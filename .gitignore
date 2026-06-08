@@ -1,0 +1,17 @@
+# Virtual environments
+.venv/
+
+# Python bytecode / caches
+__pycache__/
+*.pyc
+
+# Test / build artifacts
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# Spec dumps (not part of the codebase)
+_spec_full.json
+spec_full.txt
+spec_part2.txt
