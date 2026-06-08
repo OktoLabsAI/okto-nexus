@@ -1,13 +1,16 @@
 """MCP inbound tools for the identity slice.
 
-Registers four tools on the FastMCP server, each returning the canonical
+Registers six tools on the FastMCP server, each returning the canonical
 envelope (success ``{ok:true,data}`` / failure ``{ok:false,error}``) via
 :func:`tool_envelope`, so no exception ever crosses the adapter boundary:
 
 * ``workspace_resolve`` - resolve ``project_root`` to a ``workspace_id``.
+* ``workspace_list``    - GLOBAL-ADMIN: enumerate ALL workspaces (the single
+  deliberately cross-workspace surface; every other tool stays scoped).
 * ``agent_register``    - upsert a logical agent identity.
 * ``session_open``      - open a workspace-scoped session.
 * ``session_heartbeat`` - advance a session heartbeat / report status.
+* ``session_close``     - idempotently close a session.
 
 This module is the slice's composition root: it wires the concrete SQLite
 repositories into ``deps.repos`` (only if not already provided) and constructs
@@ -125,3 +128,23 @@ def register(server: Any, deps: Any) -> None:
         return service.session_heartbeat(
             session_id=session_id, workspace_id=workspace_id
         )
+
+    @server.tool()
+    @tool_envelope
+    def session_close(
+        session_id: str, workspace_id: str | None = None
+    ) -> dict[str, Any]:
+        """Close a session (idempotent); repeating returns ok and stays closed."""
+        return service.session_close(
+            session_id=session_id, workspace_id=workspace_id
+        )
+
+    @server.tool()
+    @tool_envelope
+    def workspace_list() -> dict[str, Any]:
+        """GLOBAL-ADMIN: enumerate ALL workspaces across every scope.
+
+        This is the single deliberately cross-workspace tool in the identity
+        slice. All other identity tools remain scoped to one workspace.
+        """
+        return {"workspaces": service.workspace_list()}

@@ -480,9 +480,11 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     register(server, deps)
     assert set(server.tools) == {
         "workspace_resolve",
+        "workspace_list",
         "agent_register",
         "session_open",
         "session_heartbeat",
+        "session_close",
     }
     # register() must wire the concrete repos into deps.repos.
     assert deps.repos.workspaces is not None
@@ -603,3 +605,185 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
     assert all(r["workspace_id"] == ws_a for r in list_a)  # zero leakage A
     assert all(r["workspace_id"] == ws_b for r in list_b)  # zero leakage B
     assert count(migrated_factory, "sessions") == 2 * per  # zero lost writes
+
+
+# --------------------------------------------------------------------------- #
+# session_close (idempotent)  -- spec ts_bfc06da4 / ac_ff46c0da
+# --------------------------------------------------------------------------- #
+def test_session_close_idempotent(migrated_factory, tmp_config, tmp_path):
+    """First close stamps closed/closed_at; a second close is a no-op {ok:true}."""
+    clock = StubClock("2026-06-07T00:00:00Z")
+    emitter = FakeEmitter()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
+    ws = _seed_ws_agent(svc, tmp_path)
+    sid = svc.session_open(agent_id="agent-1", workspace_id=ws)["session_id"]
+
+    # First call: marks status='closed' and stamps closed_at.
+    clock.set("2026-06-07T00:00:05Z")
+    first = svc.session_close(session_id=sid)
+    assert first["status"] == "closed"
+    assert first["closed_at"] == "2026-06-07T00:00:05Z"
+    assert count(migrated_factory, "sessions") == 1
+    # Closed status is derived (and persisted) on read.
+    assert svc.get_session(session_id=sid)["status"] == "closed"
+    closed_emits = [e for e in emitter.events if e["type"] == "session.closed"]
+    assert len(closed_emits) == 1  # only the transition emits
+
+    # Second call: idempotent -> succeeds, no error, row stays closed.
+    clock.set("2026-06-07T00:10:00Z")  # a much later clock must NOT move closed_at
+    second = svc.session_close(session_id=sid)
+    assert second["status"] == "closed"
+    assert second["closed_at"] == first["closed_at"]  # preserved, not re-stamped
+    assert count(migrated_factory, "sessions") == 1  # still exactly one row
+    assert svc.get_session(session_id=sid)["status"] == "closed"
+    # A repeat close does not emit a second lifecycle event.
+    assert len([e for e in emitter.events if e["type"] == "session.closed"]) == 1
+
+
+def test_session_close_via_tool_envelope_idempotent(
+    migrated_factory, tmp_config, tmp_path
+):
+    """Both close calls return {ok:true} envelopes; unknown id -> NOT_FOUND."""
+    deps = make_deps(migrated_factory, tmp_config, StubClock())
+    server = FakeServer()
+    register(server, deps)
+
+    proj = mkdir(tmp_path, "P")
+    ws = server.tools["workspace_resolve"](project_root=str(proj))["data"][
+        "workspace_id"
+    ]
+    server.tools["agent_register"](agent_id="agent-1")
+    sid = server.tools["session_open"](agent_id="agent-1", workspace_id=ws)["data"][
+        "session_id"
+    ]
+
+    c1 = server.tools["session_close"](session_id=sid)
+    assert c1["ok"] is True and c1["data"]["status"] == "closed"
+    c2 = server.tools["session_close"](session_id=sid)
+    assert c2["ok"] is True and c2["data"]["status"] == "closed"
+    assert c2["data"]["closed_at"] == c1["data"]["closed_at"]
+
+    missing = server.tools["session_close"](session_id="ghost")
+    assert missing["ok"] is False and missing["error"]["code"] == "NOT_FOUND"
+
+
+def test_session_close_validation_and_not_found(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    with pytest.raises(OktoNexusError) as ei_val:
+        svc.session_close(session_id="")
+    assert ei_val.value.code == ErrorCode.VALIDATION_ERROR.value
+    with pytest.raises(OktoNexusError) as ei_nf:
+        svc.session_close(session_id="no-such-session")
+    assert ei_nf.value.code == ErrorCode.NOT_FOUND.value
+
+
+# --------------------------------------------------------------------------- #
+# workspace_list global-admin surface  -- spec ts_995c27c5 / ac_083f4f4c
+# --------------------------------------------------------------------------- #
+def test_workspace_list_global_admin_crosses_workspaces(
+    migrated_factory, tmp_config, tmp_path
+):
+    """workspace_list returns A+B; a workspace-scoped read returns only A."""
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    ws_a = _seed_ws_agent(svc, tmp_path, name="A")
+    ws_b = svc.workspace_resolve(project_root=str(mkdir(tmp_path, "B")))["workspace_id"]
+    s_a = svc.session_open(agent_id="agent-1", workspace_id=ws_a)["session_id"]
+    s_b = svc.session_open(agent_id="agent-1", workspace_id=ws_b)["session_id"]
+
+    # GLOBAL-ADMIN surface: sees BOTH workspaces.
+    all_ws = svc.workspace_list()
+    seen = {w["workspace_id"] for w in all_ws}
+    assert {ws_a, ws_b} <= seen
+
+    # Standard workspace-scoped read: only A, never B.
+    scoped_a = svc.list_sessions(workspace_id=ws_a)
+    assert {r["session_id"] for r in scoped_a} == {s_a}
+    assert all(r["workspace_id"] == ws_a for r in scoped_a)
+    assert s_b not in {r["session_id"] for r in scoped_a}
+
+
+def test_workspace_list_tool_global_admin(migrated_factory, tmp_config, tmp_path):
+    """Via the MCP tool: workspace_list spans workspaces; list stays scoped."""
+    deps = make_deps(migrated_factory, tmp_config, StubClock())
+    server = FakeServer()
+    register(server, deps)
+
+    ws_a = server.tools["workspace_resolve"](
+        project_root=str(mkdir(tmp_path, "A"))
+    )["data"]["workspace_id"]
+    ws_b = server.tools["workspace_resolve"](
+        project_root=str(mkdir(tmp_path, "B"))
+    )["data"]["workspace_id"]
+
+    res = server.tools["workspace_list"]()
+    assert res["ok"] is True
+    ids = {w["workspace_id"] for w in res["data"]["workspaces"]}
+    assert {ws_a, ws_b} <= ids  # global-admin crosses workspaces
+
+
+# --------------------------------------------------------------------------- #
+# Concurrency: heartbeat vs stale read  -- spec ts_b87fdebd / ac_12db4f07
+# --------------------------------------------------------------------------- #
+def test_concurrent_heartbeat_vs_stale_read(migrated_factory, tmp_config, tmp_path):
+    """Heartbeat writers and status readers near the TTL never tear or DB_ERROR.
+
+    A session is opened at T0 and the clock is advanced past the stale TTL so a
+    bare read derives 'stale' while a fresh heartbeat (writing the current
+    clock) derives 'active'. Concurrently firing both must ALWAYS yield a whole,
+    valid status ('active' or 'stale', never partial) with no escaping DB_ERROR
+    under WAL + busy_timeout=5000.
+    """
+    ttl = 60
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock, stale_ttl=ttl)
+    ws = _seed_ws_agent(svc, tmp_path)
+    sid = svc.session_open(agent_id="agent-1", workspace_id=ws)["session_id"]
+
+    # Position the clock past the TTL: a read with no fresh heartbeat is 'stale'.
+    clock.set("2026-06-07T00:01:30Z")  # +90s > ttl=60
+
+    readers = 8
+    writers = 8
+    rounds = 6
+    statuses: list[str] = []
+    errors: list[Exception] = []
+    lock = threading.Lock()
+    barrier = threading.Barrier(readers + writers)
+
+    def reader():
+        barrier.wait()
+        for _ in range(rounds):
+            try:
+                out = retry_db(lambda: svc.get_session(session_id=sid))
+            except Exception as exc:  # noqa: BLE001 - capture for assertion
+                with lock:
+                    errors.append(exc)
+                return
+            with lock:
+                statuses.append(out["status"])
+
+    def writer():
+        barrier.wait()
+        for _ in range(rounds):
+            try:
+                retry_db(lambda: svc.session_heartbeat(session_id=sid))
+            except Exception as exc:  # noqa: BLE001 - capture for assertion
+                with lock:
+                    errors.append(exc)
+                return
+
+    with ThreadPoolExecutor(max_workers=readers + writers) as ex:
+        futures = [ex.submit(reader) for _ in range(readers)]
+        futures += [ex.submit(writer) for _ in range(writers)]
+        for f in futures:
+            f.result()
+
+    # No exception (no unrecovered DB_ERROR) escaped under busy_timeout.
+    assert not errors, f"concurrent ops raised: {errors}"
+    # Every read returned a whole, valid status - never a partial/torn state.
+    assert statuses, "expected reader observations"
+    assert set(statuses) <= {"active", "stale"}
+    # The row is intact and still readable after the storm.
+    final = svc.get_session(session_id=sid)
+    assert final["status"] in {"active", "stale"}
+    assert count(migrated_factory, "sessions") == 1

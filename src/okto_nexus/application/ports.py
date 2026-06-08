@@ -121,6 +121,14 @@ class WorkspaceRepo(Protocol):
         """Return the workspace, or ``None`` if it does not exist."""
         ...
 
+    def list_all(self, uow: UnitOfWork) -> list[Workspace]:
+        """Return ALL workspaces (global-admin surface; NOT workspace-scoped).
+
+        This is the single deliberately cross-workspace read in the identity
+        slice. Every other read is scoped by ``workspace_id``.
+        """
+        ...
+
 
 @runtime_checkable
 class AgentRepo(Protocol):
@@ -168,6 +176,18 @@ class SessionRepo(Protocol):
         self, uow: UnitOfWork, *, session_id: str, at: str | None = None
     ) -> Session:
         """Update ``last_heartbeat_at``; raise ``NOT_FOUND`` if missing."""
+        ...
+
+    def close(
+        self, uow: UnitOfWork, *, session_id: str, at: str | None = None
+    ) -> Session:
+        """Idempotently close a session, returning the stored row.
+
+        Sets ``status='closed'`` and ``closed_at`` only when the session is not
+        already closed; repeating the call is a no-op that keeps the row closed
+        (the original ``closed_at`` is preserved). Raises ``NOT_FOUND`` when the
+        session does not exist.
+        """
         ...
 
     def list(

@@ -48,6 +48,7 @@ class Session:
     status: str
     started_at: str
     last_heartbeat_at: str | None = None
+    closed_at: str | None = None
 
 
 @dataclass(slots=True, frozen=True)

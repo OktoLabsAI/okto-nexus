@@ -109,6 +109,24 @@ class SqliteWorkspaceRepo(_ClockBacked):
             raise _db_error("reading workspace", exc) from exc
         if row is None:
             return None
+        return self._row_to_workspace(row)
+
+    def list_all(self, uow: UnitOfWork) -> list[Workspace]:
+        """Return every workspace (global-admin; NOT workspace-scoped)."""
+        try:
+            cur = uow.connection.execute(
+                """
+                SELECT workspace_id, display_name, root_realpath, created_at, last_seen_at
+                FROM workspaces ORDER BY created_at, workspace_id
+                """
+            )
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing workspaces", exc) from exc
+        return [self._row_to_workspace(row) for row in rows]
+
+    @staticmethod
+    def _row_to_workspace(row: Any) -> Workspace:
         return Workspace(
             workspace_id=row["workspace_id"],
             created_at=row["created_at"],
@@ -183,7 +201,8 @@ class SqliteSessionRepo(_ClockBacked):
     """Persistence for ``sessions`` rows (workspace-scoped)."""
 
     _COLUMNS = (
-        "session_id, agent_id, workspace_id, status, started_at, last_heartbeat_at"
+        "session_id, agent_id, workspace_id, status, started_at, "
+        "last_heartbeat_at, closed_at"
     )
 
     def create(
@@ -256,6 +275,33 @@ class SqliteSessionRepo(_ClockBacked):
             )
         return row
 
+    def close(
+        self, uow: UnitOfWork, *, session_id: str, at: str | None = None
+    ) -> Session:
+        now = at or self._now()
+        try:
+            # Idempotent: only the FIRST close stamps status/closed_at; a repeat
+            # matches zero rows (status already 'closed') yet the row persists,
+            # so the existence check below uses get(), never rowcount.
+            uow.connection.execute(
+                """
+                UPDATE sessions
+                SET status = 'closed', closed_at = ?
+                WHERE session_id = ? AND status != 'closed'
+                """,
+                (now, session_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("closing session", exc) from exc
+        row = self.get(uow, session_id)
+        if row is None:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                "session_id does not exist.",
+                {"session_id": session_id},
+            )
+        return row
+
     def list(
         self, uow: UnitOfWork, *, workspace_id: str, status: str | None = None
     ) -> list[Session]:
@@ -281,4 +327,5 @@ class SqliteSessionRepo(_ClockBacked):
             status=row["status"],
             started_at=row["started_at"],
             last_heartbeat_at=row["last_heartbeat_at"],
+            closed_at=row["closed_at"],
         )

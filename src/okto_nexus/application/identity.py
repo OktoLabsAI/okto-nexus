@@ -5,10 +5,14 @@ Implements the workspace / agent / session use cases of Okto Nexus V1:
 * ``workspace_resolve`` - deterministic ``workspace_id`` from ``project_root``
   (the SERVER hashes; the CLIENT only supplies the path) plus an idempotent
   upsert of the ``workspaces`` row.
+* ``workspace_list`` - GLOBAL-ADMIN: enumerate ALL workspaces (the only read
+  that crosses workspace boundaries; every other read stays scoped).
 * ``agent_register`` - upsert of a global, logical agent identity.
 * ``session_open`` - create a workspace-scoped session (server-assigned id).
 * ``session_heartbeat`` - advance ``last_heartbeat_at`` and report the derived
   status (``active``/``stale``).
+* ``session_close`` - idempotently close a session (``status='closed'`` +
+  ``closed_at``); repeating is a no-op that keeps the row closed.
 
 This module is part of the application layer: it depends only on the ports in
 :mod:`okto_nexus.application.ports`, the pure :mod:`okto_nexus.domain` helpers,
@@ -141,6 +145,27 @@ class IdentityService:
             "created_at": ws.created_at,
             "last_seen_at": ws.last_seen_at,
         }
+
+    def workspace_list(self) -> list[dict[str, Any]]:
+        """Enumerate ALL workspaces (the single global-admin surface).
+
+        This is the ONLY identity read that deliberately crosses workspace
+        boundaries: it returns rows from every workspace, unscoped. Every other
+        read (e.g. :meth:`list_sessions`) is scoped to a single ``workspace_id``
+        and never leaks rows from another workspace.
+        """
+        with self._cf.unit_of_work() as uow:
+            rows = self._workspaces.list_all(uow)
+        return [
+            {
+                "workspace_id": ws.workspace_id,
+                "display_name": ws.display_name,
+                "root_realpath": ws.root_realpath,
+                "created_at": ws.created_at,
+                "last_seen_at": ws.last_seen_at,
+            }
+            for ws in rows
+        ]
 
     # ------------------------------------------------------------------ #
     # Agent
@@ -298,6 +323,60 @@ class IdentityService:
             "session_id": updated.session_id,
             "status": status,
             "last_heartbeat_at": updated.last_heartbeat_at,
+        }
+
+    def session_close(
+        self, *, session_id: Any, workspace_id: Any = None
+    ) -> dict[str, Any]:
+        """Idempotently close a session and report its terminal state.
+
+        The first call marks ``status='closed'`` and stamps ``closed_at``; a
+        second call on the same ``session_id`` returns successfully without
+        error and the row stays closed (original ``closed_at`` preserved). Only
+        the transition to ``closed`` emits an audit event.
+
+        Raises ``VALIDATION_ERROR`` for a missing ``session_id``, ``NOT_FOUND``
+        for an unknown session, and ``WORKSPACE_MISMATCH`` when the optional
+        ``workspace_id`` does not match the session's workspace (no mutation).
+        """
+        if not _is_nonempty_str(session_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "session_id is required.",
+                {"session_id": session_id},
+            )
+        now = self._clock.now_iso()
+        with self._cf.unit_of_work() as uow:
+            session = self._sessions.get(uow, session_id)
+            if session is None:
+                raise OktoNexusError(
+                    ErrorCode.NOT_FOUND,
+                    "session_id does not exist.",
+                    {"session_id": session_id},
+                )
+            self._guard_workspace(session.workspace_id, workspace_id, session_id)
+            was_closed = session.status == SESSION_STATUS_CLOSED
+            closed = self._sessions.close(uow, session_id=session_id, at=now)
+            if not was_closed:
+                self._emit(
+                    uow,
+                    workspace_id=closed.workspace_id,
+                    event_type="session.closed",
+                    actor_agent_id=closed.agent_id,
+                    session_id=closed.session_id,
+                    payload={
+                        "session_id": closed.session_id,
+                        "status": SESSION_STATUS_CLOSED,
+                    },
+                )
+        return {
+            "session_id": closed.session_id,
+            "agent_id": closed.agent_id,
+            "workspace_id": closed.workspace_id,
+            "status": SESSION_STATUS_CLOSED,
+            "started_at": closed.started_at,
+            "last_heartbeat_at": closed.last_heartbeat_at,
+            "closed_at": closed.closed_at,
         }
 
     # ------------------------------------------------------------------ #
