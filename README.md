@@ -65,7 +65,29 @@ okto-nexus
 Register it with an MCP-capable client by pointing the client at the
 `okto-nexus` command over **stdio**. Bootstrap is fail-closed: config is
 resolved, the home dir is created, the database is opened, migrations are
-applied, and only then are tools registered.
+applied, all repositories and the event emitter are wired, and only then are the
+tools auto-discovered and registered.
+
+Example client config (`claude_desktop_config.json` / any MCP host that launches
+stdio servers):
+
+```json
+{
+  "mcpServers": {
+    "okto-nexus": {
+      "command": "okto-nexus",
+      "env": {
+        "OKTO_NEXUS_HOME": "~/.okto_nexus"
+      }
+    }
+  }
+}
+```
+
+If `okto-nexus` is not on the host's `PATH`, point `command` at the venv entry
+point (e.g. `/path/to/.venv/bin/okto-nexus`, or on Windows
+`C:\\path\\to\\.venv\\Scripts\\okto-nexus.exe`). Any `OKTO_NEXUS_*` variable (see
+the table below) can be supplied via `env`, or as CLI flags in an `args` array.
 
 ## Configuration (`OKTO_NEXUS_*`)
 
@@ -99,16 +121,61 @@ catalogue of 17 codes** (`WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`,
 `INTERNAL_ERROR`). Unexpected failures normalise to `INTERNAL_ERROR`; no
 exception ever crosses the adapter boundary.
 
-## Agent instructions
+## Tools (18)
 
-> _Placeholder — domain slices will document the per-tool agent guidance here
-> (how an agent should register, claim handoffs, post messages, etc.)._
+Auto-discovered from `adapters/inbound/mcp/tools/` and registered on the live
+FastMCP server. Every tool returns the canonical envelope.
+
+| Slice | Tools |
+|---|---|
+| Identity | `workspace_resolve`, `agent_register`, `session_open`, `session_heartbeat` |
+| Events | `event_get`, `event_wait` |
+| Messages | `message_create`, `message_get`, `message_list`, `channel_list` |
+| Handoffs | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject` |
+| Artifacts | `artifact_put`, `artifact_get` |
+| shared.md | `shared_md_render` |
+
+Most tools are workspace-scoped and take `project_root` (the server derives the
+`workspace_id`); `shared_md_render` takes the resolved `workspace_id` directly.
+The coordination event streams readable via `event_get`/`event_wait` are
+`workspace`, `agent`, `task`, and `handoff`; message and artifact history is read
+through `message_list` / `artifact_get`.
 
 ## Example flow
 
-> _Placeholder — to be filled by the slices: register agent → open session →
-> create task → publish handoff → another agent claims it → exchange messages →
-> attach artifacts → tail the event stream._
+A real end-to-end flow (exercised by `tests/test_e2e_smoke.py`), all over the
+canonical `{"ok": true, "data": ...}` envelope:
+
+1. `workspace_resolve(project_root)` → deterministic `workspace_id` (+ upserts
+   the `workspaces` row).
+2. `agent_register(agent_id="builder", role="builder", capabilities=["py"])` and
+   a second `reviewer` agent.
+3. `session_open(agent_id="builder", workspace_id=...)` → `session.opened` event;
+   `session_heartbeat(session_id=...)` keeps it `active`.
+4. `message_create(project_root, from_agent_id="builder", subject, body)` →
+   persists the message and emits `message.created` in the **same** transaction
+   (the response carries the assigned `event_id`). Read it back with
+   `message_get` / `message_list`; list seeded channels with `channel_list`.
+5. `handoff_create(project_root, from_agent_id="builder",
+   target={"strategy": "broadcast"}, visibility="public")` → an `OPEN` handoff +
+   `handoff.created` on the `handoff` stream.
+6. `event_get(project_root, agent_id="reviewer", stream="handoff")` /
+   `event_wait(...)` observe `handoff.created` (cursor-paginated, visibility
+   filtered, long-poll bounded by `max_wait_timeout_seconds`).
+7. `handoff_list_available` → `handoff_claim(handoff_id, agent_id="reviewer")`
+   (atomic single-winner, lease TTL applied) → `handoff_complete(...)` →
+   `handoff.claimed` then `handoff.completed`.
+8. `artifact_put(project_root, artifact_type="text", content=...)` (inline, must
+   be ≤ 64 KB) and `artifact_put(..., artifact_type="markdown", path="notes.md")`
+   (a workspace-contained path reference) → each emits `artifact.created`.
+9. `artifact_get(artifact_id)` round-trips the inline content + metadata.
+10. `shared_md_render(workspace_id)` atomically (over)writes the derived,
+    four-section human-readable view at
+    `{home}/workspaces/{workspace_id}/shared.md`.
+
+Throughout, the append-only `events` table accumulates `session.opened`,
+`message.created`, `handoff.created`, `handoff.claimed`, `handoff.completed`, and
+`artifact.created` with global, gapless, monotonic `event_id`s.
 
 ## Known limitations (V1)
 

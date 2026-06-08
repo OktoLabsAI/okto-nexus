@@ -33,7 +33,17 @@ from ....application.ports import EventEmitter, Repos
 from ....config import NexusConfig, load_config
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
+from ...outbound.file.store import WorkspaceFileStore
+from ...outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from ...outbound.sqlite.connection import ConnectionFactory
+from ...outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
+from ...outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
+from ...outbound.sqlite.identity_repo import (
+    SqliteAgentRepo,
+    SqliteSessionRepo,
+    SqliteWorkspaceRepo,
+)
+from ...outbound.sqlite.messages_repo import SqliteChannelRepo, SqliteMessageRepo
 from ...outbound.sqlite.migrations import MigrationRunner
 from . import tools as _tools_pkg
 
@@ -63,24 +73,60 @@ class Deps:
     event_emitter: EventEmitter | None = None
 
 
+def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
+    """Instantiate every concrete outbound adapter and the event emitter.
+
+    This is the single composition root for the persistence layer. Each slice's
+    tool module ALSO knows how to wire its own repos idempotently, but doing it
+    here once - BEFORE any tool registers - guarantees that:
+
+    * every service shares ONE concrete instance per port, and
+    * the :class:`EventEmitter` is already present when slices that emit audit
+      events (artifacts/handoff/identity/messages) build their services,
+      regardless of the alphabetical tool-discovery order.
+
+    Returns the populated :class:`Repos` registry and the shared emitter.
+    """
+    events_repo = SqliteEventRepo(clock)
+    repos = Repos(
+        workspaces=SqliteWorkspaceRepo(clock),
+        agents=SqliteAgentRepo(clock),
+        sessions=SqliteSessionRepo(clock),
+        events=events_repo,
+        channels=SqliteChannelRepo(clock),
+        messages=SqliteMessageRepo(clock),
+        tasks=SqliteTaskRepo(clock),
+        handoffs=SqliteHandoffRepo(clock),
+        artifacts=SqliteArtifactRepo(clock),
+        files=WorkspaceFileStore(),
+    )
+    emitter = SqliteEventEmitter(events_repo)
+    return repos, emitter
+
+
 def bootstrap(
     env: Mapping[str, str] | None = None,
     argv: list[str] | None = None,
 ) -> Deps:
     """Run the fail-closed bootstrap and return a ready :class:`Deps`.
 
-    Does NOT import the MCP SDK, so it is safe to call from tests.
+    Does NOT import the MCP SDK, so it is safe to call from tests. All concrete
+    repositories and the shared event emitter are wired here so that tool
+    auto-discovery only ever REUSES these instances (its idempotent guards see
+    them already present), giving every slice a single coherent backing store.
     """
     env = env if env is not None else os.environ
     config = load_config(env, argv)
     factory = ConnectionFactory(config)  # ensures home_dir exists
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
+    clock = SystemClock()
+    repos, emitter = build_repos(clock)
     return Deps(
         config=config,
         connection_factory=factory,
-        clock=SystemClock(),
-        repos=Repos(),
-        event_emitter=None,
+        clock=clock,
+        repos=repos,
+        event_emitter=emitter,
     )
 
 
