@@ -31,7 +31,13 @@ import pytest
 from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service, register
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore, _is_contained
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
+from okto_nexus.adapters.outbound.sqlite.events_repo import (
+    SqliteEventEmitter,
+    SqliteEventRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.artifacts import ArtifactService
+from okto_nexus.application.events import EventService
 from okto_nexus.application.ports import Repos
 from okto_nexus.domain.artifacts import (
     ARTIFACT_TYPES,
@@ -497,11 +503,47 @@ def test_put_atomic_row_and_event(migrated_factory, tmp_config, tmp_path):
     assert len(emitter.events) == 1
     ev = emitter.events[-1]
     assert ev["type"] == "artifact.created"
+    # Published on the observable ``workspace`` stream (one of VALID_STREAMS),
+    # never the unconsultable legacy ``artifact`` stream.
+    assert ev["stream"] == "workspace"
     assert ev["target"] == out["artifact_id"]
     payload = ev["payload"]
     for key in ("workspace_id", "artifact_id", "artifact_type", "size_bytes", "created_at"):
         assert key in payload
     assert payload["artifact_id"] == out["artifact_id"]
+
+
+def test_artifact_created_observable_via_event_get_and_wait(
+    migrated_factory, tmp_config, tmp_path
+):
+    # artifact.created must be PUBLISHED on the ``workspace`` stream (visibility
+    # ``public``) so consumers of event_get/event_wait observe it WITHOUT
+    # widening VALID_STREAMS.
+    clock = StubClock()
+    emitter = SqliteEventEmitter(SqliteEventRepo(clock))
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
+    root = mkroot(tmp_path)
+
+    out = svc.artifact_put(project_root=root, artifact_type="text", content="payload")
+
+    events = EventService(
+        connection_factory=migrated_factory,
+        events=SqliteEventRepo(clock),
+        clock=clock,
+        config=tmp_config,
+        agents=SqliteAgentRepo(clock),
+    )
+
+    page = events.event_get(project_root=root, agent_id="viewer", stream="workspace")
+    art_events = [e for e in page["events"] if e["type"] == "artifact.created"]
+    assert len(art_events) == 1
+    assert art_events[0]["payload"]["artifact_id"] == out["artifact_id"]
+
+    waited = events.event_wait(
+        project_root=root, agent_id="viewer", stream="workspace", timeout_seconds=2
+    )
+    assert waited["timed_out"] is False
+    assert any(e["type"] == "artifact.created" for e in waited["events"])
 
 
 def test_put_rollback_on_emit_failure(migrated_factory, tmp_config, tmp_path):

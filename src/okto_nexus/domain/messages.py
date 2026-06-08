@@ -44,8 +44,13 @@ __all__ = [
 SEED_CHANNEL_NAMES: tuple[str, ...] = ("general", "architecture", "code-review")
 
 #: Event-log stream and type for the single ``message.created`` event emitted
-#: atomically with each new message row.
-MESSAGE_STREAM = "messages"
+#: atomically with each new message row. The event is PUBLISHED on the
+#: ``workspace`` stream - the base observable stream of the whole workspace and
+#: one of the consumable ``VALID_STREAMS`` (workspace/agent/task/handoff) - so
+#: that consumers of ``event_get`` / ``event_wait`` can observe it. Per-event
+#: visibility (broadcast vs directed) is still enforced by
+#: ``can_agent_see_event``; the stream is only the coarse routing channel.
+MESSAGE_STREAM = "workspace"
 MESSAGE_CREATED_TYPE = "message.created"
 
 

@@ -53,8 +53,13 @@ from .ports import (
     WorkspaceRepo,
 )
 
-#: Visibility tag stamped on the artifact audit event (workspace-scoped).
-ARTIFACT_VISIBILITY = "workspace"
+#: Visibility tag stamped on the artifact audit event. ``public`` means visible
+#: to every agent operating in the same workspace - an artifact is a
+#: workspace-scoped resource, not directed at a single agent. ``public`` is one
+#: of the canonical visibilities understood by ``can_agent_see_event``, so the
+#: event is observable via ``event_get`` / ``event_wait`` on the ``workspace``
+#: stream (an invalid visibility would be treated as non-visible and hidden).
+ARTIFACT_VISIBILITY = "public"
 
 
 def _is_nonempty_str(value: Any) -> bool:

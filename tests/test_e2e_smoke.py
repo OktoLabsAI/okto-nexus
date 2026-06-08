@@ -19,10 +19,11 @@ only event log is checked directly. This is the integration-level proof that
 auto-discovery registers all 18 tools against a single coherent backing store.
 
 Note on streams: ``event_get``/``event_wait`` are scoped to the coordination
-streams (``workspace``/``agent``/``task``/``handoff``); the ``handoff`` stream is
-used here to observe live events. ``message.created`` / ``artifact.created`` live
-on the ``messages`` / ``artifact`` streams and are verified directly against the
-append-only log (message reads are served by ``message_list``).
+streams (``workspace``/``agent``/``task``/``handoff``). ``handoff.created`` is
+observed on the ``handoff`` stream; ``message.created`` and ``artifact.created``
+are PUBLISHED on the ``workspace`` stream (the base observable stream of the
+whole workspace) and are observed there via ``event_get``/``event_wait`` - in
+addition to being verified directly against the append-only log.
 """
 
 from __future__ import annotations
@@ -139,6 +140,25 @@ def test_e2e_full_flow(tmp_path):
     listed = _ok(tools["message_list"](project_root=project_root))
     assert any(m["message_id"] == message_id for m in listed["messages"])
 
+    # message.created is observable on the workspace stream via event_get /
+    # event_wait (published there for cross-slice observability).
+    ws_after_msg = _ok(
+        tools["event_get"](
+            project_root=project_root, agent_id="reviewer", stream="workspace"
+        )
+    )
+    assert any(e["type"] == "message.created" for e in ws_after_msg["events"])
+    waited_msg = _ok(
+        tools["event_wait"](
+            project_root=project_root,
+            agent_id="reviewer",
+            stream="workspace",
+            timeout_seconds=2,
+        )
+    )
+    assert waited_msg["timed_out"] is False
+    assert any(e["type"] == "message.created" for e in waited_msg["events"])
+
     # channel_list returns the seeded channels.
     channels = _ok(tools["channel_list"](project_root=project_root))
     assert channels["channels"], "expected seeded channels"
@@ -236,6 +256,14 @@ def test_e2e_full_flow(tmp_path):
     )
     assert fetched["content"] == "x" * 1024
     assert fetched["metadata"] == {"kind": "report"}
+
+    # artifact.created is observable on the workspace stream too.
+    ws_after_art = _ok(
+        tools["event_get"](
+            project_root=project_root, agent_id="reviewer", stream="workspace"
+        )
+    )
+    assert any(e["type"] == "artifact.created" for e in ws_after_art["events"])
 
     # --- 10. shared_md_render writes the derived view file ---------------- #
     rendered = _ok(tools["shared_md_render"](workspace_id=workspace_id))

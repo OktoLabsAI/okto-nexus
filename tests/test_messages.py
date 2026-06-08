@@ -37,6 +37,7 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
     SqliteMessageRepo,
 )
+from okto_nexus.application.events import EventService
 from okto_nexus.application.messages import MessageService
 from okto_nexus.application.ports import Repos
 from okto_nexus.domain.ids import resolve_workspace_id
@@ -233,6 +234,9 @@ def test_message_create_happy_path_and_round_trip(
     assert len(emitter.events) == 1
     ev = emitter.events[0]
     assert ev["type"] == "message.created"
+    # Published on the observable ``workspace`` stream (one of VALID_STREAMS),
+    # never the unconsultable legacy ``messages`` stream.
+    assert ev["stream"] == "workspace"
     assert ev["workspace_id"] == data["workspace_id"]
     assert ev["payload"]["message_id"] == data["message_id"]
     assert "body" not in ev["payload"]
@@ -271,6 +275,75 @@ def test_message_create_atomic_single_event_same_commit(
     payload = json.loads(row["payload"])
     assert payload["message_id"] == res["message_id"]
     assert "body" not in payload
+
+
+def _event_service(factory, config, clock) -> EventService:
+    """Wire a real EventService over the same store to consume the log."""
+    return EventService(
+        connection_factory=factory,
+        events=SqliteEventRepo(clock),
+        clock=clock,
+        config=config,
+        agents=SqliteAgentRepo(clock),
+    )
+
+
+def test_message_created_observable_via_event_get_and_wait(
+    migrated_factory, tmp_config, tmp_path
+):
+    # The Channels spec requires message.created to be PUBLISHED on the
+    # ``workspace`` stream so consumers of event_get/event_wait observe it
+    # WITHOUT widening VALID_STREAMS.
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
+    proj = mkdir(tmp_path, "P")
+
+    created = svc.create_message(
+        project_root=str(proj), from_agent_id="agentA", subject="hello", body="b"
+    )
+
+    events = _event_service(migrated_factory, tmp_config, clock)
+
+    # event_get on the workspace stream observes the broadcast message.created.
+    page = events.event_get(
+        project_root=str(proj), agent_id="viewer", stream="workspace"
+    )
+    msg_events = [e for e in page["events"] if e["type"] == "message.created"]
+    assert len(msg_events) == 1
+    assert msg_events[0]["event_id"] == created["event_id"]
+    assert msg_events[0]["payload"]["message_id"] == created["message_id"]
+
+    # event_wait returns it immediately (event already exists -> not timed out).
+    waited = events.event_wait(
+        project_root=str(proj), agent_id="viewer", stream="workspace", timeout_seconds=2
+    )
+    assert waited["timed_out"] is False
+    assert any(e["type"] == "message.created" for e in waited["events"])
+
+
+def test_directed_message_created_visibility_preserved_on_workspace_stream(
+    migrated_factory, tmp_config, tmp_path
+):
+    # Moving to the workspace stream must NOT break visibility: a directed
+    # message.created is observable only by the eligible target (can_agent_see_event).
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
+    proj = mkdir(tmp_path, "P")
+
+    directed = svc.create_message(
+        project_root=str(proj),
+        from_agent_id="agentA",
+        subject="psst",
+        body="for B",
+        target={"strategy": "direct", "agent_id": "agentB"},
+    )
+    events = _event_service(migrated_factory, tmp_config, clock)
+
+    for_b = events.event_get(project_root=str(proj), agent_id="agentB", stream="workspace")
+    assert any(e["event_id"] == directed["event_id"] for e in for_b["events"])
+
+    for_c = events.event_get(project_root=str(proj), agent_id="agentC", stream="workspace")
+    assert all(e["event_id"] != directed["event_id"] for e in for_c["events"])
 
 
 def test_message_create_rolls_back_when_event_append_fails(
