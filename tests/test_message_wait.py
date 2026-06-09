@@ -402,7 +402,9 @@ def test_wait_channel_filter(migrated_factory, tmp_config, tmp_path):
     proj = mkdir(tmp_path)
     channels = svc.list_channels(project_root=str(proj))["channels"]
     general = next(c for c in channels if c["name"] == "general")["channel_id"]
-    architecture = next(c for c in channels if c["name"] == "architecture")["channel_id"]
+    architecture = svc.create_channel(
+        project_root=str(proj), name="architecture"
+    )["channel"]["channel_id"]
 
     svc.create_message(
         project_root=str(proj), from_agent_id="a", subject="g", body="g", channel_id=general

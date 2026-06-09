@@ -1,6 +1,6 @@
 """Channels & Messages slice application service.
 
-Implements the four use cases this slice OWNS:
+Implements the use cases this slice OWNS:
 
 * ``message_create`` - persist a message row AND emit exactly one
   ``message.created`` event INSIDE the same SQLite unit of work (both commit or
@@ -9,7 +9,11 @@ Implements the four use cases this slice OWNS:
   honouring the IMPORTED routing visibility predicate;
 * ``message_list``   - workspace-scoped, channel-filtered, event-ordered listing
   with cursor pagination (``next_cursor`` / ``has_more``) and visibility filtering;
-* ``channel_list``   - return the per-workspace seeded channels.
+* ``message_wait``   - long-poll variant of ``message_list`` (reuses the Event
+  Log waiter) that materialises new messages as they arrive;
+* ``create_channel`` - create a channel by name (idempotent), so agents add the
+  channels they need beyond the seeded ``general`` default;
+* ``channel_list``   - return the workspace channels (seeding ``general`` first).
 
 Application layer: depends only on the ports in
 :mod:`okto_nexus.application.ports`, the pure :mod:`okto_nexus.domain` helpers,
@@ -37,6 +41,7 @@ from ..domain.messages import (
     parse_target,
     require_message_fields,
     serialize_target,
+    validate_channel_name,
     validate_target,
 )
 from ..domain.models import Channel, Message
@@ -392,10 +397,56 @@ class MessageService:
         return out
 
     # ------------------------------------------------------------------ #
-    # channel_list
+    # channel_create / channel_list
     # ------------------------------------------------------------------ #
+    def create_channel(self, *, project_root: Any, name: Any) -> dict[str, Any]:
+        """Create a channel by name in the workspace - IDEMPOTENT by name.
+
+        Channels are lightweight, workspace-global organizational labels with no
+        membership/ACL: any agent in the workspace can read and post to any
+        channel. Creating an EXISTING name returns the existing channel with
+        ``created=False``; a new name creates it and returns ``created=True``.
+        The name is validated/trimmed by :func:`validate_channel_name`.
+
+        Idempotency holds under CONCURRENCY too: if a peer wins the
+        ``UNIQUE(workspace, name)`` race between our read and our insert, the
+        insert error is swallowed and the peer's row is returned (``created``
+        ``False``) instead of surfacing a spurious ``DB_ERROR``.
+        """
+        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        channel_name = validate_channel_name(name)
+        now = self._clock.now_iso()
+        try:
+            with self._cf.unit_of_work() as uow:
+                self._ensure_workspace(uow, workspace_id, root_realpath, now)
+                existing = self._channels.get_by_name(
+                    uow, workspace_id=workspace_id, name=channel_name
+                )
+                if existing is not None:
+                    return {"channel": self._channel_to_data(existing), "created": False}
+                channel = self._channels.create(
+                    uow,
+                    channel_id=new_channel_id(),
+                    workspace_id=workspace_id,
+                    name=channel_name,
+                    created_at=now,
+                )
+                return {"channel": self._channel_to_data(channel), "created": True}
+        except OktoNexusError:
+            # A concurrent creator may have won the UNIQUE(workspace, name) race
+            # between our get_by_name and our insert. Re-read in a fresh unit of
+            # work; if the row now exists, the create is idempotent (created
+            # False). Otherwise the failure was unrelated - re-raise it.
+            with self._cf.unit_of_work() as uow:
+                raced = self._channels.get_by_name(
+                    uow, workspace_id=workspace_id, name=channel_name
+                )
+            if raced is not None:
+                return {"channel": self._channel_to_data(raced), "created": False}
+            raise
+
     def list_channels(self, *, project_root: Any) -> dict[str, Any]:
-        """Return the per-workspace seeded channels (seeding idempotently first)."""
+        """Return the workspace channels (seeding the ``general`` default first)."""
         workspace_id, root_realpath = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:

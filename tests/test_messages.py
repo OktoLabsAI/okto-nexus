@@ -41,6 +41,7 @@ from okto_nexus.application.events import EventService
 from okto_nexus.application.messages import MessageService
 from okto_nexus.application.ports import Repos
 from okto_nexus.domain.ids import resolve_workspace_id
+from okto_nexus.domain.models import Channel
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
@@ -177,25 +178,25 @@ def mkdir(tmp_path, name):
 # --------------------------------------------------------------------------- #
 # channel_list / seeding
 # --------------------------------------------------------------------------- #
-def test_channel_list_seeds_three_channels(migrated_factory, tmp_config, tmp_path):
+def test_channel_list_seeds_only_general(migrated_factory, tmp_config, tmp_path):
     svc = make_service(migrated_factory, tmp_config, StubClock("2026-06-07T00:00:00Z"))
     proj = mkdir(tmp_path, "P")
 
     out = svc.list_channels(project_root=str(proj))
     channels = out["channels"]
-    assert {c["name"] for c in channels} == {"general", "architecture", "code-review"}
+    assert {c["name"] for c in channels} == {"general"}
     ws = resolve_workspace_id(str(proj))
     for c in channels:
         assert c["channel_id"]
         assert c["workspace_id"] == ws
         assert c["created_at"] == "2026-06-07T00:00:00Z"
 
-    # Idempotent: a second call does not duplicate the seeded channels.
+    # Idempotent: a second call does not duplicate the seeded channel.
     again = svc.list_channels(project_root=str(proj))
     assert {c["channel_id"] for c in again["channels"]} == {
         c["channel_id"] for c in channels
     }
-    assert count(migrated_factory, "channels") == 3
+    assert count(migrated_factory, "channels") == 1
 
 
 def test_channel_list_requires_workspace(migrated_factory, tmp_config):
@@ -204,6 +205,164 @@ def test_channel_list_requires_workspace(migrated_factory, tmp_config):
         svc.list_channels(project_root=None)
     assert ei.value.code == ErrorCode.WORKSPACE_REQUIRED.value
     assert count(migrated_factory, "channels") == 0
+
+
+# --------------------------------------------------------------------------- #
+# channel_create - agent-created channels (idempotent by name)
+# --------------------------------------------------------------------------- #
+def test_create_channel_idempotent_and_listable(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+
+    first = svc.create_channel(project_root=str(proj), name="planning")
+    assert first["created"] is True
+    assert first["channel"]["name"] == "planning"
+    chan_id = first["channel"]["channel_id"]
+
+    # Same name again -> existing channel, created=False, identical id.
+    second = svc.create_channel(project_root=str(proj), name="planning")
+    assert second["created"] is False
+    assert second["channel"]["channel_id"] == chan_id
+    assert count(migrated_factory, "channels") == 1  # not duplicated
+
+    # The agent-created channel is listable alongside the seeded 'general'...
+    names = {c["name"] for c in svc.list_channels(project_root=str(proj))["channels"]}
+    assert names == {"general", "planning"}
+
+    # ...and a message can be posted to it (it now references a real channel).
+    msg = svc.create_message(
+        project_root=str(proj),
+        from_agent_id="a",
+        subject="s",
+        body="b",
+        channel_id=chan_id,
+    )
+    assert msg["channel_id"] == chan_id
+
+
+def test_create_channel_trims_name(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+
+    created = svc.create_channel(project_root=str(proj), name="  planning  ")
+    assert created["channel"]["name"] == "planning"
+    # The trimmed name collides with the existing one (idempotent, not a dup).
+    again = svc.create_channel(project_root=str(proj), name="planning")
+    assert again["created"] is False
+    assert again["channel"]["channel_id"] == created["channel"]["channel_id"]
+
+
+def test_create_channel_rejects_blank_name(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+    for bad in (None, "", "   "):
+        with pytest.raises(OktoNexusError) as ei:
+            svc.create_channel(project_root=str(proj), name=bad)
+        assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert count(migrated_factory, "channels") == 0  # nothing created
+
+
+def test_create_channel_name_length_boundary(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+    # Exactly MAX_CHANNEL_NAME_LEN (64) is accepted (boundary-accept side)...
+    ok = svc.create_channel(project_root=str(proj), name="x" * 64)
+    assert ok["created"] is True
+    assert ok["channel"]["name"] == "x" * 64
+    # ...the length check is applied AFTER trimming, so padding does not overflow...
+    padded = svc.create_channel(project_root=str(proj), name="  " + "y" * 64 + "  ")
+    assert padded["created"] is True
+    assert padded["channel"]["name"] == "y" * 64
+    # ...but 65 real characters is rejected (boundary-reject side).
+    with pytest.raises(OktoNexusError) as ei:
+        svc.create_channel(project_root=str(proj), name="z" * 65)
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_create_channel_rejects_control_characters(migrated_factory, tmp_config, tmp_path):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+    # Interior control chars (so .strip() does not remove them): C0, NUL, DEL, C1.
+    for bad in ("bad\nname", "a\tb", "x\x00y", "x\x7fy", "x\x85y"):
+        with pytest.raises(OktoNexusError) as ei:
+            svc.create_channel(project_root=str(proj), name=bad)
+        assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert count(migrated_factory, "channels") == 0  # nothing created
+
+
+def test_create_channel_idempotent_under_concurrent_race(
+    migrated_factory, tmp_config, tmp_path
+):
+    """A peer winning the UNIQUE(workspace,name) race yields created=False, not DB_ERROR."""
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+    ws = resolve_workspace_id(str(proj))
+    winner = Channel(
+        channel_id="chan_winner",
+        workspace_id=ws,
+        name="planning",
+        created_at="2026-06-07T00:00:00Z",
+    )
+
+    class RacingChannels:
+        """First read misses (pre-insert); the insert loses; the re-read finds the peer."""
+
+        def __init__(self) -> None:
+            self._reads = 0
+
+        def get_by_name(self, uow, *, workspace_id, name):
+            self._reads += 1
+            return None if self._reads == 1 else winner
+
+        def create(self, uow, **kwargs):
+            raise OktoNexusError(ErrorCode.DB_ERROR, "UNIQUE constraint failed: channels")
+
+        def get(self, uow, **kwargs):  # pragma: no cover - unused on this path
+            return None
+
+        def list(self, uow, **kwargs):  # pragma: no cover - unused on this path
+            return []
+
+    svc._channels = RacingChannels()
+    out = svc.create_channel(project_root=str(proj), name="planning")
+    assert out["created"] is False
+    assert out["channel"]["channel_id"] == "chan_winner"
+    assert out["channel"]["name"] == "planning"
+
+
+def test_create_channel_reraises_unrelated_db_error(
+    migrated_factory, tmp_config, tmp_path
+):
+    """A create failure with no pre-existing row re-raises (not silently swallowed)."""
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+
+    class FailingChannels:
+        """No row ever exists, so the create error is NOT an idempotency race."""
+
+        def get_by_name(self, uow, *, workspace_id, name):
+            return None
+
+        def create(self, uow, **kwargs):
+            raise OktoNexusError(ErrorCode.DB_ERROR, "disk I/O error")
+
+        def get(self, uow, **kwargs):  # pragma: no cover - unused on this path
+            return None
+
+        def list(self, uow, **kwargs):  # pragma: no cover - unused on this path
+            return []
+
+    svc._channels = FailingChannels()
+    with pytest.raises(OktoNexusError) as ei:
+        svc.create_channel(project_root=str(proj), name="planning")
+    assert ei.value.code == ErrorCode.DB_ERROR.value
+
+
+def test_create_channel_requires_workspace(migrated_factory, tmp_config):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    with pytest.raises(OktoNexusError) as ei:
+        svc.create_channel(project_root=None, name="planning")
+    assert ei.value.code == ErrorCode.WORKSPACE_REQUIRED.value
 
 
 # --------------------------------------------------------------------------- #
@@ -673,9 +832,9 @@ def test_reply_linked_to_parent_in_channel(migrated_factory, tmp_config, tmp_pat
     assert ids == [parent, reply["message_id"]]  # both present, event-ordered
 
     # A reply whose parent lives in a different channel is rejected.
-    architecture = next(c for c in channels if c["name"] == "architecture")[
-        "channel_id"
-    ]
+    architecture = svc.create_channel(
+        project_root=str(proj), name="architecture"
+    )["channel"]["channel_id"]
     with pytest.raises(OktoNexusError) as ei:
         svc.create_message(
             project_root=str(proj),
@@ -701,6 +860,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         "message_get",
         "message_list",
         "message_wait",
+        "channel_create",
         "channel_list",
     }
     assert deps.repos.channels is not None
@@ -710,11 +870,21 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     proj = mkdir(tmp_path, "P")
     chans = server.tools["channel_list"](project_root=str(proj))
     assert chans["ok"] is True
-    assert {c["name"] for c in chans["data"]["channels"]} == {
-        "general",
-        "architecture",
-        "code-review",
-    }
+    assert {c["name"] for c in chans["data"]["channels"]} == {"general"}
+
+    # channel_create through the envelope: success shape + idempotent created flag.
+    made = server.tools["channel_create"](project_root=str(proj), name="planning")
+    assert made["ok"] is True
+    assert made["data"]["created"] is True
+    chan_id = made["data"]["channel"]["channel_id"]
+    again = server.tools["channel_create"](project_root=str(proj), name="planning")
+    assert again["ok"] is True
+    assert again["data"]["created"] is False
+    assert again["data"]["channel"]["channel_id"] == chan_id
+    # A bad name surfaces as an envelope, never raised.
+    bad = server.tools["channel_create"](project_root=str(proj), name="  ")
+    assert bad["ok"] is False
+    assert bad["error"]["code"] == "VALIDATION_ERROR"
 
     # Failures surface as envelopes, never raised.
     missing_ws = server.tools["message_create"](

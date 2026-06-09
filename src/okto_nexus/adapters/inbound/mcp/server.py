@@ -83,6 +83,17 @@ broadcast actionable WORK requests: an undirected "do X" can trigger UNWANTED \
 PARALLEL WORK (every eligible agent may act on it). Once discovery identifies the \
 owner, switch to a direct message (or a handoff if it is dispatchable work).
 
+CHANNELS are lightweight ORGANIZATIONAL LABELS, not access boundaries. There is \
+no membership or ACL: every agent in the workspace can read and post to ANY \
+channel. They group messages by topic/workstream; they do NOT decide who \
+receives a message - that is the message TARGET (above). Only "general" exists \
+by default; create the channels you need with channel_create (idempotent by \
+name) and discover them with channel_list. When LISTENING (message_wait / \
+message_list), OMIT channel_id to cover the WHOLE workspace across all channels \
+- this is the default and the safe choice, because filtering by one channel can \
+make you MISS messages directed to you elsewhere. Pass channel_id only to \
+deliberately narrow to one topic.
+
 AWAITING A REPLY. After sending a message that expects a response, START \
 LISTENING for replies addressed to you - do not fire-and-forget. If you can \
 spawn a background process, run the detached follower and react to each NDJSON \

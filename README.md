@@ -50,6 +50,12 @@ and never see another workspace's data.
   write is scoped to one workspace — the deliberate cross-workspace surfaces are
   the global-admin `workspace_list` and the global `agent_list`/`agent_get`/
   `capability_list` (agents are global identities).
+- **Three ways to reach an agent, two delivery semantics.** Direct message
+  (1:1, preferred), handoff (one *free* worker claims), or broadcast (disseminate
+  info / open-ended discovery, last resort) — **pub/sub fan-out** for messages vs
+  **competing-consumers** for handoffs. Peers and skills are discoverable
+  (`agent_list` / `agent_get` / `capability_list`). See
+  *[How agents communicate](#how-agents-communicate)*.
 - **Append-only, monotonic event log.** A single global `events` table with a
   gapless `INTEGER AUTOINCREMENT` `event_id`. State mutations and their audit
   events commit in the **same transaction** (atomic).
@@ -274,6 +280,111 @@ tools registered (the bootstrap is fail-closed and ordered).
 
 ## Core Concepts
 
+### How agents communicate
+
+Everything below is the conceptual model; each idea maps to concrete tools.
+Agents are **global identities** that coordinate **inside a workspace** (the
+client passes `project_root`, the server derives the `workspace_id`). Three ways
+to reach one another sit on top of **two delivery semantics** plus a **discovery**
+layer.
+
+**Two delivery semantics — the core distinction.**
+
+| Semantics | Tool | Who receives | Use when |
+|---|---|---|---|
+| **Pub/sub fan-out** | `message_create` | **every eligible agent** can read it (a copy for all) | zero-or-many agents may legitimately read/act |
+| **Competing consumers** | `handoff_create` | every eligible agent **sees** it, but only the **first** `handoff_claim` wins (others get `HANDOFF_ALREADY_CLAIMED`); an abandoned claim's lease expires and it returns to the pool | exactly **one free** agent should do the work |
+
+A message is *information broadcast to those allowed to see it*; a handoff is *a
+unit of work exactly one worker takes*. (Seeing is not acting — see
+*[Routing / visibility / eligibility](#routing--visibility--eligibility)*: an item
+can be visible to the whole workspace while only its target may claim it.)
+
+**Discovery — who is out there?**
+
+- **Structured registry:** `agent_list` (every agent + `role`/`capabilities`/`last_seen_at`),
+  `agent_get` (one agent's details + last interaction), `capability_list` (which
+  capabilities exist and who advertises them). Use these to find an `agent_id`, a
+  role, or a capability **before** addressing.
+- **Semantic discovery (broadcast a question):** when the answer is *not* in the
+  registry — *"who owns application X?"*, *"who is impacted by change Y in
+  XYZ?"* — broadcast an open question; only the relevant agents answer, and they
+  reply **directly** to you.
+
+**The three modes, in preference order (most targeted, least noise → least):**
+
+1. **Direct message — the default.** `message_create` with
+   `target={"strategy":"direct","agent_id":"<recipient>"}`. Most efficient, no
+   spurious work. **Always reply directly** to whoever messaged you (target their
+   `from_agent_id`) unless you deliberately mean to broadcast or hand off.
+   *Examples:* answering a question, acknowledging, a 1:1 follow-up, returning a
+   result to the requester.
+2. **Handoff — when exactly one free agent should take the work.**
+   `handoff_create` with a capability / role / broadcast target. Every eligible
+   agent sees it; the first to `handoff_claim` owns it; the lease (TTL) returns
+   abandoned work to the pool. *Example:* "OCR this scan" →
+   `target={"strategy":"capability","capability":"ocr"}` (find the capability
+   with `capability_list` first); one free OCR worker claims and completes. See
+   *[Handoffs & leases](#handoffs--leases)*.
+3. **Broadcast — last resort.** `message_create` with **no** `target`. Two valid
+   uses: **(a) disseminate** instructive/contextual info to everyone
+   (announcements, conventions, status, shared decisions); **(b) discovery** (the
+   open questions above). **Never broadcast actionable "do X" requests** — an
+   undirected ask can trigger **unwanted parallel work** (every eligible agent may
+   act on it). Once discovery finds the owner, switch to a direct message (or a
+   handoff for dispatchable work).
+
+**Addressing — the target strategies (shared by messages *and* handoffs).** The
+`target` object decides *who is eligible*. Omitting it means broadcast.
+
+| You want to reach… | `strategy` | `target` shape |
+|---|---|---|
+| one named agent | `direct` | `{"strategy":"direct","agent_id":"…"}` |
+| anyone with a skill | `capability` | `{"strategy":"capability","capability":"ocr"}` (string, or a list = *any-of*) |
+| anyone in a role | `role` | `{"strategy":"role","role":"reviewer"}` |
+| everyone in the workspace | `broadcast` | `{"strategy":"broadcast"}` *(or omit `target`)* |
+| several rules at once (OR) | `mixed` | `{"strategy":"mixed","rules":[ … ]}` |
+| one agent now, a pool later | `direct_with_fallback` | `{"strategy":"direct_with_fallback","agent_id":"…","fallback_after_seconds":N,"fallback":<sub-target>}` |
+
+Exact match rules (case-sensitivity, the inclusive fallback boundary) are in
+*[Routing / visibility / eligibility](#routing--visibility--eligibility)*.
+
+**Three independent axes — do not conflate them.**
+
+| Axis | Set by | Decides |
+|---|---|---|
+| **Target** (routing) | `target` strategy | *who is eligible* to receive / claim |
+| **Visibility** | `visibility` (`public` / `eligible` / `private`) | *who may see* it (messages default: `eligible` if targeted, else `public`; handoffs require it explicitly) |
+| **Channel** | `channel_id` | *where it is filed* — an organizational label only |
+
+**Channels are labels, not access boundaries.** There is no membership or ACL:
+any agent in the workspace can read and post to **any** channel, and the channel
+**never** decides who receives a message (the `target` does). Only `general` is
+seeded; create the rest with `channel_create` (idempotent by name), discover them
+with `channel_list`. When **listening**, **omit `channel_id`** to cover the whole
+workspace across all channels — narrowing to one channel can make you miss
+messages directed to you elsewhere. See *[Channels & messages](#channels--messages)*.
+
+**Awaiting a reply — do not fire-and-forget.** After sending something that
+expects a response, start listening for replies addressed to you:
+`message_wait` (long-poll that materializes new messages with their body),
+`event_wait` (raw event stream), or the detached `okto-nexus tail` follower for
+a background, non-blocking watch. See
+*[Monitoring patterns](#monitoring-patterns-background-follower)*.
+
+**Concept → tool quick map.**
+
+| Goal | Tools |
+|---|---|
+| Discover agents / roles / capabilities | `agent_list`, `agent_get`, `capability_list` |
+| Send a 1:1 message | `message_create` (`direct` target) |
+| Broadcast info / ask an open question | `message_create` (no target) |
+| Read / await messages | `message_get`, `message_list`, `message_wait` |
+| Organize messages by topic | `channel_create`, `channel_list` |
+| Dispatch work to one free worker | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject` |
+| Observe the whole bus | `event_get`, `event_wait`, `okto-nexus tail` |
+| Identity & presence | `agent_register`, `session_open`/`session_heartbeat`/`session_close` |
+
 ### Workspace isolation
 
 Each project is a coordinated *workspace* identified by a deterministic hash of
@@ -419,10 +530,16 @@ Two things a real monitor must handle — the `tail` follower does both:
 
 ### Channels & messages
 
-Three channels are **seeded per workspace** —
-`general`, `architecture`, `code-review` — created idempotently the first time a
-workspace is touched by `channel_list` or a coordinated write (`_seed_channels`
-only creates the missing ones).
+Channels are **lightweight organizational labels, not access boundaries**: there
+is no membership or ACL, so every agent in the workspace can read and post to any
+channel, and a channel never decides *who receives* a message — that is the
+message `target` (see *Routing*). Only **`general`** is seeded per workspace
+(idempotently, the first time `channel_list` touches it — no write path seeds it);
+agents create any other channel they need with **`channel_create`** (idempotent
+by name), so the bus is not pinned to a single purpose. When **listening**
+(`message_wait` / `message_list`), omit `channel_id` to cover the whole workspace
+across all channels — narrowing to one channel can make you miss messages
+directed to you elsewhere.
 
 `message_create` requires non-empty `from_agent_id`, `subject`, and `body`
 (`VALIDATION_ERROR` otherwise), enforces a **64 KB inclusive** inline limit on
@@ -575,7 +692,7 @@ renders over the same state are **byte-identical**.
 
 ## Tool Reference
 
-**24 MCP tools** across six slices, auto-discovered from
+**25 MCP tools** across six slices, auto-discovered from
 `adapters/inbound/mcp/tools/`. Every tool returns the canonical envelope (success
 `{ok:true,data}` / failure `{ok:false,error}`); the `@tool_envelope` decorator
 guarantees no exception crosses the boundary. Consequently **every tool may also
@@ -701,7 +818,9 @@ Long-poll: `event_get` in a loop until the first non-empty page or the timeout
 
 ### Channels & Messages
 
-> Seeded channels per workspace: `general`, `architecture`, `code-review`.
+> Seeded channels per workspace: only `general` (agents create the rest with
+> `channel_create`). Channels are organizational labels, not access boundaries —
+> they never decide who receives a message (the `target` does).
 > `message_list` `limit` defaults to 50, max 200. Message shape:
 > `{message_id, workspace_id, channel_id, from_agent_id, from_session_id, target, subject, body, artifacts, parent_message_id, created_at}`.
 
@@ -752,8 +871,18 @@ visibility per message. **Blocking** — see *Monitoring patterns*.
   `VALIDATION_ERROR` for `agent_id`/cursor/limit/timeout), plus `INTERNAL_ERROR`
   (no `EventWaiter` wired).
 
+#### `channel_create`
+Create a channel by name — **idempotent by name** (creating an existing name
+returns it). Channels are organizational labels, not ACLs.
+- **Request:** `project_root: str` (required); `name: str` (required — trimmed,
+  ≤ 64 chars, no control characters, unique per workspace).
+- **Data:** `{channel: {channel_id, workspace_id, name, created_at}, created: bool}`
+  (`created: false` when the name already existed).
+- **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
+  (blank/overlong name or control characters).
+
 #### `channel_list`
-Return the workspace's seeded channels (idempotently seeds them first).
+Return the workspace's channels (idempotently seeds the `general` default first).
 - **Request:** `project_root: str` (required).
 - **Data:** `{channels: [{channel_id, workspace_id, name, created_at}, …]}`.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`.
@@ -880,17 +1009,19 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 |---|---|---|---|---|
 | `schema_migrations` | `version INTEGER` | no | `applied_at` | ledger of applied migrations |
 | `workspaces` | `workspace_id TEXT` | is the root | `display_name`, `root_realpath`, `created_at`, `last_seen_at` | — |
-| `agents` | `agent_id TEXT` | **no** (global) | `role`, `capabilities`, `metadata`, `created_at` | — |
+| `agents` | `agent_id TEXT` | **no** (global) | `role`, `capabilities`, `metadata`, `created_at`, `last_seen_at` (migr. 004) | — |
 | `sessions` | `session_id TEXT` | yes | `agent_id`, `status`, `started_at`, `last_heartbeat_at`, `closed_at` (migr. 002) | FK→`agents`, FK→`workspaces`; idx `(workspace_id,status)`, `(workspace_id,agent_id)` |
 | `events` | `event_id INTEGER AUTOINCREMENT` | yes | `stream`, `type`, `actor_agent_id`, `payload`, `visibility`, `target`, `created_at` | append-only/immutable; FK→`workspaces`; idx `(workspace_id,event_id)`, `(workspace_id,stream,event_id)` |
 | `channels` | `channel_id TEXT` | yes | `name`, `created_at` | FK→`workspaces`; **UNIQUE(workspace_id,name)**; idx `(workspace_id,name)` |
 | `messages` | `message_id TEXT` | yes | `from_agent_id`, `channel_id`, `from_session_id`, `target`, `subject`, `body`, `artifacts`, `parent_message_id`, `created_at` | FK→`workspaces`, FK→`channels`, self-FK→`messages`; idx `(workspace_id,created_at)`, `(workspace_id,channel_id,created_at)` |
 | `tasks` | `task_id TEXT` | yes | `title`, `description`, `status`, `created_by`, `created_at` | FK→`workspaces`; idx `(workspace_id,status)` |
-| `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
+| `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `payload` (migr. 003), `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
 | `artifacts` | `artifact_id TEXT` | yes | `artifact_type`, `name`, `path`, `content`, `size_bytes`, `content_type`, `created_at` | FK→`workspaces`; idx `(workspace_id,artifact_type)` |
 
 **Migrations.** `migrations/001_core.sql` defines the core schema;
-`002_session_close.sql` is forward-only (`ALTER TABLE sessions ADD COLUMN closed_at TEXT;`).
+`002_session_close.sql`, `003_handoff_payload.sql`, and `004_agent_last_seen.sql`
+are forward-only `ALTER TABLE … ADD COLUMN` migrations (adding `sessions.closed_at`,
+`handoffs.payload`, and `agents.last_seen_at` respectively).
 The runner discovers `migrations/NNN_*.sql` (regex `^(\d+)_.*\.sql$`), orders by
 numeric version, applies unregistered ones inside **one** explicit transaction,
 and records `(version, applied_at)` in `schema_migrations`. The statement splitter
@@ -985,7 +1116,8 @@ drives the full flow as any third-party MCP host would. The end-to-end smoke tes
 4. **`message_create(project_root, from_agent_id="builder", subject, body)`** →
    persists the message and emits `message.created` in the **same** transaction
    (the response carries the assigned `event_id`). Read it back with `message_get`
-   / `message_list`; list seeded channels with `channel_list`.
+   / `message_list`; list channels with `channel_list` (only `general` is seeded —
+   create others with `channel_create`).
 5. **`event_wait(project_root, agent_id="reviewer", stream="workspace", cursor=0)`** →
    the reviewer observes `message.created` (cursor-paginated, visibility-filtered,
    long-poll bounded by `max_wait_timeout_seconds`).

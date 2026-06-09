@@ -3,7 +3,7 @@
 Strictly side-effect-free (stdlib only, never ``sqlite3``/``mcp`` - enforced by
 the import-boundary test). This module owns:
 
-* the seeded-channel vocabulary (``general`` / ``architecture`` / ``code-review``);
+* the seeded-channel vocabulary (only ``general`` - agents create the rest);
 * the canonical event ``stream`` / ``type`` strings emitted for a new message;
 * input validation for ``message_create`` (required fields, the 64KB inclusive
   inline boundary on ``subject``/``body``, the artifact-reference list, and the
@@ -17,6 +17,7 @@ the import-boundary test). This module owns:
 from __future__ import annotations
 
 import json
+import unicodedata
 from collections.abc import Mapping
 from typing import Any
 
@@ -26,10 +27,12 @@ from .routing import RoutingAgent, is_agent_eligible
 
 __all__ = [
     "SEED_CHANNEL_NAMES",
+    "MAX_CHANNEL_NAME_LEN",
     "MESSAGE_STREAM",
     "MESSAGE_CREATED_TYPE",
     "new_message_id",
     "new_channel_id",
+    "validate_channel_name",
     "require_message_fields",
     "enforce_inline_size",
     "normalize_artifacts",
@@ -39,9 +42,15 @@ __all__ = [
     "can_view_message",
 ]
 
-#: Channels seeded once per workspace (idempotently) the first time the
-#: workspace is touched by ``channel_list`` / a coordinated write.
-SEED_CHANNEL_NAMES: tuple[str, ...] = ("general", "architecture", "code-review")
+#: Channels seeded once per workspace (idempotently) the first time
+#: ``channel_list`` touches the workspace (no write path seeds channels). Only
+#: ``general`` is provided as a neutral default; every other channel is created
+#: on demand by agents via ``channel_create`` so the tool is not pinned to any
+#: one purpose (e.g. coding).
+SEED_CHANNEL_NAMES: tuple[str, ...] = ("general",)
+
+#: Upper bound (characters, after trimming) on an agent-supplied channel name.
+MAX_CHANNEL_NAME_LEN = 64
 
 #: Event-log stream and type for the single ``message.created`` event emitted
 #: atomically with each new message row. The event is PUBLISHED on the
@@ -62,6 +71,39 @@ def new_message_id() -> str:
 def new_channel_id() -> str:
     """Return a fresh, server-assigned, opaque channel id."""
     return new_id("chan")
+
+
+def validate_channel_name(name: Any) -> str:
+    """Validate an agent-supplied channel name, returning the trimmed value.
+
+    A channel name must be a non-blank string of at most
+    :data:`MAX_CHANNEL_NAME_LEN` characters with no control characters. The
+    value is whitespace-trimmed so ``" general "`` and ``"general"`` resolve to
+    the same channel (names are unique per workspace and matched exactly, case
+    included). Raises ``VALIDATION_ERROR`` on any violation.
+    """
+    if not isinstance(name, str) or not name.strip():
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "channel name is required (a non-blank string).",
+            {"name": name},
+        )
+    trimmed = name.strip()
+    if len(trimmed) > MAX_CHANNEL_NAME_LEN:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"channel name must be at most {MAX_CHANNEL_NAME_LEN} characters.",
+            {"length": len(trimmed), "max": MAX_CHANNEL_NAME_LEN},
+        )
+    # Reject ANY Unicode control character (category "Cc"): the C0 range, DEL
+    # (0x7F) and the C1 range (0x80-0x9F) - not just C0 (< 32).
+    if any(unicodedata.category(ch) == "Cc" for ch in trimmed):
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "channel name must not contain control characters.",
+            {"name": name},
+        )
+    return trimmed
 
 
 def _is_nonempty_str(value: Any) -> bool:

@@ -1,13 +1,15 @@
 """MCP inbound tools for the Channels & Messages slice.
 
-Registers the four tools this slice owns exclusively, each returning the
-canonical envelope via :func:`tool_envelope` so no exception ever crosses the
-adapter boundary:
+Registers the tools this slice owns exclusively, each returning the canonical
+envelope via :func:`tool_envelope` so no exception ever crosses the adapter
+boundary:
 
 * ``message_create`` - persist a message + emit ``message.created`` atomically.
 * ``message_get``    - workspace-scoped single read (visibility-filtered).
 * ``message_list``   - event-ordered, cursor-paginated, visibility-filtered list.
-* ``channel_list``   - the per-workspace seeded channels.
+* ``message_wait``   - long-poll for new messages, materialised with body.
+* ``channel_create`` - create a channel by name (idempotent).
+* ``channel_list``   - the workspace channels (``general`` seeded by default).
 
 This module is the slice's composition root: it wires the concrete SQLite
 :class:`SqliteChannelRepo` / :class:`SqliteMessageRepo` into ``deps.repos`` and
@@ -51,8 +53,22 @@ _P_BODY = (
     "artifacts and keep the body a short pointer instead of inlining it."
 )
 _P_CHANNEL = (
-    "Channel_id to post into (optional; omit to post to the workspace default "
-    "channel). Enumerate channels with channel_list."
+    "Channel_id to post into (optional; omit to post with NO channel - channel_id "
+    "is left null). Channels are organizational labels only - they do NOT decide "
+    "who receives the message (the target does). Enumerate with channel_list; "
+    "create with channel_create."
+)
+_P_CHANNEL_FILTER = (
+    "Channel_id to restrict this read to (optional; omit to span the WHOLE "
+    "workspace across all channels - the safe default, since narrowing to one "
+    "channel can miss messages directed to you elsewhere). Channels are "
+    "organizational labels only - they do NOT decide who may see a message (the "
+    "target does). Enumerate with channel_list."
+)
+_P_CHANNEL_NAME = (
+    "Channel name to create - a short topic label, e.g. general, planning, "
+    "incident-42. REQUIRED. Idempotent by name: creating an existing name returns "
+    "that channel (created=false). Trimmed; max 64 chars; unique per workspace."
 )
 _P_FROM_SESSION = "Session_id attributing the message to a specific open session of yours (optional)."
 #: The routing target controls FAN-OUT/visibility for messages (pub/sub: every
@@ -182,7 +198,7 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def message_list(
         project_root: Annotated[str, Field(description=_P_ROOT)],
-        channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
+        channel_id: Annotated[str | None, Field(description=_P_CHANNEL_FILTER)] = None,
         cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
         limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
         agent_id: Annotated[str | None, Field(description=_P_VIEWER_OPT)] = None,
@@ -201,7 +217,7 @@ def register(server: Any, deps: Any) -> None:
     def message_wait(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_WAIT_AGENT)],
-        channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
+        channel_id: Annotated[str | None, Field(description=_P_CHANNEL_FILTER)] = None,
         cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
         limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
         timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
@@ -241,8 +257,22 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
+    def channel_create(
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        name: Annotated[str, Field(description=_P_CHANNEL_NAME)],
+    ) -> dict[str, Any]:
+        """Create a channel by name (idempotent). Channels are organizational labels, not ACLs.
+
+        Returns the channel plus ``created`` (false if the name already existed).
+        Any agent in the workspace may read/post to any channel; the channel does
+        NOT control who receives a message - the message target does.
+        """
+        return service.create_channel(project_root=project_root, name=name)
+
+    @server.tool()
+    @tool_envelope
     def channel_list(
         project_root: Annotated[str, Field(description=_P_ROOT)],
     ) -> dict[str, Any]:
-        """Return the per-workspace seeded channels."""
+        """Return the workspace channels (``general`` is seeded by default)."""
         return service.list_channels(project_root=project_root)

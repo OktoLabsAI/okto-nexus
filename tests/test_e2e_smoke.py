@@ -16,7 +16,7 @@ SQLite store in a temp home, real ``WorkspaceFileStore``, real
 Every step asserts the ``{"ok": true, "data": ...}`` envelope and the append
 only event log is checked directly. This is the integration-level proof that
 ``bootstrap()`` wires every repo + the event emitter and that tool
-auto-discovery registers all 18 tools against a single coherent backing store.
+auto-discovery registers every tool against a single coherent backing store.
 
 Note on streams: ``event_get``/``event_wait`` are scoped to the coordination
 streams (``workspace``/``agent``/``task``/``handoff``). ``handoff.created`` is
@@ -80,7 +80,8 @@ def test_e2e_full_flow(tmp_path):
     expected = {
         "workspace_resolve", "agent_register", "session_open", "session_heartbeat",
         "event_get", "event_wait",
-        "message_create", "message_get", "message_list", "channel_list",
+        "message_create", "message_get", "message_list", "message_wait",
+        "channel_create", "channel_list",
         "handoff_create", "handoff_list_available", "handoff_claim",
         "handoff_complete", "handoff_reject",
         "artifact_put", "artifact_get",
