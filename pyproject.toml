@@ -29,6 +29,10 @@ package-dir = { "" = "src" }
 [tool.setuptools.packages.find]
 where = ["src"]
 
+# Ship the SQL migrations inside the wheel (they live in okto_nexus/migrations/).
+[tool.setuptools.package-data]
+okto_nexus = ["migrations/*.sql"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]

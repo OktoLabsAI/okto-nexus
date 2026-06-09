@@ -24,13 +24,21 @@ _VERSION_RE = re.compile(r"^(\d+)_.*\.sql$")
 
 
 def _default_migrations_dir() -> Path:
-    """Locate the project ``migrations/`` directory robustly.
+    """Locate the packaged ``migrations/`` directory.
 
-    Walks upward from this file looking for a ``migrations`` directory that
-    contains at least one ``NNN_*.sql`` file. Raises ``MIGRATION_ERROR`` if
-    none is found.
+    Migrations live INSIDE the package (``okto_nexus/migrations/``) so they ship
+    in the wheel (declared as ``package-data``) rather than only resolving in a
+    source/editable checkout. The primary lookup is the deterministic
+    package-relative path; a walk-upward fallback keeps unusual layouts working.
+    Raises ``MIGRATION_ERROR`` if none is found.
     """
     here = Path(__file__).resolve()
+    # Primary: this module is okto_nexus/adapters/outbound/sqlite/migrations.py,
+    # so parents[3] is the okto_nexus package directory.
+    package_dir = here.parents[3] / "migrations"
+    if package_dir.is_dir() and any(package_dir.glob("[0-9]*_*.sql")):
+        return package_dir
+    # Fallback: walk upward (covers atypical/source layouts).
     for parent in here.parents:
         candidate = parent / "migrations"
         if candidate.is_dir() and any(candidate.glob("[0-9]*_*.sql")):

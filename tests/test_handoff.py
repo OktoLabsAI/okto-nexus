@@ -928,6 +928,21 @@ def test_migration_003_adds_payload_column_idempotently(migrated_factory):
     assert MigrationRunner(migrated_factory).apply() == []  # idempotent re-run
 
 
+def test_migrations_ship_inside_the_okto_nexus_package():
+    # Migrations are package-data: the discovered dir must live UNDER the
+    # okto_nexus package (so a non-editable wheel install finds them), not at the
+    # repo root. Guards against moving migrations/ back outside the package.
+    from pathlib import Path
+
+    import okto_nexus
+    from okto_nexus.adapters.outbound.sqlite.migrations import _default_migrations_dir
+
+    mig = _default_migrations_dir()
+    pkg = Path(okto_nexus.__file__).resolve().parent
+    assert mig == pkg / "migrations"
+    assert any(mig.glob("[0-9]*_*.sql"))
+
+
 def test_payload_round_trips_through_list_and_claim(
     migrated_factory, tmp_config, tmp_path
 ):
