@@ -741,3 +741,24 @@ def test_resolve_max_limit_env():
     assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "  "}) == MAX_EVENT_LIMIT
     assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "bad"}) == MAX_EVENT_LIMIT
     assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "0"}) == MAX_EVENT_LIMIT
+
+
+def test_event_reads_touch_registered_agent_last_seen(migrated_factory, tmp_path):
+    # Reading the log stamps the caller's last_seen_at when the agent_id is a
+    # registered identity (monitoring is an interaction). BOTH event_get and
+    # event_wait touch; an UNregistered caller is a silent no-op - the touch is
+    # an UPDATE, never an INSERT, so it creates no agents row.
+    config = cfg(tmp_path)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    register_agent(migrated_factory, "alice")
+    register_agent(migrated_factory, "bob")
+    agents = SqliteAgentRepo(StubClock())
+    svc = make_service(migrated_factory, config, agents=agents)
+
+    svc.event_get(project_root=pr, agent_id="alice", stream="workspace")
+    svc.event_wait(project_root=pr, agent_id="bob", stream="workspace", timeout_seconds=0)
+    svc.event_get(project_root=pr, agent_id="nobody", stream="workspace")  # unregistered
+    with migrated_factory.unit_of_work() as uow:
+        assert agents.get(uow, "alice").last_seen_at is not None  # event_get touched
+        assert agents.get(uow, "bob").last_seen_at is not None  # event_wait touched
+        assert agents.get(uow, "nobody") is None  # no-op: no row created

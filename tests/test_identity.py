@@ -482,6 +482,9 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         "workspace_resolve",
         "workspace_list",
         "agent_register",
+        "agent_list",
+        "agent_get",
+        "capability_list",
         "session_open",
         "session_heartbeat",
         "session_close",
@@ -500,6 +503,23 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         agent_id="agent-1", role="builder", capabilities=["x"]
     )
     assert ar["ok"] is True and ar["data"]["agent_id"] == "agent-1"
+
+    al = server.tools["agent_list"]()
+    assert al["ok"] is True
+    assert any(a["agent_id"] == "agent-1" for a in al["data"]["agents"])
+
+    ag = server.tools["agent_get"](agent_id="agent-1")
+    assert ag["ok"] is True and ag["data"]["agent_id"] == "agent-1"
+    assert "last_seen_at" in ag["data"]
+    ag_missing = server.tools["agent_get"](agent_id="ghost")
+    assert ag_missing["ok"] is False and ag_missing["error"]["code"] == "NOT_FOUND"
+
+    cl = server.tools["capability_list"]()
+    assert cl["ok"] is True
+    assert any(
+        c["capability"] == "x" and "agent-1" in c["agents"]
+        for c in cl["data"]["capabilities"]
+    )
 
     # Failures are surfaced as envelopes, never raised.
     missing_ws = server.tools["session_open"](agent_id="agent-1")
@@ -548,6 +568,183 @@ def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
     build_service(deps, env={STALE_TTL_ENV: "42"})
     assert deps.repos.workspaces is existing  # not overwritten
     assert deps.repos.agents is not None  # filled in
+
+
+# --------------------------------------------------------------------------- #
+# Agent list / get / last_seen (migration 004)
+# --------------------------------------------------------------------------- #
+def test_migration_004_adds_agents_last_seen_idempotently(migrated_factory):
+    from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
+
+    conn = migrated_factory.get_connection()
+    try:
+        cols = {r[1] for r in conn.execute("PRAGMA table_info(agents)").fetchall()}
+        migs = {r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()}
+    finally:
+        conn.close()
+    assert "last_seen_at" in cols
+    assert 4 in migs
+    assert MigrationRunner(migrated_factory).apply() == []  # idempotent
+
+
+def test_agent_register_stamps_last_seen(migrated_factory, tmp_config):
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock)
+    res = svc.agent_register(agent_id="a")
+    assert res["last_seen_at"] == "2026-06-07T00:00:00Z"
+    assert svc.agent_get(agent_id="a")["last_seen_at"] == "2026-06-07T00:00:00Z"
+
+
+def test_agent_list(migrated_factory, tmp_config):
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock)
+    assert svc.agent_list() == []  # none registered yet
+
+    svc.agent_register(agent_id="a", role="builder", capabilities=["py"])
+    clock.set("2026-06-07T00:05:00Z")
+    svc.agent_register(agent_id="b")
+
+    listed = svc.agent_list()
+    assert [a["agent_id"] for a in listed] == ["a", "b"]  # ordered by created_at
+    by_id = {a["agent_id"]: a for a in listed}
+    assert by_id["a"]["role"] == "builder"
+    assert by_id["a"]["capabilities"] == ["py"]
+    assert by_id["a"]["last_seen_at"] == "2026-06-07T00:00:00Z"
+    assert by_id["b"]["last_seen_at"] == "2026-06-07T00:05:00Z"
+
+
+def test_capability_list(migrated_factory, tmp_config):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    # mapping flags (js falsey -> not possessed), list, single string, none
+    svc.agent_register(agent_id="a", capabilities={"py": True, "js": False})
+    svc.agent_register(agent_id="b", capabilities=["py", "ocr"])
+    svc.agent_register(agent_id="c", capabilities="review")
+    svc.agent_register(agent_id="d")  # no capabilities
+
+    caps = svc.capability_list()
+    assert [c["capability"] for c in caps] == ["ocr", "py", "review"]  # sorted
+    by_cap = {c["capability"]: c for c in caps}
+    assert by_cap["py"]["agents"] == ["a", "b"] and by_cap["py"]["agent_count"] == 2
+    assert by_cap["ocr"]["agents"] == ["b"]
+    assert by_cap["review"]["agents"] == ["c"]
+    assert "js" not in by_cap  # falsey flag is not possessed (routing-consistent)
+
+
+def test_capability_list_empty(migrated_factory, tmp_config):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    assert svc.capability_list() == []  # no agents registered
+    svc.agent_register(agent_id="a")  # registered, but advertises nothing
+    assert svc.capability_list() == []
+
+
+def test_agent_register_rejects_non_iterable_capabilities(migrated_factory, tmp_config):
+    # A poison capabilities value (non-iterable) is rejected at the SOURCE, so it
+    # never persists and never breaks capability_list / handoff eligibility.
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    with pytest.raises(OktoNexusError) as ei:
+        svc.agent_register(agent_id="poison", capabilities=123)
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert svc.agent_list() == []  # nothing persisted
+
+
+def test_capability_list_drops_blank_capabilities(migrated_factory, tmp_config):
+    # Blank/whitespace capability names are not advertised (unmatchable by a
+    # capability target), so the advertised set equals the addressable set.
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    svc.agent_register(agent_id="a", capabilities=["py", "", "  "])
+    assert [c["capability"] for c in svc.capability_list()] == ["py"]
+
+
+def test_agent_get_and_errors(migrated_factory, tmp_config):
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock)
+    svc.agent_register(agent_id="a", role="r", metadata={"k": "v"})
+
+    got = svc.agent_get(agent_id="a")
+    assert got["agent_id"] == "a" and got["role"] == "r"
+    assert got["metadata"] == {"k": "v"}
+    assert got["last_seen_at"] == "2026-06-07T00:00:00Z"
+
+    with pytest.raises(OktoNexusError) as ei:
+        svc.agent_get(agent_id="ghost")
+    assert ei.value.code == ErrorCode.NOT_FOUND.value
+
+    for bad in (None, "", "  "):
+        with pytest.raises(OktoNexusError) as ei2:
+            svc.agent_get(agent_id=bad)
+        assert ei2.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_last_seen_advances_with_agent_operations(
+    migrated_factory, tmp_config, tmp_path
+):
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=FakeEmitter())
+    ws = svc.workspace_resolve(project_root=str(mkdir(tmp_path, "P")))["workspace_id"]
+    svc.agent_register(agent_id="a")  # t0
+    assert svc.agent_get(agent_id="a")["last_seen_at"] == "2026-06-07T00:00:00Z"
+
+    clock.set("2026-06-07T00:01:00Z")
+    sid = svc.session_open(agent_id="a", workspace_id=ws)["session_id"]
+    assert svc.agent_get(agent_id="a")["last_seen_at"] == "2026-06-07T00:01:00Z"
+
+    clock.set("2026-06-07T00:02:00Z")
+    svc.session_heartbeat(session_id=sid)
+    assert svc.agent_get(agent_id="a")["last_seen_at"] == "2026-06-07T00:02:00Z"
+
+    clock.set("2026-06-07T00:03:00Z")
+    svc.session_close(session_id=sid)
+    assert svc.agent_get(agent_id="a")["last_seen_at"] == "2026-06-07T00:03:00Z"
+
+
+def test_agent_repo_touch_is_best_effort(migrated_factory):
+    repo = SqliteAgentRepo(StubClock())
+    with migrated_factory.unit_of_work() as uow:
+        # No-op (False) for an unregistered agent - never raises NOT_FOUND.
+        assert repo.touch(uow, agent_id="ghost", at="2026-06-07T00:00:00Z") is False
+        repo.upsert(uow, agent_id="real")
+        assert repo.touch(uow, agent_id="real", at="2026-06-07T00:09:00Z") is True
+        assert repo.get(uow, "real").last_seen_at == "2026-06-07T00:09:00Z"
+
+
+def test_legacy_agent_backfills_to_null_last_seen(tmp_path):
+    # An agents row that existed BEFORE migration 004 (no last_seen_at column)
+    # reads back with last_seen_at=None after the ALTER ADD COLUMN backfills NULL.
+    import shutil
+
+    from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
+    from okto_nexus.adapters.outbound.sqlite.migrations import (
+        MigrationRunner,
+        _default_migrations_dir,
+    )
+    from okto_nexus.config import NexusConfig
+
+    real_dir = _default_migrations_dir()
+    partial = tmp_path / "migs_pre004"
+    partial.mkdir()
+    for f in real_dir.glob("00[123]_*.sql"):  # 001 + 002 + 003 (the pre-004 schema)
+        shutil.copy(f, partial)
+
+    config = NexusConfig(home_dir=tmp_path / "home")
+    factory = ConnectionFactory(config)
+    MigrationRunner(factory, migrations_dir=partial).apply()  # 001..003 only
+
+    conn = factory.get_connection()
+    try:
+        conn.execute("BEGIN")
+        conn.execute(
+            "INSERT INTO agents (agent_id, created_at) VALUES (?, ?)",
+            ("legacy", "2026-06-07T00:00:00Z"),
+        )
+        conn.execute("COMMIT")
+    finally:
+        conn.close()
+
+    assert 4 in MigrationRunner(factory).apply()  # 004 adds column + backfills NULL
+    repo = SqliteAgentRepo(StubClock())
+    with factory.unit_of_work() as uow:
+        agent = repo.get(uow, "legacy")
+    assert agent is not None and agent.last_seen_at is None
 
 
 # --------------------------------------------------------------------------- #

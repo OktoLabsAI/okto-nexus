@@ -161,6 +161,9 @@ class MessageService:
                 created_at=now,
             )
 
+            if self._agents is not None:
+                self._agents.touch(uow, agent_id=from_agent_id, at=now)
+
             # Emit the single message.created event INSIDE this transaction; the
             # event_id is assigned by the Event Log slice within the same commit.
             event_payload: dict[str, Any] = {

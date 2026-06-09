@@ -47,8 +47,9 @@ and never see another workspace's data.
   enforces WAL + foreign keys + a busy timeout.
 - **Deterministic workspace isolation.** `workspace_id = sha256(realpath(project_root))`.
   The client passes `project_root`; the server computes the hash. Every read and
-  write is scoped to one workspace — the only deliberate cross-workspace surface
-  is the global-admin `workspace_list`.
+  write is scoped to one workspace — the deliberate cross-workspace surfaces are
+  the global-admin `workspace_list` and the global `agent_list`/`agent_get`/
+  `capability_list` (agents are global identities).
 - **Append-only, monotonic event log.** A single global `events` table with a
   gapless `INTEGER AUTOINCREMENT` `event_id`. State mutations and their audit
   events commit in the **same transaction** (atomic).
@@ -298,8 +299,9 @@ to it. Operations that take an entity id distinguish three cases:
   workspace's row);
 - id in the correct workspace → ok.
 
-The **only** cross-workspace read is `workspace_list` (global-admin), which
-enumerates every workspace without scope. Because `workspace_id` is a pure
+The cross-workspace reads are `workspace_list` (global-admin) and the global
+`agent_list`/`agent_get`/`capability_list` (agents are global identities); every
+workspace/session read stays scoped. Because `workspace_id` is a pure
 function of `realpath`, identity is reproducible and aliasing-proof (two paths
 with the same real target collide on purpose), with no client-side coordination.
 
@@ -573,7 +575,7 @@ renders over the same state are **byte-identical**.
 
 ## Tool Reference
 
-**20 MCP tools** across six slices, auto-discovered from
+**24 MCP tools** across six slices, auto-discovered from
 `adapters/inbound/mcp/tools/`. Every tool returns the canonical envelope (success
 `{ok:true,data}` / failure `{ok:false,error}`); the `@tool_envelope` decorator
 guarantees no exception crosses the boundary. Consequently **every tool may also
@@ -591,8 +593,8 @@ workspace row.
   `WORKSPACE_UNRESOLVED` (unresolvable realpath).
 
 #### `workspace_list`
-GLOBAL-ADMIN — enumerate **all** workspaces (the single deliberately
-cross-workspace surface).
+GLOBAL-ADMIN — enumerate **all** workspaces (a deliberately cross-workspace
+surface, alongside the global `agent_list`/`agent_get`).
 - **Request:** none.
 - **Data:** `{workspaces: [{workspace_id, display_name, root_realpath, created_at, last_seen_at}, …]}`.
 - **Errors:** none specific (boundary `INTERNAL_ERROR`/`DB_ERROR` only).
@@ -601,10 +603,46 @@ cross-workspace surface).
 Upsert a logical, global agent identity; re-registering updates
 role/capabilities/metadata.
 - **Request:** `agent_id: str` (required); `role: str | None`; `capabilities: Any`; `metadata: Any` (all default `None`).
-- **Data:** `{agent_id, role, capabilities, metadata, created_at, updated_at}`.
+- **Data:** `{agent_id, role, capabilities, metadata, created_at, updated_at, last_seen_at}`.
 - **Errors:** `VALIDATION_ERROR` (missing `agent_id`; or capabilities/metadata
   not JSON-serializable), `CONTENT_TOO_LARGE` (capabilities/metadata inline >
   `max_inline_bytes`).
+
+> **`last_seen_at` (presence).** Every agent-attributed operation stamps the
+> agent's `last_seen_at` (best-effort; a no-op for an unregistered actor): the
+> identity ops (`agent_register`, `session_*`), `message_create`, the handoff
+> mutations (`create`/`claim`/`complete`/`reject`), and `event_get`/`event_wait`
+> (so `message_wait` is covered via the long-poll). Surfaced by `agent_list` and
+> `agent_get`.
+
+#### `agent_list`
+Enumerate **all** registered agents (global; the agent-discovery surface for
+addressing — find an `agent_id` before a direct message / directed handoff).
+- **Request:** none.
+- **Data:** `{agents: [{agent_id, role, capabilities, metadata, created_at, last_seen_at}, …]}`,
+  ordered by `created_at`. `last_seen_at` is the agent's most recent action
+  (`null` if it never acted).
+- **Errors:** none specific (boundary `INTERNAL_ERROR`/`DB_ERROR` only).
+
+#### `agent_get`
+Return one agent's full details, including `last_seen_at` (its latest interaction).
+- **Request:** `agent_id: str` (required).
+- **Data:** `{agent_id, role, capabilities, metadata, created_at, last_seen_at}`.
+- **Errors:** `VALIDATION_ERROR` (missing `agent_id`), `NOT_FOUND` (no such agent).
+
+#### `capability_list`
+GLOBAL — enumerate the distinct capabilities advertised across all registered
+agents (discovery for capability-targeted addressing: know a capability exists
+and who would match it before a `target: {strategy:"capability"}`).
+- **Request:** none.
+- **Data:** `{capabilities: [{capability, agent_count, agents:[…]}, …]}`, sorted
+  by `capability` (and `agents` sorted per capability). Normalised exactly as
+  capability routing matches: a flag-mapping keeps truthy keys, a list/string is
+  its set; a falsey flag or blank name is excluded (so the advertised set equals
+  the addressable set).
+- **Errors:** none specific (boundary `INTERNAL_ERROR`/`DB_ERROR`). Malformed
+  capabilities are rejected at `agent_register`, so a stored value always
+  normalises cleanly here.
 
 #### `session_open`
 Open a session bound immutably to `(agent_id, workspace_id)`; server assigns

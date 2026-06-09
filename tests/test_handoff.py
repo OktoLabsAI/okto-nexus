@@ -28,6 +28,7 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
     SqliteHandoffRepo,
     SqliteTaskRepo,
 )
+from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.handoff import (
     HandoffService,
     _epoch_to_iso,
@@ -133,6 +134,13 @@ class FakeAgentRepo:
     def upsert(self, uow, *, agent_id, role=None, capabilities=None, metadata=None):
         self.add(agent_id, role=role, capabilities=capabilities)
         return self._agents[agent_id]
+
+    def touch(self, uow, *, agent_id, at=None) -> bool:
+        agent = self._agents.get(agent_id)
+        if agent is None:
+            return False
+        agent.last_seen_at = at
+        return True
 
 
 class FakeServer:
@@ -941,6 +949,51 @@ def test_migrations_ship_inside_the_okto_nexus_package():
     pkg = Path(okto_nexus.__file__).resolve().parent
     assert mig == pkg / "migrations"
     assert any(mig.glob("[0-9]*_*.sql"))
+
+
+def test_handoff_claim_touches_claimer_last_seen(
+    migrated_factory, tmp_config, tmp_path
+):
+    # Claiming a handoff stamps the claimer's last_seen_at (via the actor touch).
+    clock = StubClock()
+    agents = FakeAgentRepo()
+    agents.add("worker")
+    svc = make_service(
+        migrated_factory, tmp_config, clock, emitter=ThreadSafeEmitter(), agents=agents
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="boss",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+
+    assert agents.get(None, "worker").last_seen_at is None  # not acted yet
+    svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
+    assert agents.get(None, "worker").last_seen_at == clock.now_iso()
+
+
+def test_handoff_create_touches_author_last_seen_real_repo(
+    migrated_factory, tmp_config, tmp_path
+):
+    # The touch commits in the SAME SQLite transaction as the handoff mutation
+    # (real SqliteAgentRepo over migrated_factory, not the in-memory fake).
+    clock = StubClock()
+    agents = SqliteAgentRepo(clock)
+    svc = make_service(
+        migrated_factory, tmp_config, clock, emitter=ThreadSafeEmitter(), agents=agents
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    with migrated_factory.unit_of_work() as uow:
+        agents.upsert(uow, agent_id="boss")
+
+    svc.handoff_create(
+        project_root=proj, from_agent_id="boss",
+        target={"strategy": "broadcast"}, visibility="public",
+    )
+    with migrated_factory.unit_of_work() as uow:
+        assert agents.get(uow, "boss").last_seen_at == clock.now_iso()
 
 
 def test_payload_round_trips_through_list_and_claim(

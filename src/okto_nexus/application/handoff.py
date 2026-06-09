@@ -165,6 +165,7 @@ class HandoffService:
                 payload=payload_text,
                 created_at=now,
             )
+            self._touch_agent(uow, from_agent_id, now)
             event_payload: dict[str, Any] = {
                 "handoff_id": handoff.handoff_id,
                 "workspace_id": handoff.workspace_id,
@@ -327,6 +328,7 @@ class HandoffService:
                 lease_expires_at=lease_expires_at,
                 updated_at=now,
             )
+            self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": claimed.handoff_id,
                 "workspace_id": claimed.workspace_id,
@@ -395,6 +397,7 @@ class HandoffService:
                 status=STATUS_COMPLETED,
                 updated_at=now,
             )
+            self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": updated.handoff_id,
                 "workspace_id": updated.workspace_id,
@@ -470,6 +473,7 @@ class HandoffService:
                 status=STATUS_REJECTED,
                 updated_at=now,
             )
+            self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": updated.handoff_id,
                 "workspace_id": updated.workspace_id,
@@ -558,6 +562,11 @@ class HandoffService:
             )
         # resolve_workspace_id raises WORKSPACE_UNRESOLVED for irresolvable paths.
         return resolve_workspace_id(project_root)
+
+    def _touch_agent(self, uow: UnitOfWork, agent_id: Any, now: str) -> None:
+        """Best-effort stamp of the actor's ``last_seen_at`` within ``uow``."""
+        if self._agents is not None and _is_nonempty_str(agent_id):
+            self._agents.touch(uow, agent_id=agent_id, at=now)
 
     @staticmethod
     def _require_id(field: str, value: Any) -> None:

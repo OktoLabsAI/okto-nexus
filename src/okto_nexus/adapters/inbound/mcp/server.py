@@ -47,6 +47,57 @@ from ...outbound.sqlite.messages_repo import SqliteChannelRepo, SqliteMessageRep
 from ...outbound.sqlite.migrations import MigrationRunner
 from . import tools as _tools_pkg
 
+#: Server-level guidance surfaced to connecting agents (FastMCP ``instructions``).
+#: Covers how to choose a communication channel, replying directly by default,
+#: starting a monitor when awaiting a reply, and the blocking-vs-follower
+#: monitoring mechanics.
+SERVER_INSTRUCTIONS = """\
+Local agent coordination bus (workspace-scoped; pass project_root). Agents are \
+global identities - discover them with agent_list, and the capabilities they \
+advertise with capability_list.
+
+HOW TO COMMUNICATE - prefer the most targeted, least noisy channel:
+
+1) DIRECT MESSAGE (default, preferred). message_create with \
+target={"strategy":"direct","agent_id":"<recipient>"}. Most efficient, least \
+noise, no spurious work. ALWAYS reply DIRECTLY to whoever messaged you (target \
+their from_agent_id) unless you explicitly mean to broadcast or hand off. \
+Examples: answering a question; acknowledging; a 1:1 follow-up; returning a \
+result to the requester.
+
+2) HANDOFF (when exactly ONE free agent should take the work). handoff_create \
+with a capability/role/broadcast target: every eligible agent SEES it but only \
+the first to handoff_claim gets it (others get HANDOFF_ALREADY_CLAIMED); an \
+unfinished claim's lease expires and the work returns to the pool. Use for a \
+dispatchable task to a pool of capable agents. Example: "OCR this scan" -> \
+handoff target {"strategy":"capability","capability":"ocr"} (find the \
+capability via capability_list first); one free OCR worker claims and finishes.
+
+3) BROADCAST (last resort). message_create with NO target. Two valid uses: (a) \
+DISSEMINATE instructive/contextual information to everyone - announcements, \
+conventions, status, shared decisions; (b) open-ended DISCOVERY when you do NOT \
+yet know who to ask - poll the group to locate the right agent. Examples: "Who \
+is responsible for application X?" or "Who is impacted by change Y in application \
+XYZ?" - only the relevant agents answer, and they reply DIRECTLY to you. Do NOT \
+broadcast actionable WORK requests: an undirected "do X" can trigger UNWANTED \
+PARALLEL WORK (every eligible agent may act on it). Once discovery identifies the \
+owner, switch to a direct message (or a handoff if it is dispatchable work).
+
+AWAITING A REPLY. After sending a message that expects a response, START \
+LISTENING for replies addressed to you - do not fire-and-forget. If you can \
+spawn a background process, run the detached follower and react to each NDJSON \
+line:
+  okto-nexus tail --project-root <path> --agent-id <you> --from latest --exclude-agent <you>
+Otherwise poll message_wait(project_root, agent_id=<you>, cursor=<last>) between \
+turns, advancing cursor -> next_cursor.
+
+MONITORING MECHANICS. event_wait/message_wait are BLOCKING long-polls \
+(timeout_seconds > 0 parks the calling turn until something arrives or the \
+timeout). For non-blocking, use the detached tail follower above, or call with \
+timeout_seconds=0 (a single non-blocking snapshot). A future SSE/HTTP transport \
+will replace polling with server push.
+"""
+
 
 @dataclass
 class Deps:
@@ -153,20 +204,7 @@ def create_server(deps: Deps) -> Any:
     """
     from mcp.server.fastmcp import FastMCP  # lazy import: SDK only needed here
 
-    server = FastMCP(
-        "okto-nexus",
-        instructions=(
-            "Local agent coordination bus (workspace-scoped; pass project_root). "
-            "MONITORING: event_wait/message_wait are BLOCKING long-polls - "
-            "timeout_seconds > 0 parks the calling turn until an event/message "
-            "arrives or the timeout expires. To watch the bus WITHOUT blocking, "
-            "run the CLI follower detached and react to each NDJSON line, e.g.:\n"
-            "  okto-nexus tail --project-root <path> --agent-id <you> --from latest\n"
-            "Or poll in-loop with timeout_seconds=0 (a non-blocking snapshot; "
-            "advance cursor -> next_cursor). A future SSE/HTTP transport will "
-            "replace polling with server push."
-        ),
-    )
+    server = FastMCP("okto-nexus", instructions=SERVER_INSTRUCTIONS)
     register_tools(server, deps)
     return server
 

@@ -139,6 +139,8 @@ class SqliteWorkspaceRepo(_ClockBacked):
 class SqliteAgentRepo(_ClockBacked):
     """Persistence for ``agents`` rows (global logical identities)."""
 
+    _COLUMNS = "agent_id, role, capabilities, metadata, created_at, last_seen_at"
+
     def upsert(
         self,
         uow: UnitOfWork,
@@ -175,10 +177,7 @@ class SqliteAgentRepo(_ClockBacked):
     def get(self, uow: UnitOfWork, agent_id: str) -> Agent | None:
         try:
             cur = uow.connection.execute(
-                """
-                SELECT agent_id, role, capabilities, metadata, created_at
-                FROM agents WHERE agent_id = ?
-                """,
+                f"SELECT {self._COLUMNS} FROM agents WHERE agent_id = ?",
                 (agent_id,),
             )
             row = cur.fetchone()
@@ -186,6 +185,35 @@ class SqliteAgentRepo(_ClockBacked):
             raise _db_error("reading agent", exc) from exc
         if row is None:
             return None
+        return self._row_to_agent(row)
+
+    def list(self, uow: UnitOfWork) -> list[Agent]:
+        """Return ALL agents (global; not workspace-scoped), oldest first."""
+        try:
+            cur = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM agents ORDER BY created_at, agent_id"
+            )
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing agents", exc) from exc
+        return [self._row_to_agent(row) for row in rows]
+
+    def touch(
+        self, uow: UnitOfWork, *, agent_id: str, at: str | None = None
+    ) -> bool:
+        """Stamp ``last_seen_at`` for an agent; no-op (False) if it is absent."""
+        now = at or self._now()
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET last_seen_at = ? WHERE agent_id = ?",
+                (now, agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("touching agent", exc) from exc
+        return cur.rowcount > 0
+
+    @staticmethod
+    def _row_to_agent(row: Any) -> Agent:
         capabilities = _loads(row["capabilities"])
         metadata = _loads(row["metadata"])
         return Agent(
@@ -194,6 +222,7 @@ class SqliteAgentRepo(_ClockBacked):
             role=row["role"],
             capabilities=capabilities if capabilities is not None else {},
             metadata=metadata if metadata is not None else {},
+            last_seen_at=row["last_seen_at"],
         )
 
 

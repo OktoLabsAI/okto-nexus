@@ -20,7 +20,9 @@ matching the ``register(server, deps)`` contract.
 from __future__ import annotations
 
 import os
-from typing import Any, Mapping
+from typing import Annotated, Any, Mapping
+
+from pydantic import Field
 
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventEmitter,
@@ -33,6 +35,32 @@ from okto_nexus.application.events import (
     EventService,
 )
 from okto_nexus.envelope import tool_envelope
+
+#: Reused parameter descriptions (kept DRY across the two event tools).
+#: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
+#: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
+_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_AGENT = "Your agent_id; scopes per-event visibility (you only see events you may see)."
+_P_STREAM = (
+    "Event stream to read - one of: workspace, agent, task, handoff. "
+    "message.created and artifact.created are published on workspace."
+)
+_P_CURSOR = (
+    "Pagination cursor: the last event_id you consumed; the scan returns "
+    "event_id > cursor (optional; omit or 0 to start from the beginning)."
+)
+_P_LIMIT = "Max events per page (optional; default 100, clamped to the server maximum, default 1000)."
+_P_FILTERS = (
+    "Equality filters, AND-combined (optional). Allowed keys: type, agent_id, "
+    'task_id, handoff_id (e.g. {"type": "message.created"}).'
+)
+_P_TIMEOUT = (
+    "Long-poll bound in SECONDS (optional). >0 blocks until an event arrives or "
+    "the timeout elapses; 0 is a single non-blocking scan (no sleep); OMITTED "
+    "defaults to the server max wait - the longest blocking poll, NOT a snapshot. "
+    "Clamped to the server max wait. BLOCKING: parks your turn - see the server "
+    "instructions."
+)
 
 #: Environment knob for the maximum page size (``limit`` ceiling). Not part of
 #: ``NexusConfig``, so it is resolved here in the inbound adapter.
@@ -86,12 +114,12 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def event_get(
-        project_root: str,
-        agent_id: str,
-        stream: str,
-        cursor: int | None = None,
-        limit: int | None = None,
-        filters: dict[str, Any] | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        agent_id: Annotated[str, Field(description=_P_AGENT)],
+        stream: Annotated[str, Field(description=_P_STREAM)],
+        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        filters: Annotated[dict[str, Any] | None, Field(description=_P_FILTERS)] = None,
     ) -> dict[str, Any]:
         """Read a cursor-paginated page of the workspace event log (non-blocking)."""
         return service.event_get(
@@ -106,13 +134,13 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def event_wait(
-        project_root: str,
-        agent_id: str,
-        stream: str,
-        cursor: int | None = None,
-        limit: int | None = None,
-        filters: dict[str, Any] | None = None,
-        timeout_seconds: int | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        agent_id: Annotated[str, Field(description=_P_AGENT)],
+        stream: Annotated[str, Field(description=_P_STREAM)],
+        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        filters: Annotated[dict[str, Any] | None, Field(description=_P_FILTERS)] = None,
+        timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
         """Long-poll the event log until a non-empty page or the timeout ceiling.
 

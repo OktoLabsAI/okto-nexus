@@ -826,3 +826,23 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
     assert all(m["workspace_id"] == ws_a for m in list_a)  # zero leakage A
     assert all(m["workspace_id"] == ws_b for m in list_b)  # zero leakage B
     assert count(migrated_factory, "messages") == 2 * per
+
+
+def test_message_create_touches_author_last_seen(
+    migrated_factory, tmp_config, tmp_path
+):
+    # Sending a message stamps the author's agents.last_seen_at (best-effort:
+    # only for a registered author).
+    clock = StubClock("2026-06-07T00:00:00Z")
+    agents = SqliteAgentRepo(clock)
+    svc = make_service(migrated_factory, tmp_config, clock, agents=agents)
+    proj = mkdir(tmp_path, "P")
+    with migrated_factory.unit_of_work() as uow:
+        agents.upsert(uow, agent_id="author")
+
+    clock.set("2026-06-07T00:05:00Z")
+    svc.create_message(
+        project_root=str(proj), from_agent_id="author", subject="s", body="b"
+    )
+    with migrated_factory.unit_of_work() as uow:
+        assert agents.get(uow, "author").last_seen_at == "2026-06-07T00:05:00Z"

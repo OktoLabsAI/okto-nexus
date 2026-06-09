@@ -124,8 +124,9 @@ class WorkspaceRepo(Protocol):
     def list_all(self, uow: UnitOfWork) -> list[Workspace]:
         """Return ALL workspaces (global-admin surface; NOT workspace-scoped).
 
-        This is the single deliberately cross-workspace read in the identity
-        slice. Every other read is scoped by ``workspace_id``.
+        A deliberately cross-workspace read (as is :meth:`AgentRepo.list`, since
+        agents are global identities). Every workspace/session-scoped read is
+        keyed by ``workspace_id``.
         """
         ...
 
@@ -148,6 +149,21 @@ class AgentRepo(Protocol):
 
     def get(self, uow: UnitOfWork, agent_id: str) -> Agent | None:
         """Return the agent, or ``None`` if it does not exist."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[Agent]:
+        """Return ALL agents (global; identities are not workspace-scoped)."""
+        ...
+
+    def touch(
+        self, uow: UnitOfWork, *, agent_id: str, at: str | None = None
+    ) -> bool:
+        """Best-effort stamp of ``last_seen_at`` for an agent's latest action.
+
+        Returns ``True`` if the agent existed and was updated, ``False`` if no
+        such agent is registered (a no-op; never raises ``NOT_FOUND``) - callers
+        pass an actor id that may or may not be a registered identity.
+        """
         ...
 
 

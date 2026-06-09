@@ -36,6 +36,7 @@ class Agent:
     role: str | None = None
     capabilities: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
+    last_seen_at: str | None = None
 
 
 @dataclass(slots=True)

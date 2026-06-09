@@ -113,6 +113,7 @@ class EventService:
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
+        self._touch_agent(agent_id)
         page = self._read_page(workspace_id, agent_id, stream, cursor, limit, filters)
         return self._page_payload(page, timed_out=False)
 
@@ -140,6 +141,7 @@ class EventService:
             project_root, agent_id, stream, cursor, limit, filters
         )
         timeout = self._resolve_timeout(timeout_seconds)
+        self._touch_agent(agent_id)
         poll_seconds = max(0.0, self._config.poll_interval_ms / 1000.0)
 
         # First scan happens before any sleep (0 sleeps when events already
@@ -220,6 +222,23 @@ class EventService:
         if timeout_seconds <= 0:
             return 0
         return min(timeout_seconds, ceiling)
+
+    def _touch_agent(self, agent_id: str) -> None:
+        """Best-effort stamp of the caller's ``last_seen_at`` (own uow).
+
+        Presence tracking is a side effect of consuming the log, so it must NEVER
+        fail the read: it runs in its own unit of work, no-ops for an agent_id
+        that is not a registered identity (``touch`` returns ``False``), and
+        swallows a transient write failure (e.g. ``SQLITE_BUSY`` -> ``DB_ERROR``)
+        rather than aborting an otherwise-successful read.
+        """
+        if self._agents is None:
+            return
+        try:
+            with self._cf.unit_of_work() as uow:
+                self._agents.touch(uow, agent_id=agent_id, at=self._clock.now_iso())
+        except OktoNexusError:
+            pass  # best-effort presence; never break a read
 
     # ------------------------------------------------------------------ #
     # Scanning (a single non-blocking page)

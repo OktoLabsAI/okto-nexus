@@ -5,10 +5,15 @@ Implements the workspace / agent / session use cases of Okto Nexus V1:
 * ``workspace_resolve`` - deterministic ``workspace_id`` from ``project_root``
   (the SERVER hashes; the CLIENT only supplies the path) plus an idempotent
   upsert of the ``workspaces`` row.
-* ``workspace_list`` - GLOBAL-ADMIN: enumerate ALL workspaces (the only read
-  that crosses workspace boundaries; every other read stays scoped).
+* ``workspace_list`` - GLOBAL-ADMIN: enumerate ALL workspaces.
 * ``agent_register`` - upsert of a global, logical agent identity.
+* ``agent_list`` / ``agent_get`` - GLOBAL reads over agent identities.
 * ``session_open`` - create a workspace-scoped session (server-assigned id).
+
+The deliberately cross-workspace (global) reads are ``workspace_list`` and
+``agent_list`` / ``agent_get`` / ``capability_list`` (agents are global
+identities); every workspace/session read stays scoped to a single
+``workspace_id``.
 * ``session_heartbeat`` - advance ``last_heartbeat_at`` and report the derived
   status (``active``/``stale``).
 * ``session_close`` - idempotently close a session (``status='closed'`` +
@@ -32,6 +37,7 @@ from typing import Any, Mapping, Optional
 from ..config import NexusConfig
 from ..domain.base import new_id, utf8_byte_len
 from ..domain.ids import resolve_realpath, resolve_workspace_id
+from ..domain.routing import normalize_capabilities
 from ..errors import ErrorCode, OktoNexusError
 from .ports import (
     AgentRepo,
@@ -147,12 +153,13 @@ class IdentityService:
         }
 
     def workspace_list(self) -> list[dict[str, Any]]:
-        """Enumerate ALL workspaces (the single global-admin surface).
+        """Enumerate ALL workspaces (a global-admin surface).
 
-        This is the ONLY identity read that deliberately crosses workspace
-        boundaries: it returns rows from every workspace, unscoped. Every other
-        read (e.g. :meth:`list_sessions`) is scoped to a single ``workspace_id``
-        and never leaks rows from another workspace.
+        This deliberately crosses workspace boundaries: it returns rows from
+        every workspace, unscoped (as do :meth:`agent_list` / :meth:`agent_get`,
+        since agents are global identities). Every WORKSPACE/SESSION read (e.g.
+        :meth:`list_sessions`) stays scoped to a single ``workspace_id`` and
+        never leaks rows from another workspace.
         """
         with self._cf.unit_of_work() as uow:
             rows = self._workspaces.list_all(uow)
@@ -193,7 +200,12 @@ class IdentityService:
             )
         self._check_inline_size("capabilities", capabilities)
         self._check_inline_size("metadata", metadata)
+        # Validate the capabilities SHAPE up front (VALIDATION_ERROR for a
+        # non-iterable/non-mapping value) so a poison value is never persisted -
+        # keeping capability_list and capability routing/eligibility safe.
+        normalize_capabilities(capabilities)
 
+        now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:
             agent = self._agents.upsert(
                 uow,
@@ -202,13 +214,83 @@ class IdentityService:
                 capabilities=capabilities,
                 metadata=metadata,
             )
+            # Registering is itself an interaction; stamp last_seen_at.
+            self._agents.touch(uow, agent_id=agent_id, at=now)
         return {
             "agent_id": agent.agent_id,
             "role": agent.role,
             "capabilities": agent.capabilities,
             "metadata": agent.metadata,
             "created_at": agent.created_at,
-            "updated_at": self._clock.now_iso(),
+            "updated_at": now,
+            "last_seen_at": now,
+        }
+
+    def agent_list(self) -> list[dict[str, Any]]:
+        """Enumerate ALL registered agents (global; parallels ``workspace_list``).
+
+        Agent identities are global, so this is a deliberately cross-workspace
+        read. Each entry carries ``last_seen_at`` - the timestamp of the agent's
+        most recent action on the bus (``None`` if it never acted).
+        """
+        with self._cf.unit_of_work() as uow:
+            rows = self._agents.list(uow)
+        return [self._agent_to_data(agent) for agent in rows]
+
+    def agent_get(self, *, agent_id: Any) -> dict[str, Any]:
+        """Return one agent's full details, including ``last_seen_at``.
+
+        Raises ``VALIDATION_ERROR`` for a missing ``agent_id`` and ``NOT_FOUND``
+        when no such agent is registered.
+        """
+        if not _is_nonempty_str(agent_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "agent_id is required.",
+                {"agent_id": agent_id},
+            )
+        with self._cf.unit_of_work() as uow:
+            agent = self._agents.get(uow, agent_id)
+        if agent is None:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                "agent_id does not exist.",
+                {"agent_id": agent_id},
+            )
+        return self._agent_to_data(agent)
+
+    def capability_list(self) -> list[dict[str, Any]]:
+        """List the distinct capabilities advertised across ALL registered agents.
+
+        A global discovery surface: for each capability, the agents that possess
+        it (so a caller can decide whom to address with a capability-targeted
+        message or handoff). Capabilities are normalised with the SAME rule
+        capability routing uses (:func:`normalize_capabilities`), so what is
+        listed is exactly what a ``target: {strategy: "capability"}`` would match.
+        Result is sorted by capability; ``agents`` is sorted per capability.
+        """
+        with self._cf.unit_of_work() as uow:
+            agents = self._agents.list(uow)
+        index: dict[str, list[str]] = {}
+        for agent in agents:
+            # ``agent_register`` validates the capabilities shape up front, so a
+            # persisted value always normalises cleanly (no poison to guard).
+            for cap in normalize_capabilities(agent.capabilities):
+                index.setdefault(cap, []).append(agent.agent_id)
+        return [
+            {"capability": cap, "agent_count": len(ids), "agents": sorted(ids)}
+            for cap, ids in sorted(index.items())
+        ]
+
+    @staticmethod
+    def _agent_to_data(agent: Any) -> dict[str, Any]:
+        return {
+            "agent_id": agent.agent_id,
+            "role": agent.role,
+            "capabilities": agent.capabilities,
+            "metadata": agent.metadata,
+            "created_at": agent.created_at,
+            "last_seen_at": agent.last_seen_at,
         }
 
     # ------------------------------------------------------------------ #
@@ -261,6 +343,7 @@ class IdentityService:
                 status=SESSION_STATUS_ACTIVE,
                 started_at=now,
             )
+            self._agents.touch(uow, agent_id=agent_id, at=now)
             payload: dict[str, Any] = {
                 "session_id": session.session_id,
                 "agent_id": session.agent_id,
@@ -310,6 +393,7 @@ class IdentityService:
                 )
             self._guard_workspace(session.workspace_id, workspace_id, session_id)
             updated = self._sessions.heartbeat(uow, session_id=session_id, at=now)
+            self._agents.touch(uow, agent_id=updated.agent_id, at=now)
             status = self.derive_status(updated, now)
             self._emit(
                 uow,
@@ -357,6 +441,7 @@ class IdentityService:
             self._guard_workspace(session.workspace_id, workspace_id, session_id)
             was_closed = session.status == SESSION_STATUS_CLOSED
             closed = self._sessions.close(uow, session_id=session_id, at=now)
+            self._agents.touch(uow, agent_id=closed.agent_id, at=now)
             if not was_closed:
                 self._emit(
                     uow,

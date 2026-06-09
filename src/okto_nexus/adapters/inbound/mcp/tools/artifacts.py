@@ -16,13 +16,39 @@ passed into :func:`register`, matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
+
+from pydantic import Field
 
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteWorkspaceRepo
 from okto_nexus.application.artifacts import ArtifactService
 from okto_nexus.envelope import tool_envelope
+
+#: Reused parameter descriptions (kept DRY across the artifact tools).
+#: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
+#: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
+_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_ARTIFACT_TYPE = (
+    "Artifact classification - one of: file, text, json, markdown (normalised). "
+    "REQUIRED. json content is validated as well-formed. The type is just a label; "
+    "whether it is stored inline or by reference is decided by content-vs-path "
+    "below."
+)
+_P_NAME = "Human-friendly name/label for the artifact (optional)."
+_P_PATH = (
+    "Filesystem path to register by REFERENCE - must stay within the workspace "
+    "root; only the path + metadata are stored, never the file's bytes (optional). "
+    "Provide this OR content - at least one is REQUIRED."
+)
+_P_CONTENT = (
+    "Inline UTF-8 content to store directly, bounded by max_inline_bytes; for json "
+    "it must be well-formed (optional). Provide this OR path - at least one is "
+    "REQUIRED."
+)
+_P_METADATA = "Free-form JSON object stored with the artifact (optional)."
+_P_ARTIFACT_ID = "The artifact_id to retrieve. REQUIRED."
 
 
 def build_service(deps: Any) -> ArtifactService:
@@ -57,12 +83,12 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def artifact_put(
-        project_root: str,
-        artifact_type: str,
-        name: str | None = None,
-        path: str | None = None,
-        content: str | None = None,
-        metadata: Any = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        artifact_type: Annotated[str, Field(description=_P_ARTIFACT_TYPE)],
+        name: Annotated[str | None, Field(description=_P_NAME)] = None,
+        path: Annotated[str | None, Field(description=_P_PATH)] = None,
+        content: Annotated[str | None, Field(description=_P_CONTENT)] = None,
+        metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
     ) -> dict[str, Any]:
         """Register a file/text/json/markdown artifact in the resolved workspace."""
         return service.artifact_put(
@@ -76,6 +102,9 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
-    def artifact_get(project_root: str, artifact_id: str) -> dict[str, Any]:
+    def artifact_get(
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        artifact_id: Annotated[str, Field(description=_P_ARTIFACT_ID)],
+    ) -> dict[str, Any]:
         """Retrieve an artifact by id within the workspace resolved from project_root."""
         return service.artifact_get(project_root=project_root, artifact_id=artifact_id)

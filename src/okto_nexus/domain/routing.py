@@ -51,7 +51,12 @@ from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
 
-__all__ = ["RoutingAgent", "is_agent_eligible", "can_agent_see_event"]
+__all__ = [
+    "RoutingAgent",
+    "is_agent_eligible",
+    "can_agent_see_event",
+    "normalize_capabilities",
+]
 
 
 # --------------------------------------------------------------------------- #
@@ -123,33 +128,47 @@ def _agent_role(agent: Any) -> str | None:
     return _get(agent, "role")
 
 
-def _agent_capabilities(agent: Any) -> frozenset[str]:
-    """Normalise an agent's capabilities into an exact-match string set.
+def normalize_capabilities(capabilities: Any) -> frozenset[str]:
+    """Normalise a raw capabilities value into an exact-match string set.
+
+    The single rule shared by capability ROUTING and capability DISCOVERY
+    (``capability_list``), so what is advertised is exactly what a
+    ``capability`` target would match:
 
     * ``Mapping`` -> keys whose value is truthy (a capability mapped to a
       falsey value counts as *not* possessed).
     * ``str`` -> a single capability.
     * other ``Sequence``/iterable of strings -> that set.
     * ``None`` -> empty.
+
+    Blank/whitespace names are dropped (they could never be matched by a
+    ``capability`` target, which rejects an empty capability), so the advertised
+    set equals the addressable set. A non-iterable value raises ``VALIDATION_ERROR``.
     """
-    caps = _get(agent, "capabilities")
-    if caps is None:
+    if capabilities is None:
         return frozenset()
-    if isinstance(caps, Mapping):
-        return frozenset(str(k) for k, v in caps.items() if v)
-    if isinstance(caps, str):
-        return frozenset({caps})
-    if isinstance(caps, (set, frozenset, list, tuple)):
-        return frozenset(str(c) for c in caps)
+    if isinstance(capabilities, Mapping):
+        return frozenset(
+            str(k) for k, v in capabilities.items() if v and str(k).strip()
+        )
+    if isinstance(capabilities, str):
+        return frozenset({capabilities}) if capabilities.strip() else frozenset()
+    if isinstance(capabilities, (set, frozenset, list, tuple)):
+        return frozenset(str(c) for c in capabilities if str(c).strip())
     # Any other iterable of names.
     try:
-        return frozenset(str(c) for c in caps)
+        return frozenset(str(c) for c in capabilities if str(c).strip())
     except TypeError:
         raise OktoNexusError(
             ErrorCode.VALIDATION_ERROR,
             "Agent capabilities are not an iterable of names or a flag mapping.",
-            {"capabilities_type": type(caps).__name__},
+            {"capabilities_type": type(capabilities).__name__},
         ) from None
+
+
+def _agent_capabilities(agent: Any) -> frozenset[str]:
+    """Normalise an agent object's capabilities (see :func:`normalize_capabilities`)."""
+    return normalize_capabilities(_get(agent, "capabilities"))
 
 
 # --------------------------------------------------------------------------- #

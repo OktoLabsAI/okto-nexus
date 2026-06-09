@@ -18,7 +18,9 @@ passed into :func:`register`, matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
+
+from pydantic import Field
 
 from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
     SqliteHandoffRepo,
@@ -27,6 +29,63 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.handoff import HandoffService
 from okto_nexus.envelope import tool_envelope
+
+#: Reused parameter descriptions (kept DRY across the handoff tools).
+#: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
+#: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
+_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_FROM_AGENT = (
+    "Your agent_id (the creator); recorded as the handoff's originator - the owner "
+    "is whichever agent later claims it (handoff_claim), not necessarily you."
+)
+#: For a handoff the target controls ELIGIBILITY TO CLAIM (competing consumers:
+#: all eligible see it, the first to handoff_claim wins). Spell out the enum.
+_P_TARGET_HANDOFF = (
+    "Routing rule selecting which agents may CLAIM this handoff. REQUIRED. "
+    "Competing-consumers: every eligible agent sees it but only the first to "
+    "handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished "
+    "claim's lease expires and it returns to the pool. strategy is one of: direct, "
+    "capability, role, broadcast, mixed, direct_with_fallback. Shapes: "
+    'direct {"strategy":"direct","agent_id":"<id>"} (one named worker); '
+    'capability {"strategy":"capability","capability":"<cap>"} (string or list = '
+    "any-of) - discover capabilities via capability_list; "
+    'role {"strategy":"role","role":"<role>"} (exact, case-sensitive); '
+    'broadcast {"strategy":"broadcast"} (any agent in the workspace); '
+    'mixed {"strategy":"mixed","rules":[<sub-target>, ...]} (OR of sub-targets); '
+    'direct_with_fallback {"strategy":"direct_with_fallback","agent_id":"<id>",'
+    '"fallback_after_seconds":<n>,"fallback":<sub-target, default broadcast>} '
+    "(named worker first; opens to the fallback pool after the delay)."
+)
+_P_VISIBILITY = (
+    "Who may SEE the handoff - separate from who may CLAIM it (that is the "
+    "target). one of: public, eligible, private. REQUIRED (case-insensitive). "
+    "public = any agent in the workspace sees it; eligible = only agents the "
+    "target makes eligible; private = eligible-only (never broader than the "
+    "eligible set)."
+)
+_P_PAYLOAD = (
+    "Inline request body / work content, returned by handoff_list_available and "
+    "handoff_claim so the worker need not correlate the event (optional). A string "
+    "is returned byte-for-byte; a non-string is stored/returned as opaque JSON "
+    "TEXT. For large content, pass an artifact_id reference instead."
+)
+_P_SESSION_OPT = "Session_id attributing this operation to a specific open session of yours (optional)."
+_P_HANDOFF_AGENT = "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED."
+_P_HANDOFF_ID = "The handoff_id to act on. REQUIRED."
+_P_CURSOR = (
+    "Opaque pagination cursor: pass back the next_cursor from the previous page to "
+    "continue (optional; omit or '0' to start from the beginning)."
+)
+_P_LIMIT = "Max handoffs per page (optional; default applied by the server, clamped to the maximum)."
+_P_TIMEOUT = (
+    "Long-poll bound in SECONDS for an empty page (optional). >0 blocks until a "
+    "claimable handoff appears or the timeout elapses; 0 OR OMITTED is a single "
+    "non-blocking scan (no sleep) - unlike event_wait/message_wait, omitting it "
+    "does NOT block. Clamped to the server max wait. BLOCKING (only when >0): "
+    "parks your turn - see the server instructions."
+)
+_P_RESULT = "Completion result (string or JSON) recorded with handoff.completed (optional)."
+_P_REASON = "Human-readable reason recorded with the rejection (optional)."
 
 
 def build_service(deps: Any) -> HandoffService:
@@ -61,12 +120,12 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def handoff_create(
-        project_root: str,
-        from_agent_id: str,
-        target: Any,
-        visibility: str,
-        payload: str | None = None,
-        session_id: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
+        target: Annotated[Any, Field(description=_P_TARGET_HANDOFF)],
+        visibility: Annotated[str, Field(description=_P_VISIBILITY)],
+        payload: Annotated[str | None, Field(description=_P_PAYLOAD)] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
     ) -> dict[str, Any]:
         """Create an OPEN handoff after validating target/visibility; emit handoff.created.
 
@@ -89,11 +148,11 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def handoff_list_available(
-        project_root: str,
-        agent_id: str,
-        cursor: str | None = None,
-        limit: int | None = None,
-        timeout_seconds: int | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
+        cursor: Annotated[str | None, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
         """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated).
 
@@ -111,10 +170,10 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def handoff_claim(
-        project_root: str,
-        handoff_id: str,
-        agent_id: str,
-        session_id: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
+        agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
+        session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff; single winner, others get a structured error.
 
@@ -131,10 +190,10 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def handoff_complete(
-        project_root: str,
-        handoff_id: str,
-        agent_id: str,
-        result: Any = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
+        agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
+        result: Annotated[Any, Field(description=_P_RESULT)] = None,
     ) -> dict[str, Any]:
         """Owner-only transition CLAIMED -> COMPLETED; emit handoff.completed."""
         return service.handoff_complete(
@@ -147,10 +206,10 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def handoff_reject(
-        project_root: str,
-        handoff_id: str,
-        agent_id: str,
-        reason: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
+        agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
+        reason: Annotated[str | None, Field(description=_P_REASON)] = None,
     ) -> dict[str, Any]:
         """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED)."""
         return service.handoff_reject(

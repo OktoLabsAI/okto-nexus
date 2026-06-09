@@ -18,6 +18,7 @@ from okto_nexus.domain.routing import (
     RoutingAgent,
     can_agent_see_event,
     is_agent_eligible,
+    normalize_capabilities,
 )
 
 WS = "a" * 64  # a plausible workspace_id (hex sha256 shape)
@@ -50,6 +51,26 @@ class FakeEvent:
         self.visibility = visibility
         self.target = target
         self.created_at = created_at
+
+
+# --------------------------------------------------------------------------- #
+# normalize_capabilities (shared by capability routing AND capability_list)
+# --------------------------------------------------------------------------- #
+def test_normalize_capabilities():
+    assert normalize_capabilities(None) == frozenset()
+    assert normalize_capabilities({"py": True, "js": False}) == frozenset({"py"})
+    assert normalize_capabilities(["py", "ocr"]) == frozenset({"py", "ocr"})
+    assert normalize_capabilities("review") == frozenset({"review"})
+    assert normalize_capabilities(("a", "b")) == frozenset({"a", "b"})
+    assert normalize_capabilities([]) == frozenset()
+    # Blank/whitespace names are dropped (unmatchable by a capability target).
+    assert normalize_capabilities("") == frozenset()
+    assert normalize_capabilities("   ") == frozenset()
+    assert normalize_capabilities(["py", "", "  "]) == frozenset({"py"})
+    assert normalize_capabilities({"py": True, "": True}) == frozenset({"py"})
+    with pytest.raises(OktoNexusError) as ei:
+        normalize_capabilities(123)  # non-iterable, non-mapping
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
 # --------------------------------------------------------------------------- #

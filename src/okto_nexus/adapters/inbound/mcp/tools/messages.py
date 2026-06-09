@@ -19,7 +19,9 @@ does NOT import the MCP SDK; the live FastMCP server is passed into
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Annotated, Any
+
+from pydantic import Field
 
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventEmitter,
@@ -37,6 +39,62 @@ from okto_nexus.application.messages import MessageService
 from okto_nexus.envelope import tool_envelope
 
 from .events import build_service as build_event_service
+
+#: Reused parameter descriptions (kept DRY across the message/channel tools).
+#: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
+#: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
+_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
+_P_SUBJECT = "Short message subject/title (one line)."
+_P_BODY = (
+    "Message body (inline text). For large content, attach an artifact via "
+    "artifacts and keep the body a short pointer instead of inlining it."
+)
+_P_CHANNEL = (
+    "Channel_id to post into (optional; omit to post to the workspace default "
+    "channel). Enumerate channels with channel_list."
+)
+_P_FROM_SESSION = "Session_id attributing the message to a specific open session of yours (optional)."
+#: The routing target controls FAN-OUT/visibility for messages (pub/sub: every
+#: eligible agent receives it). Spell out the ``strategy`` enum and each shape.
+_P_TARGET_MSG = (
+    "Routing rule selecting who receives this message (optional; omit for "
+    "broadcast to the whole workspace). A message is pub/sub - every eligible "
+    "agent receives it; to reply 1:1 use direct. strategy is one of: direct, "
+    "capability, role, broadcast, mixed, direct_with_fallback. Shapes: "
+    'direct {"strategy":"direct","agent_id":"<id>"}; '
+    'capability {"strategy":"capability","capability":"<cap>"} (string or list = any-of); '
+    'role {"strategy":"role","role":"<role>"} (exact, case-sensitive); '
+    'broadcast {"strategy":"broadcast"}; '
+    'mixed {"strategy":"mixed","rules":[<sub-target>, ...]} (OR of sub-targets); '
+    'direct_with_fallback {"strategy":"direct_with_fallback","agent_id":"<id>",'
+    '"fallback_after_seconds":<n>,"fallback":<sub-target, default broadcast>}.'
+)
+_P_ARTIFACTS = (
+    "List of artifact_id strings to attach (optional; reference large content "
+    "instead of inlining it in body)."
+)
+_P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
+_P_MESSAGE_ID = "The message_id to read. REQUIRED."
+_P_VIEWER_OPT = (
+    "Your agent_id as the visibility viewer - you only see messages you are "
+    "allowed to see (optional). Omit for an UNFILTERED admin read that also "
+    "returns messages directed at other agents; pass your agent_id for the normal "
+    "scoped view."
+)
+_P_CURSOR = (
+    "Pagination cursor: the last event_id you consumed; returns event_id > cursor "
+    "(optional; omit or 0 to start from the beginning)."
+)
+_P_LIMIT = "Max messages per page (optional; default applied by the server, clamped to the maximum)."
+_P_WAIT_AGENT = "Your agent_id - the visibility viewer and the inbox you long-poll for. REQUIRED."
+_P_TIMEOUT = (
+    "Long-poll bound in SECONDS (optional). >0 blocks until a message arrives or "
+    "the timeout elapses; 0 is a single non-blocking scan (no sleep); OMITTED "
+    "defaults to the server max wait - the longest blocking poll, NOT a snapshot. "
+    "Clamped to the server max wait. BLOCKING: parks your turn - see the server "
+    "instructions."
+)
 
 
 def build_service(deps: Any) -> MessageService:
@@ -83,15 +141,15 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_create(
-        project_root: str,
-        from_agent_id: str,
-        subject: str,
-        body: str,
-        channel_id: str | None = None,
-        from_session_id: str | None = None,
-        target: dict[str, Any] | None = None,
-        artifacts: list[str] | None = None,
-        parent_message_id: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
+        subject: Annotated[str, Field(description=_P_SUBJECT)],
+        body: Annotated[str, Field(description=_P_BODY)],
+        channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
+        from_session_id: Annotated[str | None, Field(description=_P_FROM_SESSION)] = None,
+        target: Annotated[dict[str, Any] | None, Field(description=_P_TARGET_MSG)] = None,
+        artifacts: Annotated[list[str] | None, Field(description=_P_ARTIFACTS)] = None,
+        parent_message_id: Annotated[str | None, Field(description=_P_PARENT)] = None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` in one transaction."""
         return service.create_message(
@@ -109,9 +167,9 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_get(
-        project_root: str,
-        message_id: str,
-        agent_id: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        message_id: Annotated[str, Field(description=_P_MESSAGE_ID)],
+        agent_id: Annotated[str | None, Field(description=_P_VIEWER_OPT)] = None,
     ) -> dict[str, Any]:
         """Read a single workspace-scoped, visibility-filtered message."""
         return service.get_message(
@@ -123,11 +181,11 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_list(
-        project_root: str,
-        channel_id: str | None = None,
-        cursor: int | None = None,
-        limit: int | None = None,
-        agent_id: str | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
+        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        agent_id: Annotated[str | None, Field(description=_P_VIEWER_OPT)] = None,
     ) -> dict[str, Any]:
         """List workspace messages ordered by event_id with cursor pagination."""
         return service.list_messages(
@@ -141,12 +199,12 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_wait(
-        project_root: str,
-        agent_id: str,
-        channel_id: str | None = None,
-        cursor: int | None = None,
-        limit: int | None = None,
-        timeout_seconds: int | None = None,
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        agent_id: Annotated[str, Field(description=_P_WAIT_AGENT)],
+        channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
+        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
         """Long-poll for new messages, returning them materialised with body.
 
@@ -183,6 +241,8 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
-    def channel_list(project_root: str) -> dict[str, Any]:
+    def channel_list(
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+    ) -> dict[str, Any]:
         """Return the per-workspace seeded channels."""
         return service.list_channels(project_root=project_root)
