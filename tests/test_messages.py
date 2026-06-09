@@ -700,6 +700,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         "message_create",
         "message_get",
         "message_list",
+        "message_wait",
         "channel_list",
     }
     assert deps.repos.channels is not None

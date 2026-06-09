@@ -139,6 +139,7 @@ class HandoffService:
         normalized_target = validate_target(target)
         normalized_visibility = normalize_visibility(visibility)
         self._check_inline_size("payload", payload)
+        payload_text = self._serialize_payload(payload)
 
         target_text = json.dumps(normalized_target, ensure_ascii=False)
         now = self._clock.now_iso()
@@ -161,6 +162,7 @@ class HandoffService:
                 from_agent_id=from_agent_id,
                 target=target_text,
                 visibility=normalized_visibility,
+                payload=payload_text,
                 created_at=now,
             )
             event_payload: dict[str, Any] = {
@@ -172,8 +174,13 @@ class HandoffService:
                 "visibility": handoff.visibility,
                 "created_at": handoff.created_at,
             }
-            if payload is not None:
-                event_payload["payload"] = payload
+            # Emit the SERIALISED payload (the same TEXT stored on the row), so
+            # the handoff.created event, the stored row, and the
+            # list_available/claim echo all expose ONE consistent representation
+            # (a non-string payload would otherwise be an object on the event but
+            # a JSON string on claim).
+            if payload_text is not None:
+                event_payload["payload"] = payload_text
             if _is_nonempty_str(session_id):
                 event_payload["session_id"] = session_id
             self._emit(
@@ -271,6 +278,7 @@ class HandoffService:
             "target": _loads_target(handoff.target),
             "visibility": handoff.visibility,
             "from_agent_id": handoff.from_agent_id,
+            "payload": handoff.payload,
             "created_at": handoff.created_at,
         }
 
@@ -341,6 +349,7 @@ class HandoffService:
             "status": STATUS_CLAIMED,
             "claimed_by": claimed.claimed_by,
             "lease_expires_at": claimed.lease_expires_at,
+            "payload": claimed.payload,
         }
 
     # ------------------------------------------------------------------ #
@@ -694,6 +703,22 @@ class HandoffService:
                 f"{field} inline content exceeds {limit} UTF-8 bytes.",
                 {"field": field, "max_inline_bytes": limit},
             )
+
+    @staticmethod
+    def _serialize_payload(payload: Any) -> str | None:
+        """Serialise the inline payload to TEXT for storage (``None`` stays ``None``).
+
+        A string is stored verbatim so it round-trips byte-for-byte back to the
+        worker via ``handoff_list_available`` / ``handoff_claim``; any other
+        JSON-serialisable value is encoded. The payload is treated as OPAQUE on
+        read-back (returned as the stored TEXT, never re-parsed) - unlike
+        ``target``, which is always a routing object and is echoed decoded.
+        """
+        if payload is None:
+            return None
+        if isinstance(payload, str):
+            return payload
+        return json.dumps(payload, ensure_ascii=False)
 
     def _emit(
         self,

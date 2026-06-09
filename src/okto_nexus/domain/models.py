@@ -125,6 +125,7 @@ class Handoff:
     claimed_by: str | None = None
     lease_expires_at: str | None = None
     updated_at: str | None = None
+    payload: str | None = None
 
 
 @dataclass(slots=True)

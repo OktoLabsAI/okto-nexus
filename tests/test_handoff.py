@@ -15,6 +15,7 @@ concurrent-writer event monotonicity.
 
 from __future__ import annotations
 
+import json
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -863,6 +864,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     created = server.tools["handoff_create"](
         project_root=proj, from_agent_id="c",
         target={"strategy": "broadcast"}, visibility="public",
+        payload="please process batch 7",
     )
     assert created["ok"] is True
     hid = created["data"]["handoff_id"]
@@ -870,9 +872,12 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     listed = server.tools["handoff_list_available"](project_root=proj, agent_id="w")
     assert listed["ok"] is True
     assert {h["handoff_id"] for h in listed["data"]["handoffs"]} == {hid}
+    # Payload travels with the row through the full MCP path (no event correlation).
+    assert listed["data"]["handoffs"][0]["payload"] == "please process batch 7"
 
     claimed = server.tools["handoff_claim"](project_root=proj, handoff_id=hid, agent_id="w")
     assert claimed["ok"] is True and claimed["data"]["status"] == STATUS_CLAIMED
+    assert claimed["data"]["payload"] == "please process batch 7"
 
     completed = server.tools["handoff_complete"](
         project_root=proj, handoff_id=hid, agent_id="w"
@@ -902,3 +907,231 @@ def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
     assert deps.repos.handoffs is existing  # not overwritten
     assert deps.repos.tasks is not None  # filled in
     assert deps.repos.agents is not None  # filled in
+
+
+# --------------------------------------------------------------------------- #
+# Handoff payload passthrough (migration 003) - returned by list/claim
+# --------------------------------------------------------------------------- #
+def test_migration_003_adds_payload_column_idempotently(migrated_factory):
+    # The payload column comes from migration 003, and re-applying is a no-op
+    # (no 'duplicate column name', nothing newly applied).
+    from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
+
+    conn = migrated_factory.get_connection()
+    try:
+        cols = {r[1] for r in conn.execute("PRAGMA table_info(handoffs)").fetchall()}
+        migs = {r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()}
+    finally:
+        conn.close()
+    assert "payload" in cols
+    assert 3 in migs  # the column is attributable to migration 003
+    assert MigrationRunner(migrated_factory).apply() == []  # idempotent re-run
+
+
+def test_payload_round_trips_through_list_and_claim(
+    migrated_factory, tmp_config, tmp_path
+):
+    clock = StubClock()
+    agents = FakeAgentRepo()
+    agents.add("worker", capabilities={"ocr": True})
+    svc = make_service(
+        migrated_factory, tmp_config, clock, emitter=ThreadSafeEmitter(), agents=agents
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+
+    body = '{"file":"scan.pdf","pages":12}'
+    hid = svc.handoff_create(
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "capability", "capability": "ocr"},
+        visibility="eligible",
+        payload=body,
+    )["handoff_id"]
+
+    # The worker sees the payload BEFORE claiming (no event correlation needed).
+    listed = svc.handoff_list_available(project_root=proj, agent_id="worker")
+    assert len(listed["handoffs"]) == 1
+    assert listed["handoffs"][0]["payload"] == body
+
+    # And gets it back on the claim response too.
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
+    assert claimed["payload"] == body
+
+
+def test_payload_none_stays_none(migrated_factory, tmp_config, tmp_path):
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock,
+        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="boss",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+
+    listed = svc.handoff_list_available(project_root=proj, agent_id="w")
+    assert listed["handoffs"][0]["payload"] is None
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+    assert claimed["payload"] is None
+
+
+def test_payload_object_is_serialized_to_json_text(
+    migrated_factory, tmp_config, tmp_path
+):
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock,
+        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="boss",
+        target={"strategy": "broadcast"}, visibility="public",
+        payload={"k": "v", "n": 3},
+    )["handoff_id"]
+
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+    # Opaque on read-back: returned as the stored JSON TEXT, not re-parsed.
+    assert isinstance(claimed["payload"], str)
+    assert json.loads(claimed["payload"]) == {"k": "v", "n": 3}
+
+
+def test_payload_consistent_between_event_and_claim(
+    migrated_factory, tmp_config, tmp_path
+):
+    # A non-string payload exposes ONE representation across surfaces: the
+    # handoff.created event and the claim echo must agree (both the JSON TEXT).
+    clock = StubClock()
+    emitter = ThreadSafeEmitter()
+    svc = make_service(
+        migrated_factory, tmp_config, clock, emitter=emitter, agents=FakeAgentRepo()
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="b",
+        target={"strategy": "broadcast"}, visibility="public", payload={"k": "v"},
+    )["handoff_id"]
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+    created = [e for e in emitter.events if e["type"] == "handoff.created"]
+    # The emitter records the full event_payload dict; its "payload" key holds
+    # the serialised work content - it must equal the claim echo.
+    assert created[0]["payload"]["payload"] == claimed["payload"] == '{"k": "v"}'
+
+
+def test_payload_large_round_trips_at_boundary(migrated_factory, tmp_config, tmp_path):
+    # The feature is passthrough: a payload at the 64KB inclusive limit must come
+    # back byte-for-byte through both list_available and claim (not just pass the
+    # size gate).
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock,
+        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    big = "x" * tmp_config.max_inline_bytes
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="b",
+        target={"strategy": "broadcast"}, visibility="public", payload=big,
+    )["handoff_id"]
+    listed = svc.handoff_list_available(project_root=proj, agent_id="w")
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+    assert listed["handoffs"][0]["payload"] == big
+    assert claimed["payload"] == big
+    assert len(claimed["payload"]) == tmp_config.max_inline_bytes
+
+
+def test_payload_unicode_round_trips(migrated_factory, tmp_config, tmp_path):
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock,
+        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    text = "relatório café ☕ 文件"  # accents + emoji + CJK
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="b",
+        target={"strategy": "broadcast"}, visibility="public", payload=text,
+    )["handoff_id"]
+    assert svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")[
+        "payload"
+    ] == text  # same code points, no \\uXXXX escaping
+
+    # An object with non-ASCII values is stored as UTF-8 JSON, not ASCII-escaped.
+    hid2 = svc.handoff_create(
+        project_root=proj, from_agent_id="b",
+        target={"strategy": "broadcast"}, visibility="public",
+        payload={"nota": "café ☕"},
+    )["handoff_id"]
+    body2 = svc.handoff_claim(project_root=proj, handoff_id=hid2, agent_id="w")["payload"]
+    assert json.loads(body2) == {"nota": "café ☕"}
+    assert "\\u" not in body2  # ensure_ascii=False preserved the characters
+
+
+def test_payload_empty_string_preserved_not_null(
+    migrated_factory, tmp_config, tmp_path
+):
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock,
+        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="b",
+        target={"strategy": "broadcast"}, visibility="public", payload="",
+    )["handoff_id"]
+    claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+    assert claimed["payload"] == ""  # empty string preserved, distinct from None
+    assert claimed["payload"] is not None
+
+
+def test_legacy_row_backfills_to_null_payload(tmp_path):
+    # A handoff row that existed BEFORE migration 003 (no payload column) reads
+    # back with payload=None after the ALTER ADD COLUMN backfills NULL.
+    import shutil
+
+    from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
+    from okto_nexus.adapters.outbound.sqlite.migrations import (
+        MigrationRunner,
+        _default_migrations_dir,
+    )
+    from okto_nexus.config import NexusConfig
+
+    real_dir = _default_migrations_dir()
+    partial = tmp_path / "migs_partial"
+    partial.mkdir()
+    for f in real_dir.glob("00[12]_*.sql"):
+        shutil.copy(f, partial)
+
+    config = NexusConfig(home_dir=tmp_path / "home")
+    factory = ConnectionFactory(config)
+    MigrationRunner(factory, migrations_dir=partial).apply()  # 001 + 002 only
+
+    clock = StubClock()
+    ws = seed_workspace(factory, str(mkdir(tmp_path, "P")), clock)
+    conn = factory.get_connection()
+    try:
+        conn.execute("BEGIN")
+        conn.execute(
+            "INSERT INTO handoffs (handoff_id, workspace_id, status, created_at) "
+            "VALUES (?, ?, ?, ?)",
+            ("hof_legacy", ws, STATUS_OPEN, "2026-06-07T00:00:00Z"),
+        )
+        conn.execute("COMMIT")
+    finally:
+        conn.close()
+
+    # Apply the full set: 003 adds the column and backfills the legacy row NULL.
+    assert 3 in MigrationRunner(factory).apply()
+    repo = SqliteHandoffRepo(clock)
+    with factory.unit_of_work() as uow:
+        row = repo.get(uow, workspace_id=ws, handoff_id="hof_legacy")
+    assert row is not None and row.payload is None

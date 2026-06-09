@@ -376,6 +376,45 @@ non-int → `VALIDATION_ERROR`, above max → pinned to max; `timeout_seconds`
 `None`→ceiling, `<= 0` → a single `event_get` with no sleep, else
 `min(timeout, ceiling)`; polling steps by `poll_interval_ms`.
 
+### Monitoring patterns (background follower)
+
+`event_wait` / `message_wait` are **blocking** long-polls: with
+`timeout_seconds > 0` the call parks the caller's turn until an event/message
+arrives or the timeout expires. Pick the mode that fits your harness so it is
+never forced to block:
+
+- **Background follower (recommended).** If your harness can spawn a detached
+  process, run the CLI follower and treat each NDJSON line as a notification —
+  the agent loop stays free, idle cost ~0. It is the layer-clean replacement for
+  reading `nexus.db` directly (visibility/routing stay enforced):
+
+  ```bash
+  okto-nexus tail --project-root <path> --agent-id <you> --from latest \
+      --exclude-agent <you>          # drop your own echo
+  ```
+
+- **In-loop, no background.** Call with `timeout_seconds=0` for a **non-blocking
+  snapshot** (single scan, no sleep) and poll between turns, advancing
+  `cursor` → `next_cursor`. Don't use a long timeout if you can't park the turn.
+
+- **Targeted wait.** A short `timeout_seconds` (e.g. 30) is fine to await the
+  reply to a message you just sent, accepting the block.
+
+Two things a real monitor must handle — the `tail` follower does both:
+
+- **Own echo.** The follower emits *every* visible event, including the caller's
+  own, so a naive monitor reacts to itself. `--exclude-agent <you>` drops them
+  **client-side** (the `event_wait` filter is equality-only, so exclusion can't
+  be server-side); `--from-agent <x>` includes a single author **server-side**.
+- **Transient locks.** A momentary WAL lock surfaces as `DB_ERROR`; the follow
+  loop retries those with bounded backoff (counter reset on each successful poll)
+  while failing fast on terminal errors and surfacing a transient that won't
+  clear. The cursor is not advanced across a failed poll, so no event is skipped.
+
+> The block is a property of the current **stdio** long-poll. The roadmap's
+> SSE/HTTP transport would replace polling with server **push** (no blocking, no
+> busy-wait), at which point the background-follower workaround becomes optional.
+
 ### Channels & messages
 
 Three channels are **seeded per workspace** —
@@ -659,6 +698,22 @@ visibility-filtered.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
   (non-int cursor; non-int limit).
 
+#### `message_wait`
+Long-poll for new messages, **materialised with body** — collapses
+`event_wait` → parse → `message_get` into one call. Reuses `event_wait` under
+the hood (filtered to `message.created` on the `workspace` stream) and re-checks
+visibility per message. **Blocking** — see *Monitoring patterns*.
+- **Request:** `project_root: str` (required); `agent_id: str` (required, scopes
+  visibility); `channel_id: str | None`; `cursor: int | None` (the **`event_id`**
+  cursor, not the `message_list` offset); `limit: int | None`;
+  `timeout_seconds: int | None` (`<= 0` → non-blocking snapshot).
+- **Data:** `{messages: [...], next_cursor: int, has_more: bool, timed_out: bool}`.
+  Cursor semantics are inherited from `event_wait` (a non-empty page advances
+  past every scanned event; on timeout the entry cursor is returned unchanged).
+- **Errors:** same as `event_wait` (`WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`,
+  `VALIDATION_ERROR` for `agent_id`/cursor/limit/timeout), plus `INTERNAL_ERROR`
+  (no `EventWaiter` wired).
+
 #### `channel_list`
 Return the workspace's seeded channels (idempotently seeds them first).
 - **Request:** `project_root: str` (required).
@@ -674,7 +729,10 @@ Return the workspace's seeded channels (idempotently seeds them first).
 
 #### `handoff_create`
 Create an `OPEN` handoff (validating target/visibility/limit) and emit
-`handoff.created`.
+`handoff.created`. The `payload` (inline request body / work content) is stored
+**with the row** and returned by `handoff_list_available`/`handoff_claim`, so a
+worker reads the work without correlating the `handoff.created` event — pass an
+`artifact_id` reference for large content.
 - **Request:** `project_root: str` (required); `from_agent_id: str` (required);
   `target: Any` (required — descriptor with `strategy` + per-strategy fields);
   `visibility: str` (required — one of `{private, eligible, public}`);
@@ -692,7 +750,7 @@ caller (paginated, with optional long-poll).
   `cursor: str | None` (`None`→0); `limit: int | None` (`None`→100);
   `timeout_seconds: int | None` (`None`→0 = no long-poll; clamped to
   `max_wait_timeout_seconds`).
-- **Data:** `{handoffs: [{handoff_id, status, target, visibility, from_agent_id, created_at}, …], next_cursor: str | None, has_more: bool, timed_out: bool}`.
+- **Data:** `{handoffs: [{handoff_id, status, target, visibility, from_agent_id, payload, created_at}, …], next_cursor: str | None, has_more: bool, timed_out: bool}`. Each entry carries the `payload` so a worker can triage before claiming.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
   (missing agent_id; non-int/negative cursor; non-int/`<=0`/`bool` limit;
   non-numeric/negative/`bool` timeout_seconds).
@@ -702,7 +760,7 @@ Atomically claim an `OPEN` handoff (single winner); expires leases first and gat
 on eligibility. Emits `handoff.claimed`.
 - **Request:** `project_root: str` (required); `handoff_id: str` (required);
   `agent_id: str` (required); `session_id: str | None` (default `None`).
-- **Data:** `{handoff_id, workspace_id, status:"CLAIMED", claimed_by, lease_expires_at}`.
+- **Data:** `{handoff_id, workspace_id, status:"CLAIMED", claimed_by, lease_expires_at, payload}`.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
   (missing handoff_id/agent_id), `NOT_FOUND`, `WORKSPACE_MISMATCH`,
   `NOT_ELIGIBLE_TO_CLAIM`, `HANDOFF_ALREADY_CLAIMED`.

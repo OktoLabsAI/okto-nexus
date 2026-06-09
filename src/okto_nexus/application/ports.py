@@ -257,6 +257,32 @@ class EventEmitter(Protocol):
         ...
 
 
+@runtime_checkable
+class EventWaiter(Protocol):
+    """Long-poll seam OWNED by the Event Log slice (``event_wait``).
+
+    Peer slices that need to block until new events arrive (e.g. the Channels &
+    Messages ``message_wait``) depend on THIS port and REUSE the single
+    poll/sleep implementation rather than reimplementing it. The return shape is
+    the canonical page payload ``{events, next_cursor, has_more, timed_out}``;
+    visibility (``can_agent_see_event``) is already applied by the implementor.
+    """
+
+    def event_wait(
+        self,
+        *,
+        project_root: Any,
+        agent_id: Any,
+        stream: Any,
+        cursor: Any = None,
+        limit: Any = None,
+        filters: Any = None,
+        timeout_seconds: Any = None,
+    ) -> dict[str, Any]:
+        """Long-poll the log until a non-empty page or the timeout ceiling."""
+        ...
+
+
 # --------------------------------------------------------------------------- #
 # Channels / messages
 # --------------------------------------------------------------------------- #
@@ -389,6 +415,7 @@ class HandoffRepo(Protocol):
         from_agent_id: str | None = None,
         target: str | None = None,
         visibility: str | None = None,
+        payload: str | None = None,
         created_at: str | None = None,
     ) -> Handoff:
         """Create a handoff, returning the stored row."""

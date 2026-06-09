@@ -166,7 +166,7 @@ class SqliteHandoffRepo(_ClockBacked):
 
     _COLUMNS = (
         "handoff_id, workspace_id, task_id, from_agent_id, target, visibility, "
-        "status, claimed_by, lease_expires_at, created_at, updated_at"
+        "status, claimed_by, lease_expires_at, created_at, updated_at, payload"
     )
 
     def create(
@@ -180,6 +180,7 @@ class SqliteHandoffRepo(_ClockBacked):
         from_agent_id: str | None = None,
         target: str | None = None,
         visibility: str | None = None,
+        payload: str | None = None,
         created_at: str | None = None,
     ) -> Handoff:
         now = created_at or self._now()
@@ -189,8 +190,8 @@ class SqliteHandoffRepo(_ClockBacked):
                 INSERT INTO handoffs
                     (handoff_id, workspace_id, task_id, from_agent_id, target,
                      visibility, status, claimed_by, lease_expires_at,
-                     created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?)
+                     created_at, updated_at, payload)
+                VALUES (?, ?, ?, ?, ?, ?, ?, NULL, NULL, ?, ?, ?)
                 """,
                 (
                     handoff_id,
@@ -202,6 +203,7 @@ class SqliteHandoffRepo(_ClockBacked):
                     status,
                     now,
                     now,
+                    payload,
                 ),
             )
         except sqlite3.Error as exc:
@@ -414,4 +416,5 @@ class SqliteHandoffRepo(_ClockBacked):
             claimed_by=row["claimed_by"],
             lease_expires_at=row["lease_expires_at"],
             updated_at=row["updated_at"],
+            payload=row["payload"],
         )

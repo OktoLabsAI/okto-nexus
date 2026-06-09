@@ -15,3 +15,9 @@ dist/
 _spec_full.json
 spec_full.txt
 spec_part2.txt
+
+# Tooling caches
+.ruff_cache/
+
+# Local scratch (handoff diff artifacts, etc.)
+.okto_handoff_*.patch

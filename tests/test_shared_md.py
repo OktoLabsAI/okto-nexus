@@ -20,10 +20,9 @@ envelope.
 
 from __future__ import annotations
 
-import os
 import threading
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 

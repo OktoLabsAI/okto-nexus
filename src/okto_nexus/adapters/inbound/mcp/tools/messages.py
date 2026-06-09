@@ -36,12 +36,17 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
 from okto_nexus.application.messages import MessageService
 from okto_nexus.envelope import tool_envelope
 
+from .events import build_service as build_event_service
+
 
 def build_service(deps: Any) -> MessageService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
 
     Idempotent: any repo / emitter already present is reused so this slice and
     its peers share a single concrete instance and a single event append path.
+    The Event Log :class:`EventService` is built (reusing the same wired repos)
+    and injected as the :class:`EventWaiter`, so ``message_wait`` reuses the one
+    long-poll implementation instead of duplicating the poll/sleep loop.
     """
     repos = deps.repos
 
@@ -67,6 +72,7 @@ def build_service(deps: Any) -> MessageService:
         event_emitter=deps.event_emitter,
         clock=deps.clock,
         max_inline_bytes=deps.config.max_inline_bytes,
+        event_waiter=build_event_service(deps),
     )
 
 
@@ -130,6 +136,49 @@ def register(server: Any, deps: Any) -> None:
             cursor=cursor,
             limit=limit,
             viewer_agent_id=agent_id,
+        )
+
+    @server.tool()
+    @tool_envelope
+    def message_wait(
+        project_root: str,
+        agent_id: str,
+        channel_id: str | None = None,
+        cursor: int | None = None,
+        limit: int | None = None,
+        timeout_seconds: int | None = None,
+    ) -> dict[str, Any]:
+        """Long-poll for new messages, returning them materialised with body.
+
+        Reuses ``event_wait`` under the hood and resolves each ``message.created``
+        into a full, visibility-filtered message (collapsing
+        event_wait -> parse -> message_get into one call). ``cursor`` is the
+        event_id cursor; ``next_cursor`` advances as with ``event_wait``.
+
+        CONCURRENCY - this is a BLOCKING long-poll: with ``timeout_seconds > 0``
+        it parks the caller's turn until a message arrives or the timeout
+        expires. Pick a mode so a single-threaded harness is never forced to
+        block:
+          * Background follower (best): if you can spawn a detached process, run
+            ``okto-nexus tail --from latest`` (or a message_wait loop) in the
+            background and treat each emitted line as a notification - the agent
+            loop stays free, idle cost ~0. The layer-clean replacement for
+            reading the DB directly.
+          * In-loop, no background: call with ``timeout_seconds=0`` for a
+            NON-BLOCKING snapshot (single scan, no sleep) and poll between turns,
+            advancing ``cursor`` -> ``next_cursor``.
+          * Targeted wait: a short ``timeout_seconds`` (e.g. 30) is fine to await
+            the reply to a message you just sent, accepting the block.
+        The block is inherent to the current stdio long-poll; the planned
+        SSE/HTTP transport would remove it (server push, no blocking/polling).
+        """
+        return service.wait_messages(
+            project_root=project_root,
+            agent_id=agent_id,
+            channel_id=channel_id,
+            cursor=cursor,
+            limit=limit,
+            timeout_seconds=timeout_seconds,
         )
 
     @server.tool()

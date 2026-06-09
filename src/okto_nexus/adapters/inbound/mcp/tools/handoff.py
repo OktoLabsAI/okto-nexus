@@ -68,7 +68,15 @@ def register(server: Any, deps: Any) -> None:
         payload: str | None = None,
         session_id: str | None = None,
     ) -> dict[str, Any]:
-        """Create an OPEN handoff after validating target/visibility; emit handoff.created."""
+        """Create an OPEN handoff after validating target/visibility; emit handoff.created.
+
+        The optional ``payload`` (the inline request body / work content) is
+        persisted with the row and returned by ``handoff_list_available`` and
+        ``handoff_claim`` - the worker never has to correlate the
+        ``handoff.created`` event to read it. A string is returned byte-for-byte;
+        a non-string value is stored/returned as opaque JSON TEXT (not re-parsed).
+        For large content, pass an ``artifact_id`` reference instead.
+        """
         return service.handoff_create(
             project_root=project_root,
             from_agent_id=from_agent_id,
@@ -87,7 +95,11 @@ def register(server: Any, deps: Any) -> None:
         limit: int | None = None,
         timeout_seconds: int | None = None,
     ) -> dict[str, Any]:
-        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated)."""
+        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated).
+
+        Each entry includes the handoff ``payload`` so a worker can triage the
+        work BEFORE claiming it.
+        """
         return service.handoff_list_available(
             project_root=project_root,
             agent_id=agent_id,
@@ -104,7 +116,11 @@ def register(server: Any, deps: Any) -> None:
         agent_id: str,
         session_id: str | None = None,
     ) -> dict[str, Any]:
-        """Atomically claim an OPEN handoff; single winner, others get a structured error."""
+        """Atomically claim an OPEN handoff; single winner, others get a structured error.
+
+        The claim response returns the handoff ``payload`` (the work content)
+        alongside ``claimed_by`` / ``lease_expires_at``.
+        """
         return service.handoff_claim(
             project_root=project_root,
             handoff_id=handoff_id,

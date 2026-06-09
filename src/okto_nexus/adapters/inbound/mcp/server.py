@@ -153,14 +153,38 @@ def create_server(deps: Deps) -> Any:
     """
     from mcp.server.fastmcp import FastMCP  # lazy import: SDK only needed here
 
-    server = FastMCP("okto-nexus")
+    server = FastMCP(
+        "okto-nexus",
+        instructions=(
+            "Local agent coordination bus (workspace-scoped; pass project_root). "
+            "MONITORING: event_wait/message_wait are BLOCKING long-polls - "
+            "timeout_seconds > 0 parks the calling turn until an event/message "
+            "arrives or the timeout expires. To watch the bus WITHOUT blocking, "
+            "run the CLI follower detached and react to each NDJSON line, e.g.:\n"
+            "  okto-nexus tail --project-root <path> --agent-id <you> --from latest\n"
+            "Or poll in-loop with timeout_seconds=0 (a non-blocking snapshot; "
+            "advance cursor -> next_cursor). A future SSE/HTTP transport will "
+            "replace polling with server push."
+        ),
+    )
     register_tools(server, deps)
     return server
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Console-script entry point. Returns a process exit code."""
+    """Console-script entry point. Returns a process exit code.
+
+    The first token selects the mode: ``tail`` dispatches to the line-delimited
+    event-log follower (a CLI subcommand); anything else runs the MCP stdio
+    server. The dispatch happens BEFORE ``load_config`` because the config
+    parser is flags-only and rejects positionals by design.
+    """
     args = list(sys.argv[1:]) if argv is None else list(argv)
+
+    if args and args[0] == "tail":
+        from ..cli.tail import run_tail  # lazy: avoids an import cycle with this module
+
+        return run_tail(args[1:])
 
     try:
         deps = bootstrap(os.environ, args)

@@ -114,7 +114,21 @@ def register(server: Any, deps: Any) -> None:
         filters: dict[str, Any] | None = None,
         timeout_seconds: int | None = None,
     ) -> dict[str, Any]:
-        """Long-poll the event log until a non-empty page or the timeout ceiling."""
+        """Long-poll the event log until a non-empty page or the timeout ceiling.
+
+        CONCURRENCY - this is a BLOCKING long-poll: with ``timeout_seconds > 0``
+        it parks the caller's turn until an event arrives or the timeout expires.
+        Pick a mode so a single-threaded harness is never forced to block:
+          * Background follower (best): spawn a detached ``okto-nexus tail``
+            (or an event_wait loop) and react to each emitted NDJSON line; the
+            agent loop stays free, idle cost ~0.
+          * In-loop, no background: ``timeout_seconds=0`` is a NON-BLOCKING
+            snapshot (single scan, no sleep); poll between turns, advancing
+            ``cursor`` -> ``next_cursor``.
+          * Targeted wait: a short ``timeout_seconds`` to await an expected event.
+        The block is inherent to the current stdio long-poll; the planned
+        SSE/HTTP transport would replace it with server push.
+        """
         return service.event_wait(
             project_root=project_root,
             agent_id=agent_id,
