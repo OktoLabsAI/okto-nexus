@@ -99,6 +99,25 @@ class Message:
 
 
 @dataclass(slots=True)
+class MessageDelivery:
+    """A per-recipient delivery record for a message (the inbox lane, ADR 0001).
+
+    GLOBAL (not workspace-scoped): an agent's inbox spans every workspace.
+    ``status`` is one of ``unread`` / ``delivered`` (in-flight, leased) /
+    ``read`` (acknowledged into history). Mirrors ``migrations/005``.
+    """
+
+    delivery_id: str
+    message_id: str
+    recipient_agent_id: str
+    status: str
+    created_at: str
+    delivered_at: str | None = None
+    lease_expires_at: str | None = None
+    read_at: str | None = None
+
+
+@dataclass(slots=True)
 class Task:
     """A unit of work tracked within a workspace."""
 

@@ -56,6 +56,7 @@ __all__ = [
     "is_agent_eligible",
     "can_agent_see_event",
     "normalize_capabilities",
+    "target_strategy",
 ]
 
 
@@ -406,6 +407,31 @@ def is_agent_eligible(
             return True
         return is_agent_eligible(agent, fallback, created_at, now)
     return False
+
+
+def target_strategy(target: Any) -> str | None:
+    """Return the normalised routing strategy of ``target`` (or ``None``).
+
+    ``None``/blank target -> ``None`` (no restriction / broadcast semantics). A
+    present target's ``strategy``/``kind`` discriminator is normalised exactly as
+    :func:`is_agent_eligible` (case-insensitive, ``-``/space -> ``_``); a missing
+    or unknown strategy raises ``VALIDATION_ERROR`` (consistent with eligibility).
+
+    Used by the inbox model (ADR 0001) to tell a *directed* target (``direct`` /
+    ``direct_with_fallback``, where resolving to nobody is an unknown-recipient
+    ERROR) from a *group* target (where zero matches is a benign warning).
+    """
+    resolved = _coerce_target(target)
+    if resolved is None:
+        return None
+    strategy = resolved.get("strategy", resolved.get("kind"))
+    if strategy is None:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "Target is missing the 'strategy' discriminator.",
+            {"target_keys": sorted(str(k) for k in resolved.keys())},
+        )
+    return _normalize_strategy(strategy)
 
 
 def _normalize_visibility(raw: Any) -> str:

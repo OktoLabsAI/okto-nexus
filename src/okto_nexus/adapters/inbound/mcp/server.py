@@ -43,7 +43,11 @@ from ...outbound.sqlite.identity_repo import (
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
-from ...outbound.sqlite.messages_repo import SqliteChannelRepo, SqliteMessageRepo
+from ...outbound.sqlite.messages_repo import (
+    SqliteChannelRepo,
+    SqliteMessageDeliveryRepo,
+    SqliteMessageRepo,
+)
 from ...outbound.sqlite.migrations import MigrationRunner
 from . import tools as _tools_pkg
 
@@ -83,30 +87,30 @@ broadcast actionable WORK requests: an undirected "do X" can trigger UNWANTED \
 PARALLEL WORK (every eligible agent may act on it). Once discovery identifies the \
 owner, switch to a direct message (or a handoff if it is dispatchable work).
 
-CHANNELS are lightweight ORGANIZATIONAL LABELS, not access boundaries. There is \
-no membership or ACL: every agent in the workspace can read and post to ANY \
-channel. They group messages by topic/workstream; they do NOT decide who \
-receives a message - that is the message TARGET (above). Only "general" exists \
-by default; create the channels you need with channel_create (idempotent by \
-name) and discover them with channel_list. When LISTENING (message_wait / \
-message_list), OMIT channel_id to cover the WHOLE workspace across all channels \
-- this is the default and the safe choice, because filtering by one channel can \
-make you MISS messages directed to you elsewhere. Pass channel_id only to \
-deliberately narrow to one topic.
+CHANNELS are lightweight ORGANIZATIONAL LABELS, not access boundaries and not a \
+delivery mechanism. No membership or ACL: any agent in the workspace can read and \
+post to ANY channel. They only TAG a message by topic/workstream; they do NOT \
+decide who receives it - that is the message TARGET (above). Only "general" \
+exists by default; create the channels you need with channel_create (idempotent \
+by name) and discover them with channel_list.
 
-AWAITING A REPLY. After sending a message that expects a response, START \
-LISTENING for replies addressed to you - do not fire-and-forget. If you can \
-spawn a background process, run the detached follower and react to each NDJSON \
-line:
-  okto-nexus tail --project-root <path> --agent-id <you> --from latest --exclude-agent <you>
-Otherwise poll message_wait(project_root, agent_id=<you>, cursor=<last>) between \
-turns, advancing cursor -> next_cursor.
+YOUR INBOX (how you receive messages). Messages addressed to you are delivered \
+to your GLOBAL inbox and stay there until you read them - no cursor, no index, \
+regardless of which workspace they were sent in. The flow:
+  * inbox_count(agent_id=<you>) - cheap between-turns check; if unread > 0, pull.
+  * inbox_pull(agent_id=<you>) - returns your unread messages WITH their body and
+    marks them in-flight (leased).
+  * inbox_ack(agent_id=<you>, message_ids=[...]) - once handled, move them to
+    history. Unacked messages are REDELIVERED (at-least-once), so nothing is lost
+    if you stop mid-handling. inbox_peek is a non-destructive look; inbox_history
+    is the read archive.
+After sending a message that expects a reply, just check your inbox on a later \
+turn - the reply lands there (no fire-and-forget, no polling a cursor).
 
-MONITORING MECHANICS. event_wait/message_wait are BLOCKING long-polls \
-(timeout_seconds > 0 parks the calling turn until something arrives or the \
-timeout). For non-blocking, use the detached tail follower above, or call with \
-timeout_seconds=0 (a single non-blocking snapshot). A future SSE/HTTP transport \
-will replace polling with server push.
+OBSERVABILITY vs DELIVERY. event_get/event_wait and the `okto-nexus tail` \
+follower are for OBSERVING the bus (audit/monitoring of message.created and other \
+events), NOT for receiving messages addressed to you - that is the inbox. A \
+future SSE/HTTP transport will push inbox notifications instead of polling.
 """
 
 
@@ -157,6 +161,7 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         events=events_repo,
         channels=SqliteChannelRepo(clock),
         messages=SqliteMessageRepo(clock),
+        deliveries=SqliteMessageDeliveryRepo(clock),
         tasks=SqliteTaskRepo(clock),
         handoffs=SqliteHandoffRepo(clock),
         artifacts=SqliteArtifactRepo(clock),

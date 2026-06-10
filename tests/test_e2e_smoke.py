@@ -80,8 +80,8 @@ def test_e2e_full_flow(tmp_path):
     expected = {
         "workspace_resolve", "agent_register", "session_open", "session_heartbeat",
         "event_get", "event_wait",
-        "message_create", "message_get", "message_list", "message_wait",
-        "channel_create", "channel_list",
+        "message_create", "channel_create", "channel_list",
+        "inbox_pull", "inbox_ack", "inbox_peek", "inbox_count", "inbox_history",
         "handoff_create", "handoff_list_available", "handoff_claim",
         "handoff_complete", "handoff_reject",
         "artifact_put", "artifact_get",
@@ -131,15 +131,30 @@ def test_e2e_full_flow(tmp_path):
     )
     assert msg["subject"] == "kickoff"
     assert isinstance(msg["event_id"], int) and msg["event_id"] >= 1
-    message_id = msg["message_id"]
 
-    # message_get / message_list round-trip.
-    got_msg = _ok(
-        tools["message_get"](project_root=project_root, message_id=message_id)
+    # --- 4b. inbox delivery (ADR 0001): a direct message lands in the global
+    # inbox and is pulled/acked index-free (reviewer needs no session). ------- #
+    dm = _ok(
+        tools["message_create"](
+            project_root=project_root,
+            from_agent_id="builder",
+            subject="please review",
+            body="PR #1 is ready",
+            target={"strategy": "direct", "agent_id": "reviewer"},
+        )
     )
-    assert got_msg["body"] == "starting the build"
-    listed = _ok(tools["message_list"](project_root=project_root))
-    assert any(m["message_id"] == message_id for m in listed["messages"])
+    assert dm["recipients"] == ["reviewer"] and dm["delivered_count"] == 1
+    assert _ok(tools["inbox_count"](agent_id="reviewer"))["unread"] == 1
+    pulled = _ok(tools["inbox_pull"](agent_id="reviewer"))
+    assert [m["body"] for m in pulled["messages"]] == ["PR #1 is ready"]
+    assert _ok(tools["inbox_ack"](agent_id="reviewer", message_ids=[dm["message_id"]])) == {
+        "acknowledged": 1
+    }
+    assert _ok(tools["inbox_count"](agent_id="reviewer")) == {
+        "unread": 0,
+        "in_flight": 0,
+        "read": 1,
+    }
 
     # message.created is observable on the workspace stream via event_get /
     # event_wait (published there for cross-slice observability).

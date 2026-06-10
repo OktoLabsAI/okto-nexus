@@ -89,7 +89,7 @@ def _build_parser() -> argparse.ArgumentParser:
             "Designed as a BACKGROUND FOLLOWER: run it detached and treat each "
             "NDJSON line as a notification, keeping the agent loop free - the "
             "layer-clean way to watch the bus without blocking a turn on "
-            "event_wait/message_wait or reading the SQLite file directly."
+            "event_wait or reading the SQLite file directly."
         ),
     )
     parser.add_argument(

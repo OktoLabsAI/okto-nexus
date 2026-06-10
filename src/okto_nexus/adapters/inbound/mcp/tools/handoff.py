@@ -80,8 +80,8 @@ _P_LIMIT = "Max handoffs per page (optional; default applied by the server, clam
 _P_TIMEOUT = (
     "Long-poll bound in SECONDS for an empty page (optional). >0 blocks until a "
     "claimable handoff appears or the timeout elapses; 0 OR OMITTED is a single "
-    "non-blocking scan (no sleep) - unlike event_wait/message_wait, omitting it "
-    "does NOT block. Clamped to the server max wait. BLOCKING (only when >0): "
+    "non-blocking scan (no sleep) - unlike event_wait, omitting it does NOT "
+    "block. Clamped to the server max wait. BLOCKING (only when >0): "
     "parks your turn - see the server instructions."
 )
 _P_RESULT = "Completion result (string or JSON) recorded with handoff.completed (optional)."

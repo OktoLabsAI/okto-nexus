@@ -33,6 +33,7 @@ from ..domain.models import (
     Event,
     Handoff,
     Message,
+    MessageDelivery,
     Session,
     Task,
     Workspace,
@@ -273,32 +274,6 @@ class EventEmitter(Protocol):
         ...
 
 
-@runtime_checkable
-class EventWaiter(Protocol):
-    """Long-poll seam OWNED by the Event Log slice (``event_wait``).
-
-    Peer slices that need to block until new events arrive (e.g. the Channels &
-    Messages ``message_wait``) depend on THIS port and REUSE the single
-    poll/sleep implementation rather than reimplementing it. The return shape is
-    the canonical page payload ``{events, next_cursor, has_more, timed_out}``;
-    visibility (``can_agent_see_event``) is already applied by the implementor.
-    """
-
-    def event_wait(
-        self,
-        *,
-        project_root: Any,
-        agent_id: Any,
-        stream: Any,
-        cursor: Any = None,
-        limit: Any = None,
-        filters: Any = None,
-        timeout_seconds: Any = None,
-    ) -> dict[str, Any]:
-        """Long-poll the log until a non-empty page or the timeout ceiling."""
-        ...
-
-
 # --------------------------------------------------------------------------- #
 # Channels / messages
 # --------------------------------------------------------------------------- #
@@ -374,6 +349,100 @@ class MessageRepo(Protocol):
         limit: int = 100,
     ) -> list[Message]:
         """List messages, optionally filtered by channel or target."""
+        ...
+
+    def list_by_ids(
+        self, uow: UnitOfWork, *, message_ids: Sequence[str]
+    ) -> list[Message]:
+        """Return messages by id, GLOBAL (no ``workspace_id`` filter).
+
+        Used to materialise a recipient's inbox (ADR 0001): the inbox is global,
+        so a delivery's message may live in a different workspace than the
+        recipient. Missing ids are simply absent from the result.
+        """
+        ...
+
+
+@runtime_checkable
+class MessageDeliveryRepo(Protocol):
+    """Per-recipient message delivery lanes - the inbox (ADR 0001).
+
+    Deliberately GLOBAL (not ``workspace_id``-scoped): an agent's inbox spans
+    every workspace. ``status`` transitions ``unread`` -> ``delivered`` (pulled,
+    in-flight under a lease) -> ``read`` (acknowledged into history).
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        delivery_id: str,
+        message_id: str,
+        recipient_agent_id: str,
+        status: str,
+        created_at: str | None = None,
+    ) -> MessageDelivery:
+        """Insert one ``unread`` delivery row, returning the stored row."""
+        ...
+
+    def claim_unread(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        limit: int,
+        delivered_at: str,
+        lease_expires_at: str,
+    ) -> list[MessageDelivery]:
+        """Atomically move up to ``limit`` ``unread`` rows to ``delivered``.
+
+        The single-writer conditional update guards against a concurrent pull
+        (only rows still ``unread`` are taken). Returns the rows claimed by THIS
+        call, oldest first.
+        """
+        ...
+
+    def expire_leases(self, uow: UnitOfWork, *, now: str) -> int:
+        """Return ``delivered`` rows whose lease elapsed (``lease_expires_at < now``)
+        to ``unread`` (redelivery). Returns the number reopened."""
+        ...
+
+    def mark_read(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        message_ids: Sequence[str],
+        read_at: str,
+    ) -> int:
+        """Move the recipient's ``unread``/``delivered`` rows for these messages to
+        ``read`` (history). Returns the number transitioned (idempotent)."""
+        ...
+
+    def list_by_status(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        statuses: Sequence[str],
+        limit: int,
+    ) -> list[MessageDelivery]:
+        """Non-destructive list of a recipient's rows in the given statuses."""
+        ...
+
+    def counts(self, uow: UnitOfWork, *, recipient_agent_id: str) -> dict[str, int]:
+        """Return ``{status: count}`` for the recipient across all lanes."""
+        ...
+
+    def list_history(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        offset: int = 0,
+        limit: int = 100,
+    ) -> list[MessageDelivery]:
+        """List the recipient's ``read`` lane (history), newest first, paginated."""
         ...
 
 
@@ -567,6 +636,7 @@ class Repos:
     events: EventRepo | None = None
     channels: ChannelRepo | None = None
     messages: MessageRepo | None = None
+    deliveries: MessageDeliveryRepo | None = None
     tasks: TaskRepo | None = None
     handoffs: HandoffRepo | None = None
     artifacts: ArtifactRepo | None = None

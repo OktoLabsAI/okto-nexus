@@ -2,15 +2,10 @@
 
 Implements the use cases this slice OWNS:
 
-* ``message_create`` - persist a message row AND emit exactly one
-  ``message.created`` event INSIDE the same SQLite unit of work (both commit or
-  both roll back - atomic coupling);
-* ``message_get``    - workspace-scoped single read (cross-workspace -> NOT_FOUND),
-  honouring the IMPORTED routing visibility predicate;
-* ``message_list``   - workspace-scoped, channel-filtered, event-ordered listing
-  with cursor pagination (``next_cursor`` / ``has_more``) and visibility filtering;
-* ``message_wait``   - long-poll variant of ``message_list`` (reuses the Event
-  Log waiter) that materialises new messages as they arrive;
+* ``message_create`` - persist a message row, **resolve its recipients and fan
+  out one inbox delivery per recipient**, and emit exactly one ``message.created``
+  event - all INSIDE the same SQLite unit of work (atomic coupling). Reading a
+  message is the INBOX slice's job (``inbox_*``), not this slice's (ADR 0001);
 * ``create_channel`` - create a channel by name (idempotent), so agents add the
   channels they need beyond the seeded ``general`` default;
 * ``channel_list``   - return the workspace channels (seeding ``general`` first).
@@ -25,15 +20,13 @@ the import-boundary test). All transaction control flows through the injected
 
 from __future__ import annotations
 
-from collections.abc import Mapping
-from typing import Any, Optional
+from typing import Any
 
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..domain.messages import (
     MESSAGE_CREATED_TYPE,
     MESSAGE_STREAM,
     SEED_CHANNEL_NAMES,
-    can_view_message,
     enforce_inline_size,
     new_channel_id,
     new_message_id,
@@ -44,6 +37,14 @@ from ..domain.messages import (
     validate_channel_name,
     validate_target,
 )
+from ..domain.inbox import (
+    DELIVERY_UNREAD,
+    assert_deliverable_message_target,
+    new_delivery_id,
+    requires_known_recipient,
+    requires_workspace_audience,
+    resolve_recipients,
+)
 from ..domain.models import Channel, Message
 from ..domain.routing import RoutingAgent
 from ..errors import ErrorCode, OktoNexusError
@@ -53,23 +54,12 @@ from .ports import (
     Clock,
     ConnectionFactory,
     EventEmitter,
-    EventWaiter,
+    MessageDeliveryRepo,
     MessageRepo,
+    SessionRepo,
     UnitOfWork,
     WorkspaceRepo,
 )
-
-#: Default page size for ``message_list`` when the caller omits ``limit``.
-DEFAULT_MESSAGE_LIMIT = 50
-
-#: Hard ceiling on a single ``message_list`` page.
-MAX_MESSAGE_LIMIT = 200
-
-#: Upper bound on the rows scanned from the repo for one ``message_list`` call.
-#: The repo returns messages ordered by insertion (== event_id order); the
-#: service applies visibility filtering and cursor slicing on top, so it needs
-#: the full candidate window to compute ``has_more`` without gaps.
-_LIST_SCAN_CAP = 100_000
 
 
 def _is_nonempty_str(value: Any) -> bool:
@@ -86,19 +76,21 @@ class MessageService:
         channels: ChannelRepo,
         messages: MessageRepo,
         workspaces: WorkspaceRepo,
+        agents: AgentRepo,
+        sessions: SessionRepo,
+        deliveries: MessageDeliveryRepo,
         event_emitter: EventEmitter,
         clock: Clock,
         max_inline_bytes: int,
-        agents: Optional[AgentRepo] = None,
-        event_waiter: Optional[EventWaiter] = None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
         self._messages = messages
         self._workspaces = workspaces
         self._agents = agents
+        self._sessions = sessions
+        self._deliveries = deliveries
         self._emitter = event_emitter
-        self._waiter = event_waiter
         self._clock = clock
         self._max_inline_bytes = int(max_inline_bytes)
 
@@ -131,6 +123,9 @@ class MessageService:
         require_message_fields(from_agent_id, subject, body)
         enforce_inline_size(subject, body, self._max_inline_bytes)
         validate_target(target, now)
+        # Reject targets that would broadcast against the GLOBAL registry under
+        # eager inbox delivery (direct_with_fallback; broadcast nested in mixed).
+        assert_deliverable_message_target(target)
         artifact_refs = normalize_artifacts(artifacts)
 
         if self._emitter is None:  # pragma: no cover - wiring guard
@@ -151,6 +146,13 @@ class MessageService:
             self._require_channel(uow, workspace_id, channel)
             self._require_parent(uow, workspace_id, channel, parent)
 
+            # Resolve recipients UP FRONT (read-only): a directed target to an
+            # unknown agent raises NOT_FOUND here, rolling the whole uow back so no
+            # message / delivery / event persists (ADR 0001).
+            recipients, warning = self._resolve_recipients(
+                uow, workspace_id, from_agent_id, target, now
+            )
+
             message = self._messages.create(
                 uow,
                 message_id=message_id,
@@ -166,8 +168,18 @@ class MessageService:
                 created_at=now,
             )
 
-            if self._agents is not None:
-                self._agents.touch(uow, agent_id=from_agent_id, at=now)
+            self._agents.touch(uow, agent_id=from_agent_id, at=now)
+
+            # Fan out into each recipient's GLOBAL inbox (one delivery per agent).
+            for recipient_id in recipients:
+                self._deliveries.create(
+                    uow,
+                    delivery_id=new_delivery_id(),
+                    message_id=message.message_id,
+                    recipient_agent_id=recipient_id,
+                    status=DELIVERY_UNREAD,
+                    created_at=now,
+                )
 
             # Emit the single message.created event INSIDE this transaction; the
             # event_id is assigned by the Event Log slice within the same commit.
@@ -192,209 +204,11 @@ class MessageService:
 
             data = self._message_to_data(message, target_echo=target_echo)
             data["event_id"] = event_id
+            data["recipients"] = recipients
+            data["delivered_count"] = len(recipients)
+            if warning is not None:
+                data["warning"] = warning
         return data
-
-    # ------------------------------------------------------------------ #
-    # message_get
-    # ------------------------------------------------------------------ #
-    def get_message(
-        self, *, project_root: Any, message_id: Any, viewer_agent_id: Any = None
-    ) -> dict[str, Any]:
-        """Return a single workspace-scoped message or ``NOT_FOUND``.
-
-        The same ``message_id`` requested under a different workspace - or a
-        directed message the viewer is not eligible to see - is indistinguishable
-        from a non-existent message and yields ``NOT_FOUND``.
-        """
-        if not _is_nonempty_str(message_id):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "message_id is required.",
-                {"message_id": message_id},
-            )
-        workspace_id, _ = self._resolve_workspace(project_root)
-        now = self._clock.now_iso()
-        with self._cf.unit_of_work() as uow:
-            message = self._messages.get(
-                uow, workspace_id=workspace_id, message_id=message_id
-            )
-            if message is None:
-                raise self._not_found_message(message_id)
-            viewer = self._build_viewer(uow, workspace_id, viewer_agent_id)
-            if not can_view_message(
-                viewer, target=message.target, created_at=message.created_at, now=now
-            ):
-                raise self._not_found_message(message_id)
-            return self._message_to_data(message)
-
-    # ------------------------------------------------------------------ #
-    # message_list
-    # ------------------------------------------------------------------ #
-    def list_messages(
-        self,
-        *,
-        project_root: Any,
-        channel_id: Any = None,
-        cursor: Any = None,
-        limit: Any = None,
-        viewer_agent_id: Any = None,
-    ) -> dict[str, Any]:
-        """List workspace messages ordered by event_id, with cursor pagination.
-
-        Messages are returned in strictly ascending insertion order (== event_id
-        order). Directed messages are only visible to eligible viewers; broadcast
-        messages are visible to all. ``cursor`` is the offset into the visible
-        sequence; the response carries ``next_cursor`` and ``has_more``.
-        """
-        workspace_id, _ = self._resolve_workspace(project_root)
-        offset = self._coerce_cursor(cursor)
-        page_size = self._coerce_limit(limit)
-        channel = channel_id if _is_nonempty_str(channel_id) else None
-        now = self._clock.now_iso()
-
-        with self._cf.unit_of_work() as uow:
-            rows = self._messages.list(
-                uow,
-                workspace_id=workspace_id,
-                channel_id=channel,
-                limit=_LIST_SCAN_CAP,
-            )
-            viewer = self._build_viewer(uow, workspace_id, viewer_agent_id)
-            visible = [
-                m
-                for m in rows
-                if can_view_message(
-                    viewer, target=m.target, created_at=m.created_at, now=now
-                )
-            ]
-            page = visible[offset : offset + page_size]
-            has_more = len(visible) > offset + len(page)
-            next_cursor = offset + len(page) if has_more else None
-            return {
-                "messages": [self._message_to_data(m) for m in page],
-                "next_cursor": next_cursor,
-                "has_more": has_more,
-            }
-
-    # ------------------------------------------------------------------ #
-    # message_wait
-    # ------------------------------------------------------------------ #
-    def wait_messages(
-        self,
-        *,
-        project_root: Any,
-        agent_id: Any,
-        channel_id: Any = None,
-        cursor: Any = None,
-        limit: Any = None,
-        timeout_seconds: Any = None,
-    ) -> dict[str, Any]:
-        """Long-poll for new messages, returning them MATERIALISED with body.
-
-        This use case REUSES the Event Log slice's ``event_wait`` (via the
-        injected :class:`EventWaiter` port) rather than reimplementing the
-        poll/sleep loop: it waits on ``message.created`` events on the
-        ``workspace`` stream, then materialises each referenced message (subject,
-        body, artifacts, ...) under the SAME visibility predicate
-        (:func:`can_view_message`) so a directed message is only ever surfaced to
-        an eligible viewer.
-
-        ``cursor`` is the event-log ``event_id`` cursor (NOT the visible-sequence
-        offset used by ``message_list``); ``next_cursor`` / ``has_more`` /
-        ``timed_out`` are propagated verbatim from the underlying ``event_wait``,
-        so cursor semantics are INHERITED: on a NON-EMPTY page ``next_cursor``
-        advances past every scanned event (including non-visible ones, never
-        re-scanned); on a TIMEOUT (no visible event in range) it returns the
-        ENTRY cursor unchanged and the still-hidden range is re-scanned on the
-        next poll. An optional ``channel_id`` further filters the materialised
-        page (channel-filtered messages were visible events, so the cursor had
-        already advanced past them).
-
-        ``agent_id`` is REQUIRED (it scopes visibility) and validated by the
-        underlying ``event_wait``; the canonical request errors
-        (WORKSPACE_REQUIRED / WORKSPACE_UNRESOLVED / VALIDATION_ERROR for
-        cursor/limit/timeout) surface unchanged from there.
-        """
-        if self._waiter is None:
-            raise OktoNexusError(
-                ErrorCode.INTERNAL_ERROR,
-                "No EventWaiter is wired; message_wait cannot long-poll the log.",
-                {},
-            )
-        channel = channel_id if _is_nonempty_str(channel_id) else None
-
-        # Delegate the blocking long-poll (and ALL request validation) to the
-        # Event Log slice; filter to message.created on the observable stream.
-        page = self._waiter.event_wait(
-            project_root=project_root,
-            agent_id=agent_id,
-            stream=MESSAGE_STREAM,
-            cursor=cursor,
-            limit=limit,
-            filters={"type": MESSAGE_CREATED_TYPE},
-            timeout_seconds=timeout_seconds,
-        )
-
-        messages = self._materialise_wait_page(
-            project_root=project_root,
-            viewer_agent_id=agent_id,
-            channel_id=channel,
-            events=page.get("events", []),
-        )
-        return {
-            "messages": messages,
-            "next_cursor": page.get("next_cursor"),
-            "has_more": page.get("has_more", False),
-            "timed_out": page.get("timed_out", False),
-        }
-
-    def _materialise_wait_page(
-        self,
-        *,
-        project_root: Any,
-        viewer_agent_id: Any,
-        channel_id: str | None,
-        events: Any,
-    ) -> list[dict[str, Any]]:
-        """Resolve ``message.created`` events into full message dicts (with body).
-
-        Each event payload carries only a ``message_id`` reference (never the
-        body), so the row is loaded and re-checked against ``can_view_message``
-        (defence in depth: ``event_wait`` already applied ``can_agent_see_event``,
-        and both delegate to the SAME routing eligibility rule with the same
-        viewer and target, so the two gates agree). A row that vanished, is not
-        visible, or is outside ``channel_id`` is skipped. The cursor is owned by
-        ``event_wait`` and is never adjusted here.
-
-        Visibility - including the ``direct_with_fallback`` time window - is
-        inherited verbatim from ``event_wait`` / ``can_agent_see_event``, so it
-        is identical to what ``event_get`` / ``event_wait`` show the same agent.
-        """
-        if not events:
-            return []
-        workspace_id, _ = self._resolve_workspace(project_root)
-        now = self._clock.now_iso()
-        out: list[dict[str, Any]] = []
-        with self._cf.unit_of_work() as uow:
-            viewer = self._build_viewer(uow, workspace_id, viewer_agent_id)
-            for event in events:
-                payload = event.get("payload") if isinstance(event, Mapping) else None
-                message_id = payload.get("message_id") if isinstance(payload, Mapping) else None
-                if not _is_nonempty_str(message_id):
-                    continue
-                message = self._messages.get(
-                    uow, workspace_id=workspace_id, message_id=message_id
-                )
-                if message is None:
-                    continue
-                if not can_view_message(
-                    viewer, target=message.target, created_at=message.created_at, now=now
-                ):
-                    continue
-                if channel_id is not None and message.channel_id != channel_id:
-                    continue
-                out.append(self._message_to_data(message))
-        return out
 
     # ------------------------------------------------------------------ #
     # channel_create / channel_list
@@ -536,68 +350,64 @@ class MessageService:
                 {"parent_message_id": parent_message_id, "channel_id": channel_id},
             )
 
-    def _build_viewer(
-        self, uow: UnitOfWork, workspace_id: str, viewer_agent_id: Any
-    ) -> RoutingAgent | None:
-        """Build the routing view of the requesting agent (or ``None``).
+    def _resolve_recipients(
+        self,
+        uow: UnitOfWork,
+        workspace_id: str,
+        from_agent_id: Any,
+        target: Any,
+        now: str,
+    ) -> tuple[list[str], str | None]:
+        """Resolve the recipient set for a message target (ADR 0001).
 
-        ``None`` requests an unfiltered read. When an ``agents`` repo is wired,
-        the viewer's ``role``/``capabilities`` are loaded so capability/role
-        routing targets resolve correctly; for direct targets the id suffices.
+        ``broadcast``/no-target fans out to the workspace's PRESENT agents (active
+        sessions); every other target resolves against the GLOBAL registry (S1).
+        A group fan-out excludes the sender (you never inbox your own broadcast).
+        A *directed* target (``direct``/``direct_with_fallback``) matching nobody
+        is an unknown recipient -> ``NOT_FOUND``; a group target matching nobody
+        returns a ``warning`` (never a silent zero-recipient send - D1b).
         """
-        if not _is_nonempty_str(viewer_agent_id):
-            return None
-        role: str | None = None
-        capabilities: Any = None
-        if self._agents is not None:
-            agent = self._agents.get(uow, viewer_agent_id)
-            if agent is not None:
-                role = agent.role
-                capabilities = agent.capabilities
-        return RoutingAgent(
-            agent_id=viewer_agent_id,
-            workspace_id=workspace_id,
-            role=role,
-            capabilities=capabilities,
-        )
+        if requires_workspace_audience(target):
+            candidates = self._workspace_audience(uow, workspace_id)
+        else:
+            candidates = self._global_candidates(uow, workspace_id)
+        resolved = resolve_recipients(target, candidates, now=now)
+        directed = requires_known_recipient(target)
+        if not directed:
+            resolved = resolved - {str(from_agent_id)}
+        recipients = sorted(resolved)
+        warning: str | None = None
+        if not recipients:
+            if directed:
+                raise OktoNexusError(
+                    ErrorCode.NOT_FOUND,
+                    "The direct target does not match any registered agent.",
+                    {"target": parse_target(serialize_target(target))},
+                )
+            warning = "no agents matched the target; the message was delivered to nobody."
+        return recipients, warning
 
-    @staticmethod
-    def _coerce_cursor(cursor: Any) -> int:
-        if cursor is None:
-            return 0
-        try:
-            value = int(cursor)
-        except (TypeError, ValueError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "cursor must be a non-negative integer.",
-                {"cursor": cursor},
-            ) from None
-        return value if value > 0 else 0
+    def _workspace_audience(
+        self, uow: UnitOfWork, workspace_id: str
+    ) -> list[RoutingAgent]:
+        """Agents PRESENT in the workspace (distinct active-session holders)."""
+        sessions = self._sessions.list(uow, workspace_id=workspace_id, status="active")
+        agent_ids = {s.agent_id for s in sessions}
+        return [RoutingAgent(agent_id=a, workspace_id=workspace_id) for a in agent_ids]
 
-    @staticmethod
-    def _coerce_limit(limit: Any) -> int:
-        if limit is None:
-            return DEFAULT_MESSAGE_LIMIT
-        try:
-            value = int(limit)
-        except (TypeError, ValueError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            ) from None
-        if value < 1:
-            return DEFAULT_MESSAGE_LIMIT
-        return min(value, MAX_MESSAGE_LIMIT)
-
-    @staticmethod
-    def _not_found_message(message_id: Any) -> OktoNexusError:
-        return OktoNexusError(
-            ErrorCode.NOT_FOUND,
-            "message_id does not reference a message in this workspace.",
-            {"message_id": message_id},
-        )
+    def _global_candidates(
+        self, uow: UnitOfWork, workspace_id: str
+    ) -> list[RoutingAgent]:
+        """Every registered agent (global), carrying role + capabilities."""
+        return [
+            RoutingAgent(
+                agent_id=agent.agent_id,
+                workspace_id=workspace_id,
+                role=agent.role,
+                capabilities=agent.capabilities,
+            )
+            for agent in self._agents.list(uow)
+        ]
 
     @staticmethod
     def _message_to_data(

@@ -8,10 +8,10 @@ monotonic ``event_id`` assignment and atomic same-commit coupling). Covers the
 happy paths, the canonical error catalogue (WORKSPACE_REQUIRED /
 WORKSPACE_UNRESOLVED / VALIDATION_ERROR / CONTENT_TOO_LARGE / NOT_FOUND), the
 64KB inclusive inline boundary, channel seeding, parent/reply linkage, imported
-routing visibility (directed vs broadcast), cursor pagination, the MCP tool
-envelope, cross-workspace isolation, atomic rollback when the event append
-fails, and concurrency (parallel writers with strictly increasing event_ids and
-no cross-workspace leakage).
+routing visibility (directed vs broadcast), recipient resolution + inbox fan-out,
+the MCP tool envelope, cross-workspace isolation, atomic rollback when the event
+append fails, and concurrency (parallel writers with strictly increasing
+event_ids and no cross-workspace leakage).
 """
 
 from __future__ import annotations
@@ -31,10 +31,12 @@ from okto_nexus.adapters.outbound.sqlite.events_repo import (
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
+    SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
+    SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
 from okto_nexus.application.events import EventService
@@ -131,6 +133,8 @@ def make_service(factory, config, clock, emitter=None, agents=None) -> MessageSe
         messages=SqliteMessageRepo(clock),
         workspaces=SqliteWorkspaceRepo(clock),
         agents=agents if agents is not None else SqliteAgentRepo(clock),
+        sessions=SqliteSessionRepo(clock),
+        deliveries=SqliteMessageDeliveryRepo(clock),
         event_emitter=emitter if emitter is not None else FakeEmitter(),
         clock=clock,
         max_inline_bytes=config.max_inline_bytes,
@@ -400,9 +404,10 @@ def test_message_create_happy_path_and_round_trip(
     assert ev["payload"]["message_id"] == data["message_id"]
     assert "body" not in ev["payload"]
 
-    # The persisted row corresponds to the returned fields.
-    got = svc.get_message(project_root=str(proj), message_id=data["message_id"])
-    assert got == {k: v for k, v in data.items() if k != "event_id"}
+    # No active-session participants -> a broadcast reaches nobody (a warning),
+    # but the message row is still persisted (observable via the event log).
+    assert data["recipients"] == [] and data["delivered_count"] == 0
+    assert "warning" in data
     assert count(migrated_factory, "messages") == 1
 
 
@@ -489,6 +494,10 @@ def test_directed_message_created_visibility_preserved_on_workspace_stream(
     svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
     proj = mkdir(tmp_path, "P")
 
+    # agentB must be a registered identity for a direct target to resolve.
+    with migrated_factory.unit_of_work() as uow:
+        SqliteAgentRepo(clock).upsert(uow, agent_id="agentB")
+
     directed = svc.create_message(
         project_root=str(proj),
         from_agent_id="agentA",
@@ -496,6 +505,7 @@ def test_directed_message_created_visibility_preserved_on_workspace_stream(
         body="for B",
         target={"strategy": "direct", "agent_id": "agentB"},
     )
+    assert directed["recipients"] == ["agentB"]
     events = _event_service(migrated_factory, tmp_config, clock)
 
     for_b = events.event_get(project_root=str(proj), agent_id="agentB", stream="workspace")
@@ -660,116 +670,6 @@ def test_message_create_validation_error(migrated_factory, tmp_config, tmp_path,
 
 
 # --------------------------------------------------------------------------- #
-# message_get - workspace scoping
-# --------------------------------------------------------------------------- #
-def test_message_get_is_workspace_scoped(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock()
-    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
-    proj_a = mkdir(tmp_path, "A")
-    proj_b = mkdir(tmp_path, "B")
-
-    created = svc.create_message(
-        project_root=str(proj_a), from_agent_id="a", subject="s", body="b"
-    )
-    mid = created["message_id"]
-
-    assert svc.get_message(project_root=str(proj_a), message_id=mid)["message_id"] == mid
-
-    # The same message_id under a different workspace is NOT_FOUND.
-    with pytest.raises(OktoNexusError) as ei:
-        svc.get_message(project_root=str(proj_b), message_id=mid)
-    assert ei.value.code == ErrorCode.NOT_FOUND.value
-
-
-def test_message_get_missing_is_not_found(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock())
-    proj = mkdir(tmp_path, "P")
-    with pytest.raises(OktoNexusError) as ei:
-        svc.get_message(project_root=str(proj), message_id="ghost")
-    assert ei.value.code == ErrorCode.NOT_FOUND.value
-
-
-# --------------------------------------------------------------------------- #
-# message_list - pagination & ordering
-# --------------------------------------------------------------------------- #
-def test_message_list_cursor_pagination_ordered(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock()
-    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
-    proj = mkdir(tmp_path, "P")
-
-    created_ids = [
-        svc.create_message(
-            project_root=str(proj), from_agent_id="a", subject=f"s{i}", body=f"b{i}"
-        )["message_id"]
-        for i in range(5)
-    ]
-
-    seen: list[str] = []
-    cursor = None
-    pages = 0
-    while True:
-        page = svc.list_messages(project_root=str(proj), cursor=cursor, limit=2)
-        seen.extend(m["message_id"] for m in page["messages"])
-        pages += 1
-        if not page["has_more"]:
-            assert page["next_cursor"] is None
-            break
-        assert page["next_cursor"] is not None
-        cursor = page["next_cursor"]
-        assert pages < 10  # guard against runaway loops
-
-    # Strictly ascending creation (== event_id) order, no dups, no gaps.
-    assert seen == created_ids
-    assert len(seen) == len(set(seen))
-
-
-# --------------------------------------------------------------------------- #
-# Imported routing visibility (directed vs broadcast)
-# --------------------------------------------------------------------------- #
-def test_directed_visibility_in_list_and_get(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock()
-    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
-    proj = mkdir(tmp_path, "P")
-
-    bcast = svc.create_message(
-        project_root=str(proj), from_agent_id="a", subject="hi", body="all"
-    )["message_id"]
-    directed = svc.create_message(
-        project_root=str(proj),
-        from_agent_id="a",
-        subject="psst",
-        body="for B",
-        target={"strategy": "direct", "agent_id": "agentB"},
-    )["message_id"]
-
-    # agentB sees both; agentC sees only the broadcast.
-    for_b = svc.list_messages(project_root=str(proj), viewer_agent_id="agentB")
-    for_c = svc.list_messages(project_root=str(proj), viewer_agent_id="agentC")
-    assert {m["message_id"] for m in for_b["messages"]} == {bcast, directed}
-    assert {m["message_id"] for m in for_c["messages"]} == {bcast}
-
-    # message_get honours the same predicate.
-    assert (
-        svc.get_message(
-            project_root=str(proj), message_id=directed, viewer_agent_id="agentB"
-        )["message_id"]
-        == directed
-    )
-    with pytest.raises(OktoNexusError) as ei:
-        svc.get_message(
-            project_root=str(proj), message_id=directed, viewer_agent_id="agentC"
-        )
-    assert ei.value.code == ErrorCode.NOT_FOUND.value
-    # The broadcast remains visible to agentC.
-    assert (
-        svc.get_message(
-            project_root=str(proj), message_id=bcast, viewer_agent_id="agentC"
-        )["message_id"]
-        == bcast
-    )
-
-
-# --------------------------------------------------------------------------- #
 # Artifacts as references; reply linkage
 # --------------------------------------------------------------------------- #
 def test_artifacts_stored_as_references_no_inline_blob(
@@ -787,8 +687,6 @@ def test_artifacts_stored_as_references_no_inline_blob(
         artifacts=["art-1", "art-2"],
     )
     assert created["artifacts"] == ["art-1", "art-2"]
-    got = svc.get_message(project_root=str(proj), message_id=created["message_id"])
-    assert got["artifacts"] == ["art-1", "art-2"]
 
     # The message row stores references (a JSON list of ids), never inline bytes.
     conn = migrated_factory.get_connection()
@@ -827,9 +725,21 @@ def test_reply_linked_to_parent_in_channel(migrated_factory, tmp_config, tmp_pat
     )
 
     assert reply["parent_message_id"] == parent
-    listed = svc.list_messages(project_root=str(proj), channel_id=general)
-    ids = [m["message_id"] for m in listed["messages"]]
-    assert ids == [parent, reply["message_id"]]  # both present, event-ordered
+    # Both rows persisted in the channel, in insertion (== event_id) order.
+    ws = resolve_workspace_id(str(proj))
+    conn = migrated_factory.get_connection()
+    try:
+        ids = [
+            r["message_id"]
+            for r in conn.execute(
+                "SELECT message_id FROM messages "
+                "WHERE workspace_id = ? AND channel_id = ? ORDER BY rowid ASC",
+                (ws, general),
+            ).fetchall()
+        ]
+    finally:
+        conn.close()
+    assert ids == [parent, reply["message_id"]]
 
     # A reply whose parent lives in a different channel is rejected.
     architecture = svc.create_channel(
@@ -857,14 +767,12 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
 
     assert set(server.tools) == {
         "message_create",
-        "message_get",
-        "message_list",
-        "message_wait",
         "channel_create",
         "channel_list",
     }
     assert deps.repos.channels is not None
     assert deps.repos.messages is not None
+    assert deps.repos.deliveries is not None  # inbox fan-out store wired
     assert deps.event_emitter is not None  # event append path wired
 
     proj = mkdir(tmp_path, "P")
@@ -897,18 +805,21 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         project_root=str(proj), from_agent_id="a", subject="s", body="b"
     )
     assert created["ok"] is True
-    mid = created["data"]["message_id"]
     assert isinstance(created["data"]["event_id"], int)
+    # No active-session participants -> broadcast reaches nobody (warning),
+    # surfaced in the envelope's data (reading is the inbox slice's job).
+    assert created["data"]["recipients"] == []
+    assert created["data"]["delivered_count"] == 0
 
-    got = server.tools["message_get"](project_root=str(proj), message_id=mid)
-    assert got["ok"] is True and got["data"]["message_id"] == mid
-
-    missing = server.tools["message_get"](project_root=str(proj), message_id="ghost")
-    assert missing["ok"] is False and missing["error"]["code"] == "NOT_FOUND"
-
-    listed = server.tools["message_list"](project_root=str(proj))
-    assert listed["ok"] is True
-    assert [m["message_id"] for m in listed["data"]["messages"]] == [mid]
+    # A direct target to an UNKNOWN agent surfaces as a NOT_FOUND envelope.
+    unknown = server.tools["message_create"](
+        project_root=str(proj),
+        from_agent_id="a",
+        subject="s",
+        body="b",
+        target={"strategy": "direct", "agent_id": "ghost"},
+    )
+    assert unknown["ok"] is False and unknown["error"]["code"] == "NOT_FOUND"
 
 
 def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
@@ -989,12 +900,19 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
         for f in [ex.submit(worker, i, r) for i, r in enumerate(roots)]:
             f.result()
 
-    list_a = svc.list_messages(project_root=str(proj_a), limit=200)["messages"]
-    list_b = svc.list_messages(project_root=str(proj_b), limit=200)["messages"]
-    assert len(list_a) == per
-    assert len(list_b) == per
-    assert all(m["workspace_id"] == ws_a for m in list_a)  # zero leakage A
-    assert all(m["workspace_id"] == ws_b for m in list_b)  # zero leakage B
+    # Each workspace holds exactly its own messages - zero cross-workspace leak.
+    conn = migrated_factory.get_connection()
+    try:
+        rows_a = conn.execute(
+            "SELECT message_id FROM messages WHERE workspace_id = ?", (ws_a,)
+        ).fetchall()
+        rows_b = conn.execute(
+            "SELECT message_id FROM messages WHERE workspace_id = ?", (ws_b,)
+        ).fetchall()
+    finally:
+        conn.close()
+    assert len(rows_a) == per
+    assert len(rows_b) == per
     assert count(migrated_factory, "messages") == 2 * per
 
 

@@ -14,10 +14,16 @@ from datetime import datetime, timezone
 def utc_now_iso() -> str:
     """Return the current UTC time as an ISO-8601 string with a ``Z`` suffix.
 
-    Example: ``"2026-06-07T12:34:56.789012Z"``. The ``Z`` designator marks
-    UTC explicitly (no offset), as required by the canonical timestamp rule.
+    Example: ``"2026-06-07T12:34:56.789012Z"``. The ``Z`` designator marks UTC
+    explicitly (no offset), as required by the canonical timestamp rule.
+    ``timespec="microseconds"`` forces a FIXED-WIDTH fractional part (always 6
+    digits, even at a whole second) so that lexicographic string ordering of
+    timestamps matches chronological ordering everywhere (e.g. the SQL ``<``
+    used for inbox lease expiry).
     """
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    return datetime.now(timezone.utc).isoformat(timespec="microseconds").replace(
+        "+00:00", "Z"
+    )
 
 
 def new_id(prefix: str = "") -> str:

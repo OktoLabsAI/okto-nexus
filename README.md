@@ -365,12 +365,16 @@ with `channel_list`. When **listening**, **omit `channel_id`** to cover the whol
 workspace across all channels — narrowing to one channel can make you miss
 messages directed to you elsewhere. See *[Channels & messages](#channels--messages)*.
 
-**Awaiting a reply — do not fire-and-forget.** After sending something that
-expects a response, start listening for replies addressed to you:
-`message_wait` (long-poll that materializes new messages with their body),
-`event_wait` (raw event stream), or the detached `okto-nexus tail` follower for
-a background, non-blocking watch. See
-*[Monitoring patterns](#monitoring-patterns-background-follower)*.
+**Your inbox — how you receive messages (ADR 0001).** Messages addressed to you
+are **delivered to your global inbox** and stay there until you read them — no
+cursor, no index, regardless of which workspace they were sent in. Between turns,
+`inbox_count` (cheap check); if `unread > 0`, `inbox_pull` returns them with their
+body (leased), then `inbox_ack` once handled. Unacked messages are **redelivered**
+(at-least-once). `inbox_peek` is a non-destructive look; `inbox_history` is the
+read archive. After sending something that expects a reply, just check your inbox
+on a later turn. `event_get`/`event_wait`/`okto-nexus tail` are for **observing**
+the bus, not for receiving your own messages. See
+*[Message delivery & the inbox](#message-delivery--the-inbox)*.
 
 **Concept → tool quick map.**
 
@@ -379,7 +383,7 @@ a background, non-blocking watch. See
 | Discover agents / roles / capabilities | `agent_list`, `agent_get`, `capability_list` |
 | Send a 1:1 message | `message_create` (`direct` target) |
 | Broadcast info / ask an open question | `message_create` (no target) |
-| Read / await messages | `message_get`, `message_list`, `message_wait` |
+| Receive / read your messages | `inbox_count`, `inbox_pull`, `inbox_ack`, `inbox_peek`, `inbox_history` |
 | Organize messages by topic | `channel_create`, `channel_list` |
 | Dispatch work to one free worker | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject` |
 | Observe the whole bus | `event_get`, `event_wait`, `okto-nexus tail` |
@@ -491,10 +495,11 @@ non-int → `VALIDATION_ERROR`, above max → pinned to max; `timeout_seconds`
 
 ### Monitoring patterns (background follower)
 
-`event_wait` / `message_wait` are **blocking** long-polls: with
-`timeout_seconds > 0` the call parks the caller's turn until an event/message
-arrives or the timeout expires. Pick the mode that fits your harness so it is
-never forced to block:
+These patterns are for **observing** the bus (audit/monitoring) — to *receive
+messages addressed to you*, use your [inbox](#message-delivery--the-inbox), not
+these. `event_wait` is a **blocking** long-poll: with `timeout_seconds > 0` the
+call parks the caller's turn until an event arrives or the timeout expires. Pick
+the mode that fits your harness so it is never forced to block:
 
 - **Background follower (recommended).** If your harness can spawn a detached
   process, run the CLI follower and treat each NDJSON line as a notification —
@@ -536,10 +541,9 @@ channel, and a channel never decides *who receives* a message — that is the
 message `target` (see *Routing*). Only **`general`** is seeded per workspace
 (idempotently, the first time `channel_list` touches it — no write path seeds it);
 agents create any other channel they need with **`channel_create`** (idempotent
-by name), so the bus is not pinned to a single purpose. When **listening**
-(`message_wait` / `message_list`), omit `channel_id` to cover the whole workspace
-across all channels — narrowing to one channel can make you miss messages
-directed to you elsewhere.
+by name), so the bus is not pinned to a single purpose. A channel only **tags** a
+message; it does not gate delivery (you **receive** messages through your
+[inbox](#message-delivery--the-inbox), not by channel).
 
 `message_create` requires non-empty `from_agent_id`, `subject`, and `body`
 (`VALIDATION_ERROR` otherwise), enforces a **64 KB inclusive** inline limit on
@@ -547,14 +551,40 @@ directed to you elsewhere.
 **list of `artifact_id` references** (never inline blobs), validates `target`
 against the shared routing schema, and supports threading via
 `parent_message_id` (the parent must exist in the same workspace — and, when a
-channel is set, the same channel — else `NOT_FOUND`). The message row and the
-`message.created` event commit in the **same unit of work**; the event goes on the
-`workspace` stream with `visibility = "eligible" if target else "public"`.
+channel is set, the same channel — else `NOT_FOUND`). It then resolves the
+recipient set and **fans out one inbox delivery per recipient** (see
+*[Message delivery & the inbox](#message-delivery--the-inbox)*). The message row,
+its deliveries, and the `message.created` event commit in the **same unit of
+work**; the event goes on the `workspace` stream with `visibility = "eligible" if
+target else "public"` for observability.
 
-`message_get` / `message_list` are workspace-scoped and honor routing visibility:
-a directed message the viewer is not eligible to see is indistinguishable from
-nonexistent (`NOT_FOUND` on get, omitted from list). `list` orders by insertion
-(= `event_id` order) with offset pagination.
+### Message delivery & the inbox
+
+Receiving a message is **not** a log scan (V1's cursor model is gone, ADR 0001).
+At send time `message_create` resolves the **recipient set** and writes one
+**delivery row per recipient** into that recipient's **global inbox** — keyed by
+`agent_id`, so a direct message reaches you in any workspace (the message keeps a
+`workspace_id` only as context). The append-only event log still records
+`message.created` for observability/`tail`; it is no longer the delivery channel.
+
+**Recipient resolution** (`domain/inbox.py`, reusing `is_agent_eligible`):
+`direct`/`capability`/`role`/`mixed` resolve against the **global** agent
+registry; a bare top-level `broadcast` (and a no-target message) is **bounded to
+the sender's workspace** — its active-session participants — and excludes the
+sender. A `direct` target naming an unregistered agent is `NOT_FOUND` (the whole
+send rolls back); a group target matching nobody succeeds with `recipients: []` +
+a `warning` (never a silent drop). `direct_with_fallback` and a `broadcast` nested
+in a `mixed` are rejected (`VALIDATION_ERROR`) — they would broadcast globally;
+model timed escalation as a **handoff**.
+
+**Two lanes, index-free, at-least-once.** Each delivery moves `unread` →
+`delivered` (in-flight, leased) → `read` (history). `inbox_pull` takes your unread
+into in-flight and returns them with their body — no cursor; `inbox_ack` settles
+them into history; an **unacked** in-flight delivery whose lease elapses is
+**redelivered** (exactly the handoff lease mechanic). `inbox_count`/`inbox_peek`
+(both sweep expired leases) are the cheap between-turns check; `inbox_history` is
+the read archive. This is the durable, lossless replacement for the V1
+cursor/`message_wait` model.
 
 ### Routing / visibility / eligibility
 
@@ -692,7 +722,7 @@ renders over the same state are **byte-identical**.
 
 ## Tool Reference
 
-**25 MCP tools** across six slices, auto-discovered from
+**27 MCP tools** across seven slices, auto-discovered from
 `adapters/inbound/mcp/tools/`. Every tool returns the canonical envelope (success
 `{ok:true,data}` / failure `{ok:false,error}`); the `@tool_envelope` decorator
 guarantees no exception crosses the boundary. Consequently **every tool may also
@@ -727,10 +757,10 @@ role/capabilities/metadata.
 
 > **`last_seen_at` (presence).** Every agent-attributed operation stamps the
 > agent's `last_seen_at` (best-effort; a no-op for an unregistered actor): the
-> identity ops (`agent_register`, `session_*`), `message_create`, the handoff
-> mutations (`create`/`claim`/`complete`/`reject`), and `event_get`/`event_wait`
-> (so `message_wait` is covered via the long-poll). Surfaced by `agent_list` and
-> `agent_get`.
+> identity ops (`agent_register`, `session_*`), `message_create`, the inbox ops
+> (`inbox_pull`/`inbox_ack`), the handoff mutations
+> (`create`/`claim`/`complete`/`reject`), and `event_get`/`event_wait`. Surfaced
+> by `agent_list` and `agent_get`.
 
 #### `agent_list`
 Enumerate **all** registered agents (global; the agent-discovery surface for
@@ -820,56 +850,63 @@ Long-poll: `event_get` in a loop until the first non-empty page or the timeout
 
 > Seeded channels per workspace: only `general` (agents create the rest with
 > `channel_create`). Channels are organizational labels, not access boundaries —
-> they never decide who receives a message (the `target` does).
-> `message_list` `limit` defaults to 50, max 200. Message shape:
-> `{message_id, workspace_id, channel_id, from_agent_id, from_session_id, target, subject, body, artifacts, parent_message_id, created_at}`.
+> they never decide who receives a message (the `target` does). **Reading a
+> message is the [Inbox](#inbox--message-delivery-adr-0001) slice's job** —
+> `message_create` only sends; the per-recipient `inbox_*` tools receive.
 
 #### `message_create`
-Persist the message and emit `message.created` in the same (atomic) transaction.
+Persist the message, **resolve its recipients and fan one inbox delivery per
+recipient**, and emit `message.created` — all in the same (atomic) transaction.
 - **Request:** `project_root: str` (required); `from_agent_id: str` (required);
   `subject: str` (required); `body: str` (required); `channel_id: str | None`;
   `from_session_id: str | None`; `target: dict | None`; `artifacts: list[str] | None`;
   `parent_message_id: str | None` (all default `None`).
-- **Data:** message shape **+** `event_id`.
+- **Data:** message shape **+** `event_id`, `recipients: [...]`, `delivered_count`,
+  and an optional `warning` (when a group target matched nobody). Recipient
+  resolution: `direct`/`capability`/`role`/`mixed` → the **global** registry;
+  bare `broadcast`/no-target → this workspace's **active-session participants**
+  (the sender is excluded from group targets).
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
-  (missing/empty from_agent_id/subject/body; malformed target; artifacts not a
-  list or empty item), `CONTENT_TOO_LARGE` (subject/body > `max_inline_bytes`),
-  `NOT_FOUND` (channel or parent message), `INTERNAL_ERROR` (EventEmitter not wired).
+  (missing/empty from_agent_id/subject/body; malformed target; `direct_with_fallback`
+  or a `broadcast` nested in `mixed`; artifacts not a list), `CONTENT_TOO_LARGE`
+  (subject/body > `max_inline_bytes`), `NOT_FOUND` (channel, parent message, or a
+  **`direct` target that is not a registered agent**), `INTERNAL_ERROR`.
 
-#### `message_get`
-Read a single message, workspace-scoped and visibility-filtered.
-- **Request:** `project_root: str` (required); `message_id: str` (required);
-  `agent_id: str | None` (default `None` = no visibility filter).
-- **Data:** message shape.
-- **Errors:** `VALIDATION_ERROR` (missing `message_id`), `WORKSPACE_REQUIRED`,
-  `WORKSPACE_UNRESOLVED`, `NOT_FOUND` (nonexistent, other workspace, or
-  not-visible — indistinguishable).
+### Inbox — message delivery (ADR 0001)
 
-#### `message_list`
-List workspace messages ordered by `event_id`, cursor-paginated and
-visibility-filtered.
-- **Request:** `project_root: str` (required); `channel_id: str | None`;
-  `cursor: int | None` (`None`→0); `limit: int | None` (`None`→50);
-  `agent_id: str | None` (`None` = no visibility filter).
-- **Data:** `{messages: [...], next_cursor: int | None, has_more: bool}`.
-- **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
-  (non-int cursor; non-int limit).
+> The inbox is **global** (keyed by `agent_id`): a direct message reaches you in
+> any workspace. Lanes per recipient: `unread` → `delivered` (in-flight, leased) →
+> `read` (history). At-least-once: an unacked pull is **redelivered** after the
+> lease (`OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS`, default 300). `limit` defaults to
+> 50, max 200. All inbox tools take `agent_id: str` (required).
 
-#### `message_wait`
-Long-poll for new messages, **materialised with body** — collapses
-`event_wait` → parse → `message_get` into one call. Reuses `event_wait` under
-the hood (filtered to `message.created` on the `workspace` stream) and re-checks
-visibility per message. **Blocking** — see *Monitoring patterns*.
-- **Request:** `project_root: str` (required); `agent_id: str` (required, scopes
-  visibility); `channel_id: str | None`; `cursor: int | None` (the **`event_id`**
-  cursor, not the `message_list` offset); `limit: int | None`;
-  `timeout_seconds: int | None` (`<= 0` → non-blocking snapshot).
-- **Data:** `{messages: [...], next_cursor: int, has_more: bool, timed_out: bool}`.
-  Cursor semantics are inherited from `event_wait` (a non-empty page advances
-  past every scanned event; on timeout the entry cursor is returned unchanged).
-- **Errors:** same as `event_wait` (`WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`,
-  `VALIDATION_ERROR` for `agent_id`/cursor/limit/timeout), plus `INTERNAL_ERROR`
-  (no `EventWaiter` wired).
+#### `inbox_pull`
+Take your unread messages into in-flight and return them **with their body**;
+index-free (no cursor).
+- **Request:** `agent_id: str` (required); `limit: int | None`.
+- **Data:** `{messages: [{delivery_id, message_id, status, delivered_at, lease_expires_at, read_at, from_agent_id, workspace_id, channel_id, subject, body, target, artifacts, created_at}, …], count}`.
+- **Errors:** `VALIDATION_ERROR` (missing `agent_id`; non-positive `limit`).
+
+#### `inbox_ack`
+Move messages to history (read), freeing the queue. Idempotent by `message_id`.
+- **Request:** `agent_id: str` (required); `message_ids: str | list[str]` (required).
+- **Data:** `{acknowledged: int}` (rows transitioned). **Errors:** `VALIDATION_ERROR`.
+
+#### `inbox_peek`
+Non-destructive view of pending (`unread` + in-flight); sweeps expired leases.
+- **Request:** `agent_id: str` (required); `limit: int | None`.
+- **Data:** `{messages: [...], count}`. **Errors:** `VALIDATION_ERROR`.
+
+#### `inbox_count`
+Lane sizes `{unread, in_flight, read}`; sweeps expired leases first (an elapsed
+in-flight lease is counted as `unread`).
+- **Request:** `agent_id: str` (required). **Errors:** `VALIDATION_ERROR`.
+
+#### `inbox_history`
+The `read` archive, newest-first, paginated.
+- **Request:** `agent_id: str` (required); `cursor: str | None`; `limit: int | None`.
+- **Data:** `{messages: [...], next_cursor: str | None, has_more: bool}`.
+- **Errors:** `VALIDATION_ERROR`.
 
 #### `channel_create`
 Create a channel by name — **idempotent by name** (creating an existing name
@@ -1014,6 +1051,7 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 | `events` | `event_id INTEGER AUTOINCREMENT` | yes | `stream`, `type`, `actor_agent_id`, `payload`, `visibility`, `target`, `created_at` | append-only/immutable; FK→`workspaces`; idx `(workspace_id,event_id)`, `(workspace_id,stream,event_id)` |
 | `channels` | `channel_id TEXT` | yes | `name`, `created_at` | FK→`workspaces`; **UNIQUE(workspace_id,name)**; idx `(workspace_id,name)` |
 | `messages` | `message_id TEXT` | yes | `from_agent_id`, `channel_id`, `from_session_id`, `target`, `subject`, `body`, `artifacts`, `parent_message_id`, `created_at` | FK→`workspaces`, FK→`channels`, self-FK→`messages`; idx `(workspace_id,created_at)`, `(workspace_id,channel_id,created_at)` |
+| `message_deliveries` (migr. 005) | `delivery_id TEXT` | **no** (global inbox) | `message_id`, `recipient_agent_id`, `status` (`unread`/`delivered`/`read`), `delivered_at`, `lease_expires_at`, `read_at`, `created_at` | FK→`messages`, FK→`agents`; **UNIQUE(message_id,recipient_agent_id)**; idx `(recipient_agent_id,status)`, `(status,lease_expires_at)` |
 | `tasks` | `task_id TEXT` | yes | `title`, `description`, `status`, `created_by`, `created_at` | FK→`workspaces`; idx `(workspace_id,status)` |
 | `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `payload` (migr. 003), `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
 | `artifacts` | `artifact_id TEXT` | yes | `artifact_type`, `name`, `path`, `content`, `size_bytes`, `content_type`, `created_at` | FK→`workspaces`; idx `(workspace_id,artifact_type)` |
@@ -1021,7 +1059,8 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 **Migrations.** `migrations/001_core.sql` defines the core schema;
 `002_session_close.sql`, `003_handoff_payload.sql`, and `004_agent_last_seen.sql`
 are forward-only `ALTER TABLE … ADD COLUMN` migrations (adding `sessions.closed_at`,
-`handoffs.payload`, and `agents.last_seen_at` respectively).
+`handoffs.payload`, and `agents.last_seen_at`); `005_message_deliveries.sql` adds
+the global `message_deliveries` inbox table (ADR 0001).
 The runner discovers `migrations/NNN_*.sql` (regex `^(\d+)_.*\.sql$`), orders by
 numeric version, applies unregistered ones inside **one** explicit transaction,
 and records `(version, applied_at)` in `schema_migrations`. The statement splitter
@@ -1113,11 +1152,13 @@ drives the full flow as any third-party MCP host would. The end-to-end smoke tes
    a second `reviewer` agent.
 3. **`session_open(agent_id="builder", workspace_id=…)`** → emits `session.opened`;
    **`session_heartbeat(session_id=…)`** keeps it `active`.
-4. **`message_create(project_root, from_agent_id="builder", subject, body)`** →
-   persists the message and emits `message.created` in the **same** transaction
-   (the response carries the assigned `event_id`). Read it back with `message_get`
-   / `message_list`; list channels with `channel_list` (only `general` is seeded —
-   create others with `channel_create`).
+4. **`message_create(project_root, from_agent_id="builder", subject, body, target={"strategy":"direct","agent_id":"reviewer"})`** →
+   persists the message, fans an inbox delivery to `reviewer`, and emits
+   `message.created` in the **same** transaction (the response carries `event_id`,
+   `recipients`, `delivered_count`). The reviewer receives it with
+   **`inbox_pull(agent_id="reviewer")`** → `inbox_ack(...)` — no cursor, any
+   workspace. List channels with `channel_list` (only `general` is seeded — create
+   others with `channel_create`).
 5. **`event_wait(project_root, agent_id="reviewer", stream="workspace", cursor=0)`** →
    the reviewer observes `message.created` (cursor-paginated, visibility-filtered,
    long-poll bounded by `max_wait_timeout_seconds`).

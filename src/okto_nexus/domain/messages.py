@@ -8,10 +8,12 @@ the import-boundary test). This module owns:
 * input validation for ``message_create`` (required fields, the 64KB inclusive
   inline boundary on ``subject``/``body``, the artifact-reference list, and the
   routing ``target`` schema) raising the canonical catalogue codes;
-* ``(de)serialisation`` of the routing ``target`` (object <-> JSON TEXT);
-* the visibility predicate ``can_view_message``, layered on the IMPORTED routing
-  rule :func:`okto_nexus.domain.routing.is_agent_eligible` (this slice references
-  routing, it never redefines it).
+* ``(de)serialisation`` of the routing ``target`` (object <-> JSON TEXT).
+
+Target validation reuses the IMPORTED routing rule
+:func:`okto_nexus.domain.routing.is_agent_eligible` (this slice references
+routing, it never redefines it). Recipient resolution and per-recipient
+delivery live in :mod:`okto_nexus.domain.inbox` (ADR 0001).
 """
 
 from __future__ import annotations
@@ -39,7 +41,6 @@ __all__ = [
     "validate_target",
     "serialize_target",
     "parse_target",
-    "can_view_message",
 ]
 
 #: Channels seeded once per workspace (idempotently) the first time
@@ -235,18 +236,3 @@ def parse_target(stored: Any) -> Any:
         except (ValueError, TypeError):
             return stored
     return stored
-
-
-def can_view_message(
-    viewer: Any, *, target: Any, created_at: Any = None, now: Any = None
-) -> bool:
-    """Return whether ``viewer`` may see a message with routing ``target``.
-
-    ``viewer is None`` means *no visibility filtering* (an unscoped/admin read):
-    the message is returned. Otherwise the IMPORTED routing eligibility decides:
-    a broadcast (empty target) is visible to everyone; a directed message is
-    visible only to agents the routing predicate deems eligible.
-    """
-    if viewer is None:
-        return True
-    return is_agent_eligible(viewer, target, created_at, now)
