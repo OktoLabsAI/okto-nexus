@@ -287,19 +287,6 @@ def count(factory, table: str) -> int:
         conn.close()
 
 
-def retry_db(fn, attempts: int = 40, delay: float = 0.02):
-    last = None
-    for _ in range(attempts):
-        try:
-            return fn()
-        except OktoNexusError as exc:
-            if exc.code != ErrorCode.DB_ERROR.value:
-                raise
-            last = exc
-            time.sleep(delay)
-    raise last  # pragma: no cover
-
-
 # --------------------------------------------------------------------------- #
 # event_get: pagination
 # --------------------------------------------------------------------------- #
@@ -650,7 +637,7 @@ def test_event_wait_default_waiter_wakes_on_concurrent_write(
 
     def appender():
         time.sleep(0.15)
-        retry_db(lambda: emit(migrated_factory, ws, type="late"))
+        emit(migrated_factory, ws, type="late")
 
     thread = threading.Thread(target=appender)
     thread.start()
@@ -997,7 +984,7 @@ def test_concurrent_writers_distinct_monotonic_ids(migrated_factory, tmp_path):
 
     def worker(i):
         barrier.wait()
-        eid = retry_db(lambda: emit(migrated_factory, ws, type=f"e{i}"))
+        eid = emit(migrated_factory, ws, type=f"e{i}")
         with lock:
             ids.append(eid)
 

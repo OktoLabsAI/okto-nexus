@@ -15,7 +15,6 @@ import hashlib
 import json
 import os
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from types import SimpleNamespace
@@ -135,20 +134,6 @@ def count(factory, table: str) -> int:
         return conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
     finally:
         conn.close()
-
-
-def retry_db(fn, attempts: int = 30, delay: float = 0.02):
-    """Retry on transient DB_ERROR (WAL busy/snapshot under contention)."""
-    last = None
-    for _ in range(attempts):
-        try:
-            return fn()
-        except OktoNexusError as exc:
-            if exc.code != ErrorCode.DB_ERROR.value:
-                raise
-            last = exc
-            time.sleep(delay)
-    raise last  # pragma: no cover
 
 
 def mkdir(tmp_path, name):
@@ -804,9 +789,7 @@ def test_concurrent_session_open_unique_ids(migrated_factory, tmp_config, tmp_pa
 
     def worker():
         barrier.wait()
-        out = retry_db(
-            lambda: svc.session_open(agent_id="agent-1", workspace_id=ws)
-        )
+        out = svc.session_open(agent_id="agent-1", workspace_id=ws)
         with lock:
             results.append(out["session_id"])
 
@@ -832,7 +815,7 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
 
     def worker(ws):
         barrier.wait()
-        retry_db(lambda: svc.session_open(agent_id="agent-1", workspace_id=ws))
+        svc.session_open(agent_id="agent-1", workspace_id=ws)
 
     with ThreadPoolExecutor(max_workers=len(targets)) as ex:
         futures = [ex.submit(worker, ws) for ws in targets]
@@ -1055,7 +1038,7 @@ def test_concurrent_heartbeat_vs_stale_read(migrated_factory, tmp_config, tmp_pa
         barrier.wait()
         for _ in range(rounds):
             try:
-                out = retry_db(lambda: svc.get_session(session_id=sid))
+                out = svc.get_session(session_id=sid)
             except Exception as exc:  # noqa: BLE001 - capture for assertion
                 with lock:
                     errors.append(exc)
@@ -1067,7 +1050,7 @@ def test_concurrent_heartbeat_vs_stale_read(migrated_factory, tmp_config, tmp_pa
         barrier.wait()
         for _ in range(rounds):
             try:
-                retry_db(lambda: svc.session_heartbeat(session_id=sid))
+                svc.session_heartbeat(session_id=sid)
             except Exception as exc:  # noqa: BLE001 - capture for assertion
                 with lock:
                     errors.append(exc)

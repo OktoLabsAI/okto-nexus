@@ -48,6 +48,12 @@ database gets a short bounded retry (concurrent bootstraps race it outside
 so concurrent bootstraps are safe and a ledger newer than the package fails
 closed.
 
+The test suites carry **zero compensating retries**: every concurrency test
+(handoff claim races; parallel writers in the events, artifacts, identity and
+messages suites; the cross-process suite) asserts direct success or a precise
+business error. A regression of the IMMEDIATE default therefore fails loudly
+in any of these suites instead of being absorbed by a `retry_db` helper.
+
 ### D2 (M2) — The observability chain is repaired end to end
 
 Four independent breaks, one consequence (events nobody could see), all fixed:

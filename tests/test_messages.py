@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import json
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 
@@ -157,20 +156,6 @@ def count(factory, table: str) -> int:
         return conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
     finally:
         conn.close()
-
-
-def retry_db(fn, attempts: int = 40, delay: float = 0.02):
-    """Retry on transient DB_ERROR (WAL busy/snapshot under contention)."""
-    last = None
-    for _ in range(attempts):
-        try:
-            return fn()
-        except OktoNexusError as exc:
-            if exc.code != ErrorCode.DB_ERROR.value:
-                raise
-            last = exc
-            time.sleep(delay)
-    raise last  # pragma: no cover
 
 
 def mkdir(tmp_path, name):
@@ -896,13 +881,11 @@ def test_concurrent_message_create_strictly_increasing_event_ids(
 
     def worker(i: int) -> None:
         barrier.wait()
-        out = retry_db(
-            lambda: svc.create_message(
-                project_root=str(proj),
-                from_agent_id=f"a{i}",
-                subject=f"s{i}",
-                body=f"b{i}",
-            )
+        out = svc.create_message(
+            project_root=str(proj),
+            from_agent_id=f"a{i}",
+            subject=f"s{i}",
+            body=f"b{i}",
         )
         with lock:
             msg_ids.append(out["message_id"])
@@ -936,10 +919,8 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
 
     def worker(idx: int, root: str) -> None:
         barrier.wait()
-        retry_db(
-            lambda: svc.create_message(
-                project_root=root, from_agent_id=f"a{idx}", subject="s", body="b"
-            )
+        svc.create_message(
+            project_root=root, from_agent_id=f"a{idx}", subject="s", body="b"
         )
 
     with ThreadPoolExecutor(max_workers=len(roots)) as ex:

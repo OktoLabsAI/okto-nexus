@@ -22,7 +22,6 @@ from __future__ import annotations
 import json
 import os
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor
 from types import SimpleNamespace
 
@@ -240,18 +239,6 @@ def event_ids(factory, type_="artifact.created") -> list[int]:
         conn.close()
 
 
-def retry_db(fn, attempts: int = 40, delay: float = 0.02):
-    """Retry on transient DB_ERROR (WAL busy under contention)."""
-    last = None
-    for _ in range(attempts):
-        try:
-            return fn()
-        except OktoNexusError as exc:
-            if exc.code != ErrorCode.DB_ERROR.value:
-                raise
-            last = exc
-            time.sleep(delay)
-    raise last  # pragma: no cover
 
 
 def mkroot(tmp_path, name="proj"):
@@ -722,10 +709,8 @@ def test_concurrent_writers_distinct_ids_and_events(migrated_factory, tmp_config
 
     def worker(i):
         barrier.wait()
-        out = retry_db(
-            lambda: svc.artifact_put(
-                project_root=root, artifact_type="text", content=f"payload-{i}"
-            )
+        out = svc.artifact_put(
+            project_root=root, artifact_type="text", content=f"payload-{i}"
         )
         with lock:
             results.append(out["artifact_id"])
