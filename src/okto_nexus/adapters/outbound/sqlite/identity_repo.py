@@ -365,6 +365,53 @@ class SqliteSessionRepo(_ClockBacked):
             raise _db_error("listing sessions", exc) from exc
         return [self._row_to_session(row) for row in rows]
 
+    def count_closed_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+        """Count ``closed`` sessions that were closed before ``cutoff``.
+
+        The prune dry-run view: matches EXACTLY the predicate of
+        :meth:`prune_closed_before` (``COALESCE`` falls back to the heartbeat /
+        start stamps for a closed row missing ``closed_at``, e.g. pre-002).
+        """
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM sessions WHERE status = 'closed' "
+                "AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?",
+                (cutoff,),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting prunable sessions", exc) from exc
+        return int(row[0])
+
+    def prune_closed_before(
+        self, uow: UnitOfWork, *, cutoff: str, limit: int
+    ) -> int:
+        """Delete up to ``limit`` ``closed`` sessions closed before ``cutoff``.
+
+        The ONLY delete path on ``sessions``, used exclusively by the retention
+        slice. The ``status = 'closed'`` predicate is baked into the SQL, so
+        live state is unreachable BY CONSTRUCTION: ``active``/``stale``
+        sessions are never deleted regardless of age (the session reaper closes
+        them first; only then do they age into this window). Bounded by
+        ``limit`` per batch so the WAL writer lock is held briefly.
+        """
+        try:
+            cur = uow.connection.execute(
+                """
+                DELETE FROM sessions WHERE session_id IN (
+                    SELECT session_id FROM sessions
+                    WHERE status = 'closed'
+                      AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?
+                    ORDER BY COALESCE(closed_at, last_heartbeat_at, started_at) ASC,
+                             session_id ASC
+                    LIMIT ?
+                )
+                """,
+                (cutoff, int(limit)),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("pruning closed sessions", exc) from exc
+        return int(cur.rowcount)
+
     @staticmethod
     def _row_to_session(row: Any) -> Session:
         return Session(

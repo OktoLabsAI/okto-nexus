@@ -157,3 +157,27 @@ class ConnectionFactory:
         read that does not queue behind writers).
         """
         return SqliteUnitOfWork(self.get_connection(), write=write)
+
+    def vacuum(self) -> None:
+        """Run ``VACUUM`` to rebuild the database and return freed pages.
+
+        Deleting rows (retention pruning) leaves free pages inside the file;
+        only ``VACUUM`` shrinks it on disk. It cannot run inside a transaction,
+        so it executes on its own autocommit connection (never via a unit of
+        work) and briefly takes an exclusive lock - ``busy_timeout`` applies.
+        Raises ``DB_ERROR`` (retryable for lock/busy contention) on failure.
+        """
+        conn = self.get_connection()
+        try:
+            conn.execute("VACUUM")
+        except sqlite3.Error as exc:
+            raise OktoNexusError(
+                ErrorCode.DB_ERROR,
+                "VACUUM failed; the store was not compacted. If the error is "
+                "retryable the database was briefly busy - retry once writers "
+                "quiesce.",
+                {"db_path": str(self._config.db_path), "reason": str(exc)},
+                retryable=is_retryable_db_exception(exc),
+            ) from exc
+        finally:
+            conn.close()

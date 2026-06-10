@@ -618,6 +618,157 @@ def test_stream_events_terminal_error_fails_fast_no_retry():
 
 
 # --------------------------------------------------------------------------- #
+# --from latest is O(1): resolved via latest_cursor (MAX), never a log scan
+# --------------------------------------------------------------------------- #
+class LatestScriptedService(ScriptedService):
+    """ScriptedService exposing the O(1) ``latest_cursor`` resolver."""
+
+    def __init__(self, latest: int, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self._latest = latest
+        self.latest_calls: list[dict] = []
+
+    def latest_cursor(self, **kwargs):
+        self.latest_calls.append(kwargs)
+        return self._latest
+
+
+class CountingEventRepo(SqliteEventRepo):
+    """Real repo instrumented to count scans vs O(1) end lookups."""
+
+    def __init__(self, clock=None) -> None:
+        super().__init__(clock)
+        self.list_after_calls = 0
+        self.max_event_id_calls = 0
+
+    def list_after(self, *args, **kwargs):
+        self.list_after_calls += 1
+        return super().list_after(*args, **kwargs)
+
+    def max_event_id(self, *args, **kwargs):
+        self.max_event_id_calls += 1
+        return super().max_event_id(*args, **kwargs)
+
+
+def test_tail_from_latest_uses_o1_resolver_not_walk():
+    svc = LatestScriptedService(
+        7, wait_pages=[page([{"event_id": 8, "type": "new"}], 8)]
+    )
+    out = io.StringIO()
+    code = run_tail(
+        ["--project-root", "/p", "--agent-id", "a", "--from", "latest", "--once"],
+        out=out,
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 0
+    assert svc.get_calls == []  # the log was never page-walked at startup
+    assert svc.latest_calls == [
+        {"project_root": "/p", "agent_id": "a", "stream": "workspace"}
+    ]
+    assert svc.wait_calls[0]["cursor"] == 7  # follows from the resolved end
+    assert [json.loads(ln)["event_id"] for ln in out.getvalue().splitlines()] == [8]
+
+
+def test_tail_from_latest_falls_back_to_walk_without_resolver():
+    # An injected service WITHOUT latest_cursor still resolves 'latest' via the
+    # legacy event_get page-walk (no behaviour cliff for older test doubles).
+    svc = ScriptedService(
+        wait_pages=[page([], 5, timed_out=True)],
+        get_pages=[
+            page([{"event_id": 3}], 3, has_more=True),
+            page([{"event_id": 5}], 5, has_more=False),
+        ],
+    )
+    code = run_tail(
+        [
+            "--project-root", "/p", "--agent-id", "a",
+            "--from", "latest", "--timeout-seconds", "0", "--once",
+        ],
+        out=io.StringIO(),
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 0
+    assert len(svc.get_calls) == 2  # walked to the end across both pages
+    assert svc.wait_calls[0]["cursor"] == 5
+
+
+def test_tail_from_latest_startup_does_not_scan_large_log(migrated_factory, tmp_path):
+    # FUNCTIONAL guard for the O(1) startup: with a log LARGER than one legacy
+    # walk page (1000), '--from latest' must not read the log at all - one
+    # MAX(event_id) lookup plus the single follow poll. The pre-fix behaviour
+    # (>= 2 list_after walk pages before polling) fails this test.
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    repo = CountingEventRepo(StubClock())
+    with migrated_factory.unit_of_work() as uow:
+        for i in range(1500):
+            repo.append(uow, workspace_id=ws, stream="workspace", type=f"e{i}")
+    repo.list_after_calls = 0
+    repo.max_event_id_calls = 0
+
+    def factory(env, extra):
+        clock = StubClock()
+        return EventService(
+            connection_factory=migrated_factory,
+            events=repo,
+            clock=clock,
+            config=config,
+        )
+
+    out = io.StringIO()
+    code = run_tail(
+        [
+            "--project-root", pr,
+            "--agent-id", "a",
+            "--from", "latest",
+            "--timeout-seconds", "0",
+            "--once",
+        ],
+        out=out,
+        service_factory=factory,
+    )
+    assert code == 0
+    assert out.getvalue() == ""  # none of the 1500 old events is replayed
+    assert repo.max_event_id_calls == 1  # ONE O(1) end lookup...
+    assert repo.list_after_calls <= 1  # ...and only the follow poll reads the log
+
+
+def test_tail_from_latest_resolves_end_then_follows_only_new(migrated_factory, tmp_path):
+    # End-to-end through the REAL EventService: 'latest' lands exactly at the
+    # current end, so an event appended afterwards is the first one emitted.
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    for i in range(3):
+        emit(migrated_factory, ws, type=f"old{i}")
+
+    class TriggerSleeper(ManualSleeper):
+        def sleep(self, seconds):
+            super().sleep(seconds)
+            if len(self.calls) == 1:
+                emit(migrated_factory, ws, type="new")
+
+    sleeper = TriggerSleeper()
+    out = io.StringIO()
+    code = run_tail(
+        [
+            "--project-root", pr,
+            "--agent-id", "a",
+            "--from", "latest",
+            "--timeout-seconds", "10",
+            "--once",
+        ],
+        out=out,
+        service_factory=real_service_factory(
+            migrated_factory, config, sleeper=sleeper.sleep, monotonic=sleeper.monotonic
+        ),
+    )
+    assert code == 0
+    parsed = [json.loads(ln) for ln in out.getvalue().splitlines()]
+    assert [e["type"] for e in parsed] == ["new"]
+    assert parsed[0]["event_id"] == 4  # ids 1-3 (pre-existing) were skipped
+
+
+# --------------------------------------------------------------------------- #
 # Local helpers
 # --------------------------------------------------------------------------- #
 def _ns(**kwargs):

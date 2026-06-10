@@ -270,6 +270,21 @@ class EventRepo(Protocol):
         """
         ...
 
+    def max_event_id(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        stream: str | None = None,
+    ) -> int:
+        """Return the largest ``event_id`` in the (workspace, stream) scope.
+
+        ``0`` when the scope holds no events. The O(1) "end of the log"
+        position lookup (an indexed ``MAX``, never a scan) that backs
+        ``--from latest`` startup in followers.
+        """
+        ...
+
 
 @runtime_checkable
 class EventEmitter(Protocol):

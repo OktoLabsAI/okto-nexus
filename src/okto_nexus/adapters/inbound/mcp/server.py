@@ -285,6 +285,39 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
         }
 
 
+def maybe_auto_prune(deps: Deps) -> dict[str, Any] | None:
+    """Opportunistic retention reaper, gated by ``auto_prune_on_start``.
+
+    When the knob (default ``False``; env ``OKTO_NEXUS_AUTO_PRUNE_ON_START`` /
+    ``--auto-prune-on-start true``) is enabled, server startup runs ONE
+    bounded, incremental retention pass (``AUTO_PRUNE_MAX_BATCHES`` batches
+    per table) using the configured windows - cheap and predictable, never a
+    full drain; backlog converges across restarts or via ``okto-nexus admin
+    prune``. BEST-EFFORT by design: a failure is reported to stderr and
+    startup proceeds (retention must never keep the bus down). Returns the
+    prune report, or ``None`` when disabled/failed.
+    """
+    if not deps.config.auto_prune_on_start:
+        return None
+    from ....application.retention import AUTO_PRUNE_MAX_BATCHES, RetentionService
+
+    try:
+        report = RetentionService.from_deps(deps).prune(
+            max_batches=AUTO_PRUNE_MAX_BATCHES
+        )
+    except OktoNexusError as exc:
+        print(
+            f"[okto-nexus] auto-prune skipped: {exc.code}: {exc.message}",
+            file=sys.stderr,
+        )
+        return None
+    print(
+        f"[okto-nexus] auto-prune deleted {report['total_deleted']} row(s)",
+        file=sys.stderr,
+    )
+    return report
+
+
 def create_server(deps: Deps) -> Any:
     """Create the MCP server, register tools, and return the server instance.
 
@@ -302,9 +335,10 @@ def main(argv: list[str] | None = None) -> int:
     """Console-script entry point. Returns a process exit code.
 
     The first token selects the mode: ``tail`` dispatches to the line-delimited
-    event-log follower (a CLI subcommand); anything else runs the MCP stdio
-    server. The dispatch happens BEFORE ``load_config`` because the config
-    parser is flags-only and rejects positionals by design.
+    event-log follower and ``admin`` to the maintenance commands (CLI
+    subcommands); anything else runs the MCP stdio server. The dispatch happens
+    BEFORE ``load_config`` because the config parser is flags-only and rejects
+    positionals by design.
     """
     args = list(sys.argv[1:]) if argv is None else list(argv)
 
@@ -312,6 +346,11 @@ def main(argv: list[str] | None = None) -> int:
         from ..cli.tail import run_tail  # lazy: avoids an import cycle with this module
 
         return run_tail(args[1:])
+
+    if args and args[0] == "admin":
+        from ..cli.admin import run_admin  # lazy: avoids an import cycle too
+
+        return run_admin(args[1:])
 
     try:
         deps = bootstrap(os.environ, args)
@@ -321,6 +360,8 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 1
+
+    maybe_auto_prune(deps)  # no-op unless auto_prune_on_start=true; best-effort
 
     try:
         server = create_server(deps)

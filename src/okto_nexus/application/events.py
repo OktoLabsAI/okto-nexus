@@ -15,6 +15,10 @@ Implements the two use cases this slice owns EXCLUSIVELY:
   ``clamp(timeout_seconds, max_wait_timeout_seconds)`` and polls in increments
   of ``poll_interval_ms``.
 
+plus ``latest_cursor`` - the O(1) position-only complement (MAX ``event_id``,
+no scan) that resolves "the end of the log" for followers starting at
+``latest``.
+
 This module lives in the application layer: it depends only on the ports
 (:mod:`okto_nexus.application.ports`), the pure domain helpers
 (:mod:`okto_nexus.domain.events`, :mod:`okto_nexus.domain.routing`,
@@ -164,6 +168,33 @@ class EventService:
             if page.events:
                 return self._page_payload(page, timed_out=False)
         return self._timed_out_payload(cursor)
+
+    def latest_cursor(
+        self,
+        *,
+        project_root: Any,
+        agent_id: Any,
+        stream: Any,
+    ) -> int:
+        """Resolve the stream's CURRENT END as a cursor, in O(1) (no scan).
+
+        Returns the largest ``event_id`` in the (workspace, stream) scope -
+        ``0`` for an empty stream - so a follower starting at ``latest`` sees
+        only subsequently-appended events. Position-only: it answers WHERE the
+        log ends via an indexed ``MAX``, replacing the page-walk that made
+        follower startup O(log size). Visibility is irrelevant for a position
+        (the walk-based resolution already advanced past non-visible events,
+        so both yield the same cursor). Validation order and the best-effort
+        presence touch match ``event_get``.
+        """
+        workspace_id, agent_id, stream, _, _, _ = self._prepare(
+            project_root, agent_id, stream, None, None, None
+        )
+        self._touch_agent(agent_id)
+        with self._cf.unit_of_work(write=False) as uow:
+            return int(
+                self._events.max_event_id(uow, workspace_id=workspace_id, stream=stream)
+            )
 
     # ------------------------------------------------------------------ #
     # Input preparation / validation

@@ -53,6 +53,23 @@ TRUST_MODE_OPEN = "open"
 TRUST_MODE_STRICT = "strict"
 TRUST_MODES: tuple[str, ...] = (TRUST_MODE_OPEN, TRUST_MODE_STRICT)
 
+# --------------------------------------------------------------------------- #
+# Retention (M7): how long pruned-eligible rows are kept before
+# ``RetentionService.prune`` may delete them. Only TERMINAL lanes are ever
+# eligible (events are audit history; deliveries only in the ``read`` lane;
+# sessions only when ``closed``) - the windows below never touch live state.
+# --------------------------------------------------------------------------- #
+#: Default retention window (days) for the append-only event log.
+DEFAULT_RETENTION_EVENTS_KEEP_DAYS = 30
+
+#: Default retention window (days) for acknowledged (``read``) deliveries.
+#: ``unread``/``delivered``/``parked`` lanes are NEVER pruned, regardless of age.
+DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS = 14
+
+#: Default retention window (days) for ``closed`` sessions. ``active``/``stale``
+#: sessions are NEVER pruned, regardless of age.
+DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS = 7
+
 
 @dataclass
 class NexusConfig:
@@ -76,6 +93,14 @@ class NexusConfig:
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
     max_event_limit: int = DEFAULT_MAX_EVENT_LIMIT
     trust_mode: str = TRUST_MODE_OPEN
+    retention_events_keep_days: int = DEFAULT_RETENTION_EVENTS_KEEP_DAYS
+    retention_read_deliveries_keep_days: int = (
+        DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS
+    )
+    retention_closed_sessions_keep_days: int = (
+        DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS
+    )
+    auto_prune_on_start: bool = False
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -156,6 +181,26 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_MAX_EVENT_LIMIT,
         1,
     ),
+    # Retention windows accept 0 ("keep nothing older than right now"); only a
+    # negative value is rejected.
+    "retention_events_keep_days": (
+        "OKTO_NEXUS_RETENTION_EVENTS_KEEP_DAYS",
+        "--retention-events-keep-days",
+        DEFAULT_RETENTION_EVENTS_KEEP_DAYS,
+        0,
+    ),
+    "retention_read_deliveries_keep_days": (
+        "OKTO_NEXUS_RETENTION_READ_DELIVERIES_KEEP_DAYS",
+        "--retention-read-deliveries-keep-days",
+        DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS,
+        0,
+    ),
+    "retention_closed_sessions_keep_days": (
+        "OKTO_NEXUS_RETENTION_CLOSED_SESSIONS_KEEP_DAYS",
+        "--retention-closed-sessions-keep-days",
+        DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS,
+        0,
+    ),
 }
 
 # field: (env var, CLI flag, default, allowed values) - closed-vocabulary
@@ -169,6 +214,20 @@ _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
     ),
 }
 
+# field: (env var, CLI flag, default) - boolean knobs, parsed FAIL-CLOSED.
+# The CLI grammar is value-carrying (``--flag value`` / ``--flag=value``), so
+# boolean flags take an explicit true/false value rather than being bare.
+_BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
+    "auto_prune_on_start": (
+        "OKTO_NEXUS_AUTO_PRUNE_ON_START",
+        "--auto-prune-on-start",
+        False,
+    ),
+}
+
+_BOOL_TRUE = frozenset({"true", "1", "yes", "on"})
+_BOOL_FALSE = frozenset({"false", "0", "no", "off"})
+
 
 def _parse_cli(argv: list[str]) -> dict[str, str]:
     """Parse a flat ``--flag value`` / ``--flag=value`` argv into a flag->value map.
@@ -179,6 +238,7 @@ def _parse_cli(argv: list[str]) -> dict[str, str]:
     known_flags = {flag for _, flag in _PATH_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _INT_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _ENUM_FIELDS.values()}
+    known_flags |= {flag for _, flag, _ in _BOOL_FIELDS.values()}
 
     parsed: dict[str, str] = {}
     i = 0
@@ -293,6 +353,37 @@ def _resolve_enum(
     return value
 
 
+def _resolve_bool(
+    field_name: str,
+    flag: str,
+    env_var: str,
+    default: bool,
+    env: Mapping[str, str],
+    cli: Mapping[str, str],
+) -> bool:
+    """Resolve a boolean field with CLI > env > default precedence, FAIL-CLOSED.
+
+    Accepted spellings (trimmed, case-insensitive): ``true/1/yes/on`` and
+    ``false/0/no/off``. Anything else raises ``CONFIG_ERROR`` rather than being
+    silently coerced (``"enabled"`` must not quietly read as ``False``).
+    """
+    raw = _resolve_str(flag, env_var, env=env, cli=cli)
+    if raw is None:
+        return default
+    value = str(raw).strip().lower()
+    if value in _BOOL_TRUE:
+        return True
+    if value in _BOOL_FALSE:
+        return False
+    raise OktoNexusError(
+        ErrorCode.CONFIG_ERROR,
+        f"Invalid boolean for {field_name}: {raw!r}. Use one of: "
+        f"{', '.join(sorted(_BOOL_TRUE))} (true) or "
+        f"{', '.join(sorted(_BOOL_FALSE))} (false).",
+        {"field": field_name, "value": raw},
+    )
+
+
 def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusConfig:
     """Build a :class:`NexusConfig` from environment + CLI overrides.
 
@@ -329,6 +420,11 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
     for field_name, (env_var, flag, default, allowed) in _ENUM_FIELDS.items():
         kwargs[field_name] = _resolve_enum(
             field_name, flag, env_var, default, allowed, env, cli
+        )
+
+    for field_name, (env_var, flag, default) in _BOOL_FIELDS.items():
+        kwargs[field_name] = _resolve_bool(
+            field_name, flag, env_var, default, env, cli
         )
 
     return NexusConfig(**kwargs)

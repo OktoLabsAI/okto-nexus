@@ -574,6 +574,53 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             for r in rows
         ]
 
+    def count_read_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+        """Count ``read`` (history) rows acknowledged before ``cutoff``.
+
+        The prune dry-run view: matches EXACTLY the predicate of
+        :meth:`prune_read_before` (defensive ``COALESCE(read_at, created_at)``
+        for a hypothetical read row missing its ``read_at`` stamp).
+        """
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM message_deliveries "
+                "WHERE status = ? AND COALESCE(read_at, created_at) < ?",
+                (DELIVERY_READ, cutoff),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting prunable deliveries", exc) from exc
+        return int(row[0])
+
+    def prune_read_before(
+        self, uow: UnitOfWork, *, cutoff: str, limit: int
+    ) -> int:
+        """Delete up to ``limit`` ``read`` rows acknowledged before ``cutoff``.
+
+        The ONLY delete path on ``message_deliveries``, used exclusively by the
+        retention slice. The ``status = 'read'`` predicate is baked into the
+        SQL, so the protected lanes are unreachable BY CONSTRUCTION:
+        ``unread`` (queued), ``delivered`` (in-flight under a lease) and
+        ``parked`` (dead-letter awaiting an operator) rows are never deleted,
+        regardless of age - pruning history must never lose an undelivered or
+        quarantined message. Bounded by ``limit`` per batch so the WAL writer
+        lock is held briefly.
+        """
+        try:
+            cur = uow.connection.execute(
+                """
+                DELETE FROM message_deliveries WHERE delivery_id IN (
+                    SELECT delivery_id FROM message_deliveries
+                    WHERE status = ? AND COALESCE(read_at, created_at) < ?
+                    ORDER BY COALESCE(read_at, created_at) ASC, delivery_id ASC
+                    LIMIT ?
+                )
+                """,
+                (DELIVERY_READ, cutoff, int(limit)),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("pruning read deliveries", exc) from exc
+        return int(cur.rowcount)
+
     @staticmethod
     def _row(row: Any) -> MessageDelivery:
         return MessageDelivery(

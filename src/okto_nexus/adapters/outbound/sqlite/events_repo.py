@@ -10,9 +10,11 @@ This is an outbound adapter, so it MAY import ``sqlite3`` and the domain
 dataclasses. ``event_id`` is the table's ``INTEGER PRIMARY KEY AUTOINCREMENT``:
 the WAL single-writer serialises concurrent appends, so every committed event
 receives a strictly greater id assigned inside its transaction, never reused and
-never modified (the log is append-only - no UPDATE/DELETE paths exist here).
-JSON-ish columns (``payload`` / ``target``) are (de)serialised here; timestamps
-default to the injected clock (falling back to :func:`utc_now_iso`).
+never modified (the log is append-only - no UPDATE path exists, and the single
+DELETE path is :meth:`SqliteEventRepo.prune_before`, reserved for the retention
+slice; ``AUTOINCREMENT`` keeps ids monotonic even across pruning). JSON-ish
+columns (``payload`` / ``target``) are (de)serialised here; timestamps default
+to the injected clock (falling back to :func:`utc_now_iso`).
 """
 
 from __future__ import annotations
@@ -163,6 +165,69 @@ class SqliteEventRepo:
         except sqlite3.Error as exc:
             raise _db_error("listing events", exc) from exc
         return [self._row_to_event(row) for row in rows]
+
+    def max_event_id(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        stream: str | None = None,
+    ) -> int:
+        """Return the largest ``event_id`` in the (workspace, stream) scope.
+
+        ``0`` when the scope holds no events (a valid "start of log" cursor).
+        ``stream=None`` spans ALL streams of the workspace. This is the O(1)
+        "where does the log end?" lookup followers use to resolve a ``latest``
+        cursor without scanning: ``MAX`` over the indexed ``event_id`` column
+        (``idx_events_workspace`` / ``idx_events_stream``) is a single B-tree
+        descent, not a table walk.
+        """
+        sql = "SELECT MAX(event_id) FROM events WHERE workspace_id = ?"
+        params: list[Any] = [workspace_id]
+        if stream is not None:
+            sql += " AND stream = ?"
+            params.append(stream)
+        try:
+            row = uow.connection.execute(sql, tuple(params)).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("resolving max event_id", exc) from exc
+        return int(row[0]) if row is not None and row[0] is not None else 0
+
+    def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+        """Count events with ``created_at < cutoff`` (the prune dry-run view)."""
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM events WHERE created_at < ?", (cutoff,)
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting prunable events", exc) from exc
+        return int(row[0])
+
+    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
+        """Delete up to ``limit`` events with ``created_at < cutoff``; return count.
+
+        The ONLY delete path on the events table, used exclusively by the
+        retention slice (the log stays append-only for every other caller).
+        Oldest first, bounded by ``limit`` so each retention batch holds the
+        WAL writer lock briefly instead of blocking the bus for one giant
+        DELETE. ``event_id`` monotonicity survives pruning: the column is
+        ``AUTOINCREMENT``, so ids of deleted rows are never reused.
+        """
+        try:
+            cur = uow.connection.execute(
+                """
+                DELETE FROM events WHERE event_id IN (
+                    SELECT event_id FROM events
+                    WHERE created_at < ?
+                    ORDER BY event_id ASC
+                    LIMIT ?
+                )
+                """,
+                (cutoff, int(limit)),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("pruning events", exc) from exc
+        return int(cur.rowcount)
 
     @staticmethod
     def _row_to_event(row: Any) -> Event:

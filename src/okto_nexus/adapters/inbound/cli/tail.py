@@ -60,7 +60,9 @@ _LATEST = "latest"
 #: ``--from`` aliases that mean "from the very beginning of the stream".
 _BEGIN = frozenset({"0", "begin", "start"})
 
-#: Page size used while walking to the stream's end to resolve ``--from latest``.
+#: Page size of the LEGACY ``--from latest`` resolution (page-walk to the end),
+#: kept only as a fallback for injected services that lack the O(1)
+#: ``latest_cursor`` resolver.
 _WALK_LIMIT = 1000
 
 #: Error codes that are TRANSIENT under WAL contention: a momentary SQLite lock
@@ -165,14 +167,27 @@ def _resolve_start_cursor(service: Any, ns: argparse.Namespace) -> int:
     """Resolve ``--from`` into a concrete starting ``event_id`` cursor.
 
     ``0``/``begin``/``start`` -> ``0``; an explicit non-negative integer is used
-    verbatim; ``latest`` walks the stream to its current end (via the public,
-    visibility-respecting ``event_get``) so only subsequently-appended events are
-    followed. A malformed value raises ``CONFIG_ERROR`` (fail closed).
+    verbatim; ``latest`` resolves the stream's current end in O(1) via the
+    service's ``latest_cursor`` (an indexed ``MAX(event_id)``, never a scan) so
+    follower STARTUP COST does not grow with the size of the log - only
+    subsequently-appended events are followed. An injected service without the
+    resolver falls back to the legacy page-walk over ``event_get``. A malformed
+    value raises ``CONFIG_ERROR`` (fail closed).
     """
     raw = (ns.from_cursor or _LATEST).strip().lower()
     if raw in _BEGIN:
         return 0
     if raw == _LATEST:
+        latest = getattr(service, "latest_cursor", None)
+        if callable(latest):
+            return int(
+                latest(
+                    project_root=ns.project_root,
+                    agent_id=ns.agent_id,
+                    stream=ns.stream,
+                )
+            )
+        # Legacy fallback (service without latest_cursor): walk to the end.
         cursor = 0
         while True:
             page = service.event_get(
