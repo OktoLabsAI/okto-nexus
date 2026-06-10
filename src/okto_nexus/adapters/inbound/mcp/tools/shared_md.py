@@ -19,8 +19,7 @@ observes every slice's repos regardless of tool registration order.
 
 from __future__ import annotations
 
-import os
-from typing import Annotated, Any, Mapping
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -32,14 +31,9 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import (
 )
 from okto_nexus.application.shared_md import (
     DEFAULT_LIMIT_EVENTS,
-    DEFAULT_MAX_LIMIT_EVENTS,
     SharedMdService,
 )
 from okto_nexus.envelope import tool_envelope
-
-#: Environment knob for the maximum accepted ``limit_events``. Not part of
-#: ``NexusConfig``, so it is resolved here in the inbound adapter.
-MAX_EVENTS_ENV = "OKTO_NEXUS_MAX_SHARED_MD_EVENTS"
 
 #: Parameter descriptions. Module-level so the (stringised) annotations resolve
 #: against module globals when FastMCP evaluates them. House style mirrors
@@ -54,27 +48,18 @@ _P_LIMIT_EVENTS = (
 )
 
 
-def _resolve_max_events(env: Mapping[str, str]) -> int:
-    """Resolve the maximum ``limit_events`` from the environment (positive int)."""
-    raw = env.get(MAX_EVENTS_ENV)
-    if raw is None or not str(raw).strip():
-        return DEFAULT_MAX_LIMIT_EVENTS
-    try:
-        value = int(str(raw).strip())
-    except (TypeError, ValueError):
-        return DEFAULT_MAX_LIMIT_EVENTS
-    return value if value > 0 else DEFAULT_MAX_LIMIT_EVENTS
-
-
-def build_service(deps: Any, env: Mapping[str, str] | None = None) -> SharedMdService:
+def build_service(deps: Any) -> SharedMdService:
     """Wire the renderer + repos from ``deps`` and build the service.
 
     Idempotent for the foundational repos: workspace / agent / session repos
     already present on ``deps.repos`` are reused so this slice and its peers
     share a single concrete instance. Sibling repos (tasks/handoffs/events) are
-    passed through as-is (possibly ``None``).
+    passed through as-is (possibly ``None``). The ``limit_events`` ceiling
+    comes from ``deps.config.max_shared_md_events`` (env
+    ``OKTO_NEXUS_MAX_SHARED_MD_EVENTS`` / ``--max-shared-md-events``, parsed
+    FAIL-CLOSED by ``load_config`` - an invalid value aborts startup with
+    CONFIG_ERROR instead of silently falling back).
     """
-    environ = env if env is not None else os.environ
     repos = deps.repos
     if getattr(repos, "workspaces", None) is None:
         repos.workspaces = SqliteWorkspaceRepo(deps.clock)
@@ -95,7 +80,7 @@ def build_service(deps: Any, env: Mapping[str, str] | None = None) -> SharedMdSe
         tasks=getattr(repos, "tasks", None),
         handoffs=getattr(repos, "handoffs", None),
         events=getattr(repos, "events", None),
-        max_limit_events=_resolve_max_events(environ),
+        max_limit_events=deps.config.max_shared_md_events,
     )
 
 

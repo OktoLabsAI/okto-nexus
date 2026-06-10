@@ -25,11 +25,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.tools.inbox import (
-    _resolve_lease_ttl,
-    build_service,
-    register,
-)
+from okto_nexus.adapters.inbound.mcp.tools.inbox import build_service, register
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteWorkspaceRepo,
@@ -189,13 +185,13 @@ def test_lease_expiry_redelivers_unacked(migrated_factory, fake_clock):
     assert first["count"] == 1
 
     # No ack; advance past the lease -> the next pull re-claims and redelivers.
-    fake_clock.set_iso("2026-06-07T00:05:00Z")
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")
     again = inbox.pull(agent_id="r")
     assert [m["message_id"] for m in again["messages"]] == ["m1"]
 
     # But once acked, an expired lease no longer redelivers.
     inbox.ack(agent_id="r", message_ids=["m1"])
-    fake_clock.set_iso("2026-06-07T00:10:00Z")
+    fake_clock.set_iso("2026-06-07T00:10:00.000000Z")
     assert inbox.pull(agent_id="r")["count"] == 0
 
 
@@ -213,7 +209,7 @@ def test_peek_count_history_write_nothing_even_with_expired_leases(
     inbox = make_inbox(migrated_factory, fake_clock, lease_ttl=60)
     inbox.pull(agent_id="r", limit=2)        # m1, m2 in-flight
     inbox.ack(agent_id="r", message_ids=["m2"])  # m2 read
-    fake_clock.set_iso("2026-06-07T00:05:00Z")   # m1's lease expired
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")   # m1's lease expired
 
     before = _deliveries_snapshot(migrated_factory)
     observer = migrated_factory.get_connection()
@@ -297,7 +293,7 @@ def test_pull_reclaims_own_expired_and_never_touches_other_recipients(
     inbox.pull(agent_id="r1")
     r2_lease = inbox.pull(agent_id="r2")["messages"][0]["lease_expires_at"]
 
-    fake_clock.set_iso("2026-06-07T00:05:00Z")  # both leases are now expired
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")  # both leases are now expired
     seed(migrated_factory, fake_clock, workspace_id="ws", recipient="r1", message_id="m3")
 
     # ONE claim covers r1's expired redelivery AND r1's fresh unread message...
@@ -380,7 +376,7 @@ def test_poison_delivery_parks_after_max_attempts_and_frees_the_head(
 
     # m1 is claimed (never acked) the maximum number of times.
     for i in range(DEFAULT_MAX_DELIVERY_ATTEMPTS):
-        fake_clock.set_iso(f"2026-06-07T00:0{i}:00Z")
+        fake_clock.set_iso(f"2026-06-07T00:0{i}:00.000000Z")
         assert [m["message_id"] for m in inbox.pull(agent_id="r")["messages"]] == ["m1"]
 
     # A healthy message arrives behind the poison one.
@@ -388,7 +384,7 @@ def test_poison_delivery_parks_after_max_attempts_and_frees_the_head(
 
     # The next claim PARKS m1 instead of redelivering it - and the same pull
     # still delivers m2 (the poison message no longer occupies the head).
-    fake_clock.set_iso("2026-06-07T00:05:00Z")
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")
     page = inbox.pull(agent_id="r", limit=10)
     assert [m["message_id"] for m in page["messages"]] == ["m2"]
 
@@ -398,7 +394,7 @@ def test_poison_delivery_parks_after_max_attempts_and_frees_the_head(
     assert row["delivered_at"] is None and row["lease_expires_at"] is None
 
     # Parked never comes back: later pulls redeliver only the healthy message.
-    fake_clock.set_iso("2026-06-07T00:20:00Z")
+    fake_clock.set_iso("2026-06-07T00:20:00.000000Z")
     assert [m["message_id"] for m in inbox.pull(agent_id="r")["messages"]] == ["m2"]
     assert _delivery_row(migrated_factory, "m1")["status"] == "parked"
 
@@ -426,17 +422,17 @@ def test_extend_renews_lease_and_prevents_redelivery(migrated_factory, fake_cloc
     inbox = make_inbox(migrated_factory, fake_clock, lease_ttl=60)
     inbox.pull(agent_id="r")  # leased to 00:01:00
 
-    fake_clock.set_iso("2026-06-07T00:00:30Z")
+    fake_clock.set_iso("2026-06-07T00:00:30.000000Z")
     out = inbox.extend(agent_id="r", message_ids=["m1"], extend_seconds=600)
     assert out == {"extended": 1, "lease_expires_at": "2026-06-07T00:10:30.000000Z"}
 
     # Past the ORIGINAL lease the message is still in flight (not redelivered).
-    fake_clock.set_iso("2026-06-07T00:02:00Z")
+    fake_clock.set_iso("2026-06-07T00:02:00.000000Z")
     assert inbox.pull(agent_id="r")["count"] == 0
     assert inbox.count(agent_id="r") == {"unread": 0, "in_flight": 1, "read": 0}
 
     # Once the EXTENDED lease elapses, at-least-once redelivery resumes.
-    fake_clock.set_iso("2026-06-07T00:15:00Z")
+    fake_clock.set_iso("2026-06-07T00:15:00.000000Z")
     assert [m["message_id"] for m in inbox.pull(agent_id="r")["messages"]] == ["m1"]
 
 
@@ -481,7 +477,7 @@ def test_extend_fails_precisely_per_lane_and_extends_nothing(
     assert "acknowledged" in read_err.value.details["not_in_flight"][0]["reason"]
 
     # Expired lease -> redeliverable, not extendable.
-    fake_clock.set_iso("2026-06-07T00:05:00Z")
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")
     with pytest.raises(OktoNexusError) as expired:
         inbox.extend(agent_id="r", message_ids=["m1"], extend_seconds=60)
     assert expired.value.code == ErrorCode.INVALID_TRANSITION.value
@@ -515,7 +511,7 @@ def test_history_keyset_pages_do_not_duplicate_under_interleaved_acks(
 
     # Between pages, NEWER acks land (with OFFSET pagination they would shift
     # page-1 items down into page 2 and duplicate them).
-    fake_clock.set_iso("2026-06-07T00:01:00Z")
+    fake_clock.set_iso("2026-06-07T00:01:00.000000Z")
     inbox.ack(agent_id="r", message_ids=["m3", "m4"])
 
     second = inbox.history(agent_id="r", cursor=first["next_cursor"], limit=2)
@@ -573,14 +569,14 @@ def test_message_status_reflects_the_delivery_cycle(migrated_factory, fake_clock
     assert status() == {"recipient": "r", "status": "delivered", "attempts": 1, "read_at": None}
 
     # Lease elapses unacked: the sender sees it as redeliverable again.
-    fake_clock.set_iso("2026-06-07T00:05:00Z")
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")
     assert status() == {"recipient": "r", "status": "unread", "attempts": 1, "read_at": None}
 
     inbox.pull(agent_id="r")
     inbox.ack(agent_id="r", message_ids=["m1"])
     final = status()
     assert (final["status"], final["attempts"]) == ("read", 2)
-    assert final["read_at"] == "2026-06-07T00:05:00Z"
+    assert final["read_at"] == "2026-06-07T00:05:00.000000Z"
 
 
 def test_message_status_unknown_message_is_not_found(migrated_factory, fake_clock):
@@ -651,7 +647,7 @@ def test_count_reports_expired_lease_as_unread(migrated_factory, fake_clock):
     assert inbox.count(agent_id="r")["in_flight"] == 1
     # Past the lease, count must report it as unread (redeliverable), not in_flight,
     # so a recipient gating pull on `unread` is not misled into skipping it.
-    fake_clock.set_iso("2026-06-07T00:05:00Z")
+    fake_clock.set_iso("2026-06-07T00:05:00.000000Z")
     assert inbox.count(agent_id="r") == {"unread": 1, "in_flight": 0, "read": 0}
 
 
@@ -672,15 +668,21 @@ class FakeServer:
         return deco
 
 
-def test_resolve_lease_ttl_env_parsing():
-    assert _resolve_lease_ttl({}) == DEFAULT_INBOX_LEASE_TTL_SECONDS
-    assert _resolve_lease_ttl({"OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS": "42"}) == 42
-    # blank / non-int / non-positive all fall back to the default.
-    for bad in ("", "   ", "abc", "-5", "0"):
-        assert (
-            _resolve_lease_ttl({"OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS": bad})
-            == DEFAULT_INBOX_LEASE_TTL_SECONDS
-        )
+def test_build_service_lease_ttl_comes_from_config(
+    migrated_factory, tmp_config, fake_clock
+):
+    # The knob moved into NexusConfig (fail-closed parse at load_config time);
+    # the adapter must read the configured value, not os.environ.
+    assert tmp_config.inbox_lease_ttl_seconds == DEFAULT_INBOX_LEASE_TTL_SECONDS
+    tmp_config.inbox_lease_ttl_seconds = 42
+    deps = SimpleNamespace(
+        connection_factory=migrated_factory,
+        clock=fake_clock,
+        config=tmp_config,
+        repos=Repos(),
+    )
+    svc = build_service(deps)
+    assert svc._lease_ttl == 42
 
 
 def test_build_service_reuses_existing_repos(migrated_factory, tmp_config, fake_clock):
@@ -692,7 +694,7 @@ def test_build_service_reuses_existing_repos(migrated_factory, tmp_config, fake_
     )
     existing = SqliteMessageDeliveryRepo(fake_clock)
     deps.repos.deliveries = existing
-    build_service(deps, env={})
+    build_service(deps)
     assert deps.repos.deliveries is existing  # reused, not re-instantiated
     assert deps.repos.messages is not None and deps.repos.agents is not None
 

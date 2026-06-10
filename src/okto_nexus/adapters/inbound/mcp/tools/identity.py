@@ -26,8 +26,7 @@ passed into :func:`register`, matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
-import os
-from typing import Annotated, Any, Mapping
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -36,10 +35,7 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
-from okto_nexus.application.identity import (
-    DEFAULT_SESSION_STALE_TTL_SECONDS,
-    IdentityService,
-)
+from okto_nexus.application.identity import IdentityService
 from okto_nexus.envelope import tool_envelope
 
 #: Reused parameter descriptions (kept DRY across the identity tools).
@@ -70,30 +66,16 @@ _P_SESSION_ID = "The session_id returned by session_open. REQUIRED."
 _P_SESSION_WS_GUARD = "Workspace_id scope guard (optional); when given it must match the session's workspace."
 _P_GET_AGENT_ID = "The agent_id to look up. REQUIRED."
 
-#: Environment knob for the session stale TTL (seconds). Not part of
-#: ``NexusConfig``, so it is resolved here in the inbound adapter.
-STALE_TTL_ENV = "OKTO_NEXUS_SESSION_STALE_TTL_SECONDS"
-
-
-def _resolve_stale_ttl(env: Mapping[str, str]) -> int:
-    """Resolve the session stale TTL from the environment (positive int)."""
-    raw = env.get(STALE_TTL_ENV)
-    if raw is None or not str(raw).strip():
-        return DEFAULT_SESSION_STALE_TTL_SECONDS
-    try:
-        value = int(str(raw).strip())
-    except (TypeError, ValueError):
-        return DEFAULT_SESSION_STALE_TTL_SECONDS
-    return value if value > 0 else DEFAULT_SESSION_STALE_TTL_SECONDS
-
-
-def build_service(deps: Any, env: Mapping[str, str] | None = None) -> IdentityService:
+def build_service(deps: Any) -> IdentityService:
     """Wire the SQLite repos into ``deps.repos`` and build the service.
 
     Idempotent: repositories already present on ``deps.repos`` are reused so the
-    identity slice and any peers share a single concrete instance.
+    identity slice and any peers share a single concrete instance. The session
+    stale TTL comes from ``deps.config.session_stale_ttl_seconds`` (env
+    ``OKTO_NEXUS_SESSION_STALE_TTL_SECONDS`` / ``--session-stale-ttl-seconds``,
+    parsed FAIL-CLOSED by ``load_config`` - an invalid value aborts startup
+    with CONFIG_ERROR instead of silently falling back).
     """
-    environ = env if env is not None else os.environ
     repos = deps.repos
     if getattr(repos, "workspaces", None) is None:
         repos.workspaces = SqliteWorkspaceRepo(deps.clock)
@@ -109,7 +91,7 @@ def build_service(deps: Any, env: Mapping[str, str] | None = None) -> IdentitySe
         clock=deps.clock,
         config=deps.config,
         event_emitter=getattr(deps, "event_emitter", None),
-        stale_ttl_seconds=_resolve_stale_ttl(environ),
+        stale_ttl_seconds=deps.config.session_stale_ttl_seconds,
     )
 
 

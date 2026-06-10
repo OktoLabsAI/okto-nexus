@@ -8,8 +8,10 @@ ownership for the pre-claim reject path).
 It is strictly side-effect free (stdlib + the error catalogue only) and NEVER
 imports ``sqlite3`` or ``mcp`` (enforced by the import-boundary test). The
 routing/eligibility decisions themselves live in
-:mod:`okto_nexus.domain.routing` (imported by the application layer); this
-module only validates the *shape* of a target descriptor at creation time.
+:mod:`okto_nexus.domain.routing` (imported by the application layer), and the
+target GRAMMAR (parse + exhaustive validation) is IMPORTED from
+:mod:`okto_nexus.domain.targets` - the single shared definition; this module
+only adds the handoff-specific requirement that a descriptor is mandatory.
 
 State machine (V1)::
 
@@ -27,11 +29,15 @@ are terminal. Any transition outside the table is an ``INVALID_TRANSITION``.
 
 from __future__ import annotations
 
-import json
-from collections.abc import Mapping, Sequence
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .targets import (
+    VALID_STRATEGIES,
+    is_direct_target,
+    normalize_strategy,
+)
+from .targets import validate_target as _validate_target_grammar
 
 __all__ = [
     "STATUS_OPEN",
@@ -83,30 +89,9 @@ ALL_STATUSES: frozenset[str] = V1_STATUSES | RESERVED_STATUSES
 
 
 # --------------------------------------------------------------------------- #
-# Target / visibility vocabularies (mirrors routing)
+# Visibility vocabulary (the strategies live in domain.targets, re-exported)
 # --------------------------------------------------------------------------- #
-VALID_STRATEGIES: frozenset[str] = frozenset(
-    {
-        "direct",
-        "capability",
-        "role",
-        "broadcast",
-        "mixed",
-        "direct_with_fallback",
-    }
-)
-
 VALID_VISIBILITIES: frozenset[str] = frozenset({"private", "eligible", "public"})
-
-#: Required descriptor fields per strategy (after normalisation).
-_REQUIRED_FIELDS: dict[str, tuple[str, ...]] = {
-    "direct": ("agent_id",),
-    "direct_with_fallback": ("agent_id", "fallback_after_seconds"),
-    "capability": ("capability",),
-    "role": ("role",),
-    "broadcast": (),
-    "mixed": ("rules",),
-}
 
 
 # --------------------------------------------------------------------------- #
@@ -148,27 +133,6 @@ def can_transition(src: str | None, dst: str) -> bool:
 # --------------------------------------------------------------------------- #
 # Validators
 # --------------------------------------------------------------------------- #
-def normalize_strategy(raw: Any) -> str:
-    """Normalise + validate a strategy token (case-insensitive, ``-``/space -> ``_``).
-
-    Raises ``VALIDATION_ERROR`` for an unknown strategy.
-    """
-    if raw is None or (isinstance(raw, str) and not raw.strip()):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "Target is missing the 'strategy' discriminator.",
-            {"strategy": raw},
-        )
-    token = str(raw).strip().lower().replace("-", "_").replace(" ", "_")
-    if token not in VALID_STRATEGIES:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            f"Unknown routing strategy: {raw!r}.",
-            {"strategy": raw, "supported": sorted(VALID_STRATEGIES)},
-        )
-    return token
-
-
 def normalize_visibility(raw: Any) -> str:
     """Normalise + validate a visibility token (case-insensitive).
 
@@ -192,105 +156,18 @@ def normalize_visibility(raw: Any) -> str:
     return token
 
 
-def _coerce_target(target: Any) -> Mapping[str, Any]:
-    """Return ``target`` as a mapping (parsing a JSON-object string if needed).
-
-    Raises ``VALIDATION_ERROR`` for a missing/blank target or one that does not
-    resolve to a JSON object (a handoff always carries an explicit routing rule).
-    """
-    if target is None or (isinstance(target, str) and not target.strip()):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "target descriptor is required.",
-            {"target": target},
-        )
-    if isinstance(target, Mapping):
-        return target
-    if isinstance(target, str):
-        try:
-            parsed = json.loads(target)
-        except (ValueError, TypeError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "target string is not valid JSON.",
-                {"target": target},
-            ) from None
-        if isinstance(parsed, Mapping):
-            return parsed
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "target JSON must be an object.",
-            {"target": target},
-        )
-    raise OktoNexusError(
-        ErrorCode.VALIDATION_ERROR,
-        "target must be a mapping, a JSON object string, or null.",
-        {"target_type": type(target).__name__},
-    )
-
-
 def validate_target(target: Any) -> dict[str, Any]:
     """Validate a target descriptor and return it as a plain ``dict``.
 
-    Checks that the ``strategy`` discriminator is one of
-    :data:`VALID_STRATEGIES` and that the per-strategy required fields are
-    present and non-empty. Does NOT decide eligibility (that is routing's job at
+    Delegates the full grammar (known strategies, per-strategy required fields,
+    recursive ``mixed``/``fallback`` validation) to the SINGLE definition in
+    :func:`okto_nexus.domain.targets.validate_target`, with the handoff-specific
+    rule that a descriptor is REQUIRED (a handoff always carries an explicit
+    routing rule). Does NOT decide eligibility (that is routing's job at
     claim/list time); it only guarantees a well-formed descriptor for storage.
 
     Raises ``VALIDATION_ERROR`` for any structural problem.
     """
-    resolved = _coerce_target(target)
-    strategy = normalize_strategy(resolved.get("strategy", resolved.get("kind")))
-
-    for field in _REQUIRED_FIELDS[strategy]:
-        value = resolved.get(field)
-        if value is None or (isinstance(value, str) and not value.strip()):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                f"target strategy {strategy!r} requires field {field!r}.",
-                {"strategy": strategy, "missing_field": field},
-            )
-
-    if strategy == "mixed":
-        rules = resolved.get("rules", resolved.get("targets"))
-        if not isinstance(rules, Sequence) or isinstance(rules, (str, bytes)) or not rules:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "mixed target requires a non-empty 'rules' list of sub-targets.",
-                {"strategy": strategy},
-            )
-
-    if strategy == "direct_with_fallback":
-        after = resolved.get("fallback_after_seconds")
-        if isinstance(after, bool) or not isinstance(after, (int, float)) or after < 0:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "fallback_after_seconds must be a non-negative number.",
-                {"fallback_after_seconds": after},
-            )
-
-    out = dict(resolved)
-    out["strategy"] = strategy
-    return out
-
-
-def is_direct_target(target: Any, agent_id: str) -> bool:
-    """Return whether ``agent_id`` is the *direct* named recipient of ``target``.
-
-    Used by the pre-claim reject path (a ``direct`` target may reject an OPEN
-    handoff before claiming it). Only the ``direct`` strategy qualifies; any
-    malformed/other descriptor returns ``False`` (never raises).
-    """
-    if not agent_id:
-        return False
-    try:
-        resolved = _coerce_target(target)
-    except OktoNexusError:
-        return False
-    raw_strategy = resolved.get("strategy", resolved.get("kind"))
-    if raw_strategy is None:
-        return False
-    token = str(raw_strategy).strip().lower().replace("-", "_").replace(" ", "_")
-    if token != "direct":
-        return False
-    return str(resolved.get("agent_id")) == str(agent_id)
+    validated = _validate_target_grammar(target, required=True)
+    assert validated is not None  # required=True never returns None
+    return validated

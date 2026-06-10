@@ -128,8 +128,10 @@ retry the old call.
 #: Monotonic revision of the MCP tool SURFACE (tool names, parameters,
 #: defaults, semantics). Bump by 1 on EVERY surface change so agents can
 #: detect stale cached schemas via ``nexus_info``. Started at 2 with the
-#: post-S3 safe-by-default surface.
-SURFACE_REVISION = 2
+#: post-S3 safe-by-default surface. 3 = M9 unified target grammar (mixed
+#: requires non-empty rules, no null/broadcast sub-rules - everywhere) +
+#: shared pagination grammar (integer-string cursor/limit now accepted).
+SURFACE_REVISION = 3
 
 
 @dataclass

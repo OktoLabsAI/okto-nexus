@@ -30,11 +30,17 @@ from __future__ import annotations
 
 import json
 import time
-from datetime import datetime, timezone
 from typing import Any, Mapping, Optional
 
 from ..config import NexusConfig
-from ..domain.base import new_id, utf8_byte_len
+from ..domain.base import (
+    check_inline_size,
+    clamp_limit,
+    iso_plus,
+    iso_to_epoch,
+    new_id,
+    normalize_cursor,
+)
 from ..domain.handoff import (
     EVENT_CLAIMED,
     EVENT_COMPLETED,
@@ -72,23 +78,6 @@ MAX_PAGE_LIMIT = 500
 
 def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
-
-
-def _iso_to_epoch(iso: str) -> float:
-    """Parse a UTC ISO-8601 timestamp (``...Z`` or ``+00:00``) to POSIX epoch."""
-    text = iso.strip()
-    if text.endswith("Z") or text.endswith("z"):
-        text = text[:-1] + "+00:00"
-    dt = datetime.fromisoformat(text)
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    return dt.timestamp()
-
-
-def _epoch_to_iso(epoch: float) -> str:
-    """Render a POSIX epoch as a UTC ISO-8601 string with a ``Z`` suffix."""
-    dt = datetime.fromtimestamp(epoch, tz=timezone.utc)
-    return dt.isoformat().replace("+00:00", "Z")
 
 
 class HandoffService:
@@ -311,7 +300,10 @@ class HandoffService:
         self._require_id("agent_id", agent_id)
         now = self._clock.now_iso()
         lease_ttl = int(self._config.handoff_lease_ttl_seconds)
-        lease_expires_at = _epoch_to_iso(_iso_to_epoch(now) + lease_ttl)
+        # iso_plus is the lease-WRITE boundary: it rejects a non-canonical
+        # (non-lexicographically-comparable) clock value and always emits the
+        # fixed-width form.
+        lease_expires_at = iso_plus(now, lease_ttl)
 
         with self._cf.unit_of_work() as uow:
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
@@ -533,7 +525,7 @@ class HandoffService:
         not. Each successful reopen emits ``handoff.expired`` in the same
         transaction. Returns the reopened handoff ids.
         """
-        now_epoch = _iso_to_epoch(now_iso)
+        now_epoch = iso_to_epoch(now_iso)
         expired: list[str] = []
         for handoff in self._handoffs.list(
             uow, workspace_id=workspace_id, status=STATUS_CLAIMED
@@ -541,7 +533,7 @@ class HandoffService:
             if not handoff.lease_expires_at:
                 continue
             try:
-                lease_epoch = _iso_to_epoch(handoff.lease_expires_at)
+                lease_epoch = iso_to_epoch(handoff.lease_expires_at)
             except (ValueError, TypeError):
                 continue
             if lease_epoch >= now_epoch:  # strict: == now does NOT expire
@@ -690,48 +682,12 @@ class HandoffService:
         )
 
     def _parse_cursor(self, cursor: Any) -> int:
-        if cursor is None or (isinstance(cursor, str) and not cursor.strip()):
-            return 0
-        try:
-            value = int(str(cursor).strip())
-        except (TypeError, ValueError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "cursor must be a non-negative integer.",
-                {"cursor": cursor},
-            ) from None
-        if value < 0:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "cursor must be a non-negative integer.",
-                {"cursor": cursor},
-            )
-        return value
+        # Shared pagination grammar (domain.base): one cursor parser bus-wide.
+        return normalize_cursor(cursor)
 
     def _parse_limit(self, limit: Any) -> int:
-        if limit is None or (isinstance(limit, str) and not str(limit).strip()):
-            return DEFAULT_PAGE_LIMIT
-        if isinstance(limit, bool):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            )
-        try:
-            value = int(str(limit).strip()) if isinstance(limit, str) else int(limit)
-        except (TypeError, ValueError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            ) from None
-        if value <= 0:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            )
-        return min(value, MAX_PAGE_LIMIT)
+        # Shared pagination grammar (domain.base): one limit parser bus-wide.
+        return clamp_limit(limit, default=DEFAULT_PAGE_LIMIT, maximum=MAX_PAGE_LIMIT)
 
     def _clamp_timeout(self, timeout_seconds: Any) -> float:
         if timeout_seconds is None:
@@ -760,27 +716,8 @@ class HandoffService:
         return min(value, float(self._config.max_wait_timeout_seconds))
 
     def _check_inline_size(self, field: str, value: Any) -> None:
-        """Enforce the inclusive 64KB UTF-8 inline content limit."""
-        if value is None:
-            return
-        if isinstance(value, str):
-            text = value
-        else:
-            try:
-                text = json.dumps(value, ensure_ascii=False)
-            except (TypeError, ValueError) as exc:
-                raise OktoNexusError(
-                    ErrorCode.VALIDATION_ERROR,
-                    f"{field} is not JSON-serialisable.",
-                    {"field": field},
-                ) from exc
-        limit = self._config.max_inline_bytes
-        if utf8_byte_len(text) > limit:
-            raise OktoNexusError(
-                ErrorCode.CONTENT_TOO_LARGE,
-                f"{field} inline content exceeds {limit} UTF-8 bytes.",
-                {"field": field, "max_inline_bytes": limit},
-            )
+        """Enforce the inclusive 64KB UTF-8 inline content limit (shared helper)."""
+        check_inline_size(field, value, self._config.max_inline_bytes)
 
     @staticmethod
     def _serialize_payload(payload: Any) -> str | None:

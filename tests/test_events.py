@@ -31,12 +31,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.tools.events import (
-    MAX_EVENT_LIMIT_ENV,
-    _resolve_max_limit,
-    build_service,
-    register,
-)
+from okto_nexus.adapters.inbound.mcp.tools.events import build_service, register
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventEmitter,
     SqliteEventRepo,
@@ -547,7 +542,7 @@ def test_timeout_clamped_to_ceiling(migrated_factory, tmp_path):
     assert sleeper.t <= 1 + (config.poll_interval_ms / 1000.0) + 1e-9
 
 
-@pytest.mark.parametrize("bad_cursor", [-1, "5", 1.0, True, [1]])
+@pytest.mark.parametrize("bad_cursor", [-1, "-1", "abc", 1.0, True, [1]])
 def test_invalid_cursor_validation_error(migrated_factory, tmp_path, bad_cursor):
     config = cfg(tmp_path)
     pr, _ws = make_ws(migrated_factory, tmp_path)
@@ -559,7 +554,21 @@ def test_invalid_cursor_validation_error(migrated_factory, tmp_path, bad_cursor)
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
-@pytest.mark.parametrize("bad_limit", [0, -3, "10", 2.5, True])
+def test_string_cursor_and_limit_accepted(migrated_factory, tmp_path):
+    # The SHARED pagination grammar (domain.base) accepts integer strings -
+    # tools echo next_cursor as an opaque string, so it must round-trip.
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    for _ in range(3):
+        emit(migrated_factory, ws)
+    svc = make_service(migrated_factory, config)
+    page = svc.event_get(
+        project_root=pr, agent_id="a", stream="workspace", cursor="1", limit="1"
+    )
+    assert [e["event_id"] for e in page["events"]] == [2]
+
+
+@pytest.mark.parametrize("bad_limit", [0, -3, "0", "abc", 2.5, True])
 def test_invalid_limit_validation_error(migrated_factory, tmp_path, bad_limit):
     config = cfg(tmp_path)
     pr, _ws = make_ws(migrated_factory, tmp_path)
@@ -814,17 +823,23 @@ def test_register_reuses_existing_repos(migrated_factory, tmp_path):
     deps = _make_deps(migrated_factory, config)
     existing = SqliteEventRepo(StubClock())
     deps.repos.events = existing
-    build_service(deps, env={})
+    build_service(deps)
     assert deps.repos.events is existing  # not overwritten
     assert deps.event_emitter is not None
 
 
-def test_resolve_max_limit_env():
-    assert _resolve_max_limit({}) == MAX_EVENT_LIMIT
-    assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "50"}) == 50
-    assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "  "}) == MAX_EVENT_LIMIT
-    assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "bad"}) == MAX_EVENT_LIMIT
-    assert _resolve_max_limit({MAX_EVENT_LIMIT_ENV: "0"}) == MAX_EVENT_LIMIT
+def test_build_service_max_limit_comes_from_config(migrated_factory, tmp_config):
+    # The knob moved into NexusConfig (fail-closed parse at load_config time);
+    # the adapter must read the configured value, not os.environ.
+    tmp_config.max_event_limit = 50
+    deps = SimpleNamespace(
+        connection_factory=migrated_factory,
+        clock=StubClock(),
+        config=tmp_config,
+        repos=Repos(),
+    )
+    svc = build_service(deps)
+    assert svc._max_limit == 50
 
 
 def test_event_reads_touch_registered_agent_last_seen(migrated_factory, tmp_path):

@@ -197,14 +197,36 @@ def test_mixed_accepts_targets_alias():
     assert is_agent_eligible(agent(capabilities=["py"]), target) is True
 
 
-def test_mixed_empty_rules_matches_no_one():
-    target = {"strategy": "mixed", "rules": []}
-    assert is_agent_eligible(agent("x"), target) is False
+def test_mixed_empty_rules_raises_validation_error():
+    # Unified grammar (domain.targets): an empty rules list used to be accepted
+    # here while handoff's copy rejected it - the single grammar rejects it
+    # everywhere (an empty mixed matches nobody and is always a caller bug).
+    with pytest.raises(OktoNexusError) as exc:
+        is_agent_eligible(agent("x"), {"strategy": "mixed", "rules": []})
+    assert exc.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
 def test_mixed_missing_rules_raises_validation_error():
     with pytest.raises(OktoNexusError) as exc:
         is_agent_eligible(agent("x"), {"strategy": "mixed"})
+    assert exc.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_mixed_null_subrule_raises_validation_error():
+    # A null sub-rule resolves to "no restriction" (a covert broadcast); the
+    # eligibility evaluator used to short-circuit True on it. The unified
+    # grammar rejects it before any matching happens.
+    with pytest.raises(OktoNexusError) as exc:
+        is_agent_eligible(agent("x"), {"strategy": "mixed", "rules": [None]})
+    assert exc.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+def test_mixed_nested_broadcast_raises_validation_error():
+    with pytest.raises(OktoNexusError) as exc:
+        is_agent_eligible(
+            agent("x"),
+            {"strategy": "mixed", "rules": [{"strategy": "broadcast"}]},
+        )
     assert exc.value.code == ErrorCode.VALIDATION_ERROR.value
 
 

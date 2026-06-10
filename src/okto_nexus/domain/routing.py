@@ -20,7 +20,8 @@ Target strategies (the ``strategy`` discriminator, case-insensitive, with
                            (exact, CASE-SENSITIVE; ``preferred`` is advisory)
     role                   agent.role == target.role     (exact, CASE-SENSITIVE)
     broadcast              every agent in the workspace is eligible
-    mixed                  union/OR of target.rules (each a sub-target)
+    mixed                  union/OR of target.rules (each a validated,
+                           non-null, non-broadcast sub-target; never empty)
     direct_with_fallback   the direct agent is always eligible; after
                            ``now >= created_at + fallback_after_seconds``
                            (INCLUSIVE, monotonic) the ``fallback`` sub-target
@@ -39,18 +40,23 @@ whole workspace (e.g. ``public``) while only its target is allowed to claim it.
 Malformed inputs raise :class:`OktoNexusError` with ``VALIDATION_ERROR`` (the
 canonical catalogue code); a well-formed rule that simply does not match an
 agent returns ``False`` (not an error).
+
+The target GRAMMAR itself (parse + exhaustive structural validation) lives in
+:mod:`okto_nexus.domain.targets` - the single definition shared with the
+handoff and message slices; this module only EVALUATES a validated target
+against an agent.
 """
 
 from __future__ import annotations
 
-import json
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .base import iso_to_epoch
 from .events import VALID_VISIBILITIES
+from .targets import target_strategy, validate_target
 
 __all__ = [
     "RoutingAgent",
@@ -60,20 +66,6 @@ __all__ = [
     "target_strategy",
 ]
 
-
-# --------------------------------------------------------------------------- #
-# Canonical vocabularies
-# --------------------------------------------------------------------------- #
-_STRATEGIES: frozenset[str] = frozenset(
-    {
-        "direct",
-        "capability",
-        "role",
-        "broadcast",
-        "mixed",
-        "direct_with_fallback",
-    }
-)
 
 #: Single source of truth for the visibility vocabulary: the SAME closed set
 #: the event write path enforces (``domain.events.VALID_VISIBILITIES``), so an
@@ -201,86 +193,19 @@ def _to_epoch(value: Any, *, field_name: str) -> float | None:
         s = value.strip()
         if not s:
             return None
-        if s[-1] in ("Z", "z"):
-            s = s[:-1] + "+00:00"
         try:
-            dt = datetime.fromisoformat(s)
+            return iso_to_epoch(s)
         except ValueError:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
                 f"{field_name} is not a valid ISO-8601 timestamp.",
                 {"field": field_name, "value": value},
             ) from None
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
-        return dt.timestamp()
     raise OktoNexusError(
         ErrorCode.VALIDATION_ERROR,
         f"{field_name} must be an ISO-8601 string or epoch number.",
         {"field": field_name, "type": type(value).__name__},
     )
-
-
-# --------------------------------------------------------------------------- #
-# Target coercion / strategy resolution
-# --------------------------------------------------------------------------- #
-def _coerce_target(target: Any) -> Mapping[str, Any] | None:
-    """Return the target as a mapping (parsing a JSON-object string if needed).
-
-    ``None``/blank -> ``None`` (no routing restriction). A JSON string is
-    parsed; anything that does not resolve to an object raises
-    ``VALIDATION_ERROR``.
-    """
-    if target is None:
-        return None
-    if isinstance(target, Mapping):
-        return target
-    if isinstance(target, str):
-        s = target.strip()
-        if not s:
-            return None
-        try:
-            parsed = json.loads(s)
-        except (ValueError, TypeError):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "Target string is not valid JSON.",
-                {"target": target},
-            ) from None
-        if isinstance(parsed, Mapping):
-            return parsed
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "Target JSON must be an object.",
-            {"target": target},
-        )
-    raise OktoNexusError(
-        ErrorCode.VALIDATION_ERROR,
-        "Target must be a mapping, a JSON object string, or null.",
-        {"target_type": type(target).__name__},
-    )
-
-
-def _normalize_strategy(raw: Any) -> str:
-    token = str(raw).strip().lower().replace("-", "_").replace(" ", "_")
-    if token not in _STRATEGIES:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            f"Unknown routing strategy: {raw!r}.",
-            {"strategy": raw, "supported": sorted(_STRATEGIES)},
-        )
-    return token
-
-
-def _require(target: Mapping[str, Any], key: str, strategy: str) -> Any:
-    value = target.get(key)
-    if value is None or (isinstance(value, str) and not value.strip()):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            f"Target strategy {strategy!r} requires field {key!r}.",
-            {"strategy": strategy, "missing_field": key},
-        )
-    return value
 
 
 # --------------------------------------------------------------------------- #
@@ -316,83 +241,53 @@ def is_agent_eligible(
     Raises
     ------
     OktoNexusError
-        ``VALIDATION_ERROR`` for an unknown strategy, a missing required field,
-        a malformed ``mixed`` rule list, or (for ``direct_with_fallback``)
-        missing/invalid timing fields.
+        ``VALIDATION_ERROR`` for any target outside the grammar (propagated
+        from :func:`okto_nexus.domain.targets.validate_target` - the SINGLE
+        grammar definition) or, for ``direct_with_fallback``, missing/invalid
+        timing inputs.
     """
-    resolved = _coerce_target(target)
+    resolved = validate_target(target)
     if resolved is None:
         # No routing restriction -> broadcast semantics.
         return True
+    return _eligible(agent, resolved, created_at, now)
 
-    strategy = resolved.get("strategy", resolved.get("kind"))
-    if strategy is None:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "Target is missing the 'strategy' discriminator.",
-            {"target_keys": sorted(str(k) for k in resolved.keys())},
-        )
-    strategy = _normalize_strategy(strategy)
+
+def _eligible(
+    agent: Any, resolved: Mapping[str, Any], created_at: Any, now: Any
+) -> bool:
+    """Evaluate an already-VALIDATED (grammar-normalised) target descriptor."""
+    strategy = resolved["strategy"]
 
     if strategy == "broadcast":
         return True
 
     if strategy == "direct":
-        wanted = _require(resolved, "agent_id", strategy)
-        return _agent_id(agent) == str(wanted)
+        return _agent_id(agent) == str(resolved["agent_id"])
 
     if strategy == "role":
-        wanted = _require(resolved, "role", strategy)
         # Exact, case-sensitive role match.
-        return _agent_role(agent) == wanted
+        return _agent_role(agent) == resolved["role"]
 
     if strategy == "capability":
-        wanted = _require(resolved, "capability", strategy)
+        wanted = resolved["capability"]
         owned = _agent_capabilities(agent)
         if isinstance(wanted, str):
             # Exact, case-sensitive capability membership.
             return wanted in owned
-        if isinstance(wanted, (list, tuple, set, frozenset)):
-            # Any-of for a list of required capabilities.
-            return any(str(c) in owned for c in wanted)
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "Capability target must be a string or a list of strings.",
-            {"capability": wanted},
-        )
+        # Any-of for a list of required capabilities.
+        return any(str(c) in owned for c in wanted)
 
     if strategy == "mixed":
-        rules = resolved.get("rules", resolved.get("targets"))
-        if rules is None or not isinstance(rules, (list, tuple)):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "Mixed target requires a 'rules' list of sub-targets.",
-                {"rules_type": type(rules).__name__ if rules is not None else None},
-            )
         # Union / OR over the sub-rules. Short-circuits on the first match.
         return any(
-            is_agent_eligible(agent, rule, created_at, now) for rule in rules
+            _eligible(agent, rule, created_at, now) for rule in resolved["rules"]
         )
 
     # strategy == "direct_with_fallback"
-    wanted = _require(resolved, "agent_id", strategy)
-    if _agent_id(agent) == str(wanted):
+    if _agent_id(agent) == str(resolved["agent_id"]):
         # The direct recipient is eligible at all times (monotonic floor).
         return True
-
-    fallback_after = _require(resolved, "fallback_after_seconds", strategy)
-    if isinstance(fallback_after, bool) or not isinstance(fallback_after, (int, float)):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "fallback_after_seconds must be a non-negative number.",
-            {"fallback_after_seconds": fallback_after},
-        )
-    if fallback_after < 0:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "fallback_after_seconds must be non-negative.",
-            {"fallback_after_seconds": fallback_after},
-        )
 
     created_epoch = _to_epoch(created_at, field_name="created_at")
     now_epoch = _to_epoch(now, field_name="now")
@@ -404,38 +299,13 @@ def is_agent_eligible(
         )
 
     # Inclusive boundary, monotonic in ``now``.
-    if now_epoch >= created_epoch + float(fallback_after):
+    if now_epoch >= created_epoch + float(resolved["fallback_after_seconds"]):
         fallback = resolved.get("fallback")
         if fallback is None:
             # Default fallback is a workspace-wide broadcast.
             return True
-        return is_agent_eligible(agent, fallback, created_at, now)
+        return _eligible(agent, fallback, created_at, now)
     return False
-
-
-def target_strategy(target: Any) -> str | None:
-    """Return the normalised routing strategy of ``target`` (or ``None``).
-
-    ``None``/blank target -> ``None`` (no restriction / broadcast semantics). A
-    present target's ``strategy``/``kind`` discriminator is normalised exactly as
-    :func:`is_agent_eligible` (case-insensitive, ``-``/space -> ``_``); a missing
-    or unknown strategy raises ``VALIDATION_ERROR`` (consistent with eligibility).
-
-    Used by the inbox model (ADR 0001) to tell a *directed* target (``direct`` /
-    ``direct_with_fallback``, where resolving to nobody is an unknown-recipient
-    ERROR) from a *group* target (where zero matches is a benign warning).
-    """
-    resolved = _coerce_target(target)
-    if resolved is None:
-        return None
-    strategy = resolved.get("strategy", resolved.get("kind"))
-    if strategy is None:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "Target is missing the 'strategy' discriminator.",
-            {"target_keys": sorted(str(k) for k in resolved.keys())},
-        )
-    return _normalize_strategy(strategy)
 
 
 def _normalize_visibility(raw: Any) -> str:

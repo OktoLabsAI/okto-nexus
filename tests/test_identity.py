@@ -22,20 +22,15 @@ from types import SimpleNamespace
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.tools.identity import (
-    DEFAULT_SESSION_STALE_TTL_SECONDS,
-    STALE_TTL_ENV,
-    _resolve_stale_ttl,
-    build_service,
-    register,
-)
+from okto_nexus.adapters.inbound.mcp.tools.identity import build_service, register
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
-from okto_nexus.application.identity import IdentityService, _iso_to_epoch
+from okto_nexus.application.identity import IdentityService
 from okto_nexus.application.ports import Repos
+from okto_nexus.domain.base import iso_to_epoch
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
@@ -52,7 +47,7 @@ class StubClock:
         return self._iso
 
     def now_epoch(self) -> float:
-        return _iso_to_epoch(self._iso)
+        return iso_to_epoch(self._iso)
 
     def set(self, iso: str) -> None:
         self._iso = iso
@@ -355,7 +350,7 @@ def test_session_heartbeat_updates_and_not_found(
     hb = svc.session_heartbeat(session_id=sid)
     assert hb["session_id"] == sid
     assert hb["status"] == "active"
-    assert _iso_to_epoch(hb["last_heartbeat_at"]) > _iso_to_epoch(
+    assert iso_to_epoch(hb["last_heartbeat_at"]) > iso_to_epoch(
         opened["last_heartbeat_at"]
     )
 
@@ -600,23 +595,23 @@ def test_unresolved_workspace_via_tool_envelope(
     assert res["error"]["code"] == "WORKSPACE_UNRESOLVED"
 
 
-def test_resolve_stale_ttl_env():
-    assert _resolve_stale_ttl({}) == DEFAULT_SESSION_STALE_TTL_SECONDS
-    assert _resolve_stale_ttl({STALE_TTL_ENV: "15"}) == 15
-    assert _resolve_stale_ttl({STALE_TTL_ENV: "  "}) == DEFAULT_SESSION_STALE_TTL_SECONDS
-    assert _resolve_stale_ttl({STALE_TTL_ENV: "bad"}) == DEFAULT_SESSION_STALE_TTL_SECONDS
-    assert _resolve_stale_ttl({STALE_TTL_ENV: "0"}) == DEFAULT_SESSION_STALE_TTL_SECONDS
-    assert _resolve_stale_ttl({STALE_TTL_ENV: "-5"}) == DEFAULT_SESSION_STALE_TTL_SECONDS
-
-
 def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
     clock = StubClock()
     deps = make_deps(migrated_factory, tmp_config, clock)
     existing = SqliteWorkspaceRepo(clock)
     deps.repos.workspaces = existing
-    build_service(deps, env={STALE_TTL_ENV: "42"})
+    build_service(deps)
     assert deps.repos.workspaces is existing  # not overwritten
     assert deps.repos.agents is not None  # filled in
+
+
+def test_build_service_stale_ttl_comes_from_config(migrated_factory, tmp_config):
+    # The knob moved into NexusConfig (fail-closed parse at load_config time);
+    # the adapter must read the configured value, not os.environ.
+    tmp_config.session_stale_ttl_seconds = 42
+    deps = make_deps(migrated_factory, tmp_config, StubClock())
+    svc = build_service(deps)
+    assert svc._stale_ttl == 42
 
 
 # --------------------------------------------------------------------------- #

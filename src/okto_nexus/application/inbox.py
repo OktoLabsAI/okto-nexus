@@ -30,9 +30,10 @@ catalogue; never imports ``sqlite3``/``mcp`` (enforced by the boundary test).
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
 from typing import Any
 
+from ..config import DEFAULT_INBOX_LEASE_TTL_SECONDS
+from ..domain.base import clamp_limit, iso_plus
 from ..domain.inbox import (
     DELIVERY_DELIVERED,
     DELIVERY_PARKED,
@@ -45,8 +46,10 @@ from ..errors import ErrorCode, OktoNexusError
 #: Page-size defaults/ceiling for inbox reads (mirrors the message limits).
 DEFAULT_INBOX_LIMIT = 50
 MAX_INBOX_LIMIT = 200
-#: How long a pulled (in-flight) delivery is leased before it is redelivered.
-DEFAULT_INBOX_LEASE_TTL_SECONDS = 300
+# The in-flight lease TTL is a NexusConfig knob (``inbox_lease_ttl_seconds``,
+# env OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS, parsed FAIL-CLOSED at startup); its
+# default is imported from config above and re-exported under its historic
+# name (``DEFAULT_INBOX_LEASE_TTL_SECONDS``) for call-site compatibility.
 #: Clamp bounds for a caller-chosen lease (pull ``lease_seconds`` and extend
 #: ``extend_seconds``): LLM turns routinely outlive a fixed short lease, but an
 #: unbounded one would freeze redelivery.
@@ -59,20 +62,6 @@ DEFAULT_MAX_DELIVERY_ATTEMPTS = 5
 
 #: Separator of the opaque history cursor (``<read_at>~<delivery_id>``).
 _HISTORY_CURSOR_SEP = "~"
-
-
-def _iso_plus(now_iso: str, seconds: int) -> str:
-    """Return ``now_iso`` (UTC ISO-8601, ``Z``) shifted forward by ``seconds``.
-
-    Emits a FIXED-WIDTH microsecond fraction so the lease timestamp is
-    lexicographically comparable with the ``now`` used by the SQL expiry sweep.
-    """
-    base = now_iso[:-1] + "+00:00" if now_iso.endswith(("Z", "z")) else now_iso
-    dt = datetime.fromisoformat(base)
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    shifted = dt + timedelta(seconds=seconds)
-    return shifted.isoformat(timespec="microseconds").replace("+00:00", "Z")
 
 
 class InboxService:
@@ -119,7 +108,7 @@ class InboxService:
         page_limit = self._clamp_limit(limit)
         ttl = self._clamp_lease_seconds(lease_seconds, field="lease_seconds")
         now = self._clock.now_iso()
-        lease = _iso_plus(now, ttl)
+        lease = iso_plus(now, ttl)
         with self._cf.unit_of_work() as uow:
             batch = self._deliveries.claim_pending(
                 uow,
@@ -175,7 +164,7 @@ class InboxService:
             extend_seconds, field="extend_seconds", required=True
         )
         now = self._clock.now_iso()
-        lease = _iso_plus(now, seconds)
+        lease = iso_plus(now, seconds)
         with self._cf.unit_of_work() as uow:
             extended = self._deliveries.extend_leases(
                 uow,
@@ -475,21 +464,8 @@ class InboxService:
         return [str(m) for m in candidates if isinstance(m, str) and m.strip()]
 
     def _clamp_limit(self, limit: Any) -> int:
-        if limit is None:
-            return self._default_limit
-        if isinstance(limit, bool) or not isinstance(limit, int):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            )
-        if limit < 1:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "limit must be a positive integer.",
-                {"limit": limit},
-            )
-        return min(limit, self._max_limit)
+        # Shared pagination grammar (domain.base): one limit parser bus-wide.
+        return clamp_limit(limit, default=self._default_limit, maximum=self._max_limit)
 
     def _clamp_lease_seconds(
         self, seconds: Any, *, field: str, required: bool = False

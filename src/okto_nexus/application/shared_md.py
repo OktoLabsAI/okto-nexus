@@ -31,9 +31,10 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
 from typing import Any, Optional, Protocol, runtime_checkable
 
+from ..config import DEFAULT_MAX_SHARED_MD_EVENTS
+from ..domain.base import iso_to_epoch
 from ..domain.models import Agent, Event, Handoff, Session, Task
 from ..errors import ErrorCode, OktoNexusError
 from .ports import (
@@ -52,8 +53,11 @@ from .ports import (
 SECTION_COUNT = 4
 
 #: Default and ceiling for ``limit_events`` when the caller omits / over-asks.
+#: The ceiling is a ``NexusConfig`` knob (``max_shared_md_events``, env
+#: ``OKTO_NEXUS_MAX_SHARED_MD_EVENTS``, parsed fail-closed at startup); its
+#: default is aliased here under the historic name.
 DEFAULT_LIMIT_EVENTS = 50
-DEFAULT_MAX_LIMIT_EVENTS = 1000
+DEFAULT_MAX_LIMIT_EVENTS = DEFAULT_MAX_SHARED_MD_EVENTS
 
 #: Relevance predicate constants (see FR fr_488c1ca4).
 ACTIVE_SESSION_STATUS = "active"
@@ -118,17 +122,6 @@ class SharedMdRenderer(Protocol):
 
 def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
-
-
-def _iso_to_epoch(iso: str) -> float:
-    """Parse a UTC ISO-8601 timestamp (``...Z`` or ``+00:00``) to a POSIX epoch."""
-    text = iso.strip()
-    if text.endswith("Z"):
-        text = text[:-1] + "+00:00"
-    dt = datetime.fromisoformat(text)
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    return dt.timestamp()
 
 
 class SharedMdService:
@@ -362,7 +355,7 @@ class SharedMdService:
     @staticmethod
     def _safe_epoch(iso: str) -> Optional[float]:
         try:
-            return _iso_to_epoch(iso)
+            return iso_to_epoch(iso)
         except (ValueError, TypeError):
             return None
 

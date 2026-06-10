@@ -30,7 +30,7 @@ import time
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Optional
 
-from ..config import NexusConfig
+from ..config import DEFAULT_MAX_EVENT_LIMIT, NexusConfig
 from ..domain.events import (
     clamp_limit,
     event_matches_filters,
@@ -49,7 +49,10 @@ from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork
 DEFAULT_EVENT_LIMIT = 100
 
 #: Default ceiling for a single page when no explicit ceiling is injected.
-MAX_EVENT_LIMIT = 1000
+#: The live ceiling is a ``NexusConfig`` knob (``max_event_limit``, env
+#: ``OKTO_NEXUS_MAX_EVENT_LIMIT``, parsed fail-closed at startup); its default
+#: is aliased here under the historic name.
+MAX_EVENT_LIMIT = DEFAULT_MAX_EVENT_LIMIT
 
 
 def _is_nonempty_str(value: Any) -> bool:

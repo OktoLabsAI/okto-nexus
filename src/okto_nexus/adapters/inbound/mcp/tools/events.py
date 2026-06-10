@@ -26,8 +26,7 @@ matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
-import os
-from typing import Annotated, Any, Mapping
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -38,7 +37,6 @@ from okto_nexus.adapters.outbound.sqlite.events_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.events import (
     DEFAULT_EVENT_LIMIT,
-    MAX_EVENT_LIMIT,
     EventService,
 )
 from okto_nexus.envelope import tool_envelope
@@ -69,31 +67,16 @@ _P_TIMEOUT = (
     "instructions before blocking."
 )
 
-#: Environment knob for the maximum page size (``limit`` ceiling). Not part of
-#: ``NexusConfig``, so it is resolved here in the inbound adapter.
-MAX_EVENT_LIMIT_ENV = "OKTO_NEXUS_MAX_EVENT_LIMIT"
-
-
-def _resolve_max_limit(env: Mapping[str, str]) -> int:
-    """Resolve the page-size ceiling from the environment (positive int)."""
-    raw = env.get(MAX_EVENT_LIMIT_ENV)
-    if raw is None or not str(raw).strip():
-        return MAX_EVENT_LIMIT
-    try:
-        value = int(str(raw).strip())
-    except (TypeError, ValueError):
-        return MAX_EVENT_LIMIT
-    return value if value > 0 else MAX_EVENT_LIMIT
-
-
-def build_service(deps: Any, env: Mapping[str, str] | None = None) -> EventService:
+def build_service(deps: Any) -> EventService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
 
     Idempotent: an event repo / emitter / agents repo already present is reused
     so this slice and its peers share a single concrete instance and a single
-    append path.
+    append path. The page-size ceiling comes from
+    ``deps.config.max_event_limit`` (env ``OKTO_NEXUS_MAX_EVENT_LIMIT`` /
+    ``--max-event-limit``, parsed FAIL-CLOSED by ``load_config`` - an invalid
+    value aborts startup with CONFIG_ERROR instead of silently falling back).
     """
-    environ = env if env is not None else os.environ
     repos = deps.repos
 
     if getattr(repos, "events", None) is None:
@@ -110,7 +93,7 @@ def build_service(deps: Any, env: Mapping[str, str] | None = None) -> EventServi
         clock=deps.clock,
         config=deps.config,
         default_limit=DEFAULT_EVENT_LIMIT,
-        max_limit=_resolve_max_limit(environ),
+        max_limit=deps.config.max_event_limit,
     )
 
 

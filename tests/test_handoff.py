@@ -29,12 +29,9 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
     SqliteTaskRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
-from okto_nexus.application.handoff import (
-    HandoffService,
-    _epoch_to_iso,
-    _iso_to_epoch,
-)
+from okto_nexus.application.handoff import HandoffService
 from okto_nexus.application.ports import Repos
+from okto_nexus.domain.base import iso_plus, iso_to_epoch
 from okto_nexus.domain.handoff import (
     STATUS_CLAIMED,
     STATUS_COMPLETED,
@@ -54,16 +51,21 @@ from okto_nexus.errors import ErrorCode, OktoNexusError
 # Test doubles & helpers
 # --------------------------------------------------------------------------- #
 class StubClock:
-    """Deterministic, mutable clock implementing the Clock port."""
+    """Deterministic, mutable clock implementing the Clock port.
 
-    def __init__(self, iso: str = "2026-06-07T00:00:00Z") -> None:
+    Emits the canonical fixed-width form (utc_now_iso's shape): the lease-write
+    boundary (domain.base.iso_plus) rejects a non-lexicographically-comparable
+    clock value by design.
+    """
+
+    def __init__(self, iso: str = "2026-06-07T00:00:00.000000Z") -> None:
         self._iso = iso
 
     def now_iso(self) -> str:
         return self._iso
 
     def now_epoch(self) -> float:
-        return _iso_to_epoch(self._iso)
+        return iso_to_epoch(self._iso)
 
     def set(self, iso: str) -> None:
         self._iso = iso
@@ -122,7 +124,7 @@ class FakeAgentRepo:
     def add(self, agent_id, role=None, capabilities=None) -> None:
         self._agents[agent_id] = Agent(
             agent_id=agent_id,
-            created_at="2026-06-07T00:00:00Z",
+            created_at="2026-06-07T00:00:00.000000Z",
             role=role,
             capabilities=capabilities or {},
             metadata={},
@@ -155,10 +157,6 @@ class FakeServer:
             return fn
 
         return deco
-
-
-def iso_plus(iso: str, seconds: float) -> str:
-    return _epoch_to_iso(_iso_to_epoch(iso) + seconds)
 
 
 def make_service(factory, config, clock, emitter=None, agents=None):
@@ -286,7 +284,7 @@ def test_workspace_required_and_unresolved(migrated_factory, tmp_config, tmp_pat
 # FR1 / FR2 / TS2 / TS3 - create
 # --------------------------------------------------------------------------- #
 def test_handoff_create_happy_and_event(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock("2026-06-07T00:00:00Z")
+    clock = StubClock("2026-06-07T00:00:00.000000Z")
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
     proj = str(mkdir(tmp_path, "P"))
@@ -301,7 +299,7 @@ def test_handoff_create_happy_and_event(migrated_factory, tmp_config, tmp_path):
     assert out["status"] == STATUS_OPEN
     assert out["workspace_id"] == ws
     assert out["handoff_id"]
-    assert out["created_at"] == "2026-06-07T00:00:00Z"
+    assert out["created_at"] == "2026-06-07T00:00:00.000000Z"
 
     assert row_of(migrated_factory, out["handoff_id"])["status"] == STATUS_OPEN
     assert len(emitter.events) == 1
@@ -482,7 +480,7 @@ def test_list_available_long_poll_timeout(migrated_factory, tmp_config, tmp_path
 # FR4 / FR5 / TS5 / TS6 - claim
 # --------------------------------------------------------------------------- #
 def test_claim_happy(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock("2026-06-07T00:00:00Z")
+    clock = StubClock("2026-06-07T00:00:00.000000Z")
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
     proj = str(mkdir(tmp_path, "P"))
@@ -495,7 +493,7 @@ def test_claim_happy(migrated_factory, tmp_config, tmp_path):
     out = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w", session_id="s1")
     assert out["status"] == STATUS_CLAIMED
     assert out["claimed_by"] == "w"
-    expected_lease = iso_plus("2026-06-07T00:00:00Z", tmp_config.handoff_lease_ttl_seconds)
+    expected_lease = iso_plus("2026-06-07T00:00:00.000000Z", tmp_config.handoff_lease_ttl_seconds)
     assert out["lease_expires_at"] == expected_lease
     assert emitter.types() == ["handoff.created", "handoff.claimed"]
     assert emitter.events[-1]["payload"]["claimed_session_id"] == "s1"
@@ -659,7 +657,7 @@ def test_complete_after_lease_expiry_reopen_precise_error(
     # An owner whose lease expired (handoff reopened to OPEN) gets a precise,
     # prescriptive INVALID_TRANSITION pointing at handoff_claim - not NOT_FOUND,
     # not an accidental overwrite of the reopened row.
-    clock = StubClock("2026-06-07T00:00:00Z")
+    clock = StubClock("2026-06-07T00:00:00.000000Z")
     svc = make_service(migrated_factory, tmp_config, clock)
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
@@ -742,7 +740,7 @@ def test_repo_reject_open_is_conditional_on_open_status(
 # FR7 / TS8 / TS9 - lease expiry boundary + re-claim
 # --------------------------------------------------------------------------- #
 def test_lease_expiry_strict_boundary_and_reclaim(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock("2026-06-07T00:00:00Z")
+    clock = StubClock("2026-06-07T00:00:00.000000Z")
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
     proj = str(mkdir(tmp_path, "P"))
@@ -778,7 +776,7 @@ def test_lease_expiry_strict_boundary_and_reclaim(migrated_factory, tmp_config, 
 
 
 def test_list_available_expires_before_serving(migrated_factory, tmp_config, tmp_path):
-    clock = StubClock("2026-06-07T00:00:00Z")
+    clock = StubClock("2026-06-07T00:00:00.000000Z")
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
     proj = str(mkdir(tmp_path, "P"))
@@ -1329,7 +1327,7 @@ def test_legacy_row_backfills_to_null_payload(tmp_path):
         conn.execute(
             "INSERT INTO handoffs (handoff_id, workspace_id, status, created_at) "
             "VALUES (?, ?, ?, ?)",
-            ("hof_legacy", ws, STATUS_OPEN, "2026-06-07T00:00:00Z"),
+            ("hof_legacy", ws, STATUS_OPEN, "2026-06-07T00:00:00.000000Z"),
         )
         conn.execute("COMMIT")
     finally:

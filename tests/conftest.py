@@ -23,7 +23,10 @@ class FakeClock:
 
     def __init__(
         self,
-        iso: str = "2026-06-07T00:00:00Z",
+        # Canonical fixed-width form (utc_now_iso's shape): the lease-write
+        # boundary (domain.base.iso_plus) rejects a non-lexicographically
+        # comparable clock value by design.
+        iso: str = "2026-06-07T00:00:00.000000Z",
         epoch: float = 1_780_000_000.0,
     ) -> None:
         self._iso = iso

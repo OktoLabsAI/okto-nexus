@@ -5,9 +5,10 @@ append-only event log is consumed by ``event_get`` / ``event_wait``:
 
 * the closed set of consumable ``stream`` values (workspace / agent / task /
   handoff) and its validation (:func:`validate_stream` -> ``INVALID_STREAM``);
-* input normalisation for ``cursor`` (non-negative INTEGER), ``limit`` (clamped
-  to a configured maximum) and ``filters`` (an object with the enumerated keys
-  ``type`` / ``agent_id`` / ``task_id`` / ``handoff_id``);
+* input normalisation for ``filters`` (an object with the enumerated keys
+  ``type`` / ``agent_id`` / ``task_id`` / ``handoff_id``); ``cursor`` /
+  ``limit`` parsing is the SHARED helpers re-exported from
+  :mod:`okto_nexus.domain.base` (one pagination grammar for every slice);
 * the *equality-AND* filter predicate (:func:`event_matches_filters`) and the
   response serialisation of an :class:`~okto_nexus.domain.models.Event`.
 
@@ -24,6 +25,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .base import clamp_limit, normalize_cursor
 from .models import Event
 
 __all__ = [
@@ -112,53 +114,6 @@ def validate_emit_vocabulary(*, stream: Any, type: Any, visibility: Any) -> None
             "thus hidden) at read time; fix the emitting slice.",
             {"visibility": visibility, "supported": sorted(VALID_VISIBILITIES)},
         )
-
-
-def normalize_cursor(cursor: Any) -> int:
-    """Coerce ``cursor`` to a non-negative INTEGER (``None`` -> ``0``).
-
-    ``cursor`` is the *last consumed* ``event_id``; the scan selects
-    ``event_id > cursor``. A non-integer (``bool`` is rejected explicitly, as it
-    is an ``int`` subclass) or a negative value raises ``VALIDATION_ERROR``.
-    """
-    if cursor is None:
-        return 0
-    if isinstance(cursor, bool) or not isinstance(cursor, int):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "cursor must be a non-negative integer.",
-            {"cursor": cursor},
-        )
-    if cursor < 0:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "cursor must be a non-negative integer.",
-            {"cursor": cursor},
-        )
-    return cursor
-
-
-def clamp_limit(limit: Any, *, default: int, maximum: int) -> int:
-    """Resolve the page size: ``None`` -> ``default``, then clamp to ``maximum``.
-
-    A non-integer (``bool`` rejected) or a value ``< 1`` raises
-    ``VALIDATION_ERROR``. Values above ``maximum`` are clamped to ``maximum``.
-    """
-    if limit is None:
-        return min(default, maximum)
-    if isinstance(limit, bool) or not isinstance(limit, int):
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "limit must be a positive integer.",
-            {"limit": limit},
-        )
-    if limit < 1:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            "limit must be a positive integer.",
-            {"limit": limit},
-        )
-    return min(limit, maximum)
 
 
 def normalize_filters(filters: Any) -> dict[str, str]:

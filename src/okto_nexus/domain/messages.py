@@ -10,10 +10,11 @@ the import-boundary test). This module owns:
   routing ``target`` schema) raising the canonical catalogue codes;
 * ``(de)serialisation`` of the routing ``target`` (object <-> JSON TEXT).
 
-Target validation reuses the IMPORTED routing rule
-:func:`okto_nexus.domain.routing.is_agent_eligible` (this slice references
-routing, it never redefines it). Recipient resolution and per-recipient
-delivery live in :mod:`okto_nexus.domain.inbox` (ADR 0001).
+Target validation reuses the IMPORTED grammar
+:func:`okto_nexus.domain.targets.validate_target` (this slice references the
+single grammar definition, it never redefines or probes it). Recipient
+resolution and per-recipient delivery live in :mod:`okto_nexus.domain.inbox`
+(ADR 0001).
 """
 
 from __future__ import annotations
@@ -25,7 +26,7 @@ from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
 from .base import new_id, utf8_byte_len
-from .routing import RoutingAgent, is_agent_eligible
+from .targets import validate_target as _validate_target_grammar
 
 __all__ = [
     "SEED_CHANNEL_NAMES",
@@ -185,22 +186,21 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
     return out
 
 
-def validate_target(target: Any, now: Any) -> None:
-    """Validate the routing ``target`` against the IMPORTED routing schema.
+def validate_target(target: Any, now: Any = None) -> None:
+    """Validate the routing ``target`` against the IMPORTED grammar.
 
-    A ``None``/blank target is a broadcast (no restriction) and is always valid.
-    A malformed target (unknown strategy, missing required field, non-JSON
-    string, ...) surfaces as ``VALIDATION_ERROR`` straight from
-    :func:`okto_nexus.domain.routing.is_agent_eligible`, which this slice reuses
-    rather than reimplementing. The boolean result is irrelevant here - we only
-    exercise the schema.
+    A ``None``/blank target is a broadcast (no restriction) and is always
+    valid. A malformed target (unknown strategy, missing required field, an
+    empty/null-containing ``mixed`` rule list, non-JSON string, ...) raises
+    ``VALIDATION_ERROR`` straight from
+    :func:`okto_nexus.domain.targets.validate_target` - the single grammar
+    definition, validated STRUCTURALLY (the old eligibility probe with a fake
+    agent short-circuited on the first matching sub-rule and let a null
+    ``mixed`` sub-rule slip through as a covert broadcast). ``now`` is retained
+    for call-site compatibility and is unused: structural validation needs no
+    clock.
     """
-    if target is None or (isinstance(target, str) and not target.strip()):
-        return
-    probe = RoutingAgent(agent_id="__validate__", workspace_id="__validate__")
-    # Pass ``now`` for both created_at and now so the time-based
-    # ``direct_with_fallback`` strategy validates structurally.
-    is_agent_eligible(probe, target, now, now)
+    _validate_target_grammar(target)
 
 
 def serialize_target(target: Any) -> str | None:

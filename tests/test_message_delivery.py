@@ -366,6 +366,29 @@ def test_broadcast_nested_in_mixed_rejected(migrated_factory, fake_clock, tmp_pa
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
+def test_null_subrule_in_mixed_rejected_before_any_write(
+    migrated_factory, fake_clock, tmp_path
+):
+    """M9: a null sub-rule used to slip through the eligibility probe as a
+    covert global broadcast (the S1 bypass); the unified grammar rejects it
+    up front and nothing is persisted."""
+    proj = mkproj(tmp_path)
+    register(migrated_factory, fake_clock, "alice")
+    register(migrated_factory, fake_clock, "bob")
+    svc = make_service(migrated_factory, fake_clock)
+    with pytest.raises(OktoNexusError) as ei:
+        svc.create_message(
+            project_root=proj,
+            from_agent_id="alice",
+            subject="s",
+            body="b",
+            target={"strategy": "mixed", "rules": [None]},
+        )
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert count(migrated_factory, "messages") == 0
+    assert count(migrated_factory, "message_deliveries") == 0
+
+
 # --------------------------------------------------------------------------- #
 # message_status: the sender's end-to-end view of each recipient's cycle
 # --------------------------------------------------------------------------- #
@@ -409,7 +432,7 @@ def test_message_status_tracks_each_recipient_independently(
 
     # w2's lease (default 300s) elapses: the sender sees it as redeliverable
     # again - NOT silently stuck in 'delivered'.
-    fake_clock.set_iso("2026-06-07T01:00:00Z")
+    fake_clock.set_iso("2026-06-07T01:00:00.000000Z")
     state = by_recipient()
     assert state["w1"]["status"] == "read"  # history is unaffected by time
     assert state["w2"] == {"recipient": "w2", "status": "unread", "attempts": 1, "read_at": None}

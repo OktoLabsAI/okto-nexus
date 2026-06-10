@@ -29,13 +29,11 @@ and its audit event commit atomically inside a single unit of work.
 
 from __future__ import annotations
 
-import json
 import os
-from datetime import datetime, timezone
 from typing import Any, Mapping, Optional
 
-from ..config import NexusConfig
-from ..domain.base import new_id, utf8_byte_len
+from ..config import DEFAULT_SESSION_STALE_TTL_SECONDS, NexusConfig
+from ..domain.base import check_inline_size, iso_to_epoch, new_id
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..domain.routing import normalize_capabilities
 from ..errors import ErrorCode, OktoNexusError
@@ -49,10 +47,10 @@ from .ports import (
     WorkspaceRepo,
 )
 
-#: Default stale TTL (seconds) when ``OKTO_NEXUS_SESSION_STALE_TTL_SECONDS`` is
-#: unset. ``NexusConfig`` does not carry this knob, so the inbound adapter
-#: resolves it from the environment and injects it here.
-DEFAULT_SESSION_STALE_TTL_SECONDS = 60
+# The stale TTL (seconds) is a NexusConfig knob (``session_stale_ttl_seconds``,
+# env OKTO_NEXUS_SESSION_STALE_TTL_SECONDS, parsed FAIL-CLOSED at startup); the
+# default is imported from config above and re-exported under its historic name
+# (``DEFAULT_SESSION_STALE_TTL_SECONDS``) for call-site compatibility.
 
 #: Event stream used for session-lifecycle audit events. Session lifecycle is
 #: workspace-level observability, so it rides the canonical ``workspace``
@@ -68,17 +66,6 @@ SESSION_STATUS_CLOSED = "closed"
 
 def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
-
-
-def _iso_to_epoch(iso: str) -> float:
-    """Parse a UTC ISO-8601 timestamp (``...Z`` or ``+00:00``) to POSIX epoch."""
-    text = iso.strip()
-    if text.endswith("Z"):
-        text = text[:-1] + "+00:00"
-    dt = datetime.fromisoformat(text)
-    if dt.tzinfo is None:
-        dt = dt.replace(tzinfo=timezone.utc)
-    return dt.timestamp()
 
 
 class IdentityService:
@@ -555,7 +542,7 @@ class IdentityService:
             return session.status
         now_iso = now_iso or self._clock.now_iso()
         try:
-            delta = _iso_to_epoch(now_iso) - _iso_to_epoch(reference)
+            delta = iso_to_epoch(now_iso) - iso_to_epoch(reference)
         except (ValueError, TypeError):
             return session.status
         if delta > self._stale_ttl:
@@ -574,23 +561,8 @@ class IdentityService:
                 )
 
     def _check_inline_size(self, field: str, value: Any) -> None:
-        if value is None:
-            return
-        try:
-            serialized = json.dumps(value, ensure_ascii=False)
-        except (TypeError, ValueError) as exc:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                f"{field} is not JSON-serialisable.",
-                {"field": field},
-            ) from exc
-        limit = self._config.max_inline_bytes
-        if utf8_byte_len(serialized) > limit:
-            raise OktoNexusError(
-                ErrorCode.CONTENT_TOO_LARGE,
-                f"{field} inline content exceeds {limit} UTF-8 bytes.",
-                {"field": field, "max_inline_bytes": limit},
-            )
+        """Enforce the inclusive 64KB UTF-8 inline content limit (shared helper)."""
+        check_inline_size(field, value, self._config.max_inline_bytes)
 
     def _emit(
         self,

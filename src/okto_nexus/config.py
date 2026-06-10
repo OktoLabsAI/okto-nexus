@@ -20,6 +20,18 @@ from .errors import ErrorCode, OktoNexusError
 #: Inclusive upper bound (bytes, UTF-8) for inline content storage.
 DEFAULT_MAX_INLINE_BYTES = 65536
 
+#: Default in-flight lease TTL (seconds) for pulled inbox deliveries.
+DEFAULT_INBOX_LEASE_TTL_SECONDS = 300
+
+#: Default TTL (seconds) after which a non-heartbeating session reads ``stale``.
+DEFAULT_SESSION_STALE_TTL_SECONDS = 60
+
+#: Default ceiling for ``shared_md_render``'s ``limit_events``.
+DEFAULT_MAX_SHARED_MD_EVENTS = 1000
+
+#: Default ceiling for a single ``event_get``/``event_wait`` page.
+DEFAULT_MAX_EVENT_LIMIT = 1000
+
 
 @dataclass
 class NexusConfig:
@@ -36,6 +48,10 @@ class NexusConfig:
     max_wait_timeout_seconds: int = 30
     handoff_lease_ttl_seconds: int = 300
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
+    inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
+    session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
+    max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
+    max_event_limit: int = DEFAULT_MAX_EVENT_LIMIT
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -73,6 +89,35 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         "OKTO_NEXUS_MAX_INLINE_BYTES",
         "--max-inline-bytes",
         DEFAULT_MAX_INLINE_BYTES,
+        1,
+    ),
+    # The four knobs below were previously resolved ad hoc by the inbound tool
+    # adapters straight from os.environ with a SILENT fallback on bad values -
+    # contradicting this module's fail-closed contract. They now resolve here
+    # (same env var names preserved), so an invalid value is a clear
+    # CONFIG_ERROR at startup instead of a silently-applied default.
+    "inbox_lease_ttl_seconds": (
+        "OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS",
+        "--inbox-lease-ttl-seconds",
+        DEFAULT_INBOX_LEASE_TTL_SECONDS,
+        1,
+    ),
+    "session_stale_ttl_seconds": (
+        "OKTO_NEXUS_SESSION_STALE_TTL_SECONDS",
+        "--session-stale-ttl-seconds",
+        DEFAULT_SESSION_STALE_TTL_SECONDS,
+        1,
+    ),
+    "max_shared_md_events": (
+        "OKTO_NEXUS_MAX_SHARED_MD_EVENTS",
+        "--max-shared-md-events",
+        DEFAULT_MAX_SHARED_MD_EVENTS,
+        1,
+    ),
+    "max_event_limit": (
+        "OKTO_NEXUS_MAX_EVENT_LIMIT",
+        "--max-event-limit",
+        DEFAULT_MAX_EVENT_LIMIT,
         1,
     ),
 }

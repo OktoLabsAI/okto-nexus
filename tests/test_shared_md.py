@@ -28,13 +28,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.tools.shared_md import (
-    DEFAULT_MAX_LIMIT_EVENTS,
-    MAX_EVENTS_ENV,
-    _resolve_max_events,
-    build_service,
-    register,
-)
+from okto_nexus.adapters.inbound.mcp.tools.shared_md import build_service, register
 from okto_nexus.adapters.outbound.sharedmd import renderer as renderer_module
 from okto_nexus.adapters.outbound.sharedmd.renderer import (
     SHARED_MD_FILENAME,
@@ -46,10 +40,11 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteWorkspaceRep
 from okto_nexus.application.ports import Repos
 from okto_nexus.application.shared_md import (
     DEFAULT_LIMIT_EVENTS,
+    DEFAULT_MAX_LIMIT_EVENTS,
     SECTION_COUNT,
     SharedMdService,
-    _iso_to_epoch,
 )
+from okto_nexus.domain.base import iso_to_epoch
 from okto_nexus.domain.models import Agent, Event, Handoff, Session, Task, Workspace
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
@@ -76,7 +71,7 @@ class StubClock:
         return self._iso
 
     def now_epoch(self) -> float:
-        return _iso_to_epoch(self._iso)
+        return iso_to_epoch(self._iso)
 
     def set(self, iso: str) -> None:
         self._iso = iso
@@ -702,9 +697,13 @@ def test_shared_md_is_never_read_back():
 # --------------------------------------------------------------------------- #
 # MCP tool registration + canonical envelope
 # --------------------------------------------------------------------------- #
-def make_deps(tmp_path, *, repos: Repos, clock=None, env=None):
+def make_deps(tmp_path, *, repos: Repos, clock=None, max_shared_md_events=1000):
     home = Path(tmp_path / "home")
-    config = SimpleNamespace(home_dir=home, max_inline_bytes=65536)
+    config = SimpleNamespace(
+        home_dir=home,
+        max_inline_bytes=65536,
+        max_shared_md_events=max_shared_md_events,
+    )
     return SimpleNamespace(
         config=config,
         connection_factory=FakeConnectionFactory(),
@@ -752,23 +751,16 @@ def test_register_tool_and_envelope(tmp_path):
 
 def test_build_service_wires_foundational_repos(tmp_path):
     repos = Repos()  # all None
-    deps = make_deps(tmp_path, repos=repos)
-    svc = build_service(deps, env={MAX_EVENTS_ENV: "77"})
+    # The ceiling moved into NexusConfig (fail-closed parse at load_config
+    # time); the adapter must read the configured value, not os.environ.
+    deps = make_deps(tmp_path, repos=repos, max_shared_md_events=77)
+    svc = build_service(deps)
     # Foundational identity repos filled in (sibling repos stay None / optional).
     assert deps.repos.workspaces is not None
     assert deps.repos.agents is not None
     assert deps.repos.sessions is not None
     assert isinstance(svc, SharedMdService)
     assert svc._max_limit == 77
-
-
-def test_resolve_max_events_env():
-    assert _resolve_max_events({}) == DEFAULT_MAX_LIMIT_EVENTS
-    assert _resolve_max_events({MAX_EVENTS_ENV: "10"}) == 10
-    assert _resolve_max_events({MAX_EVENTS_ENV: "  "}) == DEFAULT_MAX_LIMIT_EVENTS
-    assert _resolve_max_events({MAX_EVENTS_ENV: "bad"}) == DEFAULT_MAX_LIMIT_EVENTS
-    assert _resolve_max_events({MAX_EVENTS_ENV: "0"}) == DEFAULT_MAX_LIMIT_EVENTS
-    assert _resolve_max_events({MAX_EVENTS_ENV: "-3"}) == DEFAULT_MAX_LIMIT_EVENTS
 
 
 # --------------------------------------------------------------------------- #

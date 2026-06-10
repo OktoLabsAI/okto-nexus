@@ -22,8 +22,7 @@ MCP SDK; the live server is passed into :func:`register`.
 
 from __future__ import annotations
 
-import os
-from typing import Annotated, Any, Mapping
+from typing import Annotated, Any
 
 from pydantic import Field
 
@@ -39,10 +38,6 @@ from okto_nexus.application.inbox import (
     InboxService,
 )
 from okto_nexus.envelope import tool_envelope
-
-#: Environment knob for the in-flight lease TTL (seconds). Not part of
-#: ``NexusConfig``, so it is resolved here in the inbound adapter.
-INBOX_LEASE_TTL_ENV = "OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS"
 
 #: Reused parameter descriptions (house style mirrors okto-pulse).
 _P_AGENT = (
@@ -84,25 +79,16 @@ _P_STATUS_MESSAGE_ID = (
 )
 
 
-def _resolve_lease_ttl(env: Mapping[str, str]) -> int:
-    """Resolve the in-flight lease TTL from the environment (positive int)."""
-    raw = env.get(INBOX_LEASE_TTL_ENV)
-    if raw is None or not str(raw).strip():
-        return DEFAULT_INBOX_LEASE_TTL_SECONDS
-    try:
-        value = int(str(raw).strip())
-    except (TypeError, ValueError):
-        return DEFAULT_INBOX_LEASE_TTL_SECONDS
-    return value if value > 0 else DEFAULT_INBOX_LEASE_TTL_SECONDS
-
-
-def build_service(deps: Any, env: Mapping[str, str] | None = None) -> InboxService:
+def build_service(deps: Any) -> InboxService:
     """Wire the SQLite repos into ``deps.repos`` and build the inbox service.
 
     Idempotent: repos already present are reused so this slice and its peers
-    share a single concrete instance per port and one backing store.
+    share a single concrete instance per port and one backing store. The
+    in-flight lease TTL comes from ``deps.config.inbox_lease_ttl_seconds``
+    (env ``OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS`` / ``--inbox-lease-ttl-seconds``,
+    parsed FAIL-CLOSED by ``load_config`` - an invalid value aborts startup
+    with CONFIG_ERROR instead of silently falling back).
     """
-    environ = env if env is not None else os.environ
     repos = deps.repos
     if getattr(repos, "deliveries", None) is None:
         repos.deliveries = SqliteMessageDeliveryRepo(deps.clock)
@@ -116,7 +102,7 @@ def build_service(deps: Any, env: Mapping[str, str] | None = None) -> InboxServi
         messages=repos.messages,
         agents=repos.agents,
         clock=deps.clock,
-        lease_ttl_seconds=_resolve_lease_ttl(environ),
+        lease_ttl_seconds=deps.config.inbox_lease_ttl_seconds,
     )
 
 
