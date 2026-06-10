@@ -94,8 +94,15 @@ class ConnectionFactory(Protocol):
         """Return a configured connection (PRAGMAs applied, ``Row`` factory)."""
         ...
 
-    def unit_of_work(self) -> UnitOfWork:
-        """Return a fresh :class:`UnitOfWork` bound to a new connection."""
+    def unit_of_work(self, write: bool = True) -> UnitOfWork:
+        """Return a fresh :class:`UnitOfWork` bound to a new connection.
+
+        ``write=True`` (default) opens a WRITE transaction up front, so it is
+        serialised against every other writer by SQLite's WAL single-writer
+        lock. Pass ``write=False`` for strictly read-only use cases (peek /
+        count / history-style polling): a read transaction never competes for
+        the writer lock, so polling N agents does not serialise the bus.
+        """
         ...
 
 
@@ -241,12 +248,16 @@ class EventRepo(Protocol):
         uow: UnitOfWork,
         *,
         workspace_id: str,
-        stream: str,
+        stream: str | None = None,
         cursor: int = 0,
         limit: int = 100,
         filters: Mapping[str, Any] | None = None,
     ) -> list[Event]:
-        """Return events with ``event_id > cursor`` for a stream, oldest first."""
+        """Return events with ``event_id > cursor``, oldest first.
+
+        ``stream`` selects a single stream; ``None`` spans ALL streams of the
+        workspace (a single chronological cursor over the whole workspace log).
+        """
         ...
 
 
@@ -369,7 +380,15 @@ class MessageDeliveryRepo(Protocol):
 
     Deliberately GLOBAL (not ``workspace_id``-scoped): an agent's inbox spans
     every workspace. ``status`` transitions ``unread`` -> ``delivered`` (pulled,
-    in-flight under a lease) -> ``read`` (acknowledged into history).
+    in-flight under a lease) -> ``read`` (acknowledged into history), plus
+    ``parked`` (dead-letter) once a delivery exhausts its claim attempts.
+
+    Read methods (``list_by_status`` / ``counts`` / ``list_history`` /
+    ``list_for_message``) MUST NOT write: the effective lane of an in-flight
+    delivery whose lease elapsed is COMPUTED at read time (shown/counted as
+    ``unread``), never swept by an UPDATE - polling must not become a WAL
+    writer. The only physical lane transitions happen in ``claim_pending``,
+    ``mark_read`` and ``extend_leases``, all scoped to one recipient.
     """
 
     def create(
@@ -385,26 +404,27 @@ class MessageDeliveryRepo(Protocol):
         """Insert one ``unread`` delivery row, returning the stored row."""
         ...
 
-    def claim_unread(
+    def claim_pending(
         self,
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
         limit: int,
-        delivered_at: str,
+        now: str,
         lease_expires_at: str,
+        max_attempts: int,
     ) -> list[MessageDelivery]:
-        """Atomically move up to ``limit`` ``unread`` rows to ``delivered``.
+        """Atomically claim up to ``limit`` of the recipient's claimable rows.
 
-        The single-writer conditional update guards against a concurrent pull
-        (only rows still ``unread`` are taken). Returns the rows claimed by THIS
-        call, oldest first.
+        Claimable = ``unread`` OR ``delivered`` with an elapsed lease (the
+        recipient's own redeliveries) - a SINGLE recipient-scoped statement, so
+        a pull never touches other recipients' rows. Each claim increments the
+        row's ``attempts``; a row that already reached ``max_attempts`` is
+        moved to ``parked`` (dead-letter) instead of being redelivered.
+        Returns only the rows DELIVERED by this call (``delivered_at = now``,
+        leased until ``lease_expires_at``), oldest first; parked rows are
+        omitted.
         """
-        ...
-
-    def expire_leases(self, uow: UnitOfWork, *, now: str) -> int:
-        """Return ``delivered`` rows whose lease elapsed (``lease_expires_at < now``)
-        to ``unread`` (redelivery). Returns the number reopened."""
         ...
 
     def mark_read(
@@ -419,19 +439,42 @@ class MessageDeliveryRepo(Protocol):
         ``read`` (history). Returns the number transitioned (idempotent)."""
         ...
 
+    def extend_leases(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        message_ids: Sequence[str],
+        now: str,
+        lease_expires_at: str,
+    ) -> list[str]:
+        """Renew the lease of the recipient's IN-FLIGHT deliveries.
+
+        Only rows that are ``delivered`` with a still-valid lease
+        (``lease_expires_at >= now``) are extended; everything else is left
+        untouched. Returns the ``message_id`` list actually extended so the
+        caller can report precisely which ids were not in-flight.
+        """
+        ...
+
     def list_by_status(
         self,
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
         statuses: Sequence[str],
+        now: str,
         limit: int,
     ) -> list[MessageDelivery]:
-        """Non-destructive list of a recipient's rows in the given statuses."""
+        """READ-ONLY list of a recipient's rows whose EFFECTIVE lane at ``now``
+        is in ``statuses`` (an elapsed in-flight lease reads as ``unread``)."""
         ...
 
-    def counts(self, uow: UnitOfWork, *, recipient_agent_id: str) -> dict[str, int]:
-        """Return ``{status: count}`` for the recipient across all lanes."""
+    def counts(
+        self, uow: UnitOfWork, *, recipient_agent_id: str, now: str
+    ) -> dict[str, int]:
+        """READ-ONLY ``{lane: count}`` for the recipient's EFFECTIVE lanes at
+        ``now`` (an elapsed in-flight lease counts as ``unread``)."""
         ...
 
     def list_history(
@@ -439,10 +482,38 @@ class MessageDeliveryRepo(Protocol):
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
-        offset: int = 0,
+        before: tuple[str, str] | None = None,
         limit: int = 100,
     ) -> list[MessageDelivery]:
-        """List the recipient's ``read`` lane (history), newest first, paginated."""
+        """List the recipient's ``read`` lane, newest first, keyset-paginated.
+
+        ``before`` is the exclusive ``(read_at, delivery_id)`` keyset boundary
+        (the last row of the previous page); ``None`` starts at the newest.
+        Keyset (not OFFSET) so rows acknowledged between pages can never shift
+        already-seen items into a later page.
+        """
+        ...
+
+    def list_for_messages(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        message_ids: Sequence[str],
+    ) -> list[MessageDelivery]:
+        """Return the recipient's PHYSICAL delivery rows for these messages
+        (no effective-lane projection; used to explain failed transitions)."""
+        ...
+
+    def list_for_message(
+        self, uow: UnitOfWork, *, message_id: str, now: str
+    ) -> list[Mapping[str, Any]]:
+        """READ-ONLY sender-side view of one message's deliveries.
+
+        One mapping per recipient with ``recipient_agent_id``, the EFFECTIVE
+        ``status`` at ``now``, ``attempts`` and ``read_at`` (plain mappings:
+        ``attempts`` is delivery-bookkeeping, not part of the domain model).
+        """
         ...
 
 
@@ -526,6 +597,42 @@ class HandoffRepo(Protocol):
 
         Raise ``HANDOFF_ALREADY_CLAIMED`` if already claimed (and lease valid),
         or ``NOT_ELIGIBLE_TO_CLAIM`` if the handoff is not in a claimable state.
+        """
+        ...
+
+    def transition_claimed(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_id: str,
+        claimed_by: str,
+        status: str,
+        updated_at: str | None = None,
+    ) -> Handoff | None:
+        """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
+
+        Mirrors :meth:`claim`: the implementation must re-assert
+        ``status='CLAIMED' AND claimed_by=?`` atomically (single statement),
+        so a stale caller (lease expired, different claimant, already
+        terminal) affects 0 rows instead of clobbering the row. Return the
+        updated row, or ``None`` when 0 rows were affected — the caller
+        re-reads to raise the precise catalogue error.
+        """
+        ...
+
+    def reject_open(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_id: str,
+        updated_at: str | None = None,
+    ) -> Handoff | None:
+        """Conditionally reject an unclaimed OPEN handoff (direct-target path).
+
+        Same contract as :meth:`transition_claimed`: the implementation must
+        re-assert ``status='OPEN'`` atomically; ``None`` on 0 affected rows.
         """
         ...
 

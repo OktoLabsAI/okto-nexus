@@ -28,8 +28,10 @@ from .models import Event
 
 __all__ = [
     "VALID_STREAMS",
+    "VALID_VISIBILITIES",
     "FILTER_KEYS",
     "validate_stream",
+    "validate_emit_vocabulary",
     "normalize_cursor",
     "clamp_limit",
     "normalize_filters",
@@ -40,6 +42,13 @@ __all__ = [
 #: The closed domain of consumable streams. Streams are *semantic filters* over
 #: a single global log, not physical partitions.
 VALID_STREAMS: frozenset[str] = frozenset({"workspace", "agent", "task", "handoff"})
+
+#: The closed set of persistable event visibilities. This is the SAME
+#: vocabulary :mod:`okto_nexus.domain.routing` resolves at read time (it imports
+#: this constant), so what the write path accepts is exactly what
+#: ``can_agent_see_event`` can evaluate. ``None`` stays allowed on emit (NULL
+#: column) and reads as workspace-``public``.
+VALID_VISIBILITIES: frozenset[str] = frozenset({"public", "eligible", "private"})
 
 #: The closed set of enumerated filter keys (equality, combined with AND).
 FILTER_KEYS: frozenset[str] = frozenset({"type", "agent_id", "task_id", "handoff_id"})
@@ -58,6 +67,51 @@ def validate_stream(stream: Any) -> str:
         "stream must be one of {agent, handoff, task, workspace}.",
         {"stream": stream, "supported": sorted(VALID_STREAMS)},
     )
+
+
+def validate_emit_vocabulary(*, stream: Any, type: Any, visibility: Any) -> None:
+    """Fail-closed write-path guard for emitting/appending an event.
+
+    The event log is the observability spine: a row persisted with an
+    out-of-vocabulary ``stream`` is unreachable by every consumer
+    (``event_get``/``event_wait``/``tail``/shared.md all select by
+    :data:`VALID_STREAMS`), and an out-of-vocabulary ``visibility`` poisons the
+    read path (``can_agent_see_event`` raises, hiding the event everywhere).
+    These are PRODUCER bugs, not caller input, so violations raise
+    ``INTERNAL_ERROR`` with a prescriptive message and nothing is persisted.
+
+    Rules: ``stream`` must be one of :data:`VALID_STREAMS`; ``type`` must be a
+    non-empty string (the type vocabulary is open — each slice namespaces its
+    own ``<noun>.<verb>`` types); ``visibility`` must be ``None`` (defaults to
+    workspace-``public`` at read time) or one of :data:`VALID_VISIBILITIES`.
+    """
+    if not isinstance(stream, str) or stream not in VALID_STREAMS:
+        raise OktoNexusError(
+            ErrorCode.INTERNAL_ERROR,
+            f"Refusing to persist event: stream {stream!r} is outside the "
+            "canonical vocabulary {agent, handoff, task, workspace}. An event "
+            "on an unknown stream would be invisible to every consumer; fix "
+            "the emitting slice to use a VALID_STREAMS value.",
+            {"stream": stream, "supported": sorted(VALID_STREAMS)},
+        )
+    if not isinstance(type, str) or not type.strip():
+        raise OktoNexusError(
+            ErrorCode.INTERNAL_ERROR,
+            "Refusing to persist event: 'type' must be a non-empty string "
+            "(slice-namespaced, e.g. 'session.opened'). Fix the emitting slice.",
+            {"type": type},
+        )
+    if visibility is not None and (
+        not isinstance(visibility, str) or visibility not in VALID_VISIBILITIES
+    ):
+        raise OktoNexusError(
+            ErrorCode.INTERNAL_ERROR,
+            f"Refusing to persist event: visibility {visibility!r} is outside "
+            "the canonical vocabulary {eligible, private, public} (or null = "
+            "public). An unknown visibility makes the event undecidable (and "
+            "thus hidden) at read time; fix the emitting slice.",
+            {"visibility": visibility, "supported": sorted(VALID_VISIBILITIES)},
+        )
 
 
 def normalize_cursor(cursor: Any) -> int:

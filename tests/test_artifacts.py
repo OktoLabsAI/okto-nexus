@@ -506,7 +506,10 @@ def test_put_atomic_row_and_event(migrated_factory, tmp_config, tmp_path):
     # Published on the observable ``workspace`` stream (one of VALID_STREAMS),
     # never the unconsultable legacy ``artifact`` stream.
     assert ev["stream"] == "workspace"
-    assert ev["target"] == out["artifact_id"]
+    # target is a routing rule, never a bare entity id: a raw artifact_id
+    # would poison target coercion under any non-public visibility. The id
+    # rides in the payload instead (asserted below).
+    assert ev["target"] is None
     payload = ev["payload"]
     for key in ("workspace_id", "artifact_id", "artifact_type", "size_bytes", "created_at"):
         assert key in payload

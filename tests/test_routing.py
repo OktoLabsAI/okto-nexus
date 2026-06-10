@@ -46,11 +46,20 @@ def agent(
 class FakeEvent:
     """Duck-typed stand-in for an Event/Handoff row (object access path)."""
 
-    def __init__(self, *, workspace_id=WS, visibility=None, target=None, created_at=None):
+    def __init__(
+        self,
+        *,
+        workspace_id=WS,
+        visibility=None,
+        target=None,
+        created_at=None,
+        actor_agent_id=None,
+    ):
         self.workspace_id = workspace_id
         self.visibility = visibility
         self.target = target
         self.created_at = created_at
+        self.actor_agent_id = actor_agent_id
 
 
 # --------------------------------------------------------------------------- #
@@ -512,6 +521,55 @@ def test_unknown_visibility_raises_validation_error():
     with pytest.raises(OktoNexusError) as exc:
         can_agent_see_event(agent("x"), item)
     assert exc.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+# --------------------------------------------------------------------------- #
+# Actor carve-out (ADR 0001: "... or you are the sender")
+# --------------------------------------------------------------------------- #
+def test_actor_sees_own_eligible_event_even_when_not_in_target():
+    # M2 defect 4: the sender of a directed message was NOT eligible for its own
+    # message.created event. The actor always sees what it emitted.
+    item = FakeEvent(
+        workspace_id=WS,
+        visibility="eligible",
+        target={"strategy": "direct", "agent_id": "recipient"},
+        actor_agent_id="sender",
+    )
+    assert can_agent_see_event(agent("sender"), item) is True  # the carve-out
+    assert can_agent_see_event(agent("recipient"), item) is True  # eligibility
+    assert can_agent_see_event(agent("third-party"), item) is False  # neither
+
+
+def test_actor_sees_own_private_direct_event():
+    item = FakeEvent(
+        workspace_id=WS,
+        visibility="private",
+        target={"strategy": "direct", "agent_id": "recipient"},
+        actor_agent_id="sender",
+    )
+    assert can_agent_see_event(agent("sender"), item) is True
+    assert can_agent_see_event(agent("third-party"), item) is False
+
+
+def test_actor_carveout_is_workspace_isolated():
+    # The carve-out NEVER crosses workspaces: same actor id, other workspace.
+    item = FakeEvent(
+        workspace_id=WS_OTHER,
+        visibility="eligible",
+        target={"strategy": "direct", "agent_id": "recipient"},
+        actor_agent_id="sender",
+    )
+    assert can_agent_see_event(agent("sender", workspace_id=WS), item) is False
+
+
+def test_no_actor_field_changes_nothing():
+    # Handoffs (no actor_agent_id) keep the pre-carve-out behaviour exactly.
+    item = FakeEvent(
+        workspace_id=WS,
+        visibility="eligible",
+        target={"strategy": "direct", "agent_id": "recipient"},
+    )
+    assert can_agent_see_event(agent("someone-else"), item) is False
 
 
 # --------------------------------------------------------------------------- #

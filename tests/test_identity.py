@@ -453,7 +453,11 @@ def test_audit_event_preserves_actor_and_session(
     assert ev["type"] == "session.opened"
     assert ev["workspace_id"] == ws
     assert ev["actor_agent_id"] == "agent-1"
-    assert ev["target"] == opened["session_id"]
+    # M2: canonical vocabulary - workspace stream, public visibility, NO target
+    # (a routing rule, never a bare session id); session_id rides the payload.
+    assert ev["stream"] == "workspace"
+    assert ev["visibility"] == "public"
+    assert ev["target"] is None
     assert ev["payload"]["session_id"] == opened["session_id"]
     assert ev["payload"]["agent_id"] == "agent-1"
 
@@ -461,7 +465,52 @@ def test_audit_event_preserves_actor_and_session(
     ev2 = emitter.events[-1]
     assert ev2["type"] == "session.heartbeat"
     assert ev2["actor_agent_id"] == "agent-1"
+    assert ev2["stream"] == "workspace" and ev2["target"] is None
     assert ev2["payload"]["session_id"] == opened["session_id"]
+
+
+def test_session_lifecycle_observable_via_real_event_log(
+    migrated_factory, tmp_config, tmp_path
+):
+    """REGRESSION (M2): session lifecycle reaches REAL consumers end to end.
+
+    With the old emission (stream='session', visibility='workspace', raw-string
+    target) the events either failed validation or were invisible on every
+    surface. Open/heartbeat/close must now be observable via ``event_get`` on
+    the canonical ``workspace`` stream by ANY agent in the workspace.
+    """
+    from okto_nexus.adapters.outbound.sqlite.events_repo import (
+        SqliteEventEmitter,
+        SqliteEventRepo,
+    )
+    from okto_nexus.application.events import EventService
+
+    clock = StubClock("2026-06-07T00:00:00Z")
+    emitter = SqliteEventEmitter(SqliteEventRepo(clock))
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
+    proj = mkdir(tmp_path, "P")
+    ws = svc.workspace_resolve(project_root=str(proj))["workspace_id"]
+    svc.agent_register(agent_id="agent-1")
+
+    sid = svc.session_open(agent_id="agent-1", workspace_id=ws)["session_id"]
+    svc.session_heartbeat(session_id=sid)
+    svc.session_close(session_id=sid)
+
+    events = EventService(
+        connection_factory=migrated_factory,
+        events=SqliteEventRepo(clock),
+        clock=clock,
+        config=tmp_config,
+    )
+    # An UNRELATED observer in the workspace sees the full lifecycle.
+    page = events.event_get(
+        project_root=str(proj), agent_id="observer", stream="workspace"
+    )
+    types = [e["type"] for e in page["events"]]
+    assert types == ["session.opened", "session.heartbeat", "session.closed"]
+    for e in page["events"]:
+        assert e["payload"]["session_id"] == sid
+        assert e["actor_agent_id"] == "agent-1"
 
 
 def test_no_emitter_is_safe(migrated_factory, tmp_config, tmp_path):

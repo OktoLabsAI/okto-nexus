@@ -319,6 +319,10 @@ class ArtifactService:
         }
         if stored == STORED_PATH and artifact.path is not None:
             payload["path"] = artifact.path
+        # target is a ROUTING RULE, never a bare entity id: a raw artifact_id
+        # is not JSON and would poison target coercion under any non-public
+        # visibility (the identity-slice bug class). The id already rides in
+        # the payload; lifecycle events are workspace-wide, so target=None.
         return self._emitter.emit(
             uow,
             workspace_id=artifact.workspace_id,
@@ -326,5 +330,5 @@ class ArtifactService:
             type=ARTIFACT_CREATED_EVENT,
             payload=payload,
             visibility=ARTIFACT_VISIBILITY,
-            target=artifact.artifact_id,
+            target=None,
         )

@@ -446,10 +446,13 @@ read time: an `active` session whose last heartbeat is older than the stale TTL
 `closed_at` and emits `session.closed`; a second call is a no-op (keeps the
 original `closed_at`, does not re-emit).
 
-> Session events are emitted on an internal `"session"` stream with
-> `visibility="workspace"`, which is **not** among the consumable streams or
-> canonical visibilities — i.e. they are internal audit only, deliberately *not*
-> observable via `event_get` / `event_wait` (unlike message/artifact events).
+> Session events (`session.opened` / `session.closed`) are emitted on the
+> canonical **`workspace`** stream with `visibility="public"` and no routing
+> `target`, so they ARE observable via `event_get` / `event_wait` like
+> message/artifact events. (Historically they used an internal `"session"`
+> stream with `visibility="workspace"` — neither value is in the canonical
+> vocabularies, so those events were invisible to every consumer; the emit
+> path now rejects out-of-vocabulary values fail-closed.)
 
 ### Event log + streams + long-polling
 
@@ -577,14 +580,19 @@ a `warning` (never a silent drop). `direct_with_fallback` and a `broadcast` nest
 in a `mixed` are rejected (`VALIDATION_ERROR`) — they would broadcast globally;
 model timed escalation as a **handoff**.
 
-**Two lanes, index-free, at-least-once.** Each delivery moves `unread` →
-`delivered` (in-flight, leased) → `read` (history). `inbox_pull` takes your unread
-into in-flight and returns them with their body — no cursor; `inbox_ack` settles
-them into history; an **unacked** in-flight delivery whose lease elapses is
-**redelivered** (exactly the handoff lease mechanic). `inbox_count`/`inbox_peek`
-(both sweep expired leases) are the cheap between-turns check; `inbox_history` is
-the read archive. This is the durable, lossless replacement for the V1
-cursor/`message_wait` model.
+**Index-free lanes, at-least-once, with a dead letter.** Each delivery moves
+`unread` → `delivered` (in-flight, leased) → `read` (history). `inbox_pull`
+atomically claims your claimable deliveries (unread + your own lease-expired
+redeliveries) into in-flight and returns them with their body — no cursor;
+`inbox_extend` renews the lease mid-turn; `inbox_ack` settles them into history;
+an **unacked** in-flight delivery whose lease elapses is **redelivered** (exactly
+the handoff lease mechanic), and a delivery that exhausts its claim attempts is
+**`parked`** (dead-letter — visible via `inbox_peek(include_parked=true)` for the
+recipient and `message_status` for the sender). `inbox_count`/`inbox_peek` are
+**READ-ONLY** (no sweep — expired leases are *projected* as `unread` at read
+time) and are the cheap between-turns check; `inbox_history` is the read
+archive (keyset-paginated). This is the durable, lossless replacement for the
+V1 cursor/`message_wait` model.
 
 ### Routing / visibility / eligibility
 
@@ -722,12 +730,24 @@ renders over the same state are **byte-identical**.
 
 ## Tool Reference
 
-**27 MCP tools** across seven slices, auto-discovered from
-`adapters/inbound/mcp/tools/`. Every tool returns the canonical envelope (success
-`{ok:true,data}` / failure `{ok:false,error}`); the `@tool_envelope` decorator
-guarantees no exception crosses the boundary. Consequently **every tool may also
-return `INTERNAL_ERROR`** (and `DB_ERROR` when a SQLite repo fails) in addition
-to the codes listed below.
+**33 MCP tools** — 32 across seven slices, auto-discovered from
+`adapters/inbound/mcp/tools/`, plus the server-level `nexus_info`. Every tool
+returns the canonical envelope (success `{ok:true,data}` / failure
+`{ok:false,error}`); the `@tool_envelope` decorator guarantees no exception
+crosses the boundary. Consequently **every tool may also return
+`INTERNAL_ERROR`** (and `DB_ERROR` when a SQLite repo fails) in addition to the
+codes listed below.
+
+#### `nexus_info`
+Report the server's versions — call it when behaviour seems to disagree with
+your cached tool schemas.
+- **Request:** none.
+- **Data:** `{package_version, schema_version, surface_revision}` —
+  `surface_revision` increments on every change to the tool surface
+  (names/parameters/defaults/semantics); `schema_version` is the highest
+  applied DB migration; `package_version` is the installed distribution
+  version (`"dev"` for a source checkout).
+- **Errors:** none specific (boundary `INTERNAL_ERROR`/`DB_ERROR` only).
 
 ### Identity & Workspace
 
@@ -837,10 +857,13 @@ visibility applied before the envelope).
   `WORKSPACE_REQUIRED` → `INVALID_STREAM` → `VALIDATION_ERROR` → `WORKSPACE_UNRESOLVED`.
 
 #### `event_wait`
-Long-poll: `event_get` in a loop until the first non-empty page or the timeout
-(clamped to the configured ceiling), without socket/thread.
-- **Request:** same as `event_get` + `timeout_seconds: int | None`
-  (`None`→`max_wait_timeout_seconds`; `<= 0`→single `event_get`, no sleep).
+Read the event log; optionally long-poll until the first non-empty page or the
+timeout (clamped to the configured ceiling), without socket/thread.
+- **SAFE BY DEFAULT:** `timeout_seconds` omitted, `0` or `null` is an immediate
+  **non-blocking snapshot** (single scan, no sleep). Blocking is an explicit
+  opt-in: `timeout_seconds > 0` parks the caller's turn until an event arrives
+  or the timeout expires (clamped to `max_wait_timeout_seconds`).
+- **Request:** same as `event_get` + `timeout_seconds: int | None` (default `0`).
 - **Data:** `{events: [...], next_cursor: int, has_more: bool, timed_out: bool}`.
   On timeout: `events:[]`, `next_cursor` = entry cursor, `timed_out: true`.
 - **Errors:** same as `event_get` + `VALIDATION_ERROR` (non-int `timeout_seconds`;
@@ -862,8 +885,11 @@ recipient**, and emit `message.created` — all in the same (atomic) transaction
   `from_session_id: str | None`; `target: dict | None`; `artifacts: list[str] | None`;
   `parent_message_id: str | None` (all default `None`).
 - **Data:** message shape **+** `event_id`, `recipients: [...]`, `delivered_count`,
-  and an optional `warning` (when a group target matched nobody). Recipient
-  resolution: `direct`/`capability`/`role`/`mixed` → the **global** registry;
+  an optional `warning` (when a group target matched nobody), and an optional
+  `workspace_created: true` (present **only** when the send materialised a
+  brand-new `workspaces` row; absent in the steady state — additive key,
+  existing clients unaffected). Recipient resolution:
+  `direct`/`capability`/`role`/`mixed` → the **global** registry;
   bare `broadcast`/no-target → this workspace's **active-session participants**
   (the sender is excluded from group targets).
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
@@ -876,37 +902,79 @@ recipient**, and emit `message.created` — all in the same (atomic) transaction
 
 > The inbox is **global** (keyed by `agent_id`): a direct message reaches you in
 > any workspace. Lanes per recipient: `unread` → `delivered` (in-flight, leased) →
-> `read` (history). At-least-once: an unacked pull is **redelivered** after the
-> lease (`OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS`, default 300). `limit` defaults to
-> 50, max 200. All inbox tools take `agent_id: str` (required).
+> `read` (history), plus `parked` (dead-letter). At-least-once: an unacked pull
+> is **redelivered** after the lease (`OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS`,
+> default 300); a delivery claimed 5 times (`DEFAULT_MAX_DELIVERY_ATTEMPTS`)
+> without an ack is **parked** instead of redelivered. `limit` defaults to 50,
+> max 200. `inbox_peek` / `inbox_count` / `inbox_history` / `message_status` are
+> **READ-ONLY** (`unit_of_work(write=False)` — polling never takes the WAL
+> writer lock); only `pull`/`ack`/`extend` write.
 
 #### `inbox_pull`
-Take your unread messages into in-flight and return them **with their body**;
-index-free (no cursor).
-- **Request:** `agent_id: str` (required); `limit: int | None`.
+Atomically claim your claimable deliveries (`unread` + your own lease-expired
+redeliveries) into in-flight and return them **with their body**; index-free
+(no cursor).
+- **Request:** `agent_id: str` (required); `limit: int | None`;
+  `lease_seconds: int | None` (size the lease for long turns; clamped to
+  10–3600, default = lease TTL).
 - **Data:** `{messages: [{delivery_id, message_id, status, delivered_at, lease_expires_at, read_at, from_agent_id, workspace_id, channel_id, subject, body, target, artifacts, created_at}, …], count}`.
-- **Errors:** `VALIDATION_ERROR` (missing `agent_id`; non-positive `limit`).
+- **Note:** a delivery on its 5th claim is parked (dead-letter) instead of
+  returned; parked rows consume slots of THAT claim's `limit`, so a pull that
+  parks poison messages may return fewer items — the next pull brings the rest.
+- **Errors:** `VALIDATION_ERROR` (missing `agent_id`; non-positive `limit`;
+  non-int/`bool` `lease_seconds`).
 
 #### `inbox_ack`
 Move messages to history (read), freeing the queue. Idempotent by `message_id`.
 - **Request:** `agent_id: str` (required); `message_ids: str | list[str]` (required).
 - **Data:** `{acknowledged: int}` (rows transitioned). **Errors:** `VALIDATION_ERROR`.
 
+#### `inbox_extend`
+Renew the lease on messages you pulled but have not finished handling (long
+turns), avoiding duplicate redelivery.
+- **Request:** `agent_id: str` (required); `message_ids: str | list[str]`
+  (required); `extend_seconds: int` (required; clamped to 10–3600). New lease =
+  now + `extend_seconds`.
+- **Data:** `{extended: int, lease_expires_at: str}`.
+- **All-or-nothing:** if ANY id is not currently in-flight for you (never
+  pulled / lease already expired / already acknowledged / parked) the call
+  fails with a per-message reason and **nothing** is extended.
+- **Errors:** `VALIDATION_ERROR`.
+
 #### `inbox_peek`
-Non-destructive view of pending (`unread` + in-flight); sweeps expired leases.
-- **Request:** `agent_id: str` (required); `limit: int | None`.
+READ-ONLY view of pending (`unread` + in-flight): nothing is leased, moved, or
+swept — an in-flight delivery whose lease elapsed is *shown* as `unread` (its
+effective lane, computed at read time).
+- **Request:** `agent_id: str` (required); `limit: int | None`;
+  `include_parked: bool` (default `false` — `true` also surfaces the
+  dead-letter lane).
 - **Data:** `{messages: [...], count}`. **Errors:** `VALIDATION_ERROR`.
 
 #### `inbox_count`
-Lane sizes `{unread, in_flight, read}`; sweeps expired leases first (an elapsed
-in-flight lease is counted as `unread`).
+READ-ONLY lane sizes `{unread, in_flight, read}`; an elapsed in-flight lease is
+*counted* as `unread` (effective lane) without sweeping it. Parked deliveries
+are excluded — inspect them with `inbox_peek(include_parked=true)`.
 - **Request:** `agent_id: str` (required). **Errors:** `VALIDATION_ERROR`.
 
 #### `inbox_history`
-The `read` archive, newest-first, paginated.
-- **Request:** `agent_id: str` (required); `cursor: str | None`; `limit: int | None`.
+The `read` archive, newest-first, **keyset-paginated** (READ-ONLY): the opaque
+cursor pins the page boundary to the last row seen, so acks between pages never
+duplicate/hide items.
+- **Request:** `agent_id: str` (required); `cursor: str | None` (**opaque** —
+  pass back `next_cursor` verbatim; legacy numeric offset cursors are rejected
+  with a prescriptive `VALIDATION_ERROR`); `limit: int | None`.
 - **Data:** `{messages: [...], next_cursor: str | None, has_more: bool}`.
 - **Errors:** `VALIDATION_ERROR`.
+
+#### `message_status`
+Sender-side observability (READ-ONLY): track a message you SENT instead of
+re-sending when a recipient seems silent.
+- **Request:** `message_id: str` (required — as returned by `message_create`).
+- **Data:** `{message_id, deliveries: [{recipient, status, attempts, read_at}, …], count}`
+  where `status` is the per-recipient **effective** lane: `unread` (queued, or
+  lease expired awaiting redelivery), `delivered` (in flight), `read`
+  (acknowledged), `parked` (dead-lettered after exhausting attempts).
+- **Errors:** `VALIDATION_ERROR` (missing `message_id`), `NOT_FOUND`.
 
 #### `channel_create`
 Create a channel by name — **idempotent by name** (creating an existing name
@@ -923,6 +991,17 @@ Return the workspace's channels (idempotently seeds the `general` default first)
 - **Request:** `project_root: str` (required).
 - **Data:** `{channels: [{channel_id, workspace_id, name, created_at}, …]}`.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`.
+
+#### `message_get` / `message_list` / `message_wait` (migration shims)
+Removed in S3 and kept as **permanent shims**: each always answers
+`ok:false` with `code=MIGRATED` and a prescriptive message naming the exact
+replacement call (`details.replacements` lists the new tools;
+`details.removed_in: "S3"`). The shims declare no parameters, so every legacy
+call shape lands on the guidance instead of failing schema validation.
+Replacements: `message_get` → `inbox_pull`/`inbox_peek`/`inbox_history` (or
+`event_get` for bus traffic); `message_list` → `inbox_peek`/`inbox_history`/
+`event_get`; `message_wait` → `inbox_count` polling + `inbox_pull` (or
+`event_wait` for explicit blocking).
 
 ### Handoffs
 
@@ -1051,7 +1130,7 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 | `events` | `event_id INTEGER AUTOINCREMENT` | yes | `stream`, `type`, `actor_agent_id`, `payload`, `visibility`, `target`, `created_at` | append-only/immutable; FK→`workspaces`; idx `(workspace_id,event_id)`, `(workspace_id,stream,event_id)` |
 | `channels` | `channel_id TEXT` | yes | `name`, `created_at` | FK→`workspaces`; **UNIQUE(workspace_id,name)**; idx `(workspace_id,name)` |
 | `messages` | `message_id TEXT` | yes | `from_agent_id`, `channel_id`, `from_session_id`, `target`, `subject`, `body`, `artifacts`, `parent_message_id`, `created_at` | FK→`workspaces`, FK→`channels`, self-FK→`messages`; idx `(workspace_id,created_at)`, `(workspace_id,channel_id,created_at)` |
-| `message_deliveries` (migr. 005) | `delivery_id TEXT` | **no** (global inbox) | `message_id`, `recipient_agent_id`, `status` (`unread`/`delivered`/`read`), `delivered_at`, `lease_expires_at`, `read_at`, `created_at` | FK→`messages`, FK→`agents`; **UNIQUE(message_id,recipient_agent_id)**; idx `(recipient_agent_id,status)`, `(status,lease_expires_at)` |
+| `message_deliveries` (migr. 005/006) | `delivery_id TEXT` | **no** (global inbox) | `message_id`, `recipient_agent_id`, `status` (`unread`/`delivered`/`read`/`parked`), `delivered_at`, `lease_expires_at`, `read_at`, `attempts` (migr. 006), `created_at` | FK→`messages`, FK→`agents`; **UNIQUE(message_id,recipient_agent_id)**; idx `(recipient_agent_id,status)`, `(status,lease_expires_at)`, keyset idx `(recipient_agent_id,status,read_at DESC,delivery_id DESC)` |
 | `tasks` | `task_id TEXT` | yes | `title`, `description`, `status`, `created_by`, `created_at` | FK→`workspaces`; idx `(workspace_id,status)` |
 | `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `payload` (migr. 003), `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
 | `artifacts` | `artifact_id TEXT` | yes | `artifact_type`, `name`, `path`, `content`, `size_bytes`, `content_type`, `created_at` | FK→`workspaces`; idx `(workspace_id,artifact_type)` |
@@ -1060,14 +1139,20 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 `002_session_close.sql`, `003_handoff_payload.sql`, and `004_agent_last_seen.sql`
 are forward-only `ALTER TABLE … ADD COLUMN` migrations (adding `sessions.closed_at`,
 `handoffs.payload`, and `agents.last_seen_at`); `005_message_deliveries.sql` adds
-the global `message_deliveries` inbox table (ADR 0001).
+the global `message_deliveries` inbox table (ADR 0001);
+`006_inbox_delivery_hardening.sql` adds `message_deliveries.attempts` (backs the
+`parked` dead-letter lane) and the keyset history index.
 The runner discovers `migrations/NNN_*.sql` (regex `^(\d+)_.*\.sql$`), orders by
-numeric version, applies unregistered ones inside **one** explicit transaction,
-and records `(version, applied_at)` in `schema_migrations`. The statement splitter
-is line-based (blank and `--` lines dropped; a statement boundary is a line whose
-content ends in `;`) — so `;` may not be embedded in literals. `apply()` is
-idempotent (returns `[]` when already current); any failure → best-effort
-`ROLLBACK` + `MIGRATION_ERROR`.
+numeric version, and applies each pending one in its **own** `BEGIN IMMEDIATE`
+transaction, recording `(version, applied_at)` in `schema_migrations` —
+**durable per migration**: a failure in migration N keeps 1..N-1 committed
+(forward-only by design; there is no all-or-nothing bootstrap rollback). The
+ledger is re-checked under the write lock, so concurrent bootstraps are safe,
+and a ledger version newer than the package knows fails closed. The statement
+splitter is line-based (blank and `--` lines dropped; a statement boundary is a
+line whose content ends in `;`) — so `;` may not be embedded in literals.
+`apply()` is idempotent (returns `[]` when already current); any failure →
+best-effort `ROLLBACK` of the failing migration + `MIGRATION_ERROR`.
 
 ---
 
@@ -1109,7 +1194,7 @@ adapter — it guarantees no exception crosses the boundary:
 - **any other exception** becomes `INTERNAL_ERROR` with
   `details.exception = type(exc).__name__`.
 
-**Closed catalog of 17 error codes** (`errors.py`, a frozen, normative
+**Closed catalog of 18 error codes** (`errors.py`, a frozen, normative
 `frozenset`; each serializes as its own string value):
 
 | Code | Meaning |
@@ -1130,10 +1215,17 @@ adapter — it guarantees no exception crosses the boundary:
 | `MIGRATION_ERROR` | Failure locating/applying migrations. |
 | `DB_ERROR` | Failure opening/configuring the SQLite connection. |
 | `RENDER_ERROR` | Failure rendering an output/representation. |
+| `MIGRATED` | Tool was removed/renamed; the shim's message points at the replacement tool. |
 | `INTERNAL_ERROR` | Catch-all for unexpected (unmapped) failures. |
 
 `to_envelope_error(exc)` normalizes any exception: `OktoNexusError` verbatim,
 everything else → `INTERNAL_ERROR` with *"An unexpected internal error occurred."*.
+
+**Transient failures carry `details.retryable: true`.** SQLite lock/busy
+contention (another process briefly holds the write lock) surfaces as
+`DB_ERROR` with `details.retryable = true` and a message telling the caller to
+simply retry the same call; the flag is absent on non-transient failures, so
+agents can branch on it without parsing messages.
 
 ---
 
@@ -1227,7 +1319,7 @@ okto_labs_okto_nexus/
 │  └─ live_client.py              # real MCP stdio client exercising the full flow
 ├─ src/okto_nexus/
 │  ├─ config.py                   # NexusConfig + load_config (CLI > env > default)
-│  ├─ errors.py                   # ErrorCode (17), OktoNexusError, to_envelope_error
+│  ├─ errors.py                   # ErrorCode (18), OktoNexusError, to_envelope_error
 │  ├─ envelope.py                 # ok()/err() + @tool_envelope boundary decorator
 │  ├─ domain/                     # pure, stdlib-only
 │  │  ├─ ids.py · routing.py · events.py · messages.py

@@ -19,15 +19,12 @@ from typing import Any, Optional
 from ....application.ports import Clock, UnitOfWork
 from ....domain.base import utc_now_iso
 from ....domain.models import Artifact
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
-    return OktoNexusError(
-        ErrorCode.DB_ERROR,
-        f"SQLite failure while {action}.",
-        {"reason": str(exc)},
-    )
+    # Centralised classification: lock/busy contention => retryable=True.
+    return db_error_from_exception(action, exc)
 
 
 class SqliteArtifactRepo:

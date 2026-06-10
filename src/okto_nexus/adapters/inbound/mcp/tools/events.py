@@ -5,8 +5,15 @@ canonical envelope via :func:`tool_envelope` so no exception ever crosses the
 adapter boundary:
 
 * ``event_get``  - non-blocking, cursor-paginated read of the workspace log.
-* ``event_wait`` - long-poll (``event_get`` + poll/sleep loop) bounded by the
-  configured timeout ceiling.
+* ``event_wait`` - snapshot by default (``timeout_seconds`` defaults to 0);
+  passing ``timeout_seconds > 0`` OPTS IN to a blocking long-poll
+  (``event_get`` + poll/sleep loop) bounded by the configured timeout ceiling.
+
+Pagination/filter parameters (``cursor``/``limit``/``filters``/
+``timeout_seconds``) are deliberately annotated ``Any``: the application layer
+validates them and a wrong type comes back as the canonical
+``VALIDATION_ERROR`` envelope instead of a FastMCP/pydantic validation error
+(one error grammar for agents).
 
 This module is the slice's composition root: it wires the concrete SQLite
 :class:`SqliteEventRepo` into ``deps.repos.events`` and publishes the
@@ -55,11 +62,11 @@ _P_FILTERS = (
     'task_id, handoff_id (e.g. {"type": "message.created"}).'
 )
 _P_TIMEOUT = (
-    "Long-poll bound in SECONDS (optional). >0 blocks until an event arrives or "
-    "the timeout elapses; 0 is a single non-blocking scan (no sleep); OMITTED "
-    "defaults to the server max wait - the longest blocking poll, NOT a snapshot. "
-    "Clamped to the server max wait. BLOCKING: parks your turn - see the server "
-    "instructions."
+    "Long-poll bound in SECONDS (optional; default 0). 0, OMITTED or null is an "
+    "immediate non-blocking snapshot (single scan, no sleep). >0 OPTS IN to a "
+    "BLOCKING long-poll: it parks your turn until an event arrives or the "
+    "timeout elapses (clamped to the server max wait) - see the server "
+    "instructions before blocking."
 )
 
 #: Environment knob for the maximum page size (``limit`` ceiling). Not part of
@@ -117,9 +124,9 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
-        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
-        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
-        filters: Annotated[dict[str, Any] | None, Field(description=_P_FILTERS)] = None,
+        cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
+        filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
     ) -> dict[str, Any]:
         """Read a cursor-paginated page of the workspace event log (non-blocking)."""
         return service.event_get(
@@ -137,26 +144,31 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
-        cursor: Annotated[int | None, Field(description=_P_CURSOR)] = None,
-        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
-        filters: Annotated[dict[str, Any] | None, Field(description=_P_FILTERS)] = None,
-        timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
+        cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
+        filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
+        timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = 0,
     ) -> dict[str, Any]:
-        """Long-poll the event log until a non-empty page or the timeout ceiling.
+        """Read the event log; optionally long-poll until a non-empty page.
 
-        CONCURRENCY - this is a BLOCKING long-poll: with ``timeout_seconds > 0``
-        it parks the caller's turn until an event arrives or the timeout expires.
+        SAFE BY DEFAULT: ``timeout_seconds`` omitted, ``0`` or ``null`` is an
+        immediate NON-BLOCKING snapshot (single scan, no sleep) - the same
+        default as ``handoff_list_available``. Blocking is an explicit opt-in:
+        with ``timeout_seconds > 0`` the call parks the caller's turn until an
+        event arrives or the timeout expires (clamped to the server ceiling).
         Pick a mode so a single-threaded harness is never forced to block:
           * Background follower (best): spawn a detached ``okto-nexus tail``
             (or an event_wait loop) and react to each emitted NDJSON line; the
             agent loop stays free, idle cost ~0.
-          * In-loop, no background: ``timeout_seconds=0`` is a NON-BLOCKING
-            snapshot (single scan, no sleep); poll between turns, advancing
-            ``cursor`` -> ``next_cursor``.
-          * Targeted wait: a short ``timeout_seconds`` to await an expected event.
+          * In-loop, no background: keep the default snapshot; poll between
+            turns, advancing ``cursor`` -> ``next_cursor``.
+          * Targeted wait: a short ``timeout_seconds > 0`` to await an
+            expected event.
         The block is inherent to the current stdio long-poll; the planned
         SSE/HTTP transport would replace it with server push.
         """
+        # Safe-by-default: an omitted/null timeout is a snapshot; the
+        # application layer would treat None as "use the server ceiling".
         return service.event_wait(
             project_root=project_root,
             agent_id=agent_id,
@@ -164,5 +176,5 @@ def register(server: Any, deps: Any) -> None:
             cursor=cursor,
             limit=limit,
             filters=filters,
-            timeout_seconds=timeout_seconds,
+            timeout_seconds=0 if timeout_seconds is None else timeout_seconds,
         )

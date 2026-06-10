@@ -515,6 +515,45 @@ def test_directed_message_created_visibility_preserved_on_workspace_stream(
     assert all(e["event_id"] != directed["event_id"] for e in for_c["events"])
 
 
+def test_sender_sees_own_directed_message_created_event(
+    migrated_factory, tmp_config, tmp_path
+):
+    """REGRESSION (M2 defect 4 / ADR 0001 "or you are the sender").
+
+    A directed message.created event is ``visibility='eligible'`` with a
+    ``direct`` target naming the RECIPIENT - which used to exclude the SENDER
+    from observing its own send on the log. The actor carve-out makes the
+    sender's own event visible end to end via ``event_get``.
+    """
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
+    proj = mkdir(tmp_path, "P")
+    with migrated_factory.unit_of_work() as uow:
+        SqliteAgentRepo(clock).upsert(uow, agent_id="agentB")
+
+    directed = svc.create_message(
+        project_root=str(proj),
+        from_agent_id="agentA",
+        subject="psst",
+        body="for B",
+        target={"strategy": "direct", "agent_id": "agentB"},
+    )
+    events = _event_service(migrated_factory, tmp_config, clock)
+
+    # The SENDER observes its own directed message.created on the log.
+    for_sender = events.event_get(
+        project_root=str(proj), agent_id="agentA", stream="workspace"
+    )
+    mine = [e for e in for_sender["events"] if e["event_id"] == directed["event_id"]]
+    assert len(mine) == 1
+    assert mine[0]["payload"]["message_id"] == directed["message_id"]
+    # The carve-out never widens to a third party.
+    for_c = events.event_get(
+        project_root=str(proj), agent_id="agentC", stream="workspace"
+    )
+    assert all(e["event_id"] != directed["event_id"] for e in for_c["events"])
+
+
 def test_message_create_rolls_back_when_event_append_fails(
     migrated_factory, tmp_config, tmp_path
 ):
@@ -765,10 +804,17 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     server = FakeServer()
     register(server, deps)
 
+    # Core slice surface + the S3 clean-break migration shims (message_get/
+    # message_list/message_wait answer with a prescriptive MIGRATED envelope).
+    # Exact set: the shims are a permanent, deliberate surface — any tool
+    # added/removed here must update this assertion (integration-gate decision).
     assert set(server.tools) == {
         "message_create",
         "channel_create",
         "channel_list",
+        "message_get",
+        "message_list",
+        "message_wait",
     }
     assert deps.repos.channels is not None
     assert deps.repos.messages is not None
@@ -914,6 +960,48 @@ def test_concurrent_writers_distinct_workspaces_no_leak(
     assert len(rows_a) == per
     assert len(rows_b) == per
     assert count(migrated_factory, "messages") == 2 * per
+
+
+def test_message_create_surfaces_implicit_workspace_creation(
+    migrated_factory, tmp_config, tmp_path
+):
+    """M2 extra: the first send into a never-seen project_root flags the upsert.
+
+    A mistyped path used to materialise a phantom workspace SILENTLY. The first
+    ``message_create`` that creates the workspace row reports
+    ``workspace_created: true``; sends into an already-known workspace carry no
+    such key.
+    """
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
+    proj = mkdir(tmp_path, "P")
+
+    first = svc.create_message(
+        project_root=str(proj), from_agent_id="a", subject="s", body="b"
+    )
+    assert first["workspace_created"] is True  # the row did not exist before
+
+    second = svc.create_message(
+        project_root=str(proj), from_agent_id="a", subject="s2", body="b2"
+    )
+    assert "workspace_created" not in second  # known workspace -> no flag
+    assert count(migrated_factory, "workspaces") == 1
+
+
+def test_message_create_no_workspace_created_flag_after_explicit_resolve(
+    migrated_factory, tmp_config, tmp_path
+):
+    """A workspace pre-created by another use case is never re-flagged."""
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
+    proj = mkdir(tmp_path, "P")
+    # channel_list upserts the workspace row first (any prior touch counts).
+    svc.list_channels(project_root=str(proj))
+
+    sent = svc.create_message(
+        project_root=str(proj), from_agent_id="a", subject="s", body="b"
+    )
+    assert "workspace_created" not in sent
 
 
 def test_message_create_touches_author_last_seen(

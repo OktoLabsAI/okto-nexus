@@ -13,6 +13,11 @@ Implements the use cases of Okto Nexus V1 spec #8:
 * ``handoff_reject``         - owner ``CLAIMED -> REJECTED`` or direct-target
   ``OPEN -> REJECTED``.
 
+``handoff_complete``/``handoff_reject`` mutate via CONDITIONAL updates that
+mirror the claim (the WHERE clause re-asserts the expected status and
+claimant); a 0-row outcome is re-read and mapped to the precise catalogue
+error (already terminal? lease expired and reopened? different claimant?).
+
 This module lives in the application layer: it depends only on the ports in
 :mod:`okto_nexus.application.ports`, the pure :mod:`okto_nexus.domain` helpers
 (state machine + imported routing/eligibility), the error catalogue and
@@ -368,7 +373,9 @@ class HandoffService:
         """Owner-only ``CLAIMED -> COMPLETED``.
 
         ``NOT_OWNER`` when ``agent_id != claimed_by``; ``INVALID_TRANSITION``
-        when the source state is not ``CLAIMED``.
+        when the source state is not ``CLAIMED``. The mutation is a single
+        conditional UPDATE (mirrors the claim); a 0-row outcome is re-read and
+        mapped to the precise error.
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
@@ -377,26 +384,18 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
-            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
-            if handoff.status != STATUS_CLAIMED:
-                raise OktoNexusError(
-                    ErrorCode.INVALID_TRANSITION,
-                    "handoff_complete requires the handoff to be CLAIMED.",
-                    {"handoff_id": handoff_id, "status": handoff.status},
-                )
-            if handoff.claimed_by != agent_id:
-                raise OktoNexusError(
-                    ErrorCode.NOT_OWNER,
-                    "Only the claim owner may complete this handoff.",
-                    {"handoff_id": handoff_id, "agent_id": agent_id},
-                )
-            updated = self._handoffs.update_status(
+            updated = self._handoffs.transition_claimed(
                 uow,
                 workspace_id=workspace_id,
                 handoff_id=handoff_id,
+                claimed_by=agent_id,
                 status=STATUS_COMPLETED,
                 updated_at=now,
             )
+            if updated is None:
+                self._raise_claimed_transition_error(
+                    uow, workspace_id, handoff_id, agent_id, verb="complete"
+                )
             self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": updated.handoff_id,
@@ -430,7 +429,10 @@ class HandoffService:
         The claim owner transitions ``CLAIMED -> REJECTED``; a ``direct`` target
         may transition an unclaimed ``OPEN -> REJECTED``. A caller that is
         neither owner nor direct target gets ``NOT_OWNER``; a terminal/invalid
-        source state gets ``INVALID_TRANSITION``.
+        source state gets ``INVALID_TRANSITION``. Both branches mutate via a
+        conditional UPDATE that re-asserts the state read above (the read and
+        the update share one IMMEDIATE transaction, and a 0-row outcome still
+        maps to a precise error rather than clobbering the row).
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
@@ -451,8 +453,20 @@ class HandoffService:
                     raise OktoNexusError(
                         ErrorCode.NOT_OWNER,
                         "Only the claim owner may reject a CLAIMED handoff.",
-                        {"handoff_id": handoff_id, "agent_id": agent_id},
+                        {
+                            "handoff_id": handoff_id,
+                            "agent_id": agent_id,
+                            "claimed_by": handoff.claimed_by,
+                        },
                     )
+                updated = self._handoffs.transition_claimed(
+                    uow,
+                    workspace_id=workspace_id,
+                    handoff_id=handoff_id,
+                    claimed_by=agent_id,
+                    status=STATUS_REJECTED,
+                    updated_at=now,
+                )
             elif handoff.status == STATUS_OPEN:
                 if not is_direct_target(handoff.target, agent_id):
                     raise OktoNexusError(
@@ -460,19 +474,24 @@ class HandoffService:
                         "Only the direct target may reject an OPEN handoff.",
                         {"handoff_id": handoff_id, "agent_id": agent_id},
                     )
+                updated = self._handoffs.reject_open(
+                    uow,
+                    workspace_id=workspace_id,
+                    handoff_id=handoff_id,
+                    updated_at=now,
+                )
             else:
                 raise OktoNexusError(
                     ErrorCode.INVALID_TRANSITION,
                     "handoff cannot be rejected from its current state.",
                     {"handoff_id": handoff_id, "status": handoff.status},
                 )
-            updated = self._handoffs.update_status(
-                uow,
-                workspace_id=workspace_id,
-                handoff_id=handoff_id,
-                status=STATUS_REJECTED,
-                updated_at=now,
-            )
+            if updated is None:  # pragma: no cover - unreachable: the read and
+                # the UPDATE share one BEGIN IMMEDIATE transaction, so the row
+                # cannot change in between; kept as defence in depth.
+                self._raise_claimed_transition_error(
+                    uow, workspace_id, handoff_id, agent_id, verb="reject"
+                )
             self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": updated.handoff_id,
@@ -600,6 +619,56 @@ class HandoffService:
             ErrorCode.NOT_FOUND,
             "handoff_id does not exist.",
             {"handoff_id": handoff_id},
+        )
+
+    def _raise_claimed_transition_error(
+        self,
+        uow: UnitOfWork,
+        workspace_id: str,
+        handoff_id: str,
+        agent_id: str,
+        *,
+        verb: str,
+    ) -> None:
+        """Map a failed conditional CLAIMED transition to the precise error.
+
+        Called when the conditional UPDATE affected 0 rows. Re-reads the row in
+        the same transaction: absence maps via :meth:`_load_in_workspace`
+        (``NOT_FOUND``/``WORKSPACE_MISMATCH``); an OPEN row means the claim
+        lease expired and reopened it; a terminal row was already finished; a
+        CLAIMED row held by someone else is ``NOT_OWNER``. Always raises.
+        """
+        handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+        if handoff.status == STATUS_OPEN:
+            raise OktoNexusError(
+                ErrorCode.INVALID_TRANSITION,
+                f"handoff_{verb} requires the handoff to be CLAIMED, but it is "
+                "OPEN - the claim lease may have expired and reopened it. Call "
+                "handoff_claim again before retrying.",
+                {"handoff_id": handoff_id, "status": handoff.status},
+            )
+        if handoff.status in TERMINAL_STATUSES:
+            raise OktoNexusError(
+                ErrorCode.INVALID_TRANSITION,
+                f"handoff_{verb} requires the handoff to be CLAIMED, but it is "
+                f"already {handoff.status}.",
+                {"handoff_id": handoff_id, "status": handoff.status},
+            )
+        if handoff.claimed_by != agent_id:
+            raise OktoNexusError(
+                ErrorCode.NOT_OWNER,
+                f"Only the claim owner may {verb} this handoff.",
+                {
+                    "handoff_id": handoff_id,
+                    "agent_id": agent_id,
+                    "claimed_by": handoff.claimed_by,
+                },
+            )
+        raise OktoNexusError(  # pragma: no cover - defensive: the predicate
+            # held on re-read, so the UPDATE could not have affected 0 rows.
+            ErrorCode.INVALID_TRANSITION,
+            f"handoff_{verb} failed; the current state does not allow it.",
+            {"handoff_id": handoff_id, "status": handoff.status},
         )
 
     def _routing_agent(

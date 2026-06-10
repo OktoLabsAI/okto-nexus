@@ -12,7 +12,8 @@ Tools are AUTO-DISCOVERED: every module under
 ``okto_nexus.adapters.inbound.mcp.tools`` that exposes
 ``def register(server, deps) -> None`` is invoked with the live MCP server and
 a :class:`Deps` container. With zero tool modules present, the server still
-starts and registers nothing.
+starts and registers nothing. Server-level meta tools (``nexus_info``) are
+registered separately by :func:`register_meta_tools`.
 
 The MCP SDK (``mcp``) is imported LAZILY (only inside :func:`main` /
 :func:`create_server`) so that importing this module - and the domain /
@@ -22,6 +23,7 @@ application layers - never requires the SDK to be installed.
 from __future__ import annotations
 
 import importlib
+import importlib.metadata
 import os
 import pkgutil
 import sys
@@ -31,6 +33,7 @@ from typing import Any, Mapping
 from ....application.ports import Clock, ConnectionFactory as ConnectionFactoryPort
 from ....application.ports import EventEmitter, Repos
 from ....config import NexusConfig, load_config
+from ....envelope import tool_envelope
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
 from ...outbound.file.store import WorkspaceFileStore
@@ -104,6 +107,8 @@ regardless of which workspace they were sent in. The flow:
     history. Unacked messages are REDELIVERED (at-least-once), so nothing is lost
     if you stop mid-handling. inbox_peek is a non-destructive look; inbox_history
     is the read archive.
+RECOMMENDED RECEPTION LOOP: inbox_count between turns (cheap) -> inbox_pull when \
+unread > 0 -> inbox_ack after you finish processing. \
 After sending a message that expects a reply, just check your inbox on a later \
 turn - the reply lands there (no fire-and-forget, no polling a cursor).
 
@@ -111,7 +116,20 @@ OBSERVABILITY vs DELIVERY. event_get/event_wait and the `okto-nexus tail` \
 follower are for OBSERVING the bus (audit/monitoring of message.created and other \
 events), NOT for receiving messages addressed to you - that is the inbox. A \
 future SSE/HTTP transport will push inbox notifications instead of polling.
+
+ERRORS & RETRIES. Every tool answers with {ok:true,data} or \
+{ok:false,error:{code,message,...}}. A DB_ERROR with retryable=true is transient \
+(e.g. the SQLite store was briefly busy): retrying the SAME call after a short \
+backoff (~0.5-2s) is safe. A MIGRATED error means the tool was replaced - the \
+message names the exact replacement tool and parameters; switch to it, do NOT \
+retry the old call.
 """
+
+#: Monotonic revision of the MCP tool SURFACE (tool names, parameters,
+#: defaults, semantics). Bump by 1 on EVERY surface change so agents can
+#: detect stale cached schemas via ``nexus_info``. Started at 2 with the
+#: post-S3 safe-by-default surface.
+SURFACE_REVISION = 2
 
 
 @dataclass
@@ -213,6 +231,54 @@ def register_tools(server: Any, deps: Deps) -> list[str]:
     return registered
 
 
+def _package_version() -> str:
+    """Installed distribution version; ``"dev"`` for a plain source checkout."""
+    try:
+        return importlib.metadata.version("okto-nexus")
+    except importlib.metadata.PackageNotFoundError:
+        return "dev"
+
+
+def _schema_version(connection_factory: ConnectionFactoryPort) -> int:
+    """Highest applied migration version per the ``schema_migrations`` ledger.
+
+    ``0`` means no migration has been applied (bootstrap guarantees this never
+    happens on a healthy server, as migrations run before tools register).
+    """
+    conn = connection_factory.get_connection()
+    try:
+        row = conn.execute("SELECT MAX(version) FROM schema_migrations").fetchone()
+        return int(row[0]) if row is not None and row[0] is not None else 0
+    finally:
+        conn.close()
+
+
+def register_meta_tools(server: Any, deps: Deps) -> None:
+    """Register server-level meta tools (currently ``nexus_info``).
+
+    These live in the composition root rather than a ``tools/`` module because
+    they describe the WHOLE server (surface revision, schema ledger), not any
+    one slice.
+    """
+
+    @server.tool()
+    @tool_envelope
+    def nexus_info() -> dict[str, Any]:
+        """Report the server's versions: package_version, schema_version, surface_revision.
+
+        Call this when behaviour seems to disagree with your cached tool
+        schemas. ``surface_revision`` increments on every change to the tool
+        surface (names/parameters/defaults/semantics); ``schema_version`` is
+        the highest applied DB migration; ``package_version`` is the installed
+        distribution version ("dev" for a source checkout).
+        """
+        return {
+            "package_version": _package_version(),
+            "schema_version": _schema_version(deps.connection_factory),
+            "surface_revision": SURFACE_REVISION,
+        }
+
+
 def create_server(deps: Deps) -> Any:
     """Create the MCP server, register tools, and return the server instance.
 
@@ -222,6 +288,7 @@ def create_server(deps: Deps) -> Any:
 
     server = FastMCP("okto-nexus", instructions=SERVER_INSTRUCTIONS)
     register_tools(server, deps)
+    register_meta_tools(server, deps)
     return server
 
 

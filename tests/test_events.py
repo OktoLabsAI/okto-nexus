@@ -662,6 +662,90 @@ def test_concurrent_writers_distinct_monotonic_ids(migrated_factory, tmp_path):
     assert count(migrated_factory, "events") == n  # no lost write
 
 
+# --------------------------------------------------------------------------- #
+# list_after: stream=None selects ALL streams (M2 regression - the adapter used
+# to compile stream=None to ``WHERE stream = NULL``, matching nothing)
+# --------------------------------------------------------------------------- #
+def test_list_after_stream_none_returns_all_streams(migrated_factory, tmp_path):
+    _pr, ws = make_ws(migrated_factory, tmp_path)
+    emit(migrated_factory, ws, stream="workspace", type="w.1")
+    emit(migrated_factory, ws, stream="task", type="t.1")
+    emit(migrated_factory, ws, stream="handoff", type="h.1")
+    emit(migrated_factory, ws, stream="agent", type="a.1")
+
+    repo = SqliteEventRepo(StubClock())
+    with migrated_factory.unit_of_work() as uow:
+        all_streams = repo.list_after(uow, workspace_id=ws, stream=None)
+        only_task = repo.list_after(uow, workspace_id=ws, stream="task")
+        after_cursor = repo.list_after(uow, workspace_id=ws, stream=None, cursor=2)
+
+    assert [e.event_id for e in all_streams] == [1, 2, 3, 4]  # every stream, ascending
+    assert [e.type for e in all_streams] == ["w.1", "t.1", "h.1", "a.1"]
+    assert [e.type for e in only_task] == ["t.1"]  # a str stream still filters
+    assert [e.event_id for e in after_cursor] == [3, 4]  # cursor honoured with None
+
+
+def test_list_after_stream_none_is_workspace_scoped(migrated_factory, tmp_path):
+    _pa, ws_a = make_ws(migrated_factory, tmp_path, name="A")
+    _pb, ws_b = make_ws(migrated_factory, tmp_path, name="B")
+    emit(migrated_factory, ws_a, stream="workspace", type="a.evt")
+    emit(migrated_factory, ws_b, stream="task", type="b.evt")
+
+    repo = SqliteEventRepo(StubClock())
+    with migrated_factory.unit_of_work() as uow:
+        rows = repo.list_after(uow, workspace_id=ws_a, stream=None)
+    assert [e.type for e in rows] == ["a.evt"]  # all-streams never crosses workspaces
+
+
+# --------------------------------------------------------------------------- #
+# Fail-closed emit vocabulary (M2): garbage stream/visibility/type never persists
+# --------------------------------------------------------------------------- #
+@pytest.mark.parametrize(
+    "bad_kwargs",
+    [
+        {"stream": "session"},  # the exact production bug (identity slice)
+        {"stream": "messages"},
+        {"stream": ""},
+        {"stream": None},
+        {"visibility": "workspace"},  # the exact production bug (identity slice)
+        {"visibility": "loud"},
+        {"type": ""},
+        {"type": "   "},
+        {"type": None},
+    ],
+)
+def test_append_rejects_out_of_vocabulary_fail_closed(
+    migrated_factory, tmp_path, bad_kwargs
+):
+    _pr, ws = make_ws(migrated_factory, tmp_path)
+    kwargs = {"stream": "workspace", "type": "evt", "visibility": None}
+    kwargs.update(bad_kwargs)
+    with pytest.raises(OktoNexusError) as ei:
+        emit(migrated_factory, ws, **kwargs)
+    assert ei.value.code == ErrorCode.INTERNAL_ERROR.value
+    assert count(migrated_factory, "events") == 0  # nothing persisted (fail-closed)
+
+
+def test_emit_facade_inherits_vocabulary_gate(migrated_factory, tmp_path):
+    _pr, ws = make_ws(migrated_factory, tmp_path)
+    emitter = SqliteEventEmitter(SqliteEventRepo(StubClock()))
+    with pytest.raises(OktoNexusError) as ei:
+        with migrated_factory.unit_of_work() as uow:
+            emitter.emit(
+                uow, workspace_id=ws, stream="session", type="session.opened"
+            )
+    assert ei.value.code == ErrorCode.INTERNAL_ERROR.value
+    assert count(migrated_factory, "events") == 0
+
+
+@pytest.mark.parametrize("visibility", [None, "public", "eligible", "private"])
+def test_append_accepts_canonical_visibilities(migrated_factory, tmp_path, visibility):
+    _pr, ws = make_ws(migrated_factory, tmp_path)
+    eid = emit(migrated_factory, ws, visibility=visibility)
+    assert eid == 1
+    assert count(migrated_factory, "events") == 1
+
+
 def test_emitter_facade_appends_monotonic_and_readable(migrated_factory, tmp_path):
     config = cfg(tmp_path)
     pr, ws = make_ws(migrated_factory, tmp_path)

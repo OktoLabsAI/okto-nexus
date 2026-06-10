@@ -24,11 +24,12 @@ from ....application.ports import Clock, UnitOfWork
 from ....domain.base import utc_now_iso
 from ....domain.inbox import (
     DELIVERY_DELIVERED,
+    DELIVERY_PARKED,
     DELIVERY_READ,
     DELIVERY_UNREAD,
 )
 from ....domain.models import Channel, Message, MessageDelivery
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 def _dumps_list(value: Any) -> str:
@@ -47,11 +48,8 @@ def _loads_list(text: str | None) -> list[Any]:
 
 
 def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
-    return OktoNexusError(
-        ErrorCode.DB_ERROR,
-        f"SQLite failure while {action}.",
-        {"reason": str(exc)},
-    )
+    # Centralised classification: lock/busy contention => retryable=True.
+    return db_error_from_exception(action, exc)
 
 
 class _ClockBacked:
@@ -289,12 +287,25 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
 
     Deliberately NOT ``workspace_id``-scoped: an agent's inbox spans every
     workspace. The ``unread`` -> ``delivered`` (leased) -> ``read`` lanes back the
-    at-least-once pull/ack with lease-based redelivery.
+    at-least-once pull/ack with lease-based redelivery; ``parked`` is the
+    dead-letter lane for deliveries that exhausted their claim ``attempts``.
+
+    Reads are strictly READ-ONLY: an in-flight row whose lease elapsed is
+    PROJECTED as ``unread`` via SQL CASE (never swept by an UPDATE), so peek /
+    count / history polling never competes for the WAL writer lock. The only
+    physical writes are recipient-scoped: ``claim_pending`` / ``mark_read`` /
+    ``extend_leases``.
     """
 
     _COLUMNS = (
         "delivery_id, message_id, recipient_agent_id, status, "
         "delivered_at, lease_expires_at, read_at, created_at"
+    )
+
+    # An in-flight row whose lease elapsed at :now - the read-time projection
+    # shows/counts it as 'unread' (redeliverable). Parameters: (delivered, now).
+    _EXPIRED = (
+        "(status = ? AND lease_expires_at IS NOT NULL AND lease_expires_at < ?)"
     )
 
     def create(
@@ -325,66 +336,57 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             created_at=now,
         )
 
-    def claim_unread(
+    def claim_pending(
         self,
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
         limit: int,
-        delivered_at: str,
+        now: str,
         lease_expires_at: str,
+        max_attempts: int,
     ) -> list[MessageDelivery]:
-        conn = uow.connection
+        # A SINGLE recipient-scoped statement claims unread rows AND the
+        # recipient's own lease-expired redeliveries (no global sweep). The
+        # write lock is taken by this first statement, so a concurrent pull
+        # serialises here instead of failing on a stale read snapshot.
+        # RETURNING tells us exactly which rows THIS call touched; rows whose
+        # attempts were already exhausted are parked (dead-letter), not
+        # redelivered, and are filtered out of the returned batch.
         try:
-            ids = [
-                r["delivery_id"]
-                for r in conn.execute(
-                    "SELECT delivery_id FROM message_deliveries "
-                    "WHERE recipient_agent_id = ? AND status = ? "
-                    "ORDER BY rowid ASC LIMIT ?",
-                    (recipient_agent_id, DELIVERY_UNREAD, int(limit)),
-                ).fetchall()
-            ]
-            if not ids:
-                return []
-            placeholders = ",".join("?" * len(ids))
-            # Conditional update: only rows STILL unread are taken (guards a
-            # concurrent pull). delivered_at/lease stamp this call's batch.
-            conn.execute(
-                f"UPDATE message_deliveries "
-                f"SET status = ?, delivered_at = ?, lease_expires_at = ? "
-                f"WHERE status = ? AND delivery_id IN ({placeholders})",
+            rows = uow.connection.execute(
+                f"""
+                UPDATE message_deliveries SET
+                    status = CASE WHEN attempts < ? THEN ? ELSE ? END,
+                    attempts = CASE WHEN attempts < ? THEN attempts + 1
+                                    ELSE attempts END,
+                    delivered_at = CASE WHEN attempts < ? THEN ? ELSE NULL END,
+                    lease_expires_at = CASE WHEN attempts < ? THEN ?
+                                            ELSE NULL END
+                WHERE delivery_id IN (
+                    SELECT delivery_id FROM message_deliveries
+                    WHERE recipient_agent_id = ?
+                      AND (status = ? OR {self._EXPIRED})
+                    ORDER BY created_at ASC, rowid ASC
+                    LIMIT ?
+                )
+                RETURNING rowid, {self._COLUMNS}
+                """,
                 (
-                    DELIVERY_DELIVERED,
-                    delivered_at,
-                    lease_expires_at,
-                    DELIVERY_UNREAD,
-                    *ids,
+                    int(max_attempts), DELIVERY_DELIVERED, DELIVERY_PARKED,
+                    int(max_attempts),
+                    int(max_attempts), now,
+                    int(max_attempts), lease_expires_at,
+                    recipient_agent_id,
+                    DELIVERY_UNREAD, DELIVERY_DELIVERED, now,
+                    int(limit),
                 ),
-            )
-            rows = conn.execute(
-                f"SELECT {self._COLUMNS} FROM message_deliveries "
-                f"WHERE delivery_id IN ({placeholders}) "
-                f"AND status = ? AND delivered_at = ? "
-                f"ORDER BY rowid ASC",
-                (*ids, DELIVERY_DELIVERED, delivered_at),
             ).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("claiming inbox deliveries", exc) from exc
-        return [self._row(r) for r in rows]
-
-    def expire_leases(self, uow: UnitOfWork, *, now: str) -> int:
-        try:
-            cur = uow.connection.execute(
-                "UPDATE message_deliveries "
-                "SET status = ?, delivered_at = NULL, lease_expires_at = NULL "
-                "WHERE status = ? AND lease_expires_at IS NOT NULL "
-                "AND lease_expires_at < ?",
-                (DELIVERY_UNREAD, DELIVERY_DELIVERED, now),
-            )
-        except sqlite3.Error as exc:
-            raise _db_error("expiring inbox leases", exc) from exc
-        return cur.rowcount
+        claimed = [r for r in rows if r["status"] == DELIVERY_DELIVERED]
+        claimed.sort(key=lambda r: (r["created_at"], r["rowid"]))
+        return [self._row(r) for r in claimed]
 
     def mark_read(
         self,
@@ -416,58 +418,161 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             raise _db_error("acknowledging inbox deliveries", exc) from exc
         return cur.rowcount
 
+    def extend_leases(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        message_ids: Sequence[str],
+        now: str,
+        lease_expires_at: str,
+    ) -> list[str]:
+        ids = [m for m in message_ids if m]
+        if not ids:
+            return []
+        placeholders = ",".join("?" * len(ids))
+        try:
+            rows = uow.connection.execute(
+                # Only genuinely in-flight rows: delivered AND lease not yet
+                # elapsed (an expired lease is redeliverable, not extendable).
+                f"UPDATE message_deliveries SET lease_expires_at = ? "
+                f"WHERE recipient_agent_id = ? AND status = ? "
+                f"AND lease_expires_at IS NOT NULL AND lease_expires_at >= ? "
+                f"AND message_id IN ({placeholders}) "
+                f"RETURNING message_id",
+                (lease_expires_at, recipient_agent_id, DELIVERY_DELIVERED,
+                 now, *ids),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("extending inbox leases", exc) from exc
+        return [r["message_id"] for r in rows]
+
     def list_by_status(
         self,
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
         statuses: Sequence[str],
+        now: str,
         limit: int,
     ) -> list[MessageDelivery]:
         sts = list(statuses)
         if not sts:
             return []
         placeholders = ",".join("?" * len(sts))
+        # READ-ONLY: the effective lane (and the cleared lease fields of an
+        # expired in-flight row) is projected in the SELECT, never UPDATEd.
         try:
             rows = uow.connection.execute(
-                f"SELECT {self._COLUMNS} FROM message_deliveries "
-                f"WHERE recipient_agent_id = ? AND status IN ({placeholders}) "
+                f"SELECT delivery_id, message_id, recipient_agent_id, "
+                f"CASE WHEN {self._EXPIRED} THEN ? ELSE status END AS status, "
+                f"CASE WHEN {self._EXPIRED} THEN NULL ELSE delivered_at END "
+                f"AS delivered_at, "
+                f"CASE WHEN {self._EXPIRED} THEN NULL ELSE lease_expires_at END "
+                f"AS lease_expires_at, "
+                f"read_at, created_at "
+                f"FROM message_deliveries "
+                f"WHERE recipient_agent_id = ? "
+                f"AND CASE WHEN {self._EXPIRED} THEN ? ELSE status END "
+                f"IN ({placeholders}) "
                 f"ORDER BY rowid ASC LIMIT ?",
-                (recipient_agent_id, *sts, int(limit)),
+                (
+                    DELIVERY_DELIVERED, now, DELIVERY_UNREAD,
+                    DELIVERY_DELIVERED, now,
+                    DELIVERY_DELIVERED, now,
+                    recipient_agent_id,
+                    DELIVERY_DELIVERED, now, DELIVERY_UNREAD,
+                    *sts, int(limit),
+                ),
             ).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("listing inbox deliveries", exc) from exc
         return [self._row(r) for r in rows]
 
-    def counts(self, uow: UnitOfWork, *, recipient_agent_id: str) -> dict[str, int]:
+    def counts(
+        self, uow: UnitOfWork, *, recipient_agent_id: str, now: str
+    ) -> dict[str, int]:
         try:
             rows = uow.connection.execute(
-                "SELECT status, COUNT(*) AS n FROM message_deliveries "
-                "WHERE recipient_agent_id = ? GROUP BY status",
-                (recipient_agent_id,),
+                f"SELECT CASE WHEN {self._EXPIRED} THEN ? ELSE status END "
+                "AS lane, COUNT(*) AS n FROM message_deliveries "
+                "WHERE recipient_agent_id = ? GROUP BY lane",
+                (DELIVERY_DELIVERED, now, DELIVERY_UNREAD, recipient_agent_id),
             ).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("counting inbox deliveries", exc) from exc
-        return {row["status"]: row["n"] for row in rows}
+        return {row["lane"]: row["n"] for row in rows}
 
     def list_history(
         self,
         uow: UnitOfWork,
         *,
         recipient_agent_id: str,
-        offset: int = 0,
+        before: tuple[str, str] | None = None,
         limit: int = 100,
     ) -> list[MessageDelivery]:
+        sql = (
+            f"SELECT {self._COLUMNS} FROM message_deliveries "
+            "WHERE recipient_agent_id = ? AND status = ? "
+        )
+        params: list[Any] = [recipient_agent_id, DELIVERY_READ]
+        if before is not None:
+            # Keyset boundary (exclusive): strictly older than the last row of
+            # the previous page, so interleaved acks can never duplicate items.
+            sql += "AND (read_at, delivery_id) < (?, ?) "
+            params.extend(before)
+        sql += "ORDER BY read_at DESC, delivery_id DESC LIMIT ?"
+        params.append(int(limit))
         try:
-            rows = uow.connection.execute(
-                f"SELECT {self._COLUMNS} FROM message_deliveries "
-                "WHERE recipient_agent_id = ? AND status = ? "
-                "ORDER BY rowid DESC LIMIT ? OFFSET ?",
-                (recipient_agent_id, DELIVERY_READ, int(limit), int(offset)),
-            ).fetchall()
+            rows = uow.connection.execute(sql, tuple(params)).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("listing inbox history", exc) from exc
         return [self._row(r) for r in rows]
+
+    def list_for_messages(
+        self,
+        uow: UnitOfWork,
+        *,
+        recipient_agent_id: str,
+        message_ids: Sequence[str],
+    ) -> list[MessageDelivery]:
+        ids = [m for m in message_ids if m]
+        if not ids:
+            return []
+        placeholders = ",".join("?" * len(ids))
+        try:
+            rows = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM message_deliveries "
+                f"WHERE recipient_agent_id = ? AND message_id IN ({placeholders}) "
+                f"ORDER BY rowid ASC",
+                (recipient_agent_id, *ids),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading inbox deliveries", exc) from exc
+        return [self._row(r) for r in rows]
+
+    def list_for_message(
+        self, uow: UnitOfWork, *, message_id: str, now: str
+    ) -> list[dict[str, Any]]:
+        try:
+            rows = uow.connection.execute(
+                f"SELECT recipient_agent_id, "
+                f"CASE WHEN {self._EXPIRED} THEN ? ELSE status END AS status, "
+                f"attempts, read_at "
+                f"FROM message_deliveries WHERE message_id = ? ORDER BY rowid ASC",
+                (DELIVERY_DELIVERED, now, DELIVERY_UNREAD, message_id),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading message delivery status", exc) from exc
+        return [
+            {
+                "recipient_agent_id": r["recipient_agent_id"],
+                "status": r["status"],
+                "attempts": r["attempts"],
+                "read_at": r["read_at"],
+            }
+            for r in rows
+        ]
 
     @staticmethod
     def _row(row: Any) -> MessageDelivery:

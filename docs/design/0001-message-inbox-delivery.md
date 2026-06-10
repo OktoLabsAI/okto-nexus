@@ -177,8 +177,13 @@ sender's `workspace` stream for in-workspace observability/`tail`.
 - **Stays:** event log + `event_get`/`event_wait`/`tail` (observability);
   channels, handoffs, artifacts, `shared.md` (workspace-scoped). `message.created`
   still emitted on the `workspace` stream — so **workspace-level message
-  observability (incl. body) survives via the log**, not a dedicated tool. The
-  `messages` table also stays (storage; `inbox_*` joins it to materialise bodies).
+  observability survives via the log as an envelope-only record**, not a
+  dedicated tool. The event payload carries `message_id`, `channel_id`,
+  `from_agent_id`, `target`, `subject`, `created_at` and **never the `body`**:
+  observers see *that* a message happened (and to whom), while bodies are read
+  exclusively through `inbox_*` by recipients (or by the sender, who already
+  has it). The `messages` table also stays (storage; `inbox_*` joins it to
+  materialise bodies).
 - **Changes / removed (S3 — replace all message reading with the inbox):**
   `message_create` resolves recipients + writes deliveries. `message_wait`,
   `message_list`, and `message_get` are **REMOVED** (breaking). ALL message

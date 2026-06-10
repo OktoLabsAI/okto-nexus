@@ -3,7 +3,9 @@
 ADR 0001. Strictly side-effect-free (stdlib only; never ``sqlite3``/``mcp`` -
 enforced by the import-boundary test). This module owns:
 
-* the delivery **status vocabulary** (``unread`` / ``delivered`` / ``read``);
+* the delivery **status vocabulary** (``unread`` / ``delivered`` / ``read`` /
+  ``parked`` - the dead-letter lane for deliveries that exhausted their claim
+  attempts);
 * :func:`new_delivery_id`;
 * :func:`resolve_recipients` - which agents a message ``target`` reaches, reusing
   the IMPORTED routing predicate :func:`okto_nexus.domain.routing.is_agent_eligible`
@@ -39,6 +41,7 @@ __all__ = [
     "DELIVERY_UNREAD",
     "DELIVERY_DELIVERED",
     "DELIVERY_READ",
+    "DELIVERY_PARKED",
     "DELIVERY_STATUSES",
     "new_delivery_id",
     "resolve_recipients",
@@ -48,12 +51,15 @@ __all__ = [
 ]
 
 #: Delivery lanes. ``unread`` (queued) -> ``delivered`` (pulled, in-flight under a
-#: lease) -> ``read`` (acknowledged into history).
+#: lease) -> ``read`` (acknowledged into history). A delivery whose claim
+#: attempts are exhausted is ``parked`` (dead-letter): it is never redelivered,
+#: so a poison message cannot reoccupy the head of every pull batch.
 DELIVERY_UNREAD = "unread"
 DELIVERY_DELIVERED = "delivered"
 DELIVERY_READ = "read"
+DELIVERY_PARKED = "parked"
 DELIVERY_STATUSES: frozenset[str] = frozenset(
-    {DELIVERY_UNREAD, DELIVERY_DELIVERED, DELIVERY_READ}
+    {DELIVERY_UNREAD, DELIVERY_DELIVERED, DELIVERY_READ, DELIVERY_PARKED}
 )
 
 #: Strategies that name a SPECIFIC recipient, so resolving to nobody is an ERROR

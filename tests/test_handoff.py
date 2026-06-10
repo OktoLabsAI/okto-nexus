@@ -226,20 +226,6 @@ def count(factory, table: str) -> int:
         conn.close()
 
 
-def retry_db(fn, attempts: int = 50, delay: float = 0.02):
-    """Retry on transient DB_ERROR (WAL snapshot/busy under contention)."""
-    last = None
-    for _ in range(attempts):
-        try:
-            return fn()
-        except OktoNexusError as exc:
-            if exc.code != ErrorCode.DB_ERROR.value:
-                raise
-            last = exc
-            time.sleep(delay)
-    raise last  # pragma: no cover
-
-
 # --------------------------------------------------------------------------- #
 # Pure domain unit tests
 # --------------------------------------------------------------------------- #
@@ -578,9 +564,9 @@ def test_double_claim_single_winner(migrated_factory, tmp_config, tmp_path):
     def worker(agent):
         barrier.wait()
         try:
-            out = retry_db(
-                lambda: svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id=agent)
-            )
+            # No retry wrapper: BEGIN IMMEDIATE serialises the writers, so a
+            # loser must get the clean business error - never a DB_ERROR.
+            out = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id=agent)
             with lock:
                 winners.append(out)
         except OktoNexusError as exc:
@@ -597,6 +583,158 @@ def test_double_claim_single_winner(migrated_factory, tmp_config, tmp_path):
     assert set(losers) == {ErrorCode.HANDOFF_ALREADY_CLAIMED.value}
     # Exactly one claim event (plus the single create event).
     assert emitter.types().count("handoff.claimed") == 1
+    assert row_of(migrated_factory, hid)["status"] == STATUS_CLAIMED
+
+
+def test_two_thread_claim_race_loser_gets_business_error_not_db_error(
+    migrated_factory, tmp_config, tmp_path
+):
+    # Core M1 contract: two writers disputing one claim, NO retry compensation.
+    # One wins; the other receives the clean business error (and never an
+    # opaque DB_ERROR from WAL snapshot/busy contention).
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+
+    barrier = threading.Barrier(2)
+    outcomes: dict[str, object] = {}
+    lock = threading.Lock()
+
+    def worker(agent):
+        barrier.wait()
+        try:
+            out = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id=agent)
+            with lock:
+                outcomes[agent] = out
+        except OktoNexusError as exc:
+            with lock:
+                outcomes[agent] = exc
+
+    with ThreadPoolExecutor(max_workers=2) as ex:
+        for f in [ex.submit(worker, a) for a in ("racer-1", "racer-2")]:
+            f.result()
+
+    wins = [v for v in outcomes.values() if isinstance(v, dict)]
+    errors = [v for v in outcomes.values() if isinstance(v, OktoNexusError)]
+    assert len(wins) == 1 and len(errors) == 1
+    loser = errors[0]
+    assert loser.code == ErrorCode.HANDOFF_ALREADY_CLAIMED.value
+    assert loser.code != ErrorCode.DB_ERROR.value
+    assert row_of(migrated_factory, hid)["claimed_by"] == wins[0]["claimed_by"]
+
+
+def test_complete_by_non_claimant_names_the_claimant(
+    migrated_factory, tmp_config, tmp_path
+):
+    # The precise NOT_OWNER error now reports WHO holds the claim, so an agent
+    # knows the handoff is alive under another worker (not lost).
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+    svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="owner")
+
+    with pytest.raises(OktoNexusError) as ei:
+        svc.handoff_complete(project_root=proj, handoff_id=hid, agent_id="intruder")
+    assert ei.value.code == ErrorCode.NOT_OWNER.value
+    assert ei.value.details["claimed_by"] == "owner"
+    assert ei.value.details["agent_id"] == "intruder"
+    # The conditional UPDATE must not have clobbered the row.
+    r = row_of(migrated_factory, hid)
+    assert r["status"] == STATUS_CLAIMED and r["claimed_by"] == "owner"
+
+
+def test_complete_after_lease_expiry_reopen_precise_error(
+    migrated_factory, tmp_config, tmp_path
+):
+    # An owner whose lease expired (handoff reopened to OPEN) gets a precise,
+    # prescriptive INVALID_TRANSITION pointing at handoff_claim - not NOT_FOUND,
+    # not an accidental overwrite of the reopened row.
+    clock = StubClock("2026-06-07T00:00:00Z")
+    svc = make_service(migrated_factory, tmp_config, clock)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+    claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="a1")
+    clock.set(iso_plus(claim["lease_expires_at"], 5))
+    assert svc.expire_old_leases(project_root=proj)["expired"] == [hid]
+
+    with pytest.raises(OktoNexusError) as ei:
+        svc.handoff_complete(project_root=proj, handoff_id=hid, agent_id="a1")
+    assert ei.value.code == ErrorCode.INVALID_TRANSITION.value
+    assert ei.value.details["status"] == STATUS_OPEN
+    assert "lease" in ei.value.message
+    assert "handoff_claim" in ei.value.message
+    # The reopened row stays OPEN and claimable.
+    assert row_of(migrated_factory, hid)["status"] == STATUS_OPEN
+
+
+def test_repo_transition_claimed_is_conditional_on_claimant(
+    migrated_factory, tmp_config, tmp_path
+):
+    # Negative wiring: the repo-level terminal transition affects 0 rows when
+    # the claimant does not match (the old unconditional UPDATE would have
+    # completed the handoff on behalf of the wrong agent).
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock)
+    repo = SqliteHandoffRepo(clock)
+    proj = str(mkdir(tmp_path, "P"))
+    ws = seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+    svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="owner")
+
+    with migrated_factory.unit_of_work() as uow:
+        denied = repo.transition_claimed(
+            uow, workspace_id=ws, handoff_id=hid,
+            claimed_by="not-the-owner", status=STATUS_COMPLETED,
+        )
+    assert denied is None
+    r = row_of(migrated_factory, hid)
+    assert r["status"] == STATUS_CLAIMED and r["claimed_by"] == "owner"
+
+    with migrated_factory.unit_of_work() as uow:
+        done = repo.transition_claimed(
+            uow, workspace_id=ws, handoff_id=hid,
+            claimed_by="owner", status=STATUS_COMPLETED,
+        )
+    assert done is not None and done.status == STATUS_COMPLETED
+    assert row_of(migrated_factory, hid)["status"] == STATUS_COMPLETED
+
+
+def test_repo_reject_open_is_conditional_on_open_status(
+    migrated_factory, tmp_config, tmp_path
+):
+    # reject_open must affect 0 rows once the handoff is CLAIMED (a racing
+    # direct-target reject cannot yank work from under the claimant).
+    clock = StubClock()
+    svc = make_service(migrated_factory, tmp_config, clock)
+    repo = SqliteHandoffRepo(clock)
+    proj = str(mkdir(tmp_path, "P"))
+    ws = seed_workspace(migrated_factory, proj, clock)
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+    )["handoff_id"]
+    svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
+
+    with migrated_factory.unit_of_work() as uow:
+        denied = repo.reject_open(uow, workspace_id=ws, handoff_id=hid)
+    assert denied is None
     assert row_of(migrated_factory, hid)["status"] == STATUS_CLAIMED
 
 
@@ -829,11 +967,11 @@ def test_concurrent_creates_unique_monotonic_events(migrated_factory, tmp_config
 
     def worker():
         barrier.wait()
-        retry_db(
-            lambda: svc.handoff_create(
-                project_root=proj, from_agent_id="c",
-                target={"strategy": "broadcast"}, visibility="public",
-            )
+        # Direct call (no retry): concurrent writers serialise at BEGIN
+        # IMMEDIATE instead of failing with BUSY_SNAPSHOT mid-transaction.
+        svc.handoff_create(
+            project_root=proj, from_agent_id="c",
+            target={"strategy": "broadcast"}, visibility="public",
         )
 
     with ThreadPoolExecutor(max_workers=n) as ex:

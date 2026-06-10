@@ -54,8 +54,12 @@ from .ports import (
 #: resolves it from the environment and injects it here.
 DEFAULT_SESSION_STALE_TTL_SECONDS = 60
 
-#: Event stream used for session-lifecycle audit events.
-SESSION_STREAM = "session"
+#: Event stream used for session-lifecycle audit events. Session lifecycle is
+#: workspace-level observability, so it rides the canonical ``workspace``
+#: stream - ``"session"`` is NOT in ``domain.events.VALID_STREAMS`` and would
+#: be rejected fail-closed by the event write path (and invisible to every
+#: consumer if it ever persisted).
+SESSION_STREAM = "workspace"
 
 SESSION_STATUS_ACTIVE = "active"
 SESSION_STATUS_STALE = "stale"
@@ -601,18 +605,25 @@ class IdentityService:
         """Emit a session-lifecycle audit event inside ``uow`` (best-effort).
 
         Skipped when no :class:`EventEmitter` is wired (the Event Log slice owns
-        ``event_id`` assignment, imported here, not redefined). The actor
-        ``agent_id`` and ``session_id`` are always preserved (INV11).
+        ``event_id`` assignment, imported here, not redefined). Events ride the
+        canonical ``workspace`` stream with ``visibility='public'`` and NO
+        routing ``target`` (lifecycle is workspace-wide observability, not
+        directed work; ``target`` is a routing rule, never a bare session id).
+        The actor ``agent_id`` and ``session_id`` are always preserved (INV11):
+        ``session_id`` travels in the payload.
         """
         if self._emitter is None:
             return
+        data: dict[str, Any] = dict(payload) if payload else {}
+        if session_id is not None:
+            data.setdefault("session_id", session_id)
         self._emitter.emit(
             uow,
             workspace_id=workspace_id,
             stream=SESSION_STREAM,
             type=event_type,
-            payload=dict(payload) if payload else None,
+            payload=data or None,
             actor_agent_id=actor_agent_id,
-            visibility="workspace",
-            target=session_id,
+            visibility="public",
+            target=None,
         )

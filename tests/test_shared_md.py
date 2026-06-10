@@ -41,6 +41,7 @@ from okto_nexus.adapters.outbound.sharedmd.renderer import (
     WORKSPACES_DIRNAME,
     FileSystemSharedMdRenderer,
 )
+from okto_nexus.adapters.outbound.sqlite.events_repo import SqliteEventRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteWorkspaceRepo
 from okto_nexus.application.ports import Repos
 from okto_nexus.application.shared_md import (
@@ -171,14 +172,48 @@ class FakeHandoffRepo:
 
 
 class FakeEventRepo:
-    """Mimics the canonical EventRepo: oldest-first, cursor + limit, all-stream
-    when ``stream is None``."""
+    """Mimics the canonical EventRepo CONTRACT (kept honest by
+    ``tests/test_ports_contract.py``, which runs the same scenarios against
+    this fake and the real SQLite adapter): oldest-first, cursor + limit,
+    all-streams when ``stream is None``, and the fail-closed emit-vocabulary
+    gate on ``append`` (same domain validator as the adapter)."""
 
     def __init__(self, events: list[Event] | None = None) -> None:
         self._events = list(events or [])
 
+    def append(
+        self,
+        uow,
+        *,
+        workspace_id,
+        stream,
+        type,
+        payload=None,
+        actor_agent_id=None,
+        visibility=None,
+        target=None,
+    ) -> int:
+        from okto_nexus.domain.events import validate_emit_vocabulary
+
+        validate_emit_vocabulary(stream=stream, type=type, visibility=visibility)
+        event_id = max((e.event_id or 0 for e in self._events), default=0) + 1
+        self._events.append(
+            Event(
+                workspace_id=workspace_id,
+                stream=stream,
+                type=type,
+                created_at="2026-06-07T00:00:00Z",
+                event_id=event_id,
+                actor_agent_id=actor_agent_id,
+                payload=dict(payload) if payload else None,
+                visibility=visibility,
+                target=target,
+            )
+        )
+        return event_id
+
     def list_after(
-        self, uow, *, workspace_id, stream, cursor=0, limit=100, filters=None
+        self, uow, *, workspace_id, stream=None, cursor=0, limit=100, filters=None
     ):
         rows = [
             e
@@ -206,7 +241,7 @@ class FakeServer:
 # --------------------------------------------------------------------------- #
 # Builders
 # --------------------------------------------------------------------------- #
-def make_event(eid: int, ws: str = WS_A, stream: str = "session", typ: str = "x") -> Event:
+def make_event(eid: int, ws: str = WS_A, stream: str = "workspace", typ: str = "x") -> Event:
     return Event(
         workspace_id=ws,
         stream=stream,
@@ -766,3 +801,52 @@ def test_integration_real_workspace_repo(migrated_factory, tmp_config):
     with pytest.raises(OktoNexusError) as ei:
         svc.shared_md_render(workspace_id=WS_UNKNOWN)
     assert ei.value.code == ErrorCode.NOT_FOUND.value
+
+
+def test_recent_events_rendered_from_real_sqlite_event_repo(
+    migrated_factory, tmp_config
+):
+    """REGRESSION (M2): Recent Events over the REAL adapter, across ALL streams.
+
+    The service drains the log with ``stream=None`` (= all streams). The old
+    adapter compiled that to ``WHERE stream = NULL`` - which matches nothing -
+    so Recent Events was ALWAYS empty in production while the fake-backed unit
+    tests stayed green. This test seeds committed events on several streams via
+    the real ``SqliteEventRepo`` and asserts they all reach the rendered file.
+    """
+    clock = StubClock("2026-06-07T00:00:00Z")
+    ws_repo = SqliteWorkspaceRepo(clock)
+    event_repo = SqliteEventRepo(clock)
+    with migrated_factory.unit_of_work() as uow:
+        ws_repo.upsert(uow, workspace_id=WS_A, root_realpath="/tmp/proj")
+        for stream, typ in (
+            ("workspace", "session.opened"),
+            ("handoff", "handoff.created"),
+            ("task", "task.updated"),
+            ("workspace", "message.created"),
+        ):
+            event_repo.append(
+                uow,
+                workspace_id=WS_A,
+                stream=stream,
+                type=typ,
+                actor_agent_id="agent-1",
+            )
+
+    svc = SharedMdService(
+        connection_factory=migrated_factory,
+        workspaces=ws_repo,
+        renderer=FileSystemSharedMdRenderer(home_dir=tmp_config.home_dir),
+        clock=clock,
+        events=event_repo,
+    )
+    svc.shared_md_render(workspace_id=WS_A)
+    text = (
+        Path(tmp_config.home_dir) / WORKSPACES_DIRNAME / WS_A / SHARED_MD_FILENAME
+    ).read_text(encoding="utf-8")
+
+    # All four committed events appear (newest-first by event_id), regardless
+    # of stream - Recent Events is never empty when committed events exist.
+    assert _event_ids_in_order(text) == [4, 3, 2, 1]
+    for typ in ("session.opened", "handoff.created", "task.updated", "message.created"):
+        assert typ in text

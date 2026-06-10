@@ -20,7 +20,7 @@ from typing import Any, Optional
 from ....application.ports import Clock, UnitOfWork
 from ....domain.base import utc_now_iso
 from ....domain.models import Agent, Session, Workspace
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 def _dumps(value: Any) -> str | None:
@@ -39,11 +39,8 @@ def _loads(text: str | None) -> Any:
 
 
 def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
-    return OktoNexusError(
-        ErrorCode.DB_ERROR,
-        f"SQLite failure while {action}.",
-        {"reason": str(exc)},
-    )
+    # Centralised classification: lock/busy contention => retryable=True.
+    return db_error_from_exception(action, exc)
 
 
 class _ClockBacked:

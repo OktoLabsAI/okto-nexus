@@ -9,6 +9,11 @@ Every tool/handler returns a canonical envelope:
 decorator guarantees that NO exception ever crosses the adapter boundary:
 :class:`OktoNexusError` becomes a structured failure, and any other exception
 is normalised to ``INTERNAL_ERROR``.
+
+:func:`require_json_object_param` is the wrapper-level guard that keeps the
+MCP SDK's pydantic error grammar OUT of the surface: tool wrappers annotate
+object-shaped parameters as ``Any`` and call it, so a wrong type comes back as
+the canonical ``VALIDATION_ERROR`` envelope instead of an SDK validation error.
 """
 
 from __future__ import annotations
@@ -16,7 +21,7 @@ from __future__ import annotations
 import functools
 from typing import Any, Callable, Mapping
 
-from .errors import OktoNexusError, to_envelope_error
+from .errors import ErrorCode, OktoNexusError, to_envelope_error
 
 
 def ok(data: Mapping[str, Any] | None = None) -> dict[str, Any]:
@@ -46,6 +51,45 @@ def err(
 def err_from_exc(exc: BaseException) -> dict[str, Any]:
     """Build a failure envelope from any exception (see :func:`to_envelope_error`)."""
     return {"ok": False, "error": to_envelope_error(exc)}
+
+
+def require_json_object_param(
+    param: str,
+    value: Any,
+    *,
+    required: bool = False,
+    example: str = '{"strategy": "direct", "agent_id": "<id>"}',
+) -> Any:
+    """Validate a tool parameter documented as a JSON object; return it unchanged.
+
+    Used by tool wrappers whose parameter is annotated ``Any`` so that a
+    wrong-typed value reaches THIS guard (and becomes the canonical
+    ``VALIDATION_ERROR`` envelope via :func:`tool_envelope`) instead of being
+    rejected by FastMCP/pydantic in a second error grammar.
+
+    Accepted: a mapping (the canonical shape), ``None`` when optional, and a
+    ``str`` (passed through untouched - the application layer parses a
+    JSON-object string and rejects anything else with its own canonical error).
+    Numbers, booleans and arrays can never become an object, so they are
+    rejected here with a prescriptive message.
+    """
+    if value is None:
+        if required:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"{param} is required and must be a JSON object, e.g. {example}.",
+                {param: None},
+            )
+        return None
+    if isinstance(value, (Mapping, str)):
+        return value
+    raise OktoNexusError(
+        ErrorCode.VALIDATION_ERROR,
+        f"{param} must be a JSON object (got {type(value).__name__}), e.g. "
+        f"{example}. Pass it as a raw JSON object, NOT as a number, boolean "
+        "or array.",
+        {param: value, f"{param}_type": type(value).__name__},
+    )
 
 
 def tool_envelope(fn: Callable[..., Any]) -> Callable[..., dict[str, Any]]:

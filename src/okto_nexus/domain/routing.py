@@ -50,6 +50,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .events import VALID_VISIBILITIES
 
 __all__ = [
     "RoutingAgent",
@@ -74,7 +75,10 @@ _STRATEGIES: frozenset[str] = frozenset(
     }
 )
 
-_VISIBILITIES: frozenset[str] = frozenset({"public", "eligible", "private"})
+#: Single source of truth for the visibility vocabulary: the SAME closed set
+#: the event write path enforces (``domain.events.VALID_VISIBILITIES``), so an
+#: emitted visibility is always resolvable here.
+_VISIBILITIES: frozenset[str] = VALID_VISIBILITIES
 
 #: Visibility assumed when an item leaves ``visibility`` unset (NULL column).
 #: An event with no explicit visibility is treated as workspace-``public``;
@@ -457,6 +461,10 @@ def can_agent_see_event(agent: Any, event_or_handoff: Any, now: Any = None) -> b
 
     * the agent and the item must share the same ``workspace_id`` (otherwise
       ``False`` - no cross-workspace visibility);
+    * the item's ACTOR always sees it: when ``actor_agent_id`` equals the
+      viewer's ``agent_id`` the item is visible regardless of visibility/target
+      (ADR 0001: "you have a delivery row *or you are the sender*" - a sender
+      must be able to observe its own ``message.created`` on the log);
     * ``public`` -> visible to any agent in that workspace;
     * ``eligible`` -> visible iff :func:`is_agent_eligible` is ``True``;
     * ``private`` -> eligible-only; for non-direct targets this equals
@@ -486,6 +494,15 @@ def can_agent_see_event(agent: Any, event_or_handoff: Any, now: Any = None) -> b
     # Strict workspace isolation: both must be present and identical.
     if agent_ws is None or item_ws is None or agent_ws != item_ws:
         return False
+
+    # Actor carve-out (ADR 0001): within the workspace, the agent that emitted
+    # the item always sees it - eligibility never excludes the sender from its
+    # own audit trail. Handoffs carry no ``actor_agent_id`` field, so this
+    # resolves to ``None`` for them and changes nothing.
+    actor = _get(event_or_handoff, "actor_agent_id")
+    viewer = _agent_id(agent)
+    if actor is not None and viewer is not None and str(actor) == viewer:
+        return True
 
     visibility = _normalize_visibility(_get(event_or_handoff, "visibility"))
     if visibility == "public":

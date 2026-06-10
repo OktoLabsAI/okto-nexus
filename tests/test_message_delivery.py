@@ -4,10 +4,13 @@ Exercises the DELIVERING ``MessageService`` (deliveries + sessions wired) over
 the real migrated store: the recipient-resolution audience rules (global registry
 for directed/capability/role; workspace participants for broadcast), the critique
 rules (direct->unknown = NOT_FOUND; group zero-match = warning, never silent), the
-sender exclusion, and the end-to-end create -> InboxService.pull flow.
+sender exclusion, the end-to-end create -> InboxService.pull flow, and the
+sender-side ``message_status`` view of each recipient's delivery cycle.
 """
 
 from __future__ import annotations
+
+import inspect
 
 import pytest
 
@@ -47,9 +50,29 @@ def make_service(factory, clock) -> MessageService:
     )
 
 
+def _compat(factory):
+    """Tolerate a ConnectionFactory whose ``unit_of_work`` does not yet accept
+    ``write=`` (the parameter lands in a parallel wave); returns the factory
+    untouched (fully transparent) once the parameter exists."""
+    if "write" in inspect.signature(factory.unit_of_work).parameters:
+        return factory
+
+    class _WriteParamShim:
+        def __init__(self, inner):
+            self._inner = inner
+
+        def __getattr__(self, name):
+            return getattr(self._inner, name)
+
+        def unit_of_work(self, write=True):
+            return self._inner.unit_of_work()
+
+    return _WriteParamShim(factory)
+
+
 def make_inbox(factory, clock) -> InboxService:
     return InboxService(
-        connection_factory=factory,
+        connection_factory=_compat(factory),
         deliveries=SqliteMessageDeliveryRepo(clock),
         messages=SqliteMessageRepo(clock),
         agents=SqliteAgentRepo(clock),
@@ -341,3 +364,52 @@ def test_broadcast_nested_in_mixed_rejected(migrated_factory, fake_clock, tmp_pa
             },
         )
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+# --------------------------------------------------------------------------- #
+# message_status: the sender's end-to-end view of each recipient's cycle
+# --------------------------------------------------------------------------- #
+def test_message_status_tracks_each_recipient_independently(
+    migrated_factory, fake_clock, tmp_path
+):
+    """After a fan-out send, message_status shows the per-recipient lanes as
+    they diverge: one recipient acks, the other lets its lease expire."""
+    proj = mkproj(tmp_path)
+    register(migrated_factory, fake_clock, "alice")
+    register(migrated_factory, fake_clock, "w1", capabilities=["ocr"])
+    register(migrated_factory, fake_clock, "w2", capabilities=["ocr"])
+    svc = make_service(migrated_factory, fake_clock)
+    out = svc.create_message(
+        project_root=proj,
+        from_agent_id="alice",
+        subject="ocr",
+        body="scan",
+        target={"strategy": "capability", "capability": "ocr"},
+    )
+    mid = out["message_id"]
+    inbox = make_inbox(migrated_factory, fake_clock)
+
+    def by_recipient():
+        status = inbox.message_status(message_id=mid)
+        assert status["message_id"] == mid and status["count"] == 2
+        return {d["recipient"]: d for d in status["deliveries"]}
+
+    # Freshly sent: both queued, never claimed.
+    state = by_recipient()
+    assert state["w1"] == {"recipient": "w1", "status": "unread", "attempts": 0, "read_at": None}
+    assert state["w2"] == {"recipient": "w2", "status": "unread", "attempts": 0, "read_at": None}
+
+    # w1 pulls and acks; w2 pulls but goes silent.
+    inbox.pull(agent_id="w1")
+    inbox.ack(agent_id="w1", message_ids=[mid])
+    inbox.pull(agent_id="w2")
+    state = by_recipient()
+    assert state["w1"]["status"] == "read" and state["w1"]["read_at"] is not None
+    assert state["w2"] == {"recipient": "w2", "status": "delivered", "attempts": 1, "read_at": None}
+
+    # w2's lease (default 300s) elapses: the sender sees it as redeliverable
+    # again - NOT silently stuck in 'delivered'.
+    fake_clock.set_iso("2026-06-07T01:00:00Z")
+    state = by_recipient()
+    assert state["w1"]["status"] == "read"  # history is unaffected by time
+    assert state["w2"] == {"recipient": "w2", "status": "unread", "attempts": 1, "read_at": None}

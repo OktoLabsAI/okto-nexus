@@ -115,6 +115,12 @@ class MessageService:
         On ANY rejection (workspace, validation, content size, unknown channel,
         unknown/cross-workspace parent, or a failed event append) neither the
         message row nor the event persists - the whole unit of work rolls back.
+
+        When ``project_root`` resolves to a workspace that did NOT exist yet,
+        the upsert creates it and the response carries ``workspace_created:
+        true`` - a mistyped path silently materialising a phantom workspace is
+        exactly the failure mode this flag surfaces (check it if you expected
+        an existing workspace).
         """
         workspace_id, root_realpath = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
@@ -142,7 +148,9 @@ class MessageService:
         message_id = new_message_id()
 
         with self._cf.unit_of_work() as uow:
-            self._ensure_workspace(uow, workspace_id, root_realpath, now)
+            workspace_created = self._ensure_workspace(
+                uow, workspace_id, root_realpath, now
+            )
             self._require_channel(uow, workspace_id, channel)
             self._require_parent(uow, workspace_id, channel, parent)
 
@@ -208,6 +216,10 @@ class MessageService:
             data["delivered_count"] = len(recipients)
             if warning is not None:
                 data["warning"] = warning
+            if workspace_created:
+                # The upsert materialised a BRAND-NEW workspace: surface it so a
+                # mistyped project_root never creates a phantom silently.
+                data["workspace_created"] = True
         return data
 
     # ------------------------------------------------------------------ #
@@ -290,14 +302,21 @@ class MessageService:
 
     def _ensure_workspace(
         self, uow: UnitOfWork, workspace_id: str, root_realpath: str, now: str
-    ) -> None:
-        """Idempotently ensure the ``workspaces`` row exists (FK parent)."""
+    ) -> bool:
+        """Idempotently ensure the ``workspaces`` row exists (FK parent).
+
+        Returns ``True`` when this call CREATED the row (it did not exist
+        before the upsert), so callers can surface the implicit creation
+        instead of silently materialising a phantom workspace.
+        """
+        created = self._workspaces.get(uow, workspace_id) is None
         self._workspaces.upsert(
             uow,
             workspace_id=workspace_id,
             root_realpath=root_realpath,
             last_seen_at=now,
         )
+        return created
 
     def _seed_channels(self, uow: UnitOfWork, workspace_id: str, now: str) -> None:
         """Create any missing seeded channels for the workspace (idempotent)."""

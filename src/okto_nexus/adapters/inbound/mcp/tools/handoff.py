@@ -28,7 +28,7 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.handoff import HandoffService
-from okto_nexus.envelope import tool_envelope
+from okto_nexus.envelope import require_json_object_param, tool_envelope
 
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
@@ -38,10 +38,16 @@ _P_FROM_AGENT = (
     "Your agent_id (the creator); recorded as the handoff's originator - the owner "
     "is whichever agent later claims it (handoff_claim), not necessarily you."
 )
+#: INVARIANT: byte-identical to the sentence in tools/messages.py so the SAME
+#: concept (a routing target) is documented the SAME way on both tools.
+_P_TARGET_TYPE = (
+    'Pass target as a raw JSON OBJECT (dict), e.g. {"strategy": "direct", '
+    '"agent_id": "<id>"} - NOT as a JSON-encoded string. '
+)
 #: For a handoff the target controls ELIGIBILITY TO CLAIM (competing consumers:
 #: all eligible see it, the first to handoff_claim wins). Spell out the enum.
 _P_TARGET_HANDOFF = (
-    "Routing rule selecting which agents may CLAIM this handoff. REQUIRED. "
+    _P_TARGET_TYPE + "Routing rule selecting which agents may CLAIM this handoff. REQUIRED. "
     "Competing-consumers: every eligible agent sees it but only the first to "
     "handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished "
     "claim's lease expires and it returns to the pool. strategy is one of: direct, "
@@ -65,9 +71,11 @@ _P_VISIBILITY = (
 )
 _P_PAYLOAD = (
     "Inline request body / work content, returned by handoff_list_available and "
-    "handoff_claim so the worker need not correlate the event (optional). A string "
-    "is returned byte-for-byte; a non-string is stored/returned as opaque JSON "
-    "TEXT. For large content, pass an artifact_id reference instead."
+    "handoff_claim so the worker need not correlate the event (optional). Accepts "
+    "a raw JSON object/array, a string, or null - pass dicts as raw JSON objects, "
+    "NOT as JSON-encoded strings. A string is returned byte-for-byte; a non-string "
+    "is stored/returned as opaque JSON TEXT. For large content, pass an "
+    "artifact_id reference instead."
 )
 _P_SESSION_OPT = "Session_id attributing this operation to a specific open session of yours (optional)."
 _P_HANDOFF_AGENT = "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED."
@@ -78,11 +86,11 @@ _P_CURSOR = (
 )
 _P_LIMIT = "Max handoffs per page (optional; default applied by the server, clamped to the maximum)."
 _P_TIMEOUT = (
-    "Long-poll bound in SECONDS for an empty page (optional). >0 blocks until a "
-    "claimable handoff appears or the timeout elapses; 0 OR OMITTED is a single "
-    "non-blocking scan (no sleep) - unlike event_wait, omitting it does NOT "
-    "block. Clamped to the server max wait. BLOCKING (only when >0): "
-    "parks your turn - see the server instructions."
+    "Long-poll bound in SECONDS for an empty page (optional). 0 OR OMITTED is a "
+    "single non-blocking scan (no sleep) - the same safe default as event_wait. "
+    ">0 OPTS IN to blocking until a claimable handoff appears or the timeout "
+    "elapses (clamped to the server max wait). BLOCKING (only when >0): parks "
+    "your turn - see the server instructions."
 )
 _P_RESULT = "Completion result (string or JSON) recorded with handoff.completed (optional)."
 _P_REASON = "Human-readable reason recorded with the rejection (optional)."
@@ -124,18 +132,21 @@ def register(server: Any, deps: Any) -> None:
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
         target: Annotated[Any, Field(description=_P_TARGET_HANDOFF)],
         visibility: Annotated[str, Field(description=_P_VISIBILITY)],
-        payload: Annotated[str | None, Field(description=_P_PAYLOAD)] = None,
+        payload: Annotated[Any, Field(description=_P_PAYLOAD)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
     ) -> dict[str, Any]:
         """Create an OPEN handoff after validating target/visibility; emit handoff.created.
 
-        The optional ``payload`` (the inline request body / work content) is
-        persisted with the row and returned by ``handoff_list_available`` and
-        ``handoff_claim`` - the worker never has to correlate the
-        ``handoff.created`` event to read it. A string is returned byte-for-byte;
-        a non-string value is stored/returned as opaque JSON TEXT (not re-parsed).
-        For large content, pass an ``artifact_id`` reference instead.
+        The optional ``payload`` (the inline request body / work content) is any
+        JSON value - pass a dict/list as a raw JSON object/array (NO
+        JSON-escaping needed). It is persisted with the row and returned by
+        ``handoff_list_available`` and ``handoff_claim`` - the worker never has
+        to correlate the ``handoff.created`` event to read it. A string is
+        returned byte-for-byte; a non-string value is stored/returned as opaque
+        JSON TEXT (not re-parsed). For large content, pass an ``artifact_id``
+        reference instead.
         """
+        require_json_object_param("target", target, required=True)
         return service.handoff_create(
             project_root=project_root,
             from_agent_id=from_agent_id,
@@ -150,14 +161,17 @@ def register(server: Any, deps: Any) -> None:
     def handoff_list_available(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
-        cursor: Annotated[str | None, Field(description=_P_CURSOR)] = None,
-        limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
-        timeout_seconds: Annotated[int | None, Field(description=_P_TIMEOUT)] = None,
+        cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
+        limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
+        timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
         """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated).
 
         Each entry includes the handoff ``payload`` so a worker can triage the
-        work BEFORE claiming it.
+        work BEFORE claiming it. ``cursor``/``limit``/``timeout_seconds`` are
+        annotated ``Any`` on purpose: the application layer validates them so a
+        wrong type returns the canonical ``VALIDATION_ERROR`` envelope, not an
+        SDK validation error.
         """
         return service.handoff_list_available(
             project_root=project_root,

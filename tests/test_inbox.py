@@ -15,6 +15,7 @@ import pytest
 
 from okto_nexus.domain.inbox import (
     DELIVERY_DELIVERED,
+    DELIVERY_PARKED,
     DELIVERY_READ,
     DELIVERY_STATUSES,
     DELIVERY_UNREAD,
@@ -44,11 +45,17 @@ def _agent(agent_id, role=None, capabilities=None):
 # Status vocabulary + ids + model
 # --------------------------------------------------------------------------- #
 def test_delivery_status_vocabulary():
-    assert DELIVERY_STATUSES == {DELIVERY_UNREAD, DELIVERY_DELIVERED, DELIVERY_READ}
-    assert (DELIVERY_UNREAD, DELIVERY_DELIVERED, DELIVERY_READ) == (
+    assert DELIVERY_STATUSES == {
+        DELIVERY_UNREAD,
+        DELIVERY_DELIVERED,
+        DELIVERY_READ,
+        DELIVERY_PARKED,
+    }
+    assert (DELIVERY_UNREAD, DELIVERY_DELIVERED, DELIVERY_READ, DELIVERY_PARKED) == (
         "unread",
         "delivered",
         "read",
+        "parked",
     )
 
 
@@ -286,7 +293,9 @@ def test_migration_005_creates_message_deliveries(migrated_factory):
         assert "message_deliveries" in tables
 
         cols = {r[1] for r in conn.execute("PRAGMA table_info(message_deliveries)").fetchall()}
-        assert cols == {
+        # 005's columns are all present (later migrations may add more - 006
+        # adds `attempts` - so this is a superset check, not equality).
+        assert cols >= {
             "delivery_id",
             "message_id",
             "recipient_agent_id",
@@ -339,5 +348,60 @@ def test_migration_005_enforces_one_delivery_per_message_recipient(migrated_fact
                 "VALUES ('d2', 'm1', 'a', 'unread', ?)",
                 (NOW,),
             )
+    finally:
+        conn.close()
+
+
+# --------------------------------------------------------------------------- #
+# Migration 006 — delivery hardening (attempts counter + history keyset index)
+# --------------------------------------------------------------------------- #
+def test_migration_006_adds_attempts_defaulting_to_zero(migrated_factory):
+    """A delivery inserted WITHOUT attempts gets 0 (NOT NULL DEFAULT 0)."""
+    conn = migrated_factory.get_connection()
+    try:
+        conn.execute(
+            "INSERT INTO workspaces (workspace_id, created_at) VALUES ('ws1', ?)", (NOW,)
+        )
+        conn.execute("INSERT INTO agents (agent_id, created_at) VALUES ('a', ?)", (NOW,))
+        conn.execute(
+            "INSERT INTO messages (message_id, workspace_id, from_agent_id, created_at) "
+            "VALUES ('m1', 'ws1', 'a', ?)",
+            (NOW,),
+        )
+        # Pre-006-style insert (no attempts column named) must still work...
+        conn.execute(
+            "INSERT INTO message_deliveries "
+            "(delivery_id, message_id, recipient_agent_id, status, created_at) "
+            "VALUES ('d1', 'm1', 'a', 'unread', ?)",
+            (NOW,),
+        )
+        # ...and read back as 0, never NULL.
+        row = conn.execute(
+            "SELECT attempts FROM message_deliveries WHERE delivery_id = 'd1'"
+        ).fetchone()
+        assert row["attempts"] == 0
+        with pytest.raises(sqlite3.IntegrityError):
+            conn.execute(
+                "UPDATE message_deliveries SET attempts = NULL WHERE delivery_id = 'd1'"
+            )
+    finally:
+        conn.close()
+
+
+def test_migration_006_recorded_and_history_index_present(migrated_factory):
+    conn = migrated_factory.get_connection()
+    try:
+        indexes = {
+            r[0]
+            for r in conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='index' "
+                "AND tbl_name='message_deliveries'"
+            ).fetchall()
+        }
+        assert "idx_deliveries_history" in indexes
+        versions = {
+            r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
+        }
+        assert 6 in versions
     finally:
         conn.close()

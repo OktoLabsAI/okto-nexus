@@ -23,8 +23,9 @@ from typing import Any, Mapping, Optional
 
 from ....application.ports import Clock, UnitOfWork
 from ....domain.base import utc_now_iso
+from ....domain.events import validate_emit_vocabulary
 from ....domain.models import Event
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 _COLUMNS = (
     "event_id, workspace_id, stream, type, actor_agent_id, "
@@ -50,11 +51,8 @@ def _loads(text: str | None) -> Any:
 
 
 def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
-    return OktoNexusError(
-        ErrorCode.DB_ERROR,
-        f"SQLite failure while {action}.",
-        {"reason": str(exc)},
-    )
+    # Centralised classification: lock/busy contention => retryable=True.
+    return db_error_from_exception(action, exc)
 
 
 class SqliteEventRepo:
@@ -85,7 +83,14 @@ class SqliteEventRepo:
         ``event_id`` is assigned by SQLite (AUTOINCREMENT) within the active
         transaction, so under the WAL single-writer it is globally monotonic and
         never reused.
+
+        Fail-closed vocabulary gate: ``stream``/``type``/``visibility`` are
+        validated against :mod:`okto_nexus.domain.events` BEFORE the INSERT, so
+        an out-of-vocabulary value (a producer bug) raises ``INTERNAL_ERROR``
+        and never persists - a garbage row would be invisible to every log
+        consumer and silently break the observability chain.
         """
+        validate_emit_vocabulary(stream=stream, type=type, visibility=visibility)
         created_at = self._now()
         try:
             cur = uow.connection.execute(
@@ -122,24 +127,27 @@ class SqliteEventRepo:
         uow: UnitOfWork,
         *,
         workspace_id: str,
-        stream: str,
+        stream: str | None = None,
         cursor: int = 0,
         limit: int = 100,
         filters: Mapping[str, Any] | None = None,
     ) -> list[Event]:
-        """Return events with ``event_id > cursor`` for ``(workspace, stream)``.
+        """Return events with ``event_id > cursor`` for the workspace.
 
-        Strictly ascending by ``event_id`` (the only ordering, per the spec),
-        bounded by ``limit``. Optional column-level ``filters`` (``type`` and
-        ``agent_id`` -> ``actor_agent_id``) are honoured for port fidelity; the
-        application service passes ``filters=None`` and applies all filtering
-        itself so ``next_cursor`` can advance past every discarded event.
+        ``stream`` selects a single stream; ``stream=None`` selects ALL streams
+        of the workspace (the semantics shared.md's Recent Events relies on -
+        the WHERE clause is conditional, never ``stream = NULL``). Strictly
+        ascending by ``event_id`` (the only ordering, per the spec), bounded by
+        ``limit``. Optional column-level ``filters`` (``type`` and ``agent_id``
+        -> ``actor_agent_id``) are honoured for port fidelity; the application
+        service passes ``filters=None`` and applies all filtering itself so
+        ``next_cursor`` can advance past every discarded event.
         """
-        sql = (
-            f"SELECT {_COLUMNS} FROM events "
-            "WHERE workspace_id = ? AND stream = ? AND event_id > ?"
-        )
-        params: list[Any] = [workspace_id, stream, int(cursor)]
+        sql = f"SELECT {_COLUMNS} FROM events WHERE workspace_id = ? AND event_id > ?"
+        params: list[Any] = [workspace_id, int(cursor)]
+        if stream is not None:
+            sql += " AND stream = ?"
+            params.append(stream)
         if filters:
             if filters.get("type") is not None:
                 sql += " AND type = ?"
@@ -193,7 +201,11 @@ class SqliteEventEmitter:
         visibility: str | None = None,
         target: str | None = None,
     ) -> int:
-        """Emit an event inside ``uow``; return the assigned ``event_id``."""
+        """Emit an event inside ``uow``; return the assigned ``event_id``.
+
+        Inherits the fail-closed vocabulary gate from :meth:`SqliteEventRepo.append`
+        (out-of-vocabulary stream/type/visibility -> ``INTERNAL_ERROR``, no row).
+        """
         return self._repo.append(
             uow,
             workspace_id=workspace_id,

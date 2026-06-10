@@ -9,6 +9,11 @@ The atomic claim is a single conditional UPDATE
 ``... WHERE handoff_id=? AND status='OPEN' AND workspace_id=?`` whose affected
 row count decides the outcome (1 => winner; 0 => reload + structured catalogue
 error). There is NO SELECT-then-UPDATE on the claim winner path (no TOCTOU).
+Terminal transitions mirror the same shape: :meth:`SqliteHandoffRepo.transition_claimed`
+re-asserts ``status='CLAIMED' AND claimed_by=?`` and
+:meth:`SqliteHandoffRepo.reject_open` re-asserts ``status='OPEN'`` in the WHERE
+clause, so correctness comes from the row predicate - never from snapshot
+isolation side effects.
 
 This is an outbound adapter, so it may import ``sqlite3`` and the domain
 dataclasses. The ``target`` descriptor is stored as a TEXT (JSON) string by the
@@ -22,17 +27,14 @@ from typing import Any, Optional
 
 from ....application.ports import Clock, UnitOfWork
 from ....domain.base import utc_now_iso
-from ....domain.handoff import STATUS_CLAIMED, STATUS_OPEN
+from ....domain.handoff import STATUS_CLAIMED, STATUS_OPEN, STATUS_REJECTED
 from ....domain.models import Handoff, Task
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
-    return OktoNexusError(
-        ErrorCode.DB_ERROR,
-        f"SQLite failure while {action}.",
-        {"reason": str(exc)},
-    )
+    # Centralised classification: lock/busy contention => retryable=True.
+    return db_error_from_exception(action, exc)
 
 
 class _ClockBacked:
@@ -345,6 +347,71 @@ class SqliteHandoffRepo(_ClockBacked):
             return None
         return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
 
+    def transition_claimed(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_id: str,
+        claimed_by: str,
+        status: str,
+        updated_at: str | None = None,
+    ) -> Handoff | None:
+        """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
+
+        Mirrors :meth:`claim`: the WHERE clause re-asserts
+        ``status='CLAIMED' AND claimed_by=?`` so a stale caller (lease expired,
+        different claimant, already terminal) affects 0 rows instead of
+        clobbering the row. Returns the updated row, or ``None`` when 0 rows
+        were affected - the caller re-reads to raise the precise catalogue
+        error.
+        """
+        now = updated_at or self._now()
+        try:
+            cur = uow.connection.execute(
+                """
+                UPDATE handoffs
+                   SET status = ?, updated_at = ?
+                 WHERE handoff_id = ? AND workspace_id = ?
+                   AND status = ? AND claimed_by = ?
+                """,
+                (status, now, handoff_id, workspace_id, STATUS_CLAIMED, claimed_by),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("transitioning claimed handoff", exc) from exc
+        if cur.rowcount == 0:
+            return None
+        return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+
+    def reject_open(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_id: str,
+        updated_at: str | None = None,
+    ) -> Handoff | None:
+        """Conditionally reject an unclaimed OPEN handoff (direct-target path).
+
+        Same contract as :meth:`transition_claimed`: the WHERE clause
+        re-asserts ``status='OPEN'``; ``None`` on 0 affected rows.
+        """
+        now = updated_at or self._now()
+        try:
+            cur = uow.connection.execute(
+                """
+                UPDATE handoffs
+                   SET status = ?, updated_at = ?
+                 WHERE handoff_id = ? AND workspace_id = ? AND status = ?
+                """,
+                (STATUS_REJECTED, now, handoff_id, workspace_id, STATUS_OPEN),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("rejecting open handoff", exc) from exc
+        if cur.rowcount == 0:
+            return None
+        return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+
     def update_status(
         self,
         uow: UnitOfWork,
@@ -354,6 +421,12 @@ class SqliteHandoffRepo(_ClockBacked):
         status: str,
         updated_at: str | None = None,
     ) -> Handoff:
+        """Unconditional status write (port method).
+
+        Lifecycle transitions (complete/reject) must NOT use this - they go
+        through :meth:`transition_claimed` / :meth:`reject_open` so the state
+        precondition is re-asserted in the UPDATE itself.
+        """
         now = updated_at or self._now()
         try:
             cur = uow.connection.execute(
