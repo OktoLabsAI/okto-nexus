@@ -12,10 +12,11 @@ Usage::
     okto-nexus tail --project-root <path> --agent-id <id> \
         [--stream workspace|agent|task|handoff] \
         [--from latest|0|<event_id>] \
+        [--cursor-file PATH] \
         [--from-agent <id>] [--exclude-agent <id>] \
         [--limit N] [--timeout-seconds N] [--once]
 
-As a background MONITOR, two things matter beyond the happy path:
+As a background MONITOR, four things matter beyond the happy path:
 
 * Author filtering. The follower emits EVERY visible event, including the
   caller's OWN - so a naive monitor would react to its own echo. Use
@@ -30,6 +31,21 @@ As a background MONITOR, two things matter beyond the happy path:
   follow loop retries those with bounded backoff (so a long-running monitor is
   not killed by contention) while failing fast on terminal errors and surfacing
   a transient that will not clear.
+
+* Resume. ``--cursor-file PATH`` (opt-in; the CONSUMER owns the path - there is
+  no default/global file) checkpoints the window's ``next_cursor`` after every
+  non-empty flushed window, atomically (tmp + ``os.replace``), and never on a
+  timed-out window. On start an existing, parseable file PRECEDES ``--from``
+  (a notice goes to stderr); a missing file falls back to ``--from``; a
+  corrupted file is a fail-closed ``CONFIG_ERROR`` (exit 1). Resume is
+  EXCLUSIVE (``event_wait`` scans ``event_id > cursor``), so a crash between
+  flush and persist re-emits AT MOST one window - at-least-once delivery,
+  coherent with the inbox lease/ack model of ADR 0001.
+
+* Presence. The follower is a PASSIVE observer: unlike the MCP ``event_get`` /
+  ``event_wait`` tools, it NEVER stamps the agent's ``last_seen_at`` (its
+  service is built with ``touch_on_read=False``), so a detached monitor cannot
+  hold an otherwise-idle agent's liveness signal eternally fresh.
 
 Any flag this subcommand does not recognise (e.g. ``--home`` / ``--db-path``)
 is forwarded verbatim to the same fail-closed ``bootstrap`` the server uses, so
@@ -49,6 +65,7 @@ import time
 from collections.abc import Mapping, Sequence
 from typing import Any, Callable, TextIO
 
+from okto_nexus.application.events import EventService
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
 from ..mcp.server import bootstrap
@@ -119,6 +136,19 @@ def _build_parser() -> argparse.ArgumentParser:
         help=(
             "Start cursor: 'latest' (follow only new events, default), "
             "'0' (from the beginning), or an explicit event_id."
+        ),
+    )
+    parser.add_argument(
+        "--cursor-file",
+        dest="cursor_file",
+        default=None,
+        metavar="PATH",
+        help=(
+            "Opt-in resume checkpoint owned by THIS consumer (no default/global "
+            'path). If PATH exists it must contain JSON {"next_cursor": N} and '
+            "PRECEDES --from (notice on stderr); if absent, --from applies and "
+            "the file is created after the first non-empty window. A corrupted "
+            "file is a fail-closed CONFIG_ERROR (exit 1)."
         ),
     )
     parser.add_argument(
@@ -217,6 +247,66 @@ def _resolve_start_cursor(service: Any, ns: argparse.Namespace) -> int:
     return value
 
 
+def _load_cursor_file(path: str) -> int | None:
+    """Read the persisted resume cursor from ``path`` (the ``--cursor-file`` seam).
+
+    Returns ``None`` when the file does not exist (the caller falls back to
+    ``--from``). An existing file must contain JSON ``{"next_cursor": N}`` with
+    a non-negative integer; anything else (unreadable, non-JSON, wrong shape,
+    bool, negative) raises a fail-closed ``CONFIG_ERROR`` - silently resuming
+    from a guessed position would replay or skip events, defeating the gap-free
+    guarantee the flag exists for.
+    """
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except (OSError, ValueError) as exc:
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"--cursor-file {path} exists but is unreadable or not valid "
+            "JSON. Fix or delete the file (it is recreated on the next "
+            "non-empty window), or start fresh with --from.",
+            {"cursor_file": path, "reason": str(exc)},
+        ) from exc
+    cursor = data.get("next_cursor") if isinstance(data, Mapping) else None
+    if isinstance(cursor, bool) or not isinstance(cursor, int) or cursor < 0:
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"--cursor-file {path} must contain JSON "
+            '{"next_cursor": <non-negative int>}. Fix or delete the file, or '
+            "start fresh with --from.",
+            {"cursor_file": path, "next_cursor": cursor},
+        )
+    return cursor
+
+
+def _persist_cursor(path: str, next_cursor: int) -> None:
+    """Atomically checkpoint ``next_cursor`` to ``path`` (tmp + ``os.replace``).
+
+    The replace is atomic, so a crash mid-write never leaves a torn file: on
+    restart the consumer resumes either from the PREVIOUS checkpoint (at most
+    one already-flushed window re-emitted - at-least-once, coherent with ADR
+    0001) or from the new one, never from garbage. A persistence failure is a
+    fail-closed ``CONFIG_ERROR``: a follower that silently stopped
+    checkpointing would replay an unbounded backlog on its next start.
+    """
+    tmp = f"{path}.tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump({"next_cursor": int(next_cursor)}, fh)
+        os.replace(tmp, path)
+    except OSError as exc:
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"--cursor-file {path} could not be written (cursor checkpointing "
+            "is fail-closed). Ensure the directory exists and is writable, or "
+            "drop --cursor-file to follow without resume.",
+            {"cursor_file": path, "reason": str(exc)},
+        ) from exc
+
+
 def stream_events(
     service: Any,
     ns: argparse.Namespace,
@@ -243,10 +333,18 @@ def stream_events(
     Terminal errors fail fast, and a transient that exhausts the retry budget is
     re-raised (surfaced on stderr + exit 1) rather than silently swallowed. The
     cursor is NOT advanced across a failed poll, so no event is ever skipped.
+
+    Checkpointing: when ``--cursor-file`` is set, the window's ``next_cursor``
+    is persisted atomically (:func:`_persist_cursor`) after each NON-EMPTY
+    window has been flushed - never on a timed-out window (its cursor is the
+    unchanged entry cursor; rewriting it adds only a stale-data race). Resume
+    is EXCLUSIVE (``event_id > cursor``): a crash between flush and persist
+    re-emits at most ONE window on restart (at-least-once, per ADR 0001).
     """
     cursor = start_cursor
     filters = {"agent_id": ns.from_agent} if getattr(ns, "from_agent", None) else None
     exclude = getattr(ns, "exclude_agent", None)
+    cursor_file = getattr(ns, "cursor_file", None)
     consecutive_transient = 0
     try:
         while True:
@@ -292,6 +390,11 @@ def stream_events(
                 out.write(json.dumps(event, ensure_ascii=True) + "\n")
                 out.flush()
             cursor = page["next_cursor"]
+            if cursor_file is not None and page["events"]:
+                # Checkpoint AFTER the flushed window (a window whose events
+                # were all dropped client-side was still consumed). Timed-out
+                # windows never reach here with events, so they never write.
+                _persist_cursor(cursor_file, cursor)
             if ns.once:
                 return 0
     except KeyboardInterrupt:
@@ -315,8 +418,11 @@ def run_tail(
     Unknown flags are forwarded to ``bootstrap`` (config precedence preserved).
     ``service_factory`` is an injection seam for tests: ``(env, extra_argv) ->
     service``; in production the real fail-closed bootstrap + event service are
-    used. Any :class:`OktoNexusError` (bad workspace/stream/config/...) is
-    reported to stderr and mapped to exit code 1.
+    used, built as a PASSIVE observer (``touch_on_read=False``) so tailing
+    never stamps the agent's ``last_seen_at``. An existing ``--cursor-file``
+    checkpoint takes precedence over ``--from`` (notice on stderr). Any
+    :class:`OktoNexusError` (bad workspace/stream/config/...) is reported to
+    stderr and mapped to exit code 1.
     """
     parser = _build_parser()
     ns, extra = parser.parse_known_args(list(argv))
@@ -337,12 +443,41 @@ def run_tail(
                 "loop would busy-spin (event_wait returns without sleeping).",
                 {"timeout_seconds": ns.timeout_seconds},
             )
+        # Validate/load the opt-in resume checkpoint BEFORE any service work:
+        # a corrupted cursor file must fail closed without polling the bus.
+        resume_cursor: int | None = None
+        if ns.cursor_file:
+            resume_cursor = _load_cursor_file(ns.cursor_file)
         if service_factory is not None:
             service = service_factory(environ, extra)
         else:
             deps = bootstrap(environ, extra)
-            service = build_service(deps)
-        start_cursor = _resolve_start_cursor(service, ns)
+            # Reuse the canonical composition root for the (idempotent) repo
+            # wiring, then build THIS process's service as a PASSIVE observer:
+            # a detached follower reading the log is observation, not
+            # activity, so it must never stamp the agent's ``last_seen_at``
+            # (``touch_on_read=False``). The MCP server keeps its default
+            # presence-stamping wiring (``build_service(deps)``) unchanged.
+            build_service(deps)
+            service = EventService(
+                connection_factory=deps.connection_factory,
+                events=deps.repos.events,
+                agents=deps.repos.agents,
+                clock=deps.clock,
+                config=deps.config,
+                max_limit=deps.config.max_event_limit,
+                touch_on_read=False,
+            )
+        if resume_cursor is not None:
+            print(
+                f"[okto-nexus tail] resuming from --cursor-file "
+                f"{ns.cursor_file} (next_cursor={resume_cursor}; takes "
+                "precedence over --from)",
+                file=sys.stderr,
+            )
+            start_cursor = resume_cursor
+        else:
+            start_cursor = _resolve_start_cursor(service, ns)
         return stream_events(service, ns, sink, start_cursor=start_cursor)
     except KeyboardInterrupt:
         # SIGINT during ``--from latest`` resolution (before the follow loop)

@@ -156,7 +156,7 @@ workspace** — it gates on "you have a delivery row (or you are the sender)."
 | `message_create` (changed) | resolve recipients at send time, write deliveries, emit `message.created`. Returns `{message_id, event_id, recipients:[…], delivered_count, warning?}` | inserts `unread` deliveries |
 | `inbox_pull(agent_id, limit?)` | the index-free "give me my messages": returns unread (materialised), flips to `delivered`, sets lease | `unread → delivered` |
 | `inbox_ack(agent_id, message_ids)` | move the recipient's entries for those messages to history (idempotent by message_id) | `unread`/`delivered → read` |
-| `inbox_peek(agent_id, limit?)` | view unread/in-flight WITHOUT consuming; sweeps expired leases first | reopens expired leases |
+| `inbox_peek(agent_id, limit?)` | view unread/in-flight WITHOUT consuming — envelope-only (`body_preview`/`body_bytes`; full body via `inbox_pull`, or `include_bodies=true`); sweeps expired leases first | reopens expired leases |
 | `inbox_count(agent_id)` | `{unread, in_flight, read}` counts; sweeps expired leases first | reopens expired leases |
 | `inbox_history(agent_id, cursor?)` | the read lane (paginated) | none |
 

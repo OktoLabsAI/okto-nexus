@@ -74,12 +74,12 @@ def _list(backend: _Backend, **kwargs):
 # --------------------------------------------------------------------------- #
 def test_contract_list_after_stream_none_selects_all_streams(backend):
     _append(backend, stream="workspace", type="w.1")
-    _append(backend, stream="task", type="t.1")
-    _append(backend, stream="handoff", type="h.1")
     _append(backend, stream="agent", type="a.1")
+    _append(backend, stream="handoff", type="h.1")
+    _append(backend, stream="agent", type="a.2")
 
     rows = _list(backend, stream=None)
-    assert [e.type for e in rows] == ["w.1", "t.1", "h.1", "a.1"]
+    assert [e.type for e in rows] == ["w.1", "a.1", "h.1", "a.2"]
     ids = [e.event_id for e in rows]
     assert ids == sorted(ids)  # oldest-first, ascending event_id
 
@@ -87,18 +87,18 @@ def test_contract_list_after_stream_none_selects_all_streams(backend):
 def test_contract_list_after_default_stream_is_all_streams(backend):
     # The port signature defaults ``stream=None``: omitting it == all streams.
     _append(backend, stream="workspace", type="w.1")
-    _append(backend, stream="task", type="t.1")
+    _append(backend, stream="agent", type="a.1")
     with backend.uow() as uow:
         rows = backend.repo.list_after(uow, workspace_id=WS_A)
-    assert [e.type for e in rows] == ["w.1", "t.1"]
+    assert [e.type for e in rows] == ["w.1", "a.1"]
 
 
 def test_contract_list_after_single_stream_filters(backend):
     _append(backend, stream="workspace", type="w.1")
-    _append(backend, stream="task", type="t.1")
-    _append(backend, stream="task", type="t.2")
+    _append(backend, stream="agent", type="a.1")
+    _append(backend, stream="agent", type="a.2")
 
-    assert [e.type for e in _list(backend, stream="task")] == ["t.1", "t.2"]
+    assert [e.type for e in _list(backend, stream="agent")] == ["a.1", "a.2"]
     assert [e.type for e in _list(backend, stream="workspace")] == ["w.1"]
     assert _list(backend, stream="handoff") == []
 
@@ -106,7 +106,7 @@ def test_contract_list_after_single_stream_filters(backend):
 def test_contract_list_after_cursor_and_limit_with_stream_none(backend):
     ids = [
         _append(backend, stream=s, type=f"e{i}")
-        for i, s in enumerate(("workspace", "task", "handoff", "agent", "workspace"))
+        for i, s in enumerate(("workspace", "agent", "handoff", "agent", "workspace"))
     ]
 
     after = _list(backend, stream=None, cursor=ids[1])
@@ -137,6 +137,7 @@ def test_contract_list_after_is_workspace_scoped_with_stream_none(backend):
     "bad_kwargs",
     [
         {"stream": "session"},  # the exact identity-slice production bug
+        {"stream": "task"},  # removed with the dead V1 Task subsystem
         {"stream": ""},
         {"stream": None},
         {"visibility": "workspace"},  # the exact identity-slice production bug

@@ -53,7 +53,14 @@ class _ClockBacked:
 # Tasks
 # --------------------------------------------------------------------------- #
 class SqliteTaskRepo(_ClockBacked):
-    """Persistence for ``tasks`` rows (workspace-scoped)."""
+    """Persistence for ``tasks`` rows (workspace-scoped).
+
+    DEAD in V1: the Task subsystem has no producer (no MCP tool creates a
+    task and ``handoff_create`` no longer accepts ``task_id``). The class is
+    kept ONLY because the server composition root (``server.py``) and the
+    ``Repos`` registry (``application/ports.py``) still reference it; delete
+    it together with that wiring.
+    """
 
     _COLUMNS = "task_id, workspace_id, title, description, status, created_by, created_at"
 
@@ -356,26 +363,37 @@ class SqliteHandoffRepo(_ClockBacked):
         claimed_by: str,
         status: str,
         updated_at: str | None = None,
+        result: str | None = None,
+        rejected_reason: str | None = None,
     ) -> Handoff | None:
         """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
 
         Mirrors :meth:`claim`: the WHERE clause re-asserts
         ``status='CLAIMED' AND claimed_by=?`` so a stale caller (lease expired,
         different claimant, already terminal) affects 0 rows instead of
-        clobbering the row. Returns the updated row, or ``None`` when 0 rows
-        were affected - the caller re-reads to raise the precise catalogue
-        error.
+        clobbering the row. The terminal outcome (``result`` on complete,
+        ``rejected_reason`` on reject - already serialised TEXT) is written in
+        the SAME conditional UPDATE that changes the status, so the row and
+        its outcome can never disagree. Returns the updated row, or ``None``
+        when 0 rows were affected - the caller re-reads to raise the precise
+        catalogue error.
         """
         now = updated_at or self._now()
+        sets = ["status = ?", "updated_at = ?"]
+        params: list[Any] = [status, now]
+        if result is not None:
+            sets.append("result = ?")
+            params.append(result)
+        if rejected_reason is not None:
+            sets.append("rejected_reason = ?")
+            params.append(rejected_reason)
+        params.extend([handoff_id, workspace_id, STATUS_CLAIMED, claimed_by])
         try:
             cur = uow.connection.execute(
-                """
-                UPDATE handoffs
-                   SET status = ?, updated_at = ?
-                 WHERE handoff_id = ? AND workspace_id = ?
-                   AND status = ? AND claimed_by = ?
-                """,
-                (status, now, handoff_id, workspace_id, STATUS_CLAIMED, claimed_by),
+                f"UPDATE handoffs SET {', '.join(sets)} "
+                "WHERE handoff_id = ? AND workspace_id = ? "
+                "AND status = ? AND claimed_by = ?",
+                tuple(params),
             )
         except sqlite3.Error as exc:
             raise _db_error("transitioning claimed handoff", exc) from exc
@@ -390,27 +408,56 @@ class SqliteHandoffRepo(_ClockBacked):
         workspace_id: str,
         handoff_id: str,
         updated_at: str | None = None,
+        rejected_reason: str | None = None,
     ) -> Handoff | None:
         """Conditionally reject an unclaimed OPEN handoff (direct-target path).
 
         Same contract as :meth:`transition_claimed`: the WHERE clause
-        re-asserts ``status='OPEN'``; ``None`` on 0 affected rows.
+        re-asserts ``status='OPEN'`` and the optional ``rejected_reason``
+        (serialised TEXT) rides the same UPDATE; ``None`` on 0 affected rows.
         """
         now = updated_at or self._now()
+        sets = ["status = ?", "updated_at = ?"]
+        params: list[Any] = [STATUS_REJECTED, now]
+        if rejected_reason is not None:
+            sets.append("rejected_reason = ?")
+            params.append(rejected_reason)
+        params.extend([handoff_id, workspace_id, STATUS_OPEN])
         try:
             cur = uow.connection.execute(
-                """
-                UPDATE handoffs
-                   SET status = ?, updated_at = ?
-                 WHERE handoff_id = ? AND workspace_id = ? AND status = ?
-                """,
-                (STATUS_REJECTED, now, handoff_id, workspace_id, STATUS_OPEN),
+                f"UPDATE handoffs SET {', '.join(sets)} "
+                "WHERE handoff_id = ? AND workspace_id = ? AND status = ?",
+                tuple(params),
             )
         except sqlite3.Error as exc:
             raise _db_error("rejecting open handoff", exc) from exc
         if cur.rowcount == 0:
             return None
         return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+
+    def read_outcome(
+        self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str
+    ) -> dict[str, str | None] | None:
+        """Return ``{"result", "rejected_reason"}`` for a handoff, or ``None``.
+
+        The outcome columns (migration 008) are read separately from the
+        :class:`Handoff` dataclass so the shared domain model is untouched;
+        the values are the serialised TEXT written by
+        :meth:`transition_claimed` / :meth:`reject_open` (opaque, returned
+        verbatim - the same contract as ``payload``).
+        """
+        try:
+            cur = uow.connection.execute(
+                "SELECT result, rejected_reason FROM handoffs "
+                "WHERE workspace_id = ? AND handoff_id = ?",
+                (workspace_id, handoff_id),
+            )
+            row = cur.fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("reading handoff outcome", exc) from exc
+        if row is None:
+            return None
+        return {"result": row["result"], "rejected_reason": row["rejected_reason"]}
 
     def update_status(
         self,

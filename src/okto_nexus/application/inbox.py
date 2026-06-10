@@ -9,7 +9,10 @@ Implements the GLOBAL, index-free message inbox as a robust queue:
   delivery that exhausts its claim attempts is ``parked`` (dead-letter).
 * ``ack``     - move the recipient's pulled deliveries to ``read`` (history).
 * ``extend``  - renew the lease of in-flight deliveries (long turns).
-* ``peek``    - READ-ONLY view of pending (``unread`` + in-flight) items.
+* ``peek``    - READ-ONLY, envelope-only view of pending (``unread`` +
+  in-flight) items: triage metadata plus a bounded ``body_preview`` /
+  ``body_bytes`` instead of the full body (``include_bodies=True`` opts back
+  into full bodies; ``pull`` is the consumption path).
 * ``count``   - READ-ONLY ``{unread, in_flight, read}`` lane sizes.
 * ``history`` - the ``read`` lane, newest-first, keyset-paginated.
 * ``message_status`` - READ-ONLY sender-side view of one message's deliveries.
@@ -33,7 +36,7 @@ from __future__ import annotations
 from typing import Any
 
 from ..config import DEFAULT_INBOX_LEASE_TTL_SECONDS
-from ..domain.base import clamp_limit, iso_plus
+from ..domain.base import clamp_limit, iso_plus, utf8_byte_len
 from ..domain.inbox import (
     DELIVERY_DELIVERED,
     DELIVERY_PARKED,
@@ -59,6 +62,10 @@ MAX_LEASE_SECONDS = 3600
 #: instead of redelivered. Module constant for now; moves to configuration in
 #: a later wave.
 DEFAULT_MAX_DELIVERY_ATTEMPTS = 5
+#: Characters of ``message.body`` surfaced as ``body_preview`` by the
+#: envelope-only ``peek`` projection - enough to triage who/what without
+#: materialising up to ``max_inline_bytes`` (64KB) per item in a polling read.
+PEEK_BODY_PREVIEW_CHARS = 200
 
 #: Separator of the opaque history cursor (``<read_at>~<delivery_id>``).
 _HISTORY_CURSOR_SEP = "~"
@@ -184,7 +191,12 @@ class InboxService:
     # inbox_peek
     # ------------------------------------------------------------------ #
     def peek(
-        self, *, agent_id: Any, limit: Any = None, include_parked: Any = False
+        self,
+        *,
+        agent_id: Any,
+        limit: Any = None,
+        include_parked: Any = False,
+        include_bodies: Any = False,
     ) -> dict[str, Any]:
         """View pending deliveries (unread + in-flight) WITHOUT consuming them.
 
@@ -192,15 +204,27 @@ class InboxService:
         delivery whose lease elapsed is shown as ``unread`` (its effective
         lane, computed at read time). ``include_parked=True`` additionally
         surfaces the dead-letter lane.
+
+        Envelope-only by default: each item carries the triage metadata plus
+        ``body_preview`` (first ``PEEK_BODY_PREVIEW_CHARS`` characters) and
+        ``body_bytes`` (UTF-8 size of the full body) instead of ``body`` -
+        a worst-case peek would otherwise materialise up to
+        ``limit x max_inline_bytes`` of body text just to poll.
+        ``include_bodies=True`` opts back into full bodies; ``pull`` (the
+        consumption path) and ``history`` always return them.
         """
         aid = self._require_agent_id(agent_id)
         page_limit = self._clamp_limit(limit)
-        if not isinstance(include_parked, bool):
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "include_parked must be a boolean.",
-                {"include_parked": include_parked},
-            )
+        for field, value in (
+            ("include_parked", include_parked),
+            ("include_bodies", include_bodies),
+        ):
+            if not isinstance(value, bool):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"{field} must be a boolean.",
+                    {field: value},
+                )
         statuses: tuple[str, ...] = (DELIVERY_UNREAD, DELIVERY_DELIVERED)
         if include_parked:
             statuses = statuses + (DELIVERY_PARKED,)
@@ -213,7 +237,7 @@ class InboxService:
                 now=now,
                 limit=page_limit,
             )
-            items = self._materialise(uow, rows)
+            items = self._materialise(uow, rows, include_body=include_bodies)
         return {"messages": items, "count": len(items)}
 
     # ------------------------------------------------------------------ #
@@ -319,7 +343,9 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # Internal helpers
     # ------------------------------------------------------------------ #
-    def _materialise(self, uow: Any, deliveries: Any) -> list[dict[str, Any]]:
+    def _materialise(
+        self, uow: Any, deliveries: Any, *, include_body: bool = True
+    ) -> list[dict[str, Any]]:
         deliveries = list(deliveries)
         if not deliveries:
             return []
@@ -329,10 +355,15 @@ class InboxService:
                 uow, message_ids=[d.message_id for d in deliveries]
             )
         }
-        return [self._item(d, messages.get(d.message_id)) for d in deliveries]
+        return [
+            self._item(d, messages.get(d.message_id), include_body=include_body)
+            for d in deliveries
+        ]
 
     @staticmethod
-    def _item(delivery: Any, message: Any) -> dict[str, Any]:
+    def _item(
+        delivery: Any, message: Any, *, include_body: bool = True
+    ) -> dict[str, Any]:
         data: dict[str, Any] = {
             "delivery_id": delivery.delivery_id,
             "message_id": delivery.message_id,
@@ -348,12 +379,20 @@ class InboxService:
                     "workspace_id": message.workspace_id,
                     "channel_id": message.channel_id,
                     "subject": message.subject,
-                    "body": message.body,
                     "target": parse_target(message.target),
                     "artifacts": message.artifacts,
                     "created_at": message.created_at,
                 }
             )
+            if include_body:
+                data["body"] = message.body
+            else:
+                # Envelope-only projection (peek): a bounded preview plus the
+                # full UTF-8 size so the recipient can decide whether the
+                # message is worth an inbox_pull.
+                body = message.body if isinstance(message.body, str) else ""
+                data["body_preview"] = body[:PEEK_BODY_PREVIEW_CHARS]
+                data["body_bytes"] = utf8_byte_len(body)
         return data
 
     def _raise_extend_error(

@@ -5,7 +5,8 @@ Implements the workspace / agent / session use cases of Okto Nexus V1:
 * ``workspace_resolve`` - deterministic ``workspace_id`` from ``project_root``
   (the SERVER hashes; the CLIENT only supplies the path) plus an idempotent
   upsert of the ``workspaces`` row.
-* ``workspace_list`` - GLOBAL-ADMIN: enumerate ALL workspaces.
+* ``workspace_list`` - GLOBAL-ADMIN: enumerate ALL workspaces (on-disk paths
+  opt-in via ``include_paths``).
 * ``agent_register`` - upsert of a global, logical agent identity.
 * ``agent_list`` / ``agent_get`` - GLOBAL reads over agent identities.
 * ``session_open`` - create a workspace-scoped session (server-assigned id).
@@ -328,7 +329,9 @@ class IdentityService:
             "last_seen_at": ws.last_seen_at,
         }
 
-    def workspace_list(self) -> list[dict[str, Any]]:
+    def workspace_list(
+        self, *, include_paths: bool = False
+    ) -> list[dict[str, Any]]:
         """Enumerate ALL workspaces (a global-admin surface).
 
         This deliberately crosses workspace boundaries: it returns rows from
@@ -336,19 +339,28 @@ class IdentityService:
         since agents are global identities). Every WORKSPACE/SESSION read (e.g.
         :meth:`list_sessions`) stays scoped to a single ``workspace_id`` and
         never leaks rows from another workspace.
+
+        ``root_realpath`` is OMITTED from each entry unless
+        ``include_paths=True``. Disclosure of every project's on-disk location
+        is opt-in defense-in-depth against prompt-injection exfiltration (an
+        injected agent echoing the filesystem layout of ALL projects); the
+        trust model itself is unchanged - the caller is the same OS user that
+        supplied the path to ``workspace_resolve`` in the first place.
         """
         with self._cf.unit_of_work() as uow:
             rows = self._workspaces.list_all(uow)
-        return [
-            {
+        out: list[dict[str, Any]] = []
+        for ws in rows:
+            entry: dict[str, Any] = {
                 "workspace_id": ws.workspace_id,
                 "display_name": ws.display_name,
-                "root_realpath": ws.root_realpath,
                 "created_at": ws.created_at,
                 "last_seen_at": ws.last_seen_at,
             }
-            for ws in rows
-        ]
+            if include_paths:
+                entry["root_realpath"] = ws.root_realpath
+            out.append(entry)
+        return out
 
     # ------------------------------------------------------------------ #
     # Agent

@@ -12,7 +12,12 @@ fail-closed bootstrap. Coverage:
 * cursor advancement across poll windows in the follow loop;
 * ``--once`` exits after a single window; ``Ctrl+C`` exits cleanly (code 0);
 * canonical errors (bad workspace, malformed ``--from``) -> exit 1 + stderr;
-* the ``main`` dispatcher routes ``tail`` to ``run_tail``.
+* the ``main`` dispatcher routes ``tail`` to ``run_tail``;
+* ``--cursor-file`` resume: gap-free restart without replay, precedence over
+  ``--from`` (stderr notice), fail-closed ``CONFIG_ERROR`` on a corrupted
+  file, no checkpoint on a timed-out window;
+* presence: the passive follower never stamps ``last_seen_at``, while the MCP
+  ``build_service`` path (``touch_on_read=True``) still does.
 """
 
 from __future__ import annotations
@@ -766,6 +771,218 @@ def test_tail_from_latest_resolves_end_then_follows_only_new(migrated_factory, t
     parsed = [json.loads(ln) for ln in out.getvalue().splitlines()]
     assert [e["type"] for e in parsed] == ["new"]
     assert parsed[0]["event_id"] == 4  # ids 1-3 (pre-existing) were skipped
+
+
+# --------------------------------------------------------------------------- #
+# --cursor-file: opt-in resume checkpoint (gap-free restart, fail-closed)
+# --------------------------------------------------------------------------- #
+def test_tail_cursor_file_resume_without_replay_or_gap(
+    migrated_factory, tmp_path, capsys
+):
+    # Two --once runs sharing a --cursor-file: the second resumes EXACTLY after
+    # the last consumed event - no replay of 1-3 (despite --from 0) and no gap
+    # over events appended while the follower was down.
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    cursor_file = tmp_path / "tail.cursor"
+    for i in range(3):
+        emit(migrated_factory, ws, type=f"first{i}")
+
+    args = [
+        "--project-root", pr,
+        "--agent-id", "a",
+        "--from", "0",
+        "--timeout-seconds", "0",
+        "--once",
+        "--cursor-file", str(cursor_file),
+    ]
+    out1 = io.StringIO()
+    code = run_tail(
+        args, out=out1, service_factory=real_service_factory(migrated_factory, config)
+    )
+    assert code == 0
+    parsed1 = [json.loads(ln) for ln in out1.getvalue().splitlines()]
+    assert [e["event_id"] for e in parsed1] == [1, 2, 3]
+    assert json.loads(cursor_file.read_text())["next_cursor"] == 3
+
+    # Events appended BETWEEN runs (follower down) must not be skipped.
+    emit(migrated_factory, ws, type="while-down-1")
+    emit(migrated_factory, ws, type="while-down-2")
+
+    out2 = io.StringIO()
+    code = run_tail(
+        args, out=out2, service_factory=real_service_factory(migrated_factory, config)
+    )
+    assert code == 0
+    parsed2 = [json.loads(ln) for ln in out2.getvalue().splitlines()]
+    assert [e["event_id"] for e in parsed2] == [4, 5]  # no replay, no gap
+    assert [e["type"] for e in parsed2] == ["while-down-1", "while-down-2"]
+    assert json.loads(cursor_file.read_text())["next_cursor"] == 5
+    # The resume notice (cursor file precedes --from) reaches stderr.
+    assert "--cursor-file" in capsys.readouterr().err
+
+
+def test_tail_cursor_file_precedes_from_with_stderr_notice(tmp_path, capsys):
+    cursor_file = tmp_path / "tail.cursor"
+    cursor_file.write_text(json.dumps({"next_cursor": 7}), encoding="utf-8")
+    svc = ScriptedService(wait_pages=[page([{"event_id": 8, "type": "n"}], 8)])
+    code = run_tail(
+        [
+            "--project-root", "/p", "--agent-id", "a",
+            "--from", "0", "--once", "--cursor-file", str(cursor_file),
+        ],
+        out=io.StringIO(),
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 0
+    assert svc.wait_calls[0]["cursor"] == 7  # file wins over --from 0
+    err = capsys.readouterr().err
+    assert "resuming" in err and str(cursor_file) in err
+
+
+def test_tail_missing_cursor_file_falls_back_to_from_then_creates_it(tmp_path):
+    cursor_file = tmp_path / "absent.cursor"
+    svc = ScriptedService(wait_pages=[page([{"event_id": 3, "type": "x"}], 3)])
+    code = run_tail(
+        [
+            "--project-root", "/p", "--agent-id", "a",
+            "--from", "2", "--once", "--cursor-file", str(cursor_file),
+        ],
+        out=io.StringIO(),
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 0
+    assert svc.wait_calls[0]["cursor"] == 2  # absent file -> --from applies
+    # First non-empty window checkpoints the consumer-owned file.
+    assert json.loads(cursor_file.read_text())["next_cursor"] == 3
+
+
+@pytest.mark.parametrize(
+    "content",
+    [
+        "{not json",
+        "[]",
+        "{}",
+        '{"next_cursor": -1}',
+        '{"next_cursor": "5"}',
+        '{"next_cursor": true}',
+    ],
+)
+def test_tail_corrupted_cursor_file_is_config_error(tmp_path, capsys, content):
+    cursor_file = tmp_path / "tail.cursor"
+    cursor_file.write_text(content, encoding="utf-8")
+    svc = ScriptedService(wait_pages=[page([{"event_id": 1}], 1)])
+    code = run_tail(
+        [
+            "--project-root", "/p", "--agent-id", "a",
+            "--from", "0", "--once", "--cursor-file", str(cursor_file),
+        ],
+        out=io.StringIO(),
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 1
+    assert "CONFIG_ERROR" in capsys.readouterr().err
+    assert svc.wait_calls == []  # fail-closed BEFORE any poll
+    assert cursor_file.read_text() == content  # never overwritten on failure
+
+
+def test_tail_cursor_file_not_written_on_timed_out_window(tmp_path):
+    cursor_file = tmp_path / "tail.cursor"
+    svc = ScriptedService(wait_pages=[page([], 5, timed_out=True)])
+    code = run_tail(
+        [
+            "--project-root", "/p", "--agent-id", "a",
+            "--from", "5", "--once", "--cursor-file", str(cursor_file),
+        ],
+        out=io.StringIO(),
+        service_factory=lambda env, extra: svc,
+    )
+    assert code == 0
+    assert not cursor_file.exists()  # no checkpoint for an empty window
+
+
+# --------------------------------------------------------------------------- #
+# Presence: the passive follower never stamps last_seen_at (touch_on_read)
+# --------------------------------------------------------------------------- #
+def test_tail_does_not_stamp_agent_last_seen_at(tmp_path, capsys):
+    # Through the REAL bootstrap (production wiring): a registered agent that
+    # only tails the log keeps last_seen_at=None - passive observation is not
+    # activity, so the MCP "most recent action on the bus" contract stays
+    # honest for detached monitors.
+    from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
+    from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
+    from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
+
+    home = tmp_path / "home"
+    proj = tmp_path / "proj"
+    proj.mkdir()
+    config = NexusConfig(home_dir=home)
+    factory = ConnectionFactory(config)
+    MigrationRunner(factory).apply()
+    ws = resolve_workspace_id(str(proj))
+    clock = StubClock()
+    agents = SqliteAgentRepo(clock)
+    with factory.unit_of_work() as uow:
+        SqliteWorkspaceRepo(clock).upsert(
+            uow, workspace_id=ws, root_realpath=os.path.realpath(str(proj))
+        )
+        agents.upsert(uow, agent_id="watcher")
+        SqliteEventRepo(clock).append(
+            uow, workspace_id=ws, stream="workspace", type="hello"
+        )
+
+    code = main(
+        [
+            "tail",
+            "--project-root", str(proj),
+            "--agent-id", "watcher",
+            "--home", str(home),
+            "--from", "0",
+            "--timeout-seconds", "0",
+            "--once",
+        ]
+    )
+    assert code == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert [json.loads(ln)["type"] for ln in lines] == ["hello"]  # it DID read
+    with factory.unit_of_work() as uow:
+        agent = agents.get(uow, "watcher")
+    assert agent.last_seen_at is None  # ...but reading passively is not presence
+
+
+def test_event_service_touch_on_read_true_stamps_last_seen_at(
+    migrated_factory, tmp_path
+):
+    # Regression for the MCP path: the canonical build_service wiring (default
+    # touch_on_read=True) still stamps the caller's last_seen_at on event_wait.
+    from types import SimpleNamespace
+
+    from okto_nexus.adapters.inbound.mcp.tools.events import (
+        build_service as build_event_service,
+    )
+    from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
+    from okto_nexus.application.ports import Repos
+
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    clock = StubClock()
+    agents = SqliteAgentRepo(clock)
+    with migrated_factory.unit_of_work() as uow:
+        agents.upsert(uow, agent_id="poller")
+    deps = SimpleNamespace(
+        config=config,
+        connection_factory=migrated_factory,
+        clock=clock,
+        repos=Repos(),
+    )
+    service = build_event_service(deps)
+    result = service.event_wait(
+        project_root=pr, agent_id="poller", stream="workspace", timeout_seconds=0
+    )
+    assert result["timed_out"] is True  # even a timed-out window counts as action
+    with migrated_factory.unit_of_work() as uow:
+        agent = agents.get(uow, "poller")
+    assert agent.last_seen_at == clock.now_iso()  # MCP path still stamps presence
 
 
 # --------------------------------------------------------------------------- #

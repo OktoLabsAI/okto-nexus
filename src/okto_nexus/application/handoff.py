@@ -3,7 +3,16 @@
 Implements the use cases of Okto Nexus V1 spec #8:
 
 * ``handoff_create``         - validate target/visibility + content limit, persist
-  an ``OPEN`` handoff, emit ``handoff.created``.
+  an ``OPEN`` handoff, emit ``handoff.created``. Applies the SAME D1b policy
+  as ``message_create``: a ``direct`` target naming an unregistered agent is a
+  hard ``NOT_FOUND`` (full rollback), while a pool target (capability/role/
+  mixed/broadcast/``direct_with_fallback``) matching ZERO currently-registered
+  agents succeeds WITH an explicit ``eligible_count``/``warning`` - lazy
+  re-evaluation is a feature (an agent registered later can still claim), so
+  zero-match is a warning, never a silent success and never an error. A
+  DIRECTED handoff (``direct``/``direct_with_fallback`` naming a registered
+  agent) additionally lands ONE synthetic notification in the named agent's
+  inbox (same uow) so the recipient is woken without polling.
 * ``handoff_list_available`` - run opportunistic lease expiry, then return the
   ``OPEN`` handoffs that are BOTH visible AND eligible to the caller, paginated
   (``next_cursor``/``has_more``/``timed_out``), with optional long-poll. The
@@ -13,9 +22,17 @@ Implements the use cases of Okto Nexus V1 spec #8:
   never once per poll interval.
 * ``handoff_claim``          - opportunistic expiry + atomic conditional claim
   (single winner) gated by ``is_agent_eligible``.
-* ``handoff_complete``       - owner-only ``CLAIMED -> COMPLETED``.
+* ``handoff_complete``       - owner-only ``CLAIMED -> COMPLETED``; persists
+  ``result`` on the row and notifies the creator's inbox.
 * ``handoff_reject``         - owner ``CLAIMED -> REJECTED`` or direct-target
-  ``OPEN -> REJECTED``.
+  ``OPEN -> REJECTED``; persists ``rejected_reason`` and notifies the creator.
+* ``handoff_cancel``         - creator-only ``OPEN -> CANCELLED`` (the
+  retraction path for a handoff nobody should take anymore); a CLAIMED
+  handoff is resolved by its claimant (complete/reject) or by lease expiry.
+* ``handoff_get``            - read ONE handoff by id (status/result/reason):
+  the creator's path to the outcome of a finished handoff - terminal handoffs
+  leave ``handoff_list_available`` and their events are observability, not
+  delivery.
 
 ``handoff_complete``/``handoff_reject`` mutate via CONDITIONAL updates that
 mirror the claim (the WHERE clause re-asserts the expected status and
@@ -45,12 +62,14 @@ from ..domain.base import (
     normalize_cursor,
 )
 from ..domain.handoff import (
+    EVENT_CANCELLED,
     EVENT_CLAIMED,
     EVENT_COMPLETED,
     EVENT_CREATED,
     EVENT_EXPIRED,
     EVENT_REJECTED,
     HANDOFF_STREAM,
+    STATUS_CANCELLED,
     STATUS_CLAIMED,
     STATUS_COMPLETED,
     STATUS_OPEN,
@@ -61,6 +80,7 @@ from ..domain.handoff import (
     validate_target,
 )
 from ..domain.ids import resolve_workspace_id
+from ..domain.inbox import DELIVERY_UNREAD, new_delivery_id
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
 from ..domain.targets import normalize_strategy
 from ..errors import ErrorCode, OktoNexusError
@@ -70,7 +90,8 @@ from .ports import (
     ConnectionFactory,
     EventEmitter,
     HandoffRepo,
-    TaskRepo,
+    MessageDeliveryRepo,
+    MessageRepo,
     UnitOfWork,
     Waiter,
 )
@@ -79,6 +100,19 @@ from .ports import (
 DEFAULT_PAGE_LIMIT = 100
 #: Hard upper bound on a single page (defensive; keeps responses bounded).
 MAX_PAGE_LIMIT = 500
+
+#: Strategies that NAME one specific agent (the D1b directed set): ``direct``
+#: requires the agent to be registered NOW; ``direct_with_fallback`` is the
+#: sanctioned escape hatch for an agent that will register later (so it warns
+#: instead of failing) but still notifies the named agent when it IS known.
+_DIRECTED_STRATEGIES: frozenset[str] = frozenset({"direct", "direct_with_fallback"})
+
+#: Explicit zero-match warning for a pool target (S2: never a silent zero).
+_ZERO_ELIGIBLE_WARNING = (
+    "no registered agent currently matches this target; the handoff will stay "
+    "OPEN until a matching agent registers - use handoff_cancel if this was a "
+    "mistake."
+)
 
 
 def _is_nonempty_str(value: Any) -> bool:
@@ -93,20 +127,30 @@ class HandoffService:
         *,
         connection_factory: ConnectionFactory,
         handoffs: HandoffRepo,
-        tasks: TaskRepo,
         clock: Clock,
         config: NexusConfig,
         event_emitter: Optional[EventEmitter] = None,
         agents: Optional[AgentRepo] = None,
         waiter: Optional[Waiter] = None,
+        messages: Optional[MessageRepo] = None,
+        deliveries: Optional[MessageDeliveryRepo] = None,
+        tasks: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
-        self._tasks = tasks
         self._clock = clock
         self._config = config
         self._emitter = event_emitter
         self._agents = agents
+        # Inbox lanes for the directed-handoff / outcome notifications; when
+        # either is unwired the notifications are skipped (the lifecycle
+        # itself never depends on them).
+        self._messages = messages
+        self._deliveries = deliveries
+        # ``tasks`` is DEPRECATED and ignored: the V1 Task subsystem had no
+        # producer (no MCP tool ever created a task) and was removed. The
+        # parameter is tolerated so legacy call sites keep constructing.
+        del tasks
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = waiter if waiter is not None else connection_factory.change_waiter()
@@ -123,14 +167,27 @@ class HandoffService:
         visibility: Any,
         payload: Any = None,
         session_id: Any = None,
-        task_id: Any = None,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
 
+        D1b (mirrors ``message_create``): a ``direct`` target naming an agent
+        that is not registered raises ``NOT_FOUND`` and rolls the WHOLE unit
+        of work back (no row, no event). Every other strategy resolves its
+        currently-eligible agents at creation time: the response carries
+        ``eligible_count`` and, when it is 0, an explicit ``warning`` - the
+        handoff still persists because eligibility is lazily re-evaluated at
+        claim time (an agent registered later can claim it).
+
+        A DIRECTED target (``direct``/``direct_with_fallback``) naming a
+        REGISTERED agent also lands one synthetic notification message in that
+        agent's inbox inside the same unit of work (the response lists it in
+        ``notified``); the notification wakes the recipient - claiming still
+        happens via ``handoff_claim``.
+
         Raises ``WORKSPACE_REQUIRED``/``WORKSPACE_UNRESOLVED`` for workspace
         resolution, ``VALIDATION_ERROR`` for a missing ``from_agent_id`` or an
-        invalid target/visibility, ``CONTENT_TOO_LARGE`` for an oversized inline
-        payload, and ``NOT_FOUND`` for a referenced ``task_id`` that is absent.
+        invalid target/visibility, and ``CONTENT_TOO_LARGE`` for an oversized
+        inline payload.
         """
         workspace_id = self._resolve_workspace(project_root)
         if not _is_nonempty_str(from_agent_id):
@@ -144,24 +201,41 @@ class HandoffService:
         self._check_inline_size("payload", payload)
         payload_text = self._serialize_payload(payload)
 
+        strategy = normalized_target["strategy"]
         target_text = json.dumps(normalized_target, ensure_ascii=False)
         now = self._clock.now_iso()
         handoff_id = new_id("hof")
+        extras: dict[str, Any] = {}
 
         with self._cf.unit_of_work() as uow:
-            if task_id is not None and _is_nonempty_str(task_id):
-                if self._tasks.get(uow, workspace_id=workspace_id, task_id=task_id) is None:
-                    raise OktoNexusError(
-                        ErrorCode.NOT_FOUND,
-                        "task_id does not exist in this workspace.",
-                        {"task_id": task_id},
+            if self._agents is not None:
+                if strategy == "direct":
+                    # D1b hard gate: a typo'd direct handoff must not sit OPEN
+                    # forever, silently. Raising here rolls everything back.
+                    named = str(normalized_target.get("agent_id"))
+                    if self._agents.get(uow, named) is None:
+                        raise OktoNexusError(
+                            ErrorCode.NOT_FOUND,
+                            f"agent_id '{named}' is not a registered agent; "
+                            "check agent_list or register it first. For an "
+                            "agent that will register later, use "
+                            "direct_with_fallback.",
+                            {"agent_id": named, "strategy": strategy},
+                        )
+                else:
+                    eligible = self._eligible_agent_ids(
+                        uow, workspace_id, normalized_target, now
                     )
+                    extras["eligible_count"] = len(eligible)
+                    if not eligible:
+                        # Success-with-warning (S2): never silent, never fatal
+                        # (lazy re-evaluation lets a later registrant claim).
+                        extras["warning"] = _ZERO_ELIGIBLE_WARNING
             handoff = self._handoffs.create(
                 uow,
                 handoff_id=handoff_id,
                 workspace_id=workspace_id,
                 status=STATUS_OPEN,
-                task_id=task_id if _is_nonempty_str(task_id) else None,
                 from_agent_id=from_agent_id,
                 target=target_text,
                 visibility=normalized_visibility,
@@ -194,12 +268,34 @@ class HandoffService:
                 actor_agent_id=from_agent_id,
                 payload=event_payload,
             )
-        return {
+            if strategy in _DIRECTED_STRATEGIES:
+                named = str(normalized_target.get("agent_id"))
+                body = {
+                    "kind": "handoff.directed",
+                    "handoff_id": handoff.handoff_id,
+                    "from_agent_id": from_agent_id,
+                    "next_step": "handoff_claim with this handoff_id",
+                }
+                if payload_text is not None:
+                    body["payload"] = payload_text
+                if self._notify_inbox(
+                    uow,
+                    workspace_id=workspace_id,
+                    recipient_agent_id=named,
+                    from_agent_id=from_agent_id,
+                    subject=f"handoff {handoff.handoff_id} directed to you",
+                    body=body,
+                    now=now,
+                ):
+                    extras["notified"] = [named]
+        response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
             "status": STATUS_OPEN,
             "created_at": handoff.created_at,
         }
+        response.update(extras)
+        return response
 
     # ------------------------------------------------------------------ #
     # list_available
@@ -451,12 +547,18 @@ class HandoffService:
         ``NOT_OWNER`` when ``agent_id != claimed_by``; ``INVALID_TRANSITION``
         when the source state is not ``CLAIMED``. The mutation is a single
         conditional UPDATE (mirrors the claim); a 0-row outcome is re-read and
-        mapped to the precise error.
+        mapped to the precise error. ``result`` (string verbatim, non-string
+        serialised - the ``payload`` contract) is persisted on the row in the
+        SAME UPDATE so the creator can read it later via ``handoff_get``; the
+        ``handoff.completed`` event still carries it as audit. The creator
+        (when registered and not the completing agent) gets an inbox
+        notification carrying the result (``notified`` in the response).
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         self._check_inline_size("result", result)
+        result_text = self._serialize_payload(result)
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
@@ -467,6 +569,7 @@ class HandoffService:
                 claimed_by=agent_id,
                 status=STATUS_COMPLETED,
                 updated_at=now,
+                result=result_text,
             )
             if updated is None:
                 self._raise_claimed_transition_error(
@@ -487,7 +590,22 @@ class HandoffService:
                 actor_agent_id=agent_id,
                 payload=payload,
             )
-        return {"handoff_id": updated.handoff_id, "status": STATUS_COMPLETED}
+            notified = self._notify_creator_outcome(
+                uow,
+                handoff=updated,
+                actor_agent_id=agent_id,
+                kind=EVENT_COMPLETED,
+                outcome_key="result",
+                outcome_text=result_text,
+                now=now,
+            )
+        response: dict[str, Any] = {
+            "handoff_id": updated.handoff_id,
+            "status": STATUS_COMPLETED,
+        }
+        if notified:
+            response["notified"] = notified
+        return response
 
     # ------------------------------------------------------------------ #
     # reject
@@ -508,12 +626,17 @@ class HandoffService:
         source state gets ``INVALID_TRANSITION``. Both branches mutate via a
         conditional UPDATE that re-asserts the state read above (the read and
         the update share one IMMEDIATE transaction, and a 0-row outcome still
-        maps to a precise error rather than clobbering the row).
+        maps to a precise error rather than clobbering the row). ``reason`` is
+        persisted on the row (``rejected_reason``) in the same UPDATE so the
+        creator can read it later via ``handoff_get``; the creator (when
+        registered and not the rejecting agent) also gets an inbox
+        notification (``notified`` in the response).
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
         self._require_id("agent_id", agent_id)
         self._check_inline_size("reason", reason)
+        reason_text = self._serialize_payload(reason)
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
@@ -542,6 +665,7 @@ class HandoffService:
                     claimed_by=agent_id,
                     status=STATUS_REJECTED,
                     updated_at=now,
+                    rejected_reason=reason_text,
                 )
             elif handoff.status == STATUS_OPEN:
                 if not is_direct_target(handoff.target, agent_id):
@@ -555,6 +679,7 @@ class HandoffService:
                     workspace_id=workspace_id,
                     handoff_id=handoff_id,
                     updated_at=now,
+                    rejected_reason=reason_text,
                 )
             else:
                 raise OktoNexusError(
@@ -583,7 +708,172 @@ class HandoffService:
                 actor_agent_id=agent_id,
                 payload=payload,
             )
-        return {"handoff_id": updated.handoff_id, "status": STATUS_REJECTED}
+            notified = self._notify_creator_outcome(
+                uow,
+                handoff=updated,
+                actor_agent_id=agent_id,
+                kind=EVENT_REJECTED,
+                outcome_key="reason",
+                outcome_text=reason_text,
+                now=now,
+            )
+        response: dict[str, Any] = {
+            "handoff_id": updated.handoff_id,
+            "status": STATUS_REJECTED,
+        }
+        if notified:
+            response["notified"] = notified
+        return response
+
+    # ------------------------------------------------------------------ #
+    # cancel
+    # ------------------------------------------------------------------ #
+    def handoff_cancel(
+        self,
+        *,
+        project_root: Any,
+        handoff_id: Any,
+        agent_id: Any,
+        reason: Any = None,
+    ) -> dict[str, Any]:
+        """Creator-only ``OPEN -> CANCELLED`` - retract a handoff nobody took.
+
+        The retraction path for a mistaken/stale handoff (e.g. a pool target
+        created with zero eligible agents): only the CREATOR
+        (``from_agent_id``) may cancel, and only while the handoff is OPEN. A
+        CLAIMED handoff raises ``INVALID_TRANSITION`` - it is resolved by its
+        claimant (``handoff_complete``/``handoff_reject``) or returns to OPEN
+        when the claim lease expires (cancel it then). A terminal handoff
+        (COMPLETED/REJECTED/CANCELLED) also raises ``INVALID_TRANSITION``.
+        Emits ``handoff.cancelled`` in the same transaction; the optional
+        ``reason`` rides the event payload.
+        """
+        workspace_id = self._resolve_workspace(project_root)
+        self._require_id("handoff_id", handoff_id)
+        self._require_id("agent_id", agent_id)
+        self._check_inline_size("reason", reason)
+        now = self._clock.now_iso()
+
+        with self._cf.unit_of_work() as uow:
+            # Opportunistic expiry first: a CLAIMED handoff whose lease already
+            # elapsed is logically OPEN again, so its creator may cancel it.
+            self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
+            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+            if handoff.from_agent_id != agent_id:
+                raise OktoNexusError(
+                    ErrorCode.NOT_OWNER,
+                    "Only the creator (from_agent_id) may cancel a handoff.",
+                    {
+                        "handoff_id": handoff_id,
+                        "agent_id": agent_id,
+                        "from_agent_id": handoff.from_agent_id,
+                    },
+                )
+            if handoff.status == STATUS_CLAIMED:
+                raise OktoNexusError(
+                    ErrorCode.INVALID_TRANSITION,
+                    "handoff_cancel applies only to OPEN handoffs; this one is "
+                    "CLAIMED - it is resolved by its claimant via "
+                    "handoff_complete/handoff_reject, or returns to OPEN when "
+                    "the claim lease expires (cancel it then).",
+                    {
+                        "handoff_id": handoff_id,
+                        "status": handoff.status,
+                        "claimed_by": handoff.claimed_by,
+                    },
+                )
+            if handoff.status != STATUS_OPEN:
+                raise OktoNexusError(
+                    ErrorCode.INVALID_TRANSITION,
+                    f"handoff_cancel requires the handoff to be OPEN, but it "
+                    f"is already {handoff.status}.",
+                    {"handoff_id": handoff_id, "status": handoff.status},
+                )
+            # The load above and this write share one BEGIN IMMEDIATE
+            # transaction, so the OPEN precondition cannot be raced away.
+            updated = self._handoffs.update_status(
+                uow,
+                workspace_id=workspace_id,
+                handoff_id=handoff_id,
+                status=STATUS_CANCELLED,
+                updated_at=now,
+            )
+            self._touch_agent(uow, agent_id, now)
+            payload = {
+                "handoff_id": updated.handoff_id,
+                "workspace_id": updated.workspace_id,
+                "status": updated.status,
+            }
+            if _is_nonempty_str(reason):
+                payload["reason"] = reason
+            self._emit(
+                uow,
+                handoff=updated,
+                event_type=EVENT_CANCELLED,
+                actor_agent_id=agent_id,
+                payload=payload,
+            )
+        return {"handoff_id": updated.handoff_id, "status": STATUS_CANCELLED}
+
+    # ------------------------------------------------------------------ #
+    # get
+    # ------------------------------------------------------------------ #
+    def handoff_get(
+        self,
+        *,
+        project_root: Any,
+        handoff_id: Any,
+        agent_id: Any,
+    ) -> dict[str, Any]:
+        """Read ONE handoff by id - the creator's path to the outcome.
+
+        Terminal handoffs leave ``handoff_list_available`` and their lifecycle
+        events are observability (visibility-gated), not delivery - this read
+        is how the creator (or anyone allowed) checks status/result by id.
+        Runs opportunistic lease expiry first so the returned status reflects
+        an already-elapsed lease. Access: the creator (``from_agent_id``) and
+        the claimant (``claimed_by``) always may; any other agent is gated by
+        the same visibility predicate as ``handoff_list_available``
+        (``can_agent_see_event``) and gets ``NOT_OWNER`` otherwise.
+        ``NOT_FOUND``/``WORKSPACE_MISMATCH`` map absence precisely.
+        """
+        workspace_id = self._resolve_workspace(project_root)
+        self._require_id("handoff_id", handoff_id)
+        self._require_id("agent_id", agent_id)
+        now = self._clock.now_iso()
+
+        with self._cf.unit_of_work() as uow:
+            self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
+            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+            if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
+                viewer = self._routing_agent(uow, agent_id, workspace_id)
+                if not can_agent_see_event(viewer, handoff, now):
+                    raise OktoNexusError(
+                        ErrorCode.NOT_OWNER,
+                        "You may not read this handoff: only the creator, the "
+                        "claimant, or an agent admitted by its visibility/"
+                        "eligibility may call handoff_get.",
+                        {"handoff_id": handoff_id, "agent_id": agent_id},
+                    )
+            outcome = self._handoffs.read_outcome(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
+            ) or {"result": None, "rejected_reason": None}
+            self._touch_agent(uow, agent_id, now)
+        return {
+            "handoff_id": handoff.handoff_id,
+            "workspace_id": handoff.workspace_id,
+            "status": handoff.status,
+            "from_agent_id": handoff.from_agent_id,
+            "target": _loads_target(handoff.target),
+            "visibility": handoff.visibility,
+            "claimed_by": handoff.claimed_by,
+            "lease_expires_at": handoff.lease_expires_at,
+            "payload": handoff.payload,
+            "result": outcome["result"],
+            "rejected_reason": outcome["rejected_reason"],
+            "created_at": handoff.created_at,
+            "updated_at": handoff.updated_at,
+        }
 
     # ------------------------------------------------------------------ #
     # Opportunistic lease expiry
@@ -662,6 +952,127 @@ class HandoffService:
         """Best-effort stamp of the actor's ``last_seen_at`` within ``uow``."""
         if self._agents is not None and _is_nonempty_str(agent_id):
             self._agents.touch(uow, agent_id=agent_id, at=now)
+
+    def _eligible_agent_ids(
+        self,
+        uow: UnitOfWork,
+        workspace_id: str,
+        target: Mapping[str, Any],
+        now: str,
+    ) -> list[str]:
+        """Agents from the GLOBAL registry eligible for ``target`` right now.
+
+        The same lazily-re-evaluated predicate claiming uses
+        (:func:`is_agent_eligible` with ``created_at == now``), resolved at
+        creation time ONLY to inform the creator (``eligible_count`` /
+        zero-match warning) - it is never an ACL: a later registrant can still
+        claim. The creator is not excluded (it may claim its own handoff).
+        """
+        assert self._agents is not None  # caller guards
+        eligible: list[str] = []
+        for agent in self._agents.list(uow):
+            view = RoutingAgent(
+                agent_id=agent.agent_id,
+                workspace_id=workspace_id,
+                role=agent.role,
+                capabilities=agent.capabilities,
+            )
+            if is_agent_eligible(view, target, now, now):
+                eligible.append(agent.agent_id)
+        return eligible
+
+    def _notify_inbox(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        recipient_agent_id: str,
+        from_agent_id: str,
+        subject: str,
+        body: Mapping[str, Any],
+        now: str,
+    ) -> bool:
+        """Land ONE synthetic notification in ``recipient_agent_id``'s inbox.
+
+        Reuses the messages + message_deliveries lanes (no new transport, no
+        new event type) inside the CALLER's unit of work. Skipped (``False``)
+        when the message/delivery repos are unwired or the recipient is not a
+        registered agent (``message_deliveries.recipient_agent_id`` is an FK
+        to ``agents``); the handoff lifecycle never depends on it.
+        """
+        if self._messages is None or self._deliveries is None:
+            return False
+        if self._agents is None or not _is_nonempty_str(recipient_agent_id):
+            return False
+        if self._agents.get(uow, recipient_agent_id) is None:
+            return False
+        message = self._messages.create(
+            uow,
+            message_id=new_id("msg"),
+            workspace_id=workspace_id,
+            from_agent_id=from_agent_id,
+            target=json.dumps(
+                {"strategy": "direct", "agent_id": recipient_agent_id},
+                ensure_ascii=False,
+            ),
+            subject=subject,
+            body=json.dumps(dict(body), ensure_ascii=False),
+            created_at=now,
+        )
+        self._deliveries.create(
+            uow,
+            delivery_id=new_delivery_id(),
+            message_id=message.message_id,
+            recipient_agent_id=recipient_agent_id,
+            status=DELIVERY_UNREAD,
+            created_at=now,
+        )
+        return True
+
+    def _notify_creator_outcome(
+        self,
+        uow: UnitOfWork,
+        *,
+        handoff: Any,
+        actor_agent_id: str,
+        kind: str,
+        outcome_key: str,
+        outcome_text: str | None,
+        now: str,
+    ) -> list[str]:
+        """Deliver a terminal outcome to the CREATOR's inbox (cross-workspace).
+
+        The ``handoff.completed``/``handoff.rejected`` event may be invisible
+        to the creator (visibility ``eligible``/``private`` with a target the
+        creator does not match), and a terminal handoff leaves every listing
+        surface - so the outcome is pushed to the creator's GLOBAL inbox.
+        Skipped when the creator IS the actor (no self-notification) or is
+        not a registered agent. Returns the notified agent ids (0 or 1).
+        """
+        creator = handoff.from_agent_id
+        if not _is_nonempty_str(creator) or creator == actor_agent_id:
+            return []
+        verb = kind.rsplit(".", 1)[-1]  # "completed" / "rejected"
+        body: dict[str, Any] = {
+            "kind": kind,
+            "handoff_id": handoff.handoff_id,
+            "status": handoff.status,
+            "by_agent_id": actor_agent_id,
+            "next_step": "handoff_get with this handoff_id for the full outcome",
+        }
+        if outcome_text is not None:
+            body[outcome_key] = outcome_text
+        if self._notify_inbox(
+            uow,
+            workspace_id=handoff.workspace_id,
+            recipient_agent_id=creator,
+            from_agent_id=actor_agent_id,
+            subject=f"handoff {handoff.handoff_id} {verb} by {actor_agent_id}",
+            body=body,
+            now=now,
+        ):
+            return [creator]
+        return []
 
     @staticmethod
     def _require_id(field: str, value: Any) -> None:

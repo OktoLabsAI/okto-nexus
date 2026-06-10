@@ -28,12 +28,14 @@ and never see another workspace's data.
 7. [Tool Reference](#tool-reference)
 8. [Data Model](#data-model)
 9. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
-10. [Example Flow](#example-flow)
-11. [Testing](#testing)
-12. [Project Layout](#project-layout)
-13. [Limitations (V1 Non-Goals)](#limitations-v1-non-goals)
-14. [Roadmap](#roadmap)
-15. [License](#license)
+10. [Operations](#operations)
+11. [Troubleshooting](#troubleshooting)
+12. [Example Flow](#example-flow)
+13. [Testing](#testing)
+14. [Project Layout](#project-layout)
+15. [Limitations (V1 Non-Goals)](#limitations-v1-non-goals)
+16. [Roadmap](#roadmap)
+17. [License](#license)
 
 ---
 
@@ -61,8 +63,21 @@ and never see another workspace's data.
   events commit in the **same transaction** (atomic).
 - **Cursor pagination + long-polling without threads.** `event_get` /
   `event_wait` (and `handoff_list_available`) tail the log with cursors and an
-  optional poll-and-sleep long-poll bounded by a configured ceiling — no sockets,
-  threads, or subscriptions.
+  optional long-poll bounded by a configured ceiling — no sockets, threads, or
+  subscriptions. Waiting goes through a **`Waiter` port** whose V1 adapter
+  sleep-polls gated by a cheap `PRAGMA data_version` probe: the log is
+  re-scanned only when some process actually committed a write (a future
+  SSE/notify transport swaps in at the same port).
+- **Durable per-agent inbox with at-least-once delivery (ADR 0001).** Messages
+  fan out to a global inbox at send time; pulled messages are leased
+  (caller-tunable, renewable via `inbox_extend`) and redelivered if unacked;
+  poison messages park in a dead-letter lane after 5 attempts; `inbox_peek` /
+  `inbox_count` / `inbox_history` / `message_status` are strictly read-only.
+- **Cooperative trust + bounded growth (ADR 0002).** `trust_mode=strict`
+  requires a per-session `session_secret` on every sensitive verb (in `open`
+  mode a supplied secret is still validated); `okto-nexus admin prune` (and the
+  opt-in `auto_prune_on_start`) enforce retention windows over terminal lanes
+  only — live state is never deleted.
 - **Atomic single-winner handoffs with leases.** Claiming is one conditional
   `UPDATE` (no TOCTOU race). Abandoned work returns to the pool via opportunistic
   lease expiry evaluated on access — no background reaper.
@@ -77,9 +92,10 @@ and never see another workspace's data.
 - **Hexagonal architecture with an enforced import boundary.** `domain/` and
   `application/` are stdlib-only and may never import `sqlite3` or `mcp` (a test
   fails the build otherwise).
-- **Closed, normative error catalog.** Exactly **17** error codes; no exception
+- **Closed, normative error catalog.** Exactly **18** error codes; no exception
   ever crosses the adapter boundary — anything unexpected normalizes to
-  `INTERNAL_ERROR`.
+  `INTERNAL_ERROR`. Transient WAL contention carries `details.retryable: true`
+  so agents can branch without parsing messages.
 - **Fail-closed bootstrap.** Config → home dir → DB connections → migrations →
   repos/emitter → tool auto-discovery, strictly ordered; any failure aborts.
 
@@ -139,9 +155,15 @@ on the domain; the domain depends on nothing but the standard library.
 `isolation_level=None` (driver autocommit; transactions are explicit
 `BEGIN`/`COMMIT`/`ROLLBACK`), `row_factory = sqlite3.Row`, and the three
 mandatory PRAGMAs: `journal_mode=WAL`, `foreign_keys=ON`, and
-`busy_timeout={busy_timeout_ms}`. A `SqliteUnitOfWork` opens a `BEGIN` on entry,
-commits on clean exit, rolls back on exception, always closes the connection, and
-never suppresses exceptions. Failure to open/configure a connection → `DB_ERROR`.
+`busy_timeout={busy_timeout_ms}`. A `SqliteUnitOfWork` opens **`BEGIN
+IMMEDIATE`** on entry by default (`write=True`): the WAL write lock is acquired
+up front, where `busy_timeout` applies, so a read-then-write sequence inside
+the transaction can never die mid-way with `SQLITE_BUSY_SNAPSHOT`. Read-only
+scopes pass `write=False` (deferred `BEGIN`; readers never queue behind
+writers). The UoW commits on clean exit, rolls back on exception, always closes
+the connection, and never suppresses exceptions. Failure to open/configure a
+connection → `DB_ERROR`; lock/busy contention → `DB_ERROR` with
+`details.retryable: true` (retry the same call).
 
 **Fail-closed bootstrap (ordered).** `bootstrap()` in `server.py`:
 
@@ -157,7 +179,12 @@ never suppresses exceptions. Failure to open/configure a connection → `DB_ERRO
 `[okto-nexus] bootstrap failed: {code}: {message}` to stderr, and returns exit
 code `1`. If the `mcp` SDK is missing in `create_server`, it catches the
 `ImportError`, prints an install hint, and returns `1`. On success it runs the
-stdio server and returns `0`.
+stdio server and returns `0`. The first argv token selects the mode: `tail`
+dispatches to the NDJSON event-log follower and `admin` to the operator
+maintenance commands (see [Operations](#operations)); anything else runs the
+MCP server. With `auto_prune_on_start=true`, startup additionally runs one
+bounded, best-effort retention pass (a failure is reported to stderr and
+startup proceeds).
 
 **Auto-discovery of tools.** `register_tools(server, deps)` iterates every module
 under `okto_nexus.adapters.inbound.mcp.tools` (via `pkgutil.iter_modules` +
@@ -217,8 +244,9 @@ stdio server)* · author Okto Labs · license Proprietary.
 All settings live under the `OKTO_NEXUS_*` namespace. Precedence is strict:
 **CLI flag > environment variable > default**. The CLI parser accepts both
 `--flag value` and `--flag=value`. Invalid input (unparseable integer, value
-below the minimum, unknown flag, unexpected positional argument, or a flag with
-no value) fails closed with `CONFIG_ERROR`. Path values have `~` expanded; if
+below the minimum, out-of-vocabulary enum/boolean, unknown flag, unexpected
+positional argument, or a flag with no value) fails closed with `CONFIG_ERROR` —
+**never** a silently-applied default. Path values have `~` expanded; if
 `OKTO_NEXUS_DB_PATH` is unset it is derived from the home directory.
 
 | Environment variable | CLI flag | Default | Min | Description |
@@ -230,16 +258,20 @@ no value) fails closed with `CONFIG_ERROR`. Path values have `~` expanded; if
 | `OKTO_NEXUS_MAX_WAIT_TIMEOUT_SECONDS` | `--max-wait-timeout-seconds` | `30` | `0` | Ceiling (s) for blocking long-poll operations. |
 | `OKTO_NEXUS_HANDOFF_LEASE_TTL_SECONDS` | `--handoff-lease-ttl-seconds` | `300` | `1` | TTL (s) of a claimed handoff's lease. |
 | `OKTO_NEXUS_MAX_INLINE_BYTES` | `--max-inline-bytes` | `65536` | `1` | Inclusive ceiling (UTF-8 bytes) for inline content. |
+| `OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS` | `--inbox-lease-ttl-seconds` | `300` | `1` | Default in-flight lease (s) for pulled inbox deliveries (per-pull override: `lease_seconds`). |
+| `OKTO_NEXUS_SESSION_STALE_TTL_SECONDS` | `--session-stale-ttl-seconds` | `60` | `1` | Read-time threshold (s) after which a session's heartbeat reads `stale`. |
+| `OKTO_NEXUS_PRESENCE_TTL_SECONDS` | `--presence-ttl-seconds` | `1800` | `1` | Presence window (s): a session is PRESENT (in the broadcast audience) only while its heartbeat is this fresh. |
+| `OKTO_NEXUS_SESSION_REAP_SECONDS` | `--session-reap-seconds` | `86400` | `1` | Sessions silent past this (s) are opportunistically closed by `session_open`/`session_heartbeat`. |
+| `OKTO_NEXUS_MAX_SHARED_MD_EVENTS` | `--max-shared-md-events` | `1000` | `1` | Hard ceiling for `shared_md_render`'s `limit_events`. |
+| `OKTO_NEXUS_MAX_EVENT_LIMIT` | `--max-event-limit` | `1000` | `1` | Hard ceiling for the `limit` page size on `event_get` / `event_wait`. |
+| `OKTO_NEXUS_TRUST_MODE` | `--trust-mode` | `open` | — | One of `open`, `strict`. `strict` requires `session_id` + `session_secret` on the sensitive verbs; `open` validates a supplied secret but does not require one. |
+| `OKTO_NEXUS_RETENTION_EVENTS_KEEP_DAYS` | `--retention-events-keep-days` | `30` | `0` | Retention window (days) for the event log (prune-eligible past it). |
+| `OKTO_NEXUS_RETENTION_READ_DELIVERIES_KEEP_DAYS` | `--retention-read-deliveries-keep-days` | `14` | `0` | Retention window (days) for acknowledged (`read`) deliveries. |
+| `OKTO_NEXUS_RETENTION_CLOSED_SESSIONS_KEEP_DAYS` | `--retention-closed-sessions-keep-days` | `7` | `0` | Retention window (days) for `closed` sessions. |
+| `OKTO_NEXUS_AUTO_PRUNE_ON_START` | `--auto-prune-on-start` | `false` | — | Boolean (`true/1/yes/on` / `false/0/no/off`). Run one bounded, best-effort retention pass at server startup. |
 
-**Adapter-level env knobs** (resolved in the inbound adapter, *not* part of
-`NexusConfig`, env-only — no CLI flag):
-
-| Environment variable | Default | Description |
-|---|---|---|
-| `OKTO_NEXUS_SESSION_STALE_TTL_SECONDS` | `60` | Read-time threshold after which a session's last heartbeat is reported as `stale`. |
-| `OKTO_NEXUS_MAX_EVENT_LIMIT` | `1000` | Hard ceiling for the `limit` page size on `event_get` / `event_wait`. |
-| `OKTO_NEXUS_MAX_SHARED_MD_EVENTS` | `1000` | Hard ceiling for `shared_md_render`'s `limit_events`. |
-
+Retention only ever deletes **terminal** lanes (events past their window,
+`read` deliveries, `closed` sessions) — see [Operations](#operations).
 `load_config(env, argv=None)` is the single entry point and depends only on the
 stdlib + `okto_nexus.errors` (it imports neither `mcp` nor `sqlite3`).
 
@@ -332,7 +364,10 @@ can be visible to the whole workspace while only its target may claim it.)
    open questions above). **Never broadcast actionable "do X" requests** — an
    undirected ask can trigger **unwanted parallel work** (every eligible agent may
    act on it). Once discovery finds the owner, switch to a direct message (or a
-   handoff for dispatchable work).
+   handoff for dispatchable work). A broadcast reaches the workspace's
+   **present** participants — sessions with a heartbeat within
+   `presence_ttl_seconds` (default 30 min); agents excluded for staleness are
+   reported back to the sender in `excluded_stale` (never dropped silently).
 
 **Addressing — the target strategies (shared by messages *and* handoffs).** The
 `target` object decides *who is eligible*. Omitting it means broadcast.
@@ -385,7 +420,7 @@ the bus, not for receiving your own messages. See
 | Broadcast info / ask an open question | `message_create` (no target) |
 | Receive / read your messages | `inbox_count`, `inbox_pull`, `inbox_ack`, `inbox_peek`, `inbox_history` |
 | Organize messages by topic | `channel_create`, `channel_list` |
-| Dispatch work to one free worker | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject` |
+| Dispatch work to one free worker | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject`, `handoff_cancel`, `handoff_get` |
 | Observe the whole bus | `event_get`, `event_wait`, `okto-nexus tail` |
 | Identity & presence | `agent_register`, `session_open`/`session_heartbeat`/`session_close` |
 
@@ -435,16 +470,33 @@ There are two distinct identity layers:
 - **`session_open`** creates a session whose `session_id` is **assigned by the
   server** (`ses…`), bound to `(agent_id, workspace_id)`; both the workspace and
   the agent must already exist (`NOT_FOUND` otherwise), and a workspace is
-  required (`WORKSPACE_REQUIRED`).
+  required (`WORKSPACE_REQUIRED`). The response includes a per-session
+  **`session_secret`** (uuid4, returned **only** here — keep it): in
+  `trust_mode=strict` the sensitive verbs (`message_create`,
+  `handoff_claim`/`complete`/`reject`, `inbox_pull`/`ack`/`extend`) require
+  `session_id` + `session_secret`, and in `open` mode a supplied secret is
+  always validated (a wrong credential is never ignored).
 
 **Session status is derived, not persisted as truth.** `session_heartbeat`
 advances `last_heartbeat_at` and reports a derived status. *Stale* is computed at
 read time: an `active` session whose last heartbeat is older than the stale TTL
 (default **60 s**, via `OKTO_NEXUS_SESSION_STALE_TTL_SECONDS`) is reported as
-`stale`, while its row stays `active` — there is no background reaper in V1.
-`session_close` is **idempotent**: the first call sets `status='closed'` +
-`closed_at` and emits `session.closed`; a second call is a no-op (keeps the
-original `closed_at`, does not re-emit).
+`stale`, while its row stays `active`. `session_close` is **idempotent**: the
+first call sets `status='closed'` + `closed_at` and emits `session.closed`; a
+second call is a no-op (keeps the original `closed_at`, does not re-emit).
+
+**Presence is one predicate.** A session is *present* iff its persisted status
+is `active` **and** its last heartbeat is within `presence_ttl_seconds`
+(default **30 min**). `IdentityService.list_present` is the single presence
+read, and the **message broadcast audience uses the exact same predicate** —
+a session listed as present is exactly a session that would receive a
+broadcast, so "who is present" has one answer bus-wide. Heartbeat regularly:
+agents whose every active session has gone heartbeat-stale are excluded from
+broadcasts (surfaced to the sender in `excluded_stale`). There is still no
+background thread, but `session_open` / `session_heartbeat` **opportunistically
+reap** sessions silent past `session_reap_seconds` (default **24 h**, closed
+with reason `stale`) — dead sessions that never called `session_close` stop
+accumulating state forever.
 
 > Session events (`session.opened` / `session.closed`) are emitted on the
 > canonical **`workspace`** stream with `visibility="public"` and no routing
@@ -488,13 +540,19 @@ Note that `message.created` and `artifact.created` are published on the
   `batch_size = limit + 1` probe). A "poisoned" event (malformed visibility/target)
   is treated as **not-visible**, so one bad event never wedges the stream.
 
-`event_wait` is `event_get` plus a poll-and-sleep loop (no socket/thread/
-subscription): it scans **before** sleeping, so a non-empty first page returns
-immediately (`timed_out=false`); on timeout it returns `events:[]`, the **entry
-cursor unchanged**, and `timed_out=true`. Clamps: `limit` `None`→default, `<1` or
-non-int → `VALIDATION_ERROR`, above max → pinned to max; `timeout_seconds`
-`None`→ceiling, `<= 0` → a single `event_get` with no sleep, else
-`min(timeout, ceiling)`; polling steps by `poll_interval_ms`.
+`event_wait` is `event_get` plus a bounded wait on the **`Waiter` port** (no
+socket/thread/subscription): it scans **before** waiting, so a non-empty first
+page returns immediately (`timed_out=false`); on timeout it returns
+`events:[]`, the **entry cursor unchanged**, and `timed_out=true`. The V1
+waiter (`SleepPollWaiter`) sleeps in `poll_interval_ms` steps and, between
+sleeps, probes SQLite's `PRAGMA data_version` (a cheap cross-process change
+counter) — the log is **re-scanned only when some process committed a write**,
+never once per interval; a degraded probe fails open (re-scan after one
+interval, so the read path surfaces any real error). Clamps: `limit`
+`None`→default, `<1` or non-int → `VALIDATION_ERROR`, above max → pinned to
+max; `timeout_seconds` `None`→ceiling at the service layer (the MCP tool
+defaults it to `0` = snapshot), `<= 0` → a single `event_get` with no sleep,
+else `min(timeout, ceiling)`.
 
 ### Monitoring patterns (background follower)
 
@@ -521,7 +579,7 @@ the mode that fits your harness so it is never forced to block:
 - **Targeted wait.** A short `timeout_seconds` (e.g. 30) is fine to await the
   reply to a message you just sent, accepting the block.
 
-Two things a real monitor must handle — the `tail` follower does both:
+Four things a real monitor must handle — the `tail` follower does all of them:
 
 - **Own echo.** The follower emits *every* visible event, including the caller's
   own, so a naive monitor reacts to itself. `--exclude-agent <you>` drops them
@@ -531,6 +589,14 @@ Two things a real monitor must handle — the `tail` follower does both:
   loop retries those with bounded backoff (counter reset on each successful poll)
   while failing fast on terminal errors and surfacing a transient that won't
   clear. The cursor is not advanced across a failed poll, so no event is skipped.
+- **Resume across restarts.** `--cursor-file PATH` (opt-in; the consumer owns
+  the path) checkpoints the cursor atomically after every non-empty window; on
+  restart an existing file precedes `--from`, a corrupted file fails closed
+  (`CONFIG_ERROR`). A crash between flush and persist re-emits at most one
+  window — at-least-once, coherent with the inbox lease/ack model.
+- **Passive presence.** The follower never stamps the agent's `last_seen_at`
+  (unlike the MCP `event_get`/`event_wait` tools), so a detached monitor cannot
+  keep an otherwise-idle agent's liveness signal eternally fresh.
 
 > The block is a property of the current **stdio** long-poll. The roadmap's
 > SSE/HTTP transport would replace polling with server **push** (no blocking, no
@@ -573,12 +639,17 @@ At send time `message_create` resolves the **recipient set** and writes one
 **Recipient resolution** (`domain/inbox.py`, reusing `is_agent_eligible`):
 `direct`/`capability`/`role`/`mixed` resolve against the **global** agent
 registry; a bare top-level `broadcast` (and a no-target message) is **bounded to
-the sender's workspace** — its active-session participants — and excludes the
-sender. A `direct` target naming an unregistered agent is `NOT_FOUND` (the whole
-send rolls back); a group target matching nobody succeeds with `recipients: []` +
-a `warning` (never a silent drop). `direct_with_fallback` and a `broadcast` nested
-in a `mixed` are rejected (`VALIDATION_ERROR`) — they would broadcast globally;
-model timed escalation as a **handoff**.
+the sender's workspace** — its **present** participants (sessions whose
+heartbeat is within `presence_ttl_seconds`; the same single predicate
+`list_present` uses) — and excludes the sender. Agents excluded because every
+active session of theirs is heartbeat-stale are reported **explicitly** in
+`excluded_stale` + a `warning` — reach them with a `direct` message (delivered
+regardless of presence). A `direct` target naming an unregistered agent is
+`NOT_FOUND` (the whole send rolls back); a group target matching nobody
+succeeds with `recipients: []` + a `warning` (never a silent drop).
+`direct_with_fallback` and a `broadcast` nested in a `mixed` are rejected
+(`VALIDATION_ERROR`) — they would broadcast globally; model timed escalation
+as a **handoff**.
 
 **Index-free lanes, at-least-once, with a dead letter.** Each delivery moves
 `unread` → `delivered` (in-flight, leased) → `read` (history). `inbox_pull`
@@ -596,9 +667,17 @@ V1 cursor/`message_wait` model.
 
 ### Routing / visibility / eligibility
 
-All in `domain/routing.py` — **total, deterministic, I/O-free** functions.
-Malformed input → `VALIDATION_ERROR`; a well-formed rule that simply does not
-match → `False` (not an error).
+Eligibility/visibility live in `domain/routing.py`; the target **grammar**
+(shape validation) lives in **`domain/targets.py`** — the *single source of
+truth* every slice parses through (message send validation, handoff
+descriptors, routing), so a target accepted on one write path can never be
+rejected or silently reinterpreted on another. All are **total, deterministic,
+I/O-free** functions. Malformed input → `VALIDATION_ERROR`; a well-formed rule
+that simply does not match → `False` (not an error). Grammar constraints worth
+knowing: `mixed` requires a **non-empty** `rules` list, a null/blank sub-rule
+is rejected (it would silently resolve to a covert broadcast), and a
+`broadcast` nested in a `mixed` is rejected everywhere — use a bare top-level
+`{"strategy": "broadcast"}` instead.
 
 **Six target strategies** (`is_agent_eligible`) — discriminator `strategy`/`kind`,
 case-insensitive, `-`/space normalized to `_`:
@@ -625,7 +704,14 @@ eligible). `direct_with_fallback` requires valid `created_at` and `now`.
 | `eligible` | only agents `is_agent_eligible` approves |
 | `private` | eligible-only; for non-`direct` targets, `private == eligible` (never widens beyond the eligible set) |
 
-Default when the log's `visibility` is null: **`public`**.
+Default when the log's `visibility` is null: **`public`**. **Sender
+carve-out:** the item's actor (`actor_agent_id`) always sees its own event —
+eligibility never excludes a sender from its own audit trail (ADR 0001:
+"you have a delivery row *or you are the sender*"). The emit path is
+**fail-closed** (`validate_emit_vocabulary`): an out-of-vocabulary
+`stream`/`visibility` (or a blank `type`) is rejected with `INTERNAL_ERROR`
+before anything persists, so no event can ever be written that no consumer
+could read.
 
 **Claimability ≠ visibility.** *Seeing is not acting.* An item can be `public`
 (visible to the whole workspace) while only its target may claim it. So even a
@@ -634,24 +720,49 @@ fails, returns `NOT_ELIGIBLE_TO_CLAIM`.
 
 ### Handoffs & leases
 
-V1 status set: `OPEN`, `CLAIMED`, `COMPLETED`, `REJECTED`. (`IN_PROGRESS`,
-`BLOCKED`, `CANCELLED`, `EXPIRED` are reserved for forward-compat, with no
-producer in V1.)
+Status set: `OPEN`, `CLAIMED`, `COMPLETED`, `REJECTED`, `CANCELLED`.
+(`IN_PROGRESS`, `BLOCKED`, `EXPIRED` are reserved for forward-compat, with no
+producer.)
 
 ```
 (none)  --create-->            OPEN
 OPEN    --claim-->             CLAIMED
 OPEN    --reject (direct)-->   REJECTED
+OPEN    --cancel (creator)-->  CANCELLED
 CLAIMED --complete (owner)-->  COMPLETED
 CLAIMED --reject (owner)-->    REJECTED
 CLAIMED --expire_old_leases--> OPEN
 ```
 
-`COMPLETED` / `REJECTED` are **terminal**; any transition off this table →
-`INVALID_TRANSITION`. On `handoff_create`, `visibility` is **mandatory and
-explicit** (missing/invalid → `VALIDATION_ERROR`). Owner rules: `complete` only by
-`claimed_by` (`NOT_OWNER`) and only from `CLAIMED`; `reject` by the owner of a
-`CLAIMED`, **or** by the `direct` target of an as-yet-unclaimed `OPEN`.
+`COMPLETED` / `REJECTED` / `CANCELLED` are **terminal**; any transition off
+this table → `INVALID_TRANSITION`. On `handoff_create`, `visibility` is
+**mandatory and explicit** (missing/invalid → `VALIDATION_ERROR`). Owner rules:
+`complete` only by `claimed_by` (`NOT_OWNER`) and only from `CLAIMED`; `reject`
+by the owner of a `CLAIMED`, **or** by the `direct` target of an as-yet-unclaimed
+`OPEN`; `cancel` only by the **creator** (`from_agent_id`) and only while `OPEN`
+(a `CLAIMED` handoff is resolved by its claimant, or cancel it after the lease
+expires and it reopens).
+
+**Create-time recipient policy (D1b, mirrors `message_create`).** A `direct`
+target naming an **unregistered** agent is a hard `NOT_FOUND` (full rollback —
+a typo'd handoff must not sit `OPEN` forever; use `direct_with_fallback` for an
+agent that will register later). A pool target
+(capability/role/mixed/broadcast/`direct_with_fallback`) matching **zero**
+currently-registered agents succeeds with `eligible_count: 0` + an explicit
+`warning` — never silent, never fatal (eligibility is lazily re-evaluated at
+claim time, so a later registrant can still claim; `handoff_cancel` retracts a
+mistake).
+
+**Outcome persistence + inbox notifications.** A directed handoff
+(`direct`/`direct_with_fallback` naming a registered agent) lands one synthetic
+notification in the named agent's **inbox** in the same transaction
+(`notified` in the response) — the wakeup needs no polling; claiming still
+happens via `handoff_claim`. `handoff_complete` persists `result` (and
+`handoff_reject` persists `rejected_reason`) **on the handoff row** and
+notifies the creator's inbox with the outcome. **`handoff_get`** is the
+creator's path to a finished handoff's status/result by id — terminal handoffs
+leave `handoff_list_available`, and lifecycle events are observability, not
+delivery.
 
 **Atomic claim — single winner, no TOCTOU.** Claiming is one conditional `UPDATE`:
 
@@ -676,7 +787,12 @@ background job). Threshold is strict: `lease_expires_at < now` expires;
 `handoff.expired` in the same transaction — returning abandoned work to the pool
 without a dedicated reaper. `handoff_list_available` returns the `OPEN` handoffs
 that are **visible *and* eligible** to the caller, paginated, with optional
-long-poll.
+long-poll (same waiter-gated mechanics and snapshot-by-default as `event_wait`).
+
+**Trust.** `handoff_claim` / `handoff_complete` / `handoff_reject` are
+sensitive verbs: in `trust_mode=strict` they require `session_id` +
+`session_secret` (from `session_open`); in `open` mode the credentials are
+optional but a supplied secret is always validated.
 
 ### Artifacts & path safety
 
@@ -724,13 +840,16 @@ Four fixed-order sections: (1) relevant agents / active sessions, (2) open tasks
 (3) open handoffs, (4) recent events (**newest-first** by descending `event_id`,
 capped by `limit_events`, default 50, ceiling 1000). The read is a single
 read-only transaction over committed state and embeds no wall-clock, so two
-renders over the same state are **byte-identical**.
+renders over the same state are **byte-identical**. `shared.md` is the
+workspace-**public** view: the routing target of a non-`public` handoff
+(`eligible`/`private`) is redacted as `[private]` instead of rendered raw, and
+handoff payloads are never rendered.
 
 ---
 
 ## Tool Reference
 
-**33 MCP tools** — 32 across seven slices, auto-discovered from
+**35 MCP tools** — 34 across seven slices, auto-discovered from
 `adapters/inbound/mcp/tools/`, plus the server-level `nexus_info`. Every tool
 returns the canonical envelope (success `{ok:true,data}` / failure
 `{ok:false,error}`); the `@tool_envelope` decorator guarantees no exception
@@ -813,17 +932,23 @@ and who would match it before a `target: {strategy:"capability"}`).
 
 #### `session_open`
 Open a session bound immutably to `(agent_id, workspace_id)`; server assigns
-`session_id` (`ses…`). Emits `session.opened`.
+`session_id` (`ses…`) **and a per-session `session_secret`** (uuid4, returned
+ONLY here — keep it for the sensitive verbs). Emits `session.opened` and
+opportunistically reaps the workspace's sessions silent past
+`session_reap_seconds`.
 - **Request:** `agent_id: str` (required); `workspace_id: str | None` (default
   `None`, but **required in practice**); `metadata: Any` (default `None`).
-- **Data:** `{session_id, agent_id, workspace_id, status:"active", started_at, last_heartbeat_at}`.
+- **Data:** `{session_id, agent_id, workspace_id, status:"active", started_at, last_heartbeat_at, session_secret}`.
 - **Errors:** `WORKSPACE_REQUIRED`, `VALIDATION_ERROR` (missing `agent_id`;
   non-serializable metadata), `CONTENT_TOO_LARGE` (metadata inline), `NOT_FOUND`
   (workspace or agent nonexistent). No row created on failure.
 
 #### `session_heartbeat`
 Advance `last_heartbeat_at` and report derived status (`active`/`stale`). Emits
-`session.heartbeat`.
+`session.heartbeat`. Heartbeating keeps you **present** (in the broadcast
+audience, window `presence_ttl_seconds`) and clear of the opportunistic
+stale-session reaper (which this call also runs for the workspace's long-dead
+sessions).
 - **Request:** `session_id: str` (required); `workspace_id: str | None` (default
   `None`; if given, membership is validated).
 - **Data:** `{session_id, status, last_heartbeat_at}`.
@@ -882,21 +1007,30 @@ Persist the message, **resolve its recipients and fan one inbox delivery per
 recipient**, and emit `message.created` — all in the same (atomic) transaction.
 - **Request:** `project_root: str` (required); `from_agent_id: str` (required);
   `subject: str` (required); `body: str` (required); `channel_id: str | None`;
-  `from_session_id: str | None`; `target: dict | None`; `artifacts: list[str] | None`;
-  `parent_message_id: str | None` (all default `None`).
+  `from_session_id: str | None` (REQUIRED with `session_secret` in
+  `trust_mode=strict`); `target: dict | None`; `artifacts: list[str] | None`;
+  `parent_message_id: str | None`; `session_secret: str | None` (validated
+  whenever supplied; required in `strict`) (all default `None`).
 - **Data:** message shape **+** `event_id`, `recipients: [...]`, `delivered_count`,
-  an optional `warning` (when a group target matched nobody), and an optional
-  `workspace_created: true` (present **only** when the send materialised a
-  brand-new `workspaces` row; absent in the steady state — additive key,
-  existing clients unaffected). Recipient resolution:
+  an optional `warning` (group target matched nobody, or agents were excluded
+  for staleness), an optional `excluded_stale: [...]` (agents whose every
+  active session has a heartbeat older than `presence_ttl_seconds` — they will
+  NOT receive this broadcast; reach them with a `direct` message), and an
+  optional `workspace_created: true` (present **only** when the send
+  materialised a brand-new `workspaces` row; absent in the steady state —
+  additive key, existing clients unaffected). Recipient resolution:
   `direct`/`capability`/`role`/`mixed` → the **global** registry;
-  bare `broadcast`/no-target → this workspace's **active-session participants**
-  (the sender is excluded from group targets).
+  bare `broadcast`/no-target → this workspace's **present participants**
+  (active sessions with a fresh heartbeat; the sender is excluded from group
+  targets).
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
   (missing/empty from_agent_id/subject/body; malformed target; `direct_with_fallback`
-  or a `broadcast` nested in `mixed`; artifacts not a list), `CONTENT_TOO_LARGE`
-  (subject/body > `max_inline_bytes`), `NOT_FOUND` (channel, parent message, or a
-  **`direct` target that is not a registered agent**), `INTERNAL_ERROR`.
+  or a `broadcast` nested in `mixed`; artifacts not a list; missing credentials
+  in `trust_mode=strict`), `CONTENT_TOO_LARGE` (subject/body >
+  `max_inline_bytes`), `NOT_FOUND` (channel, parent message, unknown
+  session_id, or a **`direct` target that is not a registered agent**),
+  `NOT_OWNER` (session_secret mismatch, or session belongs to another agent),
+  `INTERNAL_ERROR`.
 
 ### Inbox — message delivery (ADR 0001)
 
@@ -908,7 +1042,10 @@ recipient**, and emit `message.created` — all in the same (atomic) transaction
 > without an ack is **parked** instead of redelivered. `limit` defaults to 50,
 > max 200. `inbox_peek` / `inbox_count` / `inbox_history` / `message_status` are
 > **READ-ONLY** (`unit_of_work(write=False)` — polling never takes the WAL
-> writer lock); only `pull`/`ack`/`extend` write.
+> writer lock); only `pull`/`ack`/`extend` write. The three writers are
+> sensitive verbs: in `trust_mode=strict` they require `session_id` +
+> `session_secret` (from `session_open`); in `open` mode a supplied secret is
+> still validated (`NOT_OWNER` on mismatch).
 
 #### `inbox_pull`
 Atomically claim your claimable deliveries (`unread` + your own lease-expired
@@ -916,24 +1053,30 @@ redeliveries) into in-flight and return them **with their body**; index-free
 (no cursor).
 - **Request:** `agent_id: str` (required); `limit: int | None`;
   `lease_seconds: int | None` (size the lease for long turns; clamped to
-  10–3600, default = lease TTL).
+  10–3600, default = lease TTL); `session_id: str | None` +
+  `session_secret: str | None` (trust credentials — required in `strict`).
 - **Data:** `{messages: [{delivery_id, message_id, status, delivered_at, lease_expires_at, read_at, from_agent_id, workspace_id, channel_id, subject, body, target, artifacts, created_at}, …], count}`.
 - **Note:** a delivery on its 5th claim is parked (dead-letter) instead of
   returned; parked rows consume slots of THAT claim's `limit`, so a pull that
   parks poison messages may return fewer items — the next pull brings the rest.
 - **Errors:** `VALIDATION_ERROR` (missing `agent_id`; non-positive `limit`;
-  non-int/`bool` `lease_seconds`).
+  non-int/`bool` `lease_seconds`; missing credentials in `strict`),
+  `NOT_FOUND`/`NOT_OWNER` (bad trust credentials).
 
 #### `inbox_ack`
 Move messages to history (read), freeing the queue. Idempotent by `message_id`.
-- **Request:** `agent_id: str` (required); `message_ids: str | list[str]` (required).
-- **Data:** `{acknowledged: int}` (rows transitioned). **Errors:** `VALIDATION_ERROR`.
+- **Request:** `agent_id: str` (required); `message_ids: str | list[str]`
+  (required); `session_id: str | None` + `session_secret: str | None` (trust
+  credentials — required in `strict`).
+- **Data:** `{acknowledged: int}` (rows transitioned). **Errors:**
+  `VALIDATION_ERROR`, `NOT_FOUND`/`NOT_OWNER` (bad trust credentials).
 
 #### `inbox_extend`
 Renew the lease on messages you pulled but have not finished handling (long
 turns), avoiding duplicate redelivery.
 - **Request:** `agent_id: str` (required); `message_ids: str | list[str]`
-  (required); `extend_seconds: int` (required; clamped to 10–3600). New lease =
+  (required); `extend_seconds: int` (required; clamped to 10–3600); `session_id`
+  + `session_secret` (trust credentials — required in `strict`). New lease =
   now + `extend_seconds`.
 - **Data:** `{extended: int, lease_expires_at: str}`.
 - **All-or-nothing:** if ANY id is not currently in-flight for you (never
@@ -1005,26 +1148,37 @@ Replacements: `message_get` → `inbox_pull`/`inbox_peek`/`inbox_history` (or
 
 ### Handoffs
 
-> Status: `OPEN`/`CLAIMED`/`COMPLETED`/`REJECTED`. Visibilities:
+> Status: `OPEN`/`CLAIMED`/`COMPLETED`/`REJECTED`/`CANCELLED`. Visibilities:
 > `{private, eligible, public}`. Target strategies:
 > `{direct, capability, role, broadcast, mixed, direct_with_fallback}`.
-> `handoff_list_available` `limit` defaults to 100, max 500.
+> `handoff_list_available` `limit` defaults to 100, max 500. The mutating
+> verbs `claim`/`complete`/`reject`/`cancel` are trust-gated (`session_id` +
+> `session_secret` required in `trust_mode=strict`).
 
 #### `handoff_create`
 Create an `OPEN` handoff (validating target/visibility/limit) and emit
 `handoff.created`. The `payload` (inline request body / work content) is stored
 **with the row** and returned by `handoff_list_available`/`handoff_claim`, so a
 worker reads the work without correlating the `handoff.created` event — pass an
-`artifact_id` reference for large content.
+`artifact_id` reference for large content. A `direct` target must name a
+**registered** agent (else `NOT_FOUND`, full rollback) and lands an inbox
+notification for it; a pool target matching 0 agents succeeds with an explicit
+warning. After creating, poll `handoff_get` for the outcome.
 - **Request:** `project_root: str` (required); `from_agent_id: str` (required);
   `target: Any` (required — descriptor with `strategy` + per-strategy fields);
   `visibility: str` (required — one of `{private, eligible, public}`);
-  `payload: str | None`; `session_id: str | None` (default `None`). *(The use case
-  accepts `task_id`, but the tool does not expose it.)*
-- **Data:** `{handoff_id, workspace_id, status:"OPEN", created_at}`.
+  `payload: Any` (any JSON value — a string round-trips byte-for-byte, a
+  non-string is stored/returned as opaque JSON text); `session_id: str | None`
+  (default `None`).
+- **Data:** `{handoff_id, workspace_id, status:"OPEN", created_at}` **+** for a
+  directed target an optional `notified: [agent_id]` (the inbox notification
+  landed); for pool targets `eligible_count` and, when it is `0`, an explicit
+  `warning` (the handoff stays `OPEN` for later registrants — retract a
+  mistake with `handoff_cancel`).
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
   (missing from_agent_id; missing/malformed target or unknown strategy/missing
-  field; missing/unknown visibility), `CONTENT_TOO_LARGE` (payload inline).
+  field; missing/unknown visibility), `NOT_FOUND` (`direct` target naming an
+  unregistered agent), `CONTENT_TOO_LARGE` (payload inline).
 
 #### `handoff_list_available`
 Expire stale leases, then list `OPEN` handoffs visible **and** eligible to the
@@ -1042,32 +1196,72 @@ caller (paginated, with optional long-poll).
 Atomically claim an `OPEN` handoff (single winner); expires leases first and gates
 on eligibility. Emits `handoff.claimed`.
 - **Request:** `project_root: str` (required); `handoff_id: str` (required);
-  `agent_id: str` (required); `session_id: str | None` (default `None`).
+  `agent_id: str` (required); `session_id: str | None` +
+  `session_secret: str | None` (trust credentials — required in
+  `trust_mode=strict`; a supplied secret is validated even in `open`).
 - **Data:** `{handoff_id, workspace_id, status:"CLAIMED", claimed_by, lease_expires_at, payload}`.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
-  (missing handoff_id/agent_id), `NOT_FOUND`, `WORKSPACE_MISMATCH`,
-  `NOT_ELIGIBLE_TO_CLAIM`, `HANDOFF_ALREADY_CLAIMED`.
+  (missing handoff_id/agent_id; missing credentials in `strict`), `NOT_FOUND`,
+  `WORKSPACE_MISMATCH`, `NOT_ELIGIBLE_TO_CLAIM`, `HANDOFF_ALREADY_CLAIMED`,
+  `NOT_OWNER` (bad trust credentials).
 
 #### `handoff_complete`
-Owner-only transition `CLAIMED → COMPLETED`. Emits `handoff.completed`.
+Owner-only transition `CLAIMED → COMPLETED`. Emits `handoff.completed`,
+**persists `result` on the row** (read it back with `handoff_get`), and
+notifies the creator's inbox with the outcome.
 - **Request:** `project_root: str` (required); `handoff_id: str` (required);
-  `agent_id: str` (required); `result: Any` (default `None`).
-- **Data:** `{handoff_id, status:"COMPLETED"}`.
+  `agent_id: str` (required); `result: Any` (default `None` — string verbatim,
+  non-string as opaque JSON text); `session_id` + `session_secret` (trust
+  credentials — required in `strict`).
+- **Data:** `{handoff_id, status:"COMPLETED"}` + optional `notified: [creator]`
+  (absent when the creator is unregistered or is the completing agent itself).
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
-  (missing ids; non-serializable result), `CONTENT_TOO_LARGE` (result inline),
-  `NOT_FOUND`, `WORKSPACE_MISMATCH`, `INVALID_TRANSITION` (status ≠ CLAIMED),
-  `NOT_OWNER` (agent_id ≠ claimed_by).
+  (missing ids; non-serializable result; missing credentials in `strict`),
+  `CONTENT_TOO_LARGE` (result inline), `NOT_FOUND`, `WORKSPACE_MISMATCH`,
+  `INVALID_TRANSITION` (status ≠ CLAIMED), `NOT_OWNER` (agent_id ≠ claimed_by;
+  or bad trust credentials).
 
 #### `handoff_reject`
 Reject: owner `CLAIMED → REJECTED` or direct-target `OPEN → REJECTED`. Emits
-`handoff.rejected`.
+`handoff.rejected`, **persists `rejected_reason` on the row** (read it back
+with `handoff_get`), and notifies the creator's inbox.
 - **Request:** `project_root: str` (required); `handoff_id: str` (required);
-  `agent_id: str` (required); `reason: str | None` (default `None`).
-- **Data:** `{handoff_id, status:"REJECTED"}`.
+  `agent_id: str` (required); `reason: str | None` (default `None`); `session_id`
+  + `session_secret` (trust credentials — required in `strict`).
+- **Data:** `{handoff_id, status:"REJECTED"}` + optional `notified: [creator]`.
 - **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
-  (missing ids; non-serializable reason), `CONTENT_TOO_LARGE` (reason inline),
-  `NOT_FOUND`, `WORKSPACE_MISMATCH`, `INVALID_TRANSITION` (terminal/invalid state),
-  `NOT_OWNER` (non-owner of CLAIMED; or non-direct-target of OPEN).
+  (missing ids; non-serializable reason; missing credentials in `strict`),
+  `CONTENT_TOO_LARGE` (reason inline), `NOT_FOUND`, `WORKSPACE_MISMATCH`,
+  `INVALID_TRANSITION` (terminal/invalid state), `NOT_OWNER` (non-owner of
+  CLAIMED; non-direct-target of OPEN; or bad trust credentials).
+
+#### `handoff_cancel`
+Creator-only transition `OPEN → CANCELLED` — retract a handoff nobody should
+take anymore (e.g. created with a pool target that matched zero agents). Emits
+`handoff.cancelled` (the optional `reason` rides the event payload).
+- **Request:** `project_root: str` (required); `handoff_id: str` (required);
+  `agent_id: str` (required — must be the creator); `reason: str | None`
+  (default `None`); `session_id` + `session_secret` (trust credentials —
+  required in `strict`).
+- **Data:** `{handoff_id, status:"CANCELLED"}`.
+- **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
+  (missing ids; missing credentials in `strict`), `CONTENT_TOO_LARGE` (reason
+  inline), `NOT_FOUND`, `WORKSPACE_MISMATCH`, `NOT_OWNER` (caller is not the
+  creator; or bad trust credentials), `INVALID_TRANSITION` (CLAIMED — resolved
+  by its claimant, or cancel after the lease expires; or already terminal).
+
+#### `handoff_get`
+Read ONE handoff by id — the creator's path to a finished handoff's outcome
+(status, claimant, payload, `result`/`rejected_reason`). Runs opportunistic
+lease expiry first, so an elapsed claim reads as `OPEN` again. READ access: the
+creator and the claimant always may; any other agent is gated by the handoff's
+visibility (the same predicate as `handoff_list_available`).
+- **Request:** `project_root: str` (required); `handoff_id: str` (required);
+  `agent_id: str` (required).
+- **Data:** `{handoff_id, workspace_id, status, from_agent_id, target, visibility, claimed_by, lease_expires_at, payload, result, rejected_reason, created_at, updated_at}`.
+- **Errors:** `WORKSPACE_REQUIRED`, `WORKSPACE_UNRESOLVED`, `VALIDATION_ERROR`
+  (missing ids), `NOT_FOUND`, `WORKSPACE_MISMATCH`, `NOT_OWNER` (not
+  creator/claimant and not admitted by visibility).
 
 ### Artifacts
 
@@ -1126,22 +1320,26 @@ unscoped identities). Timestamps are UTC ISO-8601 `TEXT`; JSON-ish columns
 | `schema_migrations` | `version INTEGER` | no | `applied_at` | ledger of applied migrations |
 | `workspaces` | `workspace_id TEXT` | is the root | `display_name`, `root_realpath`, `created_at`, `last_seen_at` | — |
 | `agents` | `agent_id TEXT` | **no** (global) | `role`, `capabilities`, `metadata`, `created_at`, `last_seen_at` (migr. 004) | — |
-| `sessions` | `session_id TEXT` | yes | `agent_id`, `status`, `started_at`, `last_heartbeat_at`, `closed_at` (migr. 002) | FK→`agents`, FK→`workspaces`; idx `(workspace_id,status)`, `(workspace_id,agent_id)` |
+| `sessions` | `session_id TEXT` | yes | `agent_id`, `status`, `started_at`, `last_heartbeat_at`, `closed_at` (migr. 002), `session_secret` (migr. 007) | FK→`agents`, FK→`workspaces`; idx `(workspace_id,status)`, `(workspace_id,agent_id)` |
 | `events` | `event_id INTEGER AUTOINCREMENT` | yes | `stream`, `type`, `actor_agent_id`, `payload`, `visibility`, `target`, `created_at` | append-only/immutable; FK→`workspaces`; idx `(workspace_id,event_id)`, `(workspace_id,stream,event_id)` |
 | `channels` | `channel_id TEXT` | yes | `name`, `created_at` | FK→`workspaces`; **UNIQUE(workspace_id,name)**; idx `(workspace_id,name)` |
 | `messages` | `message_id TEXT` | yes | `from_agent_id`, `channel_id`, `from_session_id`, `target`, `subject`, `body`, `artifacts`, `parent_message_id`, `created_at` | FK→`workspaces`, FK→`channels`, self-FK→`messages`; idx `(workspace_id,created_at)`, `(workspace_id,channel_id,created_at)` |
 | `message_deliveries` (migr. 005/006) | `delivery_id TEXT` | **no** (global inbox) | `message_id`, `recipient_agent_id`, `status` (`unread`/`delivered`/`read`/`parked`), `delivered_at`, `lease_expires_at`, `read_at`, `attempts` (migr. 006), `created_at` | FK→`messages`, FK→`agents`; **UNIQUE(message_id,recipient_agent_id)**; idx `(recipient_agent_id,status)`, `(status,lease_expires_at)`, keyset idx `(recipient_agent_id,status,read_at DESC,delivery_id DESC)` |
 | `tasks` | `task_id TEXT` | yes | `title`, `description`, `status`, `created_by`, `created_at` | FK→`workspaces`; idx `(workspace_id,status)` |
-| `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `payload` (migr. 003), `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
+| `handoffs` | `handoff_id TEXT` | yes | `task_id`, `from_agent_id`, `target`, `visibility`, `status`, `claimed_by`, `lease_expires_at`, `payload` (migr. 003), `result` + `rejected_reason` (migr. 008), `created_at`, `updated_at` | FK→`workspaces`, FK→`tasks`; idx `(workspace_id,status)`, `(workspace_id,target,status)` |
 | `artifacts` | `artifact_id TEXT` | yes | `artifact_type`, `name`, `path`, `content`, `size_bytes`, `content_type`, `created_at` | FK→`workspaces`; idx `(workspace_id,artifact_type)` |
 
-**Migrations.** `migrations/001_core.sql` defines the core schema;
-`002_session_close.sql`, `003_handoff_payload.sql`, and `004_agent_last_seen.sql`
+**Migrations** (shipped inside the package at `src/okto_nexus/migrations/`).
+`001_core.sql` defines the core schema; `002_session_close.sql`,
+`003_handoff_payload.sql`, and `004_agent_last_seen.sql`
 are forward-only `ALTER TABLE … ADD COLUMN` migrations (adding `sessions.closed_at`,
 `handoffs.payload`, and `agents.last_seen_at`); `005_message_deliveries.sql` adds
 the global `message_deliveries` inbox table (ADR 0001);
 `006_inbox_delivery_hardening.sql` adds `message_deliveries.attempts` (backs the
-`parked` dead-letter lane) and the keyset history index.
+`parked` dead-letter lane) and the keyset history index;
+`007_session_secret.sql` adds `sessions.session_secret` (the trust credential,
+ADR 0002); `008_handoff_result.sql` adds `handoffs.result` +
+`handoffs.rejected_reason` (terminal-outcome persistence behind `handoff_get`).
 The runner discovers `migrations/NNN_*.sql` (regex `^(\d+)_.*\.sql$`), orders by
 numeric version, and applies each pending one in its **own** `BEGIN IMMEDIATE`
 transaction, recording `(version, applied_at)` in `schema_migrations` —
@@ -1229,6 +1427,128 @@ agents can branch on it without parsing messages.
 
 ---
 
+## Operations
+
+Operator-facing concerns of a long-running bus: the CLI subcommands, retention,
+trust, and the presence/staleness windows. (All knobs are in
+[Configuration](#configuration); design rationale in
+`docs/design/0002-design-review-hardening.md`.)
+
+### CLI subcommands
+
+The `okto-nexus` entry point dispatches on its first argument:
+
+| Invocation | What it does |
+|---|---|
+| `okto-nexus [flags]` | Run the MCP stdio server (the default). |
+| `okto-nexus tail …` | Follow the workspace event log as NDJSON (the background-monitor pattern — see [Monitoring patterns](#monitoring-patterns-background-follower)). |
+| `okto-nexus admin prune …` | Enforce the retention windows and print a JSON report. |
+
+Unrecognised flags on `tail`/`admin` (e.g. `--home`, `--db-path`) are forwarded
+verbatim to the same fail-closed bootstrap the server uses, so config
+precedence (CLI > env > default) is identical everywhere.
+
+### Retention (`admin prune` / `auto_prune_on_start`)
+
+The store is append-mostly by design — without pruning, `nexus.db` grows
+without bound. `RetentionService.prune` deletes rows older than their window
+under hard safety invariants:
+
+- **Only terminal lanes are eligible:** events past `retention_events_keep_days`
+  (default 30 d), `read` deliveries past
+  `retention_read_deliveries_keep_days` (14 d), `closed` sessions past
+  `retention_closed_sessions_keep_days` (7 d).
+- **Never deleted, regardless of age:** `unread`/`delivered`/`parked`
+  deliveries, `active`/`stale` sessions, and ALL handoffs, tasks, messages,
+  channels, agents, workspaces and artifacts.
+- **Bounded batches** (500 rows each, one write transaction per batch) keep the
+  WAL writer lock brief; concurrent agents keep flowing.
+
+```bash
+# Count first (deletes nothing, skips --vacuum):
+okto-nexus admin prune --project-root <path> --dry-run
+
+# Enforce the configured windows and compact the file:
+okto-nexus admin prune --project-root <path> --vacuum
+
+# Override a window for this run only:
+okto-nexus admin prune --project-root <path> --events-keep-days 7
+```
+
+Scope is the **whole store** — every workspace shares one `nexus.db` and the
+inbox is global; `--project-root` only anchors/validates the call. Deletes
+alone leave free pages inside the file; only `--vacuum` shrinks it on disk.
+`auto_prune_on_start=true` additionally runs one bounded, incremental pass at
+server startup (at most 4 batches per table; best-effort — a failure is
+reported to stderr and startup proceeds; backlog converges across restarts or
+via a full `admin prune`).
+
+### Trust mode
+
+`trust_mode=open` (default) keeps the cooperative posture: the sensitive verbs
+(`message_create`, `handoff_claim`/`complete`/`reject`,
+`inbox_pull`/`ack`/`extend`) accept optional credentials, but a **supplied**
+`session_secret` is always validated — a wrong credential is never ignored.
+`trust_mode=strict` requires `session_id` + `session_secret` (returned once by
+`session_open`) on every sensitive verb. This is **cooperative
+authentication**: it stops accidental/sloppy impersonation between local
+agents, not a hostile process that can read `nexus.db` directly. Sessions
+opened before the trust upgrade have no stored secret — close and reopen them.
+
+### Presence & staleness windows
+
+Three read-time windows govern session liveness (no background threads):
+
+| Window | Default | Effect when exceeded |
+|---|---|---|
+| `session_stale_ttl_seconds` | 60 s | Session *reports* `stale` (row stays `active`). |
+| `presence_ttl_seconds` | 30 min | Session leaves the **broadcast audience** (sender sees `excluded_stale`). |
+| `session_reap_seconds` | 24 h | Session is opportunistically **closed** by the next `session_open`/`session_heartbeat` in the workspace. |
+
+---
+
+## Troubleshooting
+
+Symptoms an agent (or its operator) actually meets, and the prescriptive fix:
+
+- **`DB_ERROR` with `details.retryable: true`** — transient WAL contention
+  (another process briefly held the write lock). Retry the **same call** after
+  a short backoff (~0.5–2 s). The flag is absent on real failures — never
+  retry those blindly. The `tail` follower retries transients itself with
+  bounded backoff and never advances the cursor across a failed poll.
+- **`MIGRATED` error** — you called a tool removed in S3 (`message_get`,
+  `message_list`, `message_wait`). The error's `details.replacements` names the
+  exact replacement calls (`inbox_*`, `event_get`/`event_wait`); switch to
+  them — do **not** retry the old call.
+- **Behaviour disagrees with your cached tool schemas** — call `nexus_info` and
+  compare `surface_revision` with what you cached; it increments on every
+  change to tool names/parameters/defaults/semantics. (MCP hosts typically
+  don't re-discover tools mid-session — reconnect to refresh.)
+- **A recipient seems silent** — don't re-send. `message_status(message_id)`
+  shows the per-recipient lane: `unread` (not pulled yet, or lease expired and
+  awaiting redelivery), `delivered` (in flight), `read` (acked), `parked`
+  (dead-lettered after 5 unacked claims — inspect via
+  `inbox_peek(include_parked=true)` on the recipient side).
+- **Your broadcast reached fewer agents than expected** — check the response's
+  `excluded_stale`: those agents' sessions are heartbeat-stale (older than
+  `presence_ttl_seconds`). Reach them with a `direct` message (delivered
+  regardless of presence) and remind them to `session_heartbeat`.
+- **You keep receiving the same message** — you pulled it but never
+  `inbox_ack`ed it before the lease elapsed (at-least-once redelivery). Ack
+  what you finish; for long turns size the lease (`inbox_pull(lease_seconds=…)`)
+  or renew it (`inbox_extend`).
+- **`VALIDATION_ERROR`/`NOT_OWNER` on a sensitive verb** — the server runs
+  `trust_mode=strict` (or you supplied a wrong secret in `open` mode). Pass
+  the `session_id` + `session_secret` returned by **your own** `session_open`;
+  a pre-upgrade session has no secret — open a new one.
+- **`WORKSPACE_MISMATCH`** — the entity exists but belongs to another
+  workspace. Check the `project_root` you are passing; workspace identity is
+  `sha256(realpath(project_root))`, so two different paths to the same real
+  directory are the *same* workspace, and different directories never share
+  entities.
+
+---
+
 ## Example Flow
 
 A realistic two-agent coordination, all over the canonical
@@ -1242,8 +1562,10 @@ drives the full flow as any third-party MCP host would. The end-to-end smoke tes
    the `workspaces` row).
 2. **`agent_register(agent_id="builder", role="builder", capabilities=["py"])`** and
    a second `reviewer` agent.
-3. **`session_open(agent_id="builder", workspace_id=…)`** → emits `session.opened`;
-   **`session_heartbeat(session_id=…)`** keeps it `active`.
+3. **`session_open(agent_id="builder", workspace_id=…)`** → emits `session.opened`
+   and returns a `session_secret` (keep it — required on the sensitive verbs in
+   `trust_mode=strict`); **`session_heartbeat(session_id=…)`** keeps it `active`
+   **and present** (in the broadcast audience).
 4. **`message_create(project_root, from_agent_id="builder", subject, body, target={"strategy":"direct","agent_id":"reviewer"})`** →
    persists the message, fans an inbox delivery to `reviewer`, and emits
    `message.created` in the **same** transaction (the response carries `event_id`,
@@ -1281,7 +1603,7 @@ Run the live client with the venv interpreter:
 
 ## Testing
 
-The suite has **262 tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
+The suite has **650+ tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
@@ -1298,12 +1620,27 @@ Notable coverage:
   the hexagonal layering intact.
 - **`tests/test_e2e_smoke.py`** — an in-process end-to-end smoke of the full
   coordination flow.
+- **`tests/test_ports_contract.py`** — runs the same contract suite against the
+  SQLite `EventRepo` *and* the unit-test fake, so fake-drift (the M2 root
+  cause) fails the build.
+- **`tests/test_connection.py` / `tests/test_migrations.py`** — the
+  `BEGIN IMMEDIATE` concurrency contract, retryable `DB_ERROR`, and the
+  per-migration transaction/ledger discipline.
+- **`tests/test_tools_surface.py` / `tests/test_tool_schemas.py`** — the
+  safe-by-default MCP surface (snapshot defaults, `MIGRATED` shims,
+  `nexus_info`, one error grammar) asserted at behaviour and schema level.
+- **`tests/test_presence_trust.py`** — the single presence predicate,
+  `excluded_stale`, session reap, and the `open`/`strict` trust contract.
+- **`tests/test_retention.py`** — terminal-lane-only pruning invariants,
+  bounded batches, dry-run, and the `admin prune` CLI.
 - **`scripts/live_client.py`** — a real out-of-process MCP stdio client (not a
   unit test) that initializes, lists tools, and drives the whole flow against a
   freshly migrated temp store; a successful `list_tools` already proves the store
   was migrated before any tool became callable.
 - Per-slice unit tests: `test_identity`, `test_events`, `test_messages`,
-  `test_handoff`, `test_artifacts`, `test_routing`, `test_shared_md`.
+  `test_message_delivery`, `test_inbox_service`, `test_handoff`,
+  `test_artifacts`, `test_routing`, `test_targets`, `test_shared_md`,
+  `test_tail`, `test_config`.
 
 ---
 
@@ -1312,34 +1649,40 @@ Notable coverage:
 ```
 okto_labs_okto_nexus/
 ├─ pyproject.toml                 # package metadata, deps, console script, pytest config
-├─ migrations/
-│  ├─ 001_core.sql                # core schema (workspaces, agents, sessions, events, …)
-│  └─ 002_session_close.sql       # forward-only ALTER: sessions.closed_at
+├─ docs/design/
+│  ├─ 0001-message-inbox-delivery.md      # ADR: global inbox, lease/ack at-least-once
+│  └─ 0002-design-review-hardening.md     # ADR: this hardening (M1–M11)
 ├─ scripts/
 │  └─ live_client.py              # real MCP stdio client exercising the full flow
 ├─ src/okto_nexus/
-│  ├─ config.py                   # NexusConfig + load_config (CLI > env > default)
-│  ├─ errors.py                   # ErrorCode (18), OktoNexusError, to_envelope_error
-│  ├─ envelope.py                 # ok()/err() + @tool_envelope boundary decorator
+│  ├─ config.py                   # NexusConfig + load_config (CLI > env > default, fail-closed)
+│  ├─ errors.py                   # ErrorCode (18), OktoNexusError, retryable DB_ERROR helpers
+│  ├─ envelope.py                 # ok()/err() + @tool_envelope + require_json_object_param
+│  ├─ migrations/                 # NNN_*.sql shipped inside the package (001..008)
 │  ├─ domain/                     # pure, stdlib-only
-│  │  ├─ ids.py · routing.py · events.py · messages.py
-│  │  ├─ handoff.py · artifacts.py · models.py · base.py
+│  │  ├─ ids.py · routing.py · targets.py (single target grammar) · events.py
+│  │  ├─ messages.py · inbox.py · handoff.py · artifacts.py · models.py · base.py
 │  ├─ application/                # ports (Protocols) + use-case services
-│  │  ├─ ports.py
-│  │  ├─ identity.py · events.py · messages.py
-│  │  ├─ handoff.py · artifacts.py · shared_md.py
+│  │  ├─ ports.py                 # incl. the Waiter port (blocking seam)
+│  │  ├─ identity.py · events.py · messages.py · inbox.py
+│  │  ├─ handoff.py · artifacts.py · shared_md.py · retention.py
 │  └─ adapters/
-│     ├─ inbound/mcp/
-│     │  ├─ server.py             # FastMCP stdio server + fail-closed bootstrap
-│     │  └─ tools/                # auto-discovered register(server, deps) modules
-│     │     ├─ identity.py · events.py · messages.py
-│     │     ├─ handoff.py · artifacts.py · shared_md.py
+│     ├─ inbound/
+│     │  ├─ mcp/
+│     │  │  ├─ server.py          # FastMCP stdio server + fail-closed bootstrap + nexus_info
+│     │  │  └─ tools/             # auto-discovered register(server, deps) modules
+│     │  │     ├─ identity.py · events.py · messages.py · inbox.py
+│     │  │     ├─ handoff.py · artifacts.py · shared_md.py
+│     │  └─ cli/
+│     │     ├─ tail.py            # NDJSON event-log follower (okto-nexus tail)
+│     │     └─ admin.py           # operator maintenance (okto-nexus admin prune)
 │     └─ outbound/
-│        ├─ sqlite/               # connection, migrations, *_repo, event emitter
+│        ├─ sqlite/               # connection (IMMEDIATE UoW), migrations runner, *_repo
+│        ├─ waiter.py             # SleepPollWaiter (data_version-gated long-poll)
 │        ├─ file/store.py         # workspace-contained file store (path safety)
 │        ├─ sharedmd/renderer.py  # atomic shared.md writer
 │        └─ clock.py              # SystemClock
-└─ tests/                         # 262 tests incl. import boundary + e2e smoke
+└─ tests/                         # 650+ tests incl. import boundary, contracts, e2e smoke
 ```
 
 ---
@@ -1347,12 +1690,18 @@ okto_labs_okto_nexus/
 ## Limitations (V1 Non-Goals)
 
 - **Local only:** no HTTP / SSE / WebSocket transport — MCP over stdio only.
-- **No auth / multi-tenant security:** identities are cooperative, not
-  authenticated; trust is bounded by who can launch the process.
+- **Cooperative trust, not real auth:** `trust_mode=strict` requires a
+  per-session `session_secret` on the sensitive verbs, which stops
+  impersonation *between cooperative local agents* — but secrets are stored in
+  plaintext in `nexus.db`, so trust is still bounded by who can read the file /
+  launch the process. No multi-tenant security.
 - **No cloud sync / multi-host:** coordination is bounded by a single SQLite file
   on one machine.
-- **No background workers:** session staleness and handoff lease expiry are
-  derived/opportunistic at read time — there is no scheduler or reaper.
+- **No background threads:** session staleness, presence, handoff/inbox lease
+  expiry, session reaping, and (opt-in) startup pruning are all
+  derived/opportunistic at access time — there is no scheduler. Corollary:
+  retention defaults to off, so an unmaintained store grows until an operator
+  runs `okto-nexus admin prune` (or enables `auto_prune_on_start`).
 - **No UI:** interaction is via MCP tools only.
 - **Not vendor-specific:** any MCP host that launches stdio servers works; there
   is no integration tied to a particular vendor.
@@ -1365,15 +1714,20 @@ okto_labs_okto_nexus/
 
 Post-V1 ideas (non-binding):
 
-- **Streamable HTTP transport** alongside stdio, for remote/multi-host
-  coordination.
+- **Streamable HTTP / SSE transport** alongside stdio, for remote/multi-host
+  coordination and **push** instead of polling. The seam is already in place:
+  the `Waiter` port isolates all blocking in one outbound adapter
+  (`SleepPollWaiter`), so an SSE/notify waiter — and push delivery of inbox
+  notifications — swaps in without touching the application layer (ADR 0002).
 - **Richer streams & consumers:** make more event categories consumable, with
   finer-grained filtering and tailing.
 - **Tasks surface:** the `tasks` table exists in the schema; expose task
   create/transition tools and wire them into handoffs.
 - **Reserved handoff states:** activate `IN_PROGRESS` / `BLOCKED` / `CANCELLED` /
   `EXPIRED` with explicit producers.
-- **Optional background reaper:** proactive session/lease expiry as an opt-in.
+- **Optional background reaper:** proactive session/lease expiry and continuous
+  retention as an opt-in daemon (today both are opportunistic at access time —
+  session reap, lease sweeps, and bounded startup pruning already exist).
 
 ---
 

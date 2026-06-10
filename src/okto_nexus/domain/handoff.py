@@ -18,12 +18,13 @@ State machine (V1)::
     (none)   --handoff_create-->            OPEN
     OPEN     --handoff_claim-->             CLAIMED
     OPEN     --handoff_reject (direct)-->   REJECTED
+    OPEN     --handoff_cancel (creator)-->  CANCELLED
     CLAIMED  --handoff_complete (owner)-->  COMPLETED
     CLAIMED  --handoff_reject (owner)-->    REJECTED
     CLAIMED  --expire_old_leases-->         OPEN
 
-``IN_PROGRESS``, ``BLOCKED``, ``CANCELLED`` and ``EXPIRED`` are reserved
-forward-compatible names with NO producer in V1. ``COMPLETED`` and ``REJECTED``
+``IN_PROGRESS``, ``BLOCKED`` and ``EXPIRED`` are reserved forward-compatible
+names with NO producer in V1. ``COMPLETED``, ``REJECTED`` and ``CANCELLED``
 are terminal. Any transition outside the table is an ``INVALID_TRANSITION``.
 """
 
@@ -44,6 +45,7 @@ __all__ = [
     "STATUS_CLAIMED",
     "STATUS_COMPLETED",
     "STATUS_REJECTED",
+    "STATUS_CANCELLED",
     "RESERVED_STATUSES",
     "TERMINAL_STATUSES",
     "V1_STATUSES",
@@ -55,6 +57,7 @@ __all__ = [
     "EVENT_CLAIMED",
     "EVENT_COMPLETED",
     "EVENT_REJECTED",
+    "EVENT_CANCELLED",
     "EVENT_EXPIRED",
     "validate_target",
     "normalize_visibility",
@@ -71,19 +74,21 @@ STATUS_OPEN = "OPEN"
 STATUS_CLAIMED = "CLAIMED"
 STATUS_COMPLETED = "COMPLETED"
 STATUS_REJECTED = "REJECTED"
+STATUS_CANCELLED = "CANCELLED"
 
 #: Reserved forward-compatible statuses with NO producer in V1.
 STATUS_IN_PROGRESS = "IN_PROGRESS"
 STATUS_BLOCKED = "BLOCKED"
-STATUS_CANCELLED = "CANCELLED"
 STATUS_EXPIRED = "EXPIRED"
 
 RESERVED_STATUSES: frozenset[str] = frozenset(
-    {STATUS_IN_PROGRESS, STATUS_BLOCKED, STATUS_CANCELLED, STATUS_EXPIRED}
+    {STATUS_IN_PROGRESS, STATUS_BLOCKED, STATUS_EXPIRED}
 )
-TERMINAL_STATUSES: frozenset[str] = frozenset({STATUS_COMPLETED, STATUS_REJECTED})
+TERMINAL_STATUSES: frozenset[str] = frozenset(
+    {STATUS_COMPLETED, STATUS_REJECTED, STATUS_CANCELLED}
+)
 V1_STATUSES: frozenset[str] = frozenset(
-    {STATUS_OPEN, STATUS_CLAIMED, STATUS_COMPLETED, STATUS_REJECTED}
+    {STATUS_OPEN, STATUS_CLAIMED, STATUS_COMPLETED, STATUS_REJECTED, STATUS_CANCELLED}
 )
 ALL_STATUSES: frozenset[str] = V1_STATUSES | RESERVED_STATUSES
 
@@ -102,6 +107,7 @@ EVENT_CREATED = "handoff.created"
 EVENT_CLAIMED = "handoff.claimed"
 EVENT_COMPLETED = "handoff.completed"
 EVENT_REJECTED = "handoff.rejected"
+EVENT_CANCELLED = "handoff.cancelled"
 EVENT_EXPIRED = "handoff.expired"
 
 
@@ -112,6 +118,7 @@ _TRANSITIONS: frozenset[tuple[str, str]] = frozenset(
     {
         (STATUS_OPEN, STATUS_CLAIMED),
         (STATUS_OPEN, STATUS_REJECTED),
+        (STATUS_OPEN, STATUS_CANCELLED),
         (STATUS_CLAIMED, STATUS_COMPLETED),
         (STATUS_CLAIMED, STATUS_REJECTED),
         (STATUS_CLAIMED, STATUS_OPEN),
@@ -123,7 +130,8 @@ def can_transition(src: str | None, dst: str) -> bool:
     """Return whether ``src -> dst`` is a permitted V1 lifecycle transition.
 
     ``src`` of ``None``/``""`` models creation (``-> OPEN``). Terminal states
-    (``COMPLETED``/``REJECTED``) never permit a further transition.
+    (``COMPLETED``/``REJECTED``/``CANCELLED``) never permit a further
+    transition.
     """
     if src is None or src == "":
         return dst == STATUS_OPEN

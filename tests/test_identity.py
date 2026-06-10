@@ -931,10 +931,11 @@ def test_workspace_list_global_admin_crosses_workspaces(
     s_a = svc.session_open(agent_id="agent-1", workspace_id=ws_a)["session_id"]
     s_b = svc.session_open(agent_id="agent-1", workspace_id=ws_b)["session_id"]
 
-    # GLOBAL-ADMIN surface: sees BOTH workspaces.
+    # GLOBAL-ADMIN surface: sees BOTH workspaces (paths omitted by default).
     all_ws = svc.workspace_list()
     seen = {w["workspace_id"] for w in all_ws}
     assert {ws_a, ws_b} <= seen
+    assert all("root_realpath" not in w for w in all_ws)  # disclosure is opt-in
 
     # Standard workspace-scoped read: only A, never B.
     scoped_a = svc.list_sessions(workspace_id=ws_a)
@@ -960,6 +961,65 @@ def test_workspace_list_tool_global_admin(migrated_factory, tmp_config, tmp_path
     assert res["ok"] is True
     ids = {w["workspace_id"] for w in res["data"]["workspaces"]}
     assert {ws_a, ws_b} <= ids  # global-admin crosses workspaces
+    # Default response never carries on-disk paths (opt-in via include_paths).
+    assert all("root_realpath" not in w for w in res["data"]["workspaces"])
+
+
+def test_workspace_list_omits_paths_by_default_and_discloses_on_opt_in(
+    migrated_factory, tmp_config, tmp_path
+):
+    """Default entries carry NO root_realpath key; include_paths=True returns
+    the on-disk path of EVERY workspace (defense-in-depth: filesystem layout
+    disclosure is an explicit request, not routine discovery)."""
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj_a = mkdir(tmp_path, "A")
+    proj_b = mkdir(tmp_path, "B")
+    ws_a = svc.workspace_resolve(project_root=str(proj_a))["workspace_id"]
+    ws_b = svc.workspace_resolve(project_root=str(proj_b))["workspace_id"]
+
+    by_id = {w["workspace_id"]: w for w in svc.workspace_list()}
+    for ws in (ws_a, ws_b):
+        entry = by_id[ws]
+        assert "root_realpath" not in entry  # key OMITTED, not just None
+        assert set(entry) == {
+            "workspace_id",
+            "display_name",
+            "created_at",
+            "last_seen_at",
+        }
+
+    with_paths = {
+        w["workspace_id"]: w for w in svc.workspace_list(include_paths=True)
+    }
+    assert with_paths[ws_a]["root_realpath"] == os.path.realpath(str(proj_a))
+    assert with_paths[ws_b]["root_realpath"] == os.path.realpath(str(proj_b))
+
+
+def test_workspace_list_tool_include_paths_opt_in(
+    migrated_factory, tmp_config, tmp_path
+):
+    """Via the MCP tool: default omits paths; include_paths=True discloses them."""
+    deps = make_deps(migrated_factory, tmp_config, StubClock())
+    server = FakeServer()
+    register(server, deps)
+    proj = mkdir(tmp_path, "A")
+    ws = server.tools["workspace_resolve"](project_root=str(proj))["data"][
+        "workspace_id"
+    ]
+
+    res = server.tools["workspace_list"]()
+    assert res["ok"] is True
+    default_entry = next(
+        w for w in res["data"]["workspaces"] if w["workspace_id"] == ws
+    )
+    assert "root_realpath" not in default_entry
+
+    res_paths = server.tools["workspace_list"](include_paths=True)
+    assert res_paths["ok"] is True
+    entry = next(
+        w for w in res_paths["data"]["workspaces"] if w["workspace_id"] == ws
+    )
+    assert entry["root_realpath"] == os.path.realpath(str(proj))
 
 
 # --------------------------------------------------------------------------- #

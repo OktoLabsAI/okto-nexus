@@ -415,6 +415,89 @@ def test_peek_include_parked_must_be_boolean(migrated_factory, fake_clock):
 
 
 # --------------------------------------------------------------------------- #
+# peek is envelope-only (body_preview/body_bytes); pull/history keep the body
+# --------------------------------------------------------------------------- #
+def test_peek_is_envelope_only_pull_and_history_return_full_body(
+    migrated_factory, fake_clock
+):
+    """peek is the TRIAGE path: it must not materialise full bodies (worst case
+    ~50 x 64KB per call), only a bounded preview + the full UTF-8 size so the
+    recipient can decide whether an inbox_pull is worth it. pull (consumption)
+    and history (explicit content read) keep the integral body."""
+    long_body = ("x" * 250) + "ção"  # > 200 chars, multibyte tail
+    seed(
+        migrated_factory,
+        fake_clock,
+        workspace_id="ws",
+        recipient="r",
+        message_id="m1",
+        body=long_body,
+    )
+    inbox = make_inbox(migrated_factory, fake_clock)
+
+    item = inbox.peek(agent_id="r")["messages"][0]
+    assert "body" not in item
+    assert item["body_preview"] == long_body[:200]
+    assert len(item["body_preview"]) == 200
+    assert item["body_bytes"] == len(long_body.encode("utf-8"))
+    # The triage envelope survives: who / subject / when / delivery state.
+    assert item["from_agent_id"] == "sender"
+    assert item["subject"] == "subj"
+    assert item["status"] == "unread"
+    assert item["created_at"] is not None
+
+    # pull materialises the FULL body (and no preview fields).
+    pulled = inbox.pull(agent_id="r")["messages"][0]
+    assert pulled["body"] == long_body
+    assert "body_preview" not in pulled and "body_bytes" not in pulled
+
+    # history keeps the full body too.
+    inbox.ack(agent_id="r", message_ids=["m1"])
+    hist = inbox.history(agent_id="r")["messages"][0]
+    assert hist["body"] == long_body
+    assert "body_preview" not in hist and "body_bytes" not in hist
+
+
+def test_peek_short_body_previews_whole_body(migrated_factory, fake_clock):
+    seed(
+        migrated_factory,
+        fake_clock,
+        workspace_id="ws",
+        recipient="r",
+        message_id="m1",
+        body="oi",
+    )
+    inbox = make_inbox(migrated_factory, fake_clock)
+    item = inbox.peek(agent_id="r")["messages"][0]
+    assert "body" not in item
+    assert item["body_preview"] == "oi"
+    assert item["body_bytes"] == 2
+
+
+def test_peek_include_bodies_opts_into_full_body_and_validates(
+    migrated_factory, fake_clock
+):
+    long_body = "y" * 300
+    seed(
+        migrated_factory,
+        fake_clock,
+        workspace_id="ws",
+        recipient="r",
+        message_id="m1",
+        body=long_body,
+    )
+    inbox = make_inbox(migrated_factory, fake_clock)
+
+    item = inbox.peek(agent_id="r", include_bodies=True)["messages"][0]
+    assert item["body"] == long_body
+    assert "body_preview" not in item and "body_bytes" not in item
+
+    with pytest.raises(OktoNexusError) as ei:
+        inbox.peek(agent_id="r", include_bodies="yes")
+    assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+# --------------------------------------------------------------------------- #
 # M8: inbox_extend renews in-flight leases
 # --------------------------------------------------------------------------- #
 def test_extend_renews_lease_and_prevents_redelivery(migrated_factory, fake_clock):
@@ -735,3 +818,40 @@ def test_register_exposes_queue_tools_and_envelopes_errors(
     # include_parked is plumbed through the tool surface.
     env4 = server.tools["inbox_peek"](agent_id="r", include_parked=True)
     assert env4["ok"] is True and env4["data"]["count"] == 1
+
+
+def test_inbox_peek_tool_is_envelope_only_with_include_bodies_opt_in(
+    migrated_factory, tmp_config, fake_clock
+):
+    deps = SimpleNamespace(
+        connection_factory=_compat(migrated_factory),
+        clock=fake_clock,
+        config=tmp_config,
+        repos=Repos(),
+    )
+    server = FakeServer()
+    register(server, deps)
+    body = "B" * 250
+    seed(
+        migrated_factory,
+        fake_clock,
+        workspace_id="ws",
+        recipient="r",
+        message_id="m1",
+        body=body,
+    )
+
+    # Default: envelope-only projection through the MCP tool.
+    env = server.tools["inbox_peek"](agent_id="r")
+    assert env["ok"] is True
+    item = env["data"]["messages"][0]
+    assert "body" not in item
+    assert item["body_preview"] == "B" * 200
+    assert item["body_bytes"] == 250
+
+    # Opt-in: include_bodies=true returns the full body without consuming.
+    env_full = server.tools["inbox_peek"](agent_id="r", include_bodies=True)
+    assert env_full["ok"] is True
+    assert env_full["data"]["messages"][0]["body"] == body
+    # ...and the message is STILL unread (peek never consumes).
+    assert server.tools["inbox_count"](agent_id="r")["data"]["unread"] == 1

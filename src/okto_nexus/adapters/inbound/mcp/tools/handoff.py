@@ -1,14 +1,17 @@
 """MCP inbound tools for the handoff lifecycle slice.
 
-Registers five tools on the FastMCP server, each returning the canonical
+Registers seven tools on the FastMCP server, each returning the canonical
 envelope (success ``{ok:true,data}`` / failure ``{ok:false,error}``) via
 :func:`tool_envelope`, so no exception ever crosses the adapter boundary:
 
-* ``handoff_create``         - create an OPEN handoff.
+* ``handoff_create``         - create an OPEN handoff (direct targets must
+  name a registered agent and land an inbox notification for it).
 * ``handoff_list_available`` - expire leases then list claimable handoffs.
 * ``handoff_claim``          - atomically claim an OPEN handoff.
 * ``handoff_complete``       - owner completes a CLAIMED handoff.
 * ``handoff_reject``         - owner / direct-target rejects a handoff.
+* ``handoff_cancel``         - creator retracts an OPEN handoff.
+* ``handoff_get``            - read one handoff by id (status/result/reason).
 
 This module is the slice's composition root: it wires the concrete SQLite
 repositories into ``deps.repos`` (only if not already provided) and constructs
@@ -22,13 +25,14 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
-from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
-    SqliteHandoffRepo,
-    SqliteTaskRepo,
-)
+from okto_nexus.adapters.outbound.sqlite.handoff_repo import SqliteHandoffRepo
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.messages_repo import (
+    SqliteMessageDeliveryRepo,
+    SqliteMessageRepo,
 )
 from okto_nexus.application.handoff import HandoffService
 from okto_nexus.application.identity import SessionTrustGuard
@@ -107,8 +111,24 @@ _P_TIMEOUT = (
     "elapses (clamped to the server max wait). BLOCKING (only when >0): parks "
     "your turn - see the server instructions."
 )
-_P_RESULT = "Completion result (string or JSON) recorded with handoff.completed (optional)."
-_P_REASON = "Human-readable reason recorded with the rejection (optional)."
+_P_RESULT = (
+    "Completion result (string or JSON) persisted on the handoff row (read it "
+    "back with handoff_get), recorded with handoff.completed, and delivered to "
+    "the creator's inbox (optional)."
+)
+_P_REASON = (
+    "Human-readable reason persisted on the handoff row (read it back with "
+    "handoff_get), recorded with the rejection, and delivered to the creator's "
+    "inbox (optional)."
+)
+_P_CANCEL_REASON = (
+    "Human-readable reason recorded with the handoff.cancelled event (optional)."
+)
+_P_GET_AGENT = (
+    "Your agent_id. The creator and the claimant always may read; any other "
+    "agent is gated by the handoff's visibility (same predicate as "
+    "handoff_list_available). REQUIRED."
+)
 
 
 def build_service(deps: Any) -> HandoffService:
@@ -121,20 +141,23 @@ def build_service(deps: Any) -> HandoffService:
     repos = deps.repos
     if getattr(repos, "handoffs", None) is None:
         repos.handoffs = SqliteHandoffRepo(deps.clock)
-    if getattr(repos, "tasks", None) is None:
-        repos.tasks = SqliteTaskRepo(deps.clock)
     if getattr(repos, "agents", None) is None:
         repos.agents = SqliteAgentRepo(deps.clock)
     if getattr(repos, "sessions", None) is None:
         repos.sessions = SqliteSessionRepo(deps.clock)
+    if getattr(repos, "messages", None) is None:
+        repos.messages = SqliteMessageRepo(deps.clock)
+    if getattr(repos, "deliveries", None) is None:
+        repos.deliveries = SqliteMessageDeliveryRepo(deps.clock)
     return HandoffService(
         connection_factory=deps.connection_factory,
         handoffs=repos.handoffs,
-        tasks=repos.tasks,
         clock=deps.clock,
         config=deps.config,
         event_emitter=getattr(deps, "event_emitter", None),
         agents=repos.agents,
+        messages=repos.messages,
+        deliveries=repos.deliveries,
     )
 
 
@@ -161,6 +184,16 @@ def register(server: Any, deps: Any) -> None:
         session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
     ) -> dict[str, Any]:
         """Create an OPEN handoff after validating target/visibility; emit handoff.created.
+
+        A ``direct`` target must name a REGISTERED agent (NOT_FOUND otherwise;
+        for an agent that will register later use ``direct_with_fallback``);
+        the named agent gets an inbox notification (``notified`` in the
+        response) - the claim still happens via ``handoff_claim``. Pool
+        targets (capability/role/mixed/broadcast/direct_with_fallback) return
+        ``eligible_count`` and an explicit ``warning`` when 0 agents currently
+        match (the handoff stays OPEN for later registrants; ``handoff_cancel``
+        retracts a mistake). After creating, poll ``handoff_get`` for the
+        status/result - do not scan the event stream.
 
         The optional ``payload`` (the inline request body / work content) is any
         JSON value - pass a dict/list as a raw JSON object/array (NO
@@ -292,4 +325,63 @@ def register(server: Any, deps: Any) -> None:
             handoff_id=handoff_id,
             agent_id=agent_id,
             reason=reason,
+        )
+
+    @server.tool()
+    @tool_envelope
+    def handoff_cancel(
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
+        agent_id: Annotated[
+            str, Field(description="Your agent_id; must be the handoff's creator. REQUIRED.")
+        ],
+        reason: Annotated[str | None, Field(description=_P_CANCEL_REASON)] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
+    ) -> dict[str, Any]:
+        """Creator-only OPEN -> CANCELLED; retract a handoff nobody should take; emit handoff.cancelled.
+
+        Use it to withdraw a mistaken/stale handoff (e.g. created with a pool
+        target that matched zero agents). Only OPEN handoffs cancel: a CLAIMED
+        one is resolved by its claimant (handoff_complete/handoff_reject) or
+        returns to OPEN when the claim lease expires. In trust_mode=strict
+        pass session_id + session_secret (from session_open).
+        """
+        trust.require(
+            tool="handoff_cancel",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
+        return service.handoff_cancel(
+            project_root=project_root,
+            handoff_id=handoff_id,
+            agent_id=agent_id,
+            reason=reason,
+        )
+
+    @server.tool()
+    @tool_envelope
+    def handoff_get(
+        project_root: Annotated[str, Field(description=_P_ROOT)],
+        handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
+        agent_id: Annotated[str, Field(description=_P_GET_AGENT)],
+    ) -> dict[str, Any]:
+        """Read one handoff by id: status, claimant, payload, result/rejected_reason.
+
+        THIS is the creator's path to a handoff's outcome: after
+        handoff_create, poll handoff_get for status/result; do not scan the
+        event stream (events are observability, may be visibility-gated, and a
+        terminal handoff leaves handoff_list_available). The returned status
+        reflects an already-expired claim lease (the handoff reads as OPEN
+        again). ``result``/``rejected_reason`` are the opaque TEXT recorded by
+        handoff_complete/handoff_reject (a string byte-for-byte, a non-string
+        as JSON TEXT).
+        """
+        return service.handoff_get(
+            project_root=project_root,
+            handoff_id=handoff_id,
+            agent_id=agent_id,
         )

@@ -20,6 +20,7 @@ file is fully written and fsync'd).
 from __future__ import annotations
 
 import os
+import re
 import tempfile
 import time
 from pathlib import Path
@@ -43,6 +44,27 @@ _NO_VALUE = "—"
 #: exactly ``public`` (eligible / private / unset) has its routing target
 #: redacted behind this placeholder instead of being rendered raw.
 _PRIVATE_PLACEHOLDER = "[private]"
+
+#: Unicode ``Cc`` control characters (C0, DEL, C1) - including CR/LF. Any run of
+#: them inside an agent-controlled value is collapsed to a single space by
+#: :func:`_md_inline` so one entry always renders as ONE logical line.
+_CONTROL_RUN_RE = re.compile(r"[\x00-\x1f\x7f-\x9f]+")
+
+
+def _md_inline(value: object) -> str:
+    """Flatten an agent-controlled value into a markdown-inline-safe string.
+
+    shared.md interpolates agent-supplied identifiers/labels into a fixed
+    markdown skeleton. This is a PRESENTATION concern (the values themselves
+    are stored verbatim): a stray newline must not start a heading at column 0
+    or split an entry across lines, and a backtick must not close the
+    surrounding code-span - so control characters (Unicode ``Cc``: C0, DEL,
+    C1, including CR/LF) collapse to a single space and backticks are
+    neutralised to apostrophes. Pure and deterministic: values that are
+    already clean pass through byte-identical.
+    """
+    return _CONTROL_RUN_RE.sub(" ", str(value)).replace("`", "'")
+
 
 #: ``os.replace`` is atomic on POSIX, but on Windows it can transiently fail with
 #: a sharing violation when two renders swap the SAME destination concurrently.
@@ -173,7 +195,13 @@ class FileSystemSharedMdRenderer:
     # Deterministic markdown formatting (pure)
     # ------------------------------------------------------------------ #
     def format(self, view: SharedMdView) -> str:
-        """Render the four fixed sections in order as deterministic markdown."""
+        """Render the four fixed sections in order as deterministic markdown.
+
+        Every agent-controlled value is passed through :func:`_md_inline`
+        before interpolation, so no value can corrupt the document structure
+        (inject a heading, split an entry across lines, or escape its
+        code-span).
+        """
         lines: list[str] = []
         lines.append("# Okto Nexus — shared.md")
         lines.append("")
@@ -187,8 +215,8 @@ class FileSystemSharedMdRenderer:
         lines.append("### Agents")
         if view.agents:
             for agent in view.agents:
-                role = agent.role if agent.role else _NO_VALUE
-                lines.append(f"- `{agent.agent_id}` — role: {role}")
+                role = _md_inline(agent.role) if agent.role else _NO_VALUE
+                lines.append(f"- `{_md_inline(agent.agent_id)}` — role: {role}")
         else:
             lines.append(_NONE_PLACEHOLDER)
         lines.append("")
@@ -196,8 +224,9 @@ class FileSystemSharedMdRenderer:
         if view.sessions:
             for session in view.sessions:
                 lines.append(
-                    f"- `{session.session_id}` — agent `{session.agent_id}`"
-                    f" — status: {session.status}"
+                    f"- `{_md_inline(session.session_id)}`"
+                    f" — agent `{_md_inline(session.agent_id)}`"
+                    f" — status: {_md_inline(session.status)}"
                 )
         else:
             lines.append(_NONE_PLACEHOLDER)
@@ -207,7 +236,10 @@ class FileSystemSharedMdRenderer:
         lines.append("## Open Tasks")
         if view.tasks:
             for task in view.tasks:
-                lines.append(f"- `{task.task_id}` — [{task.status}] {task.title}")
+                lines.append(
+                    f"- `{_md_inline(task.task_id)}`"
+                    f" — [{_md_inline(task.status)}] {_md_inline(task.title)}"
+                )
         else:
             lines.append(_NONE_PLACEHOLDER)
         lines.append("")
@@ -220,13 +252,22 @@ class FileSystemSharedMdRenderer:
         if view.handoffs:
             for handoff in view.handoffs:
                 if (handoff.visibility or "").strip().lower() == "public":
-                    target = handoff.target if handoff.target else _NO_VALUE
+                    target = (
+                        _md_inline(handoff.target) if handoff.target else _NO_VALUE
+                    )
                 else:
                     target = _PRIVATE_PLACEHOLDER
-                task_id = handoff.task_id if handoff.task_id else _NO_VALUE
-                claimed_by = handoff.claimed_by if handoff.claimed_by else _NO_VALUE
+                task_id = (
+                    _md_inline(handoff.task_id) if handoff.task_id else _NO_VALUE
+                )
+                claimed_by = (
+                    _md_inline(handoff.claimed_by)
+                    if handoff.claimed_by
+                    else _NO_VALUE
+                )
                 lines.append(
-                    f"- `{handoff.handoff_id}` — [{handoff.status}]"
+                    f"- `{_md_inline(handoff.handoff_id)}`"
+                    f" — [{_md_inline(handoff.status)}]"
                     f" target: {target} — task: {task_id}"
                     f" — claimed_by: {claimed_by}"
                 )
@@ -238,10 +279,14 @@ class FileSystemSharedMdRenderer:
         lines.append("## Recent Events")
         if view.events:
             for event in view.events:
-                actor = event.actor_agent_id if event.actor_agent_id else _NO_VALUE
+                actor = (
+                    _md_inline(event.actor_agent_id)
+                    if event.actor_agent_id
+                    else _NO_VALUE
+                )
                 lines.append(
-                    f"- #{event.event_id} `{event.type}`"
-                    f" (stream: {event.stream}) actor: {actor}"
+                    f"- #{event.event_id} `{_md_inline(event.type)}`"
+                    f" (stream: {_md_inline(event.stream)}) actor: {actor}"
                 )
         else:
             lines.append(_NONE_PLACEHOLDER)

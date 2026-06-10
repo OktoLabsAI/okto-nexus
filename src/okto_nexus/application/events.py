@@ -132,6 +132,7 @@ class EventService:
         waiter: Optional[Waiter] = None,
         sleeper: Optional[Callable[[float], None]] = None,
         monotonic: Optional[Callable[[], float]] = None,
+        touch_on_read: bool = True,
     ) -> None:
         self._cf = connection_factory
         self._events = events
@@ -140,6 +141,12 @@ class EventService:
         self._config = config
         self._default_limit = max(1, int(default_limit))
         self._max_limit = max(1, int(max_limit))
+        # Presence semantics knob: True (the MCP path) keeps stamping the
+        # caller's ``last_seen_at`` on every read; False builds a PASSIVE
+        # observer (the detached ``okto-nexus tail`` follower) whose reads are
+        # not activity - so ``last_seen_at`` keeps meaning "most recent action
+        # on the bus" instead of being held eternally fresh by a monitor.
+        self._touch_on_read = bool(touch_on_read)
         # Blocking seam resolution: explicit waiter > legacy sleeper shim >
         # the store's own change waiter (data_version-gated sleep-poll).
         # ``sleeper``/``monotonic`` are the legacy injection seam (kept for the
@@ -335,8 +342,12 @@ class EventService:
         that is not a registered identity (``touch`` returns ``False``), and
         swallows a transient write failure (e.g. ``SQLITE_BUSY`` -> ``DB_ERROR``)
         rather than aborting an otherwise-successful read.
+
+        A service built with ``touch_on_read=False`` (the passive tail
+        follower) skips the stamp entirely: passive observation is not
+        activity, keeping the ``last_seen_at`` liveness signal honest.
         """
-        if self._agents is None:
+        if not self._touch_on_read or self._agents is None:
             return
         try:
             with self._cf.unit_of_work() as uow:

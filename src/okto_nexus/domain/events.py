@@ -3,7 +3,7 @@
 This module owns the *pure* (IO-free, stdlib-only) rules that govern how the
 append-only event log is consumed by ``event_get`` / ``event_wait``:
 
-* the closed set of consumable ``stream`` values (workspace / agent / task /
+* the closed set of consumable ``stream`` values (workspace / agent /
   handoff) and its validation (:func:`validate_stream` -> ``INVALID_STREAM``);
 * input normalisation for ``filters`` (an object with the enumerated keys
   ``type`` / ``agent_id`` / ``task_id`` / ``handoff_id``); ``cursor`` /
@@ -42,8 +42,10 @@ __all__ = [
 ]
 
 #: The closed domain of consumable streams. Streams are *semantic filters* over
-#: a single global log, not physical partitions.
-VALID_STREAMS: frozenset[str] = frozenset({"workspace", "agent", "task", "handoff"})
+#: a single global log, not physical partitions. ``task`` was REMOVED with the
+#: dead V1 Task subsystem (it never had a producer); ``task_id`` survives only
+#: as a payload-level filter key / response field for shape stability.
+VALID_STREAMS: frozenset[str] = frozenset({"workspace", "agent", "handoff"})
 
 #: The closed set of persistable event visibilities. This is the SAME
 #: vocabulary :mod:`okto_nexus.domain.routing` resolves at read time (it imports
@@ -66,7 +68,7 @@ def validate_stream(stream: Any) -> str:
         return stream
     raise OktoNexusError(
         ErrorCode.INVALID_STREAM,
-        "stream must be one of {agent, handoff, task, workspace}.",
+        "stream must be one of {agent, handoff, workspace}.",
         {"stream": stream, "supported": sorted(VALID_STREAMS)},
     )
 
@@ -91,7 +93,7 @@ def validate_emit_vocabulary(*, stream: Any, type: Any, visibility: Any) -> None
         raise OktoNexusError(
             ErrorCode.INTERNAL_ERROR,
             f"Refusing to persist event: stream {stream!r} is outside the "
-            "canonical vocabulary {agent, handoff, task, workspace}. An event "
+            "canonical vocabulary {agent, handoff, workspace}. An event "
             "on an unknown stream would be invisible to every consumer; fix "
             "the emitting slice to use a VALID_STREAMS value.",
             {"stream": stream, "supported": sorted(VALID_STREAMS)},

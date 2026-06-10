@@ -740,7 +740,9 @@ def test_visibility_capability_targeted_uses_agents_repo(migrated_factory, tmp_p
 # --------------------------------------------------------------------------- #
 # Streams / workspace resolution errors
 # --------------------------------------------------------------------------- #
-@pytest.mark.parametrize("bad_stream", ["bogus", "", "WORKSPACE", "session", None])
+@pytest.mark.parametrize(
+    "bad_stream", ["bogus", "", "WORKSPACE", "session", "task", None]
+)
 def test_invalid_stream_no_scan(migrated_factory, tmp_path, bad_stream):
     config = cfg(tmp_path)
     pr, _ws = make_ws(migrated_factory, tmp_path)
@@ -751,6 +753,18 @@ def test_invalid_stream_no_scan(migrated_factory, tmp_path, bad_stream):
     with pytest.raises(OktoNexusError) as ei2:
         svc.event_wait(project_root=pr, agent_id="a", stream=bad_stream)
     assert ei2.value.code == ErrorCode.INVALID_STREAM.value
+
+
+def test_task_stream_removed_from_vocabulary(migrated_factory, tmp_path):
+    # The dead Task subsystem is gone: "task" is no longer a consumable stream
+    # and the error names the exact surviving vocabulary.
+    config = cfg(tmp_path)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    svc = make_service(migrated_factory, config)
+    with pytest.raises(OktoNexusError) as ei:
+        svc.event_get(project_root=pr, agent_id="a", stream="task")
+    assert ei.value.code == ErrorCode.INVALID_STREAM.value
+    assert ei.value.details["supported"] == ["agent", "handoff", "workspace"]
 
 
 def test_workspace_required_and_unresolved(migrated_factory, tmp_path):
@@ -805,15 +819,23 @@ def test_filters_and_equality_cursor_advances_past_nonmatching(
 
 
 def test_filters_task_id_from_payload(migrated_factory, tmp_path):
+    # "task" is no longer a stream, but task_id REMAINS a payload-level filter
+    # key (response-shape stability): events carrying it stay filterable.
     config = cfg(tmp_path)
     pr, ws = make_ws(migrated_factory, tmp_path, name="T")
-    emit(migrated_factory, ws, stream="task", type="task.x", payload={"task_id": "t1"})
-    emit(migrated_factory, ws, stream="task", type="task.y", payload={"task_id": "t2"})
+    emit(
+        migrated_factory, ws, stream="workspace", type="task.x",
+        payload={"task_id": "t1"},
+    )
+    emit(
+        migrated_factory, ws, stream="workspace", type="task.y",
+        payload={"task_id": "t2"},
+    )
     svc = make_service(migrated_factory, config)
     page = svc.event_get(
         project_root=pr,
         agent_id="a",
-        stream="task",
+        stream="workspace",
         filters={"task_id": "t1"},
     )
     assert [e["event_id"] for e in page["events"]] == [1]
@@ -997,19 +1019,19 @@ def test_concurrent_writers_distinct_monotonic_ids(migrated_factory, tmp_path):
 def test_list_after_stream_none_returns_all_streams(migrated_factory, tmp_path):
     _pr, ws = make_ws(migrated_factory, tmp_path)
     emit(migrated_factory, ws, stream="workspace", type="w.1")
-    emit(migrated_factory, ws, stream="task", type="t.1")
+    emit(migrated_factory, ws, stream="agent", type="ag.1")
     emit(migrated_factory, ws, stream="handoff", type="h.1")
-    emit(migrated_factory, ws, stream="agent", type="a.1")
+    emit(migrated_factory, ws, stream="agent", type="ag.2")
 
     repo = SqliteEventRepo(StubClock())
     with migrated_factory.unit_of_work() as uow:
         all_streams = repo.list_after(uow, workspace_id=ws, stream=None)
-        only_task = repo.list_after(uow, workspace_id=ws, stream="task")
+        only_agent = repo.list_after(uow, workspace_id=ws, stream="agent")
         after_cursor = repo.list_after(uow, workspace_id=ws, stream=None, cursor=2)
 
     assert [e.event_id for e in all_streams] == [1, 2, 3, 4]  # every stream, ascending
-    assert [e.type for e in all_streams] == ["w.1", "t.1", "h.1", "a.1"]
-    assert [e.type for e in only_task] == ["t.1"]  # a str stream still filters
+    assert [e.type for e in all_streams] == ["w.1", "ag.1", "h.1", "ag.2"]
+    assert [e.type for e in only_agent] == ["ag.1", "ag.2"]  # a str stream still filters
     assert [e.event_id for e in after_cursor] == [3, 4]  # cursor honoured with None
 
 
@@ -1017,7 +1039,7 @@ def test_list_after_stream_none_is_workspace_scoped(migrated_factory, tmp_path):
     _pa, ws_a = make_ws(migrated_factory, tmp_path, name="A")
     _pb, ws_b = make_ws(migrated_factory, tmp_path, name="B")
     emit(migrated_factory, ws_a, stream="workspace", type="a.evt")
-    emit(migrated_factory, ws_b, stream="task", type="b.evt")
+    emit(migrated_factory, ws_b, stream="agent", type="b.evt")
 
     repo = SqliteEventRepo(StubClock())
     with migrated_factory.unit_of_work() as uow:
@@ -1032,6 +1054,7 @@ def test_list_after_stream_none_is_workspace_scoped(migrated_factory, tmp_path):
     "bad_kwargs",
     [
         {"stream": "session"},  # the exact production bug (identity slice)
+        {"stream": "task"},  # removed with the dead Task subsystem
         {"stream": "messages"},
         {"stream": ""},
         {"stream": None},

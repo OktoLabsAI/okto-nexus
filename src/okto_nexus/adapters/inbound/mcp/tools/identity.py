@@ -5,7 +5,8 @@ envelope (success ``{ok:true,data}`` / failure ``{ok:false,error}``) via
 :func:`tool_envelope`, so no exception ever crosses the adapter boundary:
 
 * ``workspace_resolve`` - resolve ``project_root`` to a ``workspace_id``.
-* ``workspace_list``    - GLOBAL-ADMIN: enumerate ALL workspaces.
+* ``workspace_list``    - GLOBAL-ADMIN: enumerate ALL workspaces (on-disk
+  paths opt-in via ``include_paths``).
 * ``agent_register``    - upsert a logical agent identity.
 * ``agent_list``        - GLOBAL: enumerate ALL agents (discovery surface).
 * ``agent_get``         - read one agent's details incl. ``last_seen_at``.
@@ -65,6 +66,13 @@ _P_SESSION_METADATA = "Free-form JSON object stored with the session (optional).
 _P_SESSION_ID = "The session_id returned by session_open. REQUIRED."
 _P_SESSION_WS_GUARD = "Workspace_id scope guard (optional); when given it must match the session's workspace."
 _P_GET_AGENT_ID = "The agent_id to look up. REQUIRED."
+_P_INCLUDE_PATHS = (
+    "Also return each workspace's on-disk root_realpath (default: false). By "
+    "default paths are OMITTED - disclosing the filesystem layout of every "
+    "project is opt-in defense-in-depth against prompt-injection exfiltration. "
+    "Set true only for an explicit admin/ops need; for routine discovery use "
+    "agent_list / capability_list instead."
+)
 
 def build_service(deps: Any) -> IdentityService:
     """Wire the SQLite repos into ``deps.repos`` and build the service.
@@ -176,13 +184,21 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
-    def workspace_list() -> dict[str, Any]:
+    def workspace_list(
+        include_paths: Annotated[bool, Field(description=_P_INCLUDE_PATHS)] = False,
+    ) -> dict[str, Any]:
         """GLOBAL-ADMIN: enumerate ALL workspaces across every scope.
 
         This is the single deliberately cross-workspace tool in the identity
         slice. All other identity tools remain scoped to one workspace.
+
+        By DEFAULT each entry OMITS the workspace's on-disk ``root_realpath``
+        (you get workspace_id, display_name, created_at, last_seen_at); paths
+        are returned only on explicit request (``include_paths=true``) - an
+        admin/ops surface, not routine discovery. To find peers and their
+        skills, use agent_list / capability_list instead.
         """
-        return {"workspaces": service.workspace_list()}
+        return {"workspaces": service.workspace_list(include_paths=include_paths)}
 
     @server.tool()
     @tool_envelope

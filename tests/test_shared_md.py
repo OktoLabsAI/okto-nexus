@@ -43,6 +43,7 @@ from okto_nexus.application.shared_md import (
     DEFAULT_MAX_LIMIT_EVENTS,
     SECTION_COUNT,
     SharedMdService,
+    SharedMdView,
 )
 from okto_nexus.domain.base import iso_to_epoch
 from okto_nexus.domain.models import Agent, Event, Handoff, Session, Task, Workspace
@@ -532,6 +533,99 @@ def test_cross_workspace_isolation(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
+# Agent-controlled values cannot corrupt the markdown structure
+# --------------------------------------------------------------------------- #
+def test_format_sanitizes_agent_controlled_fields_no_structural_injection(tmp_path):
+    """Newlines/control chars and backticks inside agent-controlled values are
+    a PRESENTATION hazard: a raw interpolation would let an id/title start a
+    heading at column 0, split an entry across lines, or close the wrapping
+    code-span. format() must keep every entry on ONE logical line with the
+    payload rendered inline (values are stored verbatim; only the view is
+    sanitised)."""
+    renderer = FileSystemSharedMdRenderer(home_dir=tmp_path / "home")
+    inj = "\n## Injected"
+    view = SharedMdView(
+        workspace_id=WS_A,
+        limit_events=50,
+        agents=[
+            Agent(agent_id=f"agent-`pwn`{inj}", created_at="t", role=f"role `r`{inj}")
+        ],
+        sessions=[
+            Session(f"ses{inj}", f"agent-`pwn`{inj}", WS_A, f"active{inj}", "t")
+        ],
+        tasks=[Task(f"task{inj}", WS_A, f"Title `code`{inj}", f"open{inj}", "t")],
+        handoffs=[
+            Handoff(
+                f"ho{inj}",
+                WS_A,
+                f"open{inj}",
+                "t",
+                task_id=f"tid{inj}",
+                target=f"tgt `t`{inj}",
+                visibility="public",
+                claimed_by=f"cb{inj}",
+            )
+        ],
+        events=[
+            Event(
+                workspace_id=WS_A,
+                stream=f"workspace{inj}",
+                type=f"x.y`z`{inj}",
+                created_at="t",
+                event_id=1,
+                actor_agent_id=f"actor{inj}",
+            )
+        ],
+    )
+    text = renderer.format(view)
+    lines = text.splitlines()
+
+    # No injected heading ever lands at column 0...
+    assert not any(line.startswith("## Injected") for line in lines)
+    # ...the only headings are the renderer's own fixed skeleton.
+    assert [line for line in lines if line.startswith("#")] == [
+        "# Okto Nexus — shared.md",
+        "## Agents & Sessions",
+        "### Agents",
+        "### Active Sessions",
+        "## Open Tasks",
+        "## Open Handoffs",
+        "## Recent Events",
+    ]
+
+    # Each of the 5 seeded entries renders as exactly ONE logical line, with
+    # the would-be heading flattened inline into its own entry.
+    entries = [line for line in lines if line.startswith("- ")]
+    assert len(entries) == 5
+    assert all("## Injected" in line for line in entries)
+
+    # Backticks inside values are neutralised, so the values' code-spans
+    # cannot escape (the wrapper backticks are the renderer's own).
+    for evil in ("`pwn`", "`code`", "`r`", "`t`", "`z`"):
+        assert evil not in text
+        assert evil.replace("`", "'") in text
+
+
+def test_format_clean_values_render_byte_identical_after_sanitization(tmp_path):
+    """Sanitisation is a no-op for ordinary ids/titles: two formats of the same
+    clean view stay byte-identical (the determinism contract survives)."""
+    renderer = FileSystemSharedMdRenderer(home_dir=tmp_path / "home")
+    agents, sessions, tasks, handoffs, events = populated()
+    view = SharedMdView(
+        workspace_id=WS_A,
+        limit_events=50,
+        agents=agents,
+        sessions=sessions,
+        tasks=tasks,
+        handoffs=handoffs,
+        events=events,
+    )
+    text = renderer.format(view)
+    assert renderer.format(view) == text
+    assert "agent-1" in text and "Do it" in text  # values pass through verbatim
+
+
+# --------------------------------------------------------------------------- #
 # Atomic write under concurrency
 # --------------------------------------------------------------------------- #
 def test_concurrent_renders_atomic_no_partial(tmp_path):
@@ -814,7 +908,7 @@ def test_recent_events_rendered_from_real_sqlite_event_repo(
         for stream, typ in (
             ("workspace", "session.opened"),
             ("handoff", "handoff.created"),
-            ("task", "task.updated"),
+            ("agent", "agent.registered"),
             ("workspace", "message.created"),
         ):
             event_repo.append(
@@ -840,5 +934,5 @@ def test_recent_events_rendered_from_real_sqlite_event_repo(
     # All four committed events appear (newest-first by event_id), regardless
     # of stream - Recent Events is never empty when committed events exist.
     assert _event_ids_in_order(text) == [4, 3, 2, 1]
-    for typ in ("session.opened", "handoff.created", "task.updated", "message.created"):
+    for typ in ("session.opened", "handoff.created", "agent.registered", "message.created"):
         assert typ in text

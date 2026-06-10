@@ -692,15 +692,20 @@ class HandoffRepo(Protocol):
         claimed_by: str,
         status: str,
         updated_at: str | None = None,
+        result: str | None = None,
+        rejected_reason: str | None = None,
     ) -> Handoff | None:
         """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
 
         Mirrors :meth:`claim`: the implementation must re-assert
         ``status='CLAIMED' AND claimed_by=?`` atomically (single statement),
         so a stale caller (lease expired, different claimant, already
-        terminal) affects 0 rows instead of clobbering the row. Return the
-        updated row, or ``None`` when 0 rows were affected — the caller
-        re-reads to raise the precise catalogue error.
+        terminal) affects 0 rows instead of clobbering the row. The terminal
+        outcome (``result`` on complete, ``rejected_reason`` on reject —
+        already serialised TEXT) must be written in the SAME conditional
+        UPDATE that changes the status, so the row and its outcome can never
+        disagree. Return the updated row, or ``None`` when 0 rows were
+        affected — the caller re-reads to raise the precise catalogue error.
         """
         ...
 
@@ -711,11 +716,26 @@ class HandoffRepo(Protocol):
         workspace_id: str,
         handoff_id: str,
         updated_at: str | None = None,
+        rejected_reason: str | None = None,
     ) -> Handoff | None:
         """Conditionally reject an unclaimed OPEN handoff (direct-target path).
 
         Same contract as :meth:`transition_claimed`: the implementation must
-        re-assert ``status='OPEN'`` atomically; ``None`` on 0 affected rows.
+        re-assert ``status='OPEN'`` atomically, with the optional
+        ``rejected_reason`` riding the same UPDATE; ``None`` on 0 affected
+        rows.
+        """
+        ...
+
+    def read_outcome(
+        self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str
+    ) -> dict[str, str | None] | None:
+        """Return ``{"result", "rejected_reason"}`` for a handoff, or ``None``.
+
+        The outcome columns (migration 008) are read separately from the
+        :class:`Handoff` dataclass so the shared domain model stays stable;
+        values are the serialised TEXT persisted by
+        :meth:`transition_claimed` / :meth:`reject_open`.
         """
         ...
 
