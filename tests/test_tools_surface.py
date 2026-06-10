@@ -15,7 +15,10 @@ exact validation path agents hit - and asserts on observable effects:
 * ``handoff_create`` accepts a RAW dict ``payload`` end-to-end (create ->
   list_available -> claim echo the serialised JSON TEXT);
 * wrong-typed ``target`` / ``limit`` / ``timeout_seconds`` come back as the
-  canonical ``VALIDATION_ERROR`` envelope, never as an SDK validation error.
+  canonical ``VALIDATION_ERROR`` envelope, never as an SDK validation error;
+* the server-level ``instructions`` reach the live FastMCP server and keep the
+  inbox reception loop (count -> pull -> ack, at-least-once) and the
+  DB_ERROR/MIGRATED retry guidance.
 
 The SCHEMA-level counterparts (descriptions, defaults, published shims) live in
 ``test_tool_schemas.py``.
@@ -32,6 +35,7 @@ from pathlib import Path
 import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import (
+    SERVER_INSTRUCTIONS,
     SURFACE_REVISION,
     bootstrap,
     create_server,
@@ -110,6 +114,56 @@ def test_shims_tolerate_any_legacy_argument_shape(surface):
         assert env["error"]["code"] == "MIGRATED", (
             f"{name} with legacy args must still answer MIGRATED, got: {env}"
         )
+
+
+# --------------------------------------------------------------------------- #
+# Server instructions: inbox reception loop + retry guidance reach the agent
+# --------------------------------------------------------------------------- #
+def test_server_instructions_carry_reception_loop_and_retry_guidance(surface):
+    """The live FastMCP server publishes the inbox/retry guidance to agents.
+
+    ``create_server`` must pass ``instructions=SERVER_INSTRUCTIONS`` to FastMCP
+    (that is what the SDK ships in the ``initialize`` handshake); the text must
+    keep the inbox reception loop (count -> pull -> ack, at-least-once) and the
+    DB_ERROR/MIGRATED retry guidance. Dropping the kwarg or rewriting the text
+    without these sections fails here instead of silently degrading agents.
+    """
+    server, _ = surface
+    instructions = server.instructions
+    assert instructions, "create_server must hand instructions to FastMCP"
+    assert instructions == SERVER_INSTRUCTIONS
+
+    # Inbox section: the global inbox is the delivery channel...
+    assert "YOUR INBOX" in instructions
+    for tool in ("inbox_count", "inbox_pull", "inbox_ack"):
+        assert tool in instructions, f"instructions must mention {tool}"
+    # ...with at-least-once redelivery of unacked messages.
+    assert "at-least-once" in instructions
+
+    # Reception loop: count -> pull -> ack, IN THAT ORDER after the marker.
+    loop_at = instructions.find("RECOMMENDED RECEPTION LOOP")
+    assert loop_at != -1, "instructions must keep the RECOMMENDED RECEPTION LOOP"
+    count_at = instructions.find("inbox_count", loop_at)
+    pull_at = instructions.find("inbox_pull", loop_at)
+    ack_at = instructions.find("inbox_ack", loop_at)
+    assert -1 not in (count_at, pull_at, ack_at), (
+        "the reception loop must name inbox_count, inbox_pull and inbox_ack"
+    )
+    assert count_at < pull_at < ack_at, (
+        "the reception loop must read count -> pull -> ack"
+    )
+
+    # Retry guidance: transient DB_ERROR is retryable with a short backoff;
+    # MIGRATED means switch tools, never retry the old call.
+    assert "ERRORS & RETRIES" in instructions
+    assert "DB_ERROR" in instructions
+    assert "retryable=true" in instructions
+    assert "0.5-2s" in instructions, "retry guidance must keep the backoff hint"
+    migrated_at = instructions.find("MIGRATED")
+    assert migrated_at != -1
+    assert "do NOT" in instructions[migrated_at:], (
+        "MIGRATED guidance must say the old call is not to be retried"
+    )
 
 
 # --------------------------------------------------------------------------- #

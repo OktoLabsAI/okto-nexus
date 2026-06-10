@@ -5,7 +5,10 @@ carry a non-empty ``description`` in the published ``inputSchema`` (so a calling
 agent sees what every argument means), and the two enum-shaped parameters that
 gate routing - ``message_create.target`` / ``handoff_create.target`` (the
 ``strategy`` discriminator) and ``handoff_create.visibility`` - MUST enumerate
-their allowed values in prose.
+their allowed values in prose. The ``stream`` enum on ``event_get`` /
+``event_wait`` must additionally enumerate EXACTLY the domain
+``VALID_STREAMS`` (an advertised-but-removed stream prescribes a guaranteed
+``INVALID_STREAM``).
 
 This is the regression net for the "explain every parameter, especially enums"
 contract: a new tool (or a new parameter) that ships without a description fails
@@ -25,10 +28,12 @@ SDK is required for this slice; the test is skipped if it is absent.
 from __future__ import annotations
 
 import asyncio
+import re
 
 import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, create_server
+from okto_nexus.domain.events import VALID_STREAMS
 
 pytest.importorskip("mcp", reason="MCP SDK required to build the live tool schemas")
 
@@ -93,6 +98,32 @@ def test_handoff_visibility_enum_is_spelled_out(tmp_path):
     for value in ("public", "eligible", "private"):
         assert value in description, (
             f"handoff_create.visibility description omits the '{value}' value"
+        )
+
+
+def test_event_stream_enum_matches_domain_vocabulary(tmp_path):
+    """event_get/event_wait advertise EXACTLY the consumable ``VALID_STREAMS``.
+
+    The published ``stream`` description is the contract an LLM agent follows;
+    advertising a stream outside the domain vocabulary (e.g. the removed
+    ``task`` stream) prescribes a guaranteed ``INVALID_STREAM`` error, and
+    omitting a valid one hides it. The enumerated set must equal the domain
+    constant, so vocabulary drift in EITHER direction fails here.
+    """
+    tools = {t.name: t for t in _list_tools(tmp_path)}
+
+    for tool_name in ("event_get", "event_wait"):
+        spec = (tools[tool_name].inputSchema or {})["properties"]["stream"]
+        description = spec.get("description", "")
+        match = re.search(r"one of:\s*([a-z_]+(?:,\s*[a-z_]+)*)", description)
+        assert match, (
+            f"{tool_name}.stream description must enumerate streams as 'one of: ...'"
+        )
+        advertised = {value.strip() for value in match.group(1).split(",")}
+        assert advertised == set(VALID_STREAMS), (
+            f"{tool_name}.stream advertises {sorted(advertised)} but the domain "
+            f"vocabulary is {sorted(VALID_STREAMS)} - the published description "
+            "must match VALID_STREAMS exactly"
         )
 
 

@@ -517,7 +517,7 @@ it (atomic coupling via `EventEmitter.emit`).
 **Streams are semantic filters, not physical partitions:**
 
 ```
-VALID_STREAMS = { workspace, agent, task, handoff }
+VALID_STREAMS = { workspace, agent, handoff }
 ```
 
 `validate_stream` rejects anything else with `INVALID_STREAM` *before* any scan.
@@ -964,7 +964,7 @@ transition to `closed` emits `session.closed`.
 
 ### Events & Polling
 
-> Valid streams: `{workspace, agent, task, handoff}`. Valid `filters` keys
+> Valid streams: `{workspace, agent, handoff}`. Valid `filters` keys
 > (equality, AND-combined): `{type, agent_id, task_id, handoff_id}`. Each event:
 > `{event_id, workspace_id, stream, type, payload, actor_agent_id, task_id, handoff_id, created_at}`.
 > `limit` defaults to 100, max 1000 (override `OKTO_NEXUS_MAX_EVENT_LIMIT`).

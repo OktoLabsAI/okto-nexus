@@ -47,7 +47,7 @@ from okto_nexus.envelope import tool_envelope
 _P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
 _P_AGENT = "Your agent_id; scopes per-event visibility (you only see events you may see)."
 _P_STREAM = (
-    "Event stream to read - one of: workspace, agent, task, handoff. "
+    "Event stream to read - one of: workspace, agent, handoff. "
     "message.created and artifact.created are published on workspace."
 )
 _P_CURSOR = (

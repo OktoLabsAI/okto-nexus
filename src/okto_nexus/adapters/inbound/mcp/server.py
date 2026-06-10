@@ -135,7 +135,10 @@ retry the old call.
 #: heartbeat-fresh sessions with explicit excluded_stale) + M10 trust
 #: (session_id/session_secret parameters on message_create,
 #: handoff_claim/complete/reject, inbox_pull/ack/extend; trust_mode knob).
-SURFACE_REVISION = 4
+#: 5 = event_get/event_wait ``stream`` description no longer advertises the
+#: removed ``task`` stream (doc-only fix; ``VALID_STREAMS`` semantics
+#: unchanged - a cached schema saying "task" was prescribing INVALID_STREAM).
+SURFACE_REVISION = 5
 
 
 @dataclass

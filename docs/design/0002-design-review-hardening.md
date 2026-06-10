@@ -277,9 +277,11 @@ reference in the README's Handoffs sections.
   connection per process; presence-bounded broadcasts mean an alive-but-silent
   agent (heartbeat older than 30 min) misses broadcasts — mitigated by the
   generous TTL and the explicit `excluded_stale` report.
-- **Surface.** `SURFACE_REVISION` is `4` after this hardening (2 = post-S3
+- **Surface.** `SURFACE_REVISION` is `5` after this hardening (2 = post-S3
   safe-by-default surface; 3 = unified target/pagination grammar; 4 =
-  presence + trust parameters). All additions are backwards-compatible
+  presence + trust parameters; 5 = `event_get`/`event_wait` `stream`
+  description aligned with `VALID_STREAMS` — the removed `task` stream is no
+  longer advertised). All additions are backwards-compatible
   (new optional parameters / additive response keys); the only breaking change
   remains ADR 0001's S3 removal, which the `MIGRATED` shims keep prescriptive.
 

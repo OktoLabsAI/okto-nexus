@@ -45,7 +45,7 @@ STORED_PATH = "path"
 #: Event stream + type for the audit event emitted on a successful put (FR7).
 #: The event is PUBLISHED on the ``workspace`` stream - the base observable
 #: stream of the whole workspace and one of the consumable ``VALID_STREAMS``
-#: (workspace/agent/task/handoff) - so consumers of ``event_get`` /
+#: (workspace/agent/handoff) - so consumers of ``event_get`` /
 #: ``event_wait`` can observe it (rather than an unconsultable ``artifact``
 #: stream).
 ARTIFACT_STREAM = "workspace"
