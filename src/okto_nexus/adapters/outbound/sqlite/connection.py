@@ -20,6 +20,7 @@ WAL readers never queue behind writers.
 from __future__ import annotations
 
 import sqlite3
+import threading
 import time
 
 from ....config import NexusConfig
@@ -29,6 +30,7 @@ from ....errors import (
     db_error_from_exception,
     is_retryable_db_exception,
 )
+from ..waiter import SleepPollWaiter
 
 # Retry budget for the one-time WAL conversion of a fresh database (see
 # ConnectionFactory._enable_wal): attempts x sleep bounds the wait to ~1s.
@@ -92,6 +94,10 @@ class ConnectionFactory:
 
     def __init__(self, config: NexusConfig) -> None:
         self._config = config
+        # Cached probe connection for ``data_version`` (lazily opened). Guarded
+        # by a lock because FastMCP may run tool calls on multiple threads.
+        self._probe_conn: sqlite3.Connection | None = None
+        self._probe_lock = threading.Lock()
         self.ensure_home_dir()
 
     @property
@@ -147,6 +153,88 @@ class ConnectionFactory:
                 if not is_retryable_db_exception(exc) or last_attempt:
                     raise
                 time.sleep(_WAL_RETRY_SLEEP_SECONDS)
+
+    def data_version(self) -> int:
+        """Cheap cross-process change probe: ``PRAGMA data_version``.
+
+        Two values returned by THIS method differ iff some OTHER connection
+        (any process) committed a change to the database in between - exactly
+        the "did anything write?" question the long-poll waiter asks between
+        sleeps. The probe runs on ONE cached connection because the pragma is
+        connection-local (a fresh connection per call would always report the
+        same baseline); the connection is pinned read-only via
+        ``PRAGMA query_only=ON`` and never opens a transaction, so probing N
+        waiters costs N pragma reads and never touches the WAL writer lock.
+
+        Raises ``DB_ERROR`` (retryable when the underlying error is) only when
+        the probe cannot answer even after the cached connection is reopened
+        once - callers (``SleepPollWaiter``) degrade to scan-per-interval
+        rather than failing the wait.
+        """
+        with self._probe_lock:
+            try:
+                return self._probe_data_version()
+            except sqlite3.Error:
+                self._close_probe_conn()
+                try:
+                    return self._probe_data_version()
+                except sqlite3.Error as exc:
+                    self._close_probe_conn()
+                    raise OktoNexusError(
+                        ErrorCode.DB_ERROR,
+                        "PRAGMA data_version probe failed; the change-gating "
+                        "connection could not be (re)opened.",
+                        {"db_path": str(self._config.db_path), "reason": str(exc)},
+                        retryable=is_retryable_db_exception(exc),
+                    ) from exc
+
+    def _probe_data_version(self) -> int:
+        """Read the pragma on the cached probe connection (open it if needed).
+
+        Caller holds ``_probe_lock``. The connection is shared across threads
+        (``check_same_thread=False``) - safe because every use is serialised by
+        the lock and consists of a single autocommit pragma read.
+        """
+        if self._probe_conn is None:
+            conn = sqlite3.connect(
+                str(self._config.db_path),
+                isolation_level=None,
+                check_same_thread=False,
+            )
+            try:
+                conn.execute(
+                    f"PRAGMA busy_timeout={int(self._config.busy_timeout_ms)}"
+                )
+                conn.execute("PRAGMA query_only=ON")  # enforced read-only
+            except sqlite3.Error:
+                conn.close()
+                raise
+            self._probe_conn = conn
+        row = self._probe_conn.execute("PRAGMA data_version").fetchone()
+        return int(row[0])
+
+    def _close_probe_conn(self) -> None:
+        """Drop the cached probe connection (best-effort close)."""
+        if self._probe_conn is not None:
+            try:
+                self._probe_conn.close()
+            except sqlite3.Error:  # pragma: no cover - close never matters
+                pass
+            self._probe_conn = None
+
+    def change_waiter(self) -> SleepPollWaiter:
+        """Build the V1 :class:`Waiter` for this store (see the application port).
+
+        A sleep-poll waiter whose re-scan gate is :meth:`data_version`: the
+        long-poll services re-run their SELECT only when a commit happened
+        somewhere, instead of once per poll interval. The poll cadence is the
+        configured ``poll_interval_ms`` - the same knob the in-service loops
+        used before the waiter existed.
+        """
+        return SleepPollWaiter(
+            self.data_version,
+            poll_interval_s=self._config.poll_interval_ms / 1000.0,
+        )
 
     def unit_of_work(self, write: bool = True) -> SqliteUnitOfWork:
         """Return a fresh :class:`SqliteUnitOfWork` over a new connection.

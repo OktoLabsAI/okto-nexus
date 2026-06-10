@@ -111,6 +111,84 @@ class ExplodingSleeper:
         return 0.0
 
 
+class ManualWaiter:
+    """Fake Waiter (port in application.ports): deterministic virtual time.
+
+    Each ``wait_for_change`` consumes the requested window and reports "no
+    store change" unless a ``script`` of ``(changed, advance_seconds)`` steps
+    says otherwise.
+    """
+
+    def __init__(self, script=None) -> None:
+        self.calls: list[float] = []
+        self.t = 0.0
+        self.snapshots = 0
+        self._script = list(script or [])
+
+    def monotonic(self) -> float:
+        return self.t
+
+    def snapshot(self):
+        self.snapshots += 1
+        return ("v", self.snapshots)
+
+    def wait_for_change(self, since, timeout_s: float) -> bool:
+        self.calls.append(timeout_s)
+        if self._script:
+            changed, advance = self._script.pop(0)
+            self.t += min(advance, timeout_s)
+            return changed
+        self.t += timeout_s
+        return False
+
+
+class TriggerWaiter(ManualWaiter):
+    """Reports a change on the first wait, firing ``trigger`` (a concurrent write)."""
+
+    def __init__(self, trigger, advance: float = 0.2) -> None:
+        super().__init__()
+        self._trigger = trigger
+        self._advance = advance
+
+    def wait_for_change(self, since, timeout_s: float) -> bool:
+        self.calls.append(timeout_s)
+        self.t += min(self._advance, timeout_s)
+        self._trigger()
+        return True
+
+
+class ExplodingWaiter:
+    """A Waiter whose wait must never be reached (events already exist)."""
+
+    def __init__(self) -> None:
+        self.calls: list[float] = []
+
+    def monotonic(self) -> float:
+        return 0.0
+
+    def snapshot(self):
+        return 0
+
+    def wait_for_change(self, since, timeout_s):  # pragma: no cover - failure path
+        self.calls.append(timeout_s)
+        raise AssertionError("wait_for_change must not be called when events exist")
+
+
+class CountingEventRepo:
+    """Delegating EventRepo wrapper counting ``list_after`` scans."""
+
+    def __init__(self, inner) -> None:
+        self._inner = inner
+        self.scans = 0
+
+    def list_after(self, uow, **kwargs):
+        self.scans += 1
+        return self._inner.list_after(uow, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+
 class FakeServer:
     """Captures FastMCP-style ``@server.tool()`` registrations by name."""
 
@@ -181,18 +259,21 @@ def make_service(
     agents=None,
     sleeper=None,
     monotonic=None,
+    waiter=None,
+    events=None,
     default_limit=DEFAULT_EVENT_LIMIT,
     max_limit=MAX_EVENT_LIMIT,
 ) -> EventService:
     clock = StubClock()
     return EventService(
         connection_factory=factory,
-        events=SqliteEventRepo(clock),
+        events=events if events is not None else SqliteEventRepo(clock),
         clock=clock,
         config=config,
         agents=agents,
         default_limit=default_limit,
         max_limit=max_limit,
+        waiter=waiter,
         sleeper=sleeper,
         monotonic=monotonic,
     )
@@ -362,6 +443,244 @@ def test_event_wait_observes_concurrent_append_within_one_interval(
     assert page["timed_out"] is False
     assert [e["type"] for e in page["events"]] == ["late"]
     assert len(sleeper.calls) == 1  # observed after exactly one poll interval
+
+
+# --------------------------------------------------------------------------- #
+# event_wait via the Waiter port (M5: blocking out of the application layer,
+# re-scan gated on a store-change report instead of once per poll interval)
+# --------------------------------------------------------------------------- #
+def test_event_wait_waiter_timeout_skips_rescan_when_no_change(
+    migrated_factory, tmp_path
+):
+    # An idle wait answers the timeout WITHOUT re-running the SELECT scan: the
+    # waiter reported "no commit anywhere", so the page provably stayed empty.
+    config = cfg(tmp_path, max_wait_timeout_seconds=5)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    repo = CountingEventRepo(SqliteEventRepo(StubClock()))
+    waiter = ManualWaiter()
+    svc = make_service(migrated_factory, config, waiter=waiter, events=repo)
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=5
+    )
+    assert page["timed_out"] is True and page["events"] == []
+    assert page["next_cursor"] == 0  # entry cursor unchanged on timeout
+    assert repo.scans == 1  # ONLY the entry scan - zero re-scans while idle
+    assert waiter.calls == [pytest.approx(5.0)]  # one full-window wait
+
+
+def test_event_wait_waiter_change_wakes_and_returns_event(migrated_factory, tmp_path):
+    config = cfg(tmp_path, max_wait_timeout_seconds=30)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    waiter = TriggerWaiter(lambda: emit(migrated_factory, ws, type="late"))
+    svc = make_service(migrated_factory, config, waiter=waiter)
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=10
+    )
+    assert page["timed_out"] is False
+    assert [e["type"] for e in page["events"]] == ["late"]
+    assert len(waiter.calls) == 1  # woke on the change report, no extra waits
+
+
+def test_event_wait_irrelevant_changes_rescan_until_deadline(
+    migrated_factory, tmp_path
+):
+    # A reported change whose re-scan finds nothing visible keeps waiting with
+    # the REMAINING budget only; the clamped deadline still binds exactly.
+    config = cfg(tmp_path, max_wait_timeout_seconds=1)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    repo = CountingEventRepo(SqliteEventRepo(StubClock()))
+    waiter = ManualWaiter(script=[(True, 0.4), (True, 0.4), (False, 0.2)])
+    svc = make_service(migrated_factory, config, waiter=waiter, events=repo)
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=1
+    )
+    assert page["timed_out"] is True
+    assert repo.scans == 3  # entry scan + one re-scan per reported change
+    assert waiter.calls == [
+        pytest.approx(1.0),
+        pytest.approx(0.6),
+        pytest.approx(0.2),
+    ]
+
+
+def test_event_wait_snapshot_precedes_first_scan(migrated_factory, tmp_path):
+    # Race-closure invariant of the Waiter contract: the change token is
+    # captured BEFORE the entry scan, so a write landing right after the scan
+    # is reported by the first wait instead of being slept through.
+    config = cfg(tmp_path, max_wait_timeout_seconds=1)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    order: list[str] = []
+
+    class OrderWaiter(ManualWaiter):
+        def snapshot(self):
+            order.append("snapshot")
+            return super().snapshot()
+
+    class OrderRepo(CountingEventRepo):
+        def list_after(self, uow, **kwargs):
+            order.append("scan")
+            return super().list_after(uow, **kwargs)
+
+    svc = make_service(
+        migrated_factory,
+        config,
+        waiter=OrderWaiter(),
+        events=OrderRepo(SqliteEventRepo(StubClock())),
+    )
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=1
+    )
+    assert page["timed_out"] is True
+    assert order[:2] == ["snapshot", "scan"]
+
+
+def test_event_wait_immediate_page_never_touches_the_waiter(
+    migrated_factory, tmp_path
+):
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    emit(migrated_factory, ws)
+    waiter = ExplodingWaiter()
+    svc = make_service(migrated_factory, config, waiter=waiter)
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=30
+    )
+    assert page["timed_out"] is False
+    assert [e["event_id"] for e in page["events"]] == [1]
+    assert waiter.calls == []  # 0 waits when the entry page is non-empty
+
+
+# --------------------------------------------------------------------------- #
+# The data_version probe + SleepPollWaiter (the V1 adapter behind the port)
+# --------------------------------------------------------------------------- #
+def test_data_version_probe_detects_cross_connection_commits(
+    migrated_factory, tmp_path
+):
+    _pr, ws = make_ws(migrated_factory, tmp_path)
+    v0 = migrated_factory.data_version()
+    assert isinstance(v0, int)
+    assert migrated_factory.data_version() == v0  # idle store: stable token
+    emit(migrated_factory, ws)  # commit on a DIFFERENT connection
+    v1 = migrated_factory.data_version()
+    assert v1 != v0  # the probe saw the foreign commit
+    assert migrated_factory.data_version() == v1  # stable again until next write
+
+
+def _manual_clockwork():
+    """(state, sleep, monotonic) over ONE virtual timeline, recording sleeps."""
+    state = {"t": 0.0, "sleeps": []}
+
+    def sleep(seconds: float) -> None:
+        state["sleeps"].append(seconds)
+        state["t"] += seconds
+
+    def monotonic() -> float:
+        return state["t"]
+
+    return state, sleep, monotonic
+
+
+def test_sleep_poll_waiter_wakes_immediately_on_pre_wait_change():
+    from okto_nexus.adapters.outbound.waiter import SleepPollWaiter
+
+    state, sleep, monotonic = _manual_clockwork()
+    waiter = SleepPollWaiter(lambda: 7, 0.05, sleep=sleep, monotonic=monotonic)
+    # A write landed between snapshot (token 3) and the wait: zero sleeps.
+    assert waiter.wait_for_change(3, 10.0) is True
+    assert state["sleeps"] == []
+
+
+def test_sleep_poll_waiter_sleeps_in_poll_increments_until_change():
+    from okto_nexus.adapters.outbound.waiter import SleepPollWaiter
+
+    state, sleep, monotonic = _manual_clockwork()
+    versions = iter([1, 1, 1, 2])  # entry probe + 2 unchanged polls + a commit
+    waiter = SleepPollWaiter(
+        lambda: next(versions), 0.05, sleep=sleep, monotonic=monotonic
+    )
+    assert waiter.wait_for_change(1, 10.0) is True
+    assert state["sleeps"] == [0.05, 0.05, 0.05]
+
+
+def test_sleep_poll_waiter_times_out_exactly_with_no_change():
+    from okto_nexus.adapters.outbound.waiter import SleepPollWaiter
+
+    state, sleep, monotonic = _manual_clockwork()
+    waiter = SleepPollWaiter(lambda: 9, 0.4, sleep=sleep, monotonic=monotonic)
+    assert waiter.wait_for_change(9, 1.0) is False
+    # min(poll, remaining): the final sleep shrinks; the window never overshoots.
+    assert state["sleeps"] == [0.4, 0.4, pytest.approx(0.2)]
+    assert state["t"] == pytest.approx(1.0)
+
+
+def test_sleep_poll_waiter_degraded_probe_fails_open_to_rescan():
+    # A broken probe must never absorb writes: snapshot degrades to None and
+    # every wait reports a change after ONE poll interval (pre-M5 cadence), so
+    # the caller's read path is what surfaces the real, actionable DB_ERROR.
+    from okto_nexus.adapters.outbound.waiter import SleepPollWaiter
+
+    state, sleep, monotonic = _manual_clockwork()
+
+    def probe() -> int:
+        raise OktoNexusError(ErrorCode.DB_ERROR, "probe down", {}, retryable=True)
+
+    waiter = SleepPollWaiter(probe, 0.05, sleep=sleep, monotonic=monotonic)
+    token = waiter.snapshot()
+    assert token is None
+    assert waiter.wait_for_change(token, 10.0) is True
+    assert state["sleeps"] == [0.05]
+    # Probe dying MID-wait (valid token) also reports a change, immediately.
+    assert waiter.wait_for_change(5, 10.0) is True
+    assert state["sleeps"] == [0.05]  # no extra sleep for the mid-wait failure
+
+
+# --------------------------------------------------------------------------- #
+# Default wiring, end to end: EventService -> change_waiter() -> data_version
+# --------------------------------------------------------------------------- #
+def test_event_wait_default_waiter_wakes_on_concurrent_write(
+    migrated_factory, tmp_path
+):
+    # Through the REAL data_version-gated waiter (no injection): a concurrent
+    # commit wakes the long-poll well before the timeout, and the log is
+    # re-scanned only on the wake - never once per poll interval.
+    config = cfg(tmp_path, max_wait_timeout_seconds=30)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    repo = CountingEventRepo(SqliteEventRepo(StubClock()))
+    svc = make_service(migrated_factory, config, events=repo)
+
+    def appender():
+        time.sleep(0.15)
+        retry_db(lambda: emit(migrated_factory, ws, type="late"))
+
+    thread = threading.Thread(target=appender)
+    thread.start()
+    started = time.monotonic()
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=10
+    )
+    elapsed = time.monotonic() - started
+    thread.join()
+    assert page["timed_out"] is False
+    assert [e["type"] for e in page["events"]] == ["late"]
+    assert elapsed < 5.0  # woke on the write, nowhere near the 10s budget
+    assert repo.scans <= 3  # entry scan + the change wake (no interval scans)
+
+
+def test_event_wait_default_waiter_idle_blocks_and_never_rescans(
+    migrated_factory, tmp_path
+):
+    config = cfg(tmp_path, max_wait_timeout_seconds=30)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    repo = CountingEventRepo(SqliteEventRepo(StubClock()))
+    svc = make_service(migrated_factory, config, events=repo)
+    started = time.monotonic()
+    page = svc.event_wait(
+        project_root=pr, agent_id="a", stream="workspace", timeout_seconds=1
+    )
+    elapsed = time.monotonic() - started
+    assert page["timed_out"] is True
+    assert 0.9 <= elapsed < 5.0  # really blocked through the default wiring
+    assert repo.scans == 1  # idle wait -> ZERO re-scans (the M5 guarantee)
 
 
 # --------------------------------------------------------------------------- #

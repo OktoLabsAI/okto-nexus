@@ -6,7 +6,11 @@ Implements the use cases of Okto Nexus V1 spec #8:
   an ``OPEN`` handoff, emit ``handoff.created``.
 * ``handoff_list_available`` - run opportunistic lease expiry, then return the
   ``OPEN`` handoffs that are BOTH visible AND eligible to the caller, paginated
-  (``next_cursor``/``has_more``/``timed_out``), with optional long-poll.
+  (``next_cursor``/``has_more``/``timed_out``), with optional long-poll. The
+  long-poll blocks via the :class:`Waiter` port and re-scans ONLY when the
+  waiter reports a store change OR a time-driven boundary is reached (a lease
+  expiring, a ``direct_with_fallback`` target opening to its fallback pool) -
+  never once per poll interval.
 * ``handoff_claim``          - opportunistic expiry + atomic conditional claim
   (single winner) gated by ``is_agent_eligible``.
 * ``handoff_complete``       - owner-only ``CLAIMED -> COMPLETED``.
@@ -29,8 +33,7 @@ atomically inside a single unit of work.
 from __future__ import annotations
 
 import json
-import time
-from typing import Any, Mapping, Optional
+from typing import Any, Iterator, Mapping, Optional, Sequence
 
 from ..config import NexusConfig
 from ..domain.base import (
@@ -59,6 +62,7 @@ from ..domain.handoff import (
 )
 from ..domain.ids import resolve_workspace_id
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
+from ..domain.targets import normalize_strategy
 from ..errors import ErrorCode, OktoNexusError
 from .ports import (
     AgentRepo,
@@ -68,6 +72,7 @@ from .ports import (
     HandoffRepo,
     TaskRepo,
     UnitOfWork,
+    Waiter,
 )
 
 #: Default page size for ``handoff_list_available`` when no ``limit`` is given.
@@ -93,6 +98,7 @@ class HandoffService:
         config: NexusConfig,
         event_emitter: Optional[EventEmitter] = None,
         agents: Optional[AgentRepo] = None,
+        waiter: Optional[Waiter] = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -101,6 +107,9 @@ class HandoffService:
         self._config = config
         self._emitter = event_emitter
         self._agents = agents
+        # Blocking seam for the list_available long-poll: an injected Waiter
+        # (deterministic in tests), or the store's own change waiter.
+        self._waiter = waiter if waiter is not None else connection_factory.change_waiter()
 
     # ------------------------------------------------------------------ #
     # create
@@ -210,9 +219,15 @@ class HandoffService:
         :func:`can_agent_see_event` AND :func:`is_agent_eligible`. The result is
         paginated with ``next_cursor``/``has_more``/``timed_out``. When
         ``timeout_seconds`` is positive and the page is empty, the call blocks
-        (bounded by ``config.max_wait_timeout_seconds``, polling every
-        ``config.poll_interval_ms``) until a handoff appears or the deadline is
-        reached (``timed_out=True``).
+        (bounded by ``config.max_wait_timeout_seconds``) until a handoff
+        appears or the deadline is reached (``timed_out=True``). Blocking goes
+        through the :class:`Waiter` port and the scan is re-run ONLY when
+
+        * the waiter reports a store change (a commit by any process), or
+        * the next TIME-DRIVEN boundary arrives - the earliest pending lease
+          expiry (a reopen needs no write until this scan performs it) or
+          ``direct_with_fallback`` opening (eligibility widens with no write);
+          see :meth:`_next_wake_epoch`.
         """
         workspace_id = self._resolve_workspace(project_root)
         if not _is_nonempty_str(agent_id):
@@ -224,8 +239,15 @@ class HandoffService:
         offset = self._parse_cursor(cursor)
         page_limit = self._parse_limit(limit)
         timeout = self._clamp_timeout(timeout_seconds)
-        poll_interval = max(self._config.poll_interval_ms, 1) / 1000.0
-        deadline = time.monotonic() + timeout if timeout > 0 else None
+        waiter = self._waiter
+        # Floor for boundary waits: a boundary sitting exactly on ``now``
+        # (e.g. a lease at the strict-expiry edge) re-scans at poll cadence
+        # instead of busy-looping.
+        poll_floor_s = max(self._config.poll_interval_ms, 1) / 1000.0
+        # Snapshot precedes the first scan (Waiter contract): a write landing
+        # between the scan and the wait wakes the first wait_for_change.
+        token = waiter.snapshot() if timeout > 0 else None
+        deadline = waiter.monotonic() + timeout if timeout > 0 else None
 
         while True:
             now = self._clock.now_iso()
@@ -236,9 +258,22 @@ class HandoffService:
             has_more = (offset + len(page)) < len(available)
             if page or timeout <= 0:
                 return self._list_response(page, offset, has_more, timed_out=False)
-            if deadline is None or time.monotonic() >= deadline:
+            remaining = deadline - waiter.monotonic()
+            if remaining <= 0:
                 return self._list_response(page, offset, has_more, timed_out=True)
-            time.sleep(poll_interval)
+            wait_s = remaining
+            next_wake = self._next_wake_epoch(workspace_id, now)
+            if next_wake is not None:
+                until_boundary = max(next_wake - iso_to_epoch(now), poll_floor_s)
+                wait_s = min(remaining, until_boundary)
+            changed = waiter.wait_for_change(token, wait_s)
+            if not changed and wait_s >= remaining:
+                # Full remaining window, no commit anywhere and no boundary
+                # pending: a re-scan provably finds the same empty page.
+                return self._list_response(page, offset, has_more, timed_out=True)
+            # Otherwise re-scan: a write happened, or a time boundary was
+            # reached (lease expiry / fallback opening processed by the scan).
+            token = waiter.snapshot()
 
     def _available_handoffs(
         self, uow: UnitOfWork, workspace_id: str, agent: RoutingAgent, now: str
@@ -254,6 +289,55 @@ class HandoffService:
         ]
         visible.sort(key=lambda h: (h.created_at or "", h.handoff_id))
         return visible
+
+    def _next_wake_epoch(self, workspace_id: str, now_iso: str) -> float | None:
+        """Earliest FUTURE instant the available set can change WITHOUT a write.
+
+        Two boundaries are time-driven (so ``data_version`` alone would sleep
+        through them):
+
+        * a CLAIMED lease expiring - the next scan reopens it (strict
+          ``lease_expires_at < now``, so the boundary is the lease instant
+          itself, re-checked at poll cadence until strictly past);
+        * a ``direct_with_fallback`` target (possibly nested under ``mixed``
+          rules or a ``fallback`` sub-target) reaching
+          ``created_at + fallback_after_seconds`` - eligibility widens to the
+          fallback pool with no write.
+
+        Returns ``None`` when no boundary is pending. Read-only (own deferred
+        snapshot; never competes for the WAL writer lock) and defensive: a row
+        with a malformed timestamp/target can never break the wait - it is
+        skipped (the write path already validates, so this is row-level
+        hardening, not policy).
+        """
+        now_epoch = iso_to_epoch(now_iso)
+        candidates: list[float] = []
+        with self._cf.unit_of_work(write=False) as uow:
+            for handoff in self._handoffs.list(
+                uow, workspace_id=workspace_id, status=STATUS_CLAIMED
+            ):
+                if not handoff.lease_expires_at:
+                    continue
+                try:
+                    lease_epoch = iso_to_epoch(handoff.lease_expires_at)
+                except (TypeError, ValueError):
+                    continue
+                if lease_epoch >= now_epoch:
+                    candidates.append(lease_epoch)
+            for handoff in self._handoffs.list(
+                uow, workspace_id=workspace_id, status=STATUS_OPEN
+            ):
+                if not handoff.created_at:
+                    continue
+                try:
+                    created_epoch = iso_to_epoch(handoff.created_at)
+                    target = _loads_target(handoff.target)
+                    for boundary in _fallback_boundaries(target, created_epoch):
+                        if boundary > now_epoch:
+                            candidates.append(boundary)
+                except (TypeError, ValueError, OktoNexusError):
+                    continue
+        return min(candidates) if candidates else None
 
     def _list_response(
         self, page: list[Any], offset: int, has_more: bool, *, timed_out: bool
@@ -775,3 +859,31 @@ def _loads_target(text: Any) -> Any:
         except (TypeError, ValueError):
             return text
     return text
+
+
+def _fallback_boundaries(target: Any, created_epoch: float) -> Iterator[float]:
+    """Yield every instant ``target``'s eligible set can WIDEN with no write.
+
+    Walks an already-stored (write-path-validated) target descriptor: each
+    ``direct_with_fallback`` contributes ``created_epoch +
+    fallback_after_seconds`` (the inclusive instant the fallback pool opens),
+    recursing into ``mixed`` sub-rules and nested ``fallback`` sub-targets.
+    Mirrors the time dependence of :func:`is_agent_eligible` - any strategy
+    this yields nothing for is time-invariant. Raises ``VALIDATION_ERROR``
+    only for an out-of-grammar strategy token (the caller skips that row).
+    """
+    if not isinstance(target, Mapping):
+        return
+    strategy = normalize_strategy(target.get("strategy", target.get("kind")))
+    if strategy == "direct_with_fallback":
+        after = target.get("fallback_after_seconds")
+        if isinstance(after, (int, float)) and not isinstance(after, bool):
+            yield created_epoch + float(after)
+        fallback = target.get("fallback")
+        if isinstance(fallback, Mapping):
+            yield from _fallback_boundaries(fallback, created_epoch)
+    elif strategy == "mixed":
+        rules = target.get("rules", target.get("targets"))
+        if isinstance(rules, Sequence) and not isinstance(rules, (str, bytes)):
+            for rule in rules:
+                yield from _fallback_boundaries(rule, created_epoch)

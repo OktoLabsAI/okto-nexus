@@ -8,12 +8,15 @@ Implements the two use cases this slice owns EXCLUSIVELY:
   AND-combined) and visibility (``can_agent_see_event``, imported from
   Routing/Visibility) are applied BEFORE the envelope is built; ``next_cursor``
   advances past every filtered/non-visible event so they are never re-scanned.
-* ``event_wait`` - long-poll = ``event_get`` + a poll/sleep loop (no socket,
-  thread or subscription). It returns the first non-empty page immediately, or,
-  on timeout, ``events=[]`` with the ENTRY cursor unchanged and
+* ``event_wait`` - long-poll = ``event_get`` + a bounded wait on the injected
+  :class:`Waiter` port (no socket, thread or subscription HERE - the blocking
+  strategy is the adapter's). It returns the first non-empty page immediately,
+  or, on timeout, ``events=[]`` with the ENTRY cursor unchanged and
   ``timed_out=True``. The wait never blocks longer than
-  ``clamp(timeout_seconds, max_wait_timeout_seconds)`` and polls in increments
-  of ``poll_interval_ms``.
+  ``clamp(timeout_seconds, max_wait_timeout_seconds)``, and the log is
+  RE-SCANNED only when the waiter reports a store change (V1: a sleep-poll
+  gated by ``PRAGMA data_version``; a future SSE/notify waiter swaps in with
+  no change to this module).
 
 plus ``latest_cursor`` - the O(1) position-only complement (MAX ``event_id``,
 no scan) that resolves "the end of the log" for followers starting at
@@ -23,14 +26,14 @@ This module lives in the application layer: it depends only on the ports
 (:mod:`okto_nexus.application.ports`), the pure domain helpers
 (:mod:`okto_nexus.domain.events`, :mod:`okto_nexus.domain.routing`,
 :mod:`okto_nexus.domain.ids`), the error catalogue and :class:`NexusConfig`.
-It NEVER imports ``sqlite3`` nor ``mcp`` (enforced by the boundary test). The
-``Sleeper``/monotonic clock used by ``event_wait`` are injected so tests stay
-deterministic and fast.
+It NEVER imports ``sqlite3`` nor ``mcp`` (enforced by the boundary test), and
+it holds NO blocking primitive (no ``time.sleep`` anywhere in this layer): all
+waiting goes through the :class:`Waiter` port, so tests stay deterministic and
+fast and a push transport never needs to touch this file.
 """
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass
 from typing import Any, Callable, Mapping, Optional
 
@@ -47,7 +50,7 @@ from ..domain.ids import resolve_workspace_id
 from ..domain.models import Event
 from ..domain.routing import RoutingAgent, can_agent_see_event
 from ..errors import ErrorCode, OktoNexusError
-from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork
+from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork, Waiter
 
 #: Default page size when ``limit`` is omitted (also clamped to ``max_limit``).
 DEFAULT_EVENT_LIMIT = 100
@@ -72,6 +75,47 @@ class _Page:
     has_more: bool
 
 
+class _LegacySleeperWaiter:
+    """Adapts legacy injected ``sleeper``/``monotonic`` callables to ``Waiter``.
+
+    Pre-waiter semantics, preserved exactly: every poll interval the wait
+    "wakes" and REPORTS A CHANGE, so the caller re-scans each interval (no
+    ``data_version`` gating - the callables carry no store knowledge). Kept for
+    callers that inject their own sleep, e.g. the tail follower's test
+    harness; production wiring uses ``ConnectionFactory.change_waiter()``.
+
+    Pure: both callables are injected, so this layer still never imports a
+    blocking primitive. When ``monotonic`` is omitted, a virtual clock
+    advanced by the requested sleep amounts keeps deadline math consistent.
+    """
+
+    def __init__(
+        self,
+        sleeper: Optional[Callable[[float], None]],
+        monotonic: Optional[Callable[[], float]],
+        poll_interval_s: float,
+    ) -> None:
+        self._sleeper = sleeper
+        self._monotonic_fn = monotonic
+        self._poll_interval_s = max(poll_interval_s, 0.0)
+        self._virtual_t = 0.0
+
+    def monotonic(self) -> float:
+        if self._monotonic_fn is not None:
+            return self._monotonic_fn()
+        return self._virtual_t
+
+    def snapshot(self) -> Any:
+        return None  # no store knowledge: every wake is a presumed change
+
+    def wait_for_change(self, since: Any, timeout_s: float) -> bool:
+        delay = min(self._poll_interval_s, max(0.0, float(timeout_s)))
+        if delay > 0 and self._sleeper is not None:
+            self._sleeper(delay)
+        self._virtual_t += delay
+        return True  # presume changed -> caller re-scans (pre-waiter cadence)
+
+
 class EventService:
     """Use-case orchestration for ``event_get`` / ``event_wait``."""
 
@@ -85,6 +129,7 @@ class EventService:
         agents: Optional[AgentRepo] = None,
         default_limit: int = DEFAULT_EVENT_LIMIT,
         max_limit: int = MAX_EVENT_LIMIT,
+        waiter: Optional[Waiter] = None,
         sleeper: Optional[Callable[[float], None]] = None,
         monotonic: Optional[Callable[[], float]] = None,
     ) -> None:
@@ -95,8 +140,19 @@ class EventService:
         self._config = config
         self._default_limit = max(1, int(default_limit))
         self._max_limit = max(1, int(max_limit))
-        self._sleep = sleeper if sleeper is not None else time.sleep
-        self._monotonic = monotonic if monotonic is not None else time.monotonic
+        # Blocking seam resolution: explicit waiter > legacy sleeper shim >
+        # the store's own change waiter (data_version-gated sleep-poll).
+        # ``sleeper``/``monotonic`` are the legacy injection seam (kept for the
+        # tail follower's deterministic tests); a lone ``monotonic`` without a
+        # ``sleeper`` cannot block and is ignored.
+        if waiter is not None:
+            self._waiter: Waiter = waiter
+        elif sleeper is not None:
+            self._waiter = _LegacySleeperWaiter(
+                sleeper, monotonic, max(0.0, config.poll_interval_ms / 1000.0)
+            )
+        else:
+            self._waiter = connection_factory.change_waiter()
 
     # ------------------------------------------------------------------ #
     # Public use cases
@@ -135,39 +191,53 @@ class EventService:
         filters: Any = None,
         timeout_seconds: Any = None,
     ) -> dict[str, Any]:
-        """Long-poll: ``event_get`` repeated until a non-empty page or timeout.
+        """Long-poll: ``event_get`` re-scanned on store changes until timeout.
 
         Returns the first non-empty page immediately (``timed_out=False``). On
         timeout returns ``events=[]`` with the ENTRY ``cursor`` unchanged and
         ``timed_out=True``. The effective wait never exceeds
         ``clamp(timeout_seconds, max_wait_timeout_seconds)`` plus at most one
         poll interval; ``timeout_seconds <= 0`` performs a single
-        ``event_get`` with no sleeping.
+        ``event_get`` with no waiting. Blocking is delegated to the
+        :class:`Waiter` port; the log is re-scanned ONLY when the waiter
+        reports a change (a commit by any process), never once per interval.
         """
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
         timeout = self._resolve_timeout(timeout_seconds)
+        # Touch BEFORE the change-token snapshot: the presence stamp is this
+        # caller's own write, and snapshotting after it keeps the first wait
+        # from waking spuriously on it.
         self._touch_agent(agent_id)
-        poll_seconds = max(0.0, self._config.poll_interval_ms / 1000.0)
+        waiter = self._waiter
 
-        # First scan happens before any sleep (0 sleeps when events already
-        # exist -> immediate return with timed_out=False).
+        # Snapshot precedes the first scan (Waiter contract): a write landing
+        # between the scan and the wait wakes the first wait_for_change instead
+        # of being slept through.
+        token = waiter.snapshot() if timeout > 0 else None
         page = self._read_page(workspace_id, agent_id, stream, cursor, limit, filters)
         if page.events:
             return self._page_payload(page, timed_out=False)
         if timeout <= 0:
             return self._timed_out_payload(cursor)
 
-        deadline = self._monotonic() + timeout
-        while self._monotonic() < deadline:
-            self._sleep(poll_seconds)
+        deadline = waiter.monotonic() + timeout
+        while True:
+            remaining = deadline - waiter.monotonic()
+            if remaining <= 0:
+                return self._timed_out_payload(cursor)
+            if not waiter.wait_for_change(token, remaining):
+                # The full remaining window elapsed with NO commit anywhere:
+                # a re-scan provably returns the same empty page, so the
+                # timeout is answered without touching the log again.
+                return self._timed_out_payload(cursor)
+            token = waiter.snapshot()
             page = self._read_page(
                 workspace_id, agent_id, stream, cursor, limit, filters
             )
             if page.events:
                 return self._page_payload(page, timed_out=False)
-        return self._timed_out_payload(cursor)
 
     def latest_cursor(
         self,

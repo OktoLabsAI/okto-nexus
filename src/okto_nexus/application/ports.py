@@ -61,6 +61,52 @@ class Clock(Protocol):
 
 
 @runtime_checkable
+class Waiter(Protocol):
+    """Store-change notification - the blocking seam of the long-poll use cases.
+
+    ``event_wait`` / ``handoff_list_available`` need to park a caller until the
+    shared store *may* have changed. That blocking is TRANSPORT, not use-case
+    logic, so it lives behind this port: the application layer never imports
+    ``time.sleep`` and never decides *how* to wait, only *until when*.
+
+    Contract:
+
+    * :meth:`snapshot` captures an opaque change token. Callers MUST snapshot
+      BEFORE scanning, so a write that lands between the scan and the wait is
+      reported by the next :meth:`wait_for_change` instead of being slept
+      through. Spurious change reports are allowed (the caller just re-scans);
+      missed changes are not.
+    * :meth:`wait_for_change` blocks the calling thread for at most
+      ``timeout_s`` seconds and returns ``True`` iff the store changed since
+      ``since`` (the caller should re-scan), ``False`` when the full timeout
+      elapsed with no change (the caller may time out WITHOUT re-scanning -
+      that is the cheap-re-scan guarantee).
+    * :meth:`monotonic` is the waiter's own monotonic clock; deadline
+      arithmetic must use it so blocking and time measurement share one time
+      domain (deterministic fakes in tests, real time in production).
+
+    The V1 implementation is ``SleepPollWaiter`` (adapters/outbound/waiter.py):
+    an incremental sleep loop gated by SQLite's ``PRAGMA data_version`` probe
+    exposed by the connection factory. A future push transport (SSE/HTTP
+    notify, as promised in the server instructions) replaces it with a
+    subscription-backed implementation - same port, ZERO changes to the
+    application layer.
+    """
+
+    def monotonic(self) -> float:
+        """Monotonic seconds in the waiter's own time domain."""
+        ...
+
+    def snapshot(self) -> Any:
+        """Capture an opaque token of the store's current change state."""
+        ...
+
+    def wait_for_change(self, since: Any, timeout_s: float) -> bool:
+        """Block up to ``timeout_s``; ``True`` iff the store changed since ``since``."""
+        ...
+
+
+@runtime_checkable
 class UnitOfWork(Protocol):
     """Transactional scope wrapping a single DB connection.
 
@@ -102,6 +148,18 @@ class ConnectionFactory(Protocol):
         lock. Pass ``write=False`` for strictly read-only use cases (peek /
         count / history-style polling): a read transaction never competes for
         the writer lock, so polling N agents does not serialise the bus.
+        """
+        ...
+
+    def change_waiter(self) -> Waiter:
+        """Return a :class:`Waiter` watching THIS store for committed changes.
+
+        The default blocking seam for the long-poll use cases when no waiter is
+        injected explicitly: the factory fronts the store, so it knows how to
+        observe "a write was committed by any connection in any process". The
+        SQLite implementation returns a ``SleepPollWaiter`` gated by a cached
+        read-only ``PRAGMA data_version`` probe; a push transport substitutes
+        its own waiter here without touching the application services.
         """
         ...
 

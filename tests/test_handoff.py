@@ -31,6 +31,7 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.handoff import HandoffService
 from okto_nexus.application.ports import Repos
+from okto_nexus.config import NexusConfig
 from okto_nexus.domain.base import iso_plus, iso_to_epoch
 from okto_nexus.domain.handoff import (
     STATUS_CLAIMED,
@@ -159,15 +160,68 @@ class FakeServer:
         return deco
 
 
-def make_service(factory, config, clock, emitter=None, agents=None):
+class ManualWaiter:
+    """Fake Waiter (application.ports): consumes each granted window, reports
+    "no store change". Deterministic stand-in for an idle bus."""
+
+    def __init__(self) -> None:
+        self.calls: list[float] = []
+        self.t = 0.0
+
+    def monotonic(self) -> float:
+        return self.t
+
+    def snapshot(self):
+        return 0
+
+    def wait_for_change(self, since, timeout_s: float) -> bool:
+        self.calls.append(timeout_s)
+        self.t += timeout_s
+        return False
+
+
+class ClockAdvancingWaiter(ManualWaiter):
+    """Fake Waiter that also advances the StubClock by each granted wait -
+    deterministic real-time passing with NO store writes (lease/fallback
+    boundaries arrive, data_version does not move)."""
+
+    def __init__(self, clock: "StubClock") -> None:
+        super().__init__()
+        self._clock = clock
+
+    def wait_for_change(self, since, timeout_s: float) -> bool:
+        self._clock.advance_seconds(timeout_s)
+        return super().wait_for_change(since, timeout_s)
+
+
+class CountingHandoffRepo:
+    """Delegating HandoffRepo wrapper recording the ``status`` of list scans."""
+
+    def __init__(self, inner) -> None:
+        self._inner = inner
+        self.list_statuses: list = []
+
+    def list(self, uow, *, workspace_id, status=None, target=None):
+        self.list_statuses.append(status)
+        return self._inner.list(
+            uow, workspace_id=workspace_id, status=status, target=target
+        )
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+
+def make_service(factory, config, clock, emitter=None, agents=None, waiter=None,
+                 handoffs=None):
     return HandoffService(
         connection_factory=factory,
-        handoffs=SqliteHandoffRepo(clock),
+        handoffs=handoffs if handoffs is not None else SqliteHandoffRepo(clock),
         tasks=SqliteTaskRepo(clock),
         clock=clock,
         config=config,
         event_emitter=emitter,
         agents=agents,
+        waiter=waiter,
     )
 
 
@@ -474,6 +528,126 @@ def test_list_available_long_poll_timeout(migrated_factory, tmp_config, tmp_path
     # No timeout -> single shot, not flagged as timed out.
     res0 = svc.handoff_list_available(project_root=proj, agent_id="w")
     assert res0["timed_out"] is False
+
+
+# --------------------------------------------------------------------------- #
+# list_available long-poll via the Waiter port (M5: blocking out of the
+# application layer; re-scan only on a store change or a time boundary)
+# --------------------------------------------------------------------------- #
+def test_list_available_waiter_timeout_skips_rescan_when_no_change(
+    migrated_factory, tmp_config, tmp_path
+):
+    # An idle wait answers the timeout WITHOUT re-running the availability
+    # scan: one entry scan + one boundary probe, then a single full-window
+    # wait - never a scan per poll interval.
+    clock = StubClock()
+    repo = CountingHandoffRepo(SqliteHandoffRepo(clock))
+    waiter = ManualWaiter()
+    svc = make_service(
+        migrated_factory, tmp_config, clock, waiter=waiter, handoffs=repo
+    )
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+
+    res = svc.handoff_list_available(
+        project_root=proj, agent_id="w", timeout_seconds=5
+    )
+    assert res["timed_out"] is True and res["handoffs"] == []
+    assert waiter.calls == [pytest.approx(5.0)]  # ONE full-window wait
+    # OPEN is listed by the availability scan and the boundary probe, once each.
+    assert repo.list_statuses.count(STATUS_OPEN) == 2
+
+
+def test_list_available_wakes_on_store_change(migrated_factory, tmp_config, tmp_path):
+    clock = StubClock()
+    proj_box: dict = {}
+
+    class TriggerWaiter(ManualWaiter):
+        def wait_for_change(self, since, timeout_s: float) -> bool:
+            self.calls.append(timeout_s)
+            self.t += min(0.2, timeout_s)
+            proj_box["svc"].handoff_create(
+                project_root=proj_box["proj"],
+                from_agent_id="c",
+                target={"strategy": "broadcast"},
+                visibility="public",
+            )
+            return True
+
+    waiter = TriggerWaiter()
+    svc = make_service(migrated_factory, tmp_config, clock, waiter=waiter)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+    proj_box.update(svc=svc, proj=proj)
+
+    res = svc.handoff_list_available(
+        project_root=proj, agent_id="w", timeout_seconds=10
+    )
+    assert res["timed_out"] is False
+    assert len(res["handoffs"]) == 1  # the concurrent create woke the wait
+    assert len(waiter.calls) == 1
+
+
+def test_list_available_wakes_at_lease_expiry_boundary(migrated_factory, tmp_path):
+    # A lease expiring produces NO write until a scan reopens it, so a purely
+    # write-gated wait would sleep through it. The wait must cap its window at
+    # the lease boundary and re-scan there (strict-expiry edge at poll cadence).
+    config = NexusConfig(
+        home_dir=tmp_path / "okto_home",
+        handoff_lease_ttl_seconds=10,
+        max_wait_timeout_seconds=60,
+    )
+    clock = StubClock()
+    waiter = ClockAdvancingWaiter(clock)
+    svc = make_service(migrated_factory, config, clock, waiter=waiter)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={"strategy": "broadcast"}, visibility="public",
+    )["handoff_id"]
+    svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
+
+    res = svc.handoff_list_available(
+        project_root=proj, agent_id="v", timeout_seconds=60
+    )
+    assert res["timed_out"] is False
+    assert [h["handoff_id"] for h in res["handoffs"]] == [hid]  # reopened
+    assert row_of(migrated_factory, hid)["status"] == STATUS_OPEN
+    # First wait was capped at the LEASE boundary (10s), not the 60s budget;
+    # the strict edge (== lease instant does not expire) re-checks briefly.
+    assert waiter.calls[0] == pytest.approx(10.0)
+    assert sum(waiter.calls) < 15  # woke at the boundary, nowhere near 60
+
+
+def test_list_available_wakes_at_fallback_open_boundary(
+    migrated_factory, tmp_config, tmp_path
+):
+    # direct_with_fallback widens its eligible set at created_at +
+    # fallback_after_seconds with NO write: the wait must wake exactly there.
+    clock = StubClock()
+    waiter = ClockAdvancingWaiter(clock)
+    svc = make_service(migrated_factory, tmp_config, clock, waiter=waiter)
+    proj = str(mkdir(tmp_path, "P"))
+    seed_workspace(migrated_factory, proj, clock)
+
+    hid = svc.handoff_create(
+        project_root=proj, from_agent_id="c",
+        target={
+            "strategy": "direct_with_fallback",
+            "agent_id": "other",
+            "fallback_after_seconds": 15,
+        },
+        visibility="public",
+    )["handoff_id"]
+
+    res = svc.handoff_list_available(
+        project_root=proj, agent_id="w", timeout_seconds=30
+    )
+    assert res["timed_out"] is False
+    assert [h["handoff_id"] for h in res["handoffs"]] == [hid]
+    assert waiter.calls == [pytest.approx(15.0)]  # woke EXACTLY at the opening
 
 
 # --------------------------------------------------------------------------- #
