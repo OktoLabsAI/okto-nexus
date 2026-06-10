@@ -26,8 +26,12 @@ from okto_nexus.adapters.outbound.sqlite.handoff_repo import (
     SqliteHandoffRepo,
     SqliteTaskRepo,
 )
-from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
+from okto_nexus.adapters.outbound.sqlite.identity_repo import (
+    SqliteAgentRepo,
+    SqliteSessionRepo,
+)
 from okto_nexus.application.handoff import HandoffService
+from okto_nexus.application.identity import SessionTrustGuard
 from okto_nexus.envelope import require_json_object_param, tool_envelope
 
 #: Reused parameter descriptions (kept DRY across the handoff tools).
@@ -78,6 +82,17 @@ _P_PAYLOAD = (
     "artifact_id reference instead."
 )
 _P_SESSION_OPT = "Session_id attributing this operation to a specific open session of yours (optional)."
+#: INVARIANT: the sensitive handoff verbs (claim/complete/reject) share the
+#: trust wording with message_create/inbox_* - one credential story bus-wide.
+_P_SESSION_TRUST = (
+    "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
+    "together with session_secret in trust_mode=strict)."
+)
+_P_SESSION_SECRET = (
+    "The session_secret returned by session_open for session_id (optional in "
+    "trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
+    "REQUIRED together with session_id in trust_mode=strict)."
+)
 _P_HANDOFF_AGENT = "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED."
 _P_HANDOFF_ID = "The handoff_id to act on. REQUIRED."
 _P_CURSOR = (
@@ -110,6 +125,8 @@ def build_service(deps: Any) -> HandoffService:
         repos.tasks = SqliteTaskRepo(deps.clock)
     if getattr(repos, "agents", None) is None:
         repos.agents = SqliteAgentRepo(deps.clock)
+    if getattr(repos, "sessions", None) is None:
+        repos.sessions = SqliteSessionRepo(deps.clock)
     return HandoffService(
         connection_factory=deps.connection_factory,
         handoffs=repos.handoffs,
@@ -124,6 +141,14 @@ def build_service(deps: Any) -> HandoffService:
 def register(server: Any, deps: Any) -> None:
     """Register the handoff tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
+    # M10: the sensitive verbs (claim/complete/reject) are credential-gated
+    # according to NexusConfig.trust_mode; the guard validates BEFORE the
+    # service runs, in its own read-only transaction.
+    trust = SessionTrustGuard(
+        connection_factory=deps.connection_factory,
+        sessions=deps.repos.sessions,
+        trust_mode=getattr(deps.config, "trust_mode", "open"),
+    )
 
     @server.tool()
     @tool_envelope
@@ -187,13 +212,23 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
-        session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff; single winner, others get a structured error.
 
         The claim response returns the handoff ``payload`` (the work content)
-        alongside ``claimed_by`` / ``lease_expires_at``.
+        alongside ``claimed_by`` / ``lease_expires_at``. In trust_mode=strict
+        pass session_id + session_secret (from session_open).
         """
+        trust.require(
+            tool="handoff_claim",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.handoff_claim(
             project_root=project_root,
             handoff_id=handoff_id,
@@ -208,8 +243,21 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
         result: Annotated[Any, Field(description=_P_RESULT)] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
-        """Owner-only transition CLAIMED -> COMPLETED; emit handoff.completed."""
+        """Owner-only transition CLAIMED -> COMPLETED; emit handoff.completed.
+
+        In trust_mode=strict pass session_id + session_secret (from session_open).
+        """
+        trust.require(
+            tool="handoff_complete",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.handoff_complete(
             project_root=project_root,
             handoff_id=handoff_id,
@@ -224,8 +272,21 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
         reason: Annotated[str | None, Field(description=_P_REASON)] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
-        """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED)."""
+        """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED).
+
+        In trust_mode=strict pass session_id + session_secret (from session_open).
+        """
+        trust.require(
+            tool="handoff_reject",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.handoff_reject(
             project_root=project_root,
             handoff_id=handoff_id,

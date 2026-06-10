@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from ..config import DEFAULT_PRESENCE_TTL_SECONDS, TRUST_MODE_OPEN
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..domain.messages import (
     MESSAGE_CREATED_TYPE,
@@ -48,6 +49,7 @@ from ..domain.inbox import (
 from ..domain.models import Channel, Message
 from ..domain.routing import RoutingAgent
 from ..errors import ErrorCode, OktoNexusError
+from .identity import session_is_present, verify_session_credentials
 from .ports import (
     AgentRepo,
     ChannelRepo,
@@ -82,6 +84,8 @@ class MessageService:
         event_emitter: EventEmitter,
         clock: Clock,
         max_inline_bytes: int,
+        presence_ttl_seconds: int = DEFAULT_PRESENCE_TTL_SECONDS,
+        trust_mode: str = TRUST_MODE_OPEN,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -93,6 +97,8 @@ class MessageService:
         self._emitter = event_emitter
         self._clock = clock
         self._max_inline_bytes = int(max_inline_bytes)
+        self._presence_ttl = int(presence_ttl_seconds)
+        self._trust_mode = str(trust_mode)
 
     # ------------------------------------------------------------------ #
     # message_create
@@ -109,12 +115,26 @@ class MessageService:
         target: Any = None,
         artifacts: Any = None,
         parent_message_id: Any = None,
+        session_secret: Any = None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
         On ANY rejection (workspace, validation, content size, unknown channel,
-        unknown/cross-workspace parent, or a failed event append) neither the
-        message row nor the event persists - the whole unit of work rolls back.
+        unknown/cross-workspace parent, failed trust check, or a failed event
+        append) neither the message row nor the event persists - the whole
+        unit of work rolls back.
+
+        Trust (M10): in ``trust_mode='strict'`` a valid ``from_session_id`` +
+        ``session_secret`` pair belonging to ``from_agent_id`` is required; in
+        ``open`` mode a SUPPLIED ``session_secret`` is still validated (a wrong
+        credential is never ignored).
+
+        Presence (M6): a broadcast/no-target message fans out to the
+        workspace's PRESENT agents only (active session with a heartbeat within
+        ``presence_ttl_seconds``). Agents excluded because every active session
+        of theirs is stale are surfaced EXPLICITLY in ``excluded_stale`` plus a
+        ``warning`` - the sender is never silently deceived about who was left
+        out.
 
         When ``project_root`` resolves to a workspace that did NOT exist yet,
         the upsert creates it and the response carries ``workspace_created:
@@ -148,6 +168,17 @@ class MessageService:
         message_id = new_message_id()
 
         with self._cf.unit_of_work() as uow:
+            # Trust gate FIRST (M10): a failed credential check rolls the whole
+            # uow back, so a forged sender never persists anything.
+            verify_session_credentials(
+                self._sessions,
+                uow,
+                trust_mode=self._trust_mode,
+                tool="message_create",
+                agent_id=from_agent_id,
+                session_id=from_session_id,
+                session_secret=session_secret,
+            )
             workspace_created = self._ensure_workspace(
                 uow, workspace_id, root_realpath, now
             )
@@ -157,7 +188,7 @@ class MessageService:
             # Resolve recipients UP FRONT (read-only): a directed target to an
             # unknown agent raises NOT_FOUND here, rolling the whole uow back so no
             # message / delivery / event persists (ADR 0001).
-            recipients, warning = self._resolve_recipients(
+            recipients, warning, excluded_stale = self._resolve_recipients(
                 uow, workspace_id, from_agent_id, target, now
             )
 
@@ -214,6 +245,10 @@ class MessageService:
             data["event_id"] = event_id
             data["recipients"] = recipients
             data["delivered_count"] = len(recipients)
+            if excluded_stale:
+                # Explicit, never silent (M6): these agents hold ONLY stale
+                # active sessions and were excluded from the fan-out.
+                data["excluded_stale"] = excluded_stale
             if warning is not None:
                 data["warning"] = warning
             if workspace_created:
@@ -376,18 +411,29 @@ class MessageService:
         from_agent_id: Any,
         target: Any,
         now: str,
-    ) -> tuple[list[str], str | None]:
-        """Resolve the recipient set for a message target (ADR 0001).
+    ) -> tuple[list[str], str | None, list[str]]:
+        """Resolve the recipient set for a message target (ADR 0001 + M6).
 
-        ``broadcast``/no-target fans out to the workspace's PRESENT agents (active
-        sessions); every other target resolves against the GLOBAL registry (S1).
-        A group fan-out excludes the sender (you never inbox your own broadcast).
-        A *directed* target (``direct``/``direct_with_fallback``) matching nobody
-        is an unknown recipient -> ``NOT_FOUND``; a group target matching nobody
-        returns a ``warning`` (never a silent zero-recipient send - D1b).
+        ``broadcast``/no-target fans out to the workspace's PRESENT agents (the
+        single presence predicate: active session AND heartbeat within
+        ``presence_ttl_seconds``); every other target resolves against the
+        GLOBAL registry (S1). A group fan-out excludes the sender (you never
+        inbox your own broadcast). A *directed* target (``direct``/
+        ``direct_with_fallback``) matching nobody is an unknown recipient ->
+        ``NOT_FOUND``; a group target matching nobody returns a ``warning``
+        (never a silent zero-recipient send - D1b).
+
+        Returns ``(recipients, warning, excluded_stale)``: ``excluded_stale``
+        names the agents whose ONLY active sessions are heartbeat-stale and who
+        were therefore excluded from a broadcast - the exclusion is always
+        explicit (an alive-but-busy agent is never dropped silently).
         """
+        excluded_stale: list[str] = []
         if requires_workspace_audience(target):
-            candidates = self._workspace_audience(uow, workspace_id)
+            candidates, excluded_stale = self._workspace_audience(
+                uow, workspace_id, now
+            )
+            excluded_stale = [a for a in excluded_stale if a != str(from_agent_id)]
         else:
             candidates = self._global_candidates(uow, workspace_id)
         resolved = resolve_recipients(target, candidates, now=now)
@@ -395,7 +441,7 @@ class MessageService:
         if not directed:
             resolved = resolved - {str(from_agent_id)}
         recipients = sorted(resolved)
-        warning: str | None = None
+        warnings: list[str] = []
         if not recipients:
             if directed:
                 raise OktoNexusError(
@@ -403,16 +449,43 @@ class MessageService:
                     "The direct target does not match any registered agent.",
                     {"target": parse_target(serialize_target(target))},
                 )
-            warning = "no agents matched the target; the message was delivered to nobody."
-        return recipients, warning
+            warnings.append(
+                "no agents matched the target; the message was delivered to nobody."
+            )
+        if excluded_stale:
+            warnings.append(
+                f"{len(excluded_stale)} agent(s) were excluded from the "
+                "broadcast because every active session of theirs has a "
+                f"heartbeat older than presence_ttl_seconds "
+                f"({self._presence_ttl}s): {', '.join(excluded_stale)}. They "
+                "will NOT receive this message (see excluded_stale); reach "
+                "one explicitly with a direct target if it is alive but busy."
+            )
+        warning = " ".join(warnings) if warnings else None
+        return recipients, warning, excluded_stale
 
     def _workspace_audience(
-        self, uow: UnitOfWork, workspace_id: str
-    ) -> list[RoutingAgent]:
-        """Agents PRESENT in the workspace (distinct active-session holders)."""
+        self, uow: UnitOfWork, workspace_id: str, now: str
+    ) -> tuple[list[RoutingAgent], list[str]]:
+        """Split the workspace's active-session holders into present vs stale.
+
+        PRESENT (the broadcast audience) uses the single, shared predicate
+        :func:`okto_nexus.application.identity.session_is_present` - one notion
+        of presence bus-wide. An agent with ANY fresh active session is
+        present; an agent whose active sessions are ALL heartbeat-stale lands
+        in the second list (sorted) so the caller can surface the exclusion.
+        """
         sessions = self._sessions.list(uow, workspace_id=workspace_id, status="active")
-        agent_ids = {s.agent_id for s in sessions}
-        return [RoutingAgent(agent_id=a, workspace_id=workspace_id) for a in agent_ids]
+        present_ids: set[str] = set()
+        active_ids: set[str] = set()
+        for session in sessions:
+            active_ids.add(session.agent_id)
+            if session_is_present(session, now, self._presence_ttl):
+                present_ids.add(session.agent_id)
+        candidates = [
+            RoutingAgent(agent_id=a, workspace_id=workspace_id) for a in present_ids
+        ]
+        return candidates, sorted(active_ids - present_ids)
 
     def _global_candidates(
         self, uow: UnitOfWork, workspace_id: str

@@ -26,11 +26,15 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
-from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
+from okto_nexus.adapters.outbound.sqlite.identity_repo import (
+    SqliteAgentRepo,
+    SqliteSessionRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
+from okto_nexus.application.identity import SessionTrustGuard
 from okto_nexus.application.inbox import (
     DEFAULT_INBOX_LEASE_TTL_SECONDS,
     MAX_LEASE_SECONDS,
@@ -77,6 +81,17 @@ _P_STATUS_MESSAGE_ID = (
     "The message_id returned by message_create - the message whose "
     "per-recipient delivery states you want to track. REQUIRED."
 )
+#: INVARIANT: the sensitive inbox verbs (pull/ack/extend) share the trust
+#: wording with message_create/handoff_* - one credential story bus-wide.
+_P_SESSION_TRUST = (
+    "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
+    "together with session_secret in trust_mode=strict)."
+)
+_P_SESSION_SECRET = (
+    "The session_secret returned by session_open for session_id (optional in "
+    "trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
+    "REQUIRED together with session_id in trust_mode=strict)."
+)
 
 
 def build_service(deps: Any) -> InboxService:
@@ -109,6 +124,16 @@ def build_service(deps: Any) -> InboxService:
 def register(server: Any, deps: Any) -> None:
     """Register the inbox tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
+    # M10: pull/ack/extend mutate the recipient's read state, so they are
+    # credential-gated according to NexusConfig.trust_mode (the read-only
+    # peek/count/history/message_status stay open).
+    if getattr(deps.repos, "sessions", None) is None:
+        deps.repos.sessions = SqliteSessionRepo(deps.clock)
+    trust = SessionTrustGuard(
+        connection_factory=deps.connection_factory,
+        sessions=deps.repos.sessions,
+        trust_mode=getattr(deps.config, "trust_mode", "open"),
+    )
 
     @server.tool()
     @tool_envelope
@@ -118,6 +143,10 @@ def register(server: Any, deps: Any) -> None:
         lease_seconds: Annotated[
             int | None, Field(description=_P_LEASE_SECONDS)
         ] = None,
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
         """Take your unread messages into in-flight and return them with their body.
 
@@ -126,8 +155,15 @@ def register(server: Any, deps: Any) -> None:
         ``inbox_ack`` them before the lease elapses they are redelivered on a
         later pull. Long turn? Size the lease with ``lease_seconds`` or renew it
         with ``inbox_extend``. A message redelivered too many times is parked
-        (dead-letter) - see ``inbox_peek`` with ``include_parked``.
+        (dead-letter) - see ``inbox_peek`` with ``include_parked``. In
+        trust_mode=strict pass session_id + session_secret (from session_open).
         """
+        trust.require(
+            tool="inbox_pull",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.pull(agent_id=agent_id, limit=limit, lease_seconds=lease_seconds)
 
     @server.tool()
@@ -135,12 +171,23 @@ def register(server: Any, deps: Any) -> None:
     def inbox_ack(
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         message_ids: Annotated[Any, Field(description=_P_MESSAGE_IDS)],
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
         """Acknowledge messages into history (read), freeing your inbox queue.
 
         Returns ``{acknowledged: <count>}``. Ack only what you have finished
         handling; unacked in-flight messages are redelivered after their lease.
+        In trust_mode=strict pass session_id + session_secret (from session_open).
         """
+        trust.require(
+            tool="inbox_ack",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.ack(agent_id=agent_id, message_ids=message_ids)
 
     @server.tool()
@@ -149,6 +196,10 @@ def register(server: Any, deps: Any) -> None:
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         message_ids: Annotated[Any, Field(description=_P_EXTEND_IDS)],
         extend_seconds: Annotated[int, Field(description=_P_EXTEND_SECONDS)],
+        session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
         """Renew the lease on messages you pulled but have not finished handling.
 
@@ -156,8 +207,15 @@ def register(server: Any, deps: Any) -> None:
         so a long turn does not trigger duplicate redelivery. All-or-nothing:
         if any id is not in-flight (never pulled / lease already expired /
         already acknowledged / parked) the call fails with a per-message
-        reason and nothing is extended.
+        reason and nothing is extended. In trust_mode=strict pass session_id +
+        session_secret (from session_open).
         """
+        trust.require(
+            tool="inbox_extend",
+            agent_id=agent_id,
+            session_id=session_id,
+            session_secret=session_secret,
+        )
         return service.extend(
             agent_id=agent_id, message_ids=message_ids, extend_seconds=extend_seconds
         )

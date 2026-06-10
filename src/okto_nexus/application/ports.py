@@ -188,12 +188,22 @@ class SessionRepo(Protocol):
         workspace_id: str,
         status: str,
         started_at: str | None = None,
+        session_secret: str | None = None,
     ) -> Session:
         """Create a session, returning the stored row."""
         ...
 
     def get(self, uow: UnitOfWork, session_id: str) -> Session | None:
         """Return the session, or ``None`` if it does not exist."""
+        ...
+
+    def get_secret(self, uow: UnitOfWork, *, session_id: str) -> str | None:
+        """Return the stored ``session_secret`` (or ``None``).
+
+        ``None`` for an unknown session AND for a pre-007 row (NULL column);
+        callers distinguish via :meth:`get`. The secret never travels on the
+        :class:`Session` dataclass, so read surfaces cannot leak it.
+        """
         ...
 
     def heartbeat(

@@ -240,16 +240,18 @@ class SqliteSessionRepo(_ClockBacked):
         workspace_id: str,
         status: str,
         started_at: str | None = None,
+        session_secret: str | None = None,
     ) -> Session:
         now = started_at or self._now()
         try:
             uow.connection.execute(
                 """
                 INSERT INTO sessions
-                    (session_id, agent_id, workspace_id, status, started_at, last_heartbeat_at)
-                VALUES (?, ?, ?, ?, ?, ?)
+                    (session_id, agent_id, workspace_id, status, started_at,
+                     last_heartbeat_at, session_secret)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
-                (session_id, agent_id, workspace_id, status, now, now),
+                (session_id, agent_id, workspace_id, status, now, now, session_secret),
             )
         except sqlite3.Error as exc:
             raise _db_error("creating session", exc) from exc
@@ -274,6 +276,25 @@ class SqliteSessionRepo(_ClockBacked):
         if row is None:
             return None
         return self._row_to_session(row)
+
+    def get_secret(self, uow: UnitOfWork, *, session_id: str) -> str | None:
+        """Return the stored ``session_secret`` for a session (or ``None``).
+
+        ``None`` both for an unknown session and for a session opened before
+        migration 007 (NULL column) - callers that need to distinguish the two
+        check existence via :meth:`get` first. The secret is deliberately NOT
+        part of the :class:`Session` dataclass, so no list/read surface can
+        ever leak it.
+        """
+        try:
+            cur = uow.connection.execute(
+                "SELECT session_secret FROM sessions WHERE session_id = ?",
+                (session_id,),
+            )
+            row = cur.fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("reading session secret", exc) from exc
+        return None if row is None else row["session_secret"]
 
     def heartbeat(
         self, uow: UnitOfWork, *, session_id: str, at: str | None = None

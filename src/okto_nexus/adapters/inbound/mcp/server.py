@@ -131,7 +131,11 @@ retry the old call.
 #: post-S3 safe-by-default surface. 3 = M9 unified target grammar (mixed
 #: requires non-empty rules, no null/broadcast sub-rules - everywhere) +
 #: shared pagination grammar (integer-string cursor/limit now accepted).
-SURFACE_REVISION = 3
+#: 4 = M6 presence (session_open returns session_secret; broadcast audience is
+#: heartbeat-fresh sessions with explicit excluded_stale) + M10 trust
+#: (session_id/session_secret parameters on message_create,
+#: handoff_claim/complete/reject, inbox_pull/ack/extend; trust_mode knob).
+SURFACE_REVISION = 4
 
 
 @dataclass

@@ -133,7 +133,16 @@ def register(server: Any, deps: Any) -> None:
         workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS)] = None,
         metadata: Annotated[Any, Field(description=_P_SESSION_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Open a session bound to (agent_id, workspace_id); server assigns the id."""
+        """Open a session bound to (agent_id, workspace_id); server assigns the id.
+
+        The response includes a per-session ``session_secret`` (returned ONLY
+        here - keep it): in trust_mode=strict the sensitive verbs
+        (message_create, handoff_claim/complete/reject, inbox_pull/ack/extend)
+        require session_id + session_secret, and in open mode a supplied
+        secret is always validated. Heartbeat regularly (session_heartbeat):
+        only sessions with a fresh heartbeat receive broadcasts, and sessions
+        silent past the reap window are closed automatically.
+        """
         return service.session_open(
             agent_id=agent_id, workspace_id=workspace_id, metadata=metadata
         )
@@ -144,7 +153,12 @@ def register(server: Any, deps: Any) -> None:
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS_GUARD)] = None,
     ) -> dict[str, Any]:
-        """Advance a session heartbeat and report the derived status."""
+        """Advance a session heartbeat and report the derived status.
+
+        Heartbeating keeps you PRESENT (in the broadcast audience) and clear of
+        the stale-session reaper; long-dead sessions of the same workspace are
+        reaped opportunistically by this call.
+        """
         return service.session_heartbeat(
             session_id=session_id, workspace_id=workspace_id
         )

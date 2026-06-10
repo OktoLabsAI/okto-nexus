@@ -39,6 +39,10 @@ SHARED_MD_FILENAME = "shared.md"
 
 _NONE_PLACEHOLDER = "_(none)_"
 _NO_VALUE = "—"
+#: shared.md is the workspace-PUBLIC view: any handoff whose visibility is not
+#: exactly ``public`` (eligible / private / unset) has its routing target
+#: redacted behind this placeholder instead of being rendered raw.
+_PRIVATE_PLACEHOLDER = "[private]"
 
 #: ``os.replace`` is atomic on POSIX, but on Windows it can transiently fail with
 #: a sharing violation when two renders swap the SAME destination concurrently.
@@ -208,11 +212,17 @@ class FileSystemSharedMdRenderer:
             lines.append(_NONE_PLACEHOLDER)
         lines.append("")
 
-        # Section 3: open handoffs.
+        # Section 3: open handoffs. shared.md is workspace-public, so the
+        # target (and any payload, which is never rendered here) of a
+        # non-public handoff is redacted - visibility 'eligible'/'private'
+        # (or unset, fail-safe) must not leak through the public view.
         lines.append("## Open Handoffs")
         if view.handoffs:
             for handoff in view.handoffs:
-                target = handoff.target if handoff.target else _NO_VALUE
+                if (handoff.visibility or "").strip().lower() == "public":
+                    target = handoff.target if handoff.target else _NO_VALUE
+                else:
+                    target = _PRIVATE_PLACEHOLDER
                 task_id = handoff.task_id if handoff.task_id else _NO_VALUE
                 claimed_by = handoff.claimed_by if handoff.claimed_by else _NO_VALUE
                 lines.append(

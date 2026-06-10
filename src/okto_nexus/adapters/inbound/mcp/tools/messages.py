@@ -78,7 +78,16 @@ _P_CHANNEL_NAME = (
     "incident-42. REQUIRED. Idempotent by name: creating an existing name returns "
     "that channel (created=false). Trimmed; max 64 chars; unique per workspace."
 )
-_P_FROM_SESSION = "Session_id attributing the message to a specific open session of yours (optional)."
+_P_FROM_SESSION = (
+    "Session_id attributing the message to a specific open session of yours "
+    "(optional in trust_mode=open; REQUIRED together with session_secret in "
+    "trust_mode=strict)."
+)
+_P_SESSION_SECRET = (
+    "The session_secret returned by session_open for from_session_id (optional "
+    "in trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
+    "REQUIRED together with from_session_id in trust_mode=strict)."
+)
 #: INVARIANT: byte-identical to the sentence in tools/handoff.py so the SAME
 #: concept (a routing target) is documented the SAME way on both tools.
 _P_TARGET_TYPE = (
@@ -148,6 +157,8 @@ def build_service(deps: Any) -> MessageService:
         event_emitter=deps.event_emitter,
         clock=deps.clock,
         max_inline_bytes=deps.config.max_inline_bytes,
+        presence_ttl_seconds=deps.config.presence_ttl_seconds,
+        trust_mode=deps.config.trust_mode,
     )
 
 
@@ -167,8 +178,16 @@ def register(server: Any, deps: Any) -> None:
         target: Annotated[Any, Field(description=_P_TARGET_MSG)] = None,
         artifacts: Annotated[list[str] | None, Field(description=_P_ARTIFACTS)] = None,
         parent_message_id: Annotated[str | None, Field(description=_P_PARENT)] = None,
+        session_secret: Annotated[
+            str | None, Field(description=_P_SESSION_SECRET)
+        ] = None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` in one transaction.
+
+        A broadcast (no target) reaches the workspace's PRESENT agents only;
+        agents excluded for heartbeat staleness are reported explicitly in
+        ``excluded_stale`` + ``warning``. In trust_mode=strict pass
+        from_session_id + session_secret (from session_open).
 
         ``target`` is annotated ``Any`` on purpose: the wrapper + application
         layer validate it so a wrong type returns the canonical
@@ -185,6 +204,7 @@ def register(server: Any, deps: Any) -> None:
             target=target,
             artifacts=artifacts,
             parent_message_id=parent_message_id,
+            session_secret=session_secret,
         )
 
     @server.tool()

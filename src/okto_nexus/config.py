@@ -26,11 +26,32 @@ DEFAULT_INBOX_LEASE_TTL_SECONDS = 300
 #: Default TTL (seconds) after which a non-heartbeating session reads ``stale``.
 DEFAULT_SESSION_STALE_TTL_SECONDS = 60
 
+#: Default presence window (seconds): a session counts as PRESENT (and thus in
+#: the broadcast audience) only while its last heartbeat is within this TTL.
+#: Deliberately generous (30 min) so an alive-but-busy agent is not silently
+#: dropped from broadcasts; exclusion is always surfaced explicitly to the
+#: sender via ``excluded_stale``.
+DEFAULT_PRESENCE_TTL_SECONDS = 1800
+
+#: Default reap threshold (seconds): sessions whose heartbeat is older than
+#: this are opportunistically closed (status ``closed``, reason ``stale``) by
+#: ``session_open``/``session_heartbeat`` - dead sessions that never called
+#: ``session_close`` stop accumulating state forever.
+DEFAULT_SESSION_REAP_SECONDS = 86400
+
 #: Default ceiling for ``shared_md_render``'s ``limit_events``.
 DEFAULT_MAX_SHARED_MD_EVENTS = 1000
 
 #: Default ceiling for a single ``event_get``/``event_wait`` page.
 DEFAULT_MAX_EVENT_LIMIT = 1000
+
+#: Trust modes for sensitive verbs (M10). ``open`` keeps the cooperative
+#: behaviour (credentials optional, but VALIDATED when supplied - a wrong
+#: credential is never ignored); ``strict`` requires session_id+session_secret
+#: on message_create, handoff_claim/complete/reject and inbox_pull/ack/extend.
+TRUST_MODE_OPEN = "open"
+TRUST_MODE_STRICT = "strict"
+TRUST_MODES: tuple[str, ...] = (TRUST_MODE_OPEN, TRUST_MODE_STRICT)
 
 
 @dataclass
@@ -50,8 +71,11 @@ class NexusConfig:
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
     inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
     session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
+    presence_ttl_seconds: int = DEFAULT_PRESENCE_TTL_SECONDS
+    session_reap_seconds: int = DEFAULT_SESSION_REAP_SECONDS
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
     max_event_limit: int = DEFAULT_MAX_EVENT_LIMIT
+    trust_mode: str = TRUST_MODE_OPEN
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -108,6 +132,18 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_SESSION_STALE_TTL_SECONDS,
         1,
     ),
+    "presence_ttl_seconds": (
+        "OKTO_NEXUS_PRESENCE_TTL_SECONDS",
+        "--presence-ttl-seconds",
+        DEFAULT_PRESENCE_TTL_SECONDS,
+        1,
+    ),
+    "session_reap_seconds": (
+        "OKTO_NEXUS_SESSION_REAP_SECONDS",
+        "--session-reap-seconds",
+        DEFAULT_SESSION_REAP_SECONDS,
+        1,
+    ),
     "max_shared_md_events": (
         "OKTO_NEXUS_MAX_SHARED_MD_EVENTS",
         "--max-shared-md-events",
@@ -122,6 +158,17 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
     ),
 }
 
+# field: (env var, CLI flag, default, allowed values) - closed-vocabulary
+# string knobs, parsed FAIL-CLOSED like the integer fields above.
+_ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
+    "trust_mode": (
+        "OKTO_NEXUS_TRUST_MODE",
+        "--trust-mode",
+        TRUST_MODE_OPEN,
+        TRUST_MODES,
+    ),
+}
+
 
 def _parse_cli(argv: list[str]) -> dict[str, str]:
     """Parse a flat ``--flag value`` / ``--flag=value`` argv into a flag->value map.
@@ -131,6 +178,7 @@ def _parse_cli(argv: list[str]) -> dict[str, str]:
     """
     known_flags = {flag for _, flag in _PATH_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _INT_FIELDS.values()}
+    known_flags |= {flag for _, flag, _, _ in _ENUM_FIELDS.values()}
 
     parsed: dict[str, str] = {}
     i = 0
@@ -216,6 +264,35 @@ def _resolve_str(
     return None
 
 
+def _resolve_enum(
+    field_name: str,
+    flag: str,
+    env_var: str,
+    default: str,
+    allowed: tuple[str, ...],
+    env: Mapping[str, str],
+    cli: Mapping[str, str],
+) -> str:
+    """Resolve a closed-vocabulary string field with CLI > env > default precedence.
+
+    The value is trimmed and lowercased; anything outside ``allowed`` raises
+    ``CONFIG_ERROR`` so the fail-closed bootstrap aborts cleanly (never a
+    silent fallback to the default).
+    """
+    raw = _resolve_str(flag, env_var, env=env, cli=cli)
+    if raw is None:
+        return default
+    value = str(raw).strip().lower()
+    if value not in allowed:
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"Invalid value for {field_name}: {raw!r}. Allowed values: "
+            f"{', '.join(allowed)}.",
+            {"field": field_name, "value": raw, "allowed": list(allowed)},
+        )
+    return value
+
+
 def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusConfig:
     """Build a :class:`NexusConfig` from environment + CLI overrides.
 
@@ -247,6 +324,11 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
     for field_name, (env_var, flag, default, minimum) in _INT_FIELDS.items():
         kwargs[field_name] = _resolve_int(
             field_name, flag, env_var, default, minimum, env, cli
+        )
+
+    for field_name, (env_var, flag, default, allowed) in _ENUM_FIELDS.items():
+        kwargs[field_name] = _resolve_enum(
+            field_name, flag, env_var, default, allowed, env, cli
         )
 
     return NexusConfig(**kwargs)
