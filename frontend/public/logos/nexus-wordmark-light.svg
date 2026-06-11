@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 40" role="img" aria-label="Okto Nexus">
+  <!-- Light-background wordmark: same geometry as the dark variant,
+       "Okto" switches to deep ink; gradient deepened for white grounds.
+       Metrics mirror the Pulse FRONTEND asset (font-size 26 / y 30). -->
+  <defs>
+    <linearGradient id="nwi-l" gradientUnits="userSpaceOnUse" x1="5" y1="34" x2="33" y2="6">
+      <stop offset="0%" stop-color="#2438f0"/>
+      <stop offset="55%" stop-color="#5b32f4"/>
+      <stop offset="100%" stop-color="#9b2cf0"/>
+    </linearGradient>
+    <linearGradient id="nwt-l" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2d2bd8"/>
+      <stop offset="100%" stop-color="#8a23dd"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(3,4)" fill="none" stroke="url(#nwi-l)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="14.5" cy="14.5" r="5.8"/>
+    <circle cx="23.5" cy="7.5" r="2.8"/>
+    <circle cx="24" cy="23.5" r="2.8"/>
+    <circle cx="7" cy="23" r="2.8"/>
+    <line x1="19.3" y1="10.8" x2="21.1" y2="9.4"/>
+    <line x1="18.9" y1="18.7" x2="21.7" y2="21.4"/>
+  </g>
+  <!-- Okto (ink, dark for light grounds) -->
+  <text
+    x="44"
+    y="30"
+    font-family="'IBM Plex Sans', system-ui, -apple-system, sans-serif"
+    font-weight="600"
+    font-size="26"
+    letter-spacing="-0.5"
+    fill="#11131c"
+  >Okto</text>
+  <!-- Nexus (gradient) -->
+  <text
+    x="110"
+    y="30"
+    font-family="'IBM Plex Sans', system-ui, -apple-system, sans-serif"
+    font-weight="600"
+    font-size="26"
+    letter-spacing="-0.5"
+    fill="url(#nwt-l)"
+  >Nexus</text>
+</svg>

@@ -1,0 +1,229 @@
+// API client for the Nexus serve surfaces. Single source of truth for the
+// envelope ({ok, data | error}) and for credential handling: the operator
+// key lives in sessionStorage only (cleared when the tab closes) and is sent
+// via x-api-key. Issued AGENT keys are never stored anywhere (br_ae340cae).
+
+export interface Envelope<T> {
+  ok: boolean;
+  data?: T;
+  error?: { code: string; message: string };
+}
+
+export interface GraphNode {
+  agent_id: string;
+  role: string | null;
+  capabilities: Record<string, unknown>;
+  is_active: boolean;
+  has_key: boolean;
+  last_seen_at: string | null;
+  presence: "present" | "stale" | "offline";
+  sessions: number;
+  inbox: { unread: number; delivered: number; read: number; parked: number };
+}
+
+export interface GraphEdge {
+  from: string;
+  to: string;
+  count: number;
+  last_at: string;
+  in_flight: { unread: number; delivered: number };
+}
+
+export interface GraphHandoff {
+  handoff_id: string;
+  workspace_id: string;
+  status: string;
+  created_at: string;
+  from_agent_id: string | null;
+  claimed_by: string | null;
+  target: unknown;
+}
+
+export interface GraphSnapshot {
+  workspace_id: string | null;
+  generated_at: string;
+  window_hours: number;
+  nodes: GraphNode[];
+  channels: { channel_id: string; workspace_id: string; name: string }[];
+  edges: { messages: GraphEdge[]; handoffs: GraphHandoff[] };
+}
+
+export interface AgentRow {
+  agent_id: string;
+  role: string | null;
+  capabilities: Record<string, unknown>;
+  metadata: Record<string, unknown>;
+  is_active: boolean;
+  has_key: boolean;
+  created_at: string;
+  last_seen_at: string | null;
+}
+
+export interface MessageRow {
+  message_id: string;
+  workspace_id: string;
+  channel_id: string | null;
+  from_agent_id: string;
+  created_at: string;
+  subject: string | null;
+  preview: string;
+  deliveries: {
+    delivery_id: string;
+    recipient_agent_id: string;
+    status: string;
+    created_at: string;
+  }[];
+}
+
+export interface SessionRow {
+  session_id: string;
+  agent_id: string;
+  workspace_id: string;
+  status: string;
+  started_at: string;
+  last_heartbeat_at: string | null;
+  presence: string;
+}
+
+export interface NexusEvent {
+  event_id: number;
+  workspace_id: string;
+  stream: string;
+  type: string;
+  created_at: string;
+  actor_agent_id: string | null;
+  payload: unknown;
+}
+
+const KEY_STORAGE = "okto_nexus_operator_key";
+
+export function getApiKey(): string | null {
+  return sessionStorage.getItem(KEY_STORAGE);
+}
+
+export function setApiKey(key: string): void {
+  sessionStorage.setItem(KEY_STORAGE, key);
+}
+
+export function clearApiKey(): void {
+  sessionStorage.removeItem(KEY_STORAGE);
+}
+
+export class ApiError extends Error {
+  constructor(
+    public status: number,
+    public code: string,
+    message: string,
+  ) {
+    super(message);
+  }
+}
+
+async function call<T>(
+  path: string,
+  init: RequestInit = {},
+): Promise<T> {
+  const key = getApiKey();
+  const headers = new Headers(init.headers);
+  if (key) headers.set("x-api-key", key);
+  if (init.body) headers.set("content-type", "application/json");
+  const response = await fetch(path, { ...init, headers });
+  const body = (await response.json()) as Envelope<T>;
+  if (!response.ok || !body.ok) {
+    const error = body.error ?? { code: "HTTP_" + response.status, message: response.statusText };
+    throw new ApiError(response.status, error.code, error.message);
+  }
+  return body.data as T;
+}
+
+export const api = {
+  graph: (workspace: string, windowHours = 24) =>
+    call<GraphSnapshot>(
+      `/api/v1/graph?workspace=${encodeURIComponent(workspace)}&window_hours=${windowHours}`,
+    ),
+  messages: (params: Record<string, string>) =>
+    call<{ items: MessageRow[]; page: number; page_size: number; total: number }>(
+      `/api/v1/messages?${new URLSearchParams(params)}`,
+    ),
+  handoffs: (workspace?: string) =>
+    call<{ items: GraphHandoff[] }>(
+      `/api/v1/handoffs${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
+    ),
+  sessions: (workspace?: string) =>
+    call<{ items: SessionRow[] }>(
+      `/api/v1/sessions${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
+    ),
+  events: (after = 0, limit = 100) =>
+    call<{ items: NexusEvent[]; next_cursor: number }>(
+      `/api/v1/events?after=${after}&limit=${limit}`,
+    ),
+  agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
+  createAgent: (body: {
+    agent_id: string;
+    role?: string;
+    capabilities?: string[];
+  }) =>
+    call<AgentRow & { api_key: string }>("/api/v1/agents", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  updateAgent: (agentId: string, body: { is_active?: boolean; role?: string }) =>
+    call<AgentRow>(`/api/v1/agents/${encodeURIComponent(agentId)}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+  regenerateKey: (agentId: string) =>
+    call<{ agent_id: string; api_key: string; rotated_at: string }>(
+      `/api/v1/agents/${encodeURIComponent(agentId)}/regenerate-key`,
+      { method: "POST" },
+    ),
+  deleteAgent: (agentId: string) =>
+    call<{ deleted: boolean }>(`/api/v1/agents/${encodeURIComponent(agentId)}`, {
+      method: "DELETE",
+    }),
+  closeSession: (sessionId: string) =>
+    call<{ session_id: string; status: string }>(
+      `/api/v1/sessions/${encodeURIComponent(sessionId)}/close`,
+      { method: "POST" },
+    ),
+  cancelHandoff: (handoffId: string, workspace: string) =>
+    call<{ handoff_id: string; status: string }>(
+      `/api/v1/handoffs/${encodeURIComponent(handoffId)}/cancel?workspace=${encodeURIComponent(workspace)}`,
+      { method: "POST" },
+    ),
+  prune: (dryRun: boolean) =>
+    call<Record<string, unknown>>(`/api/v1/admin/prune?dry_run=${dryRun}`, {
+      method: "POST",
+    }),
+  reset: (keepAgents: boolean) =>
+    call<Record<string, unknown>>(
+      `/api/v1/admin/reset?keep_agents=${keepAgents}`,
+      { method: "POST" },
+    ),
+  info: () =>
+    call<{ service: string; package_version: string; schema_version: number }>(
+      "/api/v1/info",
+    ),
+};
+
+// MCP snippets per client format (mirrors the Pulse getMcpConfigJson).
+export function mcpSnippet(format: string, apiKey: string): string {
+  const url = `http://${location.hostname}:${location.port || "8202"}/mcp?api_key=${apiKey}`;
+  switch (format) {
+    case "claude-code":
+      return `claude mcp add -t http okto-nexus "${url}"`;
+    case "cursor":
+    case "windsurf":
+    case "vscode":
+    case "claude-desktop":
+      return JSON.stringify(
+        { mcpServers: { "okto-nexus": { url } } },
+        null,
+        2,
+      );
+    case "okto-cli":
+      return `/mcp add '{ "name": "okto-nexus", "type": "http", "server_config": {"type": "http", "url": "${url}"} }'`;
+    default:
+      return url;
+  }
+}

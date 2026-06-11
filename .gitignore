@@ -21,3 +21,7 @@ spec_part2.txt
 
 # Local scratch (handoff diff artifacts, etc.)
 .okto_handoff_*.patch
+
+# Frontend dependencies (the BUILT dashboard ships in src/.../http/static)
+frontend/node_modules/
+
