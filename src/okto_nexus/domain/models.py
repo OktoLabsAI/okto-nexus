@@ -29,7 +29,14 @@ class Workspace:
 
 @dataclass(slots=True)
 class Agent:
-    """A logical agent identity (global; not workspace-scoped)."""
+    """A logical agent identity (global; not workspace-scoped).
+
+    ``api_key_hash``/``is_active`` (migration 009, Nexus v2): a registered
+    key is the primary credential on the HTTP transport. Only the SHA256
+    hash is ever stored; ``api_key_hash`` is ``None`` while no key has been
+    issued (V1 agents pre `admin issue-keys`). ``is_active`` is the
+    revocation switch - an inactive agent's key must not authenticate.
+    """
 
     agent_id: str
     created_at: str
@@ -37,6 +44,8 @@ class Agent:
     capabilities: dict[str, Any] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
     last_seen_at: str | None = None
+    api_key_hash: str | None = None
+    is_active: bool = True
 
 
 @dataclass(slots=True)

@@ -122,7 +122,66 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="N",
         help="Override the closed-sessions window (default: config, 7 days).",
     )
+
+    issue_keys = sub.add_parser(
+        "issue-keys",
+        help="Issue API keys in batch for V1 agents that have none (FR7).",
+        description=(
+            "Strictly ADDITIVE key migration: every agent whose api_key_hash "
+            "is NULL gets a fresh nxs_* key; agents that already hold a key "
+            "are NEVER touched (no rotation, no revocation). The agent->key "
+            "map is printed ONCE - plaintext is never stored - so capture the "
+            "output now. Idempotent: a second run is an informative no-op."
+        ),
+    )
+    issue_keys.add_argument(
+        "--project-root",
+        dest="project_root",
+        required=True,
+        help="Absolute path of a workspace root (validated fail-closed).",
+    )
     return parser
+
+
+def _run_issue_keys(deps: Any, sink: TextIO) -> int:
+    """Issue keys for keyless agents; print the map exactly once."""
+    from okto_nexus.application.auth import AgentKeyAuthService
+
+    auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+    issued: dict[str, str] = {}
+    with deps.connection_factory.unit_of_work() as uow:
+        pending = deps.repos.agents.list_without_key(uow)
+        for agent in pending:
+            issued[agent.agent_id] = auth.issue_key(uow, agent_id=agent.agent_id)
+
+    if not issued:
+        sink.write(
+            json.dumps(
+                {"issued": 0, "note": "every agent already holds a key"},
+                ensure_ascii=True,
+            )
+            + "\n"
+        )
+        sink.flush()
+        return 0
+
+    sink.write(
+        json.dumps(
+            {
+                "issued": len(issued),
+                "keys": issued,
+                "warning": (
+                    "These plaintext keys are shown ONCE and never stored; "
+                    "distribute them to the agents now."
+                ),
+            },
+            indent=2,
+            ensure_ascii=True,
+        )
+        + "\n"
+    )
+    sink.flush()
+    return 0
 
 
 def run_admin(
@@ -148,8 +207,10 @@ def run_admin(
         deps = (deps_factory or bootstrap)(environ, extra)
         # Anchor to a real workspace, fail-closed (WORKSPACE_UNRESOLVED on a
         # broken path) - same discipline as every other subcommand even though
-        # retention spans the whole store.
+        # retention/key issuing spans the whole store.
         resolve_workspace_id(ns.project_root)
+        if ns.command == "issue-keys":
+            return _run_issue_keys(deps, sink)
         report = RetentionService.from_deps(deps).prune(
             events_keep_days=ns.events_keep_days,
             read_deliveries_keep_days=ns.read_deliveries_keep_days,

@@ -232,6 +232,159 @@ class AgentRepo(Protocol):
         """
         ...
 
+    def get_active_by_key_hash(
+        self, uow: UnitOfWork, *, api_key_hash: str
+    ) -> Agent | None:
+        """Resolve an ACTIVE agent by its key hash (migration 009, D5).
+
+        The authentication lookup: returns ``None`` both for an unknown hash
+        and for a matching agent with ``is_active = False`` - callers must
+        not distinguish the two (uniform auth failure).
+        """
+        ...
+
+    def set_key_hash(
+        self, uow: UnitOfWork, *, agent_id: str, api_key_hash: str | None
+    ) -> bool:
+        """Set (or clear, with ``None``) the agent's key hash.
+
+        Returns ``True`` if the agent existed. Replacing the hash is the
+        regeneration primitive: the previous key stops resolving in the same
+        transaction (immediate invalidation).
+        """
+        ...
+
+    def set_active(
+        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
+    ) -> bool:
+        """Flip the revocation switch. Returns ``True`` if the agent existed."""
+        ...
+
+    def list_without_key(self, uow: UnitOfWork) -> list[Agent]:
+        """Agents with no issued key (``api_key_hash IS NULL``), oldest first.
+
+        The `admin issue-keys` batch-migration view (FR7): strictly additive,
+        so agents that already hold a key are never returned.
+        """
+        ...
+
+    def delete(self, uow: UnitOfWork, *, agent_id: str) -> bool:
+        """Remove the agent row entirely. Returns ``True`` if it existed.
+
+        Management-surface only (FR4): deactivation (``set_active``) is the
+        normal revocation path; deletion is the irreversible cleanup.
+        """
+        ...
+
+
+@runtime_checkable
+class ObservabilityQueries(Protocol):
+    """Read-only aggregate queries backing the dashboard (Nexus v2, FR3-FR6).
+
+    Strictly observational: implementations must never write (br_5865bb88).
+    Rows come back as plain dicts shaped by the adapter; the
+    ``ObservabilityService`` derives presence and assembles the graph.
+    """
+
+    def agent_rows(self, uow: UnitOfWork) -> list[dict[str, Any]]:
+        """All agents + their freshest ACTIVE session heartbeat (global)."""
+        ...
+
+    def inbox_counts(self, uow: UnitOfWork) -> dict[str, dict[str, int]]:
+        """Per-agent delivery counts by lane (unread/delivered/read/parked)."""
+        ...
+
+    def message_edges(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        since_iso: str,
+    ) -> list[dict[str, Any]]:
+        """Aggregated (from, to) message pairs inside the window, with in-flight."""
+        ...
+
+    def handoff_rows(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        statuses: tuple[str, ...] | None = None,
+    ) -> list[dict[str, Any]]:
+        ...
+
+    def channel_rows(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> list[dict[str, Any]]:
+        ...
+
+    def session_rows(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        status: str | None = None,
+    ) -> list[dict[str, Any]]:
+        ...
+
+    def messages_page(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        agent_id: str | None,
+        channel_id: str | None,
+        lane: str | None,
+        since_iso: str | None,
+        until_iso: str | None,
+        page: int,
+        page_size: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        """Paginated message history with per-recipient deliveries; (items, total)."""
+        ...
+
+    def events_after(
+        self,
+        uow: UnitOfWork,
+        *,
+        cursor: int,
+        workspace_id: str | None,
+        stream: str | None,
+        limit: int,
+    ) -> list[dict[str, Any]]:
+        """Event-log rows with ``event_id > cursor``, ascending (SSE/tail feed)."""
+        ...
+
+
+@runtime_checkable
+class AuthProvider(Protocol):
+    """Turns inbound credentials into agent identities (Nexus v2, D5/D6).
+
+    The seam that keeps the HTTP transport SaaS-ready: the local
+    implementation (:class:`okto_nexus.application.auth.AgentKeyAuthService`)
+    resolves per-agent API keys against ``agents.api_key_hash``; a cloud
+    deployment swaps in an IdP/RBAC-backed provider without touching the
+    inbound adapters.
+    """
+
+    def issue_key(self, uow: UnitOfWork, *, agent_id: str) -> str:
+        """Issue/rotate the agent's key; return the plaintext exactly once."""
+        ...
+
+    def set_active(
+        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
+    ) -> bool:
+        """Flip the revocation switch (dropping cached resolutions)."""
+        ...
+
+    def resolve(self, uow: UnitOfWork, api_key: str | None) -> Agent | None:
+        """Resolve a credential to its ACTIVE agent; uniform ``None`` failure."""
+        ...
+
+    def invalidate_agent(self, agent_id: str) -> None:
+        """Drop any cached resolution for the agent."""
+        ...
+
 
 @runtime_checkable
 class SessionRepo(Protocol):

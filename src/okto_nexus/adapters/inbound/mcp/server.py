@@ -355,6 +355,11 @@ def main(argv: list[str] | None = None) -> int:
 
         return run_admin(args[1:])
 
+    if args and args[0] == "serve":
+        from ..cli.serve import run_serve  # lazy: FastAPI/uvicorn optional
+
+        return run_serve(args[1:])
+
     try:
         deps = bootstrap(os.environ, args)
     except OktoNexusError as exc:
@@ -363,6 +368,33 @@ def main(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 1
+
+    # Optional stdio identity-by-key (FR8): when OKTO_NEXUS_API_KEY is set,
+    # the session's identity derives from the key exactly as on HTTP, and an
+    # invalid key FAILS CLOSED (no silent fallback to the open V1 mode). The
+    # env absent keeps the V1 contract byte-for-byte (rule br_b89c1d77).
+    stdio_key = os.environ.get("OKTO_NEXUS_API_KEY")
+    if stdio_key:
+        from ....application.auth import AgentKeyAuthService
+        from ..http.identity_ctx import current_agent
+
+        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+        with deps.connection_factory.unit_of_work() as uow:
+            agent = auth.resolve(uow, stdio_key)
+        if agent is None:
+            print(
+                "[okto-nexus] OKTO_NEXUS_API_KEY is set but does not resolve "
+                "to an active agent. Fix or unset the variable (fail-closed; "
+                "the open V1 mode is NOT used as a fallback).",
+                file=sys.stderr,
+            )
+            return 1
+        current_agent.set(agent)
+        print(
+            f"[okto-nexus] stdio session authenticated as agent "
+            f"'{agent.agent_id}' via OKTO_NEXUS_API_KEY.",
+            file=sys.stderr,
+        )
 
     maybe_auto_prune(deps)  # no-op unless auto_prune_on_start=true; best-effort
 

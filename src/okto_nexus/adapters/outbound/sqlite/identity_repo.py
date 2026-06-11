@@ -136,7 +136,10 @@ class SqliteWorkspaceRepo(_ClockBacked):
 class SqliteAgentRepo(_ClockBacked):
     """Persistence for ``agents`` rows (global logical identities)."""
 
-    _COLUMNS = "agent_id, role, capabilities, metadata, created_at, last_seen_at"
+    _COLUMNS = (
+        "agent_id, role, capabilities, metadata, created_at, last_seen_at, "
+        "api_key_hash, is_active"
+    )
 
     def upsert(
         self,
@@ -209,6 +212,83 @@ class SqliteAgentRepo(_ClockBacked):
             raise _db_error("touching agent", exc) from exc
         return cur.rowcount > 0
 
+    def get_active_by_key_hash(
+        self, uow: UnitOfWork, *, api_key_hash: str
+    ) -> Agent | None:
+        """Resolve an ACTIVE agent by key hash (migration 009, D5).
+
+        ``None`` covers both an unknown hash and an inactive agent: the auth
+        failure must be uniform so a revoked key is indistinguishable from a
+        bogus one. The partial UNIQUE index guarantees at most one row.
+        """
+        try:
+            cur = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM agents "
+                "WHERE api_key_hash = ? AND is_active = 1",
+                (api_key_hash,),
+            )
+            row = cur.fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("resolving agent by key hash", exc) from exc
+        if row is None:
+            return None
+        return self._row_to_agent(row)
+
+    def set_key_hash(
+        self, uow: UnitOfWork, *, agent_id: str, api_key_hash: str | None
+    ) -> bool:
+        """Set (or clear) the agent's key hash; True if the agent existed.
+
+        Replacing the hash IS the regeneration primitive: the previous key
+        stops resolving within this transaction (immediate invalidation).
+        A duplicate hash violates the partial UNIQUE index and surfaces as
+        a DB_ERROR (callers generate fresh random keys, so a collision is
+        a bug or an attempted reuse - never silently accepted).
+        """
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET api_key_hash = ? WHERE agent_id = ?",
+                (api_key_hash, agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent key hash", exc) from exc
+        return cur.rowcount > 0
+
+    def set_active(
+        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
+    ) -> bool:
+        """Flip the revocation switch; True if the agent existed."""
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET is_active = ? WHERE agent_id = ?",
+                (1 if is_active else 0, agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent active flag", exc) from exc
+        return cur.rowcount > 0
+
+    def list_without_key(self, uow: UnitOfWork) -> list[Agent]:
+        """Agents with no issued key, oldest first (`admin issue-keys` view)."""
+        try:
+            cur = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM agents "
+                "WHERE api_key_hash IS NULL ORDER BY created_at, agent_id"
+            )
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing agents without key", exc) from exc
+        return [self._row_to_agent(row) for row in rows]
+
+    def delete(self, uow: UnitOfWork, *, agent_id: str) -> bool:
+        """Remove the agent row; True if it existed (management surface)."""
+        try:
+            cur = uow.connection.execute(
+                "DELETE FROM agents WHERE agent_id = ?", (agent_id,)
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("deleting agent", exc) from exc
+        return cur.rowcount > 0
+
     @staticmethod
     def _row_to_agent(row: Any) -> Agent:
         capabilities = _loads(row["capabilities"])
@@ -220,6 +300,8 @@ class SqliteAgentRepo(_ClockBacked):
             capabilities=capabilities if capabilities is not None else {},
             metadata=metadata if metadata is not None else {},
             last_seen_at=row["last_seen_at"],
+            api_key_hash=row["api_key_hash"],
+            is_active=bool(row["is_active"]),
         )
 
 
