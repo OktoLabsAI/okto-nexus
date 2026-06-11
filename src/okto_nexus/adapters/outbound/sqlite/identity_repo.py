@@ -138,7 +138,7 @@ class SqliteAgentRepo(_ClockBacked):
 
     _COLUMNS = (
         "agent_id, role, capabilities, metadata, created_at, last_seen_at, "
-        "api_key_hash, is_active"
+        "api_key_hash, is_active, permissions, preset_id"
     )
 
     def upsert(
@@ -210,6 +210,29 @@ class SqliteAgentRepo(_ClockBacked):
             )
         except sqlite3.Error as exc:
             raise _db_error("touching agent", exc) from exc
+        return cur.rowcount > 0
+
+    def set_permissions(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        permissions: Any,
+        preset_id: str | None,
+    ) -> bool:
+        """Overwrite BOTH permission columns; True if the agent existed.
+
+        Always a full overwrite (``None`` resets to unrestricted) - unlike
+        ``upsert``'s COALESCE semantics, clearing is a first-class operation
+        here, so a dedicated method keeps the intent unambiguous.
+        """
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET permissions = ?, preset_id = ? WHERE agent_id = ?",
+                (_dumps(permissions), preset_id, agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent permissions", exc) from exc
         return cur.rowcount > 0
 
     def get_active_by_key_hash(
@@ -302,6 +325,8 @@ class SqliteAgentRepo(_ClockBacked):
             last_seen_at=row["last_seen_at"],
             api_key_hash=row["api_key_hash"],
             is_active=bool(row["is_active"]),
+            permissions=_loads(row["permissions"]),
+            preset_id=row["preset_id"],
         )
 
 

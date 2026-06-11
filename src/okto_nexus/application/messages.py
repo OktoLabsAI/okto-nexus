@@ -48,8 +48,10 @@ from ..domain.inbox import (
 )
 from ..domain.models import Channel, Message
 from ..domain.routing import RoutingAgent
+from ..domain.base import iso_plus
 from ..errors import ErrorCode, OktoNexusError
 from .identity import session_is_present, verify_session_credentials
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     ChannelRepo,
@@ -179,6 +181,42 @@ class MessageService:
                 session_id=from_session_id,
                 session_secret=session_secret,
             )
+
+            # Permission gate (migration 011): which SEND capability this is.
+            # A channel post is gated by send_channel alone (its broadcast-ish
+            # fan-out is the channel's nature, not a broadcast privilege); a
+            # directed target additionally needs send_direct; a channel-less
+            # group/broadcast send needs send_broadcast.
+            perms = permission_set_for(self._agents, uow, from_agent_id)
+            directed = requires_known_recipient(target)
+            if channel is not None:
+                perms.require("messages", "send_channel")
+                if directed:
+                    perms.require("messages", "send_direct")
+            elif directed:
+                perms.require("messages", "send_direct")
+            else:
+                perms.require("messages", "send_broadcast")
+            rate = perms.limit("messages_per_minute")
+            if rate > 0:
+                sent = self._messages.count_since(
+                    uow,
+                    from_agent_id=str(from_agent_id),
+                    since=iso_plus(now, -60.0),
+                )
+                if sent >= rate:
+                    raise OktoNexusError(
+                        ErrorCode.PERMISSION_DENIED,
+                        f"Rate limit exceeded: this agent may send at most "
+                        f"{rate} message(s) per minute "
+                        f"(limits.messages_per_minute).",
+                        {
+                            "required_permission": "limits.messages_per_minute",
+                            "limit": rate,
+                            "sent_last_60s": sent,
+                        },
+                    )
+
             workspace_created = self._ensure_workspace(
                 uow, workspace_id, root_realpath, now
             )
@@ -191,6 +229,35 @@ class MessageService:
             recipients, warning, excluded_stale = self._resolve_recipients(
                 uow, workspace_id, from_agent_id, target, now
             )
+
+            # Quantitative permission gates over the RESOLVED fan-out.
+            max_recipients = perms.limit("max_recipients")
+            if max_recipients > 0 and len(recipients) > max_recipients:
+                raise OktoNexusError(
+                    ErrorCode.PERMISSION_DENIED,
+                    f"The send would reach {len(recipients)} recipients but "
+                    f"this agent is limited to {max_recipients} "
+                    f"(limits.max_recipients).",
+                    {
+                        "required_permission": "limits.max_recipients",
+                        "limit": max_recipients,
+                        "resolved_recipients": len(recipients),
+                    },
+                )
+            allowed_peers = perms.allowed_peers()
+            if directed and allowed_peers:
+                outside = sorted(set(recipients) - set(allowed_peers))
+                if outside:
+                    raise OktoNexusError(
+                        ErrorCode.PERMISSION_DENIED,
+                        "Direct sends from this agent are restricted to its "
+                        "allowed_peers list; the target is outside it.",
+                        {
+                            "required_permission": "messages.allowed_peers",
+                            "blocked_recipients": outside,
+                            "allowed_peers": allowed_peers,
+                        },
+                    )
 
             message = self._messages.create(
                 uow,
@@ -260,8 +327,15 @@ class MessageService:
     # ------------------------------------------------------------------ #
     # channel_create / channel_list
     # ------------------------------------------------------------------ #
-    def create_channel(self, *, project_root: Any, name: Any) -> dict[str, Any]:
+    def create_channel(
+        self, *, project_root: Any, name: Any, agent_id: Any = None
+    ) -> dict[str, Any]:
         """Create a channel by name in the workspace - IDEMPOTENT by name.
+
+        ``agent_id`` is the OPTIONAL caller identity for the permission gate
+        (``channels.create``): the HTTP transport passes the authenticated
+        agent; the cooperative stdio transport has no enforced identity, so
+        an absent id resolves to the unrestricted set (default-allow).
 
         Channels are lightweight, workspace-global organizational labels with no
         membership/ACL: any agent in the workspace can read and post to any
@@ -279,6 +353,9 @@ class MessageService:
         now = self._clock.now_iso()
         try:
             with self._cf.unit_of_work() as uow:
+                permission_set_for(self._agents, uow, agent_id).require(
+                    "channels", "create"
+                )
                 self._ensure_workspace(uow, workspace_id, root_realpath, now)
                 existing = self._channels.get_by_name(
                     uow, workspace_id=workspace_id, name=channel_name
@@ -293,7 +370,11 @@ class MessageService:
                     created_at=now,
                 )
                 return {"channel": self._channel_to_data(channel), "created": True}
-        except OktoNexusError:
+        except OktoNexusError as exc:
+            # A permission denial is NEVER the race below: re-raise before the
+            # idempotent re-read, or an existing channel name would mask it.
+            if exc.code == ErrorCode.PERMISSION_DENIED:
+                raise
             # A concurrent creator may have won the UNIQUE(workspace, name) race
             # between our get_by_name and our insert. Re-read in a fresh unit of
             # work; if the row now exists, the create is idempotent (created

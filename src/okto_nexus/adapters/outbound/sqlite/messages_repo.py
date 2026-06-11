@@ -221,6 +221,24 @@ class SqliteMessageRepo(_ClockBacked):
             raise _db_error("reading message", exc) from exc
         return self._row_to_message(row) if row is not None else None
 
+    def count_since(
+        self, uow: UnitOfWork, *, from_agent_id: str, since: str
+    ) -> int:
+        """Count messages sent by the agent at/after ``since`` (GLOBAL).
+
+        Canonical fixed-width timestamps make the lexicographic ``>=``
+        chronological. Backs ``limits.messages_per_minute``.
+        """
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM messages "
+                "WHERE from_agent_id = ? AND created_at >= ?",
+                (from_agent_id, since),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting recent messages", exc) from exc
+        return int(row[0])
+
     def list(
         self,
         uow: UnitOfWork,
@@ -395,16 +413,20 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         recipient_agent_id: str,
         message_ids: Sequence[str],
         read_at: str,
-    ) -> int:
+    ) -> list[str]:
         ids = [m for m in message_ids if m]
         if not ids:
-            return 0
+            return []
         placeholders = ",".join("?" * len(ids))
         try:
-            cur = uow.connection.execute(
+            # RETURNING (SQLite >= 3.35, guaranteed by the supported Python
+            # builds) surfaces exactly WHICH deliveries transitioned, so the
+            # caller can emit one message.read receipt per real transition
+            # (an already-read or unknown id never produces a receipt).
+            rows = uow.connection.execute(
                 f"UPDATE message_deliveries SET status = ?, read_at = ? "
                 f"WHERE recipient_agent_id = ? AND status IN (?, ?) "
-                f"AND message_id IN ({placeholders})",
+                f"AND message_id IN ({placeholders}) RETURNING message_id",
                 (
                     DELIVERY_READ,
                     read_at,
@@ -413,10 +435,10 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                     DELIVERY_DELIVERED,
                     *ids,
                 ),
-            )
+            ).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("acknowledging inbox deliveries", exc) from exc
-        return cur.rowcount
+        return sorted({row["message_id"] for row in rows})
 
     def extend_leases(
         self,

@@ -1118,7 +1118,7 @@ def test_register_wires_deps_and_envelope(migrated_factory, tmp_path):
     server = FakeServer()
     register(server, deps)
 
-    assert set(server.tools) == {"event_get", "event_wait"}
+    assert set(server.tools) == {"event_get", "event_cursor", "event_wait"}
     assert deps.repos.events is not None
     assert deps.repos.agents is not None
     assert deps.event_emitter is not None  # published for peer slices

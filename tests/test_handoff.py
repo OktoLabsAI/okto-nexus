@@ -2043,7 +2043,8 @@ def test_direct_handoff_lands_one_inbox_notification(
     assert "handoff_claim" in body["next_step"]
     # The notification acks through the normal inbox lanes.
     assert inbox.ack(agent_id="worker", message_ids=[msg["message_id"]]) == {
-        "acknowledged": 1
+        "acknowledged": 1,
+        "read_message_ids": [msg["message_id"]],
     }
     assert inbox.count(agent_id="worker")["unread"] == 0
 

@@ -276,6 +276,66 @@ class AgentRepo(Protocol):
         """
         ...
 
+    def set_permissions(
+        self,
+        uow: UnitOfWork,
+        *,
+        agent_id: str,
+        permissions: Mapping[str, Any] | None,
+        preset_id: str | None,
+    ) -> bool:
+        """Overwrite the agent's permission flags + preset reference.
+
+        Always a full overwrite of BOTH columns (``permissions=None`` resets
+        to unrestricted default-allow). Returns ``True`` if the agent existed.
+        """
+        ...
+
+
+@runtime_checkable
+class PresetRepo(Protocol):
+    """Persistence for CUSTOM permission presets (migration 011).
+
+    Built-in presets live in :mod:`okto_nexus.domain.permissions` as code and
+    never reach this table.
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        preset_id: str,
+        name: str,
+        flags: Mapping[str, Any],
+        description: str | None = None,
+    ) -> Any:
+        """Create a preset (UNIQUE name). Returns the stored row."""
+        ...
+
+    def get(self, uow: UnitOfWork, preset_id: str) -> Any:
+        """Return the preset, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[Any]:
+        """Return every custom preset, ordered by name."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        preset_id: str,
+        name: str | None = None,
+        description: Any = "__unset__",
+        flags: Mapping[str, Any] | None = None,
+    ) -> Any:
+        """Patch the preset; returns the updated row or ``None`` if absent."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, preset_id: str) -> bool:
+        """Remove the preset. Returns ``True`` if it existed."""
+        ...
+
 
 @runtime_checkable
 class ObservabilityQueries(Protocol):
@@ -586,6 +646,17 @@ class MessageRepo(Protocol):
         """Return the message, or ``None``."""
         ...
 
+    def count_since(
+        self, uow: UnitOfWork, *, from_agent_id: str, since: str
+    ) -> int:
+        """Count messages SENT by ``from_agent_id`` at/after ``since`` (global).
+
+        Backs the ``limits.messages_per_minute`` permission: the rate window
+        is global (not per-workspace) because the limit protects the bus as a
+        whole from a runaway sender.
+        """
+        ...
+
     def list(
         self,
         uow: UnitOfWork,
@@ -670,9 +741,11 @@ class MessageDeliveryRepo(Protocol):
         recipient_agent_id: str,
         message_ids: Sequence[str],
         read_at: str,
-    ) -> int:
+    ) -> list[str]:
         """Move the recipient's ``unread``/``delivered`` rows for these messages to
-        ``read`` (history). Returns the number transitioned (idempotent)."""
+        ``read`` (history). Returns the message_ids actually transitioned
+        (idempotent; already-read/unknown ids are simply absent) - the list
+        backs the ``message.read`` receipt events."""
         ...
 
     def extend_leases(
@@ -1004,3 +1077,4 @@ class Repos:
     handoffs: HandoffRepo | None = None
     artifacts: ArtifactRepo | None = None
     files: FileStore | None = None
+    presets: PresetRepo | None = None

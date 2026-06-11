@@ -33,6 +33,8 @@ __all__ = [
     "MAX_CHANNEL_NAME_LEN",
     "MESSAGE_STREAM",
     "MESSAGE_CREATED_TYPE",
+    "MESSAGE_DELIVERED_TYPE",
+    "MESSAGE_READ_TYPE",
     "new_message_id",
     "new_channel_id",
     "validate_channel_name",
@@ -63,6 +65,12 @@ MAX_CHANNEL_NAME_LEN = 64
 #: ``can_agent_see_event``; the stream is only the coarse routing channel.
 MESSAGE_STREAM = "workspace"
 MESSAGE_CREATED_TYPE = "message.created"
+#: Delivery receipts (sender-visible): emitted by the INBOX slice in the same
+#: transaction as the lane transition they describe. ``message.delivered`` =
+#: the recipient PULLED the message (in-flight; may repeat on redelivery,
+#: at-least-once); ``message.read`` = the recipient ACKNOWLEDGED it.
+MESSAGE_DELIVERED_TYPE = "message.delivered"
+MESSAGE_READ_TYPE = "message.read"
 
 
 def new_message_id() -> str:

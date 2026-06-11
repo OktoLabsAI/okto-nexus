@@ -154,14 +154,17 @@ def test_ack_moves_to_history(migrated_factory, fake_clock):
 
     inbox.pull(agent_id="r")
     acked = inbox.ack(agent_id="r", message_ids=["m1"])
-    assert acked == {"acknowledged": 1}
+    assert acked == {"acknowledged": 1, "read_message_ids": ["m1"]}
     assert inbox.count(agent_id="r") == {"unread": 0, "in_flight": 0, "read": 1}
 
     hist = inbox.history(agent_id="r")
     assert [m["message_id"] for m in hist["messages"]] == ["m1"]
     assert hist["messages"][0]["status"] == "read"
     # Acking again is idempotent (already read -> nothing transitions).
-    assert inbox.ack(agent_id="r", message_ids=["m1"]) == {"acknowledged": 0}
+    assert inbox.ack(agent_id="r", message_ids=["m1"]) == {
+        "acknowledged": 0,
+        "read_message_ids": [],
+    }
 
 
 def test_peek_is_non_destructive(migrated_factory, fake_clock):
@@ -711,7 +714,10 @@ def test_pull_clamps_limit(migrated_factory, fake_clock):
 def test_ack_of_foreign_or_unknown_message_is_zero(migrated_factory, fake_clock):
     inbox = make_inbox(migrated_factory, fake_clock)
     # 'r' has no deliveries at all; acking anything transitions nothing.
-    assert inbox.ack(agent_id="r", message_ids=["nope"]) == {"acknowledged": 0}
+    assert inbox.ack(agent_id="r", message_ids=["nope"]) == {
+        "acknowledged": 0,
+        "read_message_ids": [],
+    }
 
 
 def test_peek_surfaces_both_unread_and_in_flight(migrated_factory, fake_clock):

@@ -27,6 +27,10 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
+from okto_nexus.adapters.outbound.sqlite.events_repo import (
+    SqliteEventEmitter,
+    SqliteEventRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
@@ -119,6 +123,10 @@ def build_service(deps: Any) -> InboxService:
         repos.messages = SqliteMessageRepo(deps.clock)
     if getattr(repos, "agents", None) is None:
         repos.agents = SqliteAgentRepo(deps.clock)
+    if getattr(deps, "event_emitter", None) is None:
+        if getattr(repos, "events", None) is None:
+            repos.events = SqliteEventRepo(deps.clock)
+        deps.event_emitter = SqliteEventEmitter(repos.events)
     return InboxService(
         connection_factory=deps.connection_factory,
         deliveries=repos.deliveries,
@@ -126,6 +134,7 @@ def build_service(deps: Any) -> InboxService:
         agents=repos.agents,
         clock=deps.clock,
         lease_ttl_seconds=deps.config.inbox_lease_ttl_seconds,
+        event_emitter=deps.event_emitter,
     )
 
 
@@ -165,6 +174,10 @@ def register(server: Any, deps: Any) -> None:
         with ``inbox_extend``. A message redelivered too many times is parked
         (dead-letter) - see ``inbox_peek`` with ``include_parked``. In
         trust_mode=strict pass session_id + session_secret (from session_open).
+
+        Pulling notifies the sender: each claimed message emits a
+        ``message.delivered`` receipt event visible only to its sender, in
+        the same transaction as the claim.
         """
         trust.require(
             tool="inbox_pull",
@@ -186,9 +199,13 @@ def register(server: Any, deps: Any) -> None:
     ) -> dict[str, Any]:
         """Acknowledge messages into history (read), freeing your inbox queue.
 
-        Returns ``{acknowledged: <count>}``. Ack only what you have finished
-        handling; unacked in-flight messages are redelivered after their lease.
-        In trust_mode=strict pass session_id + session_secret (from session_open).
+        Returns ``{acknowledged: <count>, read_message_ids: [...]}`` - the ids
+        that ACTUALLY transitioned (already-read/unknown ids are absent). Ack
+        only what you have finished handling; unacked in-flight messages are
+        redelivered after their lease. Acknowledging notifies the sender: each
+        transitioned message emits a ``message.read`` receipt event visible
+        only to its sender, atomic with the transition. In trust_mode=strict
+        pass session_id + session_secret (from session_open).
         """
         trust.require(
             tool="inbox_ack",
@@ -300,5 +317,11 @@ def register(server: Any, deps: Any) -> None:
         redelivery), ``delivered`` (recipient pulled it - in flight), ``read``
         (acknowledged), ``parked`` (dead-lettered after exhausting redelivery
         attempts). Use it instead of re-sending when a recipient seems silent.
+
+        PUSH alternative: every lane transition also emits a receipt event
+        visible only to you, the sender (``message.delivered`` on pull,
+        ``message.read`` on ack) - await one with
+        event_wait(filters={"type": "message.read"}) and match
+        payload.message_id instead of polling this tool.
         """
         return service.message_status(message_id=message_id)

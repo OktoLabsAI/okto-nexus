@@ -48,6 +48,27 @@ export interface GraphSnapshot {
   edges: { messages: GraphEdge[]; handoffs: GraphHandoff[] };
 }
 
+// Permission flags: {group: {flag: bool | number | string[]}} - the Pulse
+// grammar adapted to the Nexus communication domain (migration 011).
+export type PermissionFlags = Record<
+  string,
+  Record<string, boolean | number | string[]>
+>;
+
+export interface PresetRow {
+  preset_id: string;
+  name: string;
+  description: string | null;
+  is_builtin: boolean;
+  flags: PermissionFlags;
+}
+
+export interface PresetsPayload {
+  items: PresetRow[];
+  registry: PermissionFlags;
+  descriptions: Record<string, string>;
+}
+
 export interface AgentRow {
   agent_id: string;
   role: string | null;
@@ -57,6 +78,8 @@ export interface AgentRow {
   has_key: boolean;
   created_at: string;
   last_seen_at: string | null;
+  permissions: PermissionFlags | null;
+  preset_id: string | null;
 }
 
 export interface MessageRow {
@@ -191,16 +214,49 @@ export const api = {
     agent_id: string;
     role?: string;
     capabilities?: string[];
+    preset_id?: string;
+    permissions?: PermissionFlags;
   }) =>
     call<AgentRow & { api_key: string }>("/api/v1/agents", {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  updateAgent: (agentId: string, body: { is_active?: boolean; role?: string }) =>
+  updateAgent: (
+    agentId: string,
+    body: {
+      is_active?: boolean;
+      role?: string;
+      preset_id?: string | null;
+      permissions?: PermissionFlags | null;
+    },
+  ) =>
     call<AgentRow>(`/api/v1/agents/${encodeURIComponent(agentId)}`, {
       method: "PATCH",
       body: JSON.stringify(body),
     }),
+  presets: () => call<PresetsPayload>("/api/v1/presets"),
+  createPreset: (body: {
+    name: string;
+    description?: string;
+    flags: PermissionFlags;
+  }) =>
+    call<PresetRow>("/api/v1/presets", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  updatePreset: (
+    presetId: string,
+    body: { name?: string; description?: string; flags?: PermissionFlags },
+  ) =>
+    call<PresetRow>(`/api/v1/presets/${encodeURIComponent(presetId)}`, {
+      method: "PATCH",
+      body: JSON.stringify(body),
+    }),
+  deletePreset: (presetId: string) =>
+    call<{ deleted: boolean }>(
+      `/api/v1/presets/${encodeURIComponent(presetId)}`,
+      { method: "DELETE" },
+    ),
   regenerateKey: (agentId: string) =>
     call<{ agent_id: string; api_key: string; rotated_at: string }>(
       `/api/v1/agents/${encodeURIComponent(agentId)}/regenerate-key`,
@@ -247,19 +303,24 @@ export const api = {
 export function mcpSnippet(format: string, apiKey: string): string {
   const url = `http://${location.hostname}:${location.port || "8202"}/mcp?api_key=${apiKey}`;
   switch (format) {
-    case "claude-code":
+    case "claude-cli":
       return `claude mcp add -t http okto-nexus "${url}"`;
+    case "codex":
+      return `codex mcp add okto-nexus --url "${url}"`;
+    case "vscode":
+      return JSON.stringify(
+        { servers: { "okto-nexus": { type: "http", url } } },
+        null,
+        2,
+      );
+    case "claude":
     case "cursor":
     case "windsurf":
-    case "vscode":
-    case "claude-desktop":
       return JSON.stringify(
         { mcpServers: { "okto-nexus": { url } } },
         null,
         2,
       );
-    case "okto-cli":
-      return `/mcp add '{ "name": "okto-nexus", "type": "http", "server_config": {"type": "http", "url": "${url}"} }'`;
     default:
       return url;
   }

@@ -33,6 +33,7 @@ catalogue; never imports ``sqlite3``/``mcp`` (enforced by the boundary test).
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from ..config import DEFAULT_INBOX_LEASE_TTL_SECONDS
@@ -43,7 +44,12 @@ from ..domain.inbox import (
     DELIVERY_READ,
     DELIVERY_UNREAD,
 )
-from ..domain.messages import parse_target
+from ..domain.messages import (
+    MESSAGE_DELIVERED_TYPE,
+    MESSAGE_READ_TYPE,
+    MESSAGE_STREAM,
+    parse_target,
+)
 from ..errors import ErrorCode, OktoNexusError
 
 #: Page-size defaults/ceiling for inbox reads (mirrors the message limits).
@@ -85,11 +91,13 @@ class InboxService:
         lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS,
         default_limit: int = DEFAULT_INBOX_LIMIT,
         max_limit: int = MAX_INBOX_LIMIT,
+        event_emitter: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._deliveries = deliveries
         self._messages = messages
         self._agents = agents
+        self._emitter = event_emitter
         self._clock = clock
         self._lease_ttl = int(lease_ttl_seconds)
         self._default_limit = int(default_limit)
@@ -126,6 +134,14 @@ class InboxService:
                 max_attempts=DEFAULT_MAX_DELIVERY_ATTEMPTS,
             )
             items = self._materialise(uow, batch)
+            # Delivery receipts (sender-visible): one message.delivered per
+            # claimed delivery, in the SAME transaction as the lane
+            # transition - the receipt exists iff the claim committed.
+            # At-least-once means a redelivery emits AGAIN (the receipt
+            # mirrors the lane truthfully).
+            self._emit_receipts(
+                uow, items, type_=MESSAGE_DELIVERED_TYPE, recipient=aid, at=now
+            )
             self._touch(uow, aid, now)
         return {"messages": items, "count": len(items)}
 
@@ -138,11 +154,26 @@ class InboxService:
         ids = self._coerce_ids(message_ids)
         now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:
-            acked = self._deliveries.mark_read(
+            acked_ids = self._deliveries.mark_read(
                 uow, recipient_agent_id=aid, message_ids=ids, read_at=now
             )
+            # Read receipts (sender-visible): one message.read per delivery
+            # that ACTUALLY transitioned (an already-read or unknown id never
+            # produces a receipt), atomic with the transition itself.
+            if acked_ids and self._emitter is not None:
+                read_items = [
+                    {
+                        "message_id": m.message_id,
+                        "workspace_id": m.workspace_id,
+                        "from_agent_id": m.from_agent_id,
+                    }
+                    for m in self._messages.list_by_ids(uow, message_ids=acked_ids)
+                ]
+                self._emit_receipts(
+                    uow, read_items, type_=MESSAGE_READ_TYPE, recipient=aid, at=now
+                )
             self._touch(uow, aid, now)
-        return {"acknowledged": acked}
+        return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 
     # ------------------------------------------------------------------ #
     # inbox_extend
@@ -343,6 +374,49 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # Internal helpers
     # ------------------------------------------------------------------ #
+    def _emit_receipts(
+        self,
+        uow: Any,
+        items: Any,
+        *,
+        type_: str,
+        recipient: str,
+        at: str,
+    ) -> None:
+        """Emit one sender-visible receipt event per item (same transaction).
+
+        Visibility is ``eligible`` with a DIRECT target at the original
+        sender: the receipt shows up ONLY in the sender's event stream (plus
+        the operator dashboard) - other agents never learn who read what. A
+        wired emitter is optional (legacy embedders without the events slice
+        simply skip receipts).
+        """
+        if self._emitter is None:
+            return
+        for item in items:
+            workspace_id = item.get("workspace_id")
+            sender = item.get("from_agent_id")
+            if not workspace_id or not sender:
+                continue  # message row vanished; no receipt to anchor
+            self._emitter.emit(
+                uow,
+                workspace_id=workspace_id,
+                stream=MESSAGE_STREAM,
+                type=type_,
+                payload={
+                    "message_id": item["message_id"],
+                    "recipient_agent_id": recipient,
+                    "from_agent_id": sender,
+                    "at": at,
+                },
+                actor_agent_id=recipient,
+                visibility="eligible",
+                target=json.dumps(
+                    {"strategy": "direct", "agent_id": sender},
+                    ensure_ascii=False,
+                ),
+            )
+
     def _materialise(
         self, uow: Any, deliveries: Any, *, include_body: bool = True
     ) -> list[dict[str, Any]]:

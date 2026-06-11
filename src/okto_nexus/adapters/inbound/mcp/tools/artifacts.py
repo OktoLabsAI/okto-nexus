@@ -51,6 +51,9 @@ _P_METADATA = "Free-form JSON object stored with the artifact (optional)."
 _P_ARTIFACT_ID = "The artifact_id to retrieve. REQUIRED."
 
 
+from ...http.identity_ctx import get_authenticated_agent
+
+
 def build_service(deps: Any) -> ArtifactService:
     """Wire the concrete adapters into ``deps.repos`` and build the service.
 
@@ -72,6 +75,7 @@ def build_service(deps: Any) -> ArtifactService:
         files=repos.files,
         clock=deps.clock,
         config=deps.config,
+        agents=getattr(repos, "agents", None),
         event_emitter=getattr(deps, "event_emitter", None),
     )
 
@@ -91,6 +95,7 @@ def register(server: Any, deps: Any) -> None:
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
     ) -> dict[str, Any]:
         """Register a file/text/json/markdown artifact in the resolved workspace."""
+        caller = get_authenticated_agent()
         return service.artifact_put(
             project_root=project_root,
             artifact_type=artifact_type,
@@ -98,6 +103,7 @@ def register(server: Any, deps: Any) -> None:
             path=path,
             content=content,
             metadata=metadata,
+            agent_id=caller.agent_id if caller is not None else None,
         )
 
     @server.tool()

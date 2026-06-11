@@ -511,6 +511,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         "workspace_resolve",
         "workspace_list",
         "agent_register",
+        "agent_whoami",
         "agent_list",
         "agent_get",
         "capability_list",

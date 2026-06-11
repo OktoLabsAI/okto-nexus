@@ -97,6 +97,17 @@ const SECTIONS: Section[] = [
             <b>Delete</b>: removes the identity for good.
           </Li>
         </ul>
+        <H>Permissions & presets</H>
+        <P>
+          Every agent carries communication permissions: direct messages,
+          broadcasts, channel posts, handoff create/work/cancel, plus
+          fine-tuning limits (rate per minute, max recipients, an allowlist
+          of direct peers). Assign a <b>preset</b> at creation (Full access,
+          Coordinator, Worker, Observer — or your own) and customize flags
+          per agent at any time; changes apply immediately on every
+          transport. Manage custom presets in the{" "}
+          <b>Permission presets</b> tab (clone a built-in to start).
+        </P>
         <H>Migrating stdio (V1) agents</H>
         <Code>okto-nexus admin issue-keys --project-root .</Code>
         <P>

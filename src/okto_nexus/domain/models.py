@@ -46,6 +46,23 @@ class Agent:
     last_seen_at: str | None = None
     api_key_hash: str | None = None
     is_active: bool = True
+    # Migration 011: communication permissions. ``None`` = full access
+    # (default-allow); ``preset_id`` records which preset the flags were
+    # copied from (informational - enforcement reads ``permissions`` only).
+    permissions: dict[str, Any] | None = None
+    preset_id: str | None = None
+
+
+@dataclass(slots=True)
+class PermissionPreset:
+    """A CUSTOM permission preset (built-ins live in domain.permissions)."""
+
+    preset_id: str
+    name: str
+    flags: dict[str, Any]
+    created_at: str
+    updated_at: str
+    description: str | None = None
 
 
 @dataclass(slots=True)

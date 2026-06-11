@@ -43,7 +43,9 @@ from ..domain.artifacts import (
 from ..domain.base import new_id
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..errors import ErrorCode, OktoNexusError
+from .permissions import permission_set_for
 from .ports import (
+    AgentRepo,
     ArtifactRepo,
     Clock,
     ConnectionFactory,
@@ -79,8 +81,10 @@ class ArtifactService:
         clock: Clock,
         config: NexusConfig,
         event_emitter: Optional[EventEmitter] = None,
+        agents: Optional[AgentRepo] = None,
     ) -> None:
         self._cf = connection_factory
+        self._agents = agents
         self._artifacts = artifacts
         self._workspaces = workspaces
         self._files = files
@@ -100,6 +104,7 @@ class ArtifactService:
         path: Any = None,
         content: Any = None,
         metadata: Any = None,
+        agent_id: Any = None,
     ) -> dict[str, Any]:
         """Register an artifact, emitting ``artifact.created`` atomically.
 
@@ -159,6 +164,12 @@ class ArtifactService:
         artifact_id = new_id("art")
 
         with self._cf.unit_of_work() as uow:
+            # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
+            # caller identity - the HTTP transport passes the authenticated
+            # agent; cooperative stdio has none (default-allow).
+            permission_set_for(self._agents, uow, agent_id).require(
+                "artifacts", "put"
+            )
             # Ensure the workspace row exists for the FK (idempotent upsert);
             # the client passed project_root, the server owns the identity.
             self._workspaces.upsert(

@@ -17,6 +17,14 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
+from ....domain.base import new_id
+from ....domain.permissions import (
+    BUILTIN_PRESETS,
+    PERMISSION_DESCRIPTIONS,
+    PERMISSION_REGISTRY,
+    builtin_preset,
+    validate_permission_flags,
+)
 from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
@@ -34,6 +42,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
     status = {
         ErrorCode.NOT_FOUND: 404,
         ErrorCode.VALIDATION_ERROR: 422,
+        ErrorCode.PERMISSION_DENIED: 403,
         ErrorCode.DB_ERROR: 503,
     }.get(exc.code, 500)
     return _err(status, str(exc.code), exc.message)
@@ -58,6 +67,10 @@ class CreateAgentBody(BaseModel):
     role: str | None = None
     capabilities: dict[str, Any] | list[str] | None = None
     metadata: dict[str, Any] | None = None
+    # Permissions (migration 011): a preset to copy flags from and/or an
+    # explicit flags object (explicit flags win - the Pulse semantics).
+    preset_id: str | None = None
+    permissions: dict[str, Any] | None = None
 
 
 class UpdateAgentBody(BaseModel):
@@ -65,6 +78,20 @@ class UpdateAgentBody(BaseModel):
     capabilities: dict[str, Any] | list[str] | None = None
     metadata: dict[str, Any] | None = None
     is_active: bool | None = None
+    preset_id: str | None = None
+    permissions: dict[str, Any] | None = None
+
+
+class PresetBody(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    description: str | None = None
+    flags: dict[str, Any]
+
+
+class PresetPatchBody(BaseModel):
+    name: str | None = Field(default=None, min_length=1, max_length=100)
+    description: str | None = None
+    flags: dict[str, Any] | None = None
 
 
 def _normalise_capabilities(value: dict | list | None) -> dict | None:
@@ -73,6 +100,47 @@ def _normalise_capabilities(value: dict | list | None) -> dict | None:
     if isinstance(value, list):
         return {str(item): True for item in value}
     return value
+
+
+def _preset_flags(deps, uow, preset_id: str) -> dict[str, Any]:
+    """Resolve a preset id (builtin or custom) to its flags, or NOT_FOUND."""
+    builtin = builtin_preset(preset_id)
+    if builtin is not None:
+        return builtin["flags"]
+    custom = deps.repos.presets.get(uow, preset_id)
+    if custom is None:
+        raise OktoNexusError(
+            ErrorCode.NOT_FOUND,
+            f"preset_id '{preset_id}' does not reference a preset.",
+            {"preset_id": preset_id},
+        )
+    return custom.flags
+
+
+def _resolve_permission_payload(
+    deps, uow, *, preset_id: str | None, permissions: dict[str, Any] | None
+) -> tuple[dict[str, Any] | None, str | None]:
+    """Resolve (flags, preset_id) to store - the Pulse semantics.
+
+    Explicit ``permissions`` win (validated against the registry); otherwise a
+    ``preset_id`` copies the preset's flags; neither -> ``(None, None)`` =
+    unrestricted default-allow.
+    """
+    if permissions is not None:
+        return validate_permission_flags(permissions), preset_id
+    if preset_id:
+        return _preset_flags(deps, uow, preset_id), preset_id
+    return None, None
+
+
+def _public_preset(preset) -> dict[str, Any]:
+    return {
+        "preset_id": preset.preset_id,
+        "name": preset.name,
+        "description": preset.description,
+        "is_builtin": False,
+        "flags": preset.flags,
+    }
 
 
 def build_router() -> APIRouter:
@@ -239,6 +307,9 @@ def build_router() -> APIRouter:
                     "regenerate-key to rotate its key.",
                     {"agent_id": body.agent_id},
                 )
+            flags, preset_id = _resolve_permission_payload(
+                deps, uow, preset_id=body.preset_id, permissions=body.permissions
+            )
             agent = agents.upsert(
                 uow,
                 agent_id=body.agent_id,
@@ -246,13 +317,20 @@ def build_router() -> APIRouter:
                 capabilities=_normalise_capabilities(body.capabilities),
                 metadata=body.metadata,
             )
+            if flags is not None or preset_id is not None:
+                agents.set_permissions(
+                    uow,
+                    agent_id=agent.agent_id,
+                    permissions=flags,
+                    preset_id=preset_id,
+                )
             plaintext = auth.issue_key(uow, agent_id=agent.agent_id)
-            return agent, plaintext
+            return agents.get(uow, agent.agent_id), plaintext
 
         try:
             agent, plaintext = await _run(request, _create)
         except OktoNexusError as exc:
-            if exc.code == ErrorCode.VALIDATION_ERROR:
+            if exc.code == ErrorCode.VALIDATION_ERROR and "already exists" in exc.message:
                 return _err(409, "CONFLICT", exc.message)
             return _map_error(exc)
         # The ONLY surface that ever carries the plaintext (BR7/AC3).
@@ -262,6 +340,8 @@ def build_router() -> APIRouter:
                 "role": agent.role,
                 "is_active": True,
                 "created_at": agent.created_at,
+                "preset_id": agent.preset_id,
+                "permissions": agent.permissions,
                 "api_key": plaintext,
             }
         )
@@ -306,9 +386,47 @@ def build_router() -> APIRouter:
             )
             if body.is_active is not None:
                 auth.set_active(uow, agent_id=agent_id, is_active=body.is_active)
+            # Permission semantics (the Pulse AgentUpdate contract):
+            # * permissions in the payload -> custom flags (validated); the
+            #   preset reference is whatever the payload says (or kept);
+            # * preset_id alone -> RESET the flags from that preset;
+            # * explicit preset_id null -> reset to unrestricted.
+            sent = body.model_fields_set
+            if "permissions" in sent:
+                if body.permissions is None:
+                    # Explicit null = reset to unrestricted.
+                    agents.set_permissions(
+                        uow, agent_id=agent_id, permissions=None, preset_id=None
+                    )
+                else:
+                    agents.set_permissions(
+                        uow,
+                        agent_id=agent_id,
+                        permissions=validate_permission_flags(body.permissions),
+                        preset_id=(
+                            body.preset_id
+                            if "preset_id" in sent
+                            else existing.preset_id
+                        ),
+                    )
+            elif "preset_id" in sent:
+                if body.preset_id:
+                    agents.set_permissions(
+                        uow,
+                        agent_id=agent_id,
+                        permissions=_preset_flags(deps, uow, body.preset_id),
+                        preset_id=body.preset_id,
+                    )
+                else:
+                    agents.set_permissions(
+                        uow, agent_id=agent_id, permissions=None, preset_id=None
+                    )
             return agents.get(uow, agent_id)
 
-        agent = await _run(request, _update)
+        try:
+            agent = await _run(request, _update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         if agent is None:
             return _err(404, "NOT_FOUND", "agent not found")
         return _ok(_public_agent(agent))
@@ -351,6 +469,120 @@ def build_router() -> APIRouter:
         if not removed:
             return _err(404, "NOT_FOUND", "agent not found")
         return _ok({"agent_id": agent_id, "deleted": True})
+
+    # ------------------------------------------------------------------ #
+    # Permission presets (migration 011): built-ins from code (read-only)
+    # + operator-authored custom presets (CRUD).
+    # ------------------------------------------------------------------ #
+    @router.get("/presets")
+    async def list_presets(request: Request) -> JSONResponse:
+        deps = request.app.state.deps
+
+        def _list(uow):
+            return [_public_preset(p) for p in deps.repos.presets.list(uow)]
+
+        try:
+            custom = await _run(request, _list)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(
+            {
+                "items": [dict(p) for p in BUILTIN_PRESETS] + custom,
+                # The registry + descriptions let the dashboard build the
+                # flags editor without duplicating the catalogue.
+                "registry": PERMISSION_REGISTRY,
+                "descriptions": PERMISSION_DESCRIPTIONS,
+            }
+        )
+
+    @router.post("/presets")
+    async def create_preset(request: Request, body: PresetBody) -> JSONResponse:
+        deps = request.app.state.deps
+
+        def _create(uow):
+            for builtin in BUILTIN_PRESETS:
+                if builtin["name"].lower() == body.name.strip().lower():
+                    raise OktoNexusError(
+                        ErrorCode.VALIDATION_ERROR,
+                        f"'{body.name}' is a built-in preset name; pick another.",
+                        {"name": body.name},
+                    )
+            return deps.repos.presets.create(
+                uow,
+                preset_id=new_id("prs"),
+                name=body.name.strip(),
+                description=body.description,
+                flags=validate_permission_flags(body.flags),
+            )
+
+        try:
+            preset = await _run(request, _create)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(_public_preset(preset))
+
+    @router.patch("/presets/{preset_id}")
+    async def update_preset(
+        request: Request, preset_id: str, body: PresetPatchBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        if builtin_preset(preset_id) is not None:
+            return _err(
+                403,
+                "PERMISSION_DENIED",
+                "Built-in presets are read-only; clone them into a custom preset.",
+            )
+
+        def _update(uow):
+            sent = body.model_fields_set
+            return deps.repos.presets.update(
+                uow,
+                preset_id=preset_id,
+                name=body.name.strip() if body.name else None,
+                description=(
+                    body.description if "description" in sent else "__unset__"
+                ),
+                flags=(
+                    validate_permission_flags(body.flags)
+                    if body.flags is not None
+                    else None
+                ),
+            )
+
+        try:
+            preset = await _run(request, _update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        if preset is None:
+            return _err(404, "NOT_FOUND", "preset not found")
+        return _ok(_public_preset(preset))
+
+    @router.delete("/presets/{preset_id}")
+    async def delete_preset(request: Request, preset_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        if builtin_preset(preset_id) is not None:
+            return _err(
+                403, "PERMISSION_DENIED", "Built-in presets cannot be deleted."
+            )
+
+        def _delete(uow):
+            removed = deps.repos.presets.delete(uow, preset_id=preset_id)
+            if removed:
+                # Agents keep their materialised flags; only the dangling
+                # preset REFERENCE is cleared (flags stay enforced as-is).
+                uow.connection.execute(
+                    "UPDATE agents SET preset_id = NULL WHERE preset_id = ?",
+                    (preset_id,),
+                )
+            return removed
+
+        try:
+            removed = await _run(request, _delete)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        if not removed:
+            return _err(404, "NOT_FOUND", "preset not found")
+        return _ok({"preset_id": preset_id, "deleted": True})
 
     # ------------------------------------------------------------------ #
     # Admin actions (FR6 of spec S2 - confirmed in the UI before calling)
@@ -543,4 +775,6 @@ def _public_agent(agent) -> dict[str, Any]:
         "has_key": agent.api_key_hash is not None,
         "created_at": agent.created_at,
         "last_seen_at": agent.last_seen_at,
+        "permissions": agent.permissions,
+        "preset_id": agent.preset_id,
     }

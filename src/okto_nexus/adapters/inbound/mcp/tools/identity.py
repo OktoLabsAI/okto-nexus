@@ -1,13 +1,16 @@
 """MCP inbound tools for the identity slice.
 
-Registers nine tools on the FastMCP server, each returning the canonical
+Registers ten tools on the FastMCP server, each returning the canonical
 envelope (success ``{ok:true,data}`` / failure ``{ok:false,error}``) via
 :func:`tool_envelope`, so no exception ever crosses the adapter boundary:
 
 * ``workspace_resolve`` - resolve ``project_root`` to a ``workspace_id``.
 * ``workspace_list``    - GLOBAL-ADMIN: enumerate ALL workspaces (on-disk
   paths opt-in via ``include_paths``).
-* ``agent_register``    - upsert a logical agent identity.
+* ``agent_register``    - update YOUR OWN identity profile (self-only when
+  the connection is authenticated; new identities come from the dashboard).
+* ``agent_whoami``      - return the caller's own profile, derived from the
+  API key (agent_id, role, capabilities, permissions).
 * ``agent_list``        - GLOBAL: enumerate ALL agents (discovery surface).
 * ``agent_get``         - read one agent's details incl. ``last_seen_at``.
 * ``capability_list``   - GLOBAL: enumerate capabilities advertised by agents.
@@ -103,6 +106,9 @@ def build_service(deps: Any) -> IdentityService:
     )
 
 
+from ...http.identity_ctx import get_authenticated_agent
+
+
 def register(server: Any, deps: Any) -> None:
     """Register the identity tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
@@ -126,12 +132,40 @@ def register(server: Any, deps: Any) -> None:
         capabilities: Annotated[Any, Field(description=_P_CAPABILITIES)] = None,
         metadata: Annotated[Any, Field(description=_P_AGENT_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Register (upsert) a logical agent identity; no workspace required."""
+        """Update YOUR OWN identity profile (role/capabilities/metadata).
+
+        SELF-ONLY on an authenticated connection: your API key already names
+        your identity (created by the operator on the dashboard), so
+        ``agent_id`` must be YOUR OWN id - registering a new identity or
+        touching another agent's profile returns PERMISSION_DENIED. Use this
+        to advertise/refresh the role and capabilities that routing and
+        discovery (capability_list) match on; use agent_whoami to read your
+        current profile first.
+        """
+        caller = get_authenticated_agent()
         return service.agent_register(
             agent_id=agent_id,
             role=role,
             capabilities=capabilities,
             metadata=metadata,
+            actor_agent_id=caller.agent_id if caller is not None else None,
+        )
+
+    @server.tool()
+    @tool_envelope
+    def agent_whoami() -> dict[str, Any]:
+        """Return YOUR OWN profile, derived from your API key (no parameters).
+
+        The recommended FIRST CALL of a session: it tells you your agent_id
+        (use it as from_agent_id / agent_id everywhere), your operator-assigned
+        role, capabilities, metadata, and the communication permissions in
+        effect (``permissions`` null = unrestricted). Fails with
+        VALIDATION_ERROR on a connection without an authenticated identity
+        (open cooperative stdio): there, read profiles with agent_get.
+        """
+        caller = get_authenticated_agent()
+        return service.agent_whoami(
+            actor_agent_id=caller.agent_id if caller is not None else None,
         )
 
     @server.tool()

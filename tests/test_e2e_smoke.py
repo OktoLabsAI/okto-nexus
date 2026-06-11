@@ -148,7 +148,8 @@ def test_e2e_full_flow(tmp_path):
     pulled = _ok(tools["inbox_pull"](agent_id="reviewer"))
     assert [m["body"] for m in pulled["messages"]] == ["PR #1 is ready"]
     assert _ok(tools["inbox_ack"](agent_id="reviewer", message_ids=[dm["message_id"]])) == {
-        "acknowledged": 1
+        "acknowledged": 1,
+        "read_message_ids": [dm["message_id"]],
     }
     assert _ok(tools["inbox_count"](agent_id="reviewer")) == {
         "unread": 0,

@@ -40,6 +40,10 @@ class ErrorCode(str, Enum):
     NOT_FOUND = "NOT_FOUND"
     NOT_OWNER = "NOT_OWNER"
 
+    # Agent communication permissions (migration 011): the calling agent's
+    # resolved PermissionSet denies the attempted capability.
+    PERMISSION_DENIED = "PERMISSION_DENIED"
+
     # State machines / streams
     INVALID_TRANSITION = "INVALID_TRANSITION"
     INVALID_STREAM = "INVALID_STREAM"

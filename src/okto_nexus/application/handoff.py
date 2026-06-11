@@ -84,6 +84,7 @@ from ..domain.inbox import DELIVERY_UNREAD, new_delivery_id
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
 from ..domain.targets import normalize_strategy
 from ..errors import ErrorCode, OktoNexusError
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     Clock,
@@ -208,6 +209,9 @@ class HandoffService:
         extras: dict[str, Any] = {}
 
         with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, from_agent_id).require(
+                "handoffs", "create"
+            )
             if self._agents is not None:
                 if strategy == "direct":
                     # D1b hard gate: a typo'd direct handoff must not sit OPEN
@@ -486,6 +490,9 @@ class HandoffService:
         lease_expires_at = iso_plus(now, lease_ttl)
 
         with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require(
+                "handoffs", "work"
+            )
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
 
@@ -562,6 +569,9 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require(
+                "handoffs", "work"
+            )
             updated = self._handoffs.transition_claimed(
                 uow,
                 workspace_id=workspace_id,
@@ -640,6 +650,9 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require(
+                "handoffs", "work"
+            )
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.status in TERMINAL_STATUSES:
                 raise OktoNexusError(
@@ -755,6 +768,9 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require(
+                "handoffs", "cancel"
+            )
             # Opportunistic expiry first: a CLAIMED handoff whose lease already
             # elapsed is logically OPEN again, so its creator may cancel it.
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)

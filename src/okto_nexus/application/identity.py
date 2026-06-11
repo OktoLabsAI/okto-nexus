@@ -372,6 +372,7 @@ class IdentityService:
         role: str | None = None,
         capabilities: Any = None,
         metadata: Any = None,
+        actor_agent_id: Any = None,
     ) -> dict[str, Any]:
         """Upsert a logical agent identity keyed by ``agent_id``.
 
@@ -379,12 +380,34 @@ class IdentityService:
         mutable fields (role/capabilities/metadata) without changing
         ``agent_id``. Raises ``VALIDATION_ERROR`` for a missing id and
         ``CONTENT_TOO_LARGE`` when inline capabilities/metadata exceed the limit.
+
+        ``actor_agent_id`` is the AUTHENTICATED caller identity (the API key's
+        agent on the HTTP transport). When present, registration is
+        SELF-ONLY: an authenticated agent may update its OWN role/capabilities
+        but can neither mint new identities nor rewrite another agent's
+        profile - identities are created by the operator on the dashboard
+        (PERMISSION_DENIED otherwise). Absent (the cooperative stdio mode
+        with no key), the open V1 contract is preserved.
         """
         if not _is_nonempty_str(agent_id):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
                 "agent_id is required.",
                 {"agent_id": agent_id},
+            )
+        if _is_nonempty_str(actor_agent_id) and str(agent_id) != str(actor_agent_id):
+            raise OktoNexusError(
+                ErrorCode.PERMISSION_DENIED,
+                "agent_register is self-only on an authenticated connection: "
+                f"your API key identifies you as '{actor_agent_id}', so you "
+                f"cannot register or modify '{agent_id}'. New identities are "
+                "created by the operator on the dashboard (Agents -> New "
+                "agent); use agent_whoami to read your own profile.",
+                {
+                    "required_permission": "identity.self_only",
+                    "authenticated_agent_id": str(actor_agent_id),
+                    "attempted_agent_id": str(agent_id),
+                },
             )
         self._check_inline_size("capabilities", capabilities)
         self._check_inline_size("metadata", metadata)
@@ -413,6 +436,41 @@ class IdentityService:
             "updated_at": now,
             "last_seen_at": now,
         }
+
+    def agent_whoami(self, *, actor_agent_id: Any) -> dict[str, Any]:
+        """Return the AUTHENTICATED caller's own profile (key-derived).
+
+        The self-service mirror of the dashboard registration: name
+        (agent_id), role, capabilities, metadata, timestamps, plus the
+        communication permissions the operator assigned (``permissions`` is
+        ``None`` for unrestricted/full access). Raises ``VALIDATION_ERROR``
+        when the connection carries no authenticated identity (the
+        cooperative stdio mode without a key) and ``NOT_FOUND`` if the
+        identity row vanished (deleted while connected).
+        """
+        if not _is_nonempty_str(actor_agent_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "This connection has no authenticated identity: agent_whoami "
+                "derives your profile from the API key. Connect through "
+                "/mcp?api_key=... (or set OKTO_NEXUS_API_KEY on stdio); in "
+                "the open cooperative mode read a profile with "
+                "agent_get(agent_id=...).",
+                {},
+            )
+        with self._cf.unit_of_work() as uow:
+            agent = self._agents.get(uow, str(actor_agent_id))
+        if agent is None:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                "The authenticated identity no longer exists in the registry.",
+                {"agent_id": str(actor_agent_id)},
+            )
+        data = self._agent_to_data(agent)
+        data["permissions"] = agent.permissions
+        data["preset_id"] = agent.preset_id
+        data["is_active"] = agent.is_active
+        return data
 
     def agent_list(self) -> list[dict[str, Any]]:
         """Enumerate ALL registered agents (global; parallels ``workspace_list``).

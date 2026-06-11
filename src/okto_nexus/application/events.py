@@ -50,6 +50,7 @@ from ..domain.ids import resolve_workspace_id
 from ..domain.models import Event
 from ..domain.routing import RoutingAgent, can_agent_see_event
 from ..errors import ErrorCode, OktoNexusError
+from .permissions import permission_set_for
 from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork, Waiter
 
 #: Default page size when ``limit`` is omitted (also clamped to ``max_limit``).
@@ -183,6 +184,7 @@ class EventService:
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
+        self._require_read_permission(agent_id)
         self._touch_agent(agent_id)
         page = self._read_page(workspace_id, agent_id, stream, cursor, limit, filters)
         return self._page_payload(page, timed_out=False)
@@ -212,6 +214,7 @@ class EventService:
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
+        self._require_read_permission(agent_id)
         timeout = self._resolve_timeout(timeout_seconds)
         # Touch BEFORE the change-token snapshot: the presence stamp is this
         # caller's own write, and snapshotting after it keeps the first wait
@@ -267,6 +270,7 @@ class EventService:
         workspace_id, agent_id, stream, _, _, _ = self._prepare(
             project_root, agent_id, stream, None, None, None
         )
+        self._require_read_permission(agent_id)
         self._touch_agent(agent_id)
         with self._cf.unit_of_work(write=False) as uow:
             return int(
@@ -333,6 +337,18 @@ class EventService:
         if timeout_seconds <= 0:
             return 0
         return min(timeout_seconds, ceiling)
+
+    def _require_read_permission(self, agent_id: str) -> None:
+        """Gate ``events.read`` (migration 011) in its own read-only uow.
+
+        Unlike presence touching, a denial here MUST fail the read: an
+        Observer-restricted agent may watch, but an agent whose events.read
+        flag is off gets the canonical PERMISSION_DENIED envelope.
+        """
+        with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require(
+                "events", "read"
+            )
 
     def _touch_agent(self, agent_id: str) -> None:
         """Best-effort stamp of the caller's ``last_seen_at`` (own uow).

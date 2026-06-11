@@ -162,6 +162,9 @@ def build_service(deps: Any) -> MessageService:
     )
 
 
+from ...http.identity_ctx import get_authenticated_agent
+
+
 def register(server: Any, deps: Any) -> None:
     """Register the message/channel tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
@@ -183,6 +186,13 @@ def register(server: Any, deps: Any) -> None:
         ] = None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` in one transaction.
+
+        The response IS your delivery confirmation: ``recipients`` names
+        exactly who received it in their inbox (the fan-out commits atomically
+        with the send) and ``delivered_count`` totals it. Track what happens
+        next with message_status(message_id) - per-recipient lanes
+        unread/delivered/read/parked - or wait for the sender-only receipt
+        events ``message.delivered`` / ``message.read`` via event_wait.
 
         A broadcast (no target) reaches the workspace's PRESENT agents only;
         agents excluded for heartbeat staleness are reported explicitly in
@@ -219,7 +229,12 @@ def register(server: Any, deps: Any) -> None:
         Any agent in the workspace may read/post to any channel; the channel does
         NOT control who receives a message - the message target does.
         """
-        return service.create_channel(project_root=project_root, name=name)
+        caller = get_authenticated_agent()
+        return service.create_channel(
+            project_root=project_root,
+            name=name,
+            agent_id=caller.agent_id if caller is not None else None,
+        )
 
     @server.tool()
     @tool_envelope

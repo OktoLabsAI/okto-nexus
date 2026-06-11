@@ -124,15 +124,28 @@ windows, limits) is forwarded as-is; unknown flags fail closed.
 _BANNER_PATH = Path(__file__).parent / "banner.txt"
 
 
+def _banner_version() -> str:
+    """The installed package version for the banner line (Pulse grammar)."""
+    import importlib.metadata
+
+    try:
+        return importlib.metadata.version("okto-nexus")
+    except importlib.metadata.PackageNotFoundError:
+        return "dev"
+
+
 def _print_banner() -> None:
     """Print the Okto Nexus ASCII banner to stderr (kept off stdout to
-    avoid corrupting JSON pipes). Suppressed when ``OKTO_NEXUS_NO_BANNER``
-    is set or the banner file is missing (the Pulse CLI pattern)."""
+    avoid corrupting JSON pipes), followed by the installed version - the
+    Pulse CLI pattern. Suppressed when ``OKTO_NEXUS_NO_BANNER`` is set or
+    the banner file is missing."""
     if os.environ.get("OKTO_NEXUS_NO_BANNER"):
         return
     try:
         sys.stderr.write(_BANNER_PATH.read_text(encoding="utf-8"))
         sys.stderr.write("\n")
+        sys.stderr.write(f"Version {_banner_version()}\n\n")
+        sys.stderr.flush()
     except OSError:
         pass
 
