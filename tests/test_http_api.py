@@ -289,8 +289,10 @@ def test_graph_reflects_presence_and_in_flight(serve_env):
 # --------------------------------------------------------------------------- #
 # Admin reset (Settings > wipe store)
 # --------------------------------------------------------------------------- #
-def test_admin_reset_wipes_data_but_keeps_agents(serve_env):
-    deps, client, operator_key = serve_env
+def _seed_full_store(deps) -> None:
+    """Populate EVERY operational table - including ``artifacts``, the table
+    the original hardcoded wipe list missed (its workspace FK broke the
+    reset at commit time on real stores)."""
     ws = "r" * 64
     with deps.connection_factory.unit_of_work() as uow:
         deps.repos.workspaces.upsert(uow, workspace_id=ws)
@@ -307,25 +309,67 @@ def test_admin_reset_wipes_data_but_keeps_agents(serve_env):
             uow, delivery_id="d-reset", message_id="m-reset",
             recipient_agent_id="survivor", status="unread",
         )
-    deps.event_emitter  # noqa: B018 - events table already has rows from setup
+        uow.connection.execute(
+            "INSERT INTO artifacts (artifact_id, workspace_id, artifact_type, "
+            "content, created_at) VALUES ('a-reset', ?, 'inline', 'x', "
+            "'2026-01-01T00:00:00Z')",
+            (ws,),
+        )
 
-    response = client.post(
-        "/api/v1/admin/reset", headers=_h(operator_key)
-    )
+
+def _operational_tables(deps) -> list[str]:
+    with deps.connection_factory.unit_of_work() as uow:
+        rows = uow.connection.execute(
+            "SELECT name FROM sqlite_master WHERE type='table' "
+            "AND name NOT LIKE 'sqlite_%'"
+        ).fetchall()
+    return [
+        r["name"]
+        for r in rows
+        if r["name"] not in ("schema_migrations", "settings", "agents")
+    ]
+
+
+def test_admin_reset_wipes_every_table_but_keeps_agents(serve_env):
+    deps, client, operator_key = serve_env
+    _seed_full_store(deps)
+
+    response = client.post("/api/v1/admin/reset", headers=_h(operator_key))
     assert response.status_code == 200
     data = response.json()["data"]
     assert data["kept_agents"] is True
     assert data["deleted"]["messages"] >= 1
+    assert data["deleted"]["artifacts"] >= 1  # the regression table
 
+    tables = _operational_tables(deps)  # own UoW; never nest two write txns
     with deps.connection_factory.unit_of_work() as uow:
-        for table in ("messages", "message_deliveries", "sessions", "workspaces"):
-            count = uow.connection.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+        for table in tables:
+            count = uow.connection.execute(
+                f'SELECT COUNT(*) FROM "{table}"'
+            ).fetchone()[0]
             assert count == 0, table
         agents = uow.connection.execute("SELECT COUNT(*) FROM agents").fetchone()[0]
         assert agents >= 2  # operator + survivor preserved
 
     # The operator key still authenticates after the wipe (keys preserved).
     assert client.get("/api/v1/graph", headers=_h(operator_key)).status_code == 200
+
+
+def test_admin_reset_without_keeping_agents(serve_env):
+    deps, client, operator_key = serve_env
+    _seed_full_store(deps)
+
+    response = client.post(
+        "/api/v1/admin/reset?keep_agents=false", headers=_h(operator_key)
+    )
+    assert response.status_code == 200
+    assert response.json()["data"]["kept_agents"] is False
+
+    with deps.connection_factory.unit_of_work() as uow:
+        agents = uow.connection.execute("SELECT COUNT(*) FROM agents").fetchone()[0]
+        assert agents == 0
+    # Every key died with the agents (cache invalidated synchronously).
+    assert client.get("/api/v1/graph", headers=_h(operator_key)).status_code == 401
 
 
 # --------------------------------------------------------------------------- #

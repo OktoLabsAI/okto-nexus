@@ -15,12 +15,12 @@ export function EventsView({ log }: { log: NexusEvent[] }) {
     <div className="h-full overflow-y-auto p-6">
       <div className="max-w-5xl mx-auto panel font-mono text-[11px]" data-testid="events-view">
         <div className="px-3 py-2 border-b border-surface-200/60 dark:border-surface-700/50 text-surface-500 dark:text-surface-400">
-          event tail (ao vivo via SSE) · {log.length} eventos nesta sessão
+          event tail (live via SSE) · {log.length} events this session
         </div>
         <div className="p-3 space-y-1">
           {log.length === 0 && (
             <div className="text-surface-400 dark:text-surface-500">
-              aguardando eventos… (qualquer message/handoff/session gera entradas)
+              waiting for events… (any message/handoff/session writes entries)
             </div>
           )}
           {log.map((event) => (

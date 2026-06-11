@@ -20,16 +20,16 @@ export function WorkspacesView({
           ))}
           {workspaces.length === 0 && (
             <div className="px-3 py-6 text-surface-400 dark:text-surface-500">
-              Nenhum workspace com sessões ainda — workspaces aparecem quando um
-              agente abre sessão via session_open.
+              No workspaces with sessions yet — workspaces appear when an agent
+              opens a session via session_open.
             </div>
           )}
         </div>
         {graph && (
           <div className="text-xs text-surface-500 dark:text-surface-400">
-            snapshot atual: {graph.nodes.length} agentes ·{" "}
-            {graph.edges.messages.length} pares com tráfego ·{" "}
-            {graph.edges.handoffs.length} handoffs ativos · janela{" "}
+            current snapshot: {graph.nodes.length} agents ·{" "}
+            {graph.edges.messages.length} pairs with traffic ·{" "}
+            {graph.edges.handoffs.length} active handoffs · window{" "}
             {graph.window_hours}h
           </div>
         )}

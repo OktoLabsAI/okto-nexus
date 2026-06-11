@@ -17,7 +17,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
-from ....errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 def _ok(data: Any) -> JSONResponse:
@@ -409,6 +409,56 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(report)
 
+    @router.get("/license")
+    async def license_text(request: Request):
+        """The FULL licence text (public; rendered by the About modal)."""
+        from pathlib import Path
+
+        from fastapi.responses import PlainTextResponse
+
+        path = Path(__file__).parent / "LICENSE.txt"
+        try:
+            return PlainTextResponse(path.read_text(encoding="utf-8"))
+        except OSError:
+            return PlainTextResponse(
+                "Elastic License 2.0 - full text unavailable in this build.",
+                status_code=200,
+            )
+
+    # ------------------------------------------------------------------ #
+    # Runtime settings (Settings screen; precedence CLI > env > stored)
+    # ------------------------------------------------------------------ #
+    @router.get("/settings")
+    async def get_settings(request: Request) -> JSONResponse:
+        service = request.app.state.settings_service
+        try:
+            items = await _run(request, lambda uow: service.describe(uow))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.patch("/settings")
+    async def patch_settings(
+        request: Request, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = request.app.state.settings_service
+        try:
+            applied = await _run(request, lambda uow: service.update(uow, body))
+        except OktoNexusError as exc:
+            if exc.code == ErrorCode.CONFIG_ERROR:
+                return _err(422, "INVALID_SETTING", exc.message)
+            return _map_error(exc)
+        return _ok({"applied": applied})
+
+    @router.post("/settings/reset")
+    async def reset_settings(request: Request) -> JSONResponse:
+        service = request.app.state.settings_service
+        try:
+            cleared = await _run(request, lambda uow: service.reset(uow))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"cleared": cleared})
+
     @router.post("/admin/reset")
     async def admin_reset(request: Request, keep_agents: bool = True) -> JSONResponse:
         """Wipe the operational store (Settings > "Zerar banco de dados").
@@ -423,42 +473,61 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
 
         def _reset():
-            # FK-safe order: children before parents (deliveries->messages,
-            # tasks->handoffs, everything before workspaces).
-            tables = [
-                "message_deliveries",
-                "messages",
-                "tasks",
-                "handoffs",
-                "events",
-                "sessions",
-                "channels",
-                "workspaces",
-            ]
+            import sqlite3
+
+            # Enumerate tables FROM THE SCHEMA instead of hardcoding them: a
+            # fixed list silently misses tables (the original bug: `artifacts`
+            # stayed out, its workspace FK broke the wipe at commit time) and
+            # would break again on every future migration. Preserved tables:
+            # migration bookkeeping, runtime settings and - by default - the
+            # agent identities/keys.
+            preserved = {"schema_migrations", "settings"}
+            if keep_agents:
+                preserved.add("agents")
             counts: dict[str, int] = {}
-            with deps.connection_factory.unit_of_work() as uow:
-                for table in tables:
-                    cur = uow.connection.execute(f"DELETE FROM {table}")
-                    counts[table] = cur.rowcount
-                if not keep_agents:
-                    cur = uow.connection.execute("DELETE FROM agents")
-                    counts["agents"] = cur.rowcount
-            # VACUUM needs its own autocommit connection (cannot run inside
-            # a transaction); freed pages stay in the file without it.
-            conn = deps.connection_factory.get_connection()
             try:
-                conn.execute("VACUUM")
-            finally:
-                conn.close()
-            return counts
+                with deps.connection_factory.unit_of_work() as uow:
+                    # FK checks deferred to commit: with every non-preserved
+                    # table emptied in the same transaction, the end state is
+                    # consistent regardless of deletion order.
+                    uow.connection.execute("PRAGMA defer_foreign_keys=ON")
+                    rows = uow.connection.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table' "
+                        "AND name NOT LIKE 'sqlite_%'"
+                    ).fetchall()
+                    for row in rows:
+                        table = row["name"]
+                        if table in preserved:
+                            continue
+                        cur = uow.connection.execute(f'DELETE FROM "{table}"')
+                        counts[table] = cur.rowcount
+            except sqlite3.Error as exc:
+                raise db_error_from_exception("wiping the store", exc) from exc
+            # VACUUM is best-effort: it needs a moment without readers (the
+            # SSE poller and the lock heartbeat read constantly), and a
+            # skipped VACUUM only means the file shrinks later - the DATA is
+            # already gone either way.
+            vacuumed = False
+            try:
+                conn = deps.connection_factory.get_connection()
+                try:
+                    conn.execute("VACUUM")
+                    vacuumed = True
+                finally:
+                    conn.close()
+            except sqlite3.Error:
+                pass
+            return counts, vacuumed
 
         try:
-            counts = await anyio.to_thread.run_sync(_reset)
+            counts, vacuumed = await anyio.to_thread.run_sync(_reset)
         except OktoNexusError as exc:
             return _map_error(exc)
         if not keep_agents:
             request.app.state.auth.invalidate_all()
-        return _ok({"deleted": counts, "kept_agents": keep_agents})
+        return _ok(
+            {"deleted": counts, "kept_agents": keep_agents, "vacuumed": vacuumed}
+        )
 
     return router
 

@@ -78,21 +78,21 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
         {creating && (
           <div className="px-4 py-3 border-b border-surface-200/60 dark:border-surface-700/50 grid grid-cols-3 gap-2 text-xs">
             <input
-              placeholder="agent_id (ex.: researcher)"
+              placeholder="agent_id (e.g. researcher)"
               value={newAgent.agent_id}
               onChange={(e) => setNewAgent({ ...newAgent, agent_id: e.target.value })}
               className={`${inputCls} font-mono`}
               data-testid="new-agent-id"
             />
             <input
-              placeholder="role (opcional)"
+              placeholder="role (optional)"
               value={newAgent.role}
               onChange={(e) => setNewAgent({ ...newAgent, role: e.target.value })}
               className={inputCls}
             />
             <div className="flex gap-2">
               <input
-                placeholder="capabilities, separadas por vírgula"
+                placeholder="capabilities, comma-separated"
                 value={newAgent.capabilities}
                 onChange={(e) =>
                   setNewAgent({ ...newAgent, capabilities: e.target.value })
@@ -105,7 +105,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                 disabled={!newAgent.agent_id.trim()}
                 data-testid="create-agent"
               >
-                Criar
+                Create
               </button>
             </div>
           </div>
@@ -157,8 +157,8 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                     </button>
                   </div>
                   <p className="text-[11px] text-amber-600 dark:text-amber-300/80">
-                    ⚠ Esta chave não será exibida novamente. Guarde-a agora — fechar
-                    este painel a torna irrecuperável (regenerar emite outra).
+                    ⚠ This key will not be shown again. Store it now — closing this
+                    panel makes it unrecoverable (regenerating issues a new one).
                   </p>
                   <div>
                     <div className="flex gap-2 text-[11px] text-surface-500 dark:text-surface-400 mb-1">
@@ -181,7 +181,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                     </pre>
                   </div>
                   <button className="btn btn-secondary" onClick={() => setFreshKey(null)}>
-                    Fechar painel da chave
+                    Close key panel
                   </button>
                 </div>
               )}
@@ -192,11 +192,11 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                   data-testid={`regenerate-${agent.agent_id}`}
                   onClick={() =>
                     confirm({
-                      title: "Regenerar chave?",
+                      title: "Regenerate key?",
                       body: (
                         <span>
-                          A chave atual de <b>{agent.agent_id}</b> deixa de
-                          funcionar imediatamente; a nova será exibida uma única vez.
+                          The current key of <b>{agent.agent_id}</b> stops working
+                          immediately; the new one is shown a single time.
                         </span>
                       ),
                       onConfirm: async () => {
@@ -226,11 +226,11 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                   className="btn btn-secondary !py-1 !text-xs text-red-500 ml-auto"
                   onClick={() =>
                     confirm({
-                      title: "Deletar agente?",
+                      title: "Delete agent?",
                       body: (
                         <span>
-                          <b>{agent.agent_id}</b> será removido permanentemente
-                          (a desativação é o caminho reversível).
+                          <b>{agent.agent_id}</b> will be removed permanently
+                          (deactivation is the reversible path).
                         </span>
                       ),
                       onConfirm: async () => {
@@ -248,7 +248,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
           ))}
           {agents.length === 0 && (
             <div className="px-4 py-6 text-xs text-surface-400 dark:text-surface-500">
-              Nenhum agente — crie o primeiro acima.
+              No agents — create the first one above.
             </div>
           )}
         </div>

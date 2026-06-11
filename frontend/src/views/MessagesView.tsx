@@ -56,12 +56,12 @@ export function MessagesView({ workspace }: { workspace: string }) {
           >
             {LANES.map((l) => (
               <option key={l} value={l}>
-                {l || "todas as lanes"}
+                {l || "all lanes"}
               </option>
             ))}
           </select>
           <input
-            placeholder="filtrar por agente…"
+            placeholder="filter by agent…"
             value={agent}
             onChange={(e) => {
               setAgent(e.target.value);
@@ -69,7 +69,7 @@ export function MessagesView({ workspace }: { workspace: string }) {
             }}
             className={`${inputCls} font-mono`}
           />
-          <span className="ml-auto text-surface-500">{total} mensagens</span>
+          <span className="ml-auto text-surface-500">{total} messages</span>
           <button
             className="btn btn-secondary"
             disabled={page <= 1}
@@ -77,7 +77,7 @@ export function MessagesView({ workspace }: { workspace: string }) {
           >
             ←
           </button>
-          <span className="text-surface-500">página {page}</span>
+          <span className="text-surface-500">page {page}</span>
           <button
             className="btn btn-secondary"
             disabled={page * 25 >= total}
@@ -110,7 +110,7 @@ export function MessagesView({ workspace }: { workspace: string }) {
                 ))}
                 {m.deliveries.length === 0 && (
                   <span className="chip bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">
-                    sem destinatário
+                    no recipient
                   </span>
                 )}
                 <span className="ml-auto text-surface-400 dark:text-surface-500">
@@ -124,7 +124,7 @@ export function MessagesView({ workspace }: { workspace: string }) {
           ))}
           {items.length === 0 && (
             <div className="px-3 py-6 text-surface-400 dark:text-surface-500">
-              Nenhuma mensagem para os filtros.
+              No messages for these filters.
             </div>
           )}
         </div>

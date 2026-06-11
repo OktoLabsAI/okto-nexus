@@ -85,6 +85,20 @@ export interface SessionRow {
   presence: string;
 }
 
+export interface SettingItem {
+  key: string;
+  type: "int" | "bool" | "enum";
+  description: string;
+  value: number | boolean | string;
+  default: number | boolean | string;
+  min: number | null;
+  max: number | null;
+  choices: string[] | null;
+  source: "cli/env" | "stored" | "default";
+  editable: boolean;
+  requires_restart: boolean;
+}
+
 export interface NexusEvent {
   event_id: number;
   workspace_id: string;
@@ -128,9 +142,24 @@ async function call<T>(
   if (key) headers.set("x-api-key", key);
   if (init.body) headers.set("content-type", "application/json");
   const response = await fetch(path, { ...init, headers });
-  const body = (await response.json()) as Envelope<T>;
+  // Never assume JSON: a crashed handler or a proxy can answer plain text,
+  // and "Unexpected token ..." hides the actual error from the operator.
+  const raw = await response.text();
+  let body: Envelope<T> | null = null;
+  try {
+    body = JSON.parse(raw) as Envelope<T>;
+  } catch {
+    throw new ApiError(
+      response.status,
+      "HTTP_" + response.status,
+      raw.slice(0, 300) || response.statusText,
+    );
+  }
   if (!response.ok || !body.ok) {
-    const error = body.error ?? { code: "HTTP_" + response.status, message: response.statusText };
+    const error = body.error ?? {
+      code: "HTTP_" + response.status,
+      message: response.statusText,
+    };
     throw new ApiError(response.status, error.code, error.message);
   }
   return body.data as T;
@@ -200,6 +229,14 @@ export const api = {
       `/api/v1/admin/reset?keep_agents=${keepAgents}`,
       { method: "POST" },
     ),
+  settings: () => call<{ items: SettingItem[] }>("/api/v1/settings"),
+  updateSettings: (changes: Record<string, unknown>) =>
+    call<{ applied: Record<string, unknown> }>("/api/v1/settings", {
+      method: "PATCH",
+      body: JSON.stringify(changes),
+    }),
+  resetSettings: () =>
+    call<{ cleared: string[] }>("/api/v1/settings/reset", { method: "POST" }),
   info: () =>
     call<{ service: string; package_version: string; schema_version: number }>(
       "/api/v1/info",

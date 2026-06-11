@@ -244,7 +244,7 @@ export function GraphView({
         <Legend />
         {graph && graph.nodes.length === 0 && (
           <div className="absolute inset-0 grid place-items-center text-sm text-surface-400 dark:text-surface-500">
-            Nenhum agente registrado ainda — crie um na aba Agents.
+            No agents registered yet — create one in the Agents tab.
           </div>
         )}
       </div>
@@ -274,7 +274,7 @@ function Legend() {
         className="absolute bottom-4 left-4 btn btn-secondary"
         onClick={() => setOpen(true)}
       >
-        ? Como ler
+        ? How to read
       </button>
     );
   }
@@ -286,12 +286,12 @@ function Legend() {
     >
       <div className="flex items-center justify-between mb-1">
         <span className="font-display font-semibold text-surface-800 dark:text-surface-200">
-          Como ler este grafo
+          How to read this graph
         </span>
         <button
           className="text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 ml-3"
           onClick={() => setOpen(false)}
-          title="Minimizar"
+          title="Minimize"
         >
           ✕
         </button>
@@ -302,27 +302,27 @@ function Legend() {
       </div>
       <div>
         <span className="text-amber-500 text-base align-middle">●</span> stale{" "}
-        <span className="text-surface-400">· silêncio de 1–30 min</span>
+        <span className="text-surface-400">· silent for 1–30 min</span>
       </div>
       <div>
         <span className="text-surface-400 text-base align-middle">●</span>{" "}
-        offline <span className="text-surface-400">· sem sessão ativa</span>
+        offline <span className="text-surface-400">· no active session</span>
       </div>
       <div>
         <span className="text-blue-500 font-bold align-middle">→</span>{" "}
-        mensagens (espessura = volume 24h)
+        messages (thickness = 24h volume)
       </div>
       <div>
         <span className="text-accent-500 font-bold align-middle">→</span>{" "}
-        tráfego em voo <span className="text-accent-500">N ✉</span>{" "}
-        <span className="text-surface-400">· não lidas no par</span>
+        in-flight traffic <span className="text-accent-500">N ✉</span>{" "}
+        <span className="text-surface-400">· unread in the pair</span>
       </div>
       <div>
         <span className="text-pink-500 text-sm align-middle">■</span> handoff
         aberto <span className="text-surface-400">· aguarda claim</span>
       </div>
       <div className="text-surface-400 mt-1">
-        Clique em qualquer elemento para inspecioná-lo.
+        Click any element to inspect it.
       </div>
     </div>
   );
@@ -339,7 +339,7 @@ interface ChatEntry {
   status?: string; // delivery lane towards the peer (out only)
 }
 
-const FAILED_TAB = "⚠ sem destinatário";
+const FAILED_TAB = "⚠ no recipient";
 
 function laneTick(status?: string): string {
   switch (status) {
@@ -366,7 +366,7 @@ function buildConversations(
     convos.get(peer)!.push(entry);
   };
   for (const m of messages) {
-    const text = m.preview || m.subject || "(sem corpo)";
+    const text = m.preview || m.subject || "(no body)";
     if (m.from_agent_id === agentId) {
       if (m.deliveries.length === 0) {
         // Persisted but fanned out to NOBODY (target resolved to zero
@@ -428,7 +428,7 @@ function Bubble({ entry }: { entry: ChatEntry }) {
             </span>
           )}
           {entry.status === "none" && (
-            <span className="text-red-400" title="nenhum destinatário">
+            <span className="text-red-400" title="no recipient">
               ✗
             </span>
           )}
@@ -473,7 +473,7 @@ function ChatPanel({ agentId }: { agentId: string }) {
   if (peers.length === 0) {
     return (
       <div className="text-surface-400 dark:text-surface-500">
-        sem mensagens nas últimas 200
+        no messages in the last 200
       </div>
     );
   }
@@ -502,9 +502,9 @@ function ChatPanel({ agentId }: { agentId: string }) {
 
       {tab === FAILED_TAB && (
         <p className="text-[11px] text-red-500/80 dark:text-red-300/80">
-          Envios persistidos cujo alvo não resolveu nenhum destinatário
-          elegível — entregues a ninguém. Envios para um agent_id inexistente
-          são rejeitados sem deixar rastro (rollback total, por design do bus).
+          Persisted sends whose target resolved to no eligible recipient —
+          delivered to nobody. Sends to a nonexistent agent_id are rejected
+          with no trace (full rollback, by bus design).
         </p>
       )}
 
@@ -585,11 +585,11 @@ function SidePanel({
             </span>
           </div>
           <div className="text-surface-500 dark:text-surface-400">
-            criado por <b>{selection.handoff.from_agent_id ?? "—"}</b>
+            created by <b>{selection.handoff.from_agent_id ?? "—"}</b>
             {selection.handoff.claimed_by && (
               <>
                 {" "}
-                · claim de <b>{selection.handoff.claimed_by}</b>
+                · claimed by <b>{selection.handoff.claimed_by}</b>
               </>
             )}
           </div>
@@ -599,8 +599,8 @@ function SidePanel({
           </div>
           <p className="text-[11px] text-surface-400">
             {selection.handoff.status === "OPEN"
-              ? "Aguardando claim: qualquer agente elegível pode reivindicar via handoff_claim (o primeiro vence)."
-              : "Em execução pelo agente que reivindicou; se a lease expirar, volta ao pool."}
+              ? "Awaiting claim: any eligible agent can claim it via handoff_claim (first one wins)."
+              : "Being executed by the claiming agent; if the lease expires it returns to the pool."}
           </p>
           {(selection.handoff.status === "OPEN" ||
             selection.handoff.status === "CLAIMED") && (
@@ -609,11 +609,11 @@ function SidePanel({
               data-testid="cancel-handoff"
               onClick={() =>
                 confirm({
-                  title: "Cancelar handoff?",
+                  title: "Cancel handoff?",
                   body: (
                     <span>
-                      O handoff <code>{selection.handoff.handoff_id}</code> será
-                      movido para CANCELLED e sai do pool de claims.
+                      O handoff <code>{selection.handoff.handoff_id}</code> will be
+                      moved to CANCELLED and leaves the claim pool.
                     </span>
                   ),
                   onConfirm: async () => {
@@ -627,7 +627,7 @@ function SidePanel({
                 })
               }
             >
-              <Ban size={14} /> Cancelar handoff…
+              <Ban size={14} /> Cancel handoff…
             </button>
           )}
         </div>
@@ -665,10 +665,10 @@ function SidePanel({
           </div>
           <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
             <div className="text-surface-600 dark:text-surface-300 font-medium">
-              Sessões
+              Sessions
             </div>
             {sessions.length === 0 && (
-              <div className="text-surface-400">nenhuma sessão</div>
+              <div className="text-surface-400">no sessions</div>
             )}
             {sessions.map((s) => (
               <div key={s.session_id} className="flex items-center gap-2">
@@ -681,11 +681,11 @@ function SidePanel({
                     className="btn btn-secondary !py-0.5 !text-xs text-red-500 ml-auto"
                     onClick={() =>
                       confirm({
-                        title: "Fechar sessão?",
+                        title: "Close session?",
                         body: (
                           <span>
-                            A sessão <code>{s.session_id}</code> de{" "}
-                            <b>{agentId}</b> será encerrada.
+                            Session <code>{s.session_id}</code> of{" "}
+                            <b>{agentId}</b> will be closed.
                           </span>
                         ),
                         onConfirm: async () => {
@@ -695,7 +695,7 @@ function SidePanel({
                       })
                     }
                   >
-                    Fechar…
+                    Close…
                   </button>
                 )}
               </div>
@@ -703,8 +703,8 @@ function SidePanel({
           </div>
           <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
             <div className="text-surface-600 dark:text-surface-300 font-medium">
-              Conversas{" "}
-              <span className="text-surface-400">· por interlocutor</span>
+              Conversations{" "}
+              <span className="text-surface-400">· per peer</span>
             </div>
             <ChatPanel agentId={agentId} />
           </div>
@@ -714,15 +714,15 @@ function SidePanel({
       {selection.kind === "edge" && (
         <>
           <div className="text-surface-500 dark:text-surface-400">
-            {selection.edge.count} mensagens · em voo:{" "}
+            {selection.edge.count} messages · in flight:{" "}
             {selection.edge.in_flight.unread + selection.edge.in_flight.delivered} ·
-            última: {selection.edge.last_at}
+            last: {selection.edge.last_at}
           </div>
           <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
             <div className="text-surface-600 dark:text-surface-300 font-medium">
-              Conversa do par{" "}
+              Pair conversation{" "}
               <span className="text-surface-400">
-                · perspectiva de {selection.edge.from}
+                · from {selection.edge.from}'s perspective
               </span>
             </div>
             <PairChat from={selection.edge.from} to={selection.edge.to} />
@@ -749,7 +749,7 @@ function PairChat({ from, to }: { from: string; to: string }) {
   if (entries.length === 0) {
     return (
       <div className="text-surface-400 dark:text-surface-500">
-        sem mensagens entre o par
+        no messages between the pair
       </div>
     );
   }

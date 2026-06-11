@@ -31,7 +31,7 @@ export function useConfirm() {
         </div>
         <div className="px-5 py-3 border-t border-surface-200/60 dark:border-surface-700/50 flex justify-end gap-2">
           <button className="btn btn-secondary" onClick={() => setState(null)}>
-            Cancelar
+            Cancel
           </button>
           <button
             className="btn btn-danger"
@@ -40,7 +40,7 @@ export function useConfirm() {
               setState(null);
             }}
           >
-            Confirmar
+            Confirm
           </button>
         </div>
       </div>

@@ -70,7 +70,7 @@ export function ResizablePanel({
       <div
         role="separator"
         aria-orientation="vertical"
-        title="Arraste para redimensionar"
+        title="Drag to resize"
         onMouseDown={onMouseDown}
         className="absolute left-0 top-0 h-full w-1.5 cursor-col-resize z-10
           hover:bg-accent-500/40 active:bg-accent-500/60 transition-colors"

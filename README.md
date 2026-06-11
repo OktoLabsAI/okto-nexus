@@ -1,15 +1,29 @@
 # Okto Nexus
 
-**Local Agent Coordination Bus** — a local-only [MCP](https://modelcontextprotocol.io)
-stdio server that lets multiple AI coding agents coordinate on a shared project:
+**Local Agent Coordination Bus** — an [MCP](https://modelcontextprotocol.io)
+server that lets multiple AI coding agents coordinate on a shared project:
 register identities, open sessions, exchange messages on channels, hand off work
 with atomic single-winner claiming, publish artifacts, and tail an append-only
-event log — entirely on one machine, backed by a single SQLite database, with
-**zero network surface**.
+event log — entirely on one machine, backed by a single SQLite database.
+
+One command — `okto-nexus serve` — starts the whole hub on a single port:
+
+- **`/mcp`** — the full 35-tool surface over **streamable HTTP**, gated by
+  per-agent API keys (`nxs_…`, hash-only at rest, plaintext shown once);
+- **`/api/v1`** — a REST API for agent/key management, observability
+  (live graph snapshot, message/handoff/session/event histories) and admin
+  actions, plus an **SSE stream** with exact `Last-Event-ID` resume;
+- **`/`** — a built-in **web dashboard** (React + Sigma.js, light/dark,
+  Okto Pulse visual language): a live graph of agents with derived presence,
+  in-flight traffic badges, a handoff kanban, per-peer chat timelines,
+  runtime settings and store maintenance.
+
+The classic **stdio** mode (`okto-nexus` with no subcommand) remains intact and
+byte-compatible for MCP hosts that launch local processes.
 
 Okto Nexus is the coordination substrate for a *team* of agents operating in the
 same repository. Instead of talking to a cloud service or a message broker, every
-agent speaks to the same local MCP server; all state lives in one SQLite file in
+agent speaks to the same local hub; all state lives in one SQLite file in
 WAL mode, which is the single source of truth. Every coordinated entity is scoped
 to a deterministic `workspace_id` derived from the project path, so two agents
 pointed at the same real directory automatically share one coordination space —
@@ -23,8 +37,9 @@ and never see another workspace's data.
 2. [Architecture](#architecture)
 3. [Requirements & Installation](#requirements--installation)
 4. [Configuration](#configuration)
-5. [Running It / MCP Client Setup](#running-it--mcp-client-setup)
-6. [Core Concepts](#core-concepts)
+5. [The HTTP Hub & Dashboard (`okto-nexus serve`)](#the-http-hub--dashboard-okto-nexus-serve)
+6. [Running It / MCP Client Setup](#running-it--mcp-client-setup)
+7. [Core Concepts](#core-concepts)
 7. [Tool Reference](#tool-reference)
 8. [Data Model](#data-model)
 9. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
@@ -41,9 +56,13 @@ and never see another workspace's data.
 
 ## Highlights
 
-- **Local-first, zero network surface.** MCP over **stdio** only. No HTTP, no
-  sockets, no auth server, no cloud. The MCP host launches the `okto-nexus`
-  command and talks to it through stdin/stdout.
+- **Local-first, two transports.** `okto-nexus serve` exposes the SAME 35-tool
+  surface over **streamable HTTP** (parity enforced by a test) plus REST, SSE
+  and the web dashboard — all on one loopback port. The classic **stdio** mode
+  is unchanged for MCP hosts that launch local processes. Loopback REST and
+  the dashboard need no key (same-machine trust); `/mcp` always requires a
+  per-agent API key, and any bind beyond loopback re-enables the key gate
+  everywhere (fail-closed on the network).
 - **SQLite WAL is the single source of truth.** One file (`~/.okto_nexus/nexus.db`
   by default). No in-memory cache, broker, or external store. Every connection
   enforces WAL + foreign keys + a busy timeout.
@@ -230,12 +249,22 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-This installs the `okto-nexus` console script (the MCP stdio server). If the
-`mcp` SDK is missing at runtime, `main()` exits `1` with the hint:
-`pip install 'mcp>=1.0'` (or `pip install okto-nexus`).
+This installs the `okto-nexus` console script. If the `mcp` SDK is missing at
+runtime, `main()` exits `1` with the hint: `pip install 'mcp>=1.0'` (or
+`pip install okto-nexus`).
 
-Package: `okto-nexus` v`0.1.0` — *Okto Nexus - Local Agent Coordination Bus (MCP
-stdio server)* · author Okto Labs · license Proprietary.
+**Global install (recommended for daily use).** The `[serve]` extra brings the
+HTTP hub + dashboard (FastAPI/uvicorn); the dashboard build ships inside the
+wheel, so Node is never required on the user's machine:
+
+```bash
+pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a checkout
+okto-nexus serve                        # → http://127.0.0.1:8202
+```
+
+Package: `okto-nexus` v`0.0.1` — *Okto Nexus - Local Agent Coordination Bus
+(MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
+SaaS/Branding Addendum + Trademark Policy.
 
 ---
 
@@ -277,11 +306,93 @@ stdlib + `okto_nexus.errors` (it imports neither `mcp` nor `sqlite3`).
 
 ---
 
+## The HTTP Hub & Dashboard (`okto-nexus serve`)
+
+```bash
+okto-nexus serve                 # zero-config: data in ~/.okto_nexus, port 8202
+okto-nexus serve --port 9000 --host 0.0.0.0 --project-root .
+okto-nexus serve --help
+```
+
+Boot prints the Okto Nexus ASCII banner (suppress with
+`OKTO_NEXUS_NO_BANNER=1`) and announces readiness **only after** the MCP
+session manager is running and the socket is accepting connections:
+
+```
+[okto-nexus] MCP Server initialized successfully - http://127.0.0.1:8202/mcp
+[okto-nexus] API Server initialized successfully - http://127.0.0.1:8202/api/v1
+[okto-nexus] Dashboard initialized successfully - http://127.0.0.1:8202
+[okto-nexus] Startup complete - Okto Nexus is ready
+```
+
+A **single-server lock** (`nexus.serve.lock`, PID + mtime heartbeat) prevents a
+second serve over the same home; a crashed serve is taken over automatically
+after 60 s of heartbeat silence.
+
+### Authentication model
+
+| Surface | Loopback bind (default) | Non-loopback bind |
+|---|---|---|
+| Dashboard `/` + REST `/api/v1` | **open** (same-machine trust) | API key required |
+| MCP `/mcp` | API key **always** required | API key **always** required |
+
+Every agent owns an `nxs_` + 48-hex API key: only the SHA-256 hash is
+persisted; the plaintext is shown **once** at creation/regeneration. Keys are
+accepted via `?api_key=`, the `x-api-key` header, or `Authorization: Bearer`.
+Rotation kills the old key immediately; deactivation is the reversible
+revocation path. Binding beyond loopback with zero issued keys triggers a
+one-time anti-lockout bootstrap (an `operator` agent + key, printed once).
+Migrate stdio-era agents in batch with `okto-nexus admin issue-keys` (additive,
+idempotent). On stdio, an optional `OKTO_NEXUS_API_KEY` binds the session to a
+key-derived identity (fail-closed when set; absent = V1 behaviour).
+
+### The dashboard
+
+Built with React + Tailwind + **Sigma.js** in the Okto Pulse visual language
+(same tokens, light/dark themes persisted per browser, Pulse-style header and
+collapsible navigation sidebar):
+
+- **Graph** — live mesh of agents: node colour = presence derived from session
+  heartbeats (present < 60 s, stale < 30 min, offline), node size = activity,
+  edge thickness = 24h message volume, cyan edges with `N ✉` badges = in-flight
+  (unread) traffic, magenta squares/edges = open/claimed handoffs. Click any
+  element to inspect; the right panel is drag-resizable.
+- **Per-peer chat timelines** — an agent's inbox/outbox rendered as chat
+  bubbles with delivery ticks per lane, one tab per peer, plus a "no
+  recipient" tab for sends whose target resolved to nobody.
+- **Handoffs** — a Pulse-style kanban (Open / Claimed / Completed / Rejected /
+  Cancelled) with confirm-guarded cancellation.
+- **Messages / Events / Workspaces** — filtered histories and a live SSE tail.
+- **Agents & API keys** — create agents, reveal the key once with MCP snippets
+  for six client formats (Claude Code, Claude Desktop, Cursor, VS Code,
+  Windsurf, Okto CLI), regenerate/deactivate/delete.
+- **Settings** — every CLI knob editable at runtime with per-field
+  descriptions/tooltips (precedence `CLI > env > stored > default`; CLI-pinned
+  values are read-only), retention **prune** (dry-run/run) and the
+  confirm-guarded **database reset** (schema-driven full wipe + VACUUM,
+  optionally preserving agents/keys).
+- **Help & About** — built-in guide and the full licence text (served from the
+  packaged `LICENSE` via `GET /api/v1/license`).
+
+Live updates ride `GET /api/v1/stream` (SSE keyed on the append-only
+`event_id`): reconnections resume exactly after the last seen cursor — no loss,
+no duplication.
+
+---
+
 ## Running It / MCP Client Setup
 
-Okto Nexus speaks MCP over **stdio**. Register it with any MCP host that launches
-stdio servers (e.g. Claude Desktop's `claude_desktop_config.json`) by pointing
-the host at the `okto-nexus` command:
+**HTTP (recommended):** start `okto-nexus serve`, create an agent in the
+dashboard's *Agents* tab and paste the generated snippet — e.g. for Claude
+Code:
+
+```bash
+claude mcp add -t http okto-nexus "http://127.0.0.1:8202/mcp?api_key=nxs_…"
+```
+
+**stdio (classic):** Okto Nexus also speaks MCP over **stdio**. Register it
+with any MCP host that launches stdio servers (e.g. Claude Desktop's
+`claude_desktop_config.json`) by pointing the host at the `okto-nexus` command:
 
 ```json
 {
@@ -1687,52 +1798,61 @@ okto_labs_okto_nexus/
 
 ---
 
-## Limitations (V1 Non-Goals)
+## Limitations (Non-Goals)
 
-- **Local only:** no HTTP / SSE / WebSocket transport — MCP over stdio only.
-- **Cooperative trust, not real auth:** `trust_mode=strict` requires a
-  per-session `session_secret` on the sensitive verbs, which stops
-  impersonation *between cooperative local agents* — but secrets are stored in
-  plaintext in `nexus.db`, so trust is still bounded by who can read the file /
-  launch the process. No multi-tenant security.
-- **No cloud sync / multi-host:** coordination is bounded by a single SQLite file
-  on one machine.
+- **Single machine:** coordination is bounded by one SQLite file on one host.
+  The HTTP hub can be bound to the LAN (`--host`), but there is no cloud sync,
+  clustering or multi-host replication.
+- **Cooperative trust between agents:** per-agent API keys gate every MCP/HTTP
+  surface, and `trust_mode=strict` additionally requires a per-session
+  `session_secret` on the sensitive verbs — but session secrets are stored in
+  plaintext in `nexus.db`, so trust is still bounded by who can read the file.
+  No multi-tenant security, no RBAC (every valid key has the same powers; roles
+  and scopes are part of the SaaS evolution).
 - **No background threads:** session staleness, presence, handoff/inbox lease
   expiry, session reaping, and (opt-in) startup pruning are all
-  derived/opportunistic at access time — there is no scheduler. Corollary:
-  retention defaults to off, so an unmaintained store grows until an operator
-  runs `okto-nexus admin prune` (or enables `auto_prune_on_start`).
-- **No UI:** interaction is via MCP tools only.
-- **Not vendor-specific:** any MCP host that launches stdio servers works; there
-  is no integration tied to a particular vendor.
-- **Inline content cap:** 65536 UTF-8 bytes (inclusive); larger payloads must be
-  stored by `path` as `artifact_type='file'`.
+  derived/opportunistic at access time — there is no scheduler. The serve's
+  only periodic work is the lock heartbeat and the SSE poll (1 s, bounded).
+  Retention defaults to off; run prune from the dashboard Settings screen or
+  `okto-nexus admin prune` (or enable `auto_prune_on_start`).
+- **Not vendor-specific:** any MCP host that speaks streamable HTTP or launches
+  stdio servers works; there is no integration tied to a particular vendor.
+- **Inline content cap:** 65536 UTF-8 bytes (inclusive, configurable); larger
+  payloads must be stored by `path` as `artifact_type='file'`.
 
 ---
 
 ## Roadmap
 
-Post-V1 ideas (non-binding):
+Delivered since V1: streamable-HTTP transport with per-agent API keys, the web
+dashboard (live graph, kanban, chat timelines), REST observability, the SSE
+stream with exact resume, runtime settings with UI parity, and store
+reset/maintenance from the dashboard.
 
-- **Streamable HTTP / SSE transport** alongside stdio, for remote/multi-host
-  coordination and **push** instead of polling. The seam is already in place:
-  the `Waiter` port isolates all blocking in one outbound adapter
-  (`SleepPollWaiter`), so an SSE/notify waiter — and push delivery of inbox
-  notifications — swaps in without touching the application layer (ADR 0002).
-- **Richer streams & consumers:** make more event categories consumable, with
-  finer-grained filtering and tailing.
+Next (non-binding):
+
+- **Push waiter:** swap the `SleepPollWaiter` for an in-process notify waiter
+  at the existing `Waiter` port — sub-poll latency for `event_wait` and SSE.
+- **Audit events for admin actions:** close-session / cancel-handoff / reset
+  performed from the dashboard should land in the event log.
+- **Richer streams & consumers:** more event categories, finer filtering.
 - **Tasks surface:** the `tasks` table exists in the schema; expose task
   create/transition tools and wire them into handoffs.
-- **Reserved handoff states:** activate `IN_PROGRESS` / `BLOCKED` / `CANCELLED` /
-  `EXPIRED` with explicit producers.
-- **Optional background reaper:** proactive session/lease expiry and continuous
-  retention as an opt-in daemon (today both are opportunistic at access time —
-  session reap, lease sweeps, and bounded startup pruning already exist).
+- **Reserved handoff states:** activate `IN_PROGRESS` / `BLOCKED` / `EXPIRED`
+  with explicit producers.
+- **Optional background reaper:** proactive lease expiry and continuous
+  retention as an opt-in daemon.
+- **SaaS evolution:** multi-tenant auth (RBAC/scopes), hosted storage and
+  transport behind the existing hexagonal ports (`AuthProvider`,
+  `ObservabilityQueries`, storage, `Waiter`).
 
 ---
 
 ## License
 
-Proprietary © Okto Labs. All rights reserved. See `pyproject.toml`
-(`license = { text = "Proprietary" }`). Replace this section with the project's
-chosen license terms before any external distribution.
+**Elastic License 2.0 + SaaS/Branding Addendum + Trademark Policy** —
+Copyright 2026 Okto Labs. See the `LICENSE` file for the full text (also
+served by the running hub at `GET /api/v1/license` and shown in the
+dashboard's About dialog). In short: free to use, copy, modify and
+redistribute, but you may not offer Okto Nexus as a hosted/managed service or
+remove licensing/branding notices.

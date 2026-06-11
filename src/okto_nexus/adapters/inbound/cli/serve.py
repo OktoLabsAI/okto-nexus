@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+from pathlib import Path
 from typing import Mapping
 
 from ....errors import ErrorCode, OktoNexusError
@@ -95,9 +96,88 @@ def _mcp_json_snippet(host: str, port: int, api_key: str) -> str:
     )
 
 
+SERVE_USAGE = """\
+okto-nexus serve - start the HTTP hub (MCP + REST + dashboard)
+
+Usage:
+  okto-nexus serve [options]
+
+The zero-config default just works: data lives in ~/.okto_nexus, the
+dashboard opens key-free on http://127.0.0.1:8202 and every runtime knob
+can also be tuned later in the dashboard's Settings screen.
+
+Options:
+  --port N            Port to listen on (default 8202; env OKTO_NEXUS_PORT)
+  --host ADDR         Bind address (default 127.0.0.1; binding beyond
+                      loopback makes the dashboard/REST require an API key)
+  --project-root P    Workspace the dashboard opens scoped to (default: .)
+  --home P            Data directory (default ~/.okto_nexus)
+  --db-path P         SQLite file (default {home}/nexus.db)
+  --trust-mode M      open | strict
+  -h, --help          Show this help
+
+Any other --flag accepted by the okto-nexus configuration (TTLs, retention
+windows, limits) is forwarded as-is; unknown flags fail closed.
+"""
+
+
+_BANNER_PATH = Path(__file__).parent / "banner.txt"
+
+
+def _print_banner() -> None:
+    """Print the Okto Nexus ASCII banner to stderr (kept off stdout to
+    avoid corrupting JSON pipes). Suppressed when ``OKTO_NEXUS_NO_BANNER``
+    is set or the banner file is missing (the Pulse CLI pattern)."""
+    if os.environ.get("OKTO_NEXUS_NO_BANNER"):
+        return
+    try:
+        sys.stderr.write(_BANNER_PATH.read_text(encoding="utf-8"))
+        sys.stderr.write("\n")
+    except OSError:
+        pass
+
+
+def _watch_ready(server: "object", host: str, port: int) -> None:
+    """Announce readiness ONLY once uvicorn flips ``started`` - which by
+    construction means the lifespan completed (the MCP session manager is
+    running) AND the socket is accepting connections. Pulse's
+    ``_log_ready_servers`` grammar."""
+    import time
+
+    while not getattr(server, "started", False):
+        if getattr(server, "should_exit", False):
+            return
+        time.sleep(0.1)
+    print(
+        f"[okto-nexus] MCP Server initialized successfully - "
+        f"http://{host}:{port}/mcp",
+        file=sys.stderr,
+    )
+    print(
+        f"[okto-nexus] API Server initialized successfully - "
+        f"http://{host}:{port}/api/v1",
+        file=sys.stderr,
+    )
+    print(
+        f"[okto-nexus] Dashboard initialized successfully - "
+        f"http://{host}:{port}",
+        file=sys.stderr,
+    )
+    print(
+        "[okto-nexus] Startup complete - Okto Nexus is ready",
+        file=sys.stderr,
+    )
+
+
 def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     """Console entry for the ``serve`` subcommand. Returns an exit code."""
     env = env if env is not None else os.environ
+
+    if any(token in ("-h", "--help") for token in args):
+        print(SERVE_USAGE)
+        return 0
+
+    _print_banner()
 
     try:
         import uvicorn  # noqa: F401 - probe the optional extra first
@@ -109,6 +189,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             file=sys.stderr,
         )
         return 1
+
+    import threading
 
     from ..mcp.server import bootstrap, maybe_auto_prune
     from ....application.auth import AgentKeyAuthService
@@ -136,18 +218,26 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     try:
         maybe_auto_prune(deps)
 
-        auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
-        issued = ensure_operator_key(deps, auth)
-        if issued is not None:
-            agent_id, plaintext = issued
-            print(
-                f"\n[okto-nexus] First run: issued an API key for agent "
-                f"'{agent_id}'. It is shown ONCE - store it now:\n\n"
-                f"  {plaintext}\n\n"
-                f"Add the MCP server to a client with this .mcp.json:\n"
-                f"{_mcp_json_snippet(host, port, plaintext)}\n",
-                file=sys.stderr,
-            )
+        local_open = host in ("127.0.0.1", "localhost", "::1")
+
+        # Anti-lockout bootstrap, ONLY for non-loopback binds: there the
+        # dashboard requires a key, and a keyless store would lock the
+        # operator out entirely. On loopback (the default) no key is ever
+        # needed locally, so nothing is issued and nothing is printed.
+        if not local_open:
+            auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+            issued = ensure_operator_key(deps, auth)
+            if issued is not None:
+                agent_id, plaintext = issued
+                print(
+                    f"\n[okto-nexus] Bind beyond loopback with NO issued keys: "
+                    f"created agent '{agent_id}' so you can reach the remote "
+                    f"dashboard. The key is shown ONCE - store it now:\n\n"
+                    f"  {plaintext}\n\n"
+                    f"MCP client snippet:\n"
+                    f"{_mcp_json_snippet(host, port, plaintext)}\n",
+                    file=sys.stderr,
+                )
 
         try:
             default_workspace = resolve_workspace_id(project_root)
@@ -159,20 +249,21 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         app.state.project_root = project_root
         # Same-machine trust: dashboard/REST open without a key ONLY when
         # bound to loopback; any wider bind re-enables the key gate.
-        app.state.local_open = host in ("127.0.0.1", "localhost", "::1")
-        if not app.state.local_open:
+        app.state.local_open = local_open
+        if not local_open:
             print(
                 f"[okto-nexus] host {host!r} is not loopback: the dashboard "
                 "and REST will REQUIRE an agent API key.",
                 file=sys.stderr,
             )
 
-        print(
-            f"[okto-nexus] serving on http://{host}:{port}  "
-            f"(mcp: /mcp - api: /api/v1 - docs: /api/v1/docs)",
-            file=sys.stderr,
+        server = uvicorn.Server(
+            uvicorn.Config(app, host=host, port=port, log_level="info")
         )
-        uvicorn.run(app, host=host, port=port, log_level="info")
+        threading.Thread(
+            target=_watch_ready, args=(server, host, port), daemon=True
+        ).start()
+        server.run()
         return 0
     finally:
         lock.release()

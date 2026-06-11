@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "okto-nexus"
-version = "0.2.0"
-description = "Okto Nexus - Local Agent Coordination Bus (MCP stdio server)"
+version = "0.0.1"
+description = "Okto Nexus - Local Agent Coordination Bus (MCP server + dashboard)"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "Proprietary" }
+license = { text = "Elastic License 2.0 + SaaS/Branding Addendum + Trademark Policy" }
 authors = [{ name = "Okto Labs" }]
 dependencies = [
     "mcp>=1.0",
@@ -44,6 +44,8 @@ where = ["src"]
 okto_nexus = [
     "migrations/*.sql",
     "adapters/inbound/http/static/**/*",
+    "adapters/inbound/http/LICENSE.txt",
+    "adapters/inbound/cli/banner.txt",
 ]
 
 [tool.pytest.ini_options]

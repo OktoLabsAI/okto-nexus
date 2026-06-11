@@ -360,6 +360,19 @@ def main(argv: list[str] | None = None) -> int:
 
         return run_serve(args[1:])
 
+    if args and args[0] in ("-h", "--help", "help"):
+        print(
+            "okto-nexus - local agent coordination bus\n\n"
+            "Usage:\n"
+            "  okto-nexus serve [options]   Start the HTTP hub "
+            "(MCP + REST + dashboard); see `okto-nexus serve --help`\n"
+            "  okto-nexus tail [options]    Stream the event log as NDJSON\n"
+            "  okto-nexus admin <cmd>       Maintenance (prune, issue-keys)\n"
+            "  okto-nexus [options]         Run the stdio MCP server "
+            "(the V1 default)\n"
+        )
+        return 0
+
     try:
         deps = bootstrap(os.environ, args)
     except OktoNexusError as exc:

@@ -4,12 +4,16 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
+  ChevronDown,
   FolderOpen,
+  HelpCircle,
+  Info,
   KanbanSquare,
   Lock,
+  Menu,
   MessagesSquare,
   Moon,
   PanelLeft,
@@ -19,6 +23,8 @@ import {
   Users,
   Waypoints,
 } from "lucide-react";
+import { AboutModal } from "./components/AboutModal";
+import { HelpModal } from "./components/HelpModal";
 import {
   api,
   clearApiKey,
@@ -108,7 +114,7 @@ function KeyGate({ onUnlock }: { onUnlock: () => void }) {
       onUnlock();
     } catch (exc) {
       clearApiKey();
-      setError("Chave recusada: " + (exc as Error).message);
+      setError("Key rejected: " + (exc as Error).message);
     }
   };
 
@@ -118,9 +124,8 @@ function KeyGate({ onUnlock }: { onUnlock: () => void }) {
         <div>
           <BrandMark className="h-9 w-auto mb-2" />
           <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-            Informe uma API key de agente (ex.: a chave do <code>operator</code>{" "}
-            impressa no primeiro <code>okto-nexus serve</code>). Ela fica apenas
-            nesta aba e nunca é persistida no servidor.
+            Enter an agent API key. It is kept in this tab only and never
+            persisted on the server.
           </p>
         </div>
         <input
@@ -160,6 +165,20 @@ function Dashboard({
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
   const [refreshTick, setRefreshTick] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
 
   const toggleSidebar = () =>
     setSidebarOpen((open) => {
@@ -248,7 +267,7 @@ function Dashboard({
           className="p-1.5 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300
             hover:bg-surface-100 dark:hover:bg-white/10 rounded-lg transition-colors"
           onClick={toggleSidebar}
-          title={sidebarOpen ? "Recolher menu" : "Expandir menu"}
+          title={sidebarOpen ? "Collapse menu" : "Expand menu"}
           data-testid="sidebar-toggle"
         >
           <PanelLeft size={18} />
@@ -277,29 +296,85 @@ function Dashboard({
           <button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
-            title="Atualizar"
+            title="Refresh"
           >
             <RotateCw size={14} />
-          </button>
-          <button
-            className="btn btn-secondary !px-2"
-            onClick={toggle}
-            title={theme === "dark" ? "Tema claro" : "Tema escuro"}
-            data-testid="theme-toggle"
-          >
-            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
           </button>
           {!localOpen && (
             <button
               className="btn btn-secondary !px-2"
               onClick={onLock}
-              title="Esquecer a chave desta aba"
+              title="Forget this tab's key"
             >
               <Lock size={14} />
             </button>
           )}
+          {/* Menu dropdown (the Pulse header menu) */}
+          <div className="relative" ref={menuRef}>
+            <button
+              onClick={() => setShowMenu((v) => !v)}
+              className={`btn btn-secondary flex items-center gap-1 !px-2 ${
+                showMenu ? "ring-2 ring-accent-300" : ""
+              }`}
+              data-testid="header-menu"
+            >
+              <Menu size={16} />
+              <ChevronDown size={12} />
+            </button>
+            {showMenu && (
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-lg shadow-xl z-50 py-1">
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setView("Settings");
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                >
+                  <Settings size={14} />
+                  Settings
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    toggle();
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="theme-toggle"
+                >
+                  {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+                  {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                </button>
+                <hr className="my-1 border-surface-200 dark:border-surface-700" />
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setHelpOpen(true);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="menu-help"
+                >
+                  <HelpCircle size={14} />
+                  Help
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    setAboutOpen(true);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="menu-about"
+                >
+                  <Info size={14} />
+                  About
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
+
+      {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
+      {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
 
       <div className="flex flex-1 overflow-hidden">
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
@@ -332,25 +407,6 @@ function Dashboard({
                   </button>
                 </li>
               ))}
-            </ul>
-            <h3 className="px-3 py-1 text-xs font-medium uppercase tracking-wider text-surface-400 dark:text-surface-500">
-              System
-            </h3>
-            <ul className="space-y-1">
-              <li>
-                <button
-                  data-view="Settings"
-                  onClick={() => setView("Settings")}
-                  className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
-                    view === "Settings"
-                      ? "bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-200"
-                      : "text-surface-700 hover:bg-surface-100 dark:text-surface-300 dark:hover:bg-surface-800"
-                  }`}
-                >
-                  <Settings size={16} />
-                  <span>Settings</span>
-                </button>
-              </li>
             </ul>
           </nav>
         </div>

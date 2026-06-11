@@ -109,7 +109,7 @@ export function HandoffsView({
                       </div>
                       <div className="mt-1 text-xs text-surface-500 dark:text-surface-400 space-y-0.5">
                         <div className="flex items-center gap-1">
-                          <span className="text-surface-400">de</span>
+                          <span className="text-surface-400">from</span>
                           <b>{h.from_agent_id ?? "—"}</b>
                         </div>
                         {h.claimed_by && (
@@ -127,11 +127,11 @@ export function HandoffsView({
                           className="btn btn-secondary !py-1 !text-xs mt-2 text-red-500"
                           onClick={() =>
                             confirm({
-                              title: "Cancelar handoff?",
+                              title: "Cancel handoff?",
                               body: (
                                 <span>
-                                  O handoff <code>{h.handoff_id}</code> será
-                                  movido para CANCELLED e sai do pool.
+                                  Handoff <code>{h.handoff_id}</code> will be
+                                  moved to CANCELLED and leaves the pool.
                                 </span>
                               ),
                               onConfirm: async () => {
@@ -142,7 +142,7 @@ export function HandoffsView({
                             })
                           }
                         >
-                          <Ban size={12} /> Cancelar…
+                          <Ban size={12} /> Cancel…
                         </button>
                       )}
                     </div>

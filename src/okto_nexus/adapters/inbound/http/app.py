@@ -28,6 +28,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
 from ....application.observability import ObservabilityService
+from ....application.settings import SettingsService, detect_pinned_fields
 from ....errors import OktoNexusError
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
 from ..mcp.server import (
@@ -43,7 +44,9 @@ from .lock import HEARTBEAT_INTERVAL_SECONDS, ServeLock
 #: Paths reachable WITHOUT an API key. Everything else is key-gated.
 #: The SPA shell and its bundles are public by design - they contain no
 #: data; every byte of data still rides the key-gated /api/v1 surface.
-PUBLIC_PATHS = frozenset({"/", "/healthz", "/api/v1/info", "/favicon.ico"})
+PUBLIC_PATHS = frozenset(
+    {"/", "/healthz", "/api/v1/info", "/api/v1/license", "/favicon.ico"}
+)
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
 OPERATOR_AGENT_ID = "operator"
@@ -177,6 +180,13 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     observability = ObservabilityService(
         SqliteObservabilityQueries(), deps.clock, deps.config
     )
+    # Runtime settings: stored overrides apply NOW (under CLI/env pins) so
+    # the dashboard-managed values survive restarts.
+    settings_service = SettingsService(
+        deps.config, deps.clock, detect_pinned_fields(deps.config)
+    )
+    with deps.connection_factory.unit_of_work() as uow:
+        settings_service.apply_overrides(uow)
     mcp_server = create_http_mcp_server(deps)
     mcp_app = mcp_server.streamable_http_app()
 
@@ -211,9 +221,26 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         openapi_url="/api/v1/openapi.json",
         docs_url="/api/v1/docs",
     )
+
+    # Safety net: NO unhandled exception may leave the API as a plain-text
+    # 500 ("Internal Server Error" breaks every JSON client). Everything
+    # becomes the documented envelope.
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(request, exc: Exception):
+        return JSONResponse(
+            {
+                "ok": False,
+                "error": {
+                    "code": "INTERNAL",
+                    "message": f"{type(exc).__name__}: {exc}",
+                },
+            },
+            status_code=500,
+        )
     app.state.deps = deps
     app.state.auth = auth
     app.state.observability = observability
+    app.state.settings_service = settings_service
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0
     # Same-machine trust for REST/dashboard; the serve CLI sets this to
