@@ -167,6 +167,12 @@ event_wait, e.g. filters={"type": "message.read"} and match \
 payload.message_id - no need to poll message_status. Delivery is \
 at-least-once: a redelivery after a lease expiry emits message.delivered \
 again (payload.recipient_agent_id tells you who).
+  * INBOX receipt (default ON; the operator can opt out via the \
+inbox_read_receipts setting) - when a recipient acknowledges your message \
+you ALSO receive a compact notification in YOUR OWN inbox: body kind \
+"message.read_receipt" with read_by, read_at and the message_ids (grouped \
+per sender). It is informational - inbox_ack it and move on; do NOT reply. \
+Receipts never generate receipts, so acknowledging one is always terminal.
 
 LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait OBSERVE \
 the bus (audit/monitoring of message.created, handoff.*, session.* events); \
@@ -232,7 +238,11 @@ retry.
 #: bootstrap (identity -> presence -> backlog -> monitor) so every agent
 #: initialises uniformly; NEW event_cursor tool (O(1) end-of-stream anchor
 #: so a monitor starts from NOW instead of paging history).
-SURFACE_REVISION = 9
+#: 10 = inbox read receipts (opt-out): inbox_ack additionally lands a
+#: "message.read_receipt" notification in each sender's inbox (grouped per
+#: sender; receipts never generate receipts; disable with the
+#: inbox_read_receipts setting).
+SURFACE_REVISION = 10
 
 
 @dataclass

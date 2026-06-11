@@ -211,6 +211,9 @@ def build_router() -> APIRouter:
         until: str | None = None,
         page: int = 1,
         page_size: int = 50,
+        peer: str | None = None,
+        undelivered: bool = False,
+        include_body: bool = False,
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
@@ -226,7 +229,27 @@ def build_router() -> APIRouter:
                     until_iso=until,
                     page=page,
                     page_size=page_size,
+                    peer_id=peer,
+                    undelivered_only=undelivered,
+                    include_body=include_body,
                 ),
+            )
+        except ValueError as exc:
+            return _err(422, "INVALID_PARAM", str(exc))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/conversations/peers")
+    async def conversation_peers(
+        request: Request, agent: str
+    ) -> JSONResponse:
+        """The chat's peer picker: per-peer counts + last activity (O(peers))."""
+        observability = request.app.state.observability
+        try:
+            data = await _run(
+                request,
+                lambda uow: observability.conversation_peers(uow, agent_id=agent),
             )
         except ValueError as exc:
             return _err(422, "INVALID_PARAM", str(exc))

@@ -135,6 +135,7 @@ def build_service(deps: Any) -> InboxService:
         clock=deps.clock,
         lease_ttl_seconds=deps.config.inbox_lease_ttl_seconds,
         event_emitter=deps.event_emitter,
+        config=deps.config,
     )
 
 
@@ -204,7 +205,11 @@ def register(server: Any, deps: Any) -> None:
         only what you have finished handling; unacked in-flight messages are
         redelivered after their lease. Acknowledging notifies the sender: each
         transitioned message emits a ``message.read`` receipt event visible
-        only to its sender, atomic with the transition. In trust_mode=strict
+        only to its sender, atomic with the transition - and (unless the
+        operator opted out via the inbox_read_receipts setting) the sender
+        ALSO gets a compact notification in its inbox (body kind
+        message.read_receipt, grouped per sender). Receipts never generate
+        receipts: just ack them. In trust_mode=strict
         pass session_id + session_secret (from session_open).
         """
         trust.require(

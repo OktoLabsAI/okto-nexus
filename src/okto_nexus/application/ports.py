@@ -399,8 +399,29 @@ class ObservabilityQueries(Protocol):
         until_iso: str | None,
         page: int,
         page_size: int,
+        peer_id: str | None = None,
+        undelivered_only: bool = False,
+        include_body: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
-        """Paginated message history with per-recipient deliveries; (items, total)."""
+        """Paginated message history with per-recipient deliveries; (items, total).
+
+        ``peer_id`` (with ``agent_id``) narrows to the CONVERSATION between the
+        pair, in both directions. ``undelivered_only`` selects the agent's
+        sends that fanned out to nobody (the dashboard's failed tab).
+        ``include_body`` adds the FULL ``body`` to each item (the default
+        keeps the bounded ``preview`` only).
+        """
+        ...
+
+    def conversation_peers(
+        self, uow: UnitOfWork, *, agent_id: str
+    ) -> dict[str, Any]:
+        """Aggregate the agent's conversation partners in SQL.
+
+        Returns ``{items: [{peer, count, last_at}], failed_count}`` sorted by
+        most recent activity - the scalable backing of the chat's peer picker
+        (never materialises message rows).
+        """
         ...
 
     def events_after(

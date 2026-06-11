@@ -38,8 +38,10 @@ from typing import Any
 
 from ..config import DEFAULT_INBOX_LEASE_TTL_SECONDS
 from ..domain.base import clamp_limit, iso_plus, utf8_byte_len
+from ..domain.base import new_id
 from ..domain.inbox import (
     DELIVERY_DELIVERED,
+    new_delivery_id,
     DELIVERY_PARKED,
     DELIVERY_READ,
     DELIVERY_UNREAD,
@@ -73,6 +75,11 @@ DEFAULT_MAX_DELIVERY_ATTEMPTS = 5
 #: materialising up to ``max_inline_bytes`` (64KB) per item in a polling read.
 PEEK_BODY_PREVIEW_CHARS = 200
 
+#: Inbox read receipts (opt-out via config.inbox_read_receipts): the body
+#: ``kind`` that marks a receipt notification. Receipts NEVER generate
+#: receipts (acknowledging one is a terminal act - no ping-pong).
+READ_RECEIPT_KIND = "message.read_receipt"
+
 #: Separator of the opaque history cursor (``<read_at>~<delivery_id>``).
 _HISTORY_CURSOR_SEP = "~"
 
@@ -92,7 +99,9 @@ class InboxService:
         default_limit: int = DEFAULT_INBOX_LIMIT,
         max_limit: int = MAX_INBOX_LIMIT,
         event_emitter: Any = None,
+        config: Any = None,
     ) -> None:
+        self._config = config
         self._cf = connection_factory
         self._deliveries = deliveries
         self._messages = messages
@@ -160,18 +169,27 @@ class InboxService:
             # Read receipts (sender-visible): one message.read per delivery
             # that ACTUALLY transitioned (an already-read or unknown id never
             # produces a receipt), atomic with the transition itself.
-            if acked_ids and self._emitter is not None:
-                read_items = [
-                    {
-                        "message_id": m.message_id,
-                        "workspace_id": m.workspace_id,
-                        "from_agent_id": m.from_agent_id,
-                    }
-                    for m in self._messages.list_by_ids(uow, message_ids=acked_ids)
-                ]
-                self._emit_receipts(
-                    uow, read_items, type_=MESSAGE_READ_TYPE, recipient=aid, at=now
+            if acked_ids:
+                acked_messages = self._messages.list_by_ids(
+                    uow, message_ids=acked_ids
                 )
+                if self._emitter is not None:
+                    read_items = [
+                        {
+                            "message_id": m.message_id,
+                            "workspace_id": m.workspace_id,
+                            "from_agent_id": m.from_agent_id,
+                        }
+                        for m in acked_messages
+                    ]
+                    self._emit_receipts(
+                        uow,
+                        read_items,
+                        type_=MESSAGE_READ_TYPE,
+                        recipient=aid,
+                        at=now,
+                    )
+                self._deliver_read_receipts(uow, acked_messages, reader=aid, at=now)
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 
@@ -374,6 +392,80 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # Internal helpers
     # ------------------------------------------------------------------ #
+    def _deliver_read_receipts(
+        self, uow: Any, acked_messages: Any, *, reader: str, at: str
+    ) -> None:
+        """Land ONE read-receipt notification per original sender (opt-out).
+
+        The inbox counterpart of the ``message.read`` event: when enabled
+        (``config.inbox_read_receipts``, default true, live-tunable), each
+        sender whose message was just acknowledged receives a compact
+        notification in ITS OWN inbox - grouped per sender, never for
+        self-sends, and NEVER for receipts themselves (acknowledging a
+        receipt is terminal; no ping-pong by construction). Skipped when the
+        sender is no longer a registered agent.
+        """
+        if self._config is not None and not getattr(
+            self._config, "inbox_read_receipts", True
+        ):
+            return
+        # Group the acked messages per (sender, workspace).
+        groups: dict[tuple[str, str], list[Any]] = {}
+        for message in acked_messages:
+            sender = message.from_agent_id
+            if not sender or sender == reader:
+                continue  # self-send: you know you read it
+            if self._is_receipt(message):
+                continue  # receipts never generate receipts
+            groups.setdefault((sender, message.workspace_id), []).append(message)
+        for (sender, workspace_id), batch in groups.items():
+            if self._agents is None or self._agents.get(uow, sender) is None:
+                continue
+            count = len(batch)
+            subject = (
+                f"read receipt: {count} message(s) read by {reader}"
+                if count > 1
+                else f"read receipt: {batch[0].subject or batch[0].message_id} "
+                f"read by {reader}"
+            )
+            body = {
+                "kind": READ_RECEIPT_KIND,
+                "read_by": reader,
+                "read_at": at,
+                "message_ids": [m.message_id for m in batch],
+                "subjects": [m.subject for m in batch],
+            }
+            message = self._messages.create(
+                uow,
+                message_id=new_id("msg"),
+                workspace_id=workspace_id,
+                from_agent_id=reader,
+                target=json.dumps(
+                    {"strategy": "direct", "agent_id": sender},
+                    ensure_ascii=False,
+                ),
+                subject=subject,
+                body=json.dumps(body, ensure_ascii=False),
+                created_at=at,
+            )
+            self._deliveries.create(
+                uow,
+                delivery_id=new_delivery_id(),
+                message_id=message.message_id,
+                recipient_agent_id=sender,
+                status=DELIVERY_UNREAD,
+                created_at=at,
+            )
+
+    @staticmethod
+    def _is_receipt(message: Any) -> bool:
+        """Whether the message is itself a read receipt (loop guard)."""
+        try:
+            body = json.loads(message.body or "")
+        except (TypeError, ValueError):
+            return False
+        return isinstance(body, dict) and body.get("kind") == READ_RECEIPT_KIND
+
     def _emit_receipts(
         self,
         uow: Any,

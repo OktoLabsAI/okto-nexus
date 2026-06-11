@@ -276,7 +276,14 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         threading.Thread(
             target=_watch_ready, args=(server, host, port), daemon=True
         ).start()
-        server.run()
+        try:
+            server.run()
+        except KeyboardInterrupt:
+            # uvicorn already completed its graceful shutdown and re-raised
+            # the captured CTRL+C (its signal-forwarding contract). The work
+            # is DONE at this point - swallowing it turns a scary multi-page
+            # traceback into the calm goodbye the operator expects.
+            print("[okto-nexus] Shutdown complete.", file=sys.stderr)
         return 0
     finally:
         lock.release()

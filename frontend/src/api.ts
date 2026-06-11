@@ -27,6 +27,9 @@ export interface GraphEdge {
   count: number;
   last_at: string;
   in_flight: { unread: number; delivered: number };
+  // Most recent COMPLETED hop (pulled or acked): anchors the grey
+  // flow-decay edge (light -> mid -> dark grey, gone after 15 min).
+  last_done_at: string | null;
 }
 
 export interface GraphHandoff {
@@ -90,12 +93,19 @@ export interface MessageRow {
   created_at: string;
   subject: string | null;
   preview: string;
+  body?: string; // full body, present only with include_body=true
   deliveries: {
     delivery_id: string;
     recipient_agent_id: string;
     status: string;
     created_at: string;
   }[];
+}
+
+export interface ConversationPeer {
+  peer: string;
+  count: number;
+  last_at: string;
 }
 
 export interface SessionRow {
@@ -196,6 +206,10 @@ export const api = {
   messages: (params: Record<string, string>) =>
     call<{ items: MessageRow[]; page: number; page_size: number; total: number }>(
       `/api/v1/messages?${new URLSearchParams(params)}`,
+    ),
+  conversationPeers: (agent: string) =>
+    call<{ items: ConversationPeer[]; failed_count: number }>(
+      `/api/v1/conversations/peers?agent=${encodeURIComponent(agent)}`,
     ),
   handoffs: (workspace?: string) =>
     call<{ items: GraphHandoff[] }>(

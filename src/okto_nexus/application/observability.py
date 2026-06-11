@@ -156,9 +156,14 @@ class ObservabilityService:
         until_iso: str | None = None,
         page: int = 1,
         page_size: int = 50,
+        peer_id: str | None = None,
+        undelivered_only: bool = False,
+        include_body: bool = False,
     ) -> dict[str, Any]:
         if lane is not None and lane not in _LANES:
             raise ValueError(f"invalid lane: {lane!r} (one of {', '.join(_LANES)})")
+        if peer_id is not None and agent_id is None:
+            raise ValueError("peer requires agent (the conversation is a pair)")
         page = max(1, int(page))
         page_size = min(MAX_PAGE_SIZE, max(1, int(page_size)))
         items, total = self._q.messages_page(
@@ -171,8 +176,19 @@ class ObservabilityService:
             until_iso=until_iso,
             page=page,
             page_size=page_size,
+            peer_id=peer_id,
+            undelivered_only=undelivered_only,
+            include_body=include_body,
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
+
+    def conversation_peers(
+        self, uow: UnitOfWork, *, agent_id: str
+    ) -> dict[str, Any]:
+        """The agent's conversation partners (SQL aggregate; chat peer picker)."""
+        if not agent_id:
+            raise ValueError("agent is required")
+        return self._q.conversation_peers(uow, agent_id=agent_id)
 
     def handoffs(
         self,

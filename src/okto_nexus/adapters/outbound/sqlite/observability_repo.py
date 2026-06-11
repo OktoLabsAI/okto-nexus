@@ -100,7 +100,8 @@ class SqliteObservabilityQueries:
                    COUNT(*) AS count,
                    MAX(m.created_at) AS last_at,
                    SUM(CASE WHEN d.status = 'unread' THEN 1 ELSE 0 END) AS unread,
-                   SUM(CASE WHEN d.status = 'delivered' THEN 1 ELSE 0 END) AS delivered
+                   SUM(CASE WHEN d.status = 'delivered' THEN 1 ELSE 0 END) AS delivered,
+                   MAX(COALESCE(d.read_at, d.delivered_at)) AS last_done_at
             FROM message_deliveries d
             JOIN messages m ON m.message_id = d.message_id
             WHERE m.created_at >= ?
@@ -128,6 +129,9 @@ class SqliteObservabilityQueries:
                     "unread": int(row["unread"] or 0),
                     "delivered": int(row["delivered"] or 0),
                 },
+                # Most recent COMPLETED hop (pulled or acked) in the pair:
+                # the anchor of the dashboard's grey flow-decay edge.
+                "last_done_at": row["last_done_at"],
             }
             for row in rows
         ]
@@ -225,6 +229,9 @@ class SqliteObservabilityQueries:
         until_iso: str | None,
         page: int,
         page_size: int,
+        peer_id: str | None = None,
+        undelivered_only: bool = False,
+        include_body: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
         where = ["1=1"]
         params: list[Any] = []
@@ -240,12 +247,31 @@ class SqliteObservabilityQueries:
         if until_iso is not None:
             where.append("m.created_at <= ?")
             params.append(until_iso)
-        if agent_id is not None:
+        if agent_id is not None and peer_id is not None:
+            # The pair's CONVERSATION, both directions (chat panel).
+            where.append(
+                "((m.from_agent_id = ? AND EXISTS (SELECT 1 FROM message_deliveries dd "
+                "WHERE dd.message_id = m.message_id AND dd.recipient_agent_id = ?)) OR "
+                "(m.from_agent_id = ? AND EXISTS (SELECT 1 FROM message_deliveries dd "
+                "WHERE dd.message_id = m.message_id AND dd.recipient_agent_id = ?)))"
+            )
+            params.extend([agent_id, peer_id, peer_id, agent_id])
+        elif agent_id is not None:
             where.append(
                 "(m.from_agent_id = ? OR EXISTS (SELECT 1 FROM message_deliveries dd "
                 "WHERE dd.message_id = m.message_id AND dd.recipient_agent_id = ?))"
             )
             params.extend([agent_id, agent_id])
+        if undelivered_only:
+            # Persisted sends that fanned out to NOBODY (failed tab); only
+            # meaningful for the agent's OWN sends.
+            if agent_id is not None:
+                where.append("m.from_agent_id = ?")
+                params.append(agent_id)
+            where.append(
+                "NOT EXISTS (SELECT 1 FROM message_deliveries dn "
+                "WHERE dn.message_id = m.message_id)"
+            )
         if lane is not None:
             where.append(
                 "EXISTS (SELECT 1 FROM message_deliveries dl "
@@ -284,21 +310,66 @@ class SqliteObservabilityQueries:
                     (row["message_id"],),
                 ).fetchall()
                 body = row["body"] or ""
-                items.append(
-                    {
-                        "message_id": row["message_id"],
-                        "workspace_id": row["workspace_id"],
-                        "channel_id": row["channel_id"],
-                        "from_agent_id": row["from_agent_id"],
-                        "created_at": row["created_at"],
-                        "subject": row["subject"],
-                        "preview": body[:160],
-                        "deliveries": [dict(d) for d in deliveries],
-                    }
-                )
+                item = {
+                    "message_id": row["message_id"],
+                    "workspace_id": row["workspace_id"],
+                    "channel_id": row["channel_id"],
+                    "from_agent_id": row["from_agent_id"],
+                    "created_at": row["created_at"],
+                    "subject": row["subject"],
+                    "preview": body[:160],
+                    "deliveries": [dict(d) for d in deliveries],
+                }
+                if include_body:
+                    item["body"] = body
+                items.append(item)
         except sqlite3.Error as exc:
             raise _db_error("reading message history", exc) from exc
         return items, total
+
+    def conversation_peers(
+        self, uow: UnitOfWork, *, agent_id: str
+    ) -> dict[str, Any]:
+        """Aggregate conversation partners + failed-send count in SQL.
+
+        One UNION of the outbound (per-delivery recipient) and inbound
+        (per-sender) directions, grouped per peer - O(peers) rows out,
+        regardless of history size, so the chat's peer picker scales.
+        """
+        try:
+            rows = uow.connection.execute(
+                """
+                SELECT peer, COUNT(*) AS count, MAX(at) AS last_at FROM (
+                    SELECT d.recipient_agent_id AS peer, m.created_at AS at
+                    FROM messages m
+                    JOIN message_deliveries d ON d.message_id = m.message_id
+                    WHERE m.from_agent_id = ?
+                    UNION ALL
+                    SELECT m.from_agent_id AS peer, m.created_at AS at
+                    FROM messages m
+                    JOIN message_deliveries d ON d.message_id = m.message_id
+                    WHERE d.recipient_agent_id = ? AND m.from_agent_id != ?
+                )
+                GROUP BY peer
+                ORDER BY last_at DESC
+                """,
+                (agent_id, agent_id, agent_id),
+            ).fetchall()
+            failed_row = uow.connection.execute(
+                """
+                SELECT COUNT(*) FROM messages m
+                WHERE m.from_agent_id = ?
+                  AND NOT EXISTS (SELECT 1 FROM message_deliveries dn
+                                  WHERE dn.message_id = m.message_id)
+                """,
+                (agent_id,),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("aggregating conversation peers", exc) from exc
+        return {
+            "items": [dict(row) for row in rows],
+            "failed_count": int(failed_row[0]),
+        }
 
     def events_after(
         self,

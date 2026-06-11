@@ -101,6 +101,9 @@ class NexusConfig:
         DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS
     )
     auto_prune_on_start: bool = False
+    # Deliver a read receipt to the SENDER's inbox when a recipient
+    # acknowledges its message (opt-out; live-tunable - no restart).
+    inbox_read_receipts: bool = True
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -222,6 +225,11 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "OKTO_NEXUS_AUTO_PRUNE_ON_START",
         "--auto-prune-on-start",
         False,
+    ),
+    "inbox_read_receipts": (
+        "OKTO_NEXUS_INBOX_READ_RECEIPTS",
+        "--inbox-read-receipts",
+        True,
     ),
 }
 

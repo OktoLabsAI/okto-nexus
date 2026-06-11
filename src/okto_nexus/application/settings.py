@@ -131,6 +131,12 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "auto_prune_on_start", "bool",
         "Run the retention prune automatically on every server boot.",
     ),
+    SettingSpec(
+        "inbox_read_receipts", "bool",
+        "Deliver a read receipt to the sender's inbox when a recipient "
+        "acknowledges its message (receipts never generate receipts). "
+        "Turn off to keep inboxes receipt-free.",
+    ),
 )
 
 _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS}

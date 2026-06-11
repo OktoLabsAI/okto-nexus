@@ -18,9 +18,11 @@ import Graph from "graphology";
 import forceAtlas2 from "graphology-layout-forceatlas2";
 import Sigma from "sigma";
 import { NodeSquareProgram } from "@sigma/node-square";
-import { Ban, X } from "lucide-react";
+import { DashedEdgeArrowProgram } from "../graph/DashedEdgeProgram";
+import { Ban, Search, X } from "lucide-react";
 import {
   api,
+  type ConversationPeer,
   type GraphEdge,
   type GraphHandoff,
   type GraphNode,
@@ -28,6 +30,7 @@ import {
   type MessageRow,
 } from "../api";
 import { useConfirm } from "../components/Confirm";
+import { Markdown } from "../components/Markdown";
 import { ResizablePanel } from "../components/ResizablePanel";
 
 type ThemeName = "light" | "dark";
@@ -36,6 +39,29 @@ function presenceColor(presence: GraphNode["presence"], theme: ThemeName): strin
   if (presence === "present") return "#0ea5e9";
   if (presence === "stale") return "#f59e0b";
   return theme === "dark" ? "#3f4a5c" : "#b2bdcc";
+}
+
+// Grey flow-decay for COMPLETED traffic (no pending deliveries in the
+// pair), tuned to real swarm rhythms (exchanges minutes-to-hours apart):
+// light grey < 15 min since the last completed hop, mid < 1 h, dark < 4 h,
+// gone afterwards. "Visibility decays with age" flips with the theme
+// (recent = brightest on dark, darkest on light).
+const FLOW_LIGHT_MS = 15 * 60 * 1000;
+const FLOW_MID_MS = 60 * 60 * 1000;
+const FLOW_DARK_MS = 4 * 60 * 60 * 1000;
+
+function flowDecayColor(
+  lastDoneAt: string | null,
+  nowMs: number,
+  dark: boolean,
+): string | null {
+  if (!lastDoneAt) return null;
+  const age = nowMs - Date.parse(lastDoneAt.endsWith("Z") ? lastDoneAt : lastDoneAt + "Z");
+  if (!Number.isFinite(age) || age < 0) return dark ? "#d1d5db" : "#475569";
+  if (age < FLOW_LIGHT_MS) return dark ? "#d1d5db" : "#475569";
+  if (age < FLOW_MID_MS) return dark ? "#8b95a5" : "#94a3b8";
+  if (age < FLOW_DARK_MS) return dark ? "#4b5563" : "#cbd5e1";
+  return null; // older than 4 h: the flow edge disappears
 }
 
 // Deterministic angle from the agent id (stable layout seeds, TR2).
@@ -102,13 +128,42 @@ export function GraphView({
 
     for (const edge of graph.edges.messages) {
       if (!g.hasNode(edge.from) || !g.hasNode(edge.to)) continue;
-      const inFlight = edge.in_flight.unread + edge.in_flight.delivered;
-      g.addEdgeWithKey(`m:${edge.from}->${edge.to}`, edge.from, edge.to, {
-        size: 1.5 + Math.min(6, Math.log2(edge.count + 1)),
-        color: inFlight > 0 ? "#0ea5e9" : dark ? "rgba(59,130,246,0.55)" : "rgba(59,130,246,0.45)",
-        label: inFlight > 0 ? `${inFlight} ✉` : undefined,
-        type: "arrow",
-      });
+      const { unread, delivered } = edge.in_flight;
+      const baseSize = 1.5 + Math.min(6, Math.log2(edge.count + 1));
+      // Layer 1 - IN-FLIGHT (solid cyan): the recipient PULLED the message
+      // and is working on it (no ack yet).
+      if (delivered > 0) {
+        g.addEdgeWithKey(`m:${edge.from}->${edge.to}`, edge.from, edge.to, {
+          size: baseSize,
+          color: "#0ea5e9",
+          label: `${delivered} ✉`,
+          type: "arrow",
+        });
+      }
+      // Layer 2 - INBOX (dashed): delivered to the recipient's inbox,
+      // waiting to be pulled.
+      if (unread > 0) {
+        g.addEdgeWithKey(`i:${edge.from}->${edge.to}`, edge.from, edge.to, {
+          size: Math.max(1.5, baseSize - 0.5),
+          color: dark ? "#7dd3fc" : "#0284c7",
+          label: `${unread} ⌛`,
+          type: "dashed",
+        });
+      }
+      // Layer 3 - COMPLETED FLOW (grey, decaying): nothing pending in the
+      // pair; the edge fades light -> mid -> dark grey over 15 min since
+      // the last completed hop, then disappears (a new exchange resets it).
+      if (unread === 0 && delivered === 0) {
+        const grey = flowDecayColor(edge.last_done_at, Date.now(), dark);
+        if (grey) {
+          g.addEdgeWithKey(`m:${edge.from}->${edge.to}`, edge.from, edge.to, {
+            size: baseSize,
+            color: grey,
+            type: "arrow",
+            flowDoneAt: edge.last_done_at,
+          });
+        }
+      }
     }
 
     for (const handoff of graph.edges.handoffs) {
@@ -199,6 +254,7 @@ export function GraphView({
       edgeLabelWeight: "700",
       defaultEdgeType: "line",
       nodeProgramClasses: { square: NodeSquareProgram },
+      edgeProgramClasses: { dashed: DashedEdgeArrowProgram },
       allowInvalidContainer: true,
     });
     renderer.on("clickNode", ({ node }) => {
@@ -220,7 +276,7 @@ export function GraphView({
         setSelection(handoff ? { kind: "handoff", handoff } : null);
         return;
       }
-      if (!edge.startsWith("m:")) return;
+      if (!edge.startsWith("m:") && !edge.startsWith("i:")) return;
       const [from, to] = edge.slice(2).split("->");
       const data = graph?.edges.messages.find(
         (e) => e.from === from && e.to === to,
@@ -231,7 +287,25 @@ export function GraphView({
     // Exposed for the e2e harness (clicking WebGL nodes needs their
     // viewport coordinates); harmless in production.
     (window as unknown as { __nexusSigma?: Sigma }).__nexusSigma = renderer;
-    return () => renderer.kill();
+
+    // Flow-decay ticker: every 30s, fade completed-flow edges IN PLACE
+    // (attribute mutation re-renders; it never rebuilds layout or camera).
+    const decayTimer = window.setInterval(() => {
+      const now = Date.now();
+      for (const edge of [...model.edges()]) {
+        const doneAt = model.getEdgeAttribute(edge, "flowDoneAt") as
+          | string
+          | undefined;
+        if (!doneAt) continue;
+        const grey = flowDecayColor(doneAt, now, dark);
+        if (grey) model.setEdgeAttribute(edge, "color", grey);
+        else model.dropEdge(edge);
+      }
+    }, 30_000);
+    return () => {
+      window.clearInterval(decayTimer);
+      renderer.kill();
+    };
   }, [model, graph, theme]);
 
   return (
@@ -309,13 +383,21 @@ function Legend() {
         offline <span className="text-surface-400">· no active session</span>
       </div>
       <div>
-        <span className="text-blue-500 font-bold align-middle">→</span>{" "}
-        messages (thickness = 24h volume)
+        <span className="text-accent-500 font-bold align-middle">→</span>{" "}
+        in-flight <span className="text-accent-500">N ✉</span>{" "}
+        <span className="text-surface-400">· pulled, processing (no ack yet)</span>
       </div>
       <div>
-        <span className="text-accent-500 font-bold align-middle">→</span>{" "}
-        in-flight traffic <span className="text-accent-500">N ✉</span>{" "}
-        <span className="text-surface-400">· unread in the pair</span>
+        <span className="text-sky-400 font-bold align-middle">⇢</span>{" "}
+        inbox <span className="text-sky-400">N ⌛</span>{" "}
+        <span className="text-surface-400">· dashed: delivered, awaiting pull</span>
+      </div>
+      <div>
+        <span className="font-bold align-middle" style={{ color: "#9ca3af" }}>→</span>{" "}
+        completed flow{" "}
+        <span className="text-surface-400">
+          · grey fades light→dark over 15 min / 1 h / 4 h, then disappears
+        </span>
       </div>
       <div>
         <span className="text-pink-500 text-sm align-middle">■</span> handoff
@@ -331,105 +413,70 @@ function Legend() {
 // --------------------------------------------------------------------------- //
 // Chat timeline - inbox/outbox of an agent as a per-peer conversation
 // --------------------------------------------------------------------------- //
-interface ChatEntry {
-  key: string;
-  dir: "in" | "out";
-  at: string;
-  text: string;
-  status?: string; // delivery lane towards the peer (out only)
-}
-
-const FAILED_TAB = "⚠ no recipient";
+const FAILED_TAB = "__failed__";
+const PAGE_SIZE = 10;
 
 function laneTick(status?: string): string {
   switch (status) {
     case "unread":
-      return "✓";
+      return "\u2713";
     case "delivered":
-      return "✓✓";
+      return "\u2713\u2713";
     case "read":
-      return "✓✓";
+      return "\u2713\u2713";
     case "parked":
-      return "⏸";
+      return "\u23f8";
     default:
       return "";
   }
 }
 
-function buildConversations(
-  agentId: string,
-  messages: MessageRow[],
-): Map<string, ChatEntry[]> {
-  const convos = new Map<string, ChatEntry[]>();
-  const push = (peer: string, entry: ChatEntry) => {
-    if (!convos.has(peer)) convos.set(peer, []);
-    convos.get(peer)!.push(entry);
-  };
-  for (const m of messages) {
-    const text = m.preview || m.subject || "(no body)";
-    if (m.from_agent_id === agentId) {
-      if (m.deliveries.length === 0) {
-        // Persisted but fanned out to NOBODY (target resolved to zero
-        // eligible recipients) - the visible trace of a failed send.
-        push(FAILED_TAB, {
-          key: m.message_id,
-          dir: "out",
-          at: m.created_at,
-          text,
-          status: "none",
-        });
-        continue;
-      }
-      for (const d of m.deliveries) {
-        push(d.recipient_agent_id, {
-          key: `${m.message_id}:${d.delivery_id}`,
-          dir: "out",
-          at: m.created_at,
-          text,
-          status: d.status,
-        });
-      }
-    } else if (m.deliveries.some((d) => d.recipient_agent_id === agentId)) {
-      push(m.from_agent_id, {
-        key: m.message_id,
-        dir: "in",
-        at: m.created_at,
-        text,
-      });
-    }
-  }
-  for (const entries of convos.values()) {
-    entries.sort((a, b) => a.at.localeCompare(b.at));
-  }
-  return convos;
-}
-
-function Bubble({ entry }: { entry: ChatEntry }) {
+function Bubble({
+  agentId,
+  peer,
+  message,
+}: {
+  agentId: string;
+  peer: string;
+  message: MessageRow;
+}) {
+  const out = message.from_agent_id === agentId;
+  const failed = peer === FAILED_TAB;
+  const status = failed
+    ? "none"
+    : out
+      ? (message.deliveries.find((d) => d.recipient_agent_id === peer)?.status ??
+        message.deliveries[0]?.status)
+      : undefined;
+  const text = message.body ?? message.preview ?? "";
   return (
-    <div className={`flex ${entry.dir === "out" ? "justify-end" : "justify-start"}`}>
+    <div className={`flex ${out ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[85%] rounded-xl px-2.5 py-1.5 text-[11px] leading-relaxed ${
-          entry.status === "none"
+          failed
             ? "bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-400/30 dark:text-red-200"
-            : entry.dir === "out"
+            : out
               ? "bg-accent-50 border border-accent-200 text-surface-800 dark:bg-accent-900/30 dark:border-accent-700/40 dark:text-surface-200"
               : "bg-surface-100 border border-surface-200 text-surface-700 dark:bg-surface-800 dark:border-surface-700 dark:text-surface-300"
         }`}
       >
-        <div>{entry.text}</div>
+        {message.subject && (
+          <div className="font-semibold mb-0.5">{message.subject}</div>
+        )}
+        {text ? <Markdown text={text} /> : <div>(no body)</div>}
         <div className="flex items-center gap-1.5 justify-end mt-0.5 text-[9px] text-surface-400 dark:text-surface-500">
-          <span>{entry.at.slice(5, 16).replace("T", " ")}</span>
-          {entry.dir === "out" && entry.status !== "none" && (
+          <span>{message.created_at.slice(5, 16).replace("T", " ")}</span>
+          {out && !failed && status && (
             <span
-              className={entry.status === "read" ? "text-accent-500" : ""}
-              title={entry.status}
+              className={status === "read" ? "text-accent-500" : ""}
+              title={status}
             >
-              {laneTick(entry.status)}
+              {laneTick(status)}
             </span>
           )}
-          {entry.status === "none" && (
+          {failed && (
             <span className="text-red-400" title="no recipient">
-              ✗
+              {"\u2717"}
             </span>
           )}
         </div>
@@ -438,81 +485,157 @@ function Bubble({ entry }: { entry: ChatEntry }) {
   );
 }
 
+// Per-peer conversation, server-paginated: NEWEST first, "Load more" walks
+// back into history 10 messages at a time (lazy - a long history is never
+// materialised up front). Peer list is an O(peers) SQL aggregate with a
+// client-side search filter, so it scales past the handful-of-tabs stage.
 function ChatPanel({ agentId }: { agentId: string }) {
-  const [convos, setConvos] = useState<Map<string, ChatEntry[]>>(new Map());
+  const [peers, setPeers] = useState<ConversationPeer[]>([]);
+  const [failedCount, setFailedCount] = useState(0);
+  const [filter, setFilter] = useState("");
   const [tab, setTab] = useState<string | null>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const [entries, setEntries] = useState<MessageRow[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchPage = (peer: string, pageNum: number, append: boolean) => {
+    setLoading(true);
+    const params: Record<string, string> = {
+      agent: agentId,
+      include_body: "true",
+      page: String(pageNum),
+      page_size: String(PAGE_SIZE),
+    };
+    if (peer === FAILED_TAB) params.undelivered = "true";
+    else params.peer = peer;
+    api
+      .messages(params)
+      .then(({ items, total: t }) => {
+        setEntries((prev) => (append ? [...prev, ...items] : items));
+        setPage(pageNum);
+        setTotal(t);
+      })
+      .catch(() => undefined)
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
+    setFilter("");
     api
-      .messages({ agent: agentId, page_size: "200" })
-      .then(({ items }) => {
-        const built = buildConversations(agentId, items);
-        setConvos(built);
-        setTab((current) =>
-          current && built.has(current)
-            ? current
-            : (built.keys().next().value ?? null),
-        );
+      .conversationPeers(agentId)
+      .then(({ items, failed_count }) => {
+        setPeers(items);
+        setFailedCount(failed_count);
+        const first = items[0]?.peer ?? (failed_count > 0 ? FAILED_TAB : null);
+        setTab(first);
+        if (first) fetchPage(first, 1, false);
+        else {
+          setEntries([]);
+          setTotal(0);
+        }
       })
       .catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId]);
 
-  useEffect(() => {
-    endRef.current?.scrollIntoView({ block: "end" });
-  }, [tab, convos]);
+  const openTab = (peer: string) => {
+    setTab(peer);
+    setEntries([]);
+    fetchPage(peer, 1, false);
+  };
 
-  const peers = [...convos.keys()].sort((a, b) => {
-    if (a === FAILED_TAB) return 1;
-    if (b === FAILED_TAB) return -1;
-    const lastA = convos.get(a)!.at(-1)?.at ?? "";
-    const lastB = convos.get(b)!.at(-1)?.at ?? "";
-    return lastB.localeCompare(lastA);
-  });
+  const visiblePeers = filter
+    ? peers.filter((p) =>
+        p.peer.toLowerCase().includes(filter.trim().toLowerCase()),
+      )
+    : peers;
 
-  if (peers.length === 0) {
+  if (peers.length === 0 && failedCount === 0) {
     return (
       <div className="text-surface-400 dark:text-surface-500">
-        no messages in the last 200
+        no conversations yet
       </div>
     );
   }
-  const entries = tab ? (convos.get(tab) ?? []) : [];
+  const remaining = Math.max(0, total - entries.length);
 
   return (
     <div className="space-y-2" data-testid="chat-panel">
-      <div className="flex gap-1 overflow-x-auto pb-1">
-        {peers.map((peer) => (
+      {peers.length > 6 && (
+        <div className="relative">
+          <Search
+            size={12}
+            className="absolute left-2 top-1/2 -translate-y-1/2 text-surface-400"
+          />
+          <input
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder={`search ${peers.length} peers\u2026`}
+            className="w-full pl-6 pr-2 py-1 rounded-lg text-[11px] border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 focus:outline-none focus:ring-2 focus:ring-accent-500/40"
+            data-testid="peer-search"
+          />
+        </div>
+      )}
+      <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto pb-1">
+        {visiblePeers.map(({ peer, count }) => (
           <button
             key={peer}
-            onClick={() => setTab(peer)}
+            onClick={() => openTab(peer)}
             className={`px-2 py-1 rounded-lg text-[11px] whitespace-nowrap border transition-colors ${
               peer === tab
-                ? peer === FAILED_TAB
-                  ? "bg-red-50 text-red-600 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-400/40"
-                  : "bg-accent-100 text-accent-700 border-accent-300 dark:bg-accent-900/40 dark:text-accent-300 dark:border-accent-700"
+                ? "bg-accent-100 text-accent-700 border-accent-300 dark:bg-accent-900/40 dark:text-accent-300 dark:border-accent-700"
                 : "border-surface-200 text-surface-500 hover:text-surface-800 dark:border-surface-700 dark:text-surface-400 dark:hover:text-surface-200"
             }`}
           >
             {peer}
-            <span className="ml-1 opacity-60">{convos.get(peer)!.length}</span>
+            <span className="ml-1 opacity-60">{count}</span>
           </button>
         ))}
+        {filter && visiblePeers.length === 0 && (
+          <span className="text-[11px] text-surface-400 px-1 py-1">
+            no peer matches "{filter}"
+          </span>
+        )}
+        {failedCount > 0 && (
+          <button
+            onClick={() => openTab(FAILED_TAB)}
+            className={`px-2 py-1 rounded-lg text-[11px] whitespace-nowrap border transition-colors ${
+              tab === FAILED_TAB
+                ? "bg-red-50 text-red-600 border-red-300 dark:bg-red-900/30 dark:text-red-300 dark:border-red-400/40"
+                : "border-surface-200 text-surface-500 hover:text-red-500 dark:border-surface-700 dark:text-surface-400"
+            }`}
+          >
+            {"\u26a0"} no recipient
+            <span className="ml-1 opacity-60">{failedCount}</span>
+          </button>
+        )}
       </div>
 
       {tab === FAILED_TAB && (
         <p className="text-[11px] text-red-500/80 dark:text-red-300/80">
-          Persisted sends whose target resolved to no eligible recipient —
-          delivered to nobody. Sends to a nonexistent agent_id are rejected
-          with no trace (full rollback, by bus design).
+          Persisted sends whose target resolved to no eligible recipient
+          {" \u2014 "}delivered to nobody. Sends to a nonexistent agent_id are
+          rejected with no trace (full rollback, by bus design).
         </p>
       )}
 
+      {/* Newest first; "Load more" appends OLDER messages below. */}
       <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1">
-        {entries.map((entry) => (
-          <Bubble key={entry.key} entry={entry} />
-        ))}
-        <div ref={endRef} />
+        {tab &&
+          entries.map((m) => (
+            <Bubble key={m.message_id} agentId={agentId} peer={tab} message={m} />
+          ))}
+        {remaining > 0 && (
+          <button
+            onClick={() => tab && fetchPage(tab, page + 1, true)}
+            disabled={loading}
+            className="w-full py-1.5 rounded-lg text-[11px] border border-surface-200 dark:border-surface-700 text-surface-500 hover:text-surface-800 dark:text-surface-400 dark:hover:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors disabled:opacity-50"
+            data-testid="load-more"
+          >
+            {loading ? "loading\u2026" : `Load more (${remaining} older)`}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -733,31 +856,61 @@ function SidePanel({
   );
 }
 
+// Pair conversation (edge click) - same server-paginated, newest-first
+// grammar as the per-peer chat panel.
 function PairChat({ from, to }: { from: string; to: string }) {
-  const [entries, setEntries] = useState<ChatEntry[]>([]);
+  const [entries, setEntries] = useState<MessageRow[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const fetchPage = (pageNum: number, append: boolean) => {
+    setLoading(true);
+    api
+      .messages({
+        agent: from,
+        peer: to,
+        include_body: "true",
+        page: String(pageNum),
+        page_size: String(PAGE_SIZE),
+      })
+      .then(({ items, total: t }) => {
+        setEntries((prev) => (append ? [...prev, ...items] : items));
+        setPage(pageNum);
+        setTotal(t);
+      })
+      .catch(() => undefined)
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    api
-      .messages({ agent: from, page_size: "200" })
-      .then(({ items }) => {
-        const convos = buildConversations(from, items);
-        setEntries(convos.get(to) ?? []);
-      })
-      .catch(() => undefined);
+    setEntries([]);
+    fetchPage(1, false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [from, to]);
 
-  if (entries.length === 0) {
+  if (entries.length === 0 && !loading) {
     return (
       <div className="text-surface-400 dark:text-surface-500">
         no messages between the pair
       </div>
     );
   }
+  const remaining = Math.max(0, total - entries.length);
   return (
     <div className="max-h-80 overflow-y-auto space-y-1.5 pr-1">
-      {entries.map((entry) => (
-        <Bubble key={entry.key} entry={entry} />
+      {entries.map((m) => (
+        <Bubble key={m.message_id} agentId={from} peer={to} message={m} />
       ))}
+      {remaining > 0 && (
+        <button
+          onClick={() => fetchPage(page + 1, true)}
+          disabled={loading}
+          className="w-full py-1.5 rounded-lg text-[11px] border border-surface-200 dark:border-surface-700 text-surface-500 hover:text-surface-800 dark:text-surface-400 dark:hover:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors disabled:opacity-50"
+        >
+          {loading ? "loading..." : `Load more (${remaining} older)`}
+        </button>
+      )}
     </div>
   );
 }

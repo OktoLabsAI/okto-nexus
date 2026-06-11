@@ -161,7 +161,17 @@ function Dashboard({
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
   const [workspaces, setWorkspaces] = useState<string[]>([]);
-  const [workspace, setWorkspace] = useState<string>("all");
+  // The workspace SCOPE is the user's choice and survives reloads: the
+  // serve's default only applies when nothing was ever picked (otherwise a
+  // default pointing at an empty workspace silently hides the whole graph
+  // right after the first render - the "edges vanish on refresh" effect).
+  const [workspace, setWorkspace] = useState<string>(
+    () => localStorage.getItem("okto-nexus-workspace") ?? "all",
+  );
+  const pickWorkspace = (id: string) => {
+    localStorage.setItem("okto-nexus-workspace", id);
+    setWorkspace(id);
+  };
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
   const [refreshTick, setRefreshTick] = useState(0);
@@ -186,9 +196,20 @@ function Dashboard({
       return !open;
     });
 
+  // Dedupe: a Live tick that fetches an UNCHANGED snapshot must not touch
+  // state at all - otherwise every SSE event rebuilds the whole Sigma scene
+  // (layout + camera) for nothing.
+  const lastSnapshotRef = useRef<string>("");
   const loadGraph = useCallback(async () => {
     try {
       const snapshot = await api.graph(workspace);
+      const fingerprint = JSON.stringify({
+        n: snapshot.nodes,
+        e: snapshot.edges,
+        w: snapshot.workspace_id,
+      });
+      if (fingerprint === lastSnapshotRef.current) return;
+      lastSnapshotRef.current = fingerprint;
       setGraph(snapshot);
     } catch {
       /* surfaced by the views */
@@ -197,11 +218,16 @@ function Dashboard({
 
   // Incremental updates (FR6): an SSE event triggers a TARGETED refetch of
   // the graph snapshot and feeds the live tail - never a full page reload.
+  // DEBOUNCED: connecting replays a backlog and busy swarms emit bursts;
+  // one trailing fetch 400ms after the last event of a burst replaces the
+  // fetch-per-event storm that froze the page on load.
+  const refetchTimerRef = useRef<number | undefined>(undefined);
   const sseStatus = useSSE(
     useCallback(
       (event: NexusEvent) => {
         setEventLog((log) => [...log.slice(-499), event]);
-        loadGraph();
+        window.clearTimeout(refetchTimerRef.current);
+        refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
       [loadGraph],
     ),
@@ -221,14 +247,20 @@ function Dashboard({
       .catch(() => undefined);
   }, [refreshTick]);
 
-  // Default scope = the serve's --project-root workspace (AC1).
+  // Default scope = the serve's --project-root workspace (AC1) - applied
+  // ONLY when the user never picked a scope on this browser AND the default
+  // actually has activity (sessions). A serve started from an unrelated cwd
+  // produces an EMPTY default workspace; auto-scoping to it blanks the graph
+  // right after the first paint - the "edges vanish on refresh" effect.
   useEffect(() => {
-    api
-      .info()
-      .then((info) => {
+    if (localStorage.getItem("okto-nexus-workspace")) return;
+    Promise.all([api.info(), api.sessions()])
+      .then(([info, sessions]) => {
         const def = (info as { default_workspace_id?: string | null })
           .default_workspace_id;
-        if (def) setWorkspace(def);
+        if (def && sessions.items.some((s) => s.workspace_id === def)) {
+          setWorkspace(def);
+        }
       })
       .catch(() => undefined);
   }, []);
@@ -279,13 +311,20 @@ function Dashboard({
         <div className="ml-auto flex items-center gap-2 text-xs">
           <select
             value={workspace}
-            onChange={(e) => setWorkspace(e.target.value)}
+            onChange={(e) => pickWorkspace(e.target.value)}
             className="rounded-lg border border-surface-200 dark:border-surface-700
               bg-white dark:bg-surface-800 px-2 py-1.5 max-w-[240px] text-xs
               focus:outline-none focus:ring-2 focus:ring-accent-500/40"
             title="Workspace scope"
           >
             <option value="all">All workspaces</option>
+            {/* The CURRENT scope must always be a real option: a value
+                missing from the list makes the browser DISPLAY the first
+                option ("All") while the actual fetch scope is something
+                else - a lying dropdown. */}
+            {workspace !== "all" && !workspaces.includes(workspace) && (
+              <option value={workspace}>{workspace.slice(0, 12)}… (empty)</option>
+            )}
             {workspaces.map((id) => (
               <option key={id} value={id}>
                 {id.slice(0, 12)}…
