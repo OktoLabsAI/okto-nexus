@@ -303,8 +303,28 @@ class SqliteAgentRepo(_ClockBacked):
         return [self._row_to_agent(row) for row in rows]
 
     def delete(self, uow: UnitOfWork, *, agent_id: str) -> bool:
-        """Remove the agent row; True if it existed (management surface)."""
+        """Remove the agent and its OWN dependent rows; True if it existed.
+
+        ``agents(agent_id)`` is referenced by ``sessions.agent_id`` and
+        ``message_deliveries.recipient_agent_id`` (both NOT NULL FKs), so a
+        bare DELETE on a real, active identity fails the constraint
+        (DB_ERROR). The management-surface contract is an IRREVERSIBLE
+        cleanup, so we cascade in FK-safe order inside the caller's
+        transaction: drop the agent's inbox deliveries (as recipient) and its
+        sessions first, then the identity. Messages it SENT are preserved -
+        ``messages.from_agent_id`` is not an FK, and other agents' inboxes
+        still reference those rows; erasing them would orphan peers'
+        deliveries. (Whole-store history removal is the reset surface, not
+        this.)
+        """
         try:
+            uow.connection.execute(
+                "DELETE FROM message_deliveries WHERE recipient_agent_id = ?",
+                (agent_id,),
+            )
+            uow.connection.execute(
+                "DELETE FROM sessions WHERE agent_id = ?", (agent_id,)
+            )
             cur = uow.connection.execute(
                 "DELETE FROM agents WHERE agent_id = ?", (agent_id,)
             )

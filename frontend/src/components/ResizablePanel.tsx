@@ -63,7 +63,8 @@ export function ResizablePanel({
   return (
     <aside
       className="relative shrink-0 border-l border-surface-200 dark:border-surface-700/60
-        bg-white/90 dark:bg-surface-900/90 backdrop-blur-md overflow-y-auto animate-slide-in-right"
+        bg-white/90 dark:bg-surface-900/90 backdrop-blur-md overflow-hidden
+        flex flex-col h-full animate-slide-in-right"
       style={{ width }}
       data-testid={testId}
     >
@@ -76,7 +77,7 @@ export function ResizablePanel({
           hover:bg-accent-500/40 active:bg-accent-500/60 transition-colors"
         data-testid="panel-resize-handle"
       />
-      <div className="p-4">{children}</div>
+      <div className="p-4 flex-1 min-h-0 flex flex-col">{children}</div>
     </aside>
   );
 }

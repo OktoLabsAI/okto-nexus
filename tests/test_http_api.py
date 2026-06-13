@@ -221,6 +221,61 @@ def test_delete_agent_removes_and_404s_afterwards(serve_env):
     )
 
 
+def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
+    """Deleting an agent that actually communicated must not 503 on its FKs.
+
+    ``sessions.agent_id`` and ``message_deliveries.recipient_agent_id`` are
+    NOT-NULL FKs to agents; the delete cascades its own dependent rows in one
+    transaction. Messages it SENT are preserved (not an FK; peers' inboxes
+    still reference them).
+    """
+    deps, client, operator_key = serve_env
+    repos = deps.repos
+    ws = "z" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        repos.workspaces.upsert(uow, workspace_id=ws)
+        for agent_id in ("victim", "peer"):
+            repos.agents.upsert(uow, agent_id=agent_id)
+        repos.sessions.create(
+            uow, session_id="s-victim", agent_id="victim", workspace_id=ws,
+            status="active",
+        )
+        # A message the victim received (delivery as recipient) ...
+        repos.messages.create(
+            uow, message_id="m-in", workspace_id=ws, from_agent_id="peer",
+            target='{"strategy":"direct","agent_id":"victim"}', subject="hi",
+            body="b",
+        )
+        repos.deliveries.create(
+            uow, delivery_id="d-in", message_id="m-in",
+            recipient_agent_id="victim", status="read",
+        )
+        # ... and one it SENT to a peer (must survive the delete).
+        repos.messages.create(
+            uow, message_id="m-out", workspace_id=ws, from_agent_id="victim",
+            target='{"strategy":"direct","agent_id":"peer"}', subject="bye",
+            body="b",
+        )
+        repos.deliveries.create(
+            uow, delivery_id="d-out", message_id="m-out",
+            recipient_agent_id="peer", status="unread",
+        )
+
+    assert (
+        client.delete("/api/v1/agents/victim", headers=_h(operator_key)).status_code
+        == 200
+    )
+    assert (
+        client.get("/api/v1/agents/victim", headers=_h(operator_key)).status_code
+        == 404
+    )
+    # The peer and the message the victim sent survive; the peer can still
+    # pull it from its inbox.
+    with deps.connection_factory.unit_of_work() as uow:
+        assert repos.agents.get(uow, "peer") is not None
+        assert repos.messages.get(uow, workspace_id=ws, message_id="m-out") is not None
+
+
 # --------------------------------------------------------------------------- #
 # Graph snapshot (AC5)
 # --------------------------------------------------------------------------- #

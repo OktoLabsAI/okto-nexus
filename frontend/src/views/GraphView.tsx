@@ -561,9 +561,9 @@ function ChatPanel({ agentId }: { agentId: string }) {
   const remaining = Math.max(0, total - entries.length);
 
   return (
-    <div className="space-y-2" data-testid="chat-panel">
+    <div className="flex flex-col gap-2 flex-1 min-h-0" data-testid="chat-panel">
       {peers.length > 6 && (
-        <div className="relative">
+        <div className="relative shrink-0">
           <Search
             size={12}
             className="absolute left-2 top-1/2 -translate-y-1/2 text-surface-400"
@@ -577,7 +577,7 @@ function ChatPanel({ agentId }: { agentId: string }) {
           />
         </div>
       )}
-      <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto pb-1">
+      <div className="flex flex-wrap gap-1 max-h-20 overflow-y-auto pb-1 shrink-0">
         {visiblePeers.map(({ peer, count }) => (
           <button
             key={peer}
@@ -613,7 +613,7 @@ function ChatPanel({ agentId }: { agentId: string }) {
       </div>
 
       {tab === FAILED_TAB && (
-        <p className="text-[11px] text-red-500/80 dark:text-red-300/80">
+        <p className="text-[11px] text-red-500/80 dark:text-red-300/80 shrink-0">
           Persisted sends whose target resolved to no eligible recipient
           {" \u2014 "}delivered to nobody. Sends to a nonexistent agent_id are
           rejected with no trace (full rollback, by bus design).
@@ -621,7 +621,7 @@ function ChatPanel({ agentId }: { agentId: string }) {
       )}
 
       {/* Newest first; "Load more" appends OLDER messages below. */}
-      <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1">
+      <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-1">
         {tab &&
           entries.map((m) => (
             <Bubble key={m.message_id} agentId={agentId} peer={tab} message={m} />
@@ -676,9 +676,9 @@ function SidePanel({
   }, [selection, agentId, workspace]);
 
   return (
-    <div className="text-xs space-y-3">
+    <div className="text-xs flex flex-col gap-3 flex-1 min-h-0">
       {dialog}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between shrink-0">
         <span className="font-display font-semibold text-sm text-surface-900 dark:text-surface-100">
           {selection.kind === "node"
             ? selection.node.agent_id
@@ -758,16 +758,16 @@ function SidePanel({
 
       {selection.kind === "node" && (
         <>
-          <div className="text-surface-500 dark:text-surface-400">
+          <div className="text-surface-500 dark:text-surface-400 shrink-0">
             role: {selection.node.role ?? "—"} · presence:{" "}
             <b style={{ color: presenceColor(selection.node.presence, theme) }}>
               {selection.node.presence}
             </b>
           </div>
-          <div className="text-surface-400">
+          <div className="text-surface-400 shrink-0">
             caps: {Object.keys(selection.node.capabilities).join(", ") || "—"}
           </div>
-          <div className="border-t border-surface-200 dark:border-surface-700 pt-2">
+          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 shrink-0">
             <div className="text-surface-600 dark:text-surface-300 font-medium mb-1">
               Inbox lanes
             </div>
@@ -786,7 +786,7 @@ function SidePanel({
               ))}
             </div>
           </div>
-          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
+          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1 shrink-0 max-h-32 overflow-y-auto">
             <div className="text-surface-600 dark:text-surface-300 font-medium">
               Sessions
             </div>
@@ -824,8 +824,8 @@ function SidePanel({
               </div>
             ))}
           </div>
-          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
-            <div className="text-surface-600 dark:text-surface-300 font-medium">
+          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 flex-1 min-h-0 flex flex-col gap-1">
+            <div className="text-surface-600 dark:text-surface-300 font-medium shrink-0">
               Conversations{" "}
               <span className="text-surface-400">· per peer</span>
             </div>
@@ -836,13 +836,13 @@ function SidePanel({
 
       {selection.kind === "edge" && (
         <>
-          <div className="text-surface-500 dark:text-surface-400">
+          <div className="text-surface-500 dark:text-surface-400 shrink-0">
             {selection.edge.count} messages · in flight:{" "}
             {selection.edge.in_flight.unread + selection.edge.in_flight.delivered} ·
             last: {selection.edge.last_at}
           </div>
-          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 space-y-1">
-            <div className="text-surface-600 dark:text-surface-300 font-medium">
+          <div className="border-t border-surface-200 dark:border-surface-700 pt-2 flex-1 min-h-0 flex flex-col gap-1">
+            <div className="text-surface-600 dark:text-surface-300 font-medium shrink-0">
               Pair conversation{" "}
               <span className="text-surface-400">
                 · from {selection.edge.from}'s perspective
@@ -898,7 +898,7 @@ function PairChat({ from, to }: { from: string; to: string }) {
   }
   const remaining = Math.max(0, total - entries.length);
   return (
-    <div className="max-h-80 overflow-y-auto space-y-1.5 pr-1">
+    <div className="flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-1">
       {entries.map((m) => (
         <Bubble key={m.message_id} agentId={from} peer={to} message={m} />
       ))}
