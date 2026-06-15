@@ -57,8 +57,11 @@ from . import tools as _tools_pkg
 
 #: Server-level guidance surfaced to connecting agents (FastMCP ``instructions``).
 #: Covers how to choose a communication channel, replying directly by default,
-#: starting a monitor when awaiting a reply, and the blocking-vs-follower
-#: monitoring mechanics.
+#: the canonical pre-flight, the inbox reception loop, and how a
+#: monitoring-capable harness (e.g. Claude Code) builds a listener - a
+#: backgrounded ``event_wait`` long-poll on THIS connection - plus the
+#: anti-patterns it must avoid (curl at the REST API, ``okto-nexus tail``, a
+#: standalone monitor process).
 SERVER_INSTRUCTIONS = """\
 Okto Nexus - local agent coordination bus (workspace-scoped; pass \
 project_root). Agents are global identities - discover them with agent_list, \
@@ -95,9 +98,9 @@ already tracking these deliveries.
   4. MONITOR - anchor first: event_cursor(stream="workspace") returns the \
 log's current end, so you only ever see events from NOW on. Then, if your \
 harness supports background/parallel calls, run an \
-event_wait(timeout_seconds=N, cursor=<anchor>) long-poll loop; otherwise \
-poll inbox_count + event_get(cursor=<anchor>) between turns, advancing the \
-cursor.
+event_wait(timeout_seconds=N, cursor=<anchor>) long-poll loop IN THE \
+BACKGROUND (see MONITORING FROM A CAPABLE HARNESS below); otherwise poll \
+inbox_count + event_get(cursor=<anchor>) between turns, advancing the cursor.
 THEN follow the user's instructions - communicate per the rules below. When \
 your work is finished for good, session_close (presence must reflect \
 reality).
@@ -177,20 +180,48 @@ Receipts never generate receipts, so acknowledging one is always terminal.
 LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait OBSERVE \
 the bus (audit/monitoring of message.created, handoff.*, session.* events); \
 they are NOT how you receive messages addressed to you - that is the inbox \
-above. To register a listener, use the MCP tools on THIS connection - do NOT \
-run `okto-nexus tail` or any other CLI command (that is an operator console \
-tool, not an agent surface; the dashboard already streams events live for \
-humans). Anchor with event_cursor first (pre-flight step 4), then:
+above. Anchor with event_cursor first (pre-flight step 4), then pick a mode:
   * Snapshot polling (default): event_get between turns, advancing cursor -> \
 next_cursor. Non-blocking, fits single-threaded loops.
   * Long-poll listener: event_wait(timeout_seconds=N>0, cursor=...) parks the \
 call until a matching event arrives or N elapses (clamped to the server \
-ceiling), then returns the page; loop on next_cursor. This is an ordinary \
-streamable-HTTP call - safe to use as a wait primitive when you EXPECT an \
-event.
+ceiling, default 30s), then returns the page; loop on next_cursor. This is an \
+ordinary streamable-HTTP call - safe to use as a wait primitive when you \
+EXPECT an event.
   * Targeted wait: event_wait with filters (e.g. {"type": \
 "handoff.completed", "handoff_id": ...}) and a short timeout to await one \
 specific outcome.
+
+MONITORING FROM A CAPABLE HARNESS (Claude Code & any harness that can run a \
+tool call in the BACKGROUND or in PARALLEL). A correct monitor is NOTHING but \
+event_wait called in a loop on THIS MCP connection - there is no daemon to \
+write, no socket to open, no process to supervise. Concretely:
+  * THE RIGHT WAY: start a background/parallel task whose ONLY job is to call \
+the event_wait TOOL (timeout_seconds=N>0, cursor=<last next_cursor>), and \
+re-arm it from the returned next_cursor each time it yields a page. Because \
+the long-poll runs OFF your main turn, your reasoning loop is never blocked; \
+because the call rides THIS connection, your API key already supplies your \
+identity, visibility and permissions. A timeout just returns an empty page - \
+re-arm and continue; that is the steady state, not an error.
+  * IF YOU CANNOT BACKGROUND A CALL (strictly single-threaded harness): do NOT \
+fake it with an external blocking process - fall back to snapshot polling, \
+i.e. event_get(cursor=...) between turns, advancing the cursor.
+  * ANTI-PATTERNS - never do any of these; each re-implements, worse, what one \
+tool call already does for free, and most break your identity or presence:
+      - NO curl / raw HTTP against the REST API (/api/v1), the /mcp endpoint, \
+or the dashboard's live SSE stream. Those are the human dashboard and the \
+operator's REST surface; hand-rolling them duplicates auth, cursoring and \
+visibility and drifts out of sync. Call the event_wait tool instead.
+      - NO `okto-nexus tail` (or any CLI command) as a listener. It is a \
+PASSIVE operator console, does not count as presence, and is not an agent \
+surface (older docs wrongly prescribed it).
+      - NO standalone "monitor" app/script/worker (Python, Node, shell, ...) \
+to poll the bus. That is overengineering: a separate process does not share \
+your identity/API key, does not keep your presence heartbeat fresh, and \
+cannot hand events back into your reasoning loop. The tool already does the \
+long-poll for you.
+      - NO spawning a helper process or a second server of any kind. The hub \
+is already running and this MCP session is your only required channel.
 
 PERMISSIONS. The operator may restrict what your identity can do (direct \
 sends, broadcasts, channel posts, handoff create/work/cancel, rate limits, \
@@ -242,7 +273,13 @@ retry.
 #: "message.read_receipt" notification in each sender's inbox (grouped per
 #: sender; receipts never generate receipts; disable with the
 #: inbox_read_receipts setting).
-SURFACE_REVISION = 10
+#: 11 = monitoring guidance for capable harnesses: SERVER_INSTRUCTIONS now
+#: spell out that a listener is just a BACKGROUNDED event_wait long-poll on
+#: THIS MCP connection (Claude Code & friends) and enumerate the anti-patterns
+#: to avoid - curl/raw HTTP at /api/v1, /mcp or the dashboard SSE; `okto-nexus
+#: tail` or any CLI; a standalone Python/Node monitor process; spawning any
+#: helper process. Doc-only (no tool/parameter/semantics change).
+SURFACE_REVISION = 11
 
 
 @dataclass

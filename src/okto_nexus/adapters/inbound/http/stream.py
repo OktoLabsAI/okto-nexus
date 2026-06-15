@@ -53,7 +53,10 @@ def build_router() -> APIRouter:
         cursor = _parse_cursor(request)
 
         def _fetch(after: int) -> list[dict]:
-            with deps.connection_factory.unit_of_work() as uow:
+            # Read-only SSE poll: a DEFERRED WAL snapshot (write=False) so this
+            # continuous loop never takes the write lock and never queues the
+            # dashboard behind the agents' writers (the stall root cause).
+            with deps.connection_factory.unit_of_work(write=False) as uow:
                 return observability.events_page(
                     uow,
                     cursor=after,

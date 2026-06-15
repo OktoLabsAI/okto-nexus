@@ -120,3 +120,28 @@ def tool_envelope(fn: Callable[..., Any]) -> Callable[..., dict[str, Any]]:
         return ok(result if isinstance(result, Mapping) else {"result": result})
 
     return wrapper
+
+
+def async_tool_envelope(fn: Callable[..., Any]) -> Callable[..., Any]:
+    """Async counterpart of :func:`tool_envelope` (same envelope guarantees).
+
+    For tool handlers defined as ``async def`` - in particular the long-poll
+    tools (``event_wait``, ``handoff_list_available``) that offload their
+    blocking sleep-poll to a worker thread via ``anyio.to_thread`` so a parked
+    listener never freezes the shared serve event loop (which also drives the
+    dashboard REST and every other MCP tool over streamable-HTTP).
+    """
+
+    @functools.wraps(fn)
+    async def wrapper(*args: Any, **kwargs: Any) -> dict[str, Any]:
+        try:
+            result = await fn(*args, **kwargs)
+        except OktoNexusError as exc:
+            return {"ok": False, "error": exc.to_error_dict()}
+        except Exception as exc:  # noqa: BLE001 - boundary catch is intentional
+            return err_from_exc(exc)
+        if isinstance(result, dict) and "ok" in result:
+            return result
+        return ok(result if isinstance(result, Mapping) else {"result": result})
+
+    return wrapper

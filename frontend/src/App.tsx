@@ -8,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   ChevronDown,
+  Compass,
   FolderOpen,
   HelpCircle,
   Info,
@@ -25,6 +26,11 @@ import {
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
+import { OnboardingModal } from "./components/onboarding/OnboardingModal";
+import {
+  isCompleted as onboardingDone,
+  reset as resetOnboarding,
+} from "./components/onboarding/onboardingStorage";
 import {
   api,
   clearApiKey,
@@ -178,6 +184,7 @@ function Dashboard({
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -188,6 +195,12 @@ function Dashboard({
     };
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
+  // First-run onboarding: shown once per browser (versioned localStorage),
+  // never nags a returning operator. Re-openable from the header menu.
+  useEffect(() => {
+    if (!onboardingDone()) setOnboardingOpen(true);
   }, []);
 
   const toggleSidebar = () =>
@@ -387,6 +400,18 @@ function Dashboard({
                 <button
                   onClick={() => {
                     setShowMenu(false);
+                    resetOnboarding();
+                    setOnboardingOpen(true);
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="menu-getting-started"
+                >
+                  <Compass size={14} />
+                  Getting started
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
                     setHelpOpen(true);
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
@@ -414,6 +439,9 @@ function Dashboard({
 
       {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
       {aboutOpen && <AboutModal onClose={() => setAboutOpen(false)} />}
+      {onboardingOpen && (
+        <OnboardingModal onClose={() => setOnboardingOpen(false)} />
+      )}
 
       <div className="flex flex-1 overflow-hidden">
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}

@@ -23,6 +23,9 @@ run instantly and assert sleep counts. Coverage spans:
 
 from __future__ import annotations
 
+import asyncio
+import functools
+import inspect
 import os
 import threading
 import time
@@ -197,7 +200,17 @@ class FakeServer:
 
     def tool(self, *args, **kwargs):
         def deco(fn):
-            self.tools[fn.__name__] = fn
+            # Async tools (event_wait's blocking long-poll now runs off the
+            # event loop) are exposed to these direct-call tests via a sync runner.
+            if inspect.iscoroutinefunction(fn):
+
+                @functools.wraps(fn)
+                def _sync(*a, **k):
+                    return asyncio.run(fn(*a, **k))
+
+                self.tools[fn.__name__] = _sync
+            else:
+                self.tools[fn.__name__] = fn
             return fn
 
         return deco

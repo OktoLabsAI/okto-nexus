@@ -28,6 +28,9 @@ addition to being verified directly against the append-only log.
 
 from __future__ import annotations
 
+import asyncio
+import functools
+import inspect
 import os
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, register_tools
@@ -41,7 +44,17 @@ class FakeServer:
 
     def tool(self, *args, **kwargs):
         def deco(fn):
-            self.tools[fn.__name__] = fn
+            # Async tools (event_wait / handoff_list_available run their blocking
+            # long-poll off the event loop) reach this smoke test via a sync runner.
+            if inspect.iscoroutinefunction(fn):
+
+                @functools.wraps(fn)
+                def _sync(*a, **k):
+                    return asyncio.run(fn(*a, **k))
+
+                self.tools[fn.__name__] = _sync
+            else:
+                self.tools[fn.__name__] = fn
             return fn
 
         return deco

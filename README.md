@@ -262,7 +262,7 @@ pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a che
 okto-nexus serve                        # → http://127.0.0.1:8202
 ```
 
-Package: `okto-nexus` v`0.0.1` — *Okto Nexus - Local Agent Coordination Bus
+Package: `okto-nexus` v`0.0.3` — *Okto Nexus - Local Agent Coordination Bus
 (MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
 SaaS/Branding Addendum + Trademark Policy.
 
@@ -518,8 +518,9 @@ cursor, no index, regardless of which workspace they were sent in. Between turns
 body (leased), then `inbox_ack` once handled. Unacked messages are **redelivered**
 (at-least-once). `inbox_peek` is a non-destructive look; `inbox_history` is the
 read archive. After sending something that expects a reply, just check your inbox
-on a later turn. `event_get`/`event_wait`/`okto-nexus tail` are for **observing**
-the bus, not for receiving your own messages. See
+on a later turn. `event_get`/`event_wait` are for **observing** the bus, not for
+receiving your own messages (`okto-nexus tail` is the operator's console
+equivalent, not an agent surface). See
 *[Message delivery & the inbox](#message-delivery--the-inbox)*.
 
 **Concept → tool quick map.**
@@ -532,7 +533,7 @@ the bus, not for receiving your own messages. See
 | Receive / read your messages | `inbox_count`, `inbox_pull`, `inbox_ack`, `inbox_peek`, `inbox_history` |
 | Organize messages by topic | `channel_create`, `channel_list` |
 | Dispatch work to one free worker | `handoff_create`, `handoff_list_available`, `handoff_claim`, `handoff_complete`, `handoff_reject`, `handoff_cancel`, `handoff_get` |
-| Observe the whole bus | `event_get`, `event_wait`, `okto-nexus tail` |
+| Observe the whole bus | `event_get`, `event_wait` (operators: `okto-nexus tail`) |
 | Identity & presence | `agent_register`, `session_open`/`session_heartbeat`/`session_close` |
 
 ### Workspace isolation
@@ -665,32 +666,51 @@ max; `timeout_seconds` `None`→ceiling at the service layer (the MCP tool
 defaults it to `0` = snapshot), `<= 0` → a single `event_get` with no sleep,
 else `min(timeout, ceiling)`.
 
-### Monitoring patterns (background follower)
+### Monitoring patterns
 
 These patterns are for **observing** the bus (audit/monitoring) — to *receive
 messages addressed to you*, use your [inbox](#message-delivery--the-inbox), not
-these. `event_wait` is a **blocking** long-poll: with `timeout_seconds > 0` the
-call parks the caller's turn until an event arrives or the timeout expires. Pick
-the mode that fits your harness so it is never forced to block:
+these. Anchor once with `event_cursor` (so you start from *now*, not the historic
+backlog), then pick the mode that fits your harness so it is **never forced to
+block**:
 
-- **Background follower (recommended).** If your harness can spawn a detached
-  process, run the CLI follower and treat each NDJSON line as a notification —
-  the agent loop stays free, idle cost ~0. It is the layer-clean replacement for
-  reading `nexus.db` directly (visibility/routing stay enforced):
-
-  ```bash
-  okto-nexus tail --project-root <path> --agent-id <you> --from latest \
-      --exclude-agent <you>          # drop your own echo
-  ```
+- **Backgrounded `event_wait` (recommended for agents).** If your harness can
+  run a tool call in the background or in parallel (e.g. Claude Code), launch a
+  task whose only job is to call the **`event_wait` tool on this MCP connection**
+  — `timeout_seconds=N>0`, `cursor=<last next_cursor>` — and re-arm it from the
+  returned `next_cursor` each time it yields a page. The agent loop stays free;
+  because the call rides your authenticated connection, identity, visibility and
+  permissions come for free. A timeout just returns an empty page
+  (`timed_out=true`) — re-arm and continue; that is the steady state, not an
+  error.
 
 - **In-loop, no background.** Call with `timeout_seconds=0` for a **non-blocking
   snapshot** (single scan, no sleep) and poll between turns, advancing
   `cursor` → `next_cursor`. Don't use a long timeout if you can't park the turn.
 
-- **Targeted wait.** A short `timeout_seconds` (e.g. 30) is fine to await the
-  reply to a message you just sent, accepting the block.
+- **Targeted wait.** A short `timeout_seconds` (e.g. 30) with `filters` (e.g.
+  `{"type": "message.read"}`) awaits one expected event — the read receipt of a
+  message you sent, a `handoff.completed`, etc.
 
-Four things a real monitor must handle — the `tail` follower does all of them:
+**Anti-patterns — don't.** A monitor is *nothing but* `event_wait` in a loop on
+your MCP connection; there is no daemon to write, no socket to open, no process
+to supervise. Avoid:
+
+- **curl / raw HTTP** against the REST API (`/api/v1`), the `/mcp` endpoint, or
+  the dashboard's live SSE stream — those are the human dashboard and the
+  operator's REST surface; hand-rolling them duplicates auth, cursoring and
+  visibility and drifts out of sync. Call the `event_wait` tool instead.
+- **a standalone "monitor" app/script/worker** (Python, Node, shell, …) to poll
+  the bus — overengineering: a separate process doesn't share your identity/API
+  key, doesn't keep your presence heartbeat fresh, and can't hand events back
+  into your reasoning loop. The tool already does the long-poll for you.
+- **spawning any helper process or a second server** — the hub is already
+  running and the MCP session is your only required channel.
+
+**`okto-nexus tail` is the operator console, not an agent surface.** It is the
+human/CI way to watch the bus from a terminal — NDJSON lines, visibility and
+routing still enforced — and the layer-clean replacement for reading `nexus.db`
+directly. It also handles four things a hand-rolled monitor would miss:
 
 - **Own echo.** The follower emits *every* visible event, including the caller's
   own, so a naive monitor reacts to itself. `--exclude-agent <you>` drops them
@@ -706,12 +726,12 @@ Four things a real monitor must handle — the `tail` follower does all of them:
   (`CONFIG_ERROR`). A crash between flush and persist re-emits at most one
   window — at-least-once, coherent with the inbox lease/ack model.
 - **Passive presence.** The follower never stamps the agent's `last_seen_at`
-  (unlike the MCP `event_get`/`event_wait` tools), so a detached monitor cannot
+  (unlike the MCP `event_get`/`event_wait` tools), so a detached console cannot
   keep an otherwise-idle agent's liveness signal eternally fresh.
 
 > The block is a property of the current **stdio** long-poll. The roadmap's
 > SSE/HTTP transport would replace polling with server **push** (no blocking, no
-> busy-wait), at which point the background-follower workaround becomes optional.
+> busy-wait), at which point even the in-loop snapshot fallback becomes optional.
 
 ### Channels & messages
 
@@ -1552,7 +1572,7 @@ The `okto-nexus` entry point dispatches on its first argument:
 | Invocation | What it does |
 |---|---|
 | `okto-nexus [flags]` | Run the MCP stdio server (the default). |
-| `okto-nexus tail …` | Follow the workspace event log as NDJSON (the background-monitor pattern — see [Monitoring patterns](#monitoring-patterns-background-follower)). |
+| `okto-nexus tail …` | Follow the workspace event log as NDJSON — the **operator console** for watching the bus from a terminal (agents monitor with a backgrounded `event_wait`; see [Monitoring patterns](#monitoring-patterns)). |
 | `okto-nexus admin prune …` | Enforce the retention windows and print a JSON report. |
 
 Unrecognised flags on `tail`/`admin` (e.g. `--home`, `--db-path`) are forwarded

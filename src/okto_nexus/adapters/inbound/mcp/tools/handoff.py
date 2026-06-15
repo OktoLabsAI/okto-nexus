@@ -21,8 +21,10 @@ passed into :func:`register`, matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
+import functools
 from typing import Annotated, Any
 
+import anyio.to_thread
 from pydantic import Field
 
 from okto_nexus.adapters.outbound.sqlite.handoff_repo import SqliteHandoffRepo
@@ -36,7 +38,11 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
 )
 from okto_nexus.application.handoff import HandoffService
 from okto_nexus.application.identity import SessionTrustGuard
-from okto_nexus.envelope import require_json_object_param, tool_envelope
+from okto_nexus.envelope import (
+    async_tool_envelope,
+    require_json_object_param,
+    tool_envelope,
+)
 
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
@@ -215,8 +221,8 @@ def register(server: Any, deps: Any) -> None:
         )
 
     @server.tool()
-    @tool_envelope
-    def handoff_list_available(
+    @async_tool_envelope
+    async def handoff_list_available(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
         cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
@@ -231,12 +237,18 @@ def register(server: Any, deps: Any) -> None:
         wrong type returns the canonical ``VALIDATION_ERROR`` envelope, not an
         SDK validation error.
         """
-        return service.handoff_list_available(
-            project_root=project_root,
-            agent_id=agent_id,
-            cursor=cursor,
-            limit=limit,
-            timeout_seconds=timeout_seconds,
+        # Long-poll OFF the event loop (mirrors event_wait): the blocking wait
+        # runs in a worker thread so a parked listener never freezes the shared
+        # serve event loop (dashboard REST + every other MCP tool over HTTP).
+        return await anyio.to_thread.run_sync(
+            functools.partial(
+                service.handoff_list_available,
+                project_root=project_root,
+                agent_id=agent_id,
+                cursor=cursor,
+                limit=limit,
+                timeout_seconds=timeout_seconds,
+            )
         )
 
     @server.tool()

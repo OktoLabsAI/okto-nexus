@@ -27,8 +27,10 @@ matching the ``register(server, deps)`` contract.
 
 from __future__ import annotations
 
+import functools
 from typing import Annotated, Any
 
+import anyio.to_thread
 from pydantic import Field
 
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
@@ -40,7 +42,7 @@ from okto_nexus.application.events import (
     DEFAULT_EVENT_LIMIT,
     EventService,
 )
-from okto_nexus.envelope import tool_envelope
+from okto_nexus.envelope import async_tool_envelope, tool_envelope
 
 #: Reused parameter descriptions (kept DRY across the two event tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
@@ -146,8 +148,8 @@ def register(server: Any, deps: Any) -> None:
         }
 
     @server.tool()
-    @tool_envelope
-    def event_wait(
+    @async_tool_envelope
+    async def event_wait(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         stream: Annotated[str, Field(description=_P_STREAM)],
@@ -179,14 +181,20 @@ def register(server: Any, deps: Any) -> None:
         Remember: events are OBSERVABILITY. Messages addressed to you arrive
         in your inbox (inbox_count / inbox_pull / inbox_ack), not here.
         """
-        # Safe-by-default: an omitted/null timeout is a snapshot; the
-        # application layer would treat None as "use the server ceiling".
-        return service.event_wait(
-            project_root=project_root,
-            agent_id=agent_id,
-            stream=stream,
-            cursor=cursor,
-            limit=limit,
-            filters=filters,
-            timeout_seconds=0 if timeout_seconds is None else timeout_seconds,
+        # Long-poll OFF the event loop: the blocking sleep-poll runs in a
+        # worker thread so a parked event_wait never freezes the shared serve
+        # event loop (which also drives the dashboard REST + every other MCP
+        # tool over streamable-HTTP). Safe-by-default: an omitted/null timeout
+        # is a snapshot; the application layer treats None as the server ceiling.
+        return await anyio.to_thread.run_sync(
+            functools.partial(
+                service.event_wait,
+                project_root=project_root,
+                agent_id=agent_id,
+                stream=stream,
+                cursor=cursor,
+                limit=limit,
+                filters=filters,
+                timeout_seconds=0 if timeout_seconds is None else timeout_seconds,
+            )
         )

@@ -48,15 +48,27 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
     return _err(status, str(exc.code), exc.message)
 
 
-async def _run(request: Request, fn):
-    """Execute ``fn(uow, state)`` in a worker thread with a fresh UoW."""
+async def _run(request: Request, fn, *, write: bool = True):
+    """Execute ``fn(uow)`` in a worker thread with a fresh UoW.
+
+    ``write`` defaults to True (``BEGIN IMMEDIATE``) for the mutating routes.
+    Read-only routes MUST go through :func:`_read` (``write=False``): a
+    DEFERRED WAL snapshot read never queues behind the agents' writers under
+    the busy-timeout, which is what caused the dashboard's intermittent
+    multi-second stalls (empty panels) while the bus was busy.
+    """
     deps = request.app.state.deps
 
     def _call():
-        with deps.connection_factory.unit_of_work() as uow:
+        with deps.connection_factory.unit_of_work(write=write) as uow:
             return fn(uow)
 
     return await anyio.to_thread.run_sync(_call)
+
+
+async def _read(request: Request, fn):
+    """``_run`` for a read-only route: a deferred WAL snapshot (no writer queue)."""
+    return await _run(request, fn, write=False)
 
 
 # --------------------------------------------------------------------------- #
@@ -159,7 +171,7 @@ def build_router() -> APIRouter:
             ).fetchone()
             return int(row[0]) if row and row[0] is not None else 0
 
-        schema_version = await _run(request, _info)
+        schema_version = await _read(request, _info)
         try:
             package_version = importlib.metadata.version("okto-nexus")
         except importlib.metadata.PackageNotFoundError:
@@ -190,7 +202,7 @@ def build_router() -> APIRouter:
         observability = request.app.state.observability
         workspace_id = None if workspace in (None, "", "all") else workspace
         try:
-            snapshot = await _run(
+            snapshot = await _read(
                 request,
                 lambda uow: observability.graph_snapshot(
                     uow, workspace_id=workspace_id, window_hours=window_hours
@@ -217,7 +229,7 @@ def build_router() -> APIRouter:
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
-            data = await _run(
+            data = await _read(
                 request,
                 lambda uow: observability.messages_history(
                     uow,
@@ -247,7 +259,7 @@ def build_router() -> APIRouter:
         """The chat's peer picker: per-peer counts + last activity (O(peers))."""
         observability = request.app.state.observability
         try:
-            data = await _run(
+            data = await _read(
                 request,
                 lambda uow: observability.conversation_peers(uow, agent_id=agent),
             )
@@ -263,7 +275,7 @@ def build_router() -> APIRouter:
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
-            rows = await _run(
+            rows = await _read(
                 request,
                 lambda uow: observability.handoffs(
                     uow, workspace_id=workspace, status=status
@@ -279,7 +291,7 @@ def build_router() -> APIRouter:
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
-            rows = await _run(
+            rows = await _read(
                 request,
                 lambda uow: observability.sessions(
                     uow, workspace_id=workspace, status=status
@@ -299,7 +311,7 @@ def build_router() -> APIRouter:
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
-            rows = await _run(
+            rows = await _read(
                 request,
                 lambda uow: observability.events_page(
                     uow,
@@ -378,12 +390,12 @@ def build_router() -> APIRouter:
                 _public_agent(agent) for agent in deps.repos.agents.list(uow)
             ]
 
-        return _ok({"items": await _run(request, _list)})
+        return _ok({"items": await _read(request, _list)})
 
     @router.get("/agents/{agent_id}")
     async def get_agent(request: Request, agent_id: str) -> JSONResponse:
         deps = request.app.state.deps
-        agent = await _run(request, lambda uow: deps.repos.agents.get(uow, agent_id))
+        agent = await _read(request, lambda uow: deps.repos.agents.get(uow, agent_id))
         if agent is None:
             return _err(404, "NOT_FOUND", "agent not found")
         return _ok(_public_agent(agent))
@@ -505,7 +517,7 @@ def build_router() -> APIRouter:
             return [_public_preset(p) for p in deps.repos.presets.list(uow)]
 
         try:
-            custom = await _run(request, _list)
+            custom = await _read(request, _list)
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok(
@@ -687,7 +699,7 @@ def build_router() -> APIRouter:
     async def get_settings(request: Request) -> JSONResponse:
         service = request.app.state.settings_service
         try:
-            items = await _run(request, lambda uow: service.describe(uow))
+            items = await _read(request, lambda uow: service.describe(uow))
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"items": items})

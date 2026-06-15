@@ -18,6 +18,9 @@ monotonicity.
 
 from __future__ import annotations
 
+import asyncio
+import functools
+import inspect
 import json
 import threading
 import time
@@ -169,7 +172,17 @@ class FakeServer:
 
     def tool(self, *args, **kwargs):
         def deco(fn):
-            self.tools[fn.__name__] = fn
+            # Async tools (handoff_list_available's blocking long-poll now runs
+            # off the event loop) reach these direct-call tests via a sync runner.
+            if inspect.iscoroutinefunction(fn):
+
+                @functools.wraps(fn)
+                def _sync(*a, **k):
+                    return asyncio.run(fn(*a, **k))
+
+                self.tools[fn.__name__] = _sync
+            else:
+                self.tools[fn.__name__] = fn
             return fn
 
         return deco
