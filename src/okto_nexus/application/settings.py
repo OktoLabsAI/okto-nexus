@@ -15,7 +15,12 @@ import json
 from dataclasses import dataclass, replace
 from typing import Any
 
-from ..config import NexusConfig, TRUST_MODES
+from ..config import (
+    EMBEDDING_MODES,
+    MIN_RETENTION_MESSAGES_KEEP_DAYS,
+    NexusConfig,
+    TRUST_MODES,
+)
 from ..errors import ErrorCode, OktoNexusError
 from .ports import Clock, UnitOfWork
 
@@ -126,6 +131,22 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "retention_closed_sessions_keep_days", "int",
         "Window (days) for CLOSED sessions. Active/stale sessions are never pruned.",
         minimum=1, maximum=3650,
+    ),
+    SettingSpec(
+        "retention_messages_keep_days", "int",
+        "Window (days) for MESSAGES: prune removes messages older than this by "
+        "PURE AGE, regardless of delivery status, taking their deliveries and "
+        "embeddings with them. Hard minimum 7 (fail-closed).",
+        minimum=MIN_RETENTION_MESSAGES_KEEP_DAYS, maximum=3650,
+    ),
+    SettingSpec(
+        "embedding_mode", "enum",
+        "Semantic search over message content: 'off' disables it (no embeddings; "
+        "/messages/search answers EMBEDDINGS_UNAVAILABLE); 'stub' uses a "
+        "zero-dependency deterministic provider; 'local' uses "
+        "sentence-transformers (requires the [embeddings] extra). Takes effect "
+        "after a restart.",
+        choices=EMBEDDING_MODES, requires_restart=True,
     ),
     SettingSpec(
         "auto_prune_on_start", "bool",

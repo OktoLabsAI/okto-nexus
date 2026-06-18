@@ -40,6 +40,9 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
+from okto_nexus.adapters.outbound.sqlite.embeddings_repo import (
+    SqliteMessageVectorStore,
+)
 from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
     SqliteMessageDeliveryRepo,
@@ -141,10 +144,18 @@ def build_service(deps: Any) -> MessageService:
         repos.sessions = SqliteSessionRepo(deps.clock)
     if getattr(repos, "deliveries", None) is None:
         repos.deliveries = SqliteMessageDeliveryRepo(deps.clock)
+    if getattr(repos, "message_vectors", None) is None:
+        repos.message_vectors = SqliteMessageVectorStore(deps.clock)
     if getattr(deps, "event_emitter", None) is None:
         if getattr(repos, "events", None) is None:
             repos.events = SqliteEventRepo(deps.clock)
         deps.event_emitter = SqliteEventEmitter(repos.events)
+
+    # Embedding generation is wired ONLY when the resolved capability carries a
+    # provider (off mode -> None -> generation is a no-op). The vector store is
+    # always present; the provider gates whether anything is written.
+    embedding = getattr(deps, "embedding", None)
+    embedding_provider = embedding.provider if embedding is not None else None
 
     return MessageService(
         connection_factory=deps.connection_factory,
@@ -159,6 +170,8 @@ def build_service(deps: Any) -> MessageService:
         max_inline_bytes=deps.config.max_inline_bytes,
         presence_ttl_seconds=deps.config.presence_ttl_seconds,
         trust_mode=deps.config.trust_mode,
+        embedding_provider=embedding_provider,
+        message_vectors=repos.message_vectors,
     )
 
 

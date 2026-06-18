@@ -21,19 +21,37 @@ import sys
 from pathlib import Path
 from typing import Mapping
 
+from ....config import EMBEDDING_MODE_LOCAL
 from ....errors import ErrorCode, OktoNexusError
 
 DEFAULT_PORT = 8202
 DEFAULT_HOST = "127.0.0.1"
 
+#: Upper bound (seconds) on uvicorn's graceful shutdown wait. Long-lived
+#: connections - the dashboard SSE feed and MCP streamable clients - never
+#: complete on their own, so without a ceiling CTRL+C hangs "finalizing" until
+#: the operator kills the terminal. The SSE generator self-exits on
+#: ``server.should_exit`` (see http/stream.py), so this is only the backstop
+#: for any other wedged connection, never the common path.
+GRACEFUL_SHUTDOWN_SECONDS = 5.0
+
 _PORT_ENV = "OKTO_NEXUS_PORT"
 _HOST_ENV = "OKTO_NEXUS_HOST"
+_LOG_LEVEL_ENV = "OKTO_NEXUS_LOG_LEVEL"
+
+#: Default console verbosity: WARNING, so a normal serve shows only warnings and
+#: errors. The operator opts into the chatty INFO/DEBUG (uvicorn access logs and
+#: the ML/HTTP libraries during model load) with ``--log-level`` or the
+#: ``OKTO_NEXUS_LOG_LEVEL`` env var.
+DEFAULT_LOG_LEVEL = "warning"
+_VALID_LOG_LEVELS = ("critical", "error", "warning", "info", "debug", "trace")
 
 
 def _split_serve_args(
     args: list[str], env: Mapping[str, str]
-) -> tuple[int, str, str, list[str]]:
-    """Extract serve-specific flags; return (port, host, project_root, rest).
+) -> tuple[int, str, str, str, list[str]]:
+    """Extract serve-specific flags; return (port, host, project_root,
+    log_level, rest).
 
     ``rest`` is handed to ``load_config`` untouched, so every existing
     ``--home``/``--db-path``/TTL flag keeps working on the serve command.
@@ -41,13 +59,14 @@ def _split_serve_args(
     port_raw = env.get(_PORT_ENV)
     host = env.get(_HOST_ENV) or DEFAULT_HOST
     project_root = "."
+    log_level = env.get(_LOG_LEVEL_ENV) or DEFAULT_LOG_LEVEL
     rest: list[str] = []
 
     i = 0
     while i < len(args):
         token = args[i]
         flag, _, inline = token.partition("=")
-        if flag in ("--port", "--host", "--project-root"):
+        if flag in ("--port", "--host", "--project-root", "--log-level"):
             if inline:
                 value = inline
             else:
@@ -63,8 +82,10 @@ def _split_serve_args(
                 port_raw = value
             elif flag == "--host":
                 host = value
-            else:
+            elif flag == "--project-root":
                 project_root = value
+            else:
+                log_level = value
         else:
             rest.append(token)
         i += 1
@@ -82,7 +103,16 @@ def _split_serve_args(
                 f"Invalid port: {port_raw!r} (expected 1-65535).",
                 {"port": port_raw},
             ) from None
-    return port, host, project_root, rest
+
+    log_level = str(log_level).strip().lower()
+    if log_level not in _VALID_LOG_LEVELS:
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            f"Invalid log level: {log_level!r} (expected one of "
+            f"{', '.join(_VALID_LOG_LEVELS)}).",
+            {"log_level": log_level},
+        )
+    return port, host, project_root, log_level, rest
 
 
 def _mcp_json_snippet(host: str, port: int, api_key: str) -> str:
@@ -114,6 +144,9 @@ Options:
   --home P            Data directory (default ~/.okto_nexus)
   --db-path P         SQLite file (default {home}/nexus.db)
   --trust-mode M      open | strict
+  --log-level L       Console verbosity: critical|error|warning|info|debug|
+                      trace (default warning; env OKTO_NEXUS_LOG_LEVEL). Only
+                      warnings/errors show unless raised to info or higher.
   -h, --help          Show this help
 
 Any other --flag accepted by the okto-nexus configuration (TTLs, retention
@@ -150,11 +183,68 @@ def _print_banner() -> None:
         pass
 
 
-def _watch_ready(server: "object", host: str, port: int) -> None:
+#: Third-party loggers that flood the console at INFO - uvicorn's per-request
+#: access log and the ML/HTTP stack chattering through the embedding model load
+#: (download HEADs, "using cpu", session-manager start). Quieted to WARNING
+#: unless the operator opts into >= info via --log-level.
+_NOISY_LOGGERS = (
+    "uvicorn",
+    "uvicorn.error",
+    "uvicorn.access",
+    "httpx",
+    "httpcore",
+    "huggingface_hub",
+    "transformers",
+    "sentence_transformers",
+    "filelock",
+    "urllib3",
+    "mcp",
+    "asyncio",
+)
+
+
+def _configure_logging(level: str) -> None:
+    """Apply the serve console verbosity. Default WARNING shows only warnings
+    and errors; the operator raises it with ``--log-level info|debug|trace``.
+
+    Besides the root level, this quiets the chatty ML/HTTP libraries that dump
+    INFO while the embedding model loads and disables their progress bars - the
+    library knobs are env-driven and read at import time, and the model loads
+    lazily in the warm-up thread, so setting them here still takes effect."""
+    import logging
+
+    numeric = {
+        "critical": logging.CRITICAL,
+        "error": logging.ERROR,
+        "warning": logging.WARNING,
+        "info": logging.INFO,
+        "debug": logging.DEBUG,
+        "trace": logging.DEBUG,
+    }.get(level, logging.WARNING)
+    logging.getLogger().setLevel(numeric)
+
+    verbose = level in ("info", "debug", "trace")
+    floor = numeric if verbose else logging.WARNING
+    for name in _NOISY_LOGGERS:
+        logging.getLogger(name).setLevel(floor)
+    if not verbose:
+        os.environ.setdefault("TRANSFORMERS_VERBOSITY", "error")
+        os.environ.setdefault("HF_HUB_VERBOSITY", "error")
+        os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+        os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+
+
+def _watch_ready(
+    server: "object", host: str, port: int, embeddings_done: "object"
+) -> None:
     """Announce readiness ONLY once uvicorn flips ``started`` - which by
     construction means the lifespan completed (the MCP session manager is
     running) AND the socket is accepting connections. Pulse's
-    ``_log_ready_servers`` grammar."""
+    ``_log_ready_servers`` grammar.
+
+    The final "ready" line waits on ``embeddings_done`` so completion is never
+    announced before the embedding warm-up resolves (the warm-up thread sets
+    the event immediately when there is nothing to load)."""
     import time
 
     while not getattr(server, "started", False):
@@ -176,10 +266,61 @@ def _watch_ready(server: "object", host: str, port: int) -> None:
         f"http://{host}:{port}",
         file=sys.stderr,
     )
+    # Hold "ready" until the embedding warm-up resolves; bail out promptly if
+    # the operator CTRL+C's during a long first-run model download.
+    while not embeddings_done.wait(timeout=0.5):
+        if getattr(server, "should_exit", False):
+            return
     print(
         "[okto-nexus] Startup complete - Okto Nexus is ready",
         file=sys.stderr,
     )
+
+
+def _warm_embeddings(deps: "object", done_event: "object") -> None:
+    """Eagerly load the local embedding model at startup (mirrors the Pulse KG
+    warm-up) so the model is hot BEFORE the first message/search and the
+    operator sees it come up - instead of the model lazy-loading silently on
+    the first request.
+
+    No-op for off/stub or a degraded local (the extra is absent and generation
+    fell back to the stub). Best-effort: a warm-up failure is logged and
+    swallowed so the serve stays up and the model lazy-loads on first use.
+    Runs on a daemon thread so model load (and a possible first-run download)
+    never blocks the serve from accepting connections. ALWAYS signals
+    ``done_event`` on exit (no-op, success or failure) so the readiness watcher
+    never blocks waiting for the model."""
+    import time
+
+    try:
+        embedding = getattr(deps, "embedding", None)
+        provider = getattr(embedding, "provider", None)
+        if embedding is None or provider is None:
+            return
+        if embedding.mode != EMBEDDING_MODE_LOCAL or embedding.degraded:
+            return
+        print(
+            f"[okto-nexus] Loading embedding model {provider.model} "
+            f"(first run may download the model) ...",
+            file=sys.stderr,
+        )
+        started = time.monotonic()
+        try:
+            provider.encode("warmup")  # forces the lazy load + one forward pass
+        except Exception as exc:  # noqa: BLE001 - warm-up must never crash serve
+            print(
+                f"[okto-nexus] Embedding model warm-up FAILED "
+                f"({type(exc).__name__}: {exc}); it will lazy-load on first use.",
+                file=sys.stderr,
+            )
+            return
+        print(
+            f"[okto-nexus] Embedding model loaded: {provider.model} "
+            f"({time.monotonic() - started:.1f}s)",
+            file=sys.stderr,
+        )
+    finally:
+        done_event.set()
 
 
 def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
@@ -212,7 +353,10 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     from ..http.lock import ServeLock
 
     try:
-        port, host, project_root, rest = _split_serve_args(list(args), env)
+        port, host, project_root, log_level, rest = _split_serve_args(
+            list(args), env
+        )
+        _configure_logging(log_level)
         deps = bootstrap(env, rest)
     except OktoNexusError as exc:
         print(
@@ -271,10 +415,31 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             )
 
         server = uvicorn.Server(
-            uvicorn.Config(app, host=host, port=port, log_level="info")
+            uvicorn.Config(
+                app,
+                host=host,
+                port=port,
+                log_level=log_level,
+                timeout_graceful_shutdown=GRACEFUL_SHUTDOWN_SECONDS,
+            )
         )
+        # The SSE feed reads this to end its otherwise-infinite generator the
+        # moment CTRL+C flips should_exit, so an open dashboard never holds the
+        # graceful-shutdown wait open (the "stuck finalizing" report).
+        app.state.server = server
+        # Warm the embedding model in the background (mirrors Pulse) so it is
+        # hot before the first request; no-op unless embedding_mode=local with
+        # the extra present. build_app already re-resolved deps.embedding from
+        # the effective (override-applied) mode. The readiness watcher waits on
+        # this event so the final "ready" line prints AFTER the model is loaded.
+        embeddings_done = threading.Event()
         threading.Thread(
-            target=_watch_ready, args=(server, host, port), daemon=True
+            target=_warm_embeddings, args=(deps, embeddings_done), daemon=True
+        ).start()
+        threading.Thread(
+            target=_watch_ready,
+            args=(server, host, port, embeddings_done),
+            daemon=True,
         ).start()
         try:
             server.run()

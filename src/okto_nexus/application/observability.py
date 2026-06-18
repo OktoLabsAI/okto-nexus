@@ -157,6 +157,8 @@ class ObservabilityService:
         page: int = 1,
         page_size: int = 50,
         peer_id: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
         undelivered_only: bool = False,
         include_body: bool = False,
     ) -> dict[str, Any]:
@@ -177,6 +179,8 @@ class ObservabilityService:
             page=page,
             page_size=page_size,
             peer_id=peer_id,
+            from_agent_id=from_agent_id,
+            to_agent_id=to_agent_id,
             undelivered_only=undelivered_only,
             include_body=include_body,
         )

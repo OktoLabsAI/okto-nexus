@@ -19,7 +19,7 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import Sigma from "sigma";
 import { NodeSquareProgram } from "@sigma/node-square";
 import { DashedEdgeArrowProgram } from "../graph/DashedEdgeProgram";
-import { Ban, Search, X } from "lucide-react";
+import { Ban, RotateCw, Search, X } from "lucide-react";
 import {
   api,
   type ConversationPeer,
@@ -30,8 +30,10 @@ import {
   type MessageRow,
 } from "../api";
 import { useConfirm } from "../components/Confirm";
+import { LiveChip } from "../components/LiveChip";
 import { Markdown } from "../components/Markdown";
 import { ResizablePanel } from "../components/ResizablePanel";
+import type { SSEStatus } from "../useSSE";
 
 type ThemeName = "light" | "dark";
 
@@ -91,11 +93,15 @@ export function GraphView({
   workspace,
   onChanged,
   theme,
+  liveTick,
+  sseStatus,
 }: {
   graph: GraphSnapshot | null;
   workspace: string;
   onChanged: () => void;
   theme: ThemeName;
+  liveTick?: number;
+  sseStatus?: SSEStatus;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selection, setSelection] = useState<Selection>(null);
@@ -330,6 +336,8 @@ export function GraphView({
             theme={theme}
             onClose={() => setSelection(null)}
             onChanged={onChanged}
+            liveTick={liveTick}
+            sseStatus={sseStatus}
           />
         </ResizablePanel>
       )}
@@ -489,7 +497,13 @@ function Bubble({
 // back into history 10 messages at a time (lazy - a long history is never
 // materialised up front). Peer list is an O(peers) SQL aggregate with a
 // client-side search filter, so it scales past the handful-of-tabs stage.
-function ChatPanel({ agentId }: { agentId: string }) {
+function ChatPanel({
+  agentId,
+  refreshKey,
+}: {
+  agentId: string;
+  refreshKey: number;
+}) {
   const [peers, setPeers] = useState<ConversationPeer[]>([]);
   const [failedCount, setFailedCount] = useState(0);
   const [filter, setFilter] = useState("");
@@ -498,6 +512,11 @@ function ChatPanel({ agentId }: { agentId: string }) {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  // Latest open tab, read by the refresh path without re-subscribing to it.
+  const tabRef = useRef<string | null>(null);
+  useEffect(() => {
+    tabRef.current = tab;
+  }, [tab]);
 
   const fetchPage = (peer: string, pageNum: number, append: boolean) => {
     setLoading(true);
@@ -520,24 +539,51 @@ function ChatPanel({ agentId }: { agentId: string }) {
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => {
-    setFilter("");
+  // Reload the peer list. preserveTab=true (refresh / live) keeps the open
+  // conversation and refetches its newest page; false (agent change) selects
+  // the first peer.
+  const loadPeers = (preserveTab: boolean) => {
     api
       .conversationPeers(agentId)
       .then(({ items, failed_count }) => {
         setPeers(items);
         setFailedCount(failed_count);
-        const first = items[0]?.peer ?? (failed_count > 0 ? FAILED_TAB : null);
-        setTab(first);
-        if (first) fetchPage(first, 1, false);
+        const cur = tabRef.current;
+        const keep =
+          preserveTab &&
+          cur != null &&
+          (cur === FAILED_TAB
+            ? failed_count > 0
+            : items.some((p) => p.peer === cur));
+        const next = keep
+          ? cur
+          : (items[0]?.peer ?? (failed_count > 0 ? FAILED_TAB : null));
+        setTab(next);
+        if (next) fetchPage(next, 1, false);
         else {
           setEntries([]);
           setTotal(0);
         }
       })
       .catch(() => undefined);
+  };
+
+  useEffect(() => {
+    setFilter("");
+    loadPeers(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [agentId]);
+
+  // Refresh button / live update: reload preserving the open tab. Skip mount.
+  const firstRefresh = useRef(true);
+  useEffect(() => {
+    if (firstRefresh.current) {
+      firstRefresh.current = false;
+      return;
+    }
+    loadPeers(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey]);
 
   const openTab = (peer: string) => {
     setTab(peer);
@@ -650,19 +696,44 @@ function SidePanel({
   theme,
   onClose,
   onChanged,
+  liveTick,
+  sseStatus,
 }: {
   selection: NonNullable<Selection>;
   workspace: string;
   theme: ThemeName;
   onClose: () => void;
   onChanged: () => void;
+  liveTick?: number;
+  sseStatus?: SSEStatus;
 }) {
   const { confirm, dialog } = useConfirm();
   const [sessions, setSessions] = useState<
     { session_id: string; status: string; last_heartbeat_at: string | null }[]
   >([]);
+  // Bumping refreshKey re-runs every data fetch in this panel (sessions + the
+  // chat/pair timeline). Driven by the manual Refresh button and, while the
+  // panel is open, by live bus activity (liveTick).
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refresh = () => {
+    setRefreshKey((k) => k + 1);
+    onChanged(); // also refresh the underlying graph (edge/node badges)
+  };
 
   const agentId = selection.kind === "node" ? selection.node.agent_id : "";
+
+  // Live update: a new bus event (liveTick changes) refreshes the panel,
+  // debounced so a burst coalesces into one refetch. The initial mount is
+  // skipped — the fetches below already run when the panel opens.
+  const liveSeen = useRef(false);
+  useEffect(() => {
+    if (!liveSeen.current) {
+      liveSeen.current = true;
+      return;
+    }
+    const t = window.setTimeout(() => setRefreshKey((k) => k + 1), 700);
+    return () => window.clearTimeout(t);
+  }, [liveTick]);
 
   useEffect(() => {
     if (selection.kind === "node") {
@@ -673,7 +744,7 @@ function SidePanel({
         )
         .catch(() => undefined);
     }
-  }, [selection, agentId, workspace]);
+  }, [selection, agentId, workspace, refreshKey]);
 
   return (
     <div className="text-xs flex flex-col gap-3 flex-1 min-h-0">
@@ -686,9 +757,27 @@ function SidePanel({
               ? `${selection.edge.from} → ${selection.edge.to}`
               : `Handoff · ${selection.handoff.status}`}
         </span>
-        <button className="btn btn-secondary !px-2" onClick={onClose}>
-          <X size={14} />
-        </button>
+        <div className="flex items-center gap-1.5">
+          {/* Live monitor indicator: this panel refetches on every bus event
+              (liveTick) while open, so it carries the SAME ● Live chip as the
+              header/canvas, reflecting the real SSE connection state. */}
+          <LiveChip status={sseStatus ?? "off"} />
+          <button
+            className="btn btn-secondary !px-2"
+            onClick={refresh}
+            title="Refresh"
+            data-testid="side-panel-refresh"
+          >
+            <RotateCw size={14} />
+          </button>
+          <button
+            className="btn btn-secondary !px-2"
+            onClick={onClose}
+            title="Close"
+          >
+            <X size={14} />
+          </button>
+        </div>
       </div>
 
       {selection.kind === "handoff" && (
@@ -829,7 +918,7 @@ function SidePanel({
               Conversations{" "}
               <span className="text-surface-400">· per peer</span>
             </div>
-            <ChatPanel agentId={agentId} />
+            <ChatPanel agentId={agentId} refreshKey={refreshKey} />
           </div>
         </>
       )}
@@ -848,7 +937,11 @@ function SidePanel({
                 · from {selection.edge.from}'s perspective
               </span>
             </div>
-            <PairChat from={selection.edge.from} to={selection.edge.to} />
+            <PairChat
+              from={selection.edge.from}
+              to={selection.edge.to}
+              refreshKey={refreshKey}
+            />
           </div>
         </>
       )}
@@ -858,7 +951,15 @@ function SidePanel({
 
 // Pair conversation (edge click) - same server-paginated, newest-first
 // grammar as the per-peer chat panel.
-function PairChat({ from, to }: { from: string; to: string }) {
+function PairChat({
+  from,
+  to,
+  refreshKey,
+}: {
+  from: string;
+  to: string;
+  refreshKey: number;
+}) {
   const [entries, setEntries] = useState<MessageRow[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -887,7 +988,7 @@ function PairChat({ from, to }: { from: string; to: string }) {
     setEntries([]);
     fetchPage(1, false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from, to]);
+  }, [from, to, refreshKey]);
 
   if (entries.length === 0 && !loading) {
     return (

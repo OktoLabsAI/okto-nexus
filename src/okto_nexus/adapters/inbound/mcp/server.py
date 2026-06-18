@@ -36,9 +36,11 @@ from ....config import NexusConfig, load_config
 from ....envelope import tool_envelope
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
+from ...outbound.embedding import EmbeddingResolution, resolve_embedding_provider
 from ...outbound.file.store import WorkspaceFileStore
 from ...outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from ...outbound.sqlite.connection import ConnectionFactory
+from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
 from ...outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
 from ...outbound.sqlite.identity_repo import (
@@ -305,6 +307,9 @@ class Deps:
     clock: Clock
     repos: Repos = field(default_factory=Repos)
     event_emitter: EventEmitter | None = None
+    # Resolved embedding capability (provider + search/degraded flags) for the
+    # configured ``embedding_mode``. ``None`` until bootstrap wires it.
+    embedding: EmbeddingResolution | None = None
 
 
 def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
@@ -335,6 +340,7 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         artifacts=SqliteArtifactRepo(clock),
         files=WorkspaceFileStore(),
         presets=SqlitePresetRepo(clock),
+        message_vectors=SqliteMessageVectorStore(clock),
     )
     emitter = SqliteEventEmitter(events_repo)
     return repos, emitter
@@ -357,12 +363,17 @@ def bootstrap(
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
     clock = SystemClock()
     repos, emitter = build_repos(clock)
+    # Resolve the embedding capability ONCE from the configured mode (off /
+    # stub / local). The model singleton is lazy, so this stays cheap even for
+    # ``local``; an absent extra degrades to the stub with search disabled.
+    embedding = resolve_embedding_provider(config.embedding_mode)
     return Deps(
         config=config,
         connection_factory=factory,
         clock=clock,
         repos=repos,
         event_emitter=emitter,
+        embedding=embedding,
     )
 
 

@@ -71,10 +71,19 @@ def build_router() -> APIRouter:
             # polling request.is_disconnected() here can block on the
             # exhausted receive channel under the test client.
             nonlocal cursor
+            # Server shutdown is the OTHER exit: the client stays connected, so
+            # nothing cancels this generator. uvicorn flips ``should_exit`` the
+            # instant CTRL+C is pressed (before the graceful-shutdown wait), so
+            # breaking on it lets this otherwise-infinite feed end on its own
+            # instead of wedging shutdown. Absent under the test client (no
+            # uvicorn server on app.state) -> falls back to client-cancel only.
+            server = getattr(request.app.state, "server", None)
             since_ping = 0.0
             # Resume pass first: everything already written past the cursor
             # flushes immediately on connect (AC6).
             while True:
+                if server is not None and server.should_exit:
+                    break
                 rows = await anyio.to_thread.run_sync(_fetch, cursor)
                 if rows:
                     for row in rows:

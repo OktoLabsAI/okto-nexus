@@ -28,8 +28,11 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
 from ....application.observability import ObservabilityService
+from ....application.search import MessageSearchService
 from ....application.settings import SettingsService, detect_pinned_fields
 from ....errors import OktoNexusError
+from ...outbound.embedding import resolve_embedding_provider
+from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
 from ..mcp.server import (
     SERVER_INSTRUCTIONS,
@@ -180,13 +183,35 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     observability = ObservabilityService(
         SqliteObservabilityQueries(), deps.clock, deps.config
     )
-    # Runtime settings: stored overrides apply NOW (under CLI/env pins) so
-    # the dashboard-managed values survive restarts.
+    # Runtime settings FIRST: stored (dashboard-managed) overrides must land on
+    # deps.config BEFORE anything reads it - critically embedding_mode, which
+    # bootstrap resolved from the un-overridden config. Without this ordering a
+    # dashboard-set embedding_mode stayed inert across restarts (the capability
+    # was resolved before its override was applied).
     settings_service = SettingsService(
         deps.config, deps.clock, detect_pinned_fields(deps.config)
     )
     with deps.connection_factory.unit_of_work() as uow:
         settings_service.apply_overrides(uow)
+    # Re-resolve the embedding capability from the NOW-effective mode so a
+    # stored embedding_mode (off/stub/local) actually takes effect. Cheap: the
+    # real model is lazy-loaded (serve warms it separately). Skip when the
+    # bootstrap-resolved mode already matches (keeps any test-injected value).
+    if deps.embedding is None or deps.embedding.mode != deps.config.embedding_mode:
+        deps.embedding = resolve_embedding_provider(deps.config.embedding_mode)
+    embedding = deps.embedding
+    # Semantic search (Frente 3): the resolved embedding capability gates both
+    # the query provider and whether search answers at all. The vector store is
+    # always present (built in bootstrap; constructed here defensively).
+    if deps.repos.message_vectors is None:
+        deps.repos.message_vectors = SqliteMessageVectorStore(deps.clock)
+    search_service = MessageSearchService(
+        connection_factory=deps.connection_factory,
+        provider=embedding.provider,
+        vectors=deps.repos.message_vectors,
+        messages=deps.repos.messages,
+        search_enabled=bool(embedding.search_enabled),
+    )
     mcp_server = create_http_mcp_server(deps)
     mcp_app = mcp_server.streamable_http_app()
 
@@ -240,6 +265,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     app.state.deps = deps
     app.state.auth = auth
     app.state.observability = observability
+    app.state.search = search_service
     app.state.settings_service = settings_service
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0

@@ -848,6 +848,84 @@ class MessageDeliveryRepo(Protocol):
 
 
 # --------------------------------------------------------------------------- #
+# Semantic search: embedding provider + message vector store (external services
+# behind hexagonal ports - the domain NEVER imports sentence-transformers /
+# torch / sqlite; it only ever sees these Protocols). Decisions D-EMB-1/3.
+# --------------------------------------------------------------------------- #
+@runtime_checkable
+class EmbeddingProvider(Protocol):
+    """Turns message text into a fixed-dimension embedding vector.
+
+    The EXTERNAL embedding service, fronted so the application never depends on
+    a concrete model. Two adapters implement it: a zero-dependency STUB
+    (deterministic SHA256 -> floats, used in CI / when the optional extra is
+    absent) and a sentence-transformers model (``all-MiniLM-L6-v2``, 384 dims)
+    under the ``okto-nexus[embeddings]`` extra. Both return a vector of exactly
+    :attr:`dim` floats; the same input always maps to the same vector for a
+    given provider.
+    """
+
+    @property
+    def dim(self) -> int:
+        """Fixed dimensionality of every vector this provider emits (e.g. 384)."""
+        ...
+
+    @property
+    def model(self) -> str:
+        """Opaque model identifier stored alongside each vector (provenance)."""
+        ...
+
+    def encode(self, text: str) -> list[float]:
+        """Embed one text into a ``dim``-length vector of floats."""
+        ...
+
+    def encode_batch(self, texts: Sequence[str]) -> list[list[float]]:
+        """Embed many texts at once (same order); each row has ``dim`` floats."""
+        ...
+
+
+@runtime_checkable
+class MessageVectorStore(Protocol):
+    """Persistence + cosine retrieval for per-message embedding vectors.
+
+    The vector-store seam (D-EMB-3: a SQLite ``message_embeddings`` table with a
+    BLOB vector + brute-force cosine today; swappable for ``sqlite-vec`` / an
+    external vector DB later without touching the domain). The embedding's
+    lifecycle is coupled to the message via ``ON DELETE CASCADE`` (D-EMB-5), so
+    this port exposes no bulk-prune method: deleting the message row drops its
+    vector automatically.
+    """
+
+    def upsert(
+        self,
+        uow: UnitOfWork,
+        *,
+        message_id: str,
+        vector: Sequence[float],
+        model: str,
+        dim: int,
+        created_at: str | None = None,
+    ) -> None:
+        """Insert/replace the vector for ``message_id`` (serialised as a BLOB)."""
+        ...
+
+    def search(
+        self, uow: UnitOfWork, *, query_vector: Sequence[float], k: int
+    ) -> list[tuple[str, float]]:
+        """Return up to ``k`` ``(message_id, cosine_score)`` pairs, best first.
+
+        Vectors whose stored ``dim`` differs from the query's are SKIPPED (a
+        provider change leaves incompatible rows that must not corrupt the
+        ranking), never raised on.
+        """
+        ...
+
+    def delete(self, uow: UnitOfWork, *, message_id: str) -> int:
+        """Delete the vector for ``message_id``; return rows removed (0 or 1)."""
+        ...
+
+
+# --------------------------------------------------------------------------- #
 # Tasks / handoffs / artifacts
 # --------------------------------------------------------------------------- #
 @runtime_checkable
@@ -1099,3 +1177,4 @@ class Repos:
     artifacts: ArtifactRepo | None = None
     files: FileStore | None = None
     presets: PresetRepo | None = None
+    message_vectors: MessageVectorStore | None = None

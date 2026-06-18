@@ -70,6 +70,42 @@ DEFAULT_RETENTION_READ_DELIVERIES_KEEP_DAYS = 14
 #: sessions are NEVER pruned, regardless of age.
 DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS = 7
 
+#: Default retention window (days) for MESSAGES (spec D-EMB-6). Messages expire
+#: by PURE AGE (``created_at``), independent of delivery status - deliberately
+#: breaking the "Nexus never deletes an undelivered message" invariant the
+#: owner chose to relax. The reaper is opportunistic (runs only under
+#: ``auto_prune_on_start`` / ``admin prune``), so this window only ever applies
+#: when a prune is actually invoked. HARD minimum 7 (fail-closed): a value < 7
+#: is rejected at startup so a typo can never purge the bus aggressively.
+DEFAULT_RETENTION_MESSAGES_KEEP_DAYS = 30
+
+#: Minimum accepted ``retention_messages_keep_days`` (owner directive). Enforced
+#: both at config parse (CONFIG_ERROR) and on any per-call override.
+MIN_RETENTION_MESSAGES_KEEP_DAYS = 7
+
+# --------------------------------------------------------------------------- #
+# Semantic search over message content (spec: Frente 3 - embeddings). The
+# embedding provider is selected by this closed-vocabulary knob, parsed
+# fail-closed like every other enum field:
+#   * ``off``   (default) - no embedding is generated and /messages/search
+#     answers EMBEDDINGS_UNAVAILABLE. The bus ships embeddings-free.
+#   * ``stub``  - deterministic zero-dependency provider (SHA256 -> 384 floats);
+#     generation AND search both work (the CI / test mode).
+#   * ``local`` - sentence-transformers/all-MiniLM-L6-v2 under the optional
+#     ``okto-nexus[embeddings]`` extra. With the extra installed, generation and
+#     search use the real model; WITHOUT it, generation degrades to the stub
+#     (best-effort, never blocks a send) and search answers
+#     EMBEDDINGS_UNAVAILABLE (the operator asked for a real model that is absent).
+# --------------------------------------------------------------------------- #
+EMBEDDING_MODE_OFF = "off"
+EMBEDDING_MODE_STUB = "stub"
+EMBEDDING_MODE_LOCAL = "local"
+EMBEDDING_MODES: tuple[str, ...] = (
+    EMBEDDING_MODE_OFF,
+    EMBEDDING_MODE_STUB,
+    EMBEDDING_MODE_LOCAL,
+)
+
 
 @dataclass
 class NexusConfig:
@@ -100,6 +136,8 @@ class NexusConfig:
     retention_closed_sessions_keep_days: int = (
         DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS
     )
+    retention_messages_keep_days: int = DEFAULT_RETENTION_MESSAGES_KEEP_DAYS
+    embedding_mode: str = EMBEDDING_MODE_OFF
     auto_prune_on_start: bool = False
     # Deliver a read receipt to the SENDER's inbox when a recipient
     # acknowledges its message (opt-out; live-tunable - no restart).
@@ -204,6 +242,15 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_RETENTION_CLOSED_SESSIONS_KEEP_DAYS,
         0,
     ),
+    # Messages retention is the one window with a HARD floor: by owner directive
+    # the keep-days knob may never drop below 7, so a value < 7 fails closed at
+    # startup (CONFIG_ERROR) instead of silently purging the bus aggressively.
+    "retention_messages_keep_days": (
+        "OKTO_NEXUS_RETENTION_MESSAGES_KEEP_DAYS",
+        "--retention-messages-keep-days",
+        DEFAULT_RETENTION_MESSAGES_KEEP_DAYS,
+        MIN_RETENTION_MESSAGES_KEEP_DAYS,
+    ),
 }
 
 # field: (env var, CLI flag, default, allowed values) - closed-vocabulary
@@ -214,6 +261,12 @@ _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
         "--trust-mode",
         TRUST_MODE_OPEN,
         TRUST_MODES,
+    ),
+    "embedding_mode": (
+        "OKTO_NEXUS_EMBEDDING_MODE",
+        "--embedding-mode",
+        EMBEDDING_MODE_OFF,
+        EMBEDDING_MODES,
     ),
 }
 

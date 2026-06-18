@@ -115,3 +115,34 @@ def test_conversation_peers_aggregate(seeded):
     assert data["items"] == sorted(
         data["items"], key=lambda p: p["last_at"], reverse=True
     )
+
+
+def test_from_to_agent_filters_are_independent_and_combinable(seeded):
+    """Directional DE/PARA filters: from_agent (sender), to_agent (recipient),
+    each independent of the OR-combined ``agent`` and AND-combinable together."""
+    client = seeded
+
+    # from_agent: everything alice SENT (6 -> bob, 1 -> carol, 1 failed = 8).
+    sent = client.get("/api/v1/messages?from_agent=alice").json()["data"]
+    assert sent["total"] == 8
+    assert {m["from_agent_id"] for m in sent["items"]} == {"alice"}
+
+    # to_agent: everything bob RECEIVED (only the 6 from alice).
+    recv = client.get("/api/v1/messages?to_agent=bob").json()["data"]
+    assert recv["total"] == 6
+    assert all(
+        any(d["recipient_agent_id"] == "bob" for d in m["deliveries"])
+        for m in recv["items"]
+    )
+
+    # Combined (AND): alice -> bob only (the 6-message side of the pair).
+    pair = client.get(
+        "/api/v1/messages?from_agent=alice&to_agent=bob"
+    ).json()["data"]
+    assert pair["total"] == 6
+    assert {m["from_agent_id"] for m in pair["items"]} == {"alice"}
+
+    # to_agent=carol resolves the single alice->carol side message.
+    carol = client.get("/api/v1/messages?to_agent=carol").json()["data"]
+    assert carol["total"] == 1
+    assert carol["items"][0]["subject"] == "side"

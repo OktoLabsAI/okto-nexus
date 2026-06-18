@@ -17,6 +17,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
+from ....application.search import EmbeddingsUnavailable
 from ....domain.base import new_id
 from ....domain.permissions import (
     BUILTIN_PRESETS,
@@ -224,6 +225,8 @@ def build_router() -> APIRouter:
         page: int = 1,
         page_size: int = 50,
         peer: str | None = None,
+        from_agent: str | None = None,
+        to_agent: str | None = None,
         undelivered: bool = False,
         include_body: bool = False,
     ) -> JSONResponse:
@@ -242,12 +245,39 @@ def build_router() -> APIRouter:
                     page=page,
                     page_size=page_size,
                     peer_id=peer,
+                    from_agent_id=from_agent,
+                    to_agent_id=to_agent,
                     undelivered_only=undelivered,
                     include_body=include_body,
                 ),
             )
         except ValueError as exc:
             return _err(422, "INVALID_PARAM", str(exc))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/messages/search")
+    async def messages_search(
+        request: Request, q: str | None = None, k: str | None = None
+    ) -> JSONResponse:
+        """Semantic search over message content (cosine over embeddings).
+
+        ``q`` is the query text (required); ``k`` defaults to 10 and is clamped
+        to ``[1, 50]``. Read-only. Without a usable embedding provider the
+        response is ``503 EMBEDDINGS_UNAVAILABLE`` and the rest of the system is
+        unaffected. ``k`` is taken as a string so an out-of-range value is
+        CLAMPED (not a framework 422); a non-integer ``k`` is a VALIDATION_ERROR.
+        """
+        search = request.app.state.search
+
+        def _search():
+            return search.search(query=q, k=k)
+
+        try:
+            data = await anyio.to_thread.run_sync(_search)
+        except EmbeddingsUnavailable as exc:
+            return _err(503, "EMBEDDINGS_UNAVAILABLE", str(exc))
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok(data)

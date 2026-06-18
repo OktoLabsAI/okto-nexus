@@ -122,6 +122,18 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="N",
         help="Override the closed-sessions window (default: config, 7 days).",
     )
+    prune.add_argument(
+        "--messages-keep-days",
+        dest="messages_keep_days",
+        type=int,
+        default=None,
+        metavar="N",
+        help=(
+            "Override the messages window (default: config, 30 days; HARD "
+            "minimum 7). Messages expire by PURE AGE regardless of delivery "
+            "status, taking their deliveries and embeddings with them."
+        ),
+    )
 
     issue_keys = sub.add_parser(
         "issue-keys",
@@ -215,6 +227,7 @@ def run_admin(
             events_keep_days=ns.events_keep_days,
             read_deliveries_keep_days=ns.read_deliveries_keep_days,
             closed_sessions_keep_days=ns.closed_sessions_keep_days,
+            messages_keep_days=ns.messages_keep_days,
             dry_run=ns.dry_run,
             vacuum=ns.vacuum,
         )

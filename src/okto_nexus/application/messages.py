@@ -57,9 +57,11 @@ from .ports import (
     ChannelRepo,
     Clock,
     ConnectionFactory,
+    EmbeddingProvider,
     EventEmitter,
     MessageDeliveryRepo,
     MessageRepo,
+    MessageVectorStore,
     SessionRepo,
     UnitOfWork,
     WorkspaceRepo,
@@ -88,6 +90,8 @@ class MessageService:
         max_inline_bytes: int,
         presence_ttl_seconds: int = DEFAULT_PRESENCE_TTL_SECONDS,
         trust_mode: str = TRUST_MODE_OPEN,
+        embedding_provider: EmbeddingProvider | None = None,
+        message_vectors: MessageVectorStore | None = None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -101,6 +105,10 @@ class MessageService:
         self._max_inline_bytes = int(max_inline_bytes)
         self._presence_ttl = int(presence_ttl_seconds)
         self._trust_mode = str(trust_mode)
+        # Semantic-search generation (Frente 3): both None unless embedding is
+        # enabled. When wired, create_message embeds NEW messages best-effort.
+        self._embedding_provider = embedding_provider
+        self._message_vectors = message_vectors
 
     # ------------------------------------------------------------------ #
     # message_create
@@ -322,7 +330,58 @@ class MessageService:
                 # The upsert materialised a BRAND-NEW workspace: surface it so a
                 # mistyped project_root never creates a phantom silently.
                 data["workspace_created"] = True
+
+        # Best-effort semantic index of the NEW message, in its OWN unit of work
+        # AFTER the send committed (TR3 / br_0bdedc28): a failure here never
+        # aborts the send or the fan-out, and there is no backfill of history.
+        self._maybe_generate_embedding(
+            message_id=message_id, subject=subject, body=body, created_at=now
+        )
         return data
+
+    # ------------------------------------------------------------------ #
+    # Semantic-search generation (Frente 3)
+    # ------------------------------------------------------------------ #
+    @staticmethod
+    def _embed_text(subject: Any, body: Any) -> str:
+        """The text fed to the embedder: subject + body when both are present."""
+        parts = [
+            part
+            for part in (subject, body)
+            if isinstance(part, str) and part.strip()
+        ]
+        return "\n".join(parts)
+
+    def _maybe_generate_embedding(
+        self, *, message_id: str, subject: Any, body: Any, created_at: str
+    ) -> None:
+        """Generate + persist the message embedding, BEST-EFFORT (never raises).
+
+        No-op when embedding is disabled (no provider / no vector store wired)
+        or the body is empty/whitespace (FR4: only messages WITH a body are
+        embedded). Encoding happens BEFORE the write transaction opens so the
+        WAL writer lock is held only for the upsert. EVERY failure - provider
+        error, DB lock, anything - is swallowed: the message is already sent.
+        """
+        provider = self._embedding_provider
+        vectors = self._message_vectors
+        if provider is None or vectors is None:
+            return
+        if not _is_nonempty_str(body):
+            return
+        try:
+            vector = provider.encode(self._embed_text(subject, body))
+            with self._cf.unit_of_work() as uow:
+                vectors.upsert(
+                    uow,
+                    message_id=message_id,
+                    vector=vector,
+                    model=provider.model,
+                    dim=provider.dim,
+                    created_at=created_at,
+                )
+        except Exception:  # noqa: BLE001 - best-effort: a failed embed never aborts the send
+            return
 
     # ------------------------------------------------------------------ #
     # channel_create / channel_list

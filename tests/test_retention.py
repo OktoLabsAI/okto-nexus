@@ -50,6 +50,12 @@ from conftest import FakeClock
 #: The deterministic "now" every service-level test prunes at (canonical form).
 NOW = "2026-06-07T00:00:00.000000Z"
 
+#: A messages window so wide the messages reaper (D-EMB-6) is a no-op: the
+#: pre-existing reaper tests below exercise the events/deliveries/sessions
+#: windows in ISOLATION, so they hold messages out of scope explicitly. The
+#: message reaper has its own dedicated tests (test_embeddings.py).
+MESSAGES_HELD = 36500
+
 
 def days_ago(days: float, base: str = NOW) -> str:
     return iso_plus(base, -days * 86400.0)
@@ -192,6 +198,7 @@ def make_service(factory, tmp_path, *, config: NexusConfig | None = None, **kwar
         events=SqliteEventRepo(FakeClock(iso=NOW)),
         deliveries=SqliteMessageDeliveryRepo(FakeClock(iso=NOW)),
         sessions=SqliteSessionRepo(FakeClock(iso=NOW)),
+        messages=SqliteMessageRepo(FakeClock(iso=NOW)),
         **kwargs,
     )
 
@@ -229,7 +236,10 @@ def test_prune_deletes_old_read_deliveries_and_keeps_recent_read(
         created_at=days_ago(60), read_at=days_ago(2),
     )
 
-    report = make_service(migrated_factory, tmp_path).prune()  # default 14d
+    # Hold messages out of scope: this test isolates the read-deliveries window.
+    report = make_service(migrated_factory, tmp_path).prune(
+        messages_keep_days=MESSAGES_HELD
+    )  # default 14d for read deliveries
 
     assert report["tables"]["message_deliveries"] == {"deleted": 1, "complete": True}
     assert ids_in(migrated_factory, "message_deliveries", "delivery_id") == {
@@ -283,8 +293,11 @@ def test_prune_never_deletes_unread_delivered_or_parked_deliveries(
     )
 
     # Most aggressive possible windows: everything older than NOW is eligible.
+    # Messages held out (MESSAGES_HELD) so the message reaper does not cascade
+    # into these deliveries - this test isolates the DELIVERY lane protection.
     report = make_service(migrated_factory, tmp_path).prune(
-        events_keep_days=0, read_deliveries_keep_days=0, closed_sessions_keep_days=0
+        events_keep_days=0, read_deliveries_keep_days=0, closed_sessions_keep_days=0,
+        messages_keep_days=MESSAGES_HELD,
     )
 
     # Only the read row went; every protected lane survived 500 days of age.
@@ -319,8 +332,11 @@ def test_prune_never_touches_handoffs_messages_or_open_sessions(
         started_at=days_ago(500),
     )
 
+    # Messages held out (this test asserts handoffs/open-sessions are never
+    # touched; message age-out has its own coverage in test_embeddings.py).
     make_service(migrated_factory, tmp_path).prune(
-        events_keep_days=0, read_deliveries_keep_days=0, closed_sessions_keep_days=0
+        events_keep_days=0, read_deliveries_keep_days=0, closed_sessions_keep_days=0,
+        messages_keep_days=MESSAGES_HELD,
     )
 
     assert ids_in(migrated_factory, "handoffs", "handoff_id") == {"h_open", "h_done"}
@@ -341,7 +357,9 @@ def test_prune_dry_run_counts_without_deleting(migrated_factory, tmp_path):
         created_at=days_ago(60), read_at=days_ago(20),
     )
 
-    report = make_service(migrated_factory, tmp_path).prune(dry_run=True, vacuum=True)
+    report = make_service(migrated_factory, tmp_path).prune(
+        dry_run=True, vacuum=True, messages_keep_days=MESSAGES_HELD
+    )
 
     assert report["dry_run"] is True
     assert report["tables"]["events"] == {"deleted": 2, "complete": True}
@@ -496,7 +514,7 @@ def test_admin_prune_cli_deletes_and_prints_report(tmp_path):
     assert report["dry_run"] is False
     assert report["tables"]["events"] == {"deleted": 1, "complete": True}
     assert report["windows_days"] == {
-        "events": 30, "read_deliveries": 14, "closed_sessions": 7,
+        "events": 30, "read_deliveries": 14, "closed_sessions": 7, "messages": 30,
     }
     assert count_rows(factory, "events") == 1  # only the fresh event remains
 

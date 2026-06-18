@@ -239,6 +239,70 @@ class SqliteMessageRepo(_ClockBacked):
             raise _db_error("counting recent messages", exc) from exc
         return int(row[0])
 
+    def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+        """Count messages with ``created_at < cutoff`` (the reaper dry-run view).
+
+        By PURE AGE, independent of delivery status - matches the predicate of
+        :meth:`prune_before` exactly (spec D-EMB-6 / rule br_cff2f2db).
+        """
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM messages WHERE created_at < ?", (cutoff,)
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting prunable messages", exc) from exc
+        return int(row[0])
+
+    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
+        """Delete up to ``limit`` messages with ``created_at < cutoff``; return count.
+
+        The messages reaper (spec D-EMB-6): purges by PURE AGE regardless of
+        delivery lane, deliberately relaxing the "never delete an undelivered
+        message" invariant. Inbound FKs are RESTRICT, so within this ONE batch
+        transaction the order is:
+
+        1. delete the batch's ``message_deliveries`` (the inbox rows);
+        2. NULL out ``parent_message_id`` on any message that referenced a
+           message in the batch (a surviving reply keeps existing as a thread
+           root instead of dangling against a deleted parent - the self-FK);
+        3. delete the batch's ``messages``.
+
+        The embedding rows in ``message_embeddings`` drop automatically via
+        ``ON DELETE CASCADE`` (D-EMB-5) - no explicit delete needed, no orphan
+        left. Oldest first, bounded by ``limit`` so each batch holds the WAL
+        writer lock only briefly (rule br_2d26fb6d).
+        """
+        try:
+            ids = [
+                row["message_id"]
+                for row in uow.connection.execute(
+                    "SELECT message_id FROM messages WHERE created_at < ? "
+                    "ORDER BY created_at ASC, rowid ASC LIMIT ?",
+                    (cutoff, int(limit)),
+                ).fetchall()
+            ]
+            if not ids:
+                return 0
+            placeholders = ",".join("?" * len(ids))
+            uow.connection.execute(
+                f"DELETE FROM message_deliveries WHERE message_id IN ({placeholders})",
+                tuple(ids),
+            )
+            # Clear self-FK references from ANY surviving message so deleting the
+            # batch never trips the RESTRICT on messages.parent_message_id.
+            uow.connection.execute(
+                f"UPDATE messages SET parent_message_id = NULL "
+                f"WHERE parent_message_id IN ({placeholders})",
+                tuple(ids),
+            )
+            cur = uow.connection.execute(
+                f"DELETE FROM messages WHERE message_id IN ({placeholders})",
+                tuple(ids),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("pruning messages", exc) from exc
+        return int(cur.rowcount)
+
     def list(
         self,
         uow: UnitOfWork,

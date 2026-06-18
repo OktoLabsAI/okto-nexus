@@ -11,7 +11,13 @@ that aged past their configured window, under hard SAFETY INVARIANTS:
   ``active``/``stale`` sessions are NEVER deleted regardless of age (the lane
   predicates are baked into the adapters' SQL, so the protection is
   structural, not a runtime check).
-* Handoffs, tasks, messages, channels, agents, workspaces and artifacts are
+* MESSAGES are the ONE exception (spec D-EMB-6, by owner directive): they
+  expire by PURE AGE (``created_at``), independent of delivery status, with a
+  HARD minimum window of 7 days (fail-closed). The reaper deletes a message's
+  ``message_deliveries`` and its embedding (the latter via ``ON DELETE
+  CASCADE``) alongside it. This deliberately relaxes the historical "Nexus
+  never deletes an undelivered message" invariant.
+* Handoffs, tasks, channels, agents, workspaces and artifacts are
   never touched - in particular a non-terminal handoff (OPEN/CLAIMED) can
   never be pruned because NO handoff delete path exists at all.
 * Deletes run in BOUNDED BATCHES, each in its own write transaction, so the
@@ -38,7 +44,7 @@ from __future__ import annotations
 
 from typing import Any, Protocol, runtime_checkable
 
-from ..config import NexusConfig
+from ..config import MIN_RETENTION_MESSAGES_KEEP_DAYS, NexusConfig
 from ..domain.base import iso_plus
 from ..errors import ErrorCode, OktoNexusError
 from .ports import Clock, ConnectionFactory, UnitOfWork
@@ -99,6 +105,21 @@ class PrunableSessionRepo(Protocol):
         ...
 
 
+@runtime_checkable
+class PrunableMessageRepo(Protocol):
+    """Messages: count/delete rows older than a cutoff by PURE AGE.
+
+    Deletes a message's deliveries (and its embedding via CASCADE) alongside it;
+    the predicate is ``created_at < cutoff`` regardless of delivery status.
+    """
+
+    def count_before(self, uow: UnitOfWork, *, cutoff: str) -> int:
+        ...
+
+    def prune_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
+        ...
+
+
 def _validate_keep_days(name: str, value: Any) -> int:
     """Coerce a keep-days override to a non-negative int, fail-closed.
 
@@ -121,6 +142,32 @@ def _validate_keep_days(name: str, value: Any) -> int:
     return value
 
 
+def _validate_messages_keep_days(value: Any) -> int:
+    """Coerce a messages keep-days override, fail-closed with the HARD min 7.
+
+    Mirrors :func:`_validate_keep_days` but enforces the owner-mandated floor:
+    a message-retention window below 7 days is rejected (the same minimum the
+    config parser enforces at startup), so neither path can purge the bus more
+    aggressively than the policy allows.
+    """
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "messages_keep_days must be an integer number of days "
+            f"(minimum {MIN_RETENTION_MESSAGES_KEEP_DAYS}); omit it to use the "
+            "configured default.",
+            {"messages_keep_days": value},
+        )
+    if value < MIN_RETENTION_MESSAGES_KEEP_DAYS:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"messages_keep_days must be >= {MIN_RETENTION_MESSAGES_KEEP_DAYS} "
+            "days (fail-closed minimum).",
+            {"messages_keep_days": value},
+        )
+    return value
+
+
 class RetentionService:
     """Use-case orchestration for retention pruning (and optional VACUUM)."""
 
@@ -133,6 +180,7 @@ class RetentionService:
         events: PrunableEventRepo,
         deliveries: PrunableDeliveryRepo,
         sessions: PrunableSessionRepo,
+        messages: PrunableMessageRepo,
         batch_size: int = DEFAULT_PRUNE_BATCH_SIZE,
     ) -> None:
         self._cf = connection_factory
@@ -141,6 +189,7 @@ class RetentionService:
         self._events = events
         self._deliveries = deliveries
         self._sessions = sessions
+        self._messages = messages
         self._batch_size = max(1, int(batch_size))
 
     @classmethod
@@ -160,6 +209,7 @@ class RetentionService:
             events=repos.events,
             deliveries=repos.deliveries,
             sessions=repos.sessions,
+            messages=repos.messages,
         )
 
     # ------------------------------------------------------------------ #
@@ -171,6 +221,7 @@ class RetentionService:
         events_keep_days: Any = None,
         read_deliveries_keep_days: Any = None,
         closed_sessions_keep_days: Any = None,
+        messages_keep_days: Any = None,
         dry_run: bool = False,
         max_batches: Any = None,
         vacuum: bool = False,
@@ -223,6 +274,11 @@ class RetentionService:
                     "closed_sessions_keep_days", closed_sessions_keep_days
                 )
             ),
+            "messages": (
+                self._config.retention_messages_keep_days
+                if messages_keep_days is None
+                else _validate_messages_keep_days(messages_keep_days)
+            ),
         }
         budget = self._validate_max_batches(max_batches)
 
@@ -257,6 +313,16 @@ class RetentionService:
                 dry_run=dry_run,
                 budget=budget,
             ),
+            # Messages expire by PURE AGE (D-EMB-6): the delete cascades to their
+            # deliveries (repo) and embeddings (FK CASCADE). Same batched, own-txn
+            # loop, so it never holds the WAL writer lock continuously.
+            "messages": self._run_table(
+                cutoffs["messages"],
+                count=self._messages.count_before,
+                delete=self._messages.prune_before,
+                dry_run=dry_run,
+                budget=budget,
+            ),
         }
 
         vacuum_report = self._maybe_vacuum(requested=vacuum, dry_run=dry_run)
@@ -269,9 +335,11 @@ class RetentionService:
             "tables": tables,
             "total_deleted": sum(t["deleted"] for t in tables.values()),
             "protected": (
-                "unread/delivered/parked deliveries, active/stale sessions, "
-                "and all handoffs/tasks/messages/channels/agents/workspaces/"
-                "artifacts are never pruned"
+                "unread/delivered/parked deliveries and active/stale sessions "
+                "are never pruned; all handoffs/tasks/channels/agents/"
+                "workspaces/artifacts are never pruned. Messages ARE pruned by "
+                "pure age (>= 7-day window), taking their deliveries and "
+                "embeddings with them"
             ),
             "vacuum": vacuum_report,
         }

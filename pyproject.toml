@@ -16,12 +16,33 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# HTTP transport + dashboard surfaces (`okto-nexus serve`). The stdio server
+# DEFAULT serve build (`okto-nexus serve`): HTTP transport + dashboard + the
+# semantic-search model, so `uv tool install ".[serve]"` ships embeddings by
+# design. The capability is INSTALLED but still gated by embedding_mode (off by
+# default) - shipping the model does NOT auto-enable search. The stdio server
 # stays dependency-light; `serve` fails closed with an install hint when the
-# extra is missing.
+# transport extra is missing. For a lighter build without torch, use the
+# `serve-lite` extra below.
 serve = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
+    "sentence-transformers>=2.5",
+]
+# Slim serve build WITHOUT the embedding model (no torch): HTTP transport +
+# dashboard only. Semantic search still works in `stub` mode (deterministic);
+# `local` mode degrades - search answers EMBEDDINGS_UNAVAILABLE since the model
+# is absent; `off` keeps it disabled. Use on hosts that won't run real semantic
+# search. Install with `uv tool install ".[serve-lite]"`.
+serve-lite = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+]
+# The semantic-search model on its own (Frente 3). `serve` already bundles it;
+# this extra stays for composing onto the slim build (`.[serve-lite,embeddings]`)
+# or a bare stdio host. Cosine is pure-Python (no numpy), so only the model
+# lives behind this extra. Heavy: pulls sentence-transformers + torch.
+embeddings = [
+    "sentence-transformers>=2.5",
 ]
 dev = [
     "pytest>=8",

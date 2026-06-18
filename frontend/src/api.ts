@@ -99,6 +99,8 @@ export interface MessageRow {
     recipient_agent_id: string;
     status: string;
     created_at: string;
+    delivered_at?: string | null;
+    read_at?: string | null;
   }[];
 }
 
@@ -106,6 +108,23 @@ export interface ConversationPeer {
   peer: string;
   count: number;
   last_at: string;
+}
+
+// One cosine-ranked hit from GET /messages/search (Frente 3). Lighter than
+// MessageRow: no deliveries/body - just enough to show the ranked result.
+export interface MessageSearchHit {
+  message_id: string;
+  score: number;
+  from_agent_id: string;
+  subject: string | null;
+  created_at: string;
+}
+
+export interface MessageSearchResult {
+  items: MessageSearchHit[];
+  total: number;
+  query: string;
+  k: number;
 }
 
 export interface SessionRow {
@@ -210,6 +229,13 @@ export const api = {
   conversationPeers: (agent: string) =>
     call<{ items: ConversationPeer[]; failed_count: number }>(
       `/api/v1/conversations/peers?agent=${encodeURIComponent(agent)}`,
+    ),
+  // Semantic search over message content. Throws ApiError with code
+  // EMBEDDINGS_UNAVAILABLE (HTTP 503) when the embedding provider is off /
+  // the [embeddings] extra is absent - the caller degrades gracefully.
+  searchMessages: (q: string, k = 10) =>
+    call<MessageSearchResult>(
+      `/api/v1/messages/search?q=${encodeURIComponent(q)}&k=${k}`,
     ),
   handoffs: (workspace?: string) =>
     call<{ items: GraphHandoff[] }>(

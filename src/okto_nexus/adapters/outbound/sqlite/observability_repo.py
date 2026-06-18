@@ -230,6 +230,8 @@ class SqliteObservabilityQueries:
         page: int,
         page_size: int,
         peer_id: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
         undelivered_only: bool = False,
         include_body: bool = False,
     ) -> tuple[list[dict[str, Any]], int]:
@@ -262,6 +264,17 @@ class SqliteObservabilityQueries:
                 "WHERE dd.message_id = m.message_id AND dd.recipient_agent_id = ?))"
             )
             params.extend([agent_id, agent_id])
+        # Independent, AND-combined directional filters (dashboard DE/PARA).
+        # Compose with agent/peer above and with each other.
+        if from_agent_id is not None:
+            where.append("m.from_agent_id = ?")
+            params.append(from_agent_id)
+        if to_agent_id is not None:
+            where.append(
+                "EXISTS (SELECT 1 FROM message_deliveries dr "
+                "WHERE dr.message_id = m.message_id AND dr.recipient_agent_id = ?)"
+            )
+            params.append(to_agent_id)
         if undelivered_only:
             # Persisted sends that fanned out to NOBODY (failed tab); only
             # meaningful for the agent's OWN sends.

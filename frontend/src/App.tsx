@@ -4,7 +4,7 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Activity,
   ChevronDown,
@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
+import { LiveChip } from "./components/LiveChip";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import {
   isCompleted as onboardingDone,
@@ -181,6 +182,9 @@ function Dashboard({
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
   const [refreshTick, setRefreshTick] = useState(0);
+  // Monotonic counter bumped on every SSE event — drives the side panel's
+  // live update while it is open (eventLog itself saturates at 500).
+  const [liveTick, setLiveTick] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -239,6 +243,7 @@ function Dashboard({
     useCallback(
       (event: NexusEvent) => {
         setEventLog((log) => [...log.slice(-499), event]);
+        setLiveTick((t) => t + 1);
         window.clearTimeout(refetchTimerRef.current);
         refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
@@ -277,28 +282,6 @@ function Dashboard({
       })
       .catch(() => undefined);
   }, []);
-
-  const liveChip = useMemo(() => {
-    const map = {
-      live: [
-        "● Live",
-        "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300",
-      ],
-      connecting: [
-        "● Connecting",
-        "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-      ],
-      reconnecting: [
-        "● Reconnecting",
-        "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300",
-      ],
-      off: [
-        "● Off",
-        "bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300",
-      ],
-    } as const;
-    return map[sseStatus];
-  }, [sseStatus]);
 
   return (
     <div className="h-screen flex flex-col bg-surface-50 dark:bg-surface-950">
@@ -344,7 +327,7 @@ function Dashboard({
               </option>
             ))}
           </select>
-          <span className={`chip ${liveChip[1]}`}>{liveChip[0]}</span>
+          <LiveChip status={sseStatus} />
           <button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
@@ -486,6 +469,8 @@ function Dashboard({
               workspace={workspace}
               onChanged={loadGraph}
               theme={theme}
+              liveTick={liveTick}
+              sseStatus={sseStatus}
             />
           )}
           {view === "Messages" && <MessagesView workspace={workspace} />}

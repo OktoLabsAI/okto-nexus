@@ -536,3 +536,77 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
     finally:
         server.should_exit = True
         thread.join(timeout=10)
+
+
+def test_sse_open_stream_does_not_wedge_server_shutdown(tmp_path):
+    """Regression: an open SSE feed must not block graceful shutdown.
+
+    The feed's generator is an infinite poll loop, so with a client still
+    subscribed nothing cancels it. Flipping ``should_exit`` (exactly what
+    CTRL+C does) must let the generator notice and end on its own so the
+    server thread drains promptly - instead of hanging on "finalizing" until
+    the operator force-kills the terminal. The server here runs WITHOUT a
+    graceful-shutdown timeout on purpose: if the generator stops breaking on
+    shutdown, this test HANGS (join times out) rather than passing on the
+    timeout backstop.
+    """
+    import socket
+    import time
+
+    import httpx
+    import uvicorn
+
+    home = tmp_path / "nexus_home"
+    deps = bootstrap({}, ["--home", str(home)])
+    auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+    issued = ensure_operator_key(deps, auth)
+    assert issued is not None
+    _, operator_key = issued
+
+    app = build_app(deps)
+    app.state.sse_poll_seconds = 0.05
+    app.state.sse_ping_seconds = 60.0
+
+    with socket.socket() as probe:
+        probe.bind(("127.0.0.1", 0))
+        port = probe.getsockname()[1]
+
+    server = uvicorn.Server(
+        uvicorn.Config(app, host="127.0.0.1", port=port, log_level="error")
+    )
+    # serve.py wires this so the SSE generator can see shutdown; mirror it.
+    app.state.server = server
+    thread = threading.Thread(target=server.run, daemon=True)
+    thread.start()
+    deadline = time.monotonic() + 10
+    while not server.started:
+        assert time.monotonic() < deadline, "uvicorn failed to start"
+        time.sleep(0.05)
+
+    try:
+        ws = "s" * 64
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.workspaces.upsert(uow, workspace_id=ws)
+        _emit_event(deps, ws, "sse.before_shutdown")
+
+        base = f"http://127.0.0.1:{port}"
+        with httpx.Client(timeout=10.0) as client:
+            with client.stream(
+                "GET", f"{base}/api/v1/stream", headers=_h(operator_key)
+            ) as response:
+                assert response.status_code == 200
+                # Pull the first event so the generator is actively mid-stream.
+                for line in response.iter_lines():
+                    if line.startswith("data: "):
+                        break
+                # Client is STILL subscribed. Trigger shutdown like CTRL+C and
+                # require the server thread to drain quickly.
+                shutdown_at = time.monotonic()
+                server.should_exit = True
+                thread.join(timeout=10)
+                elapsed = time.monotonic() - shutdown_at
+        assert not thread.is_alive(), "server hung on the open SSE stream"
+        assert elapsed < 8, f"shutdown was not prompt ({elapsed:.1f}s)"
+    finally:
+        server.should_exit = True
+        thread.join(timeout=10)
