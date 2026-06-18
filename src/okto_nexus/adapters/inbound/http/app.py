@@ -217,6 +217,25 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
 
     @contextlib.asynccontextmanager
     async def lifespan(app: FastAPI):
+        # Quiet a benign Windows ProactorEventLoop teardown race: when a client
+        # RSTs a connection, asyncio's _call_connection_lost calls sock.shutdown
+        # on the already-reset socket and the resulting ConnectionResetError
+        # (WinError 10054) is logged at ERROR by the loop's default handler -
+        # pure noise (the connection is already gone). Filter exactly that at
+        # the loop level; everything else keeps default handling.
+        loop = asyncio.get_running_loop()
+        _prev_handler = loop.get_exception_handler()
+
+        def _filter_conn_reset(active_loop, context):
+            if isinstance(context.get("exception"), ConnectionResetError):
+                return
+            if _prev_handler is not None:
+                _prev_handler(active_loop, context)
+            else:
+                active_loop.default_exception_handler(context)
+
+        loop.set_exception_handler(_filter_conn_reset)
+
         # The mounted MCP sub-app's own lifespan never runs under a parent
         # FastAPI, so its session manager is driven from here (SDK-documented
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
