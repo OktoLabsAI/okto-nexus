@@ -392,10 +392,16 @@ class SqliteObservabilityQueries:
         workspace_id: str | None,
         stream: str | None,
         limit: int,
+        type_: str | None = None,
+        actor_agent_id: str | None = None,
     ) -> list[dict[str, Any]]:
+        # type_/actor_agent_id are optional equality filters (dashboard FR1):
+        # absent -> no filter (byte-for-byte the prior behaviour). visibility
+        # and target travel with the row so the detail modal can show them.
         sql = (
             "SELECT event_id, workspace_id, stream, type, created_at, "
-            "actor_agent_id, payload FROM events WHERE event_id > ?"
+            "actor_agent_id, payload, visibility, target FROM events "
+            "WHERE event_id > ?"
         )
         params: list[Any] = [cursor]
         if workspace_id is not None:
@@ -404,6 +410,12 @@ class SqliteObservabilityQueries:
         if stream is not None:
             sql += " AND stream = ?"
             params.append(stream)
+        if type_ is not None:
+            sql += " AND type = ?"
+            params.append(type_)
+        if actor_agent_id is not None:
+            sql += " AND actor_agent_id = ?"
+            params.append(actor_agent_id)
         sql += " ORDER BY event_id ASC LIMIT ?"
         params.append(limit)
         try:
@@ -419,6 +431,25 @@ class SqliteObservabilityQueries:
                 "created_at": row["created_at"],
                 "actor_agent_id": row["actor_agent_id"],
                 "payload": _loads(row["payload"]),
+                "visibility": row["visibility"],
+                "target": _loads(row["target"]),
             }
             for row in rows
         ]
+
+    def distinct_event_types(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> list[str]:
+        # Powers the dashboard type filter (FR2): the type vocabulary is open,
+        # so the picker is derived from the data, never hardcoded.
+        sql = "SELECT DISTINCT type FROM events"
+        params: list[Any] = []
+        if workspace_id is not None:
+            sql += " WHERE workspace_id = ?"
+            params.append(workspace_id)
+        sql += " ORDER BY type ASC"
+        try:
+            rows = uow.connection.execute(sql, tuple(params)).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing distinct event types", exc) from exc
+        return [row["type"] for row in rows]

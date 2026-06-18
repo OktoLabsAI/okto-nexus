@@ -227,6 +227,8 @@ class ObservabilityService:
         workspace_id: str | None = None,
         stream: str | None = None,
         limit: int = 100,
+        type_: str | None = None,
+        actor_agent_id: str | None = None,
     ) -> list[dict[str, Any]]:
         limit = min(self._config.max_event_limit, max(1, int(limit)))
         return self._q.events_after(
@@ -235,7 +237,15 @@ class ObservabilityService:
             workspace_id=workspace_id,
             stream=stream,
             limit=limit,
+            type_=type_,
+            actor_agent_id=actor_agent_id,
         )
+
+    def event_types(
+        self, uow: UnitOfWork, *, workspace_id: str | None = None
+    ) -> list[str]:
+        """Distinct event types present (scoped by workspace), for the filter."""
+        return self._q.distinct_event_types(uow, workspace_id=workspace_id)
 
 
 def _epoch_to_iso(epoch: float) -> str:

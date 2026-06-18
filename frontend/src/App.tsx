@@ -477,7 +477,7 @@ function Dashboard({
           {view === "Handoffs" && (
             <HandoffsView workspace={workspace} onChanged={loadGraph} />
           )}
-          {view === "Events" && <EventsView log={eventLog} />}
+          {view === "Events" && <EventsView workspace={workspace} log={eventLog} />}
           {view === "Workspaces" && (
             <WorkspacesView workspaces={workspaces} graph={graph} />
           )}

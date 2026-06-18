@@ -337,8 +337,12 @@ def build_router() -> APIRouter:
         after: int = 0,
         workspace: str | None = None,
         stream: str | None = None,
+        type: str | None = None,
+        agent: str | None = None,
         limit: int = 100,
     ) -> JSONResponse:
+        # type/agent are optional equality filters (FR1); omitting both keeps
+        # the response byte-for-byte identical to the prior behaviour (AC7).
         observability = request.app.state.observability
         try:
             rows = await _read(
@@ -349,11 +353,28 @@ def build_router() -> APIRouter:
                     workspace_id=workspace,
                     stream=stream,
                     limit=limit,
+                    type_=type,
+                    actor_agent_id=agent,
                 ),
             )
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"items": rows, "next_cursor": rows[-1]["event_id"] if rows else after})
+
+    @router.get("/events/types")
+    async def event_types(
+        request: Request, workspace: str | None = None
+    ) -> JSONResponse:
+        # Distinct event types (FR2) to populate the dashboard type filter.
+        observability = request.app.state.observability
+        try:
+            items = await _read(
+                request,
+                lambda uow: observability.event_types(uow, workspace_id=workspace),
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
 
     # ------------------------------------------------------------------ #
     # Agent & key management (FR4/FR9)

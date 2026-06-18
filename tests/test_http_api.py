@@ -453,6 +453,86 @@ def test_events_endpoint_pages_by_cursor(serve_env):
     assert page["next_cursor"] == second
 
 
+def _seed_events_ws(deps, ws: str):
+    """Upsert the workspace and return an emit(type_, actor) helper."""
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws)
+
+    def emit(type_: str, actor: str) -> int:
+        with deps.connection_factory.unit_of_work() as uow:
+            return deps.event_emitter.emit(
+                uow,
+                workspace_id=ws,
+                stream="workspace",
+                type=type_,
+                actor_agent_id=actor,
+                payload={"t": type_},
+            )
+
+    return emit
+
+
+def test_events_filter_by_type_agent_and_types_endpoint(serve_env):
+    """FR1/FR2 (AC1/AC2/AC3): type & agent equality filters (AND-combinable)
+    and the distinct-types endpoint; visibility/target travel with each row."""
+    deps, client, key = serve_env
+    ws = "e" * 64
+    emit = _seed_events_ws(deps, ws)
+    emit("ev.alpha", "alice")
+    emit("ev.alpha", "bob")
+    emit("ev.beta", "alice")
+    emit("ev.beta", "bob")
+    base = {"workspace": ws}
+
+    # AC1: filter by type returns only that type.
+    data = client.get(
+        "/api/v1/events", params={**base, "type": "ev.alpha"}, headers=_h(key)
+    ).json()["data"]
+    assert len(data["items"]) == 2
+    assert {e["type"] for e in data["items"]} == {"ev.alpha"}
+
+    # AC2: filter by actor agent.
+    data = client.get(
+        "/api/v1/events", params={**base, "agent": "alice"}, headers=_h(key)
+    ).json()["data"]
+    assert len(data["items"]) == 2
+    assert {e["actor_agent_id"] for e in data["items"]} == {"alice"}
+
+    # AC2: type + agent applies AND.
+    data = client.get(
+        "/api/v1/events",
+        params={**base, "type": "ev.alpha", "agent": "alice"},
+        headers=_h(key),
+    ).json()["data"]
+    assert len(data["items"]) == 1
+    assert data["items"][0]["type"] == "ev.alpha"
+    assert data["items"][0]["actor_agent_id"] == "alice"
+    # visibility/target ship with the row (for the detail modal).
+    assert "visibility" in data["items"][0] and "target" in data["items"][0]
+
+    # AC3: distinct types, sorted, no duplicates, scoped by workspace.
+    data = client.get(
+        "/api/v1/events/types", params={"workspace": ws}, headers=_h(key)
+    ).json()["data"]
+    assert data["items"] == ["ev.alpha", "ev.beta"]
+
+
+def test_events_no_filters_is_backward_compatible(serve_env):
+    """AC7: omitting type/agent keeps the exact prior shape (items+next_cursor)."""
+    deps, client, key = serve_env
+    ws = "f" * 64
+    emit = _seed_events_ws(deps, ws)
+    emit("ev.solo", "alice")
+
+    data = client.get(
+        "/api/v1/events", params={"workspace": ws}, headers=_h(key)
+    ).json()["data"]
+    assert set(data.keys()) == {"items", "next_cursor"}
+    assert len(data["items"]) == 1
+    assert data["items"][0]["type"] == "ev.solo"
+    assert data["next_cursor"] == data["items"][0]["event_id"]
+
+
 def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
     """True e2e (TS6): a REAL uvicorn server on a free port.
 

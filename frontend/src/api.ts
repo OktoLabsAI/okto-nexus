@@ -159,6 +159,8 @@ export interface NexusEvent {
   created_at: string;
   actor_agent_id: string | null;
   payload: unknown;
+  visibility?: string | null; // NULL reads as "public"
+  target?: unknown; // routing descriptor, present on the REST/SSE read model
 }
 
 const KEY_STORAGE = "okto_nexus_operator_key";
@@ -245,9 +247,16 @@ export const api = {
     call<{ items: SessionRow[] }>(
       `/api/v1/sessions${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
     ),
-  events: (after = 0, limit = 100) =>
+  // Paged event log with optional equality filters (workspace/stream/type/
+  // agent) + cursor (after/limit). Omitting type/agent keeps the legacy shape.
+  events: (params: Record<string, string>) =>
     call<{ items: NexusEvent[]; next_cursor: number }>(
-      `/api/v1/events?after=${after}&limit=${limit}`,
+      `/api/v1/events?${new URLSearchParams(params)}`,
+    ),
+  // Distinct event types present (scoped by workspace), for the type filter.
+  eventTypes: (workspace?: string) =>
+    call<{ items: string[] }>(
+      `/api/v1/events/types${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
     ),
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
   createAgent: (body: {
