@@ -23,8 +23,14 @@ dependencies = [
 # stays dependency-light; `serve` fails closed with an install hint when the
 # transport extra is missing. For a lighter build without torch, use the
 # `serve-lite` extra below.
+#
+# fastapi pin excludes 0.137.0 ONLY: that release's include_router refactor
+# runs `Prefix and path cannot be both empty` against empty-path routes and
+# crashes app construction at import; 0.110-0.136 and 0.137.1+ are fine
+# (empirical bisect via Okto Pulse). Nexus has no empty-path routes today, so
+# this is defense-in-depth against a future landmine.
 serve = [
-    "fastapi>=0.110",
+    "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "sentence-transformers>=2.5",
 ]
@@ -34,7 +40,7 @@ serve = [
 # is absent; `off` keeps it disabled. Use on hosts that won't run real semantic
 # search. Install with `uv tool install ".[serve-lite]"`.
 serve-lite = [
-    "fastapi>=0.110",
+    "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
 ]
 # The semantic-search model on its own (Frente 3). `serve` already bundles it;
@@ -46,7 +52,7 @@ embeddings = [
 ]
 dev = [
     "pytest>=8",
-    "fastapi>=0.110",
+    "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "httpx>=0.27",
 ]
