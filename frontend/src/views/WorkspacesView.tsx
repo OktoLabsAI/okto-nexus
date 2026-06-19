@@ -432,6 +432,17 @@ function AnalyticsBody({
 }) {
   const { summary, buckets, agents, others } = analytics;
 
+  // Per-series visibility: click a legend chip to isolate / hide an agent.
+  const [hidden, setHidden] = useState<Set<string>>(new Set());
+  const [hover, setHover] = useState<number | null>(null);
+  const toggleSeries = (key: string) =>
+    setHidden((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
   // Series order = top-8 agents (+ an others lane when present). Colour by index.
   const series = useMemo(() => {
     const items = agents.map((a, i) => ({
@@ -441,15 +452,22 @@ function AnalyticsBody({
     if (others) items.push({ key: OTHERS, color: OTHERS_COLOR });
     return items;
   }, [agents, others]);
+  const visible = series.filter((s) => !hidden.has(s.key));
 
   const valueOf = (b: (typeof buckets)[number], key: string): number => {
     const cell = b.by_agent[key];
     if (!cell) return 0;
     return metric === "volume" ? cell.count : cell.tokens;
   };
-  const bucketTotal = (b: (typeof buckets)[number]): number =>
-    metric === "volume" ? b.total_count : b.total_tokens;
-  const maxTotal = Math.max(1, ...buckets.map(bucketTotal));
+  // Totals + the Y-axis scale follow the VISIBLE series only, so filtering an
+  // agent out re-scales the chart instead of leaving dead headroom.
+  const visibleTotal = (b: (typeof buckets)[number]): number =>
+    visible.reduce((sum, s) => sum + valueOf(b, s.key), 0);
+  const maxTotal = Math.max(1, ...buckets.map(visibleTotal));
+  const unit = metric === "volume" ? "msgs" : "tokens";
+  const fmtY = (n: number) =>
+    metric === "volume" ? String(Math.round(n)) : compact(Math.round(n));
+  const yTicks = [maxTotal, maxTotal / 2, 0];
 
   return (
     <div className="space-y-4">
@@ -472,45 +490,133 @@ function AnalyticsBody({
             {metric === "volume" ? "Messages" : "Tokens"} per bucket (stacked by
             agent)
           </h3>
-          <div className="flex items-center gap-2.5 text-[10px] text-surface-500 dark:text-surface-400 flex-wrap">
-            {series.map((s) => (
-              <span key={s.key} className="flex items-center gap-1">
-                <span
-                  className="h-2.5 w-2.5 rounded-sm"
-                  style={{ backgroundColor: s.color }}
-                />
-                {s.key === OTHERS ? "others" : s.key}
-              </span>
-            ))}
+          {/* Clickable legend: toggle a series to isolate / remove agents. */}
+          <div className="flex items-center gap-1.5 text-[10px] text-surface-500 dark:text-surface-400 flex-wrap">
+            {series.map((s) => {
+              const off = hidden.has(s.key);
+              return (
+                <button
+                  key={s.key}
+                  onClick={() => toggleSeries(s.key)}
+                  title={off ? "Show" : "Hide / isolate"}
+                  className={`flex items-center gap-1 px-1 py-0.5 rounded transition-colors ${
+                    off
+                      ? "opacity-40 line-through"
+                      : "hover:bg-surface-100 dark:hover:bg-surface-800"
+                  }`}
+                >
+                  <span
+                    className="h-2.5 w-2.5 rounded-sm"
+                    style={{ backgroundColor: s.color }}
+                  />
+                  {s.key === OTHERS ? "others" : s.key}
+                </button>
+              );
+            })}
           </div>
         </div>
-        <div className="flex items-end gap-px" style={{ height: 180 }}>
-          {buckets.map((b) => {
-            const total = bucketTotal(b);
-            return (
+
+        <div
+          className="flex"
+          style={{ height: 196 }}
+          onMouseLeave={() => setHover(null)}
+        >
+          {/* Y axis (message / token scale) */}
+          <div
+            className="flex flex-col justify-between pr-2 text-right text-[9px] text-surface-400 dark:text-surface-500 select-none"
+            style={{ width: 44 }}
+          >
+            {yTicks.map((t, i) => (
+              <div key={i}>{fmtY(t)}</div>
+            ))}
+          </div>
+
+          {/* Plot area: gridlines + bars + hover tooltip */}
+          <div className="relative flex-1">
+            {yTicks.map((_, i) => (
               <div
-                key={b.bucket_start}
-                className="flex-1 flex flex-col justify-end group relative"
-                style={{ height: "100%" }}
-                title={`${bucketLabel(b.bucket_start)} · ${total} ${metric === "volume" ? "msgs" : "tokens"}`}
+                key={i}
+                className="absolute left-0 right-0 border-t border-surface-100 dark:border-surface-800/70"
+                style={{ top: `${(i / (yTicks.length - 1)) * 100}%` }}
+              />
+            ))}
+            <div className="absolute inset-0 flex items-end gap-px">
+              {buckets.map((b, idx) => (
+                <div
+                  key={b.bucket_start}
+                  onMouseEnter={() => setHover(idx)}
+                  className={`flex-1 flex flex-col justify-end h-full ${
+                    hover === idx ? "bg-surface-100/50 dark:bg-white/5" : ""
+                  }`}
+                >
+                  {visible.map((s, i) => {
+                    const v = valueOf(b, s.key);
+                    if (v <= 0) return null;
+                    return (
+                      <div
+                        key={s.key}
+                        className={i === 0 ? "rounded-t-sm" : ""}
+                        style={{
+                          height: `${(v / maxTotal) * 100}%`,
+                          backgroundColor: s.color,
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+
+            {hover !== null && buckets[hover] && (
+              <div
+                className="absolute z-10 pointer-events-none -translate-x-1/2 rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 shadow-xl px-2.5 py-1.5 text-[10px] min-w-[150px]"
+                style={{
+                  left: `${((hover + 0.5) / buckets.length) * 100}%`,
+                  top: 0,
+                }}
               >
-                {series.map((s, i) => {
-                  const v = valueOf(b, s.key);
-                  if (v <= 0) return null;
-                  const h = (v / maxTotal) * 100;
-                  return (
+                <div className="font-medium text-surface-700 dark:text-surface-200 mb-1">
+                  {bucketLabel(buckets[hover].bucket_start)}
+                </div>
+                {visible
+                  .filter((s) => valueOf(buckets[hover]!, s.key) > 0)
+                  .sort(
+                    (a, b) =>
+                      valueOf(buckets[hover]!, b.key) -
+                      valueOf(buckets[hover]!, a.key),
+                  )
+                  .map((s) => (
                     <div
                       key={s.key}
-                      className={i === 0 ? "rounded-t-sm" : ""}
-                      style={{ height: `${h}%`, backgroundColor: s.color }}
-                    />
-                  );
-                })}
+                      className="flex items-center justify-between gap-3 leading-relaxed"
+                    >
+                      <span className="flex items-center gap-1 text-surface-500 dark:text-surface-400 truncate">
+                        <span
+                          className="h-2 w-2 rounded-sm shrink-0"
+                          style={{ backgroundColor: s.color }}
+                        />
+                        {s.key === OTHERS ? "others" : s.key}
+                      </span>
+                      <span className="font-mono text-surface-700 dark:text-surface-200">
+                        {fmtY(valueOf(buckets[hover]!, s.key))}
+                      </span>
+                    </div>
+                  ))}
+                {visibleTotal(buckets[hover]) === 0 && (
+                  <div className="text-surface-400 dark:text-surface-500">no messages</div>
+                )}
+                <div className="mt-1 pt-1 border-t border-surface-200 dark:border-surface-700 flex items-center justify-between gap-3 font-medium">
+                  <span className="text-surface-600 dark:text-surface-300">Total</span>
+                  <span className="font-mono text-surface-800 dark:text-surface-100">
+                    {fmtY(visibleTotal(buckets[hover]))} {unit}
+                  </span>
+                </div>
               </div>
-            );
-          })}
+            )}
+          </div>
         </div>
-        <div className="flex justify-between mt-1.5 text-[9px] text-surface-400 dark:text-surface-500">
+
+        <div className="flex justify-between mt-1.5 text-[9px] text-surface-400 dark:text-surface-500 pl-[44px]">
           <span>{bucketLabel(buckets[0]?.bucket_start ?? "")}</span>
           <span>
             {bucketLabel(buckets[Math.floor(buckets.length / 2)]?.bucket_start ?? "")}

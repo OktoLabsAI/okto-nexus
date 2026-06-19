@@ -104,18 +104,31 @@ class WorkspaceListService:
             1 for h in handoffs if h["status"] == "OPEN" and not h.get("claimed_by")
         )
 
-        present = stale = offline = 0
+        # Presence is per DISTINCT AGENT, not per session. A workspace
+        # accumulates many (mostly closed) session rows over its life, so
+        # counting sessions makes "Agents in workspace" explode (e.g. 0/0/83 for
+        # 3 agents). Classify each session, then reduce to the BEST state per
+        # agent (present > stale > offline). stale_sessions (a HEALTH signal)
+        # stays session-based - it is literally a count of stale sessions.
+        _rank = {"present": 2, "stale": 1, "offline": 0}
+        best_per_agent: dict[str, str] = {}
+        stale_sessions = 0
         for sess in self._q.session_rows(uow, workspace_id=wid):
             presence = self._obs.classify_presence(
                 has_active_session=sess.get("status") == "active",
                 last_heartbeat_at=sess.get("last_heartbeat_at"),
             )
-            if presence == "present":
-                present += 1
-            elif presence == "stale":
-                stale += 1
-            else:
-                offline += 1
+            if presence == "stale":
+                stale_sessions += 1
+            aid = sess.get("agent_id")
+            if aid is None:
+                continue
+            current = best_per_agent.get(aid)
+            if current is None or _rank[presence] > _rank[current]:
+                best_per_agent[aid] = presence
+        present = sum(1 for p in best_per_agent.values() if p == "present")
+        stale = sum(1 for p in best_per_agent.values() if p == "stale")
+        offline = sum(1 for p in best_per_agent.values() if p == "offline")
 
         delivery = self._q.workspace_delivery_health(uow, workspace_id=wid)
 
@@ -136,7 +149,7 @@ class WorkspaceListService:
             "presence": {"present": present, "stale": stale, "offline": offline},
             "health": {
                 "open_handoffs_unclaimed": open_handoffs_unclaimed,
-                "stale_sessions": stale,
+                "stale_sessions": stale_sessions,
                 "parked_messages_deadletter": delivery["parked"],
                 "inbox_backlog_unread": delivery["unread"],
             },

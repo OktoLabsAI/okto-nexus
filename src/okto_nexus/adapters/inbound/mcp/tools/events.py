@@ -38,6 +38,10 @@ from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
+from okto_nexus.adapters.inbound.mcp.projection import (
+    apply_to_response,
+    parse_profile,
+)
 from okto_nexus.application.events import (
     DEFAULT_EVENT_LIMIT,
     EventService,
@@ -61,6 +65,7 @@ _P_TIMEOUT = (
     "immediate non-blocking snapshot; >0 OPTS IN to a BLOCKING long-poll until an "
     "event arrives or the timeout elapses. Listener patterns: okto-nexus://reference/monitoring."
 )
+_P_PROFILE = "Response size profile: one of default/summary/full (optional; default=keep all fields minus dead ones; summary=minimal+follow_up; full=raw). Trims per-call tokens."
 
 def build_service(deps: Any) -> EventService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
@@ -105,15 +110,22 @@ def register(server: Any, deps: Any) -> None:
         cursor: Annotated[Any, Field(description=_P_CURSOR)] = None,
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
+        profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
         """Read a cursor-paginated page of the workspace event log (non-blocking)."""
-        return service.event_get(
-            project_root=project_root,
-            agent_id=agent_id,
-            stream=stream,
-            cursor=cursor,
-            limit=limit,
-            filters=filters,
+        prof = parse_profile(profile)
+        return apply_to_response(
+            service.event_get(
+                project_root=project_root,
+                agent_id=agent_id,
+                stream=stream,
+                cursor=cursor,
+                limit=limit,
+                filters=filters,
+            ),
+            "events",
+            prof,
+            kind="event",
         )
 
     @server.tool()
@@ -140,14 +152,18 @@ def register(server: Any, deps: Any) -> None:
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = 0,
+        profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
         """Read the event log; optionally long-poll (0/omitted/null = non-blocking snapshot; >0 OPTS IN to blocking). Events are observability, not delivery. Patterns: okto-nexus://reference/monitoring."""
+        # Validate the profile BEFORE parking on the long-poll: an invalid value
+        # must fail fast as a VALIDATION_ERROR, not after a blocking wait.
+        prof = parse_profile(profile)
         # Long-poll OFF the event loop: the blocking sleep-poll runs in a
         # worker thread so a parked event_wait never freezes the shared serve
         # event loop (which also drives the dashboard REST + every other MCP
         # tool over streamable-HTTP). Safe-by-default: an omitted/null timeout
         # is a snapshot; the application layer treats None as the server ceiling.
-        return await anyio.to_thread.run_sync(
+        result = await anyio.to_thread.run_sync(
             functools.partial(
                 service.event_wait,
                 project_root=project_root,
@@ -159,3 +175,6 @@ def register(server: Any, deps: Any) -> None:
                 timeout_seconds=0 if timeout_seconds is None else timeout_seconds,
             )
         )
+        # Projection is pure/synchronous and runs after the (threaded) wait
+        # returns - the async long-poll path is projected exactly like event_get.
+        return apply_to_response(result, "events", prof, kind="event")

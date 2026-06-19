@@ -40,6 +40,10 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteMessageRepo,
 )
 from okto_nexus.application.identity import SessionTrustGuard
+from okto_nexus.adapters.inbound.mcp.projection import (
+    apply_to_response,
+    parse_profile,
+)
 from okto_nexus.application.inbox import (
     DEFAULT_INBOX_LEASE_TTL_SECONDS,
     MAX_LEASE_SECONDS,
@@ -71,6 +75,7 @@ _P_INCLUDE_BODIES = (
     "inbox_pull is the way to consume a message)."
 )
 _P_STATUS_MESSAGE_ID = "The message_id from message_create whose per-recipient delivery states you want to track. REQUIRED."
+_P_PROFILE = "Response size profile: one of default/summary/full (optional; default=keep all fields minus dead ones; summary=minimal+follow_up; full=raw). Trims per-call tokens."
 #: INVARIANT: the sensitive inbox verbs (pull/ack/extend) share the trust
 #: wording with message_create/handoff_* - one credential story bus-wide.
 _P_SESSION_TRUST = (
@@ -139,15 +144,22 @@ def register(server: Any, deps: Any) -> None:
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
+        profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
         """Take your unread messages into in-flight and return them WITH their body (index-free; no cursor). At-least-once: unacked pulls are redelivered. Emits message.delivered to senders."""
+        prof = parse_profile(profile)
         trust.require(
             tool="inbox_pull",
             agent_id=agent_id,
             session_id=session_id,
             session_secret=session_secret,
         )
-        return service.pull(agent_id=agent_id, limit=limit, lease_seconds=lease_seconds)
+        return apply_to_response(
+            service.pull(agent_id=agent_id, limit=limit, lease_seconds=lease_seconds),
+            "messages",
+            prof,
+            kind="inbox",
+        )
 
     @server.tool()
     @tool_envelope
@@ -201,13 +213,20 @@ def register(server: Any, deps: Any) -> None:
         include_bodies: Annotated[
             bool, Field(description=_P_INCLUDE_BODIES)
         ] = False,
+        profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
         """Triage pending messages (unread + in-flight) WITHOUT consuming. READ-ONLY, envelope-only by default (body_preview + body_bytes). include_parked/include_bodies opt in."""
-        return service.peek(
-            agent_id=agent_id,
-            limit=limit,
-            include_parked=include_parked,
-            include_bodies=include_bodies,
+        prof = parse_profile(profile)
+        return apply_to_response(
+            service.peek(
+                agent_id=agent_id,
+                limit=limit,
+                include_parked=include_parked,
+                include_bodies=include_bodies,
+            ),
+            "messages",
+            prof,
+            kind="inbox",
         )
 
     @server.tool()
@@ -224,9 +243,16 @@ def register(server: Any, deps: Any) -> None:
         agent_id: Annotated[str, Field(description=_P_AGENT)],
         cursor: Annotated[str | None, Field(description=_P_CURSOR)] = None,
         limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
+        profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
         """List your acknowledged (read) messages, newest-first, keyset-paginated (stable pages even while you keep acknowledging). READ-ONLY."""
-        return service.history(agent_id=agent_id, cursor=cursor, limit=limit)
+        prof = parse_profile(profile)
+        return apply_to_response(
+            service.history(agent_id=agent_id, cursor=cursor, limit=limit),
+            "messages",
+            prof,
+            kind="inbox",
+        )
 
     @server.tool()
     @tool_envelope
