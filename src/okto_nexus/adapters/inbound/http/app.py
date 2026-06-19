@@ -30,10 +30,13 @@ from ....application.auth import AgentKeyAuthService
 from ....application.observability import ObservabilityService
 from ....application.search import MessageSearchService
 from ....application.settings import SettingsService, detect_pinned_fields
+from ....application.workspace_analytics import WorkspaceAnalyticsService
+from ....application.workspace_overview import WorkspaceListService
 from ....errors import OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
+from ...outbound.tokenizer import resolve_tokenizer
 from ..mcp.server import (
     SERVER_INSTRUCTIONS,
     Deps,
@@ -212,6 +215,26 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         messages=deps.repos.messages,
         search_enabled=bool(embedding.search_enabled),
     )
+    # Workspace overview + message analytics (serve-only). The tokenizer is the
+    # real tiktoken o200k_base on a full serve build (resolve_tokenizer probes
+    # it lazily; the encoding loads from the vendored blob on first count) and
+    # the dependency-free heuristic only if tiktoken is somehow absent.
+    observability_queries = SqliteObservabilityQueries()
+    workspace_analytics = WorkspaceAnalyticsService(
+        connection_factory=deps.connection_factory,
+        queries=observability_queries,
+        tokenizer=resolve_tokenizer().tokenizer,
+        clock=deps.clock,
+    )
+    workspace_list = WorkspaceListService(
+        connection_factory=deps.connection_factory,
+        queries=observability_queries,
+        workspaces=deps.repos.workspaces,
+        observability=observability,
+        clock=deps.clock,
+        config=deps.config,
+    )
+
     mcp_server = create_http_mcp_server(deps)
     mcp_app = mcp_server.streamable_http_app()
 
@@ -286,6 +309,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     app.state.observability = observability
     app.state.search = search_service
     app.state.settings_service = settings_service
+    app.state.workspace_analytics = workspace_analytics
+    app.state.workspace_list = workspace_list
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0
     # Same-machine trust for REST/dashboard; the serve CLI sets this to

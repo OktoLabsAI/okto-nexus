@@ -48,16 +48,11 @@ from okto_nexus.envelope import tool_envelope
 _P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
 _P_DISPLAY_NAME = "Human-friendly label to store/refresh for the workspace (optional)."
 _P_AGENT_ID = "The logical agent identity (stable, opaque string); agents are GLOBAL, not per-workspace. REQUIRED."
-_P_ROLE = (
-    "Logical role, e.g. validator, worker (optional); matched exactly and "
-    "case-sensitively by role-strategy targets."
-)
+_P_ROLE = "Logical role, e.g. validator, worker (optional); matched exactly/case-sensitively by role-strategy targets."
 _P_CAPABILITIES = (
-    "What this agent can do - used by capability routing AND capability_list "
-    "discovery (advertised set == addressable set) (optional). Accepts a "
-    'flag-mapping ({"ocr": true, "pdf": true} - only truthy keys count), a list of '
-    'names (["ocr", "pdf"]), or a single name string. Blank/whitespace names are '
-    "dropped; omit for no capabilities."
+    "What this agent can do - used by capability routing + capability_list "
+    'discovery (optional). Accepts a flag-map ({"ocr":true}), a list '
+    '(["ocr","pdf"]), or a single name string. Blank names dropped.'
 )
 _P_AGENT_METADATA = "Free-form JSON object of extra attributes stored with the agent (optional)."
 _P_SESSION_AGENT = "Your agent_id; the session is bound to this identity. REQUIRED."
@@ -70,11 +65,9 @@ _P_SESSION_ID = "The session_id returned by session_open. REQUIRED."
 _P_SESSION_WS_GUARD = "Workspace_id scope guard (optional); when given it must match the session's workspace."
 _P_GET_AGENT_ID = "The agent_id to look up. REQUIRED."
 _P_INCLUDE_PATHS = (
-    "Also return each workspace's on-disk root_realpath (default: false). By "
-    "default paths are OMITTED - disclosing the filesystem layout of every "
-    "project is opt-in defense-in-depth against prompt-injection exfiltration. "
-    "Set true only for an explicit admin/ops need; for routine discovery use "
-    "agent_list / capability_list instead."
+    "Also return each workspace on-disk root_realpath (default false; paths "
+    "OMITTED by default - opt-in defense-in-depth). For routine discovery use "
+    "agent_list / capability_list."
 )
 
 def build_service(deps: Any) -> IdentityService:
@@ -132,16 +125,7 @@ def register(server: Any, deps: Any) -> None:
         capabilities: Annotated[Any, Field(description=_P_CAPABILITIES)] = None,
         metadata: Annotated[Any, Field(description=_P_AGENT_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Update YOUR OWN identity profile (role/capabilities/metadata).
-
-        SELF-ONLY on an authenticated connection: your API key already names
-        your identity (created by the operator on the dashboard), so
-        ``agent_id`` must be YOUR OWN id - registering a new identity or
-        touching another agent's profile returns PERMISSION_DENIED. Use this
-        to advertise/refresh the role and capabilities that routing and
-        discovery (capability_list) match on; use agent_whoami to read your
-        current profile first.
-        """
+        """Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY: touching another agent's profile returns PERMISSION_DENIED. Full docs: okto-nexus://reference/tool-docs/identity."""
         caller = get_authenticated_agent()
         return service.agent_register(
             agent_id=agent_id,
@@ -154,15 +138,7 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def agent_whoami() -> dict[str, Any]:
-        """Return YOUR OWN profile, derived from your API key (no parameters).
-
-        The recommended FIRST CALL of a session: it tells you your agent_id
-        (use it as from_agent_id / agent_id everywhere), your operator-assigned
-        role, capabilities, metadata, and the communication permissions in
-        effect (``permissions`` null = unrestricted). Fails with
-        VALIDATION_ERROR on a connection without an authenticated identity
-        (open cooperative stdio): there, read profiles with agent_get.
-        """
+        """Return YOUR OWN profile from your API key: agent_id, role, capabilities, metadata, permissions (null=unrestricted). Recommended FIRST call. Docs: okto-nexus://reference/tool-docs/identity."""
         caller = get_authenticated_agent()
         return service.agent_whoami(
             actor_agent_id=caller.agent_id if caller is not None else None,
@@ -175,16 +151,7 @@ def register(server: Any, deps: Any) -> None:
         workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS)] = None,
         metadata: Annotated[Any, Field(description=_P_SESSION_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Open a session bound to (agent_id, workspace_id); server assigns the id.
-
-        The response includes a per-session ``session_secret`` (returned ONLY
-        here - keep it): in trust_mode=strict the sensitive verbs
-        (message_create, handoff_claim/complete/reject, inbox_pull/ack/extend)
-        require session_id + session_secret, and in open mode a supplied
-        secret is always validated. Heartbeat regularly (session_heartbeat):
-        only sessions with a fresh heartbeat receive broadcasts, and sessions
-        silent past the reap window are closed automatically.
-        """
+        """Open a session bound to (agent_id, workspace_id); returns a per-session session_secret (ONLY here - keep it; required by sensitive verbs in strict mode). Heartbeat to receive broadcasts."""
         return service.session_open(
             agent_id=agent_id, workspace_id=workspace_id, metadata=metadata
         )
@@ -195,12 +162,7 @@ def register(server: Any, deps: Any) -> None:
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS_GUARD)] = None,
     ) -> dict[str, Any]:
-        """Advance a session heartbeat and report the derived status.
-
-        Heartbeating keeps you PRESENT (in the broadcast audience) and clear of
-        the stale-session reaper; long-dead sessions of the same workspace are
-        reaped opportunistically by this call.
-        """
+        """Advance a session heartbeat and report the derived status; keeps you PRESENT (in the broadcast audience) and clear of the stale-session reaper."""
         return service.session_heartbeat(
             session_id=session_id, workspace_id=workspace_id
         )
@@ -221,28 +183,13 @@ def register(server: Any, deps: Any) -> None:
     def workspace_list(
         include_paths: Annotated[bool, Field(description=_P_INCLUDE_PATHS)] = False,
     ) -> dict[str, Any]:
-        """GLOBAL-ADMIN: enumerate ALL workspaces across every scope.
-
-        This is the single deliberately cross-workspace tool in the identity
-        slice. All other identity tools remain scoped to one workspace.
-
-        By DEFAULT each entry OMITS the workspace's on-disk ``root_realpath``
-        (you get workspace_id, display_name, created_at, last_seen_at); paths
-        are returned only on explicit request (``include_paths=true``) - an
-        admin/ops surface, not routine discovery. To find peers and their
-        skills, use agent_list / capability_list instead.
-        """
+        """GLOBAL-ADMIN: enumerate ALL workspaces. Paths OMITTED by default (include_paths=true is an admin/ops opt-in). For discovery use agent_list / capability_list."""
         return {"workspaces": service.workspace_list(include_paths=include_paths)}
 
     @server.tool()
     @tool_envelope
     def agent_list() -> dict[str, Any]:
-        """List ALL registered agents (global), each with role/capabilities and
-        last_seen_at - the timestamp of its most recent action on the bus.
-
-        Discovery surface for addressing: use it to find an agent_id before
-        sending a direct message or opening a directed handoff.
-        """
+        """List ALL registered agents (global), each with role/capabilities and last_seen_at. Discovery surface: find an agent_id before a direct message or directed handoff."""
         return {"agents": service.agent_list()}
 
     @server.tool()
@@ -256,10 +203,5 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def capability_list() -> dict[str, Any]:
-        """List the capabilities advertised by registered agents (global discovery).
-
-        For each capability, the agents that possess it - so a caller can pick a
-        `target: {strategy: "capability"}` knowing the capability exists and who
-        would match it. Normalised exactly as capability routing matches.
-        """
+        """List the capabilities advertised across all agents, each with the agents that possess it - normalised exactly as capability routing matches."""
         return {"capabilities": service.capability_list()}

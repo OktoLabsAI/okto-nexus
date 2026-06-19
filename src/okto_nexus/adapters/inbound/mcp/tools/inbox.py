@@ -50,60 +50,34 @@ from okto_nexus.application.inbox import (
 from okto_nexus.envelope import tool_envelope
 
 #: Reused parameter descriptions (house style mirrors okto-pulse).
-_P_AGENT = (
-    "Your agent_id - the GLOBAL inbox to read. A direct message reaches you "
-    "regardless of which workspace it was sent in. REQUIRED."
-)
+_P_AGENT = "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED."
 _P_LIMIT = "Max messages to return (optional; default 50, max 200; must be a positive integer)."
-_P_MESSAGE_IDS = (
-    "The message_id(s) to acknowledge into history - a single id string or a list "
-    "of them. REQUIRED. Idempotent: already-read or foreign ids are no-ops."
-)
-_P_CURSOR = (
-    "Opaque pagination cursor: pass back the next_cursor from the previous history "
-    "page (optional; omit to start from the newest read messages)."
-)
+_P_MESSAGE_IDS = "The message_id(s) to acknowledge - a single id or a list. REQUIRED. Idempotent (already-read/foreign ids are no-ops)."
+_P_CURSOR = "Opaque pagination cursor: pass back the previous page next_cursor (optional; omit = from the newest read messages)."
 _P_LEASE_SECONDS = (
-    "How long (seconds) the pulled messages stay leased to you before they are "
-    f"redelivered (optional; default {DEFAULT_INBOX_LEASE_TTL_SECONDS}, clamped "
-    f"to {MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}). Size it to your expected "
-    "processing turn, or renew mid-turn with inbox_extend."
+    "Lease (seconds) before pulled messages are redelivered (optional; default "
+    f"{DEFAULT_INBOX_LEASE_TTL_SECONDS}, clamped {MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}); "
+    "renew mid-turn with inbox_extend."
 )
-_P_EXTEND_IDS = (
-    "The message_id(s) whose lease to renew - a single id string or a list of "
-    "them. REQUIRED. All must be in-flight (pulled by you, unacknowledged, "
-    "lease still valid); otherwise the call fails with a per-message reason "
-    "and nothing is extended."
-)
+_P_EXTEND_IDS = "The message_id(s) whose lease to renew - id or list. REQUIRED. All must be in-flight; otherwise the call fails per-message and nothing is extended."
 _P_EXTEND_SECONDS = (
     "New lease duration in seconds, counted from now (REQUIRED; clamped to "
     f"{MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS})."
 )
-_P_INCLUDE_PARKED = (
-    "Also show parked (dead-letter) messages - deliveries that exhausted their "
-    "redelivery attempts and will never be redelivered (optional; default false)."
-)
+_P_INCLUDE_PARKED = "Also show parked (dead-letter) messages that exhausted redelivery (optional; default false)."
 _P_INCLUDE_BODIES = (
-    "Return the FULL message body on every item instead of the envelope-only "
-    f"body_preview (first {PEEK_BODY_PREVIEW_CHARS} chars) + body_bytes "
-    "(optional; default false). Usually unnecessary: inbox_pull is the way to "
-    "actually consume a message with its full body."
+    "Return the FULL body instead of the envelope-only body_preview (first "
+    f"{PEEK_BODY_PREVIEW_CHARS} chars) + body_bytes (optional; default false; "
+    "inbox_pull is the way to consume a message)."
 )
-_P_STATUS_MESSAGE_ID = (
-    "The message_id returned by message_create - the message whose "
-    "per-recipient delivery states you want to track. REQUIRED."
-)
+_P_STATUS_MESSAGE_ID = "The message_id from message_create whose per-recipient delivery states you want to track. REQUIRED."
 #: INVARIANT: the sensitive inbox verbs (pull/ack/extend) share the trust
 #: wording with message_create/handoff_* - one credential story bus-wide.
 _P_SESSION_TRUST = (
     "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
     "together with session_secret in trust_mode=strict)."
 )
-_P_SESSION_SECRET = (
-    "The session_secret returned by session_open for session_id (optional in "
-    "trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
-    "REQUIRED together with session_id in trust_mode=strict)."
-)
+_P_SESSION_SECRET = "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode)."
 
 
 def build_service(deps: Any) -> InboxService:
@@ -166,20 +140,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Take your unread messages into in-flight and return them with their body.
-
-        Index-free: the server tracks your per-recipient read state, so you never
-        pass a cursor. At-least-once: pulled messages are leased; if you do not
-        ``inbox_ack`` them before the lease elapses they are redelivered on a
-        later pull. Long turn? Size the lease with ``lease_seconds`` or renew it
-        with ``inbox_extend``. A message redelivered too many times is parked
-        (dead-letter) - see ``inbox_peek`` with ``include_parked``. In
-        trust_mode=strict pass session_id + session_secret (from session_open).
-
-        Pulling notifies the sender: each claimed message emits a
-        ``message.delivered`` receipt event visible only to its sender, in
-        the same transaction as the claim.
-        """
+        """Take your unread messages into in-flight and return them WITH their body (index-free; no cursor). At-least-once: unacked pulls are redelivered. Emits message.delivered to senders."""
         trust.require(
             tool="inbox_pull",
             agent_id=agent_id,
@@ -198,20 +159,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Acknowledge messages into history (read), freeing your inbox queue.
-
-        Returns ``{acknowledged: <count>, read_message_ids: [...]}`` - the ids
-        that ACTUALLY transitioned (already-read/unknown ids are absent). Ack
-        only what you have finished handling; unacked in-flight messages are
-        redelivered after their lease. Acknowledging notifies the sender: each
-        transitioned message emits a ``message.read`` receipt event visible
-        only to its sender, atomic with the transition - and (unless the
-        operator opted out via the inbox_read_receipts setting) the sender
-        ALSO gets a compact notification in its inbox (body kind
-        message.read_receipt, grouped per sender). Receipts never generate
-        receipts: just ack them. In trust_mode=strict
-        pass session_id + session_secret (from session_open).
-        """
+        """Acknowledge messages into history (read). Returns {acknowledged, read_message_ids}. Emits a message.read receipt to each sender. Full docs: okto-nexus://reference/tool-docs/inbox."""
         trust.require(
             tool="inbox_ack",
             agent_id=agent_id,
@@ -231,15 +179,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Renew the lease on messages you pulled but have not finished handling.
-
-        Sets the lease of YOUR in-flight deliveries to now + ``extend_seconds``
-        so a long turn does not trigger duplicate redelivery. All-or-nothing:
-        if any id is not in-flight (never pulled / lease already expired /
-        already acknowledged / parked) the call fails with a per-message
-        reason and nothing is extended. In trust_mode=strict pass session_id +
-        session_secret (from session_open).
-        """
+        """Renew the lease on in-flight messages you pulled but have not finished (now + extend_seconds). All-or-nothing: if any id is not in-flight the call fails per-message and nothing is extended."""
         trust.require(
             tool="inbox_extend",
             agent_id=agent_id,
@@ -262,18 +202,7 @@ def register(server: Any, deps: Any) -> None:
             bool, Field(description=_P_INCLUDE_BODIES)
         ] = False,
     ) -> dict[str, Any]:
-        """Triage your pending messages (unread + in-flight) WITHOUT consuming them.
-
-        READ-ONLY and envelope-only: each item carries who/subject/delivery
-        state plus ``body_preview`` (first chars) and ``body_bytes`` (full
-        UTF-8 size) instead of ``body`` - use ``inbox_pull`` to take a message
-        WITH its full body, and ``inbox_count`` if you only need to know
-        whether anything is pending. Nothing is leased, moved, or swept (an
-        in-flight message whose lease elapsed is shown as ``unread``). Pass
-        ``include_parked=true`` to also inspect dead-lettered messages;
-        ``include_bodies=true`` opts into full bodies when you must read
-        without consuming.
-        """
+        """Triage pending messages (unread + in-flight) WITHOUT consuming. READ-ONLY, envelope-only by default (body_preview + body_bytes). include_parked/include_bodies opt in."""
         return service.peek(
             agent_id=agent_id,
             limit=limit,
@@ -286,13 +215,7 @@ def register(server: Any, deps: Any) -> None:
     def inbox_count(
         agent_id: Annotated[str, Field(description=_P_AGENT)],
     ) -> dict[str, Any]:
-        """Return your inbox lane sizes ``{unread, in_flight, read}``.
-
-        A cheap, READ-ONLY between-turns check to decide whether to
-        ``inbox_pull`` (``unread > 0``). Expired in-flight leases are counted
-        as ``unread``. Parked (dead-letter) messages are excluded - inspect
-        them with ``inbox_peek`` and ``include_parked=true``.
-        """
+        """Return your inbox lane sizes {unread, in_flight, read}. Cheap READ-ONLY between-turns check (pull when unread > 0). Expired in-flight leases count as unread; parked excluded."""
         return service.count(agent_id=agent_id)
 
     @server.tool()
@@ -302,11 +225,7 @@ def register(server: Any, deps: Any) -> None:
         cursor: Annotated[str | None, Field(description=_P_CURSOR)] = None,
         limit: Annotated[int | None, Field(description=_P_LIMIT)] = None,
     ) -> dict[str, Any]:
-        """List your acknowledged (read) messages, newest-first, with pagination.
-
-        READ-ONLY and keyset-paginated: pages stay stable (no duplicates) even
-        while you keep acknowledging new messages between pages.
-        """
+        """List your acknowledged (read) messages, newest-first, keyset-paginated (stable pages even while you keep acknowledging). READ-ONLY."""
         return service.history(agent_id=agent_id, cursor=cursor, limit=limit)
 
     @server.tool()
@@ -314,19 +233,5 @@ def register(server: Any, deps: Any) -> None:
     def message_status(
         message_id: Annotated[str, Field(description=_P_STATUS_MESSAGE_ID)],
     ) -> dict[str, Any]:
-        """Track a message you SENT: the per-recipient delivery states.
-
-        READ-ONLY. Returns ``{message_id, deliveries, count}`` where each
-        delivery is ``{recipient, status, attempts, read_at}`` and status is
-        one of: ``unread`` (queued, or its lease expired and it awaits
-        redelivery), ``delivered`` (recipient pulled it - in flight), ``read``
-        (acknowledged), ``parked`` (dead-lettered after exhausting redelivery
-        attempts). Use it instead of re-sending when a recipient seems silent.
-
-        PUSH alternative: every lane transition also emits a receipt event
-        visible only to you, the sender (``message.delivered`` on pull,
-        ``message.read`` on ack) - await one with
-        event_wait(filters={"type": "message.read"}) and match
-        payload.message_id instead of polling this tool.
-        """
+        """Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY. Docs: okto-nexus://reference/tool-docs/inbox."""
         return service.message_status(message_id=message_id)

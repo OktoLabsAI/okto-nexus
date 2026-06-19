@@ -163,6 +163,64 @@ export interface NexusEvent {
   target?: unknown; // routing descriptor, present on the REST/SSE read model
 }
 
+// One workspace in the operator overview (GET /api/v1/workspaces). Identity +
+// a 24h activity rollup + presence counts + a health block. root_realpath is
+// null + path_redacted when the expose_workspace_path setting is off.
+export interface WorkspaceListItem {
+  workspace_id: string;
+  display_name: string | null;
+  root_realpath: string | null;
+  path_redacted: boolean;
+  created_at: string;
+  last_seen_at: string | null;
+  is_default: boolean;
+  message_count: number;
+  event_count: number;
+  last_event_at: string | null;
+  open_handoff_count: number;
+  presence: { present: number; stale: number; offline: number };
+  health: {
+    open_handoffs_unclaimed: number;
+    stale_sessions: number;
+    parked_messages_deadletter: number;
+    inbox_backlog_unread: number;
+  };
+}
+
+export type AnalyticsWindow = "24h" | "7d" | "30d";
+
+export interface AnalyticsBucket {
+  bucket_start: string;
+  total_count: number;
+  total_tokens: number;
+  by_agent: Record<string, { count: number; tokens: number }>;
+}
+
+export interface AnalyticsAgent {
+  agent_id: string;
+  count: number;
+  tokens: number;
+  avg_tokens: number;
+  p95_tokens: number;
+}
+
+export interface WorkspaceAnalytics {
+  window: AnalyticsWindow;
+  bucket_seconds: number;
+  truncated: boolean;
+  scanned_messages: number;
+  buckets: AnalyticsBucket[];
+  summary: {
+    total_messages: number;
+    total_tokens: number;
+    avg_tokens_per_msg: number;
+    p95_tokens: number;
+    peak_bucket_start: string | null;
+  };
+  agents: AnalyticsAgent[];
+  others: { agent_count: number; count: number; tokens: number } | null;
+}
+
 const KEY_STORAGE = "okto_nexus_operator_key";
 
 export function getApiKey(): string | null {
@@ -257,6 +315,15 @@ export const api = {
   eventTypes: (workspace?: string) =>
     call<{ items: string[] }>(
       `/api/v1/events/types${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
+    ),
+  // The rich workspace list (operator overview): every known workspace, not
+  // just the ones with a live session.
+  workspaces: () =>
+    call<{ workspaces: WorkspaceListItem[] }>("/api/v1/workspaces"),
+  // Message-distribution analytics for ONE workspace over a window.
+  workspaceAnalytics: (workspaceId: string, window: AnalyticsWindow = "24h") =>
+    call<WorkspaceAnalytics>(
+      `/api/v1/workspaces/${encodeURIComponent(workspaceId)}/analytics?window=${window}`,
     ),
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
   createAgent: (body: {

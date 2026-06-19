@@ -52,45 +52,23 @@ _P_FROM_AGENT = (
     "Your agent_id (the creator); recorded as the handoff's originator - the owner "
     "is whichever agent later claims it (handoff_claim), not necessarily you."
 )
-#: INVARIANT: byte-identical to the sentence in tools/messages.py so the SAME
-#: concept (a routing target) is documented the SAME way on both tools.
-_P_TARGET_TYPE = (
-    'Pass target as a raw JSON OBJECT (dict), e.g. {"strategy": "direct", '
-    '"agent_id": "<id>"} - NOT as a JSON-encoded string. '
-)
-#: For a handoff the target controls ELIGIBILITY TO CLAIM (competing consumers:
-#: all eligible see it, the first to handoff_claim wins). Spell out the enum.
+#: Compact routing-target cheat-sheet: every CLAIM-eligibility strategy SHAPE
+#: stays inline (so a harness without resources can target correctly - S7); the
+#: rules/examples live in okto-nexus://reference/target-grammar (shared with
+#: message_create). For a handoff the target controls ELIGIBILITY TO CLAIM
+#: (competing consumers: all eligible see it, the first to handoff_claim wins).
 _P_TARGET_HANDOFF = (
-    _P_TARGET_TYPE + "Routing rule selecting which agents may CLAIM this handoff. REQUIRED. "
-    "Competing-consumers: every eligible agent sees it but only the first to "
-    "handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished "
-    "claim's lease expires and it returns to the pool. strategy is one of: direct, "
-    "capability, role, broadcast, mixed, direct_with_fallback. Shapes: "
-    'direct {"strategy":"direct","agent_id":"<id>"} (one named worker); '
-    'capability {"strategy":"capability","capability":"<cap>"} (string or list = '
-    "any-of) - discover capabilities via capability_list; "
-    'role {"strategy":"role","role":"<role>"} (exact, case-sensitive); '
-    'broadcast {"strategy":"broadcast"} (any agent in the workspace); '
-    'mixed {"strategy":"mixed","rules":[<sub-target>, ...]} (OR of sub-targets); '
-    'direct_with_fallback {"strategy":"direct_with_fallback","agent_id":"<id>",'
-    '"fallback_after_seconds":<n>,"fallback":<sub-target, default broadcast>} '
-    "(named worker first; opens to the fallback pool after the delay)."
+    "Routing target as a raw JSON object - which agents may CLAIM this handoff "
+    '(REQUIRED). strategy one of: direct {"strategy":"direct","agent_id":"<id>"}; '
+    'capability {"strategy":"capability","capability":"<cap>"}; role '
+    '{"strategy":"role","role":"<role>"}; broadcast {"strategy":"broadcast"}; '
+    'mixed {"strategy":"mixed","rules":[<sub-target>,...]}; direct_with_fallback '
+    '{"strategy":"direct_with_fallback","agent_id":"<id>","fallback_after_seconds":<n>}. '
+    "Competing-consumers: the first to handoff_claim wins. Rules/examples/"
+    "edge-cases: read resource okto-nexus://reference/target-grammar."
 )
-_P_VISIBILITY = (
-    "Who may SEE the handoff - separate from who may CLAIM it (that is the "
-    "target). one of: public, eligible, private. REQUIRED (case-insensitive). "
-    "public = any agent in the workspace sees it; eligible = only agents the "
-    "target makes eligible; private = eligible-only (never broader than the "
-    "eligible set)."
-)
-_P_PAYLOAD = (
-    "Inline request body / work content, returned by handoff_list_available and "
-    "handoff_claim so the worker need not correlate the event (optional). Accepts "
-    "a raw JSON object/array, a string, or null - pass dicts as raw JSON objects, "
-    "NOT as JSON-encoded strings. A string is returned byte-for-byte; a non-string "
-    "is stored/returned as opaque JSON TEXT. For large content, pass an "
-    "artifact_id reference instead."
-)
+_P_VISIBILITY = "Who may SEE the handoff (separate from who may CLAIM it = target). one of: public, eligible, private. REQUIRED (case-insensitive)."
+_P_PAYLOAD = "Inline work content (optional; raw JSON object/array, string, or null - NOT JSON-encoded). Returned by handoff_list_available/handoff_claim. For large content pass an artifact_id."
 _P_SESSION_OPT = "Session_id attributing this operation to a specific open session of yours (optional)."
 #: INVARIANT: the sensitive handoff verbs (claim/complete/reject) share the
 #: trust wording with message_create/inbox_* - one credential story bus-wide.
@@ -110,31 +88,13 @@ _P_CURSOR = (
     "continue (optional; omit or '0' to start from the beginning)."
 )
 _P_LIMIT = "Max handoffs per page (optional; default applied by the server, clamped to the maximum)."
-_P_TIMEOUT = (
-    "Long-poll bound in SECONDS for an empty page (optional). 0 OR OMITTED is a "
-    "single non-blocking scan (no sleep) - the same safe default as event_wait. "
-    ">0 OPTS IN to blocking until a claimable handoff appears or the timeout "
-    "elapses (clamped to the server max wait). BLOCKING (only when >0): parks "
-    "your turn - see the server instructions."
-)
-_P_RESULT = (
-    "Completion result (string or JSON) persisted on the handoff row (read it "
-    "back with handoff_get), recorded with handoff.completed, and delivered to "
-    "the creator's inbox (optional)."
-)
-_P_REASON = (
-    "Human-readable reason persisted on the handoff row (read it back with "
-    "handoff_get), recorded with the rejection, and delivered to the creator's "
-    "inbox (optional)."
-)
+_P_TIMEOUT = "Long-poll bound in SECONDS (optional). 0/omitted = non-blocking snapshot; >0 OPTS IN to blocking until a claimable handoff appears or the timeout elapses."
+_P_RESULT = "Completion result (optional; string or JSON) persisted on the handoff, recorded with handoff.completed, and delivered to the creator inbox."
+_P_REASON = "Human-readable reason (optional) persisted on the handoff, recorded with the rejection, and delivered to the creator inbox."
 _P_CANCEL_REASON = (
     "Human-readable reason recorded with the handoff.cancelled event (optional)."
 )
-_P_GET_AGENT = (
-    "Your agent_id. The creator and the claimant always may read; any other "
-    "agent is gated by the handoff's visibility (same predicate as "
-    "handoff_list_available). REQUIRED."
-)
+_P_GET_AGENT = "Your agent_id (REQUIRED). Creator and claimant always read; others are gated by the handoff visibility."
 
 
 def build_service(deps: Any) -> HandoffService:
@@ -189,27 +149,7 @@ def register(server: Any, deps: Any) -> None:
         payload: Annotated[Any, Field(description=_P_PAYLOAD)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_OPT)] = None,
     ) -> dict[str, Any]:
-        """Create an OPEN handoff after validating target/visibility; emit handoff.created.
-
-        A ``direct`` target must name a REGISTERED agent (NOT_FOUND otherwise;
-        for an agent that will register later use ``direct_with_fallback``);
-        the named agent gets an inbox notification (``notified`` in the
-        response) - the claim still happens via ``handoff_claim``. Pool
-        targets (capability/role/mixed/broadcast/direct_with_fallback) return
-        ``eligible_count`` and an explicit ``warning`` when 0 agents currently
-        match (the handoff stays OPEN for later registrants; ``handoff_cancel``
-        retracts a mistake). After creating, poll ``handoff_get`` for the
-        status/result - do not scan the event stream.
-
-        The optional ``payload`` (the inline request body / work content) is any
-        JSON value - pass a dict/list as a raw JSON object/array (NO
-        JSON-escaping needed). It is persisted with the row and returned by
-        ``handoff_list_available`` and ``handoff_claim`` - the worker never has
-        to correlate the ``handoff.created`` event to read it. A string is
-        returned byte-for-byte; a non-string value is stored/returned as opaque
-        JSON TEXT (not re-parsed). For large content, pass an ``artifact_id``
-        reference instead.
-        """
+        """Create an OPEN handoff (validates target/visibility); emit handoff.created. After creating, poll handoff_get for status/result. Full docs: okto-nexus://reference/tool-docs/handoff."""
         require_json_object_param("target", target, required=True)
         return service.handoff_create(
             project_root=project_root,
@@ -229,14 +169,7 @@ def register(server: Any, deps: Any) -> None:
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
-        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated).
-
-        Each entry includes the handoff ``payload`` so a worker can triage the
-        work BEFORE claiming it. ``cursor``/``limit``/``timeout_seconds`` are
-        annotated ``Any`` on purpose: the application layer validates them so a
-        wrong type returns the canonical ``VALIDATION_ERROR`` envelope, not an
-        SDK validation error.
-        """
+        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated); each entry includes the payload for triage before claiming."""
         # Long-poll OFF the event loop (mirrors event_wait): the blocking wait
         # runs in a worker thread so a parked listener never freezes the shared
         # serve event loop (dashboard REST + every other MCP tool over HTTP).
@@ -262,12 +195,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Atomically claim an OPEN handoff; single winner, others get a structured error.
-
-        The claim response returns the handoff ``payload`` (the work content)
-        alongside ``claimed_by`` / ``lease_expires_at``. In trust_mode=strict
-        pass session_id + session_secret (from session_open).
-        """
+        """Atomically claim an OPEN handoff; single winner, others get a structured error. Returns the payload + claimed_by/lease_expires_at. In strict mode pass session_id + session_secret."""
         trust.require(
             tool="handoff_claim",
             agent_id=agent_id,
@@ -293,10 +221,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Owner-only transition CLAIMED -> COMPLETED; emit handoff.completed.
-
-        In trust_mode=strict pass session_id + session_secret (from session_open).
-        """
+        """Owner-only transition CLAIMED -> COMPLETED; emit handoff.completed. In trust_mode=strict pass session_id + session_secret."""
         trust.require(
             tool="handoff_complete",
             agent_id=agent_id,
@@ -322,10 +247,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED).
-
-        In trust_mode=strict pass session_id + session_secret (from session_open).
-        """
+        """Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED). In trust_mode=strict pass session_id + session_secret."""
         trust.require(
             tool="handoff_reject",
             agent_id=agent_id,
@@ -353,14 +275,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Creator-only OPEN -> CANCELLED; retract a handoff nobody should take; emit handoff.cancelled.
-
-        Use it to withdraw a mistaken/stale handoff (e.g. created with a pool
-        target that matched zero agents). Only OPEN handoffs cancel: a CLAIMED
-        one is resolved by its claimant (handoff_complete/handoff_reject) or
-        returns to OPEN when the claim lease expires. In trust_mode=strict
-        pass session_id + session_secret (from session_open).
-        """
+        """Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a pool target matching zero agents). Only OPEN handoffs cancel. In strict mode pass session creds."""
         trust.require(
             tool="handoff_cancel",
             agent_id=agent_id,
@@ -381,17 +296,7 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_GET_AGENT)],
     ) -> dict[str, Any]:
-        """Read one handoff by id: status, claimant, payload, result/rejected_reason.
-
-        THIS is the creator's path to a handoff's outcome: after
-        handoff_create, poll handoff_get for status/result; do not scan the
-        event stream (events are observability, may be visibility-gated, and a
-        terminal handoff leaves handoff_list_available). The returned status
-        reflects an already-expired claim lease (the handoff reads as OPEN
-        again). ``result``/``rejected_reason`` are the opaque TEXT recorded by
-        handoff_complete/handoff_reject (a string byte-for-byte, a non-string
-        as JSON TEXT).
-        """
+        """Read one handoff by id: status, claimant, payload, result/rejected_reason. The creator's path to the outcome (do not scan events). Full docs: okto-nexus://reference/tool-docs/handoff."""
         return service.handoff_get(
             project_root=project_root,
             handoff_id=handoff_id,

@@ -142,6 +142,12 @@ class NexusConfig:
     # Deliver a read receipt to the SENDER's inbox when a recipient
     # acknowledges its message (opt-out; live-tunable - no restart).
     inbox_read_receipts: bool = True
+    # Expose each workspace's root_realpath on the OPERATOR surfaces
+    # (GET /api/v1/workspaces + dashboard). Default OFF (defense-in-depth):
+    # disclosing the absolute project path is opt-in. Independent of the
+    # per-call include_paths param of the workspace_list MCP tool (agent
+    # surface) - the dashboard gating is controlled ONLY by this knob.
+    expose_workspace_path: bool = False
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -283,6 +289,11 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "OKTO_NEXUS_INBOX_READ_RECEIPTS",
         "--inbox-read-receipts",
         True,
+    ),
+    "expose_workspace_path": (
+        "OKTO_NEXUS_EXPOSE_WORKSPACE_PATH",
+        "--expose-workspace-path",
+        False,
     ),
 }
 

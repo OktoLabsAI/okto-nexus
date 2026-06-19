@@ -30,23 +30,10 @@ from okto_nexus.envelope import tool_envelope
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
 _P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-_P_ARTIFACT_TYPE = (
-    "Artifact classification - one of: file, text, json, markdown (normalised). "
-    "REQUIRED. json content is validated as well-formed. The type is just a label; "
-    "whether it is stored inline or by reference is decided by content-vs-path "
-    "below."
-)
+_P_ARTIFACT_TYPE = "Artifact classification - one of: file, text, json, markdown. REQUIRED. json content is validated as well-formed; inline-vs-reference is decided by content-vs-path."
 _P_NAME = "Human-friendly name/label for the artifact (optional)."
-_P_PATH = (
-    "Filesystem path to register by REFERENCE - must stay within the workspace "
-    "root; only the path + metadata are stored, never the file's bytes (optional). "
-    "Provide this OR content - at least one is REQUIRED."
-)
-_P_CONTENT = (
-    "Inline UTF-8 content to store directly, bounded by max_inline_bytes; for json "
-    "it must be well-formed (optional). Provide this OR path - at least one is "
-    "REQUIRED."
-)
+_P_PATH = "Filesystem path to register by REFERENCE (must stay within the workspace root; only path + metadata stored, never bytes). Provide this OR content - at least one REQUIRED."
+_P_CONTENT = "Inline UTF-8 content (bounded by max_inline_bytes; json must be well-formed). Provide this OR path - at least one REQUIRED."
 _P_METADATA = "Free-form JSON object stored with the artifact (optional)."
 _P_ARTIFACT_ID = "The artifact_id to retrieve. REQUIRED."
 

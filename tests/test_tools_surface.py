@@ -123,38 +123,31 @@ def test_server_instructions_carry_reception_loop_and_retry_guidance(surface):
     """The live FastMCP server publishes the inbox/retry guidance to agents.
 
     ``create_server`` must pass ``instructions=SERVER_INSTRUCTIONS`` to FastMCP
-    (that is what the SDK ships in the ``initialize`` handshake); the text must
-    keep the inbox reception loop (count -> pull -> ack, at-least-once) and the
-    DB_ERROR/MIGRATED retry guidance. Dropping the kwarg or rewriting the text
-    without these sections fails here instead of silently degrading agents.
+    (that is what the SDK ships in the ``initialize`` handshake). Frente 1
+    slimmed the inline block - the DEEP prose moved to MCP resources - but the
+    ACTIONABLE minimum stays inline: the inbox reception loop (count -> pull ->
+    ack) and the DB_ERROR/MIGRATED retry guidance, plus POINTERS to the
+    reference resources. Dropping the kwarg or removing these fails here instead
+    of silently degrading agents.
     """
     server, _ = surface
     instructions = server.instructions
     assert instructions, "create_server must hand instructions to FastMCP"
     assert instructions == SERVER_INSTRUCTIONS
 
-    # Inbox section: the global inbox is the delivery channel...
-    assert "YOUR INBOX" in instructions
+    # Reception loop stays inline: count -> pull -> ack, IN THAT ORDER.
     for tool in ("inbox_count", "inbox_pull", "inbox_ack"):
         assert tool in instructions, f"instructions must mention {tool}"
-    # ...with at-least-once redelivery of unacked messages.
-    assert "at-least-once" in instructions
-
-    # Reception loop: count -> pull -> ack, IN THAT ORDER after the marker.
-    loop_at = instructions.find("RECOMMENDED RECEPTION LOOP")
-    assert loop_at != -1, "instructions must keep the RECOMMENDED RECEPTION LOOP"
-    count_at = instructions.find("inbox_count", loop_at)
-    pull_at = instructions.find("inbox_pull", loop_at)
-    ack_at = instructions.find("inbox_ack", loop_at)
-    assert -1 not in (count_at, pull_at, ack_at), (
-        "the reception loop must name inbox_count, inbox_pull and inbox_ack"
-    )
+    count_at = instructions.find("inbox_count")
+    pull_at = instructions.find("inbox_pull")
+    ack_at = instructions.find("inbox_ack")
+    assert -1 not in (count_at, pull_at, ack_at)
     assert count_at < pull_at < ack_at, (
         "the reception loop must read count -> pull -> ack"
     )
 
-    # Retry guidance: transient DB_ERROR is retryable with a short backoff;
-    # MIGRATED means switch tools, never retry the old call.
+    # Retry guidance stays inline: transient DB_ERROR is retryable with a short
+    # backoff; MIGRATED means switch tools, never retry the old call.
     assert "ERRORS & RETRIES" in instructions
     assert "DB_ERROR" in instructions
     assert "retryable=true" in instructions
@@ -165,6 +158,16 @@ def test_server_instructions_carry_reception_loop_and_retry_guidance(surface):
         "MIGRATED guidance must say the old call is not to be retried"
     )
 
+    # Frente 1: the deep prose (inbox/receipts, monitoring, full pre-flight)
+    # moved to MCP resources; the inline block must POINT to them so the depth
+    # stays reachable on demand.
+    for ref in (
+        "okto-nexus://reference/preflight",
+        "okto-nexus://reference/communication",
+        "okto-nexus://reference/monitoring",
+    ):
+        assert ref in instructions, f"instructions must point to {ref}"
+
 
 # --------------------------------------------------------------------------- #
 # nexus_info
@@ -174,7 +177,12 @@ def test_nexus_info_reports_versions(surface):
     env = _call(server, "nexus_info")
     assert env["ok"] is True
     data = env["data"]
-    assert set(data) == {"package_version", "schema_version", "surface_revision"}
+    assert set(data) == {
+        "package_version",
+        "schema_version",
+        "surface_revision",
+        "resource_versions",
+    }
 
     assert isinstance(data["package_version"], str) and data["package_version"]
 
@@ -194,6 +202,12 @@ def test_nexus_info_reports_versions(surface):
     assert isinstance(data["surface_revision"], int)
     assert data["surface_revision"] == SURFACE_REVISION
     assert data["surface_revision"] >= 2  # started at 2 with the M3 surface
+
+    # Frente 1 (residente): nexus_info reports the {resource_uri: version} map
+    # so a client can detect a stale cached MCP resource.
+    rv = data["resource_versions"]
+    assert isinstance(rv, dict) and rv
+    assert all(u.startswith("okto-nexus://reference/") for u in rv)
 
 
 # --------------------------------------------------------------------------- #

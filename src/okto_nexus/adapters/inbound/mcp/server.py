@@ -56,6 +56,7 @@ from ...outbound.sqlite.messages_repo import (
 from ...outbound.sqlite.migrations import MigrationRunner
 from ...outbound.sqlite.permissions_repo import SqlitePresetRepo
 from . import tools as _tools_pkg
+from .resources import register_resources, resource_versions
 
 #: Server-level guidance surfaced to connecting agents (FastMCP ``instructions``).
 #: Covers how to choose a communication channel, replying directly by default,
@@ -64,182 +65,26 @@ from . import tools as _tools_pkg
 #: backgrounded ``event_wait`` long-poll on THIS connection - plus the
 #: anti-patterns it must avoid (curl at the REST API, ``okto-nexus tail``, a
 #: standalone monitor process).
-SERVER_INSTRUCTIONS = """\
-Okto Nexus - local agent coordination bus (workspace-scoped; pass \
-project_root). Agents are global identities - discover them with agent_list, \
-and the capabilities they advertise with capability_list.
+SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-scoped; pass project_root). Agents are global identities - discover them with agent_list and their advertised capabilities with capability_list. DEEP reference docs live in MCP resources (okto-nexus://reference/...); read them on demand. This inline block keeps only what you need to act correctly on the first try.
 
-YOUR IDENTITY & CONNECTION. You are connected over MCP streamable HTTP and \
-authenticated by the API key in your connection URL (/mcp?api_key=nxs_...): \
-that key IS your agent identity, created by the operator on the dashboard. \
-Use that agent_id consistently as from_agent_id / agent_id in every call. \
-EVERYTHING you need is exposed as MCP tools on THIS connection - never shell \
-out to the okto-nexus CLI, never spawn helper processes, never try to attach \
-a stdio server: the hub is already running and this session is your only \
-required channel. (The legacy stdio mode exists solely for hosts that launch \
-the server themselves; if you are reading this over HTTP it does not concern \
-you.)
+YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/mcp?api_key=nxs_...) IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, spawn helper processes, or attach a stdio server.
 
-PRE-FLIGHT - run this EXACT sequence on your FIRST turn, in this order, \
-BEFORE starting whatever the user asked. It is cheap and idempotent; every \
-agent bootstrapping the same way is what makes the swarm predictable:
-  1. IDENTITY - agent_whoami(): your agent_id, operator-assigned role, \
-capabilities and the permissions in effect. Use that agent_id everywhere. \
-Only if you must advertise NEW capabilities for routing, follow with \
-agent_register on your OWN id (self-only: minting/modifying other identities \
-returns PERMISSION_DENIED - identities are created on the dashboard).
-  2. PRESENCE - workspace_resolve(project_root=<cwd>) then \
-session_open(agent_id=<you>, workspace_id=<resolved>). Without an open, \
-heartbeat-fresh session you are NOT in the broadcast audience (messages to \
-"everyone" silently skip you) and the dashboard shows you offline. Keep \
-session_heartbeat fresh between turns; store the returned session_secret.
-  3. BACKLOG - inbox_count(agent_id=<you>); if anything is pending, \
-inbox_pull and triage what accumulated while you were offline (redeliveries \
-included), then inbox_ack what you handled. Never skip this: senders are \
-already tracking these deliveries.
-  4. MONITOR - anchor first: event_cursor(stream="workspace") returns the \
-log's current end, so you only ever see events from NOW on. Then, if your \
-harness supports background/parallel calls, run an \
-event_wait(timeout_seconds=N, cursor=<anchor>) long-poll loop IN THE \
-BACKGROUND (see MONITORING FROM A CAPABLE HARNESS below); otherwise poll \
-inbox_count + event_get(cursor=<anchor>) between turns, advancing the cursor.
-THEN follow the user's instructions - communicate per the rules below. When \
-your work is finished for good, session_close (presence must reflect \
-reality).
+PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, idempotent):
+  1. agent_whoami() - your agent_id, role, capabilities, permissions. Use that agent_id everywhere.
+  2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Keep session_heartbeat fresh between turns (only heartbeat-fresh sessions receive broadcasts and show online); store the returned session_secret.
+  3. inbox_count(agent_id=<you>); if unread > 0, inbox_pull and triage the backlog, then inbox_ack what you handled.
+  4. event_cursor(stream="workspace") to anchor at NOW, then monitor via event_wait (background long-poll) or event_get polling, advancing the cursor.
+Full detail: resource okto-nexus://reference/preflight. When finished for good, session_close.
 
-HOW TO COMMUNICATE - prefer the most targeted, least noisy channel:
+COMMUNICATE - prefer the most targeted, least noisy channel:
+  - DIRECT (default, preferred): message_create with target={"strategy":"direct","agent_id":"<recipient>"}. ALWAYS reply directly to whoever messaged you (target their from_agent_id).
+  - HANDOFF: handoff_create with a capability/role/broadcast target when exactly ONE free agent should claim dispatchable work (first to handoff_claim wins).
+  - BROADCAST (last resort): message_create with NO target - announcements or open-ended discovery only, NEVER actionable work (it triggers unwanted parallel work).
+HOW YOU RECEIVE: messages addressed to you land in your GLOBAL inbox - inbox_count -> inbox_pull -> inbox_ack. event_get/event_wait are OBSERVABILITY, not message delivery. Channels are organizational labels, not ACLs and not delivery - the message TARGET decides who receives it. Full detail (channels, delivery/read receipts, reception loop): okto-nexus://reference/communication. Monitoring/listener patterns + anti-patterns (no curl, no CLI tail, no separate monitor process): okto-nexus://reference/monitoring.
 
-1) DIRECT MESSAGE (default, preferred). message_create with \
-target={"strategy":"direct","agent_id":"<recipient>"}. Most efficient, least \
-noise, no spurious work. ALWAYS reply DIRECTLY to whoever messaged you (target \
-their from_agent_id) unless you explicitly mean to broadcast or hand off. \
-Examples: answering a question; acknowledging; a 1:1 follow-up; returning a \
-result to the requester.
+PERMISSIONS. The operator may restrict your identity (direct sends, broadcasts, channel posts, handoff create/work/cancel, rate limits, peer allowlists). A blocked call returns ok:false with code PERMISSION_DENIED and details.required_permission. Do NOT retry or work around it - adapt (e.g. reply directly instead of broadcasting) or report that the operator must grant the flag (dashboard Agents -> Permissions).
 
-2) HANDOFF (when exactly ONE free agent should take the work). handoff_create \
-with a capability/role/broadcast target: every eligible agent SEES it but only \
-the first to handoff_claim gets it (others get HANDOFF_ALREADY_CLAIMED); an \
-unfinished claim's lease expires and the work returns to the pool. Use for a \
-dispatchable task to a pool of capable agents. Example: "OCR this scan" -> \
-handoff target {"strategy":"capability","capability":"ocr"} (find the \
-capability via capability_list first); one free OCR worker claims and finishes.
-
-3) BROADCAST (last resort). message_create with NO target. Two valid uses: (a) \
-DISSEMINATE instructive/contextual information to everyone - announcements, \
-conventions, status, shared decisions; (b) open-ended DISCOVERY when you do NOT \
-yet know who to ask - poll the group to locate the right agent. Examples: "Who \
-is responsible for application X?" or "Who is impacted by change Y in application \
-XYZ?" - only the relevant agents answer, and they reply DIRECTLY to you. Do NOT \
-broadcast actionable WORK requests: an undirected "do X" can trigger UNWANTED \
-PARALLEL WORK (every eligible agent may act on it). Once discovery identifies the \
-owner, switch to a direct message (or a handoff if it is dispatchable work).
-
-CHANNELS are lightweight ORGANIZATIONAL LABELS, not access boundaries and not a \
-delivery mechanism. No membership or ACL: any agent in the workspace can read and \
-post to ANY channel. They only TAG a message by topic/workstream; they do NOT \
-decide who receives it - that is the message TARGET (above). Only "general" \
-exists by default; create the channels you need with channel_create (idempotent \
-by name) and discover them with channel_list.
-
-YOUR INBOX (how you receive messages). Messages addressed to you are delivered \
-to your GLOBAL inbox and stay there until you read them - no cursor, no index, \
-regardless of which workspace they were sent in. The flow:
-  * inbox_count(agent_id=<you>) - cheap between-turns check; if unread > 0, pull.
-  * inbox_pull(agent_id=<you>) - returns your unread messages WITH their body and
-    marks them in-flight (leased).
-  * inbox_ack(agent_id=<you>, message_ids=[...]) - once handled, move them to
-    history. Unacked messages are REDELIVERED (at-least-once), so nothing is lost
-    if you stop mid-handling. inbox_peek is a non-destructive look; inbox_history
-    is the read archive.
-RECOMMENDED RECEPTION LOOP: inbox_count between turns (cheap) -> inbox_pull when \
-unread > 0 -> inbox_ack after you finish processing. \
-After sending a message that expects a reply, just check your inbox on a later \
-turn - the reply lands there (no fire-and-forget, no polling a cursor).
-
-DELIVERY & READ RECEIPTS (how you KNOW a message arrived / was read). \
-message_create's response is ITSELF the delivery confirmation: ``recipients`` \
-names exactly who got it in their inbox (the fan-out commits atomically with \
-the send) and ``delivered_count`` totals it. From then on, two complementary \
-trackers:
-  * PULL - message_status(message_id=...) returns the per-recipient lane: \
-unread (queued), delivered (recipient pulled it, in-flight), read \
-(acknowledged, with read_at), parked (dead-letter). Check it INSTEAD of \
-re-sending when a recipient seems silent.
-  * PUSH - the inbox emits receipt events visible ONLY to you, the sender: \
-``message.delivered`` when a recipient pulls your message and ``message.read`` \
-when they acknowledge it (atomic with the lane transition). Await one with \
-event_wait, e.g. filters={"type": "message.read"} and match \
-payload.message_id - no need to poll message_status. Delivery is \
-at-least-once: a redelivery after a lease expiry emits message.delivered \
-again (payload.recipient_agent_id tells you who).
-  * INBOX receipt (default ON; the operator can opt out via the \
-inbox_read_receipts setting) - when a recipient acknowledges your message \
-you ALSO receive a compact notification in YOUR OWN inbox: body kind \
-"message.read_receipt" with read_by, read_at and the message_ids (grouped \
-per sender). It is informational - inbox_ack it and move on; do NOT reply. \
-Receipts never generate receipts, so acknowledging one is always terminal.
-
-LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait OBSERVE \
-the bus (audit/monitoring of message.created, handoff.*, session.* events); \
-they are NOT how you receive messages addressed to you - that is the inbox \
-above. Anchor with event_cursor first (pre-flight step 4), then pick a mode:
-  * Snapshot polling (default): event_get between turns, advancing cursor -> \
-next_cursor. Non-blocking, fits single-threaded loops.
-  * Long-poll listener: event_wait(timeout_seconds=N>0, cursor=...) parks the \
-call until a matching event arrives or N elapses (clamped to the server \
-ceiling, default 30s), then returns the page; loop on next_cursor. This is an \
-ordinary streamable-HTTP call - safe to use as a wait primitive when you \
-EXPECT an event.
-  * Targeted wait: event_wait with filters (e.g. {"type": \
-"handoff.completed", "handoff_id": ...}) and a short timeout to await one \
-specific outcome.
-
-MONITORING FROM A CAPABLE HARNESS (Claude Code & any harness that can run a \
-tool call in the BACKGROUND or in PARALLEL). A correct monitor is NOTHING but \
-event_wait called in a loop on THIS MCP connection - there is no daemon to \
-write, no socket to open, no process to supervise. Concretely:
-  * THE RIGHT WAY: start a background/parallel task whose ONLY job is to call \
-the event_wait TOOL (timeout_seconds=N>0, cursor=<last next_cursor>), and \
-re-arm it from the returned next_cursor each time it yields a page. Because \
-the long-poll runs OFF your main turn, your reasoning loop is never blocked; \
-because the call rides THIS connection, your API key already supplies your \
-identity, visibility and permissions. A timeout just returns an empty page - \
-re-arm and continue; that is the steady state, not an error.
-  * IF YOU CANNOT BACKGROUND A CALL (strictly single-threaded harness): do NOT \
-fake it with an external blocking process - fall back to snapshot polling, \
-i.e. event_get(cursor=...) between turns, advancing the cursor.
-  * ANTI-PATTERNS - never do any of these; each re-implements, worse, what one \
-tool call already does for free, and most break your identity or presence:
-      - NO curl / raw HTTP against the REST API (/api/v1), the /mcp endpoint, \
-or the dashboard's live SSE stream. Those are the human dashboard and the \
-operator's REST surface; hand-rolling them duplicates auth, cursoring and \
-visibility and drifts out of sync. Call the event_wait tool instead.
-      - NO `okto-nexus tail` (or any CLI command) as a listener. It is a \
-PASSIVE operator console, does not count as presence, and is not an agent \
-surface (older docs wrongly prescribed it).
-      - NO standalone "monitor" app/script/worker (Python, Node, shell, ...) \
-to poll the bus. That is overengineering: a separate process does not share \
-your identity/API key, does not keep your presence heartbeat fresh, and \
-cannot hand events back into your reasoning loop. The tool already does the \
-long-poll for you.
-      - NO spawning a helper process or a second server of any kind. The hub \
-is already running and this MCP session is your only required channel.
-
-PERMISSIONS. The operator may restrict what your identity can do (direct \
-sends, broadcasts, channel posts, handoff create/work/cancel, rate limits, \
-peer allowlists). A blocked call returns ok:false with code \
-PERMISSION_DENIED and details.required_permission naming the exact flag. Do \
-NOT retry or work around it - adapt (e.g. reply directly instead of \
-broadcasting) or report that the operator must grant the flag on the \
-dashboard (Agents -> Permissions).
-
-ERRORS & RETRIES. Every tool answers with {ok:true,data} or \
-{ok:false,error:{code,message,...}}. A DB_ERROR with retryable=true is transient \
-(e.g. the SQLite store was briefly busy): retrying the SAME call after a short \
-backoff (~0.5-2s) is safe. A MIGRATED error means the tool was replaced - the \
-message names the exact replacement tool and parameters; switch to it, do NOT \
-retry the old call. PERMISSION_DENIED is a policy decision, not an error to \
-retry.
+ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,message,...}}. A DB_ERROR with retryable=true is transient - retry the SAME call after a short backoff (~0.5-2s). A MIGRATED error means the tool was replaced; the message names the exact replacement - switch to it, do NOT retry the old call. PERMISSION_DENIED is a policy decision, not a retryable error.
 """
 
 #: Monotonic revision of the MCP tool SURFACE (tool names, parameters,
@@ -281,7 +126,14 @@ retry.
 #: to avoid - curl/raw HTTP at /api/v1, /mcp or the dashboard SSE; `okto-nexus
 #: tail` or any CLI; a standalone Python/Node monitor process; spawning any
 #: helper process. Doc-only (no tool/parameter/semantics change).
-SURFACE_REVISION = 11
+#: 12 = token-reduction Frente 1 (residente): the long prose moved OUT of
+#: SERVER_INSTRUCTIONS into MCP resources (okto-nexus://reference/preflight,
+#: /communication, /monitoring), read on demand; the inline block keeps only
+#: the actionable minimum (identity, 4-step pre-flight, the 3 comm modes,
+#: permissions, errors) + pointers. nexus_info now also reports
+#: resource_versions for stale-cache detection. Descriptions/instructions only
+#: - no tool/parameter/semantics change.
+SURFACE_REVISION = 12
 
 
 @dataclass
@@ -426,18 +278,12 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
     @server.tool()
     @tool_envelope
     def nexus_info() -> dict[str, Any]:
-        """Report the server's versions: package_version, schema_version, surface_revision.
-
-        Call this when behaviour seems to disagree with your cached tool
-        schemas. ``surface_revision`` increments on every change to the tool
-        surface (names/parameters/defaults/semantics); ``schema_version`` is
-        the highest applied DB migration; ``package_version`` is the installed
-        distribution version ("dev" for a source checkout).
-        """
+        """Report server versions: package_version, schema_version, surface_revision, resource_versions (uri->version map, for stale-cache detection). Call when behaviour disagrees with cached schemas."""
         return {
             "package_version": _package_version(),
             "schema_version": _schema_version(deps.connection_factory),
             "surface_revision": SURFACE_REVISION,
+            "resource_versions": resource_versions(),
         }
 
 
@@ -484,6 +330,7 @@ def create_server(deps: Deps) -> Any:
     server = FastMCP("okto-nexus", instructions=SERVER_INSTRUCTIONS)
     register_tools(server, deps)
     register_meta_tools(server, deps)
+    register_resources(server)  # MCP resources: on-demand reference docs (Frente 1)
     return server
 
 

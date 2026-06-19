@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
 from ....application.search import EmbeddingsUnavailable
+from ....application.workspace_analytics import DEFAULT_WINDOW, is_valid_window
 from ....domain.base import new_id
 from ....domain.permissions import (
     BUILTIN_PRESETS,
@@ -360,6 +361,58 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"items": rows, "next_cursor": rows[-1]["event_id"] if rows else after})
+
+    # ------------------------------------------------------------------ #
+    # Workspaces (operator overview + message-distribution analytics)
+    # ------------------------------------------------------------------ #
+    @router.get("/workspaces")
+    async def workspaces(request: Request) -> JSONResponse:
+        """Rich list of EVERY known workspace: identity + 24h rollups + health.
+
+        Read-only operator surface (not the inter-agent visibility predicate).
+        ``root_realpath`` is shown only when the ``expose_workspace_path``
+        setting is on (default off -> redacted). The service owns its own
+        read-only unit of work, so this runs straight on a worker thread.
+        """
+        service = request.app.state.workspace_list
+        deps = request.app.state.deps
+        default_ws = getattr(request.app.state, "default_workspace_id", None)
+        expose = bool(getattr(deps.config, "expose_workspace_path", False))
+
+        def _list():
+            return service.list_workspaces(
+                default_workspace_id=default_ws, expose_path=expose
+            )
+
+        try:
+            items = await anyio.to_thread.run_sync(_list)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"workspaces": items})
+
+    @router.get("/workspaces/{workspace_id}/analytics")
+    async def workspace_analytics(
+        request: Request, workspace_id: str, window: str = DEFAULT_WINDOW
+    ) -> JSONResponse:
+        """Message distribution over time x size(TOKENS), by sender, for ONE workspace.
+
+        ``window`` is one of 24h/7d/30d (default 24h); anything else is a
+        canonical ``INVALID_WINDOW`` (400). An unknown ``workspace_id`` is NOT
+        an error: it returns 200 with zeroed buckets/summary (a workspace may
+        exist with no messages). The analytics service owns its read uow.
+        """
+        if not is_valid_window(window):
+            return _err(400, "INVALID_WINDOW", "window must be one of 24h, 7d, 30d")
+        service = request.app.state.workspace_analytics
+
+        def _analytics():
+            return service.analytics(workspace_id=workspace_id, window=window)
+
+        try:
+            data = await anyio.to_thread.run_sync(_analytics)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
 
     @router.get("/events/types")
     async def event_types(

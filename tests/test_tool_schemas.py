@@ -63,27 +63,41 @@ def test_every_tool_parameter_has_a_description(tmp_path):
 
 
 def test_routing_target_enum_is_spelled_out(tmp_path):
-    """The ``target.strategy`` enum values are enumerated in the description."""
+    """The ``target.strategy`` enum SHAPES stay inline per tool (Frente 1).
+
+    The deep grammar moved to ``okto-nexus://reference/target-grammar``, but the
+    strategy shapes a tool actually accepts must remain inline so a harness
+    WITHOUT resources can target correctly (S7). message_create accepts five
+    strategies; handoff_create also accepts ``direct_with_fallback``. Both point
+    to the shared grammar resource.
+    """
     tools = {t.name: t for t in _list_tools(tmp_path)}
 
-    for tool_name in ("message_create", "handoff_create"):
-        target = (tools[tool_name].inputSchema or {})["properties"]["target"]
-        description = target.get("description", "")
-        # House style (mirrors okto-pulse): enums are spelled "one of: ...".
-        assert "one of:" in description, (
-            f"{tool_name}.target description should enumerate strategies as 'one of: ...'"
-        )
-        for strategy in (
+    expected = {
+        "message_create": ("direct", "capability", "role", "broadcast", "mixed"),
+        "handoff_create": (
             "direct",
             "capability",
             "role",
             "broadcast",
             "mixed",
             "direct_with_fallback",
-        ):
+        ),
+    }
+    for tool_name, strategies in expected.items():
+        target = (tools[tool_name].inputSchema or {})["properties"]["target"]
+        description = target.get("description", "")
+        # House style (mirrors okto-pulse): enums are spelled "one of: ...".
+        assert "one of:" in description, (
+            f"{tool_name}.target description should enumerate strategies as 'one of: ...'"
+        )
+        for strategy in strategies:
             assert strategy in description, (
                 f"{tool_name}.target description omits the '{strategy}' strategy"
             )
+        assert "okto-nexus://reference/target-grammar" in description, (
+            f"{tool_name}.target must point to the shared target-grammar resource"
+        )
 
 
 def test_handoff_visibility_enum_is_spelled_out(tmp_path):
@@ -127,24 +141,24 @@ def test_event_stream_enum_matches_domain_vocabulary(tmp_path):
         )
 
 
-#: The SAME concept (a routing target) must carry the SAME type guidance on
-#: both tools that take one (uniform surface for agents).
-_TARGET_TYPE_SENTENCE = (
-    'Pass target as a raw JSON OBJECT (dict), e.g. {"strategy": "direct", '
-    '"agent_id": "<id>"} - NOT as a JSON-encoded string.'
-)
+def test_target_type_documented_via_shared_resource(tmp_path):
+    """Both target-taking tools point to the SAME grammar resource (Frente 1).
 
-
-def test_target_type_documented_identically_on_both_tools(tmp_path):
-    """message_create.target and handoff_create.target share the type sentence."""
+    The old design duplicated a byte-identical type sentence on both tools; FR4
+    replaced that with a shared ``okto-nexus://reference/target-grammar``
+    resource (uniform surface, no duplication). Each description must still say
+    the target is a raw JSON object and reference the shared resource.
+    """
     tools = {t.name: t for t in _list_tools(tmp_path)}
 
     for tool_name in ("message_create", "handoff_create"):
         target = (tools[tool_name].inputSchema or {})["properties"]["target"]
         description = target.get("description", "")
-        assert _TARGET_TYPE_SENTENCE in description, (
-            f"{tool_name}.target description must carry the shared JSON-object "
-            "type sentence (uniform typing of the same concept)"
+        assert "raw JSON object" in description, (
+            f"{tool_name}.target must say target is a raw JSON object"
+        )
+        assert "okto-nexus://reference/target-grammar" in description, (
+            f"{tool_name}.target must reference the shared target-grammar resource"
         )
 
 

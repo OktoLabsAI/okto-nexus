@@ -158,6 +158,12 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "acknowledges its message (receipts never generate receipts). "
         "Turn off to keep inboxes receipt-free.",
     ),
+    SettingSpec(
+        "expose_workspace_path", "bool",
+        "Show each workspace's absolute project path (root_realpath) on the "
+        "Workspaces screen and the /api/v1/workspaces API. Off (default) "
+        "redacts the path (defense-in-depth); turn on to reveal it.",
+    ),
 )
 
 _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS}

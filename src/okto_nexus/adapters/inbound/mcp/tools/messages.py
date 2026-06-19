@@ -66,59 +66,24 @@ _MIGRATED_CODE: str = (
 _P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
 _P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
 _P_SUBJECT = "Short message subject/title (one line)."
-_P_BODY = (
-    "Message body (inline text). For large content, attach an artifact via "
-    "artifacts and keep the body a short pointer instead of inlining it."
-)
-_P_CHANNEL = (
-    "Channel_id to post into (optional; omit to post with NO channel - channel_id "
-    "is left null). Channels are organizational labels only - they do NOT decide "
-    "who receives the message (the target does). Enumerate with channel_list; "
-    "create with channel_create."
-)
-_P_CHANNEL_NAME = (
-    "Channel name to create - a short topic label, e.g. general, planning, "
-    "incident-42. REQUIRED. Idempotent by name: creating an existing name returns "
-    "that channel (created=false). Trimmed; max 64 chars; unique per workspace."
-)
-_P_FROM_SESSION = (
-    "Session_id attributing the message to a specific open session of yours "
-    "(optional in trust_mode=open; REQUIRED together with session_secret in "
-    "trust_mode=strict)."
-)
-_P_SESSION_SECRET = (
-    "The session_secret returned by session_open for from_session_id (optional "
-    "in trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
-    "REQUIRED together with from_session_id in trust_mode=strict)."
-)
-#: INVARIANT: byte-identical to the sentence in tools/handoff.py so the SAME
-#: concept (a routing target) is documented the SAME way on both tools.
-_P_TARGET_TYPE = (
-    'Pass target as a raw JSON OBJECT (dict), e.g. {"strategy": "direct", '
-    '"agent_id": "<id>"} - NOT as a JSON-encoded string. '
-)
-#: The routing target selects the recipient set fanned out to inboxes at send
-#: time (ADR 0001). Spell out the ``strategy`` enum and each shape.
+_P_BODY = "Message body (inline text). For large content, attach an artifact and keep body a short pointer."
+_P_CHANNEL = "Channel_id to post into (optional; omit = no channel). Organizational label only; does NOT decide recipients (the target does)."
+_P_CHANNEL_NAME = "Channel name (REQUIRED; short topic label, max 64 chars, unique per workspace). Idempotent by name (existing -> created=false)."
+_P_FROM_SESSION = "Your session_id from session_open (optional in trust_mode=open; REQUIRED with session_secret in trust_mode=strict)."
+_P_SESSION_SECRET = "session_secret from session_open for from_session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode)."
+#: Compact routing-target cheat-sheet: every strategy SHAPE stays inline (so a
+#: harness without resources can still target correctly - S7), while the rules,
+#: examples and edge cases live in okto-nexus://reference/target-grammar (shared
+#: with handoff_create, eliminating the old duplication).
 _P_TARGET_MSG = (
-    _P_TARGET_TYPE + "Routing rule selecting who receives this message (optional; omit for a "
-    "broadcast to the workspace's present agents). Each recipient gets the message "
-    "in their inbox; to reach one agent 1:1 use direct. strategy is one of: "
-    "direct, capability, role, broadcast, mixed. Shapes: "
-    'direct {"strategy":"direct","agent_id":"<id>"} (reaches that GLOBAL agent in '
-    "any workspace; unknown agent -> NOT_FOUND); "
-    'capability {"strategy":"capability","capability":"<cap>"} (string or list = '
-    "any-of; global registry); "
-    'role {"strategy":"role","role":"<role>"} (exact, case-sensitive; global); '
-    'broadcast {"strategy":"broadcast"} (this workspace\'s active-session agents); '
-    'mixed {"strategy":"mixed","rules":[<sub-target>, ...]} (OR of sub-targets). '
-    "direct_with_fallback and a broadcast nested in mixed are rejected "
-    "(VALIDATION_ERROR) - use a handoff for timed escalation. A group target "
-    "matching nobody returns recipients:[] + a warning."
+    "Routing target as a raw JSON object (optional; omit = broadcast to present "
+    'agents). strategy one of: direct {"strategy":"direct","agent_id":"<id>"}; '
+    'capability {"strategy":"capability","capability":"<cap>"}; role '
+    '{"strategy":"role","role":"<role>"}; broadcast {"strategy":"broadcast"}; '
+    'mixed {"strategy":"mixed","rules":[<sub-target>,...]}. Rules/examples/'
+    "edge-cases: read resource okto-nexus://reference/target-grammar."
 )
-_P_ARTIFACTS = (
-    "List of artifact_id strings to attach (optional; reference large content "
-    "instead of inlining it in body)."
-)
+_P_ARTIFACTS = "List of artifact_id strings to attach (optional; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
 
 
@@ -198,24 +163,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Persist a message and emit ``message.created`` in one transaction.
-
-        The response IS your delivery confirmation: ``recipients`` names
-        exactly who received it in their inbox (the fan-out commits atomically
-        with the send) and ``delivered_count`` totals it. Track what happens
-        next with message_status(message_id) - per-recipient lanes
-        unread/delivered/read/parked - or wait for the sender-only receipt
-        events ``message.delivered`` / ``message.read`` via event_wait.
-
-        A broadcast (no target) reaches the workspace's PRESENT agents only;
-        agents excluded for heartbeat staleness are reported explicitly in
-        ``excluded_stale`` + ``warning``. In trust_mode=strict pass
-        from_session_id + session_secret (from session_open).
-
-        ``target`` is annotated ``Any`` on purpose: the wrapper + application
-        layer validate it so a wrong type returns the canonical
-        ``VALIDATION_ERROR`` envelope, not an SDK validation error.
-        """
+        """Persist a message and fan it out to recipient inboxes; emit message.created. The response confirms delivery (recipients + delivered_count). Full docs: okto-nexus://reference/tool-docs/messages."""
         require_json_object_param("target", target)
         return service.create_message(
             project_root=project_root,
@@ -236,12 +184,7 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         name: Annotated[str, Field(description=_P_CHANNEL_NAME)],
     ) -> dict[str, Any]:
-        """Create a channel by name (idempotent). Channels are organizational labels, not ACLs.
-
-        Returns the channel plus ``created`` (false if the name already existed).
-        Any agent in the workspace may read/post to any channel; the channel does
-        NOT control who receives a message - the message target does.
-        """
+        """Create a channel by name (idempotent; created=false if it already existed). Channels are organizational labels, not ACLs."""
         caller = get_authenticated_agent()
         return service.create_channel(
             project_root=project_root,

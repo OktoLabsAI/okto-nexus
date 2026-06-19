@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "okto-nexus"
-version = "0.0.3"
+version = "0.0.4"
 description = "Okto Nexus - Local Agent Coordination Bus (MCP server + dashboard)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -33,6 +33,11 @@ serve = [
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "sentence-transformers>=2.5",
+    # Token counting for the workspace-analytics view (message "size" = TOKENS,
+    # not bytes). o200k_base (GPT-4o family) is available since 0.7.0; loaded
+    # fully offline from a vendored BPE blob. Lives ONLY here (serve), never in
+    # the stdio core - the tokenizer adapter imports it lazily.
+    "tiktoken>=0.7,<1",
 ]
 # Slim serve build WITHOUT the embedding model (no torch): HTTP transport +
 # dashboard only. Semantic search still works in `stub` mode (deterministic);
@@ -73,6 +78,10 @@ okto_nexus = [
     "adapters/inbound/http/static/**/*",
     "adapters/inbound/http/LICENSE.txt",
     "adapters/inbound/cli/banner.txt",
+    # Vendored o200k_base BPE blob so token counting loads 100% offline (named
+    # by tiktoken's SHA1(url) cache key). Source: official tiktoken public blob
+    # (MIT-licensed). Ships only with the serve build that uses tiktoken.
+    "adapters/outbound/tokenizer/_encodings/*",
 ]
 
 [tool.pytest.ini_options]

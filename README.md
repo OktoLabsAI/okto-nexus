@@ -262,7 +262,7 @@ pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a che
 okto-nexus serve                        # → http://127.0.0.1:8202
 ```
 
-Package: `okto-nexus` v`0.0.3` — *Okto Nexus - Local Agent Coordination Bus
+Package: `okto-nexus` v`0.0.4` — *Okto Nexus - Local Agent Coordination Bus
 (MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
 SaaS/Branding Addendum + Trademark Policy.
 

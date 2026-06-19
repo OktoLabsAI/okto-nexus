@@ -436,6 +436,56 @@ class ObservabilityQueries(Protocol):
         """Event-log rows with ``event_id > cursor``, ascending (SSE/tail feed)."""
         ...
 
+    def workspace_message_count(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> int:
+        """COUNT of a workspace's messages created at/after ``since_iso``.
+
+        The TRUE total over the analytics window (workspace-scoped), used to
+        detect truncation against the bounded row fetch below.
+        """
+        ...
+
+    def workspace_message_rows(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        since_iso: str,
+        limit: int,
+    ) -> list[dict[str, Any]]:
+        """The window's ``(message_id, from_agent_id, body, created_at)`` rows.
+
+        Workspace-scoped, created at/after ``since_iso``, NEWEST first, capped at
+        ``limit`` (the analytics bounded fetch - FR9). Token counting and all
+        aggregation happen in Python over these rows (``length()`` != tokens, so
+        tokenisation can never be pushed into SQL).
+        """
+        ...
+
+    def workspace_event_stats(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> dict[str, Any]:
+        """``{count, last_event_at}`` for a workspace's event log.
+
+        ``count`` is the number of events created at/after ``since_iso`` (the
+        rollup window); ``last_event_at`` is the OVERALL most recent event in
+        the workspace (``None`` when it has none), regardless of the window.
+        """
+        ...
+
+    def workspace_delivery_health(
+        self, uow: UnitOfWork, *, workspace_id: str
+    ) -> dict[str, int]:
+        """``{unread, parked}`` delivery counts for messages in this workspace.
+
+        Deliveries are global (ADR 0001), so this JOINs ``message_deliveries``
+        to ``messages`` on ``workspace_id``. Counts use the PHYSICAL lane (the
+        same basis as ``inbox_counts``); the effective-lane projection is a
+        per-recipient read concern, not a workspace rollup.
+        """
+        ...
+
 
 @runtime_checkable
 class AuthProvider(Protocol):
@@ -881,6 +931,43 @@ class EmbeddingProvider(Protocol):
 
     def encode_batch(self, texts: Sequence[str]) -> list[list[float]]:
         """Embed many texts at once (same order); each row has ``dim`` floats."""
+        ...
+
+
+@runtime_checkable
+class Tokenizer(Protocol):
+    """Counts LLM tokens for a piece of text (workspace-analytics, FR6).
+
+    The "size" of a message in the analytics view is measured in TOKENS, not
+    bytes - tokens estimate the coordination weight a message imposes on an LLM
+    far better than its byte length (owner decision, 2026-06-19). Tokenisation
+    cannot be pushed into SQL (``length()`` counts characters, not tokens), so
+    it lives behind this port and runs in Python at READ time over a bounded
+    window; the message write path is never touched.
+
+    The concrete adapter (``adapters/outbound/tokenizer``) wraps tiktoken's
+    ``o200k_base`` encoding (the GPT-4o family) loaded fully OFFLINE from a
+    vendored BPE blob, and is shipped only under the ``serve`` extra - the
+    stdio core never imports it (rule br_7000ed45 / dependency-light invariant).
+    A ``None`` / empty body counts as 0 tokens.
+    """
+
+    @property
+    def encoding(self) -> str:
+        """Opaque encoding identifier (e.g. ``o200k_base``) for provenance."""
+        ...
+
+    def count(self, text: str | None) -> int:
+        """Return the number of tokens in ``text`` (``None``/empty -> 0)."""
+        ...
+
+    def count_for_message(self, message_id: str, body: str | None) -> int:
+        """Token count for a message's body, memoised by ``message_id``.
+
+        Messages are immutable, so the count is cached process-wide keyed by
+        ``message_id`` - re-aggregating overlapping windows never re-tokenises
+        the same body. Equivalent to :meth:`count` on the first call for an id.
+        """
         ...
 
 

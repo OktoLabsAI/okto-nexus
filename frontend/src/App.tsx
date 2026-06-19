@@ -148,7 +148,7 @@ function KeyGate({ onUnlock }: { onUnlock: () => void }) {
         />
         {error && <p className="text-xs text-red-500">{error}</p>}
         <button className="btn btn-primary w-full justify-center" onClick={submit}>
-          Entrar
+          Sign in
         </button>
       </div>
     </div>
@@ -255,13 +255,15 @@ function Dashboard({
     loadGraph();
   }, [loadGraph, refreshTick]);
 
+  // The workspace scope picker is fed by the rich /api/v1/workspaces list (not
+  // derived from /sessions): every KNOWN workspace shows up, including ones
+  // with no live session yet (TR8).
   useEffect(() => {
     api
-      .sessions()
-      .then(({ items }) => {
-        const ids = [...new Set(items.map((s) => s.workspace_id))];
-        setWorkspaces(ids);
-      })
+      .workspaces()
+      .then(({ workspaces }) =>
+        setWorkspaces(workspaces.map((w) => w.workspace_id)),
+      )
       .catch(() => undefined);
   }, [refreshTick]);
 
@@ -479,7 +481,7 @@ function Dashboard({
           )}
           {view === "Events" && <EventsView workspace={workspace} log={eventLog} />}
           {view === "Workspaces" && (
-            <WorkspacesView workspaces={workspaces} graph={graph} />
+            <WorkspacesView scope={workspace} refreshTick={refreshTick} />
           )}
           {view === "Agents" && <AgentsView onChanged={loadGraph} />}
           {view === "Settings" && <SettingsView />}

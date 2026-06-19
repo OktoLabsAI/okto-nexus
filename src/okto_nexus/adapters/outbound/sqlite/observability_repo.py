@@ -437,6 +437,101 @@ class SqliteObservabilityQueries:
             for row in rows
         ]
 
+    def workspace_message_count(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> int:
+        # TRUE total of the workspace's messages in the window (workspace-scoped,
+        # idx_messages_workspace on (workspace_id, created_at) keeps this cheap).
+        try:
+            row = uow.connection.execute(
+                "SELECT COUNT(*) FROM messages "
+                "WHERE workspace_id = ? AND created_at >= ?",
+                (workspace_id, since_iso),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("counting workspace messages", exc) from exc
+        return int(row[0])
+
+    def workspace_message_rows(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        since_iso: str,
+        limit: int,
+    ) -> list[dict[str, Any]]:
+        # Bounded fetch of the window's rows, NEWEST first (so a truncated window
+        # keeps the most recent messages). Tokens are NOT computed here -
+        # length() counts characters, not tokens; the service tokenises in
+        # Python over these rows behind the Tokenizer port.
+        try:
+            rows = uow.connection.execute(
+                """
+                SELECT message_id, from_agent_id, body, created_at
+                FROM messages
+                WHERE workspace_id = ? AND created_at >= ?
+                ORDER BY created_at DESC, message_id
+                LIMIT ?
+                """,
+                (workspace_id, since_iso, int(limit)),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading workspace message rows", exc) from exc
+        return [
+            {
+                "message_id": row["message_id"],
+                "from_agent_id": row["from_agent_id"],
+                "body": row["body"],
+                "created_at": row["created_at"],
+            }
+            for row in rows
+        ]
+
+    def workspace_event_stats(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> dict[str, Any]:
+        # Windowed COUNT + overall MAX(created_at) in one pass, workspace-scoped.
+        try:
+            row = uow.connection.execute(
+                """
+                SELECT
+                    SUM(CASE WHEN created_at >= ? THEN 1 ELSE 0 END) AS n_window,
+                    MAX(created_at) AS last_at
+                FROM events
+                WHERE workspace_id = ?
+                """,
+                (since_iso, workspace_id),
+            ).fetchone()
+        except sqlite3.Error as exc:
+            raise _db_error("reading workspace event stats", exc) from exc
+        return {
+            "count": int(row["n_window"] or 0),
+            "last_event_at": row["last_at"],
+        }
+
+    def workspace_delivery_health(
+        self, uow: UnitOfWork, *, workspace_id: str
+    ) -> dict[str, int]:
+        # Inbox health for a workspace: deliveries are GLOBAL (ADR 0001) so JOIN
+        # to messages on workspace_id. Physical lane (same basis as inbox_counts).
+        try:
+            rows = uow.connection.execute(
+                """
+                SELECT d.status AS status, COUNT(*) AS n
+                FROM message_deliveries d
+                JOIN messages m ON m.message_id = d.message_id
+                WHERE m.workspace_id = ? AND d.status IN ('unread', 'parked')
+                GROUP BY d.status
+                """,
+                (workspace_id,),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading workspace delivery health", exc) from exc
+        out = {"unread": 0, "parked": 0}
+        for row in rows:
+            out[row["status"]] = int(row["n"])
+        return out
+
     def distinct_event_types(
         self, uow: UnitOfWork, *, workspace_id: str | None
     ) -> list[str]:
