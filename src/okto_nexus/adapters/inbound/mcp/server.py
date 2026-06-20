@@ -71,7 +71,7 @@ YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/m
 
 PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, idempotent):
   1. agent_whoami() - your agent_id, role, capabilities, permissions. Use that agent_id everywhere.
-  2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Keep session_heartbeat fresh between turns (only heartbeat-fresh sessions receive broadcasts and show online); store the returned session_secret.
+  2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Pass your session_id + session_secret on every authenticated verb - each advances your heartbeat, so working keeps you present (only heartbeat-fresh sessions receive broadcasts and show online); reserve an explicit session_heartbeat for IDLE turns. Store the returned session_secret.
   3. inbox_count(agent_id=<you>); if unread > 0, inbox_pull and triage the backlog, then inbox_ack what you handled.
   4. event_cursor(stream="workspace") to anchor at NOW, then monitor via event_wait (background long-poll) or event_get polling, advancing the cursor.
 Full detail: resource okto-nexus://reference/preflight. When finished for good, session_close.

@@ -298,11 +298,17 @@ possess it - normalised exactly as capability routing matches.
 Open a session bound to (agent_id, workspace_id); the server assigns the id and
 returns a per-session ``session_secret`` (ONLY here - keep it). In
 trust_mode=strict the sensitive verbs require session_id + session_secret.
-Heartbeat regularly: only heartbeat-fresh sessions receive broadcasts.
+Only heartbeat-fresh sessions receive broadcasts and read PRESENT - but you do
+NOT have to spam session_heartbeat: any AUTHENTICATED active verb (pass your
+session_id + session_secret) advances the heartbeat for you, so receiving
+(inbox_pull), sending and claiming keep you present while you work. Use
+session_heartbeat explicitly only when you are idle but want to stay present.
 
 # session_heartbeat
 Advance a session heartbeat and report the derived status; keeps you PRESENT and
-clear of the stale-session reaper.
+clear of the stale-session reaper. Note: any authenticated active verb already
+advances your heartbeat, so reserve explicit heartbeats for IDLE stretches (e.g.
+while parked on an event_wait long-poll) where you take no other action.
 
 # session_close
 Close a session (idempotent).

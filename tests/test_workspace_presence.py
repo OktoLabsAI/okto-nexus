@@ -8,6 +8,8 @@ presence rollup must reduce sessions to the best state per agent; stale_sessions
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
+
 import pytest
 
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteSessionRepo
@@ -81,3 +83,60 @@ def test_presence_present_when_any_session_active(svc_and_deps):
     presence = _item(svc, "ws-b")["presence"]
     # 2 distinct agents: ag1 present (has an active fresh session), ag2 offline.
     assert presence == {"present": 1, "stale": 0, "offline": 1}
+
+
+def test_recent_activity_reads_present_without_a_live_session(svc_and_deps):
+    """The claude-validator case: an agent that pulls its durable inbox WITHOUT
+    an open session (all sessions closed/reaped) but whose last_seen_at was just
+    bumped by the action reads PRESENT - activity drives presence, not only the
+    session heartbeat."""
+    svc, deps = svc_and_deps
+    now = deps.clock.now_iso()
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id="ws-c")
+        deps.repos.agents.upsert(uow, agent_id="validator")
+        # Only a CLOSED session remains (the live one was reaped)...
+        deps.repos.sessions.create(
+            uow,
+            session_id="c1",
+            agent_id="validator",
+            workspace_id="ws-c",
+            status="closed",
+        )
+        # ...but the agent just acted (inbox_pull bumps last_seen_at).
+        deps.repos.agents.touch(uow, agent_id="validator", at=now)
+    presence = _item(svc, "ws-c")["presence"]
+    assert presence == {"present": 1, "stale": 0, "offline": 0}
+
+
+def test_presence_buckets_by_activity_age(svc_and_deps):
+    """With no live session, the agent's last_seen_at age alone buckets it:
+    fresh -> present, within presence_ttl -> stale, beyond it -> offline."""
+    svc, deps = svc_and_deps
+    now_e = deps.clock.now_epoch()
+
+    def iso(delta: float) -> str:
+        dt = datetime.fromtimestamp(now_e + delta, tz=timezone.utc)
+        return dt.isoformat(timespec="microseconds").replace("+00:00", "Z")
+
+    stale_ttl = deps.config.session_stale_ttl_seconds
+    presence_ttl = deps.config.presence_ttl_seconds
+    ages = {
+        "fresh": -5,
+        "recent": -(stale_ttl + 30),
+        "old": -(presence_ttl + 30),
+    }
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id="ws-d")
+        for aid, age in ages.items():
+            deps.repos.agents.upsert(uow, agent_id=aid)
+            deps.repos.sessions.create(
+                uow,
+                session_id=f"s-{aid}",
+                agent_id=aid,
+                workspace_id="ws-d",
+                status="closed",
+            )
+            deps.repos.agents.touch(uow, agent_id=aid, at=iso(age))
+    presence = _item(svc, "ws-d")["presence"]
+    assert presence == {"present": 1, "stale": 1, "offline": 1}

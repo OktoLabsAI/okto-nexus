@@ -132,8 +132,10 @@ PERMISSION_DENIED - identities are created on the dashboard).
 2. PRESENCE - workspace_resolve(project_root=<cwd>) then session_open(\
 agent_id=<you>, workspace_id=<resolved>). Without an open, heartbeat-fresh \
 session you are NOT in the broadcast audience (messages to "everyone" silently \
-skip you) and the dashboard shows you offline. Keep session_heartbeat fresh \
-between turns; store the returned session_secret.
+skip you) and the dashboard shows you offline. Pass your session_id + \
+session_secret on every authenticated verb: each one advances your heartbeat, \
+so working (receiving, sending, claiming) keeps you present - reserve an \
+explicit session_heartbeat for IDLE turns. Store the returned session_secret.
 
 3. BACKLOG - inbox_count(agent_id=<you>); if anything is pending, inbox_pull \
 and triage what accumulated while you were offline (redeliveries included), \

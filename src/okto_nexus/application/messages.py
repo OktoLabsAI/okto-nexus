@@ -50,7 +50,11 @@ from ..domain.models import Channel, Message
 from ..domain.routing import RoutingAgent
 from ..domain.base import iso_plus
 from ..errors import ErrorCode, OktoNexusError
-from .identity import session_is_present, verify_session_credentials
+from .identity import (
+    advance_session_presence,
+    session_is_present,
+    verify_session_credentials,
+)
 from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
@@ -188,6 +192,12 @@ class MessageService:
                 agent_id=from_agent_id,
                 session_id=from_session_id,
                 session_secret=session_secret,
+            )
+            # A verified send proves the sender's session is alive now: advance
+            # its heartbeat so presence tracks activity (no extra heartbeat
+            # call). Best-effort, inside this uow - rolls back if the send does.
+            advance_session_presence(
+                self._sessions, uow, session_id=from_session_id, at=now
             )
 
             # Permission gate (migration 011): which SEND capability this is.

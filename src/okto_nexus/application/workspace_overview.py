@@ -65,6 +65,13 @@ class WorkspaceListService:
 
         with self._cf.unit_of_work(write=False) as uow:
             workspaces = self._workspaces.list_all(uow)
+            # Agent activity (global last_seen_at) folds into presence so an
+            # agent that is plainly working reads online even without a live
+            # session. Fetched ONCE here, not per workspace.
+            last_seen_by_agent = {
+                r["agent_id"]: r.get("last_seen_at")
+                for r in self._q.agent_rows(uow)
+            }
             items = [
                 self._build(
                     uow,
@@ -72,6 +79,7 @@ class WorkspaceListService:
                     since_iso=since_iso,
                     default_workspace_id=default_workspace_id,
                     expose_path=expose_path,
+                    last_seen_by_agent=last_seen_by_agent,
                 )
                 for ws in workspaces
             ]
@@ -87,6 +95,7 @@ class WorkspaceListService:
         since_iso: str,
         default_workspace_id: str | None,
         expose_path: bool,
+        last_seen_by_agent: dict[str, str | None],
     ) -> dict[str, Any]:
         wid = ws.workspace_id
 
@@ -107,28 +116,53 @@ class WorkspaceListService:
         # Presence is per DISTINCT AGENT, not per session. A workspace
         # accumulates many (mostly closed) session rows over its life, so
         # counting sessions makes "Agents in workspace" explode (e.g. 0/0/83 for
-        # 3 agents). Classify each session, then reduce to the BEST state per
-        # agent (present > stale > offline). stale_sessions (a HEALTH signal)
-        # stays session-based - it is literally a count of stale sessions.
-        _rank = {"present": 2, "stale": 1, "offline": 0}
-        best_per_agent: dict[str, str] = {}
+        # 3 agents). For each agent we keep its freshest ACTIVE-session heartbeat
+        # and fold in the agent's own last_seen_at (activity), then classify
+        # ONCE - so an agent that is plainly working reads present even with no
+        # live session (e.g. pulling its durable inbox without session_open).
+        # stale_sessions (a HEALTH signal) stays session-based - it is literally
+        # a count of stale sessions.
+        agent_ids: set[str] = set()
+        has_active: dict[str, bool] = {}
+        best_hb: dict[str, str] = {}
         stale_sessions = 0
         for sess in self._q.session_rows(uow, workspace_id=wid):
-            presence = self._obs.classify_presence(
-                has_active_session=sess.get("status") == "active",
-                last_heartbeat_at=sess.get("last_heartbeat_at"),
-            )
-            if presence == "stale":
+            active = sess.get("status") == "active"
+            if (
+                self._obs.classify_presence(
+                    has_active_session=active,
+                    last_heartbeat_at=sess.get("last_heartbeat_at"),
+                )
+                == "stale"
+            ):
                 stale_sessions += 1
             aid = sess.get("agent_id")
             if aid is None:
                 continue
-            current = best_per_agent.get(aid)
-            if current is None or _rank[presence] > _rank[current]:
-                best_per_agent[aid] = presence
-        present = sum(1 for p in best_per_agent.values() if p == "present")
-        stale = sum(1 for p in best_per_agent.values() if p == "stale")
-        offline = sum(1 for p in best_per_agent.values() if p == "offline")
+            agent_ids.add(aid)
+            if active:
+                has_active[aid] = True
+                hb = sess.get("last_heartbeat_at")
+                # Canonical fixed-width ISO -> lexicographic max is chronological.
+                if hb and (aid not in best_hb or hb > best_hb[aid]):
+                    best_hb[aid] = hb
+            else:
+                has_active.setdefault(aid, False)
+
+        buckets = {"present": 0, "stale": 0, "offline": 0}
+        for aid in agent_ids:
+            buckets[
+                self._obs.classify_presence(
+                    has_active_session=has_active.get(aid, False),
+                    last_heartbeat_at=best_hb.get(aid),
+                    last_seen_at=last_seen_by_agent.get(aid),
+                )
+            ] += 1
+        present, stale, offline = (
+            buckets["present"],
+            buckets["stale"],
+            buckets["offline"],
+        )
 
         delivery = self._q.workspace_delivery_health(uow, workspace_id=wid)
 

@@ -67,15 +67,41 @@ class ObservabilityService:
     # Presence derivation
     # ------------------------------------------------------------------ #
     def classify_presence(
-        self, *, has_active_session: bool, last_heartbeat_at: str | None
+        self,
+        *,
+        has_active_session: bool,
+        last_heartbeat_at: str | None,
+        last_seen_at: str | None = None,
     ) -> str:
-        """Collapse session state into present/stale/offline (read-time only)."""
-        if not has_active_session:
+        """Collapse liveness into present/stale/offline (read-time only).
+
+        Presence is the FRESHEST of two activity signals:
+
+        * the heartbeat of an ACTIVE session (``last_heartbeat_at`` when
+          ``has_active_session``) - an agent that opened a session and keeps it
+          warm; and
+        * the agent's own ``last_seen_at``, bumped by every active coordination
+          verb (receiving, sending, claiming). Folding it in makes an agent that
+          is plainly working show present even with NO live session - e.g. it
+          pulls its durable inbox without ``session_open`` - which is what an
+          operator means by "online".
+
+        Pass ``last_seen_at`` only at the AGENT level (graph node, workspace
+        rollup). A per-SESSION view leaves it ``None`` so a closed session is
+        never lifted by the agent's activity in a different session; omitting it
+        reproduces the original session-only rule exactly.
+        """
+        candidates: list[float] = []
+        if has_active_session:
+            hb_epoch = _epoch_or_none(last_heartbeat_at)
+            if hb_epoch is not None:
+                candidates.append(hb_epoch)
+        seen_epoch = _epoch_or_none(last_seen_at)
+        if seen_epoch is not None:
+            candidates.append(seen_epoch)
+        if not candidates:
             return PRESENCE_OFFLINE
-        hb_epoch = _epoch_or_none(last_heartbeat_at)
-        if hb_epoch is None:
-            return PRESENCE_OFFLINE
-        age = self._clock.now_epoch() - hb_epoch
+        age = self._clock.now_epoch() - max(candidates)
         if age < self._config.session_stale_ttl_seconds:
             return PRESENCE_PRESENT
         if age < self._config.presence_ttl_seconds:
@@ -117,6 +143,7 @@ class ObservabilityService:
                     "presence": self.classify_presence(
                         has_active_session=bool(row.get("active_sessions")),
                         last_heartbeat_at=row.get("last_heartbeat_at"),
+                        last_seen_at=row.get("last_seen_at"),
                     ),
                     "sessions": int(row.get("active_sessions") or 0),
                     "inbox": {lane: int(lanes.get(lane, 0)) for lane in _LANES},

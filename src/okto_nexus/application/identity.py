@@ -203,6 +203,36 @@ def verify_session_credentials(
         )
 
 
+def advance_session_presence(
+    sessions: SessionRepo,
+    uow: UnitOfWork,
+    *,
+    session_id: Any,
+    at: str | None = None,
+) -> None:
+    """Stamp ``last_heartbeat_at`` from an AUTHENTICATED, ACTIVE action.
+
+    Presence (both the dashboard rollup and the broadcast audience) keys on the
+    session heartbeat, NOT on the agent's ``last_seen_at``. So an agent that
+    actively coordinates - receiving (``inbox_pull``), sending, claiming a
+    handoff - but does not spam ``session_heartbeat`` decays to stale even
+    though it is plainly alive. Any verb it invokes with VALID session
+    credentials is itself proof of liveness, so we advance the heartbeat exactly
+    as ``session_heartbeat`` would: real activity keeps presence fresh with no
+    standalone heartbeat call (same efficiency, honest status).
+
+    Best-effort: a blank ``session_id`` is a no-op and a missing/closed session
+    is swallowed, so a liveness stamp can NEVER fail an action whose own
+    credential checks already passed.
+    """
+    if not _is_nonempty_str(session_id):
+        return
+    try:
+        sessions.heartbeat(uow, session_id=session_id, at=at)
+    except OktoNexusError:
+        pass
+
+
 class SessionTrustGuard:
     """Adapter-side helper enforcing M10 on tools whose service is slice-foreign.
 
@@ -231,12 +261,19 @@ class SessionTrustGuard:
         session_id: Any = None,
         session_secret: Any = None,
     ) -> None:
-        """Raise unless the supplied credentials satisfy the trust mode."""
+        """Raise unless the supplied credentials satisfy the trust mode.
+
+        On success it ALSO advances the session heartbeat: an authenticated,
+        active verb is itself proof of liveness, so presence tracks real
+        activity without a standalone ``session_heartbeat`` call. The single
+        unit of work is therefore a WRITE (the verification read plus the
+        presence stamp); a failed credential check rolls it back untouched.
+        """
         if self._trust_mode != TRUST_MODE_STRICT and not _is_nonempty_str(
             session_secret
         ):
-            return  # open mode, nothing supplied: skip the read transaction
-        with self._cf.unit_of_work(write=False) as uow:
+            return  # open mode, nothing supplied: skip the transaction entirely
+        with self._cf.unit_of_work() as uow:
             verify_session_credentials(
                 self._sessions,
                 uow,
@@ -246,6 +283,9 @@ class SessionTrustGuard:
                 session_id=session_id,
                 session_secret=session_secret,
             )
+            # Verified active action -> the session is alive now; keep presence
+            # fresh off real activity (best-effort, never fails the action).
+            advance_session_presence(self._sessions, uow, session_id=session_id)
 
 
 class IdentityService:
