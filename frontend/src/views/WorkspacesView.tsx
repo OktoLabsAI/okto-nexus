@@ -12,6 +12,7 @@ import {
   type WorkspaceAnalytics,
   type WorkspaceListItem,
 } from "../api";
+import { PageContainer } from "../components/PageContainer";
 
 const WINDOWS: AnalyticsWindow[] = ["24h", "7d", "30d"];
 const AUTO_REFRESH_MS = 15_000;
@@ -125,113 +126,106 @@ export function WorkspacesView({
 
   if (list.length === 0) {
     return (
-      <div className="h-full overflow-y-auto p-6">
-        <div className="max-w-3xl mx-auto" data-testid="workspaces-view">
-          <div className="panel px-4 py-10 text-center text-sm text-surface-400 dark:text-surface-500">
-            {error
-              ? `Could not load workspaces: ${error}`
-              : "No workspaces yet — they appear as agents coordinate through the bus."}
-          </div>
+      <PageContainer width="wide" testId="workspaces-view">
+        <div className="panel px-4 py-10 text-center text-sm text-surface-400 dark:text-surface-500">
+          {error
+            ? `Could not load workspaces: ${error}`
+            : "No workspaces yet — they appear as agents coordinate through the bus."}
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="h-full overflow-y-auto p-5" data-testid="workspaces-view">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-4">
-        {/* Workspace selector */}
-        <aside className="panel p-2 h-fit">
-          <div className="px-2 py-1.5 text-[11px] font-medium uppercase tracking-wider text-surface-400 dark:text-surface-500">
-            Workspaces ({list.length})
-          </div>
-          <ul className="space-y-0.5">
-            {list.map((w) => {
-              const active = w.workspace_id === selected;
-              return (
-                <li key={w.workspace_id}>
-                  <button
-                    onClick={() => setSelected(w.workspace_id)}
-                    className={`w-full text-left px-2.5 py-2 rounded-lg transition-colors ${
-                      active
-                        ? "bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-200"
-                        : "hover:bg-surface-100 dark:hover:bg-surface-800 text-surface-700 dark:text-surface-300"
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5">
-                      <FolderOpen size={13} className="shrink-0 opacity-70" />
-                      <span className="truncate text-xs font-medium">
-                        {w.display_name || w.workspace_id.slice(0, 14) + "…"}
-                      </span>
-                      {w.is_default && (
-                        <span className="ml-auto text-[9px] uppercase rounded bg-surface-200 dark:bg-surface-700 px-1 py-0.5">
-                          default
-                        </span>
-                      )}
-                    </div>
-                    <div className="mt-1 flex items-center gap-2 text-[10px] text-surface-500 dark:text-surface-400">
-                      <span>{w.message_count} msgs / 24h</span>
-                      <PresenceDots presence={w.presence} />
-                    </div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </aside>
-
-        <main className="space-y-4">
-          {current && (
-            <OverviewCard ws={current} roster={roster} analytics={analytics} />
-          )}
-
-          {/* Analytics header / controls */}
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div>
-              <h2 className="text-sm font-semibold text-surface-800 dark:text-surface-100">
-                Message distribution
-              </h2>
-              <p className="text-[11px] text-surface-400 dark:text-surface-500">
-                by sender · size in tokens (o200k_base)
-                {analytics?.truncated
-                  ? ` · sampled most-recent ${analytics.scanned_messages}`
-                  : ""}
-              </p>
-            </div>
-            <div className="flex items-center gap-2 text-xs">
-              <Toggle
-                options={[
-                  ["volume", "Volume"],
-                  ["tokens", "Tokens"],
-                ]}
-                value={metric}
-                onChange={(v) => setMetric(v as "volume" | "tokens")}
-              />
-              <Toggle
-                options={WINDOWS.map((w) => [w, w] as [string, string])}
-                value={windowSel}
-                onChange={(v) => setWindowSel(v as AnalyticsWindow)}
-              />
+    <PageContainer width="wide" testId="workspaces-view" className="space-y-4">
+      {/* Workspace cards — responsive grid, fills the width */}
+      <section>
+        <div className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-surface-400 dark:text-surface-500">
+          Workspaces ({list.length})
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {list.map((w) => {
+            const active = w.workspace_id === selected;
+            return (
               <button
-                className="btn btn-secondary !px-2"
-                onClick={() => setTick((t) => t + 1)}
-                title="Refresh"
+                key={w.workspace_id}
+                onClick={() => setSelected(w.workspace_id)}
+                className={`panel text-left p-3 transition-colors ${
+                  active
+                    ? "ring-2 ring-accent-400 dark:ring-accent-600 bg-accent-50/40 dark:bg-accent-900/20"
+                    : "hover:bg-surface-50 dark:hover:bg-surface-800/50"
+                }`}
+                data-testid={`workspace-card-${w.workspace_id}`}
               >
-                <RotateCw size={13} />
+                <div className="flex items-center gap-1.5">
+                  <FolderOpen size={14} className="shrink-0 opacity-70" />
+                  <span className="truncate text-sm font-medium text-surface-900 dark:text-surface-100">
+                    {w.display_name || w.workspace_id.slice(0, 16) + "…"}
+                  </span>
+                  {w.is_default && (
+                    <span className="ml-auto shrink-0 text-[9px] uppercase rounded bg-surface-200 dark:bg-surface-700 px-1 py-0.5">
+                      default
+                    </span>
+                  )}
+                </div>
+                <div className="mt-2 flex items-center gap-2 text-[11px] text-surface-500 dark:text-surface-400">
+                  <span>{w.message_count} msgs / 24h</span>
+                  <PresenceDots presence={w.presence} />
+                </div>
               </button>
-            </div>
-          </div>
+            );
+          })}
+        </div>
+      </section>
 
-          {analytics ? (
-            <AnalyticsBody analytics={analytics} metric={metric} />
-          ) : (
-            <div className="panel px-4 py-8 text-center text-xs text-surface-400 dark:text-surface-500">
-              Loading analytics…
-            </div>
-          )}
-        </main>
+      {/* Selected workspace: overview + analytics at full width */}
+      {current && <OverviewCard ws={current} roster={roster} analytics={analytics} />}
+
+      {/* Analytics header / controls */}
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div>
+          <h2 className="text-sm font-semibold text-surface-800 dark:text-surface-100">
+            Message distribution
+          </h2>
+          <p className="text-[11px] text-surface-400 dark:text-surface-500">
+            by sender · size in tokens (o200k_base)
+            {analytics?.truncated
+              ? ` · sampled most-recent ${analytics.scanned_messages}`
+              : ""}
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <Toggle
+            options={[
+              ["volume", "Volume"],
+              ["tokens", "Tokens"],
+            ]}
+            value={metric}
+            onChange={(v) => setMetric(v as "volume" | "tokens")}
+          />
+          <Toggle
+            options={WINDOWS.map((w) => [w, w] as [string, string])}
+            value={windowSel}
+            onChange={(v) => setWindowSel(v as AnalyticsWindow)}
+          />
+          <button
+            className="btn btn-secondary !px-2"
+            onClick={() => setTick((t) => t + 1)}
+            title="Refresh"
+          >
+            <RotateCw size={13} />
+          </button>
+        </div>
       </div>
-    </div>
+
+      {analytics ? (
+        <AnalyticsBody analytics={analytics} metric={metric} />
+      ) : (
+        <div className="panel px-4 py-8 text-center text-xs text-surface-400 dark:text-surface-500">
+          Loading analytics…
+        </div>
+      )}
+    </PageContainer>
   );
 }
 

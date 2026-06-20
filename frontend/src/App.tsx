@@ -475,11 +475,24 @@ function Dashboard({
               sseStatus={sseStatus}
             />
           )}
-          {view === "Messages" && <MessagesView workspace={workspace} />}
+          {view === "Messages" && (
+            <MessagesView
+              workspace={workspace}
+              liveTick={liveTick}
+              sseStatus={sseStatus}
+            />
+          )}
           {view === "Handoffs" && (
             <HandoffsView workspace={workspace} onChanged={loadGraph} />
           )}
-          {view === "Events" && <EventsView workspace={workspace} log={eventLog} />}
+          {view === "Events" && (
+            <EventsView
+              workspace={workspace}
+              log={eventLog}
+              liveTick={liveTick}
+              sseStatus={sseStatus}
+            />
+          )}
           {view === "Workspaces" && (
             <WorkspacesView scope={workspace} refreshTick={refreshTick} />
           )}

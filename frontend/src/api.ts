@@ -330,6 +330,7 @@ export const api = {
     agent_id: string;
     role?: string;
     capabilities?: string[];
+    metadata?: Record<string, unknown>;
     preset_id?: string;
     permissions?: PermissionFlags;
   }) =>
@@ -342,6 +343,10 @@ export const api = {
     body: {
       is_active?: boolean;
       role?: string;
+      // Already accepted + persisted by PATCH /agents/{id} (UpdateAgentBody);
+      // the typed client just never exposed them, blocking an edit flow.
+      capabilities?: string[];
+      metadata?: Record<string, unknown>;
       preset_id?: string | null;
       permissions?: PermissionFlags | null;
     },
