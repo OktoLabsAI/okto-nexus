@@ -41,6 +41,7 @@ from ..mcp.server import (
     SERVER_INSTRUCTIONS,
     Deps,
     register_meta_tools,
+    register_resources,
     register_tools,
 )
 from . import routes, stream
@@ -144,11 +145,16 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
 
 def create_http_mcp_server(deps: Deps) -> Any:
-    """A FastMCP instance serving the SAME tool surface over streamable-http.
+    """A FastMCP instance serving the SAME tool AND resource surface over
+    streamable-http.
 
-    Parity by construction: the exact ``register_tools``/``register_meta_tools``
-    used by the stdio server run against this instance - there is no second
-    tool table to drift (rule br_167701f9; verified by the parity test).
+    Parity by construction: the exact ``register_tools`` /
+    ``register_meta_tools`` / ``register_resources`` used by the stdio server run
+    against this instance - there is no second table to drift (rule br_167701f9;
+    verified by the parity test). ``register_resources`` is essential here: an
+    agent connects over THIS HTTP transport, and the inline instructions point it
+    at ``okto-nexus://reference/*`` docs (monitoring, preflight, target-grammar,
+    tool-docs/*) that must therefore resolve on a ``resources/read``.
     """
     from mcp.server.fastmcp import FastMCP  # lazy: SDK only needed at serve time
 
@@ -160,6 +166,7 @@ def create_http_mcp_server(deps: Deps) -> Any:
     )
     register_tools(server, deps)
     register_meta_tools(server, deps)
+    register_resources(server)
     return server
 
 
