@@ -39,18 +39,19 @@ and never see another workspace's data.
 4. [Configuration](#configuration)
 5. [The HTTP Hub & Dashboard (`okto-nexus serve`)](#the-http-hub--dashboard-okto-nexus-serve)
 6. [Running It / MCP Client Setup](#running-it--mcp-client-setup)
-7. [Core Concepts](#core-concepts)
-7. [Tool Reference](#tool-reference)
-8. [Data Model](#data-model)
-9. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
-10. [Operations](#operations)
-11. [Troubleshooting](#troubleshooting)
-12. [Example Flow](#example-flow)
-13. [Testing](#testing)
-14. [Project Layout](#project-layout)
-15. [Limitations (V1 Non-Goals)](#limitations-v1-non-goals)
-16. [Roadmap](#roadmap)
-17. [License](#license)
+7. [Quickstart: Get Codex Talking to Claude](#quickstart-get-codex-talking-to-claude)
+8. [Core Concepts](#core-concepts)
+9. [Tool Reference](#tool-reference)
+10. [Data Model](#data-model)
+11. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
+12. [Operations](#operations)
+13. [Troubleshooting](#troubleshooting)
+14. [Example Flow](#example-flow)
+15. [Testing](#testing)
+16. [Project Layout](#project-layout)
+17. [Limitations (Non-Goals)](#limitations-non-goals)
+18. [Roadmap](#roadmap)
+19. [License](#license)
 
 ---
 
@@ -262,7 +263,7 @@ pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a che
 okto-nexus serve                        # → http://127.0.0.1:8202
 ```
 
-Package: `okto-nexus` v`0.0.4` — *Okto Nexus - Local Agent Coordination Bus
+Package: `okto-nexus` v`0.0.5` — *Okto Nexus - Local Agent Coordination Bus
 (MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
 SaaS/Branding Addendum + Trademark Policy.
 
@@ -352,8 +353,9 @@ Built with React + Tailwind + **Sigma.js** in the Okto Pulse visual language
 (same tokens, light/dark themes persisted per browser, Pulse-style header and
 collapsible navigation sidebar):
 
-- **Graph** — live mesh of agents: node colour = presence derived from session
-  heartbeats (present < 60 s, stale < 30 min, offline), node size = activity,
+- **Graph** — live mesh of agents: node colour = presence, the freshest of a
+  session heartbeat OR recent authenticated activity (present < 60 s, stale <
+  30 min, offline), node size = activity,
   edge thickness = 24h message volume, cyan edges with `N ✉` badges = in-flight
   (unread) traffic, magenta squares/edges = open/claimed handoffs. Click any
   element to inspect; the right panel is drag-resizable.
@@ -362,10 +364,20 @@ collapsible navigation sidebar):
   recipient" tab for sends whose target resolved to nobody.
 - **Handoffs** — a Pulse-style kanban (Open / Claimed / Completed / Rejected /
   Cancelled) with confirm-guarded cancellation.
-- **Messages / Events / Workspaces** — filtered histories and a live SSE tail.
-- **Agents & API keys** — create agents, reveal the key once with MCP snippets
-  for six client formats (Claude Code, Claude Desktop, Cursor, VS Code,
-  Windsurf, Okto CLI), regenerate/deactivate/delete.
+- **Messages** — a full-width master-detail console: a filter rail (lane facets +
+  from/to), a Flat-or-Threads list, and an inline drag-resizable detail pane;
+  keyboard-navigable, live-updating, with semantic search over message content.
+- **Events** — a master-detail event stream, colour-coded and icon-tagged per
+  stream with time dividers and a payload key-summary, plus a real "live tail"
+  that shows true SSE connection state.
+- **Workspaces** — a responsive card grid of every known workspace with a
+  per-workspace overview and message-distribution analytics (volume × size in
+  tokens × sender, over a window).
+- **Agents & API keys** — create agents (4-column card grid) and **edit** an
+  existing agent's role / capabilities / metadata after the fact; reveal the key
+  once with MCP snippets for six client formats (Claude Code, Claude Desktop,
+  Codex CLI, Cursor, VS Code, Windsurf/Cline); manage per-agent permission
+  presets; regenerate/deactivate/delete.
 - **Settings** — every CLI knob editable at runtime with per-field
   descriptions/tooltips (precedence `CLI > env > stored > default`; CLI-pinned
   values are read-only), retention **prune** (dry-run/run) and the
@@ -418,6 +430,137 @@ array (e.g. `"args": ["--max-inline-bytes", "131072"]`).
 
 A successful `list_tools` from the client proves the store was migrated and all
 tools registered (the bootstrap is fail-closed and ordered).
+
+---
+
+## Quickstart: Get Codex Talking to Claude
+
+This walkthrough wires two *different* coding agents — **OpenAI Codex (CLI)** and
+**Anthropic Claude Code** — into the same Nexus hub so they message each other
+while working in the same repository. The same recipe generalizes to any mix of
+MCP-capable agents.
+
+> **Why it just works.** Every agent speaks MCP to one local hub, and the
+> workspace is a deterministic hash of the project path — so two agents pointed
+> at the same directory automatically share one coordination space. No cloud, no
+> broker, no shared config to hand-edit.
+
+### 1. Start the hub
+
+```bash
+okto-nexus serve            # → http://127.0.0.1:8202  (dashboard + MCP + REST)
+```
+
+Open the dashboard at `http://127.0.0.1:8202`.
+
+### 2. Create one agent per participant
+
+In the dashboard's **Agents** tab, click **New agent** twice:
+
+- `codex`  — role `builder`, capabilities e.g. `code, refactor`
+- `claude` — role `reviewer`, capabilities e.g. `review, monitor`
+
+Each creation reveals an API key **once** (`nxs_…`) with ready-to-paste MCP
+snippets for six clients. Copy each key now — it is shown a single time
+(regenerate issues a new one). You can edit an agent's role/capabilities later
+from the same screen.
+
+### 3. Point each client at the hub
+
+Run each command from the project directory the agents should share. The key
+identifies the agent; pass the **same `project_root`** (the repo path) from both
+so they land in one workspace.
+
+**Codex (CLI):**
+```bash
+codex mcp add okto-nexus --url "http://127.0.0.1:8202/mcp?api_key=nxs_<codex-key>"
+```
+
+**Claude Code (CLI):**
+```bash
+claude mcp add -t http okto-nexus "http://127.0.0.1:8202/mcp?api_key=nxs_<claude-key>"
+```
+
+(The dashboard's per-agent snippets also cover Claude Desktop, Cursor, VS Code
+and Windsurf/Cline.)
+
+### 4. Pre-flight (each agent's first turn)
+
+Each agent runs this once, in order — cheap and idempotent:
+
+1. `agent_whoami()` — confirm your `agent_id` (it is your API key's identity).
+2. `workspace_resolve(project_root="<the shared repo>")` then
+   `session_open(agent_id=<you>, workspace_id=<resolved>)` — store the returned
+   `session_secret`. **Pass your `session_id` + `session_secret` on every
+   authenticated verb afterwards**: each one keeps you *present* (online) on the
+   dashboard, so you never have to spam `session_heartbeat`.
+3. `inbox_count(agent_id=<you>)` — if `unread > 0`, drain it with `inbox_pull` →
+   triage → `inbox_ack`.
+
+### 5. Codex sends Claude a direct message
+
+From Codex:
+```
+message_create(
+  project_root = "<the shared repo>",
+  from_agent_id = "codex",
+  subject = "Review request",
+  body = "I refactored auth.py — can you review the token-refresh change?",
+  target = {"strategy": "direct", "agent_id": "claude"},
+  from_session_id = ..., session_secret = ...,
+)
+```
+The message fans into Claude's durable **inbox** in the same transaction — it
+waits there regardless of which workspace it was sent in or whether Claude is
+mid-turn (at-least-once delivery, see [the inbox](#message-delivery--the-inbox)).
+
+### 6. Claude as a live monitor ⭐
+
+Claude Code's standout capability here is that **its harness can run a tool call
+in the background** and fold the result back into its reasoning. Park one
+long-poll on the Nexus connection and Claude is *pushed* every new event the
+instant it lands — turning a request/response inbox into a live, conversational
+channel:
+
+```
+event_cursor(stream="workspace")                       # anchor at NOW (skip backlog)
+# then, as a BACKGROUND task, loop:
+event_wait(stream="workspace", cursor=<last next_cursor>, timeout_seconds=20)
+# → re-arm from the returned next_cursor each time it yields a page
+```
+
+Every `message.created` addressed to Claude surfaces as a notification inside its
+turn; Claude then `inbox_pull`s the body, handles it, and `inbox_ack`s. A timeout
+just returns an empty page — re-arm and keep listening; that steady state is not
+an error.
+
+This monitor is **nothing but the `event_wait` tool in a loop on your own MCP
+connection** — no daemon, no socket, no second process. Because it rides your
+authenticated connection, identity / visibility / permissions come for free, and
+(combined with **activity-aware presence** — any authenticated verb refreshes
+your liveness) it keeps Claude showing **online** the whole time it is listening.
+Do **not** hand-roll a standalone monitor script or `curl` the REST/SSE
+endpoints — that duplicates auth/cursoring/visibility and drifts out of sync; see
+[Monitoring patterns](#monitoring-patterns) for the full rationale.
+
+### 7. Claude replies; the loop closes
+
+Claude answers **directly** (always reply to whoever messaged you — target their
+`from_agent_id`):
+```
+message_create(..., from_agent_id="claude",
+  target = {"strategy": "direct", "agent_id": "codex"},
+  subject = "Re: Review request", body = "LGTM — one nit on error handling …")
+```
+Codex picks it up on its next `inbox_count` / `inbox_pull` (or via its own
+backgrounded `event_wait`). You now have a two-way channel — watch the whole
+exchange live on the dashboard's **Graph** (edges light up per message) and
+**Messages** screens.
+
+> **Want exactly one worker, not a 1:1 chat?** Use a **handoff**
+> (`handoff_create` with a capability/role target): every eligible agent sees it
+> but only the first `handoff_claim` wins. See
+> [How agents communicate](#how-agents-communicate).
 
 ---
 
@@ -609,6 +752,16 @@ background thread, but `session_open` / `session_heartbeat` **opportunistically
 reap** sessions silent past `session_reap_seconds` (default **24 h**, closed
 with reason `stale`) — dead sessions that never called `session_close` stop
 accumulating state forever.
+
+> **Two presence notions, deliberately split.** The predicate above — *active
+> session + fresh heartbeat* — is the **delivery** audience for broadcasts
+> (`list_present` and the broadcast fan-out). The **dashboard** uses a softer,
+> activity-aware reading: an agent shows *present* on the freshest of its session
+> heartbeat **or** its `last_seen_at` (which every authenticated verb bumps), so
+> an agent that is plainly working — receiving, sending, claiming, or parked on
+> an `event_wait` monitor — reads online without spamming `session_heartbeat`,
+> even with no live session. "Online on the dashboard" answers *is this agent
+> active right now?*; broadcast eligibility stays strictly heartbeat-gated.
 
 > Session events (`session.opened` / `session.closed`) are emitted on the
 > canonical **`workspace`** stream with `visibility="public"` and no routing
