@@ -921,7 +921,9 @@ def test_invalid_limit_validation_error(migrated_factory, tmp_path, bad_limit):
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
-@pytest.mark.parametrize("bad_timeout", ["5", 2.5, True, [1]])
+# A non-integer (float / bool / list) or a non-numeric string is rejected; an
+# INTEGER STRING is NOT here - it is valid (see the coercion test below).
+@pytest.mark.parametrize("bad_timeout", [2.5, "2.5", "abc", True, [1]])
 def test_invalid_timeout_validation_error(migrated_factory, tmp_path, bad_timeout):
     config = cfg(tmp_path)
     pr, _ws = make_ws(migrated_factory, tmp_path)
@@ -934,6 +936,42 @@ def test_invalid_timeout_validation_error(migrated_factory, tmp_path, bad_timeou
             timeout_seconds=bad_timeout,
         )
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
+
+
+# Regression: MCP harnesses / LLM tool-callers routinely serialize numbers as
+# strings, so a STRING timeout_seconds must be coerced (like cursor/limit), not
+# rejected - otherwise the canonical event_wait long-poll monitor is unusable.
+@pytest.mark.parametrize("snapshot_timeout", ["0", "-5", 0, -5])
+def test_string_or_nonpositive_timeout_is_a_snapshot_not_an_error(
+    migrated_factory, tmp_path, snapshot_timeout
+):
+    config = cfg(tmp_path)
+    pr, _ws = make_ws(migrated_factory, tmp_path)
+    svc = make_service(migrated_factory, config)
+    out = svc.event_wait(
+        project_root=pr,
+        agent_id="a",
+        stream="workspace",
+        timeout_seconds=snapshot_timeout,
+    )
+    assert out["timed_out"] is True  # <= 0 -> single non-blocking snapshot
+
+
+def test_positive_string_timeout_is_accepted(migrated_factory, tmp_path):
+    config = cfg(tmp_path)
+    pr, ws = make_ws(migrated_factory, tmp_path)
+    emit(migrated_factory, ws, type="x")  # a visible event present from cursor 0
+    svc = make_service(migrated_factory, config)
+    # "8" (string) must be accepted and behave like 8; the pending event returns
+    # on the first scan so the positive timeout never blocks the test.
+    out = svc.event_wait(
+        project_root=pr,
+        agent_id="a",
+        stream="workspace",
+        cursor=0,
+        timeout_seconds="8",
+    )
+    assert out["timed_out"] is False and len(out["events"]) >= 1
 
 
 # --------------------------------------------------------------------------- #

@@ -323,20 +323,35 @@ class EventService:
         """Clamp ``timeout_seconds`` to ``max_wait_timeout_seconds`` (seconds).
 
         ``None`` defaults to the configured ceiling; ``<= 0`` means a single
-        ``event_get`` (no sleeping); a non-integer raises ``VALIDATION_ERROR``.
+        ``event_get`` (no sleeping). Accepts an int OR an integer STRING - exactly
+        as the shared cursor/limit parsers already tolerate, because MCP harnesses
+        and LLM tool-callers routinely serialize numbers as strings; without this
+        the canonical ``event_wait`` long-poll monitor is unusable from such a
+        harness. ``bool``, a non-integer (e.g. ``2.5``), or a non-numeric value
+        raises ``VALIDATION_ERROR``.
         """
         ceiling = int(self._config.max_wait_timeout_seconds)
         if timeout_seconds is None:
             return ceiling
-        if isinstance(timeout_seconds, bool) or not isinstance(timeout_seconds, int):
+        if isinstance(timeout_seconds, bool) or not isinstance(
+            timeout_seconds, (int, str)
+        ):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
-                "timeout_seconds must be an integer (seconds).",
+                "timeout_seconds must be an integer number of seconds.",
                 {"timeout_seconds": timeout_seconds},
             )
-        if timeout_seconds <= 0:
+        try:
+            value = int(timeout_seconds)
+        except (TypeError, ValueError):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "timeout_seconds must be an integer number of seconds.",
+                {"timeout_seconds": timeout_seconds},
+            ) from None
+        if value <= 0:
             return 0
-        return min(timeout_seconds, ceiling)
+        return min(value, ceiling)
 
     def _require_read_permission(self, agent_id: str) -> None:
         """Gate ``events.read`` (migration 011) in its own read-only uow.
