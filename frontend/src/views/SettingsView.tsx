@@ -13,9 +13,10 @@ import {
   Save,
   SlidersHorizontal,
   Sun,
+  ToggleLeft,
   Trash2,
 } from "lucide-react";
-import { api, type SettingItem } from "../api";
+import { api, type NexusInfo, type SettingItem } from "../api";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
 
@@ -114,7 +115,7 @@ function SettingField({
 export function SettingsView() {
   const { theme, toggle } = useTheme();
   const { confirm, dialog } = useConfirm();
-  const [info, setInfo] = useState<Record<string, unknown> | null>(null);
+  const [info, setInfo] = useState<NexusInfo | null>(null);
   const [items, setItems] = useState<SettingItem[]>([]);
   const [drafts, setDrafts] = useState<Record<string, unknown>>({});
   const [saving, setSaving] = useState(false);
@@ -134,7 +135,7 @@ export function SettingsView() {
   useEffect(() => {
     api
       .info()
-      .then((data) => setInfo(data as Record<string, unknown>))
+      .then(setInfo)
       .catch(() => undefined);
     loadSettings();
   }, []);
@@ -146,6 +147,14 @@ export function SettingsView() {
         return item && drafts[key] !== item.value;
       }),
     [drafts, items],
+  );
+  const generalItems = useMemo(
+    () => items.filter((i) => i.group !== "features"),
+    [items],
+  );
+  const featureItems = useMemo(
+    () => items.filter((i) => i.group === "features"),
+    [items],
   );
   const restartTouched = dirtyKeys.some(
     (key) => items.find((i) => i.key === key)?.requires_restart,
@@ -279,7 +288,7 @@ export function SettingsView() {
             </div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            {items.map((item) => (
+            {generalItems.map((item) => (
               <SettingField
                 key={item.key}
                 item={item}
@@ -291,6 +300,41 @@ export function SettingsView() {
             ))}
           </div>
         </section>
+
+        {/* Features (meta-harness opt-ins) */}
+        {featureItems.length > 0 && (
+          <section className="panel p-5 space-y-4" data-testid="feature-settings">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display font-semibold text-sm flex items-center gap-2">
+                <ToggleLeft size={14} /> Features
+              </h2>
+              <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
+                Opt-in · default off
+              </span>
+            </div>
+            <p className="text-[11px] text-surface-400 dark:text-surface-500">
+              Coordination features ship disabled and only run when switched
+              on here (or pinned via{" "}
+              <span className="font-mono">OKTO_NEXUS_FEATURE_*</span> /{" "}
+              <span className="font-mono">--feature-*</span>). Turning a
+              feature off never removes MCP tools — agents can read the
+              effective flags via <span className="font-mono">nexus_info</span>.
+              Use the Save button above to apply changes.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              {featureItems.map((item) => (
+                <SettingField
+                  key={item.key}
+                  item={item}
+                  draft={drafts[item.key]}
+                  onChange={(value) =>
+                    setDrafts((d) => ({ ...d, [item.key]: value }))
+                  }
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Maintenance */}
         <section className="panel p-5 space-y-4">

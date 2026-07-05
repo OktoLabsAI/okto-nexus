@@ -24,17 +24,24 @@ import boundary test). The concrete connection type is referenced as ``Any``.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Protocol, Sequence, runtime_checkable
+from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
+from ..domain.approvals import Approval
+from ..domain.governance import Policy
+from ..domain.policy import PolicyRecord, PolicyVersion
 from ..domain.models import (
     Agent,
     Artifact,
+    CapabilityName,
     Channel,
     Event,
     Handoff,
+    Memory,
     Message,
     MessageDelivery,
     Session,
+    TagKey,
+    TagValue,
     Task,
     Workspace,
 )
@@ -117,11 +124,9 @@ class UnitOfWork(Protocol):
 
     connection: Connection
 
-    def __enter__(self) -> "UnitOfWork":
-        ...
+    def __enter__(self) -> "UnitOfWork": ...
 
-    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> bool | None:
-        ...
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> bool | None: ...
 
     def commit(self) -> None:
         """Commit the active transaction."""
@@ -221,9 +226,7 @@ class AgentRepo(Protocol):
         """Return ALL agents (global; identities are not workspace-scoped)."""
         ...
 
-    def touch(
-        self, uow: UnitOfWork, *, agent_id: str, at: str | None = None
-    ) -> bool:
+    def touch(self, uow: UnitOfWork, *, agent_id: str, at: str | None = None) -> bool:
         """Best-effort stamp of ``last_seen_at`` for an agent's latest action.
 
         Returns ``True`` if the agent existed and was updated, ``False`` if no
@@ -254,9 +257,7 @@ class AgentRepo(Protocol):
         """
         ...
 
-    def set_active(
-        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
-    ) -> bool:
+    def set_active(self, uow: UnitOfWork, *, agent_id: str, is_active: bool) -> bool:
         """Flip the revocation switch. Returns ``True`` if the agent existed."""
         ...
 
@@ -289,6 +290,400 @@ class AgentRepo(Protocol):
         Always a full overwrite of BOTH columns (``permissions=None`` resets
         to unrestricted default-allow). Returns ``True`` if the agent existed.
         """
+        ...
+
+    def set_tags(self, uow: UnitOfWork, *, agent_id: str, tags: Any) -> bool:
+        """Overwrite the agent's tag map (migration 013).
+
+        Full overwrite (``None`` resets to "no tags"); the caller has already
+        validated shape AND catalog existence. Returns ``True`` if the agent
+        existed.
+        """
+        ...
+
+    def set_comm_scope(
+        self, uow: UnitOfWork, *, agent_id: str, comm_scope: Any
+    ) -> bool:
+        """Overwrite the agent's communication scope (migration 013).
+
+        Full overwrite (``None`` resets to unrestricted). The value is
+        operator-set and PRIVATE (never exposed on discovery). Returns
+        ``True`` if the agent existed.
+        """
+        ...
+
+
+@runtime_checkable
+class TagCatalogRepo(Protocol):
+    """Persistence for the central tag catalog (migration 013).
+
+    The single registry behind the fail-closed tag-scoping rule: keys and
+    values must exist here before anything may reference them. Existence
+    checks and the ``TAG_IN_USE`` deletion guard live in
+    :mod:`okto_nexus.application.tags`.
+    """
+
+    def create_key(
+        self, uow: UnitOfWork, *, key: str, description: str | None = None
+    ) -> TagKey:
+        """Register a key (unique). ``VALIDATION_ERROR`` on a duplicate."""
+        ...
+
+    def get_key(self, uow: UnitOfWork, key: str) -> TagKey | None:
+        """Return the key, or ``None`` if it is not registered."""
+        ...
+
+    def list_keys(self, uow: UnitOfWork) -> list[TagKey]:
+        """Return every registered key, sorted by key."""
+        ...
+
+    def delete_key(self, uow: UnitOfWork, *, key: str) -> bool:
+        """Delete a key (values cascade). True if it existed.
+
+        Callers MUST run the in-use guard first (application layer).
+        """
+        ...
+
+    def create_value(
+        self,
+        uow: UnitOfWork,
+        *,
+        key: str,
+        value: str,
+        description: str | None = None,
+    ) -> TagValue:
+        """Register a value under a registered key.
+
+        ``NOT_FOUND`` when the key is unregistered; ``VALIDATION_ERROR`` on a
+        duplicate value.
+        """
+        ...
+
+    def get_value(self, uow: UnitOfWork, *, key: str, value: str) -> TagValue | None:
+        """Return the value, or ``None`` if it is not registered."""
+        ...
+
+    def list_values(self, uow: UnitOfWork, *, key: str | None = None) -> list[TagValue]:
+        """Values (optionally of one key), sorted by ``(key, value)``."""
+        ...
+
+    def delete_value(self, uow: UnitOfWork, *, key: str, value: str) -> bool:
+        """Delete one value. True if it existed (in-use guard is upstream)."""
+        ...
+
+
+@runtime_checkable
+class CapabilityCatalogRepo(Protocol):
+    """Persistence for the central capability catalog (migration 014).
+
+    The single registry behind the fail-closed capability rule: a name must
+    exist here before anything may reference it (agent ``capabilities``,
+    ``strategy: "capability"`` targets). Existence checks and the
+    ``CAPABILITY_IN_USE`` deletion guard live in
+    :mod:`okto_nexus.application.capabilities`.
+    """
+
+    def create(
+        self, uow: UnitOfWork, *, name: str, description: str | None = None
+    ) -> CapabilityName:
+        """Register a name (unique). ``VALIDATION_ERROR`` on a duplicate."""
+        ...
+
+    def ensure(self, uow: UnitOfWork, *, name: str) -> bool:
+        """Insert-or-ignore a name (seed path). True if inserted now."""
+        ...
+
+    def get(self, uow: UnitOfWork, name: str) -> CapabilityName | None:
+        """Return the name, or ``None`` if it is not registered."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[CapabilityName]:
+        """Return every registered name, sorted by name."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, name: str) -> bool:
+        """Delete one name. True if it existed (in-use guard is upstream)."""
+        ...
+
+
+@runtime_checkable
+class GovernanceRepo(Protocol):
+    """Persistence + consumption counters for governance policies (migration 016).
+
+    V1 policy engine (spec ffef15bf): GLOBAL deny-only policies (subject x
+    action x limit). Form validation lives in
+    :func:`okto_nexus.domain.governance.validate_policy_form`; matching and the
+    deny-overrides verdict in the same domain module; the enforcement
+    orchestration in :mod:`okto_nexus.application.governance`. The counters are
+    pre-fetched INSIDE the write path's unit of work (on-demand windows - never
+    a counter table).
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        policy_id: str,
+        subject_kind: str,
+        subject_value: str | None,
+        action: str,
+        limit_kind: str,
+        limit_value: int | None,
+        window: str | None,
+        enabled: bool = True,
+        created_at: str | None = None,
+    ) -> Policy:
+        """Insert one policy row; returns the stored :class:`Policy`."""
+        ...
+
+    def get(self, uow: UnitOfWork, policy_id: str) -> Policy | None:
+        """Return the policy, or ``None`` when absent."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[Policy]:
+        """Every policy (enabled and disabled), ``(created_at, policy_id)`` order."""
+        ...
+
+    def list_active(self, uow: UnitOfWork) -> list[Policy]:
+        """Enabled policies only, same deterministic order (enforcement read)."""
+        ...
+
+    def update(
+        self, uow: UnitOfWork, *, policy_id: str, fields: Mapping[str, Any]
+    ) -> Policy | None:
+        """Patch validated ``fields``; returns the updated row or ``None``."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, policy_id: str) -> bool:
+        """Remove the policy. ``True`` if it existed."""
+        ...
+
+    def actions_since(
+        self, uow: UnitOfWork, *, agent_id: str, action: str, since: str
+    ) -> int:
+        """COUNT of the caller's persisted ``action`` rows at/after ``since``."""
+        ...
+
+    def open_handoffs(self, uow: UnitOfWork, *, agent_id: str) -> int:
+        """COUNT of the caller's handoffs in a non-terminal status (global)."""
+        ...
+
+
+@runtime_checkable
+class PolicyRepo(Protocol):
+    """Persistence for NAMED global policies + their append-only versions
+    (migration 022, spec 80624c1a).
+
+    A policy row is metadata (``name`` + ``description``); its audience +
+    governance live in immutable :class:`PolicyVersion` rows keyed by
+    ``(policy_id, version)``. Publishing an edit APPENDS a new version (the
+    repo assigns the next number atomically); versions are never mutated.
+    Global (no ``workspace_id``), matching the governance/tag/capability
+    catalogs. Form validation is upstream
+    (:mod:`okto_nexus.domain.policy`); this port persists.
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        policy_id: str,
+        name: str,
+        description: str | None = None,
+        created_at: str | None = None,
+    ) -> PolicyRecord:
+        """Insert one catalog row (UNIQUE ``name``); returns the stored record."""
+        ...
+
+    def get(self, uow: UnitOfWork, policy_id: str) -> PolicyRecord | None:
+        """Return the policy record (with ``latest_version``), or ``None``."""
+        ...
+
+    def get_by_name(self, uow: UnitOfWork, name: str) -> PolicyRecord | None:
+        """Return the policy record by its unique ``name``, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[PolicyRecord]:
+        """Every policy, ``(created_at, policy_id)`` order, with latest version."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        policy_id: str,
+        name: str | None = None,
+        description: Any = "__unset__",
+    ) -> PolicyRecord | None:
+        """Patch the METADATA (name/description); ``None`` when absent.
+
+        Versions are append-only and never touched here. ``description`` uses
+        the ``"__unset__"`` sentinel so ``None`` can explicitly clear it.
+        """
+        ...
+
+    def delete(self, uow: UnitOfWork, *, policy_id: str) -> bool:
+        """Remove the policy (versions cascade). ``True`` if it existed.
+
+        Callers MUST run the ``POLICY_IN_USE`` guard first (application layer):
+        a binding still referencing the policy blocks deletion.
+        """
+        ...
+
+    def add_version(
+        self,
+        uow: UnitOfWork,
+        *,
+        policy_id: str,
+        audience: Mapping[str, Any] | None,
+        governance: Sequence[Mapping[str, Any]],
+        published_at: str | None = None,
+    ) -> PolicyVersion:
+        """Append the next immutable version; returns the stored version.
+
+        The version number is ``MAX(version)+1`` computed inside ``uow`` (the
+        write lock serialises it). ``audience``/``governance`` are the already
+        validated bodies; the adapter serialises them to JSON TEXT.
+        """
+        ...
+
+    def get_version(
+        self, uow: UnitOfWork, *, policy_id: str, version: int
+    ) -> PolicyVersion | None:
+        """Return one exact version (the ``pinned`` read), or ``None``."""
+        ...
+
+    def latest_version(
+        self, uow: UnitOfWork, *, policy_id: str
+    ) -> PolicyVersion | None:
+        """Return the highest-numbered version (the ``latest`` read), or ``None``."""
+        ...
+
+    def list_versions(self, uow: UnitOfWork, *, policy_id: str) -> list[PolicyVersion]:
+        """Every version of a policy, ascending ``version`` (history surface)."""
+        ...
+
+    def versions_for(
+        self, uow: UnitOfWork, *, policy_ids: Sequence[str]
+    ) -> dict[str, list[PolicyVersion]]:
+        """Bulk-fetch versions for a set of policies (the resolution read).
+
+        Returns ``{policy_id: [versions ascending]}`` for the ids that have
+        any version; a missing id simply has no key. Feeds
+        :func:`okto_nexus.domain.policy.resolve_effective_sources` as
+        ``versions_by_policy``.
+        """
+        ...
+
+
+@runtime_checkable
+class AgentPolicyBindingRepo(Protocol):
+    """Persistence for an agent's ordered policy bindings (migration 022).
+
+    Bindings live in their OWN table (not a JSON column on ``agents``) so the
+    ``POLICY_IN_USE`` guard is a single indexed lookup. :meth:`replace` is a
+    full overwrite (mirroring ``AgentRepo.set_comm_scope``); the stored dicts
+    are the already-validated output of
+    :func:`okto_nexus.domain.policy.validate_agent_bindings`.
+    """
+
+    def replace(
+        self, uow: UnitOfWork, *, agent_id: str, bindings: Sequence[Mapping[str, Any]]
+    ) -> None:
+        """Overwrite ALL of an agent's bindings, preserving list order.
+
+        Deletes the agent's existing binding rows and inserts the new ones at
+        ascending positions in ONE unit of work. An empty sequence clears the
+        bindings (back to unrestricted).
+        """
+        ...
+
+    def list_for_agent(self, uow: UnitOfWork, *, agent_id: str) -> list[dict[str, Any]]:
+        """Return the agent's bindings as validated dicts, in position order."""
+        ...
+
+    def agents_binding_policy(self, uow: UnitOfWork, *, policy_id: str) -> list[str]:
+        """Distinct agent ids with a GLOBAL binding to ``policy_id`` (in-use guard).
+
+        Empty list means the policy is unreferenced and safe to delete.
+        """
+        ...
+
+
+@runtime_checkable
+class ApprovalRepo(Protocol):
+    """Persistence for HITL approvals (migration 017, spec 2948b2a2).
+
+    Rows are append-then-decide, never deleted (BR1): ``add`` runs inside the
+    intercepting write path's OWN unit of work so the pending row and the
+    ``approval.requested`` event commit atomically with the returned envelope.
+    ``mark_decided`` is the CONDITIONAL flip (anti double-decision - AC6) and
+    ``revert_to_pending`` is the honest rollback when re-execution fails a
+    gate (BR3). Payload columns are JSON TEXT; (de)serialisation is upstream.
+    """
+
+    def add(
+        self,
+        uow: UnitOfWork,
+        *,
+        approval_id: str,
+        workspace_id: str,
+        agent_id: str,
+        action: str,
+        policy_id: str,
+        request_payload: str,
+        trace_id: str | None,
+        created_at: str,
+    ) -> Approval:
+        """Insert one PENDING row; returns the stored :class:`Approval`."""
+        ...
+
+    def get(self, uow: UnitOfWork, approval_id: str) -> Approval | None:
+        """Return the approval, or ``None`` when absent."""
+        ...
+
+    def list(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        status: str | None = None,
+        limit: int = 100,
+    ) -> list[Approval]:
+        """Workspace-scoped rows, ASCENDING ``created_at`` (oldest first).
+
+        ``status=None`` means every status; the queue default (``pending``)
+        is decided upstream.
+        """
+        ...
+
+    def mark_decided(
+        self,
+        uow: UnitOfWork,
+        *,
+        approval_id: str,
+        status: str,
+        decided_by: str,
+        justification: str | None,
+        decided_at: str,
+    ) -> bool:
+        """Conditionally flip ``pending`` -> ``status``.
+
+        Returns ``False`` when the row was NOT pending (already decided) so
+        the service can raise ``CONFLICT`` - the second decision never
+        overwrites the first (AC6).
+        """
+        ...
+
+    def set_executed_result(
+        self, uow: UnitOfWork, *, approval_id: str, executed_result: str
+    ) -> None:
+        """Record the re-execution's result JSON on an approved row."""
+        ...
+
+    def revert_to_pending(self, uow: UnitOfWork, *, approval_id: str) -> None:
+        """Honest rollback (BR3): ``approved`` -> ``pending``, clearing the
+        decision columns, after the re-execution failed a gate."""
         ...
 
 
@@ -370,13 +765,28 @@ class ObservabilityQueries(Protocol):
         *,
         workspace_id: str | None,
         statuses: tuple[str, ...] | None = None,
-    ) -> list[dict[str, Any]]:
+    ) -> list[dict[str, Any]]: ...
+
+    def handoff_dependency_aggregates(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        handoff_ids: list[str],
+    ) -> dict[str, dict[str, Any]]:
+        """Per-handoff dependency aggregates for a page of ids (I5).
+
+        ONE ``IN`` query per page (never per row): returns
+        ``{handoff_id: {"depends_on": [ids], "total", "satisfied",
+        "pending", "failed"}}`` with ONLY ids that have dependency rows -
+        a missing key means "no dependencies" and the row keeps its exact
+        pre-I5 shape.
+        """
         ...
 
     def channel_rows(
         self, uow: UnitOfWork, *, workspace_id: str | None
-    ) -> list[dict[str, Any]]:
-        ...
+    ) -> list[dict[str, Any]]: ...
 
     def session_rows(
         self,
@@ -384,8 +794,7 @@ class ObservabilityQueries(Protocol):
         *,
         workspace_id: str | None,
         status: str | None = None,
-    ) -> list[dict[str, Any]]:
-        ...
+    ) -> list[dict[str, Any]]: ...
 
     def messages_page(
         self,
@@ -413,9 +822,7 @@ class ObservabilityQueries(Protocol):
         """
         ...
 
-    def conversation_peers(
-        self, uow: UnitOfWork, *, agent_id: str
-    ) -> dict[str, Any]:
+    def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """Aggregate the agent's conversation partners in SQL.
 
         Returns ``{items: [{peer, count, last_at}], failed_count}`` sorted by
@@ -432,8 +839,15 @@ class ObservabilityQueries(Protocol):
         workspace_id: str | None,
         stream: str | None,
         limit: int,
+        type_: str | None = None,
+        actor_agent_id: str | None = None,
+        trace_id: str | None = None,
     ) -> list[dict[str, Any]]:
-        """Event-log rows with ``event_id > cursor``, ascending (SSE/tail feed)."""
+        """Event-log rows with ``event_id > cursor``, ascending (SSE/tail feed).
+
+        ``type_`` / ``actor_agent_id`` are optional column equality filters;
+        ``trace_id`` filters on the payload-level trace key (I1).
+        """
         ...
 
     def workspace_message_count(
@@ -486,6 +900,31 @@ class ObservabilityQueries(Protocol):
         """
         ...
 
+    def handoff_lifecycle_events(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> tuple[list[tuple[str, str, str]], bool]:
+        """Windowed handoff lifecycle events for the health correlation (I7).
+
+        ``(handoff_id, type, created_at)`` tuples - created/claimed/completed/
+        rejected only, workspace-scoped, created at/after ``since_iso``, in
+        append order, BOUNDED; the second element flags truncation. The
+        adapter parses ``handoff_id`` out of the JSON payload (handoff rows
+        keep no per-transition timestamps, so events are the only faithful
+        claim->complete record - dec_e7bd8ac7).
+        """
+        ...
+
+    def workspace_unread_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str
+    ) -> list[dict[str, Any]]:
+        """``[{agent_id, unread}]`` per-recipient unread counts, this workspace.
+
+        Snapshot (not windowed): the same deliveries-to-messages JOIN basis as
+        ``workspace_delivery_health``, grouped by recipient, ordered by count
+        DESC (agent_id ASC on ties).
+        """
+        ...
+
 
 @runtime_checkable
 class AuthProvider(Protocol):
@@ -502,9 +941,7 @@ class AuthProvider(Protocol):
         """Issue/rotate the agent's key; return the plaintext exactly once."""
         ...
 
-    def set_active(
-        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
-    ) -> bool:
+    def set_active(self, uow: UnitOfWork, *, agent_id: str, is_active: bool) -> bool:
         """Flip the revocation switch (dropping cached resolutions)."""
         ...
 
@@ -706,6 +1143,7 @@ class MessageRepo(Protocol):
         body: str | None = None,
         artifacts: Sequence[Any] | None = None,
         parent_message_id: str | None = None,
+        trace_id: str | None = None,
         created_at: str | None = None,
     ) -> Message:
         """Create a message, returning the stored row."""
@@ -717,9 +1155,7 @@ class MessageRepo(Protocol):
         """Return the message, or ``None``."""
         ...
 
-    def count_since(
-        self, uow: UnitOfWork, *, from_agent_id: str, since: str
-    ) -> int:
+    def count_since(self, uow: UnitOfWork, *, from_agent_id: str, since: str) -> int:
         """Count messages SENT by ``from_agent_id`` at/after ``since`` (global).
 
         Backs the ``limits.messages_per_minute`` permission: the rate window
@@ -1012,6 +1448,133 @@ class MessageVectorStore(Protocol):
         ...
 
 
+@runtime_checkable
+class MemoryRepo(Protocol):
+    """Persistence for :class:`Memory` rows (spec 8928b320, I6).
+
+    Append-only for agents: there is no update method by design - correction
+    happens via :meth:`mark_superseded` (stamped in the same unit of work as
+    the superseding row's :meth:`create`). :meth:`delete` exists solely for
+    the operator's REST curation path (BR9).
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        memory_id: str,
+        workspace_id: str,
+        author_agent_id: str,
+        title: str,
+        content: str,
+        topics: Sequence[str] = (),
+        source_kind: str | None = None,
+        source_id: str | None = None,
+        supersedes: str | None = None,
+        trace_id: str | None = None,
+        created_at: str | None = None,
+    ) -> Memory:
+        """Insert a memory row (born live: ``superseded_by`` NULL)."""
+        ...
+
+    def get(
+        self, uow: UnitOfWork, *, workspace_id: str, memory_id: str
+    ) -> Memory | None:
+        """Return the memory (superseded or not), or ``None``."""
+        ...
+
+    def get_many(
+        self, uow: UnitOfWork, *, workspace_id: str, memory_ids: Sequence[str]
+    ) -> dict[str, Memory]:
+        """Map ``memory_id`` -> row for the ids that exist in the workspace."""
+        ...
+
+    def list(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        include_superseded: bool = False,
+        topic: str | None = None,
+        author_agent_id: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[Memory]:
+        """Newest-first browse; live-only unless ``include_superseded``."""
+        ...
+
+    def search_lexical(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        query: str,
+        include_superseded: bool = False,
+        topic: str | None = None,
+        limit: int = 50,
+    ) -> list[Memory]:
+        """Deterministic substring match over title+content+topics (FR4).
+
+        The degraded ranking when semantic search is unavailable: newest
+        first, no score. ``%``/``_`` in ``query`` are matched literally.
+        """
+        ...
+
+    def mark_superseded(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        memory_id: str,
+        superseded_by: str,
+    ) -> int:
+        """Stamp ``superseded_by`` on a LIVE row; return rows changed (0/1).
+
+        Exactly-once at the SQL level (guarded by ``superseded_by IS NULL``):
+        0 means the target was already superseded - the service maps it to
+        ``CONFLICT`` (BR4).
+        """
+        ...
+
+    def delete(self, uow: UnitOfWork, *, workspace_id: str, memory_id: str) -> int:
+        """Physically remove a row (operator curation only); rows removed."""
+        ...
+
+
+@runtime_checkable
+class MemoryVectorStore(Protocol):
+    """Persistence + cosine retrieval for per-memory embedding vectors.
+
+    Same seam as :class:`MessageVectorStore` over the ``memory_embeddings``
+    table: BLOB vector + brute-force cosine, lifecycle coupled to the memory
+    row via ``ON DELETE CASCADE`` (D-EMB-5), incompatible-dim rows skipped in
+    SQL (br_04f0e599).
+    """
+
+    def upsert(
+        self,
+        uow: UnitOfWork,
+        *,
+        memory_id: str,
+        vector: Sequence[float],
+        model: str,
+        dim: int,
+        created_at: str | None = None,
+    ) -> None:
+        """Insert/replace the vector for ``memory_id`` (serialised as a BLOB)."""
+        ...
+
+    def search(
+        self, uow: UnitOfWork, *, query_vector: Sequence[float], k: int
+    ) -> list[tuple[str, float]]:
+        """Return up to ``k`` ``(memory_id, cosine_score)`` pairs, best first."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, memory_id: str) -> int:
+        """Delete the vector for ``memory_id``; return rows removed (0 or 1)."""
+        ...
+
+
 # --------------------------------------------------------------------------- #
 # Tasks / handoffs / artifacts
 # --------------------------------------------------------------------------- #
@@ -1067,9 +1630,17 @@ class HandoffRepo(Protocol):
         target: str | None = None,
         visibility: str | None = None,
         payload: str | None = None,
+        trace_id: str | None = None,
+        acceptance_criteria: str | None = None,
+        verify_by: str | None = None,
         created_at: str | None = None,
     ) -> Handoff:
-        """Create a handoff, returning the stored row."""
+        """Create a handoff, returning the stored row.
+
+        ``acceptance_criteria`` / ``verify_by`` are the serialised TEXT
+        verification contract (migration 018); ``None`` keeps the handoff on
+        the plain non-verifiable flow.
+        """
         ...
 
     def get(
@@ -1139,15 +1710,99 @@ class HandoffRepo(Protocol):
         """
         ...
 
+    def transition_verifying(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_id: str,
+        status: str,
+        updated_at: str | None = None,
+        verification_feedback: str | None = None,
+        lease_expires_at: str | None = None,
+    ) -> Handoff | None:
+        """Conditionally transition a VERIFYING handoff (verify verdict).
+
+        Same contract as :meth:`transition_claimed`: the implementation must
+        re-assert ``status='VERIFYING'`` atomically (single statement) and
+        write the verdict outcome in that SAME UPDATE - on a ``CLAIMED``
+        destination (fail) ``verification_feedback`` is always (over)written,
+        including back to NULL, and ``lease_expires_at`` is renewed; on a
+        terminal destination (pass) only the status changes. Return the
+        updated row, or ``None`` when 0 rows were affected - the caller
+        re-reads to raise the precise catalogue error.
+        """
+        ...
+
     def read_outcome(
         self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str
     ) -> dict[str, str | None] | None:
-        """Return ``{"result", "rejected_reason"}`` for a handoff, or ``None``.
+        """Return ``{"result", "rejected_reason", "verification_feedback"}``.
 
-        The outcome columns (migration 008) are read separately from the
-        :class:`Handoff` dataclass so the shared domain model stays stable;
-        values are the serialised TEXT persisted by
-        :meth:`transition_claimed` / :meth:`reject_open`.
+        The outcome columns (migrations 008 + 018) are read separately from
+        the :class:`Handoff` dataclass so the shared domain model stays
+        stable; values are the serialised TEXT persisted by
+        :meth:`transition_claimed` / :meth:`reject_open` /
+        :meth:`transition_verifying`. ``None`` when the handoff is missing.
+        """
+        ...
+
+    def read_verification(
+        self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str
+    ) -> dict[str, str | None] | None:
+        """Return ``{"acceptance_criteria", "verify_by"}``, or ``None``.
+
+        The verification contract columns (migration 018) live outside the
+        :class:`Handoff` dataclass (decision D6); NULL values mean the
+        handoff is not verifiable.
+        """
+        ...
+
+    def create_dependencies(
+        self,
+        uow: UnitOfWork,
+        *,
+        handoff_id: str,
+        workspace_id: str,
+        depends_on: list[str],
+        created_at: str | None = None,
+    ) -> None:
+        """Persist the dependent's edges (migration 019) in ITS create UoW.
+
+        One row per dependency, preserving the (already validated) list
+        order. The rows are IMMUTABLE - the port deliberately exposes no
+        update/delete for them.
+        """
+        ...
+
+    def read_dependencies(
+        self, uow: UnitOfWork, *, workspace_id: str, handoff_id: str
+    ) -> list[dict[str, Any]]:
+        """Return ``[{"depends_on_id", "status"}]`` in creation order.
+
+        ``status`` is the dependency's CURRENT status (blocked-ness is
+        derived on-read, never materialised); ``None`` (vanished row) is
+        treated as pending by callers. Empty list = no dependencies.
+        """
+        ...
+
+    def dependents_of(
+        self, uow: UnitOfWork, *, workspace_id: str, depends_on_id: str
+    ) -> list[str]:
+        """Handoff ids that depend on ``depends_on_id`` (reverse index)."""
+        ...
+
+    def dependency_aggregates(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str,
+        handoff_ids: Iterable[str],
+    ) -> dict[str, dict[str, Any]]:
+        """Per-handoff aggregates for a page of ids, in ONE ``IN`` query.
+
+        ``{handoff_id: {"depends_on": [ids], "total", "satisfied",
+        "pending", "failed"}}``; ids without dependency rows are absent.
         """
         ...
 
@@ -1191,7 +1846,9 @@ class ArtifactRepo(Protocol):
         content: str | None = None,
         size_bytes: int | None = None,
         content_type: str | None = None,
+        created_by: str | None = None,
         created_at: str | None = None,
+        audience: list[Any] | None = None,
     ) -> Artifact:
         """Create an artifact, returning the stored row."""
         ...
@@ -1265,3 +1922,11 @@ class Repos:
     files: FileStore | None = None
     presets: PresetRepo | None = None
     message_vectors: MessageVectorStore | None = None
+    memories: MemoryRepo | None = None
+    memory_vectors: MemoryVectorStore | None = None
+    tag_catalog: TagCatalogRepo | None = None
+    capability_catalog: CapabilityCatalogRepo | None = None
+    governance: GovernanceRepo | None = None
+    policies: PolicyRepo | None = None
+    policy_bindings: AgentPolicyBindingRepo | None = None
+    approvals: ApprovalRepo | None = None

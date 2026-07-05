@@ -155,6 +155,10 @@ def test_key_accepted_via_query_header_and_bearer(serve_env):
 # --------------------------------------------------------------------------- #
 def test_create_agent_exposes_plaintext_once_and_stores_hash_only(serve_env):
     deps, client, operator_key = serve_env
+    # Capabilities are fail-closed: the vocabulary must exist in the catalog
+    # before an agent may announce it (capability-catalog feature).
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="ocr")
     response = client.post(
         "/api/v1/agents",
         json={"agent_id": "researcher", "role": "analyst", "capabilities": ["ocr"]},
@@ -237,28 +241,45 @@ def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
         for agent_id in ("victim", "peer"):
             repos.agents.upsert(uow, agent_id=agent_id)
         repos.sessions.create(
-            uow, session_id="s-victim", agent_id="victim", workspace_id=ws,
+            uow,
+            session_id="s-victim",
+            agent_id="victim",
+            workspace_id=ws,
             status="active",
         )
         # A message the victim received (delivery as recipient) ...
         repos.messages.create(
-            uow, message_id="m-in", workspace_id=ws, from_agent_id="peer",
-            target='{"strategy":"direct","agent_id":"victim"}', subject="hi",
+            uow,
+            message_id="m-in",
+            workspace_id=ws,
+            from_agent_id="peer",
+            target='{"strategy":"direct","agent_id":"victim"}',
+            subject="hi",
             body="b",
         )
         repos.deliveries.create(
-            uow, delivery_id="d-in", message_id="m-in",
-            recipient_agent_id="victim", status="read",
+            uow,
+            delivery_id="d-in",
+            message_id="m-in",
+            recipient_agent_id="victim",
+            status="read",
         )
         # ... and one it SENT to a peer (must survive the delete).
         repos.messages.create(
-            uow, message_id="m-out", workspace_id=ws, from_agent_id="victim",
-            target='{"strategy":"direct","agent_id":"peer"}', subject="bye",
+            uow,
+            message_id="m-out",
+            workspace_id=ws,
+            from_agent_id="victim",
+            target='{"strategy":"direct","agent_id":"peer"}',
+            subject="bye",
             body="b",
         )
         repos.deliveries.create(
-            uow, delivery_id="d-out", message_id="m-out",
-            recipient_agent_id="peer", status="unread",
+            uow,
+            delivery_id="d-out",
+            message_id="m-out",
+            recipient_agent_id="peer",
+            status="unread",
         )
 
     assert (
@@ -266,8 +287,7 @@ def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
         == 200
     )
     assert (
-        client.get("/api/v1/agents/victim", headers=_h(operator_key)).status_code
-        == 404
+        client.get("/api/v1/agents/victim", headers=_h(operator_key)).status_code == 404
     )
     # The peer and the message the victim sent survive; the peer can still
     # pull it from its inbox.
@@ -289,19 +309,29 @@ def test_graph_reflects_presence_and_in_flight(serve_env):
             repos.agents.upsert(uow, agent_id=agent_id)
         # alpha: fresh heartbeat -> present. bravo: stale (5 min old).
         repos.sessions.create(
-            uow, session_id="s-alpha", agent_id="alpha", workspace_id=ws,
+            uow,
+            session_id="s-alpha",
+            agent_id="alpha",
+            workspace_id=ws,
             status="active",
         )
         repos.sessions.create(
-            uow, session_id="s-bravo", agent_id="bravo", workspace_id=ws,
+            uow,
+            session_id="s-bravo",
+            agent_id="bravo",
+            workspace_id=ws,
             status="active",
         )
         import datetime
 
         old = (
-            datetime.datetime.now(datetime.timezone.utc)
-            - datetime.timedelta(seconds=300)
-        ).isoformat().replace("+00:00", "Z")
+            (
+                datetime.datetime.now(datetime.timezone.utc)
+                - datetime.timedelta(seconds=300)
+            )
+            .isoformat()
+            .replace("+00:00", "Z")
+        )
         uow.connection.execute(
             "UPDATE sessions SET last_heartbeat_at = ? WHERE session_id = 's-bravo'",
             (old,),
@@ -353,16 +383,25 @@ def _seed_full_store(deps) -> None:
         deps.repos.workspaces.upsert(uow, workspace_id=ws)
         deps.repos.agents.upsert(uow, agent_id="survivor")
         deps.repos.sessions.create(
-            uow, session_id="s-reset", agent_id="survivor", workspace_id=ws,
+            uow,
+            session_id="s-reset",
+            agent_id="survivor",
+            workspace_id=ws,
             status="active",
         )
         deps.repos.messages.create(
-            uow, message_id="m-reset", workspace_id=ws, from_agent_id="survivor",
+            uow,
+            message_id="m-reset",
+            workspace_id=ws,
+            from_agent_id="survivor",
             body="to be wiped",
         )
         deps.repos.deliveries.create(
-            uow, delivery_id="d-reset", message_id="m-reset",
-            recipient_agent_id="survivor", status="unread",
+            uow,
+            delivery_id="d-reset",
+            message_id="m-reset",
+            recipient_agent_id="survivor",
+            status="unread",
         )
         uow.connection.execute(
             "INSERT INTO artifacts (artifact_id, workspace_id, artifact_type, "
@@ -445,9 +484,9 @@ def test_events_endpoint_pages_by_cursor(serve_env):
     first = _emit_event(deps, ws, "demo.one")
     second = _emit_event(deps, ws, "demo.two")
 
-    page = client.get(
-        f"/api/v1/events?after={first}", headers=_h(operator_key)
-    ).json()["data"]
+    page = client.get(f"/api/v1/events?after={first}", headers=_h(operator_key)).json()[
+        "data"
+    ]
     ids = [item["event_id"] for item in page["items"]]
     assert ids == [second]
     assert page["next_cursor"] == second
@@ -583,7 +622,10 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
 
         timer = threading.Timer(
             0.15,
-            lambda: (_emit_event(deps, ws, "sse.second"), _emit_event(deps, ws, "sse.third")),
+            lambda: (
+                _emit_event(deps, ws, "sse.second"),
+                _emit_event(deps, ws, "sse.third"),
+            ),
         )
         with httpx.Client(timeout=10.0) as client:
             with client.stream(
@@ -592,9 +634,7 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
                 headers={**_h(operator_key), "last-event-id": str(e1)},
             ) as response:
                 assert response.status_code == 200
-                assert response.headers["content-type"].startswith(
-                    "text/event-stream"
-                )
+                assert response.headers["content-type"].startswith("text/event-stream")
                 opened = time.monotonic()
                 timer.start()
                 for line in response.iter_lines():

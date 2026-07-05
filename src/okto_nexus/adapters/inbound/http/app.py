@@ -27,11 +27,13 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
+from ....application.health import HealthService
 from ....application.observability import ObservabilityService
 from ....application.search import MessageSearchService
 from ....application.settings import SettingsService, detect_pinned_fields
 from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
+from ....domain.approvals import OPERATOR_AGENT_ID
 from ....errors import OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
@@ -56,11 +58,10 @@ PUBLIC_PATHS = frozenset(
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
-OPERATOR_AGENT_ID = "operator"
-
 
 def ok(data: Any) -> JSONResponse:
     return JSONResponse({"ok": True, "data": data})
+
 
 def err(status: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(
@@ -170,7 +171,9 @@ def create_http_mcp_server(deps: Deps) -> Any:
     return server
 
 
-def ensure_operator_key(deps: Deps, auth: AgentKeyAuthService) -> tuple[str, str] | None:
+def ensure_operator_key(
+    deps: Deps, auth: AgentKeyAuthService
+) -> tuple[str, str] | None:
     """Cold-start bootstrap: guarantee at least one key exists.
 
     When NO agent holds a key yet (fresh install or a V1 store before
@@ -241,6 +244,16 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         clock=deps.clock,
         config=deps.config,
     )
+    # Coordination health (I7): the SAME service class the MCP tool builds,
+    # with the same collaborators - tool/REST payload parity by construction.
+    workspace_health = HealthService(
+        connection_factory=deps.connection_factory,
+        queries=observability_queries,
+        workspaces=deps.repos.workspaces,
+        observability=observability,
+        clock=deps.clock,
+        config=deps.config,
+    )
 
     mcp_server = create_http_mcp_server(deps)
     mcp_app = mcp_server.streamable_http_app()
@@ -271,6 +284,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
         heartbeat_task: asyncio.Task | None = None
         if lock is not None:
+
             async def _beat() -> None:
                 while True:
                     await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
@@ -311,6 +325,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
             },
             status_code=500,
         )
+
     app.state.deps = deps
     app.state.auth = auth
     app.state.observability = observability
@@ -318,6 +333,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     app.state.settings_service = settings_service
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
+    app.state.workspace_health = workspace_health
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0
     # Same-machine trust for REST/dashboard; the serve CLI sets this to
@@ -343,9 +359,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
 
         assets_dir = static_dir / "assets"
         if assets_dir.is_dir():
-            app.mount(
-                "/assets", StaticFiles(directory=assets_dir), name="assets"
-            )
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
         logos_dir = static_dir / "logos"
         if logos_dir.is_dir():
             app.mount("/logos", StaticFiles(directory=logos_dir), name="logos")

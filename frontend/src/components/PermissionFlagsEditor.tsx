@@ -1,7 +1,9 @@
 // Permission flags editor - the Pulse PermissionFlagsEditor grammar adapted
 // to the Nexus 2-level registry: group cards with toggle switches (green
-// on / gray off), per-group enabled counters, numeric limits and the
-// allowed_peers list as inline inputs, plus a readOnly mode for built-ins.
+// on / gray off), per-group enabled counters, numeric limits as inline
+// inputs, plus a readOnly mode for built-ins. Data-driven from the server's
+// registry, so retired flags (e.g. allowed_peers, removed in F1) never
+// render.
 
 import { useMemo } from "react";
 import type { PermissionFlags } from "../api";
@@ -98,7 +100,7 @@ export function PermissionFlagsEditor({
 }) {
   const merged = useMemo(() => mergeFlags(registry, flags), [registry, flags]);
 
-  const set = (group: string, flag: string, value: boolean | number | string[]) => {
+  const set = (group: string, flag: string, value: boolean | number) => {
     if (readOnly || !onChange) return;
     const updated: PermissionFlags = JSON.parse(JSON.stringify(merged));
     updated[group][flag] = value;
@@ -161,57 +163,31 @@ export function PermissionFlagsEditor({
                     </div>
                   );
                 }
-                if (typeof value === "number") {
-                  return (
-                    <div
-                      key={flag}
-                      className="flex items-center justify-between gap-2"
-                      title={tip}
-                    >
-                      <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
-                        {flag}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min={0}
-                          value={value}
-                          disabled={readOnly}
-                          onChange={(e) =>
-                            set(group, flag, Math.max(0, Number(e.target.value) || 0))
-                          }
-                          className="w-20 text-xs px-2 py-0.5 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 disabled:opacity-50"
-                        />
-                        <span className="text-[10px] text-surface-400">
-                          0 = ∞
-                        </span>
-                      </div>
-                    </div>
-                  );
-                }
-                // string[] (allowed_peers)
+                // number (the quantitative limits)
                 return (
-                  <div key={flag} title={tip}>
+                  <div
+                    key={flag}
+                    className="flex items-center justify-between gap-2"
+                    title={tip}
+                  >
                     <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
                       {flag}
                     </span>
-                    <input
-                      type="text"
-                      placeholder="agent ids, comma-separated (empty = everyone)"
-                      value={(value as string[]).join(", ")}
-                      disabled={readOnly}
-                      onChange={(e) =>
-                        set(
-                          group,
-                          flag,
-                          e.target.value
-                            .split(",")
-                            .map((s) => s.trim())
-                            .filter(Boolean),
-                        )
-                      }
-                      className="mt-1 w-full text-xs px-2 py-1 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 font-mono disabled:opacity-50"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        min={0}
+                        value={value}
+                        disabled={readOnly}
+                        onChange={(e) =>
+                          set(group, flag, Math.max(0, Number(e.target.value) || 0))
+                        }
+                        className="w-20 text-xs px-2 py-0.5 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 disabled:opacity-50"
+                      />
+                      <span className="text-[10px] text-surface-400">
+                        0 = ∞
+                      </span>
+                    </div>
                   </div>
                 );
               })}

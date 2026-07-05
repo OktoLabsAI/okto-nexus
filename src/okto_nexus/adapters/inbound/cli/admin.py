@@ -152,7 +152,119 @@ def _build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Absolute path of a workspace root (validated fail-closed).",
     )
+
+    export = sub.add_parser(
+        "export",
+        help="Export a workspace event log as an NDJSON replay stream (I8).",
+        description=(
+            "Stream the workspace's append-only event log as NDJSON: a leading "
+            "manifest line (format_version/filters/event range) followed by one "
+            "RAW event per line, ordered by event_id ASC. This is the "
+            "re-executable coordination benchmark - the operator-facing read "
+            "path (NO per-agent visibility filter). Unlike the REST download, "
+            "the CLI is intentionally UNGATED (operator already holds the "
+            "shell) - the feature_replay opt-in gates only the HTTP surface."
+        ),
+    )
+    export.add_argument(
+        "--project-root",
+        dest="project_root",
+        required=True,
+        help=(
+            "Absolute path of the workspace root to export (validated "
+            "fail-closed). The server hashes it to the workspace_id."
+        ),
+    )
+    export.add_argument(
+        "--stream",
+        dest="stream",
+        default=None,
+        help="Restrict the export to one stream (e.g. handoff, message).",
+    )
+    export.add_argument(
+        "--trace-id",
+        dest="trace_id",
+        default=None,
+        help="Restrict the export to a single correlation trace_id.",
+    )
+    export.add_argument(
+        "--since-event-id",
+        dest="since_event_id",
+        type=int,
+        default=0,
+        metavar="N",
+        help="EXCLUSIVE lower bound: only events with event_id > N (default 0).",
+    )
+    export.add_argument(
+        "--until-event-id",
+        dest="until_event_id",
+        type=int,
+        default=None,
+        metavar="N",
+        help="INCLUSIVE upper bound: only events with event_id <= N.",
+    )
+    export.add_argument(
+        "--output",
+        dest="output",
+        default=None,
+        metavar="PATH",
+        help=(
+            "Write NDJSON to this file (UTF-8, LF newlines). Omit to stream to stdout."
+        ),
+    )
     return parser
+
+
+def _run_export(deps: Any, ns: argparse.Namespace, sink: TextIO) -> int:
+    """Stream one workspace's event log as NDJSON (manifest + one event/line).
+
+    Ungated by design (D3): the CLI operates from the operator's own shell.
+    Reads through a single read UnitOfWork snapshot so the whole slice is
+    internally consistent, and writes UTF-8 with LF newlines so the bytes match
+    the REST download exactly (modulo the manifest's generated_at).
+    """
+    from okto_nexus.adapters.outbound.sqlite.observability_repo import (
+        SqliteObservabilityQueries,
+    )
+    from okto_nexus.application.observability import ObservabilityService
+    from okto_nexus.application.replay import ReplayExportService
+
+    workspace_id = resolve_workspace_id(ns.project_root)
+    observability = ObservabilityService(
+        SqliteObservabilityQueries(), deps.clock, deps.config
+    )
+    service = ReplayExportService(observability, deps.config)
+    generated_at = deps.clock.now_iso()
+
+    def _emit(writer: TextIO) -> None:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            for line in service.export_lines(
+                uow,
+                workspace_id=workspace_id,
+                generated_at=generated_at,
+                stream=ns.stream,
+                trace_id=ns.trace_id,
+                since_event_id=ns.since_event_id,
+                until_event_id=ns.until_event_id,
+            ):
+                writer.write(line + "\n")
+
+    if ns.output:
+        with open(ns.output, "w", encoding="utf-8", newline="\n") as fh:
+            _emit(fh)
+    else:
+        # RAW event payloads may carry non-ASCII; force the stdout sink to
+        # UTF-8/LF so the stream is faithful and CRLF-free (a no-op for the
+        # StringIO sink tests inject).
+        reconfigure = getattr(sink, "reconfigure", None)
+        if reconfigure is not None:
+            try:
+                reconfigure(encoding="utf-8", newline="\n")
+            except (ValueError, OSError):
+                pass
+        _emit(sink)
+        sink.flush()
+    return 0
 
 
 def _run_issue_keys(deps: Any, sink: TextIO) -> int:
@@ -223,6 +335,8 @@ def run_admin(
         resolve_workspace_id(ns.project_root)
         if ns.command == "issue-keys":
             return _run_issue_keys(deps, sink)
+        if ns.command == "export":
+            return _run_export(deps, ns, sink)
         report = RetentionService.from_deps(deps).prune(
             events_keep_days=ns.events_keep_days,
             read_deliveries_keep_days=ns.read_deliveries_keep_days,

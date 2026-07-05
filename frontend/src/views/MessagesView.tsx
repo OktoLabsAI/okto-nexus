@@ -111,10 +111,13 @@ export function MessagesView({
   workspace,
   liveTick,
   sseStatus,
+  onOpenTrace,
 }: {
   workspace: string;
   liveTick?: number;
   sseStatus?: SSEStatus;
+  // TraceChip click-through (R-I1): jumps to Events with the trace applied.
+  onOpenTrace?: (traceId: string) => void;
 }) {
   const [items, setItems] = useState<MessageRow[]>([]);
   const [total, setTotal] = useState(0);
@@ -524,7 +527,11 @@ export function MessagesView({
           storageKey="okto-nexus-messages-panel"
           testId="message-detail-panel"
         >
-          <MessageDetail message={selected} onClose={() => setSelected(null)} />
+          <MessageDetail
+            message={selected}
+            onClose={() => setSelected(null)}
+            onOpenTrace={onOpenTrace}
+          />
         </ResizablePanel>
       )}
     </PageContainer>

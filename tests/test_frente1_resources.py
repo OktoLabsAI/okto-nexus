@@ -8,7 +8,7 @@ set of ``okto-nexus://reference/*`` URIs (BR9). These tests run against the REAL
 FastMCP server (``create_server`` over a real migrated temp store) - the exact
 surface an agent sees:
 
-* S1: ``list_resources`` advertises EXACTLY the 10 reference URIs (no missing,
+* S1: ``list_resources`` advertises EXACTLY the 12 reference URIs (no missing,
   no extra) and EACH ``read_resource`` returns non-empty content carrying the
   ``version:`` frontmatter near the start (so a client can detect a stale cache).
 * S6: representative tool calls return the canonical envelope unchanged -
@@ -33,7 +33,9 @@ from okto_nexus.adapters.inbound.mcp.server import bootstrap, create_server
 pytest.importorskip("mcp", reason="MCP SDK required to build the live server")
 
 
-# The closed set of reference resource URIs (BR9). Exactly these 10, no more.
+# The closed set of reference resource URIs (BR9). Exactly these 12, no more
+# (``governance`` joined at surface revision 19 / spec ffef15bf; ``hitl`` at
+# surface revision 20 / spec 2948b2a2).
 EXPECTED_RESOURCE_URIS = {
     "okto-nexus://reference/preflight",
     "okto-nexus://reference/communication",
@@ -45,6 +47,8 @@ EXPECTED_RESOURCE_URIS = {
     "okto-nexus://reference/tool-docs/handoff",
     "okto-nexus://reference/tool-docs/identity",
     "okto-nexus://reference/tool-docs/artifacts",
+    "okto-nexus://reference/governance",
+    "okto-nexus://reference/hitl",
 }
 
 
@@ -61,7 +65,9 @@ def surface(tmp_path):
 def _call(server, name: str, arguments: dict | None = None) -> dict:
     """Call a tool through FastMCP (schema validation included); return the envelope."""
     result = asyncio.run(server.call_tool(name, arguments or {}))
-    if isinstance(result, tuple):  # (unstructured, structured) when output schema exists
+    if isinstance(
+        result, tuple
+    ):  # (unstructured, structured) when output schema exists
         return result[1]
     block = result[0]
     return json.loads(block.text)
@@ -92,7 +98,9 @@ def _assert_canonical_envelope(env: dict, *, where: str) -> None:
             f"{where}: failure envelope must NOT carry 'data': {env!r}"
         )
         error = env.get("error")
-        assert isinstance(error, dict), f"{where}: failure must carry 'error' dict: {env!r}"
+        assert isinstance(error, dict), (
+            f"{where}: failure must carry 'error' dict: {env!r}"
+        )
         assert isinstance(error.get("code"), str) and error["code"], (
             f"{where}: error.code must be a non-empty str: {env!r}"
         )
@@ -102,9 +110,9 @@ def _assert_canonical_envelope(env: dict, *, where: str) -> None:
 
 
 # --------------------------------------------------------------------------- #
-# S1 (AC1): the reference resources are a closed set of 10, each versioned.
+# S1 (AC1): the reference resources are a closed set of 12, each versioned.
 # --------------------------------------------------------------------------- #
-def test_list_resources_advertises_exactly_the_ten_reference_uris(surface):
+def test_list_resources_advertises_exactly_the_twelve_reference_uris(surface):
     server, _ = surface
 
     resources = asyncio.run(server.list_resources())
@@ -118,9 +126,9 @@ def test_list_resources_advertises_exactly_the_ten_reference_uris(surface):
         f"missing={EXPECTED_RESOURCE_URIS - advertised} "
         f"extra={advertised - EXPECTED_RESOURCE_URIS}"
     )
-    # Closed set => exactly ten distinct URIs (no duplicates collapsing the set).
-    assert len(advertised) == 10
-    assert len(list(resources)) == 10, "no duplicate resource registrations"
+    # Closed set => exactly twelve distinct URIs (no duplicates collapsing it).
+    assert len(advertised) == 12
+    assert len(list(resources)) == 12, "no duplicate resource registrations"
 
 
 def test_each_reference_resource_reads_nonempty_with_version_frontmatter(surface):

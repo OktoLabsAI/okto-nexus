@@ -6,7 +6,8 @@ append-only event log is consumed by ``event_get`` / ``event_wait``:
 * the closed set of consumable ``stream`` values (workspace / agent /
   handoff) and its validation (:func:`validate_stream` -> ``INVALID_STREAM``);
 * input normalisation for ``filters`` (an object with the enumerated keys
-  ``type`` / ``agent_id`` / ``task_id`` / ``handoff_id``); ``cursor`` /
+  ``type`` / ``agent_id`` / ``task_id`` / ``handoff_id`` / ``trace_id``);
+  ``cursor`` /
   ``limit`` parsing is the SHARED helpers re-exported from
   :mod:`okto_nexus.domain.base` (one pagination grammar for every slice);
 * the *equality-AND* filter predicate (:func:`event_matches_filters`) and the
@@ -55,7 +56,11 @@ VALID_STREAMS: frozenset[str] = frozenset({"workspace", "agent", "handoff"})
 VALID_VISIBILITIES: frozenset[str] = frozenset({"public", "eligible", "private"})
 
 #: The closed set of enumerated filter keys (equality, combined with AND).
-FILTER_KEYS: frozenset[str] = frozenset({"type", "agent_id", "task_id", "handoff_id"})
+#: ``task_id`` / ``handoff_id`` / ``trace_id`` are payload-level keys, not
+#: columns - the application layer filters them after the scan.
+FILTER_KEYS: frozenset[str] = frozenset(
+    {"type", "agent_id", "task_id", "handoff_id", "trace_id"}
+)
 
 
 def validate_stream(stream: Any) -> str:
@@ -132,7 +137,7 @@ def normalize_filters(filters: Any) -> dict[str, str]:
         raise OktoNexusError(
             ErrorCode.VALIDATION_ERROR,
             "filters must be an object with keys in "
-            "{type, agent_id, task_id, handoff_id}.",
+            "{type, agent_id, task_id, handoff_id, trace_id}.",
             {"filters_type": type(filters).__name__},
         )
     normalized: dict[str, str] = {}
@@ -153,8 +158,8 @@ def _event_filter_value(event: Event, key: str) -> Any:
     """Return the value an :class:`Event` exposes for filter ``key``.
 
     ``type`` / ``agent_id`` map to columns (``type`` / ``actor_agent_id``);
-    ``task_id`` / ``handoff_id`` are read from the event ``payload`` (they are
-    not first-class columns in V1).
+    ``task_id`` / ``handoff_id`` / ``trace_id`` are read from the event
+    ``payload`` (they are not first-class columns in V1).
     """
     if key == "type":
         return event.type
@@ -183,7 +188,8 @@ def event_matches_filters(event: Event, filters: Mapping[str, str]) -> bool:
 def event_to_dict(event: Event) -> dict[str, Any]:
     """Serialise an :class:`Event` to the canonical ``event_get`` payload shape.
 
-    ``task_id`` / ``handoff_id`` are surfaced from the ``payload`` (or ``None``).
+    ``task_id`` / ``handoff_id`` / ``trace_id`` are surfaced from the
+    ``payload`` (or ``None``).
     """
     payload = event.payload if isinstance(event.payload, Mapping) else None
     return {
@@ -195,5 +201,6 @@ def event_to_dict(event: Event) -> dict[str, Any]:
         "actor_agent_id": event.actor_agent_id,
         "task_id": payload.get("task_id") if payload is not None else None,
         "handoff_id": payload.get("handoff_id") if payload is not None else None,
+        "trace_id": payload.get("trace_id") if payload is not None else None,
         "created_at": event.created_at,
     }

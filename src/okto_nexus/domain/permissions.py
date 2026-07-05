@@ -25,15 +25,19 @@ from typing import Any
 from ..errors import ErrorCode, OktoNexusError
 
 #: Canonical registry: every known boolean flag with its default (True =
-#: allowed). ``limits`` carries the quantitative knobs (0 = unlimited) and
-#: ``allowed_peers`` is an optional allowlist of agent_ids for DIRECT sends
-#: (empty list = everyone).
+#: allowed). ``limits`` carries the quantitative knobs (0 = unlimited).
+#:
+#: REMOVED in F1 (tag scoping): ``messages.allowed_peers``. Directed-send
+#: allowlists are now the tag-based ``comm_scope.outbound`` audience selector
+#: on the agent (operator-set; see the Tag Registry). New payloads carrying
+#: ``allowed_peers`` are rejected as an unknown flag (fail-closed); rows
+#: persisted by older versions are INERT - no code reads the key, and no data
+#: migration rewrites them.
 PERMISSION_REGISTRY: dict[str, dict[str, Any]] = {
     "messages": {
         "send_direct": True,
         "send_broadcast": True,
         "send_channel": True,
-        "allowed_peers": [],
     },
     "handoffs": {
         "create": True,
@@ -60,7 +64,6 @@ PERMISSION_DESCRIPTIONS: dict[str, str] = {
     "messages.send_direct": "Send direct messages to a specific agent.",
     "messages.send_broadcast": "Fan out to groups: broadcast, by role or by capability.",
     "messages.send_channel": "Post messages into channels.",
-    "messages.allowed_peers": "Optional allowlist of agent_ids this agent may message directly (empty = everyone).",
     "handoffs.create": "Offer work to the pool (handoff_create).",
     "handoffs.work": "Claim, complete or reject handoffs.",
     "handoffs.cancel": "Cancel handoffs it created.",
@@ -76,7 +79,9 @@ def _registry_copy() -> dict[str, dict[str, Any]]:
     return copy.deepcopy(PERMISSION_REGISTRY)
 
 
-def _preset(flags_off: list[str], limits: dict[str, int] | None = None) -> dict[str, Any]:
+def _preset(
+    flags_off: list[str], limits: dict[str, int] | None = None
+) -> dict[str, Any]:
     """Build a preset's flags: the full registry with ``flags_off`` disabled."""
     flags = _registry_copy()
     for path in flags_off:
@@ -196,7 +201,7 @@ def validate_permission_flags(flags: Any) -> dict[str, dict[str, Any]]:
                         {"flag": f"{group}.{flag}", "value": value},
                     )
                 normalised[group][flag] = value
-            elif isinstance(default, int):
+            else:  # int (the quantitative limits)
                 if isinstance(value, bool) or not isinstance(value, int) or value < 0:
                     raise OktoNexusError(
                         ErrorCode.VALIDATION_ERROR,
@@ -204,16 +209,6 @@ def validate_permission_flags(flags: Any) -> dict[str, dict[str, Any]]:
                         {"flag": f"{group}.{flag}", "value": value},
                     )
                 normalised[group][flag] = value
-            else:  # list (allowed_peers)
-                if not isinstance(value, list) or not all(
-                    isinstance(item, str) and item.strip() for item in value
-                ):
-                    raise OktoNexusError(
-                        ErrorCode.VALIDATION_ERROR,
-                        f"'{group}.{flag}' must be a list of non-empty agent_id strings.",
-                        {"flag": f"{group}.{flag}", "value": value},
-                    )
-                normalised[group][flag] = [item.strip() for item in value]
     return normalised
 
 
@@ -238,13 +233,6 @@ class PermissionSet:
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             return 0
         return value
-
-    def allowed_peers(self) -> list[str]:
-        """Direct-message allowlist (empty = everyone)."""
-        value = self._flags.get("messages", {}).get("allowed_peers", [])
-        if not isinstance(value, list):
-            return []
-        return [str(item) for item in value if isinstance(item, str) and item.strip()]
 
     def denial(self, group: str, flag: str) -> OktoNexusError:
         """Build the canonical PERMISSION_DENIED error for ``group.flag``."""

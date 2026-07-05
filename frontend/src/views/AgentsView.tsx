@@ -17,6 +17,8 @@ import {
   Plus,
   Power,
   ShieldCheck,
+  Tags,
+  Target,
   Terminal,
   Trash2,
 } from "lucide-react";
@@ -24,9 +26,11 @@ import {
   api,
   mcpSnippet,
   type AgentRow,
+  type CapabilityRow,
   type PermissionFlags,
   type PresetRow,
   type PresetsPayload,
+  type TagKeyRow,
 } from "../api";
 import { PageContainer } from "../components/PageContainer";
 import { useConfirm } from "../components/Confirm";
@@ -36,6 +40,9 @@ import {
   PermissionFlagsEditor,
 } from "../components/PermissionFlagsEditor";
 import { PresetEditorModal } from "../components/PresetEditorModal";
+import { AgentTagsEditor } from "../components/AgentTagsEditor";
+import { CapabilityPicker } from "../components/CapabilityPicker";
+import { SteerModal } from "../components/SteerModal";
 
 // MCP consumers (the Pulse AgentsModal grammar): one button per client,
 // clicking copies that client's ready-to-paste command/config.
@@ -58,7 +65,14 @@ const ICON_BTN_ACTIVE =
 const ICON_BTN_DANGER =
   "p-1.5 rounded-lg text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors";
 
-export function AgentsView({ onChanged }: { onChanged: () => void }) {
+export function AgentsView({
+  onChanged,
+  workspace = "all",
+}: {
+  onChanged: () => void;
+  // The App scope, handed to the Steer modal (steering is workspace-scoped).
+  workspace?: string;
+}) {
   const { confirm, dialog } = useConfirm();
   const [tab, setTab] = useState<"agents" | "presets">("agents");
   const [agents, setAgents] = useState<AgentRow[]>([]);
@@ -70,20 +84,34 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
   );
   const [copied, setCopied] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
-  const [newAgent, setNewAgent] = useState({
+  const [newAgent, setNewAgent] = useState<{
+    agent_id: string;
+    role: string;
+    capabilities: string[];
+    preset_id: string;
+  }>({
     agent_id: "",
     role: "",
-    capabilities: "",
+    capabilities: [],
     preset_id: "",
   });
   const [permsOpen, setPermsOpen] = useState<string | null>(null);
   const [permsSavedAt, setPermsSavedAt] = useState<string | null>(null);
+  // Tags + outbound audience editor (F1) — fed by the central tag catalog.
+  const [tagsOpen, setTagsOpen] = useState<string | null>(null);
+  const [catalog, setCatalog] = useState<TagKeyRow[]>([]);
+  // Capability catalog (migration 014) — the picker's only vocabulary.
+  const [capCatalog, setCapCatalog] = useState<CapabilityRow[]>([]);
   // Inline edit (identity: role/capabilities/metadata) — the backend PATCH
   // already accepts all three; this is the missing operator affordance.
   const [editOpen, setEditOpen] = useState<string | null>(null);
-  const [editDraft, setEditDraft] = useState({
+  const [editDraft, setEditDraft] = useState<{
+    role: string;
+    capabilities: string[];
+    metadata: string;
+  }>({
     role: "",
-    capabilities: "",
+    capabilities: [],
     metadata: "",
   });
   const [editError, setEditError] = useState<string | null>(null);
@@ -93,6 +121,8 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
     preset: PresetRow | null;
     initialFlags?: PermissionFlags;
   } | null>(null);
+  // Steering composer (spec 2948b2a2 FR9): direct message as "operator".
+  const [steering, setSteering] = useState<AgentRow | null>(null);
 
   const copySnippet = (format: string, key: string) => {
     navigator.clipboard.writeText(mcpSnippet(format, key));
@@ -104,10 +134,12 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
   };
 
   const reload = () =>
-    Promise.all([api.agents(), api.presets()])
-      .then(([a, p]) => {
+    Promise.all([api.agents(), api.presets(), api.tags(), api.capabilities()])
+      .then(([a, p, t, c]) => {
         setAgents(a.items);
         setPresets(p);
+        setCatalog(t.items);
+        setCapCatalog(c.items);
       })
       .catch((exc) => setError((exc as Error).message));
 
@@ -126,14 +158,14 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
       const created = await api.createAgent({
         agent_id: newAgent.agent_id.trim(),
         role: newAgent.role.trim() || undefined,
-        capabilities: newAgent.capabilities
-          ? newAgent.capabilities.split(",").map((c) => c.trim()).filter(Boolean)
+        capabilities: newAgent.capabilities.length
+          ? newAgent.capabilities
           : undefined,
         preset_id: newAgent.preset_id || undefined,
       });
       setFreshKey({ agentId: created.agent_id, key: created.api_key });
       setCreating(false);
-      setNewAgent({ agent_id: "", role: "", capabilities: "", preset_id: "" });
+      setNewAgent({ agent_id: "", role: "", capabilities: [], preset_id: "" });
       setError(null);
       await reload();
       onChanged();
@@ -164,7 +196,10 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
     setEditError(null);
     setEditDraft({
       role: agent.role ?? "",
-      capabilities: Object.keys(agent.capabilities ?? {}).join(", "),
+      // Owned = truthy flag, the same normalisation capability routing uses.
+      capabilities: Object.entries(agent.capabilities ?? {})
+        .filter(([, flag]) => Boolean(flag))
+        .map(([name]) => name),
       metadata: Object.keys(agent.metadata ?? {}).length
         ? JSON.stringify(agent.metadata, null, 2)
         : "",
@@ -187,10 +222,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
       // (the PATCH/upsert COALESCEs nulls, not empty values).
       await api.updateAgent(agentId, {
         role: editDraft.role.trim(),
-        capabilities: editDraft.capabilities
-          .split(",")
-          .map((c) => c.trim())
-          .filter(Boolean),
+        capabilities: editDraft.capabilities,
         metadata,
       });
       setEditOpen(null);
@@ -233,6 +265,13 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
           onSaved={() => {
             reload();
           }}
+        />
+      )}
+      {steering && (
+        <SteerModal
+          agent={steering}
+          workspace={workspace}
+          onClose={() => setSteering(null)}
         />
       )}
       <div className="panel overflow-hidden" data-testid="agents-view">
@@ -405,14 +444,15 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
               onChange={(e) => setNewAgent({ ...newAgent, role: e.target.value })}
               className={inputCls}
             />
-            <input
-              placeholder="capabilities, comma-separated"
-              value={newAgent.capabilities}
-              onChange={(e) =>
-                setNewAgent({ ...newAgent, capabilities: e.target.value })
-              }
-              className={inputCls}
-            />
+            <div className="min-h-[30px] flex items-center">
+              <CapabilityPicker
+                selected={newAgent.capabilities}
+                catalog={capCatalog}
+                onChange={(next) =>
+                  setNewAgent({ ...newAgent, capabilities: next })
+                }
+              />
+            </div>
             <div className="flex gap-2">
               <select
                 value={newAgent.preset_id}
@@ -456,6 +496,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
               const showKey = freshKey?.agentId === agent.agent_id;
               const showPerms = permsOpen === agent.agent_id && !!presets;
               const showEdit = editOpen === agent.agent_id;
+              const showTags = tagsOpen === agent.agent_id;
               return (
                 <Fragment key={agent.agent_id}>
                   {/* Card */}
@@ -517,6 +558,30 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                       >
                         <ShieldCheck size={14} />
                       </button>
+                      <button
+                        className={`${ICON_BTN} ${showTags ? ICON_BTN_ACTIVE : ""}`}
+                        title="Tags & outbound audience"
+                        data-testid={`tags-${agent.agent_id}`}
+                        onClick={() =>
+                          setTagsOpen((open) =>
+                            open === agent.agent_id ? null : agent.agent_id,
+                          )
+                        }
+                      >
+                        <Tags size={14} />
+                      </button>
+                      {/* Steering to yourself is a no-op — hide it for the
+                          reserved operator identity. */}
+                      {agent.agent_id !== "operator" && (
+                        <button
+                          className={ICON_BTN}
+                          title="Steer (direct message as operator)"
+                          data-testid={`steer-${agent.agent_id}`}
+                          onClick={() => setSteering(agent)}
+                        >
+                          <Target size={14} />
+                        </button>
+                      )}
                       <button
                         className={ICON_BTN}
                         title="Regenerate key"
@@ -581,7 +646,7 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
 
                   {/* Full-width breakout row beneath the card (preserves the
                       loved click-to-expand; spans every column). */}
-                  {(showKey || showEdit || showPerms) && (
+                  {(showKey || showEdit || showPerms || showTags) && (
                     <div
                       className="col-span-full space-y-3"
                       data-testid={`agent-expand-${agent.agent_id}`}
@@ -671,19 +736,20 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                             </label>
                             <label className="space-y-1">
                               <span className="text-surface-500 dark:text-surface-400">
-                                Capabilities (comma-separated)
+                                Capabilities (from the central catalog)
                               </span>
-                              <input
-                                className={`${inputCls} w-full`}
-                                value={editDraft.capabilities}
-                                onChange={(e) =>
-                                  setEditDraft({
-                                    ...editDraft,
-                                    capabilities: e.target.value,
-                                  })
-                                }
-                                placeholder="search, summarize"
-                              />
+                              <div className="pt-1">
+                                <CapabilityPicker
+                                  selected={editDraft.capabilities}
+                                  catalog={capCatalog}
+                                  onChange={(next) =>
+                                    setEditDraft({
+                                      ...editDraft,
+                                      capabilities: next,
+                                    })
+                                  }
+                                />
+                              </div>
                             </label>
                             <label className="space-y-1 md:col-span-2">
                               <span className="text-surface-500 dark:text-surface-400">
@@ -720,6 +786,21 @@ export function AgentsView({ onChanged }: { onChanged: () => void }) {
                             </span>
                           </div>
                         </div>
+                      )}
+
+                      {/* Tags + outbound audience (F1): catalog-driven pickers
+                          only; saved via a full-overwrite PATCH. */}
+                      {showTags && (
+                        <AgentTagsEditor
+                          agent={agent}
+                          catalog={catalog}
+                          agents={agents}
+                          onSaved={async () => {
+                            await reload();
+                            onChanged();
+                          }}
+                          onClose={() => setTagsOpen(null)}
+                        />
                       )}
 
                       {/* Per-agent permissions (preset dropdown resets flags;

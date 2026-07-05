@@ -4,6 +4,7 @@
 
 import { X } from "lucide-react";
 import type { NexusEvent } from "../api";
+import { TraceChip } from "./TraceChip";
 
 function Meta({ label, value }: { label: string; value: string | null | undefined }) {
   return (
@@ -57,9 +58,11 @@ export function payloadSummary(event: NexusEvent): [string, string][] {
 export function EventDetail({
   event,
   onClose,
+  onOpenTrace,
 }: {
   event: NexusEvent;
   onClose?: () => void;
+  onOpenTrace?: (traceId: string) => void;
 }) {
   const payloadText = pretty(event.payload);
   const targetText = pretty(event.target);
@@ -77,6 +80,12 @@ export function EventDetail({
             </span>
             <span className="text-surface-400">·</span>
             <span className="text-surface-500 dark:text-surface-400">{event.stream}</span>
+            {event.trace_id && (
+              <>
+                <span className="text-surface-400">·</span>
+                <TraceChip traceId={event.trace_id} onClick={onOpenTrace} />
+              </>
+            )}
           </div>
         </div>
         {onClose && (

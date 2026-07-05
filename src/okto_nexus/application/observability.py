@@ -26,6 +26,7 @@ from typing import Any
 
 from ..config import NexusConfig
 from ..domain.base import iso_to_epoch
+from ..domain.trace import TRACE_ID_MAX_LEN
 from .ports import Clock, ObservabilityQueries, UnitOfWork
 
 #: Default aggregation window for graph edges (hours).
@@ -213,9 +214,7 @@ class ObservabilityService:
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
 
-    def conversation_peers(
-        self, uow: UnitOfWork, *, agent_id: str
-    ) -> dict[str, Any]:
+    def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """The agent's conversation partners (SQL aggregate; chat peer picker)."""
         if not agent_id:
             raise ValueError("agent is required")
@@ -229,7 +228,28 @@ class ObservabilityService:
         status: str | None = None,
     ) -> list[dict[str, Any]]:
         statuses = (status,) if status else None
-        return self._q.handoff_rows(uow, workspace_id=workspace_id, statuses=statuses)
+        rows = self._q.handoff_rows(uow, workspace_id=workspace_id, statuses=statuses)
+        if rows:
+            # Dependency exposure (I5/FR7): ONE extra aggregate query for the
+            # WHOLE page (never per-row - AC9's anti-N+1). Ids absent from
+            # the map have no dependency rows, so a dependency-free handoff
+            # keeps its exact pre-I5 row shape (the non-NULL pattern).
+            aggregates = self._q.handoff_dependency_aggregates(
+                uow,
+                workspace_id=workspace_id,
+                handoff_ids=[row["handoff_id"] for row in rows],
+            )
+            for row in rows:
+                aggregate = aggregates.get(row["handoff_id"])
+                if aggregate is not None:
+                    row["depends_on"] = aggregate["depends_on"]
+                    row["dependencies"] = {
+                        "total": aggregate["total"],
+                        "satisfied": aggregate["satisfied"],
+                        "pending": aggregate["pending"],
+                        "failed": aggregate["failed"],
+                    }
+        return rows
 
     def sessions(
         self,
@@ -256,7 +276,13 @@ class ObservabilityService:
         limit: int = 100,
         type_: str | None = None,
         actor_agent_id: str | None = None,
+        trace_id: str | None = None,
     ) -> list[dict[str, Any]]:
+        if trace_id is not None and not (1 <= len(str(trace_id)) <= TRACE_ID_MAX_LEN):
+            raise ValueError(
+                "trace must be a non-empty string of at most "
+                f"{TRACE_ID_MAX_LEN} characters"
+            )
         limit = min(self._config.max_event_limit, max(1, int(limit)))
         return self._q.events_after(
             uow,
@@ -266,6 +292,7 @@ class ObservabilityService:
             limit=limit,
             type_=type_,
             actor_agent_id=actor_agent_id,
+            trace_id=trace_id,
         )
 
     def event_types(

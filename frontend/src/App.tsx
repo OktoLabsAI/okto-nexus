@@ -7,6 +7,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Activity,
+  Brain,
+  CheckSquare,
   ChevronDown,
   Compass,
   FolderOpen,
@@ -20,7 +22,9 @@ import {
   PanelLeft,
   RotateCw,
   Settings,
+  Shield,
   Sun,
+  Tags,
   Users,
   Waypoints,
 } from "lucide-react";
@@ -47,7 +51,11 @@ import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
 import { EventsView } from "./views/EventsView";
+import { MemoryView } from "./views/MemoryView";
 import { WorkspacesView } from "./views/WorkspacesView";
+import { RegistryView } from "./views/RegistryView";
+import { PoliciesView } from "./views/PoliciesView";
+import { ApprovalsView } from "./views/ApprovalsView";
 import { SettingsView } from "./views/SettingsView";
 
 const VIEWS = [
@@ -55,8 +63,20 @@ const VIEWS = [
   { name: "Messages", icon: MessagesSquare },
   { name: "Handoffs", icon: KanbanSquare },
   { name: "Events", icon: Activity },
+  // Always listed regardless of the feature_memory flag (spec 8928b320 FR7):
+  // the operator's audit reads are never gated; the view shows the
+  // memory-disabled banner while the flag is off (the Policies precedent).
+  { name: "Memory", icon: Brain },
   { name: "Workspaces", icon: FolderOpen },
   { name: "Agents", icon: Users },
+  { name: "Registry", icon: Tags },
+  // The named, versioned policy catalog (spec 80624c1a): a policy is STAGED
+  // until an agent binds it; enforcement is always-on and binding-driven (the
+  // feature_governance flag is gone).
+  { name: "Policies", icon: Shield },
+  // Always listed too (spec 2948b2a2 BR6: pending items stay decidable with
+  // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
+  { name: "Approvals", icon: CheckSquare },
   { name: "Settings", icon: Settings },
 ] as const;
 type View = (typeof VIEWS)[number]["name"];
@@ -181,10 +201,22 @@ function Dashboard({
   };
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
+  // Trajectory filter for the Events screen (R-I1). Lifted here so a
+  // TraceChip click on ANY screen can switch views with the filter applied.
+  const [eventTrace, setEventTrace] = useState("");
+  const openTrace = useCallback((traceId: string) => {
+    setEventTrace(traceId);
+    setView("Events");
+  }, []);
   const [refreshTick, setRefreshTick] = useState(0);
   // Monotonic counter bumped on every SSE event — drives the side panel's
   // live update while it is open (eventLog itself saturates at 500).
   const [liveTick, setLiveTick] = useState(0);
+  // HITL (spec 2948b2a2): pending-approvals count behind the sidebar badge
+  // (data-gated, never flag-gated — D7) + a tick bumped only on approval.*
+  // SSE events so the Approvals screen refetches exactly when it matters.
+  const [pendingApprovals, setPendingApprovals] = useState(0);
+  const [approvalTick, setApprovalTick] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -244,6 +276,9 @@ function Dashboard({
       (event: NexusEvent) => {
         setEventLog((log) => [...log.slice(-499), event]);
         setLiveTick((t) => t + 1);
+        // approval.requested/granted/denied move the pending queue — bump
+        // the dedicated tick (badge + Approvals screen refetch on it).
+        if (event.type.startsWith("approval.")) setApprovalTick((t) => t + 1);
         window.clearTimeout(refetchTimerRef.current);
         refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
@@ -254,6 +289,28 @@ function Dashboard({
   useEffect(() => {
     loadGraph();
   }, [loadGraph, refreshTick]);
+
+  // Badge count (initial fetch + every approval.* event + header refresh).
+  // GET /approvals is workspace-scoped, so the "all" scope sums over every
+  // known workspace. A locked gate / non-operator key just means no badge.
+  const loadApprovalCount = useCallback(async () => {
+    try {
+      const ids =
+        workspace === "all"
+          ? (await api.workspaces()).workspaces.map((w) => w.workspace_id)
+          : [workspace];
+      const pages = await Promise.all(ids.map((id) => api.approvals(id)));
+      setPendingApprovals(
+        pages.reduce((total, page) => total + page.items.length, 0),
+      );
+    } catch {
+      setPendingApprovals(0);
+    }
+  }, [workspace]);
+
+  useEffect(() => {
+    loadApprovalCount();
+  }, [loadApprovalCount, approvalTick, refreshTick]);
 
   // The workspace scope picker is fed by the rich /api/v1/workspaces list (not
   // derived from /sessions): every KNOWN workspace shows up, including ones
@@ -456,6 +513,14 @@ function Dashboard({
                   >
                     <Icon size={16} />
                     <span className="truncate">{name}</span>
+                    {name === "Approvals" && pendingApprovals > 0 && (
+                      <span
+                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
+                        data-testid="approvals-badge"
+                      >
+                        {pendingApprovals}
+                      </span>
+                    )}
                   </button>
                 </li>
               ))}
@@ -480,6 +545,7 @@ function Dashboard({
               workspace={workspace}
               liveTick={liveTick}
               sseStatus={sseStatus}
+              onOpenTrace={openTrace}
             />
           )}
           {view === "Handoffs" && (
@@ -491,12 +557,32 @@ function Dashboard({
               log={eventLog}
               liveTick={liveTick}
               sseStatus={sseStatus}
+              trace={eventTrace}
+              onTraceChange={setEventTrace}
+            />
+          )}
+          {view === "Memory" && (
+            <MemoryView
+              workspace={workspace}
+              liveTick={liveTick}
+              onOpenTrace={openTrace}
             />
           )}
           {view === "Workspaces" && (
             <WorkspacesView scope={workspace} refreshTick={refreshTick} />
           )}
-          {view === "Agents" && <AgentsView onChanged={loadGraph} />}
+          {view === "Agents" && (
+            <AgentsView onChanged={loadGraph} workspace={workspace} />
+          )}
+          {view === "Registry" && <RegistryView />}
+          {view === "Policies" && <PoliciesView workspace={workspace} />}
+          {view === "Approvals" && (
+            <ApprovalsView
+              workspace={workspace}
+              refreshTick={approvalTick + refreshTick}
+              onChanged={loadApprovalCount}
+            />
+          )}
           {view === "Settings" && <SettingsView />}
       </main>
       </div>

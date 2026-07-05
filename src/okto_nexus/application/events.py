@@ -49,9 +49,10 @@ from ..domain.events import (
 from ..domain.ids import resolve_workspace_id
 from ..domain.models import Event
 from ..domain.routing import RoutingAgent, can_agent_see_event
+from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .permissions import permission_set_for
-from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork, Waiter
+from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, Waiter
 
 #: Default page size when ``limit`` is omitted (also clamped to ``max_limit``).
 DEFAULT_EVENT_LIMIT = 100
@@ -361,9 +362,7 @@ class EventService:
         flag is off gets the canonical PERMISSION_DENIED envelope.
         """
         with self._cf.unit_of_work() as uow:
-            permission_set_for(self._agents, uow, agent_id).require(
-                "events", "read"
-            )
+            permission_set_for(self._agents, uow, agent_id).require("events", "read")
 
     def _touch_agent(self, agent_id: str) -> None:
         """Best-effort stamp of the caller's ``last_seen_at`` (own uow).
@@ -412,7 +411,16 @@ class EventService:
         batch_size = limit + 1
 
         with self._cf.unit_of_work() as uow:
-            routing_agent = self._build_routing_agent(uow, agent_id, workspace_id)
+            # ONE batched agent lookup per page (F2): the registry is read
+            # once and reused for the viewer's own profile and for every
+            # actor-reachability check of this scan - never per event.
+            registry: dict[str, Any] | None = None
+            if self._agents is not None:
+                registry = {a.agent_id: a for a in self._agents.list(uow)}
+            viewer_profile = registry.get(agent_id) if registry is not None else None
+            routing_agent = self._build_routing_agent(
+                viewer_profile, agent_id, workspace_id
+            )
             while True:
                 batch = self._events.list_after(
                     uow,
@@ -433,6 +441,11 @@ class EventService:
                     if not self._is_visible(routing_agent, event):
                         next_cursor = event.event_id
                         continue
+                    if not self._actor_reachable(
+                        viewer_profile, agent_id, event, registry
+                    ):
+                        next_cursor = event.event_id
+                        continue
                     if len(results) < limit:
                         results.append(event)
                         next_cursor = event.event_id
@@ -448,28 +461,48 @@ class EventService:
         return _Page(events=results, next_cursor=next_cursor, has_more=has_more)
 
     def _build_routing_agent(
-        self, uow: UnitOfWork, agent_id: str, workspace_id: str
+        self, profile: Any, agent_id: str, workspace_id: str
     ) -> RoutingAgent:
         """Construct the routing view of the caller for visibility decisions.
 
-        When an :class:`AgentRepo` is wired, the caller's ``role`` and
-        ``capabilities`` are loaded so role/capability-targeted events resolve
-        correctly; otherwise a minimal view (id + workspace) is used, which
-        still resolves ``public`` and ``direct`` targeting.
+        ``profile`` is the caller's registry row from the page's single
+        batched lookup (or ``None`` when unregistered / no repo is wired);
+        its ``role``, ``capabilities`` and ``tags`` are carried over so role-,
+        capability- and tag-targeted events resolve correctly. A minimal view
+        (id + workspace) still resolves ``public`` and ``direct`` targeting.
         """
-        role: str | None = None
-        capabilities: Any = None
-        if self._agents is not None:
-            agent = self._agents.get(uow, agent_id)
-            if agent is not None:
-                role = agent.role
-                capabilities = agent.capabilities
         return RoutingAgent(
             agent_id=agent_id,
             workspace_id=workspace_id,
-            role=role,
-            capabilities=capabilities,
+            role=getattr(profile, "role", None),
+            capabilities=getattr(profile, "capabilities", None),
+            tags=getattr(profile, "tags", None),
         )
+
+    @staticmethod
+    def _actor_reachable(
+        viewer_profile: Any, viewer_id: str, event: Event, registry: Any
+    ) -> bool:
+        """Whether the event's ACTOR is reachable from the viewer (F2).
+
+        Composes WITH :func:`can_agent_see_event` - it never replaces it
+        (visibility != claimability). Carve-outs: the viewer's OWN events are
+        never hidden (ADR 0001) and system events without an actor always
+        pass. ``registry`` is the page's single batched agent lookup;
+        ``None`` (no agent repo wired) means unrestricted. The operator feed
+        (SSE ``/api/v1/stream`` + REST ``/api/v1/events``) never routes
+        through here.
+        """
+        if registry is None:
+            return True
+        actor = getattr(event, "actor_agent_id", None)
+        if actor is None or str(actor) == str(viewer_id):
+            return True
+        viewer_view = (
+            viewer_profile if viewer_profile is not None else {"agent_id": viewer_id}
+        )
+        actor_profile = registry.get(str(actor)) or {"agent_id": str(actor)}
+        return reachable(viewer_view, actor_profile)
 
     @staticmethod
     def _is_visible(routing_agent: RoutingAgent, event: Event) -> bool:

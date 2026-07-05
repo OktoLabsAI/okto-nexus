@@ -19,6 +19,9 @@ Target strategies (the ``strategy`` discriminator, case-insensitive, with
     capability             target.capability is possessed by the agent
                            (exact, CASE-SENSITIVE; ``preferred`` is advisory)
     role                   agent.role == target.role     (exact, CASE-SENSITIVE)
+    tag                    target.selector matches agent.tags (AND across
+                           keys, OR within a key's values; case-sensitive;
+                           tagless agents never match - fail-closed)
     broadcast              every agent in the workspace is eligible
     mixed                  union/OR of target.rules (each a validated,
                            non-null, non-broadcast sub-target; never empty)
@@ -56,6 +59,7 @@ from typing import Any
 from ..errors import ErrorCode, OktoNexusError
 from .base import iso_to_epoch
 from .events import VALID_VISIBILITIES
+from .tag_selector import selector_matches
 from .targets import target_strategy, validate_target
 
 __all__ = [
@@ -98,6 +102,7 @@ class RoutingAgent:
     workspace_id: str
     role: str | None = None
     capabilities: Mapping[str, Any] | Sequence[str] | None = field(default=None)
+    tags: Mapping[str, Any] | None = field(default=None)
 
 
 # --------------------------------------------------------------------------- #
@@ -269,6 +274,11 @@ def _eligible(
         # Exact, case-sensitive role match.
         return _agent_role(agent) == resolved["role"]
 
+    if strategy == "tag":
+        # AND across selector keys, OR within a key's values; an agent with
+        # no tags (or missing keys) does not match - fail-closed.
+        return selector_matches(resolved["selector"], _get(agent, "tags"))
+
     if strategy == "capability":
         wanted = resolved["capability"]
         owned = _agent_capabilities(agent)
@@ -295,7 +305,10 @@ def _eligible(
         raise OktoNexusError(
             ErrorCode.VALIDATION_ERROR,
             "direct_with_fallback requires both created_at and now.",
-            {"has_created_at": created_epoch is not None, "has_now": now_epoch is not None},
+            {
+                "has_created_at": created_epoch is not None,
+                "has_now": now_epoch is not None,
+            },
         )
 
     # Inclusive boundary, monotonic in ``now``.

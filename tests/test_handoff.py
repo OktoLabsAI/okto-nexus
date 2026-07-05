@@ -239,8 +239,17 @@ class CountingHandoffRepo:
         return getattr(self._inner, name)
 
 
-def make_service(factory, config, clock, emitter=None, agents=None, waiter=None,
-                 handoffs=None, messages=None, deliveries=None):
+def make_service(
+    factory,
+    config,
+    clock,
+    emitter=None,
+    agents=None,
+    waiter=None,
+    handoffs=None,
+    messages=None,
+    deliveries=None,
+):
     return HandoffService(
         connection_factory=factory,
         handoffs=handoffs if handoffs is not None else SqliteHandoffRepo(clock),
@@ -316,7 +325,13 @@ def test_validate_target_and_visibility():
     assert validate_target('{"strategy":"role","role":"builder"}')["role"] == "builder"
     assert normalize_visibility("Public") == "public"
 
-    for bad in (None, "", {"strategy": "nope"}, {"agent_id": "a"}, {"strategy": "direct"}):
+    for bad in (
+        None,
+        "",
+        {"strategy": "nope"},
+        {"agent_id": "a"},
+        {"strategy": "direct"},
+    ):
         with pytest.raises(OktoNexusError) as ei:
             validate_target(bad)
         assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
@@ -430,7 +445,9 @@ def test_handoff_create_validation(migrated_factory, tmp_config, tmp_path):
     assert count(migrated_factory, "handoffs") == 0
 
 
-def test_handoff_create_content_boundary_inclusive(migrated_factory, tmp_config, tmp_path):
+def test_handoff_create_content_boundary_inclusive(
+    migrated_factory, tmp_config, tmp_path
+):
     svc = make_service(migrated_factory, tmp_config, StubClock())
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, StubClock())
@@ -460,7 +477,9 @@ def test_handoff_create_content_boundary_inclusive(migrated_factory, tmp_config,
 # --------------------------------------------------------------------------- #
 # FR3 / TS4 - list_available filtering + pagination + long-poll
 # --------------------------------------------------------------------------- #
-def test_list_available_visibility_and_eligibility(migrated_factory, tmp_config, tmp_path):
+def test_list_available_visibility_and_eligibility(
+    migrated_factory, tmp_config, tmp_path
+):
     clock = StubClock()
     agents = FakeAgentRepo()
     agents.add("worker", capabilities=["py"])
@@ -471,18 +490,24 @@ def test_list_available_visibility_and_eligibility(migrated_factory, tmp_config,
 
     # direct->worker, eligible visibility: visible+eligible to worker only.
     h_direct = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="eligible",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="eligible",
     )["handoff_id"]
     # broadcast public: visible+eligible to everyone.
     h_broadcast = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     # direct->other, public: worker can SEE it but is NOT eligible -> excluded.
     svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "other"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "other"},
+        visibility="public",
     )
 
     res = svc.handoff_list_available(project_root=proj, agent_id="worker")
@@ -508,8 +533,10 @@ def test_list_available_pagination(migrated_factory, tmp_config, tmp_path):
     for _ in range(5):
         created.append(
             svc.handoff_create(
-                project_root=proj, from_agent_id="c",
-                target={"strategy": "broadcast"}, visibility="public",
+                project_root=proj,
+                from_agent_id="c",
+                target={"strategy": "broadcast"},
+                visibility="public",
             )["handoff_id"]
         )
 
@@ -531,7 +558,10 @@ def test_list_available_pagination(migrated_factory, tmp_config, tmp_path):
     assert page3["has_more"] is False
     assert page3["next_cursor"] is None
 
-    seen = [h["handoff_id"] for h in page1["handoffs"] + page2["handoffs"] + page3["handoffs"]]
+    seen = [
+        h["handoff_id"]
+        for h in page1["handoffs"] + page2["handoffs"] + page3["handoffs"]
+    ]
     assert set(seen) == set(created) and len(seen) == 5
 
     with pytest.raises(OktoNexusError) as ei:
@@ -550,9 +580,7 @@ def test_list_available_long_poll_timeout(migrated_factory, tmp_config, tmp_path
 
     # No eligible handoffs + a timeout -> blocks until deadline -> timed_out.
     started = time.monotonic()
-    res = svc.handoff_list_available(
-        project_root=proj, agent_id="w", timeout_seconds=1
-    )
+    res = svc.handoff_list_available(project_root=proj, agent_id="w", timeout_seconds=1)
     elapsed = time.monotonic() - started
     assert res["handoffs"] == []
     assert res["timed_out"] is True
@@ -582,9 +610,7 @@ def test_list_available_waiter_timeout_skips_rescan_when_no_change(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
-    res = svc.handoff_list_available(
-        project_root=proj, agent_id="w", timeout_seconds=5
-    )
+    res = svc.handoff_list_available(project_root=proj, agent_id="w", timeout_seconds=5)
     assert res["timed_out"] is True and res["handoffs"] == []
     assert waiter.calls == [pytest.approx(5.0)]  # ONE full-window wait
     # OPEN is listed by the availability scan and the boundary probe, once each.
@@ -637,8 +663,10 @@ def test_list_available_wakes_at_lease_expiry_boundary(migrated_factory, tmp_pat
     seed_workspace(migrated_factory, proj, clock)
 
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
 
@@ -666,7 +694,8 @@ def test_list_available_wakes_at_fallback_open_boundary(
     seed_workspace(migrated_factory, proj, clock)
 
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
+        project_root=proj,
+        from_agent_id="c",
         target={
             "strategy": "direct_with_fallback",
             "agent_id": "other",
@@ -693,14 +722,20 @@ def test_claim_happy(migrated_factory, tmp_config, tmp_path):
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
-    out = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w", session_id="s1")
+    out = svc.handoff_claim(
+        project_root=proj, handoff_id=hid, agent_id="w", session_id="s1"
+    )
     assert out["status"] == STATUS_CLAIMED
     assert out["claimed_by"] == "w"
-    expected_lease = iso_plus("2026-06-07T00:00:00.000000Z", tmp_config.handoff_lease_ttl_seconds)
+    expected_lease = iso_plus(
+        "2026-06-07T00:00:00.000000Z", tmp_config.handoff_lease_ttl_seconds
+    )
     assert out["lease_expires_at"] == expected_lease
     assert emitter.types() == ["handoff.created", "handoff.claimed"]
     assert emitter.events[-1]["payload"]["claimed_session_id"] == "s1"
@@ -714,8 +749,10 @@ def test_claim_not_found_and_workspace_mismatch(migrated_factory, tmp_config, tm
     seed_workspace(migrated_factory, proj_a, clock)
     seed_workspace(migrated_factory, proj_b, clock)
     hid = svc.handoff_create(
-        project_root=proj_a, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj_a,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     with pytest.raises(OktoNexusError) as e_nf:
@@ -735,8 +772,10 @@ def test_claim_eligibility_gate(migrated_factory, tmp_config, tmp_path):
     seed_workspace(migrated_factory, proj, clock)
     # Public visibility (stranger can SEE) but direct target -> not eligible.
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="public",
     )["handoff_id"]
     created_events = len(emitter.events)
 
@@ -756,8 +795,10 @@ def test_double_claim_single_winner(migrated_factory, tmp_config, tmp_path):
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     agents = [f"agent-{i}" for i in range(6)]
@@ -802,8 +843,10 @@ def test_two_thread_claim_race_loser_gets_business_error_not_db_error(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     barrier = threading.Barrier(2)
@@ -843,8 +886,10 @@ def test_complete_by_non_claimant_names_the_claimant(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="owner")
 
@@ -869,8 +914,10 @@ def test_complete_after_lease_expiry_reopen_precise_error(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="a1")
     clock.set(iso_plus(claim["lease_expires_at"], 5))
@@ -898,15 +945,20 @@ def test_repo_transition_claimed_is_conditional_on_claimant(
     proj = str(mkdir(tmp_path, "P"))
     ws = seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="owner")
 
     with migrated_factory.unit_of_work() as uow:
         denied = repo.transition_claimed(
-            uow, workspace_id=ws, handoff_id=hid,
-            claimed_by="not-the-owner", status=STATUS_COMPLETED,
+            uow,
+            workspace_id=ws,
+            handoff_id=hid,
+            claimed_by="not-the-owner",
+            status=STATUS_COMPLETED,
         )
     assert denied is None
     r = row_of(migrated_factory, hid)
@@ -914,8 +966,11 @@ def test_repo_transition_claimed_is_conditional_on_claimant(
 
     with migrated_factory.unit_of_work() as uow:
         done = repo.transition_claimed(
-            uow, workspace_id=ws, handoff_id=hid,
-            claimed_by="owner", status=STATUS_COMPLETED,
+            uow,
+            workspace_id=ws,
+            handoff_id=hid,
+            claimed_by="owner",
+            status=STATUS_COMPLETED,
         )
     assert done is not None and done.status == STATUS_COMPLETED
     assert row_of(migrated_factory, hid)["status"] == STATUS_COMPLETED
@@ -932,8 +987,10 @@ def test_repo_reject_open_is_conditional_on_open_status(
     proj = str(mkdir(tmp_path, "P"))
     ws = seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
 
@@ -946,15 +1003,19 @@ def test_repo_reject_open_is_conditional_on_open_status(
 # --------------------------------------------------------------------------- #
 # FR7 / TS8 / TS9 - lease expiry boundary + re-claim
 # --------------------------------------------------------------------------- #
-def test_lease_expiry_strict_boundary_and_reclaim(migrated_factory, tmp_config, tmp_path):
+def test_lease_expiry_strict_boundary_and_reclaim(
+    migrated_factory, tmp_config, tmp_path
+):
     clock = StubClock("2026-06-07T00:00:00.000000Z")
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="a1")
     lease = claim["lease_expires_at"]
@@ -989,13 +1050,17 @@ def test_list_available_expires_before_serving(migrated_factory, tmp_config, tmp
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="a1")
 
     # Before expiry the handoff is CLAIMED -> not in the available list.
-    assert svc.handoff_list_available(project_root=proj, agent_id="a2")["handoffs"] == []
+    assert (
+        svc.handoff_list_available(project_root=proj, agent_id="a2")["handoffs"] == []
+    )
 
     # After expiry, list_available runs expire first and surfaces the reopened OPEN handoff.
     clock.set(iso_plus(claim["lease_expires_at"], 5))
@@ -1010,7 +1075,10 @@ def test_list_available_expires_before_serving(migrated_factory, tmp_config, tmp
 def _open_and_claim(svc, migrated_factory, proj, clock, target=None, claimer="a1"):
     target = target or {"strategy": "broadcast"}
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c", target=target, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target=target,
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id=claimer)
     return hid
@@ -1039,8 +1107,10 @@ def test_complete_owner_nonowner_invalid(migrated_factory, tmp_config, tmp_path)
 
     # complete on an OPEN (unclaimed) handoff -> INVALID_TRANSITION
     open_hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     with pytest.raises(OktoNexusError) as e_open:
         svc.handoff_complete(project_root=proj, handoff_id=open_hid, agent_id="anyone")
@@ -1056,22 +1126,30 @@ def test_reject_owner_and_direct_target(migrated_factory, tmp_config, tmp_path):
 
     # owner rejects a CLAIMED handoff -> REJECTED
     hid = _open_and_claim(svc, migrated_factory, proj, clock, claimer="owner")
-    out = svc.handoff_reject(project_root=proj, handoff_id=hid, agent_id="owner", reason="busy")
+    out = svc.handoff_reject(
+        project_root=proj, handoff_id=hid, agent_id="owner", reason="busy"
+    )
     assert out["status"] == STATUS_REJECTED
     assert emitter.types()[-1] == "handoff.rejected"
 
     # direct target rejects an OPEN handoff before claim -> OPEN -> REJECTED
     direct_hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="eligible",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="eligible",
     )["handoff_id"]
-    out2 = svc.handoff_reject(project_root=proj, handoff_id=direct_hid, agent_id="worker")
+    out2 = svc.handoff_reject(
+        project_root=proj, handoff_id=direct_hid, agent_id="worker"
+    )
     assert out2["status"] == STATUS_REJECTED
 
     # non-owner / non-direct rejecting an OPEN handoff -> NOT_OWNER
     open_hid = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="public",
     )["handoff_id"]
     with pytest.raises(OktoNexusError) as e_no:
         svc.handoff_reject(project_root=proj, handoff_id=open_hid, agent_id="stranger")
@@ -1107,12 +1185,16 @@ def test_cross_workspace_isolation(migrated_factory, tmp_config, tmp_path):
     seed_workspace(migrated_factory, proj_a, clock)
     seed_workspace(migrated_factory, proj_b, clock)
     hid = svc.handoff_create(
-        project_root=proj_a, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj_a,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     # The handoff never appears in another workspace's listing.
-    assert svc.handoff_list_available(project_root=proj_b, agent_id="w")["handoffs"] == []
+    assert (
+        svc.handoff_list_available(project_root=proj_b, agent_id="w")["handoffs"] == []
+    )
     # And cannot be completed/rejected from another workspace.
     with pytest.raises(OktoNexusError) as ei:
         svc.handoff_complete(project_root=proj_b, handoff_id=hid, agent_id="w")
@@ -1136,8 +1218,10 @@ def test_create_direct_unknown_agent_not_found_nothing_persists(
 
     with pytest.raises(OktoNexusError) as ei:
         svc.handoff_create(
-            project_root=proj, from_agent_id="c",
-            target={"strategy": "direct", "agent_id": "ghost"}, visibility="public",
+            project_root=proj,
+            from_agent_id="c",
+            target={"strategy": "direct", "agent_id": "ghost"},
+            visibility="public",
         )
     assert ei.value.code == ErrorCode.NOT_FOUND.value
     # Prescriptive: points at agent_list / registration / the fallback escape.
@@ -1153,15 +1237,20 @@ def test_create_pool_zero_match_succeeds_with_warning(
 ):
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),  # nobody registered
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),  # nobody registered
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "capability", "capability": "ocr"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "capability", "capability": "ocr"},
+        visibility="public",
     )
     assert out["status"] == STATUS_OPEN
     assert out["eligible_count"] == 0
@@ -1182,8 +1271,10 @@ def test_create_direct_registered_agent_no_warning(
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="public",
     )
     assert out["status"] == STATUS_OPEN
     assert "warning" not in out
@@ -1202,8 +1293,10 @@ def test_create_pool_with_match_reports_eligible_count(
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "capability", "capability": "ocr"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "capability", "capability": "ocr"},
+        visibility="public",
     )
     assert out["eligible_count"] == 2
     assert "warning" not in out
@@ -1215,14 +1308,13 @@ def test_create_direct_with_fallback_unknown_agent_warns_not_errors(
     # direct_with_fallback is the sanctioned path for an agent that registers
     # LATER: an unknown agent_id is a zero-match warning, never NOT_FOUND.
     clock = StubClock()
-    svc = make_service(
-        migrated_factory, tmp_config, clock, agents=FakeAgentRepo()
-    )
+    svc = make_service(migrated_factory, tmp_config, clock, agents=FakeAgentRepo())
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="c",
+        project_root=proj,
+        from_agent_id="c",
         target={
             "strategy": "direct_with_fallback",
             "agent_id": "late-joiner",
@@ -1247,10 +1339,15 @@ def test_cancel_by_creator_cancels_and_disappears(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
-    assert len(svc.handoff_list_available(project_root=proj, agent_id="w")["handoffs"]) == 1
+    assert (
+        len(svc.handoff_list_available(project_root=proj, agent_id="w")["handoffs"])
+        == 1
+    )
 
     out = svc.handoff_cancel(
         project_root=proj, handoff_id=hid, agent_id="creator", reason="mistake"
@@ -1269,8 +1366,10 @@ def test_cancel_by_non_creator_is_not_owner(migrated_factory, tmp_config, tmp_pa
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     with pytest.raises(OktoNexusError) as ei:
@@ -1286,8 +1385,10 @@ def test_cancel_claimed_is_invalid_transition(migrated_factory, tmp_config, tmp_
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
 
@@ -1307,8 +1408,10 @@ def test_cancel_after_lease_expiry_succeeds(migrated_factory, tmp_config, tmp_pa
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     clock.set(iso_plus(claim["lease_expires_at"], 5))
@@ -1325,8 +1428,10 @@ def test_cancelled_is_terminal_for_reject_complete_claim_and_cancel(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_cancel(project_root=proj, handoff_id=hid, agent_id="creator")
     assert STATUS_CANCELLED in TERMINAL_STATUSES
@@ -1351,7 +1456,9 @@ def test_cancelled_is_terminal_for_reject_complete_claim_and_cancel(
 # --------------------------------------------------------------------------- #
 # TS13 - atomic events / monotonic event_id under concurrent writers
 # --------------------------------------------------------------------------- #
-def test_concurrent_creates_unique_monotonic_events(migrated_factory, tmp_config, tmp_path):
+def test_concurrent_creates_unique_monotonic_events(
+    migrated_factory, tmp_config, tmp_path
+):
     clock = StubClock()
     emitter = ThreadSafeEmitter()
     svc = make_service(migrated_factory, tmp_config, clock, emitter=emitter)
@@ -1365,8 +1472,10 @@ def test_concurrent_creates_unique_monotonic_events(migrated_factory, tmp_config
         # Direct call (no retry): concurrent writers serialise at BEGIN
         # IMMEDIATE instead of failing with BUSY_SNAPSHOT mid-transaction.
         svc.handoff_create(
-            project_root=proj, from_agent_id="c",
-            target={"strategy": "broadcast"}, visibility="public",
+            project_root=proj,
+            from_agent_id="c",
+            target={"strategy": "broadcast"},
+            visibility="public",
         )
 
     with ThreadPoolExecutor(max_workers=n) as ex:
@@ -1394,6 +1503,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
         "handoff_list_available",
         "handoff_claim",
         "handoff_complete",
+        "handoff_verify",
         "handoff_reject",
         "handoff_cancel",
         "handoff_get",
@@ -1406,8 +1516,10 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     seed_workspace(migrated_factory, proj, clock)
 
     created = server.tools["handoff_create"](
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
         payload="please process batch 7",
     )
     assert created["ok"] is True
@@ -1419,7 +1531,9 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     # Payload travels with the row through the full MCP path (no event correlation).
     assert listed["data"]["handoffs"][0]["payload"] == "please process batch 7"
 
-    claimed = server.tools["handoff_claim"](project_root=proj, handoff_id=hid, agent_id="w")
+    claimed = server.tools["handoff_claim"](
+        project_root=proj, handoff_id=hid, agent_id="w"
+    )
     assert claimed["ok"] is True and claimed["data"]["status"] == STATUS_CLAIMED
     assert claimed["data"]["payload"] == "please process batch 7"
 
@@ -1436,8 +1550,10 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
 
     # handoff_cancel through the envelope (creator retracts a fresh handoff).
     fresh = server.tools["handoff_create"](
-        project_root=proj, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )
     cancelled = server.tools["handoff_cancel"](
         project_root=proj, handoff_id=fresh["data"]["handoff_id"], agent_id="c"
@@ -1482,7 +1598,10 @@ def test_migration_003_adds_payload_column_idempotently(migrated_factory):
     conn = migrated_factory.get_connection()
     try:
         cols = {r[1] for r in conn.execute("PRAGMA table_info(handoffs)").fetchall()}
-        migs = {r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()}
+        migs = {
+            r[0]
+            for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
+        }
     finally:
         conn.close()
     assert "payload" in cols
@@ -1518,8 +1637,10 @@ def test_handoff_claim_touches_claimer_last_seen(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     assert agents.get(None, "worker").last_seen_at is None  # not acted yet
@@ -1543,8 +1664,10 @@ def test_handoff_create_touches_author_last_seen_real_repo(
         agents.upsert(uow, agent_id="boss")
 
     svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )
     with migrated_factory.unit_of_work() as uow:
         assert agents.get(uow, "boss").last_seen_at == clock.now_iso()
@@ -1584,14 +1707,19 @@ def test_payload_round_trips_through_list_and_claim(
 def test_payload_none_stays_none(migrated_factory, tmp_config, tmp_path):
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     listed = svc.handoff_list_available(project_root=proj, agent_id="w")
@@ -1605,14 +1733,19 @@ def test_payload_object_is_serialized_to_json_text(
 ):
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "broadcast"},
+        visibility="public",
         payload={"k": "v", "n": 3},
     )["handoff_id"]
 
@@ -1635,8 +1768,11 @@ def test_payload_consistent_between_event_and_claim(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="b",
-        target={"strategy": "broadcast"}, visibility="public", payload={"k": "v"},
+        project_root=proj,
+        from_agent_id="b",
+        target={"strategy": "broadcast"},
+        visibility="public",
+        payload={"k": "v"},
     )["handoff_id"]
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
     created = [e for e in emitter.events if e["type"] == "handoff.created"]
@@ -1651,15 +1787,21 @@ def test_payload_large_round_trips_at_boundary(migrated_factory, tmp_config, tmp
     # size gate).
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     big = "x" * tmp_config.max_inline_bytes
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="b",
-        target={"strategy": "broadcast"}, visibility="public", payload=big,
+        project_root=proj,
+        from_agent_id="b",
+        target={"strategy": "broadcast"},
+        visibility="public",
+        payload=big,
     )["handoff_id"]
     listed = svc.handoff_list_available(project_root=proj, agent_id="w")
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
@@ -1671,27 +1813,38 @@ def test_payload_large_round_trips_at_boundary(migrated_factory, tmp_config, tmp
 def test_payload_unicode_round_trips(migrated_factory, tmp_config, tmp_path):
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     text = "relatório café ☕ 文件"  # accents + emoji + CJK
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="b",
-        target={"strategy": "broadcast"}, visibility="public", payload=text,
+        project_root=proj,
+        from_agent_id="b",
+        target={"strategy": "broadcast"},
+        visibility="public",
+        payload=text,
     )["handoff_id"]
-    assert svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")[
-        "payload"
-    ] == text  # same code points, no \\uXXXX escaping
+    assert (
+        svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")["payload"]
+        == text
+    )  # same code points, no \\uXXXX escaping
 
     # An object with non-ASCII values is stored as UTF-8 JSON, not ASCII-escaped.
     hid2 = svc.handoff_create(
-        project_root=proj, from_agent_id="b",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="b",
+        target={"strategy": "broadcast"},
+        visibility="public",
         payload={"nota": "café ☕"},
     )["handoff_id"]
-    body2 = svc.handoff_claim(project_root=proj, handoff_id=hid2, agent_id="w")["payload"]
+    body2 = svc.handoff_claim(project_root=proj, handoff_id=hid2, agent_id="w")[
+        "payload"
+    ]
     assert json.loads(body2) == {"nota": "café ☕"}
     assert "\\u" not in body2  # ensure_ascii=False preserved the characters
 
@@ -1701,14 +1854,20 @@ def test_payload_empty_string_preserved_not_null(
 ):
     clock = StubClock()
     svc = make_service(
-        migrated_factory, tmp_config, clock,
-        emitter=ThreadSafeEmitter(), agents=FakeAgentRepo(),
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=ThreadSafeEmitter(),
+        agents=FakeAgentRepo(),
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="b",
-        target={"strategy": "broadcast"}, visibility="public", payload="",
+        project_root=proj,
+        from_agent_id="b",
+        target={"strategy": "broadcast"},
+        visibility="public",
+        payload="",
     )["handoff_id"]
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
     assert claimed["payload"] == ""  # empty string preserved, distinct from None
@@ -1810,8 +1969,10 @@ def test_complete_persists_result_and_handoff_get_returns_it(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     result = '{"pages": 12, "ok": true}'
@@ -1835,12 +1996,16 @@ def test_complete_serializes_non_string_result_to_json_text(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     svc.handoff_complete(
-        project_root=proj, handoff_id=hid, agent_id="worker",
+        project_root=proj,
+        handoff_id=hid,
+        agent_id="worker",
         result={"nota": "café ☕"},
     )
     got = svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="worker")
@@ -1857,8 +2022,10 @@ def test_reject_persists_reason_and_handoff_get_returns_it(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     svc.handoff_reject(
@@ -1880,8 +2047,10 @@ def test_reject_open_by_direct_target_persists_reason(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_reject(
         project_root=proj, handoff_id=hid, agent_id="worker", reason="busy"
@@ -1903,18 +2072,21 @@ def test_handoff_get_access_creator_claimant_eligible_stranger(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
+        project_root=proj,
+        from_agent_id="creator",
         target={"strategy": "capability", "capability": "ocr"},
         visibility="eligible",
     )["handoff_id"]
 
     # Creator (not eligible itself) and an eligible peer can read it.
-    assert svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="creator")[
-        "status"
-    ] == STATUS_OPEN
-    assert svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="peer")[
-        "status"
-    ] == STATUS_OPEN
+    assert (
+        svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="creator")["status"]
+        == STATUS_OPEN
+    )
+    assert (
+        svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="peer")["status"]
+        == STATUS_OPEN
+    )
     # A non-eligible stranger is gated (same predicate as list_available).
     with pytest.raises(OktoNexusError) as ei:
         svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="stranger")
@@ -1924,9 +2096,10 @@ def test_handoff_get_access_creator_claimant_eligible_stranger(
     # The claimant always can, even after the handoff turns terminal.
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     svc.handoff_complete(project_root=proj, handoff_id=hid, agent_id="worker")
-    assert svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="worker")[
-        "status"
-    ] == STATUS_COMPLETED
+    assert (
+        svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="worker")["status"]
+        == STATUS_COMPLETED
+    )
 
 
 def test_handoff_get_not_found_and_workspace_mismatch(
@@ -1939,8 +2112,10 @@ def test_handoff_get_not_found_and_workspace_mismatch(
     seed_workspace(migrated_factory, proj_a, clock)
     seed_workspace(migrated_factory, proj_b, clock)
     hid = svc.handoff_create(
-        project_root=proj_a, from_agent_id="c",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj_a,
+        from_agent_id="c",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
 
     with pytest.raises(OktoNexusError) as e_nf:
@@ -1959,8 +2134,10 @@ def test_handoff_get_reflects_expired_lease_as_open(
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     claim = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     clock.set(iso_plus(claim["lease_expires_at"], 5))
@@ -1980,20 +2157,24 @@ def test_creator_reads_outcome_invisible_on_the_event_stream(
     clock = StubClock()
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
     register_real_agent(migrated_factory, agents, "creator")  # no ocr capability
-    register_real_agent(
-        migrated_factory, agents, "worker", capabilities={"ocr": True}
-    )
+    register_real_agent(migrated_factory, agents, "worker", capabilities={"ocr": True})
     events_repo = SqliteEventRepo(clock)
     emitter = SqliteEventEmitter(events_repo)
     svc = make_service(
-        migrated_factory, tmp_config, clock, emitter=emitter, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        emitter=emitter,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
+        project_root=proj,
+        from_agent_id="creator",
         target={"strategy": "capability", "capability": "ocr"},
         visibility="eligible",
     )["handoff_id"]
@@ -2010,9 +2191,7 @@ def test_creator_reads_outcome_invisible_on_the_event_stream(
         config=tmp_config,
         agents=agents,
     )
-    page = event_svc.event_get(
-        project_root=proj, agent_id="creator", stream="handoff"
-    )
+    page = event_svc.event_get(project_root=proj, agent_id="creator", stream="handoff")
     assert "handoff.completed" not in [e["type"] for e in page["events"]]
 
     got = svc.handoff_get(project_root=proj, handoff_id=hid, agent_id="creator")
@@ -2030,15 +2209,21 @@ def test_direct_handoff_lands_one_inbox_notification(
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
     register_real_agent(migrated_factory, agents, "worker")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "direct", "agent_id": "worker"}, visibility="eligible",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "direct", "agent_id": "worker"},
+        visibility="eligible",
         payload="OCR scan.pdf",
     )
     assert out["notified"] == ["worker"]
@@ -2065,26 +2250,30 @@ def test_direct_handoff_lands_one_inbox_notification(
 def test_pool_handoff_creates_zero_deliveries(migrated_factory, tmp_config, tmp_path):
     clock = StubClock()
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
-    register_real_agent(
-        migrated_factory, agents, "w1", capabilities={"ocr": True}
-    )
-    register_real_agent(
-        migrated_factory, agents, "w2", capabilities={"ocr": True}
-    )
+    register_real_agent(migrated_factory, agents, "w1", capabilities={"ocr": True})
+    register_real_agent(migrated_factory, agents, "w2", capabilities={"ocr": True})
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "capability", "capability": "ocr"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "capability", "capability": "ocr"},
+        visibility="public",
     )
     svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="boss",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )
     # Pool targets keep poll semantics (handoff_list_available); no inbox noise.
     assert count(migrated_factory, "message_deliveries") == 0
@@ -2097,14 +2286,19 @@ def test_direct_with_fallback_notifies_registered_agent(
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
     register_real_agent(migrated_factory, agents, "worker")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
 
     out = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
+        project_root=proj,
+        from_agent_id="boss",
         target={
             "strategy": "direct_with_fallback",
             "agent_id": "worker",
@@ -2117,7 +2311,8 @@ def test_direct_with_fallback_notifies_registered_agent(
 
     # Unknown agent on the fallback path: no error, no delivery, explicit warning.
     out2 = svc.handoff_create(
-        project_root=proj, from_agent_id="boss",
+        project_root=proj,
+        from_agent_id="boss",
         target={
             "strategy": "direct_with_fallback",
             "agent_id": "late-joiner",
@@ -2138,14 +2333,20 @@ def test_complete_delivers_result_to_creator_inbox(
     register_real_agent(migrated_factory, agents, "creator")
     register_real_agent(migrated_factory, agents, "worker")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     out = svc.handoff_complete(
@@ -2172,14 +2373,20 @@ def test_reject_delivers_reason_to_creator_inbox(
     register_real_agent(migrated_factory, agents, "creator")
     register_real_agent(migrated_factory, agents, "worker")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="creator",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="creator",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     out = svc.handoff_reject(
@@ -2201,14 +2408,20 @@ def test_no_self_notification_when_creator_completes_own_claim(
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
     register_real_agent(migrated_factory, agents, "solo")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="solo",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="solo",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="solo")
     out = svc.handoff_complete(project_root=proj, handoff_id=hid, agent_id="solo")
@@ -2225,14 +2438,20 @@ def test_outcome_to_unregistered_creator_skips_delivery(
     agents, messages, deliveries = make_real_world(migrated_factory, clock)
     register_real_agent(migrated_factory, agents, "worker")
     svc = make_service(
-        migrated_factory, tmp_config, clock, agents=agents,
-        messages=messages, deliveries=deliveries,
+        migrated_factory,
+        tmp_config,
+        clock,
+        agents=agents,
+        messages=messages,
+        deliveries=deliveries,
     )
     proj = str(mkdir(tmp_path, "P"))
     seed_workspace(migrated_factory, proj, clock)
     hid = svc.handoff_create(
-        project_root=proj, from_agent_id="phantom",
-        target={"strategy": "broadcast"}, visibility="public",
+        project_root=proj,
+        from_agent_id="phantom",
+        target={"strategy": "broadcast"},
+        visibility="public",
     )["handoff_id"]
     svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     out = svc.handoff_complete(project_root=proj, handoff_id=hid, agent_id="worker")

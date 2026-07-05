@@ -24,7 +24,7 @@ domain/application (hexagonal). C1 seeds the instruction-prose resources
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
 
 #: URI prefix for every Nexus reference resource.
 URI_PREFIX = "okto-nexus://reference/"

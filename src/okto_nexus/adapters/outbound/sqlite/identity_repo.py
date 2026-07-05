@@ -138,7 +138,7 @@ class SqliteAgentRepo(_ClockBacked):
 
     _COLUMNS = (
         "agent_id, role, capabilities, metadata, created_at, last_seen_at, "
-        "api_key_hash, is_active, permissions, preset_id"
+        "api_key_hash, is_active, permissions, preset_id, tags, comm_scope"
     )
 
     def upsert(
@@ -198,9 +198,7 @@ class SqliteAgentRepo(_ClockBacked):
             raise _db_error("listing agents", exc) from exc
         return [self._row_to_agent(row) for row in rows]
 
-    def touch(
-        self, uow: UnitOfWork, *, agent_id: str, at: str | None = None
-    ) -> bool:
+    def touch(self, uow: UnitOfWork, *, agent_id: str, at: str | None = None) -> bool:
         """Stamp ``last_seen_at`` for an agent; no-op (False) if it is absent."""
         now = at or self._now()
         try:
@@ -233,6 +231,41 @@ class SqliteAgentRepo(_ClockBacked):
             )
         except sqlite3.Error as exc:
             raise _db_error("setting agent permissions", exc) from exc
+        return cur.rowcount > 0
+
+    def set_tags(self, uow: UnitOfWork, *, agent_id: str, tags: Any) -> bool:
+        """Overwrite the agent's ``tags`` column; True if the agent existed.
+
+        Always a full overwrite (``None`` resets to "no tags") - mirroring
+        :meth:`set_permissions`, clearing is a first-class operation here.
+        Catalog existence is the APPLICATION layer's job; this method persists
+        an already-validated value verbatim.
+        """
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET tags = ? WHERE agent_id = ?",
+                (_dumps(tags), agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent tags", exc) from exc
+        return cur.rowcount > 0
+
+    def set_comm_scope(
+        self, uow: UnitOfWork, *, agent_id: str, comm_scope: Any
+    ) -> bool:
+        """Overwrite the agent's ``comm_scope``; True if the agent existed.
+
+        Full overwrite (``None`` resets to unrestricted). The value is the
+        operator-set communication scope and is PRIVATE - read surfaces must
+        never expose it on discovery.
+        """
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET comm_scope = ? WHERE agent_id = ?",
+                (_dumps(comm_scope), agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent comm_scope", exc) from exc
         return cur.rowcount > 0
 
     def get_active_by_key_hash(
@@ -277,9 +310,7 @@ class SqliteAgentRepo(_ClockBacked):
             raise _db_error("setting agent key hash", exc) from exc
         return cur.rowcount > 0
 
-    def set_active(
-        self, uow: UnitOfWork, *, agent_id: str, is_active: bool
-    ) -> bool:
+    def set_active(self, uow: UnitOfWork, *, agent_id: str, is_active: bool) -> bool:
         """Flip the revocation switch; True if the agent existed."""
         try:
             cur = uow.connection.execute(
@@ -336,6 +367,7 @@ class SqliteAgentRepo(_ClockBacked):
     def _row_to_agent(row: Any) -> Agent:
         capabilities = _loads(row["capabilities"])
         metadata = _loads(row["metadata"])
+        tags = _loads(row["tags"])
         return Agent(
             agent_id=row["agent_id"],
             created_at=row["created_at"],
@@ -347,6 +379,8 @@ class SqliteAgentRepo(_ClockBacked):
             is_active=bool(row["is_active"]),
             permissions=_loads(row["permissions"]),
             preset_id=row["preset_id"],
+            tags=tags if tags is not None else {},
+            comm_scope=_loads(row["comm_scope"]),
         )
 
 
@@ -509,9 +543,7 @@ class SqliteSessionRepo(_ClockBacked):
             raise _db_error("counting prunable sessions", exc) from exc
         return int(row[0])
 
-    def prune_closed_before(
-        self, uow: UnitOfWork, *, cutoff: str, limit: int
-    ) -> int:
+    def prune_closed_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
         """Delete up to ``limit`` ``closed`` sessions closed before ``cutoff``.
 
         The ONLY delete path on ``sessions``, used exclusively by the retention

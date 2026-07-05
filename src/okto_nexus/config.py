@@ -148,6 +148,18 @@ class NexusConfig:
     # per-call include_paths param of the workspace_list MCP tool (agent
     # surface) - the dashboard gating is controlled ONLY by this knob.
     expose_workspace_path: bool = False
+    # ----------------------------------------------------------------- #
+    # Meta-harness feature flags (R-I0). All opt-in (default OFF): a flag
+    # only READS here; behavioural gating lives in the consuming use-cases
+    # (I1-I8). Turning a flag off never removes tools from the MCP surface.
+    # ----------------------------------------------------------------- #
+    feature_trace: bool = False
+    feature_hitl: bool = False
+    feature_verification: bool = False
+    feature_dag: bool = False
+    feature_memory: bool = False
+    feature_health: bool = False
+    feature_replay: bool = False
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -295,7 +307,49 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "--expose-workspace-path",
         False,
     ),
+    # Meta-harness feature flags (R-I0): all default False (opt-in).
+    "feature_trace": (
+        "OKTO_NEXUS_FEATURE_TRACE",
+        "--feature-trace",
+        False,
+    ),
+    "feature_hitl": (
+        "OKTO_NEXUS_FEATURE_HITL",
+        "--feature-hitl",
+        False,
+    ),
+    "feature_verification": (
+        "OKTO_NEXUS_FEATURE_VERIFICATION",
+        "--feature-verification",
+        False,
+    ),
+    "feature_dag": (
+        "OKTO_NEXUS_FEATURE_DAG",
+        "--feature-dag",
+        False,
+    ),
+    "feature_memory": (
+        "OKTO_NEXUS_FEATURE_MEMORY",
+        "--feature-memory",
+        False,
+    ),
+    "feature_health": (
+        "OKTO_NEXUS_FEATURE_HEALTH",
+        "--feature-health",
+        False,
+    ),
+    "feature_replay": (
+        "OKTO_NEXUS_FEATURE_REPLAY",
+        "--feature-replay",
+        False,
+    ),
 }
+
+#: The meta-harness feature flags (R-I0), derived from ``_BOOL_FIELDS`` so the
+#: ``nexus_info.features`` block and the flag fields can never drift apart.
+FEATURE_FLAG_FIELDS: tuple[str, ...] = tuple(
+    name for name in _BOOL_FIELDS if name.startswith("feature_")
+)
 
 _BOOL_TRUE = frozenset({"true", "1", "yes", "on"})
 _BOOL_FALSE = frozenset({"false", "0", "no", "off"})
@@ -495,8 +549,6 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
         )
 
     for field_name, (env_var, flag, default) in _BOOL_FIELDS.items():
-        kwargs[field_name] = _resolve_bool(
-            field_name, flag, env_var, default, env, cli
-        )
+        kwargs[field_name] = _resolve_bool(field_name, flag, env_var, default, env, cli)
 
     return NexusConfig(**kwargs)

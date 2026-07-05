@@ -151,13 +151,11 @@ def test_workspace_resolve_determinism(migrated_factory, tmp_config, tmp_path):
     mkdir(proj, "sub")
 
     r1 = svc.workspace_resolve(project_root=str(proj))
-    r2 = svc.workspace_resolve(
-        project_root=os.path.join(str(proj), "sub", "..")
-    )
+    r2 = svc.workspace_resolve(project_root=os.path.join(str(proj), "sub", ".."))
 
-    expected = hashlib.sha256(
-        os.path.realpath(str(proj)).encode("utf-8")
-    ).hexdigest().lower()
+    expected = (
+        hashlib.sha256(os.path.realpath(str(proj)).encode("utf-8")).hexdigest().lower()
+    )
     assert r1["workspace_id"] == expected
     assert r2["workspace_id"] == expected
     assert r1["workspace_id"] == r2["workspace_id"]
@@ -529,6 +527,11 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     assert res["ok"] is True
     ws = res["data"]["workspace_id"]
 
+    # Capabilities are fail-closed: the vocabulary must exist in the catalog
+    # before an agent may announce it (capability-catalog feature).
+    with migrated_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="x")
+
     ar = server.tools["agent_register"](
         agent_id="agent-1", role="builder", capabilities=["x"]
     )
@@ -568,9 +571,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     assert hb_missing["error"]["code"] == "NOT_FOUND"
 
 
-def test_unresolved_workspace_via_tool_envelope(
-    migrated_factory, tmp_config, tmp_path
-):
+def test_unresolved_workspace_via_tool_envelope(migrated_factory, tmp_config, tmp_path):
     deps = make_deps(migrated_factory, tmp_config, StubClock())
     server = FakeServer()
     register(server, deps)
@@ -609,7 +610,10 @@ def test_migration_004_adds_agents_last_seen_idempotently(migrated_factory):
     conn = migrated_factory.get_connection()
     try:
         cols = {r[1] for r in conn.execute("PRAGMA table_info(agents)").fetchall()}
-        migs = {r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()}
+        migs = {
+            r[0]
+            for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
+        }
     finally:
         conn.close()
     assert "last_seen_at" in cols
@@ -934,12 +938,12 @@ def test_workspace_list_tool_global_admin(migrated_factory, tmp_config, tmp_path
     server = FakeServer()
     register(server, deps)
 
-    ws_a = server.tools["workspace_resolve"](
-        project_root=str(mkdir(tmp_path, "A"))
-    )["data"]["workspace_id"]
-    ws_b = server.tools["workspace_resolve"](
-        project_root=str(mkdir(tmp_path, "B"))
-    )["data"]["workspace_id"]
+    ws_a = server.tools["workspace_resolve"](project_root=str(mkdir(tmp_path, "A")))[
+        "data"
+    ]["workspace_id"]
+    ws_b = server.tools["workspace_resolve"](project_root=str(mkdir(tmp_path, "B")))[
+        "data"
+    ]["workspace_id"]
 
     res = server.tools["workspace_list"]()
     assert res["ok"] is True
@@ -972,9 +976,7 @@ def test_workspace_list_omits_paths_by_default_and_discloses_on_opt_in(
             "last_seen_at",
         }
 
-    with_paths = {
-        w["workspace_id"]: w for w in svc.workspace_list(include_paths=True)
-    }
+    with_paths = {w["workspace_id"]: w for w in svc.workspace_list(include_paths=True)}
     assert with_paths[ws_a]["root_realpath"] == os.path.realpath(str(proj_a))
     assert with_paths[ws_b]["root_realpath"] == os.path.realpath(str(proj_b))
 
@@ -1000,9 +1002,7 @@ def test_workspace_list_tool_include_paths_opt_in(
 
     res_paths = server.tools["workspace_list"](include_paths=True)
     assert res_paths["ok"] is True
-    entry = next(
-        w for w in res_paths["data"]["workspaces"] if w["workspace_id"] == ws
-    )
+    entry = next(w for w in res_paths["data"]["workspaces"] if w["workspace_id"] == ws)
     assert entry["root_realpath"] == os.path.realpath(str(proj))
 
 

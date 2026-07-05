@@ -23,7 +23,14 @@ Implements the use cases of Okto Nexus V1 spec #8:
 * ``handoff_claim``          - opportunistic expiry + atomic conditional claim
   (single winner) gated by ``is_agent_eligible``.
 * ``handoff_complete``       - owner-only ``CLAIMED -> COMPLETED``; persists
-  ``result`` on the row and notifies the creator's inbox.
+  ``result`` on the row and notifies the creator's inbox. When the row has
+  ``acceptance_criteria`` (I4) the destination is ``VERIFYING`` instead: the
+  metadata-only ``handoff.verification_requested`` event fires and the
+  statically resolvable verifier is notified.
+* ``handoff_verify``         - verifier-only decision on a VERIFYING handoff:
+  ``pass`` -> COMPLETED (canonical ``handoff.completed`` + ``verified_by``),
+  ``fail`` -> CLAIMED (feedback overwritten + lease renewed in the SAME
+  conditional UPDATE). The executor (``claimed_by``) is always refused.
 * ``handoff_reject``         - owner ``CLAIMED -> REJECTED`` or direct-target
   ``OPEN -> REJECTED``; persists ``rejected_reason`` and notifies the creator.
 * ``handoff_cancel``         - creator-only ``OPEN -> CANCELLED`` (the
@@ -38,6 +45,17 @@ Implements the use cases of Okto Nexus V1 spec #8:
 mirror the claim (the WHERE clause re-asserts the expected status and
 claimant); a 0-row outcome is re-read and mapped to the precise catalogue
 error (already terminal? lease expired and reopened? different claimant?).
+
+Dependency edges (I5, ``feature_dag``): ``handoff_create`` may name 1..20
+pre-existing same-workspace handoffs in ``depends_on`` (immutable, acyclic by
+construction; the flag gates CREATION fail-closed only). A handoff whose
+dependencies are not all COMPLETED is simply OPEN-but-blocked, derived
+ON-READ: it is excluded from ``handoff_list_available`` and refused at claim
+(``DEPENDENCY_NOT_MET`` with aggregate counts, never ids). Both producers of
+COMPLETED run the synchronous exactly-once unblock scan
+(``handoff.unblocked``); REJECTED/CANCELLED producers signal
+``handoff.dependency_failed`` to each non-terminal dependent's creator - no
+cascade, the dependent is retained for an explicit decision.
 
 This module lives in the application layer: it depends only on the ports in
 :mod:`okto_nexus.application.ports`, the pure :mod:`okto_nexus.domain` helpers
@@ -62,40 +80,69 @@ from ..domain.base import (
     normalize_cursor,
 )
 from ..domain.handoff import (
+    DEPENDENCY_FAILED_STATUSES,
     EVENT_CANCELLED,
     EVENT_CLAIMED,
     EVENT_COMPLETED,
     EVENT_CREATED,
+    EVENT_DEPENDENCY_FAILED,
     EVENT_EXPIRED,
     EVENT_REJECTED,
+    EVENT_UNBLOCKED,
+    EVENT_VERIFICATION_FAILED,
+    EVENT_VERIFICATION_REQUESTED,
     HANDOFF_STREAM,
     STATUS_CANCELLED,
     STATUS_CLAIMED,
     STATUS_COMPLETED,
     STATUS_OPEN,
     STATUS_REJECTED,
+    STATUS_VERIFYING,
     TERMINAL_STATUSES,
+    VERDICT_PASS,
+    dependencies_satisfied,
+    is_degenerate_self_claim,
     is_direct_target,
+    is_eligible_verifier,
     normalize_visibility,
+    static_verifier_for,
+    summarize_dependencies,
+    validate_acceptance_criteria,
+    validate_depends_on,
     validate_target,
+    validate_verdict,
+    validate_verify_by,
 )
 from ..domain.ids import resolve_workspace_id
 from ..domain.inbox import DELIVERY_UNREAD, new_delivery_id
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
-from ..domain.targets import normalize_strategy
+from ..domain.tag_selector import reachable, scope_selector, selector_matches
+from ..domain.targets import (
+    iter_target_capabilities,
+    iter_target_selectors,
+    normalize_strategy,
+)
+from ..domain.governance import ACTION_HANDOFF_CREATE
+from ..domain.trace import resolve_trace
 from ..errors import ErrorCode, OktoNexusError
+from .approvals import ApprovalService
+from .capabilities import CapabilityCatalogService
+from .governance import GovernanceService
 from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
+    CapabilityCatalogRepo,
     Clock,
     ConnectionFactory,
     EventEmitter,
     HandoffRepo,
     MessageDeliveryRepo,
     MessageRepo,
+    TagCatalogRepo,
     UnitOfWork,
     Waiter,
 )
+from .tags import TagCatalogService
 
 #: Default page size for ``handoff_list_available`` when no ``limit`` is given.
 DEFAULT_PAGE_LIMIT = 100
@@ -136,6 +183,10 @@ class HandoffService:
         messages: Optional[MessageRepo] = None,
         deliveries: Optional[MessageDeliveryRepo] = None,
         tasks: Any = None,
+        tag_catalog: Optional[TagCatalogRepo] = None,
+        capability_catalog: Optional[CapabilityCatalogRepo] = None,
+        governance: Optional[GovernanceService] = None,
+        approvals: Optional[ApprovalService] = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -152,9 +203,36 @@ class HandoffService:
         # producer (no MCP tool ever created a task) and was removed. The
         # parameter is tolerated so legacy call sites keep constructing.
         del tasks
+        # Central tag catalog (F1): when wired, every 'tag' target selector is
+        # existence-checked fail-closed before the handoff persists.
+        self._tag_catalog = tag_catalog
+        # Central capability catalog (migration 014): when wired, every
+        # 'capability' target name is existence-checked fail-closed too.
+        self._capability_catalog = capability_catalog
+        # Policy enforcement (spec 80624c1a): when wired, handoff_create is
+        # enforced pre-persistence against the creator's attached policies
+        # (governance + the declared-target audience gate); None = no gate.
+        self._governance = governance
+        # HITL approvals (spec 2948b2a2, feature_hitl): when wired, a
+        # require_approval verdict intercepts the create into the approvals
+        # queue instead of persisting; None = verdicts are ignored.
+        self._approvals = approvals
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
-        self._waiter = waiter if waiter is not None else connection_factory.change_waiter()
+        self._waiter = (
+            waiter if waiter is not None else connection_factory.change_waiter()
+        )
+
+    def _create_uow(self, *, workspace_id: str, agent_id: Any):
+        """The write UoW for handoff_create: governance-guarded when wired.
+
+        The guard emits ``governance.denied`` in its own UoW AFTER a denial
+        rolled the main one back (BR6); with no governance wired it is exactly
+        ``unit_of_work()``.
+        """
+        if self._governance is not None:
+            return self._governance.guard(workspace_id=workspace_id, agent_id=agent_id)
+        return self._cf.unit_of_work()
 
     # ------------------------------------------------------------------ #
     # create
@@ -167,9 +245,19 @@ class HandoffService:
         target: Any,
         visibility: Any,
         payload: Any = None,
+        trace_id: Any = None,
+        acceptance_criteria: Any = None,
+        verify_by: Any = None,
+        depends_on: Any = None,
         session_id: Any = None,
+        _approved_execution: bool = False,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
+
+        ``_approved_execution`` is the INTERNAL one-shot bypass of the HITL
+        interception (spec 2948b2a2 BR2): only the approval decision path sets
+        it, so an approved re-execution cannot be re-intercepted. Every other
+        gate (permissions, catalogs, D1b, governance deny/quotas) stays active.
 
         D1b (mirrors ``message_create``): a ``direct`` target naming an agent
         that is not registered raises ``NOT_FOUND`` and rolls the WHOLE unit
@@ -201,6 +289,91 @@ class HandoffService:
         normalized_visibility = normalize_visibility(visibility)
         self._check_inline_size("payload", payload)
         payload_text = self._serialize_payload(payload)
+        # Trace resolution (D3/D4/D6): the flag is read LIVE at the start of
+        # the use case; OFF accepts-and-ignores the parameter (always None),
+        # ON validates the explicit id or generates one - handoffs never
+        # inherit (no parent). Pure phase: a bad trace persists nothing.
+        resolved_trace = resolve_trace(
+            explicit=trace_id,
+            inherited=None,
+            feature_on=bool(getattr(self._config, "feature_trace", False)),
+        )
+        # Verification contract (I4, feature_verification): fail-closed BOTH
+        # ways. OFF rejects the new params outright - a verification contract
+        # is never accepted-and-ignored (BR2; deliberate exception to the
+        # trace flag's accept-and-ignore) because silently dropping it would
+        # hand the creator a false quality guarantee. ON validates the full
+        # grammar here (pure phase); existence and degeneracy gate below.
+        criteria_list: list[str] | None = None
+        verify_by_descriptor: dict[str, Any] | None = None
+        if acceptance_criteria is not None or verify_by is not None:
+            if not bool(getattr(self._config, "feature_verification", False)):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "acceptance_criteria/verify_by require feature_verification, "
+                    "which is OFF - a verification contract is never accepted-"
+                    "and-ignored. Enable the flag or drop the parameters.",
+                    {"feature_verification": False},
+                )
+            if acceptance_criteria is None:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "verify_by requires acceptance_criteria - the verifier "
+                    "judges the delivery against explicit criteria.",
+                    {"verify_by": verify_by},
+                )
+            criteria_list = validate_acceptance_criteria(acceptance_criteria)
+            # BR8: the creator default is MATERIALISED at write time - a
+            # verifiable row always carries an explicit descriptor, never an
+            # inferred-on-read default.
+            verify_by_descriptor = (
+                validate_verify_by(verify_by)
+                if verify_by is not None
+                else {"kind": "creator"}
+            )
+            if is_degenerate_self_claim(
+                normalized_target,
+                creator=str(from_agent_id),
+                verify_by=verify_by_descriptor,
+            ):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "This verification contract is statically unsatisfiable: "
+                    "the direct target is the only possible claimant AND the "
+                    "resolved verifier, and the executor can never verify "
+                    "their own delivery. Change the target or the verify_by.",
+                    {
+                        "target": normalized_target,
+                        "verify_by": verify_by_descriptor,
+                    },
+                )
+        criteria_text = (
+            json.dumps(criteria_list, ensure_ascii=False)
+            if criteria_list is not None
+            else None
+        )
+        verify_by_text = (
+            json.dumps(verify_by_descriptor, ensure_ascii=False)
+            if verify_by_descriptor is not None
+            else None
+        )
+        # Dependency edges (I5, feature_dag): fail-closed BOTH ways, the
+        # verification precedent (BR2) - OFF rejects the parameter outright
+        # (a dependency silently dropped would run work out of order), ON
+        # validates the pure grammar here (1..20 unique ids). Existence and
+        # state gate below, inside the UoW. Acyclicity holds by construction:
+        # every dependency must ALREADY exist, and edges are immutable.
+        depends_list: list[str] | None = None
+        if depends_on is not None:
+            if not bool(getattr(self._config, "feature_dag", False)):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "depends_on requires feature_dag, which is OFF - a "
+                    "dependency edge is never accepted-and-ignored. Enable "
+                    "the flag or drop the parameter.",
+                    {"feature_dag": False},
+                )
+            depends_list = validate_depends_on(depends_on)
 
         strategy = normalized_target["strategy"]
         target_text = json.dumps(normalized_target, ensure_ascii=False)
@@ -208,16 +381,29 @@ class HandoffService:
         handoff_id = new_id("hof")
         extras: dict[str, Any] = {}
 
-        with self._cf.unit_of_work() as uow:
+        with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
             )
+            # Catalog EXISTENCE gate (F1, fail-closed): every 'tag' selector
+            # in the target (incl. nested mixed rules / fallback) must
+            # reference registered tags, or the create rolls back untouched.
+            self._ensure_target_selectors_registered(uow, normalized_target)
+            self._ensure_target_capabilities_registered(uow, normalized_target)
+            if verify_by_descriptor is not None:
+                self._ensure_verifier_resolvable(uow, verify_by_descriptor)
+            dep_statuses: list[str] = []
+            if depends_list is not None:
+                dep_statuses = self._ensure_dependencies_satisfiable(
+                    uow, workspace_id=workspace_id, depends_on=depends_list
+                )
             if self._agents is not None:
                 if strategy == "direct":
                     # D1b hard gate: a typo'd direct handoff must not sit OPEN
                     # forever, silently. Raising here rolls everything back.
                     named = str(normalized_target.get("agent_id"))
-                    if self._agents.get(uow, named) is None:
+                    target_agent = self._agents.get(uow, named)
+                    if target_agent is None:
                         raise OktoNexusError(
                             ErrorCode.NOT_FOUND,
                             f"agent_id '{named}' is not a registered agent; "
@@ -226,6 +412,31 @@ class HandoffService:
                             "direct_with_fallback.",
                             {"agent_id": named, "strategy": strategy},
                         )
+                    # Audience gate at CREATION (FR6/BR13): the DECLARED direct
+                    # target is evaluated against the creator's EFFECTIVE
+                    # audience (combined bindings) here, additively and
+                    # fail-safe - the claim-time reachability check stays as the
+                    # dynamic gate; this only fails EARLIER, never widens reach.
+                    # Opaque by design: the denial never reveals the target's
+                    # tags or the creator's selectors (only that the creator's
+                    # own scope excludes the target). No bindings on either side
+                    # => unrestricted (zero-regression).
+                    if self._governance is not None:
+                        creator_agent = self._agents.get(uow, str(from_agent_id))
+                        if not self._governance.audience_reachable(
+                            uow,
+                            sender_id=from_agent_id,
+                            sender_tags=getattr(creator_agent, "tags", None),
+                            recipient_id=named,
+                            recipient_tags=getattr(target_agent, "tags", None),
+                        ):
+                            raise OktoNexusError(
+                                ErrorCode.PERMISSION_DENIED,
+                                "Direct handoffs from this agent are restricted "
+                                "by its communication scope; the target is "
+                                "outside it.",
+                                {"required_permission": "comm_scope.outbound"},
+                            )
                 else:
                     eligible = self._eligible_agent_ids(
                         uow, workspace_id, normalized_target, now
@@ -235,6 +446,61 @@ class HandoffService:
                         # Success-with-warning (S2): never silent, never fatal
                         # (lazy re-evaluation lets a later registrant claim).
                         extras["warning"] = _ZERO_ELIGIBLE_WARNING
+            # Governance gate (spec 80624c1a): deny + max_count + max_bytes +
+            # max_open_handoffs from the actor's attached policies, composed and
+            # evaluated PRE-persistence in this same UoW (no bindings = no
+            # governance inside enforce() - BR2).
+            if self._governance is not None:
+                verdict = self._governance.enforce(
+                    uow,
+                    agent_id=from_agent_id,
+                    action=ACTION_HANDOFF_CREATE,
+                    size_bytes=len(payload_text.encode("utf-8")) if payload_text else 0,
+                )
+                if (
+                    verdict is not None
+                    and self._approvals is not None
+                    and not _approved_execution
+                ):
+                    # HITL interception (spec 2948b2a2 FR2): the create WOULD
+                    # have passed but a require_approval policy matched. The
+                    # approvals row + approval.requested commit in THIS UoW
+                    # (BR1) and the pending envelope early-returns - no
+                    # handoff row, no notification, no handoff.created. The
+                    # ORIGINAL project_root is persisted (resolution is
+                    # deterministic); session_id is deliberately NOT (BR2 -
+                    # sessions are ephemeral, secrets never land in the table).
+                    approval_kwargs: dict[str, Any] = {
+                        "project_root": project_root,
+                        "from_agent_id": from_agent_id,
+                        "target": normalized_target,
+                        "visibility": normalized_visibility,
+                        "payload": payload,
+                        "trace_id": resolved_trace,
+                    }
+                    if criteria_list is not None:
+                        # An intercepted verifiable create re-executes with
+                        # its verification contract intact (normalised values;
+                        # revalidation is idempotent). Plain creates keep the
+                        # pre-I4 kwargs shape byte-identical (BR1).
+                        approval_kwargs["acceptance_criteria"] = criteria_list
+                        approval_kwargs["verify_by"] = verify_by_descriptor
+                    if depends_list is not None:
+                        # An intercepted dependent create re-executes with its
+                        # normalised depends_on, and the replay REVALIDATES
+                        # existence/state (BR10): a dependency that terminally
+                        # failed while the approval sat pending refuses the
+                        # re-execution instead of persisting a dead edge.
+                        approval_kwargs["depends_on"] = depends_list
+                    return self._approvals.intercept(
+                        uow,
+                        workspace_id=workspace_id,
+                        agent_id=from_agent_id,
+                        action=ACTION_HANDOFF_CREATE,
+                        policy_id=verdict.policy.policy_id,
+                        kwargs=approval_kwargs,
+                        trace_id=resolved_trace,
+                    )
             handoff = self._handoffs.create(
                 uow,
                 handoff_id=handoff_id,
@@ -244,8 +510,25 @@ class HandoffService:
                 target=target_text,
                 visibility=normalized_visibility,
                 payload=payload_text,
+                trace_id=resolved_trace,
+                acceptance_criteria=criteria_text,
+                verify_by=verify_by_text,
                 created_at=now,
             )
+            born_blocked = False
+            if depends_list is not None:
+                # Immutable edge set (I5): the rows land in the SAME UoW as
+                # the handoff - a rollback leaves neither. Blocked-ness is
+                # derived on-read from live dependency statuses (the gates
+                # read the TABLE, never the flag), so nothing materialises.
+                self._handoffs.create_dependencies(
+                    uow,
+                    handoff_id=handoff.handoff_id,
+                    workspace_id=workspace_id,
+                    depends_on=depends_list,
+                    created_at=now,
+                )
+                born_blocked = not dependencies_satisfied(dep_statuses)
             self._touch_agent(uow, from_agent_id, now)
             event_payload: dict[str, Any] = {
                 "handoff_id": handoff.handoff_id,
@@ -263,6 +546,8 @@ class HandoffService:
             # a JSON string on claim).
             if payload_text is not None:
                 event_payload["payload"] = payload_text
+            if depends_list is not None:
+                event_payload["depends_on"] = depends_list
             if _is_nonempty_str(session_id):
                 event_payload["session_id"] = session_id
             self._emit(
@@ -282,14 +567,21 @@ class HandoffService:
                 }
                 if payload_text is not None:
                     body["payload"] = payload_text
+                # A dependent born blocked says so in the SUBJECT (I5): the
+                # named agent learns not to rush a claim that would only be
+                # refused - handoff.unblocked wakes it when the edges clear.
+                subject = f"handoff {handoff.handoff_id} directed to you" + (
+                    " (blocked)" if born_blocked else ""
+                )
                 if self._notify_inbox(
                     uow,
                     workspace_id=workspace_id,
                     recipient_agent_id=named,
                     from_agent_id=from_agent_id,
-                    subject=f"handoff {handoff.handoff_id} directed to you",
+                    subject=subject,
                     body=body,
                     now=now,
+                    trace_id=handoff.trace_id,
                 ):
                     extras["notified"] = [named]
         response = {
@@ -298,6 +590,21 @@ class HandoffService:
             "status": STATUS_OPEN,
             "created_at": handoff.created_at,
         }
+        if handoff.trace_id is not None:
+            # Echoed only when resolved (flag ON): the creator carries the
+            # trace forward; flag-OFF responses keep the pre-feature shape.
+            response["trace_id"] = handoff.trace_id
+        if criteria_list is not None:
+            # Echoed only for a verifiable handoff; a plain handoff keeps the
+            # pre-I4 response shape (BR1).
+            response["acceptance_criteria"] = criteria_list
+            response["verify_by"] = verify_by_descriptor
+        if depends_list is not None:
+            # Echoed only for a dependent handoff (the non-NULL pattern): the
+            # normalised edge list plus the aggregate snapshot at creation -
+            # an already-COMPLETED dependency is born satisfied.
+            response["depends_on"] = depends_list
+            response["dependencies"] = summarize_dependencies(dep_statuses)
         response.update(extras)
         return response
 
@@ -378,7 +685,14 @@ class HandoffService:
     def _available_handoffs(
         self, uow: UnitOfWork, workspace_id: str, agent: RoutingAgent, now: str
     ) -> list[Any]:
-        """Expire stale leases, then return the OPEN visible+eligible handoffs."""
+        """Expire stale leases, then return the OPEN visible+eligible handoffs.
+
+        Besides visibility and target eligibility, the caller must be able to
+        REACH the handoff's creator (F2 symmetry: the creator's outbound AND
+        the caller's own inbound) - what this list offers is exactly what
+        ``handoff_claim`` would accept, and an unreachable creator's handoff
+        is silently omitted (the policy never leaks).
+        """
         self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
         rows = self._handoffs.list(uow, workspace_id=workspace_id, status=STATUS_OPEN)
         visible = [
@@ -386,7 +700,26 @@ class HandoffService:
             for h in rows
             if can_agent_see_event(agent, h, now)
             and is_agent_eligible(agent, h.target, h.created_at, now)
+            and self._claimant_in_creator_audience(uow, h, agent.agent_id)
         ]
+        if visible:
+            # Dependency exclusion (I5/FR3): a blocked handoff is not offered
+            # - this list returns exactly what handoff_claim would accept.
+            # ONE aggregate query per scan; a handoff with no dependency rows
+            # is absent from the map and passes through untouched.
+            aggregates = self._handoffs.dependency_aggregates(
+                uow,
+                workspace_id=workspace_id,
+                handoff_ids=[h.handoff_id for h in visible],
+            )
+            if aggregates:
+                visible = [
+                    h
+                    for h in visible
+                    if h.handoff_id not in aggregates
+                    or aggregates[h.handoff_id]["satisfied"]
+                    == aggregates[h.handoff_id]["total"]
+                ]
         visible.sort(key=lambda h: (h.created_at or "", h.handoff_id))
         return visible
 
@@ -490,19 +823,48 @@ class HandoffService:
         lease_expires_at = iso_plus(now, lease_ttl)
 
         with self._cf.unit_of_work() as uow:
-            permission_set_for(self._agents, uow, agent_id).require(
-                "handoffs", "work"
-            )
+            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
 
             agent = self._routing_agent(uow, agent_id, workspace_id)
-            if not is_agent_eligible(agent, handoff.target, handoff.created_at, now):
+            # Eligibility is target-match AND creator-audience, evaluated
+            # DYNAMICALLY at claim time (current tags, not creation-time
+            # state). One shared, OPAQUE refusal for both legs: the claimant
+            # never learns whether the target or the creator's comm_scope
+            # excluded it (the policy never leaks).
+            if not is_agent_eligible(
+                agent, handoff.target, handoff.created_at, now
+            ) or not self._claimant_in_creator_audience(uow, handoff, agent_id):
                 raise OktoNexusError(
                     ErrorCode.NOT_ELIGIBLE_TO_CLAIM,
                     "Agent is not eligible to claim this handoff.",
                     {"handoff_id": handoff_id, "agent_id": agent_id},
                 )
+            # Dependency gate (I5/BR7): read from the TABLE, never the flag -
+            # a blocked handoff stays refusable even after feature_dag is
+            # switched off. Details carry AGGREGATE counts only (BR8): the
+            # dependency ids never leak to a claimant who may not be allowed
+            # to see the sibling handoffs.
+            dep_rows = self._handoffs.read_dependencies(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
+            )
+            if dep_rows:
+                dep_statuses = [row["status"] or "" for row in dep_rows]
+                if not dependencies_satisfied(dep_statuses):
+                    summary = summarize_dependencies(dep_statuses)
+                    raise OktoNexusError(
+                        ErrorCode.DEPENDENCY_NOT_MET,
+                        "This handoff is blocked: not every dependency is "
+                        "COMPLETED yet. Wait for its handoff.unblocked event "
+                        "(or the unblocked inbox notice on a directed "
+                        "handoff), then claim again.",
+                        {
+                            "handoff_id": handoff_id,
+                            "pending": summary["pending"],
+                            "failed": summary["failed"],
+                        },
+                    )
 
             claimed = self._handoffs.claim(
                 uow,
@@ -549,17 +911,23 @@ class HandoffService:
         agent_id: Any,
         result: Any = None,
     ) -> dict[str, Any]:
-        """Owner-only ``CLAIMED -> COMPLETED``.
+        """Owner-only delivery: ``CLAIMED -> COMPLETED`` or ``-> VERIFYING``.
 
         ``NOT_OWNER`` when ``agent_id != claimed_by``; ``INVALID_TRANSITION``
         when the source state is not ``CLAIMED``. The mutation is a single
         conditional UPDATE (mirrors the claim); a 0-row outcome is re-read and
         mapped to the precise error. ``result`` (string verbatim, non-string
         serialised - the ``payload`` contract) is persisted on the row in the
-        SAME UPDATE so the creator can read it later via ``handoff_get``; the
-        ``handoff.completed`` event still carries it as audit. The creator
-        (when registered and not the completing agent) gets an inbox
-        notification carrying the result (``notified`` in the response).
+        SAME UPDATE so the creator can read it later via ``handoff_get``.
+
+        A handoff WITHOUT ``acceptance_criteria`` completes exactly as before
+        I4 (byte-identical flow - BR1): ``handoff.completed`` event + creator
+        inbox notification. A VERIFIABLE handoff instead parks in
+        ``VERIFYING``: it emits the metadata-only
+        ``handoff.verification_requested`` event and notifies the STATICALLY
+        resolvable verifier's inbox (creator/agent kinds; a ``capability``
+        verifier is dynamic, so observers rely on the event) - completion is
+        then decided by ``handoff_verify``.
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
@@ -569,15 +937,24 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
-            permission_set_for(self._agents, uow, agent_id).require(
-                "handoffs", "work"
+            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            # Verification routing (I4): the ROW's contract picks the
+            # destination. The feature flag gates contract CREATION only - a
+            # verifiable handoff must never silently skip its verification,
+            # even when the flag was turned off after it was created (it
+            # stays decidable). A handoff without criteria keeps the pre-I4
+            # flow byte-identical (BR1).
+            verification = self._handoffs.read_verification(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
             )
+            verifiable = bool(verification and verification.get("acceptance_criteria"))
+            destination = STATUS_VERIFYING if verifiable else STATUS_COMPLETED
             updated = self._handoffs.transition_claimed(
                 uow,
                 workspace_id=workspace_id,
                 handoff_id=handoff_id,
                 claimed_by=agent_id,
-                status=STATUS_COMPLETED,
+                status=destination,
                 updated_at=now,
                 result=result_text,
             )
@@ -586,36 +963,310 @@ class HandoffService:
                     uow, workspace_id, handoff_id, agent_id, verb="complete"
                 )
             self._touch_agent(uow, agent_id, now)
-            payload = {
-                "handoff_id": updated.handoff_id,
-                "workspace_id": updated.workspace_id,
-                "status": updated.status,
-            }
-            if result is not None:
-                payload["result"] = result
-            self._emit(
-                uow,
-                handoff=updated,
-                event_type=EVENT_COMPLETED,
-                actor_agent_id=agent_id,
-                payload=payload,
-            )
-            notified = self._notify_creator_outcome(
-                uow,
-                handoff=updated,
-                actor_agent_id=agent_id,
-                kind=EVENT_COMPLETED,
-                outcome_key="result",
-                outcome_text=result_text,
-                now=now,
-            )
+            if not verifiable:
+                payload = {
+                    "handoff_id": updated.handoff_id,
+                    "workspace_id": updated.workspace_id,
+                    "status": updated.status,
+                }
+                if result is not None:
+                    payload["result"] = result
+                self._emit(
+                    uow,
+                    handoff=updated,
+                    event_type=EVENT_COMPLETED,
+                    actor_agent_id=agent_id,
+                    payload=payload,
+                )
+                notified = self._notify_creator_outcome(
+                    uow,
+                    handoff=updated,
+                    actor_agent_id=agent_id,
+                    kind=EVENT_COMPLETED,
+                    outcome_key="result",
+                    outcome_text=result_text,
+                    now=now,
+                )
+                self._unblock_dependents(
+                    uow, completed=updated, actor_agent_id=agent_id, now=now
+                )
+            else:
+                # Metadata-only event: the verification CONTRACT rides along
+                # (it is what a dynamic capability verifier needs to act), the
+                # delivered RESULT does not - the verifier inspects it via
+                # handoff_get. Feedback does not exist yet by construction.
+                verify_by_descriptor = _loads_target(verification.get("verify_by"))
+                self._emit(
+                    uow,
+                    handoff=updated,
+                    event_type=EVENT_VERIFICATION_REQUESTED,
+                    actor_agent_id=agent_id,
+                    payload={
+                        "handoff_id": updated.handoff_id,
+                        "workspace_id": updated.workspace_id,
+                        "status": updated.status,
+                        "claimed_by": updated.claimed_by,
+                        "verify_by": verify_by_descriptor,
+                        "acceptance_criteria": _loads_target(
+                            verification.get("acceptance_criteria")
+                        ),
+                    },
+                )
+                notified = self._notify_static_verifier(
+                    uow,
+                    handoff=updated,
+                    verify_by=verify_by_descriptor,
+                    actor_agent_id=agent_id,
+                    now=now,
+                )
         response: dict[str, Any] = {
             "handoff_id": updated.handoff_id,
-            "status": STATUS_COMPLETED,
+            "status": updated.status,
         }
         if notified:
             response["notified"] = notified
         return response
+
+    # ------------------------------------------------------------------ #
+    # verify
+    # ------------------------------------------------------------------ #
+    def handoff_verify(
+        self,
+        *,
+        project_root: Any,
+        handoff_id: Any,
+        agent_id: Any,
+        verdict: Any,
+        feedback: Any = None,
+    ) -> dict[str, Any]:
+        """Verifier-only decision on a VERIFYING handoff.
+
+        ``pass`` -> COMPLETED via the same conditional-UPDATE pattern, emitting
+        the CANONICAL ``handoff.completed`` enriched with ``verified_by``
+        (never a separate passed event - BR5) and notifying the creator's
+        inbox. ``fail`` -> CLAIMED with ``verification_feedback`` (over)written
+        and the executor's lease renewed ``now + ttl`` in the SAME UPDATE
+        (BR4), emitting ``handoff.verification_failed`` (carrying the
+        feedback) and notifying the claimant for rework.
+
+        Authorisation is layered and fail-closed: the caller must be able to
+        READ the handoff (the ``handoff_get`` predicate, refused as
+        ``PERMISSION_DENIED`` so an outsider learns nothing); the source state
+        must be ``VERIFYING`` (``INVALID_TRANSITION`` otherwise - a handoff
+        without criteria never enters it); the claimant (executor) is refused
+        ALWAYS - anti-self-verification wins over any eligibility (BR3); and
+        the caller must match the row's ``verify_by`` descriptor resolved
+        DYNAMICALLY at verify time (``capability`` checks the caller's CURRENT
+        capabilities, mirroring claim eligibility - D5). ``feedback`` is only
+        accepted with ``fail`` (``VALIDATION_ERROR`` on ``pass`` - it exists
+        to direct rework, not to be accepted-and-discarded).
+        """
+        workspace_id = self._resolve_workspace(project_root)
+        self._require_id("handoff_id", handoff_id)
+        self._require_id("agent_id", agent_id)
+        verdict_value, feedback_value = validate_verdict(verdict, feedback)
+        now = self._clock.now_iso()
+
+        with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+            if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
+                viewer = self._routing_agent(uow, agent_id, workspace_id)
+                if not can_agent_see_event(viewer, handoff, now):
+                    raise OktoNexusError(
+                        ErrorCode.PERMISSION_DENIED,
+                        "You may not read this handoff, so you may not verify "
+                        "it either.",
+                        {"handoff_id": handoff_id, "agent_id": agent_id},
+                    )
+            if handoff.status != STATUS_VERIFYING:
+                raise OktoNexusError(
+                    ErrorCode.INVALID_TRANSITION,
+                    self._verify_wrong_state_message(handoff.status),
+                    {"handoff_id": handoff_id, "status": handoff.status},
+                )
+            # Anti-self-verification (BR3): decided BEFORE eligibility, so
+            # the executor is refused even when verify_by would admit them
+            # (e.g. the only current holder of the capability).
+            if agent_id == handoff.claimed_by:
+                raise OktoNexusError(
+                    ErrorCode.PERMISSION_DENIED,
+                    "The executor (claimed_by) can never verify their own "
+                    "delivery - executor and verifier are separate by design.",
+                    {"handoff_id": handoff_id, "agent_id": agent_id},
+                )
+            verification = (
+                self._handoffs.read_verification(
+                    uow, workspace_id=workspace_id, handoff_id=handoff_id
+                )
+                or {}
+            )
+            verify_by_descriptor = _loads_target(verification.get("verify_by")) or {}
+            caller_profile = (
+                self._agents.get(uow, agent_id) if self._agents is not None else None
+            )
+            if not is_eligible_verifier(
+                str(agent_id),
+                creator=str(handoff.from_agent_id),
+                verify_by=verify_by_descriptor,
+                caller_capabilities=getattr(caller_profile, "capabilities", None) or (),
+            ):
+                raise OktoNexusError(
+                    ErrorCode.PERMISSION_DENIED,
+                    "You are not this handoff's verifier under its verify_by "
+                    "descriptor (resolved dynamically at verify time).",
+                    {
+                        "handoff_id": handoff_id,
+                        "agent_id": agent_id,
+                        "verify_by": verify_by_descriptor,
+                    },
+                )
+            # result/rejected_reason predate the verdict and are immutable
+            # here; read once for the event/response.
+            outcome = self._handoffs.read_outcome(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
+            ) or {"result": None, "rejected_reason": None}
+            if verdict_value == VERDICT_PASS:
+                updated = self._handoffs.transition_verifying(
+                    uow,
+                    workspace_id=workspace_id,
+                    handoff_id=handoff_id,
+                    status=STATUS_COMPLETED,
+                    updated_at=now,
+                )
+                if updated is None:  # pragma: no cover - unreachable: the read
+                    # and the UPDATE share one BEGIN IMMEDIATE transaction, so
+                    # the row cannot change in between; defence in depth.
+                    self._raise_verifying_transition_error(
+                        uow, workspace_id, handoff_id
+                    )
+                event_payload: dict[str, Any] = {
+                    "handoff_id": updated.handoff_id,
+                    "workspace_id": updated.workspace_id,
+                    "status": updated.status,
+                    "verified_by": agent_id,
+                }
+                if outcome.get("result") is not None:
+                    event_payload["result"] = outcome["result"]
+                self._emit(
+                    uow,
+                    handoff=updated,
+                    event_type=EVENT_COMPLETED,
+                    actor_agent_id=agent_id,
+                    payload=event_payload,
+                )
+                notified = self._notify_creator_outcome(
+                    uow,
+                    handoff=updated,
+                    actor_agent_id=agent_id,
+                    kind=EVENT_COMPLETED,
+                    outcome_key="result",
+                    outcome_text=outcome.get("result"),
+                    now=now,
+                )
+                self._unblock_dependents(
+                    uow, completed=updated, actor_agent_id=agent_id, now=now
+                )
+            else:
+                lease_ttl = int(self._config.handoff_lease_ttl_seconds)
+                lease_expires_at = iso_plus(now, lease_ttl)
+                updated = self._handoffs.transition_verifying(
+                    uow,
+                    workspace_id=workspace_id,
+                    handoff_id=handoff_id,
+                    status=STATUS_CLAIMED,
+                    updated_at=now,
+                    verification_feedback=feedback_value,
+                    lease_expires_at=lease_expires_at,
+                )
+                if updated is None:  # pragma: no cover - unreachable, see the
+                    # pass branch; defence in depth.
+                    self._raise_verifying_transition_error(
+                        uow, workspace_id, handoff_id
+                    )
+                event_payload = {
+                    "handoff_id": updated.handoff_id,
+                    "workspace_id": updated.workspace_id,
+                    "status": updated.status,
+                    "claimed_by": updated.claimed_by,
+                    "lease_expires_at": updated.lease_expires_at,
+                }
+                if feedback_value is not None:
+                    event_payload["feedback"] = feedback_value
+                self._emit(
+                    uow,
+                    handoff=updated,
+                    event_type=EVENT_VERIFICATION_FAILED,
+                    actor_agent_id=agent_id,
+                    payload=event_payload,
+                )
+                notified = self._notify_verification_failed(
+                    uow,
+                    handoff=updated,
+                    actor_agent_id=agent_id,
+                    feedback=feedback_value,
+                    now=now,
+                )
+            self._touch_agent(uow, agent_id, now)
+        response: dict[str, Any] = {
+            "handoff_id": updated.handoff_id,
+            "workspace_id": updated.workspace_id,
+            "status": updated.status,
+            "from_agent_id": updated.from_agent_id,
+            "target": _loads_target(updated.target),
+            "visibility": updated.visibility,
+            "claimed_by": updated.claimed_by,
+            "lease_expires_at": updated.lease_expires_at,
+            "payload": updated.payload,
+            "result": outcome.get("result"),
+            "rejected_reason": outcome.get("rejected_reason"),
+            "created_at": updated.created_at,
+            "updated_at": updated.updated_at,
+            "notified": bool(notified),
+        }
+        if verdict_value == VERDICT_PASS:
+            response["verified_by"] = agent_id
+        elif feedback_value is not None:
+            response["verification_feedback"] = feedback_value
+        return response
+
+    @staticmethod
+    def _verify_wrong_state_message(status: str) -> str:
+        """Directed INVALID_TRANSITION message for a verify on a wrong state."""
+        if status == STATUS_CLAIMED:
+            return (
+                "handoff_verify requires the handoff to be VERIFYING, but it "
+                "is CLAIMED - the executor submits the delivery first via "
+                "handoff_complete (which parks a verifiable handoff in "
+                "VERIFYING)."
+            )
+        if status == STATUS_OPEN:
+            return (
+                "handoff_verify requires the handoff to be VERIFYING, but it "
+                "is OPEN - nothing has been delivered yet. A handoff without "
+                "acceptance_criteria never enters VERIFYING."
+            )
+        return (
+            "handoff_verify requires the handoff to be VERIFYING, but it is "
+            f"already {status}."
+        )
+
+    def _raise_verifying_transition_error(
+        self, uow: UnitOfWork, workspace_id: str, handoff_id: str
+    ) -> None:
+        """Map a failed conditional VERIFYING transition to the precise error.
+
+        Mirrors :meth:`_raise_claimed_transition_error` for the verify verb:
+        re-reads the row (absence maps via :meth:`_load_in_workspace`) and
+        reports the state that raced the UPDATE. Always raises.
+        """
+        handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+        raise OktoNexusError(
+            ErrorCode.INVALID_TRANSITION,
+            "handoff_verify failed; the handoff is no longer VERIFYING "
+            f"(current status: {handoff.status}).",
+            {"handoff_id": handoff_id, "status": handoff.status},
+        )
 
     # ------------------------------------------------------------------ #
     # reject
@@ -650,9 +1301,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
-            permission_set_for(self._agents, uow, agent_id).require(
-                "handoffs", "work"
-            )
+            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.status in TERMINAL_STATUSES:
                 raise OktoNexusError(
@@ -694,6 +1343,16 @@ class HandoffService:
                     updated_at=now,
                     rejected_reason=reason_text,
                 )
+            elif handoff.status == STATUS_VERIFYING:
+                # BR6: the work was already delivered - reject can no longer
+                # withdraw it. Only the verify verb leaves VERIFYING.
+                raise OktoNexusError(
+                    ErrorCode.INVALID_TRANSITION,
+                    "The delivery is under verification; only handoff_verify "
+                    "decides a VERIFYING handoff - a 'fail' verdict returns "
+                    "it to CLAIMED for rework.",
+                    {"handoff_id": handoff_id, "status": handoff.status},
+                )
             else:
                 raise OktoNexusError(
                     ErrorCode.INVALID_TRANSITION,
@@ -730,6 +1389,7 @@ class HandoffService:
                 outcome_text=reason_text,
                 now=now,
             )
+            self._fail_dependents(uow, failed=updated, actor_agent_id=agent_id, now=now)
         response: dict[str, Any] = {
             "handoff_id": updated.handoff_id,
             "status": STATUS_REJECTED,
@@ -798,6 +1458,16 @@ class HandoffService:
                         "claimed_by": handoff.claimed_by,
                     },
                 )
+            if handoff.status == STATUS_VERIFYING:
+                # BR6: the creator cannot retract a delivered handoff - the
+                # judgement (handoff_verify) is the only exit from VERIFYING.
+                raise OktoNexusError(
+                    ErrorCode.INVALID_TRANSITION,
+                    "handoff_cancel applies only to OPEN handoffs; this one "
+                    "is VERIFYING - the delivery was already submitted and "
+                    "only handoff_verify (pass/fail) decides it.",
+                    {"handoff_id": handoff_id, "status": handoff.status},
+                )
             if handoff.status != STATUS_OPEN:
                 raise OktoNexusError(
                     ErrorCode.INVALID_TRANSITION,
@@ -829,6 +1499,7 @@ class HandoffService:
                 actor_agent_id=agent_id,
                 payload=payload,
             )
+            self._fail_dependents(uow, failed=updated, actor_agent_id=agent_id, now=now)
         return {"handoff_id": updated.handoff_id, "status": STATUS_CANCELLED}
 
     # ------------------------------------------------------------------ #
@@ -852,6 +1523,9 @@ class HandoffService:
         the same visibility predicate as ``handoff_list_available``
         (``can_agent_see_event``) and gets ``NOT_OWNER`` otherwise.
         ``NOT_FOUND``/``WORKSPACE_MISMATCH`` map absence precisely.
+        Verification-first handoffs (I4) additionally expose
+        ``acceptance_criteria``/``verify_by`` (decoded) and
+        ``verification_feedback`` - each omitted when NULL.
         """
         workspace_id = self._resolve_workspace(project_root)
         self._require_id("handoff_id", handoff_id)
@@ -874,8 +1548,14 @@ class HandoffService:
             outcome = self._handoffs.read_outcome(
                 uow, workspace_id=workspace_id, handoff_id=handoff_id
             ) or {"result": None, "rejected_reason": None}
+            verification = self._handoffs.read_verification(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
+            )
+            dep_rows = self._handoffs.read_dependencies(
+                uow, workspace_id=workspace_id, handoff_id=handoff_id
+            )
             self._touch_agent(uow, agent_id, now)
-        return {
+        response = {
             "handoff_id": handoff.handoff_id,
             "workspace_id": handoff.workspace_id,
             "status": handoff.status,
@@ -890,6 +1570,26 @@ class HandoffService:
             "created_at": handoff.created_at,
             "updated_at": handoff.updated_at,
         }
+        # Verification contract exposure (I4/FR6): the three columns surface
+        # top-level ONLY when non-NULL (the trace_id pattern) - a
+        # non-verifiable handoff keeps its pre-I4 shape byte-identical.
+        if verification and verification.get("acceptance_criteria"):
+            response["acceptance_criteria"] = _loads_target(
+                verification["acceptance_criteria"]
+            )
+            response["verify_by"] = _loads_target(verification["verify_by"])
+        if outcome.get("verification_feedback") is not None:
+            response["verification_feedback"] = outcome["verification_feedback"]
+        # Dependency exposure (I5/FR7): the same non-NULL pattern - only a
+        # dependent handoff carries the edge list and the LIVE aggregate
+        # (derived on-read; a vanished dependency row counts pending); a
+        # dependency-free handoff keeps its pre-I5 shape byte-identical.
+        if dep_rows:
+            response["depends_on"] = [row["depends_on_id"] for row in dep_rows]
+            response["dependencies"] = summarize_dependencies(
+                [row["status"] or "" for row in dep_rows]
+            )
+        return response
 
     # ------------------------------------------------------------------ #
     # Opportunistic lease expiry
@@ -903,7 +1603,9 @@ class HandoffService:
         workspace_id = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:
-            expired = self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
+            expired = self._expire_old_leases(
+                uow, workspace_id=workspace_id, now_iso=now
+            )
         return {"workspace_id": workspace_id, "expired": expired}
 
     def _expire_old_leases(
@@ -992,6 +1694,7 @@ class HandoffService:
                 workspace_id=workspace_id,
                 role=agent.role,
                 capabilities=agent.capabilities,
+                tags=getattr(agent, "tags", None),
             )
             if is_agent_eligible(view, target, now, now):
                 eligible.append(agent.agent_id)
@@ -1007,21 +1710,38 @@ class HandoffService:
         subject: str,
         body: Mapping[str, Any],
         now: str,
+        trace_id: str | None = None,
     ) -> bool:
         """Land ONE synthetic notification in ``recipient_agent_id``'s inbox.
 
         Reuses the messages + message_deliveries lanes (no new transport, no
         new event type) inside the CALLER's unit of work. Skipped (``False``)
-        when the message/delivery repos are unwired or the recipient is not a
+        when the message/delivery repos are unwired, the recipient is not a
         registered agent (``message_deliveries.recipient_agent_id`` is an FK
-        to ``agents``); the handoff lifecycle never depends on it.
+        to ``agents``), or the recipient's own ``comm_scope.inbound`` excludes
+        the notifier (F2 - recipient policy, silently honoured); the handoff
+        lifecycle never depends on it.
         """
         if self._messages is None or self._deliveries is None:
             return False
         if self._agents is None or not _is_nonempty_str(recipient_agent_id):
             return False
-        if self._agents.get(uow, recipient_agent_id) is None:
+        recipient = self._agents.get(uow, recipient_agent_id)
+        if recipient is None:
             return False
+        if str(recipient_agent_id) != str(from_agent_id):
+            # Only the recipient's INBOUND leg gates a notification (F2): a
+            # lifecycle notice must never be lost to the NOTIFIER's outbound
+            # selector - the communication it reports already happened.
+            inbound = scope_selector(getattr(recipient, "comm_scope", None), "inbound")
+            if inbound is not None:
+                sender = (
+                    self._agents.get(uow, str(from_agent_id))
+                    if _is_nonempty_str(from_agent_id)
+                    else None
+                )
+                if not selector_matches(inbound, getattr(sender, "tags", None)):
+                    return False
         message = self._messages.create(
             uow,
             message_id=new_id("msg"),
@@ -1033,6 +1753,9 @@ class HandoffService:
             ),
             subject=subject,
             body=json.dumps(dict(body), ensure_ascii=False),
+            # The synthetic notification carries the handoff's trace so the
+            # recipient sees it on the inbox item and can propagate it (I1).
+            trace_id=trace_id,
             created_at=now,
         )
         self._deliveries.create(
@@ -1086,8 +1809,93 @@ class HandoffService:
             subject=f"handoff {handoff.handoff_id} {verb} by {actor_agent_id}",
             body=body,
             now=now,
+            trace_id=getattr(handoff, "trace_id", None),
         ):
             return [creator]
+        return []
+
+    def _notify_static_verifier(
+        self,
+        uow: UnitOfWork,
+        *,
+        handoff: Any,
+        verify_by: Any,
+        actor_agent_id: str,
+        now: str,
+    ) -> list[str]:
+        """Wake the STATICALLY resolvable verifier after a delivery.
+
+        ``creator``/``agent`` descriptors name exactly one agent; a
+        ``capability`` verifier is dynamic (any current holder may verify), so
+        there is no single inbox to notify - observers act on the
+        ``handoff.verification_requested`` event instead. Skipped when the
+        verifier IS the executor (they cannot verify anyway) or the inbox
+        lanes are unwired. Returns the notified agent ids (0 or 1).
+        """
+        verify_by_map = verify_by if isinstance(verify_by, Mapping) else {}
+        verifier = static_verifier_for(verify_by_map, str(handoff.from_agent_id))
+        if not _is_nonempty_str(verifier) or verifier == actor_agent_id:
+            return []
+        body = {
+            "kind": EVENT_VERIFICATION_REQUESTED,
+            "handoff_id": handoff.handoff_id,
+            "status": handoff.status,
+            "claimed_by": handoff.claimed_by,
+            "next_step": "handoff_get to inspect the delivery, then "
+            "handoff_verify with verdict 'pass' or 'fail'",
+        }
+        if self._notify_inbox(
+            uow,
+            workspace_id=handoff.workspace_id,
+            recipient_agent_id=verifier,
+            from_agent_id=actor_agent_id,
+            subject=f"handoff {handoff.handoff_id} awaits your verification",
+            body=body,
+            now=now,
+            trace_id=getattr(handoff, "trace_id", None),
+        ):
+            return [verifier]
+        return []
+
+    def _notify_verification_failed(
+        self,
+        uow: UnitOfWork,
+        *,
+        handoff: Any,
+        actor_agent_id: str,
+        feedback: str | None,
+        now: str,
+    ) -> list[str]:
+        """Wake the claimant for rework after a ``fail`` verdict (best-effort).
+
+        The handoff is CLAIMED again with a renewed lease, so the executor
+        can re-complete; the notification carries the (latest) feedback when
+        given. Returns the notified agent ids (0 or 1).
+        """
+        claimant = handoff.claimed_by
+        if not _is_nonempty_str(claimant) or claimant == actor_agent_id:
+            return []
+        body: dict[str, Any] = {
+            "kind": EVENT_VERIFICATION_FAILED,
+            "handoff_id": handoff.handoff_id,
+            "status": handoff.status,
+            "by_agent_id": actor_agent_id,
+            "lease_expires_at": handoff.lease_expires_at,
+            "next_step": "address the feedback and call handoff_complete again",
+        }
+        if feedback is not None:
+            body["feedback"] = feedback
+        if self._notify_inbox(
+            uow,
+            workspace_id=handoff.workspace_id,
+            recipient_agent_id=claimant,
+            from_agent_id=actor_agent_id,
+            subject=f"handoff {handoff.handoff_id} verification failed",
+            body=body,
+            now=now,
+            trace_id=getattr(handoff, "trace_id", None),
+        ):
+            return [claimant]
         return []
 
     @staticmethod
@@ -1180,17 +1988,285 @@ class HandoffService:
         """Build the routing view of the caller from the agent profile (if any)."""
         role: str | None = None
         capabilities: Any = None
+        tags: Any = None
         if self._agents is not None:
             profile = self._agents.get(uow, agent_id)
             if profile is not None:
                 role = profile.role
                 capabilities = profile.capabilities
+                tags = getattr(profile, "tags", None)
         return RoutingAgent(
             agent_id=agent_id,
             workspace_id=workspace_id,
             role=role,
             capabilities=capabilities,
+            tags=tags,
         )
+
+    def _claimant_in_creator_audience(
+        self, uow: UnitOfWork, handoff: Any, agent_id: Any
+    ) -> bool:
+        """Whether creator and claimant can REACH each other (F1 + F2).
+
+        The dynamic leg of claim eligibility: a handoff is a communication
+        from its creator, so a claimant must sit inside the creator's
+        ``comm_scope.outbound`` audience (F1) AND the creator must sit inside
+        the claimant's own ``comm_scope.inbound`` (F2) - the shared
+        :func:`~okto_nexus.domain.tag_selector.reachable` double intersection,
+        including its self carve-out (a creator may always claim its own
+        handoff). Evaluated against CURRENT tags at claim/list time - never
+        creation-time state. Unknown creator or an unwired agent repo means
+        that side is unrestricted.
+        """
+        if self._agents is None:
+            return True
+        creator_id = getattr(handoff, "from_agent_id", None)
+        creator = (
+            self._agents.get(uow, str(creator_id))
+            if _is_nonempty_str(creator_id)
+            else None
+        )
+        if creator is None:
+            creator = {
+                "agent_id": str(creator_id) if _is_nonempty_str(creator_id) else None
+            }
+        claimant = self._agents.get(uow, str(agent_id))
+        if claimant is None:
+            claimant = {"agent_id": str(agent_id)}
+        return reachable(creator, claimant)
+
+    def _ensure_target_selectors_registered(
+        self, uow: UnitOfWork, normalized_target: Any
+    ) -> None:
+        """Catalog EXISTENCE gate over every 'tag' selector in the target.
+
+        FORM was already validated; unregistered pairs raise
+        ``VALIDATION_ERROR`` fail-closed before anything persists. A no-op
+        when no catalog repo is wired.
+        """
+        if self._tag_catalog is None:
+            return
+        service = TagCatalogService(catalog=self._tag_catalog)
+        for selector in iter_target_selectors(normalized_target):
+            service.ensure_registered(uow, selector, field="target.selector")
+
+    def _ensure_target_capabilities_registered(
+        self, uow: UnitOfWork, normalized_target: Any
+    ) -> None:
+        """Catalog EXISTENCE gate over every capability name in the target
+        (migration 014), including sub-rules nested in ``mixed``/``fallback``.
+
+        FORM was already validated; unregistered names raise
+        ``VALIDATION_ERROR`` fail-closed before anything persists. A no-op
+        when no catalog repo is wired.
+        """
+        if self._capability_catalog is None:
+            return
+        names = list(iter_target_capabilities(normalized_target))
+        if names:
+            CapabilityCatalogService(
+                catalog=self._capability_catalog
+            ).ensure_registered(uow, names, field="target.capability")
+
+    def _ensure_verifier_resolvable(
+        self, uow: UnitOfWork, verify_by_descriptor: Mapping[str, Any]
+    ) -> None:
+        """Existence gate over a validated ``verify_by`` descriptor (BR8).
+
+        FORM was already validated (pure phase); this is the I/O leg: an
+        ``agent`` kind must name a REGISTERED agent and a ``capability`` kind
+        must reference the central catalog - both fail-closed with
+        ``VALIDATION_ERROR`` before anything persists (mirroring the target's
+        own catalog gates). ``creator`` needs no lookup (the creator is the
+        caller). A no-op when the corresponding repo is unwired.
+        """
+        kind = verify_by_descriptor.get("kind")
+        if kind == "agent" and self._agents is not None:
+            named = str(verify_by_descriptor.get("agent_id"))
+            if self._agents.get(uow, named) is None:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"verify_by.agent_id '{named}' is not a registered agent; "
+                    "check agent_list or register it first.",
+                    {"verify_by": dict(verify_by_descriptor)},
+                )
+        elif kind == "capability" and self._capability_catalog is not None:
+            CapabilityCatalogService(
+                catalog=self._capability_catalog
+            ).ensure_registered(
+                uow,
+                [str(verify_by_descriptor.get("capability"))],
+                field="verify_by.capability",
+            )
+
+    def _ensure_dependencies_satisfiable(
+        self, uow: UnitOfWork, *, workspace_id: str, depends_on: Sequence[str]
+    ) -> list[str]:
+        """Existence + state gate over a validated ``depends_on`` list (I5).
+
+        FORM was already validated (pure phase); this is the I/O leg,
+        fail-closed before anything persists. Every id must name a handoff in
+        THIS workspace - ``DEPENDENCY_NOT_FOUND`` lists EVERY missing id at
+        once, and a cross-workspace id is INDISTINGUISHABLE from a
+        nonexistent one (BR8: no probing another workspace's ids). None may
+        already be terminally failed: a REJECTED/CANCELLED dependency can
+        never become COMPLETED, so the dependent would be born permanently
+        blocked - that create is statically unsatisfiable
+        (``VALIDATION_ERROR``, mirroring the degenerate verify_by gate). An
+        already-COMPLETED dependency is fine: it is born satisfied. Returns
+        the dependencies' CURRENT statuses, index-aligned with ``depends_on``
+        (the aggregate snapshot the create response echoes).
+        """
+        statuses: list[str] = []
+        missing: list[str] = []
+        failed: list[str] = []
+        for dep_id in depends_on:
+            row = self._handoffs.get(uow, workspace_id=workspace_id, handoff_id=dep_id)
+            if row is None:
+                missing.append(dep_id)
+                continue
+            statuses.append(row.status)
+            if row.status in DEPENDENCY_FAILED_STATUSES:
+                failed.append(dep_id)
+        if missing:
+            raise OktoNexusError(
+                ErrorCode.DEPENDENCY_NOT_FOUND,
+                "depends_on names handoffs that do not exist in this "
+                "workspace. Dependencies must already exist when the "
+                "dependent is created (acyclicity by construction).",
+                {"missing": missing},
+            )
+        if failed:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "This dependency set is statically unsatisfiable: a "
+                "REJECTED/CANCELLED dependency can never become COMPLETED, "
+                "so the new handoff would stay blocked forever. Drop the "
+                "failed ids or re-create that work first.",
+                {"failed": failed},
+            )
+        return statuses
+
+    def _unblock_dependents(
+        self, uow: UnitOfWork, *, completed: Any, actor_agent_id: str, now: str
+    ) -> None:
+        """Synchronous exactly-once unblock scan after a COMPLETED (I5/BR6).
+
+        Called by BOTH producers of COMPLETED - the non-verifiable complete
+        and the 'pass' verdict - inside the SAME UoW as the transition, so
+        exactly-once holds by construction: only the transaction completing
+        the LAST edge observes every dependency satisfied (SQLite's single
+        writer serialises concurrent completes), and earlier completions see
+        a pending edge and skip. For each still-OPEN dependent whose edges
+        are now all COMPLETED it emits ``handoff.unblocked`` with the
+        DEPENDENT's row - trace/visibility/target inherit from the dependent,
+        never from the completed dependency - and the completer as actor. A
+        DIRECTED dependent additionally wakes its named agent's inbox; pool
+        dependents rely on the event (the handoff.created split).
+        """
+        dependents = self._handoffs.dependents_of(
+            uow,
+            workspace_id=completed.workspace_id,
+            depends_on_id=completed.handoff_id,
+        )
+        for dependent_id in dependents:
+            dependent = self._handoffs.get(
+                uow, workspace_id=completed.workspace_id, handoff_id=dependent_id
+            )
+            if dependent is None or dependent.status != STATUS_OPEN:
+                continue
+            rows = self._handoffs.read_dependencies(
+                uow, workspace_id=completed.workspace_id, handoff_id=dependent_id
+            )
+            if not dependencies_satisfied([row["status"] or "" for row in rows]):
+                continue
+            self._emit(
+                uow,
+                handoff=dependent,
+                event_type=EVENT_UNBLOCKED,
+                actor_agent_id=actor_agent_id,
+                payload={
+                    "handoff_id": dependent.handoff_id,
+                    "workspace_id": dependent.workspace_id,
+                    "status": dependent.status,
+                    "unblocked_by": completed.handoff_id,
+                },
+            )
+            target = _loads_target(dependent.target)
+            strategy = target.get("strategy") if isinstance(target, Mapping) else None
+            if strategy in _DIRECTED_STRATEGIES:
+                self._notify_inbox(
+                    uow,
+                    workspace_id=dependent.workspace_id,
+                    recipient_agent_id=str(target.get("agent_id")),
+                    from_agent_id=actor_agent_id,
+                    subject=f"handoff {dependent.handoff_id} unblocked",
+                    body={
+                        "kind": EVENT_UNBLOCKED,
+                        "handoff_id": dependent.handoff_id,
+                        "unblocked_by": completed.handoff_id,
+                        "next_step": "handoff_claim with this handoff_id",
+                    },
+                    now=now,
+                    trace_id=getattr(dependent, "trace_id", None),
+                )
+
+    def _fail_dependents(
+        self, uow: UnitOfWork, *, failed: Any, actor_agent_id: str, now: str
+    ) -> None:
+        """Signal dependents that an edge terminally failed (I5/BR5).
+
+        Called by the application producers of REJECTED/CANCELLED in the SAME
+        UoW as the transition. NO cascade: the dependent's status never
+        changes here - each non-terminal dependent gets
+        ``handoff.dependency_failed`` (the DEPENDENT's row, so its own trace/
+        visibility govern the event) plus one inbox notice to its CREATOR,
+        who decides: cancel the dependent, or re-create the failed work AND a
+        new dependent (edges are immutable, so a re-created dependency never
+        reattaches). The raw ADMIN status override on the REST surface does
+        not pass through here - documented caveat S2.
+        """
+        dependents = self._handoffs.dependents_of(
+            uow, workspace_id=failed.workspace_id, depends_on_id=failed.handoff_id
+        )
+        for dependent_id in dependents:
+            dependent = self._handoffs.get(
+                uow, workspace_id=failed.workspace_id, handoff_id=dependent_id
+            )
+            if dependent is None or dependent.status in TERMINAL_STATUSES:
+                continue
+            self._emit(
+                uow,
+                handoff=dependent,
+                event_type=EVENT_DEPENDENCY_FAILED,
+                actor_agent_id=actor_agent_id,
+                payload={
+                    "handoff_id": dependent.handoff_id,
+                    "workspace_id": dependent.workspace_id,
+                    "status": dependent.status,
+                    "failed_dependency": failed.handoff_id,
+                    "dependency_status": failed.status,
+                },
+            )
+            creator = getattr(dependent, "from_agent_id", None)
+            if _is_nonempty_str(creator):
+                self._notify_inbox(
+                    uow,
+                    workspace_id=dependent.workspace_id,
+                    recipient_agent_id=str(creator),
+                    from_agent_id=actor_agent_id,
+                    subject=(f"handoff {dependent.handoff_id} has a failed dependency"),
+                    body={
+                        "kind": EVENT_DEPENDENCY_FAILED,
+                        "handoff_id": dependent.handoff_id,
+                        "failed_dependency": failed.handoff_id,
+                        "dependency_status": failed.status,
+                        "next_step": "handoff_cancel the blocked dependent, "
+                        "or re-create the failed work and a new dependent",
+                    },
+                    now=now,
+                    trace_id=getattr(dependent, "trace_id", None),
+                )
 
     def _parse_cursor(self, cursor: Any) -> int:
         # Shared pagination grammar (domain.base): one cursor parser bus-wide.
@@ -1262,12 +2338,20 @@ class HandoffService:
         """
         if self._emitter is None:
             return
+        event_payload = dict(payload) if payload else None
+        trace_id = getattr(handoff, "trace_id", None)
+        if trace_id is not None:
+            # BR5: every handoff.* lifecycle event carries the row's trace in
+            # its payload when set - created/claimed/completed/rejected/
+            # cancelled/expired all flow through this single seam (D1).
+            event_payload = dict(event_payload or {})
+            event_payload["trace_id"] = trace_id
         self._emitter.emit(
             uow,
             workspace_id=handoff.workspace_id,
             stream=HANDOFF_STREAM,
             type=event_type,
-            payload=dict(payload) if payload else None,
+            payload=event_payload,
             actor_agent_id=actor_agent_id,
             visibility=handoff.visibility,
             target=handoff.target,

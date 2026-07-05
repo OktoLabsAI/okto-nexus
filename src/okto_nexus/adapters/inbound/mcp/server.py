@@ -30,23 +30,32 @@ import sys
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
+from ....application.approvals import ApprovalService, seed_operator_agent
+from ....application.capabilities import seed_capability_catalog
 from ....application.ports import Clock, ConnectionFactory as ConnectionFactoryPort
 from ....application.ports import EventEmitter, Repos
-from ....config import NexusConfig, load_config
+from ....config import FEATURE_FLAG_FIELDS, NexusConfig, load_config
 from ....envelope import tool_envelope
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
 from ...outbound.embedding import EmbeddingResolution, resolve_embedding_provider
 from ...outbound.file.store import WorkspaceFileStore
+from ...outbound.sqlite.approvals_repo import SqliteApprovalRepo
 from ...outbound.sqlite.artifacts_repo import SqliteArtifactRepo
+from ...outbound.sqlite.capability_catalog_repo import SqliteCapabilityCatalogRepo
 from ...outbound.sqlite.connection import ConnectionFactory
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
+from ...outbound.sqlite.governance_repo import SqliteGovernanceRepo
 from ...outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
 from ...outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
+)
+from ...outbound.sqlite.memory_repo import (
+    SqliteMemoryRepo,
+    SqliteMemoryVectorStore,
 )
 from ...outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
@@ -55,6 +64,11 @@ from ...outbound.sqlite.messages_repo import (
 )
 from ...outbound.sqlite.migrations import MigrationRunner
 from ...outbound.sqlite.permissions_repo import SqlitePresetRepo
+from ...outbound.sqlite.policy_repo import (
+    SqliteAgentPolicyBindingRepo,
+    SqlitePolicyRepo,
+)
+from ...outbound.sqlite.tag_catalog_repo import SqliteTagCatalogRepo
 from . import tools as _tools_pkg
 from .resources import register_resources, resource_versions
 
@@ -133,7 +147,193 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: permissions, errors) + pointers. nexus_info now also reports
 #: resource_versions for stale-cache detection. Descriptions/instructions only
 #: - no tool/parameter/semantics change.
-SURFACE_REVISION = 12
+#: 13 = tag scoping F1: NEW read-only tag_list tool (the central tag catalog);
+#: NEW routing strategy "tag" on message_create/handoff_create targets
+#: (selector validated in FORM and against the catalog, fail-closed);
+#: senders/creators with a comm_scope.outbound selector have their direct
+#: sends, fan-outs and handoff claims bounded by it. BREAKING: the
+#: messages.allowed_peers permission flag is REMOVED (writes with it are
+#: rejected as unknown; stored rows are inert) - recreate allowlists as an
+#: outbound audience selector over registered tags.
+#: 14 = tag scoping F2 (inbound + "visible = reachable"): comm_scope.inbound
+#: ships (operator-set; "who may reach me") - reach is now the DOUBLE
+#: intersection sender.outbound AND recipient.inbound, enforced on direct
+#: sends (opaque PERMISSION_DENIED identical to the outbound denial), fan-outs
+#: (inbound drops are SILENT - recipient policy is never a sender warning or
+#: metric), handoff claim/list_available/notifications. Discovery is scoped:
+#: agent_list/capability_list list only agents REACHABLE from the caller
+#: (anonymous callers see all); agent_get of an unreachable agent reads as
+#: NOT_FOUND. event_get/event_wait omit events whose actor is unreachable
+#: (own events + system events always show). Operator surfaces (REST +
+#: dashboard SSE) stay unfiltered.
+#: 15 = tag scoping F3 (rich selector grammar): every selector (comm_scope
+#: outbound/inbound and the tag strategy's target.selector) also accepts a
+#: Kubernetes-style matchExpressions list [{key, operator: In|NotIn|Exists|
+#: DoesNotExist, values}] - expressions AND, multi-value intersection, the
+#: flat F1 map stays valid as In sugar (no migration). K8s absence parity:
+#: NotIn/DoesNotExist MATCH agents missing the key (compose with Exists to
+#: require it). Values match hierarchically by "/" segment (ENG covers
+#: ENG/BACKEND, never ENGX). Exists/DoesNotExist forbid values; In/NotIn
+#: require them. The catalog existence gate covers expressions fail-closed
+#: (keys of every operator; values of In/NotIn) and TAG_IN_USE counts
+#: expression references. No enforcement point changed (same predicates).
+#: 16 = central capability catalog (migration 014): capability names become a
+#: pre-defined, GLOBAL, operator-managed vocabulary (REST /api/v1/capabilities
+#: + dashboard Registry; agents never define names). Fail-closed EXISTENCE
+#: gate on every write path that references a capability - agent_register /
+#: POST / PATCH ``capabilities`` and ``strategy: "capability"`` targets on
+#: message_create/handoff_create (incl. sub-rules inside ``mixed`` and the
+#: fallback of ``direct_with_fallback``) reject unregistered names with
+#: VALIDATION_ERROR listing them. Deleting a name still OWNED by any agent
+#: (active or inactive) is CAPABILITY_IN_USE (409 on REST) with the owner
+#: list; historic targets never count. Idempotent bootstrap seed absorbs
+#: every already-announced name, so existing agents keep working unchanged.
+#: capability_list is now CATALOG-COMPLETE: entries gain ``description`` and
+#: zero-owner names list with agent_count 0. Matching semantics unchanged
+#: (normalize_capabilities and runtime routing untouched).
+#: 17 = meta-harness feature flags (R-I0): the ``nexus_info`` envelope gains a
+#: read-only ``features`` block ({feature_*: bool}, exactly the 8 flags)
+#: reflecting the EFFECTIVE config (CLI > env > stored > default) at call
+#: time. No new tool, no tool removed: a flag that is off never hides
+#: surface - behavioural gating belongs to the consuming features (I1-I8).
+#: Flags are operator-managed via Settings (group ``features``) / env
+#: ``OKTO_NEXUS_FEATURE_*`` / CLI ``--feature-*``; all default off (opt-in).
+#: 18 = trajectory traces (R-I1, gated by ``feature_trace``, default off):
+#: message_create / handoff_create accept an optional ``trace_id`` (non-empty
+#: string, max 128 chars). Flag OFF accepts-and-ignores the parameter -
+#: byte-identical pre-feature behaviour (the canonical gating pattern). Flag
+#: ON resolves explicit > inherited (reply parent) > generated ('trc_' +
+#: uuid4 hex), persists the id on the message/handoff row (migration 015),
+#: echoes it in create responses and inbox items, and stamps it into the
+#: payload of message.created and every handoff.* lifecycle event.
+#: event_get/event_wait filters gain the payload-level ``trace_id`` key and
+#: event_to_dict surfaces it top-level; REST adds GET /events?trace= plus
+#: trace_id on the /messages, /handoffs and /events serializers.
+#: 19 = governance policies (R-I2, gated by ``feature_governance``, default
+#: off): operator-set GLOBAL deny rules and quotas (deny / max_count with
+#: 1h|24h windows / max_bytes / max_open_handoffs) over subjects (agent /
+#: role / capability / star) and actions (message_create - which also covers
+#: broadcast -, broadcast, handoff_create, artifact_put), enforced
+#: PRE-persistence inside each write path's unit of work. New error codes
+#: POLICY_DENIED (REST 403) and QUOTA_EXCEEDED (REST 429); denials audited as
+#: ``governance.denied`` (payload never carries subject/body). agent_whoami
+#: gains a conditional ``governance`` block (caller-matched policies) ONLY
+#: when the flag is ON and a policy matches - flag OFF stays byte-identical
+#: (no tool added or removed). New reference resource
+#: okto-nexus://reference/governance. CRUD is operator-only over REST
+#: (/api/v1/governance/policies) and works with the flag OFF.
+#: 20 = HITL approvals (R-I3, spec 2948b2a2, gated by ``feature_hitl``, default
+#: off): governance policies gain limit_kind ``require_approval``. With
+#: feature_governance AND feature_hitl ON, a matching message_create /
+#: broadcast / handoff_create that would otherwise PASS is intercepted
+#: PRE-execution into the ``approvals`` queue (migration 017) and the tool
+#: returns the ``pending_approval`` envelope ({approval_id, action, policy_id,
+#: watch{stream,types,approval_id}, trace_id?}) instead of executing - flag
+#: OFF stays byte-identical (accept-and-ignore; no tool added or removed).
+#: Decisions are operator-only over REST (GET /approvals, GET+POST
+#: /approvals/{id}[/decision], POST /steering/messages) and work with the
+#: flag OFF; approve re-executes the persisted request verbatim via a
+#: one-shot bypass, reject notifies the requester by direct inbox message
+#: from the first-class seeded ``operator`` agent (reserved id, fail-closed
+#: on registration). approval.requested/granted/denied events carry metadata
+#: only (never subject/body); ``approval_id`` is promoted on every projection
+#: profile. New error code CONFLICT (REST 409) for an already-decided
+#: approval. New reference resource okto-nexus://reference/hitl (12th URI).
+#: 21 = handoff verification (R-I4, spec c692da7e, gated by
+#: ``feature_verification``, default off): handoff_create accepts optional
+#: ``acceptance_criteria`` (1..20 non-empty strings, <=500 chars each, no
+#: exact duplicates, IMMUTABLE) + ``verify_by`` ({kind: creator|agent|
+#: capability}; default {kind: creator} MATERIALISED at creation; agent must
+#: be registered, capability must be in the catalog; statically unsatisfiable
+#: self-claim contracts rejected). Flag OFF REJECTS the new params with
+#: VALIDATION_ERROR (fail-closed - the deliberate exception to
+#: accept-and-ignore: a verification contract is never silently dropped);
+#: without them behaviour is byte-identical ON or OFF. A verifiable handoff's
+#: ``handoff_complete`` parks it in the new non-terminal ``VERIFYING`` status
+#: (emits metadata-only ``handoff.verification_requested`` + notifies a
+#: statically resolvable verifier). New tool ``handoff_verify`` (verifier-only,
+#: resolved DYNAMICALLY at verify time; the claimant can never verify their
+#: own delivery): 'pass' -> COMPLETED emitting the CANONICAL
+#: ``handoff.completed`` enriched with ``verified_by``; 'fail' -> CLAIMED for
+#: rework with ``verification_feedback`` (<=2000 chars, overwritten per fail)
+#: + renewed lease, emitting ``handoff.verification_failed``. VERIFYING is
+#: protected: cancel/reject refuse it and lease expiry never touches it; it
+#: still counts as an OPEN handoff for governance quotas (I2). handoff_get
+#: exposes acceptance_criteria/verify_by/verification_feedback top-level when
+#: non-NULL (trace_id pattern). Migration 018; docs updated in the existing
+#: tool-docs/handoff resource (no new URI).
+#: 22 = handoff dependencies (R-I5, spec 6522ad1f, gated by ``feature_dag``,
+#: default off): handoff_create accepts an optional ``depends_on`` (1..20
+#: unique ids of PRE-EXISTING same-workspace handoffs; IMMUTABLE - acyclicity
+#: by construction). Flag OFF REJECTS the param with VALIDATION_ERROR
+#: (fail-closed, the verification precedent - a dependency edge is never
+#: silently dropped); ON gates existence (DEPENDENCY_NOT_FOUND with
+#: ``{missing}``, cross-workspace indistinguishable from nonexistent) and
+#: state (an already-REJECTED/CANCELLED dependency makes the create
+#: statically unsatisfiable -> VALIDATION_ERROR; an already-COMPLETED one is
+#: born satisfied). A dependent whose edges are not all COMPLETED is
+#: OPEN-but-blocked, DERIVED ON-READ from the migration-019 edge table (no
+#: new status): excluded from handoff_list_available and refused at claim
+#: with the new DEPENDENCY_NOT_MET (details carry aggregate {pending, failed}
+#: counts ONLY - dependency ids never leak to claimants). Post-creation gates
+#: read the TABLE, never the flag, so flipping feature_dag OFF keeps existing
+#: dependents decidable. Both producers of COMPLETED (plain complete + verify
+#: 'pass') run a synchronous exactly-once unblock scan in the SAME UoW,
+#: emitting ``handoff.unblocked`` ({handoff_id: the dependent, unblocked_by},
+#: actor = the completer, the DEPENDENT's trace/visibility) and waking a
+#: DIRECT dependent's named agent by inbox; REJECTED/CANCELLED emit
+#: ``handoff.dependency_failed`` + notify each non-terminal dependent's
+#: creator - NO cascade (the dependent stays OPEN for an explicit decision).
+#: handoff_create echoes ``depends_on`` + the ``dependencies`` aggregate;
+#: handoff_get exposes both when non-NULL (trace_id pattern); the projection
+#: summary promotes ``handoff_id`` for the 2 new event types. No new tool.
+#: Caveat S2: the raw ADMIN REST cancel (port-level update_status) does not
+#: emit dependency_failed. Docs in the existing tool-docs/handoff resource
+#: (v3, no new URI).
+#: 23 = workspace memory (R-I6, spec 8928b320, gated by ``feature_memory``,
+#: default off): THREE new tools - ``memory_put`` (persist a durable entry:
+#: title <=200 chars, content <=16384 UTF-8 bytes, <=10 normalised topics,
+#: optional atomic provenance pair source_kind {event,message,handoff} +
+#: source_id (format-only), optional LINEAR ``supersedes`` stamped
+#: bilaterally in the same UoW - NOT_FOUND/CONFLICT on a missing/already-
+#: superseded target; authorship REQUIRED under the message_create session
+#: regime), ``memory_get`` (full read by id, superseded included) and
+#: ``memory_search`` (k default 10 clamped 1..50, AND-combined topics; ranks
+#: semantic when embeddings are enabled, degrades lexical -> recent and
+#: ALWAYS declares the effective ``search_mode`` - never fails on embedding
+#: unavailability). Flag OFF -> VALIDATION_ERROR {feature_memory:false} on
+#: all three (reads included): the whole primitive is absent, the DECLARED
+#: exception to D4 accept-and-ignore (which governs new params on
+#: pre-existing tools); tools stay registered, data written while ON stays.
+#: Events ``memory.created``/``memory.superseded`` are metadata-only (NEVER
+#: title/content); the projection promotes ``memory_id`` on every profile,
+#: scoped by event type (the approval_id pattern). Migration 020. Operator
+#: REST (browse/get_raw/DELETE, curation without event) is NOT gated. Zero
+#: new error codes. Docs inline in the tool schemas (no new URI).
+#: 24 = coordination health (R-I7, spec 7df9b1e0, gated by ``feature_health``,
+#: default off): ONE new tool - ``coordination_health(project_root,
+#: window="24h")`` - a PASSIVE read (no agent_id/session/heartbeat, so the
+#: probe never turns its observer "present" in the presence metric it
+#: reports). Windows are a closed enum {1h, 24h, 7d}; the payload carries an
+#: aggregated ok|warn status, 7 metric blocks (message/event volume,
+#: unclaimed handoffs, claim->complete average by EVENT correlation per
+#: handoff_id, rejection rate, per-agent inbox backlog, presence buckets)
+#: each declaring scope windowed|snapshot, and ALWAYS echoes the fixed V1
+#: thresholds. Flag OFF -> VALIDATION_ERROR {feature_health:false} (tool
+#: stays registered). Operator REST (GET /workspaces/{id}/health) is NOT
+#: gated. Migration 021 (index-only). Zero new error codes; no new resource.
+#: 25 = attachable policies (spec 80624c1a, migration 022): NO new tool - the
+#: SEMANTICS of two existing tools evolved for the unified-policy surface.
+#: ``agent_whoami`` now returns ``effective_policies`` (``<policy_id>@<version>``
+#: / ``inline``) plus the resolved ``governance`` block when the caller has
+#: bindings (audience selectors NEVER leaked; absent with no bindings - BR2).
+#: ``artifact_get`` now captures the caller and filters by the artifact's frozen
+#: audience (a reader outside it gets NOT_FOUND, AC8). Enforcement is always-on
+#: and binding-driven (``feature_governance`` removed). One new error code
+#: (``POLICY_IN_USE``, REST-only 409). Operator REST surfaces (``/policies``,
+#: ``PUT /agents/{id}/policies``) are NOT MCP tools, so the stdio/http tool
+#: parity is unchanged. Growth ledger: ``policies_b3`` (+233 docstring chars).
+SURFACE_REVISION = 25
 
 
 @dataclass
@@ -162,6 +362,10 @@ class Deps:
     # Resolved embedding capability (provider + search/degraded flags) for the
     # configured ``embedding_mode``. ``None`` until bootstrap wires it.
     embedding: EmbeddingResolution | None = None
+    # Shared HITL approval service (spec 2948b2a2): ONE instance per process so
+    # the executors each slice registers (messages/handoff) are visible to the
+    # decision path regardless of transport. ``None`` until bootstrap wires it.
+    approvals: ApprovalService | None = None
 
 
 def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
@@ -193,6 +397,14 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         files=WorkspaceFileStore(),
         presets=SqlitePresetRepo(clock),
         message_vectors=SqliteMessageVectorStore(clock),
+        memories=SqliteMemoryRepo(clock),
+        memory_vectors=SqliteMemoryVectorStore(clock),
+        tag_catalog=SqliteTagCatalogRepo(clock),
+        capability_catalog=SqliteCapabilityCatalogRepo(clock),
+        governance=SqliteGovernanceRepo(clock),
+        policies=SqlitePolicyRepo(clock),
+        policy_bindings=SqliteAgentPolicyBindingRepo(clock),
+        approvals=SqliteApprovalRepo(),
     )
     emitter = SqliteEventEmitter(events_repo)
     return repos, emitter
@@ -215,10 +427,32 @@ def bootstrap(
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
     clock = SystemClock()
     repos, emitter = build_repos(clock)
+    # Transition seed (migration 014): absorb every announced capability into
+    # the central catalog, idempotently, BEFORE any fail-closed gate can run -
+    # the invariant "owned => registered" is what keeps existing agents
+    # (re-)registering without error under the new regime.
+    with factory.unit_of_work() as uow:
+        seed_capability_catalog(
+            uow, catalog=repos.capability_catalog, agents=repos.agents
+        )
+        # First-class operator identity (spec 2948b2a2 FR6/BR4): seeded
+        # unconditionally BEFORE any tool registers; create-if-missing only,
+        # so an existing operator (role, permissions, key) is never touched.
+        seed_operator_agent(uow, agents=repos.agents)
     # Resolve the embedding capability ONCE from the configured mode (off /
     # stub / local). The model singleton is lazy, so this stays cheap even for
     # ``local``; an absent extra degrades to the stub with search disabled.
     embedding = resolve_embedding_provider(config.embedding_mode)
+    # ONE approval service per process (spec 2948b2a2): every slice injects
+    # this instance, so the executors registered by messages/handoff wiring
+    # are the ones the operator decision path re-executes through.
+    approvals = ApprovalService(
+        connection_factory=factory,
+        approvals=repos.approvals,
+        clock=clock,
+        config=config,
+        event_emitter=emitter,
+    )
     return Deps(
         config=config,
         connection_factory=factory,
@@ -226,6 +460,7 @@ def bootstrap(
         repos=repos,
         event_emitter=emitter,
         embedding=embedding,
+        approvals=approvals,
     )
 
 
@@ -278,12 +513,17 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
     @server.tool()
     @tool_envelope
     def nexus_info() -> dict[str, Any]:
-        """Report server versions: package_version, schema_version, surface_revision, resource_versions (uri->version map, for stale-cache detection). Call when behaviour disagrees with cached schemas."""
+        """Report server versions: package_version, schema_version, surface_revision, resource_versions, features (read-only {feature_*: bool}). Call when behaviour disagrees with cached schemas."""
         return {
             "package_version": _package_version(),
             "schema_version": _schema_version(deps.connection_factory),
             "surface_revision": SURFACE_REVISION,
             "resource_versions": resource_versions(),
+            # Effective (post-precedence) values read from the LIVE config at
+            # call time - a PATCH that flips a flag shows up without restart.
+            "features": {
+                name: bool(getattr(deps.config, name)) for name in FEATURE_FLAG_FIELDS
+            },
         }
 
 

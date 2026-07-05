@@ -87,3 +87,6 @@ okto_nexus = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+    "replay: replay-harness eval tests that reconstruct + re-export an NDJSON event log (I8)",
+]

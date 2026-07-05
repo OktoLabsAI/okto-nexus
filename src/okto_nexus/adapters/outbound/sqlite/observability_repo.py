@@ -12,13 +12,34 @@ import sqlite3
 from typing import Any
 
 from ....application.ports import UnitOfWork
+from ....domain.handoff import (
+    EVENT_CLAIMED,
+    EVENT_COMPLETED,
+    EVENT_CREATED,
+    EVENT_REJECTED,
+)
 from ....errors import OktoNexusError, db_error_from_exception
+from .handoff_repo import dependency_aggregates_for
 
 #: Defensive ceilings (FR5: bounded payloads regardless of store size).
 MAX_EDGES = 2000
 MAX_HANDOFFS = 1000
 MAX_SESSIONS = 2000
 MAX_CHANNELS = 500
+
+#: Bounded scan for the health event correlation (I7): at most this many
+#: handoff lifecycle events per read; beyond it the result is flagged
+#: truncated so the payload declares the cap instead of hiding it.
+MAX_LIFECYCLE_EVENTS = 5000
+
+#: The ONLY event types the health correlation reads (domain constants, never
+#: loose strings - br_2cc10eb0).
+_LIFECYCLE_TYPES: tuple[str, ...] = (
+    EVENT_CREATED,
+    EVENT_CLAIMED,
+    EVENT_COMPLETED,
+    EVENT_REJECTED,
+)
 
 
 def _loads(text: str | None) -> Any:
@@ -145,7 +166,8 @@ class SqliteObservabilityQueries:
     ) -> list[dict[str, Any]]:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
-            "from_agent_id, claimed_by, target, visibility, lease_expires_at "
+            "from_agent_id, claimed_by, target, visibility, lease_expires_at, "
+            "trace_id, acceptance_criteria, verify_by, verification_feedback "
             "FROM handoffs WHERE 1=1"
         )
         params: list[Any] = []
@@ -161,8 +183,9 @@ class SqliteObservabilityQueries:
             rows = uow.connection.execute(sql, tuple(params)).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("reading handoffs", exc) from exc
-        return [
-            {
+        items: list[dict[str, Any]] = []
+        for row in rows:
+            item = {
                 "handoff_id": row["handoff_id"],
                 "workspace_id": row["workspace_id"],
                 "status": row["status"],
@@ -173,9 +196,38 @@ class SqliteObservabilityQueries:
                 "target": _loads(row["target"]),
                 "visibility": row["visibility"],
                 "lease_expires_at": row["lease_expires_at"],
+                "trace_id": row["trace_id"],
             }
-            for row in rows
-        ]
+            # Verification contract (I4/FR6): the three columns surface
+            # top-level ONLY when non-NULL - a non-verifiable handoff keeps
+            # its pre-I4 row shape. verify_by is always materialised
+            # alongside acceptance_criteria (BR8), so it rides that check.
+            if row["acceptance_criteria"] is not None:
+                item["acceptance_criteria"] = _loads(row["acceptance_criteria"])
+                item["verify_by"] = _loads(row["verify_by"])
+            if row["verification_feedback"] is not None:
+                item["verification_feedback"] = row["verification_feedback"]
+            items.append(item)
+        return items
+
+    def handoff_dependency_aggregates(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        handoff_ids: list[str],
+    ) -> dict[str, dict[str, Any]]:
+        """Dependency aggregates for a page of handoff ids (I5, one query).
+
+        Thin delegation to the single shared implementation in
+        :func:`okto_nexus.adapters.outbound.sqlite.handoff_repo.dependency_aggregates_for`
+        - ids absent from the result have no dependencies. Serializers merge
+        ``depends_on`` + the counters into a row ONLY when present, so
+        dependency-free handoffs keep their exact pre-I5 shape.
+        """
+        return dependency_aggregates_for(
+            uow, workspace_id=workspace_id, handoff_ids=handoff_ids
+        )
 
     def channel_rows(
         self, uow: UnitOfWork, *, workspace_id: str | None
@@ -303,7 +355,7 @@ class SqliteObservabilityQueries:
             rows = uow.connection.execute(
                 f"""
                 SELECT m.message_id, m.workspace_id, m.channel_id, m.from_agent_id,
-                       m.created_at, m.subject, m.body
+                       m.created_at, m.subject, m.body, m.trace_id
                 FROM messages m WHERE {where_sql}
                 ORDER BY m.created_at DESC, m.message_id
                 LIMIT ? OFFSET ?
@@ -330,6 +382,7 @@ class SqliteObservabilityQueries:
                     "from_agent_id": row["from_agent_id"],
                     "created_at": row["created_at"],
                     "subject": row["subject"],
+                    "trace_id": row["trace_id"],
                     "preview": body[:160],
                     "deliveries": [dict(d) for d in deliveries],
                 }
@@ -340,9 +393,7 @@ class SqliteObservabilityQueries:
             raise _db_error("reading message history", exc) from exc
         return items, total
 
-    def conversation_peers(
-        self, uow: UnitOfWork, *, agent_id: str
-    ) -> dict[str, Any]:
+    def conversation_peers(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any]:
         """Aggregate conversation partners + failed-send count in SQL.
 
         One UNION of the outbound (per-delivery recipient) and inbound
@@ -394,6 +445,7 @@ class SqliteObservabilityQueries:
         limit: int,
         type_: str | None = None,
         actor_agent_id: str | None = None,
+        trace_id: str | None = None,
     ) -> list[dict[str, Any]]:
         # type_/actor_agent_id are optional equality filters (dashboard FR1):
         # absent -> no filter (byte-for-byte the prior behaviour). visibility
@@ -416,26 +468,41 @@ class SqliteObservabilityQueries:
         if actor_agent_id is not None:
             sql += " AND actor_agent_id = ?"
             params.append(actor_agent_id)
+        if trace_id is not None:
+            # Payload-level filter (I1): the trace has no events column - it
+            # rides the JSON payload, so the predicate must stay in SQL for
+            # LIMIT/next_cursor to keep their meaning across filtered pages.
+            sql += (
+                " AND payload IS NOT NULL AND json_valid(payload)"
+                " AND json_extract(payload, '$.trace_id') = ?"
+            )
+            params.append(trace_id)
         sql += " ORDER BY event_id ASC LIMIT ?"
         params.append(limit)
         try:
             rows = uow.connection.execute(sql, tuple(params)).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("reading events after cursor", exc) from exc
-        return [
-            {
-                "event_id": int(row["event_id"]),
-                "workspace_id": row["workspace_id"],
-                "stream": row["stream"],
-                "type": row["type"],
-                "created_at": row["created_at"],
-                "actor_agent_id": row["actor_agent_id"],
-                "payload": _loads(row["payload"]),
-                "visibility": row["visibility"],
-                "target": _loads(row["target"]),
-            }
-            for row in rows
-        ]
+        items: list[dict[str, Any]] = []
+        for row in rows:
+            payload = _loads(row["payload"])
+            items.append(
+                {
+                    "event_id": int(row["event_id"]),
+                    "workspace_id": row["workspace_id"],
+                    "stream": row["stream"],
+                    "type": row["type"],
+                    "created_at": row["created_at"],
+                    "actor_agent_id": row["actor_agent_id"],
+                    "payload": payload,
+                    "trace_id": payload.get("trace_id")
+                    if isinstance(payload, dict)
+                    else None,
+                    "visibility": row["visibility"],
+                    "target": _loads(row["target"]),
+                }
+            )
+        return items
 
     def workspace_message_count(
         self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
@@ -531,6 +598,71 @@ class SqliteObservabilityQueries:
         for row in rows:
             out[row["status"]] = int(row["n"])
         return out
+
+    def handoff_lifecycle_events(
+        self, uow: UnitOfWork, *, workspace_id: str, since_iso: str
+    ) -> tuple[list[tuple[str, str, str]], bool]:
+        """Windowed handoff lifecycle events as ``(handoff_id, type, created_at)``.
+
+        Only the four types the health correlation reads (created/claimed/
+        completed/rejected), workspace-scoped, created at/after ``since_iso``,
+        in ``event_id`` (i.e. append) order, capped at
+        :data:`MAX_LIFECYCLE_EVENTS`. ``handoff_id`` is parsed HERE from the
+        JSON payload (events keep it payload-level, same as trace_id); a row
+        without a string handoff_id is skipped - it can neither correlate nor
+        be attributed. Returns ``(tuples, truncated)``.
+        """
+        placeholders = ",".join("?" for _ in _LIFECYCLE_TYPES)
+        try:
+            rows = uow.connection.execute(
+                f"""
+                SELECT type, created_at, payload
+                FROM events
+                WHERE workspace_id = ? AND created_at >= ?
+                  AND type IN ({placeholders})
+                ORDER BY event_id
+                LIMIT ?
+                """,
+                (workspace_id, since_iso, *_LIFECYCLE_TYPES, MAX_LIFECYCLE_EVENTS + 1),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading handoff lifecycle events", exc) from exc
+        truncated = len(rows) > MAX_LIFECYCLE_EVENTS
+        items: list[tuple[str, str, str]] = []
+        for row in rows[:MAX_LIFECYCLE_EVENTS]:
+            payload = _loads(row["payload"])
+            handoff_id = (
+                payload.get("handoff_id") if isinstance(payload, dict) else None
+            )
+            if isinstance(handoff_id, str) and handoff_id:
+                items.append((handoff_id, row["type"], row["created_at"]))
+        return items, truncated
+
+    def workspace_unread_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str
+    ) -> list[dict[str, Any]]:
+        """Unread delivery counts per recipient for THIS workspace (snapshot).
+
+        Deliveries are global (ADR 0001), so this JOINs to ``messages`` on
+        ``workspace_id`` - the same basis as ``workspace_delivery_health``,
+        broken down by recipient. Ordered by count DESC (agent_id ASC on
+        ties, for determinism).
+        """
+        try:
+            rows = uow.connection.execute(
+                """
+                SELECT d.recipient_agent_id AS agent_id, COUNT(*) AS n
+                FROM message_deliveries d
+                JOIN messages m ON m.message_id = d.message_id
+                WHERE m.workspace_id = ? AND d.status = 'unread'
+                GROUP BY d.recipient_agent_id
+                ORDER BY n DESC, d.recipient_agent_id
+                """,
+                (workspace_id,),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading workspace unread by agent", exc) from exc
+        return [{"agent_id": row["agent_id"], "unread": int(row["n"])} for row in rows]
 
     def distinct_event_types(
         self, uow: UnitOfWork, *, workspace_id: str | None

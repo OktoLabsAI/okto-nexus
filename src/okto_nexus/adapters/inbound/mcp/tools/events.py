@@ -51,14 +51,18 @@ from okto_nexus.envelope import async_tool_envelope, tool_envelope
 #: Reused parameter descriptions (kept DRY across the two event tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-_P_AGENT = "Your agent_id; scopes per-event visibility (you only see events you may see)."
+_P_ROOT = (
+    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+)
+_P_AGENT = (
+    "Your agent_id; scopes per-event visibility (you only see events you may see)."
+)
 _P_STREAM = "Event stream to read - one of: workspace, agent, handoff. message.created, the message.delivered/message.read receipts and artifact.created are on workspace."
 _P_CURSOR = "Pagination cursor: the last event_id you consumed; returns event_id > cursor (optional; omit/0 = from the beginning)."
 _P_LIMIT = "Max events per page (optional; default 100, clamped to the server maximum, default 1000)."
 _P_FILTERS = (
     "Equality filters, AND-combined (optional). Keys: type, agent_id, task_id, "
-    'handoff_id. e.g. {"type":"message.created"}.'
+    'handoff_id, trace_id. e.g. {"type":"message.created"}.'
 )
 _P_TIMEOUT = (
     "Long-poll bound in SECONDS (optional; default 0). 0/omitted/null = an "
@@ -66,6 +70,7 @@ _P_TIMEOUT = (
     "event arrives or the timeout elapses. Listener patterns: okto-nexus://reference/monitoring."
 )
 _P_PROFILE = "Response size profile: one of default/summary/full (optional; default=keep all fields minus dead ones; summary=minimal+follow_up; full=raw). Trims per-call tokens."
+
 
 def build_service(deps: Any) -> EventService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
@@ -112,7 +117,7 @@ def register(server: Any, deps: Any) -> None:
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
-        """Read a cursor-paginated page of the workspace event log (non-blocking)."""
+        """Read a cursor-paginated page of the workspace event log (non-blocking). Scoped: events whose actor is outside your comm scope are omitted; your own and system events always show."""
         prof = parse_profile(profile)
         return apply_to_response(
             service.event_get(
@@ -154,7 +159,7 @@ def register(server: Any, deps: Any) -> None:
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = 0,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
-        """Read the event log; optionally long-poll (0/omitted/null = non-blocking snapshot; >0 OPTS IN to blocking). Events are observability, not delivery. Patterns: okto-nexus://reference/monitoring."""
+        """Read the event log; optionally long-poll (0/omitted/null = snapshot; >0 blocks). Scoped like event_get (actors outside your comm scope omitted). Patterns: okto-nexus://reference/monitoring."""
         # Validate the profile BEFORE parking on the long-poll: an invalid value
         # must fail fast as a VALIDATION_ERROR, not after a blocking wait.
         prof = parse_profile(profile)

@@ -3,7 +3,7 @@
 This module is dependency-free (stdlib only) so it can be imported from any
 layer, including ``domain`` and ``application``. It defines:
 
-* :class:`ErrorCode` - the CLOSED catalogue of 18 error codes.
+* :class:`ErrorCode` - the CLOSED catalogue of 27 error codes.
 * :class:`OktoNexusError` - the single exception type carried across the
   application; every adapter boundary converts it into an error envelope.
   Carries ``retryable`` so transient failures (e.g. SQLite lock contention)
@@ -24,7 +24,7 @@ from typing import Any, Mapping
 
 
 class ErrorCode(str, Enum):
-    """Closed catalogue of the 18 canonical error codes (SCREAMING_SNAKE_CASE).
+    """Closed catalogue of the 27 canonical error codes (SCREAMING_SNAKE_CASE).
 
     Inherits from ``str`` so members serialise directly as their value in
     JSON envelopes (``ErrorCode.NOT_FOUND == "NOT_FOUND"``).
@@ -43,6 +43,41 @@ class ErrorCode(str, Enum):
     # Agent communication permissions (migration 011): the calling agent's
     # resolved PermissionSet denies the attempted capability.
     PERMISSION_DENIED = "PERMISSION_DENIED"
+
+    # Central tag catalog (migration 013): a registered tag key/value cannot
+    # be deleted while agents still reference it (tags or comm_scope).
+    TAG_IN_USE = "TAG_IN_USE"
+
+    # Central capability catalog (migration 014): a registered capability name
+    # cannot be deleted while any agent (active or inactive) still owns it.
+    CAPABILITY_IN_USE = "CAPABILITY_IN_USE"
+
+    # Attachable policy catalog (migration 022, spec 80624c1a): a named global
+    # policy cannot be deleted while any agent still binds it (latest or
+    # pinned). Details carry {agents} (the distinct binder ids) - the operator
+    # Registry renders who must detach first (REST 409).
+    POLICY_IN_USE = "POLICY_IN_USE"
+
+    # Governance policies (migration 016, feature_governance): a categorical
+    # deny policy forbids the attempted action (REST 403), or a quota policy's
+    # budget is exhausted (REST 429). Details carry the NORMATIVE context of
+    # the policy that matched the CALLER only ({policy_id, action, limit_kind,
+    # limit?, window?, current?}) - never other agents' state.
+    POLICY_DENIED = "POLICY_DENIED"
+    QUOTA_EXCEEDED = "QUOTA_EXCEEDED"
+
+    # HITL approvals (migration 017, spec 2948b2a2): the approval was already
+    # decided - the second decision never overwrites the first (REST 409).
+    CONFLICT = "CONFLICT"
+
+    # Handoff dependencies (migration 019, feature_dag, spec 6522ad1f): a
+    # depends_on id does not exist in the caller's workspace (REST 422;
+    # details carry {"missing": [ids]} and are deliberately indistinguishable
+    # from a cross-workspace id), or a claim was attempted while dependencies
+    # remain unsatisfied (REST 409; details carry ONLY the aggregates
+    # {handoff_id, pending, failed} - never the dependency ids or statuses).
+    DEPENDENCY_NOT_FOUND = "DEPENDENCY_NOT_FOUND"
+    DEPENDENCY_NOT_MET = "DEPENDENCY_NOT_MET"
 
     # State machines / streams
     INVALID_TRANSITION = "INVALID_TRANSITION"

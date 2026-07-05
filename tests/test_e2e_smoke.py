@@ -91,21 +91,43 @@ def test_e2e_full_flow(tmp_path):
 
     tools = server.tools
     expected = {
-        "workspace_resolve", "agent_register", "session_open", "session_heartbeat",
-        "event_get", "event_wait",
-        "message_create", "channel_create", "channel_list",
-        "inbox_pull", "inbox_ack", "inbox_peek", "inbox_count", "inbox_history",
-        "handoff_create", "handoff_list_available", "handoff_claim",
-        "handoff_complete", "handoff_reject",
-        "artifact_put", "artifact_get",
+        "workspace_resolve",
+        "agent_register",
+        "session_open",
+        "session_heartbeat",
+        "event_get",
+        "event_wait",
+        "message_create",
+        "channel_create",
+        "channel_list",
+        "inbox_pull",
+        "inbox_ack",
+        "inbox_peek",
+        "inbox_count",
+        "inbox_history",
+        "handoff_create",
+        "handoff_list_available",
+        "handoff_claim",
+        "handoff_complete",
+        "handoff_reject",
+        "artifact_put",
+        "artifact_get",
         "shared_md_render",
     }
     assert expected <= set(tools), f"missing tools: {expected - set(tools)}"
 
     # Every repo + the emitter must be populated by bootstrap (not lazily).
     for field in (
-        "workspaces", "agents", "sessions", "events", "channels",
-        "messages", "tasks", "handoffs", "artifacts", "files",
+        "workspaces",
+        "agents",
+        "sessions",
+        "events",
+        "channels",
+        "messages",
+        "tasks",
+        "handoffs",
+        "artifacts",
+        "files",
     ):
         assert getattr(deps.repos, field) is not None, f"repo {field} not wired"
     assert deps.event_emitter is not None
@@ -116,18 +138,18 @@ def test_e2e_full_flow(tmp_path):
     assert len(workspace_id) == 64 and workspace_id == workspace_id.lower()
 
     # --- 2. agent_register (two agents) ----------------------------------- #
+    # Capabilities are fail-closed: the vocabulary must exist in the catalog
+    # before an agent may announce it (capability-catalog feature).
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="py")
     builder = _ok(
-        tools["agent_register"](
-            agent_id="builder", role="builder", capabilities=["py"]
-        )
+        tools["agent_register"](agent_id="builder", role="builder", capabilities=["py"])
     )
     assert builder["agent_id"] == "builder"
     _ok(tools["agent_register"](agent_id="reviewer", role="reviewer"))
 
     # --- 3. session_open + heartbeat -------------------------------------- #
-    session = _ok(
-        tools["session_open"](agent_id="builder", workspace_id=workspace_id)
-    )
+    session = _ok(tools["session_open"](agent_id="builder", workspace_id=workspace_id))
     assert session["status"] == "active"
     session_id = session["session_id"]
     hb = _ok(tools["session_heartbeat"](session_id=session_id))
@@ -160,7 +182,9 @@ def test_e2e_full_flow(tmp_path):
     assert _ok(tools["inbox_count"](agent_id="reviewer"))["unread"] == 1
     pulled = _ok(tools["inbox_pull"](agent_id="reviewer"))
     assert [m["body"] for m in pulled["messages"]] == ["PR #1 is ready"]
-    assert _ok(tools["inbox_ack"](agent_id="reviewer", message_ids=[dm["message_id"]])) == {
+    assert _ok(
+        tools["inbox_ack"](agent_id="reviewer", message_ids=[dm["message_id"]])
+    ) == {
         "acknowledged": 1,
         "read_message_ids": [dm["message_id"]],
     }
@@ -230,9 +254,7 @@ def test_e2e_full_flow(tmp_path):
 
     # --- 7. handoff_claim + handoff_complete ------------------------------ #
     avail = _ok(
-        tools["handoff_list_available"](
-            project_root=project_root, agent_id="reviewer"
-        )
+        tools["handoff_list_available"](project_root=project_root, agent_id="reviewer")
     )
     assert any(h["handoff_id"] == handoff_id for h in avail["handoffs"])
 
@@ -280,9 +302,7 @@ def test_e2e_full_flow(tmp_path):
 
     # --- 9. artifact_get round-trips the inline content ------------------- #
     fetched = _ok(
-        tools["artifact_get"](
-            project_root=project_root, artifact_id=text_artifact_id
-        )
+        tools["artifact_get"](project_root=project_root, artifact_id=text_artifact_id)
     )
     assert fetched["content"] == "x" * 1024
     assert fetched["metadata"] == {"kind": "report"}

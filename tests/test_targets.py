@@ -41,7 +41,15 @@ def assert_validation_error(exc_info) -> None:
 # --------------------------------------------------------------------------- #
 def test_valid_strategies_closed_set():
     assert VALID_STRATEGIES == frozenset(
-        {"direct", "capability", "role", "broadcast", "mixed", "direct_with_fallback"}
+        {
+            "direct",
+            "capability",
+            "role",
+            "tag",
+            "broadcast",
+            "mixed",
+            "direct_with_fallback",
+        }
     )
 
 

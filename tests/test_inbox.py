@@ -87,7 +87,9 @@ def test_target_strategy_none_for_absent_target():
 
 def test_target_strategy_normalizes():
     assert target_strategy({"strategy": "Direct"}) == "direct"
-    assert target_strategy({"strategy": "direct-with-fallback"}) == "direct_with_fallback"
+    assert (
+        target_strategy({"strategy": "direct-with-fallback"}) == "direct_with_fallback"
+    )
     assert target_strategy({"kind": "broadcast"}) == "broadcast"
 
 
@@ -134,14 +136,21 @@ def test_resolve_capability_string_and_list_any_of():
 
 
 def test_resolve_accepts_plain_dict_candidate():
-    candidates = [{"agent_id": "x", "role": "worker"}, {"agent_id": "y", "role": "validator"}]
+    candidates = [
+        {"agent_id": "x", "role": "worker"},
+        {"agent_id": "y", "role": "validator"},
+    ]
     assert resolve_recipients(
         {"strategy": "role", "role": "worker"}, candidates, now=NOW
     ) == frozenset({"x"})
 
 
 def test_resolve_role_exact_case_sensitive():
-    candidates = [_agent("a", role="validator"), _agent("b", role="Validator"), _agent("c", role="worker")]
+    candidates = [
+        _agent("a", role="validator"),
+        _agent("b", role="Validator"),
+        _agent("c", role="worker"),
+    ]
     assert resolve_recipients(
         {"strategy": "role", "role": "validator"}, candidates, now=NOW
     ) == frozenset({"a"})  # case-sensitive: 'Validator' excluded
@@ -157,7 +166,11 @@ def test_resolve_broadcast_hits_all_candidates():
 
 
 def test_resolve_mixed_is_union():
-    candidates = [_agent("a", role="worker"), _agent("b", capabilities=["ocr"]), _agent("c")]
+    candidates = [
+        _agent("a", role="worker"),
+        _agent("b", capabilities=["ocr"]),
+        _agent("c"),
+    ]
     target = {
         "strategy": "mixed",
         "rules": [
@@ -183,7 +196,9 @@ def test_resolve_direct_with_fallback_at_send_is_direct_only_when_delayed():
         "agent_id": "a",
         "fallback_after_seconds": 0,
     }
-    assert resolve_recipients(immediate, candidates, now=NOW) == frozenset({"a", "b", "c"})
+    assert resolve_recipients(immediate, candidates, now=NOW) == frozenset(
+        {"a", "b", "c"}
+    )
 
 
 def test_resolve_malformed_target_raises():
@@ -209,9 +224,13 @@ def test_resolve_validates_target_even_with_empty_candidates():
 # requires_known_recipient
 # --------------------------------------------------------------------------- #
 def test_requires_workspace_audience():
-    # broadcast / no-target -> bounded to the workspace's participants.
+    # broadcast / no-target / tag -> bounded to the workspace's participants.
     assert requires_workspace_audience(None) is True
     assert requires_workspace_audience({"strategy": "broadcast"}) is True
+    assert (
+        requires_workspace_audience({"strategy": "tag", "selector": {"t": ["v"]}})
+        is True
+    )
     # everything else resolves against the global registry.
     for glob in (
         {"strategy": "direct", "agent_id": "a"},
@@ -228,7 +247,11 @@ def test_requires_workspace_audience():
 def test_assert_rejects_direct_with_fallback():
     with pytest.raises(OktoNexusError) as ei:
         assert_deliverable_message_target(
-            {"strategy": "direct_with_fallback", "agent_id": "a", "fallback_after_seconds": 0}
+            {
+                "strategy": "direct_with_fallback",
+                "agent_id": "a",
+                "fallback_after_seconds": 0,
+            }
         )
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
@@ -255,19 +278,29 @@ def test_assert_allows_safe_targets():
         {"strategy": "direct", "agent_id": "a"},
         {"strategy": "capability", "capability": "ocr"},
         {"strategy": "role", "role": "x"},
-        {"strategy": "mixed", "rules": [
-            {"strategy": "role", "role": "x"},
-            {"strategy": "capability", "capability": "ocr"},
-        ]},
+        {
+            "strategy": "mixed",
+            "rules": [
+                {"strategy": "role", "role": "x"},
+                {"strategy": "capability", "capability": "ocr"},
+            ],
+        },
     ):
         assert_deliverable_message_target(safe)  # no raise
 
 
 def test_requires_known_recipient_only_for_directed():
     assert requires_known_recipient({"strategy": "direct", "agent_id": "a"}) is True
-    assert requires_known_recipient(
-        {"strategy": "direct_with_fallback", "agent_id": "a", "fallback_after_seconds": 5}
-    ) is True
+    assert (
+        requires_known_recipient(
+            {
+                "strategy": "direct_with_fallback",
+                "agent_id": "a",
+                "fallback_after_seconds": 5,
+            }
+        )
+        is True
+    )
     for group in (
         None,
         {"strategy": "broadcast"},
@@ -292,7 +325,10 @@ def test_migration_005_creates_message_deliveries(migrated_factory):
         }
         assert "message_deliveries" in tables
 
-        cols = {r[1] for r in conn.execute("PRAGMA table_info(message_deliveries)").fetchall()}
+        cols = {
+            r[1]
+            for r in conn.execute("PRAGMA table_info(message_deliveries)").fetchall()
+        }
         # 005's columns are all present (later migrations may add more - 006
         # adds `attempts` - so this is a superset check, not equality).
         assert cols >= {
@@ -316,7 +352,8 @@ def test_migration_005_creates_message_deliveries(migrated_factory):
 
         # 005 is recorded in the ledger.
         versions = {
-            r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
+            r[0]
+            for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
         }
         assert 5 in versions
     finally:
@@ -327,8 +364,13 @@ def test_migration_005_enforces_one_delivery_per_message_recipient(migrated_fact
     """The UNIQUE(message_id, recipient_agent_id) invariant is actually enforced."""
     conn = migrated_factory.get_connection()
     try:
-        conn.execute("INSERT INTO workspaces (workspace_id, created_at) VALUES ('ws1', ?)", (NOW,))
-        conn.execute("INSERT INTO agents (agent_id, created_at) VALUES ('a', ?)", (NOW,))
+        conn.execute(
+            "INSERT INTO workspaces (workspace_id, created_at) VALUES ('ws1', ?)",
+            (NOW,),
+        )
+        conn.execute(
+            "INSERT INTO agents (agent_id, created_at) VALUES ('a', ?)", (NOW,)
+        )
         conn.execute(
             "INSERT INTO messages (message_id, workspace_id, from_agent_id, created_at) "
             "VALUES ('m1', 'ws1', 'a', ?)",
@@ -360,9 +402,12 @@ def test_migration_006_adds_attempts_defaulting_to_zero(migrated_factory):
     conn = migrated_factory.get_connection()
     try:
         conn.execute(
-            "INSERT INTO workspaces (workspace_id, created_at) VALUES ('ws1', ?)", (NOW,)
+            "INSERT INTO workspaces (workspace_id, created_at) VALUES ('ws1', ?)",
+            (NOW,),
         )
-        conn.execute("INSERT INTO agents (agent_id, created_at) VALUES ('a', ?)", (NOW,))
+        conn.execute(
+            "INSERT INTO agents (agent_id, created_at) VALUES ('a', ?)", (NOW,)
+        )
         conn.execute(
             "INSERT INTO messages (message_id, workspace_id, from_agent_id, created_at) "
             "VALUES ('m1', 'ws1', 'a', ?)",
@@ -400,7 +445,8 @@ def test_migration_006_recorded_and_history_index_present(migrated_factory):
         }
         assert "idx_deliveries_history" in indexes
         versions = {
-            r[0] for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
+            r[0]
+            for r in conn.execute("SELECT version FROM schema_migrations").fetchall()
         }
         assert 6 in versions
     finally:

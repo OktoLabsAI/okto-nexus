@@ -42,7 +42,10 @@ from ..domain.artifacts import (
 )
 from ..domain.base import new_id
 from ..domain.ids import resolve_realpath, resolve_workspace_id
+from ..domain.governance import ACTION_ARTIFACT_PUT
+from ..domain.policy import snapshot_permits, snapshot_to_selector
 from ..errors import ErrorCode, OktoNexusError
+from .governance import GovernanceService
 from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
@@ -63,6 +66,14 @@ from .ports import (
 #: stream (an invalid visibility would be treated as non-visible and hidden).
 ARTIFACT_VISIBILITY = "public"
 
+#: Visibility of an AUDIENCE-SCOPED ``artifact.created`` event (D-ART/BR7). When
+#: the publisher had an effective outbound audience, the event is gated by that
+#: SAME audience (folded into a ``tag`` target) so an out-of-audience agent
+#: never sees it on the stream - the stream must not leak what ``artifact_get``
+#: hides. An artifact with NO audience keeps ``ARTIFACT_VISIBILITY`` (public),
+#: byte-identical to the pre-policy event (zero-regression).
+ARTIFACT_SCOPED_VISIBILITY = "eligible"
+
 
 def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
@@ -82,6 +93,7 @@ class ArtifactService:
         config: NexusConfig,
         event_emitter: Optional[EventEmitter] = None,
         agents: Optional[AgentRepo] = None,
+        governance: Optional[GovernanceService] = None,
     ) -> None:
         self._cf = connection_factory
         self._agents = agents
@@ -91,6 +103,21 @@ class ArtifactService:
         self._clock = clock
         self._config = config
         self._emitter = event_emitter
+        # Policy enforcement (spec 80624c1a): when wired, artifact_put is
+        # enforced pre-persistence against the publisher's attached policies;
+        # None = no gate (and no bindings = no gate either).
+        self._governance = governance
+
+    def _put_uow(self, *, workspace_id: str, agent_id: Any):
+        """The write UoW for artifact_put: governance-guarded when wired.
+
+        The guard emits ``governance.denied`` in its own UoW AFTER a denial
+        rolled the main one back (BR6); with no governance wired it is exactly
+        ``unit_of_work()``.
+        """
+        if self._governance is not None:
+            return self._governance.guard(workspace_id=workspace_id, agent_id=agent_id)
+        return self._cf.unit_of_work()
 
     # ------------------------------------------------------------------ #
     # artifact_put
@@ -163,13 +190,32 @@ class ArtifactService:
         now = self._clock.now_iso()
         artifact_id = new_id("art")
 
-        with self._cf.unit_of_work() as uow:
+        with self._put_uow(workspace_id=workspace_id, agent_id=agent_id) as uow:
             # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
             # caller identity - the HTTP transport passes the authenticated
             # agent; cooperative stdio has none (default-allow).
-            permission_set_for(self._agents, uow, agent_id).require(
-                "artifacts", "put"
-            )
+            permission_set_for(self._agents, uow, agent_id).require("artifacts", "put")
+            # Governance gate (spec 80624c1a): deny + quotas from the publisher's
+            # attached policies, composed and evaluated PRE-persistence in this
+            # same UoW (no bindings = no governance inside enforce() - BR2).
+            # Without a caller identity there are no bindings, so nothing bites.
+            audience_snapshot: list[Any] | None = None
+            if self._governance is not None:
+                self._governance.enforce(
+                    uow,
+                    agent_id=agent_id,
+                    action=ACTION_ARTIFACT_PUT,
+                    size_bytes=size_bytes,
+                )
+                # Freeze the publisher's EFFECTIVE OUTBOUND as this artifact's
+                # audience (D-ART/D11), captured in the SAME UoW so it reflects
+                # exactly the bindings enforced above and never changes again.
+                # Empty -> None (a publisher with no outbound restriction, or no
+                # bindings, writes a NULL audience = public, zero-regression).
+                audience_snapshot = (
+                    self._governance.outbound_snapshot_for(uow, agent_id=agent_id)
+                    or None
+                )
             # Ensure the workspace row exists for the FK (idempotent upsert);
             # the client passed project_root, the server owns the identity.
             self._workspaces.upsert(
@@ -188,7 +234,11 @@ class ArtifactService:
                 content=stored_content,
                 size_bytes=size_bytes,
                 content_type=metadata_blob,
+                created_by=str(agent_id)
+                if isinstance(agent_id, str) and agent_id.strip()
+                else None,
                 created_at=now,
+                audience=audience_snapshot,
             )
             # artifact.created is emitted INSIDE the same uow so the row and the
             # event (with its server-assigned event_id) commit atomically (BR7).
@@ -209,12 +259,22 @@ class ArtifactService:
     # ------------------------------------------------------------------ #
     # artifact_get
     # ------------------------------------------------------------------ #
-    def artifact_get(self, *, project_root: Any, artifact_id: Any) -> dict[str, Any]:
+    def artifact_get(
+        self, *, project_root: Any, artifact_id: Any, agent_id: Any = None
+    ) -> dict[str, Any]:
         """Retrieve an artifact by id within the resolved workspace.
 
         Unknown ids and ids owned by another workspace both surface as
         ``NOT_FOUND`` with no field leakage (FR10 / BR9). ``stored=path`` returns
         only the path + metadata, never the referenced file's bytes (FR11/BR10).
+
+        Audience gate (D-ART/BR7): when the artifact froze an outbound audience
+        at ``artifact_put`` time, a reader whose tags do NOT satisfy it is
+        answered EXACTLY like a missing id - same ``NOT_FOUND``, same details, no
+        confirmation the artifact exists. ``agent_id`` is the OPTIONAL reader
+        identity (the HTTP transport passes the authenticated agent; cooperative
+        stdio has none). A NULL/empty audience (legacy rows, or an unrestricted
+        publisher) permits every reader, so pre-policy artifacts stay public.
         """
         workspace_id, _root = self._resolve_workspace(project_root)
         if not _is_nonempty_str(artifact_id):
@@ -228,7 +288,10 @@ class ArtifactService:
             artifact = self._artifacts.get(
                 uow, workspace_id=workspace_id, artifact_id=artifact_id
             )
-        if artifact is None:
+            reader_tags = (
+                self._reader_tags(uow, agent_id) if artifact is not None else None
+            )
+        if artifact is None or not snapshot_permits(artifact.audience, reader_tags):
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 "artifact_id not found in the resolved workspace.",
@@ -270,6 +333,21 @@ class ArtifactService:
         root_realpath = resolve_realpath(project_root)  # WORKSPACE_UNRESOLVED
         workspace_id = resolve_workspace_id(project_root)
         return workspace_id, root_realpath
+
+    def _reader_tags(self, uow: UnitOfWork, agent_id: Any) -> Any:
+        """The reader's tags for the artifact-audience gate (FR7/BR7).
+
+        The audience snapshot is the publisher's OUTBOUND selector; a read is
+        permitted iff the READER's tags satisfy it (:func:`snapshot_permits`).
+        Returns ``None`` (no tags) when there is no reader identity, no agent
+        repo is wired, or the id is unknown - so a restrictive audience hides the
+        artifact from a tag-less reader (fail-safe), while a NULL audience still
+        permits everyone.
+        """
+        if self._agents is None or not _is_nonempty_str(agent_id):
+            return None
+        agent = self._agents.get(uow, str(agent_id))
+        return getattr(agent, "tags", None) if agent is not None else None
 
     def _path_size(self, abs_path: str | None) -> int:
         """Return the on-disk byte size of a referenced file (metadata only).
@@ -330,16 +408,35 @@ class ArtifactService:
         }
         if stored == STORED_PATH and artifact.path is not None:
             payload["path"] = artifact.path
-        # target is a ROUTING RULE, never a bare entity id: a raw artifact_id
-        # is not JSON and would poison target coercion under any non-public
-        # visibility (the identity-slice bug class). The id already rides in
-        # the payload; lifecycle events are workspace-wide, so target=None.
+        # The event carries the SAME audience as the artifact (BR7): the frozen
+        # outbound snapshot is folded into ONE rich-form tag selector, so an
+        # out-of-audience agent never sees artifact.created on the stream (the
+        # stream must not leak what artifact_get hides). No audience -> the
+        # historic public, target-less event. target is always a ROUTING RULE,
+        # never a bare entity id (the id already rides in the payload).
+        visibility, target = self._audience_event_scope(artifact.audience)
         return self._emitter.emit(
             uow,
             workspace_id=artifact.workspace_id,
             stream=ARTIFACT_STREAM,
             type=ARTIFACT_CREATED_EVENT,
             payload=payload,
-            visibility=ARTIFACT_VISIBILITY,
-            target=None,
+            visibility=visibility,
+            target=target,
         )
+
+    @staticmethod
+    def _audience_event_scope(audience: Any) -> tuple[str, dict[str, Any] | None]:
+        """Map a frozen artifact-audience snapshot to (visibility, event target).
+
+        Empty/NULL audience -> ``(public, None)``: the historic workspace-wide
+        event, so legacy rows and unrestricted publishers stay byte-identical.
+        Otherwise the snapshot's AND is folded LOSSLESSLY into ONE rich-form
+        ``tag`` selector (:func:`snapshot_to_selector`) and the event goes out
+        ``eligible`` - an agent sees it IFF its tags satisfy the same AND that
+        gates ``artifact_get`` (BR7 - identical audience, no leak, no over-hide).
+        """
+        selector = snapshot_to_selector(audience)
+        if selector is None:
+            return ARTIFACT_VISIBILITY, None
+        return ARTIFACT_SCOPED_VISIBILITY, {"strategy": "tag", "selector": selector}

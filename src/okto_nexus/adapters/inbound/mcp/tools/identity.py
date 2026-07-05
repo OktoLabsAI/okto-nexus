@@ -34,27 +34,47 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
+from okto_nexus.adapters.outbound.sqlite.capability_catalog_repo import (
+    SqliteCapabilityCatalogRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.governance_repo import (
+    SqliteGovernanceRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.policy_repo import (
+    SqliteAgentPolicyBindingRepo,
+    SqlitePolicyRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
+from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.identity import IdentityService
 from okto_nexus.envelope import tool_envelope
+
+from ...http.identity_ctx import get_authenticated_agent
 
 #: Reused parameter descriptions (kept DRY across the identity tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_ROOT = (
+    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+)
 _P_DISPLAY_NAME = "Human-friendly label to store/refresh for the workspace (optional)."
 _P_AGENT_ID = "The logical agent identity (stable, opaque string); agents are GLOBAL, not per-workspace. REQUIRED."
 _P_ROLE = "Logical role, e.g. validator, worker (optional); matched exactly/case-sensitively by role-strategy targets."
 _P_CAPABILITIES = (
     "What this agent can do - used by capability routing + capability_list "
     'discovery (optional). Accepts a flag-map ({"ocr":true}), a list '
-    '(["ocr","pdf"]), or a single name string. Blank names dropped.'
+    '(["ocr","pdf"]), or a single name string. Blank names dropped. '
+    "FAIL-CLOSED: every name must already exist in the central capability "
+    "catalog (see capability_list; operators register names on the dashboard "
+    "Registry or POST /api/v1/capabilities)."
 )
-_P_AGENT_METADATA = "Free-form JSON object of extra attributes stored with the agent (optional)."
+_P_AGENT_METADATA = (
+    "Free-form JSON object of extra attributes stored with the agent (optional)."
+)
 _P_SESSION_AGENT = "Your agent_id; the session is bound to this identity. REQUIRED."
 _P_SESSION_WS = (
     "Workspace_id (from workspace_resolve) the session operates in (optional; omit "
@@ -69,6 +89,7 @@ _P_INCLUDE_PATHS = (
     "OMITTED by default - opt-in defense-in-depth). For routine discovery use "
     "agent_list / capability_list."
 )
+
 
 def build_service(deps: Any) -> IdentityService:
     """Wire the SQLite repos into ``deps.repos`` and build the service.
@@ -87,6 +108,8 @@ def build_service(deps: Any) -> IdentityService:
         repos.agents = SqliteAgentRepo(deps.clock)
     if getattr(repos, "sessions", None) is None:
         repos.sessions = SqliteSessionRepo(deps.clock)
+    if getattr(repos, "capability_catalog", None) is None:
+        repos.capability_catalog = SqliteCapabilityCatalogRepo(deps.clock)
     return IdentityService(
         connection_factory=deps.connection_factory,
         workspaces=repos.workspaces,
@@ -96,15 +119,40 @@ def build_service(deps: Any) -> IdentityService:
         config=deps.config,
         event_emitter=getattr(deps, "event_emitter", None),
         stale_ttl_seconds=deps.config.session_stale_ttl_seconds,
+        capability_catalog=repos.capability_catalog,
     )
 
 
-from ...http.identity_ctx import get_authenticated_agent
+def _build_governance(deps: Any) -> "GovernanceService":
+    """Governance read-model backing the whoami block (spec ffef15bf, FR6).
+
+    Idempotent on ``deps.repos.governance`` like every other slice wiring;
+    call AFTER :func:`build_service` so agents/capability_catalog exist.
+    """
+    repos = deps.repos
+    if getattr(repos, "governance", None) is None:
+        repos.governance = SqliteGovernanceRepo(deps.clock)
+    if getattr(repos, "policies", None) is None:
+        repos.policies = SqlitePolicyRepo(deps.clock)
+    if getattr(repos, "policy_bindings", None) is None:
+        repos.policy_bindings = SqliteAgentPolicyBindingRepo(deps.clock)
+    return GovernanceService(
+        connection_factory=deps.connection_factory,
+        governance=repos.governance,
+        clock=deps.clock,
+        config=deps.config,
+        agents=repos.agents,
+        capability_catalog=repos.capability_catalog,
+        event_emitter=getattr(deps, "event_emitter", None),
+        policies=repos.policies,
+        policy_bindings=repos.policy_bindings,
+    )
 
 
 def register(server: Any, deps: Any) -> None:
     """Register the identity tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
+    governance = _build_governance(deps)
 
     @server.tool()
     @tool_envelope
@@ -125,7 +173,7 @@ def register(server: Any, deps: Any) -> None:
         capabilities: Annotated[Any, Field(description=_P_CAPABILITIES)] = None,
         metadata: Annotated[Any, Field(description=_P_AGENT_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY: touching another agent's profile returns PERMISSION_DENIED. Full docs: okto-nexus://reference/tool-docs/identity."""
+        """Update YOUR OWN profile (role/capabilities/metadata); SELF-ONLY (else PERMISSION_DENIED). Capabilities are fail-closed against the central catalog. Docs: okto-nexus://reference/tool-docs/identity."""
         caller = get_authenticated_agent()
         return service.agent_register(
             agent_id=agent_id,
@@ -138,11 +186,25 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def agent_whoami() -> dict[str, Any]:
-        """Return YOUR OWN profile from your API key: agent_id, role, capabilities, metadata, permissions (null=unrestricted). Recommended FIRST call. Docs: okto-nexus://reference/tool-docs/identity."""
+        """Return YOUR OWN profile: agent_id, role, capabilities, metadata, permissions, and effective_policies (policy_id@version) + governance when attached. Docs: okto-nexus://reference/tool-docs/identity."""
         caller = get_authenticated_agent()
-        return service.agent_whoami(
+        data = service.agent_whoami(
             actor_agent_id=caller.agent_id if caller is not None else None,
         )
+        # Policy blocks (spec 80624c1a, FR11/AC10): present ONLY when the caller
+        # has bindings, so an actor with none stays byte-identical to the
+        # pre-policy surface (BR2). effective_policies names WHICH policies apply
+        # (<policy_id>@<version> / inline; audience-only sources included);
+        # governance carries the resolved rules. NEITHER leaks the audience
+        # selector contents (comm_scope stays operator-private) nor other agents'.
+        if caller is not None:
+            labels = governance.effective_policy_labels_for(caller.agent_id)
+            if labels:
+                data["effective_policies"] = labels
+            policies = governance.policies_for_agent(caller.agent_id)
+            if policies:
+                data["governance"] = policies
+        return data
 
     @server.tool()
     @tool_envelope
@@ -160,7 +222,9 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def session_heartbeat(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
-        workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS_GUARD)] = None,
+        workspace_id: Annotated[
+            str | None, Field(description=_P_SESSION_WS_GUARD)
+        ] = None,
     ) -> dict[str, Any]:
         """Advance a session heartbeat and report the derived status; keeps you PRESENT (in the broadcast audience) and clear of the stale-session reaper."""
         return service.session_heartbeat(
@@ -171,12 +235,12 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def session_close(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
-        workspace_id: Annotated[str | None, Field(description=_P_SESSION_WS_GUARD)] = None,
+        workspace_id: Annotated[
+            str | None, Field(description=_P_SESSION_WS_GUARD)
+        ] = None,
     ) -> dict[str, Any]:
         """Close a session (idempotent); repeating returns ok and stays closed."""
-        return service.session_close(
-            session_id=session_id, workspace_id=workspace_id
-        )
+        return service.session_close(session_id=session_id, workspace_id=workspace_id)
 
     @server.tool()
     @tool_envelope
@@ -189,19 +253,33 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def agent_list() -> dict[str, Any]:
-        """List ALL registered agents (global), each with role/capabilities and last_seen_at. Discovery surface: find an agent_id before a direct message or directed handoff."""
-        return {"agents": service.agent_list()}
+        """List registered agents (global), each with role/capabilities and last_seen_at. Authenticated callers see only agents their comm scope can reach (plus themselves); anonymous callers see all."""
+        caller = get_authenticated_agent()
+        return {
+            "agents": service.agent_list(
+                caller_agent_id=caller.agent_id if caller is not None else None,
+            )
+        }
 
     @server.tool()
     @tool_envelope
     def agent_get(
         agent_id: Annotated[str, Field(description=_P_GET_AGENT_ID)],
     ) -> dict[str, Any]:
-        """Return one agent's details, including its last interaction (last_seen_at)."""
-        return service.agent_get(agent_id=agent_id)
+        """Return one agent's details incl. last_seen_at. Scoped by reachability: an agent outside your comm scope reads as NOT_FOUND, indistinguishable from a non-existent agent_id."""
+        caller = get_authenticated_agent()
+        return service.agent_get(
+            agent_id=agent_id,
+            caller_agent_id=caller.agent_id if caller is not None else None,
+        )
 
     @server.tool()
     @tool_envelope
     def capability_list() -> dict[str, Any]:
-        """List the capabilities advertised across all agents, each with the agents that possess it - normalised exactly as capability routing matches."""
-        return {"capabilities": service.capability_list()}
+        """List the capability catalog merged with owners: every registered name (with description; agent_count 0 if unowned), agents scoped to your comm reach. Normalised as capability routing matches."""
+        caller = get_authenticated_agent()
+        return {
+            "capabilities": service.capability_list(
+                caller_agent_id=caller.agent_id if caller is not None else None,
+            )
+        }

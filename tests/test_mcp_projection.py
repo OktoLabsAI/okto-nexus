@@ -23,9 +23,6 @@ from pathlib import Path
 
 import pytest
 
-_SRC = Path(__file__).resolve().parents[1] / "src" / "okto_nexus"
-_HELPER_MODULE = "adapters.inbound.mcp.projection"
-
 from okto_nexus.adapters.inbound.mcp.projection import (
     MAX_ITEM_BYTES,
     PROFILES,
@@ -35,6 +32,9 @@ from okto_nexus.adapters.inbound.mcp.projection import (
     project_page,
 )
 from okto_nexus.errors import ErrorCode, OktoNexusError
+
+_SRC = Path(__file__).resolve().parents[1] / "src" / "okto_nexus"
+_HELPER_MODULE = "adapters.inbound.mcp.projection"
 
 
 def raw_event(**over):
@@ -109,8 +109,16 @@ def test_event_default_safe_trim():
 
 def test_inbox_default_keeps_contextuals_drops_empty_artifacts():
     out, omitted, truncated = project_inbox_item(raw_inbox(), "default")
-    for k in ("target", "delivery_id", "workspace_id", "channel_id",
-              "lease_expires_at", "read_at", "delivered_at", "body"):
+    for k in (
+        "target",
+        "delivery_id",
+        "workspace_id",
+        "channel_id",
+        "lease_expires_at",
+        "read_at",
+        "delivered_at",
+        "body",
+    ):
         assert k in out  # contextuals + body kept in default
     assert "artifacts" not in out  # empty [] dropped
     assert out["message_id"] == "m1"
@@ -130,14 +138,24 @@ def test_event_summary_drops_contextuals_and_payload():
     for k in ("task_id", "handoff_id", "workspace_id", "payload"):
         assert k not in out
     assert out["follow_up"]["target_ref"] == "event_get"
-    assert set(("event_id", "type", "actor_agent_id", "created_at", "stream")) <= set(out)
+    assert set(("event_id", "type", "actor_agent_id", "created_at", "stream")) <= set(
+        out
+    )
     assert omitted == 4  # task_id, handoff_id, workspace_id, payload
 
 
 def test_inbox_summary_drops_contextuals_keeps_message_id():
     out, omitted, _ = project_inbox_item(raw_inbox(), "summary")
-    for k in ("target", "delivery_id", "workspace_id", "channel_id",
-              "lease_expires_at", "read_at", "delivered_at", "body"):
+    for k in (
+        "target",
+        "delivery_id",
+        "workspace_id",
+        "channel_id",
+        "lease_expires_at",
+        "read_at",
+        "delivered_at",
+        "body",
+    ):
         assert k not in out
     assert out["message_id"] == "m1"  # LOAD-BEARING, always present
     assert out["follow_up"]["target_ref"] == "inbox_peek"
@@ -194,12 +212,16 @@ def test_event_default_truncates_oversized_payload():
 # S7 - telemetry via project_page
 # --------------------------------------------------------------------------- #
 def test_project_page_telemetry():
-    page = project_page([raw_inbox(), raw_inbox(message_id="m2")], "summary", kind="inbox")
+    page = project_page(
+        [raw_inbox(), raw_inbox(message_id="m2")], "summary", kind="inbox"
+    )
     assert page["truncated"] is False
     assert page["omitted_count"] == 18  # 9 per item, 2 items
     # payload_bytes is the deterministic compact-JSON size of the projected items
     expected = len(
-        json.dumps(page["items"], ensure_ascii=False, separators=(",", ":"), default=str).encode("utf-8")
+        json.dumps(
+            page["items"], ensure_ascii=False, separators=(",", ":"), default=str
+        ).encode("utf-8")
     )
     assert page["payload_bytes"] == expected
     # message_id survives on every item (load-bearing)
@@ -222,7 +244,11 @@ def test_project_page_event_full_vs_summary_reduction():
 def _imports_helper(py: Path) -> bool:
     tree = ast.parse(py.read_text(encoding="utf-8"))
     for node in ast.walk(tree):
-        if isinstance(node, ast.ImportFrom) and node.module and _HELPER_MODULE in node.module:
+        if (
+            isinstance(node, ast.ImportFrom)
+            and node.module
+            and _HELPER_MODULE in node.module
+        ):
             return True
         if isinstance(node, ast.Import):
             if any(_HELPER_MODULE in alias.name for alias in node.names):

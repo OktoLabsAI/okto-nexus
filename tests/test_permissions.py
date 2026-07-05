@@ -7,8 +7,10 @@ Two layers under test:
   its flags onto the agent; explicit flags win; null resets to unrestricted;
 * application-layer enforcement, exercised through the real services over the
   real adapters: default-allow for legacy agents, flag denials, the
-  quantitative limits (rate / allowed_peers) and the PERMISSION_DENIED error
-  shape every transport inherits.
+  quantitative limits (rate) and the PERMISSION_DENIED error shape every
+  transport inherits. Directed-send audience restriction moved from
+  ``allowed_peers`` to tag-based ``comm_scope`` (F1); its enforcement is
+  covered by ``test_comm_scope_outbound.py``.
 """
 
 from __future__ import annotations
@@ -31,6 +33,7 @@ from okto_nexus.adapters.inbound.mcp.tools.messages import (  # noqa: E402
 )
 from okto_nexus.domain.permissions import (  # noqa: E402
     BUILTIN_PRESETS,
+    PERMISSION_DESCRIPTIONS,
     PERMISSION_REGISTRY,
     PermissionSet,
     builtin_preset,
@@ -96,9 +99,7 @@ def test_permission_set_default_allow_and_denial_shape():
     with pytest.raises(OktoNexusError) as exc:
         restricted.require("messages", "send_broadcast")
     assert exc.value.code == ErrorCode.PERMISSION_DENIED
-    assert (
-        exc.value.details["required_permission"] == "messages.send_broadcast"
-    )
+    assert exc.value.details["required_permission"] == "messages.send_broadcast"
 
 
 def test_validate_rejects_unknown_flags_and_wrong_types():
@@ -108,12 +109,48 @@ def test_validate_rejects_unknown_flags_and_wrong_types():
         validate_permission_flags({"messages": {"send_direct": "yes"}})
     with pytest.raises(OktoNexusError):
         validate_permission_flags({"limits": {"messages_per_minute": -1}})
-    with pytest.raises(OktoNexusError):
-        validate_permission_flags({"messages": {"allowed_peers": [""]}})
-    ok = validate_permission_flags(
-        {"messages": {"allowed_peers": [" bob "]}, "limits": {"max_recipients": 3}}
+    ok = validate_permission_flags({"limits": {"max_recipients": 3}})
+    assert ok["limits"]["max_recipients"] == 3
+
+
+def test_allowed_peers_flag_is_gone_from_the_registry():
+    # REMOVED in F1: allowlists are now the tag-based comm_scope.outbound
+    # selector. The registry, the descriptions and every builtin preset are
+    # clean, so the data-driven dashboard editor drops the field by itself.
+    assert "allowed_peers" not in PERMISSION_REGISTRY["messages"]
+    assert not any("allowed_peers" in key for key in PERMISSION_DESCRIPTIONS)
+    for preset in BUILTIN_PRESETS:
+        assert "allowed_peers" not in preset["flags"]["messages"]
+    # A NEW payload carrying it is rejected fail-closed as an unknown flag.
+    with pytest.raises(OktoNexusError) as exc:
+        validate_permission_flags({"messages": {"allowed_peers": ["bob"]}})
+    assert exc.value.code == ErrorCode.VALIDATION_ERROR
+    assert exc.value.details["flag"] == "messages.allowed_peers"
+
+
+def test_legacy_allowed_peers_rows_are_inert(deps, tmp_path):
+    # A row persisted by an older version keeps its allowed_peers blob; no
+    # code reads it anymore, so a direct send to a peer OUTSIDE the old list
+    # goes through (the legacy gate has no effect - comm_scope governs now).
+    service = build_message_service(deps)
+    _register(deps, "legacy")
+    _register(deps, "outside")
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.agents.set_permissions(
+            uow,
+            agent_id="legacy",
+            permissions={"messages": {"allowed_peers": ["bob"]}},
+            preset_id=None,
+        )
+
+    out = service.create_message(
+        project_root=str(tmp_path),
+        from_agent_id="legacy",
+        subject="s",
+        body="b",
+        target={"strategy": "direct", "agent_id": "outside"},
     )
-    assert ok["messages"]["allowed_peers"] == ["bob"]
+    assert out["recipients"] == ["outside"]
 
 
 # --------------------------------------------------------------------------- #
@@ -214,16 +251,13 @@ def test_agent_patch_preset_resets_and_null_restores_full_access(loopback_client
     assert custom["permissions"]["messages"]["send_direct"] is True
 
     # Explicit null preset -> unrestricted.
-    cleared = client.patch("/api/v1/agents/a1", json={"preset_id": None}).json()[
-        "data"
-    ]
+    cleared = client.patch("/api/v1/agents/a1", json={"preset_id": None}).json()["data"]
     assert cleared["permissions"] is None
     assert cleared["preset_id"] is None
 
     # Unknown preset -> 404; invalid flags -> 422.
     assert (
-        client.patch("/api/v1/agents/a1", json={"preset_id": "nope"}).status_code
-        == 404
+        client.patch("/api/v1/agents/a1", json={"preset_id": "nope"}).status_code == 404
     )
     assert (
         client.patch(
@@ -253,7 +287,9 @@ def test_deleting_a_custom_preset_keeps_agent_flags(loopback_client):
 # --------------------------------------------------------------------------- #
 def test_broadcast_denied_for_worker_but_direct_allowed(deps, tmp_path):
     service = build_message_service(deps)
-    _register(deps, "alice", builtin_preset("builtin:worker")["flags"], "builtin:worker")
+    _register(
+        deps, "alice", builtin_preset("builtin:worker")["flags"], "builtin:worker"
+    )
     _register(deps, "bob")
     root = str(tmp_path)
 
@@ -293,38 +329,22 @@ def test_rate_limit_blocks_the_next_send(deps, tmp_path):
 
     for _ in range(2):
         service.create_message(
-            project_root=root, from_agent_id="spammy", subject="s", body="b",
+            project_root=root,
+            from_agent_id="spammy",
+            subject="s",
+            body="b",
             target=target,
         )
     with pytest.raises(OktoNexusError) as exc:
         service.create_message(
-            project_root=root, from_agent_id="spammy", subject="s", body="b",
+            project_root=root,
+            from_agent_id="spammy",
+            subject="s",
+            body="b",
             target=target,
         )
     assert exc.value.code == ErrorCode.PERMISSION_DENIED
     assert exc.value.details["limit"] == 2
-
-
-def test_allowed_peers_restricts_direct_targets(deps, tmp_path):
-    service = build_message_service(deps)
-    _register(deps, "shy", {"messages": {"allowed_peers": ["bob"]}})
-    _register(deps, "bob")
-    _register(deps, "eve")
-    root = str(tmp_path)
-
-    ok = service.create_message(
-        project_root=root, from_agent_id="shy", subject="s", body="b",
-        target={"strategy": "direct", "agent_id": "bob"},
-    )
-    assert ok["recipients"] == ["bob"]
-
-    with pytest.raises(OktoNexusError) as exc:
-        service.create_message(
-            project_root=root, from_agent_id="shy", subject="s", body="b",
-            target={"strategy": "direct", "agent_id": "eve"},
-        )
-    assert exc.value.code == ErrorCode.PERMISSION_DENIED
-    assert exc.value.details["blocked_recipients"] == ["eve"]
 
 
 def test_channel_post_needs_send_channel_only(deps, tmp_path):
@@ -338,7 +358,10 @@ def test_channel_post_needs_send_channel_only(deps, tmp_path):
     root = str(tmp_path)
     channel = service.create_channel(project_root=root, name="general")["channel"]
     result = service.create_message(
-        project_root=root, from_agent_id="chatty", subject="s", body="b",
+        project_root=root,
+        from_agent_id="chatty",
+        subject="s",
+        body="b",
         channel_id=channel["channel_id"],
     )
     assert result["channel_id"] == channel["channel_id"]
@@ -347,7 +370,10 @@ def test_channel_post_needs_send_channel_only(deps, tmp_path):
     _register(deps, "muted", {"messages": {"send_channel": False}})
     with pytest.raises(OktoNexusError) as exc:
         service.create_message(
-            project_root=root, from_agent_id="muted", subject="s", body="b",
+            project_root=root,
+            from_agent_id="muted",
+            subject="s",
+            body="b",
             channel_id=channel["channel_id"],
         )
     assert exc.value.details["required_permission"] == "messages.send_channel"
@@ -463,13 +489,14 @@ def test_agent_register_is_self_only_when_authenticated(deps):
     # ...and so is rewriting ANOTHER existing agent's profile.
     _register(deps, "bob")
     with pytest.raises(OktoNexusError):
-        identity.agent_register(
-            agent_id="bob", role="hijacked", actor_agent_id="alice"
-        )
+        identity.agent_register(agent_id="bob", role="hijacked", actor_agent_id="alice")
     with deps.connection_factory.unit_of_work() as uow:
         assert deps.repos.agents.get(uow, "bob").role is None
 
     # Updating HER OWN profile stays allowed (role/capabilities refresh).
+    # Capabilities are fail-closed: register the vocabulary before announcing.
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="search")
     updated = identity.agent_register(
         agent_id="alice",
         role="researcher",
@@ -491,6 +518,9 @@ def test_agent_whoami_returns_own_profile_with_permissions(deps):
         builtin_preset("builtin:worker")["flags"],
         "builtin:worker",
     )
+    # Capabilities are fail-closed: register the vocabulary before announcing.
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="ocr")
     identity.agent_register(
         agent_id="worker-7",
         role="executor",

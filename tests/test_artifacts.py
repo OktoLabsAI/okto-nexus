@@ -27,6 +27,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from okto_nexus.adapters.inbound.mcp.server import bootstrap, register_tools
 from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service, register
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore, _is_contained
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
@@ -37,6 +38,7 @@ from okto_nexus.adapters.outbound.sqlite.events_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.artifacts import ArtifactService
 from okto_nexus.application.events import EventService
+from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.ports import Repos
 from okto_nexus.domain.artifacts import (
     ARTIFACT_TYPES,
@@ -46,6 +48,12 @@ from okto_nexus.domain.artifacts import (
 )
 from okto_nexus.domain.ids import resolve_workspace_id
 from okto_nexus.domain.models import Workspace
+from okto_nexus.domain.policy import (
+    snapshot_permits,
+    snapshot_to_selector,
+    validate_agent_bindings,
+)
+from okto_nexus.domain.tag_selector import selector_matches
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
@@ -239,8 +247,6 @@ def event_ids(factory, type_="artifact.created") -> list[int]:
         conn.close()
 
 
-
-
 def mkroot(tmp_path, name="proj"):
     p = tmp_path / name
     p.mkdir()
@@ -312,7 +318,9 @@ def test_file_store_resolve_absolute_external_rejected(tmp_path):
 # --------------------------------------------------------------------------- #
 @pytest.mark.parametrize("bad", [None, "", "   "])
 def test_put_workspace_required(migrated_factory, tmp_config, bad):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(project_root=bad, artifact_type="text", content="hi")
     assert ei.value.code == ErrorCode.WORKSPACE_REQUIRED.value
@@ -320,7 +328,9 @@ def test_put_workspace_required(migrated_factory, tmp_config, bad):
 
 
 def test_put_workspace_unresolved(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     missing = str(tmp_path / "nope" / "child")  # absolute, nonexistent
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(project_root=missing, artifact_type="text", content="hi")
@@ -332,7 +342,9 @@ def test_put_workspace_unresolved(migrated_factory, tmp_config, tmp_path):
 # artifact_put: input validation (FR1/FR2/FR5 -> AC2/AC3/AC6)
 # --------------------------------------------------------------------------- #
 def test_put_requires_path_or_content(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(project_root=root, artifact_type="text")
@@ -341,7 +353,9 @@ def test_put_requires_path_or_content(migrated_factory, tmp_config, tmp_path):
 
 
 def test_put_invalid_artifact_type(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(project_root=root, artifact_type="zip", content="data")
@@ -350,7 +364,9 @@ def test_put_invalid_artifact_type(migrated_factory, tmp_config, tmp_path):
 
 
 def test_put_json_malformed_rejected(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(project_root=root, artifact_type="json", content="{nope}")
@@ -359,7 +375,9 @@ def test_put_json_malformed_rejected(migrated_factory, tmp_config, tmp_path):
 
 
 def test_put_json_wellformed_persists(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     out = svc.artifact_put(
         project_root=root, artifact_type="json", content='{"k": [1, 2, 3]}'
@@ -373,7 +391,9 @@ def test_put_json_wellformed_persists(migrated_factory, tmp_config, tmp_path):
 # artifact_put: 64KB inline boundary (FR3/FR4 -> AC4/AC5)
 # --------------------------------------------------------------------------- #
 def test_put_content_too_large(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     content = "a" * 65537  # 65537 bytes UTF-8
     with pytest.raises(OktoNexusError) as ei:
@@ -386,8 +406,12 @@ def test_put_content_too_large(migrated_factory, tmp_config, tmp_path):
     assert count(migrated_factory, "events") == 0
 
 
-def test_put_content_boundary_inclusive_multibyte(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+def test_put_content_boundary_inclusive_multibyte(
+    migrated_factory, tmp_config, tmp_path
+):
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     # Exactly 65536 bytes, ending in a whole 3-byte char (no partial break).
     content = "x" * (65536 - 3) + "€"  # '€' is 3 UTF-8 bytes
@@ -402,18 +426,20 @@ def test_put_content_boundary_inclusive_multibyte(migrated_factory, tmp_config, 
 # artifact_put: path containment (FR6 -> AC8/AC9/AC10/AC11)
 # --------------------------------------------------------------------------- #
 def test_put_path_traversal_rejected(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     with pytest.raises(OktoNexusError) as ei:
-        svc.artifact_put(
-            project_root=root, artifact_type="file", path="../outside.txt"
-        )
+        svc.artifact_put(project_root=root, artifact_type="file", path="../outside.txt")
     assert ei.value.code == ErrorCode.PATH_OUTSIDE_WORKSPACE.value
     assert count(migrated_factory, "artifacts") == 0
 
 
 def test_put_path_absolute_external_rejected(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     external = str(tmp_path / "external_dir" / "secret.txt")
     with pytest.raises(OktoNexusError) as ei:
@@ -434,7 +460,9 @@ def test_put_path_symlink_escape_rejected(migrated_factory, tmp_config, tmp_path
     except (OSError, NotImplementedError, AttributeError):
         pytest.skip("symlink creation not permitted in this environment")
 
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_put(
             project_root=str(root),
@@ -446,7 +474,9 @@ def test_put_path_symlink_escape_rejected(migrated_factory, tmp_config, tmp_path
 
 
 def test_put_path_contained_ok(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = tmp_path / "proj"
     root.mkdir()
     (root / "docs").mkdir()
@@ -498,7 +528,13 @@ def test_put_atomic_row_and_event(migrated_factory, tmp_config, tmp_path):
     # rides in the payload instead (asserted below).
     assert ev["target"] is None
     payload = ev["payload"]
-    for key in ("workspace_id", "artifact_id", "artifact_type", "size_bytes", "created_at"):
+    for key in (
+        "workspace_id",
+        "artifact_id",
+        "artifact_type",
+        "size_bytes",
+        "created_at",
+    ):
         assert key in payload
     assert payload["artifact_id"] == out["artifact_id"]
 
@@ -547,7 +583,9 @@ def test_put_rollback_on_emit_failure(migrated_factory, tmp_config, tmp_path):
 
 
 def test_put_repeated_identical_distinct_ids(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     a = svc.artifact_put(project_root=root, artifact_type="text", content="same")
     b = svc.artifact_put(project_root=root, artifact_type="text", content="same")
@@ -559,9 +597,13 @@ def test_put_repeated_identical_distinct_ids(migrated_factory, tmp_config, tmp_p
 # artifact_get (FR9/FR10/FR11 -> AC15/AC16/AC17/AC18)
 # --------------------------------------------------------------------------- #
 def test_get_inline_roundtrip(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
-    put = svc.artifact_put(project_root=root, artifact_type="markdown", content="# Title")
+    put = svc.artifact_put(
+        project_root=root, artifact_type="markdown", content="# Title"
+    )
 
     got = svc.artifact_get(project_root=root, artifact_id=put["artifact_id"])
     assert got["stored"] == "inline"
@@ -572,7 +614,9 @@ def test_get_inline_roundtrip(migrated_factory, tmp_config, tmp_path):
 
 
 def test_get_not_found(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     # Establish the workspace so resolution succeeds, then query a ghost id.
     svc.artifact_put(project_root=root, artifact_type="text", content="x")
@@ -582,7 +626,9 @@ def test_get_not_found(migrated_factory, tmp_config, tmp_path):
 
 
 def test_get_missing_artifact_id_validation(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     with pytest.raises(OktoNexusError) as ei:
         svc.artifact_get(project_root=root, artifact_id="  ")
@@ -590,10 +636,14 @@ def test_get_missing_artifact_id_validation(migrated_factory, tmp_config, tmp_pa
 
 
 def test_get_cross_workspace_isolation(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root_a = mkroot(tmp_path, "A")
     root_b = mkroot(tmp_path, "B")
-    put = svc.artifact_put(project_root=root_a, artifact_type="text", content="secret-A")
+    put = svc.artifact_put(
+        project_root=root_a, artifact_type="text", content="secret-A"
+    )
 
     # Same artifact_id, but resolved from workspace B -> NOT_FOUND, no leak.
     with pytest.raises(OktoNexusError) as ei:
@@ -604,11 +654,15 @@ def test_get_cross_workspace_isolation(migrated_factory, tmp_config, tmp_path):
 
 
 def test_get_path_returns_no_inline_bytes(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = tmp_path / "proj"
     root.mkdir()
     (root / "data.bin").write_text("ON DISK BYTES", encoding="utf-8")
-    put = svc.artifact_put(project_root=str(root), artifact_type="file", path="data.bin")
+    put = svc.artifact_put(
+        project_root=str(root), artifact_type="file", path="data.bin"
+    )
 
     got = svc.artifact_get(project_root=str(root), artifact_id=put["artifact_id"])
     assert got["stored"] == "path"
@@ -618,7 +672,9 @@ def test_get_path_returns_no_inline_bytes(migrated_factory, tmp_config, tmp_path
 
 
 def test_metadata_roundtrip(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     put = svc.artifact_put(
         project_root=root,
@@ -634,7 +690,9 @@ def test_metadata_roundtrip(migrated_factory, tmp_config, tmp_path):
 # Event monotonicity (FR12 -> AC19)
 # --------------------------------------------------------------------------- #
 def test_event_id_monotonic(migrated_factory, tmp_config, tmp_path):
-    svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     root = mkroot(tmp_path)
     svc.artifact_put(project_root=root, artifact_type="text", content="one")
     svc.artifact_put(project_root=root, artifact_type="text", content="two")
@@ -648,7 +706,9 @@ def test_event_id_monotonic(migrated_factory, tmp_config, tmp_path):
 # MCP tool registration + canonical envelope
 # --------------------------------------------------------------------------- #
 def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
-    deps = make_deps(migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter())
+    deps = make_deps(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
     server = FakeServer()
     register(server, deps)
     assert set(server.tools) == {"artifact_put", "artifact_get"}
@@ -698,7 +758,9 @@ def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
 # --------------------------------------------------------------------------- #
 # Concurrency: WAL single-writer serialisation (AC20)
 # --------------------------------------------------------------------------- #
-def test_concurrent_writers_distinct_ids_and_events(migrated_factory, tmp_config, tmp_path):
+def test_concurrent_writers_distinct_ids_and_events(
+    migrated_factory, tmp_config, tmp_path
+):
     emitter = RecordingEmitter()
     svc = make_service(migrated_factory, tmp_config, StubClock(), emitter=emitter)
     root = mkroot(tmp_path)
@@ -728,3 +790,281 @@ def test_concurrent_writers_distinct_ids_and_events(migrated_factory, tmp_config
     assert len(ids) == n  # one event per put, none lost/duplicated
     assert len(set(ids)) == n  # distinct event_id
     assert ids == sorted(ids)  # monotonic under serialised writes
+
+
+# --------------------------------------------------------------------------- #
+# A5 - Artifact audience inheritance (spec 80624c1a: FR7/TR5, BR6/BR7, D-ART)
+#
+# artifact_put freezes the publisher's EFFECTIVE OUTBOUND audience onto the row
+# (immutable, D11); artifact_get re-evaluates it against the reader's tags and
+# answers a failing reader EXACTLY like a missing id; the artifact.created event
+# carries the SAME audience so the stream never leaks what the read-path hides.
+# These build the service over a real bootstrap (all policy/agent repos wired),
+# calling it with an explicit reader identity - wiring that identity through the
+# artifact_get MCP tool is B3, not A5.
+# --------------------------------------------------------------------------- #
+def _ok(env: dict) -> dict:
+    assert env["ok"] is True, f"expected ok envelope, got: {env}"
+    return env["data"]
+
+
+def _policy_env(tmp_path):
+    """Real bootstrap in a temp home + registered tools + a resolved workspace."""
+    env = {"OKTO_NEXUS_HOME": str(tmp_path / "home")}
+    deps = bootstrap(env, [])
+    server = FakeServer()
+    register_tools(server, deps)
+    tools = server.tools
+    project = tmp_path / "project"
+    project.mkdir(exist_ok=True)
+    root = str(project)
+    _ok(tools["workspace_resolve"](project_root=root))
+    return deps, tools, root
+
+
+def _governance(deps):
+    """The GovernanceService exactly as the tool modules wire it."""
+    return GovernanceService(
+        connection_factory=deps.connection_factory,
+        governance=deps.repos.governance,
+        clock=deps.clock,
+        config=deps.config,
+        agents=deps.repos.agents,
+        capability_catalog=deps.repos.capability_catalog,
+        event_emitter=deps.event_emitter,
+        policies=deps.repos.policies,
+        policy_bindings=deps.repos.policy_bindings,
+    )
+
+
+def _governed_service(deps):
+    """ArtifactService wired WITH governance + agents (audience enforcement on)."""
+    return ArtifactService(
+        connection_factory=deps.connection_factory,
+        artifacts=deps.repos.artifacts,
+        workspaces=deps.repos.workspaces,
+        files=deps.repos.files,
+        clock=deps.clock,
+        config=deps.config,
+        event_emitter=deps.event_emitter,
+        agents=deps.repos.agents,
+        governance=_governance(deps),
+    )
+
+
+def _attach_inline(deps, agent_id, *, audience=None, governance=()):
+    """Overwrite ``agent_id`` with ONE inline binding (audience + governance)."""
+    bindings = validate_agent_bindings(
+        [{"source": "inline", "audience": audience, "governance": list(governance)}]
+    )
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.policy_bindings.replace(uow, agent_id=agent_id, bindings=bindings)
+
+
+def _set_tags(deps, agent_id, tags):
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.agents.set_tags(uow, agent_id=agent_id, tags=tags)
+
+
+def _row_audience(deps, artifact_id):
+    conn = deps.connection_factory.get_connection()
+    try:
+        row = conn.execute(
+            "SELECT audience FROM artifacts WHERE artifact_id = ?", (artifact_id,)
+        ).fetchone()
+    finally:
+        conn.close()
+    raw = row[0] if row is not None else None
+    return json.loads(raw) if raw is not None else None
+
+
+def test_snapshot_to_selector_folds_multisource_and_losslessly():
+    # The event-audience encoding: a multi-selector AND snapshot folds into ONE
+    # rich-form selector whose match is BIT-FOR-BIT snapshot_permits (BR7).
+    assert snapshot_to_selector(None) is None
+    assert snapshot_to_selector([]) is None
+    assert snapshot_to_selector([{"team": ["backend"]}]) == [
+        {"key": "team", "operator": "In", "values": ["backend"]}
+    ]
+    snap = [{"team": ["backend"]}, {"tier": ["gold"]}]
+    folded = snapshot_to_selector(snap)
+    for tags in (
+        {"team": ["backend"], "tier": ["gold"]},
+        {"team": ["backend"]},
+        {"tier": ["gold"]},
+        {"team": ["frontend"], "tier": ["gold"]},
+        {},
+    ):
+        assert selector_matches(folded, tags) == snapshot_permits(snap, tags)
+    # A rich-form source (Exists) passes through and still ANDs with the rest.
+    rich = [[{"key": "team", "operator": "Exists"}], {"tier": ["gold"]}]
+    folded_rich = snapshot_to_selector(rich)
+    for tags in (
+        {"team": ["x"], "tier": ["gold"]},
+        {"tier": ["gold"]},
+        {"team": ["x"]},
+    ):
+        assert selector_matches(folded_rich, tags) == snapshot_permits(rich, tags)
+
+
+def test_ts8_artifact_snapshot_at_put_and_fail_closed_get(tmp_path):
+    deps, tools, root = _policy_env(tmp_path)
+    for aid in ("publisher", "reader_in", "reader_out", "legacy_pub"):
+        _ok(tools["agent_register"](agent_id=aid, role="worker"))
+
+    # Publisher's effective OUTBOUND S = team In [backend].
+    outbound = {"team": ["backend"]}
+    _attach_inline(deps, "publisher", audience={"outbound": outbound})
+    _set_tags(deps, "reader_in", {"team": ["backend"]})  # satisfies S
+    _set_tags(deps, "reader_out", {"team": ["frontend"]})  # fails S
+
+    svc = _governed_service(deps)
+
+    scoped = svc.artifact_put(
+        project_root=root, artifact_type="text", content="secret", agent_id="publisher"
+    )
+    aid = scoped["artifact_id"]
+    # A publisher with NO bindings writes a NULL-audience (public/legacy) row.
+    legacy = svc.artifact_put(
+        project_root=root, artifact_type="text", content="open", agent_id="legacy_pub"
+    )
+    lid = legacy["artifact_id"]
+
+    # artifacts.audience == snapshot(S) - the single outbound selector, frozen.
+    assert _row_audience(deps, aid) == [outbound]
+    assert _row_audience(deps, lid) is None
+
+    # reader IN reads the scoped artifact.
+    got = svc.artifact_get(project_root=root, artifact_id=aid, agent_id="reader_in")
+    assert got["content"] == "secret"
+
+    # reader OUT is answered EXACTLY like a missing id (same code + details, no
+    # leak of the hidden content).
+    with pytest.raises(OktoNexusError) as ei:
+        svc.artifact_get(project_root=root, artifact_id=aid, agent_id="reader_out")
+    assert ei.value.code == ErrorCode.NOT_FOUND.value
+    assert (ei.value.details or {}) == {"artifact_id": aid}
+    assert "secret" not in json.dumps(ei.value.to_error_dict())
+
+    # The legacy (NULL-audience) artifact stays visible to EVERYONE.
+    for reader in ("reader_in", "reader_out"):
+        seen = svc.artifact_get(project_root=root, artifact_id=lid, agent_id=reader)
+        assert seen["content"] == "open"
+
+
+def test_ts9_artifact_created_event_respects_audience_on_stream(tmp_path):
+    deps, tools, root = _policy_env(tmp_path)
+    for aid in ("publisher", "reader_in", "reader_out"):
+        _ok(tools["agent_register"](agent_id=aid, role="worker"))
+    _attach_inline(deps, "publisher", audience={"outbound": {"team": ["backend"]}})
+    _set_tags(deps, "reader_in", {"team": ["backend"]})
+    _set_tags(deps, "reader_out", {"team": ["frontend"]})
+
+    svc = _governed_service(deps)
+    out = svc.artifact_put(
+        project_root=root, artifact_type="text", content="secret", agent_id="publisher"
+    )
+    aid = out["artifact_id"]
+
+    # The stream must not leak what artifact_get hides: only the in-audience
+    # agent sees artifact.created.
+    in_page = _ok(
+        tools["event_get"](project_root=root, agent_id="reader_in", stream="workspace")
+    )
+    out_page = _ok(
+        tools["event_get"](project_root=root, agent_id="reader_out", stream="workspace")
+    )
+    in_art = [e for e in in_page["events"] if e["type"] == "artifact.created"]
+    out_art = [e for e in out_page["events"] if e["type"] == "artifact.created"]
+    assert len(in_art) == 1
+    assert in_art[0]["payload"]["artifact_id"] == aid
+    assert out_art == []
+
+
+def test_ts8_unbound_publisher_stays_public_zero_regression(tmp_path):
+    # An agent with NO bindings publishes a NULL-audience artifact readable by
+    # everyone - byte-identical to the pre-policy bus (BR2/AC1).
+    deps, tools, root = _policy_env(tmp_path)
+    for aid in ("nobody", "whoever"):
+        _ok(tools["agent_register"](agent_id=aid, role="worker"))
+    _set_tags(deps, "whoever", {"team": ["frontend"]})
+
+    svc = _governed_service(deps)
+    out = svc.artifact_put(
+        project_root=root, artifact_type="text", content="open", agent_id="nobody"
+    )
+    assert _row_audience(deps, out["artifact_id"]) is None
+    got = svc.artifact_get(
+        project_root=root, artifact_id=out["artifact_id"], agent_id="whoever"
+    )
+    assert got["content"] == "open"
+
+
+# --------------------------------------------------------------------------- #
+# B3 - the artifact_get MCP TOOL wires the caller's identity (spec 80624c1a,
+# AC8). A5 proved the SERVICE enforces the frozen audience when handed an
+# explicit reader; B3 closes the loop at the TOOL boundary: artifact_get reads
+# the caller from the authenticated-agent context and passes it through, so an
+# out-of-audience caller is answered EXACTLY like a missing id THROUGH THE TOOL
+# (no leak of the hidden content), while the in-audience caller reads it. Put
+# also flows through the tool so the frozen audience comes from the caller, not
+# a parameter.
+# --------------------------------------------------------------------------- #
+def test_b3_artifact_get_tool_scopes_read_by_caller_identity(tmp_path):
+    from okto_nexus.adapters.inbound.http.identity_ctx import current_agent
+
+    deps, tools, root = _policy_env(tmp_path)
+    for aid in ("publisher", "reader_in", "reader_out"):
+        _ok(tools["agent_register"](agent_id=aid, role="worker"))
+    _attach_inline(deps, "publisher", audience={"outbound": {"team": ["backend"]}})
+    _set_tags(deps, "reader_in", {"team": ["backend"]})  # satisfies S
+    _set_tags(deps, "reader_out", {"team": ["frontend"]})  # fails S
+
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        publisher = deps.repos.agents.get(uow, "publisher")
+        reader_in = deps.repos.agents.get(uow, "reader_in")
+        reader_out = deps.repos.agents.get(uow, "reader_out")
+
+    # PUT through the tool AS the publisher: the frozen audience is derived from
+    # the authenticated caller, never a tool parameter.
+    token = current_agent.set(publisher)
+    try:
+        put = _ok(
+            tools["artifact_put"](
+                project_root=root, artifact_type="text", content="secret"
+            )
+        )
+    finally:
+        current_agent.reset(token)
+    aid = put["artifact_id"]
+    assert _row_audience(deps, aid) == [{"team": ["backend"]}]
+
+    # GET through the tool AS reader_in (in audience): reads the content.
+    token = current_agent.set(reader_in)
+    try:
+        got = _ok(tools["artifact_get"](project_root=root, artifact_id=aid))
+    finally:
+        current_agent.reset(token)
+    assert got["content"] == "secret"
+
+    # GET through the tool AS reader_out (out of audience): NOT_FOUND, byte-
+    # identical to a missing id (same code + details), and the hidden content
+    # never appears anywhere in the envelope.
+    token = current_agent.set(reader_out)
+    try:
+        denied = tools["artifact_get"](project_root=root, artifact_id=aid)
+    finally:
+        current_agent.reset(token)
+    assert denied["ok"] is False
+    assert denied["error"]["code"] == "NOT_FOUND"
+    assert denied["error"].get("details", {}) == {"artifact_id": aid}
+    assert "secret" not in json.dumps(denied)
+
+    # A missing id yields the SAME shape for reader_in, proving the out-of-
+    # audience answer is truly indistinguishable from absence.
+    token = current_agent.set(reader_in)
+    try:
+        missing = tools["artifact_get"](project_root=root, artifact_id=aid + "x")
+    finally:
+        current_agent.reset(token)
+    assert missing["error"]["code"] == "NOT_FOUND"

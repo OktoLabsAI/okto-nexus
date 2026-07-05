@@ -12,6 +12,7 @@ import os
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, create_server
 from okto_nexus.adapters.inbound.mcp.surface_metrics import (
+    APPROVED_GROWTH,
     BASELINE,
     cuttable_reduction_pct,
     measure_resident_surface,
@@ -45,5 +46,12 @@ def test_cuttable_reduction_helper_matches_baseline_math(tmp_path):
     server = _server(tmp_path)
     m = asyncio.run(measure_resident_surface(server))
     pct = cuttable_reduction_pct(m["cuttable"])
-    assert pct == (BASELINE["cuttable"] - m["cuttable"]) / BASELINE["cuttable"]
+    # The helper discounts ONLY the APPROVED_GROWTH ledger (surface later
+    # specs deliberately added, e.g. I4 verification); unlisted growth still
+    # lowers the figure, so gratuitous bloat keeps tripping the S4 gate.
+    approved = sum(APPROVED_GROWTH.values())
+    assert (
+        pct
+        == (BASELINE["cuttable"] - (m["cuttable"] - approved)) / BASELINE["cuttable"]
+    )
     assert 0.0 <= pct < 1.0

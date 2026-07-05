@@ -57,7 +57,9 @@ def surface(tmp_path):
 def _call(server, name: str, arguments: dict | None = None) -> dict:
     """Call a tool through FastMCP (schema validation included); return the envelope."""
     result = asyncio.run(server.call_tool(name, arguments or {}))
-    if isinstance(result, tuple):  # (unstructured, structured) when output schema exists
+    if isinstance(
+        result, tuple
+    ):  # (unstructured, structured) when output schema exists
         return result[1]
     block = result[0]
     return json.loads(block.text)
@@ -182,6 +184,7 @@ def test_nexus_info_reports_versions(surface):
         "schema_version",
         "surface_revision",
         "resource_versions",
+        "features",
     }
 
     assert isinstance(data["package_version"], str) and data["package_version"]
