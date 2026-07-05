@@ -39,6 +39,7 @@ When adding an MCP tool: drop a module under `adapters/inbound/mcp/tools/` expos
 - **State lives at `~/.okto_nexus/nexus.db`** (override with `OKTO_NEXUS_HOME` / `OKTO_NEXUS_DB_PATH`). `workspace_id = sha256(realpath(project_root))`; clients pass `project_root`, the server hashes it — reads/writes are workspace-scoped.
 - **`serve` holds a lock** (`nexus.serve.lock`) — a second `serve` on the same home is refused until 60s of heartbeat silence. On Windows the `.exe` is also locked while running; stop running `okto-nexus` processes before reinstalling.
 - Migrations (`migrations/00N_*.sql`) run automatically at bootstrap, before any tool registers.
+- **Auth is same-machine trust (decision D5), not a bug.** On a loopback bind (`local_open`, default) a *keyless* REST/dashboard request is the reserved `operator` — `_require_operator()` (routes.py) admits `agent is None`. `/mcp` is never exempt (always key-gated). The only way to require keys is to bind off-loopback. Keyless loopback is fenced from browsers by `_loopback_trust_ok` (app.py): cross-origin `Origin` or DNS-rebound `Host` (via `Sec-Fetch-Site`) → `403 CROSS_ORIGIN_BLOCKED`. Destructive/config endpoints are operator-only (non-operator key → 403).
 - Developed on **Windows / PowerShell** — venv is `.\.venv\Scripts\python.exe`.
 
 ## Conventions

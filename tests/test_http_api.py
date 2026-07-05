@@ -97,6 +97,114 @@ def test_non_loopback_client_requires_key_even_when_local_open(tmp_path):
         assert client.get("/api/v1/graph").status_code == 401
 
 
+def test_loopback_trust_refuses_cross_origin_and_dns_rebinding(tmp_path):
+    """The keyless same-machine opening must not be ridable by a BROWSER: a
+    cross-site fetch (foreign Origin) or a DNS-rebound Host is refused 403,
+    while curl/agents (no Origin, no Fetch-Metadata) and the real dashboard
+    (loopback Origin + Host) still pass."""
+    home = tmp_path / "nexus_home"
+    deps = bootstrap({}, ["--home", str(home)])
+    app = build_app(deps)
+
+    with TestClient(app, client=("127.0.0.1", 50010)) as client:
+        # Non-browser same-machine caller (no Origin / no Fetch-Metadata): trusted.
+        assert client.get("/api/v1/graph").status_code == 200
+        # The real dashboard: loopback Origin + Host + Fetch-Metadata -> trusted.
+        dashboard = {
+            "origin": "http://127.0.0.1:8202",
+            "host": "127.0.0.1:8202",
+            "sec-fetch-site": "same-origin",
+        }
+        assert client.get("/api/v1/graph", headers=dashboard).status_code == 200
+        # Dev proxy origin (vite :5202) is loopback too -> trusted.
+        dev = {"origin": "http://localhost:5202"}
+        assert client.get("/api/v1/graph", headers=dev).status_code == 200
+
+        # Cross-site CSRF: a foreign Origin on the loopback socket -> 403.
+        evil = client.get("/api/v1/graph", headers={"origin": "https://evil.example"})
+        assert evil.status_code == 403
+        assert evil.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+        # A state-changing CSRF write is refused in the middleware, before the
+        # handler runs (no policy is ever created).
+        wrote = client.post(
+            "/api/v1/policies",
+            json={"name": "x"},
+            headers={"origin": "https://evil.example"},
+        )
+        assert wrote.status_code == 403
+        assert wrote.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+
+        # Read-only DNS-rebinding: a browser (Sec-Fetch-Site) with the
+        # attacker's domain as Host but NO Origin (same-origin GET) -> 403.
+        rebound = client.get(
+            "/api/v1/graph",
+            headers={"sec-fetch-site": "same-origin", "host": "evil.example"},
+        )
+        assert rebound.status_code == 403
+        assert rebound.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+        # A non-browser caller (no Fetch-Metadata) with an odd Host is NOT a
+        # rebinding vector - curl on the box can set any Host and is trusted.
+        assert (
+            client.get("/api/v1/graph", headers={"host": "evil.example"}).status_code
+            == 200
+        )
+
+
+def test_destructive_surfaces_are_operator_only_off_loopback(serve_env):
+    """Every destructive / privileged REST surface requires the operator
+    identity: a valid but NON-operator key is refused 403 PERMISSION_DENIED
+    (previously any authenticated key passed). Covers config/admin, the legacy
+    governance CRUD, agent+key management (incl. the operator-takeover via
+    regenerate-key), the tag/capability/preset catalogs and the admin
+    session/handoff force-actions."""
+    _, client, operator_key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "peon"},
+        headers=_h(operator_key),
+    ).json()["data"]
+    peon = _h(created["api_key"])
+
+    forbidden = (
+        # config / admin
+        client.patch("/api/v1/settings", json={}, headers=peon),
+        client.post("/api/v1/settings/reset", headers=peon),
+        client.post("/api/v1/admin/reset", headers=peon),
+        client.post("/api/v1/admin/prune", headers=peon),
+        # legacy governance CRUD
+        client.get("/api/v1/governance/policies", headers=peon),
+        client.post("/api/v1/governance/policies", json={}, headers=peon),
+        client.patch("/api/v1/governance/policies/nope", json={}, headers=peon),
+        client.delete("/api/v1/governance/policies/nope", headers=peon),
+        # agent + key management (regenerate-key was operator-account-takeover)
+        client.post("/api/v1/agents", json={"agent_id": "intruder"}, headers=peon),
+        client.patch("/api/v1/agents/operator", json={}, headers=peon),
+        client.delete("/api/v1/agents/operator", headers=peon),
+        client.post("/api/v1/agents/operator/regenerate-key", headers=peon),
+        # tag / capability / preset catalogs (documented operator-only)
+        client.post("/api/v1/tags", json={"key": "team"}, headers=peon),
+        client.delete("/api/v1/tags/team", headers=peon),
+        client.post("/api/v1/capabilities", json={"name": "ocr"}, headers=peon),
+        client.delete("/api/v1/capabilities/ocr", headers=peon),
+        client.delete("/api/v1/presets/prs_nope", headers=peon),
+        # admin force-actions (the agent path is the MCP verb, not this REST)
+        client.post("/api/v1/sessions/sess_nope/close", headers=peon),
+        client.post("/api/v1/handoffs/ho_nope/cancel?workspace=w", headers=peon),
+    )
+    for response in forbidden:
+        assert response.status_code == 403, response.text
+        assert response.json()["error"]["code"] == "PERMISSION_DENIED"
+
+    # CRITICAL regression: the refused regenerate-key above did NOT rotate the
+    # operator's key, so the operator credential still authenticates (no
+    # account takeover), and the operator still passes every gate.
+    assert client.get("/api/v1/agents", headers=_h(operator_key)).status_code == 200
+    assert (
+        client.get("/api/v1/governance/policies", headers=_h(operator_key)).status_code
+        == 200
+    )
+
+
 # --------------------------------------------------------------------------- #
 # Auth gate (AC2)
 # --------------------------------------------------------------------------- #

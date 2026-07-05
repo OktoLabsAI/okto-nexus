@@ -263,7 +263,7 @@ pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a che
 okto-nexus serve                        # → http://127.0.0.1:8202
 ```
 
-Package: `okto-nexus` v`0.0.6` — *Okto Nexus - Local Agent Coordination Bus
+Package: `okto-nexus` v`0.1.0` — *Okto Nexus - Local Agent Coordination Bus
 (MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
 SaaS/Branding Addendum + Trademark Policy.
 
@@ -346,6 +346,28 @@ one-time anti-lockout bootstrap (an `operator` agent + key, printed once).
 Migrate stdio-era agents in batch with `okto-nexus admin issue-keys` (additive,
 idempotent). On stdio, an optional `OKTO_NEXUS_API_KEY` binds the session to a
 key-derived identity (fail-closed when set; absent = V1 behaviour).
+
+**Same-machine trust (decision D5).** On the default loopback bind a *keyless*
+REST/dashboard request is treated as the reserved `operator` identity — whoever
+can reach `127.0.0.1` already owns `nexus.db` on disk, so the local operator
+skips the key ceremony (that ceremony belongs to *agents*, over `/mcp`, which is
+never exempt). To require a key on your own machine, **bind beyond loopback**
+(`--host` / `OKTO_NEXUS_HOST`): `local_open` flips to `False`, every request
+needs a key, and the dashboard falls back to its sign-in gate. There is no knob
+to keep a loopback bind *and* require keys — the bind address is the switch.
+
+That keyless opening is fenced off from **browsers**: a cross-site `fetch` (a
+foreign `Origin`) or a DNS-rebound page (an attacker domain as `Host`, detected
+via `Sec-Fetch-Site`) is refused `403 CROSS_ORIGIN_BLOCKED` before any handler
+runs — so a malicious web page cannot drive your local bus. Non-browser callers
+(curl, agents) send no `Origin`/`Sec-Fetch-Site` and are unaffected.
+
+**Operator-only surfaces.** The destructive and configuration endpoints —
+`admin/reset`, `admin/prune`, settings write/reset, the policy catalog and
+legacy governance CRUD, and the HITL steering/approvals/memory-delete surfaces —
+require the operator identity specifically. A keyless loopback caller passes
+(it *is* the operator); any *non-operator* key is refused `403
+PERMISSION_DENIED`, even off loopback.
 
 ### The dashboard
 

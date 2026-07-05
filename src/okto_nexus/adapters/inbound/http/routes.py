@@ -835,6 +835,7 @@ def build_router() -> APIRouter:
             return agents.get(uow, agent.agent_id), plaintext
 
         try:
+            _require_operator()
             agent, plaintext = await _run(request, _create)
         except OktoNexusError as exc:
             if (
@@ -954,6 +955,7 @@ def build_router() -> APIRouter:
             return agents.get(uow, agent_id)
 
         try:
+            _require_operator()
             agent = await _run(request, _update)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -970,6 +972,7 @@ def build_router() -> APIRouter:
             return auth.issue_key(uow, agent_id=agent_id)
 
         try:
+            _require_operator()
             plaintext = await _run(request, _rotate)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -993,6 +996,7 @@ def build_router() -> APIRouter:
             return removed
 
         try:
+            _require_operator()
             removed = await _run(request, _delete)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1046,6 +1050,7 @@ def build_router() -> APIRouter:
             )
 
         try:
+            _require_operator()
             preset = await _run(request, _create)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1080,6 +1085,7 @@ def build_router() -> APIRouter:
             )
 
         try:
+            _require_operator()
             preset = await _run(request, _update)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1105,6 +1111,7 @@ def build_router() -> APIRouter:
             return removed
 
         try:
+            _require_operator()
             removed = await _run(request, _delete)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1135,6 +1142,7 @@ def build_router() -> APIRouter:
             return service.register_key(uow, key=body.key, description=body.description)
 
         try:
+            _require_operator()
             created = await _run(request, _create)
         except OktoNexusError as exc:
             if (
@@ -1158,6 +1166,7 @@ def build_router() -> APIRouter:
             )
 
         try:
+            _require_operator()
             created = await _run(request, _create)
         except OktoNexusError as exc:
             if (
@@ -1173,6 +1182,7 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
         service = _tag_service(deps)
         try:
+            _require_operator()
             result = await _run(request, lambda uow: service.delete_key(uow, key=key))
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1187,6 +1197,7 @@ def build_router() -> APIRouter:
             return service.delete_value(uow, key=key, value=value)
 
         try:
+            _require_operator()
             result = await _run(request, _delete)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1216,6 +1227,7 @@ def build_router() -> APIRouter:
             return service.register(uow, name=body.name, description=body.description)
 
         try:
+            _require_operator()
             created = await _run(request, _create)
         except OktoNexusError as exc:
             if (
@@ -1231,6 +1243,7 @@ def build_router() -> APIRouter:
         deps = request.app.state.deps
         service = _capability_service(deps)
         try:
+            _require_operator()
             result = await _run(request, lambda uow: service.delete(uow, name=name))
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1321,6 +1334,7 @@ def build_router() -> APIRouter:
     async def list_governance_policies(request: Request) -> JSONResponse:
         service = _governance_service(request.app.state.deps)
         try:
+            _require_operator()
             items = await anyio.to_thread.run_sync(service.list_policies)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1351,6 +1365,7 @@ def build_router() -> APIRouter:
             )
 
         try:
+            _require_operator()
             created = await anyio.to_thread.run_sync(_create)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1366,6 +1381,7 @@ def build_router() -> APIRouter:
             return service.update_policy(policy_id=policy_id, patch=body)
 
         try:
+            _require_operator()
             updated = await anyio.to_thread.run_sync(_update)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1381,6 +1397,7 @@ def build_router() -> APIRouter:
             return service.delete_policy(policy_id=policy_id)
 
         try:
+            _require_operator()
             result = await anyio.to_thread.run_sync(_delete)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1693,6 +1710,7 @@ def build_router() -> APIRouter:
             return deps.repos.sessions.close(uow, session_id=session_id)
 
         try:
+            _require_operator()
             session = await _run(request, _close)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1729,6 +1747,7 @@ def build_router() -> APIRouter:
             )
 
         try:
+            _require_operator()
             handoff = await _run(request, _cancel)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1788,6 +1807,7 @@ def build_router() -> APIRouter:
             return RetentionService.from_deps(deps).prune(dry_run=dry_run)
 
         try:
+            _require_operator()
             report = await anyio.to_thread.run_sync(_prune)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1825,6 +1845,7 @@ def build_router() -> APIRouter:
     async def patch_settings(request: Request, body: dict[str, Any]) -> JSONResponse:
         service = request.app.state.settings_service
         try:
+            _require_operator()
             applied = await _run(request, lambda uow: service.update(uow, body))
         except OktoNexusError as exc:
             if exc.code == ErrorCode.CONFIG_ERROR:
@@ -1836,6 +1857,7 @@ def build_router() -> APIRouter:
     async def reset_settings(request: Request) -> JSONResponse:
         service = request.app.state.settings_service
         try:
+            _require_operator()
             cleared = await _run(request, lambda uow: service.reset(uow))
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1902,6 +1924,7 @@ def build_router() -> APIRouter:
             return counts, vacuumed
 
         try:
+            _require_operator()
             counts, vacuumed = await anyio.to_thread.run_sync(_reset)
         except OktoNexusError as exc:
             return _map_error(exc)

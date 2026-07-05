@@ -20,6 +20,7 @@ import asyncio
 import contextlib
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import anyio.to_thread
 from fastapi import FastAPI, Request, Response
@@ -87,6 +88,51 @@ def extract_api_key(request: Request) -> str | None:
 _LOOPBACK_CLIENTS = frozenset({"127.0.0.1", "::1", "localhost"})
 
 
+def _url_host(value: str) -> str:
+    """Host of an Origin URL or a Host authority, lowercased, port stripped.
+
+    Accepts ``http://127.0.0.1:8202`` (an ``Origin``) and ``127.0.0.1:8202`` /
+    ``[::1]:8202`` (a ``Host``) alike; returns ``""`` for an opaque/``null``
+    origin, which is intentionally NOT a loopback name.
+    """
+    parsed = urlsplit(value if "//" in value else f"//{value}")
+    return (parsed.hostname or "").lower()
+
+
+def _loopback_trust_ok(request: Request) -> bool:
+    """CSRF / DNS-rebinding guard for the keyless same-machine trust path.
+
+    The loopback convenience must not become a browser-driven operator hijack:
+    a cross-site page (``fetch`` to 127.0.0.1) or a DNS-rebound domain would
+    otherwise inherit keyless-operator authority. Non-browser callers (curl,
+    agents, the test client) send neither ``Origin`` nor ``Sec-Fetch-Site`` and
+    pass untouched - they ARE the same-machine operators this path exists for.
+
+    * ``Origin``, when present, must be a loopback origin - browsers tag every
+      state-changing request with it, so this alone blocks cross-site CSRF and
+      any *mutating* DNS-rebinding attack.
+    * When ``Sec-Fetch-Site`` is present (Fetch-Metadata: a browser made the
+      request), the ``Host`` authority must be a loopback name too - this
+      closes *read-only* DNS-rebinding, where the browser omits ``Origin`` on a
+      same-origin GET yet still sends the attacker's domain as ``Host``. The
+      header is browser-controlled and cannot be stripped by an attacker page.
+
+    Residual (accepted): a browser predating Fetch-Metadata (Safari < 16.4,
+    2023) omits ``Sec-Fetch-Site``, so a same-origin GET under active
+    DNS-rebinding there still reads through. *Mutating* attacks stay blocked on
+    every browser by the ``Origin`` check, and the whole path assumes a
+    same-machine actor who already owns ``nexus.db`` - so this is a low-severity
+    read-only gap, not a privilege boundary.
+    """
+    origin = request.headers.get("origin")
+    if origin and _url_host(origin) not in _LOOPBACK_CLIENTS:
+        return False
+    if request.headers.get("sec-fetch-site") is not None:
+        if _url_host(request.headers.get("host", "")) not in _LOOPBACK_CLIENTS:
+            return False
+    return True
+
+
 class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     """Resolve the inbound key to an agent or fail uniformly with 401.
 
@@ -100,7 +146,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     comes from a loopback client, the REST/dashboard surfaces open WITHOUT a
     key - whoever sits on this machine already owns nexus.db on disk. The
     ``/mcp`` surface is exempt from this rule: an MCP connection IS an agent
-    identity (D5), so it requires a key on every transport, always.
+    identity (D5), so it requires a key on every transport, always. The
+    same-machine opening is still fenced off from BROWSERS by
+    ``_loopback_trust_ok`` - a cross-origin or DNS-rebound page cannot ride it.
     """
 
     async def dispatch(self, request: Request, call_next) -> Response:
@@ -119,6 +167,15 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             and request.client is not None
             and request.client.host in _LOOPBACK_CLIENTS
         ):
+            # Same-machine trust, but never for a cross-origin / DNS-rebound
+            # BROWSER request that merely rides the loopback socket (CSRF).
+            if not _loopback_trust_ok(request):
+                return err(
+                    403,
+                    "CROSS_ORIGIN_BLOCKED",
+                    "Refused a cross-origin or rebound-host request on the "
+                    "loopback trust path; authenticate with an api_key.",
+                )
             return await call_next(request)
 
         auth: AgentKeyAuthService = request.app.state.auth
