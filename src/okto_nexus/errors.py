@@ -58,6 +58,12 @@ class ErrorCode(str, Enum):
     # Registry renders who must detach first (REST 409).
     POLICY_IN_USE = "POLICY_IN_USE"
 
+    # Communication preset catalog (migration 023, spec 6f961722): a named
+    # global preset cannot be deleted while any agent still binds it (latest or
+    # pinned). Details carry {agents} (the distinct binder ids) - the operator
+    # Registry renders who must detach first (REST 409).
+    COMM_PRESET_IN_USE = "COMM_PRESET_IN_USE"
+
     # Governance policies (migration 016, feature_governance): a categorical
     # deny policy forbids the attempted action (REST 403), or a quota policy's
     # budget is exhausted (REST 429). Details carry the NORMATIVE context of

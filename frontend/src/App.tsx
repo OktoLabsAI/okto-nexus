@@ -17,6 +17,7 @@ import {
   KanbanSquare,
   Lock,
   Menu,
+  MessageSquare,
   MessagesSquare,
   Moon,
   PanelLeft,
@@ -55,6 +56,7 @@ import { MemoryView } from "./views/MemoryView";
 import { WorkspacesView } from "./views/WorkspacesView";
 import { RegistryView } from "./views/RegistryView";
 import { PoliciesView } from "./views/PoliciesView";
+import { CommunicationView } from "./views/CommunicationView";
 import { ApprovalsView } from "./views/ApprovalsView";
 import { SettingsView } from "./views/SettingsView";
 
@@ -74,6 +76,10 @@ const VIEWS = [
   // until an agent binds it; enforcement is always-on and binding-driven (the
   // feature_governance flag is gone).
   { name: "Policies", icon: Shield },
+  // The named, versioned communication-style catalog (spec 6f961722): the
+  // reusable half of the 4th per-agent axis — a style tells an agent HOW to
+  // communicate and surfaces SELF-ONLY on its whoami once bound.
+  { name: "Communication", icon: MessageSquare },
   // Always listed too (spec 2948b2a2 BR6: pending items stay decidable with
   // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
   { name: "Approvals", icon: CheckSquare },
@@ -576,6 +582,7 @@ function Dashboard({
           )}
           {view === "Registry" && <RegistryView />}
           {view === "Policies" && <PoliciesView workspace={workspace} />}
+          {view === "Communication" && <CommunicationView />}
           {view === "Approvals" && (
             <ApprovalsView
               workspace={workspace}

@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 
 from ....config import FEATURE_FLAG_FIELDS
 from ....application.capabilities import CapabilityCatalogService
+from ....application.comm_preset_catalog import CommPresetCatalogService
 from ....application.governance import GovernanceService
 from ....application.memory import MemoryService
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
@@ -74,6 +75,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
         ErrorCode.TAG_IN_USE: 409,
         ErrorCode.CAPABILITY_IN_USE: 409,
         ErrorCode.POLICY_IN_USE: 409,
+        ErrorCode.COMM_PRESET_IN_USE: 409,
         ErrorCode.CONFLICT: 409,
         ErrorCode.INVALID_TRANSITION: 409,
         # Handoff dependencies (I5, spec 6522ad1f): DEFENSIVE mappings - the
@@ -102,6 +104,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
             ErrorCode.TAG_IN_USE,
             ErrorCode.CAPABILITY_IN_USE,
             ErrorCode.POLICY_IN_USE,
+            ErrorCode.COMM_PRESET_IN_USE,
             ErrorCode.POLICY_DENIED,
             ErrorCode.QUOTA_EXCEEDED,
             ErrorCode.CONFLICT,
@@ -139,6 +142,12 @@ async def _read(request: Request, fn):
 # --------------------------------------------------------------------------- #
 # Request bodies
 # --------------------------------------------------------------------------- #
+# Migration 024: display color is a #RGB or #RRGGBB hex string (or null =
+# auto-by-identity). Validated declaratively so a malformed value is a 422
+# before anything persists; null passes (the reset-to-auto sentinel).
+_COLOR_PATTERN = r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+
+
 class CreateAgentBody(BaseModel):
     agent_id: str = Field(min_length=1, max_length=128)
     role: str | None = None
@@ -148,6 +157,8 @@ class CreateAgentBody(BaseModel):
     # explicit flags object (explicit flags win - the Pulse semantics).
     preset_id: str | None = None
     permissions: dict[str, Any] | None = None
+    # Display color (migration 024): null = auto-by-identity.
+    color: str | None = Field(default=None, pattern=_COLOR_PATTERN)
 
 
 class UpdateAgentBody(BaseModel):
@@ -162,6 +173,9 @@ class UpdateAgentBody(BaseModel):
     # central tag catalog (fail-closed).
     tags: dict[str, Any] | None = None
     comm_scope: dict[str, Any] | None = None
+    # Display color (migration 024): full-overwrite when present in the
+    # payload (explicit null resets to auto-by-identity).
+    color: str | None = Field(default=None, pattern=_COLOR_PATTERN)
 
 
 class PresetBody(BaseModel):
@@ -263,6 +277,23 @@ def _policy_catalog_service(deps) -> PolicyCatalogService:
         connection_factory=deps.connection_factory,
         policies=deps.repos.policies,
         policy_bindings=deps.repos.policy_bindings,
+        agents=deps.repos.agents,
+    )
+
+
+#: The closed field set of a preset HEADER payload (POST/PATCH /comm-presets).
+_COMM_PRESET_HEADER_FIELDS = {"name", "description"}
+
+
+def _comm_preset_catalog_service(deps) -> "CommPresetCatalogService":
+    # Communication-preset CRUD + single-source binding (spec 6f961722). Like
+    # _policy_catalog_service, every method opens its OWN unit of work, so the
+    # handlers call straight through anyio.to_thread - never nested inside
+    # _run/_read. Bootstrap always wires both repos (server.py build_repos).
+    return CommPresetCatalogService(
+        connection_factory=deps.connection_factory,
+        presets=deps.repos.comm_presets,
+        comm_bindings=deps.repos.comm_bindings,
         agents=deps.repos.agents,
     )
 
@@ -823,6 +854,7 @@ def build_router() -> APIRouter:
                 role=body.role,
                 capabilities=capabilities,
                 metadata=body.metadata,
+                color=body.color,
             )
             if flags is not None or preset_id is not None:
                 agents.set_permissions(
@@ -853,6 +885,7 @@ def build_router() -> APIRouter:
                 "created_at": agent.created_at,
                 "preset_id": agent.preset_id,
                 "permissions": agent.permissions,
+                "color": agent.color,
                 "api_key": plaintext,
             }
         )
@@ -952,6 +985,11 @@ def build_router() -> APIRouter:
                             field=f"comm_scope.{direction}",
                         )
                 agents.set_comm_scope(uow, agent_id=agent_id, comm_scope=scope)
+            # Display color (migration 024): full overwrite when present in the
+            # payload (explicit null resets to auto-by-identity). Format is
+            # already validated by the request model.
+            if "color" in sent:
+                agents.set_color(uow, agent_id=agent_id, color=body.color)
             return agents.get(uow, agent_id)
 
         try:
@@ -1588,6 +1626,200 @@ def build_router() -> APIRouter:
         return _ok(result)
 
     # ------------------------------------------------------------------ #
+    # Communication presets (spec 6f961722, migration 023): the operator
+    # surface for the NAMED, versioned communication style. CRUD over the
+    # header + append-only version publishing, plus the SINGLE-SOURCE per-agent
+    # binding (inline XOR global). Pure STAGING - creating/editing/publishing
+    # attaches to no one and surfaces nothing (the whoami block appears only
+    # once an agent binds); DELETE is guarded by the in-use check
+    # (COMM_PRESET_IN_USE -> 409). Operator-only, canonical _ok/_err envelope;
+    # each method opens its own UoW. NOT MCP tools (stdio/http parity intact).
+    # ------------------------------------------------------------------ #
+    @router.post("/comm-presets")
+    async def create_comm_preset(
+        request: Request, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _create():
+            unknown = sorted(set(body) - _COMM_PRESET_HEADER_FIELDS)
+            if unknown:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"Unknown communication preset field(s): {', '.join(unknown)}.",
+                    {
+                        "unknown": unknown,
+                        "supported": sorted(_COMM_PRESET_HEADER_FIELDS),
+                    },
+                )
+            return service.create(
+                name=body.get("name"), description=body.get("description")
+            )
+
+        try:
+            _require_operator()
+            created = await anyio.to_thread.run_sync(_create)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(created)
+
+    @router.get("/comm-presets")
+    async def list_comm_presets(request: Request) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(service.list)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.get("/comm-presets/{preset_id}")
+    async def get_comm_preset(request: Request, preset_id: str) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _get():
+            return service.get(preset_id=preset_id)
+
+        try:
+            _require_operator()
+            record = await anyio.to_thread.run_sync(_get)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(record)
+
+    @router.patch("/comm-presets/{preset_id}")
+    async def update_comm_preset(
+        request: Request, preset_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _update():
+            unknown = sorted(set(body) - _COMM_PRESET_HEADER_FIELDS)
+            if unknown:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"Unknown communication preset field(s): {', '.join(unknown)}.",
+                    {
+                        "unknown": unknown,
+                        "supported": sorted(_COMM_PRESET_HEADER_FIELDS),
+                    },
+                )
+            return service.update(preset_id=preset_id, patch=body)
+
+        try:
+            _require_operator()
+            updated = await anyio.to_thread.run_sync(_update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(updated)
+
+    @router.delete("/comm-presets/{preset_id}")
+    async def delete_comm_preset(request: Request, preset_id: str) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _delete():
+            return service.delete(preset_id=preset_id)
+
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(_delete)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/comm-presets/{preset_id}/versions")
+    async def publish_comm_preset_version(
+        request: Request, preset_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _publish():
+            unknown = sorted(set(body) - {"content"})
+            if unknown:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"Unknown communication preset version field(s): "
+                    f"{', '.join(unknown)}.",
+                    {"unknown": unknown, "supported": ["content"]},
+                )
+            return service.publish_version(
+                preset_id=preset_id, content=body.get("content")
+            )
+
+        try:
+            _require_operator()
+            published = await anyio.to_thread.run_sync(_publish)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(published)
+
+    @router.get("/comm-presets/{preset_id}/versions")
+    async def list_comm_preset_versions(
+        request: Request, preset_id: str
+    ) -> JSONResponse:
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _list():
+            return service.list_versions(preset_id=preset_id)
+
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(_list)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.get("/agents/{agent_id}/communication")
+    async def get_agent_communication(request: Request, agent_id: str) -> JSONResponse:
+        # The agent's CURRENT single binding, reshaped into the {inline, global}
+        # contract the PUT accepts (round-trip-friendly) plus the RESOLVED block
+        # the whoami would show, so the editor pre-populates and previews.
+        # Operator-only, like every /comm-presets surface.
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _get():
+            return service.get_agent_binding(agent_id=agent_id)
+
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(_get)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.put("/agents/{agent_id}/communication")
+    async def set_agent_communication(
+        request: Request, agent_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        # Replace an agent's SINGLE communication binding: inline content
+        # ({tone, format, ...}) XOR a global reference ({preset_id, mode,
+        # pinned_version?}). Passing neither CLEARS it. Operator-only;
+        # fail-closed existence checks live in the service (unknown agent/preset
+        # -> 404, missing pin -> 422, both sides -> 422).
+        service = _comm_preset_catalog_service(request.app.state.deps)
+
+        def _set():
+            unknown = sorted(set(body) - {"inline", "global"})
+            if unknown:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"Unknown communication binding field(s): {', '.join(unknown)}.",
+                    {"unknown": unknown, "supported": ["inline", "global"]},
+                )
+            return service.set_agent_binding(
+                agent_id=agent_id,
+                inline=body.get("inline"),
+                global_=body.get("global"),
+            )
+
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(_set)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    # ------------------------------------------------------------------ #
     # HITL approvals + steering (spec 2948b2a2): operator-only surfaces
     # backing the dashboard Approvals screen and the Steer modal. Queue
     # reads and decisions work with feature_hitl OFF (BR6) - only the
@@ -1957,4 +2189,5 @@ def _public_agent(agent) -> dict[str, Any]:
         "preset_id": agent.preset_id,
         "tags": agent.tags,
         "comm_scope": agent.comm_scope,
+        "color": agent.color,
     }

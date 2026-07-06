@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
 from ..domain.approvals import Approval
+from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
 from ..domain.policy import PolicyRecord, PolicyVersion
 from ..domain.models import (
@@ -214,8 +215,14 @@ class AgentRepo(Protocol):
         role: str | None = None,
         capabilities: Mapping[str, Any] | None = None,
         metadata: Mapping[str, Any] | None = None,
+        color: str | None = None,
     ) -> Agent:
-        """Insert or update the agent, returning the stored row."""
+        """Insert or update the agent, returning the stored row.
+
+        ``color`` follows COALESCE semantics on conflict (``None`` keeps the
+        stored value); clearing a color to auto-by-identity is a first-class
+        operation on :meth:`set_color`, never here.
+        """
         ...
 
     def get(self, uow: UnitOfWork, agent_id: str) -> Agent | None:
@@ -309,6 +316,15 @@ class AgentRepo(Protocol):
         Full overwrite (``None`` resets to unrestricted). The value is
         operator-set and PRIVATE (never exposed on discovery). Returns
         ``True`` if the agent existed.
+        """
+        ...
+
+    def set_color(self, uow: UnitOfWork, *, agent_id: str, color: str | None) -> bool:
+        """Overwrite the agent's display color (migration 024).
+
+        Full overwrite (``None`` resets to auto-by-identity); mirrors
+        :meth:`set_tags`. The value is stored verbatim (format validation is
+        the caller's job). Returns ``True`` if the agent existed.
         """
         ...
 
@@ -611,6 +627,136 @@ class AgentPolicyBindingRepo(Protocol):
 
 
 @runtime_checkable
+class CommPresetRepo(Protocol):
+    """Persistence for NAMED global communication presets + their append-only
+    versions (migration 023, spec 6f961722).
+
+    A preset row is metadata (``name`` + ``description``); its style ``content``
+    lives in immutable :class:`CommPresetVersion` rows keyed by
+    ``(preset_id, version)``. Publishing an edit APPENDS a new version (the repo
+    assigns the next number atomically); versions are never mutated. Global (no
+    ``workspace_id``), like the policy/governance/tag/capability catalogs. Form
+    validation is upstream (:mod:`okto_nexus.domain.comm_preset`); this port
+    persists. Structurally the content-only twin of :class:`PolicyRepo`.
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        preset_id: str,
+        name: str,
+        description: str | None = None,
+        created_at: str | None = None,
+    ) -> CommPresetRecord:
+        """Insert one catalog row (UNIQUE ``name``); returns the stored record."""
+        ...
+
+    def get(self, uow: UnitOfWork, preset_id: str) -> CommPresetRecord | None:
+        """Return the preset record (with ``latest_version``), or ``None``."""
+        ...
+
+    def get_by_name(self, uow: UnitOfWork, name: str) -> CommPresetRecord | None:
+        """Return the preset record by its unique ``name``, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[CommPresetRecord]:
+        """Every preset, ``(created_at, preset_id)`` order, with latest version."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        preset_id: str,
+        name: str | None = None,
+        description: Any = "__unset__",
+    ) -> CommPresetRecord | None:
+        """Patch the METADATA (name/description); ``None`` when absent.
+
+        Versions are append-only and never touched here. ``description`` uses
+        the ``"__unset__"`` sentinel so ``None`` can explicitly clear it.
+        """
+        ...
+
+    def delete(self, uow: UnitOfWork, *, preset_id: str) -> bool:
+        """Remove the preset (versions cascade). ``True`` if it existed.
+
+        Callers MUST run the ``COMM_PRESET_IN_USE`` guard first (application
+        layer): a binding still referencing the preset blocks deletion.
+        """
+        ...
+
+    def add_version(
+        self,
+        uow: UnitOfWork,
+        *,
+        preset_id: str,
+        content: Mapping[str, Any],
+        published_at: str | None = None,
+    ) -> CommPresetVersion:
+        """Append the next immutable version; returns the stored version.
+
+        The version number is ``MAX(version)+1`` computed inside ``uow`` (the
+        write lock serialises it). ``content`` is the already-validated body;
+        the adapter serialises it to JSON TEXT.
+        """
+        ...
+
+    def get_version(
+        self, uow: UnitOfWork, *, preset_id: str, version: int
+    ) -> CommPresetVersion | None:
+        """Return one exact version (the ``pinned`` read), or ``None``."""
+        ...
+
+    def latest_version(
+        self, uow: UnitOfWork, *, preset_id: str
+    ) -> CommPresetVersion | None:
+        """Return the highest-numbered version (the ``latest`` read), or ``None``."""
+        ...
+
+    def list_versions(
+        self, uow: UnitOfWork, *, preset_id: str
+    ) -> list[CommPresetVersion]:
+        """Every version of a preset, ascending ``version`` (history surface)."""
+        ...
+
+
+@runtime_checkable
+class AgentCommBindingRepo(Protocol):
+    """Persistence for an agent's SINGLE communication binding (migration 023).
+
+    Unlike :class:`AgentPolicyBindingRepo` (ordered, N-per-agent, composed), a
+    communication binding is SINGLE-SOURCE: the ``agent_comm_binding`` table is
+    keyed by ``agent_id`` alone, so :meth:`set` is an upsert of AT MOST one row
+    and the ``COMM_PRESET_IN_USE`` guard is one indexed lookup. The stored dict
+    is the already-validated output of
+    :func:`okto_nexus.domain.comm_preset.compose_comm_binding`.
+    """
+
+    def set(
+        self, uow: UnitOfWork, *, agent_id: str, binding: Mapping[str, Any] | None
+    ) -> None:
+        """Upsert (or, with ``binding=None``, CLEAR) the agent's single binding.
+
+        A full overwrite of the one row: ``None`` deletes it (back to no preset
+        = today's whoami), otherwise it replaces whatever was there.
+        """
+        ...
+
+    def get(self, uow: UnitOfWork, *, agent_id: str) -> dict[str, Any] | None:
+        """Return the agent's binding as a validated dict, or ``None`` if unset."""
+        ...
+
+    def agents_binding_preset(self, uow: UnitOfWork, *, preset_id: str) -> list[str]:
+        """Distinct agent ids with a GLOBAL binding to ``preset_id`` (in-use guard).
+
+        Empty list means the preset is unreferenced and safe to delete.
+        """
+        ...
+
+
+@runtime_checkable
 class ApprovalRepo(Protocol):
     """Persistence for HITL approvals (migration 017, spec 2948b2a2).
 
@@ -781,6 +927,46 @@ class ObservabilityQueries(Protocol):
         "pending", "failed"}}`` with ONLY ids that have dependency rows -
         a missing key means "no dependencies" and the row keeps its exact
         pre-I5 shape.
+        """
+        ...
+
+    def last_actions_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, dict[str, Any]]:
+        """Each agent's most-recent event as ``{agent_id: {"type", "at"}}``.
+
+        The action is the ``type`` and ``created_at`` of the highest-``event_id``
+        row per ``actor_agent_id`` - the real coordination verb from the log,
+        not a derived liveness signal. Scoped to ``workspace_id`` when given
+        (``None`` = the "All workspaces" view). ONE GROUP-BY for the whole
+        graph (never per-agent - the same anti-N+1 rule as the handoff
+        aggregates). Agents with no events in scope are ABSENT from the map,
+        so a node with no recent activity keeps a ``None`` last_action.
+        """
+        ...
+
+    def inbox_depth_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, int]:
+        """Per-agent pending-inbox depth as ``{agent_id: count}`` (migration 024).
+
+        Counts the PHYSICAL not-yet-read lanes (``unread`` + ``delivered``) per
+        recipient in ONE GROUP-BY (anti-N+1). Scoped to ``workspace_id`` when
+        given (``None`` = all workspaces). Agents with none are ABSENT, so the
+        node reads 0.
+        """
+        ...
+
+    def open_handoffs_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, int]:
+        """Per-agent open-handoff involvement as ``{agent_id: count}``.
+
+        Counts NON-TERMINAL handoffs (OPEN/CLAIMED/VERIFYING) attributed to
+        BOTH the origin (``from_agent_id``) and the holder (``claimed_by``) via
+        a UNION ALL, in ONE pass (anti-N+1). Scoped to ``workspace_id`` when
+        given (``None`` = all workspaces). Agents with none are ABSENT (node
+        reads 0).
         """
         ...
 
@@ -1929,4 +2115,6 @@ class Repos:
     governance: GovernanceRepo | None = None
     policies: PolicyRepo | None = None
     policy_bindings: AgentPolicyBindingRepo | None = None
+    comm_presets: CommPresetRepo | None = None
+    comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None

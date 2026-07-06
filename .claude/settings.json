@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python D:/projetos/Techridy/okto_labs_okto_nexus/.claude/hooks/nexus_ruff.py",
+            "statusMessage": "ruff (fix + format)"
+          }
+        ]
+      }
+    ]
+  }
+}

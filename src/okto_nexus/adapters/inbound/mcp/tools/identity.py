@@ -37,6 +37,10 @@ from pydantic import Field
 from okto_nexus.adapters.outbound.sqlite.capability_catalog_repo import (
     SqliteCapabilityCatalogRepo,
 )
+from okto_nexus.adapters.outbound.sqlite.comm_preset_repo import (
+    SqliteAgentCommBindingRepo,
+    SqliteCommPresetRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.governance_repo import (
     SqliteGovernanceRepo,
 )
@@ -49,6 +53,7 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import (
     SqliteSessionRepo,
     SqliteWorkspaceRepo,
 )
+from okto_nexus.application.comm_preset_catalog import CommPresetCatalogService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.identity import IdentityService
 from okto_nexus.envelope import tool_envelope
@@ -149,10 +154,32 @@ def _build_governance(deps: Any) -> "GovernanceService":
     )
 
 
+def _build_comm_presets(deps: Any) -> "CommPresetCatalogService":
+    """Communication-preset catalog backing the whoami block (spec 6f961722).
+
+    Idempotent on ``deps.repos.comm_presets`` / ``comm_bindings`` like every
+    other slice wiring; call AFTER :func:`build_service` so ``agents`` exists.
+    Only ``resolve_communication`` is used on the whoami hot path (self-only);
+    the operator CRUD surface is wired separately over HTTP.
+    """
+    repos = deps.repos
+    if getattr(repos, "comm_presets", None) is None:
+        repos.comm_presets = SqliteCommPresetRepo(deps.clock)
+    if getattr(repos, "comm_bindings", None) is None:
+        repos.comm_bindings = SqliteAgentCommBindingRepo(deps.clock)
+    return CommPresetCatalogService(
+        connection_factory=deps.connection_factory,
+        presets=repos.comm_presets,
+        comm_bindings=repos.comm_bindings,
+        agents=repos.agents,
+    )
+
+
 def register(server: Any, deps: Any) -> None:
     """Register the identity tools on ``server`` (FastMCP ``@server.tool()``)."""
     service = build_service(deps)
     governance = _build_governance(deps)
+    comm_presets = _build_comm_presets(deps)
 
     @server.tool()
     @tool_envelope
@@ -186,7 +213,7 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def agent_whoami() -> dict[str, Any]:
-        """Return YOUR OWN profile: agent_id, role, capabilities, metadata, permissions, and effective_policies (policy_id@version) + governance when attached. Docs: okto-nexus://reference/tool-docs/identity."""
+        """Return YOUR OWN profile: agent_id, role, capabilities, metadata, permissions, effective_policies + governance, plus communication style when set. Docs: okto-nexus://reference/tool-docs/identity."""
         caller = get_authenticated_agent()
         data = service.agent_whoami(
             actor_agent_id=caller.agent_id if caller is not None else None,
@@ -204,6 +231,13 @@ def register(server: Any, deps: Any) -> None:
             policies = governance.policies_for_agent(caller.agent_id)
             if policies:
                 data["governance"] = policies
+            # Communication block (spec 6f961722, BR11): SELF-ONLY style guidance
+            # {"source": <label>, "content": <dict>}, present ONLY when the caller
+            # has a resolvable binding - an agent with none stays byte-identical to
+            # the pre-feature whoami (D-CP-6). NEVER on _agent_to_data / discovery.
+            communication = comm_presets.resolve_communication(caller.agent_id)
+            if communication:
+                data["communication"] = communication
         return data
 
     @server.tool()

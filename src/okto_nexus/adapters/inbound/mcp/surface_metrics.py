@@ -73,6 +73,14 @@ APPROVED_GROWTH: dict[str, int] = {
     # artifact_get documents its audience-scoped read (+118). Measured on the
     # live server at landing time; no param added.
     "policies_b3": 127,
+    # Communication presets (spec 6f961722, SURFACE_REVISION 26): NO new tool and
+    # NO net resident growth - the agent_whoami one-line description was REWORDED
+    # (197 -> 194 chars) to advertise the self-only communication block, and no
+    # param was added. The feature surfaces at RUNTIME (a whoami response field),
+    # not on the resident schema, so the ledger entry is 0. Recorded for audit
+    # (every surface-touching spec appears here), kept under the 200-char S2
+    # budget.
+    "comm_presets_c5": 0,
 }
 
 

@@ -130,6 +130,17 @@ class ObservabilityService:
         since_iso = _epoch_to_iso(since_epoch)
 
         inbox = self._q.inbox_counts(uow)
+        # ONE aggregate for the whole graph: each agent's most-recent event
+        # verb + stamp, workspace-scoped. Folded per node below; agents absent
+        # from the map (no events in scope) keep last_action=None (FR: the card
+        # body reads "no recent activity" for them).
+        last_actions = self._q.last_actions_by_agent(uow, workspace_id=workspace_id)
+        # Two workspace-scoped anti-N+1 aggregates for the enriched card body:
+        # pending-inbox depth (physical unread+delivered) and open-handoff
+        # involvement (origin or holder). Computed ONCE here, folded O(1) per
+        # node below; an agent absent from a map has 0.
+        pending = self._q.inbox_depth_by_agent(uow, workspace_id=workspace_id)
+        open_handoffs = self._q.open_handoffs_by_agent(uow, workspace_id=workspace_id)
         nodes: list[dict[str, Any]] = []
         for row in self._q.agent_rows(uow):
             lanes = inbox.get(row["agent_id"], {})
@@ -138,9 +149,12 @@ class ObservabilityService:
                     "agent_id": row["agent_id"],
                     "role": row.get("role"),
                     "capabilities": row.get("capabilities") or {},
+                    "tags": row.get("tags") or {},
+                    "color": row.get("color"),
                     "is_active": bool(row.get("is_active", True)),
                     "has_key": bool(row.get("api_key_hash")),
                     "last_seen_at": row.get("last_seen_at"),
+                    "last_action": last_actions.get(row["agent_id"]),
                     "presence": self.classify_presence(
                         has_active_session=bool(row.get("active_sessions")),
                         last_heartbeat_at=row.get("last_heartbeat_at"),
@@ -148,6 +162,8 @@ class ObservabilityService:
                     ),
                     "sessions": int(row.get("active_sessions") or 0),
                     "inbox": {lane: int(lanes.get(lane, 0)) for lane in _LANES},
+                    "pending_inbox": int(pending.get(row["agent_id"], 0)),
+                    "open_handoffs": int(open_handoffs.get(row["agent_id"], 0)),
                 }
             )
 

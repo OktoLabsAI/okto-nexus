@@ -21,6 +21,22 @@ export interface GraphNode {
   presence: "present" | "stale" | "offline";
   sessions: number;
   inbox: { unread: number; delivered: number; read: number; parked: number };
+  // Enriched card payload (spec 2d6920f4). color is the operator-chosen header
+  // color ("#RRGGBB") or null = auto-by-identity (derived from agent_id on the
+  // client). tags are the agent's label map ({} = none). pending_inbox is the
+  // workspace-scoped physical not-yet-read depth (unread+delivered);
+  // open_handoffs is the count of non-terminal handoffs the agent owns or
+  // awaits. Both are 0 when idle (the badges self-hide).
+  color: string | null;
+  tags: Record<string, string[]>;
+  pending_inbox: number;
+  open_handoffs: number;
+  // The agent's most recent event (the real coordination verb from the log),
+  // workspace-scoped. null when the agent has no event in the current scope -
+  // the entity card renders "no recent activity" for it. {type} is the raw
+  // event type (e.g. "message.created"); the card maps it to a label and
+  // formats {at} as a relative-time reference. (spec 5e1fa07c)
+  last_action: { type: string; at: string } | null;
 }
 
 export interface GraphEdge {
@@ -253,6 +269,79 @@ export interface AgentBindings {
   inline: { audience: CommScope | null; governance: PolicyRule[] } | null;
 }
 
+// Communication presets (spec 6f961722, migration 023): the 4th per-agent axis
+// — a self-descriptive COMMUNICATION STYLE that tells the agent HOW to
+// communicate, surfaced SELF-ONLY on whoami (never on discovery). Content is a
+// CLOSED set of style dimensions with FREE string values; an EMPTY object is
+// valid (a preset that says nothing).
+export const COMM_DIMENSIONS = [
+  "tone",
+  "format",
+  "language",
+  "verbosity",
+  "structure",
+  "additional_instructions",
+] as const;
+export type CommDimension = (typeof COMM_DIMENSIONS)[number];
+// Free string values keyed by the closed dimension set; a dimension whose
+// trimmed value is empty is dropped server-side (never reaches whoami).
+export type CommContent = Partial<Record<CommDimension, string>>;
+
+// One immutable, published version of a global preset (append-only MAX+1).
+export interface CommPresetVersion {
+  preset_id: string;
+  version: number;
+  content: CommContent;
+  published_at: string;
+}
+
+// A named preset HEADER. `latest_version` is 0 until a version is published.
+// create/get/patch also return the full `versions` history (ascending); the
+// list endpoint returns headers only.
+export interface CommPresetRecord {
+  preset_id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string | null;
+  latest_version: number;
+  versions?: CommPresetVersion[];
+}
+
+// A SINGLE-SOURCE global reference on an agent (inline content XOR this — never
+// both, the deliberate divergence from policy's AND composition). `mode` picks
+// the applied version: "latest" follows the highest, "pinned" freezes on
+// `pinned_version`.
+export interface CommGlobalRef {
+  preset_id: string;
+  mode: "latest" | "pinned";
+  pinned_version?: number;
+}
+
+// The resolved whoami block (BR11): `source` is "inline" or "<preset_id>@<ver>".
+export interface CommResolvedBlock {
+  source: string;
+  content: CommContent;
+}
+
+// An agent's CURRENT communication binding, reshaped for the editor (the inverse
+// of the PUT contract, round-trip-stable): inline content XOR one global
+// reference, plus the RESOLVED block the whoami would show. `null` on every leg
+// when the agent has no binding.
+export interface AgentCommunication {
+  agent_id: string;
+  inline: CommContent | null;
+  global: CommGlobalRef | null;
+  communication: CommResolvedBlock | null;
+}
+
+// The 409 COMM_PRESET_IN_USE details payload: the agents that still bind the
+// preset (delete is refused until they detach, so no pin is orphaned).
+export interface CommPresetInUseDetails {
+  preset_id: string;
+  agents: string[];
+}
+
 // HITL approvals (spec 2948b2a2): operator-only queue behind the Approvals
 // screen. Queue reads and decisions work with feature_hitl OFF — the flag
 // gates only the interception of new actions.
@@ -343,6 +432,8 @@ export interface AgentRow {
   // selector. The MCP discovery surface exposes tags but NEVER comm_scope.
   tags: TagMap | null;
   comm_scope: CommScope | null;
+  // Display color (spec 2d6920f4): "#RRGGBB" or null = auto-by-identity.
+  color: string | null;
 }
 
 export interface MessageRow {
@@ -755,6 +846,8 @@ export const api = {
     metadata?: Record<string, unknown>;
     preset_id?: string;
     permissions?: PermissionFlags;
+    // Display color (spec 2d6920f4): "#RRGGBB" or null/omitted = auto.
+    color?: string | null;
   }) =>
     call<AgentRow & { api_key: string }>("/api/v1/agents", {
       method: "POST",
@@ -775,6 +868,9 @@ export const api = {
       // Fail-closed: unregistered keys/values are rejected with 400/422.
       tags?: TagMap | null;
       comm_scope?: CommScope | null;
+      // Display color (spec 2d6920f4): present-in-payload overwrite; an
+      // explicit null resets to auto-by-identity, omitted leaves it unchanged.
+      color?: string | null;
     },
   ) =>
     call<AgentRow>(`/api/v1/agents/${encodeURIComponent(agentId)}`, {
@@ -950,6 +1046,72 @@ export const api = {
   ) =>
     call<{ agent_id: string; effective_policies: string[] }>(
       `/api/v1/agents/${encodeURIComponent(agentId)}/policies`,
+      { method: "PUT", body: JSON.stringify(body) },
+    ),
+  // Communication presets (spec 6f961722, migration 023): operator CRUD over
+  // preset headers + append-only version publishing + the SINGLE-SOURCE per-
+  // agent binding. Pure STAGING — nothing surfaces until an agent binds a preset
+  // (its whoami then carries the resolved style). Operator-only; NOT MCP tools
+  // (stdio/http parity intact). The envelope is unwrapped by call<T>;
+  // POST/GET/PATCH bring the version history, list() returns headers only.
+  commPresets: () =>
+    call<{ items: CommPresetRecord[] }>("/api/v1/comm-presets"),
+  commPreset: (presetId: string) =>
+    call<CommPresetRecord>(
+      `/api/v1/comm-presets/${encodeURIComponent(presetId)}`,
+    ),
+  // Unknown fields -> 422 VALIDATION_ERROR; a duplicate name -> 422.
+  createCommPreset: (body: { name: string; description?: string }) =>
+    call<CommPresetRecord>("/api/v1/comm-presets", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  updateCommPreset: (
+    presetId: string,
+    body: { name?: string; description?: string },
+  ) =>
+    call<CommPresetRecord>(
+      `/api/v1/comm-presets/${encodeURIComponent(presetId)}`,
+      { method: "PATCH", body: JSON.stringify(body) },
+    ),
+  // 409 COMM_PRESET_IN_USE (details: {preset_id, agents}) while any agent binds it.
+  deleteCommPreset: (presetId: string) =>
+    call<{ deleted: boolean; preset_id: string }>(
+      `/api/v1/comm-presets/${encodeURIComponent(presetId)}`,
+      { method: "DELETE" },
+    ),
+  // Publish the next immutable version (MAX+1, append-only). An empty body {} is
+  // valid (a version with no directing content). `content` is the closed
+  // dimension dict ({tone, format, ...}); empty/whitespace dimensions are dropped.
+  publishCommPresetVersion: (
+    presetId: string,
+    body: { content?: CommContent },
+  ) =>
+    call<CommPresetVersion>(
+      `/api/v1/comm-presets/${encodeURIComponent(presetId)}/versions`,
+      { method: "POST", body: JSON.stringify(body) },
+    ),
+  commPresetVersions: (presetId: string) =>
+    call<{ items: CommPresetVersion[] }>(
+      `/api/v1/comm-presets/${encodeURIComponent(presetId)}/versions`,
+    ),
+  // Read an agent's CURRENT single binding, reshaped into the same
+  // {inline, global} shape the PUT accepts (round-trip-stable) plus the resolved
+  // block so the editor pre-populates and previews. Operator-only; unknown
+  // agent -> 404.
+  agentCommunication: (agentId: string) =>
+    call<AgentCommunication>(
+      `/api/v1/agents/${encodeURIComponent(agentId)}/communication`,
+    ),
+  // Replace an agent's SINGLE communication binding: inline content XOR a global
+  // reference ({preset_id, mode, pinned_version?}). Passing NEITHER clears it.
+  // Operator-only; both sides -> 422, unknown preset -> 404, missing pin -> 422.
+  setAgentCommunication: (
+    agentId: string,
+    body: { inline?: CommContent; global?: CommGlobalRef },
+  ) =>
+    call<{ agent_id: string; communication: CommResolvedBlock | null }>(
+      `/api/v1/agents/${encodeURIComponent(agentId)}/communication`,
       { method: "PUT", body: JSON.stringify(body) },
     ),
   // HITL approvals (spec 2948b2a2): operator-only. status defaults to

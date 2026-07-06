@@ -64,7 +64,7 @@ class SqliteObservabilityQueries:
             rows = uow.connection.execute(
                 """
                 SELECT a.agent_id, a.role, a.capabilities, a.last_seen_at,
-                       a.api_key_hash, a.is_active,
+                       a.api_key_hash, a.is_active, a.tags, a.color,
                        COUNT(s.session_id) AS active_sessions,
                        MAX(s.last_heartbeat_at) AS last_heartbeat_at
                 FROM agents a
@@ -86,6 +86,8 @@ class SqliteObservabilityQueries:
                 "is_active": bool(row["is_active"]),
                 "active_sessions": int(row["active_sessions"] or 0),
                 "last_heartbeat_at": row["last_heartbeat_at"],
+                "tags": _loads(row["tags"]) or {},
+                "color": row["color"],
             }
             for row in rows
         ]
@@ -107,6 +109,92 @@ class SqliteObservabilityQueries:
                 row["n"]
             )
         return counts
+
+    def last_actions_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, dict[str, Any]]:
+        # Each actor's MOST RECENT event (highest event_id) in ONE GROUP-BY -
+        # never per-agent (the anti-N+1 rule the handoff aggregates set). With
+        # a single MAX() aggregate, SQLite pins the bare `type`/`created_at`
+        # columns to the very row that holds the maximum event_id, so the verb
+        # and stamp are the winning row's - not an arbitrary group member's.
+        # Rows with no actor are excluded (a system event attributes to
+        # nobody). Scoped to the workspace when given; agents with no events in
+        # scope are absent, so their node keeps a null last_action.
+        sql = (
+            "SELECT actor_agent_id, type, created_at, MAX(event_id) AS event_id "
+            "FROM events WHERE actor_agent_id IS NOT NULL"
+        )
+        params: list[Any] = []
+        if workspace_id is not None:
+            sql += " AND workspace_id = ?"
+            params.append(workspace_id)
+        sql += " GROUP BY actor_agent_id"
+        try:
+            rows = uow.connection.execute(sql, tuple(params)).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading last action per agent", exc) from exc
+        return {
+            row["actor_agent_id"]: {"type": row["type"], "at": row["created_at"]}
+            for row in rows
+        }
+
+    def inbox_depth_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, int]:
+        # Per-recipient count of the PHYSICAL not-yet-read lanes (unread +
+        # delivered) in ONE GROUP-BY (the anti-N+1 rule the graph aggregates
+        # share). Deliveries are global (ADR 0001), so workspace scoping JOINs
+        # messages on workspace_id - the same basis as message_edges /
+        # workspace_unread_by_agent. ``None`` = all workspaces (no filter).
+        # 'read'/'parked' are excluded: this is pending-attention depth, not
+        # lifetime volume. Agents with none are absent (the node reads 0).
+        sql = (
+            "SELECT d.recipient_agent_id AS agent_id, COUNT(*) AS n "
+            "FROM message_deliveries d "
+            "JOIN messages m ON m.message_id = d.message_id "
+            "WHERE d.status IN ('unread', 'delivered')"
+        )
+        params: list[Any] = []
+        if workspace_id is not None:
+            sql += " AND m.workspace_id = ?"
+            params.append(workspace_id)
+        sql += " GROUP BY d.recipient_agent_id"
+        try:
+            rows = uow.connection.execute(sql, tuple(params)).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading inbox depth per agent", exc) from exc
+        return {row["agent_id"]: int(row["n"]) for row in rows}
+
+    def open_handoffs_by_agent(
+        self, uow: UnitOfWork, *, workspace_id: str | None
+    ) -> dict[str, int]:
+        # Per-agent count of NON-TERMINAL handoffs the agent is involved in,
+        # attributing each open handoff to BOTH its origin (from_agent_id) and
+        # its current holder (claimed_by) via a UNION ALL, in ONE pass
+        # (anti-N+1). Non-terminal = OPEN/CLAIMED/VERIFYING (domain
+        # V1_STATUSES - TERMINAL_STATUSES); terminal handoffs never count.
+        # ``None`` = all workspaces. claimed_by IS NULL until a claim, so the
+        # holder arm filters it out; a handoff claimed by its own originator
+        # counts twice (awaited + owned) - the UNION ALL intent.
+        where = "status IN ('OPEN', 'CLAIMED', 'VERIFYING')"
+        params: list[Any] = []
+        if workspace_id is not None:
+            where += " AND workspace_id = ?"
+            params.append(workspace_id)
+        sql = (
+            "SELECT agent_id, COUNT(*) AS n FROM ("
+            f"  SELECT from_agent_id AS agent_id FROM handoffs WHERE {where}"
+            "  UNION ALL"
+            f"  SELECT claimed_by AS agent_id FROM handoffs "
+            f"  WHERE {where} AND claimed_by IS NOT NULL"
+            ") GROUP BY agent_id"
+        )
+        try:
+            rows = uow.connection.execute(sql, tuple(params) + tuple(params)).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("reading open handoffs per agent", exc) from exc
+        return {row["agent_id"]: int(row["n"]) for row in rows}
 
     def message_edges(
         self,

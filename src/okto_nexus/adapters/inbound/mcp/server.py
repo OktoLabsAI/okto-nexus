@@ -32,6 +32,7 @@ from typing import Any, Mapping
 
 from ....application.approvals import ApprovalService, seed_operator_agent
 from ....application.capabilities import seed_capability_catalog
+from ....application.comm_preset_catalog import seed_comm_presets
 from ....application.ports import Clock, ConnectionFactory as ConnectionFactoryPort
 from ....application.ports import EventEmitter, Repos
 from ....config import FEATURE_FLAG_FIELDS, NexusConfig, load_config
@@ -61,6 +62,10 @@ from ...outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
+)
+from ...outbound.sqlite.comm_preset_repo import (
+    SqliteAgentCommBindingRepo,
+    SqliteCommPresetRepo,
 )
 from ...outbound.sqlite.migrations import MigrationRunner
 from ...outbound.sqlite.permissions_repo import SqlitePresetRepo
@@ -333,7 +338,18 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: (``POLICY_IN_USE``, REST-only 409). Operator REST surfaces (``/policies``,
 #: ``PUT /agents/{id}/policies``) are NOT MCP tools, so the stdio/http tool
 #: parity is unchanged. Growth ledger: ``policies_b3`` (+233 docstring chars).
-SURFACE_REVISION = 25
+#: 26 = communication presets (spec 6f961722, migration 023): NO new tool - only
+#: the SEMANTICS of ``agent_whoami`` grew. It now returns a SELF-ONLY
+#: ``communication`` block ({source, content}) - the caller's resolved style
+#: guidance (tone/format/language/verbosity/structure + additional_instructions)
+#: - present ONLY when the caller has a resolvable binding (absent otherwise, so
+#: an agent with none is byte-identical to rev 25 - BR11/D-CP-6). NEVER on
+#: ``_agent_to_data`` / discovery. One new error code (``COMM_PRESET_IN_USE``,
+#: REST-only 409). Operator REST surfaces (``/comm-presets``,
+#: ``PUT /agents/{id}/communication``) are NOT MCP tools, so the stdio/http tool
+#: parity is unchanged. The whoami docstring was reworded net-neutral (no
+#: resident growth): ledger ``comm_presets_c5`` (0 chars).
+SURFACE_REVISION = 26
 
 
 @dataclass
@@ -404,6 +420,8 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         governance=SqliteGovernanceRepo(clock),
         policies=SqlitePolicyRepo(clock),
         policy_bindings=SqliteAgentPolicyBindingRepo(clock),
+        comm_presets=SqliteCommPresetRepo(clock),
+        comm_bindings=SqliteAgentCommBindingRepo(clock),
         approvals=SqliteApprovalRepo(),
     )
     emitter = SqliteEventEmitter(events_repo)
@@ -439,6 +457,10 @@ def bootstrap(
         # unconditionally BEFORE any tool registers; create-if-missing only,
         # so an existing operator (role, permissions, key) is never touched.
         seed_operator_agent(uow, agents=repos.agents)
+        # Built-in communication presets (spec 6f961722): a starter style
+        # vocabulary, create-if-missing only, so an operator's edits/renames
+        # survive a restart and re-running never duplicates or bumps a version.
+        seed_comm_presets(uow, presets=repos.comm_presets)
     # Resolve the embedding capability ONCE from the configured mode (off /
     # stub / local). The model singleton is lazy, so this stays cheap even for
     # ``local``; an absent extra degrades to the stub with search disabled.

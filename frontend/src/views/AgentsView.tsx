@@ -13,6 +13,7 @@ import {
   Eye,
   FileJson,
   KeyRound,
+  MessageSquare,
   Pencil,
   Plus,
   Power,
@@ -41,7 +42,10 @@ import {
 } from "../components/PermissionFlagsEditor";
 import { PresetEditorModal } from "../components/PresetEditorModal";
 import { AgentTagsEditor } from "../components/AgentTagsEditor";
+import { AgentCommunicationEditor } from "../components/AgentCommunicationEditor";
+import { MetadataEditor } from "../components/MetadataEditor";
 import { CapabilityPicker } from "../components/CapabilityPicker";
+import { ColorPicker } from "../components/ColorPicker";
 import { SteerModal } from "../components/SteerModal";
 
 // MCP consumers (the Pulse AgentsModal grammar): one button per client,
@@ -89,16 +93,27 @@ export function AgentsView({
     role: string;
     capabilities: string[];
     preset_id: string;
+    color: string | null;
   }>({
     agent_id: "",
     role: "",
     capabilities: [],
     preset_id: "",
+    color: null,
   });
+  // Structured metadata for the CREATE form (FR-2) — the MetadataEditor owns its
+  // row state and reports {value, valid} up here.
+  const [newMeta, setNewMeta] = useState<{
+    value: Record<string, unknown>;
+    valid: boolean;
+  }>({ value: {}, valid: true });
   const [permsOpen, setPermsOpen] = useState<string | null>(null);
   const [permsSavedAt, setPermsSavedAt] = useState<string | null>(null);
   // Tags + outbound audience editor (F1) — fed by the central tag catalog.
   const [tagsOpen, setTagsOpen] = useState<string | null>(null);
+  // Communication binding editor (spec 6f961722) — the 4th per-agent axis
+  // (inline style XOR a reference to a reusable Communication preset).
+  const [commOpen, setCommOpen] = useState<string | null>(null);
   const [catalog, setCatalog] = useState<TagKeyRow[]>([]);
   // Capability catalog (migration 014) — the picker's only vocabulary.
   const [capCatalog, setCapCatalog] = useState<CapabilityRow[]>([]);
@@ -108,12 +123,19 @@ export function AgentsView({
   const [editDraft, setEditDraft] = useState<{
     role: string;
     capabilities: string[];
-    metadata: string;
+    color: string | null;
   }>({
     role: "",
     capabilities: [],
-    metadata: "",
+    color: null,
   });
+  // Structured metadata editor result for the EDIT panel (FR-1). Held apart from
+  // editDraft because the MetadataEditor owns its own row state and reports
+  // {value, valid} up (the typed object, not a raw-JSON string).
+  const [editMeta, setEditMeta] = useState<{
+    value: Record<string, unknown>;
+    valid: boolean;
+  }>({ value: {}, valid: true });
   const [editError, setEditError] = useState<string | null>(null);
   // Preset manager modal state: editing (PresetRow|null for new) +
   // optional clone template flags.
@@ -161,11 +183,21 @@ export function AgentsView({
         capabilities: newAgent.capabilities.length
           ? newAgent.capabilities
           : undefined,
+        metadata: Object.keys(newMeta.value).length ? newMeta.value : undefined,
         preset_id: newAgent.preset_id || undefined,
+        // null/omitted = auto-by-identity; a chosen hex is sent verbatim.
+        color: newAgent.color ?? undefined,
       });
       setFreshKey({ agentId: created.agent_id, key: created.api_key });
       setCreating(false);
-      setNewAgent({ agent_id: "", role: "", capabilities: [], preset_id: "" });
+      setNewAgent({
+        agent_id: "",
+        role: "",
+        capabilities: [],
+        preset_id: "",
+        color: null,
+      });
+      setNewMeta({ value: {}, valid: true });
       setError(null);
       await reload();
       onChanged();
@@ -200,30 +232,28 @@ export function AgentsView({
       capabilities: Object.entries(agent.capabilities ?? {})
         .filter(([, flag]) => Boolean(flag))
         .map(([name]) => name),
-      metadata: Object.keys(agent.metadata ?? {}).length
-        ? JSON.stringify(agent.metadata, null, 2)
-        : "",
+      color: agent.color ?? null,
     });
+    // Seed the structured editor; it re-reports {value, valid} on mount.
+    setEditMeta({ value: agent.metadata ?? {}, valid: true });
     setEditOpen((cur) => (cur === agent.agent_id ? null : agent.agent_id));
   };
 
   const saveEdit = async (agentId: string) => {
-    let metadata: Record<string, unknown> = {};
-    if (editDraft.metadata.trim()) {
-      try {
-        metadata = JSON.parse(editDraft.metadata);
-      } catch {
-        setEditError("Metadata must be valid JSON (or empty).");
-        return;
-      }
+    if (!editMeta.valid) {
+      setEditError("Fix the highlighted metadata field(s) before saving.");
+      return;
     }
     try {
       // Send the full identity triple so cleared fields actually clear
-      // (the PATCH/upsert COALESCEs nulls, not empty values).
+      // (the PATCH/upsert COALESCEs nulls, not empty values). An empty editor
+      // emits {} — clearing stored metadata (FR-7/BR-6).
       await api.updateAgent(agentId, {
         role: editDraft.role.trim(),
         capabilities: editDraft.capabilities,
-        metadata,
+        metadata: editMeta.value,
+        // Present-in-payload overwrite: null clears back to auto-by-identity.
+        color: editDraft.color,
       });
       setEditOpen(null);
       setEditError(null);
@@ -444,6 +474,29 @@ export function AgentsView({
               onChange={(e) => setNewAgent({ ...newAgent, role: e.target.value })}
               className={inputCls}
             />
+            <div className="col-span-2 space-y-1">
+              <span className="text-surface-500 dark:text-surface-400">
+                Metadata (optional)
+              </span>
+              <MetadataEditor
+                initial={{}}
+                resetSignal={creating ? "open" : "closed"}
+                onChange={setNewMeta}
+                idPrefix="new-meta"
+                testId="new-agent-metadata"
+              />
+            </div>
+            <div className="col-span-2 space-y-1">
+              <span className="text-surface-500 dark:text-surface-400">
+                Color (optional)
+              </span>
+              <ColorPicker
+                value={newAgent.color}
+                agentId={newAgent.agent_id}
+                onChange={(color) => setNewAgent({ ...newAgent, color })}
+                idPrefix="new-agent-color"
+              />
+            </div>
             <div className="min-h-[30px] flex items-center">
               <CapabilityPicker
                 selected={newAgent.capabilities}
@@ -474,7 +527,7 @@ export function AgentsView({
               <button
                 className="btn btn-primary"
                 onClick={create}
-                disabled={!newAgent.agent_id.trim()}
+                disabled={!newAgent.agent_id.trim() || !newMeta.valid}
                 data-testid="create-agent"
               >
                 Create
@@ -497,6 +550,7 @@ export function AgentsView({
               const showPerms = permsOpen === agent.agent_id && !!presets;
               const showEdit = editOpen === agent.agent_id;
               const showTags = tagsOpen === agent.agent_id;
+              const showComm = commOpen === agent.agent_id;
               return (
                 <Fragment key={agent.agent_id}>
                   {/* Card */}
@@ -569,6 +623,18 @@ export function AgentsView({
                         }
                       >
                         <Tags size={14} />
+                      </button>
+                      <button
+                        className={`${ICON_BTN} ${showComm ? ICON_BTN_ACTIVE : ""}`}
+                        title="Communication style (how the agent should communicate)"
+                        data-testid={`comm-${agent.agent_id}`}
+                        onClick={() =>
+                          setCommOpen((open) =>
+                            open === agent.agent_id ? null : agent.agent_id,
+                          )
+                        }
+                      >
+                        <MessageSquare size={14} />
                       </button>
                       {/* Steering to yourself is a no-op — hide it for the
                           reserved operator identity. */}
@@ -646,7 +712,7 @@ export function AgentsView({
 
                   {/* Full-width breakout row beneath the card (preserves the
                       loved click-to-expand; spans every column). */}
-                  {(showKey || showEdit || showPerms || showTags) && (
+                  {(showKey || showEdit || showPerms || showTags || showComm) && (
                     <div
                       className="col-span-full space-y-3"
                       data-testid={`agent-expand-${agent.agent_id}`}
@@ -751,26 +817,42 @@ export function AgentsView({
                                 />
                               </div>
                             </label>
-                            <label className="space-y-1 md:col-span-2">
+                            <div className="space-y-1 md:col-span-2">
                               <span className="text-surface-500 dark:text-surface-400">
-                                Metadata (JSON)
+                                Metadata
                               </span>
-                              <textarea
-                                className={`${inputCls} w-full font-mono`}
-                                rows={3}
-                                value={editDraft.metadata}
-                                onChange={(e) =>
-                                  setEditDraft({ ...editDraft, metadata: e.target.value })
-                                }
-                                placeholder='{ "team": "core" }'
-                              />
-                            </label>
+                              <div className="pt-1">
+                                <MetadataEditor
+                                  initial={agent.metadata ?? {}}
+                                  resetSignal={agent.agent_id}
+                                  onChange={setEditMeta}
+                                  idPrefix={`edit-meta-${agent.agent_id}`}
+                                  testId={`edit-metadata-${agent.agent_id}`}
+                                />
+                              </div>
+                            </div>
+                            <div className="space-y-1 md:col-span-2">
+                              <span className="text-surface-500 dark:text-surface-400">
+                                Color
+                              </span>
+                              <div className="pt-1">
+                                <ColorPicker
+                                  value={editDraft.color}
+                                  agentId={agent.agent_id}
+                                  onChange={(color) =>
+                                    setEditDraft({ ...editDraft, color })
+                                  }
+                                  idPrefix={`edit-color-${agent.agent_id}`}
+                                />
+                              </div>
+                            </div>
                           </div>
                           {editError && <p className="text-xs text-red-500">{editError}</p>}
                           <div className="flex items-center gap-2">
                             <button
                               className="btn btn-primary"
                               onClick={() => saveEdit(agent.agent_id)}
+                              disabled={!editMeta.valid}
                               data-testid={`save-edit-${agent.agent_id}`}
                             >
                               Save changes
@@ -800,6 +882,20 @@ export function AgentsView({
                             onChanged();
                           }}
                           onClose={() => setTagsOpen(null)}
+                        />
+                      )}
+
+                      {/* Communication binding (spec 6f961722): inline style XOR
+                          a reference to a reusable Communication preset — surfaced
+                          SELF-ONLY on the agent's whoami. */}
+                      {showComm && (
+                        <AgentCommunicationEditor
+                          agent={agent}
+                          onSaved={async () => {
+                            await reload();
+                            onChanged();
+                          }}
+                          onClose={() => setCommOpen(null)}
                         />
                       )}
 

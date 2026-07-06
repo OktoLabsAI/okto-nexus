@@ -1036,7 +1036,7 @@ def test_ts10_rest_lexical_mode_declared_when_embeddings_off(tmp_path):
 # T7 / TS11 - the frozen MCP surface contract
 # --------------------------------------------------------------------------- #
 def test_ts11_surface_revision_ledger_budgets_and_tool_set(tmp_path):
-    assert SURFACE_REVISION == 25
+    assert SURFACE_REVISION == 26
     # The growth is ON the approved ledger (AC5 stays green with it counted).
     assert APPROVED_GROWTH["memory_i6"] > 0
 

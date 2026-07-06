@@ -44,8 +44,10 @@ def test_ts11_this_test_is_collected_under_replay_marker(request) -> None:
 # --------------------------------------------------------------------------- #
 def test_ts13_surface_revision_unchanged() -> None:
     # I8 shipped no MCP tool (BR7); the surface later moved to 25 when the
-    # attachable-policies B3 reshaped agent_whoami/artifact_get (spec 80624c1a).
-    assert SURFACE_REVISION == 25
+    # attachable-policies B3 reshaped agent_whoami/artifact_get (spec 80624c1a),
+    # then to 26 when communication presets added the self-only whoami block
+    # (spec 6f961722) - still no new MCP tool.
+    assert SURFACE_REVISION == 26
 
 
 def test_ts13_feature_replay_is_a_declared_flag() -> None:
@@ -55,7 +57,7 @@ def test_ts13_feature_replay_is_a_declared_flag() -> None:
 def test_ts13_nexus_info_features_reflect_flag_off() -> None:
     hub = build_hub()  # default: feature_replay OFF
     info = _ok(hub.tools["nexus_info"]())
-    assert info["surface_revision"] == 25
+    assert info["surface_revision"] == 26
     assert "feature_replay" in info["features"]
     assert info["features"]["feature_replay"] is False
     # features are exactly the declared flag fields

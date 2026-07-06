@@ -138,7 +138,7 @@ class SqliteAgentRepo(_ClockBacked):
 
     _COLUMNS = (
         "agent_id, role, capabilities, metadata, created_at, last_seen_at, "
-        "api_key_hash, is_active, permissions, preset_id, tags, comm_scope"
+        "api_key_hash, is_active, permissions, preset_id, tags, comm_scope, color"
     )
 
     def upsert(
@@ -149,19 +149,21 @@ class SqliteAgentRepo(_ClockBacked):
         role: str | None = None,
         capabilities: Any = None,
         metadata: Any = None,
+        color: str | None = None,
     ) -> Agent:
         now = self._now()
         try:
             uow.connection.execute(
                 """
-                INSERT INTO agents (agent_id, role, capabilities, metadata, created_at)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO agents (agent_id, role, capabilities, metadata, created_at, color)
+                VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT(agent_id) DO UPDATE SET
                     role = COALESCE(excluded.role, agents.role),
                     capabilities = COALESCE(excluded.capabilities, agents.capabilities),
-                    metadata = COALESCE(excluded.metadata, agents.metadata)
+                    metadata = COALESCE(excluded.metadata, agents.metadata),
+                    color = COALESCE(excluded.color, agents.color)
                 """,
-                (agent_id, role, _dumps(capabilities), _dumps(metadata), now),
+                (agent_id, role, _dumps(capabilities), _dumps(metadata), now, color),
             )
         except sqlite3.Error as exc:
             raise _db_error("upserting agent", exc) from exc
@@ -266,6 +268,23 @@ class SqliteAgentRepo(_ClockBacked):
             )
         except sqlite3.Error as exc:
             raise _db_error("setting agent comm_scope", exc) from exc
+        return cur.rowcount > 0
+
+    def set_color(self, uow: UnitOfWork, *, agent_id: str, color: str | None) -> bool:
+        """Overwrite the agent's ``color`` column; True if the agent existed.
+
+        Full overwrite (``None`` resets to auto-by-identity) - mirroring
+        :meth:`set_tags`, clearing is a first-class operation here. The value
+        is a plain string (e.g. "#22c55e") stored verbatim; format validation
+        is the caller's job.
+        """
+        try:
+            cur = uow.connection.execute(
+                "UPDATE agents SET color = ? WHERE agent_id = ?",
+                (color, agent_id),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("setting agent color", exc) from exc
         return cur.rowcount > 0
 
     def get_active_by_key_hash(
@@ -381,6 +400,7 @@ class SqliteAgentRepo(_ClockBacked):
             preset_id=row["preset_id"],
             tags=tags if tags is not None else {},
             comm_scope=_loads(row["comm_scope"]),
+            color=row["color"],
         )
 
 

@@ -19,7 +19,9 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import Sigma from "sigma";
 import { NodeSquareProgram } from "@sigma/node-square";
 import { DashedEdgeArrowProgram } from "../graph/DashedEdgeProgram";
-import { Ban, RotateCw, Search, X } from "lucide-react";
+import { actionLabel, relativeTime } from "../graph/lastAction";
+import { agentColor, gradientFor, textColorFor } from "../graph/agentColor";
+import { ArrowLeftRight, Ban, Inbox, RotateCw, Search, X } from "lucide-react";
 import {
   api,
   type ConversationPeer,
@@ -41,6 +43,16 @@ function presenceColor(presence: GraphNode["presence"], theme: ThemeName): strin
   if (presence === "present") return "#0ea5e9";
   if (presence === "stale") return "#f59e0b";
   return theme === "dark" ? "#3f4a5c" : "#b2bdcc";
+}
+
+// The entity-card status dot follows the operator's traffic-light request:
+// GREEN online / AMBER stale / GREY offline (distinct from presenceColor, which
+// tints the small edge-anchor node and the SidePanel presence label in the
+// dashboard's sky-blue accent). Green is the "online" signal the card leads with.
+function statusDotColor(presence: GraphNode["presence"]): string {
+  if (presence === "present") return "#22c55e"; // green — online
+  if (presence === "stale") return "#f59e0b"; // amber — stale
+  return "#9ca3af"; // grey — offline
 }
 
 // Grey flow-decay for COMPLETED traffic (no pending deliveries in the
@@ -105,6 +117,17 @@ export function GraphView({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selection, setSelection] = useState<Selection>(null);
+  // agent_id -> the card's DOM node, so the Sigma frame loop can glue each
+  // card to its node's viewport position (populated by the overlay's ref).
+  const cardRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  // Live tick for the cards' relative-time reference ("2 minutes ago"): a
+  // wall-clock that advances every 30s so open cards re-render their age with
+  // no refetch. Independent of the edge flow-decay ticker below.
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => {
+    const t = window.setInterval(() => setNowMs(Date.now()), 30_000);
+    return () => window.clearInterval(t);
+  }, []);
 
   const model = useMemo(() => {
     if (!graph) return null;
@@ -112,22 +135,16 @@ export function GraphView({
     const g = new Graph({ multi: true, type: "directed" });
 
     for (const node of graph.nodes) {
-      const activity = node.sessions + node.inbox.unread + node.inbox.delivered;
-      const offline = node.presence === "offline";
       const { x, y } = seedPosition(node.agent_id);
+      // Each agent is rendered as an HTML ENTITY CARD in the overlay below;
+      // the Sigma node is a small anchor that only hosts edge endpoints (it
+      // sits UNDER the card). No label — the card owns the name and status.
       g.addNode(node.agent_id, {
-        label: node.agent_id,
+        label: "",
         x,
         y,
-        size: (offline ? 10 : 14) + Math.min(14, activity * 3),
+        size: 7,
         color: presenceColor(node.presence, theme),
-        labelColor: offline
-          ? dark
-            ? "#64748b"
-            : "#94a3b8"
-          : dark
-            ? "#e2e8f0"
-            : "#1e293b",
         kind: "agent",
       });
     }
@@ -210,8 +227,16 @@ export function GraphView({
 
     if (g.order > 1) {
       forceAtlas2.assign(g, {
-        iterations: 200,
-        settings: { ...forceAtlas2.inferSettings(g), slowDown: 5 },
+        iterations: 260,
+        settings: {
+          ...forceAtlas2.inferSettings(g),
+          slowDown: 5,
+          // Roomier spread: full entity CARDS (not dots) need space, so raise
+          // repulsion and ease gravity to reduce card overlap at fit-zoom
+          // (owner decision: always-box + wider layout, no zoom-collapse).
+          scalingRatio: 60,
+          gravity: 0.8,
+        },
       });
     }
 
@@ -234,7 +259,7 @@ export function GraphView({
         const dy = (g.getNodeAttribute(id, "y") as number) - cy;
         maxR = Math.max(maxR, Math.hypot(dx, dy));
       }
-      const orbit = maxR * 1.25;
+      const orbit = maxR * 1.6;
       for (const id of agents) {
         if (g.degree(id) > 0) continue;
         const angle = ((hashOf(id) % 3600) / 3600) * Math.PI * 2;
@@ -294,6 +319,26 @@ export function GraphView({
     // viewport coordinates); harmless in production.
     (window as unknown as { __nexusSigma?: Sigma }).__nexusSigma = renderer;
 
+    // Keep each HTML entity card glued to its agent node: reproject on every
+    // Sigma frame (pan, zoom and resize all emit afterRender). Purely reads
+    // node coords -> viewport pixels; never mutates the graph or the camera.
+    const syncCards = () => {
+      const refs = cardRefs.current;
+      refs.forEach((el, id) => {
+        if (!model.hasNode(id)) {
+          el.style.opacity = "0";
+          return;
+        }
+        const x = model.getNodeAttribute(id, "x") as number;
+        const y = model.getNodeAttribute(id, "y") as number;
+        const vp = renderer.graphToViewport({ x, y });
+        el.style.transform = `translate(${vp.x}px, ${vp.y}px) translate(-50%, -50%)`;
+        el.style.opacity = "1";
+      });
+    };
+    renderer.on("afterRender", syncCards);
+    syncCards(); // first paint (afterRender then keeps it in sync)
+
     // Flow-decay ticker: every 30s, fade completed-flow edges IN PLACE
     // (attribute mutation re-renders; it never rebuilds layout or camera).
     const decayTimer = window.setInterval(() => {
@@ -321,6 +366,136 @@ export function GraphView({
         data-testid="graph-canvas"
       >
         <div ref={containerRef} className="absolute inset-0" />
+        {/* Entity-card overlay: one card per agent, glued to its node by the
+            Sigma frame loop (syncCards). The layer ignores pointer events so
+            panning falls through the gaps; each card re-enables them so a
+            click opens the SidePanel (same target as the old node click). */}
+        {graph && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {graph.nodes.map((node) => {
+              // Identity color drives the header gradient; the name text color
+              // flips by header luminance for contrast. The status dot stays
+              // traffic-light (identity color != status).
+              const color = agentColor(node.agent_id, node.color);
+              const ink = textColorFor(color);
+              // Chips: owned capabilities + tag key:value pairs (capped, +N).
+              const caps = Object.entries(node.capabilities ?? {})
+                .filter(([, owned]) => Boolean(owned))
+                .map(([name]) => name);
+              const tagChips = Object.entries(node.tags ?? {}).flatMap(
+                ([key, vals]) => (vals ?? []).map((v) => `${key}:${v}`),
+              );
+              const chips = [...caps, ...tagChips];
+              const shownChips = chips.slice(0, 4);
+              const overflow = chips.length - shownChips.length;
+              const hasBadges = node.pending_inbox > 0 || node.open_handoffs > 0;
+              return (
+                <button
+                  key={node.agent_id}
+                  ref={(el) => {
+                    if (el) cardRefs.current.set(node.agent_id, el);
+                    else cardRefs.current.delete(node.agent_id);
+                  }}
+                  onClick={() => setSelection({ kind: "node", node })}
+                  data-testid="agent-card"
+                  data-agent-id={node.agent_id}
+                  title={`${node.agent_id} · ${node.presence}`}
+                  className="absolute top-0 left-0 opacity-0 pointer-events-auto text-left
+                    w-[184px] rounded-lg border shadow-sm overflow-hidden
+                    bg-white/95 border-surface-200 hover:border-accent-400
+                    dark:bg-surface-900/95 dark:border-surface-700 dark:hover:border-accent-500
+                    transition-colors"
+                >
+                  {/* Header: subtle color gradient + contrast name + role. */}
+                  <div
+                    className="px-2 py-1.5 border-b border-black/10 dark:border-white/10"
+                    style={{ backgroundImage: gradientFor(color) }}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className="inline-block w-2.5 h-2.5 rounded-full shrink-0 ring-1 ring-white/70"
+                        style={{ backgroundColor: statusDotColor(node.presence) }}
+                      />
+                      <span
+                        className="font-semibold text-[12px] truncate"
+                        style={{ color: ink }}
+                      >
+                        {node.agent_id}
+                      </span>
+                    </div>
+                    {node.role && (
+                      <div
+                        className="pl-4 text-[10px] leading-tight truncate opacity-80"
+                        style={{ color: ink }}
+                      >
+                        {node.role}
+                      </div>
+                    )}
+                  </div>
+                  {/* Body: last action + self-hiding badges + caps/tags chips. */}
+                  <div className="px-2 py-1 space-y-1">
+                    <div className="text-[10px] leading-tight truncate">
+                      {node.last_action ? (
+                        <>
+                          <span className="text-surface-700 dark:text-surface-200">
+                            {actionLabel(node.last_action.type)}
+                          </span>{" "}
+                          <span className="text-surface-400 dark:text-surface-500">
+                            · {relativeTime(node.last_action.at, nowMs)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="italic text-surface-400 dark:text-surface-500">
+                          no recent activity
+                        </span>
+                      )}
+                    </div>
+                    {hasBadges && (
+                      <div className="flex flex-wrap items-center gap-1">
+                        {node.pending_inbox > 0 && (
+                          <span
+                            title="Pending inbox (unread + delivered)"
+                            data-testid="badge-inbox"
+                            className="inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[9px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                          >
+                            <Inbox size={9} /> {node.pending_inbox}
+                          </span>
+                        )}
+                        {node.open_handoffs > 0 && (
+                          <span
+                            title="Open handoffs (owned or awaited)"
+                            data-testid="badge-handoffs"
+                            className="inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[9px] font-medium bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300"
+                          >
+                            <ArrowLeftRight size={9} /> {node.open_handoffs}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {shownChips.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {shownChips.map((chip) => (
+                          <span
+                            key={chip}
+                            title={chip}
+                            className="rounded bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 px-1 py-0.5 text-[9px] max-w-[76px] truncate"
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                        {overflow > 0 && (
+                          <span className="rounded px-1 py-0.5 text-[9px] text-surface-400 dark:text-surface-500">
+                            +{overflow}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
         <Legend />
         {graph && graph.nodes.length === 0 && (
           <div className="absolute inset-0 grid place-items-center text-sm text-surface-400 dark:text-surface-500">
@@ -379,7 +554,9 @@ function Legend() {
         </button>
       </div>
       <div>
-        <span className="text-accent-500 text-base align-middle">●</span>{" "}
+        <span className="text-base align-middle" style={{ color: "#22c55e" }}>
+          ●
+        </span>{" "}
         present <span className="text-surface-400">· heartbeat &lt; 1 min</span>
       </div>
       <div>
@@ -387,7 +564,9 @@ function Legend() {
         <span className="text-surface-400">· silent for 1–30 min</span>
       </div>
       <div>
-        <span className="text-surface-400 text-base align-middle">●</span>{" "}
+        <span className="text-base align-middle" style={{ color: "#9ca3af" }}>
+          ●
+        </span>{" "}
         offline <span className="text-surface-400">· no active session</span>
       </div>
       <div>
@@ -410,6 +589,26 @@ function Legend() {
       <div>
         <span className="text-pink-500 text-sm align-middle">■</span> handoff
         aberto <span className="text-surface-400">· aguarda claim</span>
+      </div>
+      <div>
+        <span
+          className="inline-block w-3 h-3 rounded-sm align-middle"
+          style={{ backgroundImage: "linear-gradient(135deg,#8b5cf6,#6d28d9)" }}
+        />{" "}
+        card header{" "}
+        <span className="text-surface-400">
+          · agent color (auto by identity unless set)
+        </span>
+      </div>
+      <div>
+        <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300 align-middle">
+          <Inbox size={9} /> N
+        </span>{" "}
+        pending inbox ·{" "}
+        <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300 align-middle">
+          <ArrowLeftRight size={9} /> N
+        </span>{" "}
+        open handoffs <span className="text-surface-400">· hidden at 0</span>
       </div>
       <div className="text-surface-400 mt-1">
         Click any element to inspect it.

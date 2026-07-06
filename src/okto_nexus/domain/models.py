@@ -57,6 +57,10 @@ class Agent:
     # unrestricted) and is NEVER exposed on any discovery surface.
     tags: dict[str, Any] = field(default_factory=dict)
     comm_scope: dict[str, Any] | None = None
+    # Migration 024: per-agent display color for the dashboard graph cards.
+    # ``None`` = unset = auto-by-identity (derived from ``agent_id`` on the
+    # client). Stored verbatim (e.g. "#22c55e").
+    color: str | None = None
 
 
 @dataclass(slots=True)
