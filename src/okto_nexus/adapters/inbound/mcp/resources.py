@@ -32,7 +32,7 @@ URI_PREFIX = "okto-nexus://reference/"
 
 def _frontmatter(version: str, body: str) -> str:
     """Prepend a minimal ``version`` frontmatter block to a resource body."""
-    return f"---\nversion: \"{version}\"\n---\n\n{body.strip()}\n"
+    return f'---\nversion: "{version}"\n---\n\n{body.strip()}\n'
 
 
 #: Registry of reference resources: uri -> metadata + body. C2 extends this via
@@ -217,8 +217,8 @@ receipts never generate receipts.""",
 add_resource(
     slug="monitoring",
     name="Monitoring & event listening",
-    description="event_get/event_wait observability vs the inbox, the long-poll listener pattern for capable harnesses, and the anti-patterns to avoid.",
-    version="1",
+    description="event_get/event_wait observability vs the inbox, the long-poll listener pattern for capable harnesses, the 6-invariant monitor contract (identity, delivery-truth, self-heartbeat, cursor, envelope, wake-don't-consume) with a reference loop, and the anti-patterns to avoid.",
+    version="2",
     body="""\
 # LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait \
 OBSERVE the bus (message.created, handoff.*, session.* events); they are NOT \
@@ -247,6 +247,61 @@ and continue; that is the steady state, not an error.
   * IF YOU CANNOT BACKGROUND A CALL (strictly single-threaded): do NOT fake it \
 with an external blocking process - fall back to snapshot polling (event_get \
 between turns, advancing the cursor).
+
+# MONITOR CONTRACT - the 6 invariants a REUSABLE monitor must hold. A monitor \
+is nothing but the agent's own identity calling event_wait in a loop whose ONLY \
+job is to WAKE the reasoning loop; these invariants keep that loop from lying \
+about delivery, presence, or identity.
+  * I1 SAME IDENTITY: run on the SAME api_key / agent_id as the agent - a \
+background task on THIS MCP connection, or a separate process authenticating \
+with the SAME key on this hub's /mcp. Never a different identity, curl, or \
+okto-nexus tail (see anti-patterns). If the identity changes it stopped being \
+the agent and became a blind observer.
+  * I2 TWO PLANES, ONE TRUTH: event_* is the SIGNAL plane (observability); \
+inbox_* is the DELIVERY plane (authoritative, global by agent_id, durable). The \
+event WAKES you; the inbox DECIDES. Confirm every wake with inbox_count/ \
+inbox_pull - never treat an event payload as receipt. A dropped event never \
+loses a message (it is in the inbox), so one inbox_count per turn covers \
+restart/gaps for free.
+  * I3 PRESENCE IS THE MONITOR'S JOB: neither event_wait nor inbox_count \
+advances your heartbeat, so a monitor loop reads as IDLE - it goes stale after \
+session_stale_ttl_seconds (default 60s) and drops out of the broadcast audience \
+after presence_ttl_seconds (default 1800s). Call session_heartbeat YOURSELF \
+every loop (< 60s cadence; the event_wait ceiling max_wait_timeout_seconds is \
+30s, so once per turn suffices). This is the monitor's real value: its \
+heartbeat keeps the agent PRESENT through the main loop's long silences. Direct \
+messages still reach the inbox regardless of presence; presence governs only \
+the broadcast audience and the online indicator.
+  * I4 CURSOR ONLY ADVANCES: anchor ONCE with event_cursor (= now), then only \
+move forward to next_cursor. Never reset to 0 (replays the whole log) except a \
+deliberate cold catch-up. On restart, persist the last next_cursor for no-loss, \
+or re-anchor at now and let inbox_count sweep the backlog (I2 makes that safe).
+  * I5 ENVELOPE ALWAYS, TIMEOUT IS NOT AN ERROR: every call returns \
+{ok:true,data} or {ok:false,error} - branch on ok BEFORE touching data. An \
+empty page is a timeout is the STEADY STATE (re-arm and continue). A transport/ \
+hub-restart error is a BOUNDED backoff then re-arm from the last good cursor - \
+never a tight retry loop.
+  * I6 WAKE, DON'T CONSUME: the monitor observes and wakes; keep inbox_pull/ \
+inbox_ack (they MUTATE read-state and emit message.delivered/message.read \
+receipts) in the agent's own turn, where processing and acknowledgement stay \
+coupled. Observing (event_wait/inbox_count/inbox_peek) needs no credential; if \
+the monitor itself must consume, it carries session_id + session_secret \
+(required in trust_mode=strict).
+
+# REFERENCE MONITOR (tool-call sketch; harness-agnostic - names are MCP tools):
+  setup once:
+    me     = agent_whoami().agent_id
+    ws     = workspace_resolve(project_root).workspace_id
+    sess   = session_open(agent_id=me, workspace_id=ws)   # keep sess.session_secret (I6)
+    cursor = event_cursor(project_root, agent_id=me, stream="workspace").cursor   # I4: now
+  loop while running:
+    r = event_wait(project_root, agent_id=me, stream="workspace", cursor=cursor,
+                   filters={"type":"message.created"}, timeout_seconds=25, profile="summary")
+    session_heartbeat(session_id=sess.session_id, workspace_id=ws)     # I3: EVERY turn
+    if not r.ok: emit(r.error); backoff(<=30s); continue               # I5
+    if r.data.next_cursor is not None: cursor = r.data.next_cursor      # I4: only forward
+    if inbox_count(agent_id=me).unread > 0: emit(unread)                # I2; do NOT pull here (I6)
+  teardown: session_close(session_id=sess.session_id, workspace_id=ws)
 
 ANTI-PATTERNS - never do any of these; each re-implements, worse, what one tool \
 call already does, and most break your identity or presence:
