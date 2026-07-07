@@ -35,6 +35,7 @@ from okto_nexus.application.governance import GovernanceService
 from okto_nexus.envelope import tool_envelope
 
 from ...http.identity_ctx import get_authenticated_agent
+from ._guardrails import build_guardrail_service
 
 #: Reused parameter descriptions (kept DRY across the artifact tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
@@ -70,6 +71,7 @@ def build_service(deps: Any) -> ArtifactService:
         repos.policies = SqlitePolicyRepo(deps.clock)
     if getattr(repos, "policy_bindings", None) is None:
         repos.policy_bindings = SqliteAgentPolicyBindingRepo(deps.clock)
+    guardrails = build_guardrail_service(deps)
     # Policy enforcement (spec 80624c1a): per-slice service composing the actor's
     # attached policies; always-on and binding-driven - an actor with no bindings
     # passes untouched (BR2 zero-regression).
@@ -94,6 +96,7 @@ def build_service(deps: Any) -> ArtifactService:
         agents=getattr(repos, "agents", None),
         event_emitter=getattr(deps, "event_emitter", None),
         governance=governance,
+        guardrails=guardrails,
     )
 
 

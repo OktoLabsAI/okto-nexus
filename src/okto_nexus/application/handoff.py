@@ -67,6 +67,7 @@ atomically inside a single unit of work.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 import json
 from typing import Any, Iterator, Mapping, Optional, Sequence
 
@@ -128,6 +129,7 @@ from ..errors import ErrorCode, OktoNexusError
 from .approvals import ApprovalService
 from .capabilities import CapabilityCatalogService
 from .governance import GovernanceService
+from .guardrails import GuardrailService
 from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
@@ -187,6 +189,7 @@ class HandoffService:
         capability_catalog: Optional[CapabilityCatalogRepo] = None,
         governance: Optional[GovernanceService] = None,
         approvals: Optional[ApprovalService] = None,
+        guardrails: Optional[GuardrailService] = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -217,22 +220,45 @@ class HandoffService:
         # require_approval verdict intercepts the create into the approvals
         # queue instead of persisting; None = verdicts are ignored.
         self._approvals = approvals
+        # Communication guardrails: when wired, payload/criteria are evaluated
+        # before governance/HITL and before any handoff row/event/notification.
+        self._guardrails = guardrails
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
             waiter if waiter is not None else connection_factory.change_waiter()
         )
 
-    def _create_uow(self, *, workspace_id: str, agent_id: Any):
-        """The write UoW for handoff_create: governance-guarded when wired.
+    @contextmanager
+    def _create_uow(
+        self,
+        *,
+        workspace_id: str,
+        agent_id: Any,
+    ):
+        """The write UoW for handoff_create: guardrail/governance audited.
 
-        The guard emits ``governance.denied`` in its own UoW AFTER a denial
-        rolled the main one back (BR6); with no governance wired it is exactly
-        ``unit_of_work()``.
+        Guardrails and governance share the same main transaction. Denied
+        writes roll that transaction back; scrubbed audit events are emitted by
+        the owning service after rollback, preserving the original error.
         """
-        if self._governance is not None:
-            return self._governance.guard(workspace_id=workspace_id, agent_id=agent_id)
-        return self._cf.unit_of_work()
+        try:
+            with self._cf.unit_of_work() as uow:
+                yield uow
+        except OktoNexusError as exc:
+            if self._guardrails is not None:
+                self._guardrails.emit_denied(
+                    workspace_id=workspace_id,
+                    actor_agent_id=agent_id,
+                    exc=exc,
+                )
+            if self._governance is not None:
+                self._governance.emit_denied(
+                    workspace_id=workspace_id,
+                    agent_id=agent_id,
+                    exc=exc,
+                )
+            raise
 
     # ------------------------------------------------------------------ #
     # create
@@ -381,6 +407,11 @@ class HandoffService:
         handoff_id = new_id("hof")
         extras: dict[str, Any] = {}
 
+        guardrail_fields: dict[str, Any] = {
+            "payload": payload_text,
+            "acceptance_criteria": criteria_list,
+        }
+
         with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
@@ -446,6 +477,17 @@ class HandoffService:
                         # Success-with-warning (S2): never silent, never fatal
                         # (lazy re-evaluation lets a later registrant claim).
                         extras["warning"] = _ZERO_ELIGIBLE_WARNING
+            if (
+                self._guardrails is not None
+                and self._guardrails.has_enabled_assignments(uow)
+            ):
+                self._guardrails.enforce(
+                    uow,
+                    workspace_id=workspace_id,
+                    actor_agent_id=from_agent_id,
+                    surface="handoff_create",
+                    fields=guardrail_fields,
+                )
             # Governance gate (spec 80624c1a): deny + max_count + max_bytes +
             # max_open_handoffs from the actor's attached policies, composed and
             # evaluated PRE-persistence in this same UoW (no bindings = no

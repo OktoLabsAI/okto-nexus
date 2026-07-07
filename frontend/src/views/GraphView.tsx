@@ -35,9 +35,11 @@ import { useConfirm } from "../components/Confirm";
 import { LiveChip } from "../components/LiveChip";
 import { Markdown } from "../components/Markdown";
 import { ResizablePanel } from "../components/ResizablePanel";
+import { TargetDescriptor, targetSummary } from "../components/TargetDescriptor";
 import type { SSEStatus } from "../useSSE";
 
 type ThemeName = "light" | "dark";
+const AGENT_NODE_RADIUS_PX = 7;
 
 function presenceColor(presence: GraphNode["presence"], theme: ThemeName): string {
   if (presence === "present") return "#0ea5e9";
@@ -136,14 +138,14 @@ export function GraphView({
 
     for (const node of graph.nodes) {
       const { x, y } = seedPosition(node.agent_id);
-      // Each agent is rendered as an HTML ENTITY CARD in the overlay below;
-      // the Sigma node is a small anchor that only hosts edge endpoints (it
-      // sits UNDER the card). No label — the card owns the name and status.
+      // Each agent is rendered as an HTML ENTITY CARD in the overlay below.
+      // The Sigma node remains a small, opaque presence sphere behind the
+      // card; the card owns the readable identity/status surface.
       g.addNode(node.agent_id, {
         label: "",
         x,
         y,
-        size: 7,
+        size: AGENT_NODE_RADIUS_PX,
         color: presenceColor(node.presence, theme),
         kind: "agent",
       });
@@ -206,10 +208,8 @@ export function GraphView({
       // OPEN handoff: a magenta SQUARE (work in the pool, not an agent).
       const poolId = `pool:${handoff.handoff_id}`;
       const base = g.getNodeAttributes(anchor);
-      const target = handoff.target as { capability?: string; role?: string } | null;
-      const targetLabel = target?.capability ?? target?.role ?? "pool";
       g.addNode(poolId, {
-        label: `handoff · ${targetLabel}`,
+        label: `handoff · ${targetSummary(handoff.target, "pool")}`,
         x: (base.x as number) + 1.5,
         y: (base.y as number) + 1.5,
         size: 11,
@@ -284,6 +284,7 @@ export function GraphView({
       edgeLabelColor: { color: "#0ea5e9" },
       edgeLabelWeight: "700",
       defaultEdgeType: "line",
+      stagePadding: 150,
       nodeProgramClasses: { square: NodeSquareProgram },
       edgeProgramClasses: { dashed: DashedEdgeArrowProgram },
       allowInvalidContainer: true,
@@ -319,9 +320,8 @@ export function GraphView({
     // viewport coordinates); harmless in production.
     (window as unknown as { __nexusSigma?: Sigma }).__nexusSigma = renderer;
 
-    // Keep each HTML entity card glued to its agent node: reproject on every
-    // Sigma frame (pan, zoom and resize all emit afterRender). Purely reads
-    // node coords -> viewport pixels; never mutates the graph or the camera.
+    // Keep each HTML entity card centered on its agent anchor: reproject on
+    // every Sigma frame (pan, zoom and resize all emit afterRender).
     const syncCards = () => {
       const refs = cardRefs.current;
       refs.forEach((el, id) => {
@@ -401,23 +401,23 @@ export function GraphView({
                   data-agent-id={node.agent_id}
                   title={`${node.agent_id} · ${node.presence}`}
                   className="absolute top-0 left-0 opacity-0 pointer-events-auto text-left
-                    w-[184px] rounded-lg border shadow-sm overflow-hidden
-                    bg-white/95 border-surface-200 hover:border-accent-400
-                    dark:bg-surface-900/95 dark:border-surface-700 dark:hover:border-accent-500
+                    w-[252px] rounded-lg border-2 shadow-md overflow-hidden text-[14px]
+                    bg-white/95 border-surface-300 hover:border-accent-500
+                    dark:bg-surface-900 dark:border-surface-600 dark:hover:border-accent-400
                     transition-colors"
                 >
                   {/* Header: subtle color gradient + contrast name + role. */}
                   <div
-                    className="px-2 py-1.5 border-b border-black/10 dark:border-white/10"
+                    className="px-3 py-2 border-b-2 border-black/15 dark:border-white/15"
                     style={{ backgroundImage: gradientFor(color) }}
                   >
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-2">
                       <span
-                        className="inline-block w-2.5 h-2.5 rounded-full shrink-0 ring-1 ring-white/70"
+                        className="inline-block w-3 h-3 rounded-full shrink-0 ring-2 ring-white/75"
                         style={{ backgroundColor: statusDotColor(node.presence) }}
                       />
                       <span
-                        className="font-semibold text-[12px] truncate"
+                        className="font-bold text-[16px] leading-tight truncate"
                         style={{ color: ink }}
                       >
                         {node.agent_id}
@@ -425,7 +425,7 @@ export function GraphView({
                     </div>
                     {node.role && (
                       <div
-                        className="pl-4 text-[10px] leading-tight truncate opacity-80"
+                        className="pl-5 text-[14px] leading-snug truncate opacity-85"
                         style={{ color: ink }}
                       >
                         {node.role}
@@ -433,8 +433,8 @@ export function GraphView({
                     )}
                   </div>
                   {/* Body: last action + self-hiding badges + caps/tags chips. */}
-                  <div className="px-2 py-1 space-y-1">
-                    <div className="text-[10px] leading-tight truncate">
+                  <div className="px-3 py-2 space-y-2">
+                    <div className="text-[14px] leading-snug truncate">
                       {node.last_action ? (
                         <>
                           <span className="text-surface-700 dark:text-surface-200">
@@ -451,40 +451,40 @@ export function GraphView({
                       )}
                     </div>
                     {hasBadges && (
-                      <div className="flex flex-wrap items-center gap-1">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         {node.pending_inbox > 0 && (
                           <span
                             title="Pending inbox (unread + delivered)"
                             data-testid="badge-inbox"
-                            className="inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[9px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[14px] font-semibold bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
                           >
-                            <Inbox size={9} /> {node.pending_inbox}
+                            <Inbox size={14} /> {node.pending_inbox}
                           </span>
                         )}
                         {node.open_handoffs > 0 && (
                           <span
                             title="Open handoffs (owned or awaited)"
                             data-testid="badge-handoffs"
-                            className="inline-flex items-center gap-0.5 rounded px-1 py-0.5 text-[9px] font-medium bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300"
+                            className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[14px] font-semibold bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300"
                           >
-                            <ArrowLeftRight size={9} /> {node.open_handoffs}
+                            <ArrowLeftRight size={14} /> {node.open_handoffs}
                           </span>
                         )}
                       </div>
                     )}
                     {shownChips.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
+                      <div className="flex flex-wrap gap-1.5">
                         {shownChips.map((chip) => (
                           <span
                             key={chip}
                             title={chip}
-                            className="rounded bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 px-1 py-0.5 text-[9px] max-w-[76px] truncate"
+                            className="rounded-md bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-300 px-1.5 py-0.5 text-[14px] max-w-[112px] truncate"
                           >
                             {chip}
                           </span>
                         ))}
                         {overflow > 0 && (
-                          <span className="rounded px-1 py-0.5 text-[9px] text-surface-400 dark:text-surface-500">
+                          <span className="rounded-md px-1.5 py-0.5 text-[14px] text-surface-400 dark:text-surface-500">
                             +{overflow}
                           </span>
                         )}
@@ -1005,9 +1005,7 @@ function SidePanel({
             )}
           </div>
           <div className="text-surface-400">{selection.handoff.created_at}</div>
-          <div className="bg-surface-100 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 rounded-lg p-2 font-mono text-[11px] text-surface-600 dark:text-surface-300 overflow-x-auto">
-            target: {JSON.stringify(selection.handoff.target ?? null)}
-          </div>
+          <TargetDescriptor target={selection.handoff.target} testId="graph-handoff-target" />
           <p className="text-[11px] text-surface-400">
             {selection.handoff.status === "OPEN"
               ? "Awaiting claim: any eligible agent can claim it via handoff_claim (first one wins)."

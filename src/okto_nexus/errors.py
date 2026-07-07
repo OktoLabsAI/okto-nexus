@@ -3,7 +3,7 @@
 This module is dependency-free (stdlib only) so it can be imported from any
 layer, including ``domain`` and ``application``. It defines:
 
-* :class:`ErrorCode` - the CLOSED catalogue of 27 error codes.
+* :class:`ErrorCode` - the CLOSED catalogue of 28 error codes.
 * :class:`OktoNexusError` - the single exception type carried across the
   application; every adapter boundary converts it into an error envelope.
   Carries ``retryable`` so transient failures (e.g. SQLite lock contention)
@@ -24,7 +24,7 @@ from typing import Any, Mapping
 
 
 class ErrorCode(str, Enum):
-    """Closed catalogue of the 27 canonical error codes (SCREAMING_SNAKE_CASE).
+    """Closed catalogue of the 28 canonical error codes (SCREAMING_SNAKE_CASE).
 
     Inherits from ``str`` so members serialise directly as their value in
     JSON envelopes (``ErrorCode.NOT_FOUND == "NOT_FOUND"``).
@@ -71,6 +71,11 @@ class ErrorCode(str, Enum):
     # limit?, window?, current?}) - never other agents' state.
     POLICY_DENIED = "POLICY_DENIED"
     QUOTA_EXCEEDED = "QUOTA_EXCEEDED"
+
+    # Communication guardrails (migration 025, guardrails/groups): a content
+    # guardrail denied a communication write before raw content was persisted.
+    # Details and audit events are scrubbed metadata only.
+    GUARDRAIL_DENIED = "GUARDRAIL_DENIED"
 
     # HITL approvals (migration 017, spec 2948b2a2): the approval was already
     # decided - the second decision never overwrites the first (REST 409).

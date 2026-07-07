@@ -24,6 +24,7 @@ import {
   RotateCw,
   Settings,
   Shield,
+  ShieldAlert,
   Sun,
   Tags,
   Users,
@@ -56,6 +57,7 @@ import { MemoryView } from "./views/MemoryView";
 import { WorkspacesView } from "./views/WorkspacesView";
 import { RegistryView } from "./views/RegistryView";
 import { PoliciesView } from "./views/PoliciesView";
+import { GuardrailsView } from "./views/GuardrailsView";
 import { CommunicationView } from "./views/CommunicationView";
 import { ApprovalsView } from "./views/ApprovalsView";
 import { SettingsView } from "./views/SettingsView";
@@ -76,6 +78,7 @@ const VIEWS = [
   // until an agent binds it; enforcement is always-on and binding-driven (the
   // feature_governance flag is gone).
   { name: "Policies", icon: Shield },
+  { name: "Guardrails", icon: ShieldAlert },
   // The named, versioned communication-style catalog (spec 6f961722): the
   // reusable half of the 4th per-agent axis — a style tells an agent HOW to
   // communicate and surfaces SELF-ONLY on its whoami once bound.
@@ -582,6 +585,7 @@ function Dashboard({
           )}
           {view === "Registry" && <RegistryView />}
           {view === "Policies" && <PoliciesView workspace={workspace} />}
+          {view === "Guardrails" && <GuardrailsView workspace={workspace} />}
           {view === "Communication" && <CommunicationView />}
           {view === "Approvals" && (
             <ApprovalsView

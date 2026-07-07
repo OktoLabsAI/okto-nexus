@@ -25,11 +25,13 @@ export const ACTIONS: PolicyAction[] = [
   "handoff_create",
   "artifact_put",
 ];
+const APPROVAL_ACTIONS: PolicyAction[] = ["message_create", "handoff_create"];
 export const LIMIT_KINDS: PolicyLimitKind[] = [
   "deny",
   "max_count",
   "max_bytes",
   "max_open_handoffs",
+  "require_approval",
 ];
 export const WINDOWS: PolicyWindow[] = ["1h", "24h"];
 
@@ -38,6 +40,7 @@ export const LIMIT_HELP: Record<PolicyLimitKind, string> = {
   max_count: "At most N actions per rolling window",
   max_bytes: "Payload may not exceed N bytes",
   max_open_handoffs: "At most N non-terminal created handoffs",
+  require_approval: "Intercept the action until an operator approves or rejects it",
 };
 
 // A compact one-line label for a rule (history tables, chips).
@@ -63,9 +66,13 @@ export function GovernanceRulesEditor({
     window: "1h" as PolicyWindow,
   });
 
-  const needsLimit = ruleDraft.limit_kind !== "deny";
+  const needsLimit =
+    ruleDraft.limit_kind !== "deny" &&
+    ruleDraft.limit_kind !== "require_approval";
   const needsWindow = ruleDraft.limit_kind === "max_count";
   const canAddRule = !needsLimit || Number(ruleDraft.limit_value) > 0;
+  const actionOptions =
+    ruleDraft.limit_kind === "require_approval" ? APPROVAL_ACTIONS : ACTIONS;
 
   const addRule = () => {
     const rule: PolicyRule = {
@@ -123,7 +130,7 @@ export function GovernanceRulesEditor({
             className={`${inputCls} mt-1 block font-mono`}
             data-testid={`${testId}-action`}
           >
-            {ACTIONS.map((action) => (
+            {actionOptions.map((action) => (
               <option key={action} value={action}>
                 {action}
               </option>
@@ -136,12 +143,18 @@ export function GovernanceRulesEditor({
           </span>
           <select
             value={ruleDraft.limit_kind}
-            onChange={(e) =>
+            onChange={(e) => {
+              const limit_kind = e.target.value as PolicyLimitKind;
               setRuleDraft({
                 ...ruleDraft,
-                limit_kind: e.target.value as PolicyLimitKind,
-              })
-            }
+                action:
+                  limit_kind === "require_approval" &&
+                  !APPROVAL_ACTIONS.includes(ruleDraft.action)
+                    ? "message_create"
+                    : ruleDraft.action,
+                limit_kind,
+              });
+            }}
             className={`${inputCls} mt-1 block font-mono`}
             title={LIMIT_HELP[ruleDraft.limit_kind]}
             data-testid={`${testId}-limit-kind`}

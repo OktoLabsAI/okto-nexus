@@ -16,9 +16,13 @@
 // (BR11) and the flag is never consulted.
 
 import { useEffect, useState } from "react";
-import { Ban, CheckCircle2, ShieldCheck, UserCheck } from "lucide-react";
+import { Ban, CheckCircle2, ShieldCheck, UserCheck, X } from "lucide-react";
 import { api, type GraphHandoff } from "../api";
 import { useConfirm } from "../components/Confirm";
+import {
+  TargetDescriptor,
+  targetCapabilityNames,
+} from "../components/TargetDescriptor";
 
 const COLUMNS: { status: string; label: string; top: string; chip: string }[] = [
   {
@@ -71,6 +75,163 @@ function verifierLabel(h: GraphHandoff): string {
   return h.from_agent_id ?? "creator";
 }
 
+function HandoffDetailModal({
+  handoff,
+  onClose,
+}: {
+  handoff: GraphHandoff;
+  onClose: () => void;
+}) {
+  return (
+    <div className="modal-overlay">
+      <div
+        className="modal-content w-[720px] max-w-[94vw] max-h-[86vh] flex flex-col"
+        role="dialog"
+        aria-modal="true"
+        data-testid={`handoff-detail-${handoff.handoff_id}`}
+      >
+        <div className="px-5 py-4 border-b border-surface-200/60 dark:border-surface-700/50 flex items-start gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="chip bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300">
+                {handoff.status}
+              </span>
+              {handoff.trace_id && (
+                <span className="text-[11px] text-surface-400 dark:text-surface-500 font-mono truncate">
+                  trace {handoff.trace_id}
+                </span>
+              )}
+            </div>
+            <h3 className="mt-2 font-display font-semibold text-sm text-surface-900 dark:text-surface-100 font-mono truncate">
+              {handoff.handoff_id}
+            </h3>
+          </div>
+          <button
+            className="ml-auto p-1.5 rounded-lg text-surface-400 hover:text-surface-700 hover:bg-surface-100 dark:hover:text-surface-200 dark:hover:bg-white/10"
+            onClick={onClose}
+            title="Close"
+            data-testid="close-handoff-detail"
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <div className="px-5 py-4 overflow-auto space-y-4 text-xs text-surface-600 dark:text-surface-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Meta label="workspace" value={handoff.workspace_id} mono />
+            <Meta label="created" value={handoff.created_at} />
+            {handoff.updated_at && <Meta label="updated" value={handoff.updated_at} />}
+            <Meta label="from" value={handoff.from_agent_id ?? "—"} mono />
+            <Meta label="claimed by" value={handoff.claimed_by ?? "—"} mono />
+            <Meta label="visibility" value={handoff.visibility ?? "—"} mono />
+            <Meta
+              label="lease expires"
+              value={handoff.lease_expires_at ?? "—"}
+            />
+            <Meta label="verifier" value={verifierLabel(handoff) || "—"} mono />
+            <Meta
+              label="verify kind"
+              value={handoff.verify_by?.kind ?? "—"}
+              mono
+            />
+          </div>
+
+          <section>
+            <h4 className="font-semibold text-surface-800 dark:text-surface-100 mb-2">
+              Target
+            </h4>
+            <TargetDescriptor
+              target={handoff.target}
+              testId={`handoff-target-${handoff.handoff_id}`}
+            />
+          </section>
+
+          {handoff.dependencies && (
+            <section className="rounded-lg border border-surface-200 dark:border-surface-700 p-3">
+              <h4 className="font-semibold text-surface-800 dark:text-surface-100 mb-2">
+                Dependencies
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <Meta label="total" value={String(handoff.dependencies.total)} />
+                <Meta
+                  label="satisfied"
+                  value={String(handoff.dependencies.satisfied)}
+                />
+                <Meta label="pending" value={String(handoff.dependencies.pending)} />
+                <Meta label="failed" value={String(handoff.dependencies.failed)} />
+              </div>
+              {handoff.depends_on && handoff.depends_on.length > 0 && (
+                <div className="mt-2 font-mono text-[11px] break-all text-surface-500 dark:text-surface-400">
+                  {handoff.depends_on.join(", ")}
+                </div>
+              )}
+            </section>
+          )}
+
+          {handoff.acceptance_criteria && handoff.acceptance_criteria.length > 0 && (
+            <section className="rounded-lg border border-surface-200 dark:border-surface-700 p-3">
+              <h4 className="font-semibold text-surface-800 dark:text-surface-100 mb-2">
+                Acceptance criteria
+              </h4>
+              <ul className="space-y-1">
+                {handoff.acceptance_criteria.map((item, index) => (
+                  <li key={index} className="flex gap-2">
+                    <span className="text-surface-400">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {handoff.verification_feedback && (
+            <section className="rounded-lg border border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 p-3 text-orange-800 dark:text-orange-200">
+              <h4 className="font-semibold mb-1">Verification feedback</h4>
+              <p>{handoff.verification_feedback}</p>
+            </section>
+          )}
+
+          {"payload" in handoff && (
+            <section>
+              <h4 className="font-semibold text-surface-800 dark:text-surface-100 mb-2">
+                Payload
+              </h4>
+              <pre className="rounded-lg bg-surface-100 dark:bg-surface-950 border border-surface-200 dark:border-surface-800 p-3 overflow-auto max-h-56 text-[11px] font-mono text-surface-700 dark:text-surface-200">
+                {JSON.stringify(handoff.payload ?? null, null, 2)}
+              </pre>
+            </section>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Meta({
+  label,
+  value,
+  mono = false,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+}) {
+  return (
+    <div>
+      <div className="text-[10px] uppercase tracking-wide text-surface-400 dark:text-surface-500">
+        {label}
+      </div>
+      <div
+        className={`mt-0.5 break-all text-surface-700 dark:text-surface-200 ${
+          mono ? "font-mono" : ""
+        }`}
+      >
+        {value}
+      </div>
+    </div>
+  );
+}
+
 export function HandoffsView({
   workspace,
   onChanged,
@@ -88,6 +249,7 @@ export function HandoffsView({
   const [failFor, setFailFor] = useState<string | null>(null);
   const [feedback, setFeedback] = useState("");
   const [busy, setBusy] = useState(false);
+  const [detail, setDetail] = useState<GraphHandoff | null>(null);
 
   const reload = () =>
     api
@@ -144,6 +306,9 @@ export function HandoffsView({
   return (
     <div className="h-full overflow-x-auto overflow-y-hidden p-6">
       {dialog}
+      {detail && (
+        <HandoffDetailModal handoff={detail} onClose={() => setDetail(null)} />
+      )}
       {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
       <div className="flex gap-4 h-full min-w-max" data-testid="handoffs-view">
         {COLUMNS.map(({ status, label, top, chip }) => {
@@ -166,14 +331,30 @@ export function HandoffsView({
 
               <div className="space-y-2 flex-1">
                 {column.map((h) => {
-                  const target = h.target as {
-                    capability?: string;
-                    role?: string;
-                    strategy?: string;
-                  } | null;
+                  const capabilityNames = targetCapabilityNames(h.target);
                   const canVerify = operatorCanVerify(h);
                   return (
-                    <div key={h.handoff_id} className="kanban-card">
+                    <div
+                      key={h.handoff_id}
+                      className="kanban-card cursor-pointer hover:border-accent-300 dark:hover:border-accent-700 transition-colors"
+                      role="button"
+                      tabIndex={0}
+                      data-testid={`handoff-card-${h.handoff_id}`}
+                      onClick={(event) => {
+                        const targetEl = event.target as HTMLElement;
+                        if (targetEl.closest("button, textarea, input, select")) {
+                          return;
+                        }
+                        setDetail(h);
+                      }}
+                      onKeyDown={(event) => {
+                        if (event.currentTarget !== event.target) return;
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setDetail(h);
+                        }
+                      }}
+                    >
                       <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
                         <span className={`chip ${chip}`}>{h.status}</span>
                         {status === "OPEN" &&
@@ -194,9 +375,9 @@ export function HandoffsView({
                               Blocked
                             </span>
                           ))}
-                        {target?.capability && (
+                        {capabilityNames.length > 0 && (
                           <span className="chip bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
-                            {target.capability}
+                            {capabilityNames.join(" / ")}
                           </span>
                         )}
                         {h.verify_by && (

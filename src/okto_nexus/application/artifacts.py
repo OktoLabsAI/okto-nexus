@@ -26,6 +26,7 @@ round-tripped back on read.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 import json
 import os
 from typing import Any, Optional
@@ -46,6 +47,7 @@ from ..domain.governance import ACTION_ARTIFACT_PUT
 from ..domain.policy import snapshot_permits, snapshot_to_selector
 from ..errors import ErrorCode, OktoNexusError
 from .governance import GovernanceService
+from .guardrails import GuardrailService
 from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
@@ -94,6 +96,7 @@ class ArtifactService:
         event_emitter: Optional[EventEmitter] = None,
         agents: Optional[AgentRepo] = None,
         governance: Optional[GovernanceService] = None,
+        guardrails: Optional[GuardrailService] = None,
     ) -> None:
         self._cf = connection_factory
         self._agents = agents
@@ -107,17 +110,40 @@ class ArtifactService:
         # enforced pre-persistence against the publisher's attached policies;
         # None = no gate (and no bindings = no gate either).
         self._governance = governance
+        # Communication guardrails: when wired, artifact fields are evaluated
+        # after pure artifact validation and before persistence/event emission.
+        self._guardrails = guardrails
 
-    def _put_uow(self, *, workspace_id: str, agent_id: Any):
-        """The write UoW for artifact_put: governance-guarded when wired.
+    @contextmanager
+    def _put_uow(
+        self,
+        *,
+        workspace_id: str,
+        agent_id: Any,
+    ):
+        """The write UoW for artifact_put: guardrail/governance audited.
 
-        The guard emits ``governance.denied`` in its own UoW AFTER a denial
-        rolled the main one back (BR6); with no governance wired it is exactly
-        ``unit_of_work()``.
+        A denial rolls back the main UoW, then the owning service emits its
+        scrubbed audit event in a separate UoW. Guardrails run before any
+        artifact row or artifact.created event can persist.
         """
-        if self._governance is not None:
-            return self._governance.guard(workspace_id=workspace_id, agent_id=agent_id)
-        return self._cf.unit_of_work()
+        try:
+            with self._cf.unit_of_work() as uow:
+                yield uow
+        except OktoNexusError as exc:
+            if self._guardrails is not None:
+                self._guardrails.emit_denied(
+                    workspace_id=workspace_id,
+                    actor_agent_id=agent_id,
+                    exc=exc,
+                )
+            if self._governance is not None:
+                self._governance.emit_denied(
+                    workspace_id=workspace_id,
+                    agent_id=agent_id,
+                    exc=exc,
+                )
+            raise
 
     # ------------------------------------------------------------------ #
     # artifact_put
@@ -189,12 +215,40 @@ class ArtifactService:
         metadata_blob = self._serialize_metadata(metadata)
         now = self._clock.now_iso()
         artifact_id = new_id("art")
+        guardrail_fields: dict[str, Any] = {
+            "artifact_type": norm_type,
+            "name": name,
+            "content": content if has_content else None,
+            "metadata": metadata,
+            "path": resolved_path if has_path else None,
+            "path_reference": resolved_path if has_path else None,
+        }
 
         with self._put_uow(workspace_id=workspace_id, agent_id=agent_id) as uow:
             # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
             # caller identity - the HTTP transport passes the authenticated
             # agent; cooperative stdio has none (default-allow).
             permission_set_for(self._agents, uow, agent_id).require("artifacts", "put")
+            # Ensure the workspace row exists before the artifact FK is needed.
+            # This contains no raw artifact content; a guardrail denial still
+            # rolls this main UoW back together with the target artifact row.
+            self._workspaces.upsert(
+                uow,
+                workspace_id=workspace_id,
+                root_realpath=root_realpath,
+                last_seen_at=now,
+            )
+            if (
+                self._guardrails is not None
+                and self._guardrails.has_enabled_assignments(uow)
+            ):
+                self._guardrails.enforce(
+                    uow,
+                    workspace_id=workspace_id,
+                    actor_agent_id=agent_id,
+                    surface="artifact_put",
+                    fields=guardrail_fields,
+                )
             # Governance gate (spec 80624c1a): deny + quotas from the publisher's
             # attached policies, composed and evaluated PRE-persistence in this
             # same UoW (no bindings = no governance inside enforce() - BR2).
@@ -216,14 +270,6 @@ class ArtifactService:
                     self._governance.outbound_snapshot_for(uow, agent_id=agent_id)
                     or None
                 )
-            # Ensure the workspace row exists for the FK (idempotent upsert);
-            # the client passed project_root, the server owns the identity.
-            self._workspaces.upsert(
-                uow,
-                workspace_id=workspace_id,
-                root_realpath=root_realpath,
-                last_seen_at=now,
-            )
             artifact = self._artifacts.create(
                 uow,
                 artifact_id=artifact_id,

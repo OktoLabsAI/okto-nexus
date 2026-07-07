@@ -159,12 +159,16 @@ export function AgentTagsEditor({
     set: (fn: (cur: TagMap) => TagMap) => void,
     key: string,
     mutate: (values: string[]) => string[] | null,
+    options: { keepEmpty?: boolean } = {},
   ) =>
     set((cur) => {
       const next = { ...cur };
       const mutated = mutate(next[key] ?? []);
-      if (mutated === null || mutated.length === 0) delete next[key];
-      else next[key] = mutated;
+      if (mutated === null || (!options.keepEmpty && mutated.length === 0)) {
+        delete next[key];
+      } else {
+        next[key] = mutated;
+      }
       return next;
     });
 
@@ -172,7 +176,9 @@ export function AgentTagsEditor({
 
   const outboundEffective = legSelector(outbound);
   const inboundEffective = legSelector(inbound);
-  const incomplete = legIncomplete(outbound) || legIncomplete(inbound);
+  const tagsIncomplete = Object.values(tags).some((values) => values.length === 0);
+  const incomplete =
+    tagsIncomplete || legIncomplete(outbound) || legIncomplete(inbound);
   const outboundPreview = useMemo(() => {
     if (!outboundEffective) return null;
     const matched = agents.filter((a) =>
@@ -257,6 +263,7 @@ export function AgentTagsEditor({
               onRemoveValue={(v) =>
                 patchMap(setTagsMap, key, (cur) => cur.filter((x) => x !== v))
               }
+              onRemoveKey={() => patchMap(setTagsMap, key, () => null)}
             />
           ))}
           <Picker
@@ -265,7 +272,9 @@ export function AgentTagsEditor({
             items={keyPickerItems(tags)}
             footer="Only registered keys can be assigned. Manage them in the Tag Registry."
             filterable
-            onPick={(key) => patchMap(setTagsMap, key, (cur) => cur)}
+            onPick={(key) =>
+              patchMap(setTagsMap, key, (cur) => cur, { keepEmpty: true })
+            }
           />
         </div>
       </section>
@@ -516,7 +525,9 @@ export function AgentTagsEditor({
           disabled={saving || incomplete}
           title={
             incomplete
-              ? "Every In/NotIn expression needs at least one value"
+              ? tagsIncomplete
+                ? "Every assigned tag key needs at least one value"
+                : "Every In/NotIn expression needs at least one value"
               : undefined
           }
           data-testid={`save-tags-${agent.agent_id}`}

@@ -72,6 +72,7 @@ from okto_nexus.envelope import err, require_json_object_param, tool_envelope
 from okto_nexus.errors import ErrorCode
 
 from ...http.identity_ctx import get_authenticated_agent
+from ._guardrails import build_guardrail_service
 
 #: Error code emitted by the S3 migration shims. ``ErrorCode.MIGRATED`` is the
 #: canonical catalogue entry; the literal fallback keeps this module importable
@@ -198,6 +199,7 @@ def build_service(deps: Any) -> MessageService:
     # always present; the provider gates whether anything is written.
     embedding = getattr(deps, "embedding", None)
     embedding_provider = embedding.provider if embedding is not None else None
+    guardrails = build_guardrail_service(deps)
 
     service = MessageService(
         connection_factory=deps.connection_factory,
@@ -216,6 +218,7 @@ def build_service(deps: Any) -> MessageService:
         capability_catalog=repos.capability_catalog,
         governance=governance,
         approvals=approvals,
+        guardrails=guardrails,
     )
 
     # Approved re-execution (BR2): one executor per intercepted action key.

@@ -50,6 +50,68 @@ export interface GraphEdge {
   last_done_at: string | null;
 }
 
+export type RoutingStrategy =
+  | "direct"
+  | "capability"
+  | "role"
+  | "tag"
+  | "broadcast"
+  | "mixed"
+  | "direct_with_fallback";
+
+interface RoutingTargetBase {
+  strategy: RoutingStrategy;
+  // Older/edge payloads may carry `kind`; the server normalises to
+  // `strategy`, but the UI renderer accepts both.
+  kind?: string;
+}
+
+export interface DirectRoutingTarget extends RoutingTargetBase {
+  strategy: "direct";
+  agent_id: string;
+}
+
+export interface CapabilityRoutingTarget extends RoutingTargetBase {
+  strategy: "capability";
+  capability: string | string[];
+  preferred?: string;
+}
+
+export interface RoleRoutingTarget extends RoutingTargetBase {
+  strategy: "role";
+  role: string;
+}
+
+export interface TagRoutingTarget extends RoutingTargetBase {
+  strategy: "tag";
+  selector: TagSelector;
+}
+
+export interface BroadcastRoutingTarget extends RoutingTargetBase {
+  strategy: "broadcast";
+}
+
+export interface MixedRoutingTarget extends RoutingTargetBase {
+  strategy: "mixed";
+  rules: RoutingTarget[];
+}
+
+export interface DirectWithFallbackRoutingTarget extends RoutingTargetBase {
+  strategy: "direct_with_fallback";
+  agent_id: string;
+  fallback_after_seconds: number;
+  fallback?: RoutingTarget | null;
+}
+
+export type RoutingTarget =
+  | DirectRoutingTarget
+  | CapabilityRoutingTarget
+  | RoleRoutingTarget
+  | TagRoutingTarget
+  | BroadcastRoutingTarget
+  | MixedRoutingTarget
+  | DirectWithFallbackRoutingTarget;
+
 // Verification contract descriptor (R-I4): always materialised on verifiable
 // handoffs - {kind:"creator"} is written at create time, never inferred.
 export interface VerifyBy {
@@ -65,7 +127,11 @@ export interface GraphHandoff {
   created_at: string;
   from_agent_id: string | null;
   claimed_by: string | null;
-  target: unknown;
+  target: RoutingTarget | null;
+  payload?: unknown;
+  visibility?: string;
+  updated_at?: string | null;
+  lease_expires_at?: string | null;
   // Trajectory correlation (R-I1): non-null only when the feature stamped one.
   trace_id?: string | null;
   // Verification contract (R-I4): present ONLY on verifiable handoffs
@@ -189,7 +255,8 @@ export type PolicyLimitKind =
   | "deny"
   | "max_count"
   | "max_bytes"
-  | "max_open_handoffs";
+  | "max_open_handoffs"
+  | "require_approval";
 export type PolicyWindow = "1h" | "24h";
 
 export interface GovernancePolicy {
@@ -267,6 +334,91 @@ export interface AgentBindings {
   agent_id: string;
   globals: AgentGlobalBinding[];
   inline: { audience: CommScope | null; governance: PolicyRule[] } | null;
+}
+
+// Communication guardrails (migration 025): operator-managed content rules
+// attached globally or to explicit agent groups. Runtime writes emit only
+// scrubbed guardrail.denied events when enforce-mode blocks a write.
+export type GuardrailSurface = "message" | "artifact" | "handoff";
+export type GuardrailVersionStatus =
+  | "draft"
+  | "active"
+  | "deprecated"
+  | "archived";
+export type GuardrailEvaluatorKind = "deterministic" | "llm";
+export type GuardrailScopeKind = "global" | "agent_group";
+export type GuardrailVersionMode = "latest" | "pinned";
+export type GuardrailMode = "audit" | "warn" | "enforce";
+
+export interface AgentGroupMember {
+  group_id: string;
+  agent_id: string;
+  created_at: string;
+}
+
+export interface AgentGroupRecord {
+  group_id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string | null;
+  members?: AgentGroupMember[];
+}
+
+export interface GuardrailVersion {
+  guardrail_id: string;
+  version: number;
+  status: GuardrailVersionStatus;
+  evaluator_kind: GuardrailEvaluatorKind;
+  evaluator_config: Record<string, unknown>;
+  surfaces: GuardrailSurface[];
+  field_targets: string[];
+  created_at: string;
+  updated_at: string | null;
+  activated_at: string | null;
+}
+
+export interface GuardrailRecord {
+  guardrail_id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string | null;
+  latest_version: number;
+  latest_active_version: number | null;
+  versions?: GuardrailVersion[];
+}
+
+export interface GuardrailAssignment {
+  assignment_id: string;
+  scope_kind: GuardrailScopeKind;
+  group_id: string | null;
+  guardrail_id: string;
+  version_mode: GuardrailVersionMode;
+  pinned_version: number | null;
+  mode: GuardrailMode;
+  priority: number;
+  enabled: boolean;
+  created_at: string;
+  updated_at: string | null;
+}
+
+export interface GuardrailInUseDetails {
+  resource: "guardrail" | "agent_group";
+  group_id?: string;
+  guardrail_id?: string;
+  assignments: string[];
+  total_assignments: number;
+}
+
+export interface GuardrailDenial {
+  event_id: number;
+  workspace_id: string;
+  stream: string;
+  type: "guardrail.denied";
+  actor_agent_id: string | null;
+  created_at: string;
+  payload: Record<string, unknown>;
 }
 
 // Communication presets (spec 6f961722, migration 023): the 4th per-agent axis
@@ -1048,6 +1200,127 @@ export const api = {
       `/api/v1/agents/${encodeURIComponent(agentId)}/policies`,
       { method: "PUT", body: JSON.stringify(body) },
     ),
+  guardrailGroups: () =>
+    call<{ items: AgentGroupRecord[] }>("/api/v1/guardrails/groups"),
+  createGuardrailGroup: (body: { name: string; description?: string }) =>
+    call<AgentGroupRecord>("/api/v1/guardrails/groups", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  guardrailGroup: (groupId: string) =>
+    call<AgentGroupRecord>(
+      `/api/v1/guardrails/groups/${encodeURIComponent(groupId)}`,
+    ),
+  updateGuardrailGroup: (
+    groupId: string,
+    body: { name?: string; description?: string },
+  ) =>
+    call<AgentGroupRecord>(
+      `/api/v1/guardrails/groups/${encodeURIComponent(groupId)}`,
+      { method: "PATCH", body: JSON.stringify(body) },
+    ),
+  deleteGuardrailGroup: (groupId: string) =>
+    call<{ deleted: boolean; group_id: string }>(
+      `/api/v1/guardrails/groups/${encodeURIComponent(groupId)}`,
+      { method: "DELETE" },
+    ),
+  addGuardrailGroupMember: (groupId: string, body: { agent_id: string }) =>
+    call<AgentGroupMember>(
+      `/api/v1/guardrails/groups/${encodeURIComponent(groupId)}/members`,
+      { method: "POST", body: JSON.stringify(body) },
+    ),
+  removeGuardrailGroupMember: (groupId: string, agentId: string) =>
+    call<{ deleted: boolean; group_id: string; agent_id: string }>(
+      `/api/v1/guardrails/groups/${encodeURIComponent(groupId)}/members/${encodeURIComponent(agentId)}`,
+      { method: "DELETE" },
+    ),
+  guardrails: () => call<{ items: GuardrailRecord[] }>("/api/v1/guardrails"),
+  guardrail: (guardrailId: string) =>
+    call<GuardrailRecord>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}`,
+    ),
+  createGuardrail: (body: { name: string; description?: string }) =>
+    call<GuardrailRecord>("/api/v1/guardrails", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  updateGuardrail: (
+    guardrailId: string,
+    body: { name?: string; description?: string },
+  ) =>
+    call<GuardrailRecord>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}`,
+      { method: "PATCH", body: JSON.stringify(body) },
+    ),
+  deleteGuardrail: (guardrailId: string) =>
+    call<{ deleted: boolean; guardrail_id: string }>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}`,
+      { method: "DELETE" },
+    ),
+  addGuardrailVersion: (
+    guardrailId: string,
+    body: {
+      status?: GuardrailVersionStatus;
+      evaluator_kind: GuardrailEvaluatorKind;
+      evaluator_config: Record<string, unknown>;
+      surfaces: GuardrailSurface[];
+      field_targets: string[];
+    },
+  ) =>
+    call<GuardrailVersion>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}/versions`,
+      { method: "POST", body: JSON.stringify(body) },
+    ),
+  guardrailVersions: (guardrailId: string) =>
+    call<{ items: GuardrailVersion[] }>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}/versions`,
+    ),
+  updateGuardrailVersionStatus: (
+    guardrailId: string,
+    version: number,
+    body: { status: GuardrailVersionStatus },
+  ) =>
+    call<GuardrailVersion>(
+      `/api/v1/guardrails/${encodeURIComponent(guardrailId)}/versions/${version}`,
+      { method: "PATCH", body: JSON.stringify(body) },
+    ),
+  guardrailAssignments: (params: Record<string, string> = {}) =>
+    call<{ items: GuardrailAssignment[] }>(
+      `/api/v1/guardrails/assignments?${new URLSearchParams(params)}`,
+    ),
+  createGuardrailAssignment: (body: {
+    scope_kind: GuardrailScopeKind;
+    group_id?: string | null;
+    guardrail_id: string;
+    version_mode?: GuardrailVersionMode;
+    pinned_version?: number | null;
+    mode?: GuardrailMode;
+    priority?: number;
+    enabled?: boolean;
+  }) =>
+    call<GuardrailAssignment>("/api/v1/guardrails/assignments", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
+  updateGuardrailAssignment: (
+    assignmentId: string,
+    body: { mode?: GuardrailMode; priority?: number; enabled?: boolean },
+  ) =>
+    call<GuardrailAssignment>(
+      `/api/v1/guardrails/assignments/${encodeURIComponent(assignmentId)}`,
+      { method: "PATCH", body: JSON.stringify(body) },
+    ),
+  deleteGuardrailAssignment: (assignmentId: string) =>
+    call<{ deleted: boolean; assignment_id: string }>(
+      `/api/v1/guardrails/assignments/${encodeURIComponent(assignmentId)}`,
+      { method: "DELETE" },
+    ),
+  guardrailDenials: (params: Record<string, string>) =>
+    call<{
+      items: GuardrailDenial[];
+      next_cursor: number;
+      s6_behavior: string;
+    }>(`/api/v1/guardrails/denials?${new URLSearchParams(params)}`),
   // Communication presets (spec 6f961722, migration 023): operator CRUD over
   // preset headers + append-only version publishing + the SINGLE-SOURCE per-
   // agent binding. Pure STAGING — nothing surfaces until an agent binds a preset

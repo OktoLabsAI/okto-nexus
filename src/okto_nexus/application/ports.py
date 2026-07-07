@@ -29,6 +29,14 @@ from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 from ..domain.approvals import Approval
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
+from ..domain.guardrails import (
+    AgentGroupMember,
+    AgentGroupRecord,
+    EffectiveGuardrail,
+    GuardrailAssignment,
+    GuardrailRecord,
+    GuardrailVersion,
+)
 from ..domain.policy import PolicyRecord, PolicyVersion
 from ..domain.models import (
     Agent,
@@ -623,6 +631,250 @@ class AgentPolicyBindingRepo(Protocol):
 
         Empty list means the policy is unreferenced and safe to delete.
         """
+        ...
+
+
+@runtime_checkable
+class AgentGroupRepo(Protocol):
+    """Persistence for explicit agent groups used by guardrail assignments.
+
+    Groups are rosters of concrete agent ids, not tags and not routing targets.
+    """
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        group_id: str,
+        name: str,
+        description: str | None = None,
+        created_at: str | None = None,
+    ) -> AgentGroupRecord:
+        """Insert a group catalog row; returns the stored record."""
+        ...
+
+    def get(self, uow: UnitOfWork, group_id: str) -> AgentGroupRecord | None:
+        """Return the group record, or ``None``."""
+        ...
+
+    def get_by_name(self, uow: UnitOfWork, name: str) -> AgentGroupRecord | None:
+        """Return the group by unique name, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[AgentGroupRecord]:
+        """Every group in deterministic order."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        group_id: str,
+        name: str | None = None,
+        description: Any = "__unset__",
+    ) -> AgentGroupRecord | None:
+        """Patch group metadata; ``None`` when absent."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, group_id: str) -> bool:
+        """Delete a group. Callers must guard active assignments first."""
+        ...
+
+    def add_member(
+        self,
+        uow: UnitOfWork,
+        *,
+        group_id: str,
+        agent_id: str,
+        created_at: str | None = None,
+    ) -> AgentGroupMember:
+        """Add an agent to the roster idempotently."""
+        ...
+
+    def get_member(
+        self, uow: UnitOfWork, *, group_id: str, agent_id: str
+    ) -> AgentGroupMember | None:
+        """Return one membership row, or ``None``."""
+        ...
+
+    def remove_member(self, uow: UnitOfWork, *, group_id: str, agent_id: str) -> bool:
+        """Remove one membership row."""
+        ...
+
+    def list_members(self, uow: UnitOfWork, *, group_id: str) -> list[AgentGroupMember]:
+        """Return group members ordered by agent id."""
+        ...
+
+    def groups_for_agent(self, uow: UnitOfWork, *, agent_id: str) -> list[str]:
+        """Return group ids containing ``agent_id``."""
+        ...
+
+
+@runtime_checkable
+class GuardrailRepo(Protocol):
+    """Persistence for named guardrails and version lifecycle rows."""
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        guardrail_id: str,
+        name: str,
+        description: str | None = None,
+        created_at: str | None = None,
+    ) -> GuardrailRecord:
+        """Insert a guardrail catalog row; returns the stored record."""
+        ...
+
+    def get(self, uow: UnitOfWork, guardrail_id: str) -> GuardrailRecord | None:
+        """Return the guardrail record, or ``None``."""
+        ...
+
+    def get_by_name(self, uow: UnitOfWork, name: str) -> GuardrailRecord | None:
+        """Return the guardrail by unique name, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[GuardrailRecord]:
+        """Every guardrail in deterministic order."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        guardrail_id: str,
+        name: str | None = None,
+        description: Any = "__unset__",
+    ) -> GuardrailRecord | None:
+        """Patch guardrail metadata."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, guardrail_id: str) -> bool:
+        """Delete a guardrail. Callers must guard active assignments first."""
+        ...
+
+    def add_version(
+        self,
+        uow: UnitOfWork,
+        *,
+        guardrail_id: str,
+        status: str,
+        evaluator_kind: str,
+        evaluator_config: Mapping[str, Any],
+        surfaces: Sequence[str],
+        field_targets: Sequence[str],
+        created_at: str | None = None,
+        activated_at: str | None = None,
+    ) -> GuardrailVersion:
+        """Append the next version; returns the stored version."""
+        ...
+
+    def get_version(
+        self, uow: UnitOfWork, *, guardrail_id: str, version: int
+    ) -> GuardrailVersion | None:
+        """Return an exact guardrail version, or ``None``."""
+        ...
+
+    def latest_active_version(
+        self, uow: UnitOfWork, *, guardrail_id: str
+    ) -> GuardrailVersion | None:
+        """Return max active version, or ``None``."""
+        ...
+
+    def list_versions(
+        self, uow: UnitOfWork, *, guardrail_id: str
+    ) -> list[GuardrailVersion]:
+        """Return every version for one guardrail."""
+        ...
+
+    def versions_for(
+        self, uow: UnitOfWork, *, guardrail_ids: Sequence[str]
+    ) -> dict[str, list[GuardrailVersion]]:
+        """Bulk-fetch versions for effective assignment resolution."""
+        ...
+
+    def update_version_status(
+        self,
+        uow: UnitOfWork,
+        *,
+        guardrail_id: str,
+        version: int,
+        status: str,
+    ) -> GuardrailVersion | None:
+        """Patch only version lifecycle status."""
+        ...
+
+
+@runtime_checkable
+class GuardrailAssignmentRepo(Protocol):
+    """Persistence for global/group guardrail assignments."""
+
+    def create(
+        self,
+        uow: UnitOfWork,
+        *,
+        assignment_id: str,
+        scope_kind: str,
+        group_id: str | None,
+        guardrail_id: str,
+        version_mode: str = "latest",
+        pinned_version: int | None = None,
+        mode: str = "enforce",
+        priority: int = 100,
+        enabled: bool = True,
+        created_at: str | None = None,
+    ) -> GuardrailAssignment:
+        """Insert one assignment after validating pinned active versions."""
+        ...
+
+    def get(
+        self, uow: UnitOfWork, assignment_id: str
+    ) -> GuardrailAssignment | None:
+        """Return an assignment, or ``None``."""
+        ...
+
+    def list(self, uow: UnitOfWork) -> list[GuardrailAssignment]:
+        """Return every assignment."""
+        ...
+
+    def list_for_group(
+        self, uow: UnitOfWork, *, group_id: str
+    ) -> list[GuardrailAssignment]:
+        """Return assignments referencing a group."""
+        ...
+
+    def list_for_guardrail(
+        self, uow: UnitOfWork, *, guardrail_id: str
+    ) -> list[GuardrailAssignment]:
+        """Return assignments referencing a guardrail."""
+        ...
+
+    def list_for_agent(
+        self, uow: UnitOfWork, *, agent_id: str
+    ) -> list[GuardrailAssignment]:
+        """Return global plus group assignments applicable to an agent."""
+        ...
+
+    def effective_for_agent(
+        self, uow: UnitOfWork, *, agent_id: str
+    ) -> list[EffectiveGuardrail]:
+        """Resolve applicable assignments to active runtime versions."""
+        ...
+
+    def update(
+        self,
+        uow: UnitOfWork,
+        *,
+        assignment_id: str,
+        mode: str | None = None,
+        priority: int | None = None,
+        enabled: bool | None = None,
+    ) -> GuardrailAssignment | None:
+        """Patch mutable assignment controls."""
+        ...
+
+    def delete(self, uow: UnitOfWork, *, assignment_id: str) -> bool:
+        """Delete one assignment."""
         ...
 
 
@@ -2115,6 +2367,9 @@ class Repos:
     governance: GovernanceRepo | None = None
     policies: PolicyRepo | None = None
     policy_bindings: AgentPolicyBindingRepo | None = None
+    agent_groups: AgentGroupRepo | None = None
+    guardrails: GuardrailRepo | None = None
+    guardrail_assignments: GuardrailAssignmentRepo | None = None
     comm_presets: CommPresetRepo | None = None
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None

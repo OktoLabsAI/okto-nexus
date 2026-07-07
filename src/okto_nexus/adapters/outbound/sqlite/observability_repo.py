@@ -254,7 +254,7 @@ class SqliteObservabilityQueries:
     ) -> list[dict[str, Any]]:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
-            "from_agent_id, claimed_by, target, visibility, lease_expires_at, "
+            "from_agent_id, claimed_by, target, payload, visibility, lease_expires_at, "
             "trace_id, acceptance_criteria, verify_by, verification_feedback "
             "FROM handoffs WHERE 1=1"
         )
@@ -282,6 +282,7 @@ class SqliteObservabilityQueries:
                 "from_agent_id": row["from_agent_id"],
                 "claimed_by": row["claimed_by"],
                 "target": _loads(row["target"]),
+                "payload": _loads(row["payload"]),
                 "visibility": row["visibility"],
                 "lease_expires_at": row["lease_expires_at"],
                 "trace_id": row["trace_id"],

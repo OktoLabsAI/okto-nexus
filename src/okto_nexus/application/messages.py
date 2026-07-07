@@ -21,6 +21,7 @@ the import-boundary test). All transaction control flows through the injected
 from __future__ import annotations
 
 from collections.abc import Mapping
+from contextlib import contextmanager
 from typing import Any
 
 from ..config import (
@@ -68,6 +69,7 @@ from ..errors import ErrorCode, OktoNexusError
 from .approvals import ApprovalService
 from .capabilities import CapabilityCatalogService
 from .governance import GovernanceService, message_action_for
+from .guardrails import GuardrailService
 from .identity import (
     advance_session_presence,
     session_is_present,
@@ -122,6 +124,7 @@ class MessageService:
         capability_catalog: CapabilityCatalogRepo | None = None,
         governance: GovernanceService | None = None,
         approvals: ApprovalService | None = None,
+        guardrails: GuardrailService | None = None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -158,17 +161,41 @@ class MessageService:
         # require_approval verdict intercepts the send into the approvals
         # queue instead of executing; None = verdicts are dropped (allow).
         self._approvals = approvals
+        # Communication guardrails (spec 9ae50ecb): when wired, content checks
+        # run before governance/HITL and before any message row/delivery/event.
+        self._guardrails = guardrails
 
-    def _send_uow(self, *, workspace_id: str, agent_id: Any):
-        """The write UoW for a send: governance-guarded when wired.
+    @contextmanager
+    def _send_uow(
+        self,
+        *,
+        workspace_id: str,
+        agent_id: Any,
+    ):
+        """The write UoW for a send: guardrail/governance audited when wired.
 
-        The guard emits ``governance.denied`` in its own UoW AFTER a denial
-        rolled the main one back (BR6); with no governance wired it is exactly
-        ``unit_of_work()``.
+        Guardrails and governance share ONE main UoW. Any denial rolls it back;
+        the matching audit event is then emitted in a separate UoW by the owning
+        service. This preserves the pre-existing governance audit behavior while
+        letting guardrails run before HITL approval rows can capture raw content.
         """
-        if self._governance is not None:
-            return self._governance.guard(workspace_id=workspace_id, agent_id=agent_id)
-        return self._cf.unit_of_work()
+        try:
+            with self._cf.unit_of_work() as uow:
+                yield uow
+        except OktoNexusError as exc:
+            if self._guardrails is not None:
+                self._guardrails.emit_denied(
+                    workspace_id=workspace_id,
+                    actor_agent_id=agent_id,
+                    exc=exc,
+                )
+            if self._governance is not None:
+                self._governance.emit_denied(
+                    workspace_id=workspace_id,
+                    agent_id=agent_id,
+                    exc=exc,
+                )
+            raise
 
     @property
     def _max_inline_bytes(self) -> int:
@@ -373,6 +400,17 @@ class MessageService:
                         "limit": max_recipients,
                         "resolved_recipients": len(recipients),
                     },
+                )
+            if (
+                self._guardrails is not None
+                and self._guardrails.has_enabled_assignments(uow)
+            ):
+                self._guardrails.enforce(
+                    uow,
+                    workspace_id=workspace_id,
+                    actor_agent_id=from_agent_id,
+                    surface="message_create",
+                    fields={"subject": subject, "body": body},
                 )
             # Governance gate (spec 80624c1a): deny rules + quotas from the
             # sender's attached policies, composed and evaluated PRE-persistence

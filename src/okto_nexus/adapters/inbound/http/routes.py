@@ -20,6 +20,7 @@ from ....config import FEATURE_FLAG_FIELDS
 from ....application.capabilities import CapabilityCatalogService
 from ....application.comm_preset_catalog import CommPresetCatalogService
 from ....application.governance import GovernanceService
+from ....application.guardrail_admin import GuardrailAdminService
 from ....application.memory import MemoryService
 from ....application.observability import DEFAULT_GRAPH_WINDOW_HOURS
 from ....application.policy_catalog import PolicyCatalogService
@@ -296,6 +297,52 @@ def _comm_preset_catalog_service(deps) -> "CommPresetCatalogService":
         comm_bindings=deps.repos.comm_bindings,
         agents=deps.repos.agents,
     )
+
+
+_GUARDRAIL_HEADER_FIELDS = {"name", "description"}
+_GUARDRAIL_VERSION_FIELDS = {
+    "status",
+    "evaluator_kind",
+    "evaluator_config",
+    "surfaces",
+    "field_targets",
+}
+_GUARDRAIL_VERSION_STATUS_FIELDS = {"status"}
+_GUARDRAIL_ASSIGNMENT_FIELDS = {
+    "scope_kind",
+    "group_id",
+    "guardrail_id",
+    "version_mode",
+    "pinned_version",
+    "mode",
+    "priority",
+    "enabled",
+}
+_GUARDRAIL_ASSIGNMENT_PATCH_FIELDS = {"mode", "priority", "enabled"}
+
+
+def _guardrail_admin_service(deps) -> GuardrailAdminService:
+    return GuardrailAdminService(
+        connection_factory=deps.connection_factory,
+        groups=deps.repos.agent_groups,
+        guardrails=deps.repos.guardrails,
+        assignments=deps.repos.guardrail_assignments,
+        agents=deps.repos.agents,
+        events=deps.repos.events,
+        max_denial_limit=deps.config.max_event_limit,
+    )
+
+
+def _reject_unknown_guardrail_fields(
+    body: dict[str, Any], *, supported: set[str], kind: str
+) -> None:
+    unknown = sorted(set(body) - supported)
+    if unknown:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"Unknown guardrail {kind} field(s): {', '.join(unknown)}.",
+            {"unknown": unknown, "supported": sorted(supported)},
+        )
 
 
 def _memory_service(deps) -> MemoryService:
@@ -1360,6 +1407,364 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok(result)
+
+    # ------------------------------------------------------------------ #
+    # Guardrails + explicit agent groups (migration 025): operator-only staging
+    # surfaces for group rosters, guardrail headers/versions, assignments and
+    # scrubbed denial reads. Runtime enforcement stays in the write paths.
+    # ------------------------------------------------------------------ #
+    @router.post("/guardrails/groups")
+    async def create_guardrail_group(
+        request: Request, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _create():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_HEADER_FIELDS, kind="group"
+            )
+            return service.create_group(
+                name=body.get("name"), description=body.get("description")
+            )
+
+        try:
+            _require_operator()
+            created = await anyio.to_thread.run_sync(_create)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(created)
+
+    @router.get("/guardrails/groups")
+    async def list_guardrail_groups(request: Request) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(service.list_groups)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.get("/guardrails/groups/{group_id}")
+    async def get_guardrail_group(request: Request, group_id: str) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            record = await anyio.to_thread.run_sync(
+                lambda: service.get_group(group_id=group_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(record)
+
+    @router.patch("/guardrails/groups/{group_id}")
+    async def update_guardrail_group(
+        request: Request, group_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _update():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_HEADER_FIELDS, kind="group"
+            )
+            return service.update_group(group_id=group_id, patch=body)
+
+        try:
+            _require_operator()
+            updated = await anyio.to_thread.run_sync(_update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(updated)
+
+    @router.delete("/guardrails/groups/{group_id}")
+    async def delete_guardrail_group(request: Request, group_id: str) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(
+                lambda: service.delete_group(group_id=group_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/guardrails/groups/{group_id}/members")
+    async def add_guardrail_group_member(
+        request: Request, group_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _add():
+            _reject_unknown_guardrail_fields(
+                body, supported={"agent_id"}, kind="group member"
+            )
+            return service.add_group_member(
+                group_id=group_id, agent_id=body.get("agent_id")
+            )
+
+        try:
+            _require_operator()
+            member = await anyio.to_thread.run_sync(_add)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(member)
+
+    @router.delete("/guardrails/groups/{group_id}/members/{agent_id}")
+    async def remove_guardrail_group_member(
+        request: Request, group_id: str, agent_id: str
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(
+                lambda: service.remove_group_member(
+                    group_id=group_id, agent_id=agent_id
+                )
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.get("/guardrails/denials")
+    async def list_guardrail_denials(
+        request: Request,
+        workspace: str | None = None,
+        after: int = 0,
+        limit: int = 100,
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _list():
+            return service.list_denials(
+                workspace_id=workspace, cursor=after, limit=limit
+            )
+
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(_list)
+        except (TypeError, ValueError) as exc:
+            return _err(422, "INVALID_PARAM", str(exc))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/guardrails/assignments")
+    async def create_guardrail_assignment(
+        request: Request, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _create():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_ASSIGNMENT_FIELDS, kind="assignment"
+            )
+            return service.create_assignment(
+                scope_kind=body.get("scope_kind"),
+                group_id=body.get("group_id"),
+                guardrail_id=body.get("guardrail_id"),
+                version_mode=body.get("version_mode", "latest"),
+                pinned_version=body.get("pinned_version"),
+                mode=body.get("mode", "enforce"),
+                priority=body.get("priority", 100),
+                enabled=body.get("enabled", True),
+            )
+
+        try:
+            _require_operator()
+            created = await anyio.to_thread.run_sync(_create)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(created)
+
+    @router.get("/guardrails/assignments")
+    async def list_guardrail_assignments(
+        request: Request,
+        group_id: str | None = None,
+        guardrail_id: str | None = None,
+        agent_id: str | None = None,
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(
+                lambda: service.list_assignments(
+                    group_id=group_id,
+                    guardrail_id=guardrail_id,
+                    agent_id=agent_id,
+                )
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.patch("/guardrails/assignments/{assignment_id}")
+    async def update_guardrail_assignment(
+        request: Request, assignment_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _update():
+            _reject_unknown_guardrail_fields(
+                body,
+                supported=_GUARDRAIL_ASSIGNMENT_PATCH_FIELDS,
+                kind="assignment",
+            )
+            return service.update_assignment(assignment_id=assignment_id, patch=body)
+
+        try:
+            _require_operator()
+            updated = await anyio.to_thread.run_sync(_update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(updated)
+
+    @router.delete("/guardrails/assignments/{assignment_id}")
+    async def delete_guardrail_assignment(
+        request: Request, assignment_id: str
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(
+                lambda: service.delete_assignment(assignment_id=assignment_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/guardrails")
+    async def create_guardrail(request: Request, body: dict[str, Any]) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _create():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_HEADER_FIELDS, kind="header"
+            )
+            return service.create_guardrail(
+                name=body.get("name"), description=body.get("description")
+            )
+
+        try:
+            _require_operator()
+            created = await anyio.to_thread.run_sync(_create)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(created)
+
+    @router.get("/guardrails")
+    async def list_guardrails(request: Request) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(service.list_guardrails)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.get("/guardrails/{guardrail_id}")
+    async def get_guardrail(request: Request, guardrail_id: str) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            record = await anyio.to_thread.run_sync(
+                lambda: service.get_guardrail(guardrail_id=guardrail_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(record)
+
+    @router.patch("/guardrails/{guardrail_id}")
+    async def update_guardrail(
+        request: Request, guardrail_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _update():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_HEADER_FIELDS, kind="header"
+            )
+            return service.update_guardrail(guardrail_id=guardrail_id, patch=body)
+
+        try:
+            _require_operator()
+            updated = await anyio.to_thread.run_sync(_update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(updated)
+
+    @router.delete("/guardrails/{guardrail_id}")
+    async def delete_guardrail(request: Request, guardrail_id: str) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            result = await anyio.to_thread.run_sync(
+                lambda: service.delete_guardrail(guardrail_id=guardrail_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/guardrails/{guardrail_id}/versions")
+    async def add_guardrail_version(
+        request: Request, guardrail_id: str, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _add():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_VERSION_FIELDS, kind="version"
+            )
+            return service.add_version(
+                guardrail_id=guardrail_id,
+                status=body.get("status", "draft"),
+                evaluator_kind=body.get("evaluator_kind"),
+                evaluator_config=body.get("evaluator_config"),
+                surfaces=body.get("surfaces"),
+                field_targets=body.get("field_targets"),
+            )
+
+        try:
+            _require_operator()
+            version = await anyio.to_thread.run_sync(_add)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(version)
+
+    @router.get("/guardrails/{guardrail_id}/versions")
+    async def list_guardrail_versions(
+        request: Request, guardrail_id: str
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+        try:
+            _require_operator()
+            items = await anyio.to_thread.run_sync(
+                lambda: service.list_versions(guardrail_id=guardrail_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"items": items})
+
+    @router.patch("/guardrails/{guardrail_id}/versions/{version}")
+    async def update_guardrail_version_status(
+        request: Request, guardrail_id: str, version: int, body: dict[str, Any]
+    ) -> JSONResponse:
+        service = _guardrail_admin_service(request.app.state.deps)
+
+        def _update():
+            _reject_unknown_guardrail_fields(
+                body, supported=_GUARDRAIL_VERSION_STATUS_FIELDS, kind="version"
+            )
+            return service.update_version_status(
+                guardrail_id=guardrail_id,
+                version=version,
+                status=body.get("status"),
+            )
+
+        try:
+            _require_operator()
+            updated = await anyio.to_thread.run_sync(_update)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(updated)
 
     # ------------------------------------------------------------------ #
     # Governance policies (spec ffef15bf): LEGACY GLOBAL deny rules and quotas,

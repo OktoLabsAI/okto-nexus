@@ -217,7 +217,7 @@ def test_feature_flag_fields_constant_matches_the_7_flags():
 
 def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     """TS6: the features block is identical across transports, with exactly
-    the 7 keys, and surface_revision is 26 on both."""
+    the 7 keys, and surface_revision is 27 on both."""
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     stdio_env = _call(create_server(deps), "nexus_info")
     http_env = _call(create_http_mcp_server(deps), "nexus_info")
@@ -228,9 +228,9 @@ def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     assert stdio_info["features"] == http_info["features"]
     assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
     assert all(value is False for value in stdio_info["features"].values())
-    assert stdio_info["surface_revision"] == 26
-    assert http_info["surface_revision"] == 26
-    assert SURFACE_REVISION == 26
+    assert stdio_info["surface_revision"] == 27
+    assert http_info["surface_revision"] == 27
+    assert SURFACE_REVISION == 27
 
 
 def test_nexus_info_reflects_env_pinned_flag(tmp_path):

@@ -48,6 +48,11 @@ from ...outbound.sqlite.connection import ConnectionFactory
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
 from ...outbound.sqlite.governance_repo import SqliteGovernanceRepo
+from ...outbound.sqlite.guardrails_repo import (
+    SqliteAgentGroupRepo,
+    SqliteGuardrailAssignmentRepo,
+    SqliteGuardrailRepo,
+)
 from ...outbound.sqlite.handoff_repo import SqliteHandoffRepo, SqliteTaskRepo
 from ...outbound.sqlite.identity_repo import (
     SqliteAgentRepo,
@@ -349,7 +354,12 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: ``PUT /agents/{id}/communication``) are NOT MCP tools, so the stdio/http tool
 #: parity is unchanged. The whoami docstring was reworded net-neutral (no
 #: resident growth): ledger ``comm_presets_c5`` (0 chars).
-SURFACE_REVISION = 26
+#: 27 = guardrail/group administration tools (migration 025): operator-only MCP
+#: tools for explicit groups, memberships, guardrail headers, versions,
+#: assignments and scrubbed denial reads. Runtime enforcement semantics are
+#: unchanged; the new tools expose staging/admin surfaces and parity holds by
+#: auto-discovery across stdio/http.
+SURFACE_REVISION = 27
 
 
 @dataclass
@@ -420,6 +430,9 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         governance=SqliteGovernanceRepo(clock),
         policies=SqlitePolicyRepo(clock),
         policy_bindings=SqliteAgentPolicyBindingRepo(clock),
+        agent_groups=SqliteAgentGroupRepo(clock),
+        guardrails=SqliteGuardrailRepo(clock),
+        guardrail_assignments=SqliteGuardrailAssignmentRepo(clock),
         comm_presets=SqliteCommPresetRepo(clock),
         comm_bindings=SqliteAgentCommBindingRepo(clock),
         approvals=SqliteApprovalRepo(),

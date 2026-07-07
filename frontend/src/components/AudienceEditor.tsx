@@ -326,14 +326,19 @@ export function initLeg(raw: TagSelector | null): LegState {
 // The selector this leg would persist right now (null = unrestricted).
 export function legSelector(leg: LegState): TagSelector | null {
   if (leg.mode === "simple") {
-    return Object.keys(leg.map).length ? leg.map : null;
+    const complete = Object.fromEntries(
+      Object.entries(leg.map).filter(([, values]) => values.length > 0),
+    );
+    return Object.keys(complete).length ? complete : null;
   }
   return leg.expressions.length ? leg.expressions : null;
 }
 
 // In/NotIn rows without values cannot be saved (the server rejects them).
 export function legIncomplete(leg: LegState): boolean {
-  if (leg.mode === "simple") return false;
+  if (leg.mode === "simple") {
+    return Object.values(leg.map).some((values) => values.length === 0);
+  }
   return leg.expressions.some(
     (e) =>
       !PRESENCE_OPERATORS.includes(e.operator) && (e.values ?? []).length === 0,
@@ -370,13 +375,17 @@ export function AudienceLegEditor({
   const patchSimple = (
     key: string,
     mutate: (values: string[]) => string[] | null,
+    options: { keepEmpty?: boolean } = {},
   ) =>
     setLeg((cur) => {
       if (cur.mode !== "simple") return cur;
       const next = { ...cur.map };
       const mutated = mutate(next[key] ?? []);
-      if (mutated === null || mutated.length === 0) delete next[key];
-      else next[key] = mutated;
+      if (mutated === null || (!options.keepEmpty && mutated.length === 0)) {
+        delete next[key];
+      } else {
+        next[key] = mutated;
+      }
       return { mode: "simple", map: next };
     });
 
@@ -503,7 +512,7 @@ export function AudienceLegEditor({
             items={simpleKeyItems}
             footer="Only registered keys can be used. Manage them in the Tag Registry."
             filterable
-            onPick={(key) => patchSimple(key, (cur) => cur)}
+            onPick={(key) => patchSimple(key, (cur) => cur, { keepEmpty: true })}
           />
         </div>
       ) : (

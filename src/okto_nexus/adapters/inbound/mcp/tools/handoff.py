@@ -68,6 +68,8 @@ from okto_nexus.envelope import (
     tool_envelope,
 )
 
+from ._guardrails import build_guardrail_service
+
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
@@ -203,6 +205,7 @@ def build_service(deps: Any) -> HandoffService:
         repos.policies = SqlitePolicyRepo(deps.clock)
     if getattr(repos, "policy_bindings", None) is None:
         repos.policy_bindings = SqliteAgentPolicyBindingRepo(deps.clock)
+    guardrails = build_guardrail_service(deps)
     # Policy enforcement (spec 80624c1a): per-slice service composing the actor's
     # attached policies; always-on and binding-driven - an actor with no bindings
     # passes untouched (BR2 zero-regression). The handoff slice also uses it to
@@ -247,6 +250,7 @@ def build_service(deps: Any) -> HandoffService:
         capability_catalog=repos.capability_catalog,
         governance=governance,
         approvals=approvals,
+        guardrails=guardrails,
     )
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
