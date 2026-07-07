@@ -217,8 +217,8 @@ receipts never generate receipts.""",
 add_resource(
     slug="monitoring",
     name="Monitoring & event listening",
-    description="event_get/event_wait observability vs the inbox, the long-poll listener pattern for capable harnesses, the 6-invariant monitor contract (identity, delivery-truth, self-heartbeat, cursor, envelope, wake-don't-consume) with a reference loop, and the anti-patterns to avoid.",
-    version="2",
+    description="event_get/event_wait observability vs the inbox, the long-poll listener pattern for capable harnesses, the 6-invariant monitor contract (identity, delivery-truth, self-heartbeat, cursor, envelope, wake-don't-consume) with an explicit copy-ready reference loop, and the anti-patterns to avoid.",
+    version="3",
     body="""\
 # LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait \
 OBSERVE the bus (message.created, handoff.*, session.* events); they are NOT \
@@ -288,20 +288,53 @@ coupled. Observing (event_wait/inbox_count/inbox_peek) needs no credential; if \
 the monitor itself must consume, it carries session_id + session_secret \
 (required in trust_mode=strict).
 
-# REFERENCE MONITOR (tool-call sketch; harness-agnostic - names are MCP tools):
-  setup once:
-    me     = agent_whoami().agent_id
-    ws     = workspace_resolve(project_root).workspace_id
-    sess   = session_open(agent_id=me, workspace_id=ws)   # keep sess.session_secret (I6)
-    cursor = event_cursor(project_root, agent_id=me, stream="workspace").cursor   # I4: now
-  loop while running:
-    r = event_wait(project_root, agent_id=me, stream="workspace", cursor=cursor,
-                   filters={"type":"message.created"}, timeout_seconds=25, profile="summary")
-    session_heartbeat(session_id=sess.session_id, workspace_id=ws)     # I3: EVERY turn
-    if not r.ok: emit(r.error); backoff(<=30s); continue               # I5
-    if r.data.next_cursor is not None: cursor = r.data.next_cursor      # I4: only forward
-    if inbox_count(agent_id=me).unread > 0: emit(unread)                # I2; do NOT pull here (I6)
-  teardown: session_close(session_id=sess.session_id, workspace_id=ws)
+# REFERENCE MONITOR - explicit and copy-ready. Convention: call(tool, args) \
+performs ONE MCP tool call on the agent's OWN connection (I1) and returns the \
+raw envelope dict {"ok": bool, "data"|"error": ...}. Every field access below \
+is the real envelope shape - nothing is elided.
+
+  # --- setup (once) ---
+  me   = call("agent_whoami", {})["data"]["agent_id"]
+  ws   = call("workspace_resolve", {"project_root": PROJECT_ROOT})["data"]["workspace_id"]
+  sess = call("session_open", {"agent_id": me, "workspace_id": ws})["data"]
+  # keep sess["session_secret"] - required by inbox_pull/ack in trust_mode=strict (I6)
+  cursor = call("event_cursor",
+                {"project_root": PROJECT_ROOT, "agent_id": me,
+                 "stream": "workspace"})["data"]["cursor"]           # I4: anchor at "now"
+
+  # --- loop ---
+  backoff = 1
+  while running:
+      r = call("event_wait", {
+          "project_root": PROJECT_ROOT, "agent_id": me, "stream": "workspace",
+          "cursor": cursor, "filters": {"type": "message.created"},
+          "timeout_seconds": 25, "profile": "summary",              # 25 <= ceiling 30s
+      })
+
+      # I3: presence is the monitor's job - event_wait/inbox_count do NOT advance
+      # your heartbeat. Do this EVERY turn (< 60s cadence) or the agent goes stale.
+      call("session_heartbeat", {"session_id": sess["session_id"], "workspace_id": ws})
+
+      if not r["ok"]:                                                # I5: transient hub error
+          emit({"type": "nexus.monitor.error", "error": r["error"]})
+          sleep(min(backoff, 30)); backoff = min(backoff * 2, 30)
+          continue
+      backoff = 1
+
+      data = r["data"]
+      if data.get("next_cursor") is not None:                       # I4: only ever forward
+          cursor = data["next_cursor"]
+
+      # I2: the inbox is the source of truth - confirm on wake AND on timeout
+      # (an empty page is normal; a dropped event never loses a durable message).
+      count = call("inbox_count", {"agent_id": me})["data"]
+      if count["unread"] > 0:
+          emit({"type": "nexus.inbox.unread", "unread": count["unread"]})
+          # I6: WAKE only - do NOT inbox_pull/ack here. The agent's main turn
+          # consumes; pull/ack mutate read-state and emit delivery/read receipts.
+
+  # --- teardown ---
+  call("session_close", {"session_id": sess["session_id"], "workspace_id": ws})
 
 ANTI-PATTERNS - never do any of these; each re-implements, worse, what one tool \
 call already does, and most break your identity or presence:
