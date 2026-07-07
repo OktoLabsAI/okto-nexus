@@ -81,6 +81,12 @@ APPROVED_GROWTH: dict[str, int] = {
     # (every surface-touching spec appears here), kept under the 200-char S2
     # budget.
     "comm_presets_c5": 0,
+    # EPT remote monitor data plane (spec nexus-monitor-spec, SURFACE_REVISION
+    # 28): THREE new control-plane tools - poll_token_issue (269),
+    # poll_token_renew (222), poll_token_revoke (152) - plus the compact
+    # resident instruction delta pointing agents at the EPT monitoring resource.
+    # Full remote-poller prose lives in okto-nexus://reference/monitoring.
+    "monitor_ept": 760,
 }
 
 

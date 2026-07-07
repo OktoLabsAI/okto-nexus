@@ -35,6 +35,7 @@ from ....application.settings import SettingsService, detect_pinned_fields
 from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
 from ....domain.approvals import OPERATOR_AGENT_ID
+from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
 from ....errors import OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
@@ -59,6 +60,18 @@ PUBLIC_PATHS = frozenset(
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
+# EPT data-plane endpoints. A well-formed ``nxsept_`` bearer skips permanent
+# API-key auth here and is validated inside the route against the poll-token
+# table. Everywhere else EPTs fail as ordinary unknown credentials.
+EPT_DATA_PATHS = frozenset(
+    {
+        "/api/v1/events",
+        "/api/v1/events/cursor",
+        "/api/v1/inbox/count",
+        "/api/v1/inbox/peek",
+    }
+)
+
 
 def ok(data: Any) -> JSONResponse:
     return JSONResponse({"ok": True, "data": data})
@@ -78,6 +91,13 @@ def extract_api_key(request: Request) -> str | None:
     key = request.headers.get("x-api-key")
     if key:
         return key
+    authorization = request.headers.get("authorization", "")
+    if authorization.lower().startswith("bearer "):
+        return authorization[7:].strip() or None
+    return None
+
+
+def extract_bearer(request: Request) -> str | None:
     authorization = request.headers.get("authorization", "")
     if authorization.lower().startswith("bearer "):
         return authorization[7:].strip() or None
@@ -161,6 +181,24 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         is_mcp = request.url.path.startswith("/mcp")
+        bearer = extract_bearer(request)
+        bearer_is_poll_token = bool(bearer and bearer.startswith(POLL_TOKEN_PREFIX))
+        bearer_is_allowed_poll = (
+            request.method == "GET"
+            and path in EPT_DATA_PATHS
+            and bearer
+            and is_well_formed_poll_token(bearer)
+            and not request.query_params.get("api_key")
+            and not request.headers.get("x-api-key")
+        )
+        if bearer_is_poll_token and not bearer_is_allowed_poll:
+            return err(
+                401,
+                "AUTH_FAILED",
+                "Ephemeral poll tokens are read-only and are accepted only on "
+                "the monitor data-plane endpoints.",
+            )
+
         if (
             not is_mcp
             and getattr(request.app.state, "local_open", False)
@@ -176,6 +214,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                     "Refused a cross-origin or rebound-host request on the "
                     "loopback trust path; authenticate with an api_key.",
                 )
+            return await call_next(request)
+
+        if bearer_is_allowed_poll:
             return await call_next(request)
 
         auth: AgentKeyAuthService = request.app.state.auth

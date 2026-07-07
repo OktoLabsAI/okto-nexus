@@ -419,6 +419,17 @@ while parked on an event_wait long-poll) where you take no other action.
 # session_close
 Close a session (idempotent).
 
+# poll_token_issue / poll_token_renew / poll_token_revoke
+Control-plane helpers for remote monitors. ``poll_token_issue(session_id,
+session_secret)`` returns a raw ``nxsept_`` bearer exactly once, bound by the
+server to this authenticated agent, this session and this workspace. Give that
+bearer only to a background process that calls the read-only data plane:
+``GET /api/v1/events/cursor``, ``GET /api/v1/events``,
+``GET /api/v1/inbox/count`` and ``GET /api/v1/inbox/peek``. The token cannot
+call MCP or mutate state, has a short TTL, is stored only as a hash, and must be
+renewed before ``expires_at`` or revoked on teardown. See
+okto-nexus://reference/monitoring for the full remote-poller loop.
+
 # workspace_list
 GLOBAL-ADMIN: enumerate ALL workspaces. By default paths are OMITTED
 (workspace_id, display_name, created_at, last_seen_at); pass include_paths=true

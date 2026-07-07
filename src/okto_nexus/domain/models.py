@@ -117,6 +117,29 @@ class Session:
 
 
 @dataclass(slots=True, frozen=True)
+class EphemeralPollToken:
+    """Short-lived read-only bearer token for a remote monitor.
+
+    The raw ``nxsept_...`` token is returned only on issue/renew. Persistence
+    keeps ``token_hash`` only; all data-plane routing derives from the stored
+    ``agent_id``/``workspace_id``/``session_id`` binding.
+    """
+
+    token_id: str
+    token_hash: str
+    agent_id: str
+    workspace_id: str
+    session_id: str
+    issue_cursor: int
+    scope: dict[str, Any]
+    expires_at: str
+    created_at: str
+    revoked_at: str | None = None
+    renewed_at: str | None = None
+    last_used_at: str | None = None
+
+
+@dataclass(slots=True, frozen=True)
 class Event:
     """An append-only, immutable coordination event.
 

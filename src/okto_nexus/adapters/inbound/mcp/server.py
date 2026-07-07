@@ -78,6 +78,7 @@ from ...outbound.sqlite.policy_repo import (
     SqliteAgentPolicyBindingRepo,
     SqlitePolicyRepo,
 )
+from ...outbound.sqlite.poll_tokens_repo import SqlitePollTokenRepo
 from ...outbound.sqlite.tag_catalog_repo import SqliteTagCatalogRepo
 from . import tools as _tools_pkg
 from .resources import register_resources, resource_versions
@@ -85,10 +86,10 @@ from .resources import register_resources, resource_versions
 #: Server-level guidance surfaced to connecting agents (FastMCP ``instructions``).
 #: Covers how to choose a communication channel, replying directly by default,
 #: the canonical pre-flight, the inbox reception loop, and how a
-#: monitoring-capable harness (e.g. Claude Code) builds a listener - a
-#: backgrounded ``event_wait`` long-poll on THIS connection - plus the
-#: anti-patterns it must avoid (curl at the REST API, ``okto-nexus tail``, a
-#: standalone monitor process).
+#: monitoring-capable harness builds a listener: either a backgrounded
+#: ``event_wait`` long-poll on THIS connection, or an EPT-backed remote
+#: data-plane poller when the harness can run a wake-up background process
+#: without carrying the permanent ``nxs_`` key.
 SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-scoped; pass project_root). Agents are global identities - discover them with agent_list and their advertised capabilities with capability_list. DEEP reference docs live in MCP resources (okto-nexus://reference/...); read them on demand. This inline block keeps only what you need to act correctly on the first try.
 
 YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/mcp?api_key=nxs_...) IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, spawn helper processes, or attach a stdio server.
@@ -97,14 +98,14 @@ PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, id
   1. agent_whoami() - your agent_id, role, capabilities, permissions. Use that agent_id everywhere.
   2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Pass your session_id + session_secret on every authenticated verb - each advances your heartbeat, so working keeps you present (only heartbeat-fresh sessions receive broadcasts and show online); reserve an explicit session_heartbeat for IDLE turns. Store the returned session_secret.
   3. inbox_count(agent_id=<you>); if unread > 0, inbox_pull and triage the backlog, then inbox_ack what you handled.
-  4. event_cursor(stream="workspace") to anchor at NOW, then monitor via event_wait (background long-poll) or event_get polling, advancing the cursor.
+  4. event_cursor(stream="workspace") to anchor at NOW, then monitor via event_wait (background long-poll), an EPT remote poller (poll_token_issue -> /api/v1/events), or event_get polling, advancing the cursor.
 Full detail: resource okto-nexus://reference/preflight. When finished for good, session_close.
 
 COMMUNICATE - prefer the most targeted, least noisy channel:
   - DIRECT (default, preferred): message_create with target={"strategy":"direct","agent_id":"<recipient>"}. ALWAYS reply directly to whoever messaged you (target their from_agent_id).
   - HANDOFF: handoff_create with a capability/role/broadcast target when exactly ONE free agent should claim dispatchable work (first to handoff_claim wins).
   - BROADCAST (last resort): message_create with NO target - announcements or open-ended discovery only, NEVER actionable work (it triggers unwanted parallel work).
-HOW YOU RECEIVE: messages addressed to you land in your GLOBAL inbox - inbox_count -> inbox_pull -> inbox_ack. event_get/event_wait are OBSERVABILITY, not message delivery. Channels are organizational labels, not ACLs and not delivery - the message TARGET decides who receives it. Full detail (channels, delivery/read receipts, reception loop): okto-nexus://reference/communication. Monitoring/listener patterns + anti-patterns (no curl, no CLI tail, no separate monitor process): okto-nexus://reference/monitoring.
+HOW YOU RECEIVE: messages addressed to you land in your GLOBAL inbox - inbox_count -> inbox_pull -> inbox_ack. event_get/event_wait are OBSERVABILITY, not message delivery. Channels are organizational labels, not ACLs and not delivery - the message TARGET decides who receives it. Full detail (channels, delivery/read receipts, reception loop): okto-nexus://reference/communication. Monitoring/listener patterns, including EPT remote pollers that do not carry the permanent key: okto-nexus://reference/monitoring.
 
 PERMISSIONS. The operator may restrict your identity (direct sends, broadcasts, channel posts, handoff create/work/cancel, rate limits, peer allowlists). A blocked call returns ok:false with code PERMISSION_DENIED and details.required_permission. Do NOT retry or work around it - adapt (e.g. reply directly instead of broadcasting) or report that the operator must grant the flag (dashboard Agents -> Permissions).
 
@@ -359,7 +360,12 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: assignments and scrubbed denial reads. Runtime enforcement semantics are
 #: unchanged; the new tools expose staging/admin surfaces and parity holds by
 #: auto-discovery across stdio/http.
-SURFACE_REVISION = 27
+#: 28 = remote-only monitor data plane (migration 026): NEW MCP control-plane
+#: tools poll_token_issue / poll_token_renew / poll_token_revoke issue short-
+#: lived nxsept_ bearers bound to the caller's session/workspace. The bearer is
+#: accepted only by read-only REST monitor endpoints (/api/v1/events[/cursor],
+#: /api/v1/inbox/count, /api/v1/inbox/peek), never MCP/mutating routes.
+SURFACE_REVISION = 28
 
 
 @dataclass
@@ -436,6 +442,7 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         comm_presets=SqliteCommPresetRepo(clock),
         comm_bindings=SqliteAgentCommBindingRepo(clock),
         approvals=SqliteApprovalRepo(),
+        poll_tokens=SqlitePollTokenRepo(clock),
     )
     emitter = SqliteEventEmitter(events_repo)
     return repos, emitter

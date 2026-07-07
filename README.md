@@ -294,6 +294,7 @@ positional argument, or a flag with no value) fails closed with `CONFIG_ERROR` �
 | `OKTO_NEXUS_SESSION_REAP_SECONDS` | `--session-reap-seconds` | `86400` | `1` | Sessions silent past this (s) are opportunistically closed by `session_open`/`session_heartbeat`. |
 | `OKTO_NEXUS_MAX_SHARED_MD_EVENTS` | `--max-shared-md-events` | `1000` | `1` | Hard ceiling for `shared_md_render`'s `limit_events`. |
 | `OKTO_NEXUS_MAX_EVENT_LIMIT` | `--max-event-limit` | `1000` | `1` | Hard ceiling for the `limit` page size on `event_get` / `event_wait`. |
+| `OKTO_NEXUS_POLL_TOKEN_TTL_SECONDS` | `--poll-token-ttl-seconds` | `3600` | `60` | TTL (s) for ephemeral `nxsept_` poll tokens used by remote monitor processes. |
 | `OKTO_NEXUS_TRUST_MODE` | `--trust-mode` | `open` | — | One of `open`, `strict`. `strict` requires `session_id` + `session_secret` on the sensitive verbs; `open` validates a supplied secret but does not require one. |
 | `OKTO_NEXUS_RETENTION_EVENTS_KEEP_DAYS` | `--retention-events-keep-days` | `30` | `0` | Retention window (days) for the event log (prune-eligible past it). |
 | `OKTO_NEXUS_RETENTION_READ_DELIVERIES_KEEP_DAYS` | `--retention-read-deliveries-keep-days` | `14` | `0` | Retention window (days) for acknowledged (`read`) deliveries. |
@@ -556,14 +557,13 @@ turn; Claude then `inbox_pull`s the body, handles it, and `inbox_ack`s. A timeou
 just returns an empty page — re-arm and keep listening; that steady state is not
 an error.
 
-This monitor is **nothing but the `event_wait` tool in a loop on your own MCP
-connection** — no daemon, no socket, no second process. Because it rides your
-authenticated connection, identity / visibility / permissions come for free, and
-(combined with **activity-aware presence** — any authenticated verb refreshes
-your liveness) it keeps Claude showing **online** the whole time it is listening.
-Do **not** hand-roll a standalone monitor script or `curl` the REST/SSE
-endpoints — that duplicates auth/cursoring/visibility and drifts out of sync; see
-[Monitoring patterns](#monitoring-patterns) for the full rationale.
+The default monitor is **nothing but the `event_wait` tool in a loop on your own
+MCP connection**. Harnesses that can run a wake-up background process but should
+not give it the permanent `nxs_` key can instead issue an ephemeral
+`nxsept_` bearer with `poll_token_issue(session_id, session_secret)` and let that
+process call only the read-only `/api/v1/events` and `/api/v1/inbox/*` monitor
+endpoints. Do **not** hand-roll a standalone monitor with the permanent key or
+the dashboard SSE endpoint; see [Monitoring patterns](#monitoring-patterns).
 
 ### 7. Claude replies; the loop closes
 
@@ -859,6 +859,15 @@ block**:
   (`timed_out=true`) — re-arm and continue; that is the steady state, not an
   error.
 
+- **Remote EPT poller.** If the harness can run a background process that wakes
+  the main harness on output, issue `poll_token_issue(session_id,
+  session_secret)` over MCP and pass only the returned short-lived `nxsept_`
+  bearer to that process. It may call `GET /api/v1/events/cursor`,
+  `GET /api/v1/events?cursor=...&timeout_seconds=25&profile=summary`,
+  `GET /api/v1/inbox/count`, and `GET /api/v1/inbox/peek`. It cannot mutate
+  state, cannot call MCP, and never receives the permanent `nxs_` key. Renew it
+  before `expires_at`; revoke it on teardown.
+
 - **In-loop, no background.** Call with `timeout_seconds=0` for a **non-blocking
   snapshot** (single scan, no sleep) and poll between turns, advancing
   `cursor` → `next_cursor`. Don't use a long timeout if you can't park the turn.
@@ -867,18 +876,14 @@ block**:
   `{"type": "message.read"}`) awaits one expected event — the read receipt of a
   message you sent, a `handoff.completed`, etc.
 
-**Anti-patterns — don't.** A monitor is *nothing but* `event_wait` in a loop on
-your MCP connection; there is no daemon to write, no socket to open, no process
-to supervise. Avoid:
+**Anti-patterns — don't.** Avoid:
 
-- **curl / raw HTTP** against the REST API (`/api/v1`), the `/mcp` endpoint, or
-  the dashboard's live SSE stream — those are the human dashboard and the
-  operator's REST surface; hand-rolling them duplicates auth, cursoring and
-  visibility and drifts out of sync. Call the `event_wait` tool instead.
-- **a standalone "monitor" app/script/worker** (Python, Node, shell, …) to poll
-  the bus — overengineering: a separate process doesn't share your identity/API
-  key, doesn't keep your presence heartbeat fresh, and can't hand events back
-  into your reasoning loop. The tool already does the long-poll for you.
+- **raw HTTP with the permanent `nxs_` key** against REST, `/mcp`, or dashboard
+  SSE. Raw HTTP is supported only for the EPT data-plane endpoints with a
+  short-lived `nxsept_` bearer.
+- **a standalone monitor that stores the permanent key or calls MCP**. A
+  separate process is acceptable only as an EPT poller whose output wakes the
+  harness.
 - **spawning any helper process or a second server** — the hub is already
   running and the MCP session is your only required channel.
 

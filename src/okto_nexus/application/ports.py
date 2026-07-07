@@ -44,6 +44,7 @@ from ..domain.models import (
     CapabilityName,
     Channel,
     Event,
+    EphemeralPollToken,
     Handoff,
     Memory,
     Message,
@@ -1449,6 +1450,67 @@ class SessionRepo(Protocol):
 
 
 # --------------------------------------------------------------------------- #
+# Ephemeral poll tokens (remote monitor data plane)
+# --------------------------------------------------------------------------- #
+@runtime_checkable
+class PollTokenRepo(Protocol):
+    """Persistence for short-lived read-only monitor bearer tokens."""
+
+    def issue(
+        self,
+        uow: UnitOfWork,
+        *,
+        token_id: str,
+        token_hash: str,
+        agent_id: str,
+        workspace_id: str,
+        session_id: str,
+        issue_cursor: int,
+        scope: Mapping[str, Any],
+        expires_at: str,
+        created_at: str,
+    ) -> EphemeralPollToken:
+        """Revoke the active token for ``(agent, workspace)`` and insert one."""
+        ...
+
+    def get_active_for_session(
+        self, uow: UnitOfWork, *, session_id: str
+    ) -> EphemeralPollToken | None:
+        """Return the non-revoked token bound to ``session_id``, if any."""
+        ...
+
+    def get_by_hash(
+        self, uow: UnitOfWork, *, token_hash: str
+    ) -> EphemeralPollToken | None:
+        """Return the token row with ``token_hash`` regardless of expiry."""
+        ...
+
+    def rotate(
+        self,
+        uow: UnitOfWork,
+        *,
+        token_id: str,
+        token_hash: str,
+        expires_at: str,
+        renewed_at: str,
+    ) -> EphemeralPollToken:
+        """Rotate the raw bearer for one active token row."""
+        ...
+
+    def revoke_for_session(
+        self, uow: UnitOfWork, *, session_id: str, revoked_at: str
+    ) -> int:
+        """Revoke every active token for ``session_id``; return rows changed."""
+        ...
+
+    def touch_used(
+        self, uow: UnitOfWork, *, token_id: str, at: str
+    ) -> bool:
+        """Best-effort weak-observer heartbeat for a data-plane request."""
+        ...
+
+
+# --------------------------------------------------------------------------- #
 # Events (append-only log) + emitter facade
 # --------------------------------------------------------------------------- #
 @runtime_checkable
@@ -2373,3 +2435,4 @@ class Repos:
     comm_presets: CommPresetRepo | None = None
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None
+    poll_tokens: PollTokenRepo | None = None

@@ -45,6 +45,9 @@ DEFAULT_MAX_SHARED_MD_EVENTS = 1000
 #: Default ceiling for a single ``event_get``/``event_wait`` page.
 DEFAULT_MAX_EVENT_LIMIT = 1000
 
+#: Default TTL (seconds) for ephemeral poll tokens used by remote monitors.
+DEFAULT_POLL_TOKEN_TTL_SECONDS = 3600
+
 #: Trust modes for sensitive verbs (M10). ``open`` keeps the cooperative
 #: behaviour (credentials optional, but VALIDATED when supplied - a wrong
 #: credential is never ignored); ``strict`` requires session_id+session_secret
@@ -128,6 +131,7 @@ class NexusConfig:
     session_reap_seconds: int = DEFAULT_SESSION_REAP_SECONDS
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
     max_event_limit: int = DEFAULT_MAX_EVENT_LIMIT
+    poll_token_ttl_seconds: int = DEFAULT_POLL_TOKEN_TTL_SECONDS
     trust_mode: str = TRUST_MODE_OPEN
     retention_events_keep_days: int = DEFAULT_RETENTION_EVENTS_KEEP_DAYS
     retention_read_deliveries_keep_days: int = (
@@ -239,6 +243,12 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         "--max-event-limit",
         DEFAULT_MAX_EVENT_LIMIT,
         1,
+    ),
+    "poll_token_ttl_seconds": (
+        "OKTO_NEXUS_POLL_TOKEN_TTL_SECONDS",
+        "--poll-token-ttl-seconds",
+        DEFAULT_POLL_TOKEN_TTL_SECONDS,
+        60,
     ),
     # Retention windows accept 0 ("keep nothing older than right now"); only a
     # negative value is rejected.

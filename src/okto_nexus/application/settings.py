@@ -118,6 +118,14 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         maximum=10000,
     ),
     SettingSpec(
+        "poll_token_ttl_seconds",
+        "int",
+        "TTL (s) for ephemeral poll tokens issued to remote monitor processes. "
+        "Shorter limits exposure if a background process leaks its bearer.",
+        minimum=60,
+        maximum=86400,
+    ),
+    SettingSpec(
         "max_shared_md_events",
         "int",
         "Ceiling of events rendered by shared_md_render (the workspace "

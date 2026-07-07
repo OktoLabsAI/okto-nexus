@@ -35,6 +35,7 @@ from ....domain.approvals import (
     validate_status_filter,
 )
 from ....domain.base import new_id
+from ....domain.poll_tokens import POLL_TOKEN_PREFIX
 from ....domain.permissions import (
     BUILTIN_PRESETS,
     PERMISSION_DESCRIPTIONS,
@@ -47,6 +48,12 @@ from ....domain.tag_selector import validate_comm_scope, validate_tags
 from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 from ..mcp.tools.handoff import build_service as _build_handoff_service
 from ..mcp.tools.messages import build_service as _build_message_service
+from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
+from ..mcp.projection import (
+    PROFILE_FULL,
+    apply_to_response,
+    parse_profile,
+)
 from .identity_ctx import get_authenticated_agent
 
 
@@ -65,6 +72,7 @@ def _err(
 
 def _map_error(exc: OktoNexusError) -> JSONResponse:
     status = {
+        "AUTH_FAILED": 401,
         ErrorCode.NOT_FOUND: 404,
         # A handoff that exists only in ANOTHER workspace is absent from the
         # addressed one - the REST resource does not exist there.
@@ -115,6 +123,70 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
         else None
     )
     return _err(status, str(exc.code), exc.message, details)
+
+
+def _bearer_token(request: Request) -> str | None:
+    authorization = request.headers.get("authorization", "")
+    if authorization.lower().startswith("bearer "):
+        return authorization[7:].strip() or None
+    return None
+
+
+def _poll_bearer(request: Request) -> str | None:
+    token = _bearer_token(request)
+    if token and token.startswith(POLL_TOKEN_PREFIX):
+        return token
+    return None
+
+
+def _parse_ept_filters(
+    filters: str | None,
+    *,
+    type_: str | None = None,
+    agent: str | None = None,
+    trace: str | None = None,
+) -> dict[str, str]:
+    parsed: dict[str, str] = {}
+    if filters:
+        for part in filters.split(","):
+            item = part.strip()
+            if not item:
+                continue
+            key, sep, value = item.partition(":")
+            if not sep or not key.strip() or not value.strip():
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "filters must use 'key:value' pairs separated by commas.",
+                    {"filters": filters},
+                )
+            parsed[key.strip()] = value.strip()
+    if type_:
+        parsed["type"] = type_
+    if agent:
+        parsed["agent_id"] = agent
+    if trace:
+        parsed["trace_id"] = trace
+    return parsed
+
+
+def _ept_profile(value: str | None) -> str:
+    profile = parse_profile(value or "summary")
+    if profile == PROFILE_FULL:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "profile=full is not supported on ephemeral poll-token endpoints.",
+            {"profile": value},
+        )
+    return profile
+
+
+def _auth_poll_token(request: Request):
+    raw = _poll_bearer(request)
+    if raw is None:
+        return None, None
+    service = _build_poll_token_service(request.app.state.deps)
+    token = service.authenticate(raw)
+    return service, token
 
 
 async def _run(request: Request, fn, *, write: bool = True):
@@ -649,17 +721,150 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok({"items": rows})
 
+    @router.get("/events/cursor")
+    async def poll_events_cursor(
+        request: Request,
+        stream: str | None = "workspace",
+    ) -> JSONResponse:
+        raw = _poll_bearer(request)
+        if raw is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: this endpoint requires a poll-token bearer.",
+            )
+        service, token = _auth_poll_token(request)
+        if token is None or service is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: unknown, expired or revoked poll token.",
+            )
+
+        def _cursor():
+            return service.event_cursor(token, stream=stream or "workspace")
+
+        try:
+            data = await anyio.to_thread.run_sync(_cursor)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/inbox/count")
+    async def poll_inbox_count(request: Request) -> JSONResponse:
+        raw = _poll_bearer(request)
+        if raw is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: this endpoint requires a poll-token bearer.",
+            )
+        service, token = _auth_poll_token(request)
+        if token is None or service is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: unknown, expired or revoked poll token.",
+            )
+
+        try:
+            data = await anyio.to_thread.run_sync(lambda: service.inbox_count(token))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/inbox/peek")
+    async def poll_inbox_peek(
+        request: Request,
+        limit: int = 50,
+        profile: str | None = None,
+    ) -> JSONResponse:
+        raw = _poll_bearer(request)
+        if raw is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: this endpoint requires a poll-token bearer.",
+            )
+        service, token = _auth_poll_token(request)
+        if token is None or service is None:
+            return _err(
+                401,
+                "AUTH_FAILED",
+                "Authentication failed: unknown, expired or revoked poll token.",
+            )
+
+        try:
+            prof = _ept_profile(profile)
+
+            def _peek():
+                return service.inbox_peek(token, limit=limit)
+
+            data = await anyio.to_thread.run_sync(_peek)
+            data = apply_to_response(
+                data,
+                "messages",
+                prof,
+                kind="inbox",
+                target_ref="/api/v1/inbox/peek",
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
     @router.get("/events")
     async def events(
         request: Request,
         after: int = 0,
+        cursor: int | None = None,
         workspace: str | None = None,
         stream: str | None = None,
         type: str | None = None,
         agent: str | None = None,
         trace: str | None = None,
+        filters: str | None = None,
+        timeout_seconds: int = 0,
+        profile: str | None = None,
         limit: int = 100,
     ) -> JSONResponse:
+        raw = _poll_bearer(request)
+        if raw is not None:
+            service, token = _auth_poll_token(request)
+            if token is None or service is None:
+                return _err(
+                    401,
+                    "AUTH_FAILED",
+                    "Authentication failed: unknown, expired or revoked poll token.",
+                )
+            try:
+                prof = _ept_profile(profile)
+                filter_obj = _parse_ept_filters(
+                    filters, type_=type, agent=agent, trace=trace
+                )
+
+                def _events():
+                    return service.events(
+                        token,
+                        stream=stream or "workspace",
+                        cursor=cursor if cursor is not None else after,
+                        limit=limit,
+                        filters=filter_obj,
+                        timeout_seconds=timeout_seconds,
+                        raw_token=raw,
+                    )
+
+                data = await anyio.to_thread.run_sync(_events)
+                data = apply_to_response(
+                    data,
+                    "events",
+                    prof,
+                    kind="event",
+                    target_ref="/api/v1/events",
+                )
+            except OktoNexusError as exc:
+                return _map_error(exc)
+            return _ok(data)
+
         # type/agent/trace are optional equality filters (FR1/I1); omitting
         # them keeps the response byte-for-byte the prior behaviour (AC7).
         observability = request.app.state.observability
