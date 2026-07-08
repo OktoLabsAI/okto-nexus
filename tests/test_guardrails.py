@@ -1220,7 +1220,7 @@ def test_guardrail_rest_admin_crud_pinned_guard_and_delete_guards(
     assert client.delete(f"/api/v1/guardrails/{grid}").status_code == 200
 
 
-def test_guardrail_versions_are_append_only_across_rest_and_mcp(
+def test_guardrail_versions_are_append_only_across_rest_and_no_mcp_admin_surface(
     guardrail_rest_client, tmp_path
 ):
     client, _deps = guardrail_rest_client
@@ -1249,14 +1249,7 @@ def test_guardrail_versions_are_append_only_across_rest_and_mcp(
     deps = bootstrap({"OKTO_NEXUS_HOME": str(tmp_path / "home")}, [])
     server = _Server()
     register_tools(server, deps)
-    mcp_delete = server.tools["guardrail_version_manage"](
-        operation="delete",
-        guardrail_id=grid,
-        version=1,
-    )
-    assert mcp_delete["ok"] is False
-    assert mcp_delete["error"]["code"] == ErrorCode.VALIDATION_ERROR.value
-    assert "operation must be add, list or update_status" in mcp_delete["error"]["message"]
+    assert "guardrail_version_manage" not in server.tools
 
 
 def test_guardrail_rest_mutations_are_operator_only(guardrail_rest_client):
@@ -1352,72 +1345,16 @@ def test_guardrail_denials_rest_read_path_is_scrubbed(guardrail_rest_client):
     _assert_scrubbed(data, raw_text="raw secret")
 
 
-def test_guardrail_mcp_admin_tools_registered_and_crud(tmp_path):
+def test_guardrail_mcp_admin_tools_are_not_registered(tmp_path):
     deps = bootstrap({"OKTO_NEXUS_HOME": str(tmp_path / "home")}, [])
     server = _Server()
     register_tools(server, deps)
 
-    expected = {
+    retired = {
         "guardrail_group_manage",
         "guardrail_manage",
         "guardrail_version_manage",
         "guardrail_assignment_manage",
         "guardrail_denial_list",
     }
-    assert expected <= set(server.tools)
-
-    assert server.tools["agent_register"](agent_id="alpha", role="worker")["ok"] is True
-    group = server.tools["guardrail_group_manage"](
-        operation="create", body={"name": "Reviewers"}
-    )
-    assert group["ok"] is True
-    gid = group["data"]["group_id"]
-    assert (
-        server.tools["guardrail_group_manage"](
-            operation="add_member", group_id=gid, agent_id="alpha"
-        )["ok"]
-        is True
-    )
-    guardrail = server.tools["guardrail_manage"](
-        operation="create", body={"name": "MCP Secrets"}
-    )
-    grid = guardrail["data"]["guardrail_id"]
-    version = server.tools["guardrail_version_manage"](
-        operation="add",
-        guardrail_id=grid,
-        body={
-            "status": "active",
-            "evaluator_kind": "deterministic",
-            "evaluator_config": {
-                "kind": "keyword_blocklist",
-                "keywords": ["secret"],
-            },
-            "surfaces": ["message"],
-            "field_targets": ["body"],
-        },
-    )
-    assert version["ok"] is True
-    assignment = server.tools["guardrail_assignment_manage"](
-        operation="create",
-        body={
-            "scope_kind": "agent_group",
-            "group_id": gid,
-            "guardrail_id": grid,
-            "version_mode": "pinned",
-            "pinned_version": 1,
-            "mode": "warn",
-        },
-    )
-    assert assignment["ok"] is True
-    assert (
-        server.tools["guardrail_assignment_manage"](operation="list", agent_id="alpha")[
-            "data"
-        ]["items"][0]["mode"]
-        == "warn"
-    )
-
-    project = tmp_path / "project"
-    project.mkdir()
-    denials = server.tools["guardrail_denial_list"](project_root=str(project))
-    assert denials["ok"] is True
-    assert denials["data"]["items"] == []
+    assert retired.isdisjoint(server.tools)

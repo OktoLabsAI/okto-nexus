@@ -35,6 +35,8 @@ from okto_nexus.application.shared_md import (
 )
 from okto_nexus.envelope import tool_envelope
 
+from ...http.identity_ctx import get_authenticated_agent
+
 #: Parameter descriptions. Module-level so the (stringised) annotations resolve
 #: against module globals when FastMCP evaluates them. House style mirrors
 #: okto-pulse (enums "one of: ...", optionals "(default: ...)").
@@ -45,6 +47,10 @@ _P_WS = (
 _P_LIMIT_EVENTS = (
     "How many of the most recent events to include in the rendered timeline "
     f"(optional; default: {DEFAULT_LIMIT_EVENTS}, clamped to the configured maximum)."
+)
+_P_AGENT = (
+    "Your agent_id for permission evaluation in open stdio mode (optional; "
+    "authenticated HTTP MCP uses the API-key identity)."
 )
 
 
@@ -102,8 +108,11 @@ def register(server: Any, deps: Any) -> None:
     def shared_md_render(
         workspace_id: Annotated[str, Field(description=_P_WS)],
         limit_events: Annotated[int, Field(description=_P_LIMIT_EVENTS)] = DEFAULT_LIMIT_EVENTS,
+        agent_id: Annotated[str | None, Field(description=_P_AGENT)] = None,
     ) -> dict[str, Any]:
         """Render the per-workspace human-readable shared.md (atomic overwrite)."""
+        caller = get_authenticated_agent()
+        actor = caller.agent_id if caller is not None else agent_id
         return _service().shared_md_render(
-            workspace_id=workspace_id, limit_events=limit_events
+            workspace_id=workspace_id, limit_events=limit_events, agent_id=actor
         )

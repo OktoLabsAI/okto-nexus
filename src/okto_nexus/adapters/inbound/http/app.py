@@ -397,6 +397,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         connection_factory=deps.connection_factory,
         queries=observability_queries,
         workspaces=deps.repos.workspaces,
+        agents=deps.repos.agents,
         observability=observability,
         clock=deps.clock,
         config=deps.config,

@@ -28,8 +28,17 @@ from okto_nexus.adapters.inbound.mcp.tools.handoff import (  # noqa: E402
 from okto_nexus.adapters.inbound.mcp.tools.identity import (  # noqa: E402
     build_service as build_identity_service,
 )
+from okto_nexus.adapters.inbound.mcp.tools.health import (  # noqa: E402
+    build_service as build_health_service,
+)
+from okto_nexus.adapters.inbound.mcp.tools.memory import (  # noqa: E402
+    build_service as build_memory_service,
+)
 from okto_nexus.adapters.inbound.mcp.tools.messages import (  # noqa: E402
     build_service as build_message_service,
+)
+from okto_nexus.adapters.inbound.mcp.tools.shared_md import (  # noqa: E402
+    build_service as build_shared_md_service,
 )
 from okto_nexus.domain.permissions import (  # noqa: E402
     BUILTIN_PRESETS,
@@ -508,6 +517,163 @@ def test_agent_register_is_self_only_when_authenticated(deps):
     # No authenticated identity (cooperative stdio): the V1 contract holds.
     free = identity.agent_register(agent_id="newcomer")
     assert free["agent_id"] == "newcomer"
+
+
+def test_session_open_is_self_only_when_authenticated(deps, tmp_path):
+    identity = build_identity_service(deps)
+    _register(deps, "alice")
+    _register(deps, "bob")
+    ws = identity.workspace_resolve(project_root=str(tmp_path))["workspace_id"]
+
+    with pytest.raises(OktoNexusError) as exc:
+        identity.session_open(
+            agent_id="bob", workspace_id=ws, actor_agent_id="alice"
+        )
+    assert exc.value.code == ErrorCode.PERMISSION_DENIED
+    assert exc.value.details["required_permission"] == "identity.session_self"
+
+    opened = identity.session_open(
+        agent_id="alice", workspace_id=ws, actor_agent_id="alice"
+    )
+    assert opened["agent_id"] == "alice"
+
+
+def test_agent_register_self_updates_are_permission_gated(deps):
+    identity = build_identity_service(deps)
+    _register(
+        deps,
+        "limited",
+        {
+            "identity": {
+                "update_profile": False,
+                "update_capabilities": False,
+            }
+        },
+    )
+    _register(
+        deps,
+        "no-caps",
+        {
+            "identity": {
+                "update_profile": True,
+                "update_capabilities": False,
+            }
+        },
+    )
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="ocr")
+
+    with pytest.raises(OktoNexusError) as profile:
+        identity.agent_register(
+            agent_id="limited", role="worker", actor_agent_id="limited"
+        )
+    assert profile.value.details["required_permission"] == "identity.update_profile"
+
+    with pytest.raises(OktoNexusError) as caps:
+        identity.agent_register(
+            agent_id="no-caps",
+            capabilities={"ocr": True},
+            actor_agent_id="no-caps",
+        )
+    assert caps.value.details["required_permission"] == "identity.update_capabilities"
+
+
+def test_workspace_list_permissions_gate_listing_and_paths(deps, tmp_path):
+    identity = build_identity_service(deps)
+    identity.workspace_resolve(project_root=str(tmp_path), display_name="Project")
+    _register(deps, "no-list", {"workspaces": {"list": False}})
+    _register(
+        deps,
+        "no-paths",
+        {"workspaces": {"list": True, "include_paths": False}},
+    )
+
+    with pytest.raises(OktoNexusError) as denied:
+        identity.workspace_list(actor_agent_id="no-list")
+    assert denied.value.details["required_permission"] == "workspaces.list"
+
+    rows = identity.workspace_list(actor_agent_id="no-paths")
+    assert rows and "root_realpath" not in rows[0]
+    with pytest.raises(OktoNexusError) as paths:
+        identity.workspace_list(include_paths=True, actor_agent_id="no-paths")
+    assert paths.value.details["required_permission"] == "workspaces.include_paths"
+
+
+def test_experimental_memory_permissions_gate_agent_tools(deps, tmp_path):
+    deps.config.feature_memory = True
+    memory = build_memory_service(deps)
+    root = str(tmp_path)
+    _register(deps, "writer")
+    _register(deps, "no-write", {"experimental": {"memory_write": False}})
+    _register(
+        deps,
+        "no-read",
+        {
+            "experimental": {
+                "memory_read": False,
+                "memory_search": False,
+            }
+        },
+    )
+
+    with pytest.raises(OktoNexusError) as write_denied:
+        memory.put_memory(
+            project_root=root,
+            agent_id="no-write",
+            title="blocked",
+            content="blocked",
+        )
+    assert (
+        write_denied.value.details["required_permission"]
+        == "experimental.memory_write"
+    )
+
+    created = memory.put_memory(
+        project_root=root,
+        agent_id="writer",
+        title="ok",
+        content="searchable content",
+    )
+    with pytest.raises(OktoNexusError) as read_denied:
+        memory.get_memory(
+            project_root=root,
+            memory_id=created["memory_id"],
+            agent_id="no-read",
+        )
+    assert (
+        read_denied.value.details["required_permission"] == "experimental.memory_read"
+    )
+    with pytest.raises(OktoNexusError) as search_denied:
+        memory.search_memory(project_root=root, query="searchable", agent_id="no-read")
+    assert (
+        search_denied.value.details["required_permission"]
+        == "experimental.memory_search"
+    )
+
+
+def test_shared_md_and_health_permissions_are_gated(deps, tmp_path):
+    identity = build_identity_service(deps)
+    ws = identity.workspace_resolve(project_root=str(tmp_path))["workspace_id"]
+    _register(
+        deps,
+        "limited",
+        {
+            "shared_md": {"render": False},
+            "health": {"read": False},
+        },
+    )
+
+    shared = build_shared_md_service(deps)
+    with pytest.raises(OktoNexusError) as render_denied:
+        shared.shared_md_render(workspace_id=ws, agent_id="limited")
+    assert render_denied.value.details["required_permission"] == "shared_md.render"
+
+    deps.config.feature_health = True
+    health = build_health_service(deps)
+    health.require_feature_health()
+    with pytest.raises(OktoNexusError) as health_denied:
+        health.require_agent_read(agent_id="limited")
+    assert health_denied.value.details["required_permission"] == "health.read"
 
 
 def test_agent_whoami_returns_own_profile_with_permissions(deps):

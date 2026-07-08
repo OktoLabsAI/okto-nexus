@@ -581,13 +581,9 @@ class HandoffService:
                 "visibility": handoff.visibility,
                 "created_at": handoff.created_at,
             }
-            # Emit the SERIALISED payload (the same TEXT stored on the row), so
-            # the handoff.created event, the stored row, and the
-            # list_available/claim echo all expose ONE consistent representation
-            # (a non-string payload would otherwise be an object on the event but
-            # a JSON string on claim).
-            if payload_text is not None:
-                event_payload["payload"] = payload_text
+            # Metadata-only: the work payload is returned only to the claimant
+            # by handoff_claim / claimant handoff_get. Event streams and
+            # directed inbox notifications must not become side channels.
             if depends_list is not None:
                 event_payload["depends_on"] = depends_list
             if _is_nonempty_str(session_id):
@@ -607,8 +603,6 @@ class HandoffService:
                     "from_agent_id": from_agent_id,
                     "next_step": "handoff_claim with this handoff_id",
                 }
-                if payload_text is not None:
-                    body["payload"] = payload_text
                 # A dependent born blocked says so in the SUBJECT (I5): the
                 # named agent learns not to rush a claim that would only be
                 # refused - handoff.unblocked wakes it when the edges clear.
@@ -832,7 +826,6 @@ class HandoffService:
             "target": _loads_target(handoff.target),
             "visibility": handoff.visibility,
             "from_agent_id": handoff.from_agent_id,
-            "payload": handoff.payload,
             "created_at": handoff.created_at,
         }
 
@@ -1259,13 +1252,14 @@ class HandoffService:
             "visibility": updated.visibility,
             "claimed_by": updated.claimed_by,
             "lease_expires_at": updated.lease_expires_at,
-            "payload": updated.payload,
             "result": outcome.get("result"),
             "rejected_reason": outcome.get("rejected_reason"),
             "created_at": updated.created_at,
             "updated_at": updated.updated_at,
             "notified": bool(notified),
         }
+        if agent_id == updated.claimed_by:
+            response["payload"] = updated.payload
         if verdict_value == VERDICT_PASS:
             response["verified_by"] = agent_id
         elif feedback_value is not None:
@@ -1606,12 +1600,13 @@ class HandoffService:
             "visibility": handoff.visibility,
             "claimed_by": handoff.claimed_by,
             "lease_expires_at": handoff.lease_expires_at,
-            "payload": handoff.payload,
             "result": outcome["result"],
             "rejected_reason": outcome["rejected_reason"],
             "created_at": handoff.created_at,
             "updated_at": handoff.updated_at,
         }
+        if agent_id == handoff.claimed_by:
+            response["payload"] = handoff.payload
         # Verification contract exposure (I4/FR6): the three columns surface
         # top-level ONLY when non-NULL (the trace_id pattern) - a
         # non-verifiable handoff keeps its pre-I4 shape byte-identical.

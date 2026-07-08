@@ -46,7 +46,14 @@ from ..domain.health import (
 from ..domain.ids import resolve_workspace_id
 from ..errors import ErrorCode, OktoNexusError
 from .observability import ObservabilityService
-from .ports import Clock, ConnectionFactory, ObservabilityQueries, WorkspaceRepo
+from .permissions import permission_set_for
+from .ports import (
+    AgentRepo,
+    Clock,
+    ConnectionFactory,
+    ObservabilityQueries,
+    WorkspaceRepo,
+)
 from .workspace_analytics import _epoch_to_iso
 
 
@@ -68,6 +75,7 @@ class HealthService:
         connection_factory: ConnectionFactory,
         queries: ObservabilityQueries,
         workspaces: WorkspaceRepo,
+        agents: AgentRepo,
         observability: ObservabilityService,
         clock: Clock,
         config: NexusConfig,
@@ -75,6 +83,7 @@ class HealthService:
         self._cf = connection_factory
         self._q = queries
         self._workspaces = workspaces
+        self._agents = agents
         self._obs = observability
         self._clock = clock
         self._config = config
@@ -97,6 +106,19 @@ class HealthService:
                 "(feature_health=false). An operator can enable the "
                 "'feature_health' setting on the dashboard.",
                 {"feature_health": False},
+            )
+
+    def require_agent_read(self, *, agent_id: Any = None) -> None:
+        """Require the per-agent health read permission when an actor is known.
+
+        This performs no touch/heartbeat and emits no event; the health read
+        stays passive while still honoring operator-assigned permissions.
+        """
+        if not isinstance(agent_id, str) or not agent_id.strip():
+            return
+        with self._cf.unit_of_work() as uow:
+            permission_set_for(self._agents, uow, agent_id.strip()).require(
+                "health", "read"
             )
 
     # ------------------------------------------------------------------ #

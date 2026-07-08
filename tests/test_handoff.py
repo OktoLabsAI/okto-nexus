@@ -1528,8 +1528,7 @@ def test_register_tools_and_envelope(migrated_factory, tmp_config, tmp_path):
     listed = server.tools["handoff_list_available"](project_root=proj, agent_id="w")
     assert listed["ok"] is True
     assert {h["handoff_id"] for h in listed["data"]["handoffs"]} == {hid}
-    # Payload travels with the row through the full MCP path (no event correlation).
-    assert listed["data"]["handoffs"][0]["payload"] == "please process batch 7"
+    assert "payload" not in listed["data"]["handoffs"][0]
 
     claimed = server.tools["handoff_claim"](
         project_root=proj, handoff_id=hid, agent_id="w"
@@ -1588,7 +1587,7 @@ def test_build_service_reuses_existing_repos(migrated_factory, tmp_config):
 
 
 # --------------------------------------------------------------------------- #
-# Handoff payload passthrough (migration 003) - returned by list/claim
+# Handoff payload passthrough (migration 003) - returned to the claimant only
 # --------------------------------------------------------------------------- #
 def test_migration_003_adds_payload_column_idempotently(migrated_factory):
     # The payload column comes from migration 003, and re-applying is a no-op
@@ -1673,7 +1672,7 @@ def test_handoff_create_touches_author_last_seen_real_repo(
         assert agents.get(uow, "boss").last_seen_at == clock.now_iso()
 
 
-def test_payload_round_trips_through_list_and_claim(
+def test_payload_is_hidden_from_list_and_returned_by_claim(
     migrated_factory, tmp_config, tmp_path
 ):
     clock = StubClock()
@@ -1694,12 +1693,11 @@ def test_payload_round_trips_through_list_and_claim(
         payload=body,
     )["handoff_id"]
 
-    # The worker sees the payload BEFORE claiming (no event correlation needed).
     listed = svc.handoff_list_available(project_root=proj, agent_id="worker")
     assert len(listed["handoffs"]) == 1
-    assert listed["handoffs"][0]["payload"] == body
+    assert "payload" not in listed["handoffs"][0]
 
-    # And gets it back on the claim response too.
+    # The worker gets the payload only after winning the claim.
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="worker")
     assert claimed["payload"] == body
 
@@ -1723,7 +1721,7 @@ def test_payload_none_stays_none(migrated_factory, tmp_config, tmp_path):
     )["handoff_id"]
 
     listed = svc.handoff_list_available(project_root=proj, agent_id="w")
-    assert listed["handoffs"][0]["payload"] is None
+    assert "payload" not in listed["handoffs"][0]
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
     assert claimed["payload"] is None
 
@@ -1758,8 +1756,8 @@ def test_payload_object_is_serialized_to_json_text(
 def test_payload_consistent_between_event_and_claim(
     migrated_factory, tmp_config, tmp_path
 ):
-    # A non-string payload exposes ONE representation across surfaces: the
-    # handoff.created event and the claim echo must agree (both the JSON TEXT).
+    # A non-string payload is serialized for the claimant, while public events
+    # remain metadata-only.
     clock = StubClock()
     emitter = ThreadSafeEmitter()
     svc = make_service(
@@ -1776,15 +1774,13 @@ def test_payload_consistent_between_event_and_claim(
     )["handoff_id"]
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
     created = [e for e in emitter.events if e["type"] == "handoff.created"]
-    # The emitter records the full event_payload dict; its "payload" key holds
-    # the serialised work content - it must equal the claim echo.
-    assert created[0]["payload"]["payload"] == claimed["payload"] == '{"k": "v"}'
+    assert "payload" not in created[0]["payload"]
+    assert claimed["payload"] == '{"k": "v"}'
 
 
 def test_payload_large_round_trips_at_boundary(migrated_factory, tmp_config, tmp_path):
     # The feature is passthrough: a payload at the 64KB inclusive limit must come
-    # back byte-for-byte through both list_available and claim (not just pass the
-    # size gate).
+    # back byte-for-byte through claim (not just pass the size gate).
     clock = StubClock()
     svc = make_service(
         migrated_factory,
@@ -1805,7 +1801,7 @@ def test_payload_large_round_trips_at_boundary(migrated_factory, tmp_config, tmp
     )["handoff_id"]
     listed = svc.handoff_list_available(project_root=proj, agent_id="w")
     claimed = svc.handoff_claim(project_root=proj, handoff_id=hid, agent_id="w")
-    assert listed["handoffs"][0]["payload"] == big
+    assert "payload" not in listed["handoffs"][0]
     assert claimed["payload"] == big
     assert len(claimed["payload"]) == tmp_config.max_inline_bytes
 
@@ -2237,7 +2233,7 @@ def test_direct_handoff_lands_one_inbox_notification(
     body = json.loads(msg["body"])
     assert body["kind"] == "handoff.directed"
     assert body["handoff_id"] == out["handoff_id"]
-    assert body["payload"] == "OCR scan.pdf"
+    assert "payload" not in body
     assert "handoff_claim" in body["next_step"]
     # The notification acks through the normal inbox lanes.
     assert inbox.ack(agent_id="worker", message_ids=[msg["message_id"]]) == {

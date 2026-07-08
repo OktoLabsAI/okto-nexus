@@ -293,8 +293,7 @@ def test_handoff_create_accepts_raw_dict_payload_end_to_end(surface):
         h for h in available["data"]["handoffs"] if h["handoff_id"] == handoff_id
     ]
     assert entries, "the broadcast handoff must be claimable by the worker"
-    # Stored/echoed as opaque JSON TEXT that round-trips to the original dict.
-    assert json.loads(entries[0]["payload"]) == payload
+    assert "payload" not in entries[0]
 
     claimed = _call(
         server,
@@ -302,6 +301,8 @@ def test_handoff_create_accepts_raw_dict_payload_end_to_end(surface):
         {"project_root": project, "handoff_id": handoff_id, "agent_id": "worker"},
     )
     assert claimed["ok"] is True
+    # Stored/echoed as opaque JSON TEXT that round-trips to the original dict
+    # only after the worker wins the claim.
     assert json.loads(claimed["data"]["payload"]) == payload
 
 

@@ -117,7 +117,7 @@ add_resource(
     slug="preflight",
     name="Pre-flight (full)",
     description="The exact first-turn bootstrap sequence, in full detail.",
-    version="1",
+    version="2",
     body="""\
 # PRE-FLIGHT - run this EXACT sequence on your FIRST turn, in order, BEFORE \
 starting whatever the user asked. It is cheap and idempotent; every agent \
@@ -127,7 +127,9 @@ bootstrapping the same way is what makes the swarm predictable.
 capabilities and the permissions in effect. Use that agent_id everywhere. Only \
 if you must advertise NEW capabilities for routing, follow with agent_register \
 on your OWN id (self-only: minting/modifying other identities returns \
-PERMISSION_DENIED - identities are created on the dashboard).
+PERMISSION_DENIED - identities are created on the dashboard). Self profile \
+updates require identity.update_profile; changing capabilities also requires \
+identity.update_capabilities.
 
 2. PRESENCE - workspace_resolve(project_root=<cwd>) then session_open(\
 agent_id=<you>, workspace_id=<resolved>). Without an open, heartbeat-fresh \
@@ -135,7 +137,9 @@ session you are NOT in the broadcast audience (messages to "everyone" silently \
 skip you) and the dashboard shows you offline. Pass your session_id + \
 session_secret on every authenticated verb: each one advances your heartbeat, \
 so working (receiving, sending, claiming) keeps you present - reserve an \
-explicit session_heartbeat for IDLE turns. Store the returned session_secret.
+explicit session_heartbeat for IDLE turns. Store the returned session_secret. \
+On authenticated connections, session_open is self-only: use exactly your \
+agent_whoami agent_id.
 
 3. BACKLOG - inbox_count(agent_id=<you>); if anything is pending, inbox_pull \
 and triage what accumulated while you were offline (redeliveries included), \

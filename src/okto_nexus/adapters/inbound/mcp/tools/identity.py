@@ -94,6 +94,10 @@ _P_INCLUDE_PATHS = (
     "OMITTED by default - opt-in defense-in-depth). For routine discovery use "
     "agent_list / capability_list."
 )
+_P_WORKSPACE_LIST_AGENT = (
+    "Your agent_id for permission evaluation in open stdio mode (optional; "
+    "authenticated HTTP MCP uses the API-key identity)."
+)
 
 
 def build_service(deps: Any) -> IdentityService:
@@ -248,8 +252,12 @@ def register(server: Any, deps: Any) -> None:
         metadata: Annotated[Any, Field(description=_P_SESSION_METADATA)] = None,
     ) -> dict[str, Any]:
         """Open a session bound to (agent_id, workspace_id); returns a per-session session_secret (ONLY here - keep it; required by sensitive verbs in strict mode). Heartbeat to receive broadcasts."""
+        caller = get_authenticated_agent()
         return service.session_open(
-            agent_id=agent_id, workspace_id=workspace_id, metadata=metadata
+            agent_id=agent_id,
+            workspace_id=workspace_id,
+            metadata=metadata,
+            actor_agent_id=caller.agent_id if caller is not None else None,
         )
 
     @server.tool()
@@ -280,9 +288,18 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     def workspace_list(
         include_paths: Annotated[bool, Field(description=_P_INCLUDE_PATHS)] = False,
+        agent_id: Annotated[
+            str | None, Field(description=_P_WORKSPACE_LIST_AGENT)
+        ] = None,
     ) -> dict[str, Any]:
         """GLOBAL-ADMIN: enumerate ALL workspaces. Paths OMITTED by default (include_paths=true is an admin/ops opt-in). For discovery use agent_list / capability_list."""
-        return {"workspaces": service.workspace_list(include_paths=include_paths)}
+        caller = get_authenticated_agent()
+        actor = caller.agent_id if caller is not None else agent_id
+        return {
+            "workspaces": service.workspace_list(
+                include_paths=include_paths, actor_agent_id=actor
+            )
+        }
 
     @server.tool()
     @tool_envelope

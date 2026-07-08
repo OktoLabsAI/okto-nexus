@@ -6,6 +6,7 @@
 // render.
 
 import { useMemo } from "react";
+import { Info } from "lucide-react";
 import type { PermissionFlags } from "../api";
 
 const GROUP_LABELS: Record<string, string> = {
@@ -14,6 +15,11 @@ const GROUP_LABELS: Record<string, string> = {
   channels: "Channels",
   artifacts: "Artifacts",
   events: "Observability",
+  identity: "Identity",
+  workspaces: "Workspaces",
+  shared_md: "Shared.md",
+  health: "Health",
+  experimental: "Experimental",
   limits: "Limits",
 };
 
@@ -23,6 +29,11 @@ const GROUP_COLORS: Record<string, string> = {
   channels: "text-emerald-600 dark:text-emerald-400",
   artifacts: "text-amber-600 dark:text-amber-400",
   events: "text-violet-600 dark:text-violet-400",
+  identity: "text-blue-600 dark:text-blue-400",
+  workspaces: "text-cyan-600 dark:text-cyan-400",
+  shared_md: "text-lime-700 dark:text-lime-300",
+  health: "text-rose-600 dark:text-rose-400",
+  experimental: "text-orange-600 dark:text-orange-400",
   limits: "text-surface-500 dark:text-surface-400",
 };
 
@@ -85,6 +96,34 @@ function Toggle({
   );
 }
 
+function PermissionHelp({
+  path,
+  tip,
+}: {
+  path: string;
+  tip: string;
+}) {
+  return (
+    <span
+      className="relative inline-flex shrink-0 items-center group/perm-help"
+      tabIndex={0}
+      aria-label={`${path}: ${tip}`}
+    >
+      <Info
+        size={13}
+        aria-hidden="true"
+        className="text-surface-400 transition-colors group-hover/perm-help:text-accent-500 group-focus/perm-help:text-accent-500 dark:text-surface-500"
+      />
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-0 z-40 mb-2 w-64 max-w-[70vw] rounded-md border border-surface-200 bg-white px-2.5 py-2 text-left text-[11px] leading-snug text-surface-700 opacity-0 shadow-lg transition-opacity group-hover/perm-help:opacity-100 group-focus/perm-help:opacity-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-200"
+      >
+        {tip}
+      </span>
+    </span>
+  );
+}
+
 export function PermissionFlagsEditor({
   flags,
   registry,
@@ -144,17 +183,20 @@ export function PermissionFlagsEditor({
             </div>
             <div className="space-y-2">
               {Object.entries(entries).map(([flag, value]) => {
-                const tip = descriptions[`${group}.${flag}`] ?? "";
+                const path = `${group}.${flag}`;
+                const tip = descriptions[path] ?? `Controls ${path}.`;
                 if (typeof value === "boolean") {
                   return (
                     <div
                       key={flag}
                       className="flex items-center justify-between gap-2"
-                      title={tip}
                     >
-                      <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
-                        {flag}
-                      </span>
+                      <div className="min-w-0 flex items-center gap-1.5">
+                        <span className="truncate text-xs text-surface-700 dark:text-surface-300 font-mono">
+                          {flag}
+                        </span>
+                        <PermissionHelp path={path} tip={tip} />
+                      </div>
                       <Toggle
                         enabled={value}
                         readOnly={readOnly}
@@ -168,11 +210,13 @@ export function PermissionFlagsEditor({
                   <div
                     key={flag}
                     className="flex items-center justify-between gap-2"
-                    title={tip}
                   >
-                    <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
-                      {flag}
-                    </span>
+                    <div className="min-w-0 flex items-center gap-1.5">
+                      <span className="truncate text-xs text-surface-700 dark:text-surface-300 font-mono">
+                        {flag}
+                      </span>
+                      <PermissionHelp path={path} tip={tip} />
+                    </div>
                     <div className="flex items-center gap-1">
                       <input
                         type="number"

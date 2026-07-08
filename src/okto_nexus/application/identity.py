@@ -58,6 +58,7 @@ from ..domain.routing import normalize_capabilities
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .capabilities import CapabilityCatalogService
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     CapabilityCatalogRepo,
@@ -373,7 +374,9 @@ class IdentityService:
             "last_seen_at": ws.last_seen_at,
         }
 
-    def workspace_list(self, *, include_paths: bool = False) -> list[dict[str, Any]]:
+    def workspace_list(
+        self, *, include_paths: bool = False, actor_agent_id: Any = None
+    ) -> list[dict[str, Any]]:
         """Enumerate ALL workspaces (a global-admin surface).
 
         This deliberately crosses workspace boundaries: it returns rows from
@@ -390,6 +393,11 @@ class IdentityService:
         supplied the path to ``workspace_resolve`` in the first place.
         """
         with self._cf.unit_of_work() as uow:
+            if _is_nonempty_str(actor_agent_id):
+                perms = permission_set_for(self._agents, uow, str(actor_agent_id))
+                perms.require("workspaces", "list")
+                if include_paths:
+                    perms.require("workspaces", "include_paths")
             rows = self._workspaces.list_all(uow)
         out: list[dict[str, Any]] = []
         for ws in rows:
@@ -470,6 +478,12 @@ class IdentityService:
 
         now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:
+            if _is_nonempty_str(actor_agent_id):
+                perms = permission_set_for(self._agents, uow, str(actor_agent_id))
+                if role is not None or metadata is not None or capabilities is not None:
+                    perms.require("identity", "update_profile")
+                if capabilities is not None:
+                    perms.require("identity", "update_capabilities")
             # EXISTENCE gate (migration 014, fail-closed): every announced
             # capability must already be in the central catalog. Runs inside
             # the write transaction so nothing persists on rejection. A no-op
@@ -664,7 +678,12 @@ class IdentityService:
     # Session
     # ------------------------------------------------------------------ #
     def session_open(
-        self, *, agent_id: Any, workspace_id: Any, metadata: Any = None
+        self,
+        *,
+        agent_id: Any,
+        workspace_id: Any,
+        metadata: Any = None,
+        actor_agent_id: Any = None,
     ) -> dict[str, Any]:
         """Open a session bound immutably to ``(agent_id, workspace_id)``.
 
@@ -688,6 +707,18 @@ class IdentityService:
                 ErrorCode.VALIDATION_ERROR,
                 "agent_id is required.",
                 {"agent_id": agent_id},
+            )
+        if _is_nonempty_str(actor_agent_id) and str(agent_id) != str(actor_agent_id):
+            raise OktoNexusError(
+                ErrorCode.PERMISSION_DENIED,
+                "session_open is self-only on an authenticated connection: "
+                f"your API key identifies you as '{actor_agent_id}', so you "
+                f"cannot open a session for '{agent_id}'.",
+                {
+                    "required_permission": "identity.session_self",
+                    "authenticated_agent_id": str(actor_agent_id),
+                    "attempted_agent_id": str(agent_id),
+                },
             )
         self._check_inline_size("metadata", metadata)
 

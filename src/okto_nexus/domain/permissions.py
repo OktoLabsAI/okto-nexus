@@ -53,6 +53,25 @@ PERMISSION_REGISTRY: dict[str, dict[str, Any]] = {
     "events": {
         "read": True,
     },
+    "identity": {
+        "update_profile": True,
+        "update_capabilities": True,
+    },
+    "workspaces": {
+        "list": True,
+        "include_paths": True,
+    },
+    "shared_md": {
+        "render": True,
+    },
+    "health": {
+        "read": True,
+    },
+    "experimental": {
+        "memory_write": True,
+        "memory_read": True,
+        "memory_search": True,
+    },
     "limits": {
         "messages_per_minute": 0,
         "max_recipients": 0,
@@ -70,6 +89,15 @@ PERMISSION_DESCRIPTIONS: dict[str, str] = {
     "channels.create": "Create new channels.",
     "artifacts.put": "Publish artifacts.",
     "events.read": "Read or wait on the workspace event stream (event_get / event_wait).",
+    "identity.update_profile": "Update its own role and metadata through agent_register.",
+    "identity.update_capabilities": "Update its own advertised capabilities through agent_register.",
+    "workspaces.list": "Enumerate registered workspaces.",
+    "workspaces.include_paths": "Include workspace root paths in workspace_list.",
+    "shared_md.render": "Render the derived shared.md workspace file.",
+    "health.read": "Read coordination health metrics for a workspace.",
+    "experimental.memory_write": "Write experimental workspace memories.",
+    "experimental.memory_read": "Read experimental workspace memories by id.",
+    "experimental.memory_search": "Search experimental workspace memories.",
     "limits.messages_per_minute": "Max messages this agent may send per minute (0 = unlimited).",
     "limits.max_recipients": "Max recipients a single group send may fan out to (0 = unlimited).",
 }
@@ -138,6 +166,13 @@ BUILTIN_PRESETS: list[dict[str, Any]] = [
                 "handoffs.cancel",
                 "channels.create",
                 "artifacts.put",
+                "identity.update_profile",
+                "identity.update_capabilities",
+                "workspaces.include_paths",
+                "shared_md.render",
+                "experimental.memory_write",
+                "experimental.memory_read",
+                "experimental.memory_search",
             ]
         ),
     },

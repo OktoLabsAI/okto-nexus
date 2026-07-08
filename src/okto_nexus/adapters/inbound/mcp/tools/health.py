@@ -29,7 +29,10 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
-from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteWorkspaceRepo
+from okto_nexus.adapters.outbound.sqlite.identity_repo import (
+    SqliteAgentRepo,
+    SqliteWorkspaceRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.observability_repo import (
     SqliteObservabilityQueries,
 )
@@ -37,11 +40,17 @@ from okto_nexus.application.health import HealthService
 from okto_nexus.application.observability import ObservabilityService
 from okto_nexus.envelope import tool_envelope
 
+from ...http.identity_ctx import get_authenticated_agent
+
 #: Reused parameter descriptions (house style, mirrors the sibling tools).
 _P_ROOT = (
     "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
 )
 _P_WINDOW = "Report window - one of: 1h, 24h, 7d (default: 24h)."
+_P_AGENT = (
+    "Your agent_id for permission evaluation in open stdio mode (optional; "
+    "authenticated HTTP MCP uses the API-key identity)."
+)
 
 
 def build_service(deps: Any) -> HealthService:
@@ -55,12 +64,15 @@ def build_service(deps: Any) -> HealthService:
     repos = deps.repos
     if getattr(repos, "workspaces", None) is None:
         repos.workspaces = SqliteWorkspaceRepo(deps.clock)
+    if getattr(repos, "agents", None) is None:
+        repos.agents = SqliteAgentRepo(deps.clock)
     queries = SqliteObservabilityQueries()
     observability = ObservabilityService(queries, deps.clock, deps.config)
     return HealthService(
         connection_factory=deps.connection_factory,
         queries=queries,
         workspaces=repos.workspaces,
+        agents=repos.agents,
         observability=observability,
         clock=deps.clock,
         config=deps.config,
@@ -76,7 +88,12 @@ def register(server: Any, deps: Any) -> None:
     def coordination_health(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         window: Annotated[str, Field(description=_P_WINDOW)] = "24h",
+        agent_id: Annotated[str | None, Field(description=_P_AGENT)] = None,
     ) -> dict[str, Any]:
-        """Windowed coordination-health report for the workspace: aggregated ok|warn status, 7 metric blocks and the thresholds used. Requires the feature_health flag ON."""
+        """Windowed coordination-health report for the workspace: aggregated ok|warn status, 7 metric blocks and thresholds. Requires feature_health and health.read."""
         service.require_feature_health()
+        caller = get_authenticated_agent()
+        service.require_agent_read(
+            agent_id=caller.agent_id if caller is not None else agent_id
+        )
         return service.health(project_root=project_root, window=window)

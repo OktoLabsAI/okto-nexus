@@ -48,6 +48,9 @@ from okto_nexus.adapters.outbound.sqlite.memory_repo import (
 )
 from okto_nexus.application.memory import MemoryService
 from okto_nexus.envelope import tool_envelope
+from okto_nexus.errors import ErrorCode, OktoNexusError
+
+from ...http.identity_ctx import get_authenticated_agent
 
 #: Reused parameter descriptions (kept DRY across the memory tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
@@ -56,6 +59,10 @@ _P_ROOT = (
     "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
 )
 _P_AGENT = "Your agent_id (the author). REQUIRED - every memory has an author; must be registered (agent_register)."
+_P_ACCESS_AGENT = (
+    "Your agent_id for memory permission evaluation in open stdio mode "
+    "(optional; authenticated HTTP MCP uses the API-key identity)."
+)
 _P_TITLE = "Short human-readable title (1..200 chars). REQUIRED."
 _P_CONTENT = "The memory content (1..16384 UTF-8 BYTES). REQUIRED. Larger payloads: store an artifact (artifact_put) and keep content a short pointer."
 _P_TOPICS = "Up to 10 topic labels for retrieval (optional; each <=50 chars, trimmed + lowercased, duplicates dropped silently; >10 DISTINCT topics rejected)."
@@ -75,6 +82,26 @@ _P_K = "Max results (default: 10; clamped into 1..50)."
 _P_INCLUDE_SUPERSEDED = (
     "true to include superseded entries (default: false = live entries only)."
 )
+
+
+def _effective_actor(agent_id: Any) -> str | None:
+    caller = get_authenticated_agent()
+    if caller is None:
+        if isinstance(agent_id, str) and agent_id.strip():
+            return agent_id.strip()
+        return None
+    if isinstance(agent_id, str) and agent_id.strip() and agent_id != caller.agent_id:
+        raise OktoNexusError(
+            ErrorCode.PERMISSION_DENIED,
+            "Authenticated memory tools are self-only: the API key identity "
+            f"is '{caller.agent_id}', so it cannot act as '{agent_id}'.",
+            {
+                "required_permission": "identity.self_only",
+                "authenticated_agent_id": caller.agent_id,
+                "attempted_agent_id": agent_id,
+            },
+        )
+    return caller.agent_id
 
 
 def build_service(deps: Any) -> MemoryService:
@@ -146,9 +173,10 @@ def register(server: Any, deps: Any) -> None:
         ] = None,
     ) -> dict[str, Any]:
         """Persist a durable workspace memory (optionally superseding one); emits memory.created. Requires the feature_memory flag ON."""
+        actor = _effective_actor(agent_id)
         return service.put_memory(
             project_root=project_root,
-            agent_id=agent_id,
+            agent_id=actor or agent_id,
             title=title,
             content=content,
             topics=topics,
@@ -165,9 +193,14 @@ def register(server: Any, deps: Any) -> None:
     def memory_get(
         project_root: Annotated[str, Field(description=_P_ROOT)],
         memory_id: Annotated[str, Field(description=_P_MEMORY_ID)],
+        agent_id: Annotated[str | None, Field(description=_P_ACCESS_AGENT)] = None,
     ) -> dict[str, Any]:
         """Fetch one workspace memory in FULL by id (superseded entries included). Requires the feature_memory flag ON."""
-        return service.get_memory(project_root=project_root, memory_id=memory_id)
+        return service.get_memory(
+            project_root=project_root,
+            memory_id=memory_id,
+            agent_id=_effective_actor(agent_id),
+        )
 
     @server.tool()
     @tool_envelope
@@ -179,6 +212,7 @@ def register(server: Any, deps: Any) -> None:
         include_superseded: Annotated[
             bool, Field(description=_P_INCLUDE_SUPERSEDED)
         ] = False,
+        agent_id: Annotated[str | None, Field(description=_P_ACCESS_AGENT)] = None,
     ) -> dict[str, Any]:
         """Search workspace memories; the response DECLARES the effective search_mode (semantic|lexical|recent). Requires feature_memory ON."""
         return service.search_memory(
@@ -187,4 +221,5 @@ def register(server: Any, deps: Any) -> None:
             topics=topics,
             k=k,
             include_superseded=include_superseded,
+            agent_id=_effective_actor(agent_id),
         )

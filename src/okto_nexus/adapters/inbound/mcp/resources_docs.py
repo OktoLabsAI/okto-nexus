@@ -31,7 +31,7 @@ add_resource(
     slug="target-grammar",
     name="Routing target grammar",
     description="The full routing-target grammar (every strategy shape, rules, examples, edge cases) shared by message_create and handoff_create.",
-    version="3",
+    version="4",
     body="""\
 # Routing target
 
@@ -246,8 +246,9 @@ Competing-consumers: every eligible agent SEES a handoff but only the first to
 handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished claim's
 lease expires and the work returns to the pool. visibility (who may SEE) is
 separate from target (who may CLAIM): one of public / eligible / private.
-``payload`` is the inline work content, returned by handoff_list_available and
-handoff_claim so the worker need not correlate the event. For ``target`` see
+``payload`` is the inline work content, returned only to the agent that wins
+handoff_claim (and later to that same claimant via handoff_get). Discovery,
+events and directed inbox notifications stay metadata-only. For ``target`` see
 okto-nexus://reference/target-grammar.
 
 Verification-first (opt-in per handoff, needs the feature_verification flag):
@@ -277,11 +278,13 @@ not the flag).
 
 # handoff_create
 Create an OPEN handoff; emit handoff.created. A direct target must name a
-REGISTERED agent (the named agent gets an inbox notification - ``notified`` in
+REGISTERED agent (the named agent gets a metadata-only inbox notification -
+``notified`` in
 the response). Pool targets return ``eligible_count`` + a ``warning`` when 0
 match (stays OPEN for later registrants). After creating, poll handoff_get for
-status/result - do not scan the event stream. payload: a string is returned
-byte-for-byte; a non-string is stored/returned as opaque JSON TEXT.
+status/result - do not scan the event stream. payload: a string is returned to
+the claimant byte-for-byte; a non-string is stored/returned to the claimant as
+opaque JSON TEXT.
 Optional verification contract: ``acceptance_criteria`` (1..20 non-empty
 strings, max 500 chars each, no exact duplicates, IMMUTABLE after creation) +
 ``verify_by`` (one of {"kind":"creator"} - the default, materialised at
@@ -301,9 +304,9 @@ inbox notification subject.
 
 # handoff_list_available
 Expire leases, then list OPEN handoffs visible+eligible to the caller
-(paginated). Each entry includes the ``payload`` so a worker can triage before
-claiming. ``timeout_seconds > 0`` opts into a blocking long-poll until a
-claimable handoff appears.
+(paginated). Entries are metadata-only and do not include ``payload``; the
+payload is revealed only after a successful claim. ``timeout_seconds > 0`` opts
+into a blocking long-poll until a claimable handoff appears.
 
 # handoff_claim
 Atomically claim an OPEN handoff; single winner, others get a structured error.
@@ -346,8 +349,9 @@ Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a
 pool target that matched zero agents). Only OPEN handoffs cancel.
 
 # handoff_get
-Read one handoff by id: status, claimant, payload, result/rejected_reason. THIS
-is the creator's path to the outcome after handoff_create (do not scan events).
+Read one handoff by id: status, claimant, result/rejected_reason; ``payload``
+is included only when the reader is the claimant. THIS is the creator's path to
+the outcome after handoff_create (do not scan events).
 An expired claim lease reads as OPEN again. Verification-first handoffs also
 expose ``acceptance_criteria``/``verify_by`` (decoded) and
 ``verification_feedback`` - each omitted when NULL. Dependent handoffs expose
@@ -360,7 +364,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="2",
+    version="3",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -381,6 +385,9 @@ agent_get.
 Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY on an
 authenticated connection: your key already names your identity; registering a
 new identity or touching another agent's profile returns PERMISSION_DENIED.
+Self-updates are permission-gated: role/metadata/capability changes require
+``identity.update_profile`` and capability changes also require
+``identity.update_capabilities``.
 capabilities accepts a flag-map ({"ocr":true}), a list (["ocr","pdf"]), or a
 single name. Capability names are FAIL-CLOSED against the central capability
 catalog: every announced name must already be registered by an operator
@@ -404,6 +411,8 @@ fail-closed on every write path.
 Open a session bound to (agent_id, workspace_id); the server assigns the id and
 returns a per-session ``session_secret`` (ONLY here - keep it). In
 trust_mode=strict the sensitive verbs require session_id + session_secret.
+On an authenticated connection, session_open is self-only: the API-key identity
+must match the requested agent_id.
 Only heartbeat-fresh sessions receive broadcasts and read PRESENT - but you do
 NOT have to spam session_heartbeat: any AUTHENTICATED active verb (pass your
 session_id + session_secret) advances the heartbeat for you, so receiving
@@ -434,7 +443,9 @@ okto-nexus://reference/monitoring for the full remote-poller loop.
 GLOBAL-ADMIN: enumerate ALL workspaces. By default paths are OMITTED
 (workspace_id, display_name, created_at, last_seen_at); pass include_paths=true
 only for an explicit admin/ops need (disclosing every project's on-disk layout is
-opt-in defense-in-depth).""",
+opt-in defense-in-depth). When an actor is known, workspace_list requires
+``workspaces.list`` and include_paths additionally requires
+``workspaces.include_paths``.""",
 )
 
 add_resource(

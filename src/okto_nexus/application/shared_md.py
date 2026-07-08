@@ -37,6 +37,7 @@ from ..config import DEFAULT_MAX_SHARED_MD_EVENTS
 from ..domain.base import iso_to_epoch
 from ..domain.models import Agent, Event, Handoff, Session, Task
 from ..errors import ErrorCode, OktoNexusError
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     Clock,
@@ -163,7 +164,7 @@ class SharedMdService:
     # Public use case
     # ------------------------------------------------------------------ #
     def shared_md_render(
-        self, *, workspace_id: Any, limit_events: Any = None
+        self, *, workspace_id: Any, limit_events: Any = None, agent_id: Any = None
     ) -> dict[str, Any]:
         """Render the four-section shared.md for ``workspace_id``.
 
@@ -189,6 +190,10 @@ class SharedMdService:
 
         # Single read transaction over committed state (no writes).
         with self._cf.unit_of_work() as uow:
+            if _is_nonempty_str(agent_id) and self._agents is not None:
+                permission_set_for(self._agents, uow, str(agent_id)).require(
+                    "shared_md", "render"
+                )
             if self._workspaces.get(uow, ws_id) is None:
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,

@@ -45,6 +45,7 @@ from ..domain.models import Memory
 from ..domain.trace import resolve_trace, validate_trace_id
 from ..errors import ErrorCode, OktoNexusError
 from .identity import advance_session_presence, verify_session_credentials
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     Clock,
@@ -195,6 +196,21 @@ class MemoryService:
             )
         return aid
 
+    def _require_memory_permission(
+        self, uow: UnitOfWork, agent_id: Any, flag: str
+    ) -> str | None:
+        """Require an experimental memory permission when an actor is known.
+
+        ``agent_id`` remains optional for the legacy cooperative stdio path.
+        Authenticated MCP adapters pass the API-key identity, so normal agent
+        harnesses cannot omit the actor to bypass the permission model.
+        """
+        if not _is_nonempty_str(agent_id):
+            return None
+        aid = self._require_registered_agent(uow, agent_id)
+        permission_set_for(self._agents, uow, aid).require("experimental", flag)
+        return aid
+
     # ------------------------------------------------------------------ #
     # memory_put
     # ------------------------------------------------------------------ #
@@ -260,6 +276,9 @@ class MemoryService:
                 self._sessions, uow, session_id=from_session_id, at=now
             )
             author = self._require_registered_agent(uow, agent_id)
+            permission_set_for(self._agents, uow, author).require(
+                "experimental", "memory_write"
+            )
             self._ensure_workspace(uow, workspace_id, root_realpath, now)
 
             resolved_trace = resolve_trace(
@@ -407,7 +426,9 @@ class MemoryService:
     # ------------------------------------------------------------------ #
     # memory_get
     # ------------------------------------------------------------------ #
-    def get_memory(self, *, project_root: Any, memory_id: Any) -> dict[str, Any]:
+    def get_memory(
+        self, *, project_root: Any, memory_id: Any, agent_id: Any = None
+    ) -> dict[str, Any]:
         """Return one memory in FULL, superseded or not (FR3 / BR7).
 
         History is the point of supersede: a superseded entry stays readable
@@ -422,6 +443,7 @@ class MemoryService:
                 {"memory_id": memory_id},
             )
         with self._cf.unit_of_work() as uow:
+            self._require_memory_permission(uow, agent_id, "memory_read")
             memory = self._memories.get(
                 uow, workspace_id=workspace_id, memory_id=str(memory_id).strip()
             )
@@ -444,6 +466,7 @@ class MemoryService:
         topics: Any = None,
         k: Any = None,
         include_superseded: Any = False,
+        agent_id: Any = None,
     ) -> dict[str, Any]:
         """Rank memories and DECLARE the effective mode (FR4 / BR6).
 
@@ -464,6 +487,8 @@ class MemoryService:
         with_superseded = bool(include_superseded)
         text = str(query).strip() if _is_nonempty_str(query) else None
         k_fetch = max(limit * SEARCH_K_FETCH_FACTOR, SEARCH_K_FETCH_MIN)
+        with self._cf.unit_of_work() as uow:
+            self._require_memory_permission(uow, agent_id, "memory_search")
 
         if text is not None and self._semantic_search_ready():
             items = self._search_semantic(

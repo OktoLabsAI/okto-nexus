@@ -103,7 +103,7 @@ _P_TARGET_HANDOFF = (
     "edge-cases: read resource okto-nexus://reference/target-grammar."
 )
 _P_VISIBILITY = "Who may SEE the handoff (separate from who may CLAIM it = target). one of: public, eligible, private. REQUIRED (case-insensitive)."
-_P_PAYLOAD = "Inline work content (optional; raw JSON object/array, string, or null - NOT JSON-encoded). Returned by handoff_list_available/handoff_claim. For large content pass an artifact_id."
+_P_PAYLOAD = "Inline work content (optional; raw JSON object/array, string, or null - NOT JSON-encoded). Returned only to the claimant by handoff_claim / claimant handoff_get. For large content pass an artifact_id."
 _P_TRACE = (
     "Trajectory trace_id to stamp on this handoff (optional; non-empty string, "
     "max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; "

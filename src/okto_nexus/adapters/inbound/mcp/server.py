@@ -116,7 +116,7 @@ COMMUNICATE - prefer the most targeted, least noisy channel:
   - BROADCAST (last resort): message_create with NO target - announcements or open-ended discovery only, NEVER actionable work (it triggers unwanted parallel work).
 HOW YOU RECEIVE: messages addressed to you land in your GLOBAL inbox - inbox_count -> inbox_pull -> inbox_ack. event_get/event_wait are OBSERVABILITY, not message delivery. Channels are organizational labels, not ACLs and not delivery - the message TARGET decides who receives it. Full detail (channels, delivery/read receipts, reception loop): okto-nexus://reference/communication. Monitoring/listener patterns, including EPT remote pollers that do not carry the permanent key: okto-nexus://reference/monitoring.
 
-PERMISSIONS. The operator may restrict your identity (direct sends, broadcasts, channel posts, handoff create/work/cancel, rate limits, peer allowlists). A blocked call returns ok:false with code PERMISSION_DENIED and details.required_permission. Do NOT retry or work around it - adapt (e.g. reply directly instead of broadcasting) or report that the operator must grant the flag (dashboard Agents -> Permissions).
+PERMISSIONS. The operator may restrict your identity (messaging, handoffs, channel/artifact writes, event/health reads, workspace listing/paths, shared.md render, self profile/capability updates, experimental memory, rate limits). A blocked call returns ok:false with code PERMISSION_DENIED and details.required_permission. Do NOT retry or work around it - adapt or report that the operator must grant the flag (dashboard Agents -> Permissions).
 
 ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,message,...}}. A DB_ERROR with retryable=true is transient - retry the SAME call after a short backoff (~0.5-2s). A MIGRATED error means the tool was replaced; the message names the exact replacement - switch to it, do NOT retry the old call. PERMISSION_DENIED is a policy decision, not a retryable error.
 """
@@ -325,7 +325,9 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: unavailability). Originally the tools stayed registered and flag OFF
 #: returned VALIDATION_ERROR {feature_memory:false}; revision 29 moved memory
 #: to an experimental registration-time surface gate so default clients do not
-#: see the memory tools at all.
+#: see the memory tools at all. Revision 30 added per-agent experimental
+#: permissions (experimental.memory_write/read/search); the feature flag only
+#: controls whether the surface exists.
 #: Events ``memory.created``/``memory.superseded`` are metadata-only (NEVER
 #: title/content); the projection promotes ``memory_id`` on every profile,
 #: scoped by event type (the approval_id pattern). Migration 020. Operator
@@ -333,9 +335,10 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: new error codes. Docs inline in the tool schemas (no new URI).
 #: 24 = coordination health (R-I7, spec 7df9b1e0, gated by ``feature_health``,
 #: default off): ONE new tool - ``coordination_health(project_root,
-#: window="24h")`` - a PASSIVE read (no agent_id/session/heartbeat, so the
-#: probe never turns its observer "present" in the presence metric it
-#: reports). Windows are a closed enum {1h, 24h, 7d}; the payload carries an
+#: window="24h")`` - a PASSIVE read (no session/heartbeat, so the probe never
+#: turns its observer "present" in the presence metric it reports). Revision
+#: 30 added per-agent health.read permission when an actor is known. Windows
+#: are a closed enum {1h, 24h, 7d}; the payload carries an
 #: aggregated ok|warn status, 7 metric blocks (message/event volume,
 #: unclaimed handoffs, claim->complete average by EVENT correlation per
 #: handoff_id, rejection rate, per-agent inbox backlog, presence buckets)
@@ -380,7 +383,15 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: ``memory_search`` tools are not registered or advertised to agents at all.
 #: Enabling/disabling this flag changes the MCP schema at server bootstrap, so
 #: operators must restart serve/MCP clients for tool-list exposure to change.
-SURFACE_REVISION = 29
+#: 30 = permission surface hardening: authenticated ``session_open`` is
+#: self-only; ``agent_register`` self-updates are gated by
+#: ``identity.update_profile`` / ``identity.update_capabilities``; workspace
+#: listing/path disclosure, shared.md render, coordination health and
+#: experimental memory have explicit agent permissions. Handoff payloads are
+#: no longer exposed by discovery/events/direct notifications, only by
+#: handoff_claim and claimant handoff_get. Guardrail/group administration tools
+#: were removed from MCP entirely; critical guardrail admin is UI/REST-only.
+SURFACE_REVISION = 30
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
