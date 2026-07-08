@@ -1,4 +1,5 @@
-// Settings: appearance, hub info, RUNTIME parameters (every CLI knob,
+// Settings: appearance, hub info, RUNTIME parameters (except dedicated
+// product panels such as Metrics),
 // non-exclusively: precedence CLI > env > stored > default) and store
 // maintenance. Field grammar mirrors the Pulse RuntimeSettingsPanel:
 // label + tiny description + bounded input, with a native tooltip
@@ -112,7 +113,11 @@ function SettingField({
   );
 }
 
-export function SettingsView() {
+export function SettingsView({
+  onSettingsApplied,
+}: {
+  onSettingsApplied?: () => void | Promise<unknown>;
+}) {
   const { theme, toggle } = useTheme();
   const { confirm, dialog } = useConfirm();
   const [info, setInfo] = useState<NexusInfo | null>(null);
@@ -149,7 +154,7 @@ export function SettingsView() {
     [drafts, items],
   );
   const generalItems = useMemo(
-    () => items.filter((i) => i.group !== "features"),
+    () => items.filter((i) => i.group !== "features" && i.group !== "metrics"),
     [items],
   );
   const featureItems = useMemo(
@@ -167,6 +172,7 @@ export function SettingsView() {
       for (const key of dirtyKeys) changes[key] = drafts[key];
       await api.updateSettings(changes);
       await loadSettings();
+      await onSettingsApplied?.();
       setReport("Settings saved and applied.");
       setError(null);
     } catch (exc) {
@@ -255,6 +261,7 @@ export function SettingsView() {
                     onConfirm: async () => {
                       await api.resetSettings();
                       await loadSettings();
+                      await onSettingsApplied?.();
                       setReport("Defaults restored.");
                     },
                   })
@@ -273,9 +280,10 @@ export function SettingsView() {
             </div>
           </div>
           <p className="text-[11px] text-surface-400 dark:text-surface-500">
-            The same parameters as the CLI, non-exclusively — precedence:
-            CLI flag &gt; environment variable &gt; value saved here &gt;
-            default. Values pinned by a flag appear as{" "}
+            The same operational parameters as the CLI, non-exclusively —
+            precedence: CLI flag &gt; environment variable &gt; value saved here
+            &gt; default. Metrics has a dedicated panel in the header menu.
+            Values pinned by a flag appear as{" "}
             <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
               cli/env
             </span>{" "}
@@ -316,10 +324,11 @@ export function SettingsView() {
               Coordination features ship disabled and only run when switched
               on here (or pinned via{" "}
               <span className="font-mono">OKTO_NEXUS_FEATURE_*</span> /{" "}
-              <span className="font-mono">--feature-*</span>). Turning a
-              feature off never removes MCP tools — agents can read the
-              effective flags via <span className="font-mono">nexus_info</span>.
-              Use the Save button above to apply changes.
+              <span className="font-mono">--feature-*</span>). Experimental
+              surfaces may hide dashboard views immediately; any field marked
+              restart changes the MCP tool schema only after restarting the
+              server. Agents can read the effective flags via{" "}
+              <span className="font-mono">nexus_info</span>.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
               {featureItems.map((item) => (

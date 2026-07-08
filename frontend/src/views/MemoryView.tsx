@@ -3,10 +3,9 @@
 // full-bleed grammar (list pane + ResizablePanel detail). The toolbar search
 // reuses the agents' ranking engine - the server DECLARES the effective
 // search_mode (semantic | lexical | recent) and the UI surfaces it as a chip,
-// never guessing. Reads are NOT gated by feature_memory (the operator always
-// audits the state); the amber banner only warns that AGENTS can't use the
-// primitive while the flag is off (D7: banner reacts to the flag, the screen
-// reacts to the data). Delete is the operator's physical curation (BR9).
+// never guessing. The dashboard shell normally hides this experimental view
+// unless feature_memory is ON; the local banner remains as a defensive stale-
+// session hint. Delete is the operator's physical curation (BR9).
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Brain, BrainCircuit, Search, Trash2, X } from "lucide-react";

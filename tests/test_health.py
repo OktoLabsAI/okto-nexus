@@ -1103,7 +1103,7 @@ def _has_index(deps, table: str, name: str) -> bool:
 # T5 / TS8 - frozen MCP surface contract + migration 021 index & idempotency
 # --------------------------------------------------------------------------- #
 def test_ts8_surface_revision_ledger_and_budgets(tmp_path):
-    assert SURFACE_REVISION == 28
+    assert SURFACE_REVISION == 29
     # The growth is ON the approved ledger (AC5 reduction test stays green with
     # it counted).
     assert APPROVED_GROWTH["health_i7"] > 0

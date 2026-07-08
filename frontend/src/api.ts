@@ -657,6 +657,37 @@ export interface SettingItem {
   requires_restart: boolean;
 }
 
+export type MetricsMode = "disabled" | "local_only" | "anonymous_beacon";
+
+export interface MetricsSummary {
+  mode: MetricsMode | "unavailable" | string;
+  schema_version?: string;
+  event_count: number;
+  sent_count?: number;
+  pending_count: number;
+  event_type_counts?: Record<string, number>;
+  mcp_tool_counts?: Record<string, number>;
+  http_route_template_counts?: Record<string, number>;
+  coordination_event_counts?: Record<string, number>;
+  lifecycle_counts?: Record<string, number>;
+  storage_dir?: string;
+  error?: string;
+}
+
+export interface MetricsPublishHealth {
+  status: string;
+  mode?: MetricsMode | "unavailable" | string;
+  last_success_at?: string | null;
+  last_failure_at?: string | null;
+  reason_code?: string | null;
+  http_status?: number | null;
+  next_retry_at?: string | null;
+  retry_count?: number;
+  install_id_redacted?: string | null;
+  redaction_applied?: boolean;
+  reason?: string;
+}
+
 // One memory entry in the browse/search list (GET /api/v1/memory) - the LEAN
 // item shape: content_preview instead of content; score only when the declared
 // search_mode is "semantic". Conditional fields follow the trace_id pattern
@@ -884,7 +915,7 @@ export interface NexusInfo {
   trust_mode?: string;
   default_workspace_id?: string | null;
   // Live effective feature flags (mirrors MCP nexus_info.features): opt-in
-  // surfaces self-gate on these (e.g. the I8 export button on features.feature_replay).
+  // surfaces self-gate on these (e.g. the Memory tab and I8 export button).
   features: Record<string, boolean>;
 }
 
@@ -1484,6 +1515,12 @@ export const api = {
     }),
   resetSettings: () =>
     call<{ cleared: string[] }>("/api/v1/settings/reset", { method: "POST" }),
+  metricsSummary: () =>
+    call<MetricsSummary>("/api/v1/metrics/local/summary"),
+  metricsPublishHealth: () =>
+    call<MetricsPublishHealth>("/api/v1/metrics/publish-health"),
+  publishMetrics: () =>
+    call<Record<string, unknown>>("/api/v1/metrics/publish", { method: "POST" }),
   info: () => call<NexusInfo>("/api/v1/info"),
   // I8 replay/export: download the workspace event log as NDJSON. `params` may
   // carry stream/trace/since_event_id/until_event_id to narrow the recorte.

@@ -13,11 +13,12 @@ Implements the use cases this slice OWNS:
 * the operator's REST reads (``browse``/``get_raw``) and physical ``delete``
   (curation, no event - BR9), which are deliberately NOT feature-gated.
 
-The three agent-facing verbs are gated LIVE by ``feature_memory`` (read from
-the shared NexusConfig at the start of each use case): flag OFF rejects the
-whole primitive - reads included - which is the DECLARED exception to the D4
-accept-and-ignore convention (D4 governs new parameters on pre-existing
-tools; memory is a whole new primitive, br_8af76e5d).
+The three agent-facing verbs are experimental. The MCP composition root only
+registers them when ``feature_memory`` is ON at server bootstrap; the service
+also keeps a LIVE guard (read from the shared NexusConfig at the start of each
+use case) so already-running servers reject the primitive if the flag is later
+flipped OFF. Reads are included in that guard because memory is a whole new
+primitive, not a new parameter on an existing tool.
 
 Application layer: depends only on the ports, the pure domain helpers and the
 error catalogue - never ``sqlite3`` nor ``mcp`` (import-boundary test).
@@ -136,9 +137,9 @@ class MemoryService:
     def _require_feature_memory(self) -> None:
         """Fail-closed LIVE gate on the 3 agent-facing verbs (br_8af76e5d).
 
-        Flag OFF means the whole primitive does not exist for agents - reads
-        included (the declared exception to D4, which governs new PARAMETERS
-        on pre-existing tools). The tools stay registered; data written while
+        The MCP composition root also hides the tools when feature_memory is
+        OFF at bootstrap. This guard is the runtime fallback for an already
+        registered server whose config is flipped off later. Data written while
         ON stays in the DB and becomes reachable again after re-enabling.
         """
         if not bool(getattr(self._config, "feature_memory", False)):

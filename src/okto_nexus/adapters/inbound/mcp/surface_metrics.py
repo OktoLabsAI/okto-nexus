@@ -59,7 +59,9 @@ APPROVED_GROWTH: dict[str, int] = {
     # tools measured on the live server at landing time - memory_put
     # (docstring 123 + params 1315 = 1438), memory_get (108 + 196 = 304),
     # memory_search (129 + 517 = 646; _P_QUERY trimmed to the <=200 budget
-    # during the T7 surface tests). No pre-existing tool touched.
+    # during the T7 surface tests). Revision 29 made this experimental at
+    # registration time, so the default surface no longer carries this cost;
+    # the ledger keeps the approved cost for feature_memory-enabled servers.
     "memory_i6": 2388,
     # I7 coordination health (spec 7df9b1e0, SURFACE_REVISION 24): ONE new
     # tool measured on the live server at landing time - coordination_health

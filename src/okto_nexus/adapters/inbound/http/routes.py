@@ -583,6 +583,31 @@ def build_router() -> APIRouter:
             }
         )
 
+    @router.get("/metrics/local/summary")
+    async def metrics_local_summary(request: Request) -> JSONResponse:
+        telemetry = getattr(request.app.state.deps, "telemetry", None)
+        if telemetry is None:
+            return _ok({"mode": "unavailable", "event_count": 0, "pending_count": 0})
+        return _ok(await anyio.to_thread.run_sync(telemetry.summary))
+
+    @router.get("/metrics/publish-health")
+    async def metrics_publish_health(request: Request) -> JSONResponse:
+        telemetry = getattr(request.app.state.deps, "telemetry", None)
+        if telemetry is None:
+            return _ok({"status": "unavailable", "redaction_applied": True})
+        return _ok(await anyio.to_thread.run_sync(telemetry.publish_health))
+
+    @router.post("/metrics/publish")
+    async def metrics_publish(request: Request) -> JSONResponse:
+        telemetry = getattr(request.app.state.deps, "telemetry", None)
+        if telemetry is None:
+            return _ok({"sent": False, "reason": "unavailable"})
+        try:
+            _require_operator()
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(await anyio.to_thread.run_sync(telemetry.publish_pending))
+
     # ------------------------------------------------------------------ #
     # Observability (read-only, FR5)
     # ------------------------------------------------------------------ #
@@ -1540,12 +1565,11 @@ def build_router() -> APIRouter:
         return _ok(result)
 
     # ------------------------------------------------------------------ #
-    # Workspace memory (spec 8928b320): the operator's audit surface over
-    # the shared memory store, backing the dashboard Memory screen. Reads
-    # and curation are deliberately NOT gated by feature_memory (FR7/FR8) -
-    # the operator always sees the state; only the agent-facing MCP verbs
-    # are flag-gated. DELETE is operator-only physical curation (no event,
-    # BR9).
+    # Workspace memory (spec 8928b320): operator REST over the shared memory
+    # store. The dashboard tab self-gates on feature_memory, but these REST
+    # reads/curation remain available for compatibility and cleanup even when
+    # the experimental agent-facing primitive is not published. DELETE is
+    # operator-only physical curation (no event, BR9).
     # ------------------------------------------------------------------ #
     @router.get("/memory")
     async def browse_memory(

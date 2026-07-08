@@ -24,9 +24,12 @@ from __future__ import annotations
 
 import importlib
 import importlib.metadata
+import functools
+import inspect
 import os
 import pkgutil
 import sys
+import time
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
@@ -35,12 +38,18 @@ from ....application.capabilities import seed_capability_catalog
 from ....application.comm_preset_catalog import seed_comm_presets
 from ....application.ports import Clock, ConnectionFactory as ConnectionFactoryPort
 from ....application.ports import EventEmitter, Repos
+from ....application.telemetry.ports import TelemetryPort
+from ....application.telemetry.schema import EVENT_MCP
+from ....application.telemetry.service import TelemetryService
 from ....config import FEATURE_FLAG_FIELDS, NexusConfig, load_config
 from ....envelope import tool_envelope
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
 from ...outbound.embedding import EmbeddingResolution, resolve_embedding_provider
 from ...outbound.file.store import WorkspaceFileStore
+from ...outbound.telemetry import NexusTelemetryHttpSink, LocalTelemetryEventStore
+from ...outbound.telemetry.event_emitter import TelemetryEventEmitter
+from ...outbound.telemetry.local_store import resolve_metrics_dir
 from ...outbound.sqlite.approvals_repo import SqliteApprovalRepo
 from ...outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from ...outbound.sqlite.capability_catalog_repo import SqliteCapabilityCatalogRepo
@@ -205,8 +214,9 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 17 = meta-harness feature flags (R-I0): the ``nexus_info`` envelope gains a
 #: read-only ``features`` block ({feature_*: bool}, exactly the 8 flags)
 #: reflecting the EFFECTIVE config (CLI > env > stored > default) at call
-#: time. No new tool, no tool removed: a flag that is off never hides
-#: surface - behavioural gating belongs to the consuming features (I1-I8).
+#: time. The original pattern was behaviour-only gating; revision 29 declares
+#: memory as the explicit experimental exception whose tools are hidden unless
+#: ``feature_memory`` is ON at bootstrap.
 #: Flags are operator-managed via Settings (group ``features``) / env
 #: ``OKTO_NEXUS_FEATURE_*`` / CLI ``--feature-*``; all default off (opt-in).
 #: 18 = trajectory traces (R-I1, gated by ``feature_trace``, default off):
@@ -312,10 +322,10 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: ``memory_search`` (k default 10 clamped 1..50, AND-combined topics; ranks
 #: semantic when embeddings are enabled, degrades lexical -> recent and
 #: ALWAYS declares the effective ``search_mode`` - never fails on embedding
-#: unavailability). Flag OFF -> VALIDATION_ERROR {feature_memory:false} on
-#: all three (reads included): the whole primitive is absent, the DECLARED
-#: exception to D4 accept-and-ignore (which governs new params on
-#: pre-existing tools); tools stay registered, data written while ON stays.
+#: unavailability). Originally the tools stayed registered and flag OFF
+#: returned VALIDATION_ERROR {feature_memory:false}; revision 29 moved memory
+#: to an experimental registration-time surface gate so default clients do not
+#: see the memory tools at all.
 #: Events ``memory.created``/``memory.superseded`` are metadata-only (NEVER
 #: title/content); the projection promotes ``memory_id`` on every profile,
 #: scoped by event type (the approval_id pattern). Migration 020. Operator
@@ -365,7 +375,21 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: lived nxsept_ bearers bound to the caller's session/workspace. The bearer is
 #: accepted only by read-only REST monitor endpoints (/api/v1/events[/cursor],
 #: /api/v1/inbox/count, /api/v1/inbox/peek), never MCP/mutating routes.
-SURFACE_REVISION = 28
+#: 29 = memory is experimental at the SURFACE boundary: with
+#: ``feature_memory=false`` (default) the ``memory_put`` / ``memory_get`` /
+#: ``memory_search`` tools are not registered or advertised to agents at all.
+#: Enabling/disabling this flag changes the MCP schema at server bootstrap, so
+#: operators must restart serve/MCP clients for tool-list exposure to change.
+SURFACE_REVISION = 29
+
+
+# Tool modules whose publication is controlled by a config flag. These gates
+# are deliberately registration-time: a FastMCP tool list is a schema surface,
+# not a per-call behaviour switch. Existing servers that already registered an
+# experimental module still keep the service-level runtime guard as a fallback.
+_EXPERIMENTAL_TOOL_MODULE_FLAGS = {
+    f"{_tools_pkg.__name__}.memory": "feature_memory",
+}
 
 
 @dataclass
@@ -398,6 +422,9 @@ class Deps:
     # the executors each slice registers (messages/handoff) are visible to the
     # decision path regardless of transport. ``None`` until bootstrap wires it.
     approvals: ApprovalService | None = None
+    # Optional, best-effort anonymous usage telemetry facade. Disabled by
+    # default; when enabled, adapters record bounded metadata only.
+    telemetry: TelemetryPort | None = None
 
 
 def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
@@ -448,6 +475,23 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
     return repos, emitter
 
 
+def build_telemetry(config: NexusConfig, clock: Clock) -> TelemetryPort:
+    """Build the telemetry facade and its local/HTTP outbound adapters."""
+    store = LocalTelemetryEventStore(resolve_metrics_dir(config))
+    sink = NexusTelemetryHttpSink(
+        config=config,
+        clock=clock,
+        app_version=_package_version(),
+    )
+    return TelemetryService(
+        config=config,
+        store=store,
+        sink=sink,
+        clock=clock,
+        app_version=_package_version(),
+    )
+
+
 def bootstrap(
     env: Mapping[str, str] | None = None,
     argv: list[str] | None = None,
@@ -465,6 +509,8 @@ def bootstrap(
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
     clock = SystemClock()
     repos, emitter = build_repos(clock)
+    telemetry = build_telemetry(config, clock)
+    emitter = TelemetryEventEmitter(emitter, telemetry)
     # Transition seed (migration 014): absorb every announced capability into
     # the central catalog, idempotently, BEFORE any fail-closed gate can run -
     # the invariant "owned => registered" is what keeps existing agents
@@ -503,7 +549,71 @@ def bootstrap(
         event_emitter=emitter,
         embedding=embedding,
         approvals=approvals,
+        telemetry=telemetry,
     )
+
+
+class TelemetryToolServer:
+    """Proxy that instruments FastMCP tool handlers at registration time."""
+
+    def __init__(self, inner: Any, telemetry: TelemetryPort) -> None:
+        self._inner = inner
+        self._telemetry = telemetry
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._inner, name)
+
+    def tool(self, *args: Any, **kwargs: Any):
+        register = self._inner.tool(*args, **kwargs)
+
+        def _decorate(fn):
+            register(_wrap_tool_for_telemetry(fn, self._telemetry))
+            return fn
+
+        return _decorate
+
+
+def _wrap_tool_for_telemetry(fn, telemetry: TelemetryPort):
+    if inspect.iscoroutinefunction(fn):
+
+        @functools.wraps(fn)
+        async def _async_wrapper(*args: Any, **kwargs: Any):
+            started = time.perf_counter()
+            result = await fn(*args, **kwargs)
+            _record_tool_result(telemetry, fn.__name__, result, started)
+            return result
+
+        return _async_wrapper
+
+    @functools.wraps(fn)
+    def _wrapper(*args: Any, **kwargs: Any):
+        started = time.perf_counter()
+        result = fn(*args, **kwargs)
+        _record_tool_result(telemetry, fn.__name__, result, started)
+        return result
+
+    return _wrapper
+
+
+def _record_tool_result(
+    telemetry: TelemetryPort, tool_name: str, result: Any, started: float
+) -> None:
+    duration_ms = int((time.perf_counter() - started) * 1000)
+    status = "ok"
+    error_code: str | None = None
+    if isinstance(result, dict) and result.get("ok") is False:
+        status = "error"
+        error = result.get("error")
+        if isinstance(error, dict) and error.get("code"):
+            error_code = str(error["code"])
+    payload: dict[str, Any] = {
+        "tool_name": tool_name,
+        "status": status,
+        "duration_ms": duration_ms,
+    }
+    if error_code:
+        payload["error_code"] = error_code
+    telemetry.record_event(EVENT_MCP, payload)
 
 
 def register_tools(server: Any, deps: Deps) -> list[str]:
@@ -513,11 +623,19 @@ def register_tools(server: Any, deps: Deps) -> list[str]:
     """
     registered: list[str] = []
     prefix = _tools_pkg.__name__ + "."
+    registration_server = (
+        TelemetryToolServer(server, deps.telemetry)
+        if deps.telemetry is not None
+        else server
+    )
     for module_info in pkgutil.iter_modules(_tools_pkg.__path__, prefix):
+        flag = _EXPERIMENTAL_TOOL_MODULE_FLAGS.get(module_info.name)
+        if flag is not None and not bool(getattr(deps.config, flag, False)):
+            continue
         module = importlib.import_module(module_info.name)
         register = getattr(module, "register", None)
         if callable(register):
-            register(server, deps)
+            register(registration_server, deps)
             registered.append(module_info.name)
     return registered
 

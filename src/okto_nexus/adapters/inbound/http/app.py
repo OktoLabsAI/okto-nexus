@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import time
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
@@ -32,6 +33,7 @@ from ....application.health import HealthService
 from ....application.observability import ObservabilityService
 from ....application.search import MessageSearchService
 from ....application.settings import SettingsService, detect_pinned_fields
+from ....application.telemetry.schema import EVENT_HTTP, EVENT_LIFECYCLE
 from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
 from ....domain.approvals import OPERATOR_AGENT_ID
@@ -243,6 +245,53 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             current_agent.reset(token)
 
 
+class TelemetryMiddleware(BaseHTTPMiddleware):
+    """Record bounded HTTP/MCP request metadata when telemetry is enabled."""
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        telemetry = getattr(getattr(request.app.state, "deps", None), "telemetry", None)
+        if telemetry is None:
+            return await call_next(request)
+        path = request.url.path
+        if not (path.startswith("/api/v1") or path.startswith("/mcp")):
+            return await call_next(request)
+        started = time.perf_counter()
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            telemetry.record_event(
+                EVENT_HTTP,
+                {
+                    "method": request.method,
+                    "route_template": _route_template(request),
+                    "status_code": 500,
+                    "error_class": type(exc).__name__,
+                    "duration_ms": int((time.perf_counter() - started) * 1000),
+                },
+            )
+            raise
+        telemetry.record_event(
+            EVENT_HTTP,
+            {
+                "method": request.method,
+                "route_template": _route_template(request),
+                "status_code": response.status_code,
+                "duration_ms": int((time.perf_counter() - started) * 1000),
+            },
+        )
+        return response
+
+
+def _route_template(request: Request) -> str:
+    if request.url.path.startswith("/mcp"):
+        return "/mcp"
+    route = request.scope.get("route")
+    template = getattr(route, "path", None)
+    if isinstance(template, str) and template:
+        return template
+    return request.url.path
+
+
 def create_http_mcp_server(deps: Deps) -> Any:
     """A FastMCP instance serving the SAME tool AND resource surface over
     streamable-http.
@@ -381,6 +430,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         # FastAPI, so its session manager is driven from here (SDK-documented
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
         heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -389,10 +439,34 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
                     lock.heartbeat()
 
             heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+
+            async def _publish_metrics() -> None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+
+            metrics_task = asyncio.create_task(_publish_metrics())
         try:
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            if telemetry is not None:
+                telemetry.record_event(
+                    EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}
+                )
+            if metrics_task is not None:
+                metrics_task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await metrics_task
             if heartbeat_task is not None:
                 heartbeat_task.cancel()
                 with contextlib.suppress(asyncio.CancelledError):
@@ -438,6 +512,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     # False when bound beyond loopback (--host on the LAN -> key required).
     app.state.local_open = True
 
+    app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
 
     @app.get("/healthz")

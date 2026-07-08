@@ -17,6 +17,7 @@ from typing import Any
 
 from ..config import (
     EMBEDDING_MODES,
+    METRICS_MODES,
     MIN_RETENTION_MESSAGES_KEEP_DAYS,
     NexusConfig,
     TRUST_MODES,
@@ -192,6 +193,35 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         requires_restart=True,
     ),
     SettingSpec(
+        "metrics_mode",
+        "enum",
+        "Anonymous usage metrics: 'disabled' writes nothing, 'local_only' "
+        "keeps a local JSONL audit trail, and 'anonymous_beacon' publishes "
+        "bounded aggregate deltas to the configured beacon.",
+        choices=METRICS_MODES,
+        group="metrics",
+    ),
+    SettingSpec(
+        "metrics_retention_days",
+        "int",
+        "Retention window (days) for local metrics files. A value of 0 keeps "
+        "only currently pending local state once pruning is implemented.",
+        minimum=0,
+        maximum=3650,
+        group="metrics",
+    ),
+    SettingSpec(
+        "metrics_publish_interval_seconds",
+        "int",
+        "Background publish cadence (s) for anonymous metrics. Changing this "
+        "while serve is running takes effect after restart; the manual publish "
+        "endpoint is available immediately.",
+        minimum=60,
+        maximum=86400,
+        requires_restart=True,
+        group="metrics",
+    ),
+    SettingSpec(
         "auto_prune_on_start",
         "bool",
         "Run the retention prune automatically on every server boot.",
@@ -211,10 +241,10 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "redacts the path (defense-in-depth); turn on to reveal it.",
     ),
     # ------------------------------------------------------------------ #
-    # Meta-harness feature flags (R-I0). All opt-in (default off). A flag
-    # never adds or removes MCP tools; it only unlocks behaviour inside
-    # the consuming use-cases once those features ship. Exposed read-only
-    # to agents via nexus_info.features.
+    # Meta-harness feature flags (R-I0). All opt-in (default off). Most flags
+    # unlock behaviour inside consuming use-cases once those features ship.
+    # feature_memory is experimental and also controls dashboard/MCP surface
+    # exposure at bootstrap. Exposed read-only to agents via nexus_info.features.
     # ------------------------------------------------------------------ #
     SettingSpec(
         "feature_trace",
@@ -251,9 +281,10 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
     SettingSpec(
         "feature_memory",
         "bool",
-        "Opt-in: shared memory primitives (memory_*) for cross-agent "
-        "knowledge. No effect until the consuming feature ships.",
+        "Experimental opt-in: shared memory primitives (memory_*) and the "
+        "dashboard Memory tab. MCP tool exposure is decided at server startup.",
         group="features",
+        requires_restart=True,
     ),
     SettingSpec(
         "feature_health",

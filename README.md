@@ -8,8 +8,10 @@ event log — entirely on one machine, backed by a single SQLite database.
 
 One command — `okto-nexus serve` — starts the whole hub on a single port:
 
-- **`/mcp`** — the full 35-tool surface over **streamable HTTP**, gated by
-  per-agent API keys (`nxs_…`, hash-only at rest, plaintext shown once);
+- **`/mcp`** — the agent tool surface over **streamable HTTP**, gated by
+  per-agent API keys (`nxs_…`, hash-only at rest, plaintext shown once).
+  Experimental memory tools are published only when `feature_memory` is enabled
+  at server startup;
 - **`/api/v1`** — a REST API for agent/key management, observability
   (live graph snapshot, message/handoff/session/event histories) and admin
   actions, plus an **SSE stream** with exact `Last-Event-ID` resume;
@@ -57,13 +59,13 @@ and never see another workspace's data.
 
 ## Highlights
 
-- **Local-first, two transports.** `okto-nexus serve` exposes the SAME 35-tool
-  surface over **streamable HTTP** (parity enforced by a test) plus REST, SSE
-  and the web dashboard — all on one loopback port. The classic **stdio** mode
-  is unchanged for MCP hosts that launch local processes. Loopback REST and
-  the dashboard need no key (same-machine trust); `/mcp` always requires a
-  per-agent API key, and any bind beyond loopback re-enables the key gate
-  everywhere (fail-closed on the network).
+- **Local-first, two transports.** `okto-nexus serve` exposes the same MCP tool
+  surface over **streamable HTTP** as stdio for the effective config (parity is
+  enforced by tests), plus REST, SSE and the web dashboard — all on one loopback
+  port. The classic **stdio** mode is unchanged for MCP hosts that launch local
+  processes. Loopback REST and the dashboard need no key (same-machine trust);
+  `/mcp` always requires a per-agent API key, and any bind beyond loopback
+  re-enables the key gate everywhere (fail-closed on the network).
 - **SQLite WAL is the single source of truth.** One file (`~/.okto_nexus/nexus.db`
   by default). No in-memory cache, broker, or external store. Every connection
   enforces WAL + foreign keys + a busy timeout.
@@ -300,9 +302,18 @@ positional argument, or a flag with no value) fails closed with `CONFIG_ERROR` �
 | `OKTO_NEXUS_RETENTION_READ_DELIVERIES_KEEP_DAYS` | `--retention-read-deliveries-keep-days` | `14` | `0` | Retention window (days) for acknowledged (`read`) deliveries. |
 | `OKTO_NEXUS_RETENTION_CLOSED_SESSIONS_KEEP_DAYS` | `--retention-closed-sessions-keep-days` | `7` | `0` | Retention window (days) for `closed` sessions. |
 | `OKTO_NEXUS_AUTO_PRUNE_ON_START` | `--auto-prune-on-start` | `false` | — | Boolean (`true/1/yes/on` / `false/0/no/off`). Run one bounded, best-effort retention pass at server startup. |
+| `OKTO_NEXUS_METRICS_MODE` | `--metrics-mode` | `disabled` | — | One of `disabled`, `local_only`, `anonymous_beacon`. `local_only` writes aggregate JSONL locally; `anonymous_beacon` also publishes aggregate batches. |
+| `OKTO_NEXUS_METRICS_DIR` | `--metrics-dir` | `{home}/metrics` | — | Local directory for metrics JSONL, sent ledger and publish state. |
+| `OKTO_NEXUS_METRICS_BEACON_URL` | `--metrics-beacon-url` | `https://nexus-metrics.oktolabs.ai` | — | Anonymous metrics ingest endpoint used only in `anonymous_beacon` mode. |
+| `OKTO_NEXUS_METRICS_RETENTION_DAYS` | `--metrics-retention-days` | `30` | `0` | Local metrics retention window; `0` keeps local metrics until manual cleanup. |
+| `OKTO_NEXUS_METRICS_PUBLISH_INTERVAL_SECONDS` | `--metrics-publish-interval-seconds` | `3600` | `1` | Background publish cadence for `anonymous_beacon` mode. |
 
 Retention only ever deletes **terminal** lanes (events past their window,
 `read` deliveries, `closed` sessions) — see [Operations](#operations).
+Usage metrics are opt-in and aggregate-only: Nexus records bounded counters
+for CLI/MCP/HTTP/coordination/lifecycle activity, status, errors and latency
+buckets. Message bodies, prompts, file paths, raw IDs, tokens, URLs and stack
+traces are rejected by the telemetry schema before anything is written or sent.
 `load_config(env, argv=None)` is the single entry point and depends only on the
 stdlib + `okto_nexus.errors` (it imports neither `mcp` nor `sqlite3`).
 

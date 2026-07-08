@@ -6,7 +6,8 @@ Sections map to the Pulse test cards:
   topics normalization, the atomic provenance pair, id shape, constants.
 * T2/TS1+TS2: happy memory_put (row + vector + metadata-only event) and the
   rejection battery (no row / no vector / no event persists).
-* T3/TS3: the fail-closed feature_memory gate on all three verbs + live flip.
+* T3/TS3: feature_memory hides MCP tools at bootstrap, with a live service
+  fallback that rejects already-registered tools after a config flip.
 * T4/TS4+TS5: semantic (stub) and lexical/recent ranking, declared modes.
 * T5/TS6+TS7: supersede chain (bilateral, linear, CONFLICT) + memory_get.
 * T6/TS8+TS9: projection promotion of memory_id + trace interop.
@@ -416,25 +417,12 @@ def test_ts2_rejected_puts_leave_no_row_no_vector_no_event(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# T3 / TS3 - the fail-closed feature gate + live flip
+# T3 / TS3 - the experimental feature gate + live flip fallback
 # --------------------------------------------------------------------------- #
-def test_ts3_flag_off_rejects_all_three_verbs_with_details(tmp_path):
+def test_ts3_flag_off_does_not_register_memory_tools(tmp_path):
     deps, tools, root, _ = make_env(tmp_path, memory=False, embedding="stub")
-    # The tools stay registered in BOTH flag states (the gate is live, not
-    # registration-time).
-    assert {"memory_put", "memory_get", "memory_search"} <= set(tools)
-
-    attempts = [
-        tools["memory_put"](
-            project_root=root, agent_id="alpha", title="t", content="c"
-        ),
-        tools["memory_get"](project_root=root, memory_id="mem_x"),
-        tools["memory_search"](project_root=root, query="q"),
-    ]
-    for env in attempts:
-        error = _err(env, "VALIDATION_ERROR")
-        assert error["details"] == {"feature_memory": False}
-        assert "feature_memory" in error["message"]
+    assert root
+    assert not any(name.startswith("memory") for name in tools)
     assert _snapshot(deps) == (0, 0, _snapshot(deps)[2])  # no rows, no vectors
 
 
@@ -451,20 +439,21 @@ def _direct_message(tools, root: str) -> dict:
 
 
 def test_ts3_live_flip_preserves_data_and_non_memory_surfaces(tmp_path):
-    deps, tools, root, _ = make_env(tmp_path, memory=False)
-    # Non-memory envelopes, flag OFF (beta is untouched by the puts below).
-    off_env = tools["agent_get"](agent_id="beta")
-    off_msg = _direct_message(tools, root)
+    deps, tools, root, _ = make_env(tmp_path, memory=True)
+    # Non-memory envelopes, flag ON (beta is untouched by the puts below).
+    before_env = tools["agent_get"](agent_id="beta")
+    before_msg = _direct_message(tools, root)
 
-    deps.config.feature_memory = True  # live flip ON (the D6 settings path)
     mid = _put(tools, root, title="Kept", content="Survives the flip.")["memory_id"]
-    on_env = tools["agent_get"](agent_id="beta")
-    on_msg = _direct_message(tools, root)
+    after_env = tools["agent_get"](agent_id="beta")
+    after_msg = _direct_message(tools, root)
     # Byte-identical non-memory read; write envelope same shape (volatiles masked).
-    assert json.dumps(off_env, sort_keys=True) == json.dumps(on_env, sort_keys=True)
-    assert sorted(off_msg) == sorted(on_msg)
+    assert json.dumps(before_env, sort_keys=True) == json.dumps(
+        after_env, sort_keys=True
+    )
+    assert sorted(before_msg) == sorted(after_msg)
 
-    deps.config.feature_memory = False  # live flip OFF: reads gated too
+    deps.config.feature_memory = False  # live flip OFF: registered tools now reject
     error = _err(
         tools["memory_get"](project_root=root, memory_id=mid), "VALIDATION_ERROR"
     )
@@ -1036,7 +1025,7 @@ def test_ts10_rest_lexical_mode_declared_when_embeddings_off(tmp_path):
 # T7 / TS11 - the frozen MCP surface contract
 # --------------------------------------------------------------------------- #
 def test_ts11_surface_revision_ledger_budgets_and_tool_set(tmp_path):
-    assert SURFACE_REVISION == 28
+    assert SURFACE_REVISION == 29
     # The growth is ON the approved ledger (AC5 stays green with it counted).
     assert APPROVED_GROWTH["memory_i6"] > 0
 

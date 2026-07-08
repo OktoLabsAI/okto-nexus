@@ -117,7 +117,7 @@ def test_setting_specs_register_the_7_flags_in_the_features_group():
         spec = by_key[field]
         assert spec.type == "bool", field
         assert spec.group == "features", field
-        assert spec.requires_restart is False, field
+        assert spec.requires_restart is (field == "feature_memory"), field
         assert spec.description, field
     # Pre-existing knobs keep the default group: the new field is additive.
     assert by_key["session_stale_ttl_seconds"].group == "general"
@@ -135,7 +135,7 @@ def test_settings_catalogue_lists_features_with_defaults(loopback_client):
         assert item["default"] is False
         assert item["source"] == "default"
         assert item["editable"] is True
-        assert item["requires_restart"] is False
+        assert item["requires_restart"] is (item["key"] == "feature_memory")
 
 
 def test_patch_feature_flag_persists_and_applies_live(loopback_client):
@@ -217,7 +217,7 @@ def test_feature_flag_fields_constant_matches_the_7_flags():
 
 def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     """TS6: the features block is identical across transports, with exactly
-    the 7 keys, and surface_revision is 28 on both."""
+    the 7 keys, and surface_revision is 29 on both."""
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     stdio_env = _call(create_server(deps), "nexus_info")
     http_env = _call(create_http_mcp_server(deps), "nexus_info")
@@ -228,9 +228,9 @@ def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     assert stdio_info["features"] == http_info["features"]
     assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
     assert all(value is False for value in stdio_info["features"].values())
-    assert stdio_info["surface_revision"] == 28
-    assert http_info["surface_revision"] == 28
-    assert SURFACE_REVISION == 28
+    assert stdio_info["surface_revision"] == 29
+    assert http_info["surface_revision"] == 29
+    assert SURFACE_REVISION == 29
 
 
 def test_nexus_info_reflects_env_pinned_flag(tmp_path):

@@ -12,10 +12,11 @@ boundary:
   ``search_mode`` (semantic when embeddings are enabled, else lexical; recent
   when no query is given).
 
-All three are gated LIVE by ``feature_memory`` (flag OFF -> VALIDATION_ERROR
-``{feature_memory: false}``, reads included - the whole primitive is absent;
-the DECLARED exception to D4 accept-and-ignore, br_8af76e5d). The operator's
-REST reads/curation are NOT gated and live in the HTTP adapter.
+The module itself is experimental: the MCP composition root registers it only
+when ``feature_memory`` is ON at server bootstrap. The service still keeps a
+LIVE guard (flag OFF -> VALIDATION_ERROR ``{feature_memory: false}``) for
+already-running servers where the flag is flipped after registration. The
+operator's REST reads/curation are NOT gated and live in the HTTP adapter.
 
 This module is the slice's composition root: it wires the concrete SQLite
 memory repo + vector store into ``deps.repos`` (reused if already present),

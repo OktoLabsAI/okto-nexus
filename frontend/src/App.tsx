@@ -4,10 +4,11 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
   Brain,
+  ChartColumn,
   CheckSquare,
   ChevronDown,
   Compass,
@@ -33,6 +34,11 @@ import {
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
 import { LiveChip } from "./components/LiveChip";
+import { MetricsSettingsPanel } from "./components/MetricsSettingsPanel";
+import {
+  dismissMetricsPrompt,
+  isMetricsPromptDismissed,
+} from "./components/metricsConsentStorage";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import {
   isCompleted as onboardingDone,
@@ -44,6 +50,7 @@ import {
   getApiKey,
   setApiKey,
   type GraphSnapshot,
+  type NexusInfo,
   type NexusEvent,
 } from "./api";
 import { useSSE } from "./useSSE";
@@ -67,9 +74,8 @@ const VIEWS = [
   { name: "Messages", icon: MessagesSquare },
   { name: "Handoffs", icon: KanbanSquare },
   { name: "Events", icon: Activity },
-  // Always listed regardless of the feature_memory flag (spec 8928b320 FR7):
-  // the operator's audit reads are never gated; the view shows the
-  // memory-disabled banner while the flag is off (the Policies precedent).
+  // Experimental: listed only when feature_memory is enabled in the effective
+  // server config. MCP memory_* tool exposure is gated at server bootstrap too.
   { name: "Memory", icon: Brain },
   { name: "Workspaces", icon: FolderOpen },
   { name: "Agents", icon: Users },
@@ -193,6 +199,7 @@ function Dashboard({
 }) {
   const { theme, toggle } = useTheme();
   const [view, setView] = useState<View>("Graph");
+  const [info, setInfo] = useState<NexusInfo | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
@@ -230,7 +237,21 @@ function Dashboard({
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [metricsPanel, setMetricsPanel] = useState<"menu" | "prompt" | null>(
+    null,
+  );
   const menuRef = useRef<HTMLDivElement>(null);
+  const memoryEnabled = Boolean(info?.features?.feature_memory);
+  const visibleViews = useMemo(
+    () => VIEWS.filter((v) => v.name !== "Memory" || memoryEnabled),
+    [memoryEnabled],
+  );
+
+  const loadInfo = useCallback(async () => {
+    const next = await api.info();
+    setInfo(next);
+    return next;
+  }, []);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -247,6 +268,39 @@ function Dashboard({
   useEffect(() => {
     if (!onboardingDone()) setOnboardingOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (onboardingOpen || metricsPanel) return;
+    if (isMetricsPromptDismissed()) return;
+    let active = true;
+    api
+      .metricsSummary()
+      .then((summary) => {
+        if (!active) return;
+        if (summary.mode === "disabled") {
+          setMetricsPanel("prompt");
+        } else {
+          dismissMetricsPrompt();
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [onboardingOpen, metricsPanel]);
+
+  const closeMetricsPanel = () => {
+    if (metricsPanel === "prompt") dismissMetricsPrompt();
+    setMetricsPanel(null);
+  };
+
+  useEffect(() => {
+    loadInfo().catch(() => undefined);
+  }, [loadInfo, refreshTick]);
+
+  useEffect(() => {
+    if (!memoryEnabled && view === "Memory") setView("Graph");
+  }, [memoryEnabled, view]);
 
   const toggleSidebar = () =>
     setSidebarOpen((open) => {
@@ -340,7 +394,7 @@ function Dashboard({
   // right after the first paint - the "edges vanish on refresh" effect.
   useEffect(() => {
     if (localStorage.getItem("okto-nexus-workspace")) return;
-    Promise.all([api.info(), api.sessions()])
+    Promise.all([loadInfo(), api.sessions()])
       .then(([info, sessions]) => {
         const def = (info as { default_workspace_id?: string | null })
           .default_workspace_id;
@@ -349,7 +403,7 @@ function Dashboard({
         }
       })
       .catch(() => undefined);
-  }, []);
+  }, [loadInfo]);
 
   return (
     <div className="h-screen flex flex-col bg-surface-50 dark:bg-surface-950">
@@ -439,6 +493,17 @@ function Dashboard({
                 <button
                   onClick={() => {
                     setShowMenu(false);
+                    setMetricsPanel("menu");
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="menu-metrics"
+                >
+                  <ChartColumn size={14} />
+                  Metrics
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
                     toggle();
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
@@ -493,6 +558,16 @@ function Dashboard({
       {onboardingOpen && (
         <OnboardingModal onClose={() => setOnboardingOpen(false)} />
       )}
+      {metricsPanel && !onboardingOpen && (
+        <MetricsSettingsPanel
+          initialPrompt={metricsPanel === "prompt"}
+          onClose={closeMetricsPanel}
+          onSaved={async () => {
+            dismissMetricsPrompt();
+            await loadInfo();
+          }}
+        />
+      )}
 
       <div className="flex flex-1 overflow-hidden">
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
@@ -509,7 +584,7 @@ function Dashboard({
               Observability
             </h3>
             <ul className="space-y-1 mb-4">
-              {VIEWS.filter((v) => v.name !== "Settings").map(({ name, icon: Icon }) => (
+              {visibleViews.filter((v) => v.name !== "Settings").map(({ name, icon: Icon }) => (
                 <li key={name}>
                   <button
                     data-view={name}
@@ -570,7 +645,7 @@ function Dashboard({
               onTraceChange={setEventTrace}
             />
           )}
-          {view === "Memory" && (
+          {view === "Memory" && memoryEnabled && (
             <MemoryView
               workspace={workspace}
               liveTick={liveTick}
@@ -594,7 +669,7 @@ function Dashboard({
               onChanged={loadApprovalCount}
             />
           )}
-          {view === "Settings" && <SettingsView />}
+          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} />}
       </main>
       </div>
     </div>
