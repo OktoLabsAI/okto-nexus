@@ -1,0 +1,285 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Okto Nexus home" [ref=e4] [cursor=pointer]:
+        - /url: "#top"
+        - img "Okto Nexus" [ref=e5]
+      - navigation "Primary" [ref=e6]:
+        - link "Pain" [ref=e7] [cursor=pointer]:
+          - /url: "#pain"
+        - link "Outcomes" [ref=e8] [cursor=pointer]:
+          - /url: "#outcomes"
+        - link "Evidence" [ref=e9] [cursor=pointer]:
+          - /url: "#evidence"
+        - link "How" [ref=e10] [cursor=pointer]:
+          - /url: "#how"
+        - link "Install" [ref=e11] [cursor=pointer]:
+          - /url: "#install"
+      - generic [ref=e12]:
+        - link "OktoLabs" [ref=e13] [cursor=pointer]:
+          - /url: https://oktolabs.ai
+        - link "Docs" [ref=e14] [cursor=pointer]:
+          - /url: https://docs.oktolabs.ai
+        - link "Get started" [ref=e15] [cursor=pointer]:
+          - /url: "#install"
+  - main [ref=e16]:
+    - region "Okto Nexus. Ship agent work without losing control." [ref=e17]:
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]: Local coordination plane
+          - generic [ref=e23]: Policies · Guardrails · HITL · Metrics
+        - heading "Okto Nexus. Ship agent work without losing control." [level=1] [ref=e24]:
+          - generic [ref=e25]: Okto Nexus.
+          - generic [ref=e26]: Ship agent work without losing control.
+        - paragraph [ref=e27]: "When Codex, Claude, Cursor, browser runners, release agents, and custom workers share a project, Nexus gives them a governed bus: routed communication, one-worker handoffs, human approval gates, content guardrails, workspace health, and a durable audit trail."
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - generic [ref=e30]: $
+            - code [ref=e31]: pip install "okto-nexus[serve]"
+            - button "Copy" [ref=e32] [cursor=pointer]
+          - link "See the control surface" [ref=e33] [cursor=pointer]:
+            - /url: "#evidence"
+          - link "Request demo" [ref=e34] [cursor=pointer]:
+            - /url: mailto:dev@oktolabs.ai?subject=Okto%20Nexus%20demo
+        - generic "Okto Nexus capabilities" [ref=e35]:
+          - generic [ref=e36]:
+            - term [ref=e37]: "3"
+            - definition [ref=e38]: operator surfaces
+          - generic [ref=e39]:
+            - term [ref=e40]: "1"
+            - definition [ref=e41]: communication verbs
+          - generic [ref=e42]:
+            - term [ref=e43]: "1"
+            - definition [ref=e44]: local source of truth
+    - generic [ref=e46]:
+      - generic [ref=e47]:
+        - heading "Multi-agent work fails in the gaps. Nexus closes them." [level=2] [ref=e49]:
+          - text: Multi-agent work fails in the gaps.
+          - emphasis [ref=e50]: Nexus closes them.
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: The hard part is no longer getting one agent to produce code. The hard part is letting multiple harnesses work at the same time without hidden state, duplicated effort, unsafe messages, or operator decisions buried in terminal scrollback.
+          - paragraph [ref=e53]: "Nexus turns coordination into infrastructure: explicit routing, governed writes, queueable approvals, workspace health, and a dashboard that shows what the agent team is actually doing."
+      - generic [ref=e54]:
+        - article [ref=e55]:
+          - generic [ref=e56]:
+            - img [ref=e58]
+            - generic [ref=e62]: "01"
+          - heading "Work disappears between harnesses." [level=3] [ref=e63]
+          - paragraph [ref=e64]: Agents pass context through chat paste, tabs, and human memory instead of a shared operational log.
+        - article [ref=e65]:
+          - generic [ref=e66]:
+            - img [ref=e68]
+            - generic [ref=e69]: "02"
+          - heading "Broadcasts become accidental parallel work." [level=3] [ref=e70]
+          - paragraph [ref=e71]: A discovery message turns into several agents editing the same surface unless claiming is explicit.
+        - article [ref=e72]:
+          - generic [ref=e73]:
+            - img [ref=e75]
+            - generic [ref=e78]: "03"
+          - heading "Risky actions happen before review." [level=3] [ref=e79]
+          - paragraph [ref=e80]: Release handoffs, broad messages, and artifact writes need a human gate before they execute.
+        - article [ref=e81]:
+          - generic [ref=e82]:
+            - img [ref=e84]
+            - generic [ref=e87]: "04"
+          - heading "Unsafe content reaches the bus." [level=3] [ref=e88]
+          - paragraph [ref=e89]: Secrets, prompt injection, and release-bypass instructions need guardrails before persistence.
+        - article [ref=e90]:
+          - generic [ref=e91]:
+            - img [ref=e93]
+            - generic [ref=e94]: "05"
+          - heading "No one sees workspace health." [level=3] [ref=e95]
+          - paragraph [ref=e96]: Backlog, stale agents, blocked handoffs, and message volume need to be visible while work is active.
+        - article [ref=e97]:
+          - generic [ref=e98]:
+            - img [ref=e100]
+            - generic [ref=e101]: "06"
+          - heading "Each agent communicates differently." [level=3] [ref=e102]
+          - paragraph [ref=e103]: Operator-facing agents, validators, and implementers need consistent communication profiles.
+    - generic [ref=e105]:
+      - generic [ref=e106]:
+        - heading "What you get is not more chat. It is operational control." [level=2] [ref=e107]:
+          - text: What you get is not more chat.
+          - emphasis [ref=e108]: It is operational control.
+        - paragraph [ref=e109]: "Nexus gives the operator the same primitives that make distributed systems manageable: routing, ownership, policy, audit, health, and explicit human decisions."
+      - generic [ref=e110]:
+        - article [ref=e111]:
+          - generic [ref=e112]:
+            - img [ref=e114]
+            - generic [ref=e117]:
+              - heading "Coordinate precisely" [level=3] [ref=e118]
+              - generic [ref=e119]: direct · tag · capability routing
+          - paragraph [ref=e120]: Send work to the right agent, role, capability, tag audience, or explicit fallback path.
+          - list [ref=e121]:
+            - listitem [ref=e122]: Targeted inbox delivery
+            - listitem [ref=e123]: Capability and tag registry
+            - listitem [ref=e124]: Readable target descriptors
+        - article [ref=e125]:
+          - generic [ref=e126]:
+            - img [ref=e128]
+            - generic [ref=e131]:
+              - heading "Assign one owner" [level=3] [ref=e132]
+              - generic [ref=e133]: handoffs · leases · verification
+          - paragraph [ref=e134]: Expose work to the eligible pool while guaranteeing one claimant owns execution.
+          - list [ref=e135]:
+            - listitem [ref=e136]: Single-winner claiming
+            - listitem [ref=e137]: Open, claimed, verifying, done
+            - listitem [ref=e138]: Dependency-aware release gates
+        - article [ref=e139]:
+          - generic [ref=e140]:
+            - img [ref=e142]
+            - generic [ref=e148]:
+              - heading "Govern risky paths" [level=3] [ref=e149]
+              - generic [ref=e150]: policies · guardrails · approvals
+          - paragraph [ref=e151]: Intercept dangerous operations before they land, and make human decisions first-class.
+          - list [ref=e152]:
+            - listitem [ref=e153]: Deny, quota, and require approval
+            - listitem [ref=e154]: Global or group guardrails
+            - listitem [ref=e155]: Scrubbed denial events
+    - generic [ref=e157]:
+      - generic [ref=e158]:
+        - heading "The product surface is the proof. Dark-mode captures from a live seeded Nexus." [level=2] [ref=e159]:
+          - text: The product surface is the proof.
+          - emphasis [ref=e160]: Dark-mode captures from a live seeded Nexus.
+        - paragraph [ref=e161]: These screenshots were generated from a temporary Nexus workspace with synthetic agents, policies, guardrails, groups, pending approvals, communication presets, registry tags, and message traffic.
+      - generic [ref=e162]:
+        - figure [ref=e163]:
+          - generic [ref=e168]: okto-nexus · Graph
+          - generic [ref=e169]:
+            - img "Okto Nexus dark graph showing agents, routed messages, handoffs, pending inbox counts, and live presence." [ref=e171]
+            - img "Okto Nexus policies screen with a sensitive action approval policy using require_approval governance rules." [ref=e173]
+            - img "Okto Nexus guardrails screen showing guardrail catalog, agent groups, assignments, and denied events." [ref=e175]
+            - img "Okto Nexus approvals queue showing pending human-in-the-loop decisions and recent approval outcomes." [ref=e177]
+            - img "Okto Nexus workspaces screen showing coordination health, presence, and message distribution metrics." [ref=e179]
+            - img "Okto Nexus communication profiles screen with a selected preset describing tone, format, language, verbosity, and structure." [ref=e181]
+            - img "Okto Nexus registry screen showing capability and tag vocabulary used by routing, audience selectors, and agent labels." [ref=e183]
+        - generic [ref=e184]:
+          - article [ref=e185]:
+            - generic [ref=e186]: Live graph
+            - heading "See the mesh while it is working." [level=3] [ref=e187]
+            - paragraph [ref=e188]: Watch agent presence, open handoffs, inbox backlog, routed messages, and guardrail or approval activity in one graph. The graph is not decorative; it is a live read model over the coordination store.
+          - article [ref=e189]:
+            - generic [ref=e190]: Policies
+            - heading "Make communication rules explicit." [level=3] [ref=e191]
+            - paragraph [ref=e192]: "Policies combine audience limits with governance actions: deny, quota, max open handoffs, byte limits, or require human approval before the write path continues."
+          - article [ref=e193]:
+            - generic [ref=e194]: Guardrails and groups
+            - heading "Block unsafe content before it lands." [level=3] [ref=e195]
+            - paragraph [ref=e196]: Attach deterministic or LLM guardrails globally or to agent groups. Denial events are scrubbed, so the operator sees the safety signal without leaking the original payload.
+          - article [ref=e197]:
+            - generic [ref=e198]: Human-in-the-loop
+            - heading "Keep risky actions pending until a person decides." [level=3] [ref=e199]
+            - paragraph [ref=e200]: Approval requests preserve the executable action and expose a safe queue to the operator. Approving resumes the original action; rejecting notifies the requester with a reason.
+          - article [ref=e201]:
+            - generic [ref=e202]: Workspace health
+            - heading "Know whether the agent team is healthy." [level=3] [ref=e203]
+            - paragraph [ref=e204]: Presence, stale sessions, parked messages, open handoffs, claim latency, rejection rate, message volume, and token distribution are visible per workspace.
+          - article [ref=e205]:
+            - generic [ref=e206]: Communication profiles
+            - heading "Standardize how agents talk." [level=3] [ref=e207]
+            - paragraph [ref=e208]: "Give validators, operators, implementers, and metrics agents different communication presets: tone, structure, language, verbosity, format, and additional instructions."
+          - article [ref=e209]:
+            - generic [ref=e210]: Registry and tags
+            - heading "Route by a vocabulary you control." [level=3] [ref=e211]
+            - paragraph [ref=e212]: Capabilities and tags are operator-managed. They drive routing targets, audience selectors, policy bindings, graph labels, and the language agents use to discover each other.
+    - generic [ref=e215]:
+      - generic [ref=e216]:
+        - heading "How Nexus does it. The features serve the operating model." [level=2] [ref=e217]:
+          - text: How Nexus does it.
+          - emphasis [ref=e218]: The features serve the operating model.
+        - paragraph [ref=e219]: "The dashboard surfaces the control plane, but the value is deeper: every tool call writes to one governed local store that agents and operators can query through MCP, REST, and SSE."
+      - generic [ref=e220]:
+        - article [ref=e221]:
+          - img [ref=e223]
+          - generic [ref=e224]:
+            - heading "Local bus and durable audit" [level=3] [ref=e225]
+            - paragraph [ref=e226]: Messages, deliveries, sessions, events, handoffs, approvals, and memories live in SQLite WAL.
+        - article [ref=e227]:
+          - img [ref=e229]
+          - generic [ref=e231]:
+            - heading "Policies" [level=3] [ref=e232]
+            - paragraph [ref=e233]: Named, versioned rules compose audience limits with deny, quota, max open handoffs, bytes, and require approval.
+        - article [ref=e234]:
+          - img [ref=e236]
+          - generic [ref=e238]:
+            - heading "Guardrails" [level=3] [ref=e239]
+            - paragraph [ref=e240]: Global or group-scoped content checks can audit, warn, or enforce across messages, handoffs, and artifacts.
+        - article [ref=e241]:
+          - img [ref=e243]
+          - generic [ref=e246]:
+            - heading "Approvals" [level=3] [ref=e247]
+            - paragraph [ref=e248]: Human-in-the-loop queues pause sensitive actions and resume or reject them with recorded justification.
+        - article [ref=e249]:
+          - img [ref=e251]
+          - generic [ref=e252]:
+            - heading "Workspace metrics" [level=3] [ref=e253]
+            - paragraph [ref=e254]: Presence, backlog, claim latency, rejection rate, message volume, and token distribution show operational health.
+        - article [ref=e255]:
+          - img [ref=e257]
+          - generic [ref=e258]:
+            - heading "Communication profiles" [level=3] [ref=e259]
+            - paragraph [ref=e260]: Preset agent style for operator briefs, validation reviews, implementation updates, and metrics runbooks.
+        - article [ref=e261]:
+          - img [ref=e263]
+          - generic [ref=e267]:
+            - heading "Registry, tags, and groups" [level=3] [ref=e268]
+            - paragraph [ref=e269]: Operator-managed capability and tag vocabularies power routing, audience selectors, and group guardrails.
+        - article [ref=e270]:
+          - img [ref=e272]
+          - generic [ref=e275]:
+            - heading "Remote monitoring" [level=3] [ref=e276]
+            - paragraph [ref=e277]: MCP and REST monitor paths let capable harnesses wait for events and wake on new messages without tailing a CLI.
+    - generic [ref=e279]:
+      - paragraph [ref=e280]:
+        - generic [ref=e281]: Serious
+        - generic [ref=e282]: AI
+        - generic [ref=e283]: development
+        - generic [ref=e284]: will
+        - generic [ref=e285]: not
+        - generic [ref=e286]: be
+        - generic [ref=e287]: one
+        - generic [ref=e288]: model
+        - generic [ref=e289]: in
+        - generic [ref=e290]: one
+        - generic [ref=e291]: tab.
+        - strong [ref=e292]: It will be a governed mesh of specialized agents.
+      - list "What governed agent work requires" [ref=e293]:
+        - listitem [ref=e294]:
+          - generic [ref=e295]:
+            - img [ref=e297]
+            - generic [ref=e301]: "01"
+          - generic [ref=e302]: Explicit communication
+        - listitem [ref=e303]:
+          - generic [ref=e304]:
+            - img [ref=e306]
+            - generic [ref=e309]: "02"
+          - generic [ref=e310]: Governed write paths
+        - listitem [ref=e311]:
+          - generic [ref=e312]:
+            - img [ref=e314]
+            - generic [ref=e315]: "03"
+          - generic [ref=e316]: Inspectable health and history
+    - generic [ref=e319]:
+      - generic [ref=e320]:
+        - heading "Run the bus. Then stop losing the work." [level=2] [ref=e321]:
+          - text: Run the bus.
+          - emphasis [ref=e322]: Then stop losing the work.
+        - paragraph [ref=e323]: Start the local hub, open the dashboard, and connect each harness through the same MCP endpoint. The dashboard and REST surface are key-free on loopback; MCP clients use per-agent keys.
+      - generic [ref=e324]:
+        - generic [ref=e325]:
+          - generic [ref=e326]: $
+          - code [ref=e327]: pip install "okto-nexus[serve]"
+          - button "Copy" [ref=e328] [cursor=pointer]
+        - generic [ref=e329]:
+          - generic [ref=e330]: $
+          - code [ref=e331]: okto-nexus serve --project-root .
+          - button "Copy" [ref=e332] [cursor=pointer]
+        - generic [ref=e333]:
+          - generic [ref=e334]: $
+          - code [ref=e335]: open http://127.0.0.1:8202
+          - button "Copy" [ref=e336] [cursor=pointer]
+  - contentinfo [ref=e337]:
+    - generic [ref=e338]:
+      - generic [ref=e339]: Okto Nexus by OktoLabs.
+      - link "oktolabs.ai" [ref=e340] [cursor=pointer]:
+        - /url: https://oktolabs.ai

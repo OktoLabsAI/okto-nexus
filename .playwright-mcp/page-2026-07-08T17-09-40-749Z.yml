@@ -1,0 +1,199 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Guardrails
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "ws_nexus_lau…"
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [active] [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals 2" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+              - generic [ref=e136]: "2"
+    - main [ref=e137]:
+      - generic [ref=e444]:
+        - generic [ref=e445]:
+          - heading "Guardrails" [level=1] [ref=e446]
+          - button "Refresh" [ref=e447] [cursor=pointer]:
+            - img [ref=e448]
+            - text: Refresh
+        - generic [ref=e451]:
+          - generic [ref=e452]:
+            - generic [ref=e453]:
+              - img [ref=e454]
+              - heading "Groups" [level=2] [ref=e459]
+            - generic [ref=e460]:
+              - textbox "Group name" [ref=e461]
+              - textbox "Description" [ref=e462]
+              - button "Create" [disabled] [ref=e463]:
+                - img [ref=e464]
+                - text: Create
+            - generic [ref=e465]:
+              - generic [ref=e466]:
+                - button "Implementation lane grp_builders" [ref=e467] [cursor=pointer]:
+                  - generic [ref=e468]: Implementation lane
+                  - generic [ref=e469]: grp_builders
+                - button "Review and safety lane grp_reviewers" [ref=e470] [cursor=pointer]:
+                  - generic [ref=e471]: Review and safety lane
+                  - generic [ref=e472]: grp_reviewers
+              - paragraph [ref=e474]: Select a group
+          - generic [ref=e475]:
+            - generic [ref=e476]:
+              - img [ref=e477]
+              - heading "Guardrails" [level=2] [ref=e479]
+            - generic [ref=e480]:
+              - textbox "Guardrail name" [ref=e481]
+              - textbox "Description" [ref=e482]
+              - button "Create" [disabled] [ref=e483]:
+                - img [ref=e484]
+                - text: Create
+            - generic [ref=e485]:
+              - generic [ref=e486]:
+                - button "Prompt injection boundary v1 active 1" [ref=e487] [cursor=pointer]:
+                  - generic [ref=e488]: Prompt injection boundary
+                  - generic [ref=e489]: v1 active 1
+                - button "Release evidence required v1 active 1" [ref=e490] [cursor=pointer]:
+                  - generic [ref=e491]: Release evidence required
+                  - generic [ref=e492]: v1 active 1
+                - button "Secret leak prevention v1 active 1" [ref=e493] [cursor=pointer]:
+                  - generic [ref=e494]: Secret leak prevention
+                  - generic [ref=e495]: v1 active 1
+              - paragraph [ref=e497]: Select a guardrail
+        - generic [ref=e498]:
+          - generic [ref=e499]:
+            - generic [ref=e500]:
+              - img [ref=e501]
+              - heading "Assignments" [level=2] [ref=e504]
+            - generic [ref=e505]:
+              - combobox [ref=e506]:
+                - option "global" [selected]
+                - option "agent_group"
+              - combobox [disabled] [ref=e507]:
+                - option "Implementation lane" [selected]
+                - option "Review and safety lane"
+              - combobox [ref=e508]:
+                - option "Prompt injection boundary" [selected]
+                - option "Release evidence required"
+                - option "Secret leak prevention"
+              - combobox [ref=e509]:
+                - option "latest" [selected]
+                - option "pinned"
+              - textbox [disabled] [ref=e510]: "1"
+              - generic [ref=e511]:
+                - combobox [ref=e512]:
+                  - option "audit"
+                  - option "warn"
+                  - option "enforce" [selected]
+                - button [ref=e513] [cursor=pointer]:
+                  - img [ref=e514]
+            - table [ref=e516]:
+              - rowgroup [ref=e517]:
+                - row "Scope Guardrail Version Mode State" [ref=e518]:
+                  - columnheader "Scope" [ref=e519]
+                  - columnheader "Guardrail" [ref=e520]
+                  - columnheader "Version" [ref=e521]
+                  - columnheader "Mode" [ref=e522]
+                  - columnheader "State" [ref=e523]
+                  - columnheader [ref=e524]
+              - rowgroup [ref=e525]:
+                - row "global gr_secret_leak latest enforce enabled" [ref=e526]:
+                  - cell "global" [ref=e527]
+                  - cell "gr_secret_leak" [ref=e528]
+                  - cell "latest" [ref=e529]
+                  - cell "enforce" [ref=e530]
+                  - cell "enabled" [ref=e531]
+                  - cell [ref=e532]:
+                    - button "Delete assignment" [ref=e533] [cursor=pointer]:
+                      - img [ref=e534]
+                - row "agent_group:grp_reviewers gr_prompt_injection latest warn enabled" [ref=e537]:
+                  - cell "agent_group:grp_reviewers" [ref=e538]
+                  - cell "gr_prompt_injection" [ref=e539]
+                  - cell "latest" [ref=e540]
+                  - cell "warn" [ref=e541]
+                  - cell "enabled" [ref=e542]
+                  - cell [ref=e543]:
+                    - button "Delete assignment" [ref=e544] [cursor=pointer]:
+                      - img [ref=e545]
+                - row "agent_group:grp_builders gr_release_claim pinned@1 audit enabled" [ref=e548]:
+                  - cell "agent_group:grp_builders" [ref=e549]
+                  - cell "gr_release_claim" [ref=e550]
+                  - cell "pinned@1" [ref=e551]
+                  - cell "audit" [ref=e552]
+                  - cell "enabled" [ref=e553]
+                  - cell [ref=e554]:
+                    - button "Delete assignment" [ref=e555] [cursor=pointer]:
+                      - img [ref=e556]
+          - generic [ref=e559]:
+            - generic [ref=e560]:
+              - img [ref=e561]
+              - heading "Denials" [level=2] [ref=e563]
+              - button "Refresh" [ref=e564] [cursor=pointer]:
+                - img [ref=e565]
+                - text: Refresh
+            - paragraph [ref=e568]: all - audit and warn matches are intentionally silent; only enforce denials emit guardrail.denied events.
+            - table [ref=e570]:
+              - rowgroup [ref=e571]:
+                - row "Event Actor Created Payload" [ref=e572]:
+                  - columnheader "Event" [ref=e573]
+                  - columnheader "Actor" [ref=e574]
+                  - columnheader "Created" [ref=e575]
+                  - columnheader "Payload" [ref=e576]
+              - rowgroup

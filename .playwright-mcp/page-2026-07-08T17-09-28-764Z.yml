@@ -1,0 +1,203 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Policies
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "ws_nexus_lau…"
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals 2" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+              - generic [ref=e136]: "2"
+    - main [ref=e137]:
+      - generic [ref=e326]:
+        - generic [ref=e327]:
+          - generic [ref=e328]:
+            - generic [ref=e329]:
+              - heading "Policies" [level=1] [ref=e330]
+              - generic [ref=e331]: Operator-only
+              - generic [ref=e332]: 3 policies
+            - paragraph [ref=e333]: Named, versioned global policies — one append-only object unifying an audience (who a holder may reach / be reached by) and governance rules (denies + quotas). A policy stages until an agent binds it; enforcement is always-on and binding-driven.
+            - generic [ref=e334]:
+              - generic [ref=e335]:
+                - text: Name
+                - textbox "Name" [ref=e336]:
+                  - /placeholder: e.g. tier-gold-only
+              - generic [ref=e337]:
+                - text: Description (optional)
+                - textbox "Description (optional)" [ref=e338]:
+                  - /placeholder: What this policy is for
+              - button "New policy" [disabled] [ref=e339]:
+                - img [ref=e340]
+                - text: New policy
+          - generic [ref=e342]:
+            - button "Parallel work quota @v1 Prevent accidental swarm fan-out and keep the handoff queue bounded." [ref=e343] [cursor=pointer]:
+              - generic [ref=e344]:
+                - generic [ref=e345]: Parallel work quota
+                - generic [ref=e346]: "@v1"
+              - paragraph [ref=e347]: Prevent accidental swarm fan-out and keep the handoff queue bounded.
+            - button "Release lane deny rules @v1 Block release handoffs from agents outside the release lane." [ref=e348] [cursor=pointer]:
+              - generic [ref=e349]:
+                - generic [ref=e350]: Release lane deny rules
+                - generic [ref=e351]: "@v1"
+              - paragraph [ref=e352]: Block release handoffs from agents outside the release lane.
+            - button "Sensitive action approval @v1 Human approval before cross-agent broadcast, artifact write, or release handoff." [active] [ref=e353] [cursor=pointer]:
+              - generic [ref=e354]:
+                - generic [ref=e355]: Sensitive action approval
+                - generic [ref=e356]: "@v1"
+              - paragraph [ref=e357]: Human approval before cross-agent broadcast, artifact write, or release handoff.
+        - complementary [ref=e358]:
+          - separator "Drag to resize" [ref=e359]
+          - generic [ref=e361]:
+            - generic [ref=e362]:
+              - heading "Sensitive action approval" [level=2] [ref=e363]
+              - button "Close" [ref=e364] [cursor=pointer]:
+                - img [ref=e365]
+            - generic [ref=e368]:
+              - generic [ref=e369]:
+                - generic [ref=e370]:
+                  - generic [ref=e371]:
+                    - text: Name
+                    - textbox "Name" [ref=e372]: Sensitive action approval
+                  - generic [ref=e373]:
+                    - text: Description
+                    - textbox "Description" [ref=e374]:
+                      - /placeholder: Optional
+                      - text: Human approval before cross-agent broadcast, artifact write, or release handoff.
+                - paragraph [ref=e375]: pol_sensitive_approval · created 05/07/2026, 14:07:25
+                - generic [ref=e376]:
+                  - button "Save" [disabled] [ref=e377]
+                  - button "Delete" [ref=e378] [cursor=pointer]
+              - generic [ref=e379]:
+                - generic [ref=e380]:
+                  - heading "Version history" [level=3] [ref=e381]
+                  - generic [ref=e382]: "1"
+                - table [ref=e384]:
+                  - rowgroup [ref=e385]:
+                    - row "Ver Published Audience Governance" [ref=e386]:
+                      - columnheader "Ver" [ref=e387]
+                      - columnheader "Published" [ref=e388]
+                      - columnheader "Audience" [ref=e389]
+                      - columnheader "Governance" [ref=e390]
+                  - rowgroup [ref=e391]:
+                    - 'row "@v1 08/07/2026, 11:07:25 outbound: 2 cond · inbound: 2 cond 2 rules" [ref=e392]':
+                      - cell "@v1" [ref=e393]
+                      - cell "08/07/2026, 11:07:25" [ref=e394]
+                      - 'cell "outbound: 2 cond · inbound: 2 cond" [ref=e395]'
+                      - cell "2 rules" [ref=e396]:
+                        - generic "broadcast:require_approval, artifact_put:require_approval" [ref=e397]: 2 rules
+              - generic [ref=e398]:
+                - heading "Publish a new version" [level=3] [ref=e399]
+                - generic [ref=e400]:
+                  - text: Governance rules
+                  - generic [ref=e402]:
+                    - generic [ref=e403]:
+                      - text: Action
+                      - combobox "Action" [ref=e404]:
+                        - option "message_create" [selected]
+                        - option "broadcast"
+                        - option "handoff_create"
+                        - option "artifact_put"
+                    - generic [ref=e405]:
+                      - text: Limit
+                      - combobox "Limit" [ref=e406]:
+                        - option "deny" [selected]
+                        - option "max_count"
+                        - option "max_bytes"
+                        - option "max_open_handoffs"
+                        - option "require_approval"
+                    - button "Add rule" [ref=e407] [cursor=pointer]:
+                      - img [ref=e408]
+                      - text: Add rule
+                - generic [ref=e409]:
+                  - text: Audience
+                  - generic [ref=e411]:
+                    - generic [ref=e412]:
+                      - generic [ref=e413]:
+                        - heading "Audience — outbound" [level=3] [ref=e414]
+                        - generic [ref=e415]: Operator-only
+                        - generic [ref=e416]:
+                          - button "Simple" [ref=e417] [cursor=pointer]
+                          - button "Expressions" [ref=e418] [cursor=pointer]
+                      - paragraph [ref=e419]:
+                        - text: "Bounds whom holders of this policy may reach with direct messages, broadcasts and handoffs. No conditions = no restriction. Simple mode: AND across keys, OR across values. Expressions mode adds In / NotIn / Exists / DoesNotExist (ANDed). Conditions are built from Tag Registry entries only; values match hierarchically by"
+                        - code [ref=e420]: /
+                        - text: segment.
+                      - button "+ Add condition (AND) — pick a registered key" [ref=e423] [cursor=pointer]:
+                        - text: + Add condition (AND) — pick a registered key
+                        - img [ref=e424]
+                    - generic [ref=e426]:
+                      - generic [ref=e427]:
+                        - heading "Audience — inbound" [level=3] [ref=e428]
+                        - generic [ref=e429]: Operator-only
+                        - generic [ref=e430]:
+                          - button "Simple" [ref=e431] [cursor=pointer]
+                          - button "Expressions" [ref=e432] [cursor=pointer]
+                      - paragraph [ref=e433]: "Bounds who may reach holders of this policy: senders whose tags miss the filter are blocked (direct sends) or silently dropped (group fan-outs). No conditions = anyone may reach them. Simple mode: AND across keys, OR across values. Expressions mode adds In / NotIn / Exists / DoesNotExist (ANDed). Conditions are built from Tag Registry entries only."
+                      - button "+ Add condition (AND) — pick a registered key" [ref=e436] [cursor=pointer]:
+                        - text: + Add condition (AND) — pick a registered key
+                        - img [ref=e437]
+                - generic [ref=e439]:
+                  - button "Publish version" [ref=e440] [cursor=pointer]:
+                    - img [ref=e441]
+                    - text: Publish version
+                  - generic [ref=e442]: Publishing with no rules and no audience is allowed — an empty, non-restricting version.

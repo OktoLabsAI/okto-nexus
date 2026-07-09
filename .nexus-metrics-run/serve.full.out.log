@@ -1,0 +1,213 @@
+INFO:     127.0.0.1:51204 - "GET /api/v1/stream?last_event_id=1457 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61937 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61946 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61947 - "GET /api/v1/metrics/publish-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49907 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49907 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /assets/index-DnrdiSCq.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /assets/index-D82j3ffn.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /logos/nexus-wordmark-light.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /logos/nexus-wordmark-dark.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57789 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57144 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51814 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51814 - "GET /api/v1/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /logos/nexus-icon.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57144 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57789 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58174 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60790 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63446 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64863 - "GET /api/v1/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61423 - "GET /api/v1/metrics/publish-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58554 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60787 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52488 - "GET /api/v1/tags HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52488 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65061 - "GET /api/v1/presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60787 - "GET /api/v1/tags HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63714 - "GET /api/v1/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63714 - "GET /api/v1/guardrails HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60787 - "GET /api/v1/guardrails/groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65061 - "GET /api/v1/guardrails/assignments HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52488 - "GET /api/v1/guardrails/denials?workspace=all&limit=50 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52488 - "GET /api/v1/guardrails/grd_c2c15d74890f4d5387e9ac52f4710758 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/v1/comm-presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59326 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50953 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64447 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60403 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60403 - "GET /api/v1/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60403 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51115 - "GET /api/v1/handoffs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58928 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53186 - "GET /api/v1/presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54956 - "GET /api/v1/tags HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52438 - "GET /api/v1/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51089 - "GET /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51089 - "GET /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 406 Not Acceptable
+INFO:     127.0.0.1:51091 - "GET /.well-known/oauth-protected-resource/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51091 - "GET /mcp/.well-known/oauth-protected-resource HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:51092 - "GET /.well-known/oauth-protected-resource HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51091 - "GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51091 - "GET /.well-known/openid-configuration/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51093 - "GET /mcp/.well-known/openid-configuration HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:51094 - "GET /.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51088 - "GET /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:51088 - "GET /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 406 Not Acceptable
+INFO:     127.0.0.1:61237 - "GET /.well-known/oauth-protected-resource/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61237 - "GET /mcp/.well-known/oauth-protected-resource HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:61238 - "GET /.well-known/oauth-protected-resource HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61237 - "GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61237 - "GET /.well-known/openid-configuration/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61239 - "GET /mcp/.well-known/openid-configuration HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:61239 - "GET /.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61247 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61247 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61251 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61251 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61253 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61253 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61260 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61264 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61264 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:61266 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61266 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61305 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61305 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61306 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61306 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52788 - "GET /.well-known/oauth-protected-resource/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52788 - "GET /mcp/.well-known/oauth-protected-resource HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:52789 - "GET /.well-known/oauth-protected-resource HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52789 - "GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52791 - "GET /.well-known/openid-configuration/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52791 - "GET /mcp/.well-known/openid-configuration HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:52793 - "GET /.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52795 - "GET /.well-known/oauth-protected-resource/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52795 - "GET /mcp/.well-known/oauth-protected-resource HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:52796 - "GET /.well-known/oauth-protected-resource HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52796 - "GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52799 - "GET /.well-known/openid-configuration/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52799 - "GET /mcp/.well-known/openid-configuration HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:52800 - "GET /.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52817 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52817 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52823 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52823 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:52824 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52824 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52827 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52827 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52832 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52832 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:52835 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:52835 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49672 - "GET /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49672 - "GET /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 406 Not Acceptable
+INFO:     127.0.0.1:49674 - "GET /.well-known/oauth-protected-resource/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49675 - "GET /mcp/.well-known/oauth-protected-resource HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:49677 - "GET /.well-known/oauth-protected-resource HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49678 - "GET /.well-known/oauth-authorization-server/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49679 - "GET /.well-known/openid-configuration/mcp HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49680 - "GET /mcp/.well-known/openid-configuration HTTP/1.1" 401 Unauthorized
+INFO:     127.0.0.1:49681 - "GET /.well-known/oauth-authorization-server HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49703 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49703 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49705 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49705 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:49706 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49706 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54419 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62132 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56333 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56333 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62132 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54419 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58549 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56923 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56333 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62132 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54215 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63668 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61329 - "GET /api/v1/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63668 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62359 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54215 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56232 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50751 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63668 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63668 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65340 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60826 - "GET /api/v1/sessions?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54200 - "GET /api/v1/workspaces/f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662/health?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65340 - "GET /api/v1/workspaces/f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662/analytics?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60826 - "GET /api/v1/workspaces/23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d/health?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:65340 - "GET /api/v1/workspaces/23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d/analytics?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54200 - "GET /api/v1/sessions?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54200 - "GET /api/v1/workspaces/23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d/health?window=7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50584 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51081 - "GET /api/v1/workspaces/23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d/analytics?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50361 - "GET /api/v1/sessions?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59950 - "GET /api/v1/workspaces/23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d/health?window=7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63475 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59571 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53818 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52288 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1&status=all HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/v1/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62349 - "GET /api/v1/comm-presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57783 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57783 - "GET /logos/nexus-wordmark-light.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /logos/nexus-wordmark-dark.svg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53117 - "GET /api/v1/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57501 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52992 - "GET /api/v1/sessions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57783 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57783 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52992 - "GET /api/v1/approvals?workspace=23746b9d03d548ad6776dba27c4ca7692366712f654eac55d6da9753cb0fef7d HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57501 - "GET /api/v1/approvals?workspace=c8bec351392a4cc455314267a3ddfcdad1312b721bc04c61a6688cc1a87b5503 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62667 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59342 - "GET /api/v1/graph?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57783 - "GET /api/v1/approvals?workspace=2fe2e37ef7c99e1ed2820ac865533ee1877fb4032c07b725751bc808a76928d1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52992 - "GET /api/v1/approvals?workspace=9049e4becebcfa8c4eb7cc7f64cdd3564b7e784a303ebca72034b5437a9ea52e HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57501 - "GET /api/v1/approvals?workspace=c82afd24fa59857091799effca4aefb561b7d6be67bffcc6e81ad0fbc88c47bb HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62667 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62667 - "GET /api/v1/graph?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49768 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55403 - "GET /api/v1/presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52287 - "GET /api/v1/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58435 - "GET /api/v1/tags HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49678 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49678 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49682 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49682 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49687 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49687 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49690 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:49690 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50979 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50980 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50980 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50987 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50987 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50992 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:50992 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54796 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61118 - "POST /mcp?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:61118 - "POST /mcp/?api_key=nxs_10a9317f9fada45badab2487c5a0b4d7a80e864cbcefeb38 HTTP/1.1" 200 OK

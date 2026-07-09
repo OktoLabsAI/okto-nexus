@@ -1,0 +1,92 @@
+- generic [ref=f3e3]:
+  - banner [ref=f3e4]:
+    - button "Collapse menu" [ref=f3e5] [cursor=pointer]:
+      - img [ref=f3e6]
+    - generic:
+      - img "Okto Nexus"
+    - generic [ref=f3e8]: / Graph
+    - generic [ref=f3e9]:
+      - combobox "Workspace scope" [ref=f3e10]:
+        - option "All workspaces" [selected]
+      - generic [ref=f3e11]: ● Off
+      - button "Refresh" [ref=f3e12] [cursor=pointer]:
+        - img [ref=f3e13]
+      - button [ref=f3e17] [cursor=pointer]:
+        - img [ref=f3e18]
+        - img [ref=f3e19]
+  - generic [ref=f3e21]:
+    - complementary [ref=f3e22]:
+      - navigation [ref=f3e24]:
+        - heading "Observability" [level=3] [ref=f3e25]
+        - list [ref=f3e26]:
+          - listitem [ref=f3e27]:
+            - button "Graph" [ref=f3e28] [cursor=pointer]:
+              - img [ref=f3e29]
+              - generic [ref=f3e36]: Graph
+          - listitem [ref=f3e37]:
+            - button "Messages" [ref=f3e38] [cursor=pointer]:
+              - img [ref=f3e39]
+              - generic [ref=f3e42]: Messages
+          - listitem [ref=f3e43]:
+            - button "Handoffs" [ref=f3e44] [cursor=pointer]:
+              - img [ref=f3e45]
+              - generic [ref=f3e47]: Handoffs
+          - listitem [ref=f3e48]:
+            - button "Events" [ref=f3e49] [cursor=pointer]:
+              - img [ref=f3e50]
+              - generic [ref=f3e52]: Events
+          - listitem [ref=f3e53]:
+            - button "Memory" [ref=f3e54] [cursor=pointer]:
+              - img [ref=f3e55]
+              - generic [ref=f3e63]: Memory
+          - listitem [ref=f3e64]:
+            - button "Workspaces" [ref=f3e65] [cursor=pointer]:
+              - img [ref=f3e66]
+              - generic [ref=f3e68]: Workspaces
+          - listitem [ref=f3e69]:
+            - button "Agents" [ref=f3e70] [cursor=pointer]:
+              - img [ref=f3e71]
+              - generic [ref=f3e76]: Agents
+          - listitem [ref=f3e77]:
+            - button "Registry" [ref=f3e78] [cursor=pointer]:
+              - img [ref=f3e79]
+              - generic [ref=f3e83]: Registry
+          - listitem [ref=f3e84]:
+            - button "Policies" [ref=f3e85] [cursor=pointer]:
+              - img [ref=f3e86]
+              - generic [ref=f3e88]: Policies
+          - listitem [ref=f3e89]:
+            - button "Guardrails" [ref=f3e90] [cursor=pointer]:
+              - img [ref=f3e91]
+              - generic [ref=f3e93]: Guardrails
+          - listitem [ref=f3e94]:
+            - button "Communication" [ref=f3e95] [cursor=pointer]:
+              - img [ref=f3e96]
+              - generic [ref=f3e98]: Communication
+          - listitem [ref=f3e99]:
+            - button "Approvals" [ref=f3e100] [cursor=pointer]:
+              - img [ref=f3e101]
+              - generic [ref=f3e104]: Approvals
+    - main [ref=f3e105]:
+      - generic [ref=f3e109]:
+        - generic [ref=f3e110]:
+          - generic [ref=f3e111]: How to read this graph
+          - button "✕" [ref=f3e112] [cursor=pointer]
+        - generic [ref=f3e113]: ● present · heartbeat < 1 min
+        - generic [ref=f3e114]: ● stale · silent for 1–30 min
+        - generic [ref=f3e115]: ● offline · no active session
+        - generic [ref=f3e116]: → in-flight N ✉ · pulled, processing (no ack yet)
+        - generic [ref=f3e117]: "⇢ inbox N ⌛ · dashed: delivered, awaiting pull"
+        - generic [ref=f3e118]: → completed flow · grey fades light→dark over 15 min / 1 h / 4 h, then disappears
+        - generic [ref=f3e119]: ■ handoff aberto · aguarda claim
+        - generic [ref=f3e120]: card header · agent color (auto by identity unless set)
+        - generic [ref=f3e122]:
+          - generic [ref=f3e123]:
+            - img [ref=f3e124]
+            - text: "N"
+          - text: pending inbox ·
+          - generic [ref=f3e127]:
+            - img [ref=f3e128]
+            - text: "N"
+          - text: open handoffs · hidden at 0
+        - generic [ref=f3e131]: Click any element to inspect it.
