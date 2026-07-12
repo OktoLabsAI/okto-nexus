@@ -22,6 +22,14 @@ publishes the full closed set (BR9: 12 URIs).
 
 from __future__ import annotations
 
+from okto_nexus.application.inbox import (
+    DEFAULT_INBOX_LEASE_TTL_SECONDS,
+    DEFAULT_MAX_DELIVERY_ATTEMPTS,
+    MAX_LEASE_SECONDS,
+    MIN_LEASE_SECONDS,
+    PEEK_BODY_PREVIEW_CHARS,
+)
+
 from .resources import add_resource
 
 # --------------------------------------------------------------------------- #
@@ -31,7 +39,7 @@ add_resource(
     slug="target-grammar",
     name="Routing target grammar",
     description="The full routing-target grammar (every strategy shape, rules, examples, edge cases) shared by message_create and handoff_create.",
-    version="4",
+    version="5",
     body="""\
 # Routing target
 
@@ -101,8 +109,9 @@ eligibility set (handoff_create: who may CLAIM it).
 - handoff_create: ``target`` is REQUIRED. Pool targets return ``eligible_count``
   and a ``warning`` when 0 agents currently match (the handoff stays OPEN for
   later registrants; ``handoff_cancel`` retracts a mistake).
-- ``direct_with_fallback`` and a ``broadcast`` nested in ``mixed`` are rejected
-  on message_create (VALIDATION_ERROR).
+- ``direct_with_fallback`` is rejected on message_create (handoff-only - model
+  timed escalation as a handoff). A ``broadcast`` nested in ``mixed`` is
+  rejected EVERYWHERE (both tools share the grammar; VALIDATION_ERROR).
 - A wrong-typed ``target`` (number/boolean/array) returns the canonical
   VALIDATION_ERROR envelope, not an SDK error.""",
 )
@@ -116,16 +125,15 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="1",
+    version="2",
     body="""\
 # message_create
 Persist a message and emit ``message.created`` in one transaction. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
 ``delivered_count`` totals it. Track what happens next with
-``message_status(message_id)`` (per-recipient lanes unread/delivered/read/parked)
-or wait for the sender-only receipt events ``message.delivered`` / ``message.read``
-via event_wait. A broadcast (no target) reaches the workspace's PRESENT agents
+``message_status(message_id)`` or the sender-only receipt events (mechanics:
+okto-nexus://reference/tool-docs/inbox). A broadcast (no target) reaches the workspace's PRESENT agents
 only; agents excluded for heartbeat staleness are reported in ``excluded_stale``
 + ``warning``. In trust_mode=strict pass from_session_id + session_secret (from
 session_open). For large content, attach an artifact and keep ``body`` a short
@@ -154,20 +162,25 @@ add_resource(
     slug="tool-docs/inbox",
     name="Tool docs - inbox",
     description="Full reference for the per-recipient inbox tools (pull/ack/extend/peek/count/history/message_status).",
-    version="1",
-    body="""\
+    version="2",
+    body=f"""\
 The inbox is GLOBAL (keyed by agent_id): a direct message reaches you regardless
 of which workspace it was sent in. At-least-once: pulled messages are leased; if
-you do not ack them before the lease elapses they are redelivered; a message
-redelivered too many times is parked (dead-letter).
+you do not ack them before the lease elapses they are redelivered; a delivery
+that exhausts its {DEFAULT_MAX_DELIVERY_ATTEMPTS} claim attempts is parked
+(dead-letter - excluded from inbox_count; see it via inbox_peek
+include_parked=true).
 
 # inbox_pull
 Take your unread messages (and your own lease-expired redeliveries) into
 in-flight and return them WITH their body. Index-free: the server tracks your
 per-recipient read state, so you never pass a cursor. Size the lease with
-``lease_seconds`` (default 120, clamped 10..3600) or renew with inbox_extend.
+``lease_seconds`` (default {DEFAULT_INBOX_LEASE_TTL_SECONDS} - the server's
+inbox_lease_ttl_seconds knob - clamped
+{MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}) or renew with inbox_extend.
 Pulling emits a ``message.delivered`` receipt to each message's sender. In
 trust_mode=strict pass session_id + session_secret.
+""" + """\
 
 # inbox_ack
 Acknowledge messages into history (read). Returns ``{acknowledged, read_message_ids}``
@@ -175,17 +188,20 @@ Acknowledge messages into history (read). Returns ``{acknowledged, read_message_
 ``message.read`` receipt to its sender; unless the operator opted out
 (inbox_read_receipts) the sender also gets a compact ``message.read_receipt``
 notification in its own inbox. Receipts never generate receipts.
+""" + f"""\
 
 # inbox_extend
 Renew the lease on in-flight messages you pulled but have not finished. New
-lease = now + extend_seconds (clamped 10..3600). All-or-nothing: if any id is not
-in-flight the call fails with a per-message reason and nothing is extended.
+lease = now + extend_seconds (clamped {MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}).
+All-or-nothing: if any id is not in-flight the call fails with a per-message
+reason and nothing is extended.
 
 # inbox_peek
 READ-ONLY triage of pending (unread + in-flight) WITHOUT consuming. Envelope-only
-by default: ``body_preview`` (first 200 chars) + ``body_bytes`` instead of the
-full body. ``include_parked=true`` also shows dead-lettered messages;
-``include_bodies=true`` opts into full bodies.
+by default: ``body_preview`` (first {PEEK_BODY_PREVIEW_CHARS} chars) +
+``body_bytes`` instead of the full body. ``include_parked=true`` also shows
+dead-lettered messages; ``include_bodies=true`` opts into full bodies.
+""" + """\
 
 # inbox_count
 READ-ONLY lane sizes ``{unread, in_flight, read}``. Cheap between-turns check;
@@ -199,21 +215,26 @@ even while you keep acknowledging).
 Track a message you SENT: ``{message_id, deliveries, count}`` where each delivery
 is ``{recipient, status, attempts, read_at}`` and status is
 unread/delivered/read/parked. Use it instead of re-sending when a recipient
-seems silent.""",
+seems silent.
+
+# profile parameter (inbox_pull/peek/history; also event_get/event_wait)
+One of: default (all fields minus dead ones), summary (minimal + follow_up -
+trims per-call tokens), full (raw).""",
 )
 
 add_resource(
     slug="tool-docs/events",
     name="Tool docs - event log",
     description="Full reference for event_get / event_cursor / event_wait (streams, filters, cursors, the long-poll).",
-    version="1",
+    version="2",
     body="""\
 Events are OBSERVABILITY (audit/monitoring of message.created, handoff.*,
 session.* events); they are NOT how you receive messages addressed to you - that
 is the inbox. stream is one of: workspace, agent, handoff. message.created, the
 sender-only receipts message.delivered/message.read and artifact.created are on
-``workspace``. filters (equality, AND-combined) allow keys: type, agent_id,
-task_id, handoff_id. Visibility is per-event: you only see events you may see.
+``workspace``. filters (equality, AND-combined) allow keys: type and agent_id
+(event columns) plus task_id, handoff_id and trace_id (payload-level).
+Visibility is per-event: you only see events you may see.
 
 # event_get
 Read a cursor-paginated page (non-blocking). cursor = the last event_id you
@@ -364,7 +385,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="3",
+    version="4",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -379,7 +400,10 @@ Return YOUR OWN profile, derived from your API key (no parameters): agent_id,
 operator-assigned role, capabilities, metadata, permissions (null = unrestricted).
 The recommended FIRST call. VALIDATION_ERROR on a connection with no
 authenticated identity (open cooperative stdio): there, read profiles with
-agent_get.
+agent_get. When you have policy/communication bindings the profile ALSO carries
+``effective_policies`` (``<policy_id>@<version>`` / ``inline``), a
+``governance`` rule list and a ``communication`` style block - each absent
+otherwise.
 
 # agent_register
 Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY on an
@@ -396,8 +420,11 @@ with VALIDATION_ERROR listing the unregistered names. Discover the sanctioned
 vocabulary with capability_list; agents never define new names themselves.
 
 # agent_list / agent_get
-List all registered agents (global), each with role/capabilities and
-last_seen_at; or read one agent's details. Discovery surface for addressing.
+List registered agents (global), each with role/capabilities and last_seen_at;
+or read one agent's details. Discovery surface for addressing. Discovery is
+scoped by REACHABILITY: an authenticated caller sees only the agents its comm
+scope can reach (plus itself); agent_get of an unreachable agent reads as
+NOT_FOUND, indistinguishable from nonexistent. Anonymous callers see all.
 
 # capability_list
 List the central capability catalog merged with ownership: EVERY registered
@@ -452,7 +479,7 @@ add_resource(
     slug="tool-docs/artifacts",
     name="Tool docs - artifacts",
     description="Full reference for artifact_put / artifact_get.",
-    version="1",
+    version="2",
     body="""\
 # artifact_put
 Register a file/text/json/markdown artifact in the resolved workspace. Provide
@@ -464,7 +491,11 @@ label; inline-vs-reference is decided by content-vs-path). Emits
 ``artifact.created``.
 
 # artifact_get
-Retrieve an artifact by id within the workspace resolved from project_root.""",
+Retrieve an artifact by id within the workspace resolved from project_root.
+Reads are AUDIENCE-SCOPED: the publisher's effective outbound audience is
+frozen onto the artifact at artifact_put; a reader outside it gets NOT_FOUND,
+indistinguishable from a missing id. No audience (publisher without bindings)
+= readable by anyone in the workspace.""",
 )
 
 # --------------------------------------------------------------------------- #
@@ -473,32 +504,33 @@ Retrieve an artifact by id within the workspace resolved from project_root.""",
 add_resource(
     slug="governance",
     name="Governance policies",
-    description="Operator-set deny rules and quotas: subject model, actions, limit kinds, deny-overrides semantics, windows, and the POLICY_DENIED / QUOTA_EXCEEDED error format.",
-    version="1",
+    description="Operator-attached policies (bindings): actions, limit kinds, deny-overrides semantics, windows, and the POLICY_DENIED / QUOTA_EXCEEDED error format.",
+    version="2",
     body="""\
-# GOVERNANCE POLICIES (feature_governance, default OFF)
+# GOVERNANCE POLICIES (always-on, binding-driven)
 
-Operators can set GLOBAL policies that the bus enforces BEFORE persisting a
-write. When the flag is OFF nothing is enforced and nothing changes for you.
-When it is ON, a write that violates a policy fails with a normative error -
-your request is NOT persisted and recipients never see it.
+Operators can ATTACH policies to your identity; the bus enforces them BEFORE
+persisting a write. There is NO feature flag: enforcement is always on and
+driven by BINDINGS - an agent with no bindings composes to nothing and passes
+untouched, byte-identical to an ungoverned bus. A write that violates an
+attached policy fails with a normative error - your request is NOT persisted
+and recipients never see it.
 
-## Subject model - who a policy matches
-Each policy names ONE subject: a specific ``agent`` (your agent_id), a ``role``
-(your operator-assigned role, exact match), a ``capability`` (any agent
-advertising that catalog capability), or ``star`` (every agent, including
-callers with no identity). Policies are GLOBAL - not per-workspace - and your
-consumption is counted across ALL workspaces.
+## Binding model - who a policy governs
+A policy is a GLOBAL, versionable object unifying audience + governance rules.
+It governs you when an operator binds it to YOUR agent (directly or as an
+inline binding). Policies are not per-workspace, and your consumption is
+counted across ALL workspaces. Callers with no identity are never governed.
 
-## Actions - what a policy covers
+## Actions - what a rule covers
 One of: ``message_create``, ``broadcast``, ``handoff_create``, ``artifact_put``.
 ``broadcast`` is the explicit {"strategy":"broadcast"} target AND the
-target-less, channel-less send (same reach). A ``message_create`` policy also
-covers broadcast (broadcast IS a message create); a ``broadcast`` policy does
+target-less, channel-less send (same reach). A ``message_create`` rule also
+covers broadcast (broadcast IS a message create); a ``broadcast`` rule does
 NOT restrict direct/targeted sends.
 
-## Limit kinds - what a policy does
-* ``deny`` - the action is categorically blocked for the subject.
+## Limit kinds - what a rule does
+* ``deny`` - the action is categorically blocked for you.
 * ``max_count`` - at most N actions per rolling window (``1h`` or ``24h``),
   counted per agent across all workspaces, evaluated pre-write (the attempt
   that would exceed the limit fails; completed ones stay).
@@ -507,12 +539,14 @@ NOT restrict direct/targeted sends.
   handoff payload, or artifact content.
 * ``max_open_handoffs`` - at most N of your created handoffs may be
   non-terminal at once; completing/cancelling/rejecting one frees the slot.
+* ``require_approval`` - the action is intercepted for a human decision (see
+  okto-nexus://reference/hitl; needs feature_hitl ON).
 
 ## Evaluation semantics
+The union of your bound policies' rules matching the action is evaluated.
 Deny-overrides: if ANY applicable deny matches, it wins over every quota.
-Otherwise quotas are checked in deterministic order (created_at, then
-policy_id) and the first violation is reported. Disabled policies are ignored.
-No applicable policy = allowed.
+Otherwise quotas are checked deterministically and the first violation is
+reported. No applicable rule = allowed.
 
 ## Errors you can receive
 * ``POLICY_DENIED`` (HTTP 403) - a deny matched. details: {policy_id, action,
@@ -521,16 +555,19 @@ No applicable policy = allowed.
   limit_kind, limit, window?, current?}.
 Both are terminal for that attempt - do NOT retry a deny; for quotas, wait for
 the window to roll or reduce your payload. The details only ever describe YOUR
-own matched policy - never other agents' state. Every denial is also audited
+own matched rule - never other agents' state. Every denial is also audited
 as a ``governance.denied`` event on the workspace stream (payload carries the
 policy/action context, never your subject/body).
 
 ## Discovering the policies that apply to YOU
-``agent_whoami`` includes a ``governance`` block - a list of {policy_id,
-action, limit_kind, limit?, window?} - ONLY when the flag is ON and at least
-one active policy matches you. No block = nothing restricts you right now.
-Policies are managed by operators over REST (/api/v1/governance/policies) and
-the dashboard; agents cannot create or edit them.""",
+``agent_whoami`` returns ``effective_policies`` (``<policy_id>@<version>`` /
+``inline``) plus a ``governance`` block - a list of {policy_id, action,
+limit_kind, limit?, window?} - ONLY when you have bindings with governance
+rules. No block = nothing restricts you right now. Policies are managed by
+operators (dashboard, or REST: POST /api/v1/policies, POST
+/api/v1/policies/{policy_id}/versions, PUT /api/v1/agents/{agent_id}/policies);
+agents cannot create or edit them. (The legacy /api/v1/governance/policies CRUD
+still exists but its writes no longer feed enforcement.)""",
 )
 
 
@@ -541,15 +578,17 @@ add_resource(
     slug="hitl",
     name="Human-in-the-loop approvals",
     description="What a pending_approval envelope means, which approval.* events to watch via event_wait, how a rejection reaches you, and why you must never re-send while pending.",
-    version="1",
+    version="2",
     body="""\
 # HITL APPROVALS (feature_hitl, default OFF)
 
-Operators can require HUMAN APPROVAL for specific actions by setting a
-governance policy with limit_kind ``require_approval``. Interception only
-happens when BOTH ``feature_governance`` and ``feature_hitl`` are ON; with
-either flag OFF nothing changes for you. When it triggers, your write is NOT
-executed: it is parked as a pending approval for a human operator to decide.
+Operators can require HUMAN APPROVAL for specific actions by binding you a
+policy whose version carries a ``require_approval`` rule. Interception happens
+when such a rule bound to YOU matches the action AND ``feature_hitl`` is ON
+(check nexus_info.features.feature_hitl; your agent_whoami ``governance`` block
+lists any require_approval rule bound to you). With ``feature_hitl`` OFF
+nothing changes for you. When it triggers, your write is NOT executed: it is
+parked as a pending approval for a human operator to decide.
 
 ## The pending envelope
 An intercepted ``message_create`` / ``handoff_create`` (broadcast included)
@@ -596,6 +635,6 @@ nothing for you to re-send.
   still checked FIRST - interception only replaces an action that would
   otherwise have PASSED.
 * ``agent_whoami``'s ``governance`` block lists any ``require_approval``
-  policy matching you, so you can anticipate the interception before
+  rule bound to you, so you can anticipate the interception before
   writing.""",
 )

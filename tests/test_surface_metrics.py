@@ -14,6 +14,7 @@ from okto_nexus.adapters.inbound.mcp.server import bootstrap, create_server
 from okto_nexus.adapters.inbound.mcp.surface_metrics import (
     APPROVED_GROWTH,
     BASELINE,
+    EXPERIMENTAL_GROWTH_KEYS,
     cuttable_reduction_pct,
     measure_resident_surface,
 )
@@ -49,9 +50,23 @@ def test_cuttable_reduction_helper_matches_baseline_math(tmp_path):
     # The helper discounts ONLY the APPROVED_GROWTH ledger (surface later
     # specs deliberately added, e.g. I4 verification); unlisted growth still
     # lowers the figure, so gratuitous bloat keeps tripping the S4 gate.
-    approved = sum(APPROVED_GROWTH.values())
+    # Experimental entries (flag-gated tools NOT on the default surface,
+    # e.g. memory_i6) are excluded unless include_experimental=True - the
+    # default gate must not discount growth that is not there (rev 31).
+    approved = sum(
+        cost
+        for key, cost in APPROVED_GROWTH.items()
+        if key not in EXPERIMENTAL_GROWTH_KEYS
+    )
     assert (
         pct
         == (BASELINE["cuttable"] - (m["cuttable"] - approved)) / BASELINE["cuttable"]
     )
     assert 0.0 <= pct < 1.0
+
+    # With the experimental surface declared present, the full ledger counts.
+    pct_full = cuttable_reduction_pct(m["cuttable"], include_experimental=True)
+    approved_full = sum(APPROVED_GROWTH.values())
+    assert pct_full == (
+        BASELINE["cuttable"] - (m["cuttable"] - approved_full)
+    ) / BASELINE["cuttable"]

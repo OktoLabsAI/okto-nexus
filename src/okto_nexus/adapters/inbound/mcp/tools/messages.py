@@ -85,9 +85,7 @@ _MIGRATED_CODE: str = (
 #: Reused parameter descriptions (kept DRY across the message/channel tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = (
-    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-)
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
 _P_SUBJECT = "Short message subject/title (one line)."
 _P_BODY = "Message body (inline text). For large content, attach an artifact and keep body a short pointer."
@@ -105,14 +103,11 @@ _P_TARGET_MSG = (
     'capability {"strategy":"capability","capability":"<cap>"}; role '
     '{"strategy":"role","role":"<role>"}; tag {"strategy":"tag","selector":'
     '{"<key>":["<value>",...]}} (flat: AND across keys, OR within values) or '
-    'rich selector [{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist",'
-    '"values":["<v>",...]}] (expressions ANDed; Exists/DoesNotExist take NO '
-    "values; CAUTION: NotIn/DoesNotExist also match agents MISSING the key - "
-    'compose with Exists to require it; values with "/" match by path segment, '
-    "ENG covers ENG/BACKEND not ENGX; selector tags must be registered in the "
-    'operator-managed tag catalog); broadcast {"strategy":"broadcast"}; '
-    'mixed {"strategy":"mixed","rules":[<sub-target>,...]}. Rules/examples/'
-    "edge-cases: read resource okto-nexus://reference/target-grammar."
+    'rich [{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist","values":'
+    '["<v>",...]}] (ANDed; CAUTION: NotIn/DoesNotExist also match agents '
+    'MISSING the key); broadcast {"strategy":"broadcast"}; mixed '
+    '{"strategy":"mixed","rules":[<sub-target>,...]}. Hierarchy/catalog rules, '
+    "examples, edge-cases: okto-nexus://reference/target-grammar."
 )
 _P_ARTIFACTS = "List of artifact_id strings to attach (optional; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."

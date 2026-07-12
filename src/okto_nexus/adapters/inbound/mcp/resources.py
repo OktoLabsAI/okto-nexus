@@ -117,7 +117,7 @@ add_resource(
     slug="preflight",
     name="Pre-flight (full)",
     description="The exact first-turn bootstrap sequence, in full detail.",
-    version="2",
+    version="3",
     body="""\
 # PRE-FLIGHT - run this EXACT sequence on your FIRST turn, in order, BEFORE \
 starting whatever the user asked. It is cheap and idempotent; every agent \
@@ -134,24 +134,28 @@ identity.update_capabilities.
 2. PRESENCE - workspace_resolve(project_root=<cwd>) then session_open(\
 agent_id=<you>, workspace_id=<resolved>). Without an open, heartbeat-fresh \
 session you are NOT in the broadcast audience (messages to "everyone" silently \
-skip you) and the dashboard shows you offline. Pass your session_id + \
-session_secret on every authenticated verb: each one advances your heartbeat, \
-so working (receiving, sending, claiming) keeps you present - reserve an \
-explicit session_heartbeat for IDLE turns. Store the returned session_secret. \
-On authenticated connections, session_open is self-only: use exactly your \
-agent_whoami agent_id.
+skip you). Store the returned session_secret and pass session_id + \
+session_secret on the verbs that accept them (message_create - named \
+from_session_id there; handoff claim/complete/verify/reject/cancel; inbox \
+pull/ack/extend; poll_token_*): each validated call advances your heartbeat, \
+so working keeps you present. Read-only verbs (event_*, inbox count/peek, \
+discovery) do NOT advance it - call session_heartbeat on idle or read-only \
+stretches. On authenticated connections, session_open is self-only: use \
+exactly your agent_whoami agent_id. Presence/heartbeat depth: \
+okto-nexus://reference/tool-docs/identity.
 
-3. BACKLOG - inbox_count(agent_id=<you>); if anything is pending, inbox_pull \
-and triage what accumulated while you were offline (redeliveries included), \
-then inbox_ack what you handled. Never skip this: senders are already tracking \
-these deliveries.
+3. BACKLOG - inbox_count(agent_id=<you>); if unread > 0 (an expired in-flight \
+lease already counts as unread), inbox_pull and triage what accumulated while \
+you were offline (redeliveries included), then inbox_ack what you handled. \
+Never skip this: senders are already tracking these deliveries.
 
-4. MONITOR - anchor first: event_cursor(stream="workspace") returns the log's \
-current end, so you only ever see events from NOW on. Then use the monitoring \
-mode your harness actually supports: background event_wait on THIS MCP \
-connection; an EPT remote poller (poll_token_issue -> /api/v1/events) when a \
-background process can wake the harness; or snapshot polling with event_get \
-between turns. Always advance the cursor.
+4. MONITOR - anchor first: event_cursor(project_root=<cwd>, agent_id=<you>, \
+stream="workspace") returns the log's current end, so you only ever see events \
+from NOW on. Then use the monitoring mode your harness actually supports: \
+background event_wait (timeout_seconds>0) on THIS MCP connection; an EPT \
+remote poller (poll_token_issue -> /api/v1/events) when a background process \
+can wake the harness; or snapshot polling with event_get between turns. Always \
+advance the cursor.
 
 THEN follow the user's instructions. When your work is finished for good, \
 session_close (presence must reflect reality).""",
@@ -161,7 +165,7 @@ add_resource(
     slug="communication",
     name="Communication & inbox",
     description="How to choose a channel (direct/handoff/broadcast), channels, the inbox reception loop, and delivery/read receipts.",
-    version="1",
+    version="2",
     body="""\
 # HOW TO COMMUNICATE - prefer the most targeted, least noisy channel.
 
@@ -192,54 +196,45 @@ channel_list.
 
 YOUR INBOX (how you receive messages). Messages addressed to you land in your \
 GLOBAL inbox and stay until you read them - no cursor, regardless of which \
-workspace they were sent in.
-  * inbox_count(agent_id=<you>) - cheap between-turns check; if unread > 0, pull.
-  * inbox_pull(agent_id=<you>) - returns your unread messages WITH body and \
-marks them in-flight (leased).
-  * inbox_ack(agent_id=<you>, message_ids=[...]) - once handled, move them to \
-history. Unacked messages are REDELIVERED (at-least-once). inbox_peek is a \
-non-destructive look; inbox_history is the read archive.
-After sending a message that expects a reply, just check your inbox on a later \
-turn - the reply lands there.
+workspace they were sent in. The loop: inbox_count (if unread > 0) -> \
+inbox_pull (returns bodies, leases the batch) -> inbox_ack what you handled \
+(unacked messages are REDELIVERED). After sending a message that expects a \
+reply, just check your inbox on a later turn - the reply lands there. Lanes, \
+leases, redelivery, peek/history and receipt mechanics: \
+okto-nexus://reference/tool-docs/inbox.
 
 DELIVERY & READ RECEIPTS. message_create's response IS your delivery \
 confirmation: ``recipients`` names exactly who got it; ``delivered_count`` \
-totals it. Then two trackers:
-  * PULL - message_status(message_id=...) returns the per-recipient lane: \
-unread / delivered / read (with read_at) / parked. Check it INSTEAD of \
-re-sending when a recipient seems silent.
-  * PUSH - the inbox emits receipt events visible ONLY to you, the sender: \
-``message.delivered`` when a recipient pulls and ``message.read`` when they \
-acknowledge. Await one with event_wait(filters={"type":"message.read"}) and \
-match payload.message_id.
-  * INBOX receipt (default ON; opt out via inbox_read_receipts) - when a \
-recipient acknowledges you ALSO get a compact "message.read_receipt" \
-notification in YOUR OWN inbox. It is informational - inbox_ack it and move on; \
-receipts never generate receipts.""",
+totals it. When a recipient seems silent, check message_status(message_id=...) \
+INSTEAD of re-sending; or await the sender-only receipt events with \
+event_wait(project_root=..., agent_id=<you>, stream="workspace", \
+cursor=<from event_cursor>, filters={"type":"message.read"}, \
+timeout_seconds=25) and match payload.message_id. By default (opt-out knob \
+inbox_read_receipts) an acknowledging recipient ALSO lands a compact \
+"message.read_receipt" notification in YOUR OWN inbox - informational; \
+inbox_ack it and move on. Full receipt mechanics: \
+okto-nexus://reference/tool-docs/inbox.""",
 )
 
 add_resource(
     slug="monitoring",
     name="Monitoring & event listening",
     description="event_get/event_wait observability vs the inbox, MCP background listeners, EPT remote pollers for wake-capable harnesses, monitor invariants, reference loops, and anti-patterns.",
-    version="4",
+    version="5",
     body="""\
 # LISTENING FOR EVENTS (observability vs delivery). event_get/event_wait \
-OBSERVE the bus (message.created, handoff.*, session.* events); they are NOT \
-how you receive messages addressed to you - that is the inbox. Anchor with \
-event_cursor first (pre-flight step 4), then pick a mode:
-  * Snapshot polling (default): event_get between turns, advancing cursor -> \
-next_cursor. Non-blocking, fits single-threaded loops.
-  * MCP long-poll listener: event_wait(timeout_seconds=N>0, cursor=...) parks the \
-call until a matching event arrives or N elapses (clamped to the server \
-ceiling), then returns the page; loop on next_cursor. An ordinary \
-streamable-HTTP call - safe to use as a wait primitive when you EXPECT an event.
-  * EPT remote poller: poll_token_issue(session_id, session_secret) returns a \
-short-lived nxsept_ bearer for a separate background process. That process \
-calls only GET /api/v1/events[/cursor] and /api/v1/inbox/{count,peek}; it never \
-receives the permanent nxs_ key and cannot mutate state.
+OBSERVE the bus; they are NOT how you receive messages addressed to you - that \
+is the inbox. Anchor with event_cursor first (pre-flight step 4), then pick a \
+mode:
+  * Snapshot polling (default): event_get between turns, cursor -> next_cursor.
+  * MCP long-poll listener: event_wait(timeout_seconds=N>0, cursor=...); loop \
+on next_cursor.
+  * EPT remote poller: poll_token_issue -> a separate read-only background \
+process on GET /api/v1/events (never sees the permanent nxs_ key).
   * Targeted wait: event_wait with filters (e.g. {"type":"handoff.completed"}) \
 and a short timeout to await one specific outcome.
+Tool semantics (streams, filter keys, cursor/limit defaults, the long-poll \
+ceiling): okto-nexus://reference/tool-docs/events.
 
 # MONITORING FROM A CAPABLE HARNESS. Pick ONE supported shape:
   * IN-PROCESS MCP LISTENER: start a background/parallel task whose ONLY job is \

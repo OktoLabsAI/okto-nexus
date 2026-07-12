@@ -43,9 +43,7 @@ from okto_nexus.envelope import tool_envelope
 from ...http.identity_ctx import get_authenticated_agent
 
 #: Reused parameter descriptions (house style, mirrors the sibling tools).
-_P_ROOT = (
-    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-)
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_WINDOW = "Report window - one of: 1h, 24h, 7d (default: 24h)."
 _P_AGENT = (
     "Your agent_id for permission evaluation in open stdio mode (optional; "

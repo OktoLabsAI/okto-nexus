@@ -101,13 +101,13 @@ from .resources import register_resources, resource_versions
 #: without carrying the permanent ``nxs_`` key.
 SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-scoped; pass project_root). Agents are global identities - discover them with agent_list and their advertised capabilities with capability_list. DEEP reference docs live in MCP resources (okto-nexus://reference/...); read them on demand. This inline block keeps only what you need to act correctly on the first try.
 
-YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/mcp?api_key=nxs_...) IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, spawn helper processes, or attach a stdio server.
+YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/mcp?api_key=nxs_...) IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, attach a stdio server, or spawn helper processes (sole exception: an EPT poller holding only a short-lived nxsept_ token, never your nxs_ key).
 
 PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, idempotent):
   1. agent_whoami() - your agent_id, role, capabilities, permissions. Use that agent_id everywhere.
-  2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Pass your session_id + session_secret on every authenticated verb - each advances your heartbeat, so working keeps you present (only heartbeat-fresh sessions receive broadcasts and show online); reserve an explicit session_heartbeat for IDLE turns. Store the returned session_secret.
+  2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Store the returned session_secret. Pass session_id + session_secret on the verbs that accept them (message_create - named from_session_id there; handoff claim/complete/verify/reject/cancel; inbox pull/ack/extend; poll_token_*) - each validated call advances your heartbeat, keeping you in the broadcast audience. Read-only verbs (event_*, inbox count/peek, discovery) do NOT advance it: call session_heartbeat on idle or read-only stretches.
   3. inbox_count(agent_id=<you>); if unread > 0, inbox_pull and triage the backlog, then inbox_ack what you handled.
-  4. event_cursor(stream="workspace") to anchor at NOW, then monitor via event_wait (background long-poll), an EPT remote poller (poll_token_issue -> /api/v1/events), or event_get polling, advancing the cursor.
+  4. event_cursor(project_root=<cwd>, agent_id=<you>, stream="workspace") to anchor at NOW, then monitor via event_wait with timeout_seconds>0 (background long-poll), an EPT remote poller (poll_token_issue -> /api/v1/events), or event_get polling, advancing the cursor.
 Full detail: resource okto-nexus://reference/preflight. When finished for good, session_close.
 
 COMMUNICATE - prefer the most targeted, least noisy channel:
@@ -356,7 +356,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: and binding-driven (``feature_governance`` removed). One new error code
 #: (``POLICY_IN_USE``, REST-only 409). Operator REST surfaces (``/policies``,
 #: ``PUT /agents/{id}/policies``) are NOT MCP tools, so the stdio/http tool
-#: parity is unchanged. Growth ledger: ``policies_b3`` (+233 docstring chars).
+#: parity is unchanged. Growth ledger: ``policies_b3`` (+127 docstring chars, the measured value).
 #: 26 = communication presets (spec 6f961722, migration 023): NO new tool - only
 #: the SEMANTICS of ``agent_whoami`` grew. It now returns a SELF-ONLY
 #: ``communication`` block ({source, content}) - the caller's resolved style
@@ -391,7 +391,30 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: no longer exposed by discovery/events/direct notifications, only by
 #: handoff_claim and claimant handoff_get. Guardrail/group administration tools
 #: were removed from MCP entirely; critical guardrail admin is UI/REST-only.
-SURFACE_REVISION = 30
+#: 31 = docs-accuracy sweep (análise 0003, doc-only - no tool/parameter/
+#: semantics change): SERVER_INSTRUCTIONS corrected (full event_cursor call
+#: shape; precise credential/heartbeat verb list - read-only verbs never
+#: advance the session heartbeat; the helper-process ban now carries its one
+#: sanctioned exception, the nxsept_ EPT poller; event_wait long-poll is an
+#: explicit timeout_seconds>0 opt-in). Stale resources rewritten and bumped:
+#: governance v2 (binding-driven always-on model, /api/v1/policies flow -
+#: feature_governance no longer exists), hitl v2 (same flag fix),
+#: tool-docs/inbox v2 (lease default now INTERPOLATED from config - was
+#: hardcoded 120 vs real 300 - plus the profile enum semantics),
+#: tool-docs/events v2 (trace_id filter key), tool-docs/identity v4
+#: (reachability-scoped discovery + whoami conditional blocks),
+#: tool-docs/artifacts v2 (audience-scoped reads), target-grammar v5
+#: (broadcast-in-mixed rejection is universal), tool-docs/messages v2,
+#: communication v2 + monitoring v5 + preflight v3 (dedup: reception loop /
+#: receipts / event-tool semantics each live in ONE resource + pointers).
+#: Params token cut (target cheat-sheets keep shapes + absence caution, deep
+#: rules move to the grammar resource; project_root sha256 tail lives only on
+#: workspace_resolve; handoff session_secret standardized to the bus-wide
+#: wording; profile enums minimal) and family docs pointers standardized on
+#: the entry tools (inbox_pull, event_get, artifact_put). surface_metrics:
+#: memory_i6 discount now conditional on the experimental surface being
+#: registered (the 40% gate no longer discounts phantom growth).
+SURFACE_REVISION = 31
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

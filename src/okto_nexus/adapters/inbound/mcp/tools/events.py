@@ -51,9 +51,7 @@ from okto_nexus.envelope import async_tool_envelope, tool_envelope
 #: Reused parameter descriptions (kept DRY across the two event tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = (
-    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-)
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_AGENT = (
     "Your agent_id; scopes per-event visibility (you only see events you may see)."
 )
@@ -67,9 +65,9 @@ _P_FILTERS = (
 _P_TIMEOUT = (
     "Long-poll bound in SECONDS (optional; default 0). 0/omitted/null = an "
     "immediate non-blocking snapshot; >0 OPTS IN to a BLOCKING long-poll until an "
-    "event arrives or the timeout elapses. Listener patterns: okto-nexus://reference/monitoring."
+    "event arrives or the timeout elapses."
 )
-_P_PROFILE = "Response size profile: one of default/summary/full (optional; default=keep all fields minus dead ones; summary=minimal+follow_up; full=raw). Trims per-call tokens."
+_P_PROFILE = "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens)."
 
 
 def build_service(deps: Any) -> EventService:
@@ -117,7 +115,7 @@ def register(server: Any, deps: Any) -> None:
         filters: Annotated[Any, Field(description=_P_FILTERS)] = None,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
-        """Read a cursor-paginated page of the workspace event log (non-blocking). Scoped: events whose actor is outside your comm scope are omitted; your own and system events always show."""
+        """Read a cursor-paginated page of the event log (non-blocking). Actors outside your comm scope are omitted; yours and system events always show. Docs: okto-nexus://reference/tool-docs/events."""
         prof = parse_profile(profile)
         return apply_to_response(
             service.event_get(

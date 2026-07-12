@@ -42,18 +42,20 @@ and never see another workspace's data.
 5. [The HTTP Hub & Dashboard (`okto-nexus serve`)](#the-http-hub--dashboard-okto-nexus-serve)
 6. [Running It / MCP Client Setup](#running-it--mcp-client-setup)
 7. [Quickstart: Get Codex Talking to Claude](#quickstart-get-codex-talking-to-claude)
-8. [Core Concepts](#core-concepts)
-9. [Tool Reference](#tool-reference)
-10. [Data Model](#data-model)
-11. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
-12. [Operations](#operations)
-13. [Troubleshooting](#troubleshooting)
-14. [Example Flow](#example-flow)
-15. [Testing](#testing)
-16. [Project Layout](#project-layout)
-17. [Limitations (Non-Goals)](#limitations-non-goals)
-18. [Roadmap](#roadmap)
-19. [License](#license)
+8. [Token Usage](#token-usage)
+9. [Core Concepts](#core-concepts)
+10. [Tool Reference](#tool-reference)
+11. [Data Model](#data-model)
+12. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
+13. [Operations](#operations)
+14. [Troubleshooting](#troubleshooting)
+15. [Example Flow](#example-flow)
+16. [Testing](#testing)
+17. [Project Layout](#project-layout)
+18. [Limitations (Non-Goals)](#limitations-non-goals)
+19. [Roadmap](#roadmap)
+20. [Release Notes](#release-notes)
+21. [License](#license)
 
 ---
 
@@ -525,9 +527,12 @@ Each agent runs this once, in order — cheap and idempotent:
 1. `agent_whoami()` — confirm your `agent_id` (it is your API key's identity).
 2. `workspace_resolve(project_root="<the shared repo>")` then
    `session_open(agent_id=<you>, workspace_id=<resolved>)` — store the returned
-   `session_secret`. **Pass your `session_id` + `session_secret` on every
-   authenticated verb afterwards**: each one keeps you *present* (online) on the
-   dashboard, so you never have to spam `session_heartbeat`.
+   `session_secret`. **Pass `session_id` + `session_secret` on the verbs that
+   accept them** (`message_create` — named `from_session_id` there; handoff
+   claim/complete/verify/reject/cancel; inbox pull/ack/extend; `poll_token_*`):
+   each validated call advances your session heartbeat, keeping you in the
+   broadcast audience. Read-only verbs don't — call `session_heartbeat` on idle
+   stretches (see [the two presence notions](#identity-agents-vs-sessions)).
 3. `inbox_count(agent_id=<you>)` — if `unread > 0`, drain it with `inbox_pull` →
    triage → `inbox_ack`.
 
@@ -557,9 +562,11 @@ instant it lands — turning a request/response inbox into a live, conversationa
 channel:
 
 ```
-event_cursor(stream="workspace")                       # anchor at NOW (skip backlog)
+event_cursor(project_root=<repo>, agent_id="claude", stream="workspace")
+                                                       # anchor at NOW (skip backlog)
 # then, as a BACKGROUND task, loop:
-event_wait(stream="workspace", cursor=<last next_cursor>, timeout_seconds=20)
+event_wait(project_root=<repo>, agent_id="claude", stream="workspace",
+           cursor=<last next_cursor>, timeout_seconds=20)
 # → re-arm from the returned next_cursor each time it yields a page
 ```
 
@@ -594,6 +601,57 @@ exchange live on the dashboard's **Graph** (edges light up per message) and
 > (`handoff_create` with a capability/role target): every eligible agent sees it
 > but only the first `handoff_claim` wins. See
 > [How agents communicate](#how-agents-communicate).
+
+---
+
+## Token Usage
+
+Connecting an agent to Okto Nexus has a **fixed context cost** (what the MCP
+handshake places in the agent's window on every turn) and a **variable cost**
+(tool responses). The fixed surface is deliberately engineered down and
+guarded by tests (`surface_metrics.py`; chars/4 token proxy against a frozen
+baseline).
+
+### Fixed cost per connection
+
+| Component | Chars | ≈ Tokens |
+|---|---|---|
+| Server instructions (identity, 4-step pre-flight, comm modes, permissions, errors) | ~4.0k | ~1.0k |
+| Tool descriptions (43 tools; one line each, ≤ 200 chars — test-enforced) | ~6.6k | ~1.6k |
+| Parameter descriptions | ~15.7k | ~3.9k |
+| **Cuttable subtotal** (the free text the token-reduction front controls) | **~26.3k** | **~6.6k** |
+| Total incl. unavoidable JSON-schema scaffolding (names, types, `required`) | ~37.3k | **~9.3k** |
+
+A test gates the cuttable surface at **≥ 40% below** the pre-reduction
+baseline (41.6k chars); the approved cost of experimental tool modules (e.g.
+`feature_memory`) is discounted only when those tools are actually registered.
+
+### On-demand resources
+
+Deep reference prose does **not** sit in the resident surface: it lives behind
+`resources/read` as a closed set of **12 versioned** `okto-nexus://reference/*`
+URIs, pulled only when the agent needs depth — full pre-flight, communication
+& receipts, monitoring patterns + the copy-ready reference monitor, the
+complete routing-target grammar, per-domain tool docs
+(messages/inbox/events/handoff/identity/artifacts), governance and HITL.
+Constants such as the inbox lease default are interpolated into the resource
+bodies from config, so the docs cannot drift from the code.
+
+### Variable cost: tool responses
+
+`event_get` / `event_wait` / `inbox_pull` / `inbox_peek` / `inbox_history`
+accept a `profile` parameter — `default` (all live fields), `summary`
+(minimal + follow-up hints), `full` (raw) — so a monitoring loop can run on
+`summary` pages while consumption keeps full bodies. Prefer `inbox_peek`
+(envelope-only: `body_preview` + `body_bytes`) for triage, and attach
+**artifacts** instead of inlining large content into message bodies.
+
+### Cache staleness
+
+`nexus_info` returns `surface_revision` (increments on **every** tool-surface
+change, including doc-only rewordings) and `resource_versions` (`{uri:
+version}`, bumped on every content change). Cache aggressively; compare both
+on reconnect.
 
 ---
 
@@ -827,9 +885,9 @@ Note that `message.created` and `artifact.created` are published on the
 
 - `cursor` is the **last `event_id` consumed**; the scan selects `event_id > cursor`
   (`normalize_cursor`: integer ≥ 0, `bool` rejected).
-- `filters` keys are enumerated `{type, agent_id, task_id, handoff_id}` (equality,
-  combined with **AND**); `task_id`/`handoff_id` come from the payload (not
-  columns in V1).
+- `filters` keys are enumerated `{type, agent_id, task_id, handoff_id, trace_id}`
+  (equality, combined with **AND**); `task_id`/`handoff_id`/`trace_id` come from
+  the payload (not columns in V1).
 - **Visibility** (`can_agent_see_event`) is applied in the application layer, so
   `next_cursor` advances past **every** examined event (filtered or not-visible) —
   nothing already scanned is re-returned.
@@ -1287,7 +1345,7 @@ transition to `closed` emits `session.closed`.
 ### Events & Polling
 
 > Valid streams: `{workspace, agent, handoff}`. Valid `filters` keys
-> (equality, AND-combined): `{type, agent_id, task_id, handoff_id}`. Each event:
+> (equality, AND-combined): `{type, agent_id, task_id, handoff_id, trace_id}`. Each event:
 > `{event_id, workspace_id, stream, type, payload, actor_agent_id, task_id, handoff_id, created_at}`.
 > `limit` defaults to 100, max 1000 (override `OKTO_NEXUS_MAX_EVENT_LIMIT`).
 
@@ -1925,7 +1983,7 @@ Run the live client with the venv interpreter:
 
 ## Testing
 
-The suite has **650+ tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
+The suite has **1,570+ tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
@@ -2056,6 +2114,84 @@ Next (non-binding):
 - **SaaS evolution:** multi-tenant auth (RBAC/scopes), hosted storage and
   transport behind the existing hexagonal ports (`AuthProvider`,
   `ObservabilityQueries`, storage, `Waiter`).
+
+---
+
+## Release Notes
+
+### Unreleased — surface revision 31 (docs-accuracy sweep)
+
+Driven by the adversarial two-aspect audit in
+[`docs/design/0003`](docs/design/0003-analise-indice-recuperacao-e-superficie-docs.md)
+(32 verified findings, 0 refuted). **Doc-only** — no tool, parameter or
+runtime semantics changed.
+
+- **Server instructions corrected (assertiveness):** the pre-flight now shows
+  the full `event_cursor(project_root=…, agent_id=…, stream=…)` call (the
+  short form failed schema validation); the credential/heartbeat guidance
+  names the exact verbs that accept `session_id` + `session_secret` and states
+  that read-only verbs never advance the session heartbeat; the helper-process
+  ban carries its one sanctioned exception (an EPT poller holding only an
+  `nxsept_` token); `event_wait` as a listener is an explicit
+  `timeout_seconds>0` opt-in.
+- **Stale reference resources rewritten and version-bumped:** `governance` v2
+  (binding-driven, always-on model — `feature_governance` no longer exists;
+  the operative REST flow is `POST /api/v1/policies` + versions +
+  `PUT /api/v1/agents/{id}/policies`; the legacy `/governance/policies` CRUD
+  no longer feeds enforcement), `hitl` v2 (same flag fix), `tool-docs/inbox`
+  v2 (the lease default is now **interpolated from config** — it had drifted
+  to a hardcoded 120 vs the real 300 — plus the `profile` semantics),
+  `tool-docs/events` v2 (`trace_id` filter key), `tool-docs/identity` v4
+  (reachability-scoped discovery; `agent_whoami` conditional
+  `effective_policies`/`governance`/`communication` blocks),
+  `tool-docs/artifacts` v2 (audience-scoped reads), `target-grammar` v5
+  (broadcast-in-`mixed` is rejected everywhere), `tool-docs/messages` v2,
+  `communication` v2 / `monitoring` v5 / `preflight` v3 (reception loop,
+  receipts and event-tool semantics each live in exactly one resource +
+  pointers — the triple-drift surface is gone).
+- **Resident-surface token cut:** parameter descriptions trimmed 17.5k →
+  15.7k chars — back **below** the pre-reduction baseline (16.4k) — while
+  every strategy shape, the selector absence-trap caution and every
+  behaviour-changing default stay inline. Net cuttable surface: 26.3k chars
+  (~6.6k tokens), honest reduction 44.3% vs the frozen baseline.
+- **Honest 40% gate:** `cuttable_reduction_pct` no longer discounts the
+  approved cost of experimental tools that are not registered
+  (`EXPERIMENTAL_GROWTH_KEYS`; the default-surface gate had been sheltering
+  2.4k chars of phantom growth).
+- README aligned with the same fixes (quickstart call shapes, filter keys,
+  heartbeat guidance) and restructured with this **Token Usage** / **Release
+  Notes** layout.
+
+### 0.1.1 — current
+
+- **Permission surface hardening** (surface revision 30): authenticated
+  `session_open` is self-only; self profile/capability updates gated by
+  `identity.update_profile` / `identity.update_capabilities`; workspace
+  listing & path disclosure, `shared.md` render, coordination health and
+  experimental memory behind explicit per-agent permissions; handoff payloads
+  exposed only to the claimant; guardrail admin is UI/REST-only.
+- Configurable metrics telemetry.
+
+### 0.1.0
+
+- **Remote-only monitor data plane** (rev 28): `poll_token_issue/renew/revoke`
+  mint short-lived `nxsept_` bearers accepted only by the read-only REST
+  monitor endpoints (`/api/v1/events[/cursor]`, `/api/v1/inbox/{count,peek}`);
+  memory became a registration-time experimental surface (rev 29).
+- **Attachable policies** (rev 25) and **communication presets** (rev 26);
+  guardrail/group administration; agent display colors + enriched graph
+  cards; loopback-trust hardening with operator-gated mutating REST.
+- Monitor contract invariants (I1–I6) + the copy-ready reference monitor
+  documented in the `monitoring` resource.
+
+### 0.0.x
+
+- **0.0.6** — MCP reference resources served over HTTP `serve`; Frente 1
+  token reduction (deep prose relocated out of the resident surface).
+- **0.0.5** — Codex ↔ Claude quickstart + monitor docs.
+- **0.0.3–0.0.4** — dashboard observability waves (chat UX, 3-layer flow
+  graph, inbox receipts, events tab), semantic search (embeddings), serve
+  event-loop hardening.
 
 ---
 

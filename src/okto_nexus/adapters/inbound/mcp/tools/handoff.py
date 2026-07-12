@@ -73,9 +73,7 @@ from ._guardrails import build_guardrail_service
 #: Reused parameter descriptions (kept DRY across the handoff tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = (
-    "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-)
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_FROM_AGENT = (
     "Your agent_id (the creator); recorded as the handoff's originator - the owner "
     "is whichever agent later claims it (handoff_claim), not necessarily you."
@@ -91,16 +89,13 @@ _P_TARGET_HANDOFF = (
     'capability {"strategy":"capability","capability":"<cap>"}; role '
     '{"strategy":"role","role":"<role>"}; tag {"strategy":"tag","selector":'
     '{"<key>":["<value>",...]}} (flat: AND across keys, OR within values) or '
-    'rich selector [{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist",'
-    '"values":["<v>",...]}] (expressions ANDed; Exists/DoesNotExist take NO '
-    "values; CAUTION: NotIn/DoesNotExist also match agents MISSING the key - "
-    'compose with Exists to require it; values with "/" match by path segment, '
-    "ENG covers ENG/BACKEND not ENGX; selector tags must be registered in the "
-    'operator-managed tag catalog); broadcast {"strategy":"broadcast"}; '
-    'mixed {"strategy":"mixed","rules":[<sub-target>,...]}; direct_with_fallback '
+    'rich [{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist","values":'
+    '["<v>",...]}] (ANDed; CAUTION: NotIn/DoesNotExist also match agents '
+    'MISSING the key); broadcast {"strategy":"broadcast"}; mixed '
+    '{"strategy":"mixed","rules":[<sub-target>,...]}; direct_with_fallback '
     '{"strategy":"direct_with_fallback","agent_id":"<id>","fallback_after_seconds":<n>}. '
-    "Competing-consumers: the first to handoff_claim wins. Rules/examples/"
-    "edge-cases: read resource okto-nexus://reference/target-grammar."
+    "Competing-consumers: the first to handoff_claim wins. Hierarchy/catalog "
+    "rules, examples, edge-cases: okto-nexus://reference/target-grammar."
 )
 _P_VISIBILITY = "Who may SEE the handoff (separate from who may CLAIM it = target). one of: public, eligible, private. REQUIRED (case-insensitive)."
 _P_PAYLOAD = "Inline work content (optional; raw JSON object/array, string, or null - NOT JSON-encoded). Returned only to the claimant by handoff_claim / claimant handoff_get. For large content pass an artifact_id."
@@ -116,11 +111,7 @@ _P_SESSION_TRUST = (
     "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
     "together with session_secret in trust_mode=strict)."
 )
-_P_SESSION_SECRET = (
-    "The session_secret returned by session_open for session_id (optional in "
-    "trust_mode=open - but if supplied it is VALIDATED, a mismatch fails; "
-    "REQUIRED together with session_id in trust_mode=strict)."
-)
+_P_SESSION_SECRET = "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode)."
 _P_HANDOFF_AGENT = (
     "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED."
 )

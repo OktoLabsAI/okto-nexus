@@ -91,6 +91,14 @@ APPROVED_GROWTH: dict[str, int] = {
     "monitor_ept": 760,
 }
 
+#: Ledger entries whose tools are EXPERIMENTAL at the surface boundary
+#: (registered only behind a feature flag, revision 29): their approved cost
+#: is discounted from the 40% gate ONLY when the corresponding tools are
+#: actually on the measured surface. Discounting them against the default
+#: (flag-off) surface would shelter that many chars of phantom growth
+#: (surface rev 31; análise 0003 finding metrics-phantom-memory-discount).
+EXPERIMENTAL_GROWTH_KEYS: frozenset[str] = frozenset({"memory_i6"})
+
 
 async def measure_resident_surface(server: Any) -> dict[str, int]:
     """Measure the live FastMCP ``server``'s resident surface in chars.
@@ -124,14 +132,24 @@ async def measure_resident_surface(server: Any) -> dict[str, int]:
     }
 
 
-def cuttable_reduction_pct(current_cuttable: int) -> float:
+def cuttable_reduction_pct(
+    current_cuttable: int, *, include_experimental: bool = False
+) -> float:
     """Reduction of the cuttable surface vs the frozen baseline (0..1).
 
     ``(baseline_cuttable - (current_cuttable - approved_growth)) /
     baseline_cuttable`` - the exact quantity AC5/BR8 gate on (>= 0.40),
     discounting only the :data:`APPROVED_GROWTH` ledger (surface later specs
-    deliberately added; unlisted growth still lowers the figure).
+    deliberately added; unlisted growth still lowers the figure). Ledger
+    entries in :data:`EXPERIMENTAL_GROWTH_KEYS` are discounted ONLY when
+    ``include_experimental`` is True (i.e. the measured server registered the
+    flag-gated tools) - against the default surface they would discount
+    growth that is not there.
     """
     base = BASELINE["cuttable"]
-    approved = sum(APPROVED_GROWTH.values())
+    approved = sum(
+        cost
+        for key, cost in APPROVED_GROWTH.items()
+        if include_experimental or key not in EXPERIMENTAL_GROWTH_KEYS
+    )
     return (base - (int(current_cuttable) - approved)) / base

@@ -74,8 +74,7 @@ _P_CAPABILITIES = (
     'discovery (optional). Accepts a flag-map ({"ocr":true}), a list '
     '(["ocr","pdf"]), or a single name string. Blank names dropped. '
     "FAIL-CLOSED: every name must already exist in the central capability "
-    "catalog (see capability_list; operators register names on the dashboard "
-    "Registry or POST /api/v1/capabilities)."
+    "catalog (discover with capability_list)."
 )
 _P_AGENT_METADATA = (
     "Free-form JSON object of extra attributes stored with the agent (optional)."

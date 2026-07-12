@@ -478,10 +478,10 @@ def test_builtin_presets_seeded_and_idempotent(tmp_path):
     assert all(p["latest_version"] == 1 for p in svc.list())
 
 
-def test_no_comm_preset_mcp_tool_and_surface_revision_is_30(tmp_path):
+def test_no_comm_preset_mcp_tool_and_surface_revision_is_31(tmp_path):
     from okto_nexus.adapters.inbound.mcp.server import SURFACE_REVISION
 
     deps, tools, _root = make_env(tmp_path)
-    assert SURFACE_REVISION == 30
+    assert SURFACE_REVISION == 31
     # communication presets add NO MCP tool (operator surface is REST only)
     assert not any("comm_preset" in name or "communication" in name for name in tools)
