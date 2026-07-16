@@ -1,0 +1,228 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Agents
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Graph" [ref=e30] [cursor=pointer]:
+              - img [ref=e31]
+              - generic [ref=e38]: Graph
+          - listitem [ref=e39]:
+            - button "Messages" [ref=e40] [cursor=pointer]:
+              - img [ref=e41]
+              - generic [ref=e44]: Messages
+          - listitem [ref=e45]:
+            - button "Handoffs" [ref=e46] [cursor=pointer]:
+              - img [ref=e47]
+              - generic [ref=e49]: Handoffs
+          - listitem [ref=e50]:
+            - button "Events" [ref=e51] [cursor=pointer]:
+              - img [ref=e52]
+              - generic [ref=e54]: Events
+          - listitem [ref=e55]:
+            - button "Memory" [ref=e56] [cursor=pointer]:
+              - img [ref=e57]
+              - generic [ref=e65]: Memory
+          - listitem [ref=e66]:
+            - button "Workspaces" [ref=e67] [cursor=pointer]:
+              - img [ref=e68]
+              - generic [ref=e70]: Workspaces
+          - listitem [ref=e71]:
+            - button "Agents" [ref=e72] [cursor=pointer]:
+              - img [ref=e73]
+              - generic [ref=e78]: Agents
+          - listitem [ref=e79]:
+            - button "Registry" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e85]: Registry
+          - listitem [ref=e86]:
+            - button "Policies" [ref=e87] [cursor=pointer]:
+              - img [ref=e88]
+              - generic [ref=e90]: Policies
+          - listitem [ref=e91]:
+            - button "Guardrails" [ref=e92] [cursor=pointer]:
+              - img [ref=e93]
+              - generic [ref=e95]: Guardrails
+          - listitem [ref=e96]:
+            - button "Communication" [ref=e97] [cursor=pointer]:
+              - img [ref=e98]
+              - generic [ref=e100]: Communication
+          - listitem [ref=e101]:
+            - button "Approvals" [ref=e102] [cursor=pointer]:
+              - img [ref=e103]
+              - generic [ref=e106]: Approvals
+    - main [ref=e107]:
+      - generic [ref=e640]:
+        - generic [ref=e641]:
+          - generic [ref=e642]:
+            - button "Agents" [ref=e643] [cursor=pointer]
+            - button "Permission presets" [ref=e644] [cursor=pointer]
+          - button "New agent" [ref=e645] [cursor=pointer]:
+            - img [ref=e646]
+            - text: New agent
+        - generic [ref=e1269]:
+          - textbox "agent_id (e.g. researcher)" [ref=e1270]: meta-t3-2355
+          - textbox "role (optional)" [ref=e1271]: tester
+          - generic [ref=e1272]:
+            - text: Metadata (optional)
+            - generic [ref=e1273]:
+              - generic [ref=e1310]:
+                - textbox "metadata key" [ref=e1311]:
+                  - /placeholder: key
+                - combobox "metadata value type" [ref=e1312]:
+                  - option "text" [selected]
+                  - option "number"
+                  - option "boolean"
+                  - option "JSON"
+                - textbox "metadata value" [ref=e1314]:
+                  - /placeholder: value
+                - button "remove field" [ref=e1315] [cursor=pointer]:
+                  - img [ref=e1316]
+              - button "Add field" [active] [ref=e1275] [cursor=pointer]:
+                - img [ref=e1276]
+                - text: Add field
+          - generic [ref=e1277]:
+            - text: Color (optional)
+            - generic [ref=e1278]:
+              - generic [ref=e1279]:
+                - button "A" [ref=e1280] [cursor=pointer]
+                - button "#ef4444" [ref=e1281] [cursor=pointer]
+                - button "#f97316" [ref=e1282] [cursor=pointer]
+                - button "#f59e0b" [ref=e1283] [cursor=pointer]
+                - button "#eab308" [ref=e1284] [cursor=pointer]
+                - button "#22c55e" [ref=e1285] [cursor=pointer]
+                - button "#10b981" [ref=e1286] [cursor=pointer]
+                - button "#14b8a6" [ref=e1287] [cursor=pointer]
+                - button "#06b6d4" [ref=e1288] [cursor=pointer]
+                - button "#0ea5e9" [ref=e1289] [cursor=pointer]
+                - button "#3b82f6" [ref=e1290] [cursor=pointer]
+                - button "#6366f1" [ref=e1291] [cursor=pointer]
+                - button "#8b5cf6" [ref=e1292] [cursor=pointer]
+                - button "#a855f7" [ref=e1293] [cursor=pointer]
+                - button "#ec4899" [ref=e1294] [cursor=pointer]
+                - button "#f43f5e" [ref=e1295] [cursor=pointer]
+                - button "#64748b" [ref=e1296] [cursor=pointer]
+              - generic [ref=e1297]:
+                - textbox "#8b5cf6" [ref=e1298]
+                - generic [ref=e1299]: meta-t3-2355
+          - button "+ capability" [ref=e1303] [cursor=pointer]:
+            - text: + capability
+            - img [ref=e1304]
+          - generic [ref=e1306]:
+            - combobox "Permission preset applied at creation (flags are copied; customize later per agent)." [ref=e1307]:
+              - option "Full access (default)" [selected]
+              - option "Full access (built-in)"
+              - option "Coordinator (built-in)"
+              - option "Worker (built-in)"
+              - option "Observer (built-in)"
+            - button "Create" [ref=e1308] [cursor=pointer]
+        - generic [ref=e647]:
+          - generic [ref=e648]:
+            - generic "operator" [ref=e651]
+            - generic [ref=e652]: operator · no key
+            - generic [ref=e653]: last seen never
+            - generic [ref=e654]:
+              - generic "Effective permissions" [ref=e655]: Full access
+              - generic [ref=e656]: active
+            - generic [ref=e657]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e658] [cursor=pointer]:
+                - img [ref=e659]
+              - button "Permissions" [ref=e662] [cursor=pointer]:
+                - img [ref=e663]
+              - button "Tags & outbound audience" [ref=e666] [cursor=pointer]:
+                - img [ref=e667]
+              - button "Communication style (how the agent should communicate)" [ref=e671] [cursor=pointer]:
+                - img [ref=e672]
+              - button "Regenerate key" [ref=e674] [cursor=pointer]:
+                - img [ref=e675]
+              - button "Deactivate" [ref=e678] [cursor=pointer]:
+                - img [ref=e679]
+              - button "Delete agent" [ref=e681] [cursor=pointer]:
+                - img [ref=e682]
+          - generic [ref=e685]:
+            - generic "atlas" [ref=e688]
+            - generic [ref=e689]: reviewer · key issued
+            - generic [ref=e690]: last seen never
+            - generic [ref=e691]:
+              - generic "Effective permissions" [ref=e692]: Full access
+              - generic [ref=e693]: active
+            - generic [ref=e694]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e695] [cursor=pointer]:
+                - img [ref=e696]
+              - button "Permissions" [ref=e699] [cursor=pointer]:
+                - img [ref=e700]
+              - button "Tags & outbound audience" [ref=e703] [cursor=pointer]:
+                - img [ref=e704]
+              - button "Communication style (how the agent should communicate)" [ref=e708] [cursor=pointer]:
+                - img [ref=e709]
+              - button "Steer (direct message as operator)" [ref=e711] [cursor=pointer]:
+                - img [ref=e712]
+              - button "Regenerate key" [ref=e716] [cursor=pointer]:
+                - img [ref=e717]
+              - button "Deactivate" [ref=e720] [cursor=pointer]:
+                - img [ref=e721]
+              - button "Delete agent" [ref=e723] [cursor=pointer]:
+                - img [ref=e724]
+          - generic [ref=e727]:
+            - generic "beta" [ref=e730]
+            - generic [ref=e731]: builder · key issued
+            - generic [ref=e732]: last seen never
+            - generic [ref=e733]:
+              - generic "Effective permissions" [ref=e734]: Full access
+              - generic [ref=e735]: active
+            - generic [ref=e736]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e737] [cursor=pointer]:
+                - img [ref=e738]
+              - button "Permissions" [ref=e741] [cursor=pointer]:
+                - img [ref=e742]
+              - button "Tags & outbound audience" [ref=e745] [cursor=pointer]:
+                - img [ref=e746]
+              - button "Communication style (how the agent should communicate)" [ref=e750] [cursor=pointer]:
+                - img [ref=e751]
+              - button "Steer (direct message as operator)" [ref=e753] [cursor=pointer]:
+                - img [ref=e754]
+              - button "Regenerate key" [ref=e758] [cursor=pointer]:
+                - img [ref=e759]
+              - button "Deactivate" [ref=e762] [cursor=pointer]:
+                - img [ref=e763]
+              - button "Delete agent" [ref=e765] [cursor=pointer]:
+                - img [ref=e766]
+          - generic [ref=e769]:
+            - generic "quinn" [ref=e772]
+            - generic [ref=e773]: qa · key issued
+            - generic [ref=e774]: last seen never
+            - generic [ref=e775]:
+              - generic "Effective permissions" [ref=e776]: Full access
+              - generic [ref=e777]: active
+            - generic [ref=e778]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e779] [cursor=pointer]:
+                - img [ref=e780]
+              - button "Permissions" [ref=e783] [cursor=pointer]:
+                - img [ref=e784]
+              - button "Tags & outbound audience" [ref=e787] [cursor=pointer]:
+                - img [ref=e788]
+              - button "Communication style (how the agent should communicate)" [ref=e792] [cursor=pointer]:
+                - img [ref=e793]
+              - button "Steer (direct message as operator)" [ref=e795] [cursor=pointer]:
+                - img [ref=e796]
+              - button "Regenerate key" [ref=e800] [cursor=pointer]:
+                - img [ref=e801]
+              - button "Deactivate" [ref=e804] [cursor=pointer]:
+                - img [ref=e805]
+              - button "Delete agent" [ref=e807] [cursor=pointer]:
+                - img [ref=e808]

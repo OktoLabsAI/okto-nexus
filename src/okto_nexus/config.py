@@ -45,6 +45,26 @@ DEFAULT_MAX_SHARED_MD_EVENTS = 1000
 #: Default ceiling for a single ``event_get``/``event_wait`` page.
 DEFAULT_MAX_EVENT_LIMIT = 1000
 
+#: Default TTL (seconds) for ephemeral poll tokens used by remote monitors.
+DEFAULT_POLL_TOKEN_TTL_SECONDS = 3600
+
+# --------------------------------------------------------------------------- #
+# Anonymous usage metrics (Pulse-derived pattern). This is opt-in and keeps the
+# Nexus runtime portable: the application layer owns the bounded contract while
+# concrete filesystem/HTTP/AWS concerns live in outbound adapters / IaC.
+# --------------------------------------------------------------------------- #
+METRICS_MODE_DISABLED = "disabled"
+METRICS_MODE_LOCAL_ONLY = "local_only"
+METRICS_MODE_ANONYMOUS_BEACON = "anonymous_beacon"
+METRICS_MODES: tuple[str, ...] = (
+    METRICS_MODE_DISABLED,
+    METRICS_MODE_LOCAL_ONLY,
+    METRICS_MODE_ANONYMOUS_BEACON,
+)
+DEFAULT_METRICS_BEACON_URL = "https://nexus-metrics.oktolabs.ai"
+DEFAULT_METRICS_RETENTION_DAYS = 30
+DEFAULT_METRICS_PUBLISH_INTERVAL_SECONDS = 3600
+
 #: Trust modes for sensitive verbs (M10). ``open`` keeps the cooperative
 #: behaviour (credentials optional, but VALIDATED when supplied - a wrong
 #: credential is never ignored); ``strict`` requires session_id+session_secret
@@ -128,6 +148,12 @@ class NexusConfig:
     session_reap_seconds: int = DEFAULT_SESSION_REAP_SECONDS
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
     max_event_limit: int = DEFAULT_MAX_EVENT_LIMIT
+    poll_token_ttl_seconds: int = DEFAULT_POLL_TOKEN_TTL_SECONDS
+    metrics_mode: str = METRICS_MODE_DISABLED
+    metrics_dir: Path | None = None
+    metrics_beacon_url: str = DEFAULT_METRICS_BEACON_URL
+    metrics_retention_days: int = DEFAULT_METRICS_RETENTION_DAYS
+    metrics_publish_interval_seconds: int = DEFAULT_METRICS_PUBLISH_INTERVAL_SECONDS
     trust_mode: str = TRUST_MODE_OPEN
     retention_events_keep_days: int = DEFAULT_RETENTION_EVENTS_KEEP_DAYS
     retention_read_deliveries_keep_days: int = (
@@ -148,6 +174,19 @@ class NexusConfig:
     # per-call include_paths param of the workspace_list MCP tool (agent
     # surface) - the dashboard gating is controlled ONLY by this knob.
     expose_workspace_path: bool = False
+    # ----------------------------------------------------------------- #
+    # Meta-harness feature flags (R-I0). All opt-in (default OFF). Most flags
+    # gate behaviour inside consuming use-cases; feature_memory is the explicit
+    # experimental exception that also controls MCP tool registration at
+    # bootstrap.
+    # ----------------------------------------------------------------- #
+    feature_trace: bool = False
+    feature_hitl: bool = False
+    feature_verification: bool = False
+    feature_dag: bool = False
+    feature_memory: bool = False
+    feature_health: bool = False
+    feature_replay: bool = False
 
     def __post_init__(self) -> None:
         self.home_dir = Path(self.home_dir).expanduser()
@@ -155,6 +194,8 @@ class NexusConfig:
             self.db_path = self.home_dir / "nexus.db"
         else:
             self.db_path = Path(self.db_path).expanduser()
+        if self.metrics_dir is not None:
+            self.metrics_dir = Path(self.metrics_dir).expanduser()
 
 
 # Mapping: NexusConfig field -> (env var name, CLI flag).
@@ -163,6 +204,7 @@ class NexusConfig:
 _PATH_FIELDS: dict[str, tuple[str, str]] = {
     "home_dir": ("OKTO_NEXUS_HOME", "--home"),
     "db_path": ("OKTO_NEXUS_DB_PATH", "--db-path"),
+    "metrics_dir": ("OKTO_NEXUS_METRICS_DIR", "--metrics-dir"),
 }
 
 _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
@@ -228,6 +270,24 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_MAX_EVENT_LIMIT,
         1,
     ),
+    "poll_token_ttl_seconds": (
+        "OKTO_NEXUS_POLL_TOKEN_TTL_SECONDS",
+        "--poll-token-ttl-seconds",
+        DEFAULT_POLL_TOKEN_TTL_SECONDS,
+        60,
+    ),
+    "metrics_retention_days": (
+        "OKTO_NEXUS_METRICS_RETENTION_DAYS",
+        "--metrics-retention-days",
+        DEFAULT_METRICS_RETENTION_DAYS,
+        0,
+    ),
+    "metrics_publish_interval_seconds": (
+        "OKTO_NEXUS_METRICS_PUBLISH_INTERVAL_SECONDS",
+        "--metrics-publish-interval-seconds",
+        DEFAULT_METRICS_PUBLISH_INTERVAL_SECONDS,
+        60,
+    ),
     # Retention windows accept 0 ("keep nothing older than right now"); only a
     # negative value is rejected.
     "retention_events_keep_days": (
@@ -262,6 +322,12 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
 # field: (env var, CLI flag, default, allowed values) - closed-vocabulary
 # string knobs, parsed FAIL-CLOSED like the integer fields above.
 _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
+    "metrics_mode": (
+        "OKTO_NEXUS_METRICS_MODE",
+        "--metrics-mode",
+        METRICS_MODE_DISABLED,
+        METRICS_MODES,
+    ),
     "trust_mode": (
         "OKTO_NEXUS_TRUST_MODE",
         "--trust-mode",
@@ -273,6 +339,17 @@ _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
         "--embedding-mode",
         EMBEDDING_MODE_OFF,
         EMBEDDING_MODES,
+    ),
+}
+
+# field: (env var, CLI flag, default) - free string knobs, parsed with the same
+# CLI > env > default precedence. Keep this set tiny; sensitive values do not
+# belong here.
+_STRING_FIELDS: dict[str, tuple[str, str, str]] = {
+    "metrics_beacon_url": (
+        "OKTO_NEXUS_METRICS_BEACON_URL",
+        "--metrics-beacon-url",
+        DEFAULT_METRICS_BEACON_URL,
     ),
 }
 
@@ -295,7 +372,49 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "--expose-workspace-path",
         False,
     ),
+    # Meta-harness feature flags (R-I0): all default False (opt-in).
+    "feature_trace": (
+        "OKTO_NEXUS_FEATURE_TRACE",
+        "--feature-trace",
+        False,
+    ),
+    "feature_hitl": (
+        "OKTO_NEXUS_FEATURE_HITL",
+        "--feature-hitl",
+        False,
+    ),
+    "feature_verification": (
+        "OKTO_NEXUS_FEATURE_VERIFICATION",
+        "--feature-verification",
+        False,
+    ),
+    "feature_dag": (
+        "OKTO_NEXUS_FEATURE_DAG",
+        "--feature-dag",
+        False,
+    ),
+    "feature_memory": (
+        "OKTO_NEXUS_FEATURE_MEMORY",
+        "--feature-memory",
+        False,
+    ),
+    "feature_health": (
+        "OKTO_NEXUS_FEATURE_HEALTH",
+        "--feature-health",
+        False,
+    ),
+    "feature_replay": (
+        "OKTO_NEXUS_FEATURE_REPLAY",
+        "--feature-replay",
+        False,
+    ),
 }
+
+#: The meta-harness feature flags (R-I0), derived from ``_BOOL_FIELDS`` so the
+#: ``nexus_info.features`` block and the flag fields can never drift apart.
+FEATURE_FLAG_FIELDS: tuple[str, ...] = tuple(
+    name for name in _BOOL_FIELDS if name.startswith("feature_")
+)
 
 _BOOL_TRUE = frozenset({"true", "1", "yes", "on"})
 _BOOL_FALSE = frozenset({"false", "0", "no", "off"})
@@ -310,6 +429,7 @@ def _parse_cli(argv: list[str]) -> dict[str, str]:
     known_flags = {flag for _, flag in _PATH_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _INT_FIELDS.values()}
     known_flags |= {flag for _, flag, _, _ in _ENUM_FIELDS.values()}
+    known_flags |= {flag for _, flag, _ in _STRING_FIELDS.values()}
     known_flags |= {flag for _, flag, _ in _BOOL_FIELDS.values()}
 
     parsed: dict[str, str] = {}
@@ -483,6 +603,12 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
         kwargs["home_dir"] = Path(home_override)
     if db_override is not None:
         kwargs["db_path"] = Path(db_override)
+    metrics_dir_env, metrics_dir_flag = _PATH_FIELDS["metrics_dir"]
+    metrics_dir_override = _resolve_str(
+        metrics_dir_flag, metrics_dir_env, env=env, cli=cli
+    )
+    if metrics_dir_override is not None:
+        kwargs["metrics_dir"] = Path(metrics_dir_override)
 
     for field_name, (env_var, flag, default, minimum) in _INT_FIELDS.items():
         kwargs[field_name] = _resolve_int(
@@ -494,9 +620,10 @@ def load_config(env: Mapping[str, str], argv: list[str] | None = None) -> NexusC
             field_name, flag, env_var, default, allowed, env, cli
         )
 
+    for field_name, (env_var, flag, default) in _STRING_FIELDS.items():
+        kwargs[field_name] = _resolve_str(flag, env_var, env=env, cli=cli) or default
+
     for field_name, (env_var, flag, default) in _BOOL_FIELDS.items():
-        kwargs[field_name] = _resolve_bool(
-            field_name, flag, env_var, default, env, cli
-        )
+        kwargs[field_name] = _resolve_bool(field_name, flag, env_var, default, env, cli)
 
     return NexusConfig(**kwargs)

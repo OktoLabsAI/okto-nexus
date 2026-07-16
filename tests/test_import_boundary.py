@@ -60,3 +60,18 @@ def test_domain_and_application_do_not_import_infrastructure() -> None:
     for path in _iter_inner_py_files():
         violations.extend(_violations_in(path))
     assert not violations, "Hexagonal boundary violated:\n" + "\n".join(violations)
+
+
+def test_replay_core_modules_are_in_scope_and_clean() -> None:
+    """The I8 replay core lives in domain/ + application/ and stays sqlite/mcp-free.
+
+    ``okto_nexus.testing`` (the shipped harness) is a TOP-LEVEL package, ORTHOGONAL
+    to the boundary: it is free to touch sqlite/mcp and is intentionally NOT
+    scanned here. The pure core it delegates to, though, must remain clean.
+    """
+    scanned = set(_iter_inner_py_files())
+    domain_replay = _PKG_ROOT / "domain" / "replay.py"
+    application_replay = _PKG_ROOT / "application" / "replay.py"
+    for module in (domain_replay, application_replay):
+        assert module in scanned, f"{module} not covered by the boundary scan"
+        assert not _violations_in(module), f"{module} imports sqlite3/mcp"

@@ -14,12 +14,21 @@ is referenced by BOTH message_create and handoff_create, eliminating the
 ~1.000-char duplication of ``_P_TARGET_MSG`` / ``_P_TARGET_HANDOFF``.
 
 Importing this module runs its ``add_resource`` side effects, registering the
-target-grammar + the six per-domain tool-docs into the shared registry in
-``resources.py``. ``resources.py`` imports this module at the bottom so a single
-``register_resources(server)`` publishes the full closed set (BR9: 10 URIs).
+target-grammar + the six per-domain tool-docs + the governance and hitl
+references into the shared registry in ``resources.py``. ``resources.py``
+imports this module at the bottom so a single ``register_resources(server)``
+publishes the full closed set (BR9: 12 URIs).
 """
 
 from __future__ import annotations
+
+from okto_nexus.application.inbox import (
+    DEFAULT_INBOX_LEASE_TTL_SECONDS,
+    DEFAULT_MAX_DELIVERY_ATTEMPTS,
+    MAX_LEASE_SECONDS,
+    MIN_LEASE_SECONDS,
+    PEEK_BODY_PREVIEW_CHARS,
+)
 
 from .resources import add_resource
 
@@ -30,7 +39,7 @@ add_resource(
     slug="target-grammar",
     name="Routing target grammar",
     description="The full routing-target grammar (every strategy shape, rules, examples, edge cases) shared by message_create and handoff_create.",
-    version="1",
+    version="5",
     body="""\
 # Routing target
 
@@ -47,9 +56,37 @@ eligibility set (handoff_create: who may CLAIM it).
   an agent that will register later use ``direct_with_fallback``).
 - **capability** - ``{"strategy":"capability","capability":"<cap>"}``. ``<cap>``
   is a string OR a list (any-of). Global registry; discover with
-  ``capability_list``.
+  ``capability_list``. FAIL-CLOSED: every referenced name must be REGISTERED
+  in the operator-managed capability catalog (VALIDATION_ERROR listing the
+  unregistered names otherwise) - also enforced on sub-rules inside ``mixed``
+  and on a ``direct_with_fallback`` fallback.
 - **role** - ``{"strategy":"role","role":"<role>"}``. Exact, case-sensitive;
   global.
+- **tag** - ``{"strategy":"tag","selector":<selector>}``. Agents whose
+  operator-set tags satisfy the selector (message_create: present matching
+  agents; handoff_create: claimable by matching agents). The selector takes
+  either form:
+  - FLAT map ``{"<key>":["<value>",...]}`` - AND across keys, OR (non-empty
+    intersection) within a key's values. Sugar for one ``In`` expression per
+    key.
+  - RICH match-expression list (Kubernetes parity)
+    ``[{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist","values":[...]}]``
+    - expressions are ANDed. ``In``: the agent's values under ``key``
+    intersect ``values``. ``NotIn``: no intersection OR the key is absent.
+    ``Exists`` / ``DoesNotExist``: bare presence/absence checks - they FORBID
+    ``values`` (In/NotIn REQUIRE a non-empty list).
+  - ABSENCE TRAP (K8s parity): ``NotIn`` and ``DoesNotExist`` MATCH agents
+    that lack the key entirely - a lone ``NotIn`` matches every untagged
+    agent. Compose with ``Exists`` on the same key to mean "has the key AND
+    is not X".
+  - HIERARCHY: values containing ``/`` match by path SEGMENT - selector value
+    ``ENG`` covers tags ``ENG`` and ``ENG/BACKEND`` but never ``ENGX``;
+    ``NotIn ENG`` excludes the whole ``ENG/*`` subtree. No inheritance across
+    different keys.
+  - Every referenced key (all operators) and every In/NotIn value must be
+    REGISTERED in the operator-managed tag catalog (fail-closed
+    VALIDATION_ERROR otherwise); an empty selector is rejected (use a bare
+    broadcast).
 - **broadcast** - ``{"strategy":"broadcast"}``. message_create: the workspace's
   active-session (heartbeat-fresh) agents. handoff_create: any agent in the
   workspace.
@@ -72,8 +109,9 @@ eligibility set (handoff_create: who may CLAIM it).
 - handoff_create: ``target`` is REQUIRED. Pool targets return ``eligible_count``
   and a ``warning`` when 0 agents currently match (the handoff stays OPEN for
   later registrants; ``handoff_cancel`` retracts a mistake).
-- ``direct_with_fallback`` and a ``broadcast`` nested in ``mixed`` are rejected
-  on message_create (VALIDATION_ERROR).
+- ``direct_with_fallback`` is rejected on message_create (handoff-only - model
+  timed escalation as a handoff). A ``broadcast`` nested in ``mixed`` is
+  rejected EVERYWHERE (both tools share the grammar; VALIDATION_ERROR).
 - A wrong-typed ``target`` (number/boolean/array) returns the canonical
   VALIDATION_ERROR envelope, not an SDK error.""",
 )
@@ -87,16 +125,15 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="1",
+    version="2",
     body="""\
 # message_create
 Persist a message and emit ``message.created`` in one transaction. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
 ``delivered_count`` totals it. Track what happens next with
-``message_status(message_id)`` (per-recipient lanes unread/delivered/read/parked)
-or wait for the sender-only receipt events ``message.delivered`` / ``message.read``
-via event_wait. A broadcast (no target) reaches the workspace's PRESENT agents
+``message_status(message_id)`` or the sender-only receipt events (mechanics:
+okto-nexus://reference/tool-docs/inbox). A broadcast (no target) reaches the workspace's PRESENT agents
 only; agents excluded for heartbeat staleness are reported in ``excluded_stale``
 + ``warning``. In trust_mode=strict pass from_session_id + session_secret (from
 session_open). For large content, attach an artifact and keep ``body`` a short
@@ -125,20 +162,25 @@ add_resource(
     slug="tool-docs/inbox",
     name="Tool docs - inbox",
     description="Full reference for the per-recipient inbox tools (pull/ack/extend/peek/count/history/message_status).",
-    version="1",
-    body="""\
+    version="2",
+    body=f"""\
 The inbox is GLOBAL (keyed by agent_id): a direct message reaches you regardless
 of which workspace it was sent in. At-least-once: pulled messages are leased; if
-you do not ack them before the lease elapses they are redelivered; a message
-redelivered too many times is parked (dead-letter).
+you do not ack them before the lease elapses they are redelivered; a delivery
+that exhausts its {DEFAULT_MAX_DELIVERY_ATTEMPTS} claim attempts is parked
+(dead-letter - excluded from inbox_count; see it via inbox_peek
+include_parked=true).
 
 # inbox_pull
 Take your unread messages (and your own lease-expired redeliveries) into
 in-flight and return them WITH their body. Index-free: the server tracks your
 per-recipient read state, so you never pass a cursor. Size the lease with
-``lease_seconds`` (default 120, clamped 10..3600) or renew with inbox_extend.
+``lease_seconds`` (default {DEFAULT_INBOX_LEASE_TTL_SECONDS} - the server's
+inbox_lease_ttl_seconds knob - clamped
+{MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}) or renew with inbox_extend.
 Pulling emits a ``message.delivered`` receipt to each message's sender. In
 trust_mode=strict pass session_id + session_secret.
+""" + """\
 
 # inbox_ack
 Acknowledge messages into history (read). Returns ``{acknowledged, read_message_ids}``
@@ -146,17 +188,20 @@ Acknowledge messages into history (read). Returns ``{acknowledged, read_message_
 ``message.read`` receipt to its sender; unless the operator opted out
 (inbox_read_receipts) the sender also gets a compact ``message.read_receipt``
 notification in its own inbox. Receipts never generate receipts.
+""" + f"""\
 
 # inbox_extend
 Renew the lease on in-flight messages you pulled but have not finished. New
-lease = now + extend_seconds (clamped 10..3600). All-or-nothing: if any id is not
-in-flight the call fails with a per-message reason and nothing is extended.
+lease = now + extend_seconds (clamped {MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}).
+All-or-nothing: if any id is not in-flight the call fails with a per-message
+reason and nothing is extended.
 
 # inbox_peek
 READ-ONLY triage of pending (unread + in-flight) WITHOUT consuming. Envelope-only
-by default: ``body_preview`` (first 200 chars) + ``body_bytes`` instead of the
-full body. ``include_parked=true`` also shows dead-lettered messages;
-``include_bodies=true`` opts into full bodies.
+by default: ``body_preview`` (first {PEEK_BODY_PREVIEW_CHARS} chars) +
+``body_bytes`` instead of the full body. ``include_parked=true`` also shows
+dead-lettered messages; ``include_bodies=true`` opts into full bodies.
+""" + """\
 
 # inbox_count
 READ-ONLY lane sizes ``{unread, in_flight, read}``. Cheap between-turns check;
@@ -170,21 +215,26 @@ even while you keep acknowledging).
 Track a message you SENT: ``{message_id, deliveries, count}`` where each delivery
 is ``{recipient, status, attempts, read_at}`` and status is
 unread/delivered/read/parked. Use it instead of re-sending when a recipient
-seems silent.""",
+seems silent.
+
+# profile parameter (inbox_pull/peek/history; also event_get/event_wait)
+One of: default (all fields minus dead ones), summary (minimal + follow_up -
+trims per-call tokens), full (raw).""",
 )
 
 add_resource(
     slug="tool-docs/events",
     name="Tool docs - event log",
     description="Full reference for event_get / event_cursor / event_wait (streams, filters, cursors, the long-poll).",
-    version="1",
+    version="2",
     body="""\
 Events are OBSERVABILITY (audit/monitoring of message.created, handoff.*,
 session.* events); they are NOT how you receive messages addressed to you - that
 is the inbox. stream is one of: workspace, agent, handoff. message.created, the
 sender-only receipts message.delivered/message.read and artifact.created are on
-``workspace``. filters (equality, AND-combined) allow keys: type, agent_id,
-task_id, handoff_id. Visibility is per-event: you only see events you may see.
+``workspace``. filters (equality, AND-combined) allow keys: type and agent_id
+(event columns) plus task_id, handoff_id and trace_id (payload-level).
+Visibility is per-event: you only see events you may see.
 
 # event_get
 Read a cursor-paginated page (non-blocking). cursor = the last event_id you
@@ -210,59 +260,132 @@ okto-nexus://reference/monitoring for the listener patterns.""",
 add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
-    description="Full reference for the handoff lifecycle (create/list_available/claim/complete/reject/cancel/get).",
-    version="1",
+    description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
+    version="3",
     body="""\
 Competing-consumers: every eligible agent SEES a handoff but only the first to
 handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished claim's
 lease expires and the work returns to the pool. visibility (who may SEE) is
 separate from target (who may CLAIM): one of public / eligible / private.
-``payload`` is the inline work content, returned by handoff_list_available and
-handoff_claim so the worker need not correlate the event. For ``target`` see
+``payload`` is the inline work content, returned only to the agent that wins
+handoff_claim (and later to that same claimant via handoff_get). Discovery,
+events and directed inbox notifications stay metadata-only. For ``target`` see
 okto-nexus://reference/target-grammar.
+
+Verification-first (opt-in per handoff, needs the feature_verification flag):
+creating with ``acceptance_criteria`` adds a VERIFYING stage between the
+claimant's delivery and COMPLETED - handoff_complete parks the handoff in
+VERIFYING and the ``verify_by`` verifier decides via handoff_verify ('pass' ->
+COMPLETED, 'fail' -> back to CLAIMED for rework with feedback + renewed lease).
+While the flag is OFF the params are REJECTED (a verification contract is
+never accepted-and-ignored); without them nothing changes.
+
+Dependencies / DAG (opt-in per handoff, needs the feature_dag flag): creating
+with ``depends_on`` (1..20 unique ids of EXISTING same-workspace handoffs;
+IMMUTABLE, so cycles are impossible by construction) makes the handoff a
+BLOCKED dependent: it stays OPEN but is excluded from handoff_list_available
+and refused at claim (DEPENDENCY_NOT_MET) until EVERY dependency is
+COMPLETED - VERIFYING does not satisfy, only the verified/plain COMPLETED
+does. When the LAST dependency completes the bus emits ``handoff.unblocked``
+({handoff_id: the dependent, unblocked_by}) in the same transaction and
+notifies a direct dependent's named agent by inbox - claim then proceeds
+normally. If a dependency is REJECTED or CANCELLED the dependent can never
+unblock: the bus emits ``handoff.dependency_failed`` and notifies the
+dependent's CREATOR, who decides (cancel the dependent, or re-create the
+work - edges never reattach). There is NO cascade. While the flag is OFF the
+param is REJECTED (never accepted-and-ignored); flipping the flag OFF later
+keeps existing dependents fully decidable (the gates read the stored edges,
+not the flag).
 
 # handoff_create
 Create an OPEN handoff; emit handoff.created. A direct target must name a
-REGISTERED agent (the named agent gets an inbox notification - ``notified`` in
+REGISTERED agent (the named agent gets a metadata-only inbox notification -
+``notified`` in
 the response). Pool targets return ``eligible_count`` + a ``warning`` when 0
 match (stays OPEN for later registrants). After creating, poll handoff_get for
-status/result - do not scan the event stream. payload: a string is returned
-byte-for-byte; a non-string is stored/returned as opaque JSON TEXT.
+status/result - do not scan the event stream. payload: a string is returned to
+the claimant byte-for-byte; a non-string is stored/returned to the claimant as
+opaque JSON TEXT.
+Optional verification contract: ``acceptance_criteria`` (1..20 non-empty
+strings, max 500 chars each, no exact duplicates, IMMUTABLE after creation) +
+``verify_by`` (one of {"kind":"creator"} - the default, materialised at
+creation; {"kind":"agent","agent_id":...} - must be registered;
+{"kind":"capability","capability":...} - must be in the catalog, resolved
+dynamically at verify time). verify_by without acceptance_criteria is
+rejected, as is a contract only the claimant could ever verify.
+Optional ``depends_on`` (feature_dag): every id must name an EXISTING handoff
+in this workspace - unknown ids fail with DEPENDENCY_NOT_FOUND (details
+``{missing: [ids]}``; a cross-workspace id reads as nonexistent), and an
+already-REJECTED/CANCELLED dependency makes the create statically
+unsatisfiable (VALIDATION_ERROR) - drop it or re-create the work first. An
+already-COMPLETED dependency is born satisfied. The response echoes
+``depends_on`` plus a ``dependencies`` aggregate {total, satisfied, pending,
+failed}; a directed dependent born blocked gets the "(blocked)" suffix on its
+inbox notification subject.
 
 # handoff_list_available
 Expire leases, then list OPEN handoffs visible+eligible to the caller
-(paginated). Each entry includes the ``payload`` so a worker can triage before
-claiming. ``timeout_seconds > 0`` opts into a blocking long-poll until a
-claimable handoff appears.
+(paginated). Entries are metadata-only and do not include ``payload``; the
+payload is revealed only after a successful claim. ``timeout_seconds > 0`` opts
+into a blocking long-poll until a claimable handoff appears.
 
 # handoff_claim
 Atomically claim an OPEN handoff; single winner, others get a structured error.
 Returns the ``payload`` plus ``claimed_by`` / ``lease_expires_at``. strict mode:
-session_id + session_secret.
+session_id + session_secret. A BLOCKED dependent is refused with
+DEPENDENCY_NOT_MET (details carry aggregate ``{handoff_id, pending, failed}``
+counts only - dependency ids are never disclosed): wait for its
+``handoff.unblocked`` event (or the "unblocked" inbox notice on a directed
+handoff), then claim again. ``failed > 0`` means it can NEVER unblock - the
+creator must decide.
 
 # handoff_complete
-Owner-only CLAIMED -> COMPLETED; emit handoff.completed; result delivered to the
-creator's inbox. strict mode: session credentials.
+Owner-only delivery of a CLAIMED handoff. Without acceptance_criteria:
+-> COMPLETED, emit handoff.completed, result delivered to the creator's inbox
+(exactly as always). With acceptance_criteria: -> VERIFYING, emit
+handoff.verification_requested (metadata-only: the contract, never the
+result) and notify a statically resolvable verifier; the outcome then belongs
+to handoff_verify. strict mode: session credentials.
+
+# handoff_verify
+Verifier-only verdict on a VERIFYING handoff. The verifier is resolved from
+``verify_by`` AT VERIFY TIME (creator -> the creator; agent -> that exact
+agent; capability -> any agent currently announcing it); the claimant can
+NEVER verify their own delivery, eligible or not. 'pass' -> COMPLETED,
+emitting the CANONICAL handoff.completed enriched with ``verified_by`` (there
+is no separate passed event) and notifying the creator. 'fail' -> CLAIMED for
+rework: ``feedback`` (optional, max 2000 chars, only with 'fail') is persisted
+(each fail overwrites the previous; history lives in the event log), the
+claimant's lease is RENEWED and handoff.verification_failed is emitted +
+delivered to the claimant's inbox. VERIFYING is protected: reject/cancel
+refuse it and lease expiry never touches it. strict mode: session credentials.
 
 # handoff_reject
 Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED).
-``reason`` is persisted + delivered to the creator's inbox.
+``reason`` is persisted + delivered to the creator's inbox. A VERIFYING
+handoff cannot be rejected - only a 'fail' verdict returns it to CLAIMED.
 
 # handoff_cancel
 Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a
 pool target that matched zero agents). Only OPEN handoffs cancel.
 
 # handoff_get
-Read one handoff by id: status, claimant, payload, result/rejected_reason. THIS
-is the creator's path to the outcome after handoff_create (do not scan events).
-An expired claim lease reads as OPEN again.""",
+Read one handoff by id: status, claimant, result/rejected_reason; ``payload``
+is included only when the reader is the claimant. THIS is the creator's path to
+the outcome after handoff_create (do not scan events).
+An expired claim lease reads as OPEN again. Verification-first handoffs also
+expose ``acceptance_criteria``/``verify_by`` (decoded) and
+``verification_feedback`` - each omitted when NULL. Dependent handoffs expose
+``depends_on`` plus the LIVE ``dependencies`` aggregate {total, satisfied,
+pending, failed} (derived on-read); both omitted on a dependency-free
+handoff.""",
 )
 
 add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="1",
+    version="4",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -277,27 +400,46 @@ Return YOUR OWN profile, derived from your API key (no parameters): agent_id,
 operator-assigned role, capabilities, metadata, permissions (null = unrestricted).
 The recommended FIRST call. VALIDATION_ERROR on a connection with no
 authenticated identity (open cooperative stdio): there, read profiles with
-agent_get.
+agent_get. When you have policy/communication bindings the profile ALSO carries
+``effective_policies`` (``<policy_id>@<version>`` / ``inline``), a
+``governance`` rule list and a ``communication`` style block - each absent
+otherwise.
 
 # agent_register
 Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY on an
 authenticated connection: your key already names your identity; registering a
 new identity or touching another agent's profile returns PERMISSION_DENIED.
+Self-updates are permission-gated: role/metadata/capability changes require
+``identity.update_profile`` and capability changes also require
+``identity.update_capabilities``.
 capabilities accepts a flag-map ({"ocr":true}), a list (["ocr","pdf"]), or a
-single name.
+single name. Capability names are FAIL-CLOSED against the central capability
+catalog: every announced name must already be registered by an operator
+(dashboard Registry or POST /api/v1/capabilities), or the write is rejected
+with VALIDATION_ERROR listing the unregistered names. Discover the sanctioned
+vocabulary with capability_list; agents never define new names themselves.
 
 # agent_list / agent_get
-List all registered agents (global), each with role/capabilities and
-last_seen_at; or read one agent's details. Discovery surface for addressing.
+List registered agents (global), each with role/capabilities and last_seen_at;
+or read one agent's details. Discovery surface for addressing. Discovery is
+scoped by REACHABILITY: an authenticated caller sees only the agents its comm
+scope can reach (plus itself); agent_get of an unreachable agent reads as
+NOT_FOUND, indistinguishable from nonexistent. Anonymous callers see all.
 
 # capability_list
-List the capabilities advertised across all agents, each with the agents that
-possess it - normalised exactly as capability routing matches.
+List the central capability catalog merged with ownership: EVERY registered
+name appears (with its description), including names nobody advertises yet
+(agent_count 0). Per name, the agents that possess it - normalised exactly as
+capability routing matches. Use it to pick a valid name BEFORE agent_register
+or a {"strategy":"capability"} target: unregistered names are rejected
+fail-closed on every write path.
 
 # session_open
 Open a session bound to (agent_id, workspace_id); the server assigns the id and
 returns a per-session ``session_secret`` (ONLY here - keep it). In
 trust_mode=strict the sensitive verbs require session_id + session_secret.
+On an authenticated connection, session_open is self-only: the API-key identity
+must match the requested agent_id.
 Only heartbeat-fresh sessions receive broadcasts and read PRESENT - but you do
 NOT have to spam session_heartbeat: any AUTHENTICATED active verb (pass your
 session_id + session_secret) advances the heartbeat for you, so receiving
@@ -313,18 +455,31 @@ while parked on an event_wait long-poll) where you take no other action.
 # session_close
 Close a session (idempotent).
 
+# poll_token_issue / poll_token_renew / poll_token_revoke
+Control-plane helpers for remote monitors. ``poll_token_issue(session_id,
+session_secret)`` returns a raw ``nxsept_`` bearer exactly once, bound by the
+server to this authenticated agent, this session and this workspace. Give that
+bearer only to a background process that calls the read-only data plane:
+``GET /api/v1/events/cursor``, ``GET /api/v1/events``,
+``GET /api/v1/inbox/count`` and ``GET /api/v1/inbox/peek``. The token cannot
+call MCP or mutate state, has a short TTL, is stored only as a hash, and must be
+renewed before ``expires_at`` or revoked on teardown. See
+okto-nexus://reference/monitoring for the full remote-poller loop.
+
 # workspace_list
 GLOBAL-ADMIN: enumerate ALL workspaces. By default paths are OMITTED
 (workspace_id, display_name, created_at, last_seen_at); pass include_paths=true
 only for an explicit admin/ops need (disclosing every project's on-disk layout is
-opt-in defense-in-depth).""",
+opt-in defense-in-depth). When an actor is known, workspace_list requires
+``workspaces.list`` and include_paths additionally requires
+``workspaces.include_paths``.""",
 )
 
 add_resource(
     slug="tool-docs/artifacts",
     name="Tool docs - artifacts",
     description="Full reference for artifact_put / artifact_get.",
-    version="1",
+    version="2",
     body="""\
 # artifact_put
 Register a file/text/json/markdown artifact in the resolved workspace. Provide
@@ -336,5 +491,150 @@ label; inline-vs-reference is decided by content-vs-path). Emits
 ``artifact.created``.
 
 # artifact_get
-Retrieve an artifact by id within the workspace resolved from project_root.""",
+Retrieve an artifact by id within the workspace resolved from project_root.
+Reads are AUDIENCE-SCOPED: the publisher's effective outbound audience is
+frozen onto the artifact at artifact_put; a reader outside it gets NOT_FOUND,
+indistinguishable from a missing id. No audience (publisher without bindings)
+= readable by anyone in the workspace.""",
+)
+
+# --------------------------------------------------------------------------- #
+# Governance reference (spec ffef15bf, feature_governance - surface rev 19).
+# --------------------------------------------------------------------------- #
+add_resource(
+    slug="governance",
+    name="Governance policies",
+    description="Operator-attached policies (bindings): actions, limit kinds, deny-overrides semantics, windows, and the POLICY_DENIED / QUOTA_EXCEEDED error format.",
+    version="2",
+    body="""\
+# GOVERNANCE POLICIES (always-on, binding-driven)
+
+Operators can ATTACH policies to your identity; the bus enforces them BEFORE
+persisting a write. There is NO feature flag: enforcement is always on and
+driven by BINDINGS - an agent with no bindings composes to nothing and passes
+untouched, byte-identical to an ungoverned bus. A write that violates an
+attached policy fails with a normative error - your request is NOT persisted
+and recipients never see it.
+
+## Binding model - who a policy governs
+A policy is a GLOBAL, versionable object unifying audience + governance rules.
+It governs you when an operator binds it to YOUR agent (directly or as an
+inline binding). Policies are not per-workspace, and your consumption is
+counted across ALL workspaces. Callers with no identity are never governed.
+
+## Actions - what a rule covers
+One of: ``message_create``, ``broadcast``, ``handoff_create``, ``artifact_put``.
+``broadcast`` is the explicit {"strategy":"broadcast"} target AND the
+target-less, channel-less send (same reach). A ``message_create`` rule also
+covers broadcast (broadcast IS a message create); a ``broadcast`` rule does
+NOT restrict direct/targeted sends.
+
+## Limit kinds - what a rule does
+* ``deny`` - the action is categorically blocked for you.
+* ``max_count`` - at most N actions per rolling window (``1h`` or ``24h``),
+  counted per agent across all workspaces, evaluated pre-write (the attempt
+  that would exceed the limit fails; completed ones stay).
+* ``max_bytes`` - the payload/body/content may not EXCEED N bytes (exactly N
+  passes; N+1 fails). Applies to the UTF-8 byte size of the message body,
+  handoff payload, or artifact content.
+* ``max_open_handoffs`` - at most N of your created handoffs may be
+  non-terminal at once; completing/cancelling/rejecting one frees the slot.
+* ``require_approval`` - the action is intercepted for a human decision (see
+  okto-nexus://reference/hitl; needs feature_hitl ON).
+
+## Evaluation semantics
+The union of your bound policies' rules matching the action is evaluated.
+Deny-overrides: if ANY applicable deny matches, it wins over every quota.
+Otherwise quotas are checked deterministically and the first violation is
+reported. No applicable rule = allowed.
+
+## Errors you can receive
+* ``POLICY_DENIED`` (HTTP 403) - a deny matched. details: {policy_id, action,
+  limit_kind}.
+* ``QUOTA_EXCEEDED`` (HTTP 429) - a quota matched. details: {policy_id, action,
+  limit_kind, limit, window?, current?}.
+Both are terminal for that attempt - do NOT retry a deny; for quotas, wait for
+the window to roll or reduce your payload. The details only ever describe YOUR
+own matched rule - never other agents' state. Every denial is also audited
+as a ``governance.denied`` event on the workspace stream (payload carries the
+policy/action context, never your subject/body).
+
+## Discovering the policies that apply to YOU
+``agent_whoami`` returns ``effective_policies`` (``<policy_id>@<version>`` /
+``inline``) plus a ``governance`` block - a list of {policy_id, action,
+limit_kind, limit?, window?} - ONLY when you have bindings with governance
+rules. No block = nothing restricts you right now. Policies are managed by
+operators (dashboard, or REST: POST /api/v1/policies, POST
+/api/v1/policies/{policy_id}/versions, PUT /api/v1/agents/{agent_id}/policies);
+agents cannot create or edit them. (The legacy /api/v1/governance/policies CRUD
+still exists but its writes no longer feed enforcement.)""",
+)
+
+
+# --------------------------------------------------------------------------- #
+# HITL approvals reference (spec 2948b2a2, feature_hitl - surface rev 20).
+# --------------------------------------------------------------------------- #
+add_resource(
+    slug="hitl",
+    name="Human-in-the-loop approvals",
+    description="What a pending_approval envelope means, which approval.* events to watch via event_wait, how a rejection reaches you, and why you must never re-send while pending.",
+    version="2",
+    body="""\
+# HITL APPROVALS (feature_hitl, default OFF)
+
+Operators can require HUMAN APPROVAL for specific actions by binding you a
+policy whose version carries a ``require_approval`` rule. Interception happens
+when such a rule bound to YOU matches the action AND ``feature_hitl`` is ON
+(check nexus_info.features.feature_hitl; your agent_whoami ``governance`` block
+lists any require_approval rule bound to you). With ``feature_hitl`` OFF
+nothing changes for you. When it triggers, your write is NOT executed: it is
+parked as a pending approval for a human operator to decide.
+
+## The pending envelope
+An intercepted ``message_create`` / ``handoff_create`` (broadcast included)
+still returns ``ok: true`` - branch on ``data.status``:
+
+    {"status": "pending_approval", "approval_id": "apr_...",
+     "action": "message_create", "policy_id": "pol_...",
+     "watch": {"stream": "workspace",
+               "types": ["approval.granted", "approval.denied"],
+               "approval_id": "apr_..."},
+     "trace_id": "..."}   # present only when tracing resolved one
+
+Nothing was delivered and no recipient saw anything. Your ORIGINAL arguments
+are stored server-side and will be executed VERBATIM if approved - there is
+nothing for you to re-send.
+
+## While it is pending
+* Do NOT retry or re-send the action. A retry is intercepted again and files
+  a SECOND pending approval: it will not go out faster, and the operator now
+  has duplicates to reject. One request = one approval_id = one decision.
+* WAIT using the ``watch`` block: ``event_wait(stream="workspace",
+  filters={"type":"approval.granted"})`` (and/or ``approval.denied``), keeping
+  only events whose ``approval_id`` matches yours - it is surfaced on every
+  projection profile.
+* You are not blocked: keep doing other work; only this one action is parked.
+
+## Outcomes
+* ``approval.granted`` - an operator approved and the bus ALREADY EXECUTED
+  your original request (same arguments, same side effects, receipts and
+  events as a normal call). Do not re-send.
+* ``approval.denied`` - the action was rejected and will NEVER execute. The
+  operator's justification arrives as a DIRECT message in your inbox from
+  agent ``operator`` (subject ``Approval <id>: <action> rejected``).
+  inbox_ack it, adapt to the feedback, and only then submit a NEW request if
+  still needed.
+
+## Semantics and guarantees
+* approval.* event payloads carry METADATA ONLY ({approval_id, action,
+  agent_id, policy_id, decided_by, trace_id?}) - never your subject/body.
+* Decisions are OPERATOR-ONLY (dashboard / REST); agents cannot approve or
+  reject - not even their own requests. The FIRST decision is final (a second
+  one gets CONFLICT); there is no un-approve.
+* Precedence: a matching ``deny`` still returns POLICY_DENIED and quotas are
+  still checked FIRST - interception only replaces an action that would
+  otherwise have PASSED.
+* ``agent_whoami``'s ``governance`` block lists any ``require_approval``
+  rule bound to you, so you can anticipate the interception before
+  writing.""",
 )

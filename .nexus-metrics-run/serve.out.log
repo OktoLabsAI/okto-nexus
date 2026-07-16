@@ -1,0 +1,39 @@
+INFO:     127.0.0.1:61204 - "GET /api/v1/stream?last_event_id=1456 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61207 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63703 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51589 - "GET /api/v1/settings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51591 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51593 - "GET /api/v1/metrics/publish-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51651 - "GET /api/v1/info HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51652 - "GET /api/v1/workspaces HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51653 - "POST /api/v1/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51654 - "POST /api/v1/tags HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51655 - "POST /api/v1/tags/metrics_suite_20260708075413/values HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51656 - "POST /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51657 - "POST /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51658 - "GET /api/v1/agents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51659 - "GET /api/v1/agents/metrics-agent-a-20260708075413 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51660 - "POST /api/v1/guardrails/groups HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51661 - "POST /api/v1/guardrails/groups/grp_6f0c2e26e01745ed8eccdaf885a3bbfe/members HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51662 - "POST /api/v1/guardrails HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51663 - "POST /api/v1/guardrails/grd_c2c15d74890f4d5387e9ac52f4710758/versions HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:51664 - "POST /api/v1/policies HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51665 - "POST /api/v1/policies/pol_13ae24c292f14799a15e3f8d0d37cf8d/versions HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:51666 - "POST /api/v1/comm-presets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51667 - "POST /api/v1/comm-presets/cpr_28a323244533483781546a5c189fb560/versions HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:51668 - "POST /api/v1/steering/messages HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51669 - "GET /api/v1/sessions HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51670 - "GET /api/v1/messages?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&page=1&page_size=20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51671 - "GET /api/v1/events?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&limit=30 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51672 - "GET /api/v1/events/types?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51673 - "GET /api/v1/graph?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51674 - "GET /api/v1/workspaces/f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662/analytics?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51675 - "GET /api/v1/workspaces/f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662/health?window=24h HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51676 - "GET /api/v1/approvals?workspace=f51741501b7040e31d9c9a7de87f5ee4753c165fcb74cb2968e4c0b11e677662 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51677 - "GET /api/v1/agents/does-not-exist-for-metrics-e2e HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51678 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62017 - "GET /api/v1/graph?workspace=all&window_hours=24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62019 - "POST /api/v1/metrics/publish HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50061 - "GET /api/v1/metrics/publish-health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50063 - "GET /api/v1/metrics/local/summary HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50771 - "GET /api/v1/metrics/publish-health HTTP/1.1" 200 OK

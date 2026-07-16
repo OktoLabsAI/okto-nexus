@@ -8,8 +8,10 @@ event log — entirely on one machine, backed by a single SQLite database.
 
 One command — `okto-nexus serve` — starts the whole hub on a single port:
 
-- **`/mcp`** — the full 35-tool surface over **streamable HTTP**, gated by
-  per-agent API keys (`nxs_…`, hash-only at rest, plaintext shown once);
+- **`/mcp`** — the agent tool surface over **streamable HTTP**, gated by
+  per-agent API keys (`nxs_…`, hash-only at rest, plaintext shown once).
+  Experimental memory tools are published only when `feature_memory` is enabled
+  at server startup;
 - **`/api/v1`** — a REST API for agent/key management, observability
   (live graph snapshot, message/handoff/session/event histories) and admin
   actions, plus an **SSE stream** with exact `Last-Event-ID` resume;
@@ -40,30 +42,32 @@ and never see another workspace's data.
 5. [The HTTP Hub & Dashboard (`okto-nexus serve`)](#the-http-hub--dashboard-okto-nexus-serve)
 6. [Running It / MCP Client Setup](#running-it--mcp-client-setup)
 7. [Quickstart: Get Codex Talking to Claude](#quickstart-get-codex-talking-to-claude)
-8. [Core Concepts](#core-concepts)
-9. [Tool Reference](#tool-reference)
-10. [Data Model](#data-model)
-11. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
-12. [Operations](#operations)
-13. [Troubleshooting](#troubleshooting)
-14. [Example Flow](#example-flow)
-15. [Testing](#testing)
-16. [Project Layout](#project-layout)
-17. [Limitations (Non-Goals)](#limitations-non-goals)
-18. [Roadmap](#roadmap)
-19. [License](#license)
+8. [Token Usage](#token-usage)
+9. [Core Concepts](#core-concepts)
+10. [Tool Reference](#tool-reference)
+11. [Data Model](#data-model)
+12. [Response Envelope & Error Catalog](#response-envelope--error-catalog)
+13. [Operations](#operations)
+14. [Troubleshooting](#troubleshooting)
+15. [Example Flow](#example-flow)
+16. [Testing](#testing)
+17. [Project Layout](#project-layout)
+18. [Limitations (Non-Goals)](#limitations-non-goals)
+19. [Roadmap](#roadmap)
+20. [Release Notes](#release-notes)
+21. [License](#license)
 
 ---
 
 ## Highlights
 
-- **Local-first, two transports.** `okto-nexus serve` exposes the SAME 35-tool
-  surface over **streamable HTTP** (parity enforced by a test) plus REST, SSE
-  and the web dashboard — all on one loopback port. The classic **stdio** mode
-  is unchanged for MCP hosts that launch local processes. Loopback REST and
-  the dashboard need no key (same-machine trust); `/mcp` always requires a
-  per-agent API key, and any bind beyond loopback re-enables the key gate
-  everywhere (fail-closed on the network).
+- **Local-first, two transports.** `okto-nexus serve` exposes the same MCP tool
+  surface over **streamable HTTP** as stdio for the effective config (parity is
+  enforced by tests), plus REST, SSE and the web dashboard — all on one loopback
+  port. The classic **stdio** mode is unchanged for MCP hosts that launch local
+  processes. Loopback REST and the dashboard need no key (same-machine trust);
+  `/mcp` always requires a per-agent API key, and any bind beyond loopback
+  re-enables the key gate everywhere (fail-closed on the network).
 - **SQLite WAL is the single source of truth.** One file (`~/.okto_nexus/nexus.db`
   by default). No in-memory cache, broker, or external store. Every connection
   enforces WAL + foreign keys + a busy timeout.
@@ -263,7 +267,7 @@ pipx install "okto-nexus[serve]"        # or: pipx install ".[serve]" from a che
 okto-nexus serve                        # → http://127.0.0.1:8202
 ```
 
-Package: `okto-nexus` v`0.0.6` — *Okto Nexus - Local Agent Coordination Bus
+Package: `okto-nexus` v`0.1.1` — *Okto Nexus - Local Agent Coordination Bus
 (MCP server + dashboard)* · author Okto Labs · license Elastic License 2.0 +
 SaaS/Branding Addendum + Trademark Policy.
 
@@ -294,14 +298,24 @@ positional argument, or a flag with no value) fails closed with `CONFIG_ERROR` �
 | `OKTO_NEXUS_SESSION_REAP_SECONDS` | `--session-reap-seconds` | `86400` | `1` | Sessions silent past this (s) are opportunistically closed by `session_open`/`session_heartbeat`. |
 | `OKTO_NEXUS_MAX_SHARED_MD_EVENTS` | `--max-shared-md-events` | `1000` | `1` | Hard ceiling for `shared_md_render`'s `limit_events`. |
 | `OKTO_NEXUS_MAX_EVENT_LIMIT` | `--max-event-limit` | `1000` | `1` | Hard ceiling for the `limit` page size on `event_get` / `event_wait`. |
+| `OKTO_NEXUS_POLL_TOKEN_TTL_SECONDS` | `--poll-token-ttl-seconds` | `3600` | `60` | TTL (s) for ephemeral `nxsept_` poll tokens used by remote monitor processes. |
 | `OKTO_NEXUS_TRUST_MODE` | `--trust-mode` | `open` | — | One of `open`, `strict`. `strict` requires `session_id` + `session_secret` on the sensitive verbs; `open` validates a supplied secret but does not require one. |
 | `OKTO_NEXUS_RETENTION_EVENTS_KEEP_DAYS` | `--retention-events-keep-days` | `30` | `0` | Retention window (days) for the event log (prune-eligible past it). |
 | `OKTO_NEXUS_RETENTION_READ_DELIVERIES_KEEP_DAYS` | `--retention-read-deliveries-keep-days` | `14` | `0` | Retention window (days) for acknowledged (`read`) deliveries. |
 | `OKTO_NEXUS_RETENTION_CLOSED_SESSIONS_KEEP_DAYS` | `--retention-closed-sessions-keep-days` | `7` | `0` | Retention window (days) for `closed` sessions. |
 | `OKTO_NEXUS_AUTO_PRUNE_ON_START` | `--auto-prune-on-start` | `false` | — | Boolean (`true/1/yes/on` / `false/0/no/off`). Run one bounded, best-effort retention pass at server startup. |
+| `OKTO_NEXUS_METRICS_MODE` | `--metrics-mode` | `disabled` | — | One of `disabled`, `local_only`, `anonymous_beacon`. `local_only` writes aggregate JSONL locally; `anonymous_beacon` also publishes aggregate batches. |
+| `OKTO_NEXUS_METRICS_DIR` | `--metrics-dir` | `{home}/metrics` | — | Local directory for metrics JSONL, sent ledger and publish state. |
+| `OKTO_NEXUS_METRICS_BEACON_URL` | `--metrics-beacon-url` | `https://nexus-metrics.oktolabs.ai` | — | Anonymous metrics ingest endpoint used only in `anonymous_beacon` mode. |
+| `OKTO_NEXUS_METRICS_RETENTION_DAYS` | `--metrics-retention-days` | `30` | `0` | Local metrics retention window; `0` keeps local metrics until manual cleanup. |
+| `OKTO_NEXUS_METRICS_PUBLISH_INTERVAL_SECONDS` | `--metrics-publish-interval-seconds` | `3600` | `1` | Background publish cadence for `anonymous_beacon` mode. |
 
 Retention only ever deletes **terminal** lanes (events past their window,
 `read` deliveries, `closed` sessions) — see [Operations](#operations).
+Usage metrics are opt-in and aggregate-only: Nexus records bounded counters
+for CLI/MCP/HTTP/coordination/lifecycle activity, status, errors and latency
+buckets. Message bodies, prompts, file paths, raw IDs, tokens, URLs and stack
+traces are rejected by the telemetry schema before anything is written or sent.
 `load_config(env, argv=None)` is the single entry point and depends only on the
 stdlib + `okto_nexus.errors` (it imports neither `mcp` nor `sqlite3`).
 
@@ -346,6 +360,28 @@ one-time anti-lockout bootstrap (an `operator` agent + key, printed once).
 Migrate stdio-era agents in batch with `okto-nexus admin issue-keys` (additive,
 idempotent). On stdio, an optional `OKTO_NEXUS_API_KEY` binds the session to a
 key-derived identity (fail-closed when set; absent = V1 behaviour).
+
+**Same-machine trust (decision D5).** On the default loopback bind a *keyless*
+REST/dashboard request is treated as the reserved `operator` identity — whoever
+can reach `127.0.0.1` already owns `nexus.db` on disk, so the local operator
+skips the key ceremony (that ceremony belongs to *agents*, over `/mcp`, which is
+never exempt). To require a key on your own machine, **bind beyond loopback**
+(`--host` / `OKTO_NEXUS_HOST`): `local_open` flips to `False`, every request
+needs a key, and the dashboard falls back to its sign-in gate. There is no knob
+to keep a loopback bind *and* require keys — the bind address is the switch.
+
+That keyless opening is fenced off from **browsers**: a cross-site `fetch` (a
+foreign `Origin`) or a DNS-rebound page (an attacker domain as `Host`, detected
+via `Sec-Fetch-Site`) is refused `403 CROSS_ORIGIN_BLOCKED` before any handler
+runs — so a malicious web page cannot drive your local bus. Non-browser callers
+(curl, agents) send no `Origin`/`Sec-Fetch-Site` and are unaffected.
+
+**Operator-only surfaces.** The destructive and configuration endpoints —
+`admin/reset`, `admin/prune`, settings write/reset, the policy catalog and
+legacy governance CRUD, and the HITL steering/approvals/memory-delete surfaces —
+require the operator identity specifically. A keyless loopback caller passes
+(it *is* the operator); any *non-operator* key is refused `403
+PERMISSION_DENIED`, even off loopback.
 
 ### The dashboard
 
@@ -491,9 +527,12 @@ Each agent runs this once, in order — cheap and idempotent:
 1. `agent_whoami()` — confirm your `agent_id` (it is your API key's identity).
 2. `workspace_resolve(project_root="<the shared repo>")` then
    `session_open(agent_id=<you>, workspace_id=<resolved>)` — store the returned
-   `session_secret`. **Pass your `session_id` + `session_secret` on every
-   authenticated verb afterwards**: each one keeps you *present* (online) on the
-   dashboard, so you never have to spam `session_heartbeat`.
+   `session_secret`. **Pass `session_id` + `session_secret` on the verbs that
+   accept them** (`message_create` — named `from_session_id` there; handoff
+   claim/complete/verify/reject/cancel; inbox pull/ack/extend; `poll_token_*`):
+   each validated call advances your session heartbeat, keeping you in the
+   broadcast audience. Read-only verbs don't — call `session_heartbeat` on idle
+   stretches (see [the two presence notions](#identity-agents-vs-sessions)).
 3. `inbox_count(agent_id=<you>)` — if `unread > 0`, drain it with `inbox_pull` →
    triage → `inbox_ack`.
 
@@ -523,9 +562,11 @@ instant it lands — turning a request/response inbox into a live, conversationa
 channel:
 
 ```
-event_cursor(stream="workspace")                       # anchor at NOW (skip backlog)
+event_cursor(project_root=<repo>, agent_id="claude", stream="workspace")
+                                                       # anchor at NOW (skip backlog)
 # then, as a BACKGROUND task, loop:
-event_wait(stream="workspace", cursor=<last next_cursor>, timeout_seconds=20)
+event_wait(project_root=<repo>, agent_id="claude", stream="workspace",
+           cursor=<last next_cursor>, timeout_seconds=20)
 # → re-arm from the returned next_cursor each time it yields a page
 ```
 
@@ -534,14 +575,13 @@ turn; Claude then `inbox_pull`s the body, handles it, and `inbox_ack`s. A timeou
 just returns an empty page — re-arm and keep listening; that steady state is not
 an error.
 
-This monitor is **nothing but the `event_wait` tool in a loop on your own MCP
-connection** — no daemon, no socket, no second process. Because it rides your
-authenticated connection, identity / visibility / permissions come for free, and
-(combined with **activity-aware presence** — any authenticated verb refreshes
-your liveness) it keeps Claude showing **online** the whole time it is listening.
-Do **not** hand-roll a standalone monitor script or `curl` the REST/SSE
-endpoints — that duplicates auth/cursoring/visibility and drifts out of sync; see
-[Monitoring patterns](#monitoring-patterns) for the full rationale.
+The default monitor is **nothing but the `event_wait` tool in a loop on your own
+MCP connection**. Harnesses that can run a wake-up background process but should
+not give it the permanent `nxs_` key can instead issue an ephemeral
+`nxsept_` bearer with `poll_token_issue(session_id, session_secret)` and let that
+process call only the read-only `/api/v1/events` and `/api/v1/inbox/*` monitor
+endpoints. Do **not** hand-roll a standalone monitor with the permanent key or
+the dashboard SSE endpoint; see [Monitoring patterns](#monitoring-patterns).
 
 ### 7. Claude replies; the loop closes
 
@@ -561,6 +601,57 @@ exchange live on the dashboard's **Graph** (edges light up per message) and
 > (`handoff_create` with a capability/role target): every eligible agent sees it
 > but only the first `handoff_claim` wins. See
 > [How agents communicate](#how-agents-communicate).
+
+---
+
+## Token Usage
+
+Connecting an agent to Okto Nexus has a **fixed context cost** (what the MCP
+handshake places in the agent's window on every turn) and a **variable cost**
+(tool responses). The fixed surface is deliberately engineered down and
+guarded by tests (`surface_metrics.py`; chars/4 token proxy against a frozen
+baseline).
+
+### Fixed cost per connection
+
+| Component | Chars | ≈ Tokens |
+|---|---|---|
+| Server instructions (identity, 4-step pre-flight, comm modes, permissions, errors) | ~4.0k | ~1.0k |
+| Tool descriptions (43 tools; one line each, ≤ 200 chars — test-enforced) | ~6.6k | ~1.6k |
+| Parameter descriptions | ~15.7k | ~3.9k |
+| **Cuttable subtotal** (the free text the token-reduction front controls) | **~26.3k** | **~6.6k** |
+| Total incl. unavoidable JSON-schema scaffolding (names, types, `required`) | ~37.3k | **~9.3k** |
+
+A test gates the cuttable surface at **≥ 40% below** the pre-reduction
+baseline (41.6k chars); the approved cost of experimental tool modules (e.g.
+`feature_memory`) is discounted only when those tools are actually registered.
+
+### On-demand resources
+
+Deep reference prose does **not** sit in the resident surface: it lives behind
+`resources/read` as a closed set of **12 versioned** `okto-nexus://reference/*`
+URIs, pulled only when the agent needs depth — full pre-flight, communication
+& receipts, monitoring patterns + the copy-ready reference monitor, the
+complete routing-target grammar, per-domain tool docs
+(messages/inbox/events/handoff/identity/artifacts), governance and HITL.
+Constants such as the inbox lease default are interpolated into the resource
+bodies from config, so the docs cannot drift from the code.
+
+### Variable cost: tool responses
+
+`event_get` / `event_wait` / `inbox_pull` / `inbox_peek` / `inbox_history`
+accept a `profile` parameter — `default` (all live fields), `summary`
+(minimal + follow-up hints), `full` (raw) — so a monitoring loop can run on
+`summary` pages while consumption keeps full bodies. Prefer `inbox_peek`
+(envelope-only: `body_preview` + `body_bytes`) for triage, and attach
+**artifacts** instead of inlining large content into message bodies.
+
+### Cache staleness
+
+`nexus_info` returns `surface_revision` (increments on **every** tool-surface
+change, including doc-only rewordings) and `resource_versions` (`{uri:
+version}`, bumped on every content change). Cache aggressively; compare both
+on reconnect.
 
 ---
 
@@ -794,9 +885,9 @@ Note that `message.created` and `artifact.created` are published on the
 
 - `cursor` is the **last `event_id` consumed**; the scan selects `event_id > cursor`
   (`normalize_cursor`: integer ≥ 0, `bool` rejected).
-- `filters` keys are enumerated `{type, agent_id, task_id, handoff_id}` (equality,
-  combined with **AND**); `task_id`/`handoff_id` come from the payload (not
-  columns in V1).
+- `filters` keys are enumerated `{type, agent_id, task_id, handoff_id, trace_id}`
+  (equality, combined with **AND**); `task_id`/`handoff_id`/`trace_id` come from
+  the payload (not columns in V1).
 - **Visibility** (`can_agent_see_event`) is applied in the application layer, so
   `next_cursor` advances past **every** examined event (filtered or not-visible) —
   nothing already scanned is re-returned.
@@ -837,6 +928,15 @@ block**:
   (`timed_out=true`) — re-arm and continue; that is the steady state, not an
   error.
 
+- **Remote EPT poller.** If the harness can run a background process that wakes
+  the main harness on output, issue `poll_token_issue(session_id,
+  session_secret)` over MCP and pass only the returned short-lived `nxsept_`
+  bearer to that process. It may call `GET /api/v1/events/cursor`,
+  `GET /api/v1/events?cursor=...&timeout_seconds=25&profile=summary`,
+  `GET /api/v1/inbox/count`, and `GET /api/v1/inbox/peek`. It cannot mutate
+  state, cannot call MCP, and never receives the permanent `nxs_` key. Renew it
+  before `expires_at`; revoke it on teardown.
+
 - **In-loop, no background.** Call with `timeout_seconds=0` for a **non-blocking
   snapshot** (single scan, no sleep) and poll between turns, advancing
   `cursor` → `next_cursor`. Don't use a long timeout if you can't park the turn.
@@ -845,18 +945,14 @@ block**:
   `{"type": "message.read"}`) awaits one expected event — the read receipt of a
   message you sent, a `handoff.completed`, etc.
 
-**Anti-patterns — don't.** A monitor is *nothing but* `event_wait` in a loop on
-your MCP connection; there is no daemon to write, no socket to open, no process
-to supervise. Avoid:
+**Anti-patterns — don't.** Avoid:
 
-- **curl / raw HTTP** against the REST API (`/api/v1`), the `/mcp` endpoint, or
-  the dashboard's live SSE stream — those are the human dashboard and the
-  operator's REST surface; hand-rolling them duplicates auth, cursoring and
-  visibility and drifts out of sync. Call the `event_wait` tool instead.
-- **a standalone "monitor" app/script/worker** (Python, Node, shell, …) to poll
-  the bus — overengineering: a separate process doesn't share your identity/API
-  key, doesn't keep your presence heartbeat fresh, and can't hand events back
-  into your reasoning loop. The tool already does the long-poll for you.
+- **raw HTTP with the permanent `nxs_` key** against REST, `/mcp`, or dashboard
+  SSE. Raw HTTP is supported only for the EPT data-plane endpoints with a
+  short-lived `nxsept_` bearer.
+- **a standalone monitor that stores the permanent key or calls MCP**. A
+  separate process is acceptable only as an EPT poller whose output wakes the
+  harness.
 - **spawning any helper process or a second server** — the hub is already
   running and the MCP session is your only required channel.
 
@@ -1249,7 +1345,7 @@ transition to `closed` emits `session.closed`.
 ### Events & Polling
 
 > Valid streams: `{workspace, agent, handoff}`. Valid `filters` keys
-> (equality, AND-combined): `{type, agent_id, task_id, handoff_id}`. Each event:
+> (equality, AND-combined): `{type, agent_id, task_id, handoff_id, trace_id}`. Each event:
 > `{event_id, workspace_id, stream, type, payload, actor_agent_id, task_id, handoff_id, created_at}`.
 > `limit` defaults to 100, max 1000 (override `OKTO_NEXUS_MAX_EVENT_LIMIT`).
 
@@ -1887,7 +1983,7 @@ Run the live client with the venv interpreter:
 
 ## Testing
 
-The suite has **650+ tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
+The suite has **1,570+ tests** (`pytest`, `testpaths=["tests"]`, `pythonpath=["src"]`).
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest -q
@@ -2018,6 +2114,84 @@ Next (non-binding):
 - **SaaS evolution:** multi-tenant auth (RBAC/scopes), hosted storage and
   transport behind the existing hexagonal ports (`AuthProvider`,
   `ObservabilityQueries`, storage, `Waiter`).
+
+---
+
+## Release Notes
+
+### Unreleased — surface revision 31 (docs-accuracy sweep)
+
+Driven by the adversarial two-aspect audit in
+[`docs/design/0003`](docs/design/0003-analise-indice-recuperacao-e-superficie-docs.md)
+(32 verified findings, 0 refuted). **Doc-only** — no tool, parameter or
+runtime semantics changed.
+
+- **Server instructions corrected (assertiveness):** the pre-flight now shows
+  the full `event_cursor(project_root=…, agent_id=…, stream=…)` call (the
+  short form failed schema validation); the credential/heartbeat guidance
+  names the exact verbs that accept `session_id` + `session_secret` and states
+  that read-only verbs never advance the session heartbeat; the helper-process
+  ban carries its one sanctioned exception (an EPT poller holding only an
+  `nxsept_` token); `event_wait` as a listener is an explicit
+  `timeout_seconds>0` opt-in.
+- **Stale reference resources rewritten and version-bumped:** `governance` v2
+  (binding-driven, always-on model — `feature_governance` no longer exists;
+  the operative REST flow is `POST /api/v1/policies` + versions +
+  `PUT /api/v1/agents/{id}/policies`; the legacy `/governance/policies` CRUD
+  no longer feeds enforcement), `hitl` v2 (same flag fix), `tool-docs/inbox`
+  v2 (the lease default is now **interpolated from config** — it had drifted
+  to a hardcoded 120 vs the real 300 — plus the `profile` semantics),
+  `tool-docs/events` v2 (`trace_id` filter key), `tool-docs/identity` v4
+  (reachability-scoped discovery; `agent_whoami` conditional
+  `effective_policies`/`governance`/`communication` blocks),
+  `tool-docs/artifacts` v2 (audience-scoped reads), `target-grammar` v5
+  (broadcast-in-`mixed` is rejected everywhere), `tool-docs/messages` v2,
+  `communication` v2 / `monitoring` v5 / `preflight` v3 (reception loop,
+  receipts and event-tool semantics each live in exactly one resource +
+  pointers — the triple-drift surface is gone).
+- **Resident-surface token cut:** parameter descriptions trimmed 17.5k →
+  15.7k chars — back **below** the pre-reduction baseline (16.4k) — while
+  every strategy shape, the selector absence-trap caution and every
+  behaviour-changing default stay inline. Net cuttable surface: 26.3k chars
+  (~6.6k tokens), honest reduction 44.3% vs the frozen baseline.
+- **Honest 40% gate:** `cuttable_reduction_pct` no longer discounts the
+  approved cost of experimental tools that are not registered
+  (`EXPERIMENTAL_GROWTH_KEYS`; the default-surface gate had been sheltering
+  2.4k chars of phantom growth).
+- README aligned with the same fixes (quickstart call shapes, filter keys,
+  heartbeat guidance) and restructured with this **Token Usage** / **Release
+  Notes** layout.
+
+### 0.1.1 — current
+
+- **Permission surface hardening** (surface revision 30): authenticated
+  `session_open` is self-only; self profile/capability updates gated by
+  `identity.update_profile` / `identity.update_capabilities`; workspace
+  listing & path disclosure, `shared.md` render, coordination health and
+  experimental memory behind explicit per-agent permissions; handoff payloads
+  exposed only to the claimant; guardrail admin is UI/REST-only.
+- Configurable metrics telemetry.
+
+### 0.1.0
+
+- **Remote-only monitor data plane** (rev 28): `poll_token_issue/renew/revoke`
+  mint short-lived `nxsept_` bearers accepted only by the read-only REST
+  monitor endpoints (`/api/v1/events[/cursor]`, `/api/v1/inbox/{count,peek}`);
+  memory became a registration-time experimental surface (rev 29).
+- **Attachable policies** (rev 25) and **communication presets** (rev 26);
+  guardrail/group administration; agent display colors + enriched graph
+  cards; loopback-trust hardening with operator-gated mutating REST.
+- Monitor contract invariants (I1–I6) + the copy-ready reference monitor
+  documented in the `monitoring` resource.
+
+### 0.0.x
+
+- **0.0.6** — MCP reference resources served over HTTP `serve`; Frente 1
+  token reduction (deep prose relocated out of the resident surface).
+- **0.0.5** — Codex ↔ Claude quickstart + monitor docs.
+- **0.0.3–0.0.4** — dashboard observability waves (chat UX, 3-layer flow
+  graph, inbox receipts, events tab), semantic search (embeddings), serve
+  event-loop hardening.
 
 ---
 

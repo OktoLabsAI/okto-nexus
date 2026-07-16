@@ -1,0 +1,307 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Agents
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+    - main [ref=e136]:
+      - generic [ref=e304]:
+        - generic [ref=e305]:
+          - generic [ref=e306]:
+            - button "Agents" [ref=e307] [cursor=pointer]
+            - button "Permission presets" [ref=e308] [cursor=pointer]
+          - button "New agent" [ref=e309] [cursor=pointer]:
+            - img [ref=e310]
+            - text: New agent
+        - generic [ref=e311]:
+          - generic [ref=e312]:
+            - generic "operator" [ref=e315]
+            - generic [ref=e316]: operator · no key
+            - generic [ref=e317]: last seen never
+            - generic [ref=e318]:
+              - generic "Effective permissions" [ref=e319]: Full access
+              - generic [ref=e320]: active
+            - generic [ref=e321]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e322] [cursor=pointer]:
+                - img [ref=e323]
+              - button "Permissions" [ref=e326] [cursor=pointer]:
+                - img [ref=e327]
+              - button "Tags & outbound audience" [ref=e330] [cursor=pointer]:
+                - img [ref=e331]
+              - button "Communication style (how the agent should communicate)" [ref=e335] [cursor=pointer]:
+                - img [ref=e336]
+              - button "Regenerate key" [ref=e338] [cursor=pointer]:
+                - img [ref=e339]
+              - button "Deactivate" [ref=e342] [cursor=pointer]:
+                - img [ref=e343]
+              - button "Delete agent" [ref=e345] [cursor=pointer]:
+                - img [ref=e346]
+          - generic [ref=e349]:
+            - generic "atlas" [ref=e352]
+            - generic [ref=e353]: reviewer · key issued
+            - generic [ref=e354]: last seen never
+            - generic [ref=e355]:
+              - generic "Effective permissions" [ref=e356]: Full access
+              - generic [ref=e357]: active
+            - generic [ref=e358]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e359] [cursor=pointer]:
+                - img [ref=e360]
+              - button "Permissions" [ref=e363] [cursor=pointer]:
+                - img [ref=e364]
+              - button "Tags & outbound audience" [ref=e367] [cursor=pointer]:
+                - img [ref=e368]
+              - button "Communication style (how the agent should communicate)" [ref=e372] [cursor=pointer]:
+                - img [ref=e373]
+              - button "Steer (direct message as operator)" [ref=e375] [cursor=pointer]:
+                - img [ref=e376]
+              - button "Regenerate key" [ref=e380] [cursor=pointer]:
+                - img [ref=e381]
+              - button "Deactivate" [ref=e384] [cursor=pointer]:
+                - img [ref=e385]
+              - button "Delete agent" [ref=e387] [cursor=pointer]:
+                - img [ref=e388]
+          - generic [ref=e476]:
+            - generic [ref=e477]:
+              - generic [ref=e478]:
+                - heading "Tags" [level=3] [ref=e479]
+                - generic [ref=e480]: Operator-only
+              - paragraph [ref=e481]:
+                - text: Key/value labels used by audience selectors and the
+                - code [ref=e482]: tag
+                - text: routing strategy. Agents cannot edit their own tags. Keys and values come from the central Tag Registry — unregistered entries are rejected (fail-closed).
+              - generic [ref=e483]:
+                - generic [ref=e484]:
+                  - generic "TEAM" [ref=e485]
+                  - generic [ref=e486]:
+                    - generic [ref=e487]:
+                      - text: BACKEND
+                      - button "Remove TEAM=BACKEND" [ref=e488] [cursor=pointer]:
+                        - img [ref=e489]
+                    - generic [ref=e492]:
+                      - button "+ value" [active] [ref=e493] [cursor=pointer]:
+                        - text: + value
+                        - img [ref=e494]
+                      - generic [ref=e597]:
+                        - generic [ref=e598]: Registered values — TEAM
+                        - generic [ref=e599]:
+                          - button "BACKEND — already added" [disabled] [ref=e600]
+                          - button "FRONTEND" [ref=e601] [cursor=pointer]
+                          - button "QA" [ref=e602] [cursor=pointer]
+                        - generic [ref=e603]: Missing a value? Add it in the Tag Registry.
+                - button "+ Add key" [ref=e497] [cursor=pointer]:
+                  - text: + Add key
+                  - img [ref=e498]
+            - generic [ref=e500]:
+              - generic [ref=e501]:
+                - heading "Audience — outbound" [level=3] [ref=e502]
+                - generic [ref=e503]: Operator-only
+                - generic [ref=e504]:
+                  - button "Simple" [ref=e505] [cursor=pointer]
+                  - button "Expressions" [ref=e506] [cursor=pointer]
+              - paragraph [ref=e507]:
+                - text: "Restricts who this agent can reach with direct messages, broadcasts and handoffs. No conditions = no restriction. Simple mode: AND across keys, OR across values. Expressions mode adds In / NotIn / Exists / DoesNotExist (ANDed). Conditions are built from Tag Registry entries only; values match hierarchically by"
+                - code [ref=e508]: /
+                - text: segment (ENG covers ENG/BACKEND).
+              - generic [ref=e509]:
+                - generic [ref=e510]:
+                  - generic [ref=e511]: is any of
+                  - generic [ref=e513]:
+                    - generic "TEAM" [ref=e514]
+                    - generic [ref=e515]:
+                      - generic [ref=e516]:
+                        - text: BACKEND
+                        - button "Remove TEAM=BACKEND" [ref=e517] [cursor=pointer]:
+                          - img [ref=e518]
+                      - button "+ value" [ref=e522] [cursor=pointer]:
+                        - text: + value
+                        - img [ref=e523]
+                      - button "Remove the TEAM condition" [ref=e525] [cursor=pointer]:
+                        - img [ref=e526]
+                - button "+ Add condition (AND) — pick a registered key" [ref=e530] [cursor=pointer]:
+                  - text: + Add condition (AND) — pick a registered key
+                  - img [ref=e531]
+              - generic [ref=e533]:
+                - img [ref=e534]
+                - paragraph [ref=e537]:
+                  - text: This agent can currently reach
+                  - generic [ref=e538]: 1 of 4
+                  - text: "registered agents: atlas. Each target's own inbound filter still applies."
+              - generic [ref=e539]:
+                - img [ref=e540]
+                - paragraph [ref=e542]:
+                  - text: The legacy
+                  - code [ref=e543]: allowed_peers
+                  - text: allowlist was removed in this release; stored values are ignored. Recreate that policy as an audience selector above.
+            - generic [ref=e544]:
+              - generic [ref=e545]:
+                - heading "Audience — inbound" [level=3] [ref=e546]
+                - generic [ref=e547]: Operator-only
+                - generic [ref=e548]:
+                  - button "Simple" [ref=e549] [cursor=pointer]
+                  - button "Expressions" [ref=e550] [cursor=pointer]
+              - paragraph [ref=e551]: "Restricts who can reach this agent: senders whose tags miss the filter are blocked (direct sends) or silently dropped (group fan-outs), and this agent stops seeing them in discovery and the event stream. No conditions = anyone may reach it. Simple mode: AND across keys, OR across values. Expressions mode adds In / NotIn / Exists / DoesNotExist (ANDed). Conditions are built from Tag Registry entries only."
+              - button "+ Add condition (AND) — pick a registered key" [ref=e554] [cursor=pointer]:
+                - text: + Add condition (AND) — pick a registered key
+                - img [ref=e555]
+            - generic [ref=e557]:
+              - generic [ref=e558]:
+                - heading "Attached policies" [level=3] [ref=e559]
+                - generic [ref=e560]: Operator-only
+              - paragraph [ref=e561]: Global policies are named, versioned and reusable across agents; the inline policy is embedded on this agent alone. Both carry audience + governance with identical force and compose by intersection — a policy only ever narrows what this agent can do.
+              - generic [ref=e562]:
+                - generic [ref=e563]:
+                  - generic "pol_e0bd4a411f234463bc1642d191dbc70f" [ref=e564]: Backend audience
+                  - combobox "latest follows the newest version; pinned freezes on one" [ref=e565]:
+                    - option "latest"
+                    - option "pinned" [selected]
+                  - combobox [ref=e566]:
+                    - option "@v2"
+                    - option "@v1" [selected]
+                  - button "Detach this policy" [ref=e567] [cursor=pointer]:
+                    - img [ref=e568]
+                - generic [ref=e571]:
+                  - generic "pol_aeec7497536947cca54d1d8420b426b3" [ref=e572]: QA latest guard
+                  - combobox "latest follows the newest version; pinned freezes on one" [ref=e573]:
+                    - option "latest" [selected]
+                    - option "pinned"
+                  - generic [ref=e574]: "@v1"
+                  - button "Detach this policy" [ref=e575] [cursor=pointer]:
+                    - img [ref=e576]
+                - button "+ Attach a global policy" [ref=e580] [cursor=pointer]:
+                  - text: + Attach a global policy
+                  - img [ref=e581]
+              - generic [ref=e583]:
+                - text: Inline governance rules
+                - paragraph [ref=e584]: Deny/quota rules embedded on this agent — same vocabulary and force as a global policy's rules, just not reusable.
+                - generic [ref=e586]:
+                  - generic [ref=e587]:
+                    - text: Action
+                    - combobox "Action" [ref=e588]:
+                      - option "message_create" [selected]
+                      - option "broadcast"
+                      - option "handoff_create"
+                      - option "artifact_put"
+                  - generic [ref=e589]:
+                    - text: Limit
+                    - combobox "Limit" [ref=e590]:
+                      - option "deny" [selected]
+                      - option "max_count"
+                      - option "max_bytes"
+                      - option "max_open_handoffs"
+                  - button "Add rule" [ref=e591] [cursor=pointer]:
+                    - img [ref=e592]
+                    - text: Add rule
+            - generic [ref=e593]:
+              - button "Save changes" [ref=e594] [cursor=pointer]
+              - button "Cancel" [ref=e595] [cursor=pointer]
+              - generic [ref=e596]: Saving overwrites tags, audience and attached policies; clearing everything resets the agent to unrestricted and unbound.
+          - generic [ref=e391]:
+            - generic "beta" [ref=e394]
+            - generic [ref=e395]: builder · key issued
+            - generic [ref=e396]: last seen never
+            - generic [ref=e397]:
+              - generic "Effective permissions" [ref=e398]: Full access
+              - generic [ref=e399]: active
+            - generic [ref=e400]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e401] [cursor=pointer]:
+                - img [ref=e402]
+              - button "Permissions" [ref=e405] [cursor=pointer]:
+                - img [ref=e406]
+              - button "Tags & outbound audience" [ref=e409] [cursor=pointer]:
+                - img [ref=e410]
+              - button "Communication style (how the agent should communicate)" [ref=e414] [cursor=pointer]:
+                - img [ref=e415]
+              - button "Steer (direct message as operator)" [ref=e417] [cursor=pointer]:
+                - img [ref=e418]
+              - button "Regenerate key" [ref=e422] [cursor=pointer]:
+                - img [ref=e423]
+              - button "Deactivate" [ref=e426] [cursor=pointer]:
+                - img [ref=e427]
+              - button "Delete agent" [ref=e429] [cursor=pointer]:
+                - img [ref=e430]
+          - generic [ref=e433]:
+            - generic "quinn" [ref=e436]
+            - generic [ref=e437]: qa · key issued
+            - generic [ref=e438]: last seen never
+            - generic [ref=e439]:
+              - generic "Effective permissions" [ref=e440]: Full access
+              - generic [ref=e441]: active
+            - generic [ref=e442]:
+              - button "Edit identity (role / capabilities / metadata)" [ref=e443] [cursor=pointer]:
+                - img [ref=e444]
+              - button "Permissions" [ref=e447] [cursor=pointer]:
+                - img [ref=e448]
+              - button "Tags & outbound audience" [ref=e451] [cursor=pointer]:
+                - img [ref=e452]
+              - button "Communication style (how the agent should communicate)" [ref=e456] [cursor=pointer]:
+                - img [ref=e457]
+              - button "Steer (direct message as operator)" [ref=e459] [cursor=pointer]:
+                - img [ref=e460]
+              - button "Regenerate key" [ref=e464] [cursor=pointer]:
+                - img [ref=e465]
+              - button "Deactivate" [ref=e468] [cursor=pointer]:
+                - img [ref=e469]
+              - button "Delete agent" [ref=e471] [cursor=pointer]:
+                - img [ref=e472]

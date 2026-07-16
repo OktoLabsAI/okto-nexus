@@ -97,6 +97,114 @@ def test_non_loopback_client_requires_key_even_when_local_open(tmp_path):
         assert client.get("/api/v1/graph").status_code == 401
 
 
+def test_loopback_trust_refuses_cross_origin_and_dns_rebinding(tmp_path):
+    """The keyless same-machine opening must not be ridable by a BROWSER: a
+    cross-site fetch (foreign Origin) or a DNS-rebound Host is refused 403,
+    while curl/agents (no Origin, no Fetch-Metadata) and the real dashboard
+    (loopback Origin + Host) still pass."""
+    home = tmp_path / "nexus_home"
+    deps = bootstrap({}, ["--home", str(home)])
+    app = build_app(deps)
+
+    with TestClient(app, client=("127.0.0.1", 50010)) as client:
+        # Non-browser same-machine caller (no Origin / no Fetch-Metadata): trusted.
+        assert client.get("/api/v1/graph").status_code == 200
+        # The real dashboard: loopback Origin + Host + Fetch-Metadata -> trusted.
+        dashboard = {
+            "origin": "http://127.0.0.1:8202",
+            "host": "127.0.0.1:8202",
+            "sec-fetch-site": "same-origin",
+        }
+        assert client.get("/api/v1/graph", headers=dashboard).status_code == 200
+        # Dev proxy origin (vite :5202) is loopback too -> trusted.
+        dev = {"origin": "http://localhost:5202"}
+        assert client.get("/api/v1/graph", headers=dev).status_code == 200
+
+        # Cross-site CSRF: a foreign Origin on the loopback socket -> 403.
+        evil = client.get("/api/v1/graph", headers={"origin": "https://evil.example"})
+        assert evil.status_code == 403
+        assert evil.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+        # A state-changing CSRF write is refused in the middleware, before the
+        # handler runs (no policy is ever created).
+        wrote = client.post(
+            "/api/v1/policies",
+            json={"name": "x"},
+            headers={"origin": "https://evil.example"},
+        )
+        assert wrote.status_code == 403
+        assert wrote.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+
+        # Read-only DNS-rebinding: a browser (Sec-Fetch-Site) with the
+        # attacker's domain as Host but NO Origin (same-origin GET) -> 403.
+        rebound = client.get(
+            "/api/v1/graph",
+            headers={"sec-fetch-site": "same-origin", "host": "evil.example"},
+        )
+        assert rebound.status_code == 403
+        assert rebound.json()["error"]["code"] == "CROSS_ORIGIN_BLOCKED"
+        # A non-browser caller (no Fetch-Metadata) with an odd Host is NOT a
+        # rebinding vector - curl on the box can set any Host and is trusted.
+        assert (
+            client.get("/api/v1/graph", headers={"host": "evil.example"}).status_code
+            == 200
+        )
+
+
+def test_destructive_surfaces_are_operator_only_off_loopback(serve_env):
+    """Every destructive / privileged REST surface requires the operator
+    identity: a valid but NON-operator key is refused 403 PERMISSION_DENIED
+    (previously any authenticated key passed). Covers config/admin, the legacy
+    governance CRUD, agent+key management (incl. the operator-takeover via
+    regenerate-key), the tag/capability/preset catalogs and the admin
+    session/handoff force-actions."""
+    _, client, operator_key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "peon"},
+        headers=_h(operator_key),
+    ).json()["data"]
+    peon = _h(created["api_key"])
+
+    forbidden = (
+        # config / admin
+        client.patch("/api/v1/settings", json={}, headers=peon),
+        client.post("/api/v1/settings/reset", headers=peon),
+        client.post("/api/v1/admin/reset", headers=peon),
+        client.post("/api/v1/admin/prune", headers=peon),
+        # legacy governance CRUD
+        client.get("/api/v1/governance/policies", headers=peon),
+        client.post("/api/v1/governance/policies", json={}, headers=peon),
+        client.patch("/api/v1/governance/policies/nope", json={}, headers=peon),
+        client.delete("/api/v1/governance/policies/nope", headers=peon),
+        # agent + key management (regenerate-key was operator-account-takeover)
+        client.post("/api/v1/agents", json={"agent_id": "intruder"}, headers=peon),
+        client.patch("/api/v1/agents/operator", json={}, headers=peon),
+        client.delete("/api/v1/agents/operator", headers=peon),
+        client.post("/api/v1/agents/operator/regenerate-key", headers=peon),
+        # tag / capability / preset catalogs (documented operator-only)
+        client.post("/api/v1/tags", json={"key": "team"}, headers=peon),
+        client.delete("/api/v1/tags/team", headers=peon),
+        client.post("/api/v1/capabilities", json={"name": "ocr"}, headers=peon),
+        client.delete("/api/v1/capabilities/ocr", headers=peon),
+        client.delete("/api/v1/presets/prs_nope", headers=peon),
+        # admin force-actions (the agent path is the MCP verb, not this REST)
+        client.post("/api/v1/sessions/sess_nope/close", headers=peon),
+        client.post("/api/v1/handoffs/ho_nope/cancel?workspace=w", headers=peon),
+    )
+    for response in forbidden:
+        assert response.status_code == 403, response.text
+        assert response.json()["error"]["code"] == "PERMISSION_DENIED"
+
+    # CRITICAL regression: the refused regenerate-key above did NOT rotate the
+    # operator's key, so the operator credential still authenticates (no
+    # account takeover), and the operator still passes every gate.
+    assert client.get("/api/v1/agents", headers=_h(operator_key)).status_code == 200
+    assert (
+        client.get("/api/v1/governance/policies", headers=_h(operator_key)).status_code
+        == 200
+    )
+
+
 # --------------------------------------------------------------------------- #
 # Auth gate (AC2)
 # --------------------------------------------------------------------------- #
@@ -155,6 +263,10 @@ def test_key_accepted_via_query_header_and_bearer(serve_env):
 # --------------------------------------------------------------------------- #
 def test_create_agent_exposes_plaintext_once_and_stores_hash_only(serve_env):
     deps, client, operator_key = serve_env
+    # Capabilities are fail-closed: the vocabulary must exist in the catalog
+    # before an agent may announce it (capability-catalog feature).
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.capability_catalog.ensure(uow, name="ocr")
     response = client.post(
         "/api/v1/agents",
         json={"agent_id": "researcher", "role": "analyst", "capabilities": ["ocr"]},
@@ -237,28 +349,45 @@ def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
         for agent_id in ("victim", "peer"):
             repos.agents.upsert(uow, agent_id=agent_id)
         repos.sessions.create(
-            uow, session_id="s-victim", agent_id="victim", workspace_id=ws,
+            uow,
+            session_id="s-victim",
+            agent_id="victim",
+            workspace_id=ws,
             status="active",
         )
         # A message the victim received (delivery as recipient) ...
         repos.messages.create(
-            uow, message_id="m-in", workspace_id=ws, from_agent_id="peer",
-            target='{"strategy":"direct","agent_id":"victim"}', subject="hi",
+            uow,
+            message_id="m-in",
+            workspace_id=ws,
+            from_agent_id="peer",
+            target='{"strategy":"direct","agent_id":"victim"}',
+            subject="hi",
             body="b",
         )
         repos.deliveries.create(
-            uow, delivery_id="d-in", message_id="m-in",
-            recipient_agent_id="victim", status="read",
+            uow,
+            delivery_id="d-in",
+            message_id="m-in",
+            recipient_agent_id="victim",
+            status="read",
         )
         # ... and one it SENT to a peer (must survive the delete).
         repos.messages.create(
-            uow, message_id="m-out", workspace_id=ws, from_agent_id="victim",
-            target='{"strategy":"direct","agent_id":"peer"}', subject="bye",
+            uow,
+            message_id="m-out",
+            workspace_id=ws,
+            from_agent_id="victim",
+            target='{"strategy":"direct","agent_id":"peer"}',
+            subject="bye",
             body="b",
         )
         repos.deliveries.create(
-            uow, delivery_id="d-out", message_id="m-out",
-            recipient_agent_id="peer", status="unread",
+            uow,
+            delivery_id="d-out",
+            message_id="m-out",
+            recipient_agent_id="peer",
+            status="unread",
         )
 
     assert (
@@ -266,8 +395,7 @@ def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
         == 200
     )
     assert (
-        client.get("/api/v1/agents/victim", headers=_h(operator_key)).status_code
-        == 404
+        client.get("/api/v1/agents/victim", headers=_h(operator_key)).status_code == 404
     )
     # The peer and the message the victim sent survive; the peer can still
     # pull it from its inbox.
@@ -289,19 +417,29 @@ def test_graph_reflects_presence_and_in_flight(serve_env):
             repos.agents.upsert(uow, agent_id=agent_id)
         # alpha: fresh heartbeat -> present. bravo: stale (5 min old).
         repos.sessions.create(
-            uow, session_id="s-alpha", agent_id="alpha", workspace_id=ws,
+            uow,
+            session_id="s-alpha",
+            agent_id="alpha",
+            workspace_id=ws,
             status="active",
         )
         repos.sessions.create(
-            uow, session_id="s-bravo", agent_id="bravo", workspace_id=ws,
+            uow,
+            session_id="s-bravo",
+            agent_id="bravo",
+            workspace_id=ws,
             status="active",
         )
         import datetime
 
         old = (
-            datetime.datetime.now(datetime.timezone.utc)
-            - datetime.timedelta(seconds=300)
-        ).isoformat().replace("+00:00", "Z")
+            (
+                datetime.datetime.now(datetime.timezone.utc)
+                - datetime.timedelta(seconds=300)
+            )
+            .isoformat()
+            .replace("+00:00", "Z")
+        )
         uow.connection.execute(
             "UPDATE sessions SET last_heartbeat_at = ? WHERE session_id = 's-bravo'",
             (old,),
@@ -353,16 +491,25 @@ def _seed_full_store(deps) -> None:
         deps.repos.workspaces.upsert(uow, workspace_id=ws)
         deps.repos.agents.upsert(uow, agent_id="survivor")
         deps.repos.sessions.create(
-            uow, session_id="s-reset", agent_id="survivor", workspace_id=ws,
+            uow,
+            session_id="s-reset",
+            agent_id="survivor",
+            workspace_id=ws,
             status="active",
         )
         deps.repos.messages.create(
-            uow, message_id="m-reset", workspace_id=ws, from_agent_id="survivor",
+            uow,
+            message_id="m-reset",
+            workspace_id=ws,
+            from_agent_id="survivor",
             body="to be wiped",
         )
         deps.repos.deliveries.create(
-            uow, delivery_id="d-reset", message_id="m-reset",
-            recipient_agent_id="survivor", status="unread",
+            uow,
+            delivery_id="d-reset",
+            message_id="m-reset",
+            recipient_agent_id="survivor",
+            status="unread",
         )
         uow.connection.execute(
             "INSERT INTO artifacts (artifact_id, workspace_id, artifact_type, "
@@ -445,9 +592,9 @@ def test_events_endpoint_pages_by_cursor(serve_env):
     first = _emit_event(deps, ws, "demo.one")
     second = _emit_event(deps, ws, "demo.two")
 
-    page = client.get(
-        f"/api/v1/events?after={first}", headers=_h(operator_key)
-    ).json()["data"]
+    page = client.get(f"/api/v1/events?after={first}", headers=_h(operator_key)).json()[
+        "data"
+    ]
     ids = [item["event_id"] for item in page["items"]]
     assert ids == [second]
     assert page["next_cursor"] == second
@@ -583,7 +730,10 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
 
         timer = threading.Timer(
             0.15,
-            lambda: (_emit_event(deps, ws, "sse.second"), _emit_event(deps, ws, "sse.third")),
+            lambda: (
+                _emit_event(deps, ws, "sse.second"),
+                _emit_event(deps, ws, "sse.third"),
+            ),
         )
         with httpx.Client(timeout=10.0) as client:
             with client.stream(
@@ -592,9 +742,7 @@ def test_sse_streams_new_events_and_resumes_after_cursor(tmp_path):
                 headers={**_h(operator_key), "last-event-id": str(e1)},
             ) as response:
                 assert response.status_code == 200
-                assert response.headers["content-type"].startswith(
-                    "text/event-stream"
-                )
+                assert response.headers["content-type"].startswith("text/event-stream")
                 opened = time.monotonic()
                 timer.start()
                 for line in response.iter_lines():

@@ -51,6 +51,16 @@ class Agent:
     # copied from (informational - enforcement reads ``permissions`` only).
     permissions: dict[str, Any] | None = None
     preset_id: str | None = None
+    # Migration 013: tag-based communication scoping. ``tags`` is the
+    # catalog-validated multi-value tag map ({} = none; exposed on discovery);
+    # ``comm_scope`` is the operator-set communication scope (``None`` =
+    # unrestricted) and is NEVER exposed on any discovery surface.
+    tags: dict[str, Any] = field(default_factory=dict)
+    comm_scope: dict[str, Any] | None = None
+    # Migration 024: per-agent display color for the dashboard graph cards.
+    # ``None`` = unset = auto-by-identity (derived from ``agent_id`` on the
+    # client). Stored verbatim (e.g. "#22c55e").
+    color: str | None = None
 
 
 @dataclass(slots=True)
@@ -66,6 +76,34 @@ class PermissionPreset:
 
 
 @dataclass(slots=True)
+class TagKey:
+    """A registered tag key in the central catalog (migration 013)."""
+
+    key: str
+    created_at: str
+    description: str | None = None
+
+
+@dataclass(slots=True)
+class TagValue:
+    """A registered tag value, existing only under its registered key."""
+
+    key: str
+    value: str
+    created_at: str
+    description: str | None = None
+
+
+@dataclass(slots=True)
+class CapabilityName:
+    """A registered capability name in the central catalog (migration 014)."""
+
+    name: str
+    created_at: str
+    description: str | None = None
+
+
+@dataclass(slots=True)
 class Session:
     """A live agent session bound to a workspace."""
 
@@ -76,6 +114,29 @@ class Session:
     started_at: str
     last_heartbeat_at: str | None = None
     closed_at: str | None = None
+
+
+@dataclass(slots=True, frozen=True)
+class EphemeralPollToken:
+    """Short-lived read-only bearer token for a remote monitor.
+
+    The raw ``nxsept_...`` token is returned only on issue/renew. Persistence
+    keeps ``token_hash`` only; all data-plane routing derives from the stored
+    ``agent_id``/``workspace_id``/``session_id`` binding.
+    """
+
+    token_id: str
+    token_hash: str
+    agent_id: str
+    workspace_id: str
+    session_id: str
+    issue_cursor: int
+    scope: dict[str, Any]
+    expires_at: str
+    created_at: str
+    revoked_at: str | None = None
+    renewed_at: str | None = None
+    last_used_at: str | None = None
 
 
 @dataclass(slots=True, frozen=True)
@@ -122,6 +183,7 @@ class Message:
     body: str | None = None
     artifacts: list[Any] = field(default_factory=list)
     parent_message_id: str | None = None
+    trace_id: str | None = None
 
 
 @dataclass(slots=True)
@@ -172,6 +234,7 @@ class Handoff:
     lease_expires_at: str | None = None
     updated_at: str | None = None
     payload: str | None = None
+    trace_id: str | None = None
 
 
 @dataclass(slots=True)
@@ -187,3 +250,39 @@ class Artifact:
     content: str | None = None
     size_bytes: int | None = None
     content_type: str | None = None
+    # Migration 016: authoring agent (None on legacy rows / identity-less
+    # cooperative stdio puts). Backs the artifact_put governance quota; never
+    # surfaced by the artifact contracts.
+    created_by: str | None = None
+    # Migration 022 (spec 80624c1a, D-ART): the publisher's EFFECTIVE OUTBOUND
+    # audience, FROZEN as an ordered selector list at artifact_put time and
+    # IMMUTABLE thereafter (D11). ``None`` = no restriction (public / legacy
+    # rows). Re-evaluated against a reader's tags on artifact_get (AND, via
+    # ``policy.snapshot_permits``); the ``artifact.created`` event carries the
+    # same audience so the stream never leaks what the read-path hides (BR7).
+    audience: list[Any] | None = None
+
+
+@dataclass(slots=True)
+class Memory:
+    """A durable workspace memory entry (migration 020).
+
+    Append-only for agents: correction happens by superseding (``supersedes``
+    on the new row + ``superseded_by`` stamped on the target, both in the same
+    unit of work). ``author_agent_id`` is NOT NULL - a memory without an
+    author never exists. Provenance (``source_kind``/``source_id``) is an
+    informative pointer whose target existence is never verified.
+    """
+
+    memory_id: str
+    workspace_id: str
+    author_agent_id: str
+    title: str
+    content: str
+    created_at: str
+    topics: list[str] = field(default_factory=list)
+    source_kind: str | None = None
+    source_id: str | None = None
+    supersedes: str | None = None
+    superseded_by: str | None = None
+    trace_id: str | None = None

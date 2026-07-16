@@ -170,9 +170,7 @@ class InboxService:
             # that ACTUALLY transitioned (an already-read or unknown id never
             # produces a receipt), atomic with the transition itself.
             if acked_ids:
-                acked_messages = self._messages.list_by_ids(
-                    uow, message_ids=acked_ids
-                )
+                acked_messages = self._messages.list_by_ids(uow, message_ids=acked_ids)
                 if self._emitter is not None:
                     read_items = [
                         {
@@ -336,9 +334,7 @@ class InboxService:
         next_cursor = None
         if has_more and rows:
             last = rows[-1]
-            next_cursor = (
-                f"{last.read_at}{_HISTORY_CURSOR_SEP}{last.delivery_id}"
-            )
+            next_cursor = f"{last.read_at}{_HISTORY_CURSOR_SEP}{last.delivery_id}"
         return {
             "messages": items,
             "next_cursor": next_cursor,
@@ -367,8 +363,7 @@ class InboxService:
             if not self._messages.list_by_ids(uow, message_ids=[message_id]):
                 raise OktoNexusError(
                     ErrorCode.NOT_FOUND,
-                    "No such message. Pass the message_id returned by "
-                    "message_create.",
+                    "No such message. Pass the message_id returned by message_create.",
                     {"message_id": message_id},
                 )
             rows = self._deliveries.list_for_message(
@@ -550,6 +545,12 @@ class InboxService:
                     "created_at": message.created_at,
                 }
             )
+            trace_id = getattr(message, "trace_id", None)
+            if trace_id is not None:
+                # Trace propagation (I1): the recipient must SEE the trace to
+                # carry it into its next send. Key omitted when NULL, so
+                # flag-OFF deliveries keep the pre-feature shape (D4).
+                data["trace_id"] = trace_id
             if include_body:
                 data["body"] = message.body
             else:

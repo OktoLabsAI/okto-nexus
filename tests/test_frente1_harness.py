@@ -14,7 +14,7 @@ the inline surface is self-sufficient, so these assertions read ONLY
 the gate). Mirrors the live-server build used by ``test_tool_schemas.py``.
 
 S8 (AC1) - ``nexus_info`` reports an integer ``surface_revision`` and a
-``resource_versions`` ``{uri: version}`` map over the 10 reference resources, and
+``resource_versions`` ``{uri: version}`` map over the 12 reference resources, and
 those two signals let a client holding a stale cache DETECT divergence. Calls the
 tool through the same FastMCP path as ``test_tools_surface.py`` (the ``_call``
 helper is copied verbatim from that file).
@@ -57,7 +57,9 @@ def _call(server, name: str, arguments: dict | None = None) -> dict:
     validation path agents hit.
     """
     result = asyncio.run(server.call_tool(name, arguments or {}))
-    if isinstance(result, tuple):  # (unstructured, structured) when output schema exists
+    if isinstance(
+        result, tuple
+    ):  # (unstructured, structured) when output schema exists
         return result[1]
     block = result[0]
     return json.loads(block.text)
@@ -84,7 +86,9 @@ def _described(tool, param: str) -> str:
     return description
 
 
-# The closed set of reference resources nexus_info must report (BR9: 10 URIs).
+# The closed set of reference resources nexus_info must report (BR9: 12 URIs;
+# ``governance`` joined at surface revision 19 / spec ffef15bf, ``hitl`` at
+# surface revision 20 / spec 2948b2a2).
 _EXPECTED_RESOURCE_URIS = {
     "okto-nexus://reference/preflight",
     "okto-nexus://reference/communication",
@@ -96,6 +100,8 @@ _EXPECTED_RESOURCE_URIS = {
     "okto-nexus://reference/tool-docs/handoff",
     "okto-nexus://reference/tool-docs/identity",
     "okto-nexus://reference/tool-docs/artifacts",
+    "okto-nexus://reference/governance",
+    "okto-nexus://reference/hitl",
 }
 
 
@@ -191,7 +197,7 @@ def test_s7_tf_channel_posting_callable_from_inline_surface(surface):
 # --------------------------------------------------------------------------- #
 def test_s8_nexus_info_reports_surface_revision_and_resource_versions(surface):
     """nexus_info -> surface_revision (int) + resource_versions ({uri: version}
-    over the 10 reference resources, each version a non-empty string)."""
+    over the 12 reference resources, each version a non-empty string)."""
     server, _ = surface
 
     env = _call(server, "nexus_info")
@@ -204,12 +210,11 @@ def test_s8_nexus_info_reports_surface_revision_and_resource_versions(surface):
     )
     assert data["surface_revision"] == SURFACE_REVISION
 
-    # resource_versions maps each of the 10 reference URIs to a version string.
+    # resource_versions maps each of the 12 reference URIs to a version string.
     rv = data["resource_versions"]
     assert isinstance(rv, dict), "resource_versions must be a dict"
     assert set(rv) == _EXPECTED_RESOURCE_URIS, (
-        f"resource_versions must map exactly the 10 reference URIs; "
-        f"got {sorted(rv)}"
+        f"resource_versions must map exactly the 12 reference URIs; got {sorted(rv)}"
     )
     for uri, version in rv.items():
         assert uri.startswith("okto-nexus://reference/")
@@ -239,7 +244,9 @@ def test_s8_stale_cache_divergence_is_detectable(surface):
     def snapshot() -> tuple:
         data = _call(server, "nexus_info")["data"]
         # order-independent, hashable freeze of the {uri: version} map
-        return data["surface_revision"], tuple(sorted(data["resource_versions"].items()))
+        return data["surface_revision"], tuple(
+            sorted(data["resource_versions"].items())
+        )
 
     live = snapshot()
 

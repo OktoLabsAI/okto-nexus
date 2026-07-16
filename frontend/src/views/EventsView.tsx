@@ -9,10 +9,13 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Activity,
   Bot,
+  Download,
   Globe,
   Radio,
   RotateCw,
+  Route,
   Waypoints,
+  X,
   type LucideIcon,
 } from "lucide-react";
 import { api, type AgentRow, type NexusEvent } from "../api";
@@ -139,11 +142,17 @@ export function EventsView({
   workspace,
   log,
   sseStatus,
+  trace,
+  onTraceChange,
 }: {
   workspace: string;
   log: NexusEvent[];
   liveTick?: number;
   sseStatus?: SSEStatus;
+  // Trajectory filter (R-I1). Lifted to the App shell so a TraceChip click on
+  // ANY screen can land here with the filter already applied.
+  trace: string;
+  onTraceChange: (trace: string) => void;
 }) {
   const [live, setLive] = useState(false);
   const [stream, setStream] = useState("");
@@ -154,6 +163,11 @@ export function EventsView({
   const [types, setTypes] = useState<string[]>([]);
   const [selected, setSelected] = useState<NexusEvent | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // I8 replay/export: self-gated on the live feature_replay flag (defense in
+  // depth with the endpoint gate). default_workspace_id lets the "all" view
+  // still export the serve's primary workspace.
+  const [replayEnabled, setReplayEnabled] = useState(false);
+  const [defaultWorkspace, setDefaultWorkspace] = useState<string | null>(null);
 
   // Paged mode: `stack` holds the `after` cursor of each visited page.
   const [items, setItems] = useState<NexusEvent[]>([]);
@@ -172,6 +186,25 @@ export function EventsView({
       .then(({ items }) => setTypes(items))
       .catch(() => undefined);
   }, [workspace]);
+  useEffect(() => {
+    api
+      .info()
+      .then((info) => {
+        setReplayEnabled(Boolean(info.features?.feature_replay));
+        setDefaultWorkspace(info.default_workspace_id ?? null);
+      })
+      .catch(() => undefined);
+  }, []);
+
+  // The export always targets a CONCRETE workspace; on the "all" view fall back
+  // to the serve's default workspace (null -> button hidden).
+  const exportWorkspace = workspace !== "all" ? workspace : defaultWorkspace;
+  const runExport = (params: Record<string, string>) => {
+    if (!exportWorkspace) return;
+    api
+      .exportEventLog(exportWorkspace, params)
+      .catch((exc) => setError((exc as Error).message));
+  };
 
   const load = (after: number) => {
     const params: Record<string, string> = {
@@ -182,6 +215,7 @@ export function EventsView({
     if (stream) params.stream = stream;
     if (type) params.type = type;
     if (agent) params.agent = agent;
+    if (trace) params.trace = trace;
     api
       .events(params)
       .then((data) => {
@@ -197,7 +231,7 @@ export function EventsView({
     setStack([0]);
     load(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspace, stream, type, agent, live]);
+  }, [workspace, stream, type, agent, trace, live]);
 
   const goNext = () => {
     const c = nextCursor;
@@ -221,11 +255,12 @@ export function EventsView({
             (workspace === "all" || e.workspace_id === workspace) &&
             (!stream || e.stream === stream) &&
             (!type || e.type === type) &&
-            (!agent || e.actor_agent_id === agent),
+            (!agent || e.actor_agent_id === agent) &&
+            (!trace || e.trace_id === trace),
         )
         .slice()
         .reverse(),
-    [log, workspace, stream, type, agent],
+    [log, workspace, stream, type, agent, trace],
   );
 
   const rows = live ? liveRows : items;
@@ -278,6 +313,25 @@ export function EventsView({
             </div>
             <TypeSelect label="Type" value={type} onChange={setType} types={types} />
             <AgentSelect label="Actor" value={agent} onChange={setAgent} agents={agents} />
+            {trace && (
+              <span
+                className="flex items-center gap-1 rounded-lg border border-violet-200 dark:border-violet-800/60 bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 pl-2 pr-1 py-1 font-mono"
+                data-testid="trace-filter-pill"
+              >
+                <Route size={12} className="shrink-0" />
+                <span className="max-w-[160px] truncate" title={trace}>
+                  {trace}
+                </span>
+                <button
+                  onClick={() => onTraceChange("")}
+                  className="p-0.5 rounded hover:bg-violet-100 dark:hover:bg-violet-900/60 transition-colors"
+                  title="Clear trace filter"
+                  data-testid="trace-filter-clear"
+                >
+                  <X size={12} />
+                </button>
+              </span>
+            )}
 
             <button
               className="flex items-center rounded-lg border border-surface-200 dark:border-surface-700 overflow-hidden"
@@ -336,6 +390,28 @@ export function EventsView({
                 {liveRows.length} live events
               </span>
             )}
+            {replayEnabled && exportWorkspace && (
+              <>
+                <button
+                  className="btn btn-secondary flex items-center gap-1"
+                  onClick={() => runExport(stream ? { stream } : {})}
+                  title="Download the workspace event log as NDJSON (replay/eval)"
+                  data-testid="export-log"
+                >
+                  <Download size={14} /> Export event log (NDJSON)
+                </button>
+                {trace && (
+                  <button
+                    className="btn btn-secondary flex items-center gap-1"
+                    onClick={() => runExport({ trace })}
+                    title="Download just this trace as NDJSON"
+                    data-testid="export-trace"
+                  >
+                    <Download size={14} /> Export this trace
+                  </button>
+                )}
+              </>
+            )}
             <button
               className={`btn ${live ? "btn-primary" : "btn-secondary"} flex items-center gap-1`}
               onClick={() => setLive((v) => !v)}
@@ -345,6 +421,21 @@ export function EventsView({
               <Radio size={14} /> Live tail
             </button>
           </div>
+          {trace && (
+            <div
+              className="flex items-center gap-2 text-[11px] text-violet-600 dark:text-violet-300"
+              data-testid="trace-count-header"
+            >
+              <Route size={12} className="shrink-0" />
+              <span className="font-mono truncate" title={trace}>
+                {trace}
+              </span>
+              <span className="text-surface-400 dark:text-surface-500">
+                · {rows.length} event{rows.length === 1 ? "" : "s"}{" "}
+                {live ? "in live buffer" : "on this page"}
+              </span>
+            </div>
+          )}
           {error && <p className="text-xs text-red-500">{error}</p>}
         </div>
 
@@ -387,7 +478,11 @@ export function EventsView({
           storageKey="okto-nexus-events-panel"
           testId="event-detail-panel"
         >
-          <EventDetail event={selected} onClose={() => setSelected(null)} />
+          <EventDetail
+            event={selected}
+            onClose={() => setSelected(null)}
+            onOpenTrace={onTraceChange}
+          />
         </ResizablePanel>
       )}
     </PageContainer>

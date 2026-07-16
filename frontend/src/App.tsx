@@ -4,9 +4,12 @@
 // class strategy. Every surface beyond the gate talks exclusively to
 // /api/v1 (br_4eeb72b0).
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
+  Brain,
+  ChartColumn,
+  CheckSquare,
   ChevronDown,
   Compass,
   FolderOpen,
@@ -15,18 +18,27 @@ import {
   KanbanSquare,
   Lock,
   Menu,
+  MessageSquare,
   MessagesSquare,
   Moon,
   PanelLeft,
   RotateCw,
   Settings,
+  Shield,
+  ShieldAlert,
   Sun,
+  Tags,
   Users,
   Waypoints,
 } from "lucide-react";
 import { AboutModal } from "./components/AboutModal";
 import { HelpModal } from "./components/HelpModal";
 import { LiveChip } from "./components/LiveChip";
+import { MetricsSettingsPanel } from "./components/MetricsSettingsPanel";
+import {
+  dismissMetricsPrompt,
+  isMetricsPromptDismissed,
+} from "./components/metricsConsentStorage";
 import { OnboardingModal } from "./components/onboarding/OnboardingModal";
 import {
   isCompleted as onboardingDone,
@@ -38,6 +50,7 @@ import {
   getApiKey,
   setApiKey,
   type GraphSnapshot,
+  type NexusInfo,
   type NexusEvent,
 } from "./api";
 import { useSSE } from "./useSSE";
@@ -47,7 +60,13 @@ import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
 import { EventsView } from "./views/EventsView";
+import { MemoryView } from "./views/MemoryView";
 import { WorkspacesView } from "./views/WorkspacesView";
+import { RegistryView } from "./views/RegistryView";
+import { PoliciesView } from "./views/PoliciesView";
+import { GuardrailsView } from "./views/GuardrailsView";
+import { CommunicationView } from "./views/CommunicationView";
+import { ApprovalsView } from "./views/ApprovalsView";
 import { SettingsView } from "./views/SettingsView";
 
 const VIEWS = [
@@ -55,8 +74,24 @@ const VIEWS = [
   { name: "Messages", icon: MessagesSquare },
   { name: "Handoffs", icon: KanbanSquare },
   { name: "Events", icon: Activity },
+  // Experimental: listed only when feature_memory is enabled in the effective
+  // server config. MCP memory_* tool exposure is gated at server bootstrap too.
+  { name: "Memory", icon: Brain },
   { name: "Workspaces", icon: FolderOpen },
   { name: "Agents", icon: Users },
+  { name: "Registry", icon: Tags },
+  // The named, versioned policy catalog (spec 80624c1a): a policy is STAGED
+  // until an agent binds it; enforcement is always-on and binding-driven (the
+  // feature_governance flag is gone).
+  { name: "Policies", icon: Shield },
+  { name: "Guardrails", icon: ShieldAlert },
+  // The named, versioned communication-style catalog (spec 6f961722): the
+  // reusable half of the 4th per-agent axis — a style tells an agent HOW to
+  // communicate and surfaces SELF-ONLY on its whoami once bound.
+  { name: "Communication", icon: MessageSquare },
+  // Always listed too (spec 2948b2a2 BR6: pending items stay decidable with
+  // feature_hitl OFF); only the BADGE is gated — by the data, never the flag.
+  { name: "Approvals", icon: CheckSquare },
   { name: "Settings", icon: Settings },
 ] as const;
 type View = (typeof VIEWS)[number]["name"];
@@ -164,6 +199,7 @@ function Dashboard({
 }) {
   const { theme, toggle } = useTheme();
   const [view, setView] = useState<View>("Graph");
+  const [info, setInfo] = useState<NexusInfo | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
@@ -181,15 +217,41 @@ function Dashboard({
   };
   const [graph, setGraph] = useState<GraphSnapshot | null>(null);
   const [eventLog, setEventLog] = useState<NexusEvent[]>([]);
+  // Trajectory filter for the Events screen (R-I1). Lifted here so a
+  // TraceChip click on ANY screen can switch views with the filter applied.
+  const [eventTrace, setEventTrace] = useState("");
+  const openTrace = useCallback((traceId: string) => {
+    setEventTrace(traceId);
+    setView("Events");
+  }, []);
   const [refreshTick, setRefreshTick] = useState(0);
   // Monotonic counter bumped on every SSE event — drives the side panel's
   // live update while it is open (eventLog itself saturates at 500).
   const [liveTick, setLiveTick] = useState(0);
+  // HITL (spec 2948b2a2): pending-approvals count behind the sidebar badge
+  // (data-gated, never flag-gated — D7) + a tick bumped only on approval.*
+  // SSE events so the Approvals screen refetches exactly when it matters.
+  const [pendingApprovals, setPendingApprovals] = useState(0);
+  const [approvalTick, setApprovalTick] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [metricsPanel, setMetricsPanel] = useState<"menu" | "prompt" | null>(
+    null,
+  );
   const menuRef = useRef<HTMLDivElement>(null);
+  const memoryEnabled = Boolean(info?.features?.feature_memory);
+  const visibleViews = useMemo(
+    () => VIEWS.filter((v) => v.name !== "Memory" || memoryEnabled),
+    [memoryEnabled],
+  );
+
+  const loadInfo = useCallback(async () => {
+    const next = await api.info();
+    setInfo(next);
+    return next;
+  }, []);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -206,6 +268,39 @@ function Dashboard({
   useEffect(() => {
     if (!onboardingDone()) setOnboardingOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (onboardingOpen || metricsPanel) return;
+    if (isMetricsPromptDismissed()) return;
+    let active = true;
+    api
+      .metricsSummary()
+      .then((summary) => {
+        if (!active) return;
+        if (summary.mode === "disabled") {
+          setMetricsPanel("prompt");
+        } else {
+          dismissMetricsPrompt();
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [onboardingOpen, metricsPanel]);
+
+  const closeMetricsPanel = () => {
+    if (metricsPanel === "prompt") dismissMetricsPrompt();
+    setMetricsPanel(null);
+  };
+
+  useEffect(() => {
+    loadInfo().catch(() => undefined);
+  }, [loadInfo, refreshTick]);
+
+  useEffect(() => {
+    if (!memoryEnabled && view === "Memory") setView("Graph");
+  }, [memoryEnabled, view]);
 
   const toggleSidebar = () =>
     setSidebarOpen((open) => {
@@ -244,6 +339,9 @@ function Dashboard({
       (event: NexusEvent) => {
         setEventLog((log) => [...log.slice(-499), event]);
         setLiveTick((t) => t + 1);
+        // approval.requested/granted/denied move the pending queue — bump
+        // the dedicated tick (badge + Approvals screen refetch on it).
+        if (event.type.startsWith("approval.")) setApprovalTick((t) => t + 1);
         window.clearTimeout(refetchTimerRef.current);
         refetchTimerRef.current = window.setTimeout(loadGraph, 400);
       },
@@ -254,6 +352,28 @@ function Dashboard({
   useEffect(() => {
     loadGraph();
   }, [loadGraph, refreshTick]);
+
+  // Badge count (initial fetch + every approval.* event + header refresh).
+  // GET /approvals is workspace-scoped, so the "all" scope sums over every
+  // known workspace. A locked gate / non-operator key just means no badge.
+  const loadApprovalCount = useCallback(async () => {
+    try {
+      const ids =
+        workspace === "all"
+          ? (await api.workspaces()).workspaces.map((w) => w.workspace_id)
+          : [workspace];
+      const pages = await Promise.all(ids.map((id) => api.approvals(id)));
+      setPendingApprovals(
+        pages.reduce((total, page) => total + page.items.length, 0),
+      );
+    } catch {
+      setPendingApprovals(0);
+    }
+  }, [workspace]);
+
+  useEffect(() => {
+    loadApprovalCount();
+  }, [loadApprovalCount, approvalTick, refreshTick]);
 
   // The workspace scope picker is fed by the rich /api/v1/workspaces list (not
   // derived from /sessions): every KNOWN workspace shows up, including ones
@@ -274,7 +394,7 @@ function Dashboard({
   // right after the first paint - the "edges vanish on refresh" effect.
   useEffect(() => {
     if (localStorage.getItem("okto-nexus-workspace")) return;
-    Promise.all([api.info(), api.sessions()])
+    Promise.all([loadInfo(), api.sessions()])
       .then(([info, sessions]) => {
         const def = (info as { default_workspace_id?: string | null })
           .default_workspace_id;
@@ -283,7 +403,7 @@ function Dashboard({
         }
       })
       .catch(() => undefined);
-  }, []);
+  }, [loadInfo]);
 
   return (
     <div className="h-screen flex flex-col bg-surface-50 dark:bg-surface-950">
@@ -373,6 +493,17 @@ function Dashboard({
                 <button
                   onClick={() => {
                     setShowMenu(false);
+                    setMetricsPanel("menu");
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
+                  data-testid="menu-metrics"
+                >
+                  <ChartColumn size={14} />
+                  Metrics
+                </button>
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
                     toggle();
                   }}
                   className="w-full text-left px-4 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-surface-50 dark:hover:bg-surface-700 flex items-center gap-2"
@@ -427,6 +558,16 @@ function Dashboard({
       {onboardingOpen && (
         <OnboardingModal onClose={() => setOnboardingOpen(false)} />
       )}
+      {metricsPanel && !onboardingOpen && (
+        <MetricsSettingsPanel
+          initialPrompt={metricsPanel === "prompt"}
+          onClose={closeMetricsPanel}
+          onSaved={async () => {
+            dismissMetricsPrompt();
+            await loadInfo();
+          }}
+        />
+      )}
 
       <div className="flex flex-1 overflow-hidden">
       {/* Navigation sidebar (the Pulse Sidebar grammar) */}
@@ -443,7 +584,7 @@ function Dashboard({
               Observability
             </h3>
             <ul className="space-y-1 mb-4">
-              {VIEWS.filter((v) => v.name !== "Settings").map(({ name, icon: Icon }) => (
+              {visibleViews.filter((v) => v.name !== "Settings").map(({ name, icon: Icon }) => (
                 <li key={name}>
                   <button
                     data-view={name}
@@ -456,6 +597,14 @@ function Dashboard({
                   >
                     <Icon size={16} />
                     <span className="truncate">{name}</span>
+                    {name === "Approvals" && pendingApprovals > 0 && (
+                      <span
+                        className="ml-auto min-w-[18px] px-1.5 py-0.5 rounded-full bg-red-500 text-white text-[10px] font-semibold text-center leading-none"
+                        data-testid="approvals-badge"
+                      >
+                        {pendingApprovals}
+                      </span>
+                    )}
                   </button>
                 </li>
               ))}
@@ -480,6 +629,7 @@ function Dashboard({
               workspace={workspace}
               liveTick={liveTick}
               sseStatus={sseStatus}
+              onOpenTrace={openTrace}
             />
           )}
           {view === "Handoffs" && (
@@ -491,13 +641,35 @@ function Dashboard({
               log={eventLog}
               liveTick={liveTick}
               sseStatus={sseStatus}
+              trace={eventTrace}
+              onTraceChange={setEventTrace}
+            />
+          )}
+          {view === "Memory" && memoryEnabled && (
+            <MemoryView
+              workspace={workspace}
+              liveTick={liveTick}
+              onOpenTrace={openTrace}
             />
           )}
           {view === "Workspaces" && (
             <WorkspacesView scope={workspace} refreshTick={refreshTick} />
           )}
-          {view === "Agents" && <AgentsView onChanged={loadGraph} />}
-          {view === "Settings" && <SettingsView />}
+          {view === "Agents" && (
+            <AgentsView onChanged={loadGraph} workspace={workspace} />
+          )}
+          {view === "Registry" && <RegistryView />}
+          {view === "Policies" && <PoliciesView workspace={workspace} />}
+          {view === "Guardrails" && <GuardrailsView workspace={workspace} />}
+          {view === "Communication" && <CommunicationView />}
+          {view === "Approvals" && (
+            <ApprovalsView
+              workspace={workspace}
+              refreshTick={approvalTick + refreshTick}
+              onChanged={loadApprovalCount}
+            />
+          )}
+          {view === "Settings" && <SettingsView onSettingsApplied={loadInfo} />}
       </main>
       </div>
     </div>

@@ -1,4 +1,5 @@
-// Settings: appearance, hub info, RUNTIME parameters (every CLI knob,
+// Settings: appearance, hub info, RUNTIME parameters (except dedicated
+// product panels such as Metrics),
 // non-exclusively: precedence CLI > env > stored > default) and store
 // maintenance. Field grammar mirrors the Pulse RuntimeSettingsPanel:
 // label + tiny description + bounded input, with a native tooltip
@@ -13,9 +14,10 @@ import {
   Save,
   SlidersHorizontal,
   Sun,
+  ToggleLeft,
   Trash2,
 } from "lucide-react";
-import { api, type SettingItem } from "../api";
+import { api, type NexusInfo, type SettingItem } from "../api";
 import { useConfirm } from "../components/Confirm";
 import { useTheme } from "../hooks/useTheme";
 
@@ -111,10 +113,14 @@ function SettingField({
   );
 }
 
-export function SettingsView() {
+export function SettingsView({
+  onSettingsApplied,
+}: {
+  onSettingsApplied?: () => void | Promise<unknown>;
+}) {
   const { theme, toggle } = useTheme();
   const { confirm, dialog } = useConfirm();
-  const [info, setInfo] = useState<Record<string, unknown> | null>(null);
+  const [info, setInfo] = useState<NexusInfo | null>(null);
   const [items, setItems] = useState<SettingItem[]>([]);
   const [drafts, setDrafts] = useState<Record<string, unknown>>({});
   const [saving, setSaving] = useState(false);
@@ -134,7 +140,7 @@ export function SettingsView() {
   useEffect(() => {
     api
       .info()
-      .then((data) => setInfo(data as Record<string, unknown>))
+      .then(setInfo)
       .catch(() => undefined);
     loadSettings();
   }, []);
@@ -147,6 +153,14 @@ export function SettingsView() {
       }),
     [drafts, items],
   );
+  const generalItems = useMemo(
+    () => items.filter((i) => i.group !== "features" && i.group !== "metrics"),
+    [items],
+  );
+  const featureItems = useMemo(
+    () => items.filter((i) => i.group === "features"),
+    [items],
+  );
   const restartTouched = dirtyKeys.some(
     (key) => items.find((i) => i.key === key)?.requires_restart,
   );
@@ -158,6 +172,7 @@ export function SettingsView() {
       for (const key of dirtyKeys) changes[key] = drafts[key];
       await api.updateSettings(changes);
       await loadSettings();
+      await onSettingsApplied?.();
       setReport("Settings saved and applied.");
       setError(null);
     } catch (exc) {
@@ -246,6 +261,7 @@ export function SettingsView() {
                     onConfirm: async () => {
                       await api.resetSettings();
                       await loadSettings();
+                      await onSettingsApplied?.();
                       setReport("Defaults restored.");
                     },
                   })
@@ -264,9 +280,10 @@ export function SettingsView() {
             </div>
           </div>
           <p className="text-[11px] text-surface-400 dark:text-surface-500">
-            The same parameters as the CLI, non-exclusively — precedence:
-            CLI flag &gt; environment variable &gt; value saved here &gt;
-            default. Values pinned by a flag appear as{" "}
+            The same operational parameters as the CLI, non-exclusively —
+            precedence: CLI flag &gt; environment variable &gt; value saved here
+            &gt; default. Metrics has a dedicated panel in the header menu.
+            Values pinned by a flag appear as{" "}
             <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
               cli/env
             </span>{" "}
@@ -279,7 +296,7 @@ export function SettingsView() {
             </div>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
-            {items.map((item) => (
+            {generalItems.map((item) => (
               <SettingField
                 key={item.key}
                 item={item}
@@ -291,6 +308,42 @@ export function SettingsView() {
             ))}
           </div>
         </section>
+
+        {/* Features (meta-harness opt-ins) */}
+        {featureItems.length > 0 && (
+          <section className="panel p-5 space-y-4" data-testid="feature-settings">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display font-semibold text-sm flex items-center gap-2">
+                <ToggleLeft size={14} /> Features
+              </h2>
+              <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
+                Opt-in · default off
+              </span>
+            </div>
+            <p className="text-[11px] text-surface-400 dark:text-surface-500">
+              Coordination features ship disabled and only run when switched
+              on here (or pinned via{" "}
+              <span className="font-mono">OKTO_NEXUS_FEATURE_*</span> /{" "}
+              <span className="font-mono">--feature-*</span>). Experimental
+              surfaces may hide dashboard views immediately; any field marked
+              restart changes the MCP tool schema only after restarting the
+              server. Agents can read the effective flags via{" "}
+              <span className="font-mono">nexus_info</span>.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+              {featureItems.map((item) => (
+                <SettingField
+                  key={item.key}
+                  item={item}
+                  draft={drafts[item.key]}
+                  onChange={(value) =>
+                    setDrafts((d) => ({ ...d, [item.key]: value }))
+                  }
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Maintenance */}
         <section className="panel p-5 space-y-4">

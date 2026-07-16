@@ -8,13 +8,16 @@ import { FolderOpen, RotateCw } from "lucide-react";
 import {
   api,
   type AnalyticsWindow,
+  type HealthWindow,
   type SessionRow,
   type WorkspaceAnalytics,
+  type WorkspaceHealth,
   type WorkspaceListItem,
 } from "../api";
 import { PageContainer } from "../components/PageContainer";
 
 const WINDOWS: AnalyticsWindow[] = ["24h", "7d", "30d"];
+const HEALTH_WINDOWS: HealthWindow[] = ["1h", "24h", "7d"];
 const AUTO_REFRESH_MS = 15_000;
 const OTHERS = "others";
 
@@ -50,6 +53,29 @@ function bucketLabel(iso: string): string {
   return d.toLocaleString(undefined, { hour: "2-digit", minute: "2-digit" });
 }
 
+function clockLabel(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return d.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+}
+
+// Compact duration for health ages/averages and their thresholds.
+function fmtDuration(seconds: number): string {
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  if (seconds < 3600) return `${Math.round(seconds / 60)}m`;
+  const h = seconds / 3600;
+  return `${h >= 10 ? Math.round(h) : Math.round(h * 10) / 10}h`;
+}
+
+function fmtPct(rate: number): string {
+  const pct = rate * 100;
+  return `${Number.isInteger(pct) ? pct : pct.toFixed(1)}%`;
+}
+
 export function WorkspacesView({
   scope,
   refreshTick,
@@ -60,8 +86,10 @@ export function WorkspacesView({
   const [list, setList] = useState<WorkspaceListItem[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [windowSel, setWindowSel] = useState<AnalyticsWindow>("24h");
+  const [healthWindow, setHealthWindow] = useState<HealthWindow>("24h");
   const [metric, setMetric] = useState<"volume" | "tokens">("volume");
   const [analytics, setAnalytics] = useState<WorkspaceAnalytics | null>(null);
+  const [health, setHealth] = useState<WorkspaceHealth | null>(null);
   const [roster, setRoster] = useState<SessionRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
@@ -118,6 +146,22 @@ export function WorkspacesView({
       alive = false;
     };
   }, [selected, windowSel, refreshTick, tick]);
+
+  // Coordination health: same 15s poll, refetch on workspace/window change.
+  useEffect(() => {
+    if (!selected) {
+      setHealth(null);
+      return;
+    }
+    let alive = true;
+    api
+      .workspaceHealth(selected, healthWindow)
+      .then((h) => alive && setHealth(h))
+      .catch(() => alive && setHealth(null));
+    return () => {
+      alive = false;
+    };
+  }, [selected, healthWindow, refreshTick, tick]);
 
   const current = useMemo(
     () => list.find((w) => w.workspace_id === selected) ?? null,
@@ -180,6 +224,24 @@ export function WorkspacesView({
 
       {/* Selected workspace: overview + analytics at full width */}
       {current && <OverviewCard ws={current} roster={roster} analytics={analytics} />}
+
+      {/* Coordination health (spec 7df9b1e0): windowed metrics + thresholds
+          straight from the payload — replaces the old embryo health card. */}
+      {current && (
+        <HealthSection
+          health={health}
+          staleAgents={[
+            ...new Set(
+              roster
+                .filter((s) => s.presence === "stale")
+                .map((s) => s.agent_id),
+            ),
+          ]}
+          parked={current.health.parked_messages_deadletter}
+          window={healthWindow}
+          onWindow={setHealthWindow}
+        />
+      )}
 
       {/* Analytics header / controls */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
@@ -335,40 +397,28 @@ function OverviewCard({
         <Stat label="Most active agent" value={topAgent} mono />
       </div>
 
-      {/* Presence + health */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div className="rounded-xl border border-surface-200 dark:border-surface-700/60 p-3">
-          <div className="text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-2">
-            Agents in workspace
-          </div>
-          <div className="flex items-center gap-4 text-xs">
-            <PresenceDots presence={ws.presence} />
-          </div>
-          {present.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-1">
-              {present.slice(0, 8).map((s) => (
-                <span
-                  key={s.session_id}
-                  className="font-mono text-[10px] rounded bg-surface-100 dark:bg-surface-800 px-1.5 py-0.5"
-                  title={s.agent_id}
-                >
-                  {s.agent_id}
-                </span>
-              ))}
-            </div>
-          )}
+      {/* Presence roster — the windowed health block moved to the dedicated
+          "Coordination health" section below (spec 7df9b1e0). */}
+      <div className="rounded-xl border border-surface-200 dark:border-surface-700/60 p-3">
+        <div className="text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-2">
+          Agents in workspace
         </div>
-        <div className="rounded-xl border border-surface-200 dark:border-surface-700/60 p-3">
-          <div className="text-[11px] font-medium text-surface-500 dark:text-surface-400 mb-2">
-            Health / coordination
-          </div>
-          <dl className="grid grid-cols-2 gap-y-1.5 gap-x-3 text-xs">
-            <HealthRow label="Open handoffs (unclaimed)" value={ws.health.open_handoffs_unclaimed} />
-            <HealthRow label="Stale sessions" value={ws.health.stale_sessions} />
-            <HealthRow label="Parked messages (dead-letter)" value={ws.health.parked_messages_deadletter} />
-            <HealthRow label="Inbox backlog (unread)" value={ws.health.inbox_backlog_unread} />
-          </dl>
+        <div className="flex items-center gap-4 text-xs">
+          <PresenceDots presence={ws.presence} />
         </div>
+        {present.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {present.slice(0, 8).map((s) => (
+              <span
+                key={s.session_id}
+                className="font-mono text-[10px] rounded bg-surface-100 dark:bg-surface-800 px-1.5 py-0.5"
+                title={s.agent_id}
+              >
+                {s.agent_id}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
       <p className="text-[10px] text-surface-400 dark:text-surface-500">
         Read-only in the MVP. Rename / pin / archive and the multi-workspace
@@ -401,19 +451,276 @@ function Stat({
   );
 }
 
-function HealthRow({ label, value }: { label: string; value: number }) {
-  const warn = value > 0;
+function StatusBadge({ status }: { status: "ok" | "warn" }) {
+  const warn = status === "warn";
   return (
-    <>
-      <dt className="text-surface-500 dark:text-surface-400">{label}</dt>
-      <dd
-        className={`text-right font-semibold ${
-          warn ? "text-amber-600 dark:text-amber-400" : "text-surface-700 dark:text-surface-200"
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
+        warn
+          ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30"
+          : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30"
+      }`}
+      data-testid="health-status-badge"
+    >
+      <span
+        className={`h-1.5 w-1.5 rounded-full ${warn ? "bg-amber-500" : "bg-emerald-500"}`}
+      />
+      {warn ? "WARN" : "OK"}
+    </span>
+  );
+}
+
+function HealthCard({
+  label,
+  scope,
+  value,
+  suffix,
+  sub,
+  warn,
+}: {
+  label: string;
+  scope?: "windowed" | "snapshot";
+  value: string;
+  suffix?: string;
+  sub?: string;
+  warn: boolean;
+}) {
+  return (
+    <div
+      className={`rounded-xl border p-3 ${
+        warn
+          ? "border-amber-500/40 bg-amber-500/5"
+          : "border-surface-200 dark:border-surface-700/60"
+      }`}
+    >
+      <div
+        className={`text-[11px] mb-1 ${
+          warn
+            ? "text-amber-600 dark:text-amber-400"
+            : "text-surface-400 dark:text-surface-500"
+        }`}
+      >
+        {label}
+        {scope && <span className="opacity-60"> · {scope}</span>}
+      </div>
+      <div
+        className={`text-2xl font-semibold truncate ${
+          warn
+            ? "text-amber-600 dark:text-amber-300"
+            : "text-surface-800 dark:text-surface-100"
         }`}
       >
         {value}
-      </dd>
-    </>
+        {suffix && (
+          <span className="text-sm font-normal text-surface-500 dark:text-surface-400">
+            {" "}
+            {suffix}
+          </span>
+        )}
+      </div>
+      {sub && (
+        <div
+          className={`text-[11px] mt-1 ${
+            warn
+              ? "text-amber-600/80 dark:text-amber-400/80"
+              : "text-surface-400 dark:text-surface-500"
+          }`}
+        >
+          {sub}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// The "Coordination health" section (spec 7df9b1e0, replaces the old embryo
+// card): aggregated OK/WARN badge, 1h/24h/7d window toggle, one card per
+// metric block with its declared scope, per-agent unread backlog and the
+// thresholds — ALWAYS rendered from the payload, never hardcoded here. The
+// parked dead-letter card stays fed by the workspace overview (snapshot; the
+// health payload does not carry the parked lane in V1).
+function HealthSection({
+  health,
+  staleAgents,
+  parked,
+  window: win,
+  onWindow,
+}: {
+  health: WorkspaceHealth | null;
+  staleAgents: string[];
+  parked: number;
+  window: HealthWindow;
+  onWindow: (w: HealthWindow) => void;
+}) {
+  const m = health?.metrics;
+  const t = health?.thresholds;
+  const maxUnread = m?.inbox_backlog.per_agent[0]?.unread ?? 0;
+  return (
+    <section className="panel p-4 space-y-4" data-testid="coordination-health">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-3">
+          <h2 className="text-sm font-semibold text-surface-800 dark:text-surface-100">
+            Coordination health
+          </h2>
+          {health && <StatusBadge status={health.status} />}
+        </div>
+        <div className="flex items-center gap-2 text-xs">
+          <Toggle
+            options={HEALTH_WINDOWS.map((w) => [w, w] as [string, string])}
+            value={win}
+            onChange={(v) => onWindow(v as HealthWindow)}
+          />
+          {health && (
+            <span className="text-[11px] text-surface-400 dark:text-surface-500">
+              as of {clockLabel(health.generated_at)}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {!health || !m || !t ? (
+        <div className="px-4 py-6 text-center text-xs text-surface-400 dark:text-surface-500">
+          Loading health…
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+            <HealthCard
+              label="Messages"
+              scope={m.message_volume.scope}
+              value={compact(m.message_volume.count)}
+              sub="informational"
+              warn={m.message_volume.status === "warn"}
+            />
+            <HealthCard
+              label="Events"
+              scope={m.event_volume.scope}
+              value={compact(m.event_volume.count)}
+              sub="informational"
+              warn={m.event_volume.status === "warn"}
+            />
+            <HealthCard
+              label="Unclaimed handoffs"
+              scope={m.unclaimed_handoffs.scope}
+              value={String(m.unclaimed_handoffs.count)}
+              sub={
+                m.unclaimed_handoffs.oldest_age_seconds != null
+                  ? `oldest ${fmtDuration(m.unclaimed_handoffs.oldest_age_seconds)} (warn > ${fmtDuration(t.unclaimed_handoff_age_seconds)})`
+                  : "none open"
+              }
+              warn={m.unclaimed_handoffs.status === "warn"}
+            />
+            <HealthCard
+              label="Claim → complete"
+              scope={m.handoff_completion.scope}
+              value={
+                m.handoff_completion.avg_claim_to_complete_seconds != null
+                  ? fmtDuration(m.handoff_completion.avg_claim_to_complete_seconds)
+                  : "—"
+              }
+              sub={`${m.handoff_completion.completed_pairs} pairs · avg (warn > ${fmtDuration(t.avg_claim_to_complete_seconds)})${m.handoff_completion.truncated ? " · sampled" : ""}`}
+              warn={m.handoff_completion.status === "warn"}
+            />
+            <HealthCard
+              label="Rejection rate"
+              scope={m.handoff_rejections.scope}
+              value={
+                m.handoff_rejections.rejection_rate != null
+                  ? fmtPct(m.handoff_rejections.rejection_rate)
+                  : "—"
+              }
+              sub={`${m.handoff_rejections.rejected} of ${m.handoff_rejections.created} created (warn > ${fmtPct(t.rejection_rate)})${m.handoff_rejections.truncated ? " · sampled" : ""}`}
+              warn={m.handoff_rejections.status === "warn"}
+            />
+            <HealthCard
+              label="Inbox backlog"
+              scope={m.inbox_backlog.scope}
+              value={compact(m.inbox_backlog.total_unread)}
+              sub={`max ${maxUnread} / agent (warn > ${t.per_agent_unread})`}
+              warn={m.inbox_backlog.status === "warn"}
+            />
+            <HealthCard
+              label="Agent presence"
+              scope={m.agent_presence.scope}
+              value={String(m.agent_presence.present)}
+              suffix="present"
+              sub={`${m.agent_presence.stale} stale · ${m.agent_presence.offline} offline (warn > ${t.stale_agents} stale)`}
+              warn={m.agent_presence.status === "warn"}
+            />
+            <HealthCard
+              label="Parked (dead-letter)"
+              value={String(parked)}
+              sub="from workspace overview"
+              warn={parked > 0}
+            />
+          </div>
+
+          {m.agent_presence.stale > 0 && staleAgents.length > 0 && (
+            <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-amber-600 dark:text-amber-400">
+              <span className="font-medium">Stale agents:</span>
+              {staleAgents.map((a) => (
+                <span
+                  key={a}
+                  className="font-mono text-[10px] rounded border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5"
+                >
+                  {a}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="rounded-xl border border-surface-200 dark:border-surface-700/60 p-3">
+            <div className="text-[11px] font-medium uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-2">
+              Unread by agent{" "}
+              <span className="normal-case">
+                (top {m.inbox_backlog.per_agent.length} · +
+                {m.inbox_backlog.others_unread} others)
+              </span>
+            </div>
+            {m.inbox_backlog.per_agent.length === 0 ? (
+              <div className="text-xs text-surface-400 dark:text-surface-500">
+                No unread deliveries.
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                {m.inbox_backlog.per_agent.map((row) => (
+                  <div key={row.agent_id} className="flex items-center gap-2 text-xs">
+                    <span
+                      className="w-32 truncate font-mono text-surface-600 dark:text-surface-300"
+                      title={row.agent_id}
+                    >
+                      {row.agent_id}
+                    </span>
+                    <div className="flex-1 h-1.5 rounded bg-surface-100 dark:bg-surface-800">
+                      <div
+                        className={`h-1.5 rounded ${
+                          row.unread > t.per_agent_unread
+                            ? "bg-amber-500/80"
+                            : "bg-sky-500/70"
+                        }`}
+                        style={{
+                          width: `${(row.unread / Math.max(1, maxUnread)) * 100}%`,
+                        }}
+                      />
+                    </div>
+                    <span className="w-8 text-right text-surface-500 dark:text-surface-400">
+                      {row.unread}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="mt-3 pt-2 border-t border-surface-200/70 dark:border-surface-700/50 text-[11px] text-surface-400 dark:text-surface-500">
+              Thresholds are server defaults echoed in each reply — unclaimed
+              &gt; {fmtDuration(t.unclaimed_handoff_age_seconds)} · avg
+              claim→complete &gt; {fmtDuration(t.avg_claim_to_complete_seconds)}{" "}
+              · rejection &gt; {fmtPct(t.rejection_rate)} · unread/agent &gt;{" "}
+              {t.per_agent_unread} · stale agents &gt; {t.stale_agents}
+            </div>
+          </div>
+        </>
+      )}
+    </section>
   );
 }
 

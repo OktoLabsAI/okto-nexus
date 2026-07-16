@@ -1,0 +1,191 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Registry
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "ws_nexus_lau…"
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [active] [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals 2" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+              - generic [ref=e136]: "2"
+    - main [ref=e137]:
+      - generic [ref=e1148]:
+        - generic [ref=e1149]:
+          - heading "Registry" [level=1] [ref=e1150]
+          - paragraph [ref=e1151]:
+            - text: Central catalogs of the vocabulary agents may use. Tags back agent labels, audience selectors and
+            - code [ref=e1152]: tag
+            - text: routing; capabilities back agent announcements and
+            - code [ref=e1153]: capability
+            - text: "routing. Both are fail-closed: only entries registered here can be referenced."
+        - generic [ref=e1154]:
+          - button "Tags" [ref=e1155] [cursor=pointer]
+          - button "Capabilities" [ref=e1156] [cursor=pointer]
+        - generic [ref=e1157]:
+          - generic [ref=e1158]:
+            - generic [ref=e1159]: Operator-only
+            - generic [ref=e1160]: 3 keys · 10 values
+            - button "New key" [ref=e1161] [cursor=pointer]:
+              - img [ref=e1162]
+              - text: New key
+          - generic [ref=e1163]:
+            - generic [ref=e1164]:
+              - generic [ref=e1165]:
+                - heading "lane" [level=2] [ref=e1166]
+                - generic [ref=e1167]: used by 8 agents · 0 selectors
+                - button "Delete key" [disabled] [ref=e1168]
+              - paragraph [ref=e1169]: "Demo tag key: lane"
+              - generic [ref=e1170]:
+                - generic "lane=frontend" [ref=e1171]:
+                  - text: frontend
+                  - generic [ref=e1172]: · 2 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1173]:
+                    - img [ref=e1174]
+                - generic "lane=ops" [ref=e1177]:
+                  - text: ops
+                  - generic [ref=e1178]: · 3 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1179]:
+                    - img [ref=e1180]
+                - generic "lane=runtime" [ref=e1183]:
+                  - text: runtime
+                  - generic [ref=e1184]: · 1 use
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1185]:
+                    - img [ref=e1186]
+                - generic "lane=security" [ref=e1189]:
+                  - text: security
+                  - generic [ref=e1190]: · 2 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1191]:
+                    - img [ref=e1192]
+                - generic [ref=e1195]:
+                  - textbox "new value" [ref=e1196]
+                  - button "Add" [disabled] [ref=e1197]
+            - generic [ref=e1198]:
+              - generic [ref=e1199]:
+                - heading "risk" [level=2] [ref=e1200]
+                - generic [ref=e1201]: used by 8 agents · 0 selectors
+                - button "Delete key" [disabled] [ref=e1202]
+              - paragraph [ref=e1203]: "Demo tag key: risk"
+              - generic [ref=e1204]:
+                - generic "risk=high" [ref=e1205]:
+                  - text: high
+                  - generic [ref=e1206]: · 3 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1207]:
+                    - img [ref=e1208]
+                - generic "risk=low" [ref=e1211]:
+                  - text: low
+                  - generic [ref=e1212]: · 2 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1213]:
+                    - img [ref=e1214]
+                - generic "risk=medium" [ref=e1217]:
+                  - text: medium
+                  - generic [ref=e1218]: · 3 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1219]:
+                    - img [ref=e1220]
+                - generic [ref=e1223]:
+                  - textbox "new value" [ref=e1224]
+                  - button "Add" [disabled] [ref=e1225]
+            - generic [ref=e1226]:
+              - generic [ref=e1227]:
+                - heading "team" [level=2] [ref=e1228]
+                - generic [ref=e1229]: used by 8 agents · 0 selectors
+                - button "Delete key" [disabled] [ref=e1230]
+              - paragraph [ref=e1231]: "Demo tag key: team"
+              - generic [ref=e1232]:
+                - generic "team=orchestration" [ref=e1233]:
+                  - text: orchestration
+                  - generic [ref=e1234]: · 3 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1235]:
+                    - img [ref=e1236]
+                - generic "team=platform" [ref=e1239]:
+                  - text: platform
+                  - generic [ref=e1240]: · 2 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1241]:
+                    - img [ref=e1242]
+                - generic "team=validation" [ref=e1245]:
+                  - text: validation
+                  - generic [ref=e1246]: · 3 uses
+                  - button "Value is in use — remove all usages first" [disabled] [ref=e1247]:
+                    - img [ref=e1248]
+                - generic [ref=e1251]:
+                  - textbox "new value" [ref=e1252]
+                  - button "Add" [disabled] [ref=e1253]
+          - generic [ref=e1254]:
+            - heading "Register a new key" [level=2] [ref=e1255]
+            - generic [ref=e1256]:
+              - generic [ref=e1257]:
+                - text: Key
+                - textbox "Key" [ref=e1258]:
+                  - /placeholder: e.g. TIER
+              - generic [ref=e1259]:
+                - text: Description (optional)
+                - textbox "Description (optional)" [ref=e1260]:
+                  - /placeholder: What this key classifies
+              - generic [ref=e1261]:
+                - text: Initial values (comma-separated)
+                - textbox "Initial values (comma-separated)" [ref=e1262]:
+                  - /placeholder: GOLD, SILVER
+              - button "Register" [disabled] [ref=e1263]
+            - paragraph [ref=e1264]:
+              - text: Keys and values are exact-match and case-sensitive. Agents discover this catalog read-only via the
+              - code [ref=e1265]: tag_list
+              - text: MCP tool.

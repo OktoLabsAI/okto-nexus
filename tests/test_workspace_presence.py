@@ -72,7 +72,7 @@ def test_presence_present_when_any_session_active(svc_and_deps):
         deps.repos.sessions.create(
             uow, session_id="c1", agent_id="ag1", workspace_id="ws-b", status="closed"
         )
-        s = deps.repos.sessions.create(
+        deps.repos.sessions.create(
             uow, session_id="a1", agent_id="ag1", workspace_id="ws-b", status="active"
         )
         deps.repos.sessions.heartbeat(uow, session_id="a1", at=now)

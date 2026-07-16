@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "okto-nexus"
-version = "0.0.6"
+version = "0.1.2"
 description = "Okto Nexus - Local Agent Coordination Bus (MCP server + dashboard)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -87,3 +87,6 @@ okto_nexus = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+markers = [
+    "replay: replay-harness eval tests that reconstruct + re-export an NDJSON event log (I8)",
+]

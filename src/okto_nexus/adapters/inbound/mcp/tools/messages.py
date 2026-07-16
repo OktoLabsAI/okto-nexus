@@ -43,14 +43,36 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import (
 from okto_nexus.adapters.outbound.sqlite.embeddings_repo import (
     SqliteMessageVectorStore,
 )
+from okto_nexus.adapters.outbound.sqlite.capability_catalog_repo import (
+    SqliteCapabilityCatalogRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.tag_catalog_repo import (
+    SqliteTagCatalogRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.approvals_repo import (
+    SqliteApprovalRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.governance_repo import (
+    SqliteGovernanceRepo,
+)
+from okto_nexus.adapters.outbound.sqlite.policy_repo import (
+    SqliteAgentPolicyBindingRepo,
+    SqlitePolicyRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteChannelRepo,
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
+from okto_nexus.application.approvals import ApprovalService
+from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.messages import MessageService
+from okto_nexus.domain.governance import ACTION_BROADCAST, ACTION_MESSAGE_CREATE
 from okto_nexus.envelope import err, require_json_object_param, tool_envelope
 from okto_nexus.errors import ErrorCode
+
+from ...http.identity_ctx import get_authenticated_agent
+from ._guardrails import build_guardrail_service
 
 #: Error code emitted by the S3 migration shims. ``ErrorCode.MIGRATED`` is the
 #: canonical catalogue entry; the literal fallback keeps this module importable
@@ -63,7 +85,7 @@ _MIGRATED_CODE: str = (
 #: Reused parameter descriptions (kept DRY across the message/channel tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
 _P_FROM_AGENT = "Your agent_id (the sender); recorded as the author - recipients reply by targeting it."
 _P_SUBJECT = "Short message subject/title (one line)."
 _P_BODY = "Message body (inline text). For large content, attach an artifact and keep body a short pointer."
@@ -79,12 +101,21 @@ _P_TARGET_MSG = (
     "Routing target as a raw JSON object (optional; omit = broadcast to present "
     'agents). strategy one of: direct {"strategy":"direct","agent_id":"<id>"}; '
     'capability {"strategy":"capability","capability":"<cap>"}; role '
-    '{"strategy":"role","role":"<role>"}; broadcast {"strategy":"broadcast"}; '
-    'mixed {"strategy":"mixed","rules":[<sub-target>,...]}. Rules/examples/'
-    "edge-cases: read resource okto-nexus://reference/target-grammar."
+    '{"strategy":"role","role":"<role>"}; tag {"strategy":"tag","selector":'
+    '{"<key>":["<value>",...]}} (flat: AND across keys, OR within values) or '
+    'rich [{"key":"<k>","operator":"In|NotIn|Exists|DoesNotExist","values":'
+    '["<v>",...]}] (ANDed; CAUTION: NotIn/DoesNotExist also match agents '
+    'MISSING the key); broadcast {"strategy":"broadcast"}; mixed '
+    '{"strategy":"mixed","rules":[<sub-target>,...]}. Hierarchy/catalog rules, '
+    "examples, edge-cases: okto-nexus://reference/target-grammar."
 )
 _P_ARTIFACTS = "List of artifact_id strings to attach (optional; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
+_P_TRACE = (
+    "Trajectory trace_id to stamp on this message (optional; non-empty string, "
+    "max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; "
+    "omitted = inherit the reply parent's trace, or generate one."
+)
 
 
 def build_service(deps: Any) -> MessageService:
@@ -111,18 +142,61 @@ def build_service(deps: Any) -> MessageService:
         repos.deliveries = SqliteMessageDeliveryRepo(deps.clock)
     if getattr(repos, "message_vectors", None) is None:
         repos.message_vectors = SqliteMessageVectorStore(deps.clock)
+    if getattr(repos, "tag_catalog", None) is None:
+        repos.tag_catalog = SqliteTagCatalogRepo(deps.clock)
+    if getattr(repos, "capability_catalog", None) is None:
+        repos.capability_catalog = SqliteCapabilityCatalogRepo(deps.clock)
+    if getattr(repos, "governance", None) is None:
+        repos.governance = SqliteGovernanceRepo(deps.clock)
+    if getattr(repos, "policies", None) is None:
+        repos.policies = SqlitePolicyRepo(deps.clock)
+    if getattr(repos, "policy_bindings", None) is None:
+        repos.policy_bindings = SqliteAgentPolicyBindingRepo(deps.clock)
     if getattr(deps, "event_emitter", None) is None:
         if getattr(repos, "events", None) is None:
             repos.events = SqliteEventRepo(deps.clock)
         deps.event_emitter = SqliteEventEmitter(repos.events)
+
+    # Policy enforcement (spec 80624c1a): per-slice service composing the
+    # actor's attached policies; always-on and binding-driven - an actor with no
+    # bindings passes untouched (BR2 zero-regression).
+    governance = GovernanceService(
+        connection_factory=deps.connection_factory,
+        governance=repos.governance,
+        clock=deps.clock,
+        config=deps.config,
+        agents=repos.agents,
+        capability_catalog=repos.capability_catalog,
+        event_emitter=deps.event_emitter,
+        policies=repos.policies,
+        policy_bindings=repos.policy_bindings,
+    )
+
+    # HITL approvals (spec 2948b2a2): the PROCESS-WIDE service built in
+    # bootstrap; constructed here defensively for hand-rolled test Deps. It
+    # must stay a single instance - the executors registered below are what
+    # the operator decision path re-executes through.
+    approvals = getattr(deps, "approvals", None)
+    if approvals is None:
+        if getattr(repos, "approvals", None) is None:
+            repos.approvals = SqliteApprovalRepo()
+        approvals = ApprovalService(
+            connection_factory=deps.connection_factory,
+            approvals=repos.approvals,
+            clock=deps.clock,
+            config=deps.config,
+            event_emitter=deps.event_emitter,
+        )
+        deps.approvals = approvals
 
     # Embedding generation is wired ONLY when the resolved capability carries a
     # provider (off mode -> None -> generation is a no-op). The vector store is
     # always present; the provider gates whether anything is written.
     embedding = getattr(deps, "embedding", None)
     embedding_provider = embedding.provider if embedding is not None else None
+    guardrails = build_guardrail_service(deps)
 
-    return MessageService(
+    service = MessageService(
         connection_factory=deps.connection_factory,
         channels=repos.channels,
         messages=repos.messages,
@@ -132,15 +206,26 @@ def build_service(deps: Any) -> MessageService:
         deliveries=repos.deliveries,
         event_emitter=deps.event_emitter,
         clock=deps.clock,
-        max_inline_bytes=deps.config.max_inline_bytes,
-        presence_ttl_seconds=deps.config.presence_ttl_seconds,
-        trust_mode=deps.config.trust_mode,
+        config=deps.config,
         embedding_provider=embedding_provider,
         message_vectors=repos.message_vectors,
+        tag_catalog=repos.tag_catalog,
+        capability_catalog=repos.capability_catalog,
+        governance=governance,
+        approvals=approvals,
+        guardrails=guardrails,
     )
 
+    # Approved re-execution (BR2): one executor per intercepted action key.
+    # ``message_create`` policies also cover broadcast attempts, and intercept
+    # persists the ATTEMPTED action - so both keys point at the same callable.
+    def _execute_message(kwargs: dict[str, Any]) -> dict[str, Any]:
+        return service.create_message(**kwargs, _approved_execution=True)
 
-from ...http.identity_ctx import get_authenticated_agent
+    approvals.register_executor(ACTION_MESSAGE_CREATE, _execute_message)
+    approvals.register_executor(ACTION_BROADCAST, _execute_message)
+
+    return service
 
 
 def register(server: Any, deps: Any) -> None:
@@ -155,10 +240,13 @@ def register(server: Any, deps: Any) -> None:
         subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
-        from_session_id: Annotated[str | None, Field(description=_P_FROM_SESSION)] = None,
+        from_session_id: Annotated[
+            str | None, Field(description=_P_FROM_SESSION)
+        ] = None,
         target: Annotated[Any, Field(description=_P_TARGET_MSG)] = None,
         artifacts: Annotated[list[str] | None, Field(description=_P_ARTIFACTS)] = None,
         parent_message_id: Annotated[str | None, Field(description=_P_PARENT)] = None,
+        trace_id: Annotated[str | None, Field(description=_P_TRACE)] = None,
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
@@ -175,6 +263,7 @@ def register(server: Any, deps: Any) -> None:
             target=target,
             artifacts=artifacts,
             parent_message_id=parent_message_id,
+            trace_id=trace_id,
             session_secret=session_secret,
         )
 
@@ -227,7 +316,7 @@ def register(server: Any, deps: Any) -> None:
             "inbox_peek(agent_id=<you>) for a non-destructive look, or "
             "inbox_history(agent_id=<you>, cursor=..., limit=...) for "
             "already-read messages. To fetch bus traffic by event instead, use "
-            "event_get(project_root=..., agent_id=<you>, stream=\"workspace\", "
+            'event_get(project_root=..., agent_id=<you>, stream="workspace", '
             'filters={"type": "message.created"}).',
             ["inbox_pull", "inbox_peek", "inbox_history", "event_get"],
         )

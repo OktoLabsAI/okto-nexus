@@ -166,7 +166,6 @@ def test_event_cursor_anchors_a_monitor_at_now(bus):
     ]
 
     # The anchor honours the events.read permission gate.
-    from okto_nexus.domain.permissions import builtin_preset
     from okto_nexus.errors import ErrorCode, OktoNexusError
 
     with deps.connection_factory.unit_of_work() as uow:

@@ -38,10 +38,10 @@ from okto_nexus.domain.events import VALID_STREAMS
 pytest.importorskip("mcp", reason="MCP SDK required to build the live tool schemas")
 
 
-def _list_tools(tmp_path):
+def _list_tools(tmp_path, env: dict[str, str] | None = None):
     """Bootstrap + build the live server and return its published tools."""
     home = tmp_path / "home"
-    deps = bootstrap({"OKTO_NEXUS_HOME": str(home)}, [])
+    deps = bootstrap({"OKTO_NEXUS_HOME": str(home), **(env or {})}, [])
     server = create_server(deps)
     return asyncio.run(server.list_tools())
 
@@ -226,3 +226,20 @@ def test_nexus_info_is_published(tmp_path):
     description = tools["nexus_info"].description or ""
     for field in ("package_version", "schema_version", "surface_revision"):
         assert field in description, f"nexus_info description omits {field}"
+
+
+def test_memory_tools_are_hidden_by_default(tmp_path):
+    """Memory is experimental: default MCP schemas do not expose memory_*."""
+    tools = {t.name for t in _list_tools(tmp_path)}
+
+    assert {"memory_put", "memory_get", "memory_search"}.isdisjoint(tools)
+
+
+def test_memory_tools_are_published_when_feature_enabled(tmp_path):
+    """Enabling feature_memory at bootstrap publishes the memory tools."""
+    tools = {
+        t.name
+        for t in _list_tools(tmp_path, {"OKTO_NEXUS_FEATURE_MEMORY": "true"})
+    }
+
+    assert {"memory_put", "memory_get", "memory_search"} <= tools

@@ -1,9 +1,12 @@
 // Permission flags editor - the Pulse PermissionFlagsEditor grammar adapted
 // to the Nexus 2-level registry: group cards with toggle switches (green
-// on / gray off), per-group enabled counters, numeric limits and the
-// allowed_peers list as inline inputs, plus a readOnly mode for built-ins.
+// on / gray off), per-group enabled counters, numeric limits as inline
+// inputs, plus a readOnly mode for built-ins. Data-driven from the server's
+// registry, so retired flags (e.g. allowed_peers, removed in F1) never
+// render.
 
 import { useMemo } from "react";
+import { Info } from "lucide-react";
 import type { PermissionFlags } from "../api";
 
 const GROUP_LABELS: Record<string, string> = {
@@ -12,6 +15,11 @@ const GROUP_LABELS: Record<string, string> = {
   channels: "Channels",
   artifacts: "Artifacts",
   events: "Observability",
+  identity: "Identity",
+  workspaces: "Workspaces",
+  shared_md: "Shared.md",
+  health: "Health",
+  experimental: "Experimental",
   limits: "Limits",
 };
 
@@ -21,6 +29,11 @@ const GROUP_COLORS: Record<string, string> = {
   channels: "text-emerald-600 dark:text-emerald-400",
   artifacts: "text-amber-600 dark:text-amber-400",
   events: "text-violet-600 dark:text-violet-400",
+  identity: "text-blue-600 dark:text-blue-400",
+  workspaces: "text-cyan-600 dark:text-cyan-400",
+  shared_md: "text-lime-700 dark:text-lime-300",
+  health: "text-rose-600 dark:text-rose-400",
+  experimental: "text-orange-600 dark:text-orange-400",
   limits: "text-surface-500 dark:text-surface-400",
 };
 
@@ -83,6 +96,34 @@ function Toggle({
   );
 }
 
+function PermissionHelp({
+  path,
+  tip,
+}: {
+  path: string;
+  tip: string;
+}) {
+  return (
+    <span
+      className="relative inline-flex shrink-0 items-center group/perm-help"
+      tabIndex={0}
+      aria-label={`${path}: ${tip}`}
+    >
+      <Info
+        size={13}
+        aria-hidden="true"
+        className="text-surface-400 transition-colors group-hover/perm-help:text-accent-500 group-focus/perm-help:text-accent-500 dark:text-surface-500"
+      />
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-0 z-40 mb-2 w-64 max-w-[70vw] rounded-md border border-surface-200 bg-white px-2.5 py-2 text-left text-[11px] leading-snug text-surface-700 opacity-0 shadow-lg transition-opacity group-hover/perm-help:opacity-100 group-focus/perm-help:opacity-100 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-200"
+      >
+        {tip}
+      </span>
+    </span>
+  );
+}
+
 export function PermissionFlagsEditor({
   flags,
   registry,
@@ -98,7 +139,7 @@ export function PermissionFlagsEditor({
 }) {
   const merged = useMemo(() => mergeFlags(registry, flags), [registry, flags]);
 
-  const set = (group: string, flag: string, value: boolean | number | string[]) => {
+  const set = (group: string, flag: string, value: boolean | number) => {
     if (readOnly || !onChange) return;
     const updated: PermissionFlags = JSON.parse(JSON.stringify(merged));
     updated[group][flag] = value;
@@ -142,17 +183,20 @@ export function PermissionFlagsEditor({
             </div>
             <div className="space-y-2">
               {Object.entries(entries).map(([flag, value]) => {
-                const tip = descriptions[`${group}.${flag}`] ?? "";
+                const path = `${group}.${flag}`;
+                const tip = descriptions[path] ?? `Controls ${path}.`;
                 if (typeof value === "boolean") {
                   return (
                     <div
                       key={flag}
                       className="flex items-center justify-between gap-2"
-                      title={tip}
                     >
-                      <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
-                        {flag}
-                      </span>
+                      <div className="min-w-0 flex items-center gap-1.5">
+                        <span className="truncate text-xs text-surface-700 dark:text-surface-300 font-mono">
+                          {flag}
+                        </span>
+                        <PermissionHelp path={path} tip={tip} />
+                      </div>
                       <Toggle
                         enabled={value}
                         readOnly={readOnly}
@@ -161,57 +205,33 @@ export function PermissionFlagsEditor({
                     </div>
                   );
                 }
-                if (typeof value === "number") {
-                  return (
-                    <div
-                      key={flag}
-                      className="flex items-center justify-between gap-2"
-                      title={tip}
-                    >
-                      <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
+                // number (the quantitative limits)
+                return (
+                  <div
+                    key={flag}
+                    className="flex items-center justify-between gap-2"
+                  >
+                    <div className="min-w-0 flex items-center gap-1.5">
+                      <span className="truncate text-xs text-surface-700 dark:text-surface-300 font-mono">
                         {flag}
                       </span>
-                      <div className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min={0}
-                          value={value}
-                          disabled={readOnly}
-                          onChange={(e) =>
-                            set(group, flag, Math.max(0, Number(e.target.value) || 0))
-                          }
-                          className="w-20 text-xs px-2 py-0.5 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 disabled:opacity-50"
-                        />
-                        <span className="text-[10px] text-surface-400">
-                          0 = ∞
-                        </span>
-                      </div>
+                      <PermissionHelp path={path} tip={tip} />
                     </div>
-                  );
-                }
-                // string[] (allowed_peers)
-                return (
-                  <div key={flag} title={tip}>
-                    <span className="text-xs text-surface-700 dark:text-surface-300 font-mono">
-                      {flag}
-                    </span>
-                    <input
-                      type="text"
-                      placeholder="agent ids, comma-separated (empty = everyone)"
-                      value={(value as string[]).join(", ")}
-                      disabled={readOnly}
-                      onChange={(e) =>
-                        set(
-                          group,
-                          flag,
-                          e.target.value
-                            .split(",")
-                            .map((s) => s.trim())
-                            .filter(Boolean),
-                        )
-                      }
-                      className="mt-1 w-full text-xs px-2 py-1 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 font-mono disabled:opacity-50"
-                    />
+                    <div className="flex items-center gap-1">
+                      <input
+                        type="number"
+                        min={0}
+                        value={value}
+                        disabled={readOnly}
+                        onChange={(e) =>
+                          set(group, flag, Math.max(0, Number(e.target.value) || 0))
+                        }
+                        className="w-20 text-xs px-2 py-0.5 rounded border border-surface-300 dark:border-surface-600 bg-white dark:bg-surface-800 disabled:opacity-50"
+                      />
+                      <span className="text-[10px] text-surface-400">
+                        0 = ∞
+                      </span>
+                    </div>
                   </div>
                 );
               })}

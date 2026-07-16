@@ -1,0 +1,296 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Workspaces
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+        - option "ws_nexus_lau…"
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [active] [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals 2" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+              - generic [ref=e136]: "2"
+    - main [ref=e137]:
+      - generic [ref=e578]:
+        - generic [ref=e579]:
+          - generic [ref=e580]: Workspaces (1)
+          - button "Nexus launch workspace 48 msgs / 24h 0 8 0" [ref=e582] [cursor=pointer]:
+            - generic [ref=e583]:
+              - img [ref=e584]
+              - generic [ref=e586]: Nexus launch workspace
+            - generic [ref=e587]:
+              - generic [ref=e588]: 48 msgs / 24h
+              - generic [ref=e589]:
+                - generic "0 present" [ref=e590]: "0"
+                - generic "8 stale" [ref=e592]: "8"
+                - generic "0 offline" [ref=e594]: "0"
+        - generic [ref=e596]:
+          - generic [ref=e597]:
+            - generic [ref=e598]:
+              - heading "Nexus launch workspace" [level=1] [ref=e600]
+              - generic [ref=e601]: ws_nexus_launch
+              - generic [ref=e602]: D:\Projetos\Techridy\okto_labs_okto_nexus\.nexus-landing-run\demo-workspace
+            - generic [ref=e603]:
+              - generic [ref=e604]: created 8 de jul., 06:07
+              - generic [ref=e605]: last seen 8 de jul., 14:07
+              - generic [ref=e606]: last event 8 de jul., 13:47
+          - generic [ref=e607]:
+            - generic [ref=e608]:
+              - generic [ref=e609]: Messages (24h)
+              - generic [ref=e610]: "48"
+            - generic [ref=e611]:
+              - generic [ref=e612]: Events (24h)
+              - generic [ref=e613]: "61"
+            - generic [ref=e614]:
+              - generic [ref=e615]: Open handoffs
+              - generic [ref=e616]: "4"
+            - generic [ref=e617]:
+              - generic [ref=e618]: Most active agent
+              - generic [ref=e619]: codex-orchestrator
+          - generic [ref=e620]:
+            - generic [ref=e621]: Agents in workspace
+            - generic [ref=e623]:
+              - generic "0 present" [ref=e624]: "0"
+              - generic "8 stale" [ref=e626]: "8"
+              - generic "0 offline" [ref=e628]: "0"
+          - paragraph [ref=e630]: Read-only in the MVP. Rename / pin / archive and the multi-workspace overview are phase 2.
+        - generic [ref=e631]:
+          - generic [ref=e632]:
+            - generic [ref=e633]:
+              - heading "Coordination health" [level=2] [ref=e634]
+              - generic [ref=e635]: WARN
+            - generic [ref=e637]:
+              - generic [ref=e638]:
+                - button "1h" [ref=e639] [cursor=pointer]
+                - button "24h" [ref=e640] [cursor=pointer]
+                - button "7d" [ref=e641] [cursor=pointer]
+              - generic [ref=e642]: as of 14:09:56
+          - generic [ref=e643]:
+            - generic [ref=e644]:
+              - generic [ref=e645]:
+                - text: Messages
+                - generic [ref=e646]: · windowed
+              - generic [ref=e647]: "48"
+              - generic [ref=e648]: informational
+            - generic [ref=e649]:
+              - generic [ref=e650]:
+                - text: Events
+                - generic [ref=e651]: · windowed
+              - generic [ref=e652]: "61"
+              - generic [ref=e653]: informational
+            - generic [ref=e654]:
+              - generic [ref=e655]:
+                - text: Unclaimed handoffs
+                - generic [ref=e656]: · snapshot
+              - generic [ref=e657]: "2"
+              - generic [ref=e658]: oldest 5.5h (warn > 30m)
+            - generic [ref=e659]:
+              - generic [ref=e660]:
+                - text: Claim → complete
+                - generic [ref=e661]: · windowed
+              - generic [ref=e662]: —
+              - generic [ref=e663]: 0 pairs · avg (warn > 1h)
+            - generic [ref=e664]:
+              - generic [ref=e665]:
+                - text: Rejection rate
+                - generic [ref=e666]: · windowed
+              - generic [ref=e667]: 0%
+              - generic [ref=e668]: 0 of 6 created (warn > 25%)
+            - generic [ref=e669]:
+              - generic [ref=e670]:
+                - text: Inbox backlog
+                - generic [ref=e671]: · snapshot
+              - generic [ref=e672]: "1"
+              - generic [ref=e673]: max 1 / agent (warn > 25)
+            - generic [ref=e674]:
+              - generic [ref=e675]:
+                - text: Agent presence
+                - generic [ref=e676]: · snapshot
+              - generic [ref=e677]:
+                - text: "0"
+                - generic [ref=e678]: present
+              - generic [ref=e679]: 8 stale · 0 offline (warn > 0 stale)
+            - generic [ref=e680]:
+              - generic [ref=e681]: Parked (dead-letter)
+              - generic [ref=e682]: "0"
+              - generic [ref=e683]: from workspace overview
+          - generic [ref=e684]:
+            - generic [ref=e685]: "Stale agents:"
+            - generic [ref=e686]: security-guard
+            - generic [ref=e687]: claude-validator
+            - generic [ref=e688]: codex-orchestrator
+            - generic [ref=e689]: metrics-runner
+            - generic [ref=e690]: okto-nexus-operator
+            - generic [ref=e691]: cursor-ui
+            - generic [ref=e692]: playwright-smoke
+            - generic [ref=e693]: release-captain
+          - generic [ref=e694]:
+            - generic [ref=e695]:
+              - text: Unread by agent
+              - generic [ref=e696]: (top 1 · +0 others)
+            - generic [ref=e698]:
+              - generic "claude-validator" [ref=e699]
+              - generic [ref=e702]: "1"
+            - generic [ref=e703]: Thresholds are server defaults echoed in each reply — unclaimed > 30m · avg claim→complete > 1h · rejection > 25% · unread/agent > 25 · stale agents > 0
+        - generic [ref=e704]:
+          - generic [ref=e705]:
+            - heading "Message distribution" [level=2] [ref=e706]
+            - paragraph [ref=e707]: by sender · size in tokens (o200k_base)
+          - generic [ref=e708]:
+            - generic [ref=e709]:
+              - button "Volume" [ref=e710] [cursor=pointer]
+              - button "Tokens" [ref=e711] [cursor=pointer]
+            - generic [ref=e712]:
+              - button "24h" [ref=e713] [cursor=pointer]
+              - button "7d" [ref=e714] [cursor=pointer]
+              - button "30d" [ref=e715] [cursor=pointer]
+            - button "Refresh" [ref=e716] [cursor=pointer]:
+              - img [ref=e717]
+        - generic [ref=e720]:
+          - generic [ref=e721]:
+            - generic [ref=e722]:
+              - generic [ref=e723]: Total messages
+              - generic [ref=e724]: "48"
+            - generic [ref=e725]:
+              - generic [ref=e726]: Total tokens
+              - generic [ref=e727]: 1.2K
+            - generic [ref=e728]:
+              - generic [ref=e729]: Avg tokens/msg
+              - generic [ref=e730]: "26"
+            - generic [ref=e731]:
+              - generic [ref=e732]: p95 tokens
+              - generic [ref=e733]: "29"
+            - generic [ref=e734]:
+              - generic [ref=e735]: Peak bucket
+              - generic [ref=e736]: 15:00
+          - generic [ref=e737]:
+            - generic [ref=e738]:
+              - heading "Messages per bucket (stacked by agent)" [level=3] [ref=e739]
+              - generic [ref=e740]:
+                - button "codex-orchestrator" [ref=e741] [cursor=pointer]: codex-orchestrator
+                - button "security-guard" [ref=e743] [cursor=pointer]: security-guard
+                - button "cursor-ui" [ref=e745] [cursor=pointer]: cursor-ui
+                - button "claude-validator" [ref=e747] [cursor=pointer]: claude-validator
+                - button "playwright-smoke" [ref=e749] [cursor=pointer]: playwright-smoke
+                - button "release-captain" [ref=e751] [cursor=pointer]: release-captain
+                - button "metrics-runner" [ref=e753] [cursor=pointer]: metrics-runner
+            - generic [ref=e756]:
+              - generic [ref=e757]: "4"
+              - generic [ref=e758]: "2"
+              - generic [ref=e759]: "0"
+            - generic [ref=e831]:
+              - generic [ref=e832]: 15:00
+              - generic [ref=e833]: 03:00
+              - generic [ref=e834]: now
+          - generic [ref=e835]:
+            - heading "Top agents (by sender)" [level=3] [ref=e837]
+            - table [ref=e838]:
+              - rowgroup [ref=e839]:
+                - row "Agent Messages Tokens Avg p95" [ref=e840]:
+                  - columnheader "Agent" [ref=e841]
+                  - columnheader "Messages" [ref=e842]
+                  - columnheader "Tokens" [ref=e843]
+                  - columnheader "Avg" [ref=e844]
+                  - columnheader "p95" [ref=e845]
+              - rowgroup [ref=e846]:
+                - row "codex-orchestrator 12 324 27 28" [ref=e847]:
+                  - cell "codex-orchestrator" [ref=e848]: codex-orchestrator
+                  - cell "12" [ref=e850]
+                  - cell "324" [ref=e851]
+                  - cell "27" [ref=e852]
+                  - cell "28" [ref=e853]
+                - row "security-guard 6 174 29 29" [ref=e854]:
+                  - cell "security-guard" [ref=e855]: security-guard
+                  - cell "6" [ref=e857]
+                  - cell "174" [ref=e858]
+                  - cell "29" [ref=e859]
+                  - cell "29" [ref=e860]
+                - row "cursor-ui 6 168 28 28" [ref=e861]:
+                  - cell "cursor-ui" [ref=e862]: cursor-ui
+                  - cell "6" [ref=e864]
+                  - cell "168" [ref=e865]
+                  - cell "28" [ref=e866]
+                  - cell "28" [ref=e867]
+                - row "claude-validator 6 162 27 27" [ref=e868]:
+                  - cell "claude-validator" [ref=e869]: claude-validator
+                  - cell "6" [ref=e871]
+                  - cell "162" [ref=e872]
+                  - cell "27" [ref=e873]
+                  - cell "27" [ref=e874]
+                - row "playwright-smoke 6 150 25 25" [ref=e875]:
+                  - cell "playwright-smoke" [ref=e876]: playwright-smoke
+                  - cell "6" [ref=e878]
+                  - cell "150" [ref=e879]
+                  - cell "25" [ref=e880]
+                  - cell "25" [ref=e881]
+                - row "release-captain 6 132 22 22" [ref=e882]:
+                  - cell "release-captain" [ref=e883]: release-captain
+                  - cell "6" [ref=e885]
+                  - cell "132" [ref=e886]
+                  - cell "22" [ref=e887]
+                  - cell "22" [ref=e888]
+                - row "metrics-runner 6 126 21 21" [ref=e889]:
+                  - cell "metrics-runner" [ref=e890]: metrics-runner
+                  - cell "6" [ref=e892]
+                  - cell "126" [ref=e893]
+                  - cell "21" [ref=e894]
+                  - cell "21" [ref=e895]
+          - paragraph [ref=e896]: "Source: messages (message_create); size = TOKENS via tiktoken o200k_base (offline). By sender. Recipient/fan-out and multi-workspace are phase 2."

@@ -1,0 +1,284 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Settings
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+      - generic [ref=e13]: ● Live
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - navigation [ref=e26]:
+        - heading "Observability" [level=3] [ref=e27]
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - button "Graph" [ref=e30] [cursor=pointer]:
+              - img [ref=e31]
+              - generic [ref=e38]: Graph
+          - listitem [ref=e39]:
+            - button "Messages" [ref=e40] [cursor=pointer]:
+              - img [ref=e41]
+              - generic [ref=e44]: Messages
+          - listitem [ref=e45]:
+            - button "Handoffs" [ref=e46] [cursor=pointer]:
+              - img [ref=e47]
+              - generic [ref=e49]: Handoffs
+          - listitem [ref=e50]:
+            - button "Events" [ref=e51] [cursor=pointer]:
+              - img [ref=e52]
+              - generic [ref=e54]: Events
+          - listitem [ref=e55]:
+            - button "Memory" [ref=e56] [cursor=pointer]:
+              - img [ref=e57]
+              - generic [ref=e65]: Memory
+          - listitem [ref=e66]:
+            - button "Workspaces" [ref=e67] [cursor=pointer]:
+              - img [ref=e68]
+              - generic [ref=e70]: Workspaces
+          - listitem [ref=e71]:
+            - button "Agents" [ref=e72] [cursor=pointer]:
+              - img [ref=e73]
+              - generic [ref=e78]: Agents
+          - listitem [ref=e79]:
+            - button "Registry" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e85]: Registry
+          - listitem [ref=e86]:
+            - button "Policies" [ref=e87] [cursor=pointer]:
+              - img [ref=e88]
+              - generic [ref=e90]: Policies
+          - listitem [ref=e91]:
+            - button "Guardrails" [ref=e92] [cursor=pointer]:
+              - img [ref=e93]
+              - generic [ref=e95]: Guardrails
+          - listitem [ref=e96]:
+            - button "Communication" [ref=e97] [cursor=pointer]:
+              - img [ref=e98]
+              - generic [ref=e100]: Communication
+          - listitem [ref=e101]:
+            - button "Approvals" [ref=e102] [cursor=pointer]:
+              - img [ref=e103]
+              - generic [ref=e106]: Approvals
+    - main [ref=e107]:
+      - generic [ref=e662]:
+        - generic [ref=e663]:
+          - heading "Appearance" [level=2] [ref=e664]
+          - generic [ref=e665]:
+            - generic "Switches between light and dark themes; the preference is saved in this browser." [ref=e666]: Interface theme
+            - button "Switch to dark" [ref=e667] [cursor=pointer]:
+              - img [ref=e668]
+              - text: Switch to dark
+        - generic [ref=e670]:
+          - heading "Hub" [level=2] [ref=e671]:
+            - img [ref=e672]
+            - text: Hub
+          - generic [ref=e676]:
+            - generic "Installed okto-nexus package version." [ref=e677]:
+              - generic [ref=e678]: 0.1.0
+              - generic [ref=e679]: version
+            - generic "Database schema version (applied migrations)." [ref=e680]:
+              - generic [ref=e681]: v25
+              - generic [ref=e682]: schema
+            - generic "Trust mode in effect for sensitive MCP verbs." [ref=e683]:
+              - generic [ref=e684]: open
+              - generic [ref=e685]: trust mode
+        - generic [ref=e686]:
+          - generic [ref=e687]:
+            - heading "Runtime parameters" [level=2] [ref=e688]:
+              - img [ref=e689]
+              - text: Runtime parameters
+            - generic [ref=e690]:
+              - button "Defaults" [ref=e691] [cursor=pointer]:
+                - img [ref=e692]
+                - text: Defaults
+              - button "Save" [disabled] [ref=e695]:
+                - img [ref=e696]
+                - text: Save
+          - paragraph [ref=e700]:
+            - text: "The same parameters as the CLI, non-exclusively — precedence: CLI flag > environment variable > value saved here > default. Values pinned by a flag appear as"
+            - generic [ref=e701]: cli/env
+            - text: and are read-only for this run.
+          - generic [ref=e702]:
+            - generic "Seconds without a heartbeat before an active session shows as 'stale' (amber on the graph). Too short causes false alarms; too long hides stuck agents." [ref=e703]:
+              - generic [ref=e704]: Session stale TTL seconds
+              - paragraph [ref=e705]: Seconds without a heartbeat before an active session shows as 'stale' (amber on the graph). Too short causes false alarms; too long hides stuck agents.
+              - generic [ref=e706]:
+                - spinbutton [ref=e707]: "60"
+                - generic [ref=e708]: 5–3600
+            - 'generic "Presence window (s): with a heartbeat older than this the agent drops out of the broadcast audience and shows offline on the dashboard." [ref=e709]':
+              - generic [ref=e710]: Presence TTL seconds
+              - paragraph [ref=e711]: "Presence window (s): with a heartbeat older than this the agent drops out of the broadcast audience and shows offline on the dashboard."
+              - generic [ref=e712]:
+                - spinbutton [ref=e713]: "1800"
+                - generic [ref=e714]: 60–86400
+            - generic "Heartbeat age (s) past which abandoned sessions are closed automatically (opportunistic reaper)." [ref=e715]:
+              - generic [ref=e716]: Session reap seconds
+              - paragraph [ref=e717]: Heartbeat age (s) past which abandoned sessions are closed automatically (opportunistic reaper).
+              - generic [ref=e718]:
+                - spinbutton [ref=e719]: "86400"
+                - generic [ref=e720]: 300–604800
+            - 'generic "Lease (s) of a claimed handoff: without completion within it, the claim expires and the work returns to the pool for another agent." [ref=e721]':
+              - generic [ref=e722]: Handoff lease TTL seconds
+              - paragraph [ref=e723]: "Lease (s) of a claimed handoff: without completion within it, the claim expires and the work returns to the pool for another agent."
+              - generic [ref=e724]:
+                - spinbutton [ref=e725]: "300"
+                - generic [ref=e726]: 30–86400
+            - 'generic "Lease (s) for messages pulled via inbox_pull: without an ack within it, the delivery returns to ''unread''." [ref=e727]':
+              - generic [ref=e728]: Inbox lease TTL seconds
+              - paragraph [ref=e729]: "Lease (s) for messages pulled via inbox_pull: without an ack within it, the delivery returns to 'unread'."
+              - generic [ref=e730]:
+                - spinbutton [ref=e731]: "300"
+                - generic [ref=e732]: 30–86400
+            - generic "Ceiling (s) for the timeout parameter of message_wait/event_wait (agent long polling)." [ref=e733]:
+              - generic [ref=e734]: Max wait timeout seconds
+              - paragraph [ref=e735]: Ceiling (s) for the timeout parameter of message_wait/event_wait (agent long polling).
+              - generic [ref=e736]:
+                - spinbutton [ref=e737]: "30"
+                - generic [ref=e738]: 1–300
+            - generic "Internal interval (ms) between checks in long-polling waits. Lower = more responsive, more SQLite read load." [ref=e739]:
+              - generic [ref=e740]: Poll interval MS
+              - paragraph [ref=e741]: Internal interval (ms) between checks in long-polling waits. Lower = more responsive, more SQLite read load.
+              - generic [ref=e742]:
+                - spinbutton [ref=e743]: "200"
+                - generic [ref=e744]: 50–5000
+            - 'generic "PRAGMA busy_timeout (ms): how long a connection waits for SQLite locks before failing. Affects new connections." [ref=e745]':
+              - generic [ref=e746]:
+                - text: Busy timeout MS
+                - generic [ref=e747]: restart
+              - paragraph [ref=e748]: "PRAGMA busy_timeout (ms): how long a connection waits for SQLite locks before failing. Affects new connections."
+              - generic [ref=e749]:
+                - spinbutton [ref=e750]: "5000"
+                - generic [ref=e751]: 100–60000
+            - generic "Maximum events returned per page in event_get/event_wait and the dashboard feed." [ref=e752]:
+              - generic [ref=e753]: Max event limit
+              - paragraph [ref=e754]: Maximum events returned per page in event_get/event_wait and the dashboard feed.
+              - generic [ref=e755]:
+                - spinbutton [ref=e756]: "1000"
+                - generic [ref=e757]: 10–10000
+            - generic "Ceiling of events rendered by shared_md_render (the workspace Markdown digest)." [ref=e758]:
+              - generic [ref=e759]: Max shared MD events
+              - paragraph [ref=e760]: Ceiling of events rendered by shared_md_render (the workspace Markdown digest).
+              - generic [ref=e761]:
+                - spinbutton [ref=e762]: "1000"
+                - generic [ref=e763]: 10–10000
+            - generic "Maximum size (UTF-8 bytes) of inline content in messages and artifacts before artifact_put is required." [ref=e764]:
+              - generic [ref=e765]: Max inline bytes
+              - paragraph [ref=e766]: Maximum size (UTF-8 bytes) of inline content in messages and artifacts before artifact_put is required.
+              - generic [ref=e767]:
+                - spinbutton [ref=e768]: "65536"
+                - generic [ref=e769]: 1024–1048576
+            - 'generic "''open'': session credentials optional but validated when supplied. ''strict'': sensitive verbs (message_create, handoff_*, inbox_*) require session_id + session_secret." [ref=e770]':
+              - generic [ref=e771]: Trust mode
+              - paragraph [ref=e772]: "'open': session credentials optional but validated when supplied. 'strict': sensitive verbs (message_create, handoff_*, inbox_*) require session_id + session_secret."
+              - combobox [ref=e774]:
+                - option "open" [selected]
+                - option "strict"
+            - 'generic "Window (days) for the event log: prune removes events older than this." [ref=e775]':
+              - generic [ref=e776]: Retention events keep days
+              - paragraph [ref=e777]: "Window (days) for the event log: prune removes events older than this."
+              - generic [ref=e778]:
+                - spinbutton [ref=e779]: "30"
+                - generic [ref=e780]: 1–3650
+            - generic "Window (days) for READ deliveries. The unread/delivered/parked lanes are never pruned." [ref=e781]:
+              - generic [ref=e782]: Retention read deliveries keep days
+              - paragraph [ref=e783]: Window (days) for READ deliveries. The unread/delivered/parked lanes are never pruned.
+              - generic [ref=e784]:
+                - spinbutton [ref=e785]: "14"
+                - generic [ref=e786]: 1–3650
+            - generic "Window (days) for CLOSED sessions. Active/stale sessions are never pruned." [ref=e787]:
+              - generic [ref=e788]: Retention closed sessions keep days
+              - paragraph [ref=e789]: Window (days) for CLOSED sessions. Active/stale sessions are never pruned.
+              - generic [ref=e790]:
+                - spinbutton [ref=e791]: "7"
+                - generic [ref=e792]: 1–3650
+            - 'generic "Window (days) for MESSAGES: prune removes messages older than this by PURE AGE, regardless of delivery status, taking their deliveries and embeddings with them. Hard minimum 7 (fail-closed)." [ref=e793]':
+              - generic [ref=e794]: Retention messages keep days
+              - paragraph [ref=e795]: "Window (days) for MESSAGES: prune removes messages older than this by PURE AGE, regardless of delivery status, taking their deliveries and embeddings with them. Hard minimum 7 (fail-closed)."
+              - generic [ref=e796]:
+                - spinbutton [ref=e797]: "30"
+                - generic [ref=e798]: 7–3650
+            - 'generic "Semantic search over message content: ''off'' disables it (no embeddings; /messages/search answers EMBEDDINGS_UNAVAILABLE); ''stub'' uses a zero-dependency deterministic provider; ''local'' uses sentence-transformers (requires the [embeddings] extra). Takes effect after a restart." [ref=e799]':
+              - generic [ref=e800]:
+                - text: Embedding mode
+                - generic [ref=e801]: restart
+              - paragraph [ref=e802]: "Semantic search over message content: 'off' disables it (no embeddings; /messages/search answers EMBEDDINGS_UNAVAILABLE); 'stub' uses a zero-dependency deterministic provider; 'local' uses sentence-transformers (requires the [embeddings] extra). Takes effect after a restart."
+              - combobox [ref=e804]:
+                - option "off" [selected]
+                - option "stub"
+                - option "local"
+            - generic "Run the retention prune automatically on every server boot." [ref=e805]:
+              - generic [ref=e806]: Auto prune on start
+              - paragraph [ref=e807]: Run the retention prune automatically on every server boot.
+              - checkbox [ref=e809]
+            - generic "Deliver a read receipt to the sender's inbox when a recipient acknowledges its message (receipts never generate receipts). Turn off to keep inboxes receipt-free." [ref=e810]:
+              - generic [ref=e811]: Inbox read receipts
+              - paragraph [ref=e812]: Deliver a read receipt to the sender's inbox when a recipient acknowledges its message (receipts never generate receipts). Turn off to keep inboxes receipt-free.
+              - checkbox [checked] [ref=e814]
+            - generic "Show each workspace's absolute project path (root_realpath) on the Workspaces screen and the /api/v1/workspaces API. Off (default) redacts the path (defense-in-depth); turn on to reveal it." [ref=e815]:
+              - generic [ref=e816]: Expose workspace path
+              - paragraph [ref=e817]: Show each workspace's absolute project path (root_realpath) on the Workspaces screen and the /api/v1/workspaces API. Off (default) redacts the path (defense-in-depth); turn on to reveal it.
+              - checkbox [ref=e819]
+        - generic [ref=e820]:
+          - generic [ref=e821]:
+            - heading "Features" [level=2] [ref=e822]:
+              - img [ref=e823]
+              - text: Features
+            - generic [ref=e826]: Opt-in · default off
+          - paragraph [ref=e827]: Coordination features ship disabled and only run when switched on here (or pinned via OKTO_NEXUS_FEATURE_* / --feature-*). Turning a feature off never removes MCP tools — agents can read the effective flags via nexus_info. Use the Save button above to apply changes.
+          - generic [ref=e828]:
+            - 'generic "Opt-in: trace-id propagation across messages and handoffs so multi-agent trajectories can be reconstructed. No effect until the consuming feature ships." [ref=e829]':
+              - generic [ref=e830]: Feature trace
+              - paragraph [ref=e831]: "Opt-in: trace-id propagation across messages and handoffs so multi-agent trajectories can be reconstructed. No effect until the consuming feature ships."
+              - checkbox [ref=e833]
+            - 'generic "Opt-in: human-in-the-loop steering - operator pause, inject and redirect over agent coordination. No effect until the consuming feature ships." [ref=e834]':
+              - generic [ref=e835]: Feature hitl
+              - paragraph [ref=e836]: "Opt-in: human-in-the-loop steering - operator pause, inject and redirect over agent coordination. No effect until the consuming feature ships."
+              - checkbox [ref=e838]
+            - 'generic "Opt-in: handoff verification - completion evidence is checked before a handoff closes. No effect until the consuming feature ships." [ref=e839]':
+              - generic [ref=e840]: Feature verification
+              - paragraph [ref=e841]: "Opt-in: handoff verification - completion evidence is checked before a handoff closes. No effect until the consuming feature ships."
+              - checkbox [ref=e843]
+            - 'generic "Opt-in: handoff dependency graphs (depends_on) with dependency-aware claiming. No effect until the consuming feature ships." [ref=e844]':
+              - generic [ref=e845]: Feature dag
+              - paragraph [ref=e846]: "Opt-in: handoff dependency graphs (depends_on) with dependency-aware claiming. No effect until the consuming feature ships."
+              - checkbox [ref=e848]
+            - 'generic "Opt-in: shared memory primitives (memory_*) for cross-agent knowledge. No effect until the consuming feature ships." [ref=e849]':
+              - generic [ref=e850]: Feature memory
+              - paragraph [ref=e851]: "Opt-in: shared memory primitives (memory_*) for cross-agent knowledge. No effect until the consuming feature ships."
+              - checkbox [ref=e853]
+            - 'generic "Opt-in: coordination health reporting (windowed metrics over bus activity). No effect until the consuming feature ships." [ref=e854]':
+              - generic [ref=e855]: Feature health
+              - paragraph [ref=e856]: "Opt-in: coordination health reporting (windowed metrics over bus activity). No effect until the consuming feature ships."
+              - checkbox [ref=e858]
+            - 'generic "Opt-in: replay/eval export of coordination history (NDJSON + manifest). No effect until the consuming feature ships." [ref=e859]':
+              - generic [ref=e860]: Feature replay
+              - paragraph [ref=e861]: "Opt-in: replay/eval export of coordination history (NDJSON + manifest). No effect until the consuming feature ships."
+              - checkbox [ref=e863]
+        - generic [ref=e864]:
+          - heading "Store maintenance" [level=2] [ref=e865]:
+            - img [ref=e866]
+            - text: Store maintenance
+          - generic [ref=e869]:
+            - generic [ref=e870]:
+              - 'generic "Applies the retention windows configured above: old events, read deliveries and closed sessions." [ref=e871]': Prune (retention)
+              - paragraph [ref=e872]: Removes old events, read deliveries and closed sessions according to the retention windows.
+            - generic [ref=e873]:
+              - button "Simular" [ref=e874] [cursor=pointer]
+              - button "Executar" [ref=e875] [cursor=pointer]
+          - generic [ref=e877]:
+            - generic [ref=e878]:
+              - generic "Erases the hub's entire operational history (messages, handoffs, sessions, events, workspaces) with VACUUM. Irreversible." [ref=e879]: Reset database
+              - paragraph [ref=e880]: Erases ALL messages, deliveries, handoffs, sessions, events, channels and workspaces (with VACUUM). Irreversible.
+              - 'generic "Keeps agent identities and API keys: the dashboard and connected MCP clients keep working after the reset." [ref=e881]':
+                - checkbox "Preserve agents and API keys (recommended)" [checked] [ref=e882]
+                - text: Preserve agents and API keys (recommended)
+            - button "Reset…" [ref=e883] [cursor=pointer]:
+              - img [ref=e884]
+              - text: Reset…

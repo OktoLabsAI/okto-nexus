@@ -13,6 +13,7 @@ clock (falling back to :func:`utc_now_iso`) when the caller omits one.
 
 from __future__ import annotations
 
+import json
 import sqlite3
 from typing import Any, Optional
 
@@ -27,12 +28,29 @@ def _db_error(action: str, exc: sqlite3.Error) -> OktoNexusError:
     return db_error_from_exception(action, exc)
 
 
+def _dumps(value: Any) -> str | None:
+    """Serialise the audience snapshot to JSON TEXT (``None`` stays NULL)."""
+    if value is None:
+        return None
+    return json.dumps(value, ensure_ascii=False)
+
+
+def _loads(text: str | None) -> Any:
+    """Hydrate a JSON TEXT column; a NULL or malformed blob reads as ``None``."""
+    if text is None:
+        return None
+    try:
+        return json.loads(text)
+    except (TypeError, ValueError):
+        return None
+
+
 class SqliteArtifactRepo:
     """Persistence for ``artifacts`` rows (inline content or path references)."""
 
     _COLUMNS = (
         "artifact_id, workspace_id, artifact_type, name, path, content, "
-        "size_bytes, content_type, created_at"
+        "size_bytes, content_type, created_by, created_at, audience"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -55,7 +73,9 @@ class SqliteArtifactRepo:
         content: str | None = None,
         size_bytes: int | None = None,
         content_type: str | None = None,
+        created_by: str | None = None,
         created_at: str | None = None,
+        audience: list[Any] | None = None,
     ) -> Artifact:
         now = created_at or self._now()
         try:
@@ -63,8 +83,9 @@ class SqliteArtifactRepo:
                 """
                 INSERT INTO artifacts
                     (artifact_id, workspace_id, artifact_type, name, path,
-                     content, size_bytes, content_type, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     content, size_bytes, content_type, created_by, created_at,
+                     audience)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     artifact_id,
@@ -75,7 +96,9 @@ class SqliteArtifactRepo:
                     content,
                     size_bytes,
                     content_type,
+                    created_by,
                     now,
+                    _dumps(audience),
                 ),
             )
         except sqlite3.Error as exc:
@@ -133,4 +156,6 @@ class SqliteArtifactRepo:
             content=row["content"],
             size_bytes=row["size_bytes"],
             content_type=row["content_type"],
+            created_by=row["created_by"],
+            audience=_loads(row["audience"]),
         )

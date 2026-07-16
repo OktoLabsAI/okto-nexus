@@ -25,15 +25,19 @@ from typing import Any
 from ..errors import ErrorCode, OktoNexusError
 
 #: Canonical registry: every known boolean flag with its default (True =
-#: allowed). ``limits`` carries the quantitative knobs (0 = unlimited) and
-#: ``allowed_peers`` is an optional allowlist of agent_ids for DIRECT sends
-#: (empty list = everyone).
+#: allowed). ``limits`` carries the quantitative knobs (0 = unlimited).
+#:
+#: REMOVED in F1 (tag scoping): ``messages.allowed_peers``. Directed-send
+#: allowlists are now the tag-based ``comm_scope.outbound`` audience selector
+#: on the agent (operator-set; see the Tag Registry). New payloads carrying
+#: ``allowed_peers`` are rejected as an unknown flag (fail-closed); rows
+#: persisted by older versions are INERT - no code reads the key, and no data
+#: migration rewrites them.
 PERMISSION_REGISTRY: dict[str, dict[str, Any]] = {
     "messages": {
         "send_direct": True,
         "send_broadcast": True,
         "send_channel": True,
-        "allowed_peers": [],
     },
     "handoffs": {
         "create": True,
@@ -49,6 +53,25 @@ PERMISSION_REGISTRY: dict[str, dict[str, Any]] = {
     "events": {
         "read": True,
     },
+    "identity": {
+        "update_profile": True,
+        "update_capabilities": True,
+    },
+    "workspaces": {
+        "list": True,
+        "include_paths": True,
+    },
+    "shared_md": {
+        "render": True,
+    },
+    "health": {
+        "read": True,
+    },
+    "experimental": {
+        "memory_write": True,
+        "memory_read": True,
+        "memory_search": True,
+    },
     "limits": {
         "messages_per_minute": 0,
         "max_recipients": 0,
@@ -60,13 +83,21 @@ PERMISSION_DESCRIPTIONS: dict[str, str] = {
     "messages.send_direct": "Send direct messages to a specific agent.",
     "messages.send_broadcast": "Fan out to groups: broadcast, by role or by capability.",
     "messages.send_channel": "Post messages into channels.",
-    "messages.allowed_peers": "Optional allowlist of agent_ids this agent may message directly (empty = everyone).",
     "handoffs.create": "Offer work to the pool (handoff_create).",
     "handoffs.work": "Claim, complete or reject handoffs.",
     "handoffs.cancel": "Cancel handoffs it created.",
     "channels.create": "Create new channels.",
     "artifacts.put": "Publish artifacts.",
     "events.read": "Read or wait on the workspace event stream (event_get / event_wait).",
+    "identity.update_profile": "Update its own role and metadata through agent_register.",
+    "identity.update_capabilities": "Update its own advertised capabilities through agent_register.",
+    "workspaces.list": "Enumerate registered workspaces.",
+    "workspaces.include_paths": "Include workspace root paths in workspace_list.",
+    "shared_md.render": "Render the derived shared.md workspace file.",
+    "health.read": "Read coordination health metrics for a workspace.",
+    "experimental.memory_write": "Write experimental workspace memories.",
+    "experimental.memory_read": "Read experimental workspace memories by id.",
+    "experimental.memory_search": "Search experimental workspace memories.",
     "limits.messages_per_minute": "Max messages this agent may send per minute (0 = unlimited).",
     "limits.max_recipients": "Max recipients a single group send may fan out to (0 = unlimited).",
 }
@@ -76,7 +107,9 @@ def _registry_copy() -> dict[str, dict[str, Any]]:
     return copy.deepcopy(PERMISSION_REGISTRY)
 
 
-def _preset(flags_off: list[str], limits: dict[str, int] | None = None) -> dict[str, Any]:
+def _preset(
+    flags_off: list[str], limits: dict[str, int] | None = None
+) -> dict[str, Any]:
     """Build a preset's flags: the full registry with ``flags_off`` disabled."""
     flags = _registry_copy()
     for path in flags_off:
@@ -133,6 +166,13 @@ BUILTIN_PRESETS: list[dict[str, Any]] = [
                 "handoffs.cancel",
                 "channels.create",
                 "artifacts.put",
+                "identity.update_profile",
+                "identity.update_capabilities",
+                "workspaces.include_paths",
+                "shared_md.render",
+                "experimental.memory_write",
+                "experimental.memory_read",
+                "experimental.memory_search",
             ]
         ),
     },
@@ -196,7 +236,7 @@ def validate_permission_flags(flags: Any) -> dict[str, dict[str, Any]]:
                         {"flag": f"{group}.{flag}", "value": value},
                     )
                 normalised[group][flag] = value
-            elif isinstance(default, int):
+            else:  # int (the quantitative limits)
                 if isinstance(value, bool) or not isinstance(value, int) or value < 0:
                     raise OktoNexusError(
                         ErrorCode.VALIDATION_ERROR,
@@ -204,16 +244,6 @@ def validate_permission_flags(flags: Any) -> dict[str, dict[str, Any]]:
                         {"flag": f"{group}.{flag}", "value": value},
                     )
                 normalised[group][flag] = value
-            else:  # list (allowed_peers)
-                if not isinstance(value, list) or not all(
-                    isinstance(item, str) and item.strip() for item in value
-                ):
-                    raise OktoNexusError(
-                        ErrorCode.VALIDATION_ERROR,
-                        f"'{group}.{flag}' must be a list of non-empty agent_id strings.",
-                        {"flag": f"{group}.{flag}", "value": value},
-                    )
-                normalised[group][flag] = [item.strip() for item in value]
     return normalised
 
 
@@ -238,13 +268,6 @@ class PermissionSet:
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             return 0
         return value
-
-    def allowed_peers(self) -> list[str]:
-        """Direct-message allowlist (empty = everyone)."""
-        value = self._flags.get("messages", {}).get("allowed_peers", [])
-        if not isinstance(value, list):
-            return []
-        return [str(item) for item in value if isinstance(item, str) and item.strip()]
 
     def denial(self, group: str, flag: str) -> OktoNexusError:
         """Build the canonical PERMISSION_DENIED error for ``group.flag``."""

@@ -51,12 +51,17 @@ from ..config import (
     TRUST_MODE_STRICT,
     NexusConfig,
 )
+from ..domain.approvals import OPERATOR_AGENT_ID, is_reserved_agent_id
 from ..domain.base import check_inline_size, iso_to_epoch, new_id
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..domain.routing import normalize_capabilities
+from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
+from .capabilities import CapabilityCatalogService
+from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
+    CapabilityCatalogRepo,
     Clock,
     ConnectionFactory,
     EventEmitter,
@@ -86,9 +91,7 @@ def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def session_is_present(
-    session: Any, now_iso: str, presence_ttl_seconds: int
-) -> bool:
+def session_is_present(session: Any, now_iso: str, presence_ttl_seconds: int) -> bool:
     """The SINGLE presence predicate (M6): stored-active AND fresh heartbeat.
 
     Reconciles the three previously-unreconciled notions of presence (stored
@@ -302,6 +305,7 @@ class IdentityService:
         config: NexusConfig,
         event_emitter: Optional[EventEmitter] = None,
         stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS,
+        capability_catalog: Optional[CapabilityCatalogRepo] = None,
     ) -> None:
         self._cf = connection_factory
         self._workspaces = workspaces
@@ -310,6 +314,7 @@ class IdentityService:
         self._clock = clock
         self._config = config
         self._emitter = event_emitter
+        self._capability_catalog = capability_catalog
         self._stale_ttl = int(stale_ttl_seconds)
         self._presence_ttl = int(
             getattr(config, "presence_ttl_seconds", DEFAULT_PRESENCE_TTL_SECONDS)
@@ -370,7 +375,7 @@ class IdentityService:
         }
 
     def workspace_list(
-        self, *, include_paths: bool = False
+        self, *, include_paths: bool = False, actor_agent_id: Any = None
     ) -> list[dict[str, Any]]:
         """Enumerate ALL workspaces (a global-admin surface).
 
@@ -388,6 +393,11 @@ class IdentityService:
         supplied the path to ``workspace_resolve`` in the first place.
         """
         with self._cf.unit_of_work() as uow:
+            if _is_nonempty_str(actor_agent_id):
+                perms = permission_set_for(self._agents, uow, str(actor_agent_id))
+                perms.require("workspaces", "list")
+                if include_paths:
+                    perms.require("workspaces", "include_paths")
             rows = self._workspaces.list_all(uow)
         out: list[dict[str, Any]] = []
         for ws in rows:
@@ -435,6 +445,16 @@ class IdentityService:
                 "agent_id is required.",
                 {"agent_id": agent_id},
             )
+        # Reserved operator identity (spec 2948b2a2 BR4, fail-closed, no
+        # flag): the human's first-class identity is seeded at bootstrap and
+        # can never be registered/impersonated through a public write path.
+        if is_reserved_agent_id(agent_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"agent_id '{agent_id}' is reserved for the human operator "
+                "and cannot be registered by agents.",
+                {"agent_id": agent_id, "reserved": OPERATOR_AGENT_ID},
+            )
         if _is_nonempty_str(actor_agent_id) and str(agent_id) != str(actor_agent_id):
             raise OktoNexusError(
                 ErrorCode.PERMISSION_DENIED,
@@ -454,10 +474,24 @@ class IdentityService:
         # Validate the capabilities SHAPE up front (VALIDATION_ERROR for a
         # non-iterable/non-mapping value) so a poison value is never persisted -
         # keeping capability_list and capability routing/eligibility safe.
-        normalize_capabilities(capabilities)
+        announced = normalize_capabilities(capabilities)
 
         now = self._clock.now_iso()
         with self._cf.unit_of_work() as uow:
+            if _is_nonempty_str(actor_agent_id):
+                perms = permission_set_for(self._agents, uow, str(actor_agent_id))
+                if role is not None or metadata is not None or capabilities is not None:
+                    perms.require("identity", "update_profile")
+                if capabilities is not None:
+                    perms.require("identity", "update_capabilities")
+            # EXISTENCE gate (migration 014, fail-closed): every announced
+            # capability must already be in the central catalog. Runs inside
+            # the write transaction so nothing persists on rejection. A no-op
+            # when no catalog repo is wired (partial test wirings).
+            if self._capability_catalog is not None and announced:
+                CapabilityCatalogService(
+                    catalog=self._capability_catalog
+                ).ensure_registered(uow, announced, field="capabilities")
             agent = self._agents.upsert(
                 uow,
                 agent_id=agent_id,
@@ -512,22 +546,34 @@ class IdentityService:
         data["is_active"] = agent.is_active
         return data
 
-    def agent_list(self) -> list[dict[str, Any]]:
-        """Enumerate ALL registered agents (global; parallels ``workspace_list``).
+    def agent_list(self, *, caller_agent_id: Any = None) -> list[dict[str, Any]]:
+        """Enumerate the registered agents VISIBLE to the caller.
 
         Agent identities are global, so this is a deliberately cross-workspace
         read. Each entry carries ``last_seen_at`` - the timestamp of the agent's
         most recent action on the bus (``None`` if it never acted).
+
+        Discovery is scoped by reachability (F2 - "visible = reachable"): an
+        AUTHENTICATED caller sees only the agents its comm scope can reach
+        (its own outbound AND each peer's inbound), plus always itself. An
+        anonymous caller (``caller_agent_id=None`` - the cooperative stdio
+        mode or the operator REST surface) sees everything.
         """
         with self._cf.unit_of_work() as uow:
             rows = self._agents.list(uow)
+            rows = self._filter_reachable(uow, caller_agent_id, rows)
         return [self._agent_to_data(agent) for agent in rows]
 
-    def agent_get(self, *, agent_id: Any) -> dict[str, Any]:
+    def agent_get(
+        self, *, agent_id: Any, caller_agent_id: Any = None
+    ) -> dict[str, Any]:
         """Return one agent's full details, including ``last_seen_at``.
 
         Raises ``VALIDATION_ERROR`` for a missing ``agent_id`` and ``NOT_FOUND``
-        when no such agent is registered.
+        when no such agent is registered. For an AUTHENTICATED caller an agent
+        its comm scope cannot reach also reads as ``NOT_FOUND`` - byte-identical
+        to the non-existent case, so unreachable and unknown are
+        indistinguishable (F2; the policy never leaks).
         """
         if not _is_nonempty_str(agent_id):
             raise OktoNexusError(
@@ -537,6 +583,11 @@ class IdentityService:
             )
         with self._cf.unit_of_work() as uow:
             agent = self._agents.get(uow, agent_id)
+            if (
+                agent is not None
+                and self._filter_reachable(uow, caller_agent_id, [agent]) == []
+            ):
+                agent = None
         if agent is None:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
@@ -545,31 +596,74 @@ class IdentityService:
             )
         return self._agent_to_data(agent)
 
-    def capability_list(self) -> list[dict[str, Any]]:
-        """List the distinct capabilities advertised across ALL registered agents.
+    def capability_list(self, *, caller_agent_id: Any = None) -> list[dict[str, Any]]:
+        """List the capability CATALOG merged with who advertises each name.
 
-        A global discovery surface: for each capability, the agents that possess
+        A discovery surface: for each capability, the agents that possess
         it (so a caller can decide whom to address with a capability-targeted
         message or handoff). Capabilities are normalised with the SAME rule
         capability routing uses (:func:`normalize_capabilities`), so what is
         listed is exactly what a ``target: {strategy: "capability"}`` would match.
-        Result is sorted by capability; ``agents`` is sorted per capability.
+
+        With the central catalog wired (migration 014) the result is
+        CATALOG-COMPLETE: every registered name appears - with its
+        ``description`` and ``agent_count: 0`` when nobody advertises it yet -
+        so callers discover the full sanctioned vocabulary, not just what
+        happens to be owned. Ownership stays scoped by reachability exactly
+        like :meth:`agent_list` (F2); anonymous callers see everything. The
+        union is kept defensively (an advertised name missing from the catalog
+        still lists, with ``description: None``). Result is sorted by
+        capability; ``agents`` is sorted per capability.
         """
         with self._cf.unit_of_work() as uow:
             agents = self._agents.list(uow)
+            agents = self._filter_reachable(uow, caller_agent_id, agents)
+            catalog = (
+                self._capability_catalog.list(uow)
+                if self._capability_catalog is not None
+                else []
+            )
         index: dict[str, list[str]] = {}
         for agent in agents:
             # ``agent_register`` validates the capabilities shape up front, so a
             # persisted value always normalises cleanly (no poison to guard).
             for cap in normalize_capabilities(agent.capabilities):
                 index.setdefault(cap, []).append(agent.agent_id)
+        descriptions = {row.name: row.description for row in catalog}
+        names = sorted(set(index) | set(descriptions))
         return [
-            {"capability": cap, "agent_count": len(ids), "agents": sorted(ids)}
-            for cap, ids in sorted(index.items())
+            {
+                "capability": cap,
+                "description": descriptions.get(cap),
+                "agent_count": len(index.get(cap, [])),
+                "agents": sorted(index.get(cap, [])),
+            }
+            for cap in names
         ]
+
+    def _filter_reachable(
+        self, uow: Any, caller_agent_id: Any, agents: list[Any]
+    ) -> list[Any]:
+        """Keep the agents the caller's comm scope can REACH (F2 discovery).
+
+        ``caller_agent_id=None``/blank means an unscoped surface (anonymous
+        stdio caller or the operator REST/dashboard) - no filtering. The
+        shared :func:`~okto_nexus.domain.tag_selector.reachable` predicate
+        supplies the self carve-out: the caller always sees itself.
+        """
+        if not _is_nonempty_str(caller_agent_id):
+            return agents
+        caller = self._agents.get(uow, str(caller_agent_id))
+        caller_view: Any = (
+            caller if caller is not None else {"agent_id": str(caller_agent_id)}
+        )
+        return [a for a in agents if reachable(caller_view, a)]
 
     @staticmethod
     def _agent_to_data(agent: Any) -> dict[str, Any]:
+        # ``tags`` are PUBLIC discovery data (a peer needs them to reason
+        # about tag-targeted routing); ``comm_scope`` is operator-private and
+        # deliberately NEVER leaves the identity slice on this surface.
         return {
             "agent_id": agent.agent_id,
             "role": agent.role,
@@ -577,13 +671,19 @@ class IdentityService:
             "metadata": agent.metadata,
             "created_at": agent.created_at,
             "last_seen_at": agent.last_seen_at,
+            "tags": getattr(agent, "tags", None) or {},
         }
 
     # ------------------------------------------------------------------ #
     # Session
     # ------------------------------------------------------------------ #
     def session_open(
-        self, *, agent_id: Any, workspace_id: Any, metadata: Any = None
+        self,
+        *,
+        agent_id: Any,
+        workspace_id: Any,
+        metadata: Any = None,
+        actor_agent_id: Any = None,
     ) -> dict[str, Any]:
         """Open a session bound immutably to ``(agent_id, workspace_id)``.
 
@@ -607,6 +707,18 @@ class IdentityService:
                 ErrorCode.VALIDATION_ERROR,
                 "agent_id is required.",
                 {"agent_id": agent_id},
+            )
+        if _is_nonempty_str(actor_agent_id) and str(agent_id) != str(actor_agent_id):
+            raise OktoNexusError(
+                ErrorCode.PERMISSION_DENIED,
+                "session_open is self-only on an authenticated connection: "
+                f"your API key identifies you as '{actor_agent_id}', so you "
+                f"cannot open a session for '{agent_id}'.",
+                {
+                    "required_permission": "identity.session_self",
+                    "authenticated_agent_id": str(actor_agent_id),
+                    "attempted_agent_id": str(agent_id),
+                },
             )
         self._check_inline_size("metadata", metadata)
 
@@ -701,9 +813,7 @@ class IdentityService:
                 session_id=updated.session_id,
                 payload={"session_id": updated.session_id, "status": status},
             )
-            self._reap_stale_sessions(
-                uow, workspace_id=updated.workspace_id, now=now
-            )
+            self._reap_stale_sessions(uow, workspace_id=updated.workspace_id, now=now)
         return {
             "session_id": updated.session_id,
             "status": status,
@@ -855,9 +965,7 @@ class IdentityService:
             rows = self._sessions.list(
                 uow, workspace_id=workspace_id, status=SESSION_STATUS_ACTIVE
             )
-        present = [
-            s for s in rows if session_is_present(s, now, self._presence_ttl)
-        ]
+        present = [s for s in rows if session_is_present(s, now, self._presence_ttl)]
         present.sort(key=lambda s: (s.agent_id, s.session_id))
         return [
             {

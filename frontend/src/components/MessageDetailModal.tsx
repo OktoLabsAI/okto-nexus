@@ -6,6 +6,7 @@
 import { X } from "lucide-react";
 import type { MessageRow } from "../api";
 import { Markdown } from "./Markdown";
+import { TraceChip } from "./TraceChip";
 
 const LANE_CHIP: Record<string, string> = {
   unread: "bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300",
@@ -29,9 +30,11 @@ function Meta({ label, value }: { label: string; value: string | null | undefine
 export function MessageDetail({
   message,
   onClose,
+  onOpenTrace,
 }: {
   message: MessageRow;
   onClose?: () => void;
+  onOpenTrace?: (traceId: string) => void;
 }) {
   const body = message.body ?? message.preview ?? "";
   return (
@@ -57,6 +60,7 @@ export function MessageDetail({
                 </span>
               ))
             )}
+            <TraceChip traceId={message.trace_id} onClick={onOpenTrace} />
           </div>
         </div>
         {onClose && (
@@ -80,6 +84,7 @@ export function MessageDetail({
           <Meta label="created_at" value={message.created_at} />
           <Meta label="workspace" value={message.workspace_id} />
           <Meta label="channel" value={message.channel_id} />
+          <Meta label="trace_id" value={message.trace_id} />
         </section>
 
         {/* Delivery lanes */}

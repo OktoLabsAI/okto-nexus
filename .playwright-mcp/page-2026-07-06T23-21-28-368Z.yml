@@ -1,0 +1,115 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - button "Collapse menu" [ref=e5] [cursor=pointer]:
+      - img [ref=e6]
+    - img "Okto Nexus" [ref=e9]
+    - generic [ref=e10]: / Graph
+    - generic [ref=e11]:
+      - combobox "Workspace scope" [ref=e12]:
+        - option "All workspaces" [selected]
+      - generic [ref=e13]: ● Connecting
+      - button "Refresh" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+      - button [ref=e19] [cursor=pointer]:
+        - img [ref=e20]
+        - img [ref=e21]
+  - dialog "Welcome to Okto Nexus" [ref=e23]:
+    - generic [ref=e24]:
+      - banner [ref=e25]:
+        - generic [ref=e26]: 01 / 04 · Onboarding
+        - generic [ref=e27]:
+          - button "Switch to dark theme" [ref=e28] [cursor=pointer]:
+            - img [ref=e29]
+          - button "Close onboarding" [ref=e31] [cursor=pointer]:
+            - img [ref=e32]
+      - main [ref=e35]:
+        - generic [ref=e36]:
+          - img "Okto Nexus" [ref=e37]
+          - generic [ref=e38]: Okto Labs · Coordination bus
+          - heading "Welcome to Okto Nexus" [level=1] [ref=e39]
+          - paragraph [ref=e40]: The local bus where your agents discover each other, exchange messages, hand off work — and you watch it all happen live.
+          - generic [ref=e41]: Register → Connect → Coordinate → Observe
+      - contentinfo [ref=e43]:
+        - tablist "Slide indicator" [ref=e44]:
+          - tab "Slide 1 (current)" [selected] [ref=e45]
+          - tab "Slide 2" [ref=e46]
+          - tab "Slide 3" [ref=e47]
+          - tab "Slide 4" [ref=e48]
+        - button "Next →" [ref=e50] [cursor=pointer]
+      - status [ref=e51]
+  - generic [ref=e52]:
+    - complementary [ref=e53]:
+      - navigation [ref=e55]:
+        - heading "Observability" [level=3] [ref=e56]
+        - list [ref=e57]:
+          - listitem [ref=e58]:
+            - button "Graph" [ref=e59] [cursor=pointer]:
+              - img [ref=e60]
+              - generic [ref=e67]: Graph
+          - listitem [ref=e68]:
+            - button "Messages" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e73]: Messages
+          - listitem [ref=e74]:
+            - button "Handoffs" [ref=e75] [cursor=pointer]:
+              - img [ref=e76]
+              - generic [ref=e78]: Handoffs
+          - listitem [ref=e79]:
+            - button "Events" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e83]: Events
+          - listitem [ref=e84]:
+            - button "Memory" [ref=e85] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e94]: Memory
+          - listitem [ref=e95]:
+            - button "Workspaces" [ref=e96] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e99]: Workspaces
+          - listitem [ref=e100]:
+            - button "Agents" [ref=e101] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e107]: Agents
+          - listitem [ref=e108]:
+            - button "Registry" [ref=e109] [cursor=pointer]:
+              - img [ref=e110]
+              - generic [ref=e114]: Registry
+          - listitem [ref=e115]:
+            - button "Policies" [ref=e116] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e119]: Policies
+          - listitem [ref=e120]:
+            - button "Guardrails" [ref=e121] [cursor=pointer]:
+              - img [ref=e122]
+              - generic [ref=e124]: Guardrails
+          - listitem [ref=e125]:
+            - button "Communication" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - generic [ref=e129]: Communication
+          - listitem [ref=e130]:
+            - button "Approvals" [ref=e131] [cursor=pointer]:
+              - img [ref=e132]
+              - generic [ref=e135]: Approvals
+    - main [ref=e136]:
+      - generic [ref=e140]:
+        - generic [ref=e141]:
+          - generic [ref=e142]: How to read this graph
+          - button "✕" [ref=e143] [cursor=pointer]
+        - generic [ref=e144]: ● present · heartbeat < 1 min
+        - generic [ref=e145]: ● stale · silent for 1–30 min
+        - generic [ref=e146]: ● offline · no active session
+        - generic [ref=e147]: → in-flight N ✉ · pulled, processing (no ack yet)
+        - generic [ref=e148]: "⇢ inbox N ⌛ · dashed: delivered, awaiting pull"
+        - generic [ref=e149]: → completed flow · grey fades light→dark over 15 min / 1 h / 4 h, then disappears
+        - generic [ref=e150]: ■ handoff aberto · aguarda claim
+        - generic [ref=e151]: card header · agent color (auto by identity unless set)
+        - generic [ref=e153]:
+          - generic [ref=e154]:
+            - img [ref=e155]
+            - text: "N"
+          - text: pending inbox ·
+          - generic [ref=e158]:
+            - img [ref=e159]
+            - text: "N"
+          - text: open handoffs · hidden at 0
+        - generic [ref=e162]: Click any element to inspect it.

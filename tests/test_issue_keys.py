@@ -24,9 +24,7 @@ def test_issue_keys_is_additive_and_idempotent(tmp_path):
         deps.repos.agents.upsert(uow, agent_id="v1-bravo")
         deps.repos.agents.upsert(uow, agent_id="keyed")
         pre_existing = deps.repos.agents
-        pre_existing.set_key_hash(
-            uow, agent_id="keyed", api_key_hash="f" * 64
-        )
+        pre_existing.set_key_hash(uow, agent_id="keyed", api_key_hash="f" * 64)
 
     out = io.StringIO()
     code = run_admin(
@@ -37,8 +35,10 @@ def test_issue_keys_is_additive_and_idempotent(tmp_path):
     )
     assert code == 0
     report = json.loads(out.getvalue())
-    assert report["issued"] == 2
-    assert set(report["keys"]) == {"v1-alpha", "v1-bravo"}
+    # 3 = the two V1 agents + the bootstrap-seeded "operator" (spec 2948b2a2:
+    # seeded keyless; issue-keys is exactly the additive backfill for that).
+    assert report["issued"] == 3
+    assert set(report["keys"]) == {"v1-alpha", "v1-bravo", "operator"}
     for plaintext in report["keys"].values():
         assert is_well_formed_api_key(plaintext)
 

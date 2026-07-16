@@ -16,6 +16,14 @@ normalised to ``_``; ``kind`` is accepted as an alias of ``strategy``)::
     capability             requires ``capability`` - a non-empty string or a
                            non-empty list of non-empty names (any-of)
     role                   requires a non-empty ``role``
+    tag                    requires a NON-EMPTY ``selector`` - either the flat
+                           tag map (``{key: [value, ...]}``) or the rich
+                           match-expression list (``[{key, operator, values}]``
+                           with In | NotIn | Exists | DoesNotExist) - FORM
+                           validated by :mod:`okto_nexus.domain.tag_selector`;
+                           catalog EXISTENCE is the application layer's gate.
+                           An empty selector is rejected (it would silently
+                           be a broadcast)
     broadcast              no required fields
     mixed                  requires a NON-EMPTY ``rules`` list (``targets`` is
                            accepted as an alias) of sub-targets; each sub-rule
@@ -36,10 +44,11 @@ canonical catalogue code) and a prescriptive message.
 from __future__ import annotations
 
 import json
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterator, Mapping, Sequence
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .tag_selector import validate_selector
 
 __all__ = [
     "VALID_STRATEGIES",
@@ -47,6 +56,7 @@ __all__ = [
     "normalize_strategy",
     "target_strategy",
     "validate_target",
+    "iter_target_selectors",
     "is_direct_target",
 ]
 
@@ -56,6 +66,7 @@ VALID_STRATEGIES: frozenset[str] = frozenset(
         "direct",
         "capability",
         "role",
+        "tag",
         "broadcast",
         "mixed",
         "direct_with_fallback",
@@ -188,8 +199,10 @@ def _validate_capability(resolved: Mapping[str, Any]) -> Any:
 
 def _validate_mixed_rules(resolved: Mapping[str, Any]) -> list[dict[str, Any]]:
     rules = resolved.get("rules", resolved.get("targets"))
-    if rules is None or isinstance(rules, (str, bytes)) or not isinstance(
-        rules, Sequence
+    if (
+        rules is None
+        or isinstance(rules, (str, bytes))
+        or not isinstance(rules, Sequence)
     ):
         raise OktoNexusError(
             ErrorCode.VALIDATION_ERROR,
@@ -226,6 +239,31 @@ def _validate_mixed_rules(resolved: Mapping[str, Any]) -> list[dict[str, Any]]:
             )
         validated.append(sub)
     return validated
+
+
+def _validate_tag_selector(
+    resolved: Mapping[str, Any],
+) -> dict[str, list[str]] | list[dict[str, Any]]:
+    """Validate a ``tag`` target's ``selector`` in FORM (existence is the
+    application layer's catalog gate). Both selector forms are accepted -
+    flat map and rich match-expression list."""
+    if resolved.get("selector") is None:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "Target strategy 'tag' requires field 'selector'.",
+            {"strategy": "tag", "missing_field": "selector"},
+        )
+    selector = validate_selector(resolved["selector"])
+    if selector is None:
+        # {} normalises to allow-all - which would silently be a broadcast.
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "tag target requires a NON-EMPTY selector (an empty selector "
+            "would match every agent - use a bare "
+            '{"strategy": "broadcast"} if you mean everyone).',
+            {"strategy": "tag"},
+        )
+    return selector
 
 
 def _validate_fallback_seconds(resolved: Mapping[str, Any]) -> Any:
@@ -266,6 +304,8 @@ def validate_target(target: Any, *, required: bool = False) -> dict[str, Any] | 
         _require(resolved, "role", strategy)
     elif strategy == "capability":
         out["capability"] = _validate_capability(resolved)
+    elif strategy == "tag":
+        out["selector"] = _validate_tag_selector(resolved)
     elif strategy == "mixed":
         out.pop("targets", None)
         out["rules"] = _validate_mixed_rules(resolved)
@@ -279,6 +319,59 @@ def validate_target(target: Any, *, required: bool = False) -> dict[str, Any] | 
             out["fallback"] = validate_target(fallback)
     # strategy == "broadcast": no required fields.
     return out
+
+
+def iter_target_selectors(resolved: Any) -> Iterator[Any]:
+    """Yield every ``tag`` selector inside a VALIDATED target descriptor.
+
+    Walks nested ``mixed`` rules and an explicit ``direct_with_fallback``
+    ``fallback``, so a write path can run the catalog EXISTENCE gate over the
+    whole tree before routing anything. Selectors are yielded in whichever
+    form they carry (flat map or rich expression list). Expects the
+    normalised output of :func:`validate_target`; anything else yields
+    nothing (never raises).
+    """
+    if not isinstance(resolved, Mapping):
+        return
+    strategy = resolved.get("strategy")
+    if strategy == "tag":
+        selector = resolved.get("selector")
+        if isinstance(selector, Mapping) or (
+            isinstance(selector, Sequence) and not isinstance(selector, (str, bytes))
+        ):
+            yield selector
+    elif strategy == "mixed":
+        for rule in resolved.get("rules") or []:
+            yield from iter_target_selectors(rule)
+    elif strategy == "direct_with_fallback":
+        yield from iter_target_selectors(resolved.get("fallback"))
+
+
+def iter_target_capabilities(resolved: Any) -> Iterator[str]:
+    """Yield every capability NAME inside a VALIDATED target descriptor.
+
+    Walks the ``capability`` strategy (single string or any-of list), nested
+    ``mixed`` sub-rules and an explicit ``direct_with_fallback`` ``fallback``,
+    so a write path can run the catalog EXISTENCE gate over the whole tree
+    before routing anything (migration 014). Expects the normalised output of
+    :func:`validate_target`; anything else yields nothing (never raises).
+    """
+    if not isinstance(resolved, Mapping):
+        return
+    strategy = resolved.get("strategy")
+    if strategy == "capability":
+        wanted = resolved.get("capability")
+        if isinstance(wanted, str):
+            yield wanted
+        elif isinstance(wanted, Sequence) and not isinstance(wanted, (str, bytes)):
+            for name in wanted:
+                if isinstance(name, str):
+                    yield name
+    elif strategy == "mixed":
+        for rule in resolved.get("rules") or []:
+            yield from iter_target_capabilities(rule)
+    elif strategy == "direct_with_fallback":
+        yield from iter_target_capabilities(resolved.get("fallback"))
 
 
 def is_direct_target(target: Any, agent_id: str) -> bool:

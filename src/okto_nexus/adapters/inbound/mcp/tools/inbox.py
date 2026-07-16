@@ -75,7 +75,7 @@ _P_INCLUDE_BODIES = (
     "inbox_pull is the way to consume a message)."
 )
 _P_STATUS_MESSAGE_ID = "The message_id from message_create whose per-recipient delivery states you want to track. REQUIRED."
-_P_PROFILE = "Response size profile: one of default/summary/full (optional; default=keep all fields minus dead ones; summary=minimal+follow_up; full=raw). Trims per-call tokens."
+_P_PROFILE = "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens)."
 #: INVARIANT: the sensitive inbox verbs (pull/ack/extend) share the trust
 #: wording with message_create/handoff_* - one credential story bus-wide.
 _P_SESSION_TRUST = (
@@ -146,7 +146,7 @@ def register(server: Any, deps: Any) -> None:
         ] = None,
         profile: Annotated[str | None, Field(description=_P_PROFILE)] = None,
     ) -> dict[str, Any]:
-        """Take your unread messages into in-flight and return them WITH their body (index-free; no cursor). At-least-once: unacked pulls are redelivered. Emits message.delivered to senders."""
+        """Take your unread messages into in-flight and return them WITH body (index-free; no cursor). At-least-once: unacked pulls are redelivered. Docs: okto-nexus://reference/tool-docs/inbox."""
         prof = parse_profile(profile)
         trust.require(
             tool="inbox_pull",
@@ -171,7 +171,7 @@ def register(server: Any, deps: Any) -> None:
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
     ) -> dict[str, Any]:
-        """Acknowledge messages into history (read). Returns {acknowledged, read_message_ids}. Emits a message.read receipt to each sender. Full docs: okto-nexus://reference/tool-docs/inbox."""
+        """Acknowledge messages into history (read). Returns {acknowledged, read_message_ids}. Emits a message.read receipt to each sender."""
         trust.require(
             tool="inbox_ack",
             agent_id=agent_id,
@@ -259,5 +259,5 @@ def register(server: Any, deps: Any) -> None:
     def message_status(
         message_id: Annotated[str, Field(description=_P_STATUS_MESSAGE_ID)],
     ) -> dict[str, Any]:
-        """Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY. Docs: okto-nexus://reference/tool-docs/inbox."""
+        """Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY."""
         return service.message_status(message_id=message_id)

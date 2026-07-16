@@ -184,7 +184,7 @@ def test_search_returns_cosine_ranked_items(stub_client):
     target = sent[0]
     # The stored embed text is "subject\nbody"; querying it back yields cosine
     # 1.0 with that message, so it MUST rank first.
-    query = f"s0\nalpha report on widgets"
+    query = "s0\nalpha report on widgets"
     data = client.get(
         "/api/v1/messages/search", params={"q": query, "k": 3}
     ).json()["data"]

@@ -153,7 +153,8 @@ class SqliteMessageRepo(_ClockBacked):
 
     _COLUMNS = (
         "message_id, workspace_id, channel_id, from_agent_id, from_session_id, "
-        "target, subject, body, artifacts, parent_message_id, created_at"
+        "target, subject, body, artifacts, parent_message_id, trace_id, "
+        "created_at"
     )
 
     def create(
@@ -170,6 +171,7 @@ class SqliteMessageRepo(_ClockBacked):
         body: str | None = None,
         artifacts: Sequence[Any] | None = None,
         parent_message_id: str | None = None,
+        trace_id: str | None = None,
         created_at: str | None = None,
     ) -> Message:
         now = created_at or self._now()
@@ -179,8 +181,8 @@ class SqliteMessageRepo(_ClockBacked):
                 INSERT INTO messages
                     (message_id, workspace_id, channel_id, from_agent_id,
                      from_session_id, target, subject, body, artifacts,
-                     parent_message_id, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     parent_message_id, trace_id, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     message_id,
@@ -193,6 +195,7 @@ class SqliteMessageRepo(_ClockBacked):
                     body,
                     _dumps_list(artifacts),
                     parent_message_id,
+                    trace_id,
                     now,
                 ),
             )
@@ -221,9 +224,7 @@ class SqliteMessageRepo(_ClockBacked):
             raise _db_error("reading message", exc) from exc
         return self._row_to_message(row) if row is not None else None
 
-    def count_since(
-        self, uow: UnitOfWork, *, from_agent_id: str, since: str
-    ) -> int:
+    def count_since(self, uow: UnitOfWork, *, from_agent_id: str, since: str) -> int:
         """Count messages sent by the agent at/after ``since`` (GLOBAL).
 
         Canonical fixed-width timestamps make the lexicographic ``>=``
@@ -361,6 +362,7 @@ class SqliteMessageRepo(_ClockBacked):
             body=row["body"],
             artifacts=_loads_list(row["artifacts"]),
             parent_message_id=row["parent_message_id"],
+            trace_id=row["trace_id"],
         )
 
 
@@ -386,9 +388,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
 
     # An in-flight row whose lease elapsed at :now - the read-time projection
     # shows/counts it as 'unread' (redeliverable). Parameters: (delivered, now).
-    _EXPIRED = (
-        "(status = ? AND lease_expires_at IS NOT NULL AND lease_expires_at < ?)"
-    )
+    _EXPIRED = "(status = ? AND lease_expires_at IS NOT NULL AND lease_expires_at < ?)"
 
     def create(
         self,
@@ -455,12 +455,18 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                 RETURNING rowid, {self._COLUMNS}
                 """,
                 (
-                    int(max_attempts), DELIVERY_DELIVERED, DELIVERY_PARKED,
                     int(max_attempts),
-                    int(max_attempts), now,
-                    int(max_attempts), lease_expires_at,
+                    DELIVERY_DELIVERED,
+                    DELIVERY_PARKED,
+                    int(max_attempts),
+                    int(max_attempts),
+                    now,
+                    int(max_attempts),
+                    lease_expires_at,
                     recipient_agent_id,
-                    DELIVERY_UNREAD, DELIVERY_DELIVERED, now,
+                    DELIVERY_UNREAD,
+                    DELIVERY_DELIVERED,
+                    now,
                     int(limit),
                 ),
             ).fetchall()
@@ -526,8 +532,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                 f"AND lease_expires_at IS NOT NULL AND lease_expires_at >= ? "
                 f"AND message_id IN ({placeholders}) "
                 f"RETURNING message_id",
-                (lease_expires_at, recipient_agent_id, DELIVERY_DELIVERED,
-                 now, *ids),
+                (lease_expires_at, recipient_agent_id, DELIVERY_DELIVERED, now, *ids),
             ).fetchall()
         except sqlite3.Error as exc:
             raise _db_error("extending inbox leases", exc) from exc
@@ -563,12 +568,19 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                 f"IN ({placeholders}) "
                 f"ORDER BY rowid ASC LIMIT ?",
                 (
-                    DELIVERY_DELIVERED, now, DELIVERY_UNREAD,
-                    DELIVERY_DELIVERED, now,
-                    DELIVERY_DELIVERED, now,
+                    DELIVERY_DELIVERED,
+                    now,
+                    DELIVERY_UNREAD,
+                    DELIVERY_DELIVERED,
+                    now,
+                    DELIVERY_DELIVERED,
+                    now,
                     recipient_agent_id,
-                    DELIVERY_DELIVERED, now, DELIVERY_UNREAD,
-                    *sts, int(limit),
+                    DELIVERY_DELIVERED,
+                    now,
+                    DELIVERY_UNREAD,
+                    *sts,
+                    int(limit),
                 ),
             ).fetchall()
         except sqlite3.Error as exc:
@@ -677,9 +689,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             raise _db_error("counting prunable deliveries", exc) from exc
         return int(row[0])
 
-    def prune_read_before(
-        self, uow: UnitOfWork, *, cutoff: str, limit: int
-    ) -> int:
+    def prune_read_before(self, uow: UnitOfWork, *, cutoff: str, limit: int) -> int:
         """Delete up to ``limit`` ``read`` rows acknowledged before ``cutoff``.
 
         The ONLY delete path on ``message_deliveries``, used exclusively by the

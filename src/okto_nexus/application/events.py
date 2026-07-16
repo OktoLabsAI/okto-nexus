@@ -49,9 +49,10 @@ from ..domain.events import (
 from ..domain.ids import resolve_workspace_id
 from ..domain.models import Event
 from ..domain.routing import RoutingAgent, can_agent_see_event
+from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .permissions import permission_set_for
-from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, UnitOfWork, Waiter
+from .ports import AgentRepo, Clock, ConnectionFactory, EventRepo, Waiter
 
 #: Default page size when ``limit`` is omitted (also clamped to ``max_limit``).
 DEFAULT_EVENT_LIMIT = 100
@@ -184,6 +185,43 @@ class EventService:
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
+        return self._event_get_prepared(
+            workspace_id, agent_id, stream, cursor, limit, filters
+        )
+
+    def event_get_for_workspace(
+        self,
+        *,
+        workspace_id: Any,
+        agent_id: Any,
+        stream: Any,
+        cursor: Any = None,
+        limit: Any = None,
+        filters: Any = None,
+    ) -> dict[str, Any]:
+        """``event_get`` variant for already-authenticated workspace scopes.
+
+        Used by the EPT data plane: the token row supplies ``workspace_id`` and
+        the client cannot override it with a ``project_root``.
+        """
+        workspace_id, agent_id, stream, cursor, limit, filters = (
+            self._prepare_workspace_id(
+                workspace_id, agent_id, stream, cursor, limit, filters
+            )
+        )
+        return self._event_get_prepared(
+            workspace_id, agent_id, stream, cursor, limit, filters
+        )
+
+    def _event_get_prepared(
+        self,
+        workspace_id: str,
+        agent_id: str,
+        stream: str,
+        cursor: int,
+        limit: int,
+        filters: dict[str, str],
+    ) -> dict[str, Any]:
         self._require_read_permission(agent_id)
         self._touch_agent(agent_id)
         page = self._read_page(workspace_id, agent_id, stream, cursor, limit, filters)
@@ -214,6 +252,53 @@ class EventService:
         workspace_id, agent_id, stream, cursor, limit, filters = self._prepare(
             project_root, agent_id, stream, cursor, limit, filters
         )
+        return self._event_wait_prepared(
+            workspace_id,
+            agent_id,
+            stream,
+            cursor,
+            limit,
+            filters,
+            timeout_seconds,
+        )
+
+    def event_wait_for_workspace(
+        self,
+        *,
+        workspace_id: Any,
+        agent_id: Any,
+        stream: Any,
+        cursor: Any = None,
+        limit: Any = None,
+        filters: Any = None,
+        timeout_seconds: Any = None,
+    ) -> dict[str, Any]:
+        """``event_wait`` variant for EPT/server-derived workspace scopes."""
+        workspace_id, agent_id, stream, cursor, limit, filters = (
+            self._prepare_workspace_id(
+                workspace_id, agent_id, stream, cursor, limit, filters
+            )
+        )
+        return self._event_wait_prepared(
+            workspace_id,
+            agent_id,
+            stream,
+            cursor,
+            limit,
+            filters,
+            timeout_seconds,
+        )
+
+    def _event_wait_prepared(
+        self,
+        workspace_id: str,
+        agent_id: str,
+        stream: str,
+        cursor: int,
+        limit: int,
+        filters: dict[str, str],
+        timeout_seconds: Any,
+    ) -> dict[str, Any]:
         self._require_read_permission(agent_id)
         timeout = self._resolve_timeout(timeout_seconds)
         # Touch BEFORE the change-token snapshot: the presence stamp is this
@@ -270,6 +355,21 @@ class EventService:
         workspace_id, agent_id, stream, _, _, _ = self._prepare(
             project_root, agent_id, stream, None, None, None
         )
+        return self.latest_cursor_for_workspace(
+            workspace_id=workspace_id, agent_id=agent_id, stream=stream
+        )
+
+    def latest_cursor_for_workspace(
+        self,
+        *,
+        workspace_id: Any,
+        agent_id: Any,
+        stream: Any,
+    ) -> int:
+        """Resolve the stream end for an already-authenticated workspace."""
+        workspace_id, agent_id, stream, _, _, _ = self._prepare_workspace_id(
+            workspace_id, agent_id, stream, None, None, None
+        )
         self._require_read_permission(agent_id)
         self._touch_agent(agent_id)
         with self._cf.unit_of_work(write=False) as uow:
@@ -317,6 +417,35 @@ class EventService:
         # Server-side workspace resolution: sha256(realpath(project_root)).
         # Raises WORKSPACE_UNRESOLVED when realpath cannot be resolved.
         workspace_id = resolve_workspace_id(project_root)
+        return self._prepare_workspace_id(
+            workspace_id, agent_id, stream, cursor, limit, filters
+        )
+
+    def _prepare_workspace_id(
+        self,
+        workspace_id: Any,
+        agent_id: Any,
+        stream: Any,
+        cursor: Any,
+        limit: Any,
+        filters: Any,
+    ) -> tuple[str, str, str, int, int, dict[str, str]]:
+        if not _is_nonempty_str(workspace_id):
+            raise OktoNexusError(
+                ErrorCode.WORKSPACE_REQUIRED,
+                "workspace_id is required.",
+                {"workspace_id": workspace_id},
+            )
+        stream = validate_stream(stream)
+        if not _is_nonempty_str(agent_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "agent_id is required (used to enforce event visibility).",
+                {"agent_id": agent_id},
+            )
+        cursor = normalize_cursor(cursor)
+        limit = clamp_limit(limit, default=self._default_limit, maximum=self._max_limit)
+        filters = normalize_filters(filters)
         return workspace_id, agent_id, stream, cursor, limit, filters
 
     def _resolve_timeout(self, timeout_seconds: Any) -> int:
@@ -360,10 +489,8 @@ class EventService:
         Observer-restricted agent may watch, but an agent whose events.read
         flag is off gets the canonical PERMISSION_DENIED envelope.
         """
-        with self._cf.unit_of_work() as uow:
-            permission_set_for(self._agents, uow, agent_id).require(
-                "events", "read"
-            )
+        with self._cf.unit_of_work(write=False) as uow:
+            permission_set_for(self._agents, uow, agent_id).require("events", "read")
 
     def _touch_agent(self, agent_id: str) -> None:
         """Best-effort stamp of the caller's ``last_seen_at`` (own uow).
@@ -411,8 +538,17 @@ class EventService:
         has_more = False
         batch_size = limit + 1
 
-        with self._cf.unit_of_work() as uow:
-            routing_agent = self._build_routing_agent(uow, agent_id, workspace_id)
+        with self._cf.unit_of_work(write=False) as uow:
+            # ONE batched agent lookup per page (F2): the registry is read
+            # once and reused for the viewer's own profile and for every
+            # actor-reachability check of this scan - never per event.
+            registry: dict[str, Any] | None = None
+            if self._agents is not None:
+                registry = {a.agent_id: a for a in self._agents.list(uow)}
+            viewer_profile = registry.get(agent_id) if registry is not None else None
+            routing_agent = self._build_routing_agent(
+                viewer_profile, agent_id, workspace_id
+            )
             while True:
                 batch = self._events.list_after(
                     uow,
@@ -433,6 +569,11 @@ class EventService:
                     if not self._is_visible(routing_agent, event):
                         next_cursor = event.event_id
                         continue
+                    if not self._actor_reachable(
+                        viewer_profile, agent_id, event, registry
+                    ):
+                        next_cursor = event.event_id
+                        continue
                     if len(results) < limit:
                         results.append(event)
                         next_cursor = event.event_id
@@ -448,28 +589,48 @@ class EventService:
         return _Page(events=results, next_cursor=next_cursor, has_more=has_more)
 
     def _build_routing_agent(
-        self, uow: UnitOfWork, agent_id: str, workspace_id: str
+        self, profile: Any, agent_id: str, workspace_id: str
     ) -> RoutingAgent:
         """Construct the routing view of the caller for visibility decisions.
 
-        When an :class:`AgentRepo` is wired, the caller's ``role`` and
-        ``capabilities`` are loaded so role/capability-targeted events resolve
-        correctly; otherwise a minimal view (id + workspace) is used, which
-        still resolves ``public`` and ``direct`` targeting.
+        ``profile`` is the caller's registry row from the page's single
+        batched lookup (or ``None`` when unregistered / no repo is wired);
+        its ``role``, ``capabilities`` and ``tags`` are carried over so role-,
+        capability- and tag-targeted events resolve correctly. A minimal view
+        (id + workspace) still resolves ``public`` and ``direct`` targeting.
         """
-        role: str | None = None
-        capabilities: Any = None
-        if self._agents is not None:
-            agent = self._agents.get(uow, agent_id)
-            if agent is not None:
-                role = agent.role
-                capabilities = agent.capabilities
         return RoutingAgent(
             agent_id=agent_id,
             workspace_id=workspace_id,
-            role=role,
-            capabilities=capabilities,
+            role=getattr(profile, "role", None),
+            capabilities=getattr(profile, "capabilities", None),
+            tags=getattr(profile, "tags", None),
         )
+
+    @staticmethod
+    def _actor_reachable(
+        viewer_profile: Any, viewer_id: str, event: Event, registry: Any
+    ) -> bool:
+        """Whether the event's ACTOR is reachable from the viewer (F2).
+
+        Composes WITH :func:`can_agent_see_event` - it never replaces it
+        (visibility != claimability). Carve-outs: the viewer's OWN events are
+        never hidden (ADR 0001) and system events without an actor always
+        pass. ``registry`` is the page's single batched agent lookup;
+        ``None`` (no agent repo wired) means unrestricted. The operator feed
+        (SSE ``/api/v1/stream`` + REST ``/api/v1/events``) never routes
+        through here.
+        """
+        if registry is None:
+            return True
+        actor = getattr(event, "actor_agent_id", None)
+        if actor is None or str(actor) == str(viewer_id):
+            return True
+        viewer_view = (
+            viewer_profile if viewer_profile is not None else {"agent_id": viewer_id}
+        )
+        actor_profile = registry.get(str(actor)) or {"agent_id": str(actor)}
+        return reachable(viewer_view, actor_profile)
 
     @staticmethod
     def _is_visible(routing_agent: RoutingAgent, event: Event) -> bool:

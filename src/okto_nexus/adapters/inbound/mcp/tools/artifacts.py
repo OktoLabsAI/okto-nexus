@@ -22,23 +22,31 @@ from pydantic import Field
 
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
+from okto_nexus.adapters.outbound.sqlite.governance_repo import (
+    SqliteGovernanceRepo,
+)
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteWorkspaceRepo
+from okto_nexus.adapters.outbound.sqlite.policy_repo import (
+    SqliteAgentPolicyBindingRepo,
+    SqlitePolicyRepo,
+)
 from okto_nexus.application.artifacts import ArtifactService
+from okto_nexus.application.governance import GovernanceService
 from okto_nexus.envelope import tool_envelope
+
+from ...http.identity_ctx import get_authenticated_agent
+from ._guardrails import build_guardrail_service
 
 #: Reused parameter descriptions (kept DRY across the artifact tools).
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
-_P_ROOT = "Absolute path to the project; the server derives workspace_id = sha256(realpath)."
-_P_ARTIFACT_TYPE = "Artifact classification - one of: file, text, json, markdown. REQUIRED. json content is validated as well-formed; inline-vs-reference is decided by content-vs-path."
+_P_ROOT = "Absolute path to the project (defines the workspace scope)."
+_P_ARTIFACT_TYPE = "Artifact classification - one of: file, text, json, markdown. REQUIRED."
 _P_NAME = "Human-friendly name/label for the artifact (optional)."
-_P_PATH = "Filesystem path to register by REFERENCE (must stay within the workspace root; only path + metadata stored, never bytes). Provide this OR content - at least one REQUIRED."
+_P_PATH = "Filesystem path to register by REFERENCE (must stay within the workspace root). Provide this OR content - at least one REQUIRED."
 _P_CONTENT = "Inline UTF-8 content (bounded by max_inline_bytes; json must be well-formed). Provide this OR path - at least one REQUIRED."
 _P_METADATA = "Free-form JSON object stored with the artifact (optional)."
 _P_ARTIFACT_ID = "The artifact_id to retrieve. REQUIRED."
-
-
-from ...http.identity_ctx import get_authenticated_agent
 
 
 def build_service(deps: Any) -> ArtifactService:
@@ -55,6 +63,27 @@ def build_service(deps: Any) -> ArtifactService:
         repos.workspaces = SqliteWorkspaceRepo(deps.clock)
     if getattr(repos, "files", None) is None:
         repos.files = WorkspaceFileStore()
+    if getattr(repos, "governance", None) is None:
+        repos.governance = SqliteGovernanceRepo(deps.clock)
+    if getattr(repos, "policies", None) is None:
+        repos.policies = SqlitePolicyRepo(deps.clock)
+    if getattr(repos, "policy_bindings", None) is None:
+        repos.policy_bindings = SqliteAgentPolicyBindingRepo(deps.clock)
+    guardrails = build_guardrail_service(deps)
+    # Policy enforcement (spec 80624c1a): per-slice service composing the actor's
+    # attached policies; always-on and binding-driven - an actor with no bindings
+    # passes untouched (BR2 zero-regression).
+    governance = GovernanceService(
+        connection_factory=deps.connection_factory,
+        governance=repos.governance,
+        clock=deps.clock,
+        config=deps.config,
+        agents=getattr(repos, "agents", None),
+        capability_catalog=getattr(repos, "capability_catalog", None),
+        event_emitter=getattr(deps, "event_emitter", None),
+        policies=repos.policies,
+        policy_bindings=repos.policy_bindings,
+    )
     return ArtifactService(
         connection_factory=deps.connection_factory,
         artifacts=repos.artifacts,
@@ -64,6 +93,8 @@ def build_service(deps: Any) -> ArtifactService:
         config=deps.config,
         agents=getattr(repos, "agents", None),
         event_emitter=getattr(deps, "event_emitter", None),
+        governance=governance,
+        guardrails=guardrails,
     )
 
 
@@ -81,7 +112,7 @@ def register(server: Any, deps: Any) -> None:
         content: Annotated[str | None, Field(description=_P_CONTENT)] = None,
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Register a file/text/json/markdown artifact in the resolved workspace."""
+        """Register a file/text/json/markdown artifact in the resolved workspace. Docs: okto-nexus://reference/tool-docs/artifacts."""
         caller = get_authenticated_agent()
         return service.artifact_put(
             project_root=project_root,
@@ -99,5 +130,10 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         artifact_id: Annotated[str, Field(description=_P_ARTIFACT_ID)],
     ) -> dict[str, Any]:
-        """Retrieve an artifact by id within the workspace resolved from project_root."""
-        return service.artifact_get(project_root=project_root, artifact_id=artifact_id)
+        """Retrieve an artifact by id within the workspace resolved from project_root. Reads are audience-scoped: a caller outside the frozen audience gets NOT_FOUND (indistinguishable from a missing id)."""
+        caller = get_authenticated_agent()
+        return service.artifact_get(
+            project_root=project_root,
+            artifact_id=artifact_id,
+            agent_id=caller.agent_id if caller is not None else None,
+        )

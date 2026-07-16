@@ -18,8 +18,10 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import time
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import anyio.to_thread
 from fastapi import FastAPI, Request, Response
@@ -27,11 +29,15 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from ....application.auth import AgentKeyAuthService
+from ....application.health import HealthService
 from ....application.observability import ObservabilityService
 from ....application.search import MessageSearchService
 from ....application.settings import SettingsService, detect_pinned_fields
+from ....application.telemetry.schema import EVENT_HTTP, EVENT_LIFECYCLE
 from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
+from ....domain.approvals import OPERATOR_AGENT_ID
+from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
 from ....errors import OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
@@ -56,11 +62,22 @@ PUBLIC_PATHS = frozenset(
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
-OPERATOR_AGENT_ID = "operator"
+# EPT data-plane endpoints. A well-formed ``nxsept_`` bearer skips permanent
+# API-key auth here and is validated inside the route against the poll-token
+# table. Everywhere else EPTs fail as ordinary unknown credentials.
+EPT_DATA_PATHS = frozenset(
+    {
+        "/api/v1/events",
+        "/api/v1/events/cursor",
+        "/api/v1/inbox/count",
+        "/api/v1/inbox/peek",
+    }
+)
 
 
 def ok(data: Any) -> JSONResponse:
     return JSONResponse({"ok": True, "data": data})
+
 
 def err(status: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(
@@ -82,8 +99,60 @@ def extract_api_key(request: Request) -> str | None:
     return None
 
 
+def extract_bearer(request: Request) -> str | None:
+    authorization = request.headers.get("authorization", "")
+    if authorization.lower().startswith("bearer "):
+        return authorization[7:].strip() or None
+    return None
+
+
 #: Hosts considered "same machine" for the operator convenience rule.
 _LOOPBACK_CLIENTS = frozenset({"127.0.0.1", "::1", "localhost"})
+
+
+def _url_host(value: str) -> str:
+    """Host of an Origin URL or a Host authority, lowercased, port stripped.
+
+    Accepts ``http://127.0.0.1:8202`` (an ``Origin``) and ``127.0.0.1:8202`` /
+    ``[::1]:8202`` (a ``Host``) alike; returns ``""`` for an opaque/``null``
+    origin, which is intentionally NOT a loopback name.
+    """
+    parsed = urlsplit(value if "//" in value else f"//{value}")
+    return (parsed.hostname or "").lower()
+
+
+def _loopback_trust_ok(request: Request) -> bool:
+    """CSRF / DNS-rebinding guard for the keyless same-machine trust path.
+
+    The loopback convenience must not become a browser-driven operator hijack:
+    a cross-site page (``fetch`` to 127.0.0.1) or a DNS-rebound domain would
+    otherwise inherit keyless-operator authority. Non-browser callers (curl,
+    agents, the test client) send neither ``Origin`` nor ``Sec-Fetch-Site`` and
+    pass untouched - they ARE the same-machine operators this path exists for.
+
+    * ``Origin``, when present, must be a loopback origin - browsers tag every
+      state-changing request with it, so this alone blocks cross-site CSRF and
+      any *mutating* DNS-rebinding attack.
+    * When ``Sec-Fetch-Site`` is present (Fetch-Metadata: a browser made the
+      request), the ``Host`` authority must be a loopback name too - this
+      closes *read-only* DNS-rebinding, where the browser omits ``Origin`` on a
+      same-origin GET yet still sends the attacker's domain as ``Host``. The
+      header is browser-controlled and cannot be stripped by an attacker page.
+
+    Residual (accepted): a browser predating Fetch-Metadata (Safari < 16.4,
+    2023) omits ``Sec-Fetch-Site``, so a same-origin GET under active
+    DNS-rebinding there still reads through. *Mutating* attacks stay blocked on
+    every browser by the ``Origin`` check, and the whole path assumes a
+    same-machine actor who already owns ``nexus.db`` - so this is a low-severity
+    read-only gap, not a privilege boundary.
+    """
+    origin = request.headers.get("origin")
+    if origin and _url_host(origin) not in _LOOPBACK_CLIENTS:
+        return False
+    if request.headers.get("sec-fetch-site") is not None:
+        if _url_host(request.headers.get("host", "")) not in _LOOPBACK_CLIENTS:
+            return False
+    return True
 
 
 class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
@@ -99,7 +168,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
     comes from a loopback client, the REST/dashboard surfaces open WITHOUT a
     key - whoever sits on this machine already owns nexus.db on disk. The
     ``/mcp`` surface is exempt from this rule: an MCP connection IS an agent
-    identity (D5), so it requires a key on every transport, always.
+    identity (D5), so it requires a key on every transport, always. The
+    same-machine opening is still fenced off from BROWSERS by
+    ``_loopback_trust_ok`` - a cross-origin or DNS-rebound page cannot ride it.
     """
 
     async def dispatch(self, request: Request, call_next) -> Response:
@@ -112,12 +183,42 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         is_mcp = request.url.path.startswith("/mcp")
+        bearer = extract_bearer(request)
+        bearer_is_poll_token = bool(bearer and bearer.startswith(POLL_TOKEN_PREFIX))
+        bearer_is_allowed_poll = (
+            request.method == "GET"
+            and path in EPT_DATA_PATHS
+            and bearer
+            and is_well_formed_poll_token(bearer)
+            and not request.query_params.get("api_key")
+            and not request.headers.get("x-api-key")
+        )
+        if bearer_is_poll_token and not bearer_is_allowed_poll:
+            return err(
+                401,
+                "AUTH_FAILED",
+                "Ephemeral poll tokens are read-only and are accepted only on "
+                "the monitor data-plane endpoints.",
+            )
+
         if (
             not is_mcp
             and getattr(request.app.state, "local_open", False)
             and request.client is not None
             and request.client.host in _LOOPBACK_CLIENTS
         ):
+            # Same-machine trust, but never for a cross-origin / DNS-rebound
+            # BROWSER request that merely rides the loopback socket (CSRF).
+            if not _loopback_trust_ok(request):
+                return err(
+                    403,
+                    "CROSS_ORIGIN_BLOCKED",
+                    "Refused a cross-origin or rebound-host request on the "
+                    "loopback trust path; authenticate with an api_key.",
+                )
+            return await call_next(request)
+
+        if bearer_is_allowed_poll:
             return await call_next(request)
 
         auth: AgentKeyAuthService = request.app.state.auth
@@ -142,6 +243,53 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         finally:
             current_agent.reset(token)
+
+
+class TelemetryMiddleware(BaseHTTPMiddleware):
+    """Record bounded HTTP/MCP request metadata when telemetry is enabled."""
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        telemetry = getattr(getattr(request.app.state, "deps", None), "telemetry", None)
+        if telemetry is None:
+            return await call_next(request)
+        path = request.url.path
+        if not (path.startswith("/api/v1") or path.startswith("/mcp")):
+            return await call_next(request)
+        started = time.perf_counter()
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            telemetry.record_event(
+                EVENT_HTTP,
+                {
+                    "method": request.method,
+                    "route_template": _route_template(request),
+                    "status_code": 500,
+                    "error_class": type(exc).__name__,
+                    "duration_ms": int((time.perf_counter() - started) * 1000),
+                },
+            )
+            raise
+        telemetry.record_event(
+            EVENT_HTTP,
+            {
+                "method": request.method,
+                "route_template": _route_template(request),
+                "status_code": response.status_code,
+                "duration_ms": int((time.perf_counter() - started) * 1000),
+            },
+        )
+        return response
+
+
+def _route_template(request: Request) -> str:
+    if request.url.path.startswith("/mcp"):
+        return "/mcp"
+    route = request.scope.get("route")
+    template = getattr(route, "path", None)
+    if isinstance(template, str) and template:
+        return template
+    return request.url.path
 
 
 def create_http_mcp_server(deps: Deps) -> Any:
@@ -170,7 +318,9 @@ def create_http_mcp_server(deps: Deps) -> Any:
     return server
 
 
-def ensure_operator_key(deps: Deps, auth: AgentKeyAuthService) -> tuple[str, str] | None:
+def ensure_operator_key(
+    deps: Deps, auth: AgentKeyAuthService
+) -> tuple[str, str] | None:
     """Cold-start bootstrap: guarantee at least one key exists.
 
     When NO agent holds a key yet (fresh install or a V1 store before
@@ -241,6 +391,17 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         clock=deps.clock,
         config=deps.config,
     )
+    # Coordination health (I7): the SAME service class the MCP tool builds,
+    # with the same collaborators - tool/REST payload parity by construction.
+    workspace_health = HealthService(
+        connection_factory=deps.connection_factory,
+        queries=observability_queries,
+        workspaces=deps.repos.workspaces,
+        agents=deps.repos.agents,
+        observability=observability,
+        clock=deps.clock,
+        config=deps.config,
+    )
 
     mcp_server = create_http_mcp_server(deps)
     mcp_app = mcp_server.streamable_http_app()
@@ -270,17 +431,43 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
         # FastAPI, so its session manager is driven from here (SDK-documented
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
         heartbeat_task: asyncio.Task | None = None
+        metrics_task: asyncio.Task | None = None
         if lock is not None:
+
             async def _beat() -> None:
                 while True:
                     await asyncio.sleep(HEARTBEAT_INTERVAL_SECONDS / 2)
                     lock.heartbeat()
 
             heartbeat_task = asyncio.create_task(_beat())
+        telemetry = getattr(deps, "telemetry", None)
+        if telemetry is not None:
+            telemetry.record_event(
+                EVENT_LIFECYCLE, {"action": "serve_start", "status": "ok"}
+            )
+        if (
+            telemetry is not None
+            and getattr(deps.config, "metrics_mode", "") == "anonymous_beacon"
+        ):
+
+            async def _publish_metrics() -> None:
+                while True:
+                    await asyncio.sleep(deps.config.metrics_publish_interval_seconds)
+                    await anyio.to_thread.run_sync(telemetry.publish_pending)
+
+            metrics_task = asyncio.create_task(_publish_metrics())
         try:
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            if telemetry is not None:
+                telemetry.record_event(
+                    EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}
+                )
+            if metrics_task is not None:
+                metrics_task.cancel()
+                with contextlib.suppress(asyncio.CancelledError):
+                    await metrics_task
             if heartbeat_task is not None:
                 heartbeat_task.cancel()
                 with contextlib.suppress(asyncio.CancelledError):
@@ -311,6 +498,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
             },
             status_code=500,
         )
+
     app.state.deps = deps
     app.state.auth = auth
     app.state.observability = observability
@@ -318,12 +506,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
     app.state.settings_service = settings_service
     app.state.workspace_analytics = workspace_analytics
     app.state.workspace_list = workspace_list
+    app.state.workspace_health = workspace_health
     app.state.sse_poll_seconds = 1.0  # TR7 fallback cadence (tests shrink it)
     app.state.sse_ping_seconds = 15.0
     # Same-machine trust for REST/dashboard; the serve CLI sets this to
     # False when bound beyond loopback (--host on the LAN -> key required).
     app.state.local_open = True
 
+    app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
 
     @app.get("/healthz")
@@ -343,9 +533,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
 
         assets_dir = static_dir / "assets"
         if assets_dir.is_dir():
-            app.mount(
-                "/assets", StaticFiles(directory=assets_dir), name="assets"
-            )
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
         logos_dir = static_dir / "logos"
         if logos_dir.is_dir():
             app.mount("/logos", StaticFiles(directory=logos_dir), name="logos")

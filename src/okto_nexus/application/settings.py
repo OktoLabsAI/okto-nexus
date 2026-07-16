@@ -17,6 +17,7 @@ from typing import Any
 
 from ..config import (
     EMBEDDING_MODES,
+    METRICS_MODES,
     MIN_RETENTION_MESSAGES_KEEP_DAYS,
     NexusConfig,
     TRUST_MODES,
@@ -36,6 +37,7 @@ class SettingSpec:
     maximum: int | None = None
     choices: tuple[str, ...] | None = None
     requires_restart: bool = False
+    group: str = "general"
 
 
 #: The dashboard-editable subset of NexusConfig. ``home_dir``/``db_path``
@@ -43,126 +45,260 @@ class SettingSpec:
 #: applied safely to a running process.
 SETTING_SPECS: tuple[SettingSpec, ...] = (
     SettingSpec(
-        "session_stale_ttl_seconds", "int",
+        "session_stale_ttl_seconds",
+        "int",
         "Seconds without a heartbeat before an active session shows as "
         "'stale' (amber on the graph). Too short causes false alarms; too "
         "long hides stuck agents.",
-        minimum=5, maximum=3600,
+        minimum=5,
+        maximum=3600,
     ),
     SettingSpec(
-        "presence_ttl_seconds", "int",
+        "presence_ttl_seconds",
+        "int",
         "Presence window (s): with a heartbeat older than this the agent "
         "drops out of the broadcast audience and shows offline on the dashboard.",
-        minimum=60, maximum=86400,
+        minimum=60,
+        maximum=86400,
     ),
     SettingSpec(
-        "session_reap_seconds", "int",
+        "session_reap_seconds",
+        "int",
         "Heartbeat age (s) past which abandoned sessions are closed "
         "automatically (opportunistic reaper).",
-        minimum=300, maximum=604800,
+        minimum=300,
+        maximum=604800,
     ),
     SettingSpec(
-        "handoff_lease_ttl_seconds", "int",
+        "handoff_lease_ttl_seconds",
+        "int",
         "Lease (s) of a claimed handoff: without completion within it, the "
         "claim expires and the work returns to the pool for another agent.",
-        minimum=30, maximum=86400,
+        minimum=30,
+        maximum=86400,
     ),
     SettingSpec(
-        "inbox_lease_ttl_seconds", "int",
+        "inbox_lease_ttl_seconds",
+        "int",
         "Lease (s) for messages pulled via inbox_pull: without an ack within "
         "it, the delivery returns to 'unread'.",
-        minimum=30, maximum=86400,
+        minimum=30,
+        maximum=86400,
     ),
     SettingSpec(
-        "max_wait_timeout_seconds", "int",
+        "max_wait_timeout_seconds",
+        "int",
         "Ceiling (s) for the timeout parameter of message_wait/event_wait "
         "(agent long polling).",
-        minimum=1, maximum=300,
+        minimum=1,
+        maximum=300,
     ),
     SettingSpec(
-        "poll_interval_ms", "int",
+        "poll_interval_ms",
+        "int",
         "Internal interval (ms) between checks in long-polling waits. Lower = "
         "more responsive, more SQLite read load.",
-        minimum=50, maximum=5000,
+        minimum=50,
+        maximum=5000,
     ),
     SettingSpec(
-        "busy_timeout_ms", "int",
+        "busy_timeout_ms",
+        "int",
         "PRAGMA busy_timeout (ms): how long a connection waits for SQLite "
         "locks before failing. Affects new connections.",
-        minimum=100, maximum=60000, requires_restart=True,
+        minimum=100,
+        maximum=60000,
+        requires_restart=True,
     ),
     SettingSpec(
-        "max_event_limit", "int",
+        "max_event_limit",
+        "int",
         "Maximum events returned per page in event_get/event_wait and the "
         "dashboard feed.",
-        minimum=10, maximum=10000,
+        minimum=10,
+        maximum=10000,
     ),
     SettingSpec(
-        "max_shared_md_events", "int",
+        "poll_token_ttl_seconds",
+        "int",
+        "TTL (s) for ephemeral poll tokens issued to remote monitor processes. "
+        "Shorter limits exposure if a background process leaks its bearer.",
+        minimum=60,
+        maximum=86400,
+    ),
+    SettingSpec(
+        "max_shared_md_events",
+        "int",
         "Ceiling of events rendered by shared_md_render (the workspace "
         "Markdown digest).",
-        minimum=10, maximum=10000,
+        minimum=10,
+        maximum=10000,
     ),
     SettingSpec(
-        "max_inline_bytes", "int",
+        "max_inline_bytes",
+        "int",
         "Maximum size (UTF-8 bytes) of inline content in messages and "
         "artifacts before artifact_put is required.",
-        minimum=1024, maximum=1048576,
+        minimum=1024,
+        maximum=1048576,
     ),
     SettingSpec(
-        "trust_mode", "enum",
+        "trust_mode",
+        "enum",
         "'open': session credentials optional but validated when supplied. "
         "'strict': sensitive verbs (message_create, handoff_*, inbox_*) "
         "require session_id + session_secret.",
         choices=TRUST_MODES,
     ),
     SettingSpec(
-        "retention_events_keep_days", "int",
+        "retention_events_keep_days",
+        "int",
         "Window (days) for the event log: prune removes events older than this.",
-        minimum=1, maximum=3650,
+        minimum=1,
+        maximum=3650,
     ),
     SettingSpec(
-        "retention_read_deliveries_keep_days", "int",
+        "retention_read_deliveries_keep_days",
+        "int",
         "Window (days) for READ deliveries. The unread/delivered/parked lanes "
         "are never pruned.",
-        minimum=1, maximum=3650,
+        minimum=1,
+        maximum=3650,
     ),
     SettingSpec(
-        "retention_closed_sessions_keep_days", "int",
+        "retention_closed_sessions_keep_days",
+        "int",
         "Window (days) for CLOSED sessions. Active/stale sessions are never pruned.",
-        minimum=1, maximum=3650,
+        minimum=1,
+        maximum=3650,
     ),
     SettingSpec(
-        "retention_messages_keep_days", "int",
+        "retention_messages_keep_days",
+        "int",
         "Window (days) for MESSAGES: prune removes messages older than this by "
         "PURE AGE, regardless of delivery status, taking their deliveries and "
         "embeddings with them. Hard minimum 7 (fail-closed).",
-        minimum=MIN_RETENTION_MESSAGES_KEEP_DAYS, maximum=3650,
+        minimum=MIN_RETENTION_MESSAGES_KEEP_DAYS,
+        maximum=3650,
     ),
     SettingSpec(
-        "embedding_mode", "enum",
+        "embedding_mode",
+        "enum",
         "Semantic search over message content: 'off' disables it (no embeddings; "
         "/messages/search answers EMBEDDINGS_UNAVAILABLE); 'stub' uses a "
         "zero-dependency deterministic provider; 'local' uses "
         "sentence-transformers (requires the [embeddings] extra). Takes effect "
         "after a restart.",
-        choices=EMBEDDING_MODES, requires_restart=True,
+        choices=EMBEDDING_MODES,
+        requires_restart=True,
     ),
     SettingSpec(
-        "auto_prune_on_start", "bool",
+        "metrics_mode",
+        "enum",
+        "Anonymous usage metrics: 'disabled' writes nothing, 'local_only' "
+        "keeps a local JSONL audit trail, and 'anonymous_beacon' publishes "
+        "bounded aggregate deltas to the configured beacon.",
+        choices=METRICS_MODES,
+        group="metrics",
+    ),
+    SettingSpec(
+        "metrics_retention_days",
+        "int",
+        "Retention window (days) for local metrics files. A value of 0 keeps "
+        "only currently pending local state once pruning is implemented.",
+        minimum=0,
+        maximum=3650,
+        group="metrics",
+    ),
+    SettingSpec(
+        "metrics_publish_interval_seconds",
+        "int",
+        "Background publish cadence (s) for anonymous metrics. Changing this "
+        "while serve is running takes effect after restart; the manual publish "
+        "endpoint is available immediately.",
+        minimum=60,
+        maximum=86400,
+        requires_restart=True,
+        group="metrics",
+    ),
+    SettingSpec(
+        "auto_prune_on_start",
+        "bool",
         "Run the retention prune automatically on every server boot.",
     ),
     SettingSpec(
-        "inbox_read_receipts", "bool",
+        "inbox_read_receipts",
+        "bool",
         "Deliver a read receipt to the sender's inbox when a recipient "
         "acknowledges its message (receipts never generate receipts). "
         "Turn off to keep inboxes receipt-free.",
     ),
     SettingSpec(
-        "expose_workspace_path", "bool",
+        "expose_workspace_path",
+        "bool",
         "Show each workspace's absolute project path (root_realpath) on the "
         "Workspaces screen and the /api/v1/workspaces API. Off (default) "
         "redacts the path (defense-in-depth); turn on to reveal it.",
+    ),
+    # ------------------------------------------------------------------ #
+    # Meta-harness feature flags (R-I0). All opt-in (default off). Most flags
+    # unlock behaviour inside consuming use-cases once those features ship.
+    # feature_memory is experimental and also controls dashboard/MCP surface
+    # exposure at bootstrap. Exposed read-only to agents via nexus_info.features.
+    # ------------------------------------------------------------------ #
+    SettingSpec(
+        "feature_trace",
+        "bool",
+        "Opt-in: trace-id propagation across messages and handoffs so "
+        "multi-agent trajectories can be reconstructed. No effect until "
+        "the consuming feature ships.",
+        group="features",
+    ),
+    SettingSpec(
+        "feature_hitl",
+        "bool",
+        "Opt-in: human-in-the-loop steering - operator pause, inject and "
+        "redirect over agent coordination. No effect until the consuming "
+        "feature ships.",
+        group="features",
+    ),
+    SettingSpec(
+        "feature_verification",
+        "bool",
+        "Opt-in: handoff verification - completion evidence is checked "
+        "before a handoff closes. No effect until the consuming feature "
+        "ships.",
+        group="features",
+    ),
+    SettingSpec(
+        "feature_dag",
+        "bool",
+        "Opt-in: handoff dependency graphs (depends_on) with "
+        "dependency-aware claiming. No effect until the consuming "
+        "feature ships.",
+        group="features",
+    ),
+    SettingSpec(
+        "feature_memory",
+        "bool",
+        "Experimental opt-in: shared memory primitives (memory_*) and the "
+        "dashboard Memory tab. MCP tool exposure is decided at server startup.",
+        group="features",
+        requires_restart=True,
+    ),
+    SettingSpec(
+        "feature_health",
+        "bool",
+        "Opt-in: coordination health reporting (windowed metrics over "
+        "bus activity). No effect until the consuming feature ships.",
+        group="features",
+    ),
+    SettingSpec(
+        "feature_replay",
+        "bool",
+        "Opt-in: replay/eval export of coordination history (NDJSON + "
+        "manifest). No effect until the consuming feature ships.",
+        group="features",
     ),
 )
 
@@ -274,6 +410,7 @@ class SettingsService:
                 {
                     "key": spec.key,
                     "type": spec.type,
+                    "group": spec.group,
                     "description": spec.description,
                     "value": current,
                     "default": getattr(defaults, spec.key),

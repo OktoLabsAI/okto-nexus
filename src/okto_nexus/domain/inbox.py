@@ -86,9 +86,7 @@ def _candidate_agent_id(candidate: Any) -> str | None:
     return None if value is None else str(value)
 
 
-def resolve_recipients(
-    target: Any, candidates: Any, now: Any = None
-) -> frozenset[str]:
+def resolve_recipients(target: Any, candidates: Any, now: Any = None) -> frozenset[str]:
     """Return the ``agent_id`` set among ``candidates`` that ``target`` reaches.
 
     Pure: applies the IMPORTED routing rule :func:`is_agent_eligible` to each
@@ -132,9 +130,10 @@ def requires_known_recipient(target: Any) -> bool:
 def requires_workspace_audience(target: Any) -> bool:
     """Whether ``target`` is delivered to the workspace's PARTICIPANTS (ADR S1).
 
-    ``True`` for a top-level ``broadcast`` or an absent target - a broadcast is
-    bounded to the sender's workspace (its present agents), never the whole bus.
-    ``False`` for ``direct`` / ``capability`` / ``role`` / ``mixed`` /
+    ``True`` for a top-level ``broadcast``, an absent target, or a top-level
+    ``tag`` selector - both fan out to the workspace's PRESENT agents (a tag
+    selector narrows the live audience; it never widens delivery to the whole
+    bus). ``False`` for ``direct`` / ``capability`` / ``role`` / ``mixed`` /
     ``direct_with_fallback``, which resolve against the GLOBAL agent registry.
     Propagates ``VALIDATION_ERROR`` for a malformed/unknown strategy.
 
@@ -144,7 +143,7 @@ def requires_workspace_audience(target: Any) -> bool:
     rejected up front by :func:`assert_deliverable_message_target`, so they never
     reach this function.
     """
-    return target_strategy(target) in (None, "broadcast")
+    return target_strategy(target) in (None, "broadcast", "tag")
 
 
 def _mixed_rules(target: Any) -> list[Any]:
