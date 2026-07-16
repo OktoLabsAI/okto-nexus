@@ -11,6 +11,20 @@ __pycache__/
 build/
 dist/
 
+# SQLite runtime databases and sidecars
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-shm
+*.sqlite3-wal
+
 # Spec dumps (not part of the codebase)
 _spec_full.json
 spec_full.txt
