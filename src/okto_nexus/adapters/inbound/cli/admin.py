@@ -1,17 +1,18 @@
 """``okto-nexus admin`` - operator maintenance subcommands.
 
-Currently one command, ``prune``: enforce the retention windows (events /
-read deliveries / closed sessions) against the shared store and print a JSON
-report. The store is append-mostly by design, so WITHOUT pruning ``nexus.db``
-grows without bound; this is the operator-facing counterpart of the
-``auto_prune_on_start`` opportunistic reaper.
+The maintenance surface covers retention, additive legacy-key issuance, and
+event-log replay export. Retention applies the configured windows (events /
+read deliveries / closed sessions / messages) against the shared store and
+prints a JSON report. The store is append-mostly by design, so WITHOUT pruning
+``nexus.db`` grows without bound; this is the operator-facing counterpart of
+the ``auto_prune_on_start`` opportunistic pass.
 
 Usage::
 
     okto-nexus admin prune --project-root <path> \
         [--dry-run] [--vacuum] \
         [--events-keep-days N] [--read-deliveries-keep-days N] \
-        [--closed-sessions-keep-days N]
+        [--closed-sessions-keep-days N] [--messages-keep-days N]
 
 Semantics worth knowing before running it:
 
@@ -20,10 +21,11 @@ Semantics worth knowing before running it:
   ``--project-root`` anchors the call to a real workspace exactly like every
   other subcommand (it is validated fail-closed) but does NOT narrow the
   prune.
-* ONLY TERMINAL LANES ARE ELIGIBLE: events past their window, ``read``
-  deliveries, ``closed`` sessions. ``unread``/``delivered``/``parked``
-  deliveries, ``active``/``stale`` sessions and ALL handoffs are never
-  deleted, regardless of age.
+* Events past their window, ``read`` deliveries and ``closed`` sessions are
+  eligible. Messages are the deliberate exception to the terminal-lane rule:
+  they expire by pure age and take their deliveries/embeddings with them,
+  even when a delivery is unread, in-flight or parked. ALL handoffs and
+  non-message live rows remain outside age pruning.
 * ``--dry-run`` only counts (nothing is deleted, ``--vacuum`` is skipped) -
   run it first when unsure.
 * ``--vacuum`` compacts the file after pruning (deletes alone leave free
@@ -65,13 +67,16 @@ def _build_parser() -> argparse.ArgumentParser:
 
     prune = sub.add_parser(
         "prune",
-        help="Enforce retention windows (events/read deliveries/closed sessions).",
+        help=(
+            "Enforce retention windows (events/read deliveries/closed "
+            "sessions/messages)."
+        ),
         description=(
             "Delete rows older than their retention window across the WHOLE "
             "store (every workspace shares one nexus.db) and print a JSON "
-            "report. Only terminal lanes are eligible: unread/delivered/"
-            "parked deliveries, active/stale sessions and all handoffs are "
-            "NEVER deleted."
+            "report. Events/read deliveries/closed sessions use their lane "
+            "windows; messages expire by pure age and take deliveries and "
+            "embeddings with them. Handoffs are never age-pruned."
         ),
     )
     prune.add_argument(

@@ -212,7 +212,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: zero-owner names list with agent_count 0. Matching semantics unchanged
 #: (normalize_capabilities and runtime routing untouched).
 #: 17 = meta-harness feature flags (R-I0): the ``nexus_info`` envelope gains a
-#: read-only ``features`` block ({feature_*: bool}, exactly the 8 flags)
+#: read-only ``features`` block ({feature_*: bool}, exactly the 7 flags)
 #: reflecting the EFFECTIVE config (CLI > env > stored > default) at call
 #: time. The original pattern was behaviour-only gating; revision 29 declares
 #: memory as the explicit experimental exception whose tools are hidden unless
@@ -802,7 +802,8 @@ def main(argv: list[str] | None = None) -> int:
             "(MCP + REST + dashboard); see `okto-nexus serve --help`\n"
             "  okto-nexus tail [options]    Stream the event log as NDJSON "
             "(operator console)\n"
-            "  okto-nexus admin <cmd>       Maintenance (prune, issue-keys)\n"
+            "  okto-nexus admin <cmd>       Maintenance "
+            "(prune, issue-keys, export)\n"
             "  okto-nexus [options]         Run the legacy stdio MCP server "
             "(prefer `serve`)\n"
         )

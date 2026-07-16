@@ -2,7 +2,8 @@
 
 One process, three surfaces (decision D1):
 
-* ``/mcp``      - the 35 MCP tools over streamable-http (same ``register``
+* ``/mcp``      - 43 MCP tools by default (46 with memory) over
+  streamable-http (same ``register``
   functions as stdio: parity by construction), gated by per-agent API keys.
 * ``/api/v1``   - REST: observability read-model + agent/key management.
 * ``/``         - the dashboard SPA (static; spec S2) + health/info.

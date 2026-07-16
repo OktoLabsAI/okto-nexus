@@ -67,7 +67,7 @@ class ServeLock:
                     "Another `okto-nexus serve` is already running for this "
                     f"home (PID {holder_pid if holder_pid is not None else 'unknown'}; "
                     f"lock {self.path}). Stop it first, or pass a different "
-                    "--home/--db-path. stdio clients are unaffected.",
+                    "--home. stdio clients are unaffected.",
                     {
                         "lock_path": str(self.path),
                         "holder_pid": holder_pid,

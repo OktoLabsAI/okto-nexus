@@ -68,16 +68,19 @@ DEFAULT_METRICS_PUBLISH_INTERVAL_SECONDS = 3600
 #: Trust modes for sensitive verbs (M10). ``open`` keeps the cooperative
 #: behaviour (credentials optional, but VALIDATED when supplied - a wrong
 #: credential is never ignored); ``strict`` requires session_id+session_secret
-#: on message_create, handoff_claim/complete/reject and inbox_pull/ack/extend.
+#: on message_create, handoff claim/complete/verify/reject/cancel,
+#: inbox pull/ack/extend, and memory_put when that tool is published. Poll-token
+#: issue/renew/revoke always require the pair in both modes.
 TRUST_MODE_OPEN = "open"
 TRUST_MODE_STRICT = "strict"
 TRUST_MODES: tuple[str, ...] = (TRUST_MODE_OPEN, TRUST_MODE_STRICT)
 
 # --------------------------------------------------------------------------- #
-# Retention (M7): how long pruned-eligible rows are kept before
-# ``RetentionService.prune`` may delete them. Only TERMINAL lanes are ever
-# eligible (events are audit history; deliveries only in the ``read`` lane;
-# sessions only when ``closed``) - the windows below never touch live state.
+# Retention (M7): how long prune-eligible rows are kept before
+# ``RetentionService.prune`` may delete them. Events, ``read`` deliveries and
+# ``closed`` sessions follow their lane windows. Messages are the deliberate
+# pure-age exception and may be removed in any delivery lane together with
+# their deliveries/embeddings. Handoffs and non-message live rows are excluded.
 # --------------------------------------------------------------------------- #
 #: Default retention window (days) for the append-only event log.
 DEFAULT_RETENTION_EVENTS_KEEP_DAYS = 30

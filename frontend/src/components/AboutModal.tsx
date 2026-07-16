@@ -52,7 +52,7 @@ export function AboutModal({ onClose }: { onClose: () => void }) {
             Community Edition — v{version}
           </p>
           <p className="text-[11px] text-surface-400 dark:text-surface-500 mt-0.5">
-            Elastic License 2.0 + SaaS/Branding Addendum + Trademark Policy
+            Elastic License 2.0 + SaaS/Branding Addendum
           </p>
         </div>
 
