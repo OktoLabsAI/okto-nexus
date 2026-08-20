@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import threading
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -662,6 +663,114 @@ def test_events_filter_by_type_agent_and_types_endpoint(serve_env):
         "/api/v1/events/types", params={"workspace": ws}, headers=_h(key)
     ).json()["data"]
     assert data["items"] == ["ev.alpha", "ev.beta"]
+
+
+def test_events_timeline_and_recipient_filter(serve_env):
+    deps, client, key = serve_env
+    ws = "r" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws)
+        deps.event_emitter.emit(
+            uow,
+            workspace_id=ws,
+            stream="workspace",
+            type="ev.alpha",
+            actor_agent_id="alice",
+            target=json.dumps({"strategy": "direct", "agent_id": "bob"}),
+        )
+        deps.event_emitter.emit(
+            uow,
+            workspace_id=ws,
+            stream="workspace",
+            type="ev.alpha",
+            actor_agent_id="bob",
+            target=json.dumps({"strategy": "direct", "agent_id": "carol"}),
+        )
+        deps.event_emitter.emit(
+            uow,
+            workspace_id=ws,
+            stream="workspace",
+            type="ev.beta",
+            actor_agent_id="alice",
+            payload={"recipient_agent_id": "bob"},
+        )
+
+    now = datetime.now(timezone.utc)
+    params = {
+        "workspace": ws,
+        "recipient": "bob",
+        "since": (now - timedelta(days=1)).isoformat(),
+        "until": (now + timedelta(days=1)).isoformat(),
+    }
+    page = client.get("/api/v1/events", params=params, headers=_h(key)).json()["data"]
+    assert len(page["items"]) == 2
+    assert {event["type"] for event in page["items"]} == {"ev.alpha", "ev.beta"}
+
+    timeline = client.get(
+        "/api/v1/events/timeline",
+        params={**params, "bucket_seconds": 3600},
+        headers=_h(key),
+    )
+    assert timeline.status_code == 200
+    data = timeline.json()["data"]
+    assert data["total"] == 2
+    assert data["types"] == ["ev.alpha", "ev.beta"]
+    assert sum(bucket["total"] for bucket in data["buckets"]) == 2
+
+    too_granular = client.get(
+        "/api/v1/events/timeline",
+        params={**params, "bucket_seconds": 60},
+        headers=_h(key),
+    )
+    assert too_granular.status_code == 422
+    assert "increase the interval" in too_granular.json()["error"]["message"]
+
+
+def test_handoffs_filter_by_range_and_agents(serve_env):
+    deps, client, key = serve_env
+    ws = "h" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws)
+        uow.connection.executemany(
+            """
+            INSERT INTO handoffs(
+                handoff_id, workspace_id, from_agent_id, target, visibility,
+                status, created_at
+            ) VALUES (?, ?, ?, ?, 'private', 'OPEN', ?)
+            """,
+            [
+                (
+                    "hof_old",
+                    ws,
+                    "alice",
+                    json.dumps({"strategy": "direct", "agent_id": "bob"}),
+                    "2026-07-01T10:00:00Z",
+                ),
+                (
+                    "hof_match",
+                    ws,
+                    "carol",
+                    json.dumps({"strategy": "direct", "agent_id": "alice"}),
+                    "2026-08-10T10:00:00Z",
+                ),
+            ],
+        )
+
+    response = client.get(
+        "/api/v1/handoffs",
+        params={
+            "workspace": ws,
+            "since": "2026-08-01T00:00:00Z",
+            "until": "2026-08-31T23:59:59Z",
+            "from_agent": "carol",
+            "to_agent": "alice",
+        },
+        headers=_h(key),
+    )
+    assert response.status_code == 200
+    assert [item["handoff_id"] for item in response.json()["data"]["items"]] == [
+        "hof_match"
+    ]
 
 
 def test_events_no_filters_is_backward_compatible(serve_env):

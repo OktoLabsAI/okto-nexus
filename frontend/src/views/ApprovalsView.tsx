@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { api, type ApprovalDetail, type ApprovalRow } from "../api";
 import { PageContainer } from "../components/PageContainer";
+import { useWorkspaceName } from "../components/WorkspaceNames";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -64,6 +65,7 @@ function actionChip(action: string): string {
 }
 
 function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
+  const workspaceName = useWorkspaceName(detail?.workspace_id);
   if (detail === null) {
     return (
       <p className="text-xs text-surface-400 dark:text-surface-500 py-2">
@@ -78,7 +80,7 @@ function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
     >
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-surface-500 dark:text-surface-400">
         <span>
-          workspace <span className="font-mono">{detail.workspace_id.slice(0, 12)}…</span>
+          workspace <span>{workspaceName}</span>
         </span>
         <span>
           policy <span className="font-mono">{detail.policy_id}</span>

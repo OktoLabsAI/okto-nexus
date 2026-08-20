@@ -699,6 +699,27 @@ def build_router() -> APIRouter:
             return _map_error(exc)
         return _ok(data)
 
+    @router.get("/messages/{message_id}")
+    async def message_detail(request: Request, message_id: str) -> JSONResponse:
+        """Hydrate one search/list result without changing the active filters."""
+        observability = request.app.state.observability
+        try:
+            data = await _read(
+                request,
+                lambda uow: observability.messages_history(
+                    uow,
+                    page=1,
+                    page_size=1,
+                    include_body=True,
+                    message_id=message_id,
+                ),
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        if not data["items"]:
+            return _err(404, "NOT_FOUND", "Message not found.")
+        return _ok(data["items"][0])
+
     @router.get("/conversations/peers")
     async def conversation_peers(request: Request, agent: str) -> JSONResponse:
         """The chat's peer picker: per-peer counts + last activity (O(peers))."""
@@ -716,14 +737,26 @@ def build_router() -> APIRouter:
 
     @router.get("/handoffs")
     async def handoffs(
-        request: Request, workspace: str | None = None, status: str | None = None
+        request: Request,
+        workspace: str | None = None,
+        status: str | None = None,
+        since: str | None = None,
+        until: str | None = None,
+        from_agent: str | None = None,
+        to_agent: str | None = None,
     ) -> JSONResponse:
         observability = request.app.state.observability
         try:
             rows = await _read(
                 request,
                 lambda uow: observability.handoffs(
-                    uow, workspace_id=workspace, status=status
+                    uow,
+                    workspace_id=workspace,
+                    status=status,
+                    since_iso=since,
+                    until_iso=until,
+                    from_agent_id=from_agent,
+                    to_agent_id=to_agent,
                 ),
             )
         except OktoNexusError as exc:
@@ -847,6 +880,9 @@ def build_router() -> APIRouter:
         type: str | None = None,
         agent: str | None = None,
         trace: str | None = None,
+        recipient: str | None = None,
+        since: str | None = None,
+        until: str | None = None,
         filters: str | None = None,
         timeout_seconds: int = 0,
         profile: str | None = None,
@@ -905,6 +941,9 @@ def build_router() -> APIRouter:
                     type_=type,
                     actor_agent_id=agent,
                     trace_id=trace,
+                    recipient_agent_id=recipient,
+                    since_iso=since,
+                    until_iso=until,
                 ),
             )
         except ValueError as exc:
@@ -914,6 +953,43 @@ def build_router() -> APIRouter:
         return _ok(
             {"items": rows, "next_cursor": rows[-1]["event_id"] if rows else after}
         )
+
+    @router.get("/events/timeline")
+    async def event_timeline(
+        request: Request,
+        since: str,
+        until: str,
+        bucket_seconds: int = 3600,
+        workspace: str | None = None,
+        stream: str | None = None,
+        type: str | None = None,
+        agent: str | None = None,
+        recipient: str | None = None,
+        trace: str | None = None,
+    ) -> JSONResponse:
+        """Time-bucketed event distribution for the Events timeline view."""
+        observability = request.app.state.observability
+        try:
+            data = await _read(
+                request,
+                lambda uow: observability.event_timeline(
+                    uow,
+                    workspace_id=workspace,
+                    stream=stream,
+                    type_=type,
+                    actor_agent_id=agent,
+                    recipient_agent_id=recipient,
+                    trace_id=trace,
+                    since_iso=since,
+                    until_iso=until,
+                    bucket_seconds=bucket_seconds,
+                ),
+            )
+        except ValueError as exc:
+            return _err(422, "INVALID_PARAM", str(exc))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
 
     @router.get("/workspaces/{workspace_id}/events/export")
     async def export_events(

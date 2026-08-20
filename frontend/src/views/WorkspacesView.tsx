@@ -15,6 +15,7 @@ import {
   type WorkspaceListItem,
 } from "../api";
 import { PageContainer } from "../components/PageContainer";
+import { workspaceDisplayName } from "../components/WorkspaceNames";
 
 const WINDOWS: AnalyticsWindow[] = ["24h", "7d", "30d"];
 const HEALTH_WINDOWS: HealthWindow[] = ["1h", "24h", "7d"];
@@ -188,7 +189,7 @@ export function WorkspacesView({
           Workspaces ({list.length})
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {list.map((w) => {
+          {list.map((w, index) => {
             const active = w.workspace_id === selected;
             return (
               <button
@@ -204,7 +205,7 @@ export function WorkspacesView({
                 <div className="flex items-center gap-1.5">
                   <FolderOpen size={14} className="shrink-0 opacity-70" />
                   <span className="truncate text-sm font-medium text-surface-900 dark:text-surface-100">
-                    {w.display_name || w.workspace_id.slice(0, 16) + "…"}
+                    {workspaceDisplayName(w, index)}
                   </span>
                   {w.is_default && (
                     <span className="ml-auto shrink-0 text-[9px] uppercase rounded bg-surface-200 dark:bg-surface-700 px-1 py-0.5">
@@ -363,16 +364,13 @@ function OverviewCard({
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-base font-semibold text-surface-800 dark:text-surface-100">
-              {ws.display_name || ws.workspace_id}
+              {workspaceDisplayName(ws)}
             </h1>
             {ws.is_default && (
               <span className="text-[9px] uppercase rounded bg-surface-200 dark:bg-surface-700 px-1.5 py-0.5">
                 default
               </span>
             )}
-          </div>
-          <div className="mt-0.5 font-mono text-[11px] text-surface-400 dark:text-surface-500">
-            {ws.workspace_id}
           </div>
           <div className="mt-0.5 text-[11px] text-surface-500 dark:text-surface-400">
             {ws.path_redacted ? (

@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import type { MessageRow } from "../api";
 import { Markdown } from "./Markdown";
 import { TraceChip } from "./TraceChip";
+import { useWorkspaceName } from "./WorkspaceNames";
 
 const LANE_CHIP: Record<string, string> = {
   unread: "bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300",
@@ -37,6 +38,7 @@ export function MessageDetail({
   onOpenTrace?: (traceId: string) => void;
 }) {
   const body = message.body ?? message.preview ?? "";
+  const workspaceName = useWorkspaceName(message.workspace_id);
   return (
     <div className="flex flex-col h-full min-h-0" data-testid="message-detail">
       <header className="shrink-0 flex items-start gap-2 pb-3 border-b border-surface-200/50 dark:border-surface-700/50">
@@ -82,7 +84,7 @@ export function MessageDetail({
           </h3>
           <Meta label="message_id" value={message.message_id} />
           <Meta label="created_at" value={message.created_at} />
-          <Meta label="workspace" value={message.workspace_id} />
+          <Meta label="workspace" value={workspaceName} />
           <Meta label="channel" value={message.channel_id} />
           <Meta label="trace_id" value={message.trace_id} />
         </section>

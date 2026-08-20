@@ -15,14 +15,26 @@
 // progress. Same self-gating: cards without the fields render unchanged
 // (BR11) and the flag is never consulted.
 
-import { useEffect, useState } from "react";
-import { Ban, CheckCircle2, ShieldCheck, UserCheck, X } from "lucide-react";
-import { api, type GraphHandoff } from "../api";
+import { useCallback, useEffect, useState } from "react";
+import { Ban, CheckCircle2, RotateCw, ShieldCheck, UserCheck, X } from "lucide-react";
+import { api, type AgentRow, type GraphHandoff } from "../api";
 import { useConfirm } from "../components/Confirm";
 import {
   TargetDescriptor,
   targetCapabilityNames,
 } from "../components/TargetDescriptor";
+import { useWorkspaceName } from "../components/WorkspaceNames";
+import { AgentSelect } from "../components/AgentSelect";
+
+const CARDS_PER_PAGE = 3;
+const inputCls =
+  "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
+
+function asIso(value: string): string | undefined {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
 
 const COLUMNS: { status: string; label: string; top: string; chip: string }[] = [
   {
@@ -82,6 +94,7 @@ function HandoffDetailModal({
   handoff: GraphHandoff;
   onClose: () => void;
 }) {
+  const workspaceName = useWorkspaceName(handoff.workspace_id);
   return (
     <div className="modal-overlay">
       <div
@@ -118,7 +131,7 @@ function HandoffDetailModal({
 
         <div className="px-5 py-4 overflow-auto space-y-4 text-xs text-surface-600 dark:text-surface-300">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Meta label="workspace" value={handoff.workspace_id} mono />
+            <Meta label="workspace" value={workspaceName} />
             <Meta label="created" value={handoff.created_at} />
             {handoff.updated_at && <Meta label="updated" value={handoff.updated_at} />}
             <Meta label="from" value={handoff.from_agent_id ?? "—"} mono />
@@ -250,24 +263,40 @@ export function HandoffsView({
   const [feedback, setFeedback] = useState("");
   const [busy, setBusy] = useState(false);
   const [detail, setDetail] = useState<GraphHandoff | null>(null);
+  const [agents, setAgents] = useState<AgentRow[]>([]);
+  const [since, setSince] = useState("");
+  const [until, setUntil] = useState("");
+  const [fromAgent, setFromAgent] = useState("");
+  const [toAgent, setToAgent] = useState("");
+  const [pages, setPages] = useState<Record<string, number>>({});
 
-  const reload = () =>
-    api
-      .handoffs(workspace === "all" ? undefined : workspace)
+  const reload = useCallback(() => {
+    const filters: Record<string, string> = {};
+    const sinceIso = asIso(since);
+    const untilIso = asIso(until);
+    if (sinceIso) filters.since = sinceIso;
+    if (untilIso) filters.until = untilIso;
+    if (fromAgent) filters.from_agent = fromAgent;
+    if (toAgent) filters.to_agent = toAgent;
+    return api
+      .handoffs(workspace === "all" ? undefined : workspace, filters)
       .then(({ items }) => {
         setItems(items);
+        setPages({});
         setError(null);
       })
       .catch((exc) => setError((exc as Error).message));
+  }, [workspace, since, until, fromAgent, toAgent]);
 
   useEffect(() => {
     reload();
-  }, [workspace]);
+  }, [reload]);
 
   useEffect(() => {
     api
       .agents()
       .then(({ items }) => {
+        setAgents(items);
         const op = items.find((a) => a.agent_id === "operator");
         setOperatorCaps(new Set(op ? Object.keys(op.capabilities ?? {}) : []));
       })
@@ -304,39 +333,88 @@ export function HandoffsView({
   };
 
   return (
-    <div className="h-full overflow-x-auto overflow-y-hidden p-6">
+    <div className="h-full min-h-0 flex flex-col p-4 gap-3">
       {dialog}
       {detail && (
         <HandoffDetailModal handoff={detail} onClose={() => setDetail(null)} />
       )}
-      {error && <p className="text-xs text-red-500 mb-2">{error}</p>}
-      <div className="flex gap-4 h-full min-w-max" data-testid="handoffs-view">
+      <div className="panel shrink-0 px-3 py-2 flex items-end gap-2 flex-wrap" data-testid="handoff-filters">
+        <label className="text-[10px] uppercase tracking-wide text-surface-400 dark:text-surface-500">
+          From date
+          <input
+            type="datetime-local"
+            value={since}
+            onChange={(event) => setSince(event.target.value)}
+            className={`${inputCls} block mt-1 normal-case`}
+          />
+        </label>
+        <label className="text-[10px] uppercase tracking-wide text-surface-400 dark:text-surface-500">
+          To date
+          <input
+            type="datetime-local"
+            value={until}
+            onChange={(event) => setUntil(event.target.value)}
+            className={`${inputCls} block mt-1 normal-case`}
+          />
+        </label>
+        <AgentSelect label="From agent" value={fromAgent} onChange={setFromAgent} agents={agents} />
+        <AgentSelect label="To agent" value={toAgent} onChange={setToAgent} agents={agents} />
+        <button
+          className="btn btn-secondary"
+          onClick={() => {
+            setSince("");
+            setUntil("");
+            setFromAgent("");
+            setToAgent("");
+          }}
+        >
+          Clear filters
+        </button>
+        <button className="btn btn-secondary !px-2" onClick={reload} title="Refresh">
+          <RotateCw size={14} />
+        </button>
+        <span className="ml-auto text-xs text-surface-500 dark:text-surface-400">
+          {items.length} handoff{items.length === 1 ? "" : "s"}
+        </span>
+      </div>
+      {error && <p className="text-xs text-red-500">{error}</p>}
+      <div className="flex-1 min-h-0 overflow-auto">
+      <div className="flex gap-4 min-w-max items-start" data-testid="handoffs-view">
         {COLUMNS.map(({ status, label, top, chip }) => {
-          const column = items.filter((h) => h.status === status);
+          const allCards = items.filter((h) => h.status === status);
+          const totalPages = Math.max(1, Math.ceil(allCards.length / CARDS_PER_PAGE));
+          const page = Math.min(pages[status] ?? 1, totalPages);
+          const column = allCards.slice(
+            (page - 1) * CARDS_PER_PAGE,
+            page * CARDS_PER_PAGE,
+          );
           return (
             <div
               key={status}
-              className={`kanban-column border-t-4 ${top} h-full overflow-y-auto`}
+              className={`kanban-column border-t-4 ${top} self-start flex flex-col`}
             >
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-3 shrink-0">
                 <div className="flex items-center gap-2">
                   <h3 className="kanban-column-header text-surface-700 dark:text-surface-200">
                     {label}
                   </h3>
                   <span className="text-xs bg-surface-200 dark:bg-surface-600 text-surface-600 dark:text-surface-300 px-1.5 py-0.5 rounded">
-                    {column.length}
+                    {allCards.length}
                   </span>
                 </div>
+                {allCards.length > CARDS_PER_PAGE && (
+                  <span className="text-[10px] text-surface-400">{page}/{totalPages}</span>
+                )}
               </div>
 
-              <div className="space-y-2 flex-1">
+              <div className="space-y-2">
                 {column.map((h) => {
                   const capabilityNames = targetCapabilityNames(h.target);
                   const canVerify = operatorCanVerify(h);
                   return (
                     <div
                       key={h.handoff_id}
-                      className="kanban-card cursor-pointer hover:border-accent-300 dark:hover:border-accent-700 transition-colors"
+                      className="kanban-card overflow-hidden cursor-pointer hover:border-accent-300 dark:hover:border-accent-700 transition-colors"
                       role="button"
                       tabIndex={0}
                       data-testid={`handoff-card-${h.handoff_id}`}
@@ -376,13 +454,16 @@ export function HandoffsView({
                             </span>
                           ))}
                         {capabilityNames.length > 0 && (
-                          <span className="chip bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300">
+                          <span
+                            className="chip max-w-40 truncate bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-300"
+                            title={capabilityNames.join(" / ")}
+                          >
                             {capabilityNames.join(" / ")}
                           </span>
                         )}
                         {h.verify_by && (
                           <span
-                            className="chip bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
+                            className="chip max-w-40 truncate bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300"
                             title={`Contracted verifier (${h.verify_by.kind})`}
                           >
                             <ShieldCheck size={10} /> verify: {verifierLabel(h)}
@@ -409,10 +490,16 @@ export function HandoffsView({
                       </div>
 
                       {h.depends_on && h.dependencies && (
-                        <div className="mt-1.5 text-[11px] text-surface-500 dark:text-surface-400">
+                        <div className="mt-1.5 text-[11px] text-surface-500 dark:text-surface-400 truncate">
                           Depends on:{" "}
                           <span className="font-mono">
-                            {h.depends_on.map((id) => id.slice(0, 8)).join(", ")}
+                            {h.depends_on
+                              .slice(0, 3)
+                              .map((id) => id.slice(0, 8))
+                              .join(", ")}
+                            {h.depends_on.length > 3
+                              ? ` +${h.depends_on.length - 3}`
+                              : ""}
                           </span>{" "}
                           ·{" "}
                           <span
@@ -431,22 +518,35 @@ export function HandoffsView({
 
                       {h.acceptance_criteria && (
                         <ul className="mt-1.5 space-y-0.5">
-                          {h.acceptance_criteria.map((c, i) => (
+                          {h.acceptance_criteria.slice(0, 2).map((c, i) => (
                             <li
                               key={i}
-                              title={c}
                               className="flex items-start gap-1 text-[11px] text-surface-500 dark:text-surface-400"
                             >
                               <span className="text-surface-400">•</span>
                               <span className="truncate">{c}</span>
                             </li>
                           ))}
+                          {h.acceptance_criteria.length > 2 && (
+                            <li className="pl-3 text-[10px] text-surface-400 dark:text-surface-500">
+                              +{h.acceptance_criteria.length - 2} more criteria
+                            </li>
+                          )}
                         </ul>
                       )}
 
                       {h.verification_feedback && (
                         <div className="mt-1.5 rounded border border-orange-300 dark:border-orange-700 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 text-[11px] text-orange-800 dark:text-orange-200">
-                          <b>Rework:</b> {h.verification_feedback}
+                          <div className="line-clamp-3 break-words">
+                            <b>Rework:</b> {h.verification_feedback}
+                          </div>
+                        </div>
+                      )}
+
+                      {((h.acceptance_criteria?.length ?? 0) > 2 ||
+                        (h.verification_feedback?.length ?? 0) > 180) && (
+                        <div className="mt-1.5 text-[10px] font-medium text-accent-600 dark:text-accent-400">
+                          Open card for complete details →
                         </div>
                       )}
 
@@ -573,9 +673,29 @@ export function HandoffsView({
                   </div>
                 )}
               </div>
+              {allCards.length > CARDS_PER_PAGE && (
+                <div className="shrink-0 pt-2 mt-2 border-t border-surface-200 dark:border-surface-700 flex items-center justify-between text-[10px] text-surface-500">
+                  <button
+                    className="btn btn-secondary !px-2 !py-1"
+                    disabled={page <= 1}
+                    onClick={() => setPages((current) => ({ ...current, [status]: page - 1 }))}
+                  >
+                    ←
+                  </button>
+                  <span>page {page} of {totalPages}</span>
+                  <button
+                    className="btn btn-secondary !px-2 !py-1"
+                    disabled={page >= totalPages}
+                    onClick={() => setPages((current) => ({ ...current, [status]: page + 1 }))}
+                  >
+                    →
+                  </button>
+                </div>
+              )}
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );

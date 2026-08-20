@@ -12,6 +12,7 @@ import {
   type SteeringResult,
   type WorkspaceListItem,
 } from "../api";
+import { workspaceDisplayName } from "./WorkspaceNames";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -136,10 +137,9 @@ export function SteerModal({
               data-testid="steer-workspace"
             >
               {target === "" && <option value="">Pick a workspace…</option>}
-              {workspaces.map((ws) => (
+              {workspaces.map((ws, index) => (
                 <option key={ws.workspace_id} value={ws.workspace_id}>
-                  {ws.workspace_id.slice(0, 12)}…
-                  {ws.display_name ? ` (${ws.display_name})` : ""}
+                  {workspaceDisplayName(ws, index)}
                 </option>
               ))}
             </select>
