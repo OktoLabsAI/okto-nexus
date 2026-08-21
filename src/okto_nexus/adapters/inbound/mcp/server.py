@@ -93,8 +93,8 @@ from . import tools as _tools_pkg
 from .resources import register_resources, resource_versions
 
 #: Server-level guidance surfaced to connecting agents (FastMCP ``instructions``).
-#: Covers how to choose a communication channel, replying directly by default,
-#: the canonical pre-flight, the inbox reception loop, and how a
+#: Covers the profile operating contract, intent-based channel selection, the
+#: canonical pre-flight, inbox reception loop, and how a
 #: monitoring-capable harness builds a listener: either a backgrounded
 #: ``event_wait`` long-poll on THIS connection, or an EPT-backed remote
 #: data-plane poller when the harness can run a wake-up background process
@@ -104,16 +104,19 @@ SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-
 YOUR IDENTITY. You connect over MCP streamable HTTP; the API key in your URL (/mcp?api_key=nxs_...) IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, attach a stdio server, or spawn helper processes (sole exception: an EPT poller holding only a short-lived nxsept_ token, never your nxs_ key).
 
 PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, idempotent):
-  1. agent_whoami() - your agent_id, role, capabilities, permissions. Use that agent_id everywhere.
+  1. agent_whoami() - your agent_id, role, capabilities, permissions, and communication style when set. Use that agent_id everywhere.
   2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Store the returned session_secret. Pass session_id + session_secret on the verbs that accept them (message_create - named from_session_id there; handoff claim/complete/verify/reject/cancel; inbox pull/ack/extend; poll_token_*) - each validated call advances your heartbeat, keeping you in the broadcast audience. Read-only verbs (event_*, inbox count/peek, discovery) do NOT advance it: call session_heartbeat on idle or read-only stretches.
   3. inbox_count(agent_id=<you>); if unread > 0, inbox_pull and triage the backlog, then inbox_ack what you handled.
   4. event_cursor(project_root=<cwd>, agent_id=<you>, stream="workspace") to anchor at NOW, then monitor via event_wait with timeout_seconds>0 (background long-poll), an EPT remote poller (poll_token_issue -> /api/v1/events), or event_get polling, advancing the cursor.
 Full detail: resource okto-nexus://reference/preflight. When finished for good, session_close.
 
-COMMUNICATE - prefer the most targeted, least noisy channel:
-  - DIRECT (default, preferred): message_create with target={"strategy":"direct","agent_id":"<recipient>"}. ALWAYS reply directly to whoever messaged you (target their from_agent_id).
-  - HANDOFF: handoff_create with a capability/role/broadcast target when exactly ONE free agent should claim dispatchable work (first to handoff_claim wins).
-  - BROADCAST (last resort): message_create with NO target - announcements or open-ended discovery only, NEVER actionable work (it triggers unwanted parallel work).
+PROFILE. Treat role and communication.content from agent_whoami as your default operating contract: role guides responsibilities and decision boundaries; communication.content guides tone, format, language, verbosity, structure and additional instructions. An explicit user instruction for the current task overrides conflicting profile guidance only for that task. It never grants permissions or bypasses governance, policies, guardrails, approvals, communication scope, safety rules, or higher-priority host instructions. Capabilities are routing claims, not authorization or persona.
+
+COMMUNICATE - choose by intent:
+  - HANDOFF (ALL EXECUTABLE WORK): any request asking another agent to perform work or produce a deliverable MUST use handoff_create, never message_create alone. Use a direct target for a named intended assignee, or a pool target (capability/role/tag/mixed/broadcast/direct_with_fallback) when the first eligible claimant should own it. One handoff has one claimant at a time and a trackable status/result.
+  - BROADCAST MESSAGE (SHARED ALIGNMENT/INFORMATION): message_create with an explicit broadcast target or no target. Use it for shared context, decisions, announcements, discoveries, risks and alignment. It informs every reached recipient; it never assigns work. If action is required, create one or more handoffs.
+  - DIRECT MESSAGE (CONVERSATION): use for status checks, questions, clarifications, acknowledgements and informal coordination. Reply directly when the answer belongs to that conversation. If new executable work emerges, create a handoff; if it is already in scope, reference the existing handoff.
+IMPORTANT: a message broadcast fans information out to many recipients; a broadcast-target handoff is a claim pool for ONE executor.
 HOW YOU RECEIVE: messages addressed to you land in your GLOBAL inbox - inbox_count -> inbox_pull -> inbox_ack. event_get/event_wait are OBSERVABILITY, not message delivery. Channels are organizational labels, not ACLs and not delivery - the message TARGET decides who receives it. Full detail (channels, delivery/read receipts, reception loop): okto-nexus://reference/communication. Monitoring/listener patterns, including EPT remote pollers that do not carry the permanent key: okto-nexus://reference/monitoring.
 
 PERMISSIONS. The operator may restrict your identity (messaging, handoffs, channel/artifact writes, event/health reads, workspace listing/paths, shared.md render, self profile/capability updates, experimental memory, rate limits). A blocked call returns ok:false with code PERMISSION_DENIED and details.required_permission. Do NOT retry or work around it - adapt or report that the operator must grant the flag (dashboard Agents -> Permissions).
@@ -414,7 +417,17 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: the entry tools (inbox_pull, event_get, artifact_put). surface_metrics:
 #: memory_i6 discount now conditional on the experimental surface being
 #: registered (the 40% gate no longer discounts phantom growth).
-SURFACE_REVISION = 31
+#: 32 = agent operating-contract + coordination-intent guidance (doc-only):
+#: role and communication.content from agent_whoami are now explicit defaults,
+#: scoped user overrides cannot bypass hard controls, every inter-agent request
+#: for executable work uses a handoff, broadcasts are informational fan-out,
+#: and direct messages are conversational coordination. The resident block and
+#: reference docs now distinguish a broadcast message from a broadcast-target
+#: handoff (ONE claimant). Bumped resources: preflight v4, communication v3,
+#: tool-docs/messages v3, tool-docs/handoff v4, tool-docs/identity v5. Also
+#: corrected stale payload-discovery and heartbeat wording. Growth ledger:
+#: ``coordination_guidance_r32`` (+1221 resident chars, measured net).
+SURFACE_REVISION = 32
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

@@ -117,15 +117,25 @@ add_resource(
     slug="preflight",
     name="Pre-flight (full)",
     description="The exact first-turn bootstrap sequence, in full detail.",
-    version="3",
+    version="4",
     body="""\
 # PRE-FLIGHT - run this EXACT sequence on your FIRST turn, in order, BEFORE \
 starting whatever the user asked. It is cheap and idempotent; every agent \
 bootstrapping the same way is what makes the swarm predictable.
 
 1. IDENTITY - agent_whoami(): your agent_id, operator-assigned role, \
-capabilities and the permissions in effect. Use that agent_id everywhere. Only \
-if you must advertise NEW capabilities for routing, follow with agent_register \
+capabilities, permissions and resolved ``communication`` style when one is \
+bound. Use that agent_id everywhere. Treat ``role`` and \
+``communication.content`` as your DEFAULT OPERATING CONTRACT: role guides your \
+responsibilities, operating perspective and decision boundaries; communication \
+content guides tone, format, language, verbosity, structure and additional \
+instructions in user-facing and agent-to-agent communication. Apply both unless \
+the user explicitly directs otherwise for the current task or interaction. A \
+user override is task-scoped: it does not modify the Nexus profile and never \
+grants permissions or bypasses governance, policies, guardrails, approvals, \
+communication scope, safety rules, or higher-priority host instructions. \
+Capabilities are routing claims, not authorization or persona. Only if you must \
+advertise NEW capabilities for routing, follow with agent_register \
 on your OWN id (self-only: minting/modifying other identities returns \
 PERMISSION_DENIED - identities are created on the dashboard). Self profile \
 updates require identity.update_profile; changing capabilities also requires \
@@ -164,28 +174,55 @@ session_close (presence must reflect reality).""",
 add_resource(
     slug="communication",
     name="Communication & inbox",
-    description="How to choose a channel (direct/handoff/broadcast), channels, the inbox reception loop, and delivery/read receipts.",
-    version="2",
+    description="Intent-based choice among handoff, broadcast message and direct message, plus channels, inbox reception and delivery/read receipts.",
+    version="3",
     body="""\
-# HOW TO COMMUNICATE - prefer the most targeted, least noisy channel.
+# HOW TO COMMUNICATE - CHOOSE BY INTENT
 
-1) DIRECT MESSAGE (default, preferred). message_create with \
-target={"strategy":"direct","agent_id":"<recipient>"}. Most efficient, least \
-noise. ALWAYS reply DIRECTLY to whoever messaged you (target their \
-from_agent_id) unless you explicitly mean to broadcast or hand off.
+DECISION RULE: if another agent is expected to PERFORM WORK or produce a \
+DELIVERABLE, create a handoff. If the recipient only needs to KNOW something \
+or REPLY, use a message and choose direct vs broadcast by audience.
 
-2) HANDOFF (when exactly ONE free agent should take the work). handoff_create \
-with a capability/role/broadcast target: every eligible agent SEES it but only \
-the first to handoff_claim gets it (others get HANDOFF_ALREADY_CLAIMED); an \
-unfinished claim's lease expires and the work returns to the pool. Example: \
-"OCR this scan" -> handoff target {"strategy":"capability","capability":"ocr"} \
-(find the capability via capability_list first).
+1) HANDOFF - ALL EXECUTABLE WORK. Any request asking another agent to execute, \
+investigate, change, build, test, review, validate, or otherwise produce a \
+deliverable MUST use handoff_create; message_create must never be the sole \
+record of that delegation. Use target={"strategy":"direct","agent_id":"<id>"} \
+when the intended assignee is known; that agent still calls handoff_claim to \
+accept ownership. Use capability/role/tag/mixed/broadcast/direct_with_fallback \
+when the first eligible claimant should own the work. Every handoff has one \
+claimant at a time and gives agents and users the canonical, trackable record of \
+ownership, status and result. Put the objective, context, scope, constraints and \
+expected deliverable in ``payload``; use acceptance_criteria, depends_on and \
+verify_by when applicable AND their corresponding feature flags are enabled \
+(feature_verification / feature_dag; these fields are rejected while OFF). If N \
+agents must execute independently, create N handoffs rather than one \
+broadcast-target handoff.
 
-3) BROADCAST (last resort). message_create with NO target. Two valid uses: (a) \
-DISSEMINATE instructive/contextual info to everyone; (b) open-ended DISCOVERY \
-when you do NOT yet know who to ask. Do NOT broadcast actionable WORK requests: \
-an undirected "do X" can trigger UNWANTED PARALLEL WORK. Once discovery finds \
-the owner, switch to a direct message (or a handoff if it is dispatchable).
+2) BROADCAST MESSAGE - SHARED ALIGNMENT AND INFORMATION. Use message_create \
+with target={"strategy":"broadcast"}, or intentionally omit target, to \
+disseminate shared context, decisions, announcements, discoveries, risk/blocker \
+alerts and general alignment to every PRESENT, reachable recipient selected by \
+the workspace and communication scope. Check the response's ``recipients`` to \
+see who was actually reached. A broadcast message INFORMS; it does not assign \
+work and creates no task owner, claim, lease, status or result. If anyone is \
+expected to act, create one or more handoffs.
+
+3) DIRECT MESSAGE - CONVERSATION AND INFORMAL COORDINATION. Use message_create \
+with target={"strategy":"direct","agent_id":"<recipient>"} for status checks, \
+questions, clarifications, acknowledgements, focused context exchange and \
+informal coordination. Reply directly when the answer belongs to that \
+conversation. handoff_get is the canonical lifecycle/status/result record; a \
+direct message is appropriate when you need contextual progress or blocker \
+detail. It may discuss an existing handoff, but it must not be the only record \
+of NEW executable work. If conversation creates new work, create a handoff; if \
+the work is already in scope, reference the existing handoff_id.
+
+DO NOT CONFUSE THE TWO BROADCASTS. A broadcast MESSAGE is informational fan-out \
+to many recipients. A handoff with target={"strategy":"broadcast"} is a CLAIM \
+POOL: every eligible agent may see it, but only the first successful \
+handoff_claim becomes its ONE executor (others get \
+HANDOFF_ALREADY_CLAIMED). An unfinished claim's lease eventually returns the \
+work to the pool; it never asks every eligible agent to execute.
 
 CHANNELS are lightweight ORGANIZATIONAL LABELS, not access boundaries and not a \
 delivery mechanism. No membership/ACL: any agent in the workspace can read/post \

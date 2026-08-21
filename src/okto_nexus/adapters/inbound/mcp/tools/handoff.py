@@ -304,7 +304,7 @@ def register(server: Any, deps: Any) -> None:
         limit: Annotated[Any, Field(description=_P_LIMIT)] = None,
         timeout_seconds: Annotated[Any, Field(description=_P_TIMEOUT)] = None,
     ) -> dict[str, Any]:
-        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated); each entry includes the payload for triage before claiming."""
+        """Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated); entries are metadata-only until claimed."""
         # Long-poll OFF the event loop (mirrors event_wait): the blocking wait
         # runs in a worker thread so a parked listener never freezes the shared
         # serve event loop (dashboard REST + every other MCP tool over HTTP).

@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="2",
+    version="3",
     body="""\
 # message_create
 Persist a message and emit ``message.created`` in one transaction. The response
@@ -133,11 +133,20 @@ IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and
 ``delivered_count`` totals it. Track what happens next with
 ``message_status(message_id)`` or the sender-only receipt events (mechanics:
-okto-nexus://reference/tool-docs/inbox). A broadcast (no target) reaches the workspace's PRESENT agents
-only; agents excluded for heartbeat staleness are reported in ``excluded_stale``
-+ ``warning``. In trust_mode=strict pass from_session_id + session_secret (from
-session_open). For large content, attach an artifact and keep ``body`` a short
-pointer. ``target``: see okto-nexus://reference/target-grammar.
+okto-nexus://reference/tool-docs/inbox). A broadcast (explicit broadcast target
+or no target) reaches the workspace's PRESENT agents only; agents excluded for
+heartbeat staleness are reported in ``excluded_stale`` + ``warning``. In
+trust_mode=strict pass from_session_id + session_secret (from session_open). For
+large content, attach an artifact and keep ``body`` a short pointer. ``target``:
+see okto-nexus://reference/target-grammar.
+
+Messages are for CONVERSATION and INFORMATION, not task ownership. Use a direct
+message for status checks, questions, clarifications, acknowledgements and
+informal coordination. Use a broadcast message for shared context, decisions,
+announcements, discoveries, risks and alignment. If another agent is expected
+to execute work or produce a deliverable, create a handoff; a message may
+discuss or reference that handoff but must not be the sole delegation record.
+See okto-nexus://reference/communication for the normative decision policy.
 
 # channel_create
 Create a channel by name (idempotent). Channels are organizational LABELS, not
@@ -261,8 +270,20 @@ add_resource(
     slug="tool-docs/handoff",
     name="Tool docs - handoff",
     description="Full reference for the handoff lifecycle (create/list_available/claim/complete/verify/reject/cancel/get), including the opt-in VERIFYING cycle and DAG dependencies.",
-    version="3",
+    version="4",
     body="""\
+Handoffs are the CANONICAL mechanism for inter-agent task delegation. Every
+request that expects another agent to execute work or produce a deliverable
+must use handoff_create; a direct or broadcast message must never be its sole
+delegation record. Use a direct target when the intended assignee is known; use
+a capability/role/tag/mixed/broadcast pool (or direct_with_fallback) when the
+first eligible claimant should own the work. Put the objective, context, scope,
+constraints and expected deliverable in ``payload`` and use the optional
+acceptance/dependency/verification contract when applicable AND the
+corresponding feature flag is enabled (feature_verification / feature_dag;
+those fields are rejected while OFF). The lifecycle is the traceable record
+agents and users use for ownership, status and result.
+
 Competing-consumers: every eligible agent SEES a handoff but only the first to
 handoff_claim wins (others get HANDOFF_ALREADY_CLAIMED); an unfinished claim's
 lease expires and the work returns to the pool. visibility (who may SEE) is
@@ -271,6 +292,10 @@ separate from target (who may CLAIM): one of public / eligible / private.
 handoff_claim (and later to that same claimant via handoff_get). Discovery,
 events and directed inbox notifications stay metadata-only. For ``target`` see
 okto-nexus://reference/target-grammar.
+
+Do not confuse target={"strategy":"broadcast"} here with a broadcast message:
+on a handoff it defines a CLAIM POOL for ONE executor, not parallel execution by
+everyone. If N agents must execute independently, create N handoffs.
 
 Verification-first (opt-in per handoff, needs the feature_verification flag):
 creating with ``acceptance_criteria`` adds a VERIFYING stage between the
@@ -385,7 +410,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="4",
+    version="5",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -404,6 +429,17 @@ agent_get. When you have policy/communication bindings the profile ALSO carries
 ``effective_policies`` (``<policy_id>@<version>`` / ``inline``), a
 ``governance`` rule list and a ``communication`` style block - each absent
 otherwise.
+
+Treat ``role`` and ``communication.content`` as your DEFAULT OPERATING CONTRACT,
+not display metadata. Role guides responsibilities, operating perspective and
+decision boundaries. Communication content guides tone, format, language,
+verbosity, structure and additional instructions in user-facing and
+agent-to-agent communication. Apply both unless the user explicitly directs
+otherwise for the current task or interaction. That override is task-scoped; it
+does not modify your profile and never grants permissions or bypasses
+governance, policies, guardrails, approvals, communication scope, safety rules,
+or higher-priority host instructions. Capabilities are routing claims, not
+authorization or persona.
 
 # agent_register
 Update YOUR OWN identity profile (role/capabilities/metadata). SELF-ONLY on an
@@ -441,16 +477,17 @@ trust_mode=strict the sensitive verbs require session_id + session_secret.
 On an authenticated connection, session_open is self-only: the API-key identity
 must match the requested agent_id.
 Only heartbeat-fresh sessions receive broadcasts and read PRESENT - but you do
-NOT have to spam session_heartbeat: any AUTHENTICATED active verb (pass your
-session_id + session_secret) advances the heartbeat for you, so receiving
-(inbox_pull), sending and claiming keep you present while you work. Use
-session_heartbeat explicitly only when you are idle but want to stay present.
+NOT have to spam session_heartbeat. Only verbs that accept and validate session
+credentials advance it: message_create (``from_session_id``), handoff
+claim/complete/verify/reject/cancel, inbox pull/ack/extend and poll_token_*.
+Read-only verbs, discovery and event_* never advance it. Use session_heartbeat
+explicitly when you are idle or on a read-only stretch but want to stay present.
 
 # session_heartbeat
 Advance a session heartbeat and report the derived status; keeps you PRESENT and
-clear of the stale-session reaper. Note: any authenticated active verb already
-advances your heartbeat, so reserve explicit heartbeats for IDLE stretches (e.g.
-while parked on an event_wait long-poll) where you take no other action.
+clear of the stale-session reaper. The credential-bearing verbs listed above
+already advance your heartbeat; reserve explicit heartbeats for IDLE or
+read-only stretches (e.g. while parked on an event_wait long-poll).
 
 # session_close
 Close a session (idempotent).

@@ -32,6 +32,10 @@ def test_baseline_is_internally_consistent():
     assert BASELINE["cuttable"] > 0
 
 
+def test_revision_32_coordination_guidance_growth_is_audited():
+    assert APPROVED_GROWTH["coordination_guidance_r32"] == 1221
+
+
 def test_measure_resident_surface_reports_components(tmp_path):
     server = _server(tmp_path)
     m = asyncio.run(measure_resident_surface(server))
@@ -52,7 +56,7 @@ def test_cuttable_reduction_helper_matches_baseline_math(tmp_path):
     # lowers the figure, so gratuitous bloat keeps tripping the S4 gate.
     # Experimental entries (flag-gated tools NOT on the default surface,
     # e.g. memory_i6) are excluded unless include_experimental=True - the
-    # default gate must not discount growth that is not there (rev 31).
+    # default gate must not discount growth that is not there (rev 32).
     approved = sum(
         cost
         for key, cost in APPROVED_GROWTH.items()

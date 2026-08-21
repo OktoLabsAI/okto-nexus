@@ -1253,7 +1253,7 @@ def test_ts11_surface_revision_feature_flag_and_budgets(tmp_path):
     meta = FakeServer()
     register_meta_tools(meta, deps)
     info = _ok(meta.tools["nexus_info"]())
-    assert info["surface_revision"] == SURFACE_REVISION == 31
+    assert info["surface_revision"] == SURFACE_REVISION == 32
     assert info["features"]["feature_dag"] is True
 
     # Zero new tools: I5 rides existing verbs only - no tool name mentions

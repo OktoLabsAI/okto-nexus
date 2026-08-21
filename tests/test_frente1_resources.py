@@ -25,10 +25,15 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.server import bootstrap, create_server
+from okto_nexus.adapters.inbound.mcp.server import (
+    SERVER_INSTRUCTIONS,
+    bootstrap,
+    create_server,
+)
 
 pytest.importorskip("mcp", reason="MCP SDK required to build the live server")
 
@@ -80,6 +85,12 @@ def _read_body(server, uri: str) -> str:
     body = contents[0].content
     assert isinstance(body, str), f"{uri} content must be text, got {type(body)!r}"
     return body
+
+
+def _normalised_resource(server, uri: str) -> str:
+    """Return prose normalised for semantic, formatting-insensitive checks."""
+    body = _read_body(server, uri).replace("`", "").lower()
+    return re.sub(r"\s+", " ", body).strip()
 
 
 def _assert_canonical_envelope(env: dict, *, where: str) -> None:
@@ -143,6 +154,171 @@ def test_each_reference_resource_reads_nonempty_with_version_frontmatter(surface
             f"{uri} body must carry 'version:' frontmatter near the start; "
             f"head was {head!r}"
         )
+
+
+def test_changed_guidance_resources_publish_new_cache_versions(surface):
+    """Every changed instruction resource must invalidate clients' caches."""
+    server, _ = surface
+    expected_versions = {
+        "okto-nexus://reference/preflight": "4",
+        "okto-nexus://reference/communication": "3",
+        "okto-nexus://reference/tool-docs/messages": "3",
+        "okto-nexus://reference/tool-docs/handoff": "4",
+        "okto-nexus://reference/tool-docs/identity": "5",
+    }
+
+    info = _call(server, "nexus_info")
+    assert info["ok"] is True
+    versions = info["data"]["resource_versions"]
+    for uri, expected in expected_versions.items():
+        assert versions[uri] == expected, (
+            f"{uri} changed semantically and must publish version {expected}; "
+            f"got {versions[uri]!r}"
+        )
+        assert f'version: "{expected}"' in _read_body(server, uri)[:80]
+
+
+def test_resident_instructions_match_the_intent_based_coordination_contract():
+    """The always-resident summary must not drift behind the deep resources."""
+    resident = re.sub(r"\s+", " ", SERVER_INSTRUCTIONS.lower()).strip()
+
+    assert "default operating contract" in resident
+    assert "explicit user instruction for the current task" in resident
+    assert "never grants permissions or bypasses governance" in resident
+    assert "handoff (all executable work)" in resident
+    assert "must use handoff_create, never message_create alone" in resident
+    assert "broadcast message (shared alignment/information)" in resident
+    assert "direct message (conversation)" in resident
+    assert "a broadcast-target handoff is a claim pool for one executor" in resident
+
+    for stale_rule in (
+        "direct (default, preferred)",
+        "broadcast (last resort)",
+        "when exactly one free agent",
+    ):
+        assert stale_rule not in resident
+
+
+def test_preflight_makes_profile_defaults_overridable_only_for_current_task(surface):
+    """Role/style guide behaviour; a user request cannot weaken hard controls."""
+    server, _ = surface
+    preflight = _normalised_resource(
+        server, "okto-nexus://reference/preflight"
+    )
+
+    # agent_whoami is the source of both behavioural defaults.  The wording
+    # deliberately calls them an operating contract, rather than merely
+    # reporting that these fields happen to exist in the response.
+    assert "agent_whoami" in preflight
+    assert "role" in preflight
+    assert "communication.content" in preflight
+    assert "default operating contract" in preflight
+
+    # An explicit user direction may override those defaults for the current
+    # job/interaction, but must not silently mutate the saved Nexus profile.
+    assert "unless the user explicitly directs otherwise" in preflight
+    assert "task-scoped" in preflight
+    assert "does not modify the nexus profile" in preflight
+
+    # User-level style/role overrides never become an authority escalation.
+    for hard_control in (
+        "permissions",
+        "policies",
+        "guardrails",
+        "approvals",
+        "communication scope",
+        "safety rules",
+        "higher-priority host instructions",
+    ):
+        assert hard_control in preflight, (
+            f"profile override guidance must preserve {hard_control}"
+        )
+    assert re.search(
+        r"user override.{0,180}(never|cannot|does not).{0,80}"
+        r"(grant|bypass|override)",
+        preflight,
+    ), "a task-scoped user override must explicitly deny authority escalation"
+
+
+def test_communication_resource_routes_all_executable_work_through_handoffs(surface):
+    """The channel decision is based on intent, with handoff as task record."""
+    server, _ = surface
+    communication = _normalised_resource(
+        server, "okto-nexus://reference/communication"
+    )
+
+    assert "choose by intent" in communication
+    assert re.search(
+        r"if another agent is expected to perform work or produce a "
+        r"deliverable, create a handoff",
+        communication,
+    )
+    assert "all executable work" in communication
+    assert "must use handoff_create" in communication
+    assert re.search(
+        r"message_create must (?:not|never) be the sole record", communication
+    )
+
+    # This applies both when the owner is already known and when the first
+    # eligible agent is intentionally invited to claim the task.
+    assert 'target={"strategy":"direct"' in communication
+    assert re.search(r"intended (?:assignee|agent) is known", communication)
+    assert "first eligible claimant" in communication
+    assert "canonical" in communication
+    assert "trackable record" in communication
+    assert "users" in communication
+    for lifecycle_field in ("ownership", "status", "result", "lifecycle"):
+        assert lifecycle_field in communication
+
+
+def test_communication_resource_keeps_broadcast_and_direct_informational(surface):
+    """Messages coordinate conversation; they do not create task ownership."""
+    server, _ = surface
+    communication = _normalised_resource(
+        server, "okto-nexus://reference/communication"
+    )
+
+    # Broadcast is legitimate shared alignment/information, rather than a
+    # generic "last resort", but any expectation of action becomes handoff(s).
+    assert "shared alignment and information" in communication
+    for use in ("shared context", "decisions", "announcements", "general alignment"):
+        assert use in communication
+    assert "a broadcast message informs; it does not assign work" in communication
+    assert re.search(
+        r"if (?:any recipient|anyone) is expected to act, "
+        r"create one or more handoffs",
+        communication,
+    )
+
+    # Direct messages cover conversational coordination.  Turning that
+    # conversation into new executable work must create a traceable handoff.
+    assert "direct message" in communication
+    for use in ("status checks", "questions", "clarifications", "informal coordination"):
+        assert use in communication
+    assert re.search(
+        r"if (?:the )?conversation creates new work, create a handoff",
+        communication,
+    )
+    assert re.search(r"reference (?:its|the existing) (?:id|handoff_id)", communication)
+
+
+def test_communication_resource_disambiguates_the_two_broadcast_operations(surface):
+    """Message fan-out and a claim-first handoff must never be conflated."""
+    server, _ = surface
+    communication = _normalised_resource(
+        server, "okto-nexus://reference/communication"
+    )
+
+    assert "a broadcast message is informational fan-out" in communication
+    assert re.search(
+        r"a handoff with target=\{[^}]*broadcast[^}]*\} is a claim pool",
+        communication,
+    )
+    assert re.search(
+        r"claim pool:.{0,180}only the first.{0,180}(?:one|1) executor",
+        communication,
+    )
+    assert "never asks every eligible agent to execute" in communication
 
 
 # --------------------------------------------------------------------------- #
