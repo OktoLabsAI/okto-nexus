@@ -350,8 +350,9 @@ They cannot call MCP or mutate state.
 
 The bundled dashboard provides:
 
-- **Graph** — agent cards, heartbeat-derived presence, recent message flow,
-  unread traffic, open handoffs, and claimed relationships;
+- **Graph** — toggle between detailed agent cards and compact activity-sized
+  circles, with profile colours, live presence status badges, recent
+  message flow, unread traffic, open handoffs, and claimed relationships;
 - **Messages** — inbox lanes, peer conversations, undelivered targeting
   outcomes, receipts, and optional semantic search;
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,

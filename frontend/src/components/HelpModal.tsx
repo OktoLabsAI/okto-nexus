@@ -124,11 +124,25 @@ const SECTIONS: Section[] = [
     content: (
       <>
         <H>How to read it</H>
+        <P>
+          Use <b>Agent representation</b> at the top of the Graph to switch
+          between the full <b>Detailed</b> cards and compact <b>Simple</b>{" "}
+          circles. The choice is remembered without changing the graph layout
+          or your current inspection.
+        </P>
         <ul className="list-disc pl-4 space-y-1 mb-2">
           <Li>
-            <b>Node colour = presence</b>: blue (heartbeat &lt; 1 min), amber
-            (silent for 1–30 min), dimmed (no active session). Derived live
-            from heartbeats — never invented.
+            <b>Agent colour = identity</b>: the configured profile colour, or
+            a stable colour derived from the agent ID when none is set.
+          </Li>
+          <Li>
+            <b>Status dot = presence</b>: green means online, amber means
+            stale, and grey means offline. In Simple mode it sits on the
+            circle's upper-left edge.
+          </Li>
+          <Li>
+            <b>Simple circle size = current activity</b>: active sessions plus
+            unread and in-flight inbox work, on a bounded scale.
           </Li>
           <Li>
             <b>Blue arrows</b>: messages in the last 24h; thickness = volume.

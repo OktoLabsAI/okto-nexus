@@ -326,7 +326,7 @@ function ConnectSlide() {
 
 function ObserveSlide() {
   const legend: [string, string, string][] = [
-    ["#0ea5e9", "Agents are nodes", "colour shows presence — present, stale, offline."],
+    ["#8b5cf6", "Agents are nodes", "profile colour identifies them; the corner dot shows status."],
     ["#22d3ee", "Edges are messages", "cyan/dashed = in-flight; grey = completed flow."],
     ["#ec4899", "Squares are handoffs", "work waiting in the pool for a free agent to claim."],
   ];
@@ -338,7 +338,8 @@ function ObserveSlide() {
       </h2>
       <p className="text-[13.5px] leading-snug text-surface-500 dark:text-surface-400 mb-5">
         The Graph is your live view of the swarm. Messages addressed to an agent
-        land in its inbox; click any element to inspect it.
+        land in its inbox; switch between detailed cards and activity-sized
+        circles, then click any element to inspect it.
       </p>
       <ul className="space-y-3">
         {legend.map(([color, title, desc]) => (

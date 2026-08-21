@@ -5,8 +5,8 @@
 // Visual grammar (owner-reviewed, 2026-06-10; central hub node tried and
 // REJECTED by the owner - idle agents sit on a calm deterministic orbit
 // around the mesh's centroid instead):
-// * Agents are circles coloured by DERIVED presence; size tracks activity;
-//   offline nodes and labels are deliberately muted.
+// * Detailed mode renders agent entity cards. Simple mode renders identity-
+//   coloured circles whose size tracks activity, with a corner presence badge.
 // * Message edges are blue, thickness ~ volume; in-flight traffic turns
 //   the edge cyan and adds a "N (mail)" edge label badge.
 // * Handoffs are magenta SQUARES (work waiting for a claim, not agents).
@@ -19,9 +19,22 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import Sigma from "sigma";
 import { NodeSquareProgram } from "@sigma/node-square";
 import { DashedEdgeArrowProgram } from "../graph/DashedEdgeProgram";
+import {
+  agentActivityScore,
+  simpleAgentNodeRadius,
+} from "../graph/agentActivity";
 import { actionLabel, relativeTime } from "../graph/lastAction";
 import { agentColor, gradientFor, textColorFor } from "../graph/agentColor";
-import { ArrowLeftRight, Ban, Inbox, RotateCw, Search, X } from "lucide-react";
+import {
+  ArrowLeftRight,
+  Ban,
+  Circle,
+  Inbox,
+  PanelsTopLeft,
+  RotateCw,
+  Search,
+  X,
+} from "lucide-react";
 import {
   api,
   type ConversationPeer,
@@ -39,7 +52,9 @@ import { TargetDescriptor, targetSummary } from "../components/TargetDescriptor"
 import type { SSEStatus } from "../useSSE";
 
 type ThemeName = "light" | "dark";
+type GraphViewMode = "detailed" | "simple";
 const AGENT_NODE_RADIUS_PX = 7;
+const GRAPH_VIEW_MODE_KEY = "okto-nexus-graph-mode";
 
 function presenceColor(presence: GraphNode["presence"], theme: ThemeName): string {
   if (presence === "present") return "#0ea5e9";
@@ -55,6 +70,19 @@ function statusDotColor(presence: GraphNode["presence"]): string {
   if (presence === "present") return "#22c55e"; // green — online
   if (presence === "stale") return "#f59e0b"; // amber — stale
   return "#9ca3af"; // grey — offline
+}
+
+function statusLabel(presence: GraphNode["presence"]): string {
+  return presence === "present" ? "online" : presence;
+}
+
+function initialGraphViewMode(): GraphViewMode {
+  try {
+    const stored = localStorage.getItem(GRAPH_VIEW_MODE_KEY);
+    return stored === "simple" ? "simple" : "detailed";
+  } catch {
+    return "detailed";
+  }
 }
 
 // Grey flow-decay for COMPLETED traffic (no pending deliveries in the
@@ -119,9 +147,16 @@ export function GraphView({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [selection, setSelection] = useState<Selection>(null);
-  // agent_id -> the card's DOM node, so the Sigma frame loop can glue each
-  // card to its node's viewport position (populated by the overlay's ref).
-  const cardRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const [viewMode, setViewMode] = useState<GraphViewMode>(initialGraphViewMode);
+  const viewModeRef = useRef<GraphViewMode>(viewMode);
+  viewModeRef.current = viewMode;
+  const rendererRef = useRef<Sigma | null>(null);
+  const syncAgentOverlaysRef = useRef<() => void>(() => undefined);
+  // agent_id -> the visible card or the simple node's transparent hit target.
+  // The Sigma frame loop glues either representation to the same graph point.
+  const agentOverlayRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const simpleOutlineRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
+  const simpleBadgeRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
   // Live tick for the cards' relative-time reference ("2 minutes ago"): a
   // wall-clock that advances every 30s so open cards re-render their age with
   // no refetch. Independent of the edge flow-decay ticker below.
@@ -148,6 +183,10 @@ export function GraphView({
         size: AGENT_NODE_RADIUS_PX,
         color: presenceColor(node.presence, theme),
         kind: "agent",
+        agentLabel: node.agent_id,
+        identityColor: agentColor(node.agent_id, node.color),
+        simpleSize: simpleAgentNodeRadius(node),
+        anchorColor: presenceColor(node.presence, theme),
       });
     }
 
@@ -288,7 +327,26 @@ export function GraphView({
       nodeProgramClasses: { square: NodeSquareProgram },
       edgeProgramClasses: { dashed: DashedEdgeArrowProgram },
       allowInvalidContainer: true,
+      nodeReducer: (_node, data) => {
+        if (data.kind !== "agent") return data;
+        if (viewModeRef.current === "simple") {
+          return {
+            ...data,
+            label: String(data.agentLabel ?? ""),
+            size: Number(data.simpleSize ?? AGENT_NODE_RADIUS_PX),
+            color: String(data.identityColor ?? data.color),
+            labelColor: dark ? "#e2e8f0" : "#1e293b",
+          };
+        }
+        return {
+          ...data,
+          label: "",
+          size: AGENT_NODE_RADIUS_PX,
+          color: String(data.anchorColor ?? data.color),
+        };
+      },
     });
+    rendererRef.current = renderer;
     renderer.on("clickNode", ({ node }) => {
       if (node.startsWith("pool:")) {
         const handoff = graph?.edges.handoffs.find(
@@ -320,10 +378,11 @@ export function GraphView({
     // viewport coordinates); harmless in production.
     (window as unknown as { __nexusSigma?: Sigma }).__nexusSigma = renderer;
 
-    // Keep each HTML entity card centered on its agent anchor: reproject on
-    // every Sigma frame (pan, zoom and resize all emit afterRender).
-    const syncCards = () => {
-      const refs = cardRefs.current;
+    // Keep the active HTML representation centered on its agent anchor.
+    // In Simple mode the transparent button matches the rendered circle's
+    // zoom-aware diameter and carries the corner presence badge.
+    const syncAgentOverlays = () => {
+      const refs = agentOverlayRefs.current;
       refs.forEach((el, id) => {
         if (!model.hasNode(id)) {
           el.style.opacity = "0";
@@ -333,11 +392,36 @@ export function GraphView({
         const y = model.getNodeAttribute(id, "y") as number;
         const vp = renderer.graphToViewport({ x, y });
         el.style.transform = `translate(${vp.x}px, ${vp.y}px) translate(-50%, -50%)`;
+        if (viewModeRef.current === "simple") {
+          const display = renderer.getNodeDisplayData(id);
+          const radius = renderer.scaleSize(
+            display?.size ?? AGENT_NODE_RADIUS_PX,
+          );
+          const visualDiameter = Math.max(2, radius * 2);
+          const hitDiameter = Math.max(24, visualDiameter);
+          const badgeSize = Math.max(10, Math.min(14, visualDiameter * 0.32));
+          const badgeOffset = radius * Math.SQRT1_2;
+          el.style.width = `${hitDiameter}px`;
+          el.style.height = `${hitDiameter}px`;
+          const outline = simpleOutlineRefs.current.get(id);
+          if (outline) {
+            outline.style.width = `${visualDiameter}px`;
+            outline.style.height = `${visualDiameter}px`;
+          }
+          const badge = simpleBadgeRefs.current.get(id);
+          if (badge) {
+            badge.style.width = `${badgeSize}px`;
+            badge.style.height = `${badgeSize}px`;
+            badge.style.left = `calc(50% - ${badgeOffset}px)`;
+            badge.style.top = `calc(50% - ${badgeOffset}px)`;
+          }
+        }
         el.style.opacity = "1";
       });
     };
-    renderer.on("afterRender", syncCards);
-    syncCards(); // first paint (afterRender then keeps it in sync)
+    syncAgentOverlaysRef.current = syncAgentOverlays;
+    renderer.on("afterRender", syncAgentOverlays);
+    syncAgentOverlays(); // first paint; afterRender keeps pan/zoom in sync
 
     // Flow-decay ticker: every 30s, fade completed-flow edges IN PLACE
     // (attribute mutation re-renders; it never rebuilds layout or camera).
@@ -355,22 +439,35 @@ export function GraphView({
     }, 30_000);
     return () => {
       window.clearInterval(decayTimer);
+      if (rendererRef.current === renderer) rendererRef.current = null;
+      syncAgentOverlaysRef.current = () => undefined;
       renderer.kill();
     };
   }, [model, graph, theme]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(GRAPH_VIEW_MODE_KEY, viewMode);
+    } catch {
+      // Browser policy can disable storage; the current visit still toggles.
+    }
+    // nodeReducer reads viewModeRef, so refresh changes only presentation: the
+    // Graphology model, ForceAtlas layout, camera and selection remain intact.
+    rendererRef.current?.refresh();
+    syncAgentOverlaysRef.current();
+  }, [viewMode]);
+
   return (
     <div className="h-full flex">
-      <div
-        className="flex-1 relative bg-surface-50 dark:bg-surface-950 transition-colors"
-        data-testid="graph-canvas"
-      >
-        <div ref={containerRef} className="absolute inset-0" />
+      <div className="flex-1 min-w-0 flex flex-col bg-surface-50 dark:bg-surface-950 transition-colors">
+        <GraphModeToolbar mode={viewMode} onChange={setViewMode} />
+        <div className="flex-1 min-h-0 relative" data-testid="graph-canvas">
+          <div ref={containerRef} className="absolute inset-0" />
         {/* Entity-card overlay: one card per agent, glued to its node by the
-            Sigma frame loop (syncCards). The layer ignores pointer events so
+            Sigma frame loop. The layer ignores pointer events so
             panning falls through the gaps; each card re-enables them so a
             click opens the SidePanel (same target as the old node click). */}
-        {graph && (
+        {graph && viewMode === "detailed" && (
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             {graph.nodes.map((node) => {
               // Identity color drives the header gradient; the name text color
@@ -393,8 +490,8 @@ export function GraphView({
                 <button
                   key={node.agent_id}
                   ref={(el) => {
-                    if (el) cardRefs.current.set(node.agent_id, el);
-                    else cardRefs.current.delete(node.agent_id);
+                    if (el) agentOverlayRefs.current.set(node.agent_id, el);
+                    else agentOverlayRefs.current.delete(node.agent_id);
                   }}
                   onClick={() => setSelection({ kind: "node", node })}
                   data-testid="agent-card"
@@ -496,12 +593,81 @@ export function GraphView({
             })}
           </div>
         )}
-        <Legend />
+        {graph && viewMode === "simple" && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {graph.nodes.map((node) => {
+              const activity = agentActivityScore(node);
+              const radius = simpleAgentNodeRadius(node);
+              const color = agentColor(node.agent_id, node.color);
+              const state = statusLabel(node.presence);
+              return (
+                <button
+                  key={node.agent_id}
+                  ref={(el) => {
+                    if (el) agentOverlayRefs.current.set(node.agent_id, el);
+                    else agentOverlayRefs.current.delete(node.agent_id);
+                  }}
+                  type="button"
+                  onClick={() => setSelection({ kind: "node", node })}
+                  data-testid="simple-agent-node"
+                  data-agent-id={node.agent_id}
+                  data-activity={activity}
+                  data-node-radius={radius}
+                  data-agent-color={color}
+                  data-presence={node.presence}
+                  data-status={state}
+                  data-status-color={statusDotColor(node.presence)}
+                  aria-label={`${node.agent_id}${node.role ? `, ${node.role}` : ""}, ${state}, activity ${activity}`}
+                  title={`${node.agent_id} · ${state} · activity ${activity}`}
+                  className="absolute top-0 left-0 opacity-0 pointer-events-auto rounded-full
+                    bg-transparent hover:ring-2 hover:ring-accent-500/60
+                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500
+                    focus-visible:ring-offset-2 focus-visible:ring-offset-surface-50
+                    dark:focus-visible:ring-offset-surface-950"
+                >
+                  <span
+                    data-node-outline
+                    ref={(el) => {
+                      if (el) simpleOutlineRefs.current.set(node.agent_id, el);
+                      else simpleOutlineRefs.current.delete(node.agent_id);
+                    }}
+                    aria-hidden="true"
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                      rounded-full border border-surface-300/80 dark:border-surface-600/80"
+                  />
+                  <span
+                    data-status-badge
+                    ref={(el) => {
+                      if (el) simpleBadgeRefs.current.set(node.agent_id, el);
+                      else simpleBadgeRefs.current.delete(node.agent_id);
+                    }}
+                    aria-hidden="true"
+                    className="absolute grid -translate-x-1/2 -translate-y-1/2 place-items-center
+                      rounded-full border-2 border-surface-50 text-[8px] font-black leading-none
+                      shadow-sm dark:border-surface-950"
+                    style={{
+                      backgroundColor: statusDotColor(node.presence),
+                      color: "#0b1220",
+                    }}
+                  >
+                    {node.presence === "present"
+                      ? "✓"
+                      : node.presence === "stale"
+                        ? "!"
+                        : "–"}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+        <Legend viewMode={viewMode} />
         {graph && graph.nodes.length === 0 && (
           <div className="absolute inset-0 grid place-items-center text-sm text-surface-400 dark:text-surface-500">
             No agents registered yet — create one in the Agents tab.
           </div>
         )}
+        </div>
       </div>
       {selection && (
         <ResizablePanel testId="side-panel">
@@ -521,9 +687,71 @@ export function GraphView({
 }
 
 // --------------------------------------------------------------------------- //
+// View mode - persistent, camera-preserving representation switch
+// --------------------------------------------------------------------------- //
+function GraphModeToolbar({
+  mode,
+  onChange,
+}: {
+  mode: GraphViewMode;
+  onChange: (mode: GraphViewMode) => void;
+}) {
+  const buttonClass = (active: boolean) =>
+    `inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium transition-colors
+      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 ${
+      active
+        ? "bg-accent-700 text-white shadow-sm"
+        : "text-surface-500 hover:bg-surface-100 hover:text-surface-800 dark:text-surface-400 dark:hover:bg-surface-800 dark:hover:text-surface-100"
+    }`;
+
+  return (
+    <div
+      className="shrink-0 flex h-12 items-center gap-3 border-b border-surface-200/80
+        bg-white/90 px-4 dark:border-surface-800 dark:bg-surface-900/90"
+      data-testid="graph-view-toolbar"
+    >
+      <span
+        id="graph-representation-label"
+        className="hidden text-xs font-medium text-surface-500 dark:text-surface-400 sm:inline"
+      >
+        Agent representation
+      </span>
+      <div
+        role="group"
+        aria-labelledby="graph-representation-label"
+        className="inline-flex rounded-lg border border-surface-200 bg-surface-50 p-0.5
+          dark:border-surface-700 dark:bg-surface-950"
+        data-testid="graph-view-toggle"
+      >
+        <button
+          type="button"
+          className={buttonClass(mode === "detailed")}
+          aria-pressed={mode === "detailed"}
+          data-testid="graph-mode-detailed"
+          title="Show detailed agent cards"
+          onClick={() => onChange("detailed")}
+        >
+          <PanelsTopLeft size={14} /> Detailed
+        </button>
+        <button
+          type="button"
+          className={buttonClass(mode === "simple")}
+          aria-pressed={mode === "simple"}
+          data-testid="graph-mode-simple"
+          title="Show activity-sized agent circles"
+          onClick={() => onChange("simple")}
+        >
+          <Circle size={14} /> Simple
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// --------------------------------------------------------------------------- //
 // Legend - collapsible "how to read this graph" card
 // --------------------------------------------------------------------------- //
-function Legend() {
+function Legend({ viewMode }: { viewMode: GraphViewMode }) {
   const [open, setOpen] = useState(true);
   if (!open) {
     return (
@@ -557,7 +785,8 @@ function Legend() {
         <span className="text-base align-middle" style={{ color: "#22c55e" }}>
           ●
         </span>{" "}
-        present <span className="text-surface-400">· heartbeat &lt; 1 min</span>
+        online{" "}
+        <span className="text-surface-400">· heartbeat/activity &lt; 1 min</span>
       </div>
       <div>
         <span className="text-amber-500 text-base align-middle">●</span> stale{" "}
@@ -590,26 +819,47 @@ function Legend() {
         <span className="text-pink-500 text-sm align-middle">■</span> handoff
         aberto <span className="text-surface-400">· aguarda claim</span>
       </div>
-      <div>
-        <span
-          className="inline-block w-3 h-3 rounded-sm align-middle"
-          style={{ backgroundImage: "linear-gradient(135deg,#8b5cf6,#6d28d9)" }}
-        />{" "}
-        card header{" "}
-        <span className="text-surface-400">
-          · agent color (auto by identity unless set)
-        </span>
-      </div>
-      <div>
-        <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300 align-middle">
-          <Inbox size={9} /> N
-        </span>{" "}
-        pending inbox ·{" "}
-        <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300 align-middle">
-          <ArrowLeftRight size={9} /> N
-        </span>{" "}
-        open handoffs <span className="text-surface-400">· hidden at 0</span>
-      </div>
+      {viewMode === "detailed" ? (
+        <>
+          <div>
+            <span
+              className="inline-block w-3 h-3 rounded-sm align-middle"
+              style={{ backgroundImage: "linear-gradient(135deg,#8b5cf6,#6d28d9)" }}
+            />{" "}
+            card header{" "}
+            <span className="text-surface-400">
+              · agent color (auto by identity unless set)
+            </span>
+          </div>
+          <div>
+            <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-sky-100 text-sky-700 dark:bg-sky-900/40 dark:text-sky-300 align-middle">
+              <Inbox size={9} /> N
+            </span>{" "}
+            pending inbox ·{" "}
+            <span className="inline-flex items-center gap-0.5 rounded px-1 text-[9px] font-medium bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-900/40 dark:text-fuchsia-300 align-middle">
+              <ArrowLeftRight size={9} /> N
+            </span>{" "}
+            open handoffs <span className="text-surface-400">· hidden at 0</span>
+          </div>
+        </>
+      ) : (
+        <>
+          <div>
+            <span className="relative mr-1 inline-block h-4 w-4 rounded-full bg-violet-500 align-middle">
+              <span className="absolute -left-0.5 -top-0.5 h-2 w-2 rounded-full border border-white bg-emerald-500" />
+            </span>{" "}
+            agent circle{" "}
+            <span className="text-surface-400">· profile color + corner status</span>
+          </div>
+          <div>
+            <span className="inline-block w-4 text-center font-bold text-accent-500">↗</span>{" "}
+            circle size{" "}
+            <span className="text-surface-400">
+              · active sessions + unread/in-flight inbox
+            </span>
+          </div>
+        </>
+      )}
       <div className="text-surface-400 mt-1">
         Click any element to inspect it.
       </div>
