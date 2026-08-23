@@ -1,0 +1,76 @@
+name: Bug report
+description: Report reproducible incorrect behavior in Okto Nexus
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Remove API keys, session secrets, tokens,
+        private messages, workspace data, and other sensitive information.
+  - type: input
+    id: version
+    attributes:
+      label: Okto Nexus version
+      description: Run `okto-nexus --version` or provide the installed package version.
+      placeholder: 0.1.4
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11, macOS 15, Ubuntu 24.04
+    validations:
+      required: true
+  - type: dropdown
+    id: install-extra
+    attributes:
+      label: Installation mode or extra
+      options:
+        - Core / stdio
+        - serve
+        - serve-lite
+        - embeddings
+        - Custom combination
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest sequence that consistently reproduces the problem.
+      placeholder: |
+        1. Configure ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste sanitized logs only. Remove all secrets and private data.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed secrets and private workspace data from this report.
+          required: true
+        - label: I searched existing issues for the same problem.
+          required: true
