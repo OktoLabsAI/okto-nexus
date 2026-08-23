@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.3` |
+| Package | `okto-nexus 0.1.4` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -693,7 +693,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.3 default surface:
+For the 0.1.4 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -961,10 +961,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.3
+uv build --out-dir dist/release-0.1.4
 uvx twine check \
-  dist/release-0.1.3/okto_nexus-0.1.3-py3-none-any.whl \
-  dist/release-0.1.3/okto_nexus-0.1.3.tar.gz
+  dist/release-0.1.4/okto_nexus-0.1.4-py3-none-any.whl \
+  dist/release-0.1.4/okto_nexus-0.1.4.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1091,11 +1091,20 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.3 — current
+### 0.1.4 — current
 
-Maintenance, documentation, and repository-hygiene release. The MCP guidance
+Dashboard, observability, and coordination-guidance release. The MCP guidance
 contract advances to surface revision 32; the database schema is unchanged and
 the latest migration remains 026.
+
+- Added detailed and compact activity-based agent graph modes, profile colours,
+  live status badges, richer relationship context, and graph conversations.
+- Added an event timeline, expanded event and handoff filters, message detail
+  hydration, workspace display names, and catalog import/export workflows.
+- Improved dashboard views for agents, approvals, communication, events,
+  guardrails, handoffs, messages, policies, and workspaces.
+- Extended observability APIs and repositories with message lookup, filtered
+  handoff/event queries, and bucketed event timeline data.
 
 - Clarified that agents follow the role and communication profile returned by
   `agent_whoami` unless the user supplies a task-scoped override, without
@@ -1109,7 +1118,7 @@ the latest migration remains 026.
   governance features, verification/DAG workflows, 34-table schema, 29-code
   error catalog, operations, testing, and limitations.
 - Synchronized `pyproject.toml` and the root project entry in `uv.lock` at
-  version 0.1.3, and aligned the package/dashboard license label with the
+  version 0.1.4, and aligned the package/dashboard license label with the
   addendum that is actually included in `LICENSE`.
 - Removed tracked runtime SQLite databases and added ignore coverage for
   database files and journal/WAL/SHM sidecars.
