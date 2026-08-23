@@ -10,10 +10,36 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Elastic License 2.0 + SaaS/Branding Addendum" }
 authors = [{ name = "Okto Labs" }]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "multi-agent",
+    "agent-coordination",
+    "local-first",
+    "developer-tools",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: System :: Distributed Computing",
+]
 dependencies = [
     "mcp>=1.0",
     "pydantic>=2",
 ]
+
+[project.urls]
+Homepage = "https://nexus.oktolabs.ai"
+Documentation = "https://github.com/OktoLabsAI/okto-nexus#readme"
+Repository = "https://github.com/OktoLabsAI/okto-nexus"
+Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 
 [project.optional-dependencies]
 # DEFAULT serve build (`okto-nexus serve`): HTTP transport + dashboard + the

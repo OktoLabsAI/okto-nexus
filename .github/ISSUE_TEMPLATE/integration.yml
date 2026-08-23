@@ -1,0 +1,66 @@
+name: Integration request
+description: Request or improve an MCP client, tool, or platform integration
+title: "integration: "
+labels:
+  - enhancement
+body:
+  - type: input
+    id: client
+    attributes:
+      label: Client or tool
+      placeholder: Codex, Claude Code, custom MCP client
+    validations:
+      required: true
+  - type: input
+    id: client-version
+    attributes:
+      label: Client or tool version
+    validations:
+      required: true
+  - type: dropdown
+    id: transport
+    attributes:
+      label: Transport
+      options:
+        - stdio
+        - Streamable HTTP
+        - REST / SSE monitor
+        - Not sure
+    validations:
+      required: true
+  - type: dropdown
+    id: authentication
+    attributes:
+      label: Authentication mode
+      options:
+        - Agent API key
+        - Loopback operator trust
+        - Ephemeral monitor token
+        - Reverse-proxy or external authentication
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: workflow
+    attributes:
+      label: Desired workflow
+      description: Describe how the client should connect and coordinate through Nexus.
+    validations:
+      required: true
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: Current behavior or blocker
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Sanitized configuration example
+      description: Remove API keys, tokens, paths, messages, and other private data.
+      render: json
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed secrets and private data from this request.
+          required: true

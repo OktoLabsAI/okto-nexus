@@ -13,6 +13,10 @@ All notable changes to Okto Nexus are documented in this file.
 - Message-detail hydration and richer filtering for handoff and event APIs.
 - Workspace display names and catalog import/export workflows in the dashboard.
 - Repository ownership metadata for the main branch.
+- Complete PyPI project URLs, keywords, and supported-Python classifiers.
+- Contributor and security policies plus structured bug, feature, and
+  integration issue forms.
+- A dedicated documentation-assets directory for product screenshots.
 
 ### Changed
 
@@ -33,3 +37,4 @@ All notable changes to Okto Nexus are documented in this file.
 - Expanded coverage for conversations, HTTP observability APIs, resources,
   surface metrics, feature flags, memory, handoff dependencies, health, replay,
   and verification behavior.
+- Added a focused package-metadata regression test.

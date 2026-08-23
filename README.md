@@ -48,6 +48,7 @@ the derived `shared.md` view live outside that database.
 - [Data model and migrations](#data-model-and-migrations)
 - [Errors](#errors)
 - [Development](#development)
+- [Contributing](#contributing)
 - [Troubleshooting](#troubleshooting)
 - [Security and limitations](#security-and-limitations)
 - [Release notes](#release-notes)
@@ -995,6 +996,11 @@ pyproject.toml               package metadata and extras
 uv.lock                      reproducible dependency lock
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the supported Python and frontend
+development environments, validation commands, and pull-request workflow.
+
 ## Troubleshooting
 
 ### `event_wait` returns immediately
@@ -1056,6 +1062,10 @@ reusing cached MCP reference content.
 
 ## Security and limitations
 
+Report vulnerabilities privately according to [SECURITY.md](SECURITY.md). Do
+not include vulnerability details, credentials, tokens, or private workspace
+data in a public issue.
+
 - Nexus is designed for local or controlled single-tenant coordination, not as
   a public multi-tenant broker.
 - It does not terminate TLS. Put an authenticated TLS reverse proxy in front
@@ -1105,6 +1115,10 @@ the latest migration remains 026.
   guardrails, handoffs, messages, policies, and workspaces.
 - Extended observability APIs and repositories with message lookup, filtered
   handoff/event queries, and bucketed event timeline data.
+- Completed PyPI project URLs, keywords, and supported-Python classifiers, with
+  a focused metadata regression test.
+- Added contributor and security policies, structured GitHub issue forms, and
+  a dedicated documentation-assets location for product screenshots.
 
 - Clarified that agents follow the role and communication profile returned by
   `agent_whoami` unless the user supplies a task-scoped override, without
