@@ -1164,6 +1164,10 @@ class ObservabilityQueries(Protocol):
         *,
         workspace_id: str | None,
         statuses: tuple[str, ...] | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
     ) -> list[dict[str, Any]]: ...
 
     def handoff_dependency_aggregates(
@@ -1248,8 +1252,11 @@ class ObservabilityQueries(Protocol):
         page: int,
         page_size: int,
         peer_id: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
         undelivered_only: bool = False,
         include_body: bool = False,
+        message_id: str | None = None,
     ) -> tuple[list[dict[str, Any]], int]:
         """Paginated message history with per-recipient deliveries; (items, total).
 
@@ -1281,12 +1288,32 @@ class ObservabilityQueries(Protocol):
         type_: str | None = None,
         actor_agent_id: str | None = None,
         trace_id: str | None = None,
+        recipient_agent_id: str | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
     ) -> list[dict[str, Any]]:
         """Event-log rows with ``event_id > cursor``, ascending (SSE/tail feed).
 
         ``type_`` / ``actor_agent_id`` are optional column equality filters;
         ``trace_id`` filters on the payload-level trace key (I1).
         """
+        ...
+
+    def event_timeline(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        stream: str | None,
+        type_: str | None,
+        actor_agent_id: str | None,
+        recipient_agent_id: str | None,
+        trace_id: str | None,
+        since_iso: str,
+        until_iso: str,
+        bucket_seconds: int,
+    ) -> list[dict[str, Any]]:
+        """Counts grouped by time bucket and event type for the dashboard."""
         ...
 
     def workspace_message_count(

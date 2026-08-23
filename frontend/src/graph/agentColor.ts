@@ -1,11 +1,10 @@
 // Pure color helpers for the agent identity color (spec 2d6920f4).
 //
-// An agent's card header is tinted by its color: the operator-chosen color
-// verbatim when set, else an "auto-by-identity" color derived deterministically
-// from the agent_id (the same id always yields the same color; different ids
-// generally differ). The name text color is chosen for contrast against the
-// header. All functions are pure and total — a malformed input never throws,
-// it falls back to the auto color — so the card always renders.
+// An agent's graph representation is tinted by its color: the operator-chosen
+// color verbatim when set, else an "auto-by-identity" color derived
+// deterministically from the agent_id (the same id always yields the same
+// color; different ids generally differ). Card text uses a contrast-aware ink.
+// All functions are pure and total — malformed input falls back to auto color.
 
 // FNV-1a → deterministic uint32 per id (identical to the graph layout seed
 // hash, so identity is stable across reloads).
@@ -68,8 +67,8 @@ export function autoColor(id: string): string {
   return hslToHex(hashOf(id) % 360, 0.58, 0.55);
 }
 
-// The card header base color for an agent: the stored color verbatim when it is
-// a valid hex, else the auto-by-identity color. Never throws.
+// The graph/card base color for an agent: stored verbatim when it is a valid
+// hex, else auto-by-identity. Never throws.
 export function agentColor(id: string, stored?: string | null): string {
   return isHexColor(stored) ? stored.trim() : autoColor(id);
 }

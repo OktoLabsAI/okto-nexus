@@ -19,12 +19,12 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.3` |
+| Package | `okto-nexus 0.1.4` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
 | MCP prompts | 0 |
-| Surface revision | 31 |
+| Surface revision | 32 |
 | Database schema | 26 migrations, 34 tables |
 | Storage | local SQLite/WAL |
 
@@ -209,7 +209,8 @@ authenticated identity rules as HTTP. An invalid configured key fails closed.
 
 Every authenticated agent should do this on its first turn:
 
-1. Call `agent_whoami()` and use the returned `agent_id` consistently.
+1. Call `agent_whoami()`, use the returned `agent_id` consistently, and treat
+   its `role` and `communication.content` as the default operating contract.
 2. Call `workspace_resolve(project_root=<absolute cwd>)`.
 3. Call `session_open(agent_id=<you>, workspace_id=<resolved id>)` and retain
    the returned `session_id` and one-time `session_secret`.
@@ -219,6 +220,15 @@ Every authenticated agent should do this on its first turn:
 
 The full procedure is available at
 `okto-nexus://reference/preflight`.
+
+The role guides responsibilities, operating perspective, and decision
+boundaries. The communication block guides tone, format, language, verbosity,
+structure, and agent-to-agent as well as user-facing communication. Follow both
+unless the user explicitly directs otherwise for the current task or
+interaction. That task-scoped override does not modify the Nexus profile or
+bypass permissions, policies, guardrails, approvals, communication scope,
+safety rules, or higher-priority host instructions. Capabilities are routing
+claims, not authorization or persona.
 
 ### Direct message
 
@@ -340,8 +350,9 @@ They cannot call MCP or mutate state.
 
 The bundled dashboard provides:
 
-- **Graph** — agent cards, heartbeat-derived presence, recent message flow,
-  unread traffic, open handoffs, and claimed relationships;
+- **Graph** — toggle between detailed agent cards and compact activity-sized
+  circles, with profile colours, live presence status badges, recent
+  message flow, unread traffic, open handoffs, and claimed relationships;
 - **Messages** — inbox lanes, peer conversations, undelivered targeting
   outcomes, receipts, and optional semantic search;
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,
@@ -416,6 +427,39 @@ still intersects with permissions, policy, guardrails, and communication
 reachability. Message retention can remove aged messages and their deliveries,
 including unread or in-flight rows, so durability is bounded by configured
 retention and explicit database reset.
+
+### Communication intent
+
+Choose the coordination mechanism by intended outcome: if another agent is
+expected to perform work or produce a deliverable, create a handoff. If the
+recipient only needs to know something or reply, use a message.
+
+- **Handoff — executable work.** Any request to execute, investigate, change,
+  build, test, review, validate, or otherwise produce a deliverable must use
+  `handoff_create`; a direct message must not be its sole record. Target the
+  intended assignee directly when known, or use a capability, role, tag, mixed,
+  broadcast, or direct-with-fallback target when the first eligible claimant
+  should own the work. The handoff is the canonical, operator-visible record of
+  ownership, lifecycle, result, and verification. Include the objective,
+  context, scope, constraints, and expected deliverable; add acceptance
+  criteria, dependencies, and a verifier when applicable and the corresponding
+  `feature_verification` / `feature_dag` flag is enabled. Those fields are
+  rejected while their feature is off.
+- **Broadcast message — shared alignment.** Use it for shared context,
+  decisions, announcements, discoveries, risk or blocker alerts, and general
+  alignment across every selected reachable recipient. It informs recipients
+  but assigns no owner and creates no task lifecycle. If anyone is expected to
+  act, create one or more handoffs.
+- **Direct message — conversation and informal coordination.** Use it for
+  status checks, questions, clarifications, acknowledgements, focused context
+  exchange, and informal coordination. It may discuss an existing handoff, but
+  new executable work requires a handoff; reference that handoff in the
+  conversation. Use `handoff_get` for canonical lifecycle state and direct
+  messages for contextual updates or blocker explanations.
+
+A broadcast message is informational fan-out to many recipients. A handoff
+with a `broadcast` target is a claim pool for one executor. If several agents
+must produce independent results, create separate handoffs.
 
 ### Routing
 
@@ -604,15 +648,15 @@ require a valid `session_id` and `session_secret` in both modes.
 
 | URI | Version |
 |---|---:|
-| `okto-nexus://reference/preflight` | 3 |
-| `okto-nexus://reference/communication` | 2 |
+| `okto-nexus://reference/preflight` | 4 |
+| `okto-nexus://reference/communication` | 3 |
 | `okto-nexus://reference/monitoring` | 5 |
 | `okto-nexus://reference/target-grammar` | 5 |
-| `okto-nexus://reference/tool-docs/messages` | 2 |
+| `okto-nexus://reference/tool-docs/messages` | 3 |
 | `okto-nexus://reference/tool-docs/inbox` | 2 |
 | `okto-nexus://reference/tool-docs/events` | 2 |
-| `okto-nexus://reference/tool-docs/handoff` | 3 |
-| `okto-nexus://reference/tool-docs/identity` | 4 |
+| `okto-nexus://reference/tool-docs/handoff` | 4 |
+| `okto-nexus://reference/tool-docs/identity` | 5 |
 | `okto-nexus://reference/tool-docs/artifacts` | 2 |
 | `okto-nexus://reference/governance` | 2 |
 | `okto-nexus://reference/hitl` | 2 |
@@ -649,7 +693,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.3 default surface:
+For the 0.1.4 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -917,10 +961,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.3
+uv build --out-dir dist/release-0.1.4
 uvx twine check \
-  dist/release-0.1.3/okto_nexus-0.1.3-py3-none-any.whl \
-  dist/release-0.1.3/okto_nexus-0.1.3.tar.gz
+  dist/release-0.1.4/okto_nexus-0.1.4-py3-none-any.whl \
+  dist/release-0.1.4/okto_nexus-0.1.4.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1047,18 +1091,34 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.3 — current
+### 0.1.4 — current
 
-Maintenance, documentation, and repository-hygiene release. It does not change
-the MCP contract or database schema: surface revision remains 31 and the latest
-migration remains 026.
+Dashboard, observability, and coordination-guidance release. The MCP guidance
+contract advances to surface revision 32; the database schema is unchanged and
+the latest migration remains 026.
+
+- Added detailed and compact activity-based agent graph modes, profile colours,
+  live status badges, richer relationship context, and graph conversations.
+- Added an event timeline, expanded event and handoff filters, message detail
+  hydration, workspace display names, and catalog import/export workflows.
+- Improved dashboard views for agents, approvals, communication, events,
+  guardrails, handoffs, messages, policies, and workspaces.
+- Extended observability APIs and repositories with message lookup, filtered
+  handoff/event queries, and bucketed event timeline data.
+
+- Clarified that agents follow the role and communication profile returned by
+  `agent_whoami` unless the user supplies a task-scoped override, without
+  bypassing platform governance.
+- Defined handoffs as the required, traceable mechanism for executable work,
+  broadcasts as shared alignment or information fan-out, and direct messages
+  as status, clarification, and informal coordination channels.
 
 - Rewrote this README against the current CLI, transport/authentication model,
   dashboard, 43/46-tool surface, seven routing strategies, message retention,
   governance features, verification/DAG workflows, 34-table schema, 29-code
   error catalog, operations, testing, and limitations.
 - Synchronized `pyproject.toml` and the root project entry in `uv.lock` at
-  version 0.1.3, and aligned the package/dashboard license label with the
+  version 0.1.4, and aligned the package/dashboard license label with the
   addendum that is actually included in `LICENSE`.
 - Removed tracked runtime SQLite databases and added ignore coverage for
   database files and journal/WAL/SHM sidecars.

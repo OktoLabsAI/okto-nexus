@@ -33,6 +33,12 @@ import {
   ruleLabel,
 } from "../components/GovernanceRulesEditor";
 import { useConfirm } from "../components/Confirm";
+import {
+  CatalogExportButton,
+  CatalogImportButton,
+  catalogEntityFilename,
+  uniqueImportedName,
+} from "../components/CatalogTransfer";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -405,8 +411,24 @@ function PolicyDetail({
         <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
           {record ? record.name : "Loading…"}
         </h2>
+        {record && (
+          <CatalogExportButton
+            catalog="policies"
+            filename={catalogEntityFilename("okto-nexus-policy", record.name)}
+            className="ml-auto btn btn-secondary !py-1"
+            title={`Export ${record.name} as JSON`}
+            onExport={() => ({
+              name: record.name,
+              description: record.description,
+              versions: (record.versions ?? []).map(({ audience, governance }) => ({
+                audience,
+                governance,
+              })),
+            })}
+          />
+        )}
         <button
-          className="ml-auto text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"
+          className="text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"
           onClick={onClose}
           title="Close"
           data-testid="close-policy-detail"
@@ -638,6 +660,69 @@ export function PoliciesView({ workspace }: { workspace: string }) {
             <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
               {policies.length} polic{policies.length === 1 ? "y" : "ies"}
             </span>
+            <div className="ml-auto">
+              <CatalogImportButton
+                catalog="policies"
+                onImport={async (value) => {
+                  const names = new Set(policies.map((policy) => policy.name.toLocaleLowerCase()));
+                  if (!value || typeof value !== "object" || Array.isArray(value)) {
+                    throw new Error("The policy export is invalid.");
+                  }
+                  const row = value as Record<string, unknown>;
+                  if (typeof row.name !== "string") {
+                    throw new Error("The policy must include a name.");
+                  }
+                  const rawVersions = Array.isArray(row.versions) ? row.versions : [];
+                  const versions = rawVersions.map((versionValue) => {
+                    if (
+                      !versionValue ||
+                      typeof versionValue !== "object" ||
+                      Array.isArray(versionValue)
+                    ) {
+                      throw new Error("The policy contains an invalid version.");
+                    }
+                    const version = versionValue as Record<string, unknown>;
+                    const audience = version.audience;
+                    const governance = version.governance;
+                    if (
+                      audience !== null &&
+                      audience !== undefined &&
+                      (typeof audience !== "object" || Array.isArray(audience))
+                    ) {
+                      throw new Error("A policy version contains an invalid audience.");
+                    }
+                    if (
+                      !Array.isArray(governance) ||
+                      !governance.every(
+                        (rule) =>
+                          !!rule && typeof rule === "object" && !Array.isArray(rule),
+                      )
+                    ) {
+                      throw new Error("A policy version contains invalid governance rules.");
+                    }
+                    return {
+                      audience: audience as CommScope | null | undefined,
+                      governance: governance as PolicyRule[],
+                    };
+                  });
+                  const created = await api.createPolicy({
+                    name: uniqueImportedName(row.name, names),
+                    description:
+                      typeof row.description === "string" ? row.description : undefined,
+                  });
+                  for (const version of versions) {
+                    await api.publishPolicyVersion(created.policy_id, {
+                      ...(version.audience
+                        ? { audience: version.audience }
+                        : {}),
+                      governance: version.governance,
+                    });
+                  }
+                  await reload();
+                  setSelectedId(created.policy_id);
+                }}
+              />
+            </div>
           </div>
           <p className="text-xs text-surface-500 dark:text-surface-400 mb-3">
             Named, versioned global policies — one append-only object unifying an{" "}
@@ -694,36 +779,58 @@ export function PoliciesView({ workspace }: { workspace: string }) {
           ) : (
             <div className="space-y-1.5">
               {policies.map((policy) => (
-                <button
+                <div
                   key={policy.policy_id}
-                  onClick={() => setSelectedId(policy.policy_id)}
-                  className={`w-full text-left rounded-lg border px-3 py-2 transition-colors ${
+                  className={`w-full rounded-lg border flex items-start transition-colors ${
                     selectedId === policy.policy_id
                       ? "border-accent-300 dark:border-accent-700 bg-accent-50 dark:bg-accent-900/20"
                       : "border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-800/50"
                   }`}
                   data-testid={`policy-${policy.policy_id}`}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
-                      {policy.name}
-                    </span>
-                    {policy.latest_version === 0 ? (
-                      <span className="chip bg-surface-200 text-surface-500 dark:bg-surface-700 dark:text-surface-400">
-                        no versions
+                  <button
+                    onClick={() => setSelectedId(policy.policy_id)}
+                    className="min-w-0 flex-1 text-left px-3 py-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
+                        {policy.name}
                       </span>
-                    ) : (
-                      <span className="chip bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300 font-mono">
-                        @v{policy.latest_version}
-                      </span>
+                      {policy.latest_version === 0 ? (
+                        <span className="chip bg-surface-200 text-surface-500 dark:bg-surface-700 dark:text-surface-400">
+                          no versions
+                        </span>
+                      ) : (
+                        <span className="chip bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300 font-mono">
+                          @v{policy.latest_version}
+                        </span>
+                      )}
+                    </div>
+                    {policy.description && (
+                      <p className="text-xs text-surface-500 dark:text-surface-400 mt-0.5 truncate">
+                        {policy.description}
+                      </p>
                     )}
-                  </div>
-                  {policy.description && (
-                    <p className="text-xs text-surface-500 dark:text-surface-400 mt-0.5 truncate">
-                      {policy.description}
-                    </p>
-                  )}
-                </button>
+                  </button>
+                  <CatalogExportButton
+                    catalog="policies"
+                    filename={catalogEntityFilename("okto-nexus-policy", policy.name)}
+                    className="btn btn-secondary !px-2 !py-1 !text-[10px] shrink-0 m-2 ml-0"
+                    label="Export JSON"
+                    title={`Export ${policy.name} as JSON`}
+                    testId={`export-policy-${policy.policy_id}`}
+                    onExport={async () => {
+                      const record = await api.policy(policy.policy_id);
+                      return {
+                        name: record.name,
+                        description: record.description,
+                        versions: (record.versions ?? []).map(
+                          ({ audience, governance }) => ({ audience, governance }),
+                        ),
+                      };
+                    }}
+                  />
+                </div>
               ))}
             </div>
           )}

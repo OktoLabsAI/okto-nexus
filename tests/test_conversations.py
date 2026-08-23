@@ -93,6 +93,25 @@ def test_include_body_returns_the_full_text(seeded):
     assert LONG_BODY in bodies  # untruncated, markdown intact
 
 
+def test_message_detail_hydrates_exact_search_result(seeded):
+    """A search result can open by id without clearing the active UI filters."""
+    client = seeded
+    item = client.get(
+        "/api/v1/messages?from_agent=alice&include_body=true&page_size=1"
+    ).json()["data"]["items"][0]
+
+    response = client.get(f"/api/v1/messages/{item['message_id']}")
+    assert response.status_code == 200
+    detail = response.json()["data"]
+    assert detail["message_id"] == item["message_id"]
+    assert "body" in detail
+    assert "deliveries" in detail
+
+    missing = client.get("/api/v1/messages/msg_missing")
+    assert missing.status_code == 404
+    assert missing.json()["error"]["code"] == "NOT_FOUND"
+
+
 def test_undelivered_filter_is_the_failed_tab(seeded):
     client = seeded
     data = client.get(

@@ -68,6 +68,11 @@ import { GuardrailsView } from "./views/GuardrailsView";
 import { CommunicationView } from "./views/CommunicationView";
 import { ApprovalsView } from "./views/ApprovalsView";
 import { SettingsView } from "./views/SettingsView";
+import {
+  WorkspaceNamesProvider,
+  workspaceDisplayName,
+} from "./components/WorkspaceNames";
+import type { WorkspaceListItem } from "./api";
 
 const VIEWS = [
   { name: "Graph", icon: Waypoints },
@@ -203,7 +208,7 @@ function Dashboard({
   const [sidebarOpen, setSidebarOpen] = useState(
     () => localStorage.getItem("okto-nexus-sidebar") !== "closed",
   );
-  const [workspaces, setWorkspaces] = useState<string[]>([]);
+  const [workspaces, setWorkspaces] = useState<WorkspaceListItem[]>([]);
   // The workspace SCOPE is the user's choice and survives reloads: the
   // serve's default only applies when nothing was ever picked (otherwise a
   // default pointing at an empty workspace silently hides the whole graph
@@ -381,9 +386,7 @@ function Dashboard({
   useEffect(() => {
     api
       .workspaces()
-      .then(({ workspaces }) =>
-        setWorkspaces(workspaces.map((w) => w.workspace_id)),
-      )
+      .then(({ workspaces }) => setWorkspaces(workspaces))
       .catch(() => undefined);
   }, [refreshTick]);
 
@@ -406,6 +409,7 @@ function Dashboard({
   }, [loadInfo]);
 
   return (
+    <WorkspaceNamesProvider workspaces={workspaces}>
     <div className="h-screen flex flex-col bg-surface-50 dark:bg-surface-950">
       {/* Header FIRST, full-width above the sidebar (the Pulse App shell) */}
       <header
@@ -440,12 +444,13 @@ function Dashboard({
                 missing from the list makes the browser DISPLAY the first
                 option ("All") while the actual fetch scope is something
                 else - a lying dropdown. */}
-            {workspace !== "all" && !workspaces.includes(workspace) && (
-              <option value={workspace}>{workspace.slice(0, 12)}… (empty)</option>
+            {workspace !== "all" &&
+              !workspaces.some((item) => item.workspace_id === workspace) && (
+              <option value={workspace}>Unavailable workspace</option>
             )}
-            {workspaces.map((id) => (
-              <option key={id} value={id}>
-                {id.slice(0, 12)}…
+            {workspaces.map((item, index) => (
+              <option key={item.workspace_id} value={item.workspace_id}>
+                {workspaceDisplayName(item, index)}
               </option>
             ))}
           </select>
@@ -673,5 +678,6 @@ function Dashboard({
       </main>
       </div>
     </div>
+    </WorkspaceNamesProvider>
   );
 }

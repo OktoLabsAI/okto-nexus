@@ -27,6 +27,28 @@ MAX_HANDOFFS = 1000
 MAX_SESSIONS = 2000
 MAX_CHANNELS = 500
 
+# A recipient can be represented by a direct routing target or by the common
+# payload recipient fields.  CASE keeps SQLite's JSON1 functions safe for
+# legacy rows whose JSON columns are null or malformed.
+_EVENT_RECIPIENT_SQL = """
+ AND (
+   json_extract(CASE WHEN json_valid(target) THEN target ELSE '{}' END, '$.agent_id') = ?
+   OR json_extract(CASE WHEN json_valid(target) THEN target ELSE '{}' END, '$.to_agent_id') = ?
+   OR json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END, '$.recipient_agent_id') = ?
+   OR json_extract(CASE WHEN json_valid(payload) THEN payload ELSE '{}' END, '$.to_agent_id') = ?
+   OR EXISTS (
+     SELECT 1 FROM json_each(
+       CASE WHEN json_valid(target) THEN target ELSE '{}' END, '$.recipients'
+     ) WHERE value = ?
+   )
+   OR EXISTS (
+     SELECT 1 FROM json_each(
+       CASE WHEN json_valid(payload) THEN payload ELSE '{}' END, '$.recipients'
+     ) WHERE value = ?
+   )
+ )
+"""
+
 #: Bounded scan for the health event correlation (I7): at most this many
 #: handoff lifecycle events per read; beyond it the result is flagged
 #: truncated so the payload declares the cap instead of hiding it.
@@ -251,6 +273,10 @@ class SqliteObservabilityQueries:
         *,
         workspace_id: str | None,
         statuses: tuple[str, ...] | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
     ) -> list[dict[str, Any]]:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
@@ -266,6 +292,21 @@ class SqliteObservabilityQueries:
             placeholders = ",".join("?" for _ in statuses)
             sql += f" AND status IN ({placeholders})"
             params.extend(statuses)
+        if since_iso is not None:
+            sql += " AND created_at >= ?"
+            params.append(since_iso)
+        if until_iso is not None:
+            sql += " AND created_at <= ?"
+            params.append(until_iso)
+        if from_agent_id is not None:
+            sql += " AND from_agent_id = ?"
+            params.append(from_agent_id)
+        if to_agent_id is not None:
+            sql += (
+                " AND ((target IS NOT NULL AND json_valid(target) "
+                "AND json_extract(target, '$.agent_id') = ?) OR claimed_by = ?)"
+            )
+            params.extend((to_agent_id, to_agent_id))
         sql += f" ORDER BY created_at DESC, handoff_id LIMIT {MAX_HANDOFFS}"
         try:
             rows = uow.connection.execute(sql, tuple(params)).fetchall()
@@ -375,9 +416,13 @@ class SqliteObservabilityQueries:
         to_agent_id: str | None = None,
         undelivered_only: bool = False,
         include_body: bool = False,
+        message_id: str | None = None,
     ) -> tuple[list[dict[str, Any]], int]:
         where = ["1=1"]
         params: list[Any] = []
+        if message_id is not None:
+            where.append("m.message_id = ?")
+            params.append(message_id)
         if workspace_id is not None:
             where.append("m.workspace_id = ?")
             params.append(workspace_id)
@@ -535,6 +580,9 @@ class SqliteObservabilityQueries:
         type_: str | None = None,
         actor_agent_id: str | None = None,
         trace_id: str | None = None,
+        recipient_agent_id: str | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
     ) -> list[dict[str, Any]]:
         # type_/actor_agent_id are optional equality filters (dashboard FR1):
         # absent -> no filter (byte-for-byte the prior behaviour). visibility
@@ -566,6 +614,15 @@ class SqliteObservabilityQueries:
                 " AND json_extract(payload, '$.trace_id') = ?"
             )
             params.append(trace_id)
+        if since_iso is not None:
+            sql += " AND created_at >= ?"
+            params.append(since_iso)
+        if until_iso is not None:
+            sql += " AND created_at <= ?"
+            params.append(until_iso)
+        if recipient_agent_id is not None:
+            sql += _EVENT_RECIPIENT_SQL
+            params.extend([recipient_agent_id] * 6)
         sql += " ORDER BY event_id ASC LIMIT ?"
         params.append(limit)
         try:
@@ -592,6 +649,65 @@ class SqliteObservabilityQueries:
                 }
             )
         return items
+
+    def event_timeline(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        stream: str | None,
+        type_: str | None,
+        actor_agent_id: str | None,
+        recipient_agent_id: str | None,
+        trace_id: str | None,
+        since_iso: str,
+        until_iso: str,
+        bucket_seconds: int,
+    ) -> list[dict[str, Any]]:
+        where = ["created_at >= ?", "created_at <= ?", "unixepoch(created_at) IS NOT NULL"]
+        params: list[Any] = [since_iso, until_iso]
+        if workspace_id is not None:
+            where.append("workspace_id = ?")
+            params.append(workspace_id)
+        if stream is not None:
+            where.append("stream = ?")
+            params.append(stream)
+        if type_ is not None:
+            where.append("type = ?")
+            params.append(type_)
+        if actor_agent_id is not None:
+            where.append("actor_agent_id = ?")
+            params.append(actor_agent_id)
+        if trace_id is not None:
+            where.append(
+                "payload IS NOT NULL AND json_valid(payload) "
+                "AND json_extract(payload, '$.trace_id') = ?"
+            )
+            params.append(trace_id)
+        recipient_sql = ""
+        if recipient_agent_id is not None:
+            recipient_sql = _EVENT_RECIPIENT_SQL
+            params.extend([recipient_agent_id] * 6)
+        sql = f"""
+            SELECT CAST(unixepoch(created_at) / ? AS INTEGER) * ? AS bucket_epoch,
+                   type, COUNT(*) AS count
+            FROM events
+            WHERE {' AND '.join(where)} {recipient_sql}
+            GROUP BY bucket_epoch, type
+            ORDER BY bucket_epoch, type
+        """
+        try:
+            rows = uow.connection.execute(
+                sql, (bucket_seconds, bucket_seconds, *params)
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("aggregating event timeline", exc) from exc
+        grouped: dict[int, dict[str, Any]] = {}
+        for row in rows:
+            epoch = int(row["bucket_epoch"])
+            item = grouped.setdefault(epoch, {"bucket_epoch": epoch, "by_type": {}})
+            item["by_type"][row["type"]] = int(row["count"])
+        return list(grouped.values())
 
     def workspace_message_count(
         self, uow: UnitOfWork, *, workspace_id: str, since_iso: str

@@ -47,6 +47,12 @@ import { MetadataEditor } from "../components/MetadataEditor";
 import { CapabilityPicker } from "../components/CapabilityPicker";
 import { ColorPicker } from "../components/ColorPicker";
 import { SteerModal } from "../components/SteerModal";
+import {
+  CatalogExportButton,
+  CatalogImportButton,
+  catalogEntityFilename,
+  uniqueImportedName,
+} from "../components/CatalogTransfer";
 
 // MCP consumers (the Pulse AgentsModal grammar): one button per client,
 // clicking copies that client's ready-to-paste command/config.
@@ -333,6 +339,52 @@ export function AgentsView({
               <Plus size={14} /> New agent
             </button>
           ) : (
+            <div className="flex items-center gap-2">
+            <CatalogImportButton
+              catalog="permission-presets"
+              onImport={async (value) => {
+                if (!presets) {
+                  throw new Error("Permission presets are still loading.");
+                }
+                const names = new Set(
+                  presets.items.map((preset) => preset.name.toLocaleLowerCase()),
+                );
+                if (!value || typeof value !== "object" || Array.isArray(value)) {
+                  throw new Error("The permission preset is invalid.");
+                }
+                const row = value as Record<string, unknown>;
+                if (
+                  typeof row.name !== "string" ||
+                  !row.flags ||
+                  typeof row.flags !== "object" ||
+                  Array.isArray(row.flags)
+                ) {
+                  throw new Error("The permission preset must include a name and flags.");
+                }
+                const importedFlags = row.flags as Record<string, unknown>;
+                const validFlags = Object.values(importedFlags).every(
+                  (group) =>
+                    !!group &&
+                    typeof group === "object" &&
+                    !Array.isArray(group) &&
+                    Object.values(group as Record<string, unknown>).every(
+                      (flag) => typeof flag === "boolean" || typeof flag === "number",
+                    ),
+                );
+                if (!validFlags) {
+                  throw new Error("The permission preset contains invalid flags.");
+                }
+                // Imports always CREATE a custom copy. A colliding default or
+                // custom name is renamed; built-ins are never updated.
+                await api.createPreset({
+                  name: uniqueImportedName(row.name, names),
+                  description:
+                    typeof row.description === "string" ? row.description : undefined,
+                  flags: mergeFlags(presets.registry, row.flags as PermissionFlags),
+                });
+                await reload();
+              }}
+            />
             <button
               className="btn btn-primary"
               onClick={() => setEditorOpen({ preset: null })}
@@ -340,6 +392,7 @@ export function AgentsView({
             >
               <Plus size={14} /> New preset
             </button>
+            </div>
           )}
         </div>
 
@@ -372,7 +425,7 @@ export function AgentsView({
                       return (
                         <div
                           key={p.preset_id}
-                          className={`rounded-xl border p-3 ${
+                          className={`rounded-xl border p-3 transition-colors hover:border-accent-300 dark:hover:border-accent-700 ${
                             p.is_builtin
                               ? "border-surface-200 dark:border-surface-700"
                               : "border-accent-200 dark:border-accent-800/50 bg-accent-50/30 dark:bg-accent-900/10"
@@ -446,6 +499,30 @@ export function AgentsView({
                               {p.description}
                             </p>
                           )}
+                          <div className="mt-2 flex items-center justify-between gap-2">
+                            <button
+                              className="text-[10px] font-medium text-accent-600 hover:text-accent-700 dark:text-accent-400 dark:hover:text-accent-300"
+                              onClick={() => setEditorOpen({ preset: p })}
+                            >
+                              {p.is_builtin ? "View permissions · read-only" : "View or edit permissions"} →
+                            </button>
+                            <CatalogExportButton
+                              catalog="permission-presets"
+                              filename={catalogEntityFilename(
+                                "okto-nexus-permission-preset",
+                                p.name,
+                              )}
+                              className="btn btn-secondary !px-2 !py-1 !text-[10px] shrink-0"
+                              label="Export JSON"
+                              title={`Export ${p.name} as JSON`}
+                              testId={`export-permission-preset-${p.preset_id}`}
+                              onExport={() => ({
+                                name: p.name,
+                                description: p.description,
+                                flags: mergeFlags(presets?.registry ?? {}, p.flags),
+                              })}
+                            />
+                          </div>
                         </div>
                       );
                     })}

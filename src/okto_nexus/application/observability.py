@@ -35,6 +35,9 @@ DEFAULT_GRAPH_WINDOW_HOURS = 24
 #: Hard ceiling for history pages (defensive LIMIT, FR5).
 MAX_PAGE_SIZE = 200
 
+#: Prevent minute-level timelines over huge ranges from allocating unbounded rows.
+MAX_TIMELINE_BUCKETS = 2_000
+
 PRESENCE_PRESENT = "present"
 PRESENCE_STALE = "stale"
 PRESENCE_OFFLINE = "offline"
@@ -205,6 +208,7 @@ class ObservabilityService:
         to_agent_id: str | None = None,
         undelivered_only: bool = False,
         include_body: bool = False,
+        message_id: str | None = None,
     ) -> dict[str, Any]:
         if lane is not None and lane not in _LANES:
             raise ValueError(f"invalid lane: {lane!r} (one of {', '.join(_LANES)})")
@@ -227,6 +231,7 @@ class ObservabilityService:
             to_agent_id=to_agent_id,
             undelivered_only=undelivered_only,
             include_body=include_body,
+            message_id=message_id,
         )
         return {"items": items, "page": page, "page_size": page_size, "total": total}
 
@@ -242,9 +247,21 @@ class ObservabilityService:
         *,
         workspace_id: str | None = None,
         status: str | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
+        from_agent_id: str | None = None,
+        to_agent_id: str | None = None,
     ) -> list[dict[str, Any]]:
         statuses = (status,) if status else None
-        rows = self._q.handoff_rows(uow, workspace_id=workspace_id, statuses=statuses)
+        rows = self._q.handoff_rows(
+            uow,
+            workspace_id=workspace_id,
+            statuses=statuses,
+            since_iso=since_iso,
+            until_iso=until_iso,
+            from_agent_id=from_agent_id,
+            to_agent_id=to_agent_id,
+        )
         if rows:
             # Dependency exposure (I5/FR7): ONE extra aggregate query for the
             # WHOLE page (never per-row - AC9's anti-N+1). Ids absent from
@@ -293,6 +310,9 @@ class ObservabilityService:
         type_: str | None = None,
         actor_agent_id: str | None = None,
         trace_id: str | None = None,
+        recipient_agent_id: str | None = None,
+        since_iso: str | None = None,
+        until_iso: str | None = None,
     ) -> list[dict[str, Any]]:
         if trace_id is not None and not (1 <= len(str(trace_id)) <= TRACE_ID_MAX_LEN):
             raise ValueError(
@@ -309,7 +329,91 @@ class ObservabilityService:
             type_=type_,
             actor_agent_id=actor_agent_id,
             trace_id=trace_id,
+            recipient_agent_id=recipient_agent_id,
+            since_iso=since_iso,
+            until_iso=until_iso,
         )
+
+    def event_timeline(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None = None,
+        stream: str | None = None,
+        type_: str | None = None,
+        actor_agent_id: str | None = None,
+        recipient_agent_id: str | None = None,
+        trace_id: str | None = None,
+        since_iso: str,
+        until_iso: str,
+        bucket_seconds: int = 3600,
+    ) -> dict[str, Any]:
+        """Aggregate event-type distribution across an explicit time range."""
+        if trace_id is not None and not (1 <= len(str(trace_id)) <= TRACE_ID_MAX_LEN):
+            raise ValueError(
+                "trace must be a non-empty string of at most "
+                f"{TRACE_ID_MAX_LEN} characters"
+            )
+        start = iso_to_epoch(since_iso)
+        end = iso_to_epoch(until_iso)
+        if end < start:
+            raise ValueError("until must be greater than or equal to since")
+        bucket_seconds = min(31 * 86400, max(60, int(bucket_seconds)))
+        bucket_count = int(end // bucket_seconds) - int(start // bucket_seconds) + 1
+        if bucket_count > MAX_TIMELINE_BUCKETS:
+            raise ValueError(
+                f"range produces {bucket_count} timeline buckets; "
+                f"increase the interval to stay at or below {MAX_TIMELINE_BUCKETS}"
+            )
+        raw = self._q.event_timeline(
+            uow,
+            workspace_id=workspace_id,
+            stream=stream,
+            type_=type_,
+            actor_agent_id=actor_agent_id,
+            recipient_agent_id=recipient_agent_id,
+            trace_id=trace_id,
+            since_iso=since_iso,
+            until_iso=until_iso,
+            bucket_seconds=bucket_seconds,
+        )
+        first = int(start // bucket_seconds) * bucket_seconds
+        last = int(end // bucket_seconds) * bucket_seconds
+        by_epoch = {int(row["bucket_epoch"]): row for row in raw}
+        types = sorted(
+            {
+                str(event_type)
+                for row in raw
+                for event_type in row.get("by_type", {})
+            }
+        )
+        buckets: list[dict[str, Any]] = []
+        total = 0
+        cursor = first
+        while cursor <= last:
+            by_type: dict[str, int] = {}
+            for event_type in types:
+                row = by_epoch.get(cursor, {}).get("by_type", {})
+                count = int(row.get(event_type, 0))
+                if count:
+                    by_type[event_type] = count
+                    total += count
+            buckets.append(
+                {
+                    "bucket_start": _epoch_to_iso(cursor),
+                    "total": sum(by_type.values()),
+                    "by_type": by_type,
+                }
+            )
+            cursor += bucket_seconds
+        return {
+            "since": since_iso,
+            "until": until_iso,
+            "bucket_seconds": bucket_seconds,
+            "total": total,
+            "types": types,
+            "buckets": buckets,
+        }
 
     def event_types(
         self, uow: UnitOfWork, *, workspace_id: str | None = None

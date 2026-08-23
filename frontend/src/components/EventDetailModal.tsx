@@ -5,6 +5,8 @@
 import { X } from "lucide-react";
 import type { NexusEvent } from "../api";
 import { TraceChip } from "./TraceChip";
+import { useWorkspaceName } from "./WorkspaceNames";
+import { TargetDescriptor } from "./TargetDescriptor";
 
 function Meta({ label, value }: { label: string; value: string | null | undefined }) {
   return (
@@ -17,15 +19,72 @@ function Meta({ label, value }: { label: string; value: string | null | undefine
   );
 }
 
-// Pretty-print arbitrary JSON-ish values; never throws on circular/oddities.
-function pretty(value: unknown): string {
-  if (value === null || value === undefined) return "";
-  if (typeof value === "string") return value;
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch {
-    return String(value);
+function fieldLabel(value: string): string {
+  return value.replace(/_/g, " ");
+}
+
+function StructuredData({ value, depth = 0 }: { value: unknown; depth?: number }) {
+  if (value === null || value === undefined || value === "") {
+    return <span className="text-surface-400 dark:text-surface-500">—</span>;
   }
+  if (typeof value === "string") {
+    return (
+      <span className="whitespace-pre-wrap break-words text-surface-700 dark:text-surface-200">
+        {value}
+      </span>
+    );
+  }
+  if (typeof value === "number" || typeof value === "boolean") {
+    return (
+      <span className="font-mono text-surface-700 dark:text-surface-200">
+        {String(value)}
+      </span>
+    );
+  }
+  if (Array.isArray(value)) {
+    if (value.length === 0) return <span className="text-surface-400">empty list</span>;
+    const primitives = value.every(
+      (item) => item === null || ["string", "number", "boolean"].includes(typeof item),
+    );
+    if (primitives) {
+      return (
+        <div className="flex flex-wrap gap-1">
+          {value.map((item, index) => (
+            <span key={index} className="chip bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-300 font-mono">
+              {String(item ?? "—")}
+            </span>
+          ))}
+        </div>
+      );
+    }
+    return (
+      <div className="space-y-2">
+        {value.map((item, index) => (
+          <div key={index} className="rounded-lg border border-surface-200 dark:border-surface-700 p-2.5">
+            <div className="text-[10px] uppercase tracking-wide text-surface-400 mb-1">item {index + 1}</div>
+            <StructuredData value={item} depth={depth + 1} />
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if (typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (!entries.length) return <span className="text-surface-400">empty object</span>;
+    return (
+      <div className={depth === 0 ? "rounded-lg border border-surface-200 dark:border-surface-700 divide-y divide-surface-100 dark:divide-surface-800" : "space-y-2"}>
+        {entries.map(([key, item]) => (
+          <div key={key} className={depth === 0 ? "grid grid-cols-[110px_minmax(0,1fr)] gap-3 px-3 py-2" : "grid grid-cols-[96px_minmax(0,1fr)] gap-2"}>
+            <span className="text-[10px] uppercase tracking-wide text-surface-400 dark:text-surface-500 break-words">
+              {fieldLabel(key)}
+            </span>
+            <div className="min-w-0"><StructuredData value={item} depth={depth + 1} /></div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return <span className="text-surface-600 dark:text-surface-300">{String(value)}</span>;
 }
 
 // Surface the correlation/identity keys buried in the payload/target so the
@@ -64,8 +123,7 @@ export function EventDetail({
   onClose?: () => void;
   onOpenTrace?: (traceId: string) => void;
 }) {
-  const payloadText = pretty(event.payload);
-  const targetText = pretty(event.target);
+  const workspaceName = useWorkspaceName(event.workspace_id);
   const summary = payloadSummary(event);
   return (
     <div className="flex flex-col h-full min-h-0" data-testid="event-detail">
@@ -123,20 +181,18 @@ export function EventDetail({
           <Meta label="stream" value={event.stream} />
           <Meta label="type" value={event.type} />
           <Meta label="actor" value={event.actor_agent_id} />
-          <Meta label="workspace" value={event.workspace_id} />
+          <Meta label="workspace" value={workspaceName} />
           <Meta label="visibility" value={event.visibility ?? "public"} />
           <Meta label="created_at" value={event.created_at} />
         </section>
 
         {/* Target (routing descriptor), when present */}
-        {targetText && (
+        {event.target !== null && event.target !== undefined && (
           <section>
             <h3 className="text-surface-500 dark:text-surface-400 font-medium uppercase tracking-wider mb-1.5">
               Target
             </h3>
-            <pre className="bg-surface-50 dark:bg-surface-900 border border-surface-200/60 dark:border-surface-700/50 rounded-lg p-3 text-surface-700 dark:text-surface-300 overflow-x-auto whitespace-pre-wrap break-all">
-              {targetText}
-            </pre>
+            <TargetDescriptor target={event.target} testId="event-target" />
           </section>
         )}
 
@@ -145,12 +201,9 @@ export function EventDetail({
           <h3 className="text-surface-500 dark:text-surface-400 font-medium uppercase tracking-wider mb-1.5">
             Payload
           </h3>
-          <pre
-            className="bg-surface-50 dark:bg-surface-900 border border-surface-200/60 dark:border-surface-700/50 rounded-lg p-3 text-surface-700 dark:text-surface-300 overflow-x-auto whitespace-pre-wrap break-all"
-            data-testid="event-payload"
-          >
-            {payloadText || <span className="text-surface-400">(empty)</span>}
-          </pre>
+          <div data-testid="event-payload">
+            <StructuredData value={event.payload} />
+          </div>
         </section>
       </div>
     </div>

@@ -224,13 +224,16 @@ export function MessagesView({
     clearSearch();
   };
 
-  // Drill from a search hit into that sender's messages (the hit shape has no
-  // body/deliveries, so we cannot open the rich detail directly).
-  const drillToSender = (hit: MessageSearchHit) => {
-    clearSearch();
-    setFromAgent(hit.from_agent_id);
-    setLane("");
-    setPage(1);
+  // Search hits are deliberately lean. Hydrate the exact message by id and
+  // keep the current query/results intact while the inline inspector opens.
+  const openSearchHit = async (hit: MessageSearchHit) => {
+    try {
+      const message = await api.message(hit.message_id);
+      setSelected(message);
+      setError(null);
+    } catch (exc) {
+      setError((exc as Error).message);
+    }
   };
 
   // Keyboard: ↑/↓ (or j/k) move the selection; Esc clears; "/" focuses search.
@@ -444,10 +447,14 @@ export function MessagesView({
                 {hits.map((h, i) => (
                   <button
                     key={h.message_id}
-                    onClick={() => drillToSender(h)}
-                    className="w-full text-left px-3 py-2 hover:bg-surface-50 dark:hover:bg-surface-800/50 transition-colors"
+                    onClick={() => openSearchHit(h)}
+                    className={`w-full text-left px-3 py-2 transition-colors border-l-2 ${
+                      selected?.message_id === h.message_id
+                        ? "border-accent-500 bg-accent-50 dark:bg-accent-900/20"
+                        : "border-transparent hover:bg-surface-50 dark:hover:bg-surface-800/50"
+                    }`}
                     data-testid="search-hit"
-                    title="View this sender's messages"
+                    title="Open message details"
                   >
                     <div className="flex items-center gap-2 flex-wrap text-xs">
                       <span className="text-surface-400 dark:text-surface-500 w-5 tabular-nums">

@@ -25,6 +25,12 @@ import {
   CommContentEditor,
 } from "../components/CommContentEditor";
 import { useConfirm } from "../components/Confirm";
+import {
+  CatalogExportButton,
+  CatalogImportButton,
+  catalogEntityFilename,
+  uniqueImportedName,
+} from "../components/CatalogTransfer";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -216,8 +222,24 @@ function PresetDetail({
         <h2 className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
           {record ? record.name : "Loading…"}
         </h2>
+        {record && (
+          <CatalogExportButton
+            catalog="communication-presets"
+            filename={catalogEntityFilename(
+              "okto-nexus-communication-preset",
+              record.name,
+            )}
+            className="ml-auto btn btn-secondary !py-1"
+            title={`Export ${record.name} as JSON`}
+            onExport={() => ({
+              name: record.name,
+              description: record.description,
+              versions: (record.versions ?? []).map(({ content }) => ({ content })),
+            })}
+          />
+        )}
         <button
-          className="ml-auto text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"
+          className="text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"
           onClick={onClose}
           title="Close"
           data-testid="close-comm-preset-detail"
@@ -421,6 +443,46 @@ export function CommunicationView() {
             <span className="chip bg-surface-200 text-surface-600 dark:bg-surface-700 dark:text-surface-300">
               {presets.length} preset{presets.length === 1 ? "" : "s"}
             </span>
+            <div className="ml-auto">
+              <CatalogImportButton
+                catalog="communication-presets"
+                onImport={async (value) => {
+                  const names = new Set(presets.map((preset) => preset.name.toLocaleLowerCase()));
+                  if (!value || typeof value !== "object" || Array.isArray(value)) {
+                    throw new Error("The communication preset export is invalid.");
+                  }
+                  const row = value as Record<string, unknown>;
+                  if (typeof row.name !== "string") {
+                    throw new Error("The communication preset must include a name.");
+                  }
+                  const versions = Array.isArray(row.versions) ? row.versions : [];
+                  const contents = versions.map((versionValue) => {
+                    if (
+                      !versionValue ||
+                      typeof versionValue !== "object" ||
+                      Array.isArray(versionValue)
+                    ) {
+                      throw new Error("The communication preset contains an invalid version.");
+                    }
+                    const content = (versionValue as Record<string, unknown>).content;
+                    if (!content || typeof content !== "object" || Array.isArray(content)) {
+                      throw new Error("Each communication preset version must contain content.");
+                    }
+                    return content as CommContent;
+                  });
+                  const created = await api.createCommPreset({
+                    name: uniqueImportedName(row.name, names),
+                    description:
+                      typeof row.description === "string" ? row.description : undefined,
+                  });
+                  for (const content of contents) {
+                    await api.publishCommPresetVersion(created.preset_id, { content });
+                  }
+                  await reload();
+                  setSelectedId(created.preset_id);
+                }}
+              />
+            </div>
           </div>
           <p className="text-xs text-surface-500 dark:text-surface-400 mb-3">
             Named, versioned communication <b>styles</b> — how an agent should
@@ -481,40 +543,63 @@ export function CommunicationView() {
           ) : (
             <div className="space-y-1.5">
               {presets.map((preset) => (
-                <button
+                <div
                   key={preset.preset_id}
-                  onClick={() => setSelectedId(preset.preset_id)}
-                  className={`w-full text-left rounded-lg border px-3 py-2 transition-colors ${
+                  className={`w-full rounded-lg border flex items-start transition-colors ${
                     selectedId === preset.preset_id
                       ? "border-accent-300 dark:border-accent-700 bg-accent-50 dark:bg-accent-900/20"
                       : "border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-800/50"
                   }`}
                   data-testid={`comm-preset-${preset.preset_id}`}
                 >
-                  <div className="flex items-center gap-2">
-                    <MessageSquare
-                      size={14}
-                      className="shrink-0 text-surface-400 dark:text-surface-500"
-                    />
-                    <span className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
-                      {preset.name}
-                    </span>
-                    {preset.latest_version === 0 ? (
-                      <span className="chip bg-surface-200 text-surface-500 dark:bg-surface-700 dark:text-surface-400">
-                        no versions
+                  <button
+                    onClick={() => setSelectedId(preset.preset_id)}
+                    className="min-w-0 flex-1 text-left px-3 py-2"
+                  >
+                    <div className="flex items-center gap-2">
+                      <MessageSquare
+                        size={14}
+                        className="shrink-0 text-surface-400 dark:text-surface-500"
+                      />
+                      <span className="text-sm font-semibold text-surface-900 dark:text-surface-100 truncate">
+                        {preset.name}
                       </span>
-                    ) : (
-                      <span className="chip bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300 font-mono">
-                        @v{preset.latest_version}
-                      </span>
+                      {preset.latest_version === 0 ? (
+                        <span className="chip bg-surface-200 text-surface-500 dark:bg-surface-700 dark:text-surface-400">
+                          no versions
+                        </span>
+                      ) : (
+                        <span className="chip bg-accent-100 text-accent-700 dark:bg-accent-900/40 dark:text-accent-300 font-mono">
+                          @v{preset.latest_version}
+                        </span>
+                      )}
+                    </div>
+                    {preset.description && (
+                      <p className="text-xs text-surface-500 dark:text-surface-400 mt-0.5 truncate">
+                        {preset.description}
+                      </p>
                     )}
-                  </div>
-                  {preset.description && (
-                    <p className="text-xs text-surface-500 dark:text-surface-400 mt-0.5 truncate">
-                      {preset.description}
-                    </p>
-                  )}
-                </button>
+                  </button>
+                  <CatalogExportButton
+                    catalog="communication-presets"
+                    filename={catalogEntityFilename(
+                      "okto-nexus-communication-preset",
+                      preset.name,
+                    )}
+                    className="btn btn-secondary !px-2 !py-1 !text-[10px] shrink-0 m-2 ml-0"
+                    label="Export JSON"
+                    title={`Export ${preset.name} as JSON`}
+                    testId={`export-comm-preset-${preset.preset_id}`}
+                    onExport={async () => {
+                      const record = await api.commPreset(preset.preset_id);
+                      return {
+                        name: record.name,
+                        description: record.description,
+                        versions: (record.versions ?? []).map(({ content }) => ({ content })),
+                      };
+                    }}
+                  />
+                </div>
               ))}
             </div>
           )}

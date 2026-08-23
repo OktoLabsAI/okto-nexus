@@ -738,6 +738,21 @@ export interface NexusEvent {
   trace_id?: string | null;
 }
 
+export interface EventTimelineBucket {
+  bucket_start: string;
+  total: number;
+  by_type: Record<string, number>;
+}
+
+export interface EventTimeline {
+  since: string;
+  until: string;
+  bucket_seconds: number;
+  total: number;
+  types: string[];
+  buckets: EventTimelineBucket[];
+}
+
 // One workspace in the operator overview (GET /api/v1/workspaces). Identity +
 // a 24h activity rollup + presence counts + a health block. root_realpath is
 // null + path_redacted when the expose_workspace_path setting is off.
@@ -958,6 +973,8 @@ export const api = {
     call<{ items: MessageRow[]; page: number; page_size: number; total: number }>(
       `/api/v1/messages?${new URLSearchParams(params)}`,
     ),
+  message: (messageId: string) =>
+    call<MessageRow>(`/api/v1/messages/${encodeURIComponent(messageId)}`),
   conversationPeers: (agent: string) =>
     call<{ items: ConversationPeer[]; failed_count: number }>(
       `/api/v1/conversations/peers?agent=${encodeURIComponent(agent)}`,
@@ -969,10 +986,14 @@ export const api = {
     call<MessageSearchResult>(
       `/api/v1/messages/search?q=${encodeURIComponent(q)}&k=${k}`,
     ),
-  handoffs: (workspace?: string) =>
-    call<{ items: GraphHandoff[] }>(
-      `/api/v1/handoffs${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
-    ),
+  handoffs: (workspace?: string, filters: Record<string, string> = {}) => {
+    const params = new URLSearchParams(filters);
+    if (workspace) params.set("workspace", workspace);
+    const query = params.toString();
+    return call<{ items: GraphHandoff[] }>(
+      `/api/v1/handoffs${query ? `?${query}` : ""}`,
+    );
+  },
   sessions: (workspace?: string) =>
     call<{ items: SessionRow[] }>(
       `/api/v1/sessions${workspace ? `?workspace=${encodeURIComponent(workspace)}` : ""}`,
@@ -982,6 +1003,10 @@ export const api = {
   events: (params: Record<string, string>) =>
     call<{ items: NexusEvent[]; next_cursor: number }>(
       `/api/v1/events?${new URLSearchParams(params)}`,
+    ),
+  eventTimeline: (params: Record<string, string>) =>
+    call<EventTimeline>(
+      `/api/v1/events/timeline?${new URLSearchParams(params)}`,
     ),
   // Distinct event types present (scoped by workspace), for the type filter.
   eventTypes: (workspace?: string) =>

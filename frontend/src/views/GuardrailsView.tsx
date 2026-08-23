@@ -15,6 +15,7 @@ import {
   type AgentGroupRecord,
   type GuardrailAssignment,
   type GuardrailDenial,
+  type GuardrailEvaluatorKind,
   type GuardrailInUseDetails,
   type GuardrailMode,
   type GuardrailRecord,
@@ -23,6 +24,13 @@ import {
   type GuardrailVersionMode,
 } from "../api";
 import { PageContainer } from "../components/PageContainer";
+import { useWorkspaceName } from "../components/WorkspaceNames";
+import {
+  CatalogExportButton,
+  CatalogImportButton,
+  catalogEntityFilename,
+  uniqueImportedName,
+} from "../components/CatalogTransfer";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -333,23 +341,58 @@ function GuardrailsPanel({
       <div className="mt-4 grid grid-cols-1 xl:grid-cols-[minmax(0,0.9fr)_minmax(340px,1fr)] gap-3">
         <div className="space-y-2">
           {guardrails.map((guardrail) => (
-            <button
+            <div
               key={guardrail.guardrail_id}
-              className={`w-full text-left rounded-lg border px-3 py-2 text-xs transition-colors ${
+              className={`w-full rounded-lg border flex items-start text-xs transition-colors ${
                 selected?.guardrail_id === guardrail.guardrail_id
                   ? "border-accent-400 bg-accent-50 dark:bg-accent-900/20"
                   : "border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-800"
               }`}
-              onClick={() => onSelect(guardrail.guardrail_id)}
+              data-testid={`guardrail-${guardrail.guardrail_id}`}
             >
-              <span className="block font-semibold text-surface-800 dark:text-surface-100 truncate">
-                {guardrail.name}
-              </span>
-              <span className="text-surface-500 dark:text-surface-400">
-                v{guardrail.latest_version} active{" "}
-                {guardrail.latest_active_version ?? "-"}
-              </span>
-            </button>
+              <button
+                className="min-w-0 flex-1 text-left px-3 py-2"
+                onClick={() => onSelect(guardrail.guardrail_id)}
+              >
+                <span className="block font-semibold text-surface-800 dark:text-surface-100 truncate">
+                  {guardrail.name}
+                </span>
+                <span className="text-surface-500 dark:text-surface-400">
+                  v{guardrail.latest_version} active{" "}
+                  {guardrail.latest_active_version ?? "-"}
+                </span>
+              </button>
+              <CatalogExportButton
+                catalog="guardrails"
+                filename={catalogEntityFilename(
+                  "okto-nexus-guardrail",
+                  guardrail.name,
+                )}
+                className="btn btn-secondary !px-2 !py-1 !text-[10px] shrink-0 m-2 ml-0"
+                label="Export JSON"
+                title={`Export ${guardrail.name} as JSON`}
+                testId={`export-guardrail-${guardrail.guardrail_id}`}
+                onExport={() => ({
+                  name: guardrail.name,
+                  description: guardrail.description,
+                  versions: (guardrail.versions ?? []).map(
+                    ({
+                      status: versionStatus,
+                      evaluator_kind,
+                      evaluator_config,
+                      surfaces: versionSurfaces,
+                      field_targets,
+                    }) => ({
+                      status: versionStatus,
+                      evaluator_kind,
+                      evaluator_config,
+                      surfaces: versionSurfaces,
+                      field_targets,
+                    }),
+                  ),
+                })}
+              />
+            </div>
           ))}
         </div>
         <div className="rounded-lg border border-surface-200 dark:border-surface-700 p-3 min-w-0">
@@ -359,8 +402,36 @@ function GuardrailsPanel({
                 <p className="text-xs font-semibold text-surface-800 dark:text-surface-100 truncate">
                   {selected.name}
                 </p>
-                <button
+                <CatalogExportButton
+                  catalog="guardrails"
+                  filename={catalogEntityFilename(
+                    "okto-nexus-guardrail",
+                    selected.name,
+                  )}
                   className="ml-auto btn btn-secondary !py-1"
+                  title={`Export ${selected.name} as JSON`}
+                  onExport={() => ({
+                    name: selected.name,
+                    description: selected.description,
+                    versions: (selected.versions ?? []).map(
+                      ({
+                        status: versionStatus,
+                        evaluator_kind,
+                        evaluator_config,
+                        surfaces: versionSurfaces,
+                        field_targets,
+                      }) => ({
+                        status: versionStatus,
+                        evaluator_kind,
+                        evaluator_config,
+                        surfaces: versionSurfaces,
+                        field_targets,
+                      }),
+                    ),
+                  })}
+                />
+                <button
+                  className="btn btn-secondary !py-1"
                   onClick={() => remove(selected)}
                   title="Delete guardrail"
                 >
@@ -643,6 +714,7 @@ function DenialsPanel({
   behavior: string;
   onRefresh: () => Promise<void>;
 }) {
+  const workspaceName = useWorkspaceName(workspace);
   return (
     <section className={`${sectionCls} p-4`}>
       <div className="flex items-center gap-2 mb-3">
@@ -655,7 +727,7 @@ function DenialsPanel({
         </button>
       </div>
       <p className="mb-3 text-xs text-surface-500 dark:text-surface-400 truncate">
-        {workspace} - {behavior}
+          {workspaceName} - {behavior}
       </p>
       <div className="overflow-auto">
         <table className="min-w-full text-xs">
@@ -751,7 +823,75 @@ export function GuardrailsView({ workspace }: { workspace: string }) {
         <h1 className="text-xl font-semibold text-surface-900 dark:text-surface-100">
           Guardrails
         </h1>
-        <button className="ml-auto btn btn-secondary" onClick={loadAll}>
+        <div className="ml-auto">
+          <CatalogImportButton
+            catalog="guardrails"
+            onImport={async (value) => {
+              const names = new Set(
+                guardrails.map((guardrail) => guardrail.name.toLocaleLowerCase()),
+              );
+              if (!value || typeof value !== "object" || Array.isArray(value)) {
+                throw new Error("The guardrail export is invalid.");
+              }
+              const row = value as Record<string, unknown>;
+              if (typeof row.name !== "string") {
+                throw new Error("The guardrail must include a name.");
+              }
+              const rawVersions = Array.isArray(row.versions) ? row.versions : [];
+              const versions = rawVersions.map((versionValue) => {
+                if (
+                  !versionValue ||
+                  typeof versionValue !== "object" ||
+                  Array.isArray(versionValue)
+                ) {
+                  throw new Error("The guardrail contains an invalid version.");
+                }
+                const version = versionValue as Record<string, unknown>;
+                const versionStatus = version.status;
+                const evaluatorKind = version.evaluator_kind;
+                const evaluatorConfig = version.evaluator_config;
+                const versionSurfaces = version.surfaces;
+                const fieldTargets = version.field_targets;
+                if (
+                  typeof versionStatus !== "string" ||
+                  !STATUSES.includes(versionStatus as GuardrailVersionStatus) ||
+                  (evaluatorKind !== "deterministic" && evaluatorKind !== "llm") ||
+                  !evaluatorConfig ||
+                  typeof evaluatorConfig !== "object" ||
+                  Array.isArray(evaluatorConfig) ||
+                  !Array.isArray(versionSurfaces) ||
+                  !versionSurfaces.every(
+                    (surface) =>
+                      typeof surface === "string" &&
+                      SURFACES.includes(surface as GuardrailSurface),
+                  ) ||
+                  !Array.isArray(fieldTargets) ||
+                  !fieldTargets.every((field) => typeof field === "string")
+                ) {
+                  throw new Error("The guardrail contains an invalid version contract.");
+                }
+                return {
+                  status: versionStatus as GuardrailVersionStatus,
+                  evaluator_kind: evaluatorKind as GuardrailEvaluatorKind,
+                  evaluator_config: evaluatorConfig as Record<string, unknown>,
+                  surfaces: versionSurfaces as GuardrailSurface[],
+                  field_targets: fieldTargets as string[],
+                };
+              });
+              const created = await api.createGuardrail({
+                name: uniqueImportedName(row.name, names),
+                description:
+                  typeof row.description === "string" ? row.description : undefined,
+              });
+              for (const version of versions) {
+                await api.addGuardrailVersion(created.guardrail_id, version);
+              }
+              await loadCatalog();
+              setSelectedGuardrail(created.guardrail_id);
+            }}
+          />
+        </div>
+        <button className="btn btn-secondary" onClick={loadAll}>
           <RotateCw size={14} /> Refresh
         </button>
       </div>

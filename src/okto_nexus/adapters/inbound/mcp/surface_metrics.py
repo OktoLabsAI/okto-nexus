@@ -89,6 +89,12 @@ APPROVED_GROWTH: dict[str, int] = {
     # resident instruction delta pointing agents at the EPT monitoring resource.
     # Full remote-poller prose lives in okto-nexus://reference/monitoring.
     "monitor_ept": 760,
+    # Intent-based coordination guidance (SURFACE_REVISION 32): the resident
+    # SERVER_INSTRUCTIONS grew by 1240 chars to make role/communication profile
+    # adherence and handoff-vs-message selection unambiguous; correcting the
+    # stale handoff_list_available docstring removed 19 chars. Deep prose lives
+    # in versioned resources and is not resident. Net measured growth: 1221.
+    "coordination_guidance_r32": 1221,
 }
 
 #: Ledger entries whose tools are EXPERIMENTAL at the surface boundary
