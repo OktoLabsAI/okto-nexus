@@ -23,6 +23,28 @@ uv run okto-nexus
 The final command starts the stdio MCP server. This path is appropriate when a
 change does not need the bundled dashboard or real local semantic search.
 
+### Live MCP smoke test
+
+Run the live client after changing the MCP transport, coordination tools, or
+SQLite persistence, and before opening a pull request that affects those paths:
+
+```bash
+.venv/bin/python scripts/live_client.py
+```
+
+On Windows PowerShell, use the virtual environment's Windows interpreter:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\live_client.py
+```
+
+Unlike the unit suite, this script starts the real stdio MCP server and drives
+an end-to-end two-agent flow through registration, sessions, messaging, event
+delivery, handoff, artifact storage, and `shared.md` rendering. It uses temporary
+home and project directories, then removes them on exit, so it does not touch
+the user's `~/.okto_nexus` data. A successful run ends with
+`LIVE E2E RESULT: PASS`.
+
 ## Full HTTP and dashboard development
 
 Install the full `serve` extra when testing the HTTP transport, dashboard,
