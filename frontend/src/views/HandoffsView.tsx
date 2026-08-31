@@ -16,7 +16,7 @@
 // (BR11) and the flag is never consulted.
 
 import { useCallback, useEffect, useState } from "react";
-import { Ban, CheckCircle2, RotateCw, ShieldCheck, UserCheck, X } from "lucide-react";
+import { Ban, CheckCircle2, ShieldCheck, UserCheck, X } from "lucide-react";
 import { api, type AgentRow, type GraphHandoff } from "../api";
 import { useConfirm } from "../components/Confirm";
 import {
@@ -247,9 +247,13 @@ function Meta({
 
 export function HandoffsView({
   workspace,
+  refreshTick,
   onChanged,
 }: {
   workspace: string;
+  // The single header refresh is contextual: while this view is mounted,
+  // each tick reloads the filtered kanban cards.
+  refreshTick: number;
   onChanged: () => void;
 }) {
   const { confirm, dialog } = useConfirm();
@@ -290,7 +294,7 @@ export function HandoffsView({
 
   useEffect(() => {
     reload();
-  }, [reload]);
+  }, [reload, refreshTick]);
 
   useEffect(() => {
     api
@@ -369,9 +373,6 @@ export function HandoffsView({
           }}
         >
           Clear filters
-        </button>
-        <button className="btn btn-secondary !px-2" onClick={reload} title="Refresh">
-          <RotateCw size={14} />
         </button>
         <span className="ml-auto text-xs text-surface-500 dark:text-surface-400">
           {items.length} handoff{items.length === 1 ? "" : "s"}
