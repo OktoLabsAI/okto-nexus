@@ -2,6 +2,27 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.5 - 2026-08-31
+
+### Added
+
+- Rendered `kind`-based message notifications as distinct semantic cards in
+  the Graph conversation drawer, including read receipts and handoff outcomes.
+
+### Fixed
+
+- Restored the live MCP smoke test on clean stores by no longer announcing
+  capabilities that have not been registered in the fail-closed catalog.
+
+### Documentation
+
+- Documented the live stdio MCP smoke-test workflow, its isolated temporary
+  state, cross-platform commands, and successful completion signal.
+
+### Validation
+
+- Verified the real two-agent stdio flow and the complete test suite.
+
 ## 0.1.4 - 2026-08-23
 
 ### Added

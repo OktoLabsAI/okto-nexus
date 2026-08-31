@@ -458,7 +458,9 @@ function Dashboard({
           <button
             className="btn btn-secondary !px-2"
             onClick={() => setRefreshTick((t) => t + 1)}
-            title="Refresh"
+            title={`Refresh ${view}`}
+            aria-label={`Refresh ${view}`}
+            data-testid="header-refresh"
           >
             <RotateCw size={14} />
           </button>
@@ -638,7 +640,11 @@ function Dashboard({
             />
           )}
           {view === "Handoffs" && (
-            <HandoffsView workspace={workspace} onChanged={loadGraph} />
+            <HandoffsView
+              workspace={workspace}
+              refreshTick={refreshTick}
+              onChanged={loadGraph}
+            />
           )}
           {view === "Events" && (
             <EventsView

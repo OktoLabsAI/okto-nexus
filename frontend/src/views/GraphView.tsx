@@ -48,6 +48,10 @@ import { useConfirm } from "../components/Confirm";
 import { LiveChip } from "../components/LiveChip";
 import { Markdown } from "../components/Markdown";
 import { ResizablePanel } from "../components/ResizablePanel";
+import {
+  parseStructuredMessage,
+  StructuredMessage,
+} from "../components/StructuredMessage";
 import { TargetDescriptor, targetSummary } from "../components/TargetDescriptor";
 import type { SSEStatus } from "../useSSE";
 
@@ -906,22 +910,37 @@ function Bubble({
         message.deliveries[0]?.status)
       : undefined;
   const text = message.body ?? message.preview ?? "";
+  const structured = parseStructuredMessage(text);
   return (
     <div className={`flex ${out ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] rounded-xl px-2.5 py-1.5 text-[11px] leading-relaxed ${
-          failed
-            ? "bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-400/30 dark:text-red-200"
-            : out
-              ? "bg-accent-50 border border-accent-200 text-surface-800 dark:bg-accent-900/30 dark:border-accent-700/40 dark:text-surface-200"
-              : "bg-surface-100 border border-surface-200 text-surface-700 dark:bg-surface-800 dark:border-surface-700 dark:text-surface-300"
-        }`}
+        className={
+          structured
+            ? "min-w-0 max-w-[92%] text-[11px] leading-relaxed"
+            : `max-w-[85%] rounded-xl px-2.5 py-1.5 text-[11px] leading-relaxed ${
+                failed
+                  ? "bg-red-50 border border-red-200 text-red-700 dark:bg-red-900/20 dark:border-red-400/30 dark:text-red-200"
+                  : out
+                    ? "bg-accent-50 border border-accent-200 text-surface-800 dark:bg-accent-900/30 dark:border-accent-700/40 dark:text-surface-200"
+                    : "bg-surface-100 border border-surface-200 text-surface-700 dark:bg-surface-800 dark:border-surface-700 dark:text-surface-300"
+              }`
+        }
       >
-        {message.subject && (
-          <div className="font-semibold mb-0.5">{message.subject}</div>
+        {structured ? (
+          <StructuredMessage payload={structured} subject={message.subject} />
+        ) : (
+          <>
+            {message.subject && (
+              <div className="font-semibold mb-0.5">{message.subject}</div>
+            )}
+            {text ? <Markdown text={text} /> : <div>(no body)</div>}
+          </>
         )}
-        {text ? <Markdown text={text} /> : <div>(no body)</div>}
-        <div className="flex items-center gap-1.5 justify-end mt-0.5 text-[9px] text-surface-400 dark:text-surface-500">
+        <div
+          className={`flex items-center gap-1.5 justify-end text-[9px] text-surface-400 dark:text-surface-500 ${
+            structured ? "mt-1 px-1" : "mt-0.5"
+          }`}
+        >
           <span>{message.created_at.slice(5, 16).replace("T", " ")}</span>
           {out && !failed && status && (
             <span
