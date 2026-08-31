@@ -179,12 +179,10 @@ async def run() -> int:
                 a1 = await call(
                     session, "agent_register",
                     agent_id="agent-alpha", role="architect",
-                    capabilities=["py", "review"],
                 )
                 a2 = await call(
                     session, "agent_register",
                     agent_id="agent-beta", role="builder",
-                    capabilities=["py"],
                 )
                 envelopes += [a1, a2]
                 require_ok(a1, "agent_register/alpha")
