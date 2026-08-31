@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.4` |
+| Package | `okto-nexus 0.1.5` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -694,7 +694,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.4 default surface:
+For the 0.1.5 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -962,10 +962,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.4
+uv build --out-dir dist/release-0.1.5
 uvx twine check \
-  dist/release-0.1.4/okto_nexus-0.1.4-py3-none-any.whl \
-  dist/release-0.1.4/okto_nexus-0.1.4.tar.gz
+  dist/release-0.1.5/okto_nexus-0.1.5-py3-none-any.whl \
+  dist/release-0.1.5/okto_nexus-0.1.5.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1101,7 +1101,23 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.4 — current
+### 0.1.5 — current
+
+Live MCP smoke-test maintenance release. The MCP contract and database schema
+are unchanged: surface revision remains 32 and the latest migration remains
+026.
+
+- Restored the real stdio smoke test on clean stores after capability
+  registration became fail-closed.
+- Documented when and how to run the isolated two-agent smoke flow on Unix and
+  Windows, including its `LIVE E2E RESULT: PASS` completion signal.
+- Added semantic cards for structured `kind` messages in the Graph conversation
+  drawer, with distinct read-receipt and handoff lifecycle treatments instead
+  of raw JSON.
+- Synchronized `pyproject.toml`, `uv.lock`, and release commands at version
+  0.1.5.
+
+### 0.1.4
 
 Dashboard, observability, and coordination-guidance release. The MCP guidance
 contract advances to surface revision 32; the database schema is unchanged and
