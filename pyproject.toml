@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "okto-nexus"
-version = "0.1.5"
+version = "0.1.6"
 description = "Okto Nexus - Local Agent Coordination Bus (MCP server + dashboard)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -31,7 +31,9 @@ classifiers = [
     "Topic :: System :: Distributed Computing",
 ]
 dependencies = [
-    "mcp>=1.0",
+    # Nexus uses the MCP Python SDK v1 FastMCP API.  Keep v2 as an explicit
+    # migration instead of accepting a breaking major during installation.
+    "mcp>=1.0,<2",
     "pydantic>=2",
 ]
 

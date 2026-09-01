@@ -47,6 +47,7 @@ from ...outbound.tokenizer import resolve_tokenizer
 from ..mcp.server import (
     SERVER_INSTRUCTIONS,
     Deps,
+    _load_fastmcp,
     register_meta_tools,
     register_resources,
     register_tools,
@@ -305,8 +306,7 @@ def create_http_mcp_server(deps: Deps) -> Any:
     at ``okto-nexus://reference/*`` docs (monitoring, preflight, target-grammar,
     tool-docs/*) that must therefore resolve on a ``resources/read``.
     """
-    from mcp.server.fastmcp import FastMCP  # lazy: SDK only needed at serve time
-
+    FastMCP = _load_fastmcp()  # lazy: SDK only needed at serve time
     server = FastMCP(
         "okto-nexus",
         instructions=SERVER_INSTRUCTIONS,

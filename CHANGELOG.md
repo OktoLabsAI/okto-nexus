@@ -2,6 +2,25 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.6 - 2026-09-01
+
+### Fixed
+
+- Rebuilt the MCP v1 FastMCP settings model after import so
+  `pydantic-settings` 2.15+ no longer reports an unresolved `lifespan`
+  forward reference during stdio or HTTP server startup.
+
+### Changed
+
+- Constrained the MCP Python SDK dependency to the compatible v1 line
+  (`mcp>=1.0,<2`), keeping the eventual v2 migration explicit.
+
+### Validation
+
+- Verified the installed `okto-nexus serve` executable with the local MiniLM
+  embedding provider and a live `/healthz` request.
+- Passed the complete test suite with 1,589 tests passing and 2 skipped.
+
 ## 0.1.5 - 2026-08-31
 
 ### Added
