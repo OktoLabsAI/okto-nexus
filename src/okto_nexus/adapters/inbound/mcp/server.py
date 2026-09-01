@@ -767,13 +767,29 @@ def maybe_auto_prune(deps: Deps) -> dict[str, Any] | None:
     return report
 
 
+def _load_fastmcp() -> Any:
+    """Load the v1 FastMCP class with its settings model fully rebuilt.
+
+    MCP 1.29.0 defines ``Settings`` before ``FastMCP``.  That leaves the
+    generic ``lifespan`` annotation as an unresolved forward reference and
+    pydantic-settings 2.15+ warns every time a server is constructed.  Rebuild
+    after both classes exist, using Pydantic's public hook; fixed SDK releases
+    already report the model complete and take the no-op branch.
+    """
+    from mcp.server.fastmcp import FastMCP
+    from mcp.server.fastmcp.server import Settings
+
+    if not Settings.__pydantic_complete__:
+        Settings.model_rebuild()
+    return FastMCP
+
+
 def create_server(deps: Deps) -> Any:
     """Create the MCP server, register tools, and return the server instance.
 
     Imports the MCP SDK lazily; raises ``ImportError`` if it is missing.
     """
-    from mcp.server.fastmcp import FastMCP  # lazy import: SDK only needed here
-
+    FastMCP = _load_fastmcp()  # lazy import: SDK only needed here
     server = FastMCP("okto-nexus", instructions=SERVER_INSTRUCTIONS)
     register_tools(server, deps)
     register_meta_tools(server, deps)

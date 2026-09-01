@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.5` |
+| Package | `okto-nexus 0.1.6` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -694,7 +694,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.5 default surface:
+For the 0.1.6 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -962,10 +962,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.5
+uv build --out-dir dist/release-0.1.6
 uvx twine check \
-  dist/release-0.1.5/okto_nexus-0.1.5-py3-none-any.whl \
-  dist/release-0.1.5/okto_nexus-0.1.5.tar.gz
+  dist/release-0.1.6/okto_nexus-0.1.6-py3-none-any.whl \
+  dist/release-0.1.6/okto_nexus-0.1.6.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1101,7 +1101,25 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.5 — current
+### 0.1.6 — current
+
+Startup compatibility maintenance release. The MCP contract and database
+schema are unchanged: surface revision remains 32 and the latest migration
+remains 026.
+
+- Rebuilt the MCP v1 FastMCP settings model after import, eliminating the
+  unresolved `lifespan` forward-reference warning introduced by
+  `pydantic-settings` 2.15.
+- Applied the compatibility path to both stdio and streamable-HTTP server
+  construction.
+- Constrained the MCP SDK dependency to `mcp>=1.0,<2` so adopting the breaking
+  v2 API requires an explicit migration.
+- Added a regression test that promotes the startup warning to an error and
+  verifies the settings model is complete.
+- Verified the installed executable with local MiniLM warm-up, a live health
+  request, and the complete test suite.
+
+### 0.1.5
 
 Live MCP smoke-test maintenance release. The MCP contract and database schema
 are unchanged: surface revision remains 32 and the latest migration remains
