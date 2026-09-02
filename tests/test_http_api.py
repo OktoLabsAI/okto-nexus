@@ -345,6 +345,20 @@ def test_delete_agent_removes_and_404s_afterwards(serve_env):
     )
 
 
+def test_delete_operator_is_rejected_and_identity_survives(serve_env):
+    _, client, operator_key = serve_env
+
+    response = client.delete("/api/v1/agents/operator", headers=_h(operator_key))
+
+    assert response.status_code == 422
+    error = response.json()["error"]
+    assert error["code"] == "VALIDATION_ERROR"
+    assert "cannot be deleted" in error["message"]
+    assert (
+        client.get("/api/v1/agents/operator", headers=_h(operator_key)).status_code == 200
+    )
+
+
 def test_delete_agent_with_sessions_and_deliveries_cascades(serve_env):
     """Deleting an agent that actually communicated must not 503 on its FKs.
 

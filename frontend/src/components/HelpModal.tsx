@@ -234,6 +234,12 @@ const SECTIONS: Section[] = [
           terminal handoff results in one chronological chat. Filter by one
           agent or keep the complete team conversation visible.
         </P>
+        <H>Conversation history</H>
+        <P>
+          The latest 20 turns load first. Scroll to the top and choose <b>Load
+          more messages</b> to prepend the next batch without losing your
+          reading position.
+        </P>
         <H>Delivery and audience</H>
         <P>
           Choose <b>Message</b> or <b>Handoff</b>, then choose <b>Private</b>{" "}

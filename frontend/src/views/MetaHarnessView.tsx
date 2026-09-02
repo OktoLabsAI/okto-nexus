@@ -2,6 +2,7 @@ import {
   ArrowDown,
   Bot,
   CheckCircle2,
+  ChevronUp,
   CircleAlert,
   LoaderCircle,
   MessageSquare,
@@ -35,6 +36,7 @@ import { workspaceDisplayName } from "../components/WorkspaceNames";
 import { agentColor } from "../graph/agentColor";
 
 const OPERATOR = "operator";
+const TIMELINE_PAGE_SIZE = 20;
 
 type TimelineEntry = {
   id: string;
@@ -49,6 +51,12 @@ type TimelineEntry = {
   content: string;
   status?: string;
   outcome?: "completed" | "rejected";
+};
+
+type TimelineOrder = {
+  scope: string;
+  next: number;
+  positions: Map<string, number>;
 };
 
 function targetAgent(row: MessageRow | GraphHandoff): string | undefined {
@@ -227,6 +235,38 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
   );
 }
 
+function preserveArrivalOrder(
+  entries: TimelineEntry[],
+  order: TimelineOrder,
+  scope: string,
+): TimelineEntry[] {
+  if (order.scope !== scope) {
+    order.scope = scope;
+    order.next = 0;
+    order.positions.clear();
+  }
+
+  // The first hydration is already chronological. Entries discovered by later
+  // refreshes receive the next position so a live chat turn never jumps above
+  // content that was already visible because of clock skew between producers.
+  for (const entry of entries) {
+    if (!order.positions.has(entry.id)) {
+      order.positions.set(entry.id, order.next);
+      order.next += 1;
+    }
+  }
+
+  return [...entries].sort(
+    (a, b) => (order.positions.get(a.id) ?? 0) - (order.positions.get(b.id) ?? 0),
+  );
+}
+
+function mergeMessages(current: MessageRow[], incoming: MessageRow[]): MessageRow[] {
+  const merged = new Map(current.map((message) => [message.message_id, message]));
+  for (const message of incoming) merged.set(message.message_id, message);
+  return [...merged.values()];
+}
+
 function shortWorkspace(id: string, workspaces: WorkspaceListItem[]): string {
   const index = workspaces.findIndex((workspace) => workspace.workspace_id === id);
   return index >= 0 ? workspaceDisplayName(workspaces[index], index) : id.slice(0, 8);
@@ -378,10 +418,22 @@ export function MetaHarnessView({
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [sending, setSending] = useState(false);
+  const [messagePage, setMessagePage] = useState(1);
+  const [messageTotal, setMessageTotal] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(TIMELINE_PAGE_SIZE);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const feedScopeRef = useRef(workspace);
+  const preserveScrollRef = useRef(false);
+  const timelineOrderRef = useRef<TimelineOrder>({
+    scope: workspace,
+    next: 0,
+    positions: new Map(),
+  });
 
   const availableAgents = useMemo(
     () => agents.filter((agent) => agent.agent_id !== OPERATOR && agent.is_active),
@@ -415,10 +467,11 @@ export function MetaHarnessView({
   }, [workspace, workspaces]);
 
   const loadFeed = useCallback(async () => {
+    const scopeChanged = feedScopeRef.current !== workspace;
     const params: Record<string, string> = {
       agent: OPERATOR,
       page: "1",
-      page_size: "100",
+      page_size: String(TIMELINE_PAGE_SIZE),
       include_body: "true",
     };
     const scopedWorkspace = workspace === "all" ? undefined : workspace;
@@ -428,7 +481,15 @@ export function MetaHarnessView({
         api.messages(params),
         api.handoffs(scopedWorkspace, { from_agent: OPERATOR }),
       ]);
-      setMessages(messagePage.items);
+      if (scopeChanged) {
+        feedScopeRef.current = workspace;
+        setMessages(messagePage.items);
+        setMessagePage(1);
+        setVisibleCount(TIMELINE_PAGE_SIZE);
+      } else {
+        setMessages((current) => mergeMessages(current, messagePage.items));
+      }
+      setMessageTotal(messagePage.total);
       setHandoffs(handoffPage.items);
       setError(null);
     } catch (exc) {
@@ -450,13 +511,80 @@ export function MetaHarnessView({
   }, [liveTick, loadFeed]);
 
   const timeline = useMemo(
-    () => buildTimeline(messages, handoffs).filter((entry) => involvedAgent(entry, filterAgent)),
-    [messages, handoffs, filterAgent],
+    () =>
+      preserveArrivalOrder(
+        buildTimeline(messages, handoffs),
+        timelineOrderRef.current,
+        workspace,
+      ).filter((entry) => involvedAgent(entry, filterAgent)),
+    [messages, handoffs, filterAgent, workspace],
   );
+  const visibleTimeline = useMemo(
+    () => timeline.slice(-visibleCount),
+    [timeline, visibleCount],
+  );
+  const hasOlderMessages =
+    visibleCount < timeline.length || messages.length < messageTotal;
 
   useEffect(() => {
+    setVisibleCount(TIMELINE_PAGE_SIZE);
+  }, [filterAgent, workspace]);
+
+  useEffect(() => {
+    if (preserveScrollRef.current) {
+      preserveScrollRef.current = false;
+      return;
+    }
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [timeline.length]);
+  }, [visibleTimeline.length, workspace, filterAgent]);
+
+  const loadMoreMessages = async () => {
+    if (loadingMore || !hasOlderMessages) return;
+    const scroller = timelineRef.current;
+    const previousHeight = scroller?.scrollHeight ?? 0;
+    const previousTop = scroller?.scrollTop ?? 0;
+    preserveScrollRef.current = true;
+    setLoadingMore(true);
+
+    try {
+      const hiddenLoaded = Math.max(0, timeline.length - visibleCount);
+      if (hiddenLoaded < TIMELINE_PAGE_SIZE && messages.length < messageTotal) {
+        const nextPage = messagePage + 1;
+        const params: Record<string, string> = {
+          agent: OPERATOR,
+          page: String(nextPage),
+          page_size: String(TIMELINE_PAGE_SIZE),
+          include_body: "true",
+        };
+        if (workspace !== "all") params.workspace = workspace;
+        const page = await api.messages(params);
+
+        // History backfill belongs at its real chronological position. Clear
+        // first-seen ordering before merging; subsequent live entries will
+        // again append without jumping around.
+        timelineOrderRef.current.positions.clear();
+        timelineOrderRef.current.next = 0;
+        setMessages((current) => mergeMessages(current, page.items));
+        setMessagePage(nextPage);
+        setMessageTotal(page.total);
+      }
+      setVisibleCount((current) => current + TIMELINE_PAGE_SIZE);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          const currentScroller = timelineRef.current;
+          if (currentScroller) {
+            currentScroller.scrollTop =
+              previousTop + (currentScroller.scrollHeight - previousHeight);
+          }
+        });
+      });
+    } catch (exc) {
+      preserveScrollRef.current = false;
+      setError((exc as Error).message);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
 
   // OpenAI-style composer: one line at rest, growing with content up to eight
   // lines before its own scrollbar appears.
@@ -534,7 +662,11 @@ export function MetaHarnessView({
           </div>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto" data-testid="meta-harness-timeline">
+        <div
+          ref={timelineRef}
+          className="min-h-0 flex-1 overflow-y-auto"
+          data-testid="meta-harness-timeline"
+        >
           <div className="mx-auto flex min-h-full max-w-5xl flex-col px-4 py-6 sm:px-6">
             {loading ? (
               <div className="grid flex-1 place-items-center text-sm text-surface-400">
@@ -552,7 +684,26 @@ export function MetaHarnessView({
               </div>
             ) : (
               <div className="mt-auto space-y-6">
-                {timeline.map((entry) => (
+                {hasOlderMessages && (
+                  <div className="flex justify-center pb-1">
+                    <button
+                      type="button"
+                      onClick={() => void loadMoreMessages()}
+                      disabled={loadingMore}
+                      className="inline-flex items-center gap-2 rounded-full border border-surface-200 bg-white px-3 py-1.5 text-xs font-medium text-surface-600 shadow-sm transition-colors hover:border-accent-300 hover:text-accent-600 disabled:cursor-wait disabled:opacity-60 dark:border-surface-700 dark:bg-surface-900 dark:text-surface-300 dark:hover:border-accent-700 dark:hover:text-accent-300"
+                      aria-label="Load more messages"
+                      data-testid="meta-harness-load-more"
+                    >
+                      {loadingMore ? (
+                        <LoaderCircle className="animate-spin" size={14} />
+                      ) : (
+                        <ChevronUp size={14} />
+                      )}
+                      {loadingMore ? "Loading messages…" : "Load more messages"}
+                    </button>
+                  </div>
+                )}
+                {visibleTimeline.map((entry) => (
                   <ChatTurn
                     key={entry.id}
                     entry={entry}

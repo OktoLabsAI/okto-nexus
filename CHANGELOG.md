@@ -26,16 +26,22 @@ All notable changes to Okto Nexus are documented in this file.
   of raw JSON.
 - Refined the Meta-harness composer to start at one line, grow up to eight,
   blend into the conversation background, and open its recipient menu upward.
+- Added on-demand Meta-harness history in batches of 20 with scroll-position
+  preservation when older messages are prepended.
 
 ### Fixed
 
 - Corrected guardrail assignment and rule validation failures found during the
   usability review.
 - Removed competing page-level scroll containers from the dashboard shell.
+- Kept newly observed Meta-harness turns at the end of the live conversation,
+  even when an existing producer reports a skewed timestamp.
+- Prevented deletion of the reserved `operator` identity in both the dashboard
+  and the HTTP management API.
 
 ### Validation
 
-- Passed the complete suite with 1,593 tests passing and 2 skipped.
+- Passed the complete suite with 1,594 tests passing and 2 skipped.
 - Built the production dashboard and exercised private messages, broadcast
   handoffs, agent replies, result formatting, and agent filtering against an
   isolated live server.

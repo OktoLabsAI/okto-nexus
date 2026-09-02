@@ -1408,6 +1408,13 @@ def build_router() -> APIRouter:
 
         try:
             _require_operator()
+            if is_reserved_agent_id(agent_id):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "The reserved operator agent cannot be deleted because "
+                    "dashboard messaging depends on it.",
+                    {"agent_id": agent_id, "reserved": OPERATOR_AGENT_ID},
+                )
             removed = await _run(request, _delete)
         except OktoNexusError as exc:
             return _map_error(exc)
