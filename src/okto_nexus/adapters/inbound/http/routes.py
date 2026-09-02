@@ -9,14 +9,15 @@ untouched by async concerns (rule BR2). Responses use the documented
 from __future__ import annotations
 
 import importlib.metadata
-from typing import Any
+from typing import Any, Literal
+from urllib.parse import quote
 
 import anyio.to_thread
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field
 
-from ....config import FEATURE_FLAG_FIELDS
+from ....application.artifacts import ArtifactService
 from ....application.capabilities import CapabilityCatalogService
 from ....application.comm_preset_catalog import CommPresetCatalogService
 from ....application.governance import GovernanceService
@@ -27,15 +28,16 @@ from ....application.policy_catalog import PolicyCatalogService
 from ....application.search import EmbeddingsUnavailable
 from ....application.tags import TagCatalogService
 from ....application.workspace_analytics import DEFAULT_WINDOW, is_valid_window
-from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
-from ....domain.health import is_valid_window as is_valid_health_window
+from ....config import FEATURE_FLAG_FIELDS
 from ....domain.approvals import (
     OPERATOR_AGENT_ID,
     is_reserved_agent_id,
     validate_status_filter,
 )
 from ....domain.base import new_id
-from ....domain.poll_tokens import POLL_TOKEN_PREFIX
+from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
+from ....domain.health import is_valid_window as is_valid_health_window
+from ....domain.messages import normalize_artifacts
 from ....domain.permissions import (
     BUILTIN_PRESETS,
     PERMISSION_DESCRIPTIONS,
@@ -43,18 +45,24 @@ from ....domain.permissions import (
     builtin_preset,
     validate_permission_flags,
 )
+from ....domain.poll_tokens import POLL_TOKEN_PREFIX
 from ....domain.routing import normalize_capabilities
 from ....domain.tag_selector import validate_comm_scope, validate_tags
 from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
-from ..mcp.tools.handoff import build_service as _build_handoff_service
-from ..mcp.tools.messages import build_service as _build_message_service
-from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from ..mcp.projection import (
     PROFILE_FULL,
     apply_to_response,
     parse_profile,
 )
+from ..mcp.tools.artifacts import build_service as _build_artifact_service
+from ..mcp.tools.handoff import build_service as _build_handoff_service
+from ..mcp.tools.messages import build_service as _build_message_service
+from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
+
+
+META_HARNESS_MAX_ATTACHMENTS = 10
+META_HARNESS_MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 
 
 def _ok(data: Any) -> JSONResponse:
@@ -78,6 +86,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
         # addressed one - the REST resource does not exist there.
         ErrorCode.WORKSPACE_MISMATCH: 404,
         ErrorCode.VALIDATION_ERROR: 422,
+        ErrorCode.CONTENT_TOO_LARGE: 413,
         ErrorCode.PERMISSION_DENIED: 403,
         ErrorCode.POLICY_DENIED: 403,
         ErrorCode.QUOTA_EXCEEDED: 429,
@@ -116,6 +125,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
             ErrorCode.COMM_PRESET_IN_USE,
             ErrorCode.POLICY_DENIED,
             ErrorCode.QUOTA_EXCEEDED,
+            ErrorCode.CONTENT_TOO_LARGE,
             ErrorCode.CONFLICT,
             ErrorCode.DEPENDENCY_NOT_MET,
             ErrorCode.DEPENDENCY_NOT_FOUND,
@@ -290,6 +300,25 @@ class SteeringBody(BaseModel):
     body: str = Field(min_length=1)
 
 
+class MetaHarnessSendBody(BaseModel):
+    """One operator-authored turn from the dashboard Meta-harness.
+
+    ``kind`` describes the durable primitive while ``audience`` describes its
+    routing.  Keeping those dimensions independent avoids the ambiguous UI
+    where "private" and "handoff" looked like competing concepts.
+    """
+
+    workspace: str = Field(min_length=1)
+    kind: Literal["message", "handoff"]
+    audience: Literal["private", "broadcast"]
+    to_agent_id: str | None = Field(default=None, min_length=1)
+    subject: str | None = None
+    body: str = Field(min_length=1)
+    artifact_ids: list[str] = Field(
+        default_factory=list, max_length=META_HARNESS_MAX_ATTACHMENTS
+    )
+
+
 class VerifyHandoffBody(BaseModel):
     # Grammar (pass|fail lowercase, feedback only with fail, <=2000 chars) is
     # the domain's validate_verdict - the route just forwards; violations map
@@ -304,7 +333,9 @@ def _tag_service(deps) -> TagCatalogService:
 
 def _capability_service(deps) -> CapabilityCatalogService:
     return CapabilityCatalogService(
-        catalog=deps.repos.capability_catalog, agents=deps.repos.agents
+        catalog=deps.repos.capability_catalog,
+        agents=deps.repos.agents,
+        guardrail_assignments=deps.repos.guardrail_assignments,
     )
 
 
@@ -383,6 +414,7 @@ _GUARDRAIL_VERSION_STATUS_FIELDS = {"status"}
 _GUARDRAIL_ASSIGNMENT_FIELDS = {
     "scope_kind",
     "group_id",
+    "capability",
     "guardrail_id",
     "version_mode",
     "pinned_version",
@@ -400,6 +432,7 @@ def _guardrail_admin_service(deps) -> GuardrailAdminService:
         guardrails=deps.repos.guardrails,
         assignments=deps.repos.guardrail_assignments,
         agents=deps.repos.agents,
+        capability_catalog=deps.repos.capability_catalog,
         events=deps.repos.events,
         max_denial_limit=deps.config.max_event_limit,
     )
@@ -439,6 +472,10 @@ def _memory_service(deps) -> MemoryService:
             embedding is not None and embedding.search_enabled
         ),
     )
+
+
+def _artifact_service(deps) -> ArtifactService:
+    return _build_artifact_service(deps)
 
 
 def _approval_service(deps):
@@ -1388,6 +1425,13 @@ def build_router() -> APIRouter:
 
         try:
             _require_operator()
+            if is_reserved_agent_id(agent_id):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "The reserved operator agent cannot be deleted because "
+                    "dashboard messaging depends on it.",
+                    {"agent_id": agent_id, "reserved": OPERATOR_AGENT_ID},
+                )
             removed = await _run(request, _delete)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -1714,6 +1758,171 @@ def build_router() -> APIRouter:
         return _ok(result)
 
     # ------------------------------------------------------------------ #
+    # Artifacts: operator catalog over payloads managed by ArtifactStore.
+    # SQLite holds only the searchable/authorization catalog; these reads
+    # resolve payloads through the same injected adapter used by artifact_put.
+    # ------------------------------------------------------------------ #
+    @router.post("/meta-harness/artifacts")
+    async def upload_meta_harness_artifact(
+        request: Request,
+        workspace: str = "",
+        filename: str = "",
+    ) -> JSONResponse:
+        """Import one raw document as an operator-authored artifact.
+
+        The raw-body contract avoids a multipart parser dependency.  The
+        browser supplies the original filename as a query parameter and the
+        media type in Content-Type.  Bytes flow through ArtifactService and
+        ArtifactStore; SQLite receives catalog metadata only.
+        """
+        try:
+            _require_operator()
+            length_header = request.headers.get("content-length")
+            if length_header:
+                try:
+                    declared_size = int(length_header)
+                except ValueError:
+                    declared_size = 0
+                if declared_size > META_HARNESS_MAX_UPLOAD_BYTES:
+                    raise OktoNexusError(
+                        ErrorCode.CONTENT_TOO_LARGE,
+                        "Attachment exceeds the 25 MiB upload limit.",
+                        {
+                            "size_bytes": declared_size,
+                            "max_bytes": META_HARNESS_MAX_UPLOAD_BYTES,
+                        },
+                    )
+
+            payload = bytearray()
+            async for chunk in request.stream():
+                payload.extend(chunk)
+                if len(payload) > META_HARNESS_MAX_UPLOAD_BYTES:
+                    raise OktoNexusError(
+                        ErrorCode.CONTENT_TOO_LARGE,
+                        "Attachment exceeds the 25 MiB upload limit.",
+                        {
+                            "size_bytes": len(payload),
+                            "max_bytes": META_HARNESS_MAX_UPLOAD_BYTES,
+                        },
+                    )
+
+            service = _artifact_service(request.app.state.deps)
+            media_type = request.headers.get("content-type")
+
+            def _upload():
+                deps = request.app.state.deps
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    ws = deps.repos.workspaces.get(uow, workspace)
+                if ws is None or not ws.root_realpath:
+                    raise OktoNexusError(
+                        ErrorCode.NOT_FOUND,
+                        f"workspace '{workspace}' is not registered.",
+                        {"workspace": workspace},
+                    )
+                result = service.artifact_upload(
+                    project_root=ws.root_realpath,
+                    filename=filename,
+                    data=bytes(payload),
+                    media_type=media_type,
+                    agent_id=OPERATOR_AGENT_ID,
+                )
+                return service.get_for_operator(
+                    workspace_id=workspace,
+                    artifact_id=result["artifact_id"],
+                    include_content=False,
+                )
+
+            data = await anyio.to_thread.run_sync(_upload)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/artifacts")
+    async def browse_artifacts(
+        request: Request,
+        workspace: str = "all",
+        artifact_type: str | None = None,
+        agents: str | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        q: str | None = None,
+        page: int = 1,
+        page_size: int = 25,
+    ) -> JSONResponse:
+        service = _artifact_service(request.app.state.deps)
+
+        def _browse():
+            return service.browse(
+                workspace_id=workspace,
+                artifact_type=artifact_type,
+                producer_ids=agents.split(",") if agents else None,
+                date_from=date_from,
+                date_to=date_to,
+                query=q,
+                page=page,
+                page_size=page_size,
+            )
+
+        try:
+            _require_operator()
+            data = await anyio.to_thread.run_sync(_browse)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/artifacts/{artifact_id}/content")
+    async def get_artifact_content(
+        request: Request, artifact_id: str, workspace: str = "all"
+    ) -> Response:
+        service = _artifact_service(request.app.state.deps)
+
+        def _payload():
+            return service.payload_for_operator(
+                workspace_id=workspace, artifact_id=artifact_id
+            )
+
+        try:
+            _require_operator()
+            payload, media_type, filename = await anyio.to_thread.run_sync(
+                _payload
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        encoded_filename = quote(filename, safe="")
+        return Response(
+            content=payload,
+            media_type=media_type,
+            headers={
+                "Content-Disposition": (
+                    f"inline; filename*=UTF-8''{encoded_filename}"
+                )
+            },
+        )
+
+    @router.get("/artifacts/{artifact_id}")
+    async def get_artifact_detail(
+        request: Request,
+        artifact_id: str,
+        workspace: str = "all",
+        include_content: bool = True,
+    ) -> JSONResponse:
+        service = _artifact_service(request.app.state.deps)
+
+        def _get():
+            return service.get_for_operator(
+                workspace_id=workspace,
+                artifact_id=artifact_id,
+                include_content=include_content,
+            )
+
+        try:
+            _require_operator()
+            data = await anyio.to_thread.run_sync(_get)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    # ------------------------------------------------------------------ #
     # Guardrails + explicit agent groups (migration 025): operator-only staging
     # surfaces for group rosters, guardrail headers/versions, assignments and
     # scrubbed denial reads. Runtime enforcement stays in the write paths.
@@ -1865,10 +2074,11 @@ def build_router() -> APIRouter:
             return service.create_assignment(
                 scope_kind=body.get("scope_kind"),
                 group_id=body.get("group_id"),
+                capability=body.get("capability"),
                 guardrail_id=body.get("guardrail_id"),
                 version_mode=body.get("version_mode", "latest"),
                 pinned_version=body.get("pinned_version"),
-                mode=body.get("mode", "enforce"),
+                mode=body.get("mode", "audit"),
                 priority=body.get("priority", 100),
                 enabled=body.get("enabled", True),
             )
@@ -1884,6 +2094,7 @@ def build_router() -> APIRouter:
     async def list_guardrail_assignments(
         request: Request,
         group_id: str | None = None,
+        capability: str | None = None,
         guardrail_id: str | None = None,
         agent_id: str | None = None,
     ) -> JSONResponse:
@@ -1893,6 +2104,7 @@ def build_router() -> APIRouter:
             items = await anyio.to_thread.run_sync(
                 lambda: service.list_assignments(
                     group_id=group_id,
+                    capability=capability,
                     guardrail_id=guardrail_id,
                     agent_id=agent_id,
                 )
@@ -2634,6 +2846,94 @@ def build_router() -> APIRouter:
                 body=body.body,
                 target={"strategy": "direct", "agent_id": body.to_agent_id},
             )
+
+        try:
+            result = await anyio.to_thread.run_sync(_send)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/meta-harness/send")
+    async def meta_harness_send(
+        request: Request, body: MetaHarnessSendBody
+    ) -> JSONResponse:
+        """Send one Meta-harness turn through the normal Nexus use cases.
+
+        This is an operator convenience surface, not a privileged transport:
+        permissions, communication scope, policies, guardrails and HITL are
+        evaluated exactly as they are for MCP-originated work.
+        """
+
+        deps = request.app.state.deps
+        try:
+            _require_operator()
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+        def _send():
+            if body.audience == "private" and not body.to_agent_id:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "to_agent_id is required for a private Meta-harness turn.",
+                    {"audience": body.audience},
+                )
+
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                ws = deps.repos.workspaces.get(uow, body.workspace)
+            if ws is None or not ws.root_realpath:
+                raise OktoNexusError(
+                    ErrorCode.NOT_FOUND,
+                    f"workspace '{body.workspace}' is not registered.",
+                    {"workspace": body.workspace},
+                )
+
+            artifact_refs = normalize_artifacts(body.artifact_ids)
+            artifact_service = _artifact_service(deps)
+            for artifact_id in artifact_refs:
+                # Fail before creating the message/handoff when a stale or
+                # cross-workspace reference is supplied.  The operator read
+                # bypasses audience filtering but never workspace isolation.
+                artifact_service.get_for_operator(
+                    workspace_id=body.workspace,
+                    artifact_id=artifact_id,
+                    include_content=False,
+                )
+
+            target = (
+                {"strategy": "direct", "agent_id": body.to_agent_id}
+                if body.audience == "private"
+                else {"strategy": "broadcast"}
+            )
+            if body.kind == "message":
+                result = _build_message_service(deps).create_message(
+                    project_root=ws.root_realpath,
+                    from_agent_id=OPERATOR_AGENT_ID,
+                    subject=body.subject or "Meta-harness message",
+                    body=body.body,
+                    target=target,
+                    artifacts=artifact_refs,
+                )
+            else:
+                result = _build_handoff_service(deps).handoff_create(
+                    project_root=ws.root_realpath,
+                    from_agent_id=OPERATOR_AGENT_ID,
+                    target=target,
+                    visibility=(
+                        "private" if body.audience == "private" else "eligible"
+                    ),
+                    payload={
+                        "kind": "meta_harness.request",
+                        "subject": body.subject or "Meta-harness handoff",
+                        "body": body.body,
+                        "artifacts": artifact_refs,
+                    },
+                )
+            return {
+                "kind": body.kind,
+                "audience": body.audience,
+                "artifact_ids": artifact_refs,
+                **result,
+            }
 
         try:
             result = await anyio.to_thread.run_sync(_send)

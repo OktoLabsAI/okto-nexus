@@ -19,14 +19,14 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.6` |
+| Package | `okto-nexus 0.1.8` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
 | MCP prompts | 0 |
-| Surface revision | 32 |
-| Database schema | 26 migrations, 34 tables |
-| Storage | local SQLite/WAL |
+| Surface revision | 33 |
+| Database schema | 28 migrations, 34 tables |
+| Storage | local SQLite/WAL catalog + adapter-backed artifact payloads |
 
 - PyPI: [pypi.org/project/okto-nexus](https://pypi.org/project/okto-nexus/)
 - Source: [github.com/OktoLabsAI/okto-nexus](https://github.com/OktoLabsAI/okto-nexus)
@@ -358,6 +358,8 @@ The bundled dashboard provides:
   outcomes, receipts, and optional semantic search;
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,
   dependency state, verification, cancellation, and results;
+- **Meta-harness** — an OpenAI-style chat for private or broadcast messages
+  and handoffs, with agent filtering and replies/results in one timeline;
 - **Events** — filtered event history, trace navigation, and live SSE updates;
 - **Memory** — durable memory browse/search/curation when `feature_memory` is
   enabled;
@@ -549,10 +551,19 @@ dependency is `COMPLETED`.
 
 ### Artifacts and `shared.md`
 
-Artifacts are either inline `text`/`json`/`markdown` or a workspace-contained
-file reference. Path containment is checked after canonical resolution;
-escapes return `PATH_OUTSIDE_WORKSPACE`. Inline content is bounded by
+Artifacts are published as `text`/`json`/`markdown`/`html` content or imported from a
+workspace-contained file. Path containment is checked after canonical
+resolution; escapes return `PATH_OUTSIDE_WORKSPACE`. Text content is bounded by
 `max_inline_bytes`.
+
+Payload bytes and free-form metadata do not live in SQLite. The database keeps
+only the minimal searchable and authorization catalog. The default local
+`ArtifactStore` adapter writes each payload and its `manifest.json` below
+`~/.okto_nexus/artifacts/<workspace>/<agent>/<artifact-id>/`. Imported files
+are copied into that managed location, so the artifact survives later changes
+to the original workspace file. The dashboard's **Artifacts** screen pages
+through the managed payload catalog, filters by one or more producing agents
+and a production date interval, and previews or downloads the selected payload.
 
 The publisher's effective outbound audience is frozen on the artifact. The
 same audience controls `artifact.created` visibility and `artifact_get`.
@@ -658,7 +669,7 @@ require a valid `session_id` and `session_secret` in both modes.
 | `okto-nexus://reference/tool-docs/events` | 2 |
 | `okto-nexus://reference/tool-docs/handoff` | 4 |
 | `okto-nexus://reference/tool-docs/identity` | 5 |
-| `okto-nexus://reference/tool-docs/artifacts` | 2 |
+| `okto-nexus://reference/tool-docs/artifacts` | 4 |
 | `okto-nexus://reference/governance` | 2 |
 | `okto-nexus://reference/hitl` | 2 |
 
@@ -694,7 +705,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.6 default surface:
+For the 0.1.8 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -962,10 +973,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.6
+uv build --out-dir dist/release-0.1.8
 uvx twine check \
-  dist/release-0.1.6/okto_nexus-0.1.6-py3-none-any.whl \
-  dist/release-0.1.6/okto_nexus-0.1.6.tar.gz
+  dist/release-0.1.8/okto_nexus-0.1.8-py3-none-any.whl \
+  dist/release-0.1.8/okto_nexus-0.1.8.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -987,7 +998,7 @@ src/okto_nexus/
       telemetry/ tokenizer/ metrics support
   application/              use cases and ports
   domain/                   entities, routing, state machines, policies
-  migrations/               001 through 026
+  migrations/               001 through 027
   testing/                  reusable test/replay harnesses
 frontend/                    React dashboard source
 tests/                       unit, contract, integration, replay tests
@@ -1101,7 +1112,39 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.6 — current
+### 0.1.8 — current
+
+Artifact storage and catalog release. The MCP contract is at surface revision
+33 and the latest database migration is 028.
+
+- Moved artifact payloads and free-form metadata out of SQLite into an
+  adapter-backed store, with a local filesystem adapter by default.
+- Imported path-based artifacts into managed storage so they remain available
+  independently of the original workspace file.
+- Added the Artifacts catalog with paginated producer/date filtering, detail
+  previews, expanded Raw/Rich rendering, and managed-payload downloads.
+- Added rendered metadata fields plus safe Rich previews for Markdown, JSON,
+  and HTML artifacts.
+
+### 0.1.7
+
+Dashboard usability and operator-interaction release. The MCP surface remains
+unchanged; the latest database migration is 027.
+
+- Added the Meta-harness chat with independent Message/Handoff and
+  Private/Broadcast controls.
+- Combined outgoing turns, incoming agent messages, and handoff completion or
+  rejection outcomes in a live, agent-filterable timeline.
+- Rendered structured chat content as readable labels and lists instead of raw
+  JSON.
+- Reworked Guardrails group composition and rule authoring, including agent
+  auto-completion, capability-scoped assignments, regex assistance, and
+  stricter validation.
+- Added completed-agent responses and rejection reasons to Handoff cards and
+  details.
+- Removed nested page scrolling from the dashboard shell.
+
+### 0.1.6
 
 Startup compatibility maintenance release. The MCP contract and database
 schema are unchanged: surface revision remains 32 and the latest migration

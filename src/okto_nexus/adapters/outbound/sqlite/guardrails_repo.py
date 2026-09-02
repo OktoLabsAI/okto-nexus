@@ -596,7 +596,7 @@ class SqliteGuardrailAssignmentRepo:
     """Persistence and effective resolution for guardrail assignments."""
 
     _COLUMNS = (
-        "assignment_id, scope_kind, group_id, guardrail_id, version_mode, "
+        "assignment_id, scope_kind, group_id, capability, guardrail_id, version_mode, "
         "pinned_version, mode, priority, enabled, created_at, updated_at"
     )
 
@@ -614,9 +614,10 @@ class SqliteGuardrailAssignmentRepo:
         scope_kind: str,
         group_id: str | None,
         guardrail_id: str,
+        capability: str | None = None,
         version_mode: str = "latest",
         pinned_version: int | None = None,
-        mode: str = "enforce",
+        mode: str = "audit",
         priority: int = 100,
         enabled: bool = True,
         created_at: str | None = None,
@@ -624,6 +625,7 @@ class SqliteGuardrailAssignmentRepo:
         fields = validate_guardrail_assignment_form(
             scope_kind=scope_kind,
             group_id=group_id,
+            capability=capability,
             guardrail_id=guardrail_id,
             version_mode=version_mode,
             pinned_version=pinned_version,
@@ -642,12 +644,13 @@ class SqliteGuardrailAssignmentRepo:
             uow.connection.execute(
                 f"""
                 INSERT INTO guardrail_assignments ({self._COLUMNS})
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     assignment_id,
                     fields["scope_kind"],
                     fields["group_id"],
+                    fields["capability"],
                     fields["guardrail_id"],
                     fields["version_mode"],
                     fields["pinned_version"],
@@ -710,6 +713,22 @@ class SqliteGuardrailAssignmentRepo:
             ) from exc
         return [self._row_to_assignment(row) for row in rows]
 
+    def list_for_capability(
+        self, uow: UnitOfWork, *, capability: str
+    ) -> list[GuardrailAssignment]:
+        try:
+            cur = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM guardrail_assignments "
+                "WHERE capability = ? ORDER BY priority, assignment_id",
+                (capability,),
+            )
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise db_error_from_exception(
+                "listing capability guardrail assignments", exc
+            ) from exc
+        return [self._row_to_assignment(row) for row in rows]
+
     def list_for_guardrail(
         self, uow: UnitOfWork, *, guardrail_id: str
     ) -> list[GuardrailAssignment]:
@@ -740,9 +759,19 @@ class SqliteGuardrailAssignmentRepo:
                 FROM guardrail_assignments a
                 JOIN agent_group_members m ON m.group_id = a.group_id
                 WHERE a.scope_kind = 'agent_group' AND m.agent_id = ?
+                UNION ALL
+                SELECT a.{self._COLUMNS.replace(', ', ', a.')}
+                FROM guardrail_assignments a
+                JOIN agents agent ON agent.agent_id = ?
+                JOIN json_each(
+                    CASE WHEN json_valid(agent.capabilities)
+                         THEN agent.capabilities ELSE '{{}}'
+                    END
+                ) capability_item ON capability_item.key = a.capability
+                WHERE a.scope_kind = 'capability'
                 ORDER BY priority, guardrail_id, assignment_id
                 """,
-                (agent_id,),
+                (agent_id, agent_id),
             )
             rows = cur.fetchall()
         except sqlite3.Error as exc:
@@ -842,13 +871,27 @@ class SqliteGuardrailAssignmentRepo:
             raise db_error_from_exception(
                 "validating pinned guardrail assignment", exc
             ) from exc
-        if row is None or row["status"] != "active":
+        if row is None:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
-                "pinned guardrail assignments require an active version.",
+                f"Guardrail {guardrail_id!r} has no version {pinned_version}.",
                 {
                     "guardrail_id": guardrail_id,
                     "pinned_version": pinned_version,
+                    "reason": "version_not_found",
+                    "resolution_status": RESOLUTION_CONFIG_UNAVAILABLE,
+                },
+            )
+        if row["status"] != "active":
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"Guardrail {guardrail_id!r} version {pinned_version} is "
+                f"{row['status']!r}; pinned assignments require an active version.",
+                {
+                    "guardrail_id": guardrail_id,
+                    "pinned_version": pinned_version,
+                    "current_status": row["status"],
+                    "reason": "version_not_active",
                     "resolution_status": RESOLUTION_CONFIG_UNAVAILABLE,
                 },
             )
@@ -887,6 +930,7 @@ class SqliteGuardrailAssignmentRepo:
             assignment_id=row["assignment_id"],
             scope_kind=row["scope_kind"],
             group_id=row["group_id"],
+            capability=row["capability"],
             guardrail_id=row["guardrail_id"],
             version_mode=row["version_mode"],
             pinned_version=row["pinned_version"],

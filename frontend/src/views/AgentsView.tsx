@@ -762,28 +762,38 @@ export function AgentsView({
                       >
                         <Power size={14} />
                       </button>
-                      <button
-                        className={`${ICON_BTN_DANGER} ml-auto`}
-                        title="Delete agent"
-                        onClick={() =>
-                          confirm({
-                            title: "Delete agent?",
-                            body: (
-                              <span>
-                                <b>{agent.agent_id}</b> will be removed permanently
-                                (deactivation is the reversible path).
-                              </span>
-                            ),
-                            onConfirm: async () => {
-                              await api.deleteAgent(agent.agent_id);
-                              await reload();
-                              onChanged();
-                            },
-                          })
-                        }
-                      >
-                        <Trash2 size={14} />
-                      </button>
+                      {agent.agent_id === "operator" ? (
+                        <span
+                          className={`${ICON_BTN} ml-auto cursor-not-allowed opacity-60`}
+                          title="Reserved operator — required by dashboard messaging and cannot be deleted"
+                          aria-label="Reserved operator cannot be deleted"
+                        >
+                          <ShieldCheck size={14} />
+                        </span>
+                      ) : (
+                        <button
+                          className={`${ICON_BTN_DANGER} ml-auto`}
+                          title="Delete agent"
+                          onClick={() =>
+                            confirm({
+                              title: "Delete agent?",
+                              body: (
+                                <span>
+                                  <b>{agent.agent_id}</b> will be removed permanently
+                                  (deactivation is the reversible path).
+                                </span>
+                              ),
+                              onConfirm: async () => {
+                                await api.deleteAgent(agent.agent_id);
+                                await reload();
+                                onChanged();
+                              },
+                            })
+                          }
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      )}
                     </div>
                   </div>
 

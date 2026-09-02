@@ -2,12 +2,14 @@
 
 Implements the two artifact use cases of Okto Nexus V1:
 
-* ``artifact_put`` - register a ``file``/``text``/``json``/``markdown`` artifact
+* ``artifact_put`` - register a ``file``/``text``/``json``/``markdown``/``html``
+  artifact
   in the workspace resolved from ``project_root``. Requires at least one of
   ``path`` or ``content``; enforces the 64 KB inline limit (inclusive), JSON
   well-formedness for ``json`` artifacts, and workspace-root containment for
-  ``path`` references. On success it persists the metadata row (plus inline
-  content when small) and emits ``artifact.created`` in the SAME unit of work.
+  ``path`` references. On success it writes the payload through the injected
+  ``ArtifactStore``, persists only searchable catalog metadata in SQLite and
+  emits ``artifact.created`` in the SAME unit of work.
 * ``artifact_get`` - retrieve an artifact by id within the resolved workspace;
   cross-workspace / unknown ids surface as ``NOT_FOUND`` (never a leak). It
   never reads external files: ``stored=path`` returns the path + metadata only.
@@ -18,17 +20,17 @@ the error catalogue and :class:`NexusConfig`. It NEVER imports ``sqlite3`` nor
 ``mcp`` (enforced by the import-boundary test). Every coordinated mutation and
 its audit event commit atomically through a single injected unit of work.
 
-Note on metadata: the ``artifacts`` table carries no dedicated metadata blob
-column, so the optional ``metadata`` object is serialised into the
-``content_type`` column (which is not surfaced by any artifact contract) and
-round-tripped back on read.
+Free-form artifact metadata lives beside the payload in the store manifest.
+The legacy ``content``/``content_type`` database columns remain readable only
+for compatibility with stores created before migration 028.
 """
 
 from __future__ import annotations
 
-from contextlib import contextmanager
 import json
 import os
+from contextlib import contextmanager
+from datetime import date, datetime, time, timezone
 from typing import Any, Optional
 
 from ..config import NexusConfig
@@ -37,13 +39,15 @@ from ..domain.artifacts import (
     ARTIFACT_STREAM,
     STORED_INLINE,
     STORED_PATH,
+    StoredArtifactPayload,
     ensure_well_formed_json,
     ensure_within_inline_limit,
     normalize_artifact_type,
 )
 from ..domain.base import new_id
-from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..domain.governance import ACTION_ARTIFACT_PUT
+from ..domain.ids import resolve_realpath, resolve_workspace_id
+from ..domain.models import Artifact
 from ..domain.policy import snapshot_permits, snapshot_to_selector
 from ..errors import ErrorCode, OktoNexusError
 from .governance import GovernanceService
@@ -52,6 +56,7 @@ from .permissions import permission_set_for
 from .ports import (
     AgentRepo,
     ArtifactRepo,
+    ArtifactStore,
     Clock,
     ConnectionFactory,
     EventEmitter,
@@ -81,6 +86,92 @@ def _is_nonempty_str(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def _date_bound(value: str | None, *, end_of_day: bool) -> str | None:
+    if value is None or not value.strip():
+        return None
+    raw = value.strip()
+    try:
+        if len(raw) == 10:
+            parsed_date = date.fromisoformat(raw)
+            parsed = datetime.combine(
+                parsed_date,
+                time.max if end_of_day else time.min,
+                tzinfo=timezone.utc,
+            )
+        else:
+            parsed = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=timezone.utc)
+            parsed = parsed.astimezone(timezone.utc)
+    except ValueError:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "Artifact date filters must be ISO dates or timestamps.",
+            {"value": value},
+        ) from None
+    return parsed.isoformat(timespec="microseconds").replace("+00:00", "Z")
+
+
+def externalize_legacy_artifacts(
+    *,
+    connection_factory: ConnectionFactory,
+    artifacts: ArtifactRepo,
+    artifact_store: ArtifactStore,
+) -> dict[str, int]:
+    """Move legacy SQLite payloads into the configured artifact store.
+
+    This bootstrap migration is deliberately idempotent. Each successfully
+    copied artifact is repointed and has ``path``, ``content`` and
+    ``content_type`` cleared in one database transaction. Missing legacy path
+    references are left untouched because silently inventing payload bytes
+    would corrupt the artifact; inline payloads are always migrated.
+    """
+    with connection_factory.unit_of_work(write=False) as uow:
+        legacy = artifacts.list_legacy(uow)
+
+    migrated = 0
+    skipped = 0
+    for artifact in legacy:
+        if artifact.content is None and (
+            artifact.path is None or not os.path.isfile(artifact.path)
+        ):
+            skipped += 1
+            continue
+        stored = STORED_INLINE if artifact.content is not None else STORED_PATH
+        descriptor: StoredArtifactPayload | None = None
+        try:
+            descriptor = artifact_store.put(
+                workspace_id=artifact.workspace_id,
+                agent_id=artifact.created_by,
+                artifact_id=artifact.artifact_id,
+                artifact_type=artifact.artifact_type,
+                storage_kind=stored,
+                name=artifact.name,
+                content=artifact.content,
+                source_path=artifact.path if stored == STORED_PATH else None,
+                metadata=ArtifactService._deserialize_metadata(
+                    artifact.content_type
+                ),
+                created_at=artifact.created_at,
+            )
+            with connection_factory.unit_of_work() as uow:
+                artifacts.set_external_storage(
+                    uow,
+                    artifact_id=artifact.artifact_id,
+                    storage_path=descriptor.storage_path,
+                    storage_kind=descriptor.storage_kind,
+                    filename=descriptor.filename,
+                    media_type=descriptor.media_type,
+                    size_bytes=descriptor.size_bytes,
+                )
+            migrated += 1
+        except Exception:
+            if descriptor is not None:
+                artifact_store.delete(descriptor.storage_path)
+            raise
+    return {"migrated": migrated, "skipped": skipped}
+
+
 class ArtifactService:
     """Use-case orchestration for ``artifact_put`` / ``artifact_get``."""
 
@@ -89,6 +180,7 @@ class ArtifactService:
         *,
         connection_factory: ConnectionFactory,
         artifacts: ArtifactRepo,
+        artifact_store: ArtifactStore,
         workspaces: WorkspaceRepo,
         files: FileStore,
         clock: Clock,
@@ -101,6 +193,7 @@ class ArtifactService:
         self._cf = connection_factory
         self._agents = agents
         self._artifacts = artifacts
+        self._artifact_store = artifact_store
         self._workspaces = workspaces
         self._files = files
         self._clock = clock
@@ -212,9 +305,6 @@ class ArtifactService:
             stored_path = resolved_path
             size_bytes = self._path_size(resolved_path)
 
-        metadata_blob = self._serialize_metadata(metadata)
-        now = self._clock.now_iso()
-        artifact_id = new_id("art")
         guardrail_fields: dict[str, Any] = {
             "artifact_type": norm_type,
             "name": name,
@@ -223,83 +313,240 @@ class ArtifactService:
             "path": resolved_path if has_path else None,
             "path_reference": resolved_path if has_path else None,
         }
+        return self._persist_artifact(
+            workspace_id=workspace_id,
+            root_realpath=root_realpath,
+            artifact_type=norm_type,
+            name=name,
+            stored=stored,
+            stored_content=stored_content,
+            stored_path=stored_path,
+            size_bytes=size_bytes,
+            metadata=metadata,
+            agent_id=agent_id,
+            guardrail_fields=guardrail_fields,
+        )
 
-        with self._put_uow(workspace_id=workspace_id, agent_id=agent_id) as uow:
-            # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
-            # caller identity - the HTTP transport passes the authenticated
-            # agent; cooperative stdio has none (default-allow).
-            permission_set_for(self._agents, uow, agent_id).require("artifacts", "put")
-            # Ensure the workspace row exists before the artifact FK is needed.
-            # This contains no raw artifact content; a guardrail denial still
-            # rolls this main UoW back together with the target artifact row.
-            self._workspaces.upsert(
-                uow,
-                workspace_id=workspace_id,
-                root_realpath=root_realpath,
-                last_seen_at=now,
+    def artifact_upload(
+        self,
+        *,
+        project_root: Any,
+        filename: Any,
+        data: Any,
+        media_type: Any = None,
+        metadata: Any = None,
+        agent_id: Any = None,
+    ) -> dict[str, Any]:
+        """Import browser-uploaded bytes into the normal artifact lifecycle.
+
+        Unlike inline ``artifact_put`` content, an uploaded document is a
+        managed file and is therefore not subject to the inline-text ceiling.
+        The HTTP adapter owns its transport-size limit.  This use case still
+        applies the same artifact permission, guardrail, governance, audience,
+        catalog and audit-event rules as agent-originated artifacts.
+        """
+        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        if not _is_nonempty_str(filename):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "filename is required for an artifact upload.",
+                {"filename": filename},
             )
-            if (
-                self._guardrails is not None
-                and self._guardrails.has_enabled_assignments(uow)
-            ):
-                self._guardrails.enforce(
+        safe_name = str(filename).replace("\\", "/").rsplit("/", 1)[-1].strip()
+        if (
+            not safe_name
+            or len(safe_name) > 255
+            or any(ord(char) < 32 for char in safe_name)
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "filename must be a plain file name of at most 255 characters.",
+                {"filename": filename},
+            )
+        if not isinstance(data, (bytes, bytearray, memoryview)):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "artifact upload data must be bytes.",
+                {"data_type": type(data).__name__},
+            )
+        payload = bytes(data)
+        normalized_media = (
+            str(media_type).split(";", 1)[0].strip().lower()
+            if _is_nonempty_str(media_type)
+            else "application/octet-stream"
+        )
+        artifact_type = self._uploaded_artifact_type(safe_name, normalized_media)
+        if artifact_type in {"text", "json", "markdown", "html"}:
+            try:
+                decoded = payload.decode("utf-8")
+            except UnicodeDecodeError:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "Text document uploads must use UTF-8 encoding.",
+                    {"filename": safe_name, "media_type": normalized_media},
+                ) from None
+            if artifact_type == "json":
+                ensure_well_formed_json(decoded)
+
+        upload_metadata: dict[str, Any] = {
+            "source": "meta-harness",
+            "original_filename": safe_name,
+            "uploaded_media_type": normalized_media,
+        }
+        if metadata is not None:
+            metadata_blob = self._serialize_metadata(metadata)
+            upload_metadata.update(self._deserialize_metadata(metadata_blob))
+        guardrail_fields: dict[str, Any] = {
+            "artifact_type": artifact_type,
+            "name": safe_name,
+            # Agent file artifacts are inspected as path-based payloads too;
+            # raw uploaded bytes never enter a guardrail/event/database field.
+            "content": None,
+            "metadata": upload_metadata,
+            "path": safe_name,
+            "path_reference": safe_name,
+        }
+        return self._persist_artifact(
+            workspace_id=workspace_id,
+            root_realpath=root_realpath,
+            artifact_type=artifact_type,
+            name=safe_name,
+            stored=STORED_PATH,
+            stored_content=payload,
+            stored_path=None,
+            size_bytes=len(payload),
+            metadata=upload_metadata,
+            agent_id=agent_id,
+            guardrail_fields=guardrail_fields,
+        )
+
+    def _persist_artifact(
+        self,
+        *,
+        workspace_id: str,
+        root_realpath: str,
+        artifact_type: str,
+        name: str | None,
+        stored: str,
+        stored_content: str | bytes | None,
+        stored_path: str | None,
+        size_bytes: int,
+        metadata: Any,
+        agent_id: Any,
+        guardrail_fields: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Persist a validated payload through the shared artifact pipeline."""
+        metadata_blob = self._serialize_metadata(metadata)
+        metadata_value = self._deserialize_metadata(metadata_blob)
+        now = self._clock.now_iso()
+        artifact_id = new_id("art")
+
+        stored_payload: StoredArtifactPayload | None = None
+        artifact: Artifact | None = None
+        try:
+            with self._put_uow(workspace_id=workspace_id, agent_id=agent_id) as uow:
+                # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
+                # caller identity - the HTTP transport passes the authenticated
+                # agent; cooperative stdio has none (default-allow).
+                permission_set_for(self._agents, uow, agent_id).require(
+                    "artifacts", "put"
+                )
+                # Ensure the workspace row exists before the catalog FK is needed.
+                self._workspaces.upsert(
                     uow,
                     workspace_id=workspace_id,
-                    actor_agent_id=agent_id,
-                    surface="artifact_put",
-                    fields=guardrail_fields,
+                    root_realpath=root_realpath,
+                    last_seen_at=now,
                 )
-            # Governance gate (spec 80624c1a): deny + quotas from the publisher's
-            # attached policies, composed and evaluated PRE-persistence in this
-            # same UoW (no bindings = no governance inside enforce() - BR2).
-            # Without a caller identity there are no bindings, so nothing bites.
-            audience_snapshot: list[Any] | None = None
-            if self._governance is not None:
-                self._governance.enforce(
-                    uow,
-                    agent_id=agent_id,
-                    action=ACTION_ARTIFACT_PUT,
-                    size_bytes=size_bytes,
-                )
-                # Freeze the publisher's EFFECTIVE OUTBOUND as this artifact's
-                # audience (D-ART/D11), captured in the SAME UoW so it reflects
-                # exactly the bindings enforced above and never changes again.
-                # Empty -> None (a publisher with no outbound restriction, or no
-                # bindings, writes a NULL audience = public, zero-regression).
-                audience_snapshot = (
-                    self._governance.outbound_snapshot_for(uow, agent_id=agent_id)
-                    or None
-                )
-            artifact = self._artifacts.create(
-                uow,
-                artifact_id=artifact_id,
-                workspace_id=workspace_id,
-                artifact_type=norm_type,
-                name=name,
-                path=stored_path,
-                content=stored_content,
-                size_bytes=size_bytes,
-                content_type=metadata_blob,
-                created_by=str(agent_id)
-                if isinstance(agent_id, str) and agent_id.strip()
-                else None,
-                created_at=now,
-                audience=audience_snapshot,
-            )
-            # artifact.created is emitted INSIDE the same uow so the row and the
-            # event (with its server-assigned event_id) commit atomically (BR7).
-            self._emit_created(uow, artifact=artifact, stored=stored)
+                if (
+                    self._guardrails is not None
+                    and self._guardrails.has_enabled_assignments(uow)
+                ):
+                    self._guardrails.enforce(
+                        uow,
+                        workspace_id=workspace_id,
+                        actor_agent_id=agent_id,
+                        surface="artifact_put",
+                        fields=guardrail_fields,
+                    )
+                # Governance runs before filesystem persistence.  The database
+                # keeps the minimal authorship fields used by quotas, never the
+                # artifact payload itself.
+                audience_snapshot: list[Any] | None = None
+                if self._governance is not None:
+                    self._governance.enforce(
+                        uow,
+                        agent_id=agent_id,
+                        action=ACTION_ARTIFACT_PUT,
+                        size_bytes=size_bytes,
+                    )
+                    audience_snapshot = (
+                        self._governance.outbound_snapshot_for(uow, agent_id=agent_id)
+                        or None
+                    )
 
+                stored_payload = self._artifact_store.put(
+                    workspace_id=workspace_id,
+                    agent_id=(
+                        str(agent_id)
+                        if isinstance(agent_id, str) and agent_id.strip()
+                        else None
+                    ),
+                    artifact_id=artifact_id,
+                    artifact_type=artifact_type,
+                    storage_kind=stored,
+                    name=name,
+                    content=stored_content,
+                    source_path=stored_path,
+                    metadata=metadata_value,
+                    created_at=now,
+                )
+                artifact = self._artifacts.create(
+                    uow,
+                    artifact_id=artifact_id,
+                    workspace_id=workspace_id,
+                    artifact_type=artifact_type,
+                    name=name,
+                    # Payload, source path and free-form metadata are owned by
+                    # ArtifactStore.  These legacy DB columns stay NULL.
+                    path=None,
+                    content=None,
+                    size_bytes=stored_payload.size_bytes,
+                    content_type=None,
+                    created_by=str(agent_id)
+                    if isinstance(agent_id, str) and agent_id.strip()
+                    else None,
+                    created_at=now,
+                    audience=audience_snapshot,
+                    storage_path=stored_payload.storage_path,
+                    storage_kind=stored_payload.storage_kind,
+                    filename=stored_payload.filename,
+                    media_type=stored_payload.media_type,
+                )
+                # Catalog row + event are transactional.  A failure removes the
+                # already-written payload below as a compensating action.
+                self._emit_created(uow, artifact=artifact, stored=stored)
+        except Exception:
+            if stored_payload is not None:
+                self._artifact_store.delete(stored_payload.storage_path)
+            raise
+
+        if artifact is None or stored_payload is None:  # pragma: no cover
+            raise OktoNexusError(
+                ErrorCode.INTERNAL_ERROR,
+                "Artifact persistence completed without a catalog row.",
+                {"artifact_id": artifact_id},
+            )
         data: dict[str, Any] = {
             "artifact_id": artifact.artifact_id,
             "workspace_id": artifact.workspace_id,
             "artifact_type": artifact.artifact_type,
             "stored": stored,
-            "size_bytes": artifact.size_bytes,
+            "size_bytes": stored_payload.size_bytes,
             "created_at": artifact.created_at,
         }
         if stored == STORED_PATH:
-            data["path"] = artifact.path
+            data["path"] = stored_payload.source_path or stored_payload.local_path
         return data
 
     # ------------------------------------------------------------------ #
@@ -312,7 +559,8 @@ class ArtifactService:
 
         Unknown ids and ids owned by another workspace both surface as
         ``NOT_FOUND`` with no field leakage (FR10 / BR9). ``stored=path`` returns
-        only the path + metadata, never the referenced file's bytes (FR11/BR10).
+        a readable source or managed local path plus metadata, never the file's
+        bytes inline (FR11/BR10).
 
         Audience gate (D-ART/BR7): when the artifact froze an outbound audience
         at ``artifact_put`` time, a reader whose tags do NOT satisfy it is
@@ -344,25 +592,274 @@ class ArtifactService:
                 {"artifact_id": artifact_id},
             )
 
-        stored = STORED_INLINE if artifact.content is not None else STORED_PATH
+        stored, descriptor = self._storage_descriptor(artifact)
         data: dict[str, Any] = {
             "artifact_id": artifact.artifact_id,
             "workspace_id": artifact.workspace_id,
             "artifact_type": artifact.artifact_type,
             "stored": stored,
             "size_bytes": artifact.size_bytes,
-            "metadata": self._deserialize_metadata(artifact.content_type),
+            "metadata": (
+                descriptor.metadata
+                if descriptor
+                else self._deserialize_metadata(artifact.content_type)
+            ),
             "created_at": artifact.created_at,
         }
         if stored == STORED_INLINE:
-            data["content"] = artifact.content
+            data["content"] = (
+                self._artifact_store.read_text(artifact.storage_path)
+                if artifact.storage_path
+                else artifact.content
+            )
         else:
-            data["path"] = artifact.path
+            data["path"] = (
+                descriptor.source_path or descriptor.local_path
+                if descriptor
+                else artifact.path
+            )
         return data
+
+    # ------------------------------------------------------------------ #
+    # Operator dashboard reads
+    # ------------------------------------------------------------------ #
+    def browse(
+        self,
+        *,
+        workspace_id: str,
+        artifact_type: str | None = None,
+        producer_ids: list[str] | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        query: str | None = None,
+        page: int = 1,
+        page_size: int = 25,
+    ) -> dict[str, Any]:
+        """Page lean artifact catalog entries for the operator dashboard."""
+        norm_type = normalize_artifact_type(artifact_type) if artifact_type else None
+        try:
+            safe_page = max(1, int(page))
+            safe_page_size = max(1, min(int(page_size), 100))
+        except (TypeError, ValueError):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "page and page_size must be integers.",
+                {"page": page, "page_size": page_size},
+            ) from None
+        producers = list(
+            dict.fromkeys(
+                producer.strip()
+                for producer in (producer_ids or [])
+                if isinstance(producer, str) and producer.strip()
+            )
+        )
+        created_from = _date_bound(date_from, end_of_day=False)
+        created_to = _date_bound(date_to, end_of_day=True)
+        if created_from and created_to and created_from > created_to:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "date_from must be before or equal to date_to.",
+                {"date_from": date_from, "date_to": date_to},
+            )
+        offset = (safe_page - 1) * safe_page_size
+        with self._cf.unit_of_work(write=False) as uow:
+            rows, total = self._artifacts.browse_catalog(
+                uow,
+                workspace_id=None if workspace_id == "all" else workspace_id,
+                artifact_type=norm_type,
+                producer_ids=producers,
+                created_from=created_from,
+                created_to=created_to,
+                query=(query or "").strip() or None,
+                limit=safe_page_size,
+                offset=offset,
+            )
+        items = [
+            self._operator_shape(row, include_content=False)
+            for row in rows
+        ]
+        total_pages = (total + safe_page_size - 1) // safe_page_size
+        return {
+            "count": len(items),
+            "total": total,
+            "page": safe_page,
+            "page_size": safe_page_size,
+            "total_pages": total_pages,
+            "items": items,
+        }
+
+    def get_for_operator(
+        self,
+        *,
+        workspace_id: str,
+        artifact_id: str,
+        include_content: bool = True,
+    ) -> dict[str, Any]:
+        """Return one artifact without the agent-audience gate."""
+        if not _is_nonempty_str(artifact_id):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "artifact_id is required.",
+                {"artifact_id": artifact_id},
+            )
+        artifact = self._find_operator_artifact(
+            workspace_id=workspace_id, artifact_id=str(artifact_id)
+        )
+        if artifact is None:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                "artifact_id not found in the resolved workspace.",
+                {"artifact_id": artifact_id},
+            )
+        return self._operator_shape(
+            artifact,
+            include_content=include_content,
+            include_manifest=True,
+        )
+
+    def payload_for_operator(
+        self, *, workspace_id: str, artifact_id: str
+    ) -> tuple[bytes, str, str]:
+        """Return payload bytes, media type and filename for preview/download."""
+        artifact = self._find_operator_artifact(
+            workspace_id=workspace_id, artifact_id=artifact_id
+        )
+        if artifact is None:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                "artifact_id not found in the resolved workspace.",
+                {"artifact_id": artifact_id},
+            )
+        if artifact.storage_path:
+            descriptor = self._artifact_store.describe(artifact.storage_path)
+            return (
+                self._artifact_store.read_bytes(artifact.storage_path),
+                descriptor.media_type,
+                descriptor.filename,
+            )
+        if artifact.content is not None:
+            return (
+                artifact.content.encode("utf-8"),
+                artifact.media_type or "text/plain",
+                artifact.filename or artifact.name or f"{artifact.artifact_id}.txt",
+            )
+        raise OktoNexusError(
+            ErrorCode.NOT_FOUND,
+            "Artifact payload is not available in managed storage.",
+            {"artifact_id": artifact_id},
+        )
 
     # ------------------------------------------------------------------ #
     # Helpers
     # ------------------------------------------------------------------ #
+    def _find_operator_artifact(
+        self, *, workspace_id: str, artifact_id: str
+    ) -> Artifact | None:
+        with self._cf.unit_of_work(write=False) as uow:
+            if workspace_id != "all":
+                return self._artifacts.get(
+                    uow, workspace_id=workspace_id, artifact_id=artifact_id
+                )
+            return next(
+                (
+                    item
+                    for item in self._artifacts.list_all(uow)
+                    if item.artifact_id == artifact_id
+                ),
+                None,
+            )
+
+    def _storage_descriptor(
+        self, artifact: Artifact
+    ) -> tuple[str, StoredArtifactPayload | None]:
+        if artifact.storage_path:
+            descriptor = self._artifact_store.describe(artifact.storage_path)
+            return artifact.storage_kind or descriptor.storage_kind, descriptor
+        legacy_kind = STORED_INLINE if artifact.content is not None else STORED_PATH
+        return legacy_kind, None
+
+    def _operator_shape(
+        self,
+        artifact: Artifact,
+        *,
+        include_content: bool,
+        include_manifest: bool = False,
+    ) -> dict[str, Any]:
+        if artifact.storage_path and not include_content and not include_manifest:
+            stored = artifact.storage_kind or STORED_PATH
+            descriptor = None
+        else:
+            stored, descriptor = self._storage_descriptor(artifact)
+        filename = (
+            descriptor.filename
+            if descriptor
+            else artifact.filename
+            or artifact.name
+            or artifact.artifact_id
+        )
+        metadata = descriptor.metadata if descriptor else {}
+        if not artifact.storage_path:
+            metadata = self._deserialize_metadata(artifact.content_type)
+        available = bool(artifact.storage_path or artifact.content is not None)
+        data: dict[str, Any] = {
+            "artifact_id": artifact.artifact_id,
+            "workspace_id": artifact.workspace_id,
+            "artifact_type": artifact.artifact_type,
+            "name": artifact.name,
+            "filename": filename,
+            "stored": stored,
+            "size_bytes": artifact.size_bytes or 0,
+            "media_type": (
+                descriptor.media_type
+                if descriptor
+                else artifact.media_type or "application/octet-stream"
+            ),
+            "created_by": artifact.created_by,
+            "created_at": artifact.created_at,
+            "metadata": metadata,
+            "managed": artifact.storage_path is not None,
+            "available": available,
+        }
+        if stored == STORED_PATH:
+            data["source_path"] = (
+                descriptor.source_path if descriptor else artifact.path
+            )
+        if include_content and available and self._is_text_preview(artifact, data):
+            data["content"] = (
+                self._artifact_store.read_text(artifact.storage_path)
+                if artifact.storage_path
+                else artifact.content
+            )
+        return data
+
+    @staticmethod
+    def _is_text_preview(artifact: Artifact, data: dict[str, Any]) -> bool:
+        media_type = str(data.get("media_type") or "").lower()
+        return artifact.artifact_type in {"text", "json", "markdown", "html"} or (
+            media_type.startswith("text/") or media_type == "application/json"
+        )
+
+    @staticmethod
+    def _uploaded_artifact_type(filename: str, media_type: str) -> str:
+        """Infer the closed artifact kind from a browser upload descriptor."""
+        extension = os.path.splitext(filename.lower())[1]
+        if extension in {".md", ".markdown"} or media_type == "text/markdown":
+            return "markdown"
+        if extension == ".json" or media_type == "application/json":
+            return "json"
+        if extension in {".html", ".htm"} or media_type == "text/html":
+            return "html"
+        if media_type.startswith("text/") or extension in {
+            ".txt",
+            ".csv",
+            ".log",
+            ".xml",
+            ".yaml",
+            ".yml",
+        }:
+            return "text"
+        return "file"
+
     def _resolve_workspace(self, project_root: Any) -> tuple[str, str]:
         """Resolve ``(workspace_id, root_realpath)`` from a client project_root.
 

@@ -46,11 +46,17 @@ def _loads(text: str | None) -> Any:
 
 
 class SqliteArtifactRepo:
-    """Persistence for ``artifacts`` rows (inline content or path references)."""
+    """Searchable metadata catalog for externally stored artifacts.
+
+    The legacy ``path``/``content``/``content_type`` columns remain readable so
+    databases created before migration 028 keep working.  New writes leave
+    those payload columns NULL and point at an injected ArtifactStore instead.
+    """
 
     _COLUMNS = (
         "artifact_id, workspace_id, artifact_type, name, path, content, "
-        "size_bytes, content_type, created_by, created_at, audience"
+        "size_bytes, content_type, created_by, created_at, audience, "
+        "storage_path, storage_kind, filename, media_type"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -76,6 +82,10 @@ class SqliteArtifactRepo:
         created_by: str | None = None,
         created_at: str | None = None,
         audience: list[Any] | None = None,
+        storage_path: str | None = None,
+        storage_kind: str | None = None,
+        filename: str | None = None,
+        media_type: str | None = None,
     ) -> Artifact:
         now = created_at or self._now()
         try:
@@ -84,8 +94,8 @@ class SqliteArtifactRepo:
                 INSERT INTO artifacts
                     (artifact_id, workspace_id, artifact_type, name, path,
                      content, size_bytes, content_type, created_by, created_at,
-                     audience)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     audience, storage_path, storage_kind, filename, media_type)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     artifact_id,
@@ -99,6 +109,10 @@ class SqliteArtifactRepo:
                     created_by,
                     now,
                     _dumps(audience),
+                    storage_path,
+                    storage_kind,
+                    filename,
+                    media_type,
                 ),
             )
         except sqlite3.Error as exc:
@@ -144,6 +158,129 @@ class SqliteArtifactRepo:
             raise _db_error("listing artifacts", exc) from exc
         return [self._row_to_artifact(row) for row in rows]
 
+    def list_all(
+        self, uow: UnitOfWork, *, artifact_type: str | None = None
+    ) -> list[Artifact]:
+        sql = f"SELECT {self._COLUMNS} FROM artifacts"
+        params: list[Any] = []
+        if artifact_type is not None:
+            sql += " WHERE artifact_type = ?"
+            params.append(artifact_type)
+        sql += " ORDER BY created_at, artifact_id"
+        try:
+            cur = uow.connection.execute(sql, tuple(params))
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing artifacts", exc) from exc
+        return [self._row_to_artifact(row) for row in rows]
+
+    def browse_catalog(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        artifact_type: str | None,
+        producer_ids: list[str],
+        created_from: str | None,
+        created_to: str | None,
+        query: str | None,
+        limit: int,
+        offset: int,
+    ) -> tuple[list[Artifact], int]:
+        clauses: list[str] = []
+        params: list[Any] = []
+        if workspace_id is not None:
+            clauses.append("workspace_id = ?")
+            params.append(workspace_id)
+        if artifact_type is not None:
+            clauses.append("artifact_type = ?")
+            params.append(artifact_type)
+        if producer_ids:
+            placeholders = ", ".join("?" for _ in producer_ids)
+            clauses.append(f"created_by IN ({placeholders})")
+            params.extend(producer_ids)
+        if created_from is not None:
+            clauses.append("created_at >= ?")
+            params.append(created_from)
+        if created_to is not None:
+            clauses.append("created_at <= ?")
+            params.append(created_to)
+        if query:
+            clauses.append(
+                "(LOWER(artifact_id) LIKE ? OR LOWER(COALESCE(name, '')) LIKE ? "
+                "OR LOWER(COALESCE(filename, '')) LIKE ? "
+                "OR LOWER(COALESCE(created_by, '')) LIKE ? "
+                "OR LOWER(workspace_id) LIKE ?)"
+            )
+            like = f"%{query.lower()}%"
+            params.extend([like, like, like, like, like])
+        where = f" WHERE {' AND '.join(clauses)}" if clauses else ""
+        try:
+            total = int(
+                uow.connection.execute(
+                    f"SELECT COUNT(*) FROM artifacts{where}", tuple(params)
+                ).fetchone()[0]
+            )
+            rows = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM artifacts{where} "
+                "ORDER BY created_at DESC, artifact_id DESC LIMIT ? OFFSET ?",
+                (*params, limit, offset),
+            ).fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("browsing artifact catalog", exc) from exc
+        return [self._row_to_artifact(row) for row in rows], total
+
+    def list_legacy(self, uow: UnitOfWork) -> list[Artifact]:
+        try:
+            cur = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM artifacts "
+                "WHERE storage_path IS NULL "
+                "AND (content IS NOT NULL OR path IS NOT NULL) "
+                "ORDER BY created_at, artifact_id"
+            )
+            rows = cur.fetchall()
+        except sqlite3.Error as exc:
+            raise _db_error("listing legacy artifacts", exc) from exc
+        return [self._row_to_artifact(row) for row in rows]
+
+    def set_external_storage(
+        self,
+        uow: UnitOfWork,
+        *,
+        artifact_id: str,
+        storage_path: str,
+        storage_kind: str,
+        filename: str,
+        media_type: str,
+        size_bytes: int,
+    ) -> None:
+        try:
+            cur = uow.connection.execute(
+                """
+                UPDATE artifacts
+                SET storage_path = ?, storage_kind = ?, filename = ?,
+                    media_type = ?, size_bytes = ?,
+                    path = NULL, content = NULL, content_type = NULL
+                WHERE artifact_id = ? AND storage_path IS NULL
+                """,
+                (
+                    storage_path,
+                    storage_kind,
+                    filename,
+                    media_type,
+                    size_bytes,
+                    artifact_id,
+                ),
+            )
+        except sqlite3.Error as exc:
+            raise _db_error("externalising legacy artifact", exc) from exc
+        if cur.rowcount != 1:
+            raise OktoNexusError(
+                ErrorCode.CONFLICT,
+                "Artifact was externalised concurrently.",
+                {"artifact_id": artifact_id},
+            )
+
     @staticmethod
     def _row_to_artifact(row: Any) -> Artifact:
         return Artifact(
@@ -158,4 +295,8 @@ class SqliteArtifactRepo:
             content_type=row["content_type"],
             created_by=row["created_by"],
             audience=_loads(row["audience"]),
+            storage_path=row["storage_path"],
+            storage_kind=row["storage_kind"],
+            filename=row["filename"],
+            media_type=row["media_type"],
         )

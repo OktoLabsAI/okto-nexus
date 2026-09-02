@@ -2,6 +2,50 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.7 - 2026-09-02
+
+### Added
+
+- Added the Meta-harness dashboard chat, combining private and broadcast
+  messages, direct and broadcast handoffs, agent replies, and terminal handoff
+  outcomes in one chronological, agent-filterable timeline.
+- Added the operator-only `POST /api/v1/meta-harness/send` surface. It delegates
+  to the normal message and handoff use cases, so permissions, communication
+  scope, policies, guardrails, and HITL remain enforced.
+- Added guardrail assignment by agent capability while preserving explicit
+  agent groups and direct agent assignments.
+
+### Changed
+
+- Reworked the Guardrails screen to separate agent-group composition from rule
+  configuration, auto-populate agent choices, explain inspected content fields,
+  and assist regular-expression authoring with examples and validation.
+- Added agent completion results and rejection reasons to Handoff cards and
+  details, clearly separated from the original request payload.
+- Render structured Meta-harness content as readable fields and lists instead
+  of raw JSON.
+- Refined the Meta-harness composer to start at one line, grow up to eight,
+  blend into the conversation background, and open its recipient menu upward.
+- Added on-demand Meta-harness history in batches of 20 with scroll-position
+  preservation when older messages are prepended.
+
+### Fixed
+
+- Corrected guardrail assignment and rule validation failures found during the
+  usability review.
+- Removed competing page-level scroll containers from the dashboard shell.
+- Kept newly observed Meta-harness turns at the end of the live conversation,
+  even when an existing producer reports a skewed timestamp.
+- Prevented deletion of the reserved `operator` identity in both the dashboard
+  and the HTTP management API.
+
+### Validation
+
+- Passed the complete suite with 1,594 tests passing and 2 skipped.
+- Built the production dashboard and exercised private messages, broadcast
+  handoffs, agent replies, result formatting, and agent filtering against an
+  isolated live server.
+
 ## 0.1.6 - 2026-09-01
 
 ### Fixed

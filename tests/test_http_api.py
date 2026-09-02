@@ -21,9 +21,16 @@ import pytest
 fastapi = pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient  # noqa: E402
 
-from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key  # noqa: E402
+from okto_nexus.adapters.inbound.http.app import (  # noqa: E402
+    build_app,
+    ensure_operator_key,
+)
 from okto_nexus.adapters.inbound.mcp.server import bootstrap  # noqa: E402
+from okto_nexus.adapters.inbound.mcp.tools.artifacts import (  # noqa: E402
+    build_service as build_artifact_service,
+)
 from okto_nexus.application.auth import AgentKeyAuthService  # noqa: E402
+from okto_nexus.domain.ids import resolve_realpath, resolve_workspace_id  # noqa: E402
 
 
 @pytest.fixture
@@ -60,6 +67,163 @@ def _table_counts(deps) -> dict[str, int]:
             t: uow.connection.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
             for t in tables
         }
+
+
+def test_artifact_catalog_detail_and_content_are_operator_only(serve_env):
+    deps, client, operator_key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "artifact-author"},
+        headers=_h(operator_key),
+    ).json()["data"]
+    project = deps.config.home_dir / "artifact-workspace"
+    project.mkdir()
+    stored = build_artifact_service(deps).artifact_put(
+        project_root=str(project),
+        artifact_type="markdown",
+        name="Release notes",
+        content="# Ready\n\nManaged outside SQLite.",
+        metadata={"release": "0.1.8"},
+        agent_id="artifact-author",
+    )
+
+    headers = _h(operator_key)
+    listing = client.get("/api/v1/artifacts?workspace=all", headers=headers)
+    assert listing.status_code == 200
+    catalog = listing.json()["data"]
+    assert catalog["page"] == 1
+    assert catalog["page_size"] == 25
+    assert catalog["total"] == 1
+    assert catalog["total_pages"] == 1
+    item = catalog["items"][0]
+    assert item["artifact_id"] == stored["artifact_id"]
+    assert item["created_by"] == "artifact-author"
+    assert item["managed"] is True
+
+    detail = client.get(
+        f"/api/v1/artifacts/{stored['artifact_id']}?workspace=all",
+        headers=headers,
+    )
+    assert detail.status_code == 200
+    assert detail.json()["data"]["content"].startswith("# Ready")
+    assert detail.json()["data"]["metadata"] == {"release": "0.1.8"}
+
+    content = client.get(
+        f"/api/v1/artifacts/{stored['artifact_id']}/content?workspace=all",
+        headers=headers,
+    )
+    assert content.status_code == 200
+    assert content.text.startswith("# Ready")
+    assert content.headers["content-type"].startswith("text/markdown")
+    assert "Release_notes.md" in content.headers["content-disposition"]
+
+    non_operator = _h(created["api_key"])
+    assert (
+        client.get("/api/v1/artifacts?workspace=all", headers=non_operator).status_code
+        == 403
+    )
+
+
+def test_artifact_catalog_paginates_and_filters_producers_and_dates(serve_env):
+    deps, client, operator_key = serve_env
+    headers = _h(operator_key)
+    for agent_id in ("producer-alpha", "producer-beta"):
+        response = client.post(
+            "/api/v1/agents",
+            json={"agent_id": agent_id},
+            headers=headers,
+        )
+        assert response.status_code == 200
+
+    project = deps.config.home_dir / "catalog-workspace"
+    project.mkdir()
+    service = build_artifact_service(deps)
+    alpha_old = service.artifact_put(
+        project_root=str(project),
+        artifact_type="text",
+        name="Alpha old",
+        content="old",
+        agent_id="producer-alpha",
+    )
+    beta_middle = service.artifact_put(
+        project_root=str(project),
+        artifact_type="json",
+        name="Beta middle",
+        content='{"position": 2}',
+        agent_id="producer-beta",
+    )
+    alpha_new = service.artifact_put(
+        project_root=str(project),
+        artifact_type="markdown",
+        name="Alpha new",
+        content="# New",
+        agent_id="producer-alpha",
+    )
+    timestamps = {
+        alpha_old["artifact_id"]: "2026-08-01T12:00:00.000000Z",
+        beta_middle["artifact_id"]: "2026-09-01T12:00:00.000000Z",
+        alpha_new["artifact_id"]: "2026-10-01T12:00:00.000000Z",
+    }
+    with deps.connection_factory.unit_of_work(write=True) as uow:
+        for artifact_id, created_at in timestamps.items():
+            uow.connection.execute(
+                "UPDATE artifacts SET created_at = ? WHERE artifact_id = ?",
+                (created_at, artifact_id),
+            )
+
+    first = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha",
+            "page": 1,
+            "page_size": 1,
+        },
+        headers=headers,
+    )
+    assert first.status_code == 200
+    first_page = first.json()["data"]
+    assert first_page["total"] == 2
+    assert first_page["total_pages"] == 2
+    assert first_page["count"] == 1
+    assert first_page["items"][0]["artifact_id"] == alpha_new["artifact_id"]
+
+    second = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha",
+            "page": 2,
+            "page_size": 1,
+        },
+        headers=headers,
+    ).json()["data"]
+    assert second["items"][0]["artifact_id"] == alpha_old["artifact_id"]
+
+    interval = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha,producer-beta",
+            "date_from": "2026-08-15",
+            "date_to": "2026-09-15",
+        },
+        headers=headers,
+    ).json()["data"]
+    assert interval["total"] == 1
+    assert interval["items"][0]["artifact_id"] == beta_middle["artifact_id"]
+
+    invalid = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "date_from": "2026-10-01",
+            "date_to": "2026-09-01",
+        },
+        headers=headers,
+    )
+    assert invalid.status_code == 422
+    assert invalid.json()["error"]["code"] == "VALIDATION_ERROR"
 
 
 # --------------------------------------------------------------------------- #
@@ -191,6 +355,16 @@ def test_destructive_surfaces_are_operator_only_off_loopback(serve_env):
         # admin force-actions (the agent path is the MCP verb, not this REST)
         client.post("/api/v1/sessions/sess_nope/close", headers=peon),
         client.post("/api/v1/handoffs/ho_nope/cancel?workspace=w", headers=peon),
+        client.post(
+            "/api/v1/meta-harness/send",
+            json={
+                "workspace": "w",
+                "kind": "message",
+                "audience": "broadcast",
+                "body": "intrusion",
+            },
+            headers=peon,
+        ),
     )
     for response in forbidden:
         assert response.status_code == 403, response.text
@@ -331,6 +505,20 @@ def test_delete_agent_removes_and_404s_afterwards(serve_env):
     assert (
         client.get("/api/v1/agents/ephemeral", headers=_h(operator_key)).status_code
         == 404
+    )
+
+
+def test_delete_operator_is_rejected_and_identity_survives(serve_env):
+    _, client, operator_key = serve_env
+
+    response = client.delete("/api/v1/agents/operator", headers=_h(operator_key))
+
+    assert response.status_code == 422
+    error = response.json()["error"]
+    assert error["code"] == "VALIDATION_ERROR"
+    assert "cannot be deleted" in error["message"]
+    assert (
+        client.get("/api/v1/agents/operator", headers=_h(operator_key)).status_code == 200
     )
 
 
@@ -771,6 +959,282 @@ def test_handoffs_filter_by_range_and_agents(serve_env):
     assert [item["handoff_id"] for item in response.json()["data"]["items"]] == [
         "hof_match"
     ]
+
+
+def test_handoffs_include_terminal_agent_outcomes(serve_env):
+    deps, client, key = serve_env
+    ws = "o" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws)
+        uow.connection.executemany(
+            """
+            INSERT INTO handoffs(
+                handoff_id, workspace_id, from_agent_id, target, visibility,
+                status, created_at, claimed_by, result, rejected_reason
+            ) VALUES (?, ?, 'creator', ?, 'public', ?, ?, 'worker', ?, ?)
+            """,
+            [
+                (
+                    "hof_completed_with_result",
+                    ws,
+                    json.dumps({"strategy": "broadcast"}),
+                    "COMPLETED",
+                    "2026-08-10T10:00:00Z",
+                    '{"summary":"delivered"}',
+                    None,
+                ),
+                (
+                    "hof_rejected_with_reason",
+                    ws,
+                    json.dumps({"strategy": "broadcast"}),
+                    "REJECTED",
+                    "2026-08-10T11:00:00Z",
+                    None,
+                    "Missing required evidence",
+                ),
+            ],
+        )
+
+    response = client.get(
+        "/api/v1/handoffs",
+        params={"workspace": ws},
+        headers=_h(key),
+    )
+    assert response.status_code == 200
+    by_id = {
+        item["handoff_id"]: item for item in response.json()["data"]["items"]
+    }
+    assert by_id["hof_completed_with_result"]["result"] == (
+        '{"summary":"delivered"}'
+    )
+    assert "rejected_reason" not in by_id["hof_completed_with_result"]
+    assert by_id["hof_rejected_with_reason"]["rejected_reason"] == (
+        "Missing required evidence"
+    )
+    assert "result" not in by_id["hof_rejected_with_reason"]
+
+
+def test_meta_harness_sends_messages_and_handoffs_by_audience(
+    serve_env, tmp_path
+):
+    deps, client, key = serve_env
+    root = tmp_path / "meta-harness-project"
+    root.mkdir()
+    root_path = str(root)
+    ws = resolve_workspace_id(root_path)
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow,
+            workspace_id=ws,
+            display_name="Meta-harness test",
+            root_realpath=resolve_realpath(root_path),
+        )
+
+    for agent_id in ("alpha", "beta"):
+        created = client.post(
+            "/api/v1/agents",
+            json={"agent_id": agent_id},
+            headers=_h(key),
+        )
+        assert created.status_code == 200, created.text
+
+    uploaded = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "review-notes.md"},
+        content=b"# Review notes\n\nUse the managed copy.",
+        headers={**_h(key), "content-type": "text/markdown"},
+    )
+    assert uploaded.status_code == 200, uploaded.text
+    uploaded_artifact = uploaded.json()["data"]
+    artifact_id = uploaded_artifact["artifact_id"]
+    assert uploaded_artifact["artifact_type"] == "markdown"
+    assert uploaded_artifact["filename"] == "review-notes.md"
+    assert uploaded_artifact["created_by"] == "operator"
+    assert uploaded_artifact["metadata"]["source"] == "meta-harness"
+    assert "content" not in uploaded_artifact
+
+    private_message = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "private",
+            "to_agent_id": "alpha",
+            "subject": "Review",
+            "body": "Review the policy.",
+            "artifact_ids": [artifact_id],
+        },
+        headers=_h(key),
+    )
+    assert private_message.status_code == 200, private_message.text
+    private_data = private_message.json()["data"]
+    assert private_data["kind"] == "message"
+    assert private_data["audience"] == "private"
+    assert private_data["recipients"] == ["alpha"]
+
+    broadcast_message = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "broadcast",
+            "body": "Share current status.",
+        },
+        headers=_h(key),
+    )
+    assert broadcast_message.status_code == 200, broadcast_message.text
+    assert broadcast_message.json()["data"]["audience"] == "broadcast"
+
+    private_handoff = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "handoff",
+            "audience": "private",
+            "to_agent_id": "beta",
+            "subject": "Implement",
+            "body": "Implement the approved change.",
+            "artifact_ids": [artifact_id],
+        },
+        headers=_h(key),
+    )
+    assert private_handoff.status_code == 200, private_handoff.text
+    assert private_handoff.json()["data"]["notified"] == ["beta"]
+
+    broadcast_handoff = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "handoff",
+            "audience": "broadcast",
+            "body": "First available agent: investigate the incident.",
+        },
+        headers=_h(key),
+    )
+    assert broadcast_handoff.status_code == 200, broadcast_handoff.text
+    assert broadcast_handoff.json()["data"]["audience"] == "broadcast"
+
+    messages = client.get(
+        "/api/v1/messages",
+        params={"workspace": ws, "agent": "operator", "include_body": "true"},
+        headers=_h(key),
+    ).json()["data"]["items"]
+    private_row = next(row for row in messages if row["subject"] == "Review")
+    assert private_row["body"] == "Review the policy."
+    assert private_row["target"] == {
+        "strategy": "direct",
+        "agent_id": "alpha",
+    }
+    assert private_row["artifacts"] == [artifact_id]
+    assert [d["recipient_agent_id"] for d in private_row["deliveries"]] == [
+        "alpha"
+    ]
+
+    handoffs = client.get(
+        "/api/v1/handoffs",
+        params={"workspace": ws, "from_agent": "operator"},
+        headers=_h(key),
+    ).json()["data"]["items"]
+    by_id = {row["handoff_id"]: row for row in handoffs}
+    assert by_id[private_handoff.json()["data"]["handoff_id"]]["target"] == {
+        "strategy": "direct",
+        "agent_id": "beta",
+    }
+    assert by_id[private_handoff.json()["data"]["handoff_id"]]["payload"][
+        "artifacts"
+    ] == [artifact_id]
+    assert by_id[broadcast_handoff.json()["data"]["handoff_id"]]["target"] == {
+        "strategy": "broadcast"
+    }
+
+    missing_agent = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "private",
+            "body": "No target",
+        },
+        headers=_h(key),
+    )
+    assert missing_agent.status_code == 422
+    assert missing_agent.json()["error"]["code"] == "VALIDATION_ERROR"
+
+    readable = build_artifact_service(deps).artifact_get(
+        project_root=root_path,
+        artifact_id=artifact_id,
+        agent_id="alpha",
+    )
+    assert readable["stored"] == "path"
+    assert readable["path"]
+    with open(readable["path"], "rb") as uploaded_file:
+        assert uploaded_file.read().startswith(b"# Review notes")
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute(
+            "SELECT path, content, content_type, storage_path FROM artifacts "
+            "WHERE artifact_id = ?",
+            (artifact_id,),
+        ).fetchone()
+    assert row["path"] is None
+    assert row["content"] is None
+    assert row["content_type"] is None
+    assert row["storage_path"]
+
+
+def test_meta_harness_artifact_upload_validates_transport_and_workspace(serve_env):
+    deps, client, key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "upload-caller"},
+        headers=_h(key),
+    ).json()["data"]
+
+    forbidden = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": "missing", "filename": "notes.txt"},
+        content=b"notes",
+        headers={**_h(created["api_key"]), "content-type": "text/plain"},
+    )
+    assert forbidden.status_code == 403
+
+    missing_workspace = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": "missing", "filename": "notes.txt"},
+        content=b"notes",
+        headers={**_h(key), "content-type": "text/plain"},
+    )
+    assert missing_workspace.status_code == 404
+
+    root = deps.config.home_dir / "upload-validation"
+    root.mkdir()
+    ws = resolve_workspace_id(str(root))
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow,
+            workspace_id=ws,
+            root_realpath=resolve_realpath(str(root)),
+        )
+    malformed = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "broken.json"},
+        content=b"{broken",
+        headers={**_h(key), "content-type": "application/json"},
+    )
+    assert malformed.status_code == 422
+    assert malformed.json()["error"]["code"] == "VALIDATION_ERROR"
+
+    # Browser documents use managed file storage even when textual, so they
+    # are not incorrectly constrained by artifact_put's 64 KiB inline limit.
+    large_text = b"x" * (deps.config.max_inline_bytes + 1)
+    imported = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "large-notes.txt"},
+        content=large_text,
+        headers={**_h(key), "content-type": "text/plain"},
+    )
+    assert imported.status_code == 200, imported.text
+    assert imported.json()["data"]["stored"] == "path"
+    assert imported.json()["data"]["size_bytes"] == len(large_text)
 
 
 def test_events_no_filters_is_backward_compatible(serve_env):

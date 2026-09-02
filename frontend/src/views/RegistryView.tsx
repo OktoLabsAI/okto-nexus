@@ -120,17 +120,20 @@ function CapabilityInUsePanel({
         </p>
       </div>
       <p className="text-xs text-red-600/90 dark:text-red-200/90 mb-2">
-        Deleting this name would silently break these agents' announcements
-        (fail-closed policy forbids cascading removal). Remove the capability
-        from these agents first:
+        Deleting this name would break agent announcements or guardrail
+        assignments. Remove these references first:
       </p>
       <ul className="text-xs text-surface-700 dark:text-surface-300 space-y-1 mb-3">
         {details.uses.map((use, i) => (
           <li key={i} className="flex items-center gap-2">
             <span className="w-1 h-1 rounded-full bg-red-400 shrink-0" />
-            <span className="font-mono">{use.agent_id}</span>
+            <span className="font-mono">
+              {use.kind === "capabilities" ? use.agent_id : use.assignment_id}
+            </span>
             <span className="text-surface-500 dark:text-surface-400">
-              — announces {details.capability}
+              — {use.kind === "capabilities"
+                ? `agent announces ${details.capability}`
+                : `guardrail assignment targets ${details.capability}`}
             </span>
           </li>
         ))}

@@ -281,7 +281,8 @@ class SqliteObservabilityQueries:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
             "from_agent_id, claimed_by, target, payload, visibility, lease_expires_at, "
-            "trace_id, acceptance_criteria, verify_by, verification_feedback "
+            "trace_id, acceptance_criteria, verify_by, verification_feedback, "
+            "result, rejected_reason "
             "FROM handoffs WHERE 1=1"
         )
         params: list[Any] = []
@@ -337,6 +338,13 @@ class SqliteObservabilityQueries:
                 item["verify_by"] = _loads(row["verify_by"])
             if row["verification_feedback"] is not None:
                 item["verification_feedback"] = row["verification_feedback"]
+            # Terminal outcomes complete the original handoff request in the
+            # operator UI. Keep result opaque, matching handoff_get: strings
+            # remain byte-for-byte and JSON submitted by an agent stays TEXT.
+            if row["result"] is not None:
+                item["result"] = row["result"]
+            if row["rejected_reason"] is not None:
+                item["rejected_reason"] = row["rejected_reason"]
             items.append(item)
         return items
 
@@ -489,7 +497,8 @@ class SqliteObservabilityQueries:
             rows = uow.connection.execute(
                 f"""
                 SELECT m.message_id, m.workspace_id, m.channel_id, m.from_agent_id,
-                       m.created_at, m.subject, m.body, m.trace_id
+                       m.created_at, m.subject, m.body, m.target, m.artifacts,
+                       m.trace_id
                 FROM messages m WHERE {where_sql}
                 ORDER BY m.created_at DESC, m.message_id
                 LIMIT ? OFFSET ?
@@ -516,12 +525,16 @@ class SqliteObservabilityQueries:
                     "from_agent_id": row["from_agent_id"],
                     "created_at": row["created_at"],
                     "subject": row["subject"],
+                    "target": _loads(row["target"]),
                     "trace_id": row["trace_id"],
                     "preview": body[:160],
                     "deliveries": [dict(d) for d in deliveries],
                 }
                 if include_body:
                     item["body"] = body
+                artifacts = _loads(row["artifacts"])
+                if isinstance(artifacts, list) and artifacts:
+                    item["artifacts"] = artifacts
                 items.append(item)
         except sqlite3.Error as exc:
             raise _db_error("reading message history", exc) from exc

@@ -10,9 +10,9 @@ The application-layer owner of capability EXISTENCE (FORM lives in
   An unregistered name is a ``VALIDATION_ERROR`` listing every missing name;
   nothing unregistered ever persists.
 * Registry CRUD for the operator surface, including the in-use deletion
-  guard: deleting a name still OWNED by any agent (active or inactive)
-  raises ``CAPABILITY_IN_USE`` with the exact owner list. Historic targets do
-  not count as use (they are ephemeral; new sends are blocked by the gate).
+  guard: deleting a name still owned by any agent (active or inactive) or
+  referenced by a guardrail assignment raises ``CAPABILITY_IN_USE`` with the
+  exact reference list. Historic routing targets remain ephemeral.
 * :func:`seed_capability_catalog` - the idempotent transition seed: every
   capability already announced by ANY persisted agent is absorbed
   (insert-or-ignore), so the invariant "owned => registered" holds before the
@@ -28,12 +28,18 @@ from typing import Any, Iterable, Optional
 
 from ..domain.routing import normalize_capabilities
 from ..errors import ErrorCode, OktoNexusError
-from .ports import AgentRepo, CapabilityCatalogRepo, UnitOfWork
+from .ports import (
+    AgentRepo,
+    CapabilityCatalogRepo,
+    GuardrailAssignmentRepo,
+    UnitOfWork,
+)
 
 #: ``kind`` discriminator in a CAPABILITY_IN_USE ``uses`` entry: ownership via
 #: the agent's announced ``capabilities`` (the only kind - targets are
 #: ephemeral and never count).
 USE_KIND_CAPABILITIES = "capabilities"
+USE_KIND_GUARDRAIL_ASSIGNMENT = "guardrail_assignment"
 
 
 def _require_token(name: str, value: Any) -> str:
@@ -59,9 +65,11 @@ class CapabilityCatalogService:
         *,
         catalog: CapabilityCatalogRepo,
         agents: Optional[AgentRepo] = None,
+        guardrail_assignments: Optional[GuardrailAssignmentRepo] = None,
     ) -> None:
         self._catalog = catalog
         self._agents = agents
+        self._guardrail_assignments = guardrail_assignments
 
     # ------------------------------------------------------------------ #
     # Read model
@@ -138,20 +146,35 @@ class CapabilityCatalogService:
     # Usage scan (CAPABILITY_IN_USE)
     # ------------------------------------------------------------------ #
     def collect_uses(self, uow: UnitOfWork, *, name: str) -> list[dict[str, str]]:
-        """Every agent OWNING ``name`` (active and inactive), one entry each.
+        """Every agent or guardrail assignment referencing ``name``.
 
-        Ownership only: an inactive agent counts (it can reactivate and its
-        announcement must stay valid). Historic message/handoff targets never
-        count - they are ephemeral and already resolved. Sorted by agent_id.
+        An inactive agent counts (it can reactivate and its announcement must
+        stay valid). Historic message/handoff targets never count because they
+        are ephemeral and already resolved.
         """
-        if self._agents is None:
-            return []
-        uses = [
-            {"agent_id": agent.agent_id, "kind": USE_KIND_CAPABILITIES}
-            for agent in self._agents.list(uow)
-            if name in normalize_capabilities(agent.capabilities)
-        ]
-        uses.sort(key=lambda u: u["agent_id"])
+        uses: list[dict[str, str]] = []
+        if self._agents is not None:
+            uses.extend(
+                {"agent_id": agent.agent_id, "kind": USE_KIND_CAPABILITIES}
+                for agent in self._agents.list(uow)
+                if name in normalize_capabilities(agent.capabilities)
+            )
+        if self._guardrail_assignments is not None:
+            uses.extend(
+                {
+                    "assignment_id": assignment.assignment_id,
+                    "kind": USE_KIND_GUARDRAIL_ASSIGNMENT,
+                }
+                for assignment in self._guardrail_assignments.list_for_capability(
+                    uow, capability=name
+                )
+            )
+        uses.sort(
+            key=lambda use: (
+                use["kind"],
+                use.get("agent_id", use.get("assignment_id", "")),
+            )
+        )
         return uses
 
     def _guard_not_in_use(self, uow: UnitOfWork, *, name: str) -> None:
@@ -160,9 +183,9 @@ class CapabilityCatalogService:
             return
         raise OktoNexusError(
             ErrorCode.CAPABILITY_IN_USE,
-            f"Capability '{name}' is owned by {len(uses)} agent(s) and cannot "
-            "be deleted. Remove it from the listed agents' capabilities first "
-            "(deleting it would silently break their announcements).",
+            f"Capability '{name}' has {len(uses)} active reference(s) and cannot "
+            "be deleted. Remove it from the listed agents and guardrail "
+            "assignments first.",
             {
                 "capability": name,
                 "total_uses": len(uses),

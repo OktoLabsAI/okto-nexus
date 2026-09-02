@@ -7,6 +7,7 @@ import json
 import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, register_tools
+from okto_nexus.adapters.outbound.file.artifacts import LocalArtifactStore
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
@@ -110,8 +111,13 @@ def _issue_key(deps, agent_id: str) -> str:
         return auth.issue_key(uow, agent_id=agent_id)
 
 
-def _seed_agent(uow, agent_id: str) -> None:
-    SqliteAgentRepo().upsert(uow, agent_id=agent_id, role="worker")
+def _seed_agent(uow, agent_id: str, *, capabilities=None) -> None:
+    SqliteAgentRepo().upsert(
+        uow,
+        agent_id=agent_id,
+        role="worker",
+        capabilities=capabilities,
+    )
 
 
 def _routing_agent(agent_id: str = "alpha") -> RoutingAgent:
@@ -232,6 +238,41 @@ def _add_guardrail(
     )
 
 
+def _insert_unvalidated_active_guardrail(
+    uow,
+    *,
+    guardrail_id: str,
+    evaluator_kind: str,
+    evaluator_config: dict,
+) -> None:
+    """Simulate legacy/corrupt rows to retain runtime fail-closed coverage."""
+
+    SqliteGuardrailRepo(_Clock()).create(
+        uow,
+        guardrail_id=guardrail_id,
+        name=guardrail_id,
+    )
+    now = _Clock().now_iso()
+    uow.connection.execute(
+        """
+        INSERT INTO guardrail_versions (
+            guardrail_id, version, status, evaluator_kind, evaluator_config,
+            surfaces, field_targets, created_at, updated_at, activated_at
+        ) VALUES (?, 1, 'active', ?, ?, '["message"]', '["body"]', ?, ?, ?)
+        """,
+        (guardrail_id, evaluator_kind, json.dumps(evaluator_config), now, now, now),
+    )
+    SqliteGuardrailAssignmentRepo(_Clock()).create(
+        uow,
+        assignment_id=f"asg_{guardrail_id}",
+        scope_kind=gr.SCOPE_KIND_GLOBAL,
+        group_id=None,
+        guardrail_id=guardrail_id,
+        version_mode=gr.VERSION_MODE_LATEST,
+        mode=gr.ENFORCEMENT_MODE_ENFORCE,
+    )
+
+
 def _assert_scrubbed(payload, raw_text="secret"):
     forbidden = {
         "subject",
@@ -248,7 +289,7 @@ def _assert_scrubbed(payload, raw_text="secret"):
     assert raw_text not in json.dumps(payload, sort_keys=True)
 
 
-def test_migration_025_creates_guardrail_and_group_tables(migrated_factory):
+def test_migrations_create_guardrail_group_and_capability_scope(migrated_factory):
     conn = migrated_factory.get_connection()
     try:
         tables = {
@@ -263,10 +304,16 @@ def test_migration_025_creates_guardrail_and_group_tables(migrated_factory):
                 "SELECT version FROM schema_migrations ORDER BY version"
             ).fetchall()
         ]
+        assignment_columns = {
+            row["name"]
+            for row in conn.execute("PRAGMA table_info(guardrail_assignments)")
+        }
     finally:
         conn.close()
 
     assert 25 in versions
+    assert 27 in versions
+    assert "capability" in assignment_columns
     assert {
         "agent_groups",
         "agent_group_members",
@@ -346,6 +393,41 @@ def test_groups_are_rosters_and_latest_active_resolution_is_scoped(
     assert [item.version.version for item in alpha if item.version] == [2, 2]
     assert [item.assignment.assignment_id for item in beta] == ["asg_global"]
     assert beta[0].version and beta[0].version.version == 2
+
+
+def test_capability_assignment_follows_announced_agent_capabilities(
+    migrated_factory,
+):
+    guardrails = SqliteGuardrailRepo()
+    assignments = SqliteGuardrailAssignmentRepo()
+
+    with migrated_factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO capability_names (name, description, created_at) "
+            "VALUES ('review', 'Can review sensitive output', ?)",
+            (_Clock().now_iso(),),
+        )
+        _seed_agent(uow, "reviewer", capabilities={"review": True})
+        _seed_agent(uow, "builder", capabilities={"build": True})
+        _make_active_guardrail(guardrails, uow, "gr_review")
+        assignments.create(
+            uow,
+            assignment_id="asg_review_capability",
+            scope_kind=gr.SCOPE_KIND_CAPABILITY,
+            group_id=None,
+            capability="review",
+            guardrail_id="gr_review",
+            mode=gr.ENFORCEMENT_MODE_AUDIT,
+        )
+
+        reviewer = assignments.effective_for_agent(uow, agent_id="reviewer")
+        builder = assignments.effective_for_agent(uow, agent_id="builder")
+
+    assert [item.assignment.assignment_id for item in reviewer] == [
+        "asg_review_capability"
+    ]
+    assert reviewer[0].assignment.capability == "review"
+    assert builder == []
 
 
 def test_agent_group_is_not_a_message_target_strategy():
@@ -654,6 +736,7 @@ def test_write_paths_deny_before_persisting_rows_events_or_notifications(
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,
@@ -786,12 +869,13 @@ def test_guardrail_service_fail_closed_for_unsupported_schema_validation_and_llm
     with migrated_factory.unit_of_work() as uow:
         _seed_workspace(uow)
         _seed_agent(uow, "alpha")
-        _add_guardrail(
+        _insert_unvalidated_active_guardrail(
             uow,
             guardrail_id="gr_schema",
+            evaluator_kind=gr.EVALUATOR_KIND_DETERMINISTIC,
             evaluator_config={"kind": "schema_validation", "schema": {}},
         )
-        _add_guardrail(
+        _insert_unvalidated_active_guardrail(
             uow,
             guardrail_id="gr_llm",
             evaluator_kind=gr.EVALUATOR_KIND_LLM,
@@ -817,9 +901,10 @@ def test_guardrail_service_invalid_regex_config_fails_closed(migrated_factory):
     with migrated_factory.unit_of_work() as uow:
         _seed_workspace(uow)
         _seed_agent(uow, "alpha")
-        _add_guardrail(
+        _insert_unvalidated_active_guardrail(
             uow,
             guardrail_id="gr_bad_regex",
+            evaluator_kind=gr.EVALUATOR_KIND_DETERMINISTIC,
             evaluator_config={"kind": "regex", "patterns": ["["]},
         )
 
@@ -909,6 +994,7 @@ def test_artifact_path_reference_content_guardrail_denies_as_unevaluable(
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,
@@ -961,6 +1047,7 @@ def test_artifact_metadata_target_on_path_reference_evaluates_without_inline_con
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,
@@ -1218,6 +1305,112 @@ def test_guardrail_rest_admin_crud_pinned_guard_and_delete_guards(
     )
     assert client.delete(f"/api/v1/guardrails/groups/{gid}").status_code == 200
     assert client.delete(f"/api/v1/guardrails/{grid}").status_code == 200
+
+
+def test_guardrail_rest_validates_rules_and_supports_capability_scope(
+    guardrail_rest_client,
+):
+    client, _deps = guardrail_rest_client
+    assert (
+        client.post(
+            "/api/v1/capabilities",
+            json={"name": "review", "description": "Reviews output"},
+        ).status_code
+        == 200
+    )
+    guardrail = client.post(
+        "/api/v1/guardrails",
+        json={"name": "Validated rule"},
+    ).json()["data"]
+    grid = guardrail["guardrail_id"]
+
+    invalid_regex = client.post(
+        f"/api/v1/guardrails/{grid}/versions",
+        json={
+            "status": "active",
+            "evaluator_kind": "deterministic",
+            "evaluator_config": {"kind": "regex", "patterns": ["["]},
+            "surfaces": ["message"],
+            "field_targets": ["body"],
+        },
+    )
+    assert invalid_regex.status_code == 422
+    assert "Invalid regular expression" in invalid_regex.json()["error"]["message"]
+
+    invalid_field = client.post(
+        f"/api/v1/guardrails/{grid}/versions",
+        json={
+            "status": "active",
+            "evaluator_kind": "deterministic",
+            "evaluator_config": {
+                "kind": "keyword_blocklist",
+                "keywords": ["secret"],
+            },
+            "surfaces": ["artifact"],
+            "field_targets": ["body"],
+        },
+    )
+    assert invalid_field.status_code == 422
+    assert "unsupported field(s): body" in invalid_field.json()["error"]["message"]
+
+    unsupported_draft = client.post(
+        f"/api/v1/guardrails/{grid}/versions",
+        json={
+            "status": "draft",
+            "evaluator_kind": "deterministic",
+            "evaluator_config": {"kind": "schema_validation", "schema": {}},
+            "surfaces": ["message"],
+            "field_targets": ["body"],
+        },
+    )
+    assert unsupported_draft.status_code == 200
+    cannot_activate = client.patch(
+        f"/api/v1/guardrails/{grid}/versions/1",
+        json={"status": "active"},
+    )
+    assert cannot_activate.status_code == 422
+    assert "runtime evaluator is unavailable" in cannot_activate.json()["error"]["message"]
+
+    active = client.post(
+        f"/api/v1/guardrails/{grid}/versions",
+        json={
+            "status": "active",
+            "evaluator_kind": "deterministic",
+            "evaluator_config": {"kind": "regex", "patterns": [r"secret-\d+"]},
+            "surfaces": ["message"],
+            "field_targets": ["body"],
+        },
+    )
+    assert active.status_code == 200
+
+    assignment = client.post(
+        "/api/v1/guardrails/assignments",
+        json={
+            "scope_kind": "capability",
+            "capability": "review",
+            "guardrail_id": grid,
+        },
+    )
+    assert assignment.status_code == 200
+    assert assignment.json()["data"]["capability"] == "review"
+    assert assignment.json()["data"]["mode"] == "audit"
+
+    listed = client.get(
+        "/api/v1/guardrails/assignments",
+        params={"capability": "review"},
+    )
+    assert listed.status_code == 200
+    assert [item["assignment_id"] for item in listed.json()["data"]["items"]] == [
+        assignment.json()["data"]["assignment_id"]
+    ]
+    blocked_capability = client.delete("/api/v1/capabilities/review")
+    assert blocked_capability.status_code == 409
+    assert blocked_capability.json()["error"]["details"]["uses"] == [
+        {
+            "assignment_id": assignment.json()["data"]["assignment_id"],
+            "kind": "guardrail_assignment",
+        }
+    ]
 
 
 def test_guardrail_versions_are_append_only_across_rest_and_no_mcp_admin_surface(

@@ -139,6 +139,10 @@ export interface GraphHandoff {
   acceptance_criteria?: string[];
   verify_by?: VerifyBy;
   verification_feedback?: string;
+  // Terminal outcome supplied by the claimant. Omitted while no outcome is
+  // stored so older/non-terminal rows keep their compact response shape.
+  result?: string;
+  rejected_reason?: string;
   // Dependency edges (R-I5): present ONLY on handoffs created with
   // depends_on (same self-gating pattern - the UI never consults the flag).
   depends_on?: string[];
@@ -231,10 +235,9 @@ export interface CapabilityRow {
 
 // One agent owning a capability, as reported by the 409 CAPABILITY_IN_USE
 // details payload (and recomputable client-side from the agents list).
-export interface CapabilityUse {
-  agent_id: string;
-  kind: "capabilities";
-}
+export type CapabilityUse =
+  | { agent_id: string; kind: "capabilities" }
+  | { assignment_id: string; kind: "guardrail_assignment" };
 
 export interface CapabilityInUseDetails {
   capability: string;
@@ -337,7 +340,8 @@ export interface AgentBindings {
 }
 
 // Communication guardrails (migration 025): operator-managed content rules
-// attached globally or to explicit agent groups. Runtime writes emit only
+// attached globally, to explicit agent groups, or to agents that announce a
+// registered capability. Runtime writes emit only
 // scrubbed guardrail.denied events when enforce-mode blocks a write.
 export type GuardrailSurface = "message" | "artifact" | "handoff";
 export type GuardrailVersionStatus =
@@ -346,7 +350,7 @@ export type GuardrailVersionStatus =
   | "deprecated"
   | "archived";
 export type GuardrailEvaluatorKind = "deterministic" | "llm";
-export type GuardrailScopeKind = "global" | "agent_group";
+export type GuardrailScopeKind = "global" | "agent_group" | "capability";
 export type GuardrailVersionMode = "latest" | "pinned";
 export type GuardrailMode = "audit" | "warn" | "enforce";
 
@@ -393,6 +397,7 @@ export interface GuardrailAssignment {
   assignment_id: string;
   scope_kind: GuardrailScopeKind;
   group_id: string | null;
+  capability: string | null;
   guardrail_id: string;
   version_mode: GuardrailVersionMode;
   pinned_version: number | null;
@@ -555,6 +560,20 @@ export interface SteeringResult {
   warning?: string;
 }
 
+export type MetaHarnessKind = "message" | "handoff";
+export type MetaHarnessAudience = "private" | "broadcast";
+
+export interface MetaHarnessSendResult extends SteeringResult {
+  kind: MetaHarnessKind;
+  audience: MetaHarnessAudience;
+  handoff_id?: string;
+  workspace_id?: string;
+  created_at?: string;
+  eligible_count?: number;
+  notified?: string[];
+  artifact_ids?: string[];
+}
+
 export interface PresetRow {
   preset_id: string;
   name: string;
@@ -595,8 +614,10 @@ export interface MessageRow {
   from_agent_id: string;
   created_at: string;
   subject: string | null;
+  target?: RoutingTarget | null;
   preview: string;
   body?: string; // full body, present only with include_body=true
+  artifacts?: string[];
   // Trajectory correlation (R-I1): non-null only when the feature stamped one.
   trace_id?: string | null;
   deliveries: {
@@ -721,6 +742,36 @@ export interface MemoryDetail {
   supersedes?: string;
   superseded_by?: string;
   trace_id?: string;
+}
+
+export interface ArtifactItem {
+  artifact_id: string;
+  workspace_id: string;
+  artifact_type: "file" | "text" | "json" | "markdown" | "html";
+  name: string | null;
+  filename: string;
+  stored: "inline" | "path";
+  size_bytes: number;
+  media_type: string;
+  created_by: string | null;
+  created_at: string;
+  metadata: Record<string, unknown>;
+  managed: boolean;
+  available: boolean;
+  source_path?: string | null;
+}
+
+export interface ArtifactDetail extends ArtifactItem {
+  content?: string;
+}
+
+export interface ArtifactPage {
+  count: number;
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  items: ArtifactItem[];
 }
 
 export interface NexusEvent {
@@ -964,6 +1015,56 @@ async function downloadExport(path: string, filename: string): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
+async function fetchBlob(path: string): Promise<Blob> {
+  const key = getApiKey();
+  const headers = new Headers();
+  if (key) headers.set("x-api-key", key);
+  const response = await fetch(path, { headers });
+  if (!response.ok) {
+    const raw = await response.text();
+    let message = raw.slice(0, 300) || response.statusText;
+    try {
+      message = (JSON.parse(raw) as Envelope<unknown>).error?.message ?? message;
+    } catch {
+      /* keep the raw text */
+    }
+    throw new ApiError(response.status, "HTTP_" + response.status, message);
+  }
+  return response.blob();
+}
+
+async function uploadArtifact(workspace: string, file: File): Promise<ArtifactItem> {
+  const key = getApiKey();
+  const headers = new Headers();
+  if (key) headers.set("x-api-key", key);
+  headers.set("content-type", file.type || "application/octet-stream");
+  const params = new URLSearchParams({ workspace, filename: file.name });
+  const response = await fetch(`/api/v1/meta-harness/artifacts?${params}`, {
+    method: "POST",
+    headers,
+    body: file,
+  });
+  const raw = await response.text();
+  let envelope: Envelope<ArtifactItem> | null = null;
+  try {
+    envelope = JSON.parse(raw) as Envelope<ArtifactItem>;
+  } catch {
+    throw new ApiError(
+      response.status,
+      "HTTP_" + response.status,
+      raw.slice(0, 300) || response.statusText,
+    );
+  }
+  if (!response.ok || !envelope.ok) {
+    const error = envelope.error ?? {
+      code: "HTTP_" + response.status,
+      message: response.statusText,
+    };
+    throw new ApiError(response.status, error.code, error.message, error.details);
+  }
+  return envelope.data as ArtifactItem;
+}
+
 export const api = {
   graph: (workspace: string, windowHours = 24) =>
     call<GraphSnapshot>(
@@ -1046,6 +1147,19 @@ export const api = {
       `/api/v1/memory/${encodeURIComponent(memoryId)}?workspace=${encodeURIComponent(workspace)}`,
       { method: "DELETE" },
     ),
+  artifacts: (params: Record<string, string>) =>
+    call<ArtifactPage>(
+      `/api/v1/artifacts?${new URLSearchParams(params)}`,
+    ),
+  artifactDetail: (workspace: string, artifactId: string, includeContent = true) =>
+    call<ArtifactDetail>(
+      `/api/v1/artifacts/${encodeURIComponent(artifactId)}?workspace=${encodeURIComponent(workspace)}&include_content=${includeContent}`,
+    ),
+  artifactBlob: (workspace: string, artifactId: string) =>
+    fetchBlob(
+      `/api/v1/artifacts/${encodeURIComponent(artifactId)}/content?workspace=${encodeURIComponent(workspace)}`,
+    ),
+  uploadMetaHarnessArtifact: uploadArtifact,
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
   createAgent: (body: {
     agent_id: string;
@@ -1347,6 +1461,7 @@ export const api = {
   createGuardrailAssignment: (body: {
     scope_kind: GuardrailScopeKind;
     group_id?: string | null;
+    capability?: string | null;
     guardrail_id: string;
     version_mode?: GuardrailVersionMode;
     pinned_version?: number | null;
@@ -1487,6 +1602,19 @@ export const api = {
         subject: subject || undefined,
         body,
       }),
+    }),
+  metaHarnessSend: (body: {
+    workspace: string;
+    kind: MetaHarnessKind;
+    audience: MetaHarnessAudience;
+    to_agent_id?: string;
+    subject?: string;
+    body: string;
+    artifact_ids?: string[];
+  }) =>
+    call<MetaHarnessSendResult>("/api/v1/meta-harness/send", {
+      method: "POST",
+      body: JSON.stringify(body),
     }),
   regenerateKey: (agentId: string) =>
     call<{ agent_id: string; api_key: string; rotated_at: string }>(

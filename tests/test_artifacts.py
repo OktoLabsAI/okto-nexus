@@ -29,6 +29,7 @@ import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, register_tools
 from okto_nexus.adapters.inbound.mcp.tools.artifacts import build_service, register
+from okto_nexus.adapters.outbound.file.artifacts import LocalArtifactStore
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore, _is_contained
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
@@ -36,7 +37,10 @@ from okto_nexus.adapters.outbound.sqlite.events_repo import (
     SqliteEventRepo,
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
-from okto_nexus.application.artifacts import ArtifactService
+from okto_nexus.application.artifacts import (
+    ArtifactService,
+    externalize_legacy_artifacts,
+)
 from okto_nexus.application.events import EventService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.ports import Repos
@@ -209,6 +213,7 @@ def make_service(factory, config, clock, emitter=None, files=None, artifacts=Non
     return ArtifactService(
         connection_factory=factory,
         artifacts=artifacts or SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(config.home_dir / "artifacts"),
         workspaces=FakeWorkspaceRepo(),
         files=files or WorkspaceFileStore(),
         clock=clock,
@@ -257,9 +262,10 @@ def mkroot(tmp_path, name="proj"):
 # Pure domain helpers
 # --------------------------------------------------------------------------- #
 def test_artifact_types_whitelist():
-    assert ARTIFACT_TYPES == {"file", "text", "json", "markdown"}
+    assert ARTIFACT_TYPES == {"file", "text", "json", "markdown", "html"}
     assert normalize_artifact_type("JSON") == "json"
     assert normalize_artifact_type("  markdown ") == "markdown"
+    assert normalize_artifact_type("HTML") == "html"
 
 
 @pytest.mark.parametrize("bad", [None, "", "  ", "zip", "binary", 5])
@@ -517,6 +523,23 @@ def test_put_atomic_row_and_event(migrated_factory, tmp_config, tmp_path):
     assert count(migrated_factory, "artifacts") == 1
     assert count(migrated_factory, "events") == 1
 
+    conn = migrated_factory.get_connection()
+    try:
+        row = conn.execute(
+            "SELECT path, content, content_type, storage_path, storage_kind "
+            "FROM artifacts WHERE artifact_id = ?",
+            (out["artifact_id"],),
+        ).fetchone()
+    finally:
+        conn.close()
+    assert row["path"] is None
+    assert row["content"] is None
+    assert row["content_type"] is None
+    assert row["storage_kind"] == "inline"
+    payload = tmp_config.home_dir / "artifacts" / row["storage_path"]
+    assert payload.read_text(encoding="utf-8") == "payload"
+    assert (payload.parent / "manifest.json").is_file()
+
     assert len(emitter.events) == 1
     ev = emitter.events[-1]
     assert ev["type"] == "artifact.created"
@@ -580,6 +603,7 @@ def test_put_rollback_on_emit_failure(migrated_factory, tmp_config, tmp_path):
     # The artifact insert and the (failed) event are both rolled back atomically.
     assert count(migrated_factory, "artifacts") == 0
     assert count(migrated_factory, "events") == 0
+    assert not list((tmp_config.home_dir / "artifacts").glob("**/manifest.json"))
 
 
 def test_put_repeated_identical_distinct_ids(migrated_factory, tmp_config, tmp_path):
@@ -611,6 +635,31 @@ def test_get_inline_roundtrip(migrated_factory, tmp_config, tmp_path):
     assert got["size_bytes"] == len("# Title".encode("utf-8"))
     assert "path" not in got
     assert got["metadata"] == {}
+
+
+def test_html_artifact_has_managed_media_type_and_operator_preview(
+    migrated_factory, tmp_config, tmp_path
+):
+    svc = make_service(
+        migrated_factory, tmp_config, StubClock(), emitter=RecordingEmitter()
+    )
+    root = mkroot(tmp_path)
+    content = "<article><h1>Result</h1><p>Ready</p></article>"
+    put = svc.artifact_put(
+        project_root=root,
+        artifact_type="html",
+        name="Rendered result",
+        content=content,
+        agent_id="renderer",
+    )
+
+    detail = svc.get_for_operator(
+        workspace_id=put["workspace_id"], artifact_id=put["artifact_id"]
+    )
+    assert detail["artifact_type"] == "html"
+    assert detail["filename"] == "Rendered_result.html"
+    assert detail["media_type"] == "text/html"
+    assert detail["content"] == content
 
 
 def test_get_not_found(migrated_factory, tmp_config, tmp_path):
@@ -669,6 +718,71 @@ def test_get_path_returns_no_inline_bytes(migrated_factory, tmp_config, tmp_path
     assert "content" not in got
     assert got["path"].endswith("data.bin")
     assert "ON DISK BYTES" not in json.dumps(got)  # bytes never inlined
+
+    # A path submission is an import, not a fragile external reference.
+    (root / "data.bin").unlink()
+    payload, media_type, filename = svc.payload_for_operator(
+        workspace_id=put["workspace_id"], artifact_id=put["artifact_id"]
+    )
+    assert payload == b"ON DISK BYTES"
+    assert media_type == "application/octet-stream"
+    assert filename == "data.bin"
+
+
+def test_bootstrap_externalizes_legacy_inline_payload(
+    migrated_factory, tmp_config, tmp_path
+):
+    root = mkroot(tmp_path)
+    workspace_id = resolve_workspace_id(root)
+    with migrated_factory.unit_of_work() as uow:
+        FakeWorkspaceRepo().upsert(
+            uow,
+            workspace_id=workspace_id,
+            root_realpath=root,
+            last_seen_at="2026-06-07T00:00:00Z",
+        )
+        uow.connection.execute(
+            """
+            INSERT INTO artifacts
+                (artifact_id, workspace_id, artifact_type, name, content,
+                 size_bytes, content_type, created_by, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                "art_legacy",
+                workspace_id,
+                "json",
+                "Legacy report",
+                '{"answer": 42}',
+                14,
+                '{"source": "old-db"}',
+                "legacy-agent",
+                "2026-06-07T00:00:00Z",
+            ),
+        )
+
+    store = LocalArtifactStore(tmp_config.home_dir / "artifacts")
+    result = externalize_legacy_artifacts(
+        connection_factory=migrated_factory,
+        artifacts=SqliteArtifactRepo(StubClock()),
+        artifact_store=store,
+    )
+    assert result == {"migrated": 1, "skipped": 0}
+
+    conn = migrated_factory.get_connection()
+    try:
+        row = conn.execute(
+            "SELECT path, content, content_type, storage_path "
+            "FROM artifacts WHERE artifact_id = 'art_legacy'"
+        ).fetchone()
+    finally:
+        conn.close()
+    assert row["path"] is None
+    assert row["content"] is None
+    assert row["content_type"] is None
+    descriptor = store.describe(row["storage_path"])
+    assert store.read_text(row["storage_path"]) == '{"answer": 42}'
+    assert descriptor.metadata == {"source": "old-db"}
 
 
 def test_metadata_roundtrip(migrated_factory, tmp_config, tmp_path):
@@ -842,6 +956,7 @@ def _governed_service(deps):
     return ArtifactService(
         connection_factory=deps.connection_factory,
         artifacts=deps.repos.artifacts,
+        artifact_store=deps.repos.artifact_store,
         workspaces=deps.repos.workspaces,
         files=deps.repos.files,
         clock=deps.clock,

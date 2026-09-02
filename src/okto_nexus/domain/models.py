@@ -239,7 +239,7 @@ class Handoff:
 
 @dataclass(slots=True)
 class Artifact:
-    """A stored artifact (inline content or a workspace-relative path reference)."""
+    """Artifact catalog metadata plus an adapter-owned payload reference."""
 
     artifact_id: str
     workspace_id: str
@@ -261,6 +261,13 @@ class Artifact:
     # ``policy.snapshot_permits``); the ``artifact.created`` event carries the
     # same audience so the stream never leaks what the read-path hides (BR7).
     audience: list[Any] | None = None
+    # Migration 028: the payload and free-form metadata live behind the
+    # ArtifactStore port.  These catalog fields are sufficient to locate and
+    # present them without placing artifact bytes in SQLite.
+    storage_path: str | None = None
+    storage_kind: str | None = None
+    filename: str | None = None
+    media_type: str | None = None
 
 
 @dataclass(slots=True)

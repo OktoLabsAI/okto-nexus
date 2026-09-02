@@ -7,11 +7,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity,
+  Bot,
   Brain,
   ChartColumn,
   CheckSquare,
   ChevronDown,
   Compass,
+  Files,
   FolderOpen,
   HelpCircle,
   Info,
@@ -59,8 +61,10 @@ import { GraphView } from "./views/GraphView";
 import { AgentsView } from "./views/AgentsView";
 import { MessagesView } from "./views/MessagesView";
 import { HandoffsView } from "./views/HandoffsView";
+import { MetaHarnessView } from "./views/MetaHarnessView";
 import { EventsView } from "./views/EventsView";
 import { MemoryView } from "./views/MemoryView";
+import { ArtifactsView } from "./views/ArtifactsView";
 import { WorkspacesView } from "./views/WorkspacesView";
 import { RegistryView } from "./views/RegistryView";
 import { PoliciesView } from "./views/PoliciesView";
@@ -78,7 +82,9 @@ const VIEWS = [
   { name: "Graph", icon: Waypoints },
   { name: "Messages", icon: MessagesSquare },
   { name: "Handoffs", icon: KanbanSquare },
+  { name: "Meta-harness", icon: Bot },
   { name: "Events", icon: Activity },
+  { name: "Artifacts", icon: Files },
   // Experimental: listed only when feature_memory is enabled in the effective
   // server config. MCP memory_* tool exposure is gated at server bootstrap too.
   { name: "Memory", icon: Brain },
@@ -410,7 +416,7 @@ function Dashboard({
 
   return (
     <WorkspaceNamesProvider workspaces={workspaces}>
-    <div className="h-screen flex flex-col bg-surface-50 dark:bg-surface-950">
+    <div className="h-screen overflow-hidden flex flex-col bg-surface-50 dark:bg-surface-950">
       {/* Header FIRST, full-width above the sidebar (the Pulse App shell) */}
       <header
         className="flex items-center gap-3 px-4 py-2 shrink-0
@@ -646,6 +652,13 @@ function Dashboard({
               onChanged={loadGraph}
             />
           )}
+          {view === "Meta-harness" && (
+            <MetaHarnessView
+              workspace={workspace}
+              workspaces={workspaces}
+              liveTick={liveTick}
+            />
+          )}
           {view === "Events" && (
             <EventsView
               workspace={workspace}
@@ -662,6 +675,9 @@ function Dashboard({
               liveTick={liveTick}
               onOpenTrace={openTrace}
             />
+          )}
+          {view === "Artifacts" && (
+            <ArtifactsView workspace={workspace} liveTick={liveTick} />
           )}
           {view === "Workspaces" && (
             <WorkspacesView scope={workspace} refreshTick={refreshTick} />
