@@ -21,8 +21,14 @@ import pytest
 fastapi = pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient  # noqa: E402
 
-from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key  # noqa: E402
+from okto_nexus.adapters.inbound.http.app import (  # noqa: E402
+    build_app,
+    ensure_operator_key,
+)
 from okto_nexus.adapters.inbound.mcp.server import bootstrap  # noqa: E402
+from okto_nexus.adapters.inbound.mcp.tools.artifacts import (  # noqa: E402
+    build_service as build_artifact_service,
+)
 from okto_nexus.application.auth import AgentKeyAuthService  # noqa: E402
 from okto_nexus.domain.ids import resolve_realpath, resolve_workspace_id  # noqa: E402
 
@@ -61,6 +67,163 @@ def _table_counts(deps) -> dict[str, int]:
             t: uow.connection.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
             for t in tables
         }
+
+
+def test_artifact_catalog_detail_and_content_are_operator_only(serve_env):
+    deps, client, operator_key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "artifact-author"},
+        headers=_h(operator_key),
+    ).json()["data"]
+    project = deps.config.home_dir / "artifact-workspace"
+    project.mkdir()
+    stored = build_artifact_service(deps).artifact_put(
+        project_root=str(project),
+        artifact_type="markdown",
+        name="Release notes",
+        content="# Ready\n\nManaged outside SQLite.",
+        metadata={"release": "0.1.8"},
+        agent_id="artifact-author",
+    )
+
+    headers = _h(operator_key)
+    listing = client.get("/api/v1/artifacts?workspace=all", headers=headers)
+    assert listing.status_code == 200
+    catalog = listing.json()["data"]
+    assert catalog["page"] == 1
+    assert catalog["page_size"] == 25
+    assert catalog["total"] == 1
+    assert catalog["total_pages"] == 1
+    item = catalog["items"][0]
+    assert item["artifact_id"] == stored["artifact_id"]
+    assert item["created_by"] == "artifact-author"
+    assert item["managed"] is True
+
+    detail = client.get(
+        f"/api/v1/artifacts/{stored['artifact_id']}?workspace=all",
+        headers=headers,
+    )
+    assert detail.status_code == 200
+    assert detail.json()["data"]["content"].startswith("# Ready")
+    assert detail.json()["data"]["metadata"] == {"release": "0.1.8"}
+
+    content = client.get(
+        f"/api/v1/artifacts/{stored['artifact_id']}/content?workspace=all",
+        headers=headers,
+    )
+    assert content.status_code == 200
+    assert content.text.startswith("# Ready")
+    assert content.headers["content-type"].startswith("text/markdown")
+    assert "Release_notes.md" in content.headers["content-disposition"]
+
+    non_operator = _h(created["api_key"])
+    assert (
+        client.get("/api/v1/artifacts?workspace=all", headers=non_operator).status_code
+        == 403
+    )
+
+
+def test_artifact_catalog_paginates_and_filters_producers_and_dates(serve_env):
+    deps, client, operator_key = serve_env
+    headers = _h(operator_key)
+    for agent_id in ("producer-alpha", "producer-beta"):
+        response = client.post(
+            "/api/v1/agents",
+            json={"agent_id": agent_id},
+            headers=headers,
+        )
+        assert response.status_code == 200
+
+    project = deps.config.home_dir / "catalog-workspace"
+    project.mkdir()
+    service = build_artifact_service(deps)
+    alpha_old = service.artifact_put(
+        project_root=str(project),
+        artifact_type="text",
+        name="Alpha old",
+        content="old",
+        agent_id="producer-alpha",
+    )
+    beta_middle = service.artifact_put(
+        project_root=str(project),
+        artifact_type="json",
+        name="Beta middle",
+        content='{"position": 2}',
+        agent_id="producer-beta",
+    )
+    alpha_new = service.artifact_put(
+        project_root=str(project),
+        artifact_type="markdown",
+        name="Alpha new",
+        content="# New",
+        agent_id="producer-alpha",
+    )
+    timestamps = {
+        alpha_old["artifact_id"]: "2026-08-01T12:00:00.000000Z",
+        beta_middle["artifact_id"]: "2026-09-01T12:00:00.000000Z",
+        alpha_new["artifact_id"]: "2026-10-01T12:00:00.000000Z",
+    }
+    with deps.connection_factory.unit_of_work(write=True) as uow:
+        for artifact_id, created_at in timestamps.items():
+            uow.connection.execute(
+                "UPDATE artifacts SET created_at = ? WHERE artifact_id = ?",
+                (created_at, artifact_id),
+            )
+
+    first = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha",
+            "page": 1,
+            "page_size": 1,
+        },
+        headers=headers,
+    )
+    assert first.status_code == 200
+    first_page = first.json()["data"]
+    assert first_page["total"] == 2
+    assert first_page["total_pages"] == 2
+    assert first_page["count"] == 1
+    assert first_page["items"][0]["artifact_id"] == alpha_new["artifact_id"]
+
+    second = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha",
+            "page": 2,
+            "page_size": 1,
+        },
+        headers=headers,
+    ).json()["data"]
+    assert second["items"][0]["artifact_id"] == alpha_old["artifact_id"]
+
+    interval = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "agents": "producer-alpha,producer-beta",
+            "date_from": "2026-08-15",
+            "date_to": "2026-09-15",
+        },
+        headers=headers,
+    ).json()["data"]
+    assert interval["total"] == 1
+    assert interval["items"][0]["artifact_id"] == beta_middle["artifact_id"]
+
+    invalid = client.get(
+        "/api/v1/artifacts",
+        params={
+            "workspace": "all",
+            "date_from": "2026-10-01",
+            "date_to": "2026-09-01",
+        },
+        headers=headers,
+    )
+    assert invalid.status_code == 422
+    assert invalid.json()["error"]["code"] == "VALIDATION_ERROR"
 
 
 # --------------------------------------------------------------------------- #

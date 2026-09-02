@@ -22,9 +22,9 @@ application layers - never requires the SDK to be installed.
 
 from __future__ import annotations
 
+import functools
 import importlib
 import importlib.metadata
-import functools
 import inspect
 import os
 import pkgutil
@@ -34,10 +34,11 @@ from dataclasses import dataclass, field
 from typing import Any, Mapping
 
 from ....application.approvals import ApprovalService, seed_operator_agent
+from ....application.artifacts import externalize_legacy_artifacts
 from ....application.capabilities import seed_capability_catalog
 from ....application.comm_preset_catalog import seed_comm_presets
-from ....application.ports import Clock, ConnectionFactory as ConnectionFactoryPort
-from ....application.ports import EventEmitter, Repos
+from ....application.ports import Clock, EventEmitter, Repos
+from ....application.ports import ConnectionFactory as ConnectionFactoryPort
 from ....application.telemetry.ports import TelemetryPort
 from ....application.telemetry.schema import EVENT_MCP
 from ....application.telemetry.service import TelemetryService
@@ -46,13 +47,15 @@ from ....envelope import tool_envelope
 from ....errors import OktoNexusError
 from ...outbound.clock import SystemClock
 from ...outbound.embedding import EmbeddingResolution, resolve_embedding_provider
+from ...outbound.file.artifacts import LocalArtifactStore
 from ...outbound.file.store import WorkspaceFileStore
-from ...outbound.telemetry import NexusTelemetryHttpSink, LocalTelemetryEventStore
-from ...outbound.telemetry.event_emitter import TelemetryEventEmitter
-from ...outbound.telemetry.local_store import resolve_metrics_dir
 from ...outbound.sqlite.approvals_repo import SqliteApprovalRepo
 from ...outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from ...outbound.sqlite.capability_catalog_repo import SqliteCapabilityCatalogRepo
+from ...outbound.sqlite.comm_preset_repo import (
+    SqliteAgentCommBindingRepo,
+    SqliteCommPresetRepo,
+)
 from ...outbound.sqlite.connection import ConnectionFactory
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
@@ -77,10 +80,6 @@ from ...outbound.sqlite.messages_repo import (
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
-from ...outbound.sqlite.comm_preset_repo import (
-    SqliteAgentCommBindingRepo,
-    SqliteCommPresetRepo,
-)
 from ...outbound.sqlite.migrations import MigrationRunner
 from ...outbound.sqlite.permissions_repo import SqlitePresetRepo
 from ...outbound.sqlite.policy_repo import (
@@ -89,6 +88,9 @@ from ...outbound.sqlite.policy_repo import (
 )
 from ...outbound.sqlite.poll_tokens_repo import SqlitePollTokenRepo
 from ...outbound.sqlite.tag_catalog_repo import SqliteTagCatalogRepo
+from ...outbound.telemetry import LocalTelemetryEventStore, NexusTelemetryHttpSink
+from ...outbound.telemetry.event_emitter import TelemetryEventEmitter
+from ...outbound.telemetry.local_store import resolve_metrics_dir
 from . import tools as _tools_pkg
 from .resources import register_resources, resource_versions
 
@@ -427,7 +429,11 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: tool-docs/messages v3, tool-docs/handoff v4, tool-docs/identity v5. Also
 #: corrected stale payload-discovery and heartbeat wording. Growth ledger:
 #: ``coordination_guidance_r32`` (+1221 resident chars, measured net).
-SURFACE_REVISION = 32
+#: 33 = artifact payload storage is adapter-backed instead of SQLite-backed;
+#: path submissions are imported into managed storage, and ``html`` joins the
+#: closed artifact_type enum for safe dashboard preview. Tool names and
+#: parameters are unchanged; the artifact reference resource is now v4.
+SURFACE_REVISION = 33
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -474,7 +480,7 @@ class Deps:
     telemetry: TelemetryPort | None = None
 
 
-def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
+def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:
     """Instantiate every concrete outbound adapter and the event emitter.
 
     This is the single composition root for the persistence layer. Each slice's
@@ -500,6 +506,7 @@ def build_repos(clock: Clock) -> tuple[Repos, EventEmitter]:
         tasks=SqliteTaskRepo(clock),
         handoffs=SqliteHandoffRepo(clock),
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(config.home_dir / "artifacts"),
         files=WorkspaceFileStore(),
         presets=SqlitePresetRepo(clock),
         message_vectors=SqliteMessageVectorStore(clock),
@@ -555,7 +562,12 @@ def bootstrap(
     factory = ConnectionFactory(config)  # ensures home_dir exists
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
     clock = SystemClock()
-    repos, emitter = build_repos(clock)
+    repos, emitter = build_repos(clock, config)
+    externalize_legacy_artifacts(
+        connection_factory=factory,
+        artifacts=repos.artifacts,
+        artifact_store=repos.artifact_store,
+    )
     telemetry = build_telemetry(config, clock)
     emitter = TelemetryEventEmitter(emitter, telemetry)
     # Transition seed (migration 014): absorb every announced capability into

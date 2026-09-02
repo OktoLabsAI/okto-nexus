@@ -742,6 +742,36 @@ export interface MemoryDetail {
   trace_id?: string;
 }
 
+export interface ArtifactItem {
+  artifact_id: string;
+  workspace_id: string;
+  artifact_type: "file" | "text" | "json" | "markdown" | "html";
+  name: string | null;
+  filename: string;
+  stored: "inline" | "path";
+  size_bytes: number;
+  media_type: string;
+  created_by: string | null;
+  created_at: string;
+  metadata: Record<string, unknown>;
+  managed: boolean;
+  available: boolean;
+  source_path?: string | null;
+}
+
+export interface ArtifactDetail extends ArtifactItem {
+  content?: string;
+}
+
+export interface ArtifactPage {
+  count: number;
+  total: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  items: ArtifactItem[];
+}
+
 export interface NexusEvent {
   event_id: number;
   workspace_id: string;
@@ -983,6 +1013,24 @@ async function downloadExport(path: string, filename: string): Promise<void> {
   URL.revokeObjectURL(url);
 }
 
+async function fetchBlob(path: string): Promise<Blob> {
+  const key = getApiKey();
+  const headers = new Headers();
+  if (key) headers.set("x-api-key", key);
+  const response = await fetch(path, { headers });
+  if (!response.ok) {
+    const raw = await response.text();
+    let message = raw.slice(0, 300) || response.statusText;
+    try {
+      message = (JSON.parse(raw) as Envelope<unknown>).error?.message ?? message;
+    } catch {
+      /* keep the raw text */
+    }
+    throw new ApiError(response.status, "HTTP_" + response.status, message);
+  }
+  return response.blob();
+}
+
 export const api = {
   graph: (workspace: string, windowHours = 24) =>
     call<GraphSnapshot>(
@@ -1064,6 +1112,18 @@ export const api = {
     call<{ memory_id: string; deleted: boolean }>(
       `/api/v1/memory/${encodeURIComponent(memoryId)}?workspace=${encodeURIComponent(workspace)}`,
       { method: "DELETE" },
+    ),
+  artifacts: (params: Record<string, string>) =>
+    call<ArtifactPage>(
+      `/api/v1/artifacts?${new URLSearchParams(params)}`,
+    ),
+  artifactDetail: (workspace: string, artifactId: string) =>
+    call<ArtifactDetail>(
+      `/api/v1/artifacts/${encodeURIComponent(artifactId)}?workspace=${encodeURIComponent(workspace)}`,
+    ),
+  artifactBlob: (workspace: string, artifactId: string) =>
+    fetchBlob(
+      `/api/v1/artifacts/${encodeURIComponent(artifactId)}/content?workspace=${encodeURIComponent(workspace)}`,
     ),
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
   createAgent: (body: {

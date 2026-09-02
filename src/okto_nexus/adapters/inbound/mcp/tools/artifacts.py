@@ -20,6 +20,7 @@ from typing import Annotated, Any
 
 from pydantic import Field
 
+from okto_nexus.adapters.outbound.file.artifacts import LocalArtifactStore
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from okto_nexus.adapters.outbound.sqlite.governance_repo import (
@@ -41,10 +42,10 @@ from ._guardrails import build_guardrail_service
 #: House style (mirrors okto-pulse): enums as "one of: a, b, c (default: x)";
 #: optionals marked "(optional)"/"(default: ...)"; cross-refs to sibling tools.
 _P_ROOT = "Absolute path to the project (defines the workspace scope)."
-_P_ARTIFACT_TYPE = "Artifact classification - one of: file, text, json, markdown. REQUIRED."
+_P_ARTIFACT_TYPE = "Artifact classification - one of: file, text, json, markdown, html. REQUIRED."
 _P_NAME = "Human-friendly name/label for the artifact (optional)."
-_P_PATH = "Filesystem path to register by REFERENCE (must stay within the workspace root). Provide this OR content - at least one REQUIRED."
-_P_CONTENT = "Inline UTF-8 content (bounded by max_inline_bytes; json must be well-formed). Provide this OR path - at least one REQUIRED."
+_P_PATH = "Filesystem path to import into Nexus-managed artifact storage (must stay within the workspace root). Provide this OR content - at least one REQUIRED."
+_P_CONTENT = "UTF-8 content stored outside the database (bounded by max_inline_bytes; json must be well-formed). Provide this OR path - at least one REQUIRED."
 _P_METADATA = "Free-form JSON object stored with the artifact (optional)."
 _P_ARTIFACT_ID = "The artifact_id to retrieve. REQUIRED."
 
@@ -59,6 +60,10 @@ def build_service(deps: Any) -> ArtifactService:
     repos = deps.repos
     if getattr(repos, "artifacts", None) is None:
         repos.artifacts = SqliteArtifactRepo(deps.clock)
+    if getattr(repos, "artifact_store", None) is None:
+        repos.artifact_store = LocalArtifactStore(
+            deps.config.home_dir / "artifacts"
+        )
     if getattr(repos, "workspaces", None) is None:
         repos.workspaces = SqliteWorkspaceRepo(deps.clock)
     if getattr(repos, "files", None) is None:
@@ -87,6 +92,7 @@ def build_service(deps: Any) -> ArtifactService:
     return ArtifactService(
         connection_factory=deps.connection_factory,
         artifacts=repos.artifacts,
+        artifact_store=repos.artifact_store,
         workspaces=repos.workspaces,
         files=repos.files,
         clock=deps.clock,
@@ -112,7 +118,7 @@ def register(server: Any, deps: Any) -> None:
         content: Annotated[str | None, Field(description=_P_CONTENT)] = None,
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
     ) -> dict[str, Any]:
-        """Register a file/text/json/markdown artifact in the resolved workspace. Docs: okto-nexus://reference/tool-docs/artifacts."""
+        """Register a file/text/json/markdown/html artifact in the resolved workspace. Docs: okto-nexus://reference/tool-docs/artifacts."""
         caller = get_authenticated_agent()
         return service.artifact_put(
             project_root=project_root,

@@ -13,6 +13,7 @@ import {
   CheckSquare,
   ChevronDown,
   Compass,
+  Files,
   FolderOpen,
   HelpCircle,
   Info,
@@ -63,6 +64,7 @@ import { HandoffsView } from "./views/HandoffsView";
 import { MetaHarnessView } from "./views/MetaHarnessView";
 import { EventsView } from "./views/EventsView";
 import { MemoryView } from "./views/MemoryView";
+import { ArtifactsView } from "./views/ArtifactsView";
 import { WorkspacesView } from "./views/WorkspacesView";
 import { RegistryView } from "./views/RegistryView";
 import { PoliciesView } from "./views/PoliciesView";
@@ -82,6 +84,7 @@ const VIEWS = [
   { name: "Handoffs", icon: KanbanSquare },
   { name: "Meta-harness", icon: Bot },
   { name: "Events", icon: Activity },
+  { name: "Artifacts", icon: Files },
   // Experimental: listed only when feature_memory is enabled in the effective
   // server config. MCP memory_* tool exposure is gated at server bootstrap too.
   { name: "Memory", icon: Brain },
@@ -672,6 +675,9 @@ function Dashboard({
               liveTick={liveTick}
               onOpenTrace={openTrace}
             />
+          )}
+          {view === "Artifacts" && (
+            <ArtifactsView workspace={workspace} liveTick={liveTick} />
           )}
           {view === "Workspaces" && (
             <WorkspacesView scope={workspace} refreshTick={refreshTick} />

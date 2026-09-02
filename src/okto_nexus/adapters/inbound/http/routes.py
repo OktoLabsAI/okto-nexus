@@ -10,13 +10,14 @@ from __future__ import annotations
 
 import importlib.metadata
 from typing import Any, Literal
+from urllib.parse import quote
 
 import anyio.to_thread
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel, Field
 
-from ....config import FEATURE_FLAG_FIELDS
+from ....application.artifacts import ArtifactService
 from ....application.capabilities import CapabilityCatalogService
 from ....application.comm_preset_catalog import CommPresetCatalogService
 from ....application.governance import GovernanceService
@@ -27,15 +28,15 @@ from ....application.policy_catalog import PolicyCatalogService
 from ....application.search import EmbeddingsUnavailable
 from ....application.tags import TagCatalogService
 from ....application.workspace_analytics import DEFAULT_WINDOW, is_valid_window
-from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
-from ....domain.health import is_valid_window as is_valid_health_window
+from ....config import FEATURE_FLAG_FIELDS
 from ....domain.approvals import (
     OPERATOR_AGENT_ID,
     is_reserved_agent_id,
     validate_status_filter,
 )
 from ....domain.base import new_id
-from ....domain.poll_tokens import POLL_TOKEN_PREFIX
+from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
+from ....domain.health import is_valid_window as is_valid_health_window
 from ....domain.permissions import (
     BUILTIN_PRESETS,
     PERMISSION_DESCRIPTIONS,
@@ -43,17 +44,19 @@ from ....domain.permissions import (
     builtin_preset,
     validate_permission_flags,
 )
+from ....domain.poll_tokens import POLL_TOKEN_PREFIX
 from ....domain.routing import normalize_capabilities
 from ....domain.tag_selector import validate_comm_scope, validate_tags
 from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
-from ..mcp.tools.handoff import build_service as _build_handoff_service
-from ..mcp.tools.messages import build_service as _build_message_service
-from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from ..mcp.projection import (
     PROFILE_FULL,
     apply_to_response,
     parse_profile,
 )
+from ..mcp.tools.artifacts import build_service as _build_artifact_service
+from ..mcp.tools.handoff import build_service as _build_handoff_service
+from ..mcp.tools.messages import build_service as _build_message_service
+from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
 
 
@@ -459,6 +462,10 @@ def _memory_service(deps) -> MemoryService:
             embedding is not None and embedding.search_enabled
         ),
     )
+
+
+def _artifact_service(deps) -> ArtifactService:
+    return _build_artifact_service(deps)
 
 
 def _approval_service(deps):
@@ -1739,6 +1746,91 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok(result)
+
+    # ------------------------------------------------------------------ #
+    # Artifacts: operator catalog over payloads managed by ArtifactStore.
+    # SQLite holds only the searchable/authorization catalog; these reads
+    # resolve payloads through the same injected adapter used by artifact_put.
+    # ------------------------------------------------------------------ #
+    @router.get("/artifacts")
+    async def browse_artifacts(
+        request: Request,
+        workspace: str = "all",
+        artifact_type: str | None = None,
+        agents: str | None = None,
+        date_from: str | None = None,
+        date_to: str | None = None,
+        q: str | None = None,
+        page: int = 1,
+        page_size: int = 25,
+    ) -> JSONResponse:
+        service = _artifact_service(request.app.state.deps)
+
+        def _browse():
+            return service.browse(
+                workspace_id=workspace,
+                artifact_type=artifact_type,
+                producer_ids=agents.split(",") if agents else None,
+                date_from=date_from,
+                date_to=date_to,
+                query=q,
+                page=page,
+                page_size=page_size,
+            )
+
+        try:
+            _require_operator()
+            data = await anyio.to_thread.run_sync(_browse)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
+    @router.get("/artifacts/{artifact_id}/content")
+    async def get_artifact_content(
+        request: Request, artifact_id: str, workspace: str = "all"
+    ) -> Response:
+        service = _artifact_service(request.app.state.deps)
+
+        def _payload():
+            return service.payload_for_operator(
+                workspace_id=workspace, artifact_id=artifact_id
+            )
+
+        try:
+            _require_operator()
+            payload, media_type, filename = await anyio.to_thread.run_sync(
+                _payload
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        encoded_filename = quote(filename, safe="")
+        return Response(
+            content=payload,
+            media_type=media_type,
+            headers={
+                "Content-Disposition": (
+                    f"inline; filename*=UTF-8''{encoded_filename}"
+                )
+            },
+        )
+
+    @router.get("/artifacts/{artifact_id}")
+    async def get_artifact_detail(
+        request: Request, artifact_id: str, workspace: str = "all"
+    ) -> JSONResponse:
+        service = _artifact_service(request.app.state.deps)
+
+        def _get():
+            return service.get_for_operator(
+                workspace_id=workspace, artifact_id=artifact_id
+            )
+
+        try:
+            _require_operator()
+            data = await anyio.to_thread.run_sync(_get)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
 
     # ------------------------------------------------------------------ #
     # Guardrails + explicit agent groups (migration 025): operator-only staging

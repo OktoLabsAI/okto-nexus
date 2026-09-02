@@ -7,6 +7,7 @@ import {
   Bot,
   Brain,
   CheckSquare,
+  Files,
   FolderOpen,
   KanbanSquare,
   KeyRound,
@@ -327,6 +328,50 @@ const SECTIONS: Section[] = [
           The navigation entry appears when <code>feature_memory</code> is on.
           Turning it off prevents agent reads and writes but keeps existing
           entries stored.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "artifacts",
+    title: "Artifacts",
+    icon: <Files size={14} />,
+    content: (
+      <>
+        <H>Agent deliverables</H>
+        <P>
+          Artifacts are files or structured text deliberately published by an
+          agent with <code>artifact_put</code>. Use the workspace, search and
+          type filters, then narrow the results by one or more producing agents
+          and a production date interval. Results are loaded in pages of 20.
+          Open a row to preview text, Markdown, HTML, JSON, images or PDFs and
+          download the original payload. Use the expand action in the right
+          detail panel for a large modal preview.
+        </P>
+        <H>Raw and Rich modes</H>
+        <P>
+          Expanded Markdown, HTML and JSON previews offer a <b>Rich</b> /{" "}
+          <b>Raw</b> toggle. Rich Markdown is rendered, Rich JSON becomes a
+          collapsible tree, and Rich HTML is sanitized and isolated without
+          scripts or external resources.
+        </P>
+        <H>Where payloads live</H>
+        <P>
+          Artifact bytes and free-form metadata are not stored in SQLite. The
+          default local adapter copies them below{" "}
+          <code>
+            ~/.okto_nexus/artifacts/&lt;workspace&gt;/&lt;agent&gt;/&lt;artifact-id&gt;
+          </code>
+          . SQLite keeps only the minimal catalog and audience fields needed
+          for search, quotas and authorization.
+        </P>
+        <H>Files are imported</H>
+        <P>
+          When an agent publishes a workspace path, Nexus copies that file into
+          managed artifact storage. The artifact therefore remains available if
+          the original workspace file is later moved or deleted. A different
+          adapter can implement the same storage port without changing the
+          application service.
         </P>
       </>
     ),

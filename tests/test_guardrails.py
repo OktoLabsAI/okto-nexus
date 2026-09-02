@@ -7,6 +7,7 @@ import json
 import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap, register_tools
+from okto_nexus.adapters.outbound.file.artifacts import LocalArtifactStore
 from okto_nexus.adapters.outbound.file.store import WorkspaceFileStore
 from okto_nexus.adapters.outbound.sqlite.artifacts_repo import SqliteArtifactRepo
 from okto_nexus.adapters.outbound.sqlite.events_repo import (
@@ -735,6 +736,7 @@ def test_write_paths_deny_before_persisting_rows_events_or_notifications(
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,
@@ -992,6 +994,7 @@ def test_artifact_path_reference_content_guardrail_denies_as_unevaluable(
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,
@@ -1044,6 +1047,7 @@ def test_artifact_metadata_target_on_path_reference_evaluates_without_inline_con
     artifacts = ArtifactService(
         connection_factory=migrated_factory,
         artifacts=SqliteArtifactRepo(clock),
+        artifact_store=LocalArtifactStore(tmp_config.home_dir / "artifacts"),
         workspaces=SqliteWorkspaceRepo(clock),
         files=WorkspaceFileStore(),
         clock=clock,

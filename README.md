@@ -19,14 +19,14 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.7` |
+| Package | `okto-nexus 0.1.8` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
 | MCP prompts | 0 |
-| Surface revision | 32 |
-| Database schema | 27 migrations, 34 tables |
-| Storage | local SQLite/WAL |
+| Surface revision | 33 |
+| Database schema | 28 migrations, 34 tables |
+| Storage | local SQLite/WAL catalog + adapter-backed artifact payloads |
 
 - PyPI: [pypi.org/project/okto-nexus](https://pypi.org/project/okto-nexus/)
 - Source: [github.com/OktoLabsAI/okto-nexus](https://github.com/OktoLabsAI/okto-nexus)
@@ -551,10 +551,19 @@ dependency is `COMPLETED`.
 
 ### Artifacts and `shared.md`
 
-Artifacts are either inline `text`/`json`/`markdown` or a workspace-contained
-file reference. Path containment is checked after canonical resolution;
-escapes return `PATH_OUTSIDE_WORKSPACE`. Inline content is bounded by
+Artifacts are published as `text`/`json`/`markdown`/`html` content or imported from a
+workspace-contained file. Path containment is checked after canonical
+resolution; escapes return `PATH_OUTSIDE_WORKSPACE`. Text content is bounded by
 `max_inline_bytes`.
+
+Payload bytes and free-form metadata do not live in SQLite. The database keeps
+only the minimal searchable and authorization catalog. The default local
+`ArtifactStore` adapter writes each payload and its `manifest.json` below
+`~/.okto_nexus/artifacts/<workspace>/<agent>/<artifact-id>/`. Imported files
+are copied into that managed location, so the artifact survives later changes
+to the original workspace file. The dashboard's **Artifacts** screen pages
+through the managed payload catalog, filters by one or more producing agents
+and a production date interval, and previews or downloads the selected payload.
 
 The publisher's effective outbound audience is frozen on the artifact. The
 same audience controls `artifact.created` visibility and `artifact_get`.
@@ -660,7 +669,7 @@ require a valid `session_id` and `session_secret` in both modes.
 | `okto-nexus://reference/tool-docs/events` | 2 |
 | `okto-nexus://reference/tool-docs/handoff` | 4 |
 | `okto-nexus://reference/tool-docs/identity` | 5 |
-| `okto-nexus://reference/tool-docs/artifacts` | 2 |
+| `okto-nexus://reference/tool-docs/artifacts` | 4 |
 | `okto-nexus://reference/governance` | 2 |
 | `okto-nexus://reference/hitl` | 2 |
 
@@ -696,7 +705,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.7 default surface:
+For the 0.1.8 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -964,10 +973,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.7
+uv build --out-dir dist/release-0.1.8
 uvx twine check \
-  dist/release-0.1.7/okto_nexus-0.1.7-py3-none-any.whl \
-  dist/release-0.1.7/okto_nexus-0.1.7.tar.gz
+  dist/release-0.1.8/okto_nexus-0.1.8-py3-none-any.whl \
+  dist/release-0.1.8/okto_nexus-0.1.8.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1103,7 +1112,21 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.7 — current
+### 0.1.8 — current
+
+Artifact storage and catalog release. The MCP contract is at surface revision
+33 and the latest database migration is 028.
+
+- Moved artifact payloads and free-form metadata out of SQLite into an
+  adapter-backed store, with a local filesystem adapter by default.
+- Imported path-based artifacts into managed storage so they remain available
+  independently of the original workspace file.
+- Added the Artifacts catalog with paginated producer/date filtering, detail
+  previews, expanded Raw/Rich rendering, and managed-payload downloads.
+- Added rendered metadata fields plus safe Rich previews for Markdown, JSON,
+  and HTML artifacts.
+
+### 0.1.7
 
 Dashboard usability and operator-interaction release. The MCP surface remains
 unchanged; the latest database migration is 027.

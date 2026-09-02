@@ -27,6 +27,7 @@ from dataclasses import dataclass
 from typing import Any, Iterable, Mapping, Protocol, Sequence, runtime_checkable
 
 from ..domain.approvals import Approval
+from ..domain.artifacts import StoredArtifactPayload
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
 from ..domain.guardrails import (
@@ -37,14 +38,13 @@ from ..domain.guardrails import (
     GuardrailRecord,
     GuardrailVersion,
 )
-from ..domain.policy import PolicyRecord, PolicyVersion
 from ..domain.models import (
     Agent,
     Artifact,
     CapabilityName,
     Channel,
-    Event,
     EphemeralPollToken,
+    Event,
     Handoff,
     Memory,
     Message,
@@ -55,6 +55,7 @@ from ..domain.models import (
     Task,
     Workspace,
 )
+from ..domain.policy import PolicyRecord, PolicyVersion
 
 # A concrete DB connection (``sqlite3.Connection`` in the adapter). Typed as
 # ``Any`` here to keep the application layer free of ``sqlite3``.
@@ -2366,7 +2367,7 @@ class HandoffRepo(Protocol):
 
 @runtime_checkable
 class ArtifactRepo(Protocol):
-    """Persistence for :class:`Artifact` rows (inline content or path refs)."""
+    """Minimal searchable catalog for externally stored artifact payloads."""
 
     def create(
         self,
@@ -2383,6 +2384,10 @@ class ArtifactRepo(Protocol):
         created_by: str | None = None,
         created_at: str | None = None,
         audience: list[Any] | None = None,
+        storage_path: str | None = None,
+        storage_kind: str | None = None,
+        filename: str | None = None,
+        media_type: str | None = None,
     ) -> Artifact:
         """Create an artifact, returning the stored row."""
         ...
@@ -2397,6 +2402,90 @@ class ArtifactRepo(Protocol):
         self, uow: UnitOfWork, *, workspace_id: str, artifact_type: str | None = None
     ) -> list[Artifact]:
         """List artifacts in a workspace, optionally filtered by type."""
+        ...
+
+    def list_all(
+        self, uow: UnitOfWork, *, artifact_type: str | None = None
+    ) -> list[Artifact]:
+        """List artifacts across workspaces for the operator dashboard."""
+        ...
+
+    def browse_catalog(
+        self,
+        uow: UnitOfWork,
+        *,
+        workspace_id: str | None,
+        artifact_type: str | None,
+        producer_ids: list[str],
+        created_from: str | None,
+        created_to: str | None,
+        query: str | None,
+        limit: int,
+        offset: int,
+    ) -> tuple[list[Artifact], int]:
+        """Page the operator catalog with producer/date/text filters."""
+        ...
+
+    def list_legacy(self, uow: UnitOfWork) -> list[Artifact]:
+        """List pre-external-storage rows that still carry a payload."""
+        ...
+
+    def set_external_storage(
+        self,
+        uow: UnitOfWork,
+        *,
+        artifact_id: str,
+        storage_path: str,
+        storage_kind: str,
+        filename: str,
+        media_type: str,
+        size_bytes: int,
+    ) -> None:
+        """Point a legacy row at managed storage and clear payload columns."""
+        ...
+
+
+@runtime_checkable
+class ArtifactStore(Protocol):
+    """Durable storage for artifact payloads and their free-form manifests.
+
+    This is deliberately separate from :class:`ArtifactRepo`: the repo is a
+    searchable authorization catalog, while this port owns the artifact bytes.
+    Concrete adapters may use a local directory, object storage, or another
+    durable medium without changing the application service.
+    """
+
+    def put(
+        self,
+        *,
+        workspace_id: str,
+        agent_id: str | None,
+        artifact_id: str,
+        artifact_type: str,
+        storage_kind: str,
+        name: str | None,
+        content: str | None,
+        source_path: str | None,
+        metadata: dict[str, Any],
+        created_at: str,
+    ) -> StoredArtifactPayload:
+        """Persist one payload and return its adapter-neutral descriptor."""
+        ...
+
+    def describe(self, storage_path: str) -> StoredArtifactPayload:
+        """Read the manifest associated with a stored payload."""
+        ...
+
+    def read_text(self, storage_path: str) -> str:
+        """Read a UTF-8 payload."""
+        ...
+
+    def read_bytes(self, storage_path: str) -> bytes:
+        """Read the payload as bytes."""
+        ...
+
+    def delete(self, storage_path: str) -> None:
+        """Remove the artifact directory used for rollback compensation."""
         ...
 
 
@@ -2453,6 +2542,7 @@ class Repos:
     tasks: TaskRepo | None = None
     handoffs: HandoffRepo | None = None
     artifacts: ArtifactRepo | None = None
+    artifact_store: ArtifactStore | None = None
     files: FileStore | None = None
     presets: PresetRepo | None = None
     message_vectors: MessageVectorStore | None = None

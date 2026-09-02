@@ -6,7 +6,7 @@ is strictly side-effect free: stdlib only, never ``sqlite3`` nor ``mcp``
 persistence live in the outbound adapters; here we only answer pure questions:
 
 * :func:`normalize_artifact_type` - is ``artifact_type`` in the closed
-  whitelist ``{file, text, json, markdown}`` (else ``VALIDATION_ERROR``)?
+  whitelist ``{file, text, json, markdown, html}`` (else ``VALIDATION_ERROR``)?
 * :func:`ensure_within_inline_limit` - is inline ``content`` within the 64 KB
   (``65536`` bytes UTF-8, *inclusive*) ceiling (else ``CONTENT_TOO_LARGE``)?
 * :func:`ensure_well_formed_json` - does a ``json`` artifact's ``content``
@@ -18,6 +18,7 @@ codes; a value that is simply absent is handled by the caller.
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import json
 from typing import Any
 
@@ -30,13 +31,34 @@ __all__ = [
     "STORED_PATH",
     "ARTIFACT_STREAM",
     "ARTIFACT_CREATED_EVENT",
+    "StoredArtifactPayload",
     "normalize_artifact_type",
     "ensure_within_inline_limit",
     "ensure_well_formed_json",
 ]
 
+
+@dataclass(frozen=True, slots=True)
+class StoredArtifactPayload:
+    """Descriptor returned by the artifact-payload storage port.
+
+    ``storage_path`` is relative to the adapter-owned root.  Application code
+    never needs to know whether that root is a local directory, an object-store
+    bucket, or another implementation.
+    """
+
+    storage_path: str
+    storage_kind: str
+    filename: str
+    media_type: str
+    size_bytes: int
+    metadata: dict[str, Any]
+    source_path: str | None = None
+
 #: Closed whitelist of accepted artifact types (BR3).
-ARTIFACT_TYPES: frozenset[str] = frozenset({"file", "text", "json", "markdown"})
+ARTIFACT_TYPES: frozenset[str] = frozenset(
+    {"file", "text", "json", "markdown", "html"}
+)
 
 #: ``stored`` discriminators surfaced in the envelopes (derived, not a column).
 STORED_INLINE = "inline"
@@ -57,7 +79,7 @@ def normalize_artifact_type(value: Any) -> str:
 
     Matching is case-insensitive; the canonical lowercase token is returned.
     Raises ``VALIDATION_ERROR`` for a missing/blank type or one outside
-    ``{file, text, json, markdown}`` (FR2 / BR3).
+    ``{file, text, json, markdown, html}`` (FR2 / BR3).
     """
     if not isinstance(value, str) or not value.strip():
         raise OktoNexusError(

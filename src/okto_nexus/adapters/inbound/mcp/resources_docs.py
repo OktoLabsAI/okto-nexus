@@ -171,7 +171,7 @@ add_resource(
     slug="tool-docs/inbox",
     name="Tool docs - inbox",
     description="Full reference for the per-recipient inbox tools (pull/ack/extend/peek/count/history/message_status).",
-    version="2",
+    version="4",
     body=f"""\
 The inbox is GLOBAL (keyed by agent_id): a direct message reaches you regardless
 of which workspace it was sent in. At-least-once: pulled messages are leased; if
@@ -519,12 +519,13 @@ add_resource(
     version="2",
     body="""\
 # artifact_put
-Register a file/text/json/markdown artifact in the resolved workspace. Provide
-``path`` (register by REFERENCE - must stay within the workspace root; only the
-path + metadata are stored, never the bytes) OR ``content`` (inline UTF-8,
-bounded by max_inline_bytes; json must be well-formed) - at least one is
-REQUIRED. ``artifact_type`` one of: file, text, json, markdown (the type is a
-label; inline-vs-reference is decided by content-vs-path). Emits
+Register a file/text/json/markdown/html artifact in the resolved workspace. Provide
+``path`` (must stay within the workspace root; the file is copied into managed
+artifact storage) OR ``content`` (UTF-8, bounded by max_inline_bytes; json must
+be well-formed) - at least one is REQUIRED. ``artifact_type`` one of: file,
+text, json, markdown, html. Payload bytes and free-form metadata are stored through
+the configured ArtifactStore adapter, not in SQLite. The default local adapter
+uses ``~/.okto_nexus/artifacts/<workspace>/<agent>/<artifact-id>/``. Emits
 ``artifact.created``.
 
 # artifact_get
