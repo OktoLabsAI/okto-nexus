@@ -19,13 +19,13 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.6` |
+| Package | `okto-nexus 0.1.7` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
 | MCP prompts | 0 |
 | Surface revision | 32 |
-| Database schema | 26 migrations, 34 tables |
+| Database schema | 27 migrations, 34 tables |
 | Storage | local SQLite/WAL |
 
 - PyPI: [pypi.org/project/okto-nexus](https://pypi.org/project/okto-nexus/)
@@ -358,6 +358,8 @@ The bundled dashboard provides:
   outcomes, receipts, and optional semantic search;
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,
   dependency state, verification, cancellation, and results;
+- **Meta-harness** — an OpenAI-style chat for private or broadcast messages
+  and handoffs, with agent filtering and replies/results in one timeline;
 - **Events** — filtered event history, trace navigation, and live SSE updates;
 - **Memory** — durable memory browse/search/curation when `feature_memory` is
   enabled;
@@ -694,7 +696,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.6 default surface:
+For the 0.1.7 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -962,10 +964,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.6
+uv build --out-dir dist/release-0.1.7
 uvx twine check \
-  dist/release-0.1.6/okto_nexus-0.1.6-py3-none-any.whl \
-  dist/release-0.1.6/okto_nexus-0.1.6.tar.gz
+  dist/release-0.1.7/okto_nexus-0.1.7-py3-none-any.whl \
+  dist/release-0.1.7/okto_nexus-0.1.7.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -987,7 +989,7 @@ src/okto_nexus/
       telemetry/ tokenizer/ metrics support
   application/              use cases and ports
   domain/                   entities, routing, state machines, policies
-  migrations/               001 through 026
+  migrations/               001 through 027
   testing/                  reusable test/replay harnesses
 frontend/                    React dashboard source
 tests/                       unit, contract, integration, replay tests
@@ -1101,7 +1103,25 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.6 — current
+### 0.1.7 — current
+
+Dashboard usability and operator-interaction release. The MCP surface remains
+unchanged; the latest database migration is 027.
+
+- Added the Meta-harness chat with independent Message/Handoff and
+  Private/Broadcast controls.
+- Combined outgoing turns, incoming agent messages, and handoff completion or
+  rejection outcomes in a live, agent-filterable timeline.
+- Rendered structured chat content as readable labels and lists instead of raw
+  JSON.
+- Reworked Guardrails group composition and rule authoring, including agent
+  auto-completion, capability-scoped assignments, regex assistance, and
+  stricter validation.
+- Added completed-agent responses and rejection reasons to Handoff cards and
+  details.
+- Removed nested page scrolling from the dashboard shell.
+
+### 0.1.6
 
 Startup compatibility maintenance release. The MCP contract and database
 schema are unchanged: surface revision remains 32 and the latest migration

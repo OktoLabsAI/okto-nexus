@@ -139,6 +139,10 @@ export interface GraphHandoff {
   acceptance_criteria?: string[];
   verify_by?: VerifyBy;
   verification_feedback?: string;
+  // Terminal outcome supplied by the claimant. Omitted while no outcome is
+  // stored so older/non-terminal rows keep their compact response shape.
+  result?: string;
+  rejected_reason?: string;
   // Dependency edges (R-I5): present ONLY on handoffs created with
   // depends_on (same self-gating pattern - the UI never consults the flag).
   depends_on?: string[];
@@ -231,10 +235,9 @@ export interface CapabilityRow {
 
 // One agent owning a capability, as reported by the 409 CAPABILITY_IN_USE
 // details payload (and recomputable client-side from the agents list).
-export interface CapabilityUse {
-  agent_id: string;
-  kind: "capabilities";
-}
+export type CapabilityUse =
+  | { agent_id: string; kind: "capabilities" }
+  | { assignment_id: string; kind: "guardrail_assignment" };
 
 export interface CapabilityInUseDetails {
   capability: string;
@@ -337,7 +340,8 @@ export interface AgentBindings {
 }
 
 // Communication guardrails (migration 025): operator-managed content rules
-// attached globally or to explicit agent groups. Runtime writes emit only
+// attached globally, to explicit agent groups, or to agents that announce a
+// registered capability. Runtime writes emit only
 // scrubbed guardrail.denied events when enforce-mode blocks a write.
 export type GuardrailSurface = "message" | "artifact" | "handoff";
 export type GuardrailVersionStatus =
@@ -346,7 +350,7 @@ export type GuardrailVersionStatus =
   | "deprecated"
   | "archived";
 export type GuardrailEvaluatorKind = "deterministic" | "llm";
-export type GuardrailScopeKind = "global" | "agent_group";
+export type GuardrailScopeKind = "global" | "agent_group" | "capability";
 export type GuardrailVersionMode = "latest" | "pinned";
 export type GuardrailMode = "audit" | "warn" | "enforce";
 
@@ -393,6 +397,7 @@ export interface GuardrailAssignment {
   assignment_id: string;
   scope_kind: GuardrailScopeKind;
   group_id: string | null;
+  capability: string | null;
   guardrail_id: string;
   version_mode: GuardrailVersionMode;
   pinned_version: number | null;
@@ -555,6 +560,19 @@ export interface SteeringResult {
   warning?: string;
 }
 
+export type MetaHarnessKind = "message" | "handoff";
+export type MetaHarnessAudience = "private" | "broadcast";
+
+export interface MetaHarnessSendResult extends SteeringResult {
+  kind: MetaHarnessKind;
+  audience: MetaHarnessAudience;
+  handoff_id?: string;
+  workspace_id?: string;
+  created_at?: string;
+  eligible_count?: number;
+  notified?: string[];
+}
+
 export interface PresetRow {
   preset_id: string;
   name: string;
@@ -595,6 +613,7 @@ export interface MessageRow {
   from_agent_id: string;
   created_at: string;
   subject: string | null;
+  target?: RoutingTarget | null;
   preview: string;
   body?: string; // full body, present only with include_body=true
   // Trajectory correlation (R-I1): non-null only when the feature stamped one.
@@ -1347,6 +1366,7 @@ export const api = {
   createGuardrailAssignment: (body: {
     scope_kind: GuardrailScopeKind;
     group_id?: string | null;
+    capability?: string | null;
     guardrail_id: string;
     version_mode?: GuardrailVersionMode;
     pinned_version?: number | null;
@@ -1487,6 +1507,18 @@ export const api = {
         subject: subject || undefined,
         body,
       }),
+    }),
+  metaHarnessSend: (body: {
+    workspace: string;
+    kind: MetaHarnessKind;
+    audience: MetaHarnessAudience;
+    to_agent_id?: string;
+    subject?: string;
+    body: string;
+  }) =>
+    call<MetaHarnessSendResult>("/api/v1/meta-harness/send", {
+      method: "POST",
+      body: JSON.stringify(body),
     }),
   regenerateKey: (agentId: string) =>
     call<{ agent_id: string; api_key: string; rotated_at: string }>(

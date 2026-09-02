@@ -808,7 +808,7 @@ class GuardrailRepo(Protocol):
 
 @runtime_checkable
 class GuardrailAssignmentRepo(Protocol):
-    """Persistence for global/group guardrail assignments."""
+    """Persistence for global/group/capability guardrail assignments."""
 
     def create(
         self,
@@ -818,9 +818,10 @@ class GuardrailAssignmentRepo(Protocol):
         scope_kind: str,
         group_id: str | None,
         guardrail_id: str,
+        capability: str | None = None,
         version_mode: str = "latest",
         pinned_version: int | None = None,
-        mode: str = "enforce",
+        mode: str = "audit",
         priority: int = 100,
         enabled: bool = True,
         created_at: str | None = None,
@@ -844,6 +845,12 @@ class GuardrailAssignmentRepo(Protocol):
         """Return assignments referencing a group."""
         ...
 
+    def list_for_capability(
+        self, uow: UnitOfWork, *, capability: str
+    ) -> list[GuardrailAssignment]:
+        """Return assignments referencing a registered capability."""
+        ...
+
     def list_for_guardrail(
         self, uow: UnitOfWork, *, guardrail_id: str
     ) -> list[GuardrailAssignment]:
@@ -853,7 +860,7 @@ class GuardrailAssignmentRepo(Protocol):
     def list_for_agent(
         self, uow: UnitOfWork, *, agent_id: str
     ) -> list[GuardrailAssignment]:
-        """Return global plus group assignments applicable to an agent."""
+        """Return global, group and capability assignments for an agent."""
         ...
 
     def effective_for_agent(

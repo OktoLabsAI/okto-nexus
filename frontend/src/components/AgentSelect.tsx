@@ -12,12 +12,16 @@ export function AgentSelect({
   agents,
   label,
   placeholder = "any agent",
+  allowEmpty = true,
+  menuPlacement = "bottom",
 }: {
   value: string;
   onChange: (id: string) => void;
   agents: AgentRow[];
   label?: string;
   placeholder?: string;
+  allowEmpty?: boolean;
+  menuPlacement?: "top" | "bottom";
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -51,6 +55,8 @@ export function AgentSelect({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="listbox"
         data-testid={`agent-select${label ? `-${label.toLowerCase()}` : ""}`}
         className="flex items-center gap-1.5 rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs min-w-[150px] focus:outline-none focus:ring-2 focus:ring-accent-500/40"
       >
@@ -62,7 +68,7 @@ export function AgentSelect({
         >
           {value || placeholder}
         </span>
-        {value ? (
+        {value && allowEmpty ? (
           <X
             size={12}
             className="ml-auto shrink-0 text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"
@@ -77,7 +83,11 @@ export function AgentSelect({
       </button>
 
       {open && (
-        <div className="absolute z-30 mt-1 w-64 max-h-72 overflow-hidden flex flex-col rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 shadow-xl">
+        <div
+          className={`absolute z-30 w-64 max-h-72 overflow-hidden flex flex-col rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 shadow-xl ${
+            menuPlacement === "top" ? "bottom-full mb-1" : "top-full mt-1"
+          }`}
+        >
           <div className="relative p-1.5 border-b border-surface-100 dark:border-surface-700">
             <Search
               size={12}
@@ -92,12 +102,14 @@ export function AgentSelect({
             />
           </div>
           <div className="overflow-y-auto">
-            <button
-              onClick={() => pick("")}
-              className="w-full text-left px-3 py-1.5 text-xs text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700"
-            >
-              (any)
-            </button>
+            {allowEmpty && (
+              <button
+                onClick={() => pick("")}
+                className="w-full text-left px-3 py-1.5 text-xs text-surface-400 hover:bg-surface-50 dark:hover:bg-surface-700"
+              >
+                (any)
+              </button>
+            )}
             {filtered.map((a) => (
               <button
                 key={a.agent_id}

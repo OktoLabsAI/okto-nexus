@@ -4,6 +4,7 @@
 import { type ReactNode, useState } from "react";
 import {
   Activity,
+  Bot,
   KanbanSquare,
   KeyRound,
   MessagesSquare,
@@ -217,6 +218,28 @@ const SECTIONS: Section[] = [
           Columns Open → Claimed → Completed / Rejected / Cancelled. The
           operator can cancel Open/Claimed handoffs (confirm-guarded) — they
           leave the pool immediately.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "meta-harness",
+    title: "Meta-harness",
+    icon: <Bot size={14} />,
+    content: (
+      <>
+        <H>One conversation surface</H>
+        <P>
+          Meta-harness combines messages, agent replies, handoff requests and
+          terminal handoff results in one chronological chat. Filter by one
+          agent or keep the complete team conversation visible.
+        </P>
+        <H>Delivery and audience</H>
+        <P>
+          Choose <b>Message</b> or <b>Handoff</b>, then choose <b>Private</b>{" "}
+          for one selected agent or <b>Broadcast</b> for the workspace. A
+          broadcast handoff is single-winner work: the first eligible agent to
+          claim it becomes responsible for the result.
         </P>
       </>
     ),

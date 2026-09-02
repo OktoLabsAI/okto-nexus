@@ -87,6 +87,19 @@ function verifierLabel(h: GraphHandoff): string {
   return h.from_agent_id ?? "creator";
 }
 
+function outcomeText(value: string): string {
+  if (!value) return "(empty response)";
+  try {
+    return JSON.stringify(JSON.parse(value), null, 2);
+  } catch {
+    return value;
+  }
+}
+
+function outcomePreview(value: string): string {
+  return outcomeText(value).replace(/\s+/g, " ").trim();
+}
+
 function HandoffDetailModal({
   handoff,
   onClose,
@@ -204,10 +217,38 @@ function HandoffDetailModal({
             </section>
           )}
 
+          {"result" in handoff && handoff.result != null && (
+            <section
+              className="rounded-lg border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 p-3"
+              data-testid="handoff-agent-response"
+            >
+              <h4 className="font-semibold text-emerald-800 dark:text-emerald-200 mb-2">
+                Agent response
+              </h4>
+              <pre className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-[11px] font-mono text-emerald-900 dark:text-emerald-100">
+                {outcomeText(handoff.result)}
+              </pre>
+            </section>
+          )}
+
+          {"rejected_reason" in handoff && handoff.rejected_reason != null && (
+            <section
+              className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 p-3"
+              data-testid="handoff-rejection-reason"
+            >
+              <h4 className="font-semibold text-red-800 dark:text-red-200 mb-1">
+                Rejection reason
+              </h4>
+              <p className="whitespace-pre-wrap break-words text-red-900 dark:text-red-100">
+                {handoff.rejected_reason || "(no reason provided)"}
+              </p>
+            </section>
+          )}
+
           {"payload" in handoff && (
             <section>
               <h4 className="font-semibold text-surface-800 dark:text-surface-100 mb-2">
-                Payload
+                Original request (payload)
               </h4>
               <pre className="rounded-lg bg-surface-100 dark:bg-surface-950 border border-surface-200 dark:border-surface-800 p-3 overflow-auto max-h-56 text-[11px] font-mono text-surface-700 dark:text-surface-200">
                 {JSON.stringify(handoff.payload ?? null, null, 2)}
@@ -544,8 +585,33 @@ export function HandoffsView({
                         </div>
                       )}
 
+                      {"result" in h && h.result != null && (
+                        <div
+                          className="mt-1.5 rounded border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 px-2 py-1.5 text-[11px] text-emerald-800 dark:text-emerald-200"
+                          data-testid={`handoff-result-${h.handoff_id}`}
+                        >
+                          <div className="line-clamp-3 break-words">
+                            <b>Agent response:</b> {outcomePreview(h.result)}
+                          </div>
+                        </div>
+                      )}
+
+                      {"rejected_reason" in h && h.rejected_reason != null && (
+                        <div
+                          className="mt-1.5 rounded border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20 px-2 py-1.5 text-[11px] text-red-800 dark:text-red-200"
+                          data-testid={`handoff-rejection-${h.handoff_id}`}
+                        >
+                          <div className="line-clamp-3 break-words">
+                            <b>Rejection reason:</b>{" "}
+                            {h.rejected_reason || "(no reason provided)"}
+                          </div>
+                        </div>
+                      )}
+
                       {((h.acceptance_criteria?.length ?? 0) > 2 ||
-                        (h.verification_feedback?.length ?? 0) > 180) && (
+                        (h.verification_feedback?.length ?? 0) > 180 ||
+                        (h.result?.length ?? 0) > 180 ||
+                        (h.rejected_reason?.length ?? 0) > 180) && (
                         <div className="mt-1.5 text-[10px] font-medium text-accent-600 dark:text-accent-400">
                           Open card for complete details →
                         </div>

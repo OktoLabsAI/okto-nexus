@@ -14,6 +14,7 @@ admin APIs, MCP tools and dashboard surfaces live in outer layers.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any
@@ -32,6 +33,7 @@ __all__ = [
     "SURFACES",
     "SCOPE_KIND_GLOBAL",
     "SCOPE_KIND_AGENT_GROUP",
+    "SCOPE_KIND_CAPABILITY",
     "SCOPE_KINDS",
     "VERSION_MODE_LATEST",
     "VERSION_MODE_PINNED",
@@ -84,7 +86,10 @@ SURFACES: frozenset[str] = frozenset({"message", "artifact", "handoff"})
 
 SCOPE_KIND_GLOBAL = "global"
 SCOPE_KIND_AGENT_GROUP = "agent_group"
-SCOPE_KINDS: frozenset[str] = frozenset({SCOPE_KIND_GLOBAL, SCOPE_KIND_AGENT_GROUP})
+SCOPE_KIND_CAPABILITY = "capability"
+SCOPE_KINDS: frozenset[str] = frozenset(
+    {SCOPE_KIND_GLOBAL, SCOPE_KIND_AGENT_GROUP, SCOPE_KIND_CAPABILITY}
+)
 
 VERSION_MODE_LATEST = "latest"
 VERSION_MODE_PINNED = "pinned"
@@ -106,6 +111,15 @@ _DETERMINISTIC_KINDS: frozenset[str] = frozenset(
         "token_limit",
     }
 )
+_RUNTIME_DETERMINISTIC_KINDS: frozenset[str] = frozenset(
+    {"regex", "keyword_blocklist", "pii_detection", "token_limit"}
+)
+_MAX_PATTERN_LENGTH = 1000
+_SURFACE_FIELD_ROOTS: dict[str, frozenset[str]] = {
+    "message": frozenset({"subject", "body"}),
+    "artifact": frozenset({"artifact_type", "name", "content", "metadata", "path"}),
+    "handoff": frozenset({"payload", "acceptance_criteria"}),
+}
 
 RESOLUTION_RESOLVED = "resolved"
 RESOLUTION_CONFIG_UNAVAILABLE = "config_unavailable"
@@ -174,11 +188,12 @@ class GuardrailVersion:
 
 @dataclass(frozen=True)
 class GuardrailAssignment:
-    """One assignment of a guardrail to global or group scope."""
+    """One assignment of a guardrail to global, group or capability scope."""
 
     assignment_id: str
     scope_kind: str
     group_id: str | None
+    capability: str | None
     guardrail_id: str
     version_mode: str
     pinned_version: int | None
@@ -255,6 +270,7 @@ def _string_tuple(
     field: str,
     supported: frozenset[str] | None = None,
     max_item_len: int = _FIELD_TARGET_MAX,
+    lowercase: bool = True,
 ) -> tuple[str, ...]:
     if not (
         isinstance(value, Sequence)
@@ -270,7 +286,8 @@ def _string_tuple(
     for raw in value:
         item = _text(raw, field=field, required=True, max_len=max_item_len)
         assert item is not None  # for type-checkers; required=True above
-        item = item.lower()
+        if lowercase:
+            item = item.lower()
         if supported is not None and item not in supported:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -352,23 +369,110 @@ def validate_guardrail_version_form(
                 {"kind": config.get("kind"), "supported": sorted(_DETERMINISTIC_KINDS)},
             )
         config["kind"] = kind
+        if normalised_status == VERSION_STATUS_ACTIVE and kind not in _RUNTIME_DETERMINISTIC_KINDS:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"{kind} guardrails cannot be activated because the runtime evaluator is unavailable.",
+                {"kind": kind, "supported_active": sorted(_RUNTIME_DETERMINISTIC_KINDS)},
+            )
+        config = _validate_deterministic_config(kind, config)
+    elif normalised_status == VERSION_STATUS_ACTIVE:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "LLM guardrails cannot be activated because the runtime evaluator is unavailable.",
+            {"evaluator_kind": normalised_kind},
+        )
+    normalised_surfaces = _string_tuple(
+        surfaces, field="surfaces", supported=SURFACES
+    )
+    normalised_targets = _string_tuple(field_targets, field="field_targets")
+    _validate_field_targets(normalised_surfaces, normalised_targets)
     return {
         "status": normalised_status,
         "evaluator_kind": normalised_kind,
         "evaluator_config": config,
-        "surfaces": _string_tuple(surfaces, field="surfaces", supported=SURFACES),
-        "field_targets": _string_tuple(field_targets, field="field_targets"),
+        "surfaces": normalised_surfaces,
+        "field_targets": normalised_targets,
     }
+
+
+def _validate_deterministic_config(kind: str, config: dict[str, Any]) -> dict[str, Any]:
+    """Validate evaluator-specific payloads before a version can be stored."""
+
+    if kind in {"regex", "keyword_blocklist"}:
+        field = "patterns" if kind == "regex" else "keywords"
+        values = _string_tuple(
+            config.get(field),
+            field=f"evaluator_config.{field}",
+            max_item_len=_MAX_PATTERN_LENGTH,
+            lowercase=False,
+        )
+        if kind == "regex":
+            for index, pattern in enumerate(values, start=1):
+                try:
+                    re.compile(pattern)
+                except re.error as exc:
+                    raise OktoNexusError(
+                        ErrorCode.VALIDATION_ERROR,
+                        f"Invalid regular expression at position {index}: {exc}.",
+                        {"field": field, "index": index - 1, "pattern": pattern},
+                    ) from exc
+        config[field] = list(values)
+        if kind == "regex" and "ignore_case" in config and not isinstance(
+            config["ignore_case"], bool
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "evaluator_config.ignore_case must be true or false.",
+                {"ignore_case": config["ignore_case"]},
+            )
+    elif kind == "token_limit":
+        limit = config.get("max_tokens")
+        if isinstance(limit, bool) or not isinstance(limit, int) or limit < 0:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "evaluator_config.max_tokens must be an integer greater than or equal to zero.",
+                {"max_tokens": limit},
+            )
+    return config
+
+
+def _validate_field_targets(
+    surfaces: Sequence[str], field_targets: Sequence[str]
+) -> None:
+    """Require meaningful fields for every selected communication surface."""
+
+    roots = {target.split(".", 1)[0] for target in field_targets}
+    allowed = set().union(*(_SURFACE_FIELD_ROOTS[surface] for surface in surfaces))
+    unsupported = sorted(roots - allowed)
+    if unsupported:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"field_targets contains unsupported field(s): {', '.join(unsupported)}.",
+            {"unsupported": unsupported, "supported": sorted(allowed)},
+        )
+    missing = [
+        surface
+        for surface in surfaces
+        if roots.isdisjoint(_SURFACE_FIELD_ROOTS[surface])
+    ]
+    if missing:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "Every selected surface must have at least one compatible field target.",
+            {"surfaces_without_fields": missing},
+        )
 
 
 def validate_guardrail_assignment_form(
     *,
     scope_kind: Any,
     group_id: Any = None,
+    capability: Any = None,
     guardrail_id: Any,
     version_mode: Any = VERSION_MODE_LATEST,
     pinned_version: Any = None,
-    mode: Any = ENFORCEMENT_MODE_ENFORCE,
+    mode: Any = ENFORCEMENT_MODE_AUDIT,
     priority: Any = 100,
     enabled: Any = True,
 ) -> dict[str, Any]:
@@ -381,11 +485,23 @@ def validate_guardrail_assignment_form(
         required=normalised_scope == SCOPE_KIND_AGENT_GROUP,
         max_len=_NAME_MAX,
     )
-    if normalised_scope == SCOPE_KIND_GLOBAL and normalised_group is not None:
+    normalised_capability = _text(
+        capability,
+        field="capability",
+        required=normalised_scope == SCOPE_KIND_CAPABILITY,
+        max_len=_NAME_MAX,
+    )
+    if normalised_scope != SCOPE_KIND_AGENT_GROUP and normalised_group is not None:
         raise OktoNexusError(
             ErrorCode.VALIDATION_ERROR,
-            "global guardrail assignments must not set group_id.",
+            f"{normalised_scope} guardrail assignments must not set group_id.",
             {"scope_kind": normalised_scope, "group_id": group_id},
+        )
+    if normalised_scope != SCOPE_KIND_CAPABILITY and normalised_capability is not None:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"{normalised_scope} guardrail assignments must not set capability.",
+            {"scope_kind": normalised_scope, "capability": capability},
         )
     normalised_guardrail = _text(
         guardrail_id,
@@ -440,6 +556,7 @@ def validate_guardrail_assignment_form(
     return {
         "scope_kind": normalised_scope,
         "group_id": normalised_group,
+        "capability": normalised_capability,
         "guardrail_id": normalised_guardrail,
         "version_mode": normalised_version_mode,
         "pinned_version": pin,

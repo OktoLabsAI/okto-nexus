@@ -9,7 +9,7 @@ untouched by async concerns (rule BR2). Responses use the documented
 from __future__ import annotations
 
 import importlib.metadata
-from typing import Any
+from typing import Any, Literal
 
 import anyio.to_thread
 from fastapi import APIRouter, Request
@@ -290,6 +290,22 @@ class SteeringBody(BaseModel):
     body: str = Field(min_length=1)
 
 
+class MetaHarnessSendBody(BaseModel):
+    """One operator-authored turn from the dashboard Meta-harness.
+
+    ``kind`` describes the durable primitive while ``audience`` describes its
+    routing.  Keeping those dimensions independent avoids the ambiguous UI
+    where "private" and "handoff" looked like competing concepts.
+    """
+
+    workspace: str = Field(min_length=1)
+    kind: Literal["message", "handoff"]
+    audience: Literal["private", "broadcast"]
+    to_agent_id: str | None = Field(default=None, min_length=1)
+    subject: str | None = None
+    body: str = Field(min_length=1)
+
+
 class VerifyHandoffBody(BaseModel):
     # Grammar (pass|fail lowercase, feedback only with fail, <=2000 chars) is
     # the domain's validate_verdict - the route just forwards; violations map
@@ -304,7 +320,9 @@ def _tag_service(deps) -> TagCatalogService:
 
 def _capability_service(deps) -> CapabilityCatalogService:
     return CapabilityCatalogService(
-        catalog=deps.repos.capability_catalog, agents=deps.repos.agents
+        catalog=deps.repos.capability_catalog,
+        agents=deps.repos.agents,
+        guardrail_assignments=deps.repos.guardrail_assignments,
     )
 
 
@@ -383,6 +401,7 @@ _GUARDRAIL_VERSION_STATUS_FIELDS = {"status"}
 _GUARDRAIL_ASSIGNMENT_FIELDS = {
     "scope_kind",
     "group_id",
+    "capability",
     "guardrail_id",
     "version_mode",
     "pinned_version",
@@ -400,6 +419,7 @@ def _guardrail_admin_service(deps) -> GuardrailAdminService:
         guardrails=deps.repos.guardrails,
         assignments=deps.repos.guardrail_assignments,
         agents=deps.repos.agents,
+        capability_catalog=deps.repos.capability_catalog,
         events=deps.repos.events,
         max_denial_limit=deps.config.max_event_limit,
     )
@@ -1865,10 +1885,11 @@ def build_router() -> APIRouter:
             return service.create_assignment(
                 scope_kind=body.get("scope_kind"),
                 group_id=body.get("group_id"),
+                capability=body.get("capability"),
                 guardrail_id=body.get("guardrail_id"),
                 version_mode=body.get("version_mode", "latest"),
                 pinned_version=body.get("pinned_version"),
-                mode=body.get("mode", "enforce"),
+                mode=body.get("mode", "audit"),
                 priority=body.get("priority", 100),
                 enabled=body.get("enabled", True),
             )
@@ -1884,6 +1905,7 @@ def build_router() -> APIRouter:
     async def list_guardrail_assignments(
         request: Request,
         group_id: str | None = None,
+        capability: str | None = None,
         guardrail_id: str | None = None,
         agent_id: str | None = None,
     ) -> JSONResponse:
@@ -1893,6 +1915,7 @@ def build_router() -> APIRouter:
             items = await anyio.to_thread.run_sync(
                 lambda: service.list_assignments(
                     group_id=group_id,
+                    capability=capability,
                     guardrail_id=guardrail_id,
                     agent_id=agent_id,
                 )
@@ -2634,6 +2657,75 @@ def build_router() -> APIRouter:
                 body=body.body,
                 target={"strategy": "direct", "agent_id": body.to_agent_id},
             )
+
+        try:
+            result = await anyio.to_thread.run_sync(_send)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.post("/meta-harness/send")
+    async def meta_harness_send(
+        request: Request, body: MetaHarnessSendBody
+    ) -> JSONResponse:
+        """Send one Meta-harness turn through the normal Nexus use cases.
+
+        This is an operator convenience surface, not a privileged transport:
+        permissions, communication scope, policies, guardrails and HITL are
+        evaluated exactly as they are for MCP-originated work.
+        """
+
+        deps = request.app.state.deps
+        try:
+            _require_operator()
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+        def _send():
+            if body.audience == "private" and not body.to_agent_id:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "to_agent_id is required for a private Meta-harness turn.",
+                    {"audience": body.audience},
+                )
+
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                ws = deps.repos.workspaces.get(uow, body.workspace)
+            if ws is None or not ws.root_realpath:
+                raise OktoNexusError(
+                    ErrorCode.NOT_FOUND,
+                    f"workspace '{body.workspace}' is not registered.",
+                    {"workspace": body.workspace},
+                )
+
+            target = (
+                {"strategy": "direct", "agent_id": body.to_agent_id}
+                if body.audience == "private"
+                else {"strategy": "broadcast"}
+            )
+            if body.kind == "message":
+                result = _build_message_service(deps).create_message(
+                    project_root=ws.root_realpath,
+                    from_agent_id=OPERATOR_AGENT_ID,
+                    subject=body.subject or "Meta-harness message",
+                    body=body.body,
+                    target=target,
+                )
+            else:
+                result = _build_handoff_service(deps).handoff_create(
+                    project_root=ws.root_realpath,
+                    from_agent_id=OPERATOR_AGENT_ID,
+                    target=target,
+                    visibility=(
+                        "private" if body.audience == "private" else "eligible"
+                    ),
+                    payload={
+                        "kind": "meta_harness.request",
+                        "subject": body.subject or "Meta-harness handoff",
+                        "body": body.body,
+                    },
+                )
+            return {"kind": body.kind, "audience": body.audience, **result}
 
         try:
             result = await anyio.to_thread.run_sync(_send)

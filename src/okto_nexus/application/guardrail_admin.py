@@ -19,6 +19,7 @@ from ..domain.guardrails import (
     GuardrailAssignment,
     GuardrailRecord,
     GuardrailVersion,
+    VERSION_STATUS_ACTIVE,
     validate_group_header_form,
     validate_guardrail_assignment_form,
     validate_guardrail_header_form,
@@ -29,6 +30,7 @@ from .guardrails import GUARDRAIL_DENIED_EVENT, GUARDRAIL_STREAM
 from .ports import (
     AgentGroupRepo,
     AgentRepo,
+    CapabilityCatalogRepo,
     ConnectionFactory,
     EventRepo,
     GuardrailAssignmentRepo,
@@ -115,6 +117,7 @@ def _assignment(record: GuardrailAssignment) -> dict[str, Any]:
         "assignment_id": record.assignment_id,
         "scope_kind": record.scope_kind,
         "group_id": record.group_id,
+        "capability": record.capability,
         "guardrail_id": record.guardrail_id,
         "version_mode": record.version_mode,
         "pinned_version": record.pinned_version,
@@ -182,6 +185,7 @@ class GuardrailAdminService:
         guardrails: GuardrailRepo,
         assignments: GuardrailAssignmentRepo,
         agents: AgentRepo,
+        capability_catalog: CapabilityCatalogRepo,
         events: EventRepo,
         max_denial_limit: int = 1000,
     ) -> None:
@@ -190,6 +194,7 @@ class GuardrailAdminService:
         self._guardrails = guardrails
         self._assignments = assignments
         self._agents = agents
+        self._capability_catalog = capability_catalog
         self._events = events
         self._max_denial_limit = int(max_denial_limit)
 
@@ -408,6 +413,26 @@ class GuardrailAdminService:
         ver = self._positive_int(version, field="version")
         with self._cf.unit_of_work() as uow:
             self._require_guardrail(uow, guardrail_id=gid)
+            existing = self._guardrails.get_version(
+                uow, guardrail_id=gid, version=ver
+            )
+            if existing is None:
+                raise OktoNexusError(
+                    ErrorCode.NOT_FOUND,
+                    f"Guardrail version {gid!r}@{ver} was not found.",
+                    {"guardrail_id": gid, "version": ver},
+                )
+            # Activation is the trust boundary: reject configurations the
+            # runtime cannot safely execute. Non-active transitions remain
+            # available so operators can quarantine legacy invalid versions.
+            if str(status or "").strip().lower() == VERSION_STATUS_ACTIVE:
+                validate_guardrail_version_form(
+                    status=status,
+                    evaluator_kind=existing.evaluator_kind,
+                    evaluator_config=existing.evaluator_config,
+                    surfaces=existing.surfaces,
+                    field_targets=existing.field_targets,
+                )
             record = self._guardrails.update_version_status(
                 uow, guardrail_id=gid, version=ver, status=status
             )
@@ -427,16 +452,18 @@ class GuardrailAdminService:
         *,
         scope_kind: Any,
         group_id: Any = None,
+        capability: Any = None,
         guardrail_id: Any,
         version_mode: Any = "latest",
         pinned_version: Any = None,
-        mode: Any = "enforce",
+        mode: Any = "audit",
         priority: Any = 100,
         enabled: Any = True,
     ) -> dict[str, Any]:
         fields = validate_guardrail_assignment_form(
             scope_kind=scope_kind,
             group_id=group_id,
+            capability=capability,
             guardrail_id=guardrail_id,
             version_mode=version_mode,
             pinned_version=pinned_version,
@@ -448,11 +475,21 @@ class GuardrailAdminService:
             self._require_guardrail(uow, guardrail_id=fields["guardrail_id"])
             if fields["group_id"] is not None:
                 self._require_group(uow, group_id=fields["group_id"])
+            if (
+                fields["capability"] is not None
+                and self._capability_catalog.get(uow, fields["capability"]) is None
+            ):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"Capability {fields['capability']!r} is not registered.",
+                    {"capability": fields["capability"]},
+                )
             record = self._assignments.create(
                 uow,
                 assignment_id=new_id("gra"),
                 scope_kind=fields["scope_kind"],
                 group_id=fields["group_id"],
+                capability=fields["capability"],
                 guardrail_id=fields["guardrail_id"],
                 version_mode=fields["version_mode"],
                 pinned_version=fields["pinned_version"],
@@ -466,6 +503,7 @@ class GuardrailAdminService:
         self,
         *,
         group_id: Any = None,
+        capability: Any = None,
         guardrail_id: Any = None,
         agent_id: Any = None,
     ) -> list[dict[str, Any]]:
@@ -473,6 +511,10 @@ class GuardrailAdminService:
             if group_id is not None:
                 rows = self._assignments.list_for_group(
                     uow, group_id=self._id(group_id, field="group_id")
+                )
+            elif capability is not None:
+                rows = self._assignments.list_for_capability(
+                    uow, capability=self._id(capability, field="capability")
                 )
             elif guardrail_id is not None:
                 rows = self._assignments.list_for_guardrail(

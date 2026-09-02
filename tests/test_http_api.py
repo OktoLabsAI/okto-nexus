@@ -24,6 +24,7 @@ from fastapi.testclient import TestClient  # noqa: E402
 from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key  # noqa: E402
 from okto_nexus.adapters.inbound.mcp.server import bootstrap  # noqa: E402
 from okto_nexus.application.auth import AgentKeyAuthService  # noqa: E402
+from okto_nexus.domain.ids import resolve_realpath, resolve_workspace_id  # noqa: E402
 
 
 @pytest.fixture
@@ -191,6 +192,16 @@ def test_destructive_surfaces_are_operator_only_off_loopback(serve_env):
         # admin force-actions (the agent path is the MCP verb, not this REST)
         client.post("/api/v1/sessions/sess_nope/close", headers=peon),
         client.post("/api/v1/handoffs/ho_nope/cancel?workspace=w", headers=peon),
+        client.post(
+            "/api/v1/meta-harness/send",
+            json={
+                "workspace": "w",
+                "kind": "message",
+                "audience": "broadcast",
+                "body": "intrusion",
+            },
+            headers=peon,
+        ),
     )
     for response in forbidden:
         assert response.status_code == 403, response.text
@@ -771,6 +782,185 @@ def test_handoffs_filter_by_range_and_agents(serve_env):
     assert [item["handoff_id"] for item in response.json()["data"]["items"]] == [
         "hof_match"
     ]
+
+
+def test_handoffs_include_terminal_agent_outcomes(serve_env):
+    deps, client, key = serve_env
+    ws = "o" * 64
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(uow, workspace_id=ws)
+        uow.connection.executemany(
+            """
+            INSERT INTO handoffs(
+                handoff_id, workspace_id, from_agent_id, target, visibility,
+                status, created_at, claimed_by, result, rejected_reason
+            ) VALUES (?, ?, 'creator', ?, 'public', ?, ?, 'worker', ?, ?)
+            """,
+            [
+                (
+                    "hof_completed_with_result",
+                    ws,
+                    json.dumps({"strategy": "broadcast"}),
+                    "COMPLETED",
+                    "2026-08-10T10:00:00Z",
+                    '{"summary":"delivered"}',
+                    None,
+                ),
+                (
+                    "hof_rejected_with_reason",
+                    ws,
+                    json.dumps({"strategy": "broadcast"}),
+                    "REJECTED",
+                    "2026-08-10T11:00:00Z",
+                    None,
+                    "Missing required evidence",
+                ),
+            ],
+        )
+
+    response = client.get(
+        "/api/v1/handoffs",
+        params={"workspace": ws},
+        headers=_h(key),
+    )
+    assert response.status_code == 200
+    by_id = {
+        item["handoff_id"]: item for item in response.json()["data"]["items"]
+    }
+    assert by_id["hof_completed_with_result"]["result"] == (
+        '{"summary":"delivered"}'
+    )
+    assert "rejected_reason" not in by_id["hof_completed_with_result"]
+    assert by_id["hof_rejected_with_reason"]["rejected_reason"] == (
+        "Missing required evidence"
+    )
+    assert "result" not in by_id["hof_rejected_with_reason"]
+
+
+def test_meta_harness_sends_messages_and_handoffs_by_audience(
+    serve_env, tmp_path
+):
+    deps, client, key = serve_env
+    root = tmp_path / "meta-harness-project"
+    root.mkdir()
+    root_path = str(root)
+    ws = resolve_workspace_id(root_path)
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow,
+            workspace_id=ws,
+            display_name="Meta-harness test",
+            root_realpath=resolve_realpath(root_path),
+        )
+
+    for agent_id in ("alpha", "beta"):
+        created = client.post(
+            "/api/v1/agents",
+            json={"agent_id": agent_id},
+            headers=_h(key),
+        )
+        assert created.status_code == 200, created.text
+
+    private_message = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "private",
+            "to_agent_id": "alpha",
+            "subject": "Review",
+            "body": "Review the policy.",
+        },
+        headers=_h(key),
+    )
+    assert private_message.status_code == 200, private_message.text
+    private_data = private_message.json()["data"]
+    assert private_data["kind"] == "message"
+    assert private_data["audience"] == "private"
+    assert private_data["recipients"] == ["alpha"]
+
+    broadcast_message = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "broadcast",
+            "body": "Share current status.",
+        },
+        headers=_h(key),
+    )
+    assert broadcast_message.status_code == 200, broadcast_message.text
+    assert broadcast_message.json()["data"]["audience"] == "broadcast"
+
+    private_handoff = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "handoff",
+            "audience": "private",
+            "to_agent_id": "beta",
+            "subject": "Implement",
+            "body": "Implement the approved change.",
+        },
+        headers=_h(key),
+    )
+    assert private_handoff.status_code == 200, private_handoff.text
+    assert private_handoff.json()["data"]["notified"] == ["beta"]
+
+    broadcast_handoff = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "handoff",
+            "audience": "broadcast",
+            "body": "First available agent: investigate the incident.",
+        },
+        headers=_h(key),
+    )
+    assert broadcast_handoff.status_code == 200, broadcast_handoff.text
+    assert broadcast_handoff.json()["data"]["audience"] == "broadcast"
+
+    messages = client.get(
+        "/api/v1/messages",
+        params={"workspace": ws, "agent": "operator", "include_body": "true"},
+        headers=_h(key),
+    ).json()["data"]["items"]
+    private_row = next(row for row in messages if row["subject"] == "Review")
+    assert private_row["body"] == "Review the policy."
+    assert private_row["target"] == {
+        "strategy": "direct",
+        "agent_id": "alpha",
+    }
+    assert [d["recipient_agent_id"] for d in private_row["deliveries"]] == [
+        "alpha"
+    ]
+
+    handoffs = client.get(
+        "/api/v1/handoffs",
+        params={"workspace": ws, "from_agent": "operator"},
+        headers=_h(key),
+    ).json()["data"]["items"]
+    by_id = {row["handoff_id"]: row for row in handoffs}
+    assert by_id[private_handoff.json()["data"]["handoff_id"]]["target"] == {
+        "strategy": "direct",
+        "agent_id": "beta",
+    }
+    assert by_id[broadcast_handoff.json()["data"]["handoff_id"]]["target"] == {
+        "strategy": "broadcast"
+    }
+
+    missing_agent = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "private",
+            "body": "No target",
+        },
+        headers=_h(key),
+    )
+    assert missing_agent.status_code == 422
+    assert missing_agent.json()["error"]["code"] == "VALIDATION_ERROR"
 
 
 def test_events_no_filters_is_backward_compatible(serve_env):

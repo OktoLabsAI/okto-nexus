@@ -14,7 +14,7 @@ body:
     attributes:
       label: Okto Nexus version
       description: Run `okto-nexus --version` or provide the installed package version.
-      placeholder: 0.1.4
+      placeholder: 0.1.7
     validations:
       required: true
   - type: input
