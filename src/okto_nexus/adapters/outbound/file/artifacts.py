@@ -80,7 +80,7 @@ class LocalArtifactStore:
         artifact_type: str,
         storage_kind: str,
         name: str | None,
-        content: str | None,
+        content: str | bytes | None,
         source_path: str | None,
         metadata: dict[str, Any],
         created_at: str,
@@ -107,7 +107,9 @@ class LocalArtifactStore:
             temp_dir.mkdir()
             temp_payload = temp_dir / filename
             if content is not None:
-                data = content.encode("utf-8")
+                data = (
+                    content if isinstance(content, bytes) else content.encode("utf-8")
+                )
                 temp_payload.write_bytes(data)
             else:
                 source = Path(source_path or "")
@@ -183,6 +185,7 @@ class LocalArtifactStore:
                     if isinstance(raw.get("source_path"), str)
                     else None
                 ),
+                local_path=str(payload),
             )
         except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
             raise OktoNexusError(

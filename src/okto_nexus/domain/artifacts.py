@@ -54,6 +54,10 @@ class StoredArtifactPayload:
     size_bytes: int
     metadata: dict[str, Any]
     source_path: str | None = None
+    # Optional device-local path exposed by adapters that materialise payloads
+    # on the same machine as their consumers.  Remote stores may leave it None.
+    local_path: str | None = None
+
 
 #: Closed whitelist of accepted artifact types (BR3).
 ARTIFACT_TYPES: frozenset[str] = frozenset(

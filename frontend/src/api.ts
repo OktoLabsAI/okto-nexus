@@ -571,6 +571,7 @@ export interface MetaHarnessSendResult extends SteeringResult {
   created_at?: string;
   eligible_count?: number;
   notified?: string[];
+  artifact_ids?: string[];
 }
 
 export interface PresetRow {
@@ -616,6 +617,7 @@ export interface MessageRow {
   target?: RoutingTarget | null;
   preview: string;
   body?: string; // full body, present only with include_body=true
+  artifacts?: string[];
   // Trajectory correlation (R-I1): non-null only when the feature stamped one.
   trace_id?: string | null;
   deliveries: {
@@ -1031,6 +1033,38 @@ async function fetchBlob(path: string): Promise<Blob> {
   return response.blob();
 }
 
+async function uploadArtifact(workspace: string, file: File): Promise<ArtifactItem> {
+  const key = getApiKey();
+  const headers = new Headers();
+  if (key) headers.set("x-api-key", key);
+  headers.set("content-type", file.type || "application/octet-stream");
+  const params = new URLSearchParams({ workspace, filename: file.name });
+  const response = await fetch(`/api/v1/meta-harness/artifacts?${params}`, {
+    method: "POST",
+    headers,
+    body: file,
+  });
+  const raw = await response.text();
+  let envelope: Envelope<ArtifactItem> | null = null;
+  try {
+    envelope = JSON.parse(raw) as Envelope<ArtifactItem>;
+  } catch {
+    throw new ApiError(
+      response.status,
+      "HTTP_" + response.status,
+      raw.slice(0, 300) || response.statusText,
+    );
+  }
+  if (!response.ok || !envelope.ok) {
+    const error = envelope.error ?? {
+      code: "HTTP_" + response.status,
+      message: response.statusText,
+    };
+    throw new ApiError(response.status, error.code, error.message, error.details);
+  }
+  return envelope.data as ArtifactItem;
+}
+
 export const api = {
   graph: (workspace: string, windowHours = 24) =>
     call<GraphSnapshot>(
@@ -1117,14 +1151,15 @@ export const api = {
     call<ArtifactPage>(
       `/api/v1/artifacts?${new URLSearchParams(params)}`,
     ),
-  artifactDetail: (workspace: string, artifactId: string) =>
+  artifactDetail: (workspace: string, artifactId: string, includeContent = true) =>
     call<ArtifactDetail>(
-      `/api/v1/artifacts/${encodeURIComponent(artifactId)}?workspace=${encodeURIComponent(workspace)}`,
+      `/api/v1/artifacts/${encodeURIComponent(artifactId)}?workspace=${encodeURIComponent(workspace)}&include_content=${includeContent}`,
     ),
   artifactBlob: (workspace: string, artifactId: string) =>
     fetchBlob(
       `/api/v1/artifacts/${encodeURIComponent(artifactId)}/content?workspace=${encodeURIComponent(workspace)}`,
     ),
+  uploadMetaHarnessArtifact: uploadArtifact,
   agents: () => call<{ items: AgentRow[] }>("/api/v1/agents"),
   createAgent: (body: {
     agent_id: string;
@@ -1575,6 +1610,7 @@ export const api = {
     to_agent_id?: string;
     subject?: string;
     body: string;
+    artifact_ids?: string[];
   }) =>
     call<MetaHarnessSendResult>("/api/v1/meta-harness/send", {
       method: "POST",

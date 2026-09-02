@@ -264,6 +264,16 @@ const SECTIONS: Section[] = [
           Subject is optional. Press Enter to send or Shift+Enter for a new
           line; the message field grows from one to eight lines.
         </P>
+        <H>Attach documents</H>
+        <P>
+          Use the paperclip to attach up to 10 documents (25 MB each). Nexus
+          publishes every attachment as an operator-authored artifact in the
+          selected workspace before sending the turn, then includes its{" "}
+          <code>artifact_id</code> in the message or handoff. The same artifact
+          permissions, policies, guardrails, audience rules and managed storage
+          used for agent submissions apply. Attachment-only turns are allowed;
+          attached files appear inside the chat and can be downloaded there.
+        </P>
         <H>Replies and history</H>
         <P>
           Markdown and structured responses are formatted for reading instead
@@ -352,8 +362,9 @@ const SECTIONS: Section[] = [
         <P>
           Expanded Markdown, HTML and JSON previews offer a <b>Rich</b> /{" "}
           <b>Raw</b> toggle. Rich Markdown is rendered, Rich JSON becomes a
-          collapsible tree, and Rich HTML is sanitized and isolated without
-          scripts or external resources.
+          collapsible tree, and Rich HTML preserves embedded CSS and safe
+          document attributes while remaining isolated without scripts or
+          external resources.
         </P>
         <H>Where payloads live</H>
         <P>

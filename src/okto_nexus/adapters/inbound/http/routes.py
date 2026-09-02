@@ -37,6 +37,7 @@ from ....domain.approvals import (
 from ....domain.base import new_id
 from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
 from ....domain.health import is_valid_window as is_valid_health_window
+from ....domain.messages import normalize_artifacts
 from ....domain.permissions import (
     BUILTIN_PRESETS,
     PERMISSION_DESCRIPTIONS,
@@ -60,6 +61,10 @@ from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
 
 
+META_HARNESS_MAX_ATTACHMENTS = 10
+META_HARNESS_MAX_UPLOAD_BYTES = 25 * 1024 * 1024
+
+
 def _ok(data: Any) -> JSONResponse:
     return JSONResponse({"ok": True, "data": data})
 
@@ -81,6 +86,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
         # addressed one - the REST resource does not exist there.
         ErrorCode.WORKSPACE_MISMATCH: 404,
         ErrorCode.VALIDATION_ERROR: 422,
+        ErrorCode.CONTENT_TOO_LARGE: 413,
         ErrorCode.PERMISSION_DENIED: 403,
         ErrorCode.POLICY_DENIED: 403,
         ErrorCode.QUOTA_EXCEEDED: 429,
@@ -119,6 +125,7 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
             ErrorCode.COMM_PRESET_IN_USE,
             ErrorCode.POLICY_DENIED,
             ErrorCode.QUOTA_EXCEEDED,
+            ErrorCode.CONTENT_TOO_LARGE,
             ErrorCode.CONFLICT,
             ErrorCode.DEPENDENCY_NOT_MET,
             ErrorCode.DEPENDENCY_NOT_FOUND,
@@ -307,6 +314,9 @@ class MetaHarnessSendBody(BaseModel):
     to_agent_id: str | None = Field(default=None, min_length=1)
     subject: str | None = None
     body: str = Field(min_length=1)
+    artifact_ids: list[str] = Field(
+        default_factory=list, max_length=META_HARNESS_MAX_ATTACHMENTS
+    )
 
 
 class VerifyHandoffBody(BaseModel):
@@ -1752,6 +1762,81 @@ def build_router() -> APIRouter:
     # SQLite holds only the searchable/authorization catalog; these reads
     # resolve payloads through the same injected adapter used by artifact_put.
     # ------------------------------------------------------------------ #
+    @router.post("/meta-harness/artifacts")
+    async def upload_meta_harness_artifact(
+        request: Request,
+        workspace: str = "",
+        filename: str = "",
+    ) -> JSONResponse:
+        """Import one raw document as an operator-authored artifact.
+
+        The raw-body contract avoids a multipart parser dependency.  The
+        browser supplies the original filename as a query parameter and the
+        media type in Content-Type.  Bytes flow through ArtifactService and
+        ArtifactStore; SQLite receives catalog metadata only.
+        """
+        try:
+            _require_operator()
+            length_header = request.headers.get("content-length")
+            if length_header:
+                try:
+                    declared_size = int(length_header)
+                except ValueError:
+                    declared_size = 0
+                if declared_size > META_HARNESS_MAX_UPLOAD_BYTES:
+                    raise OktoNexusError(
+                        ErrorCode.CONTENT_TOO_LARGE,
+                        "Attachment exceeds the 25 MiB upload limit.",
+                        {
+                            "size_bytes": declared_size,
+                            "max_bytes": META_HARNESS_MAX_UPLOAD_BYTES,
+                        },
+                    )
+
+            payload = bytearray()
+            async for chunk in request.stream():
+                payload.extend(chunk)
+                if len(payload) > META_HARNESS_MAX_UPLOAD_BYTES:
+                    raise OktoNexusError(
+                        ErrorCode.CONTENT_TOO_LARGE,
+                        "Attachment exceeds the 25 MiB upload limit.",
+                        {
+                            "size_bytes": len(payload),
+                            "max_bytes": META_HARNESS_MAX_UPLOAD_BYTES,
+                        },
+                    )
+
+            service = _artifact_service(request.app.state.deps)
+            media_type = request.headers.get("content-type")
+
+            def _upload():
+                deps = request.app.state.deps
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    ws = deps.repos.workspaces.get(uow, workspace)
+                if ws is None or not ws.root_realpath:
+                    raise OktoNexusError(
+                        ErrorCode.NOT_FOUND,
+                        f"workspace '{workspace}' is not registered.",
+                        {"workspace": workspace},
+                    )
+                result = service.artifact_upload(
+                    project_root=ws.root_realpath,
+                    filename=filename,
+                    data=bytes(payload),
+                    media_type=media_type,
+                    agent_id=OPERATOR_AGENT_ID,
+                )
+                return service.get_for_operator(
+                    workspace_id=workspace,
+                    artifact_id=result["artifact_id"],
+                    include_content=False,
+                )
+
+            data = await anyio.to_thread.run_sync(_upload)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(data)
+
     @router.get("/artifacts")
     async def browse_artifacts(
         request: Request,
@@ -1816,13 +1901,18 @@ def build_router() -> APIRouter:
 
     @router.get("/artifacts/{artifact_id}")
     async def get_artifact_detail(
-        request: Request, artifact_id: str, workspace: str = "all"
+        request: Request,
+        artifact_id: str,
+        workspace: str = "all",
+        include_content: bool = True,
     ) -> JSONResponse:
         service = _artifact_service(request.app.state.deps)
 
         def _get():
             return service.get_for_operator(
-                workspace_id=workspace, artifact_id=artifact_id
+                workspace_id=workspace,
+                artifact_id=artifact_id,
+                include_content=include_content,
             )
 
         try:
@@ -2797,6 +2887,18 @@ def build_router() -> APIRouter:
                     {"workspace": body.workspace},
                 )
 
+            artifact_refs = normalize_artifacts(body.artifact_ids)
+            artifact_service = _artifact_service(deps)
+            for artifact_id in artifact_refs:
+                # Fail before creating the message/handoff when a stale or
+                # cross-workspace reference is supplied.  The operator read
+                # bypasses audience filtering but never workspace isolation.
+                artifact_service.get_for_operator(
+                    workspace_id=body.workspace,
+                    artifact_id=artifact_id,
+                    include_content=False,
+                )
+
             target = (
                 {"strategy": "direct", "agent_id": body.to_agent_id}
                 if body.audience == "private"
@@ -2809,6 +2911,7 @@ def build_router() -> APIRouter:
                     subject=body.subject or "Meta-harness message",
                     body=body.body,
                     target=target,
+                    artifacts=artifact_refs,
                 )
             else:
                 result = _build_handoff_service(deps).handoff_create(
@@ -2822,9 +2925,15 @@ def build_router() -> APIRouter:
                         "kind": "meta_harness.request",
                         "subject": body.subject or "Meta-harness handoff",
                         "body": body.body,
+                        "artifacts": artifact_refs,
                     },
                 )
-            return {"kind": body.kind, "audience": body.audience, **result}
+            return {
+                "kind": body.kind,
+                "audience": body.audience,
+                "artifact_ids": artifact_refs,
+                **result,
+            }
 
         try:
             result = await anyio.to_thread.run_sync(_send)

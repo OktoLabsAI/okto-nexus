@@ -2464,7 +2464,7 @@ class ArtifactStore(Protocol):
         artifact_type: str,
         storage_kind: str,
         name: str | None,
-        content: str | None,
+        content: str | bytes | None,
         source_path: str | None,
         metadata: dict[str, Any],
         created_at: str,

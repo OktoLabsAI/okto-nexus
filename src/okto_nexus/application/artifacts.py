@@ -305,10 +305,6 @@ class ArtifactService:
             stored_path = resolved_path
             size_bytes = self._path_size(resolved_path)
 
-        metadata_blob = self._serialize_metadata(metadata)
-        metadata_value = self._deserialize_metadata(metadata_blob)
-        now = self._clock.now_iso()
-        artifact_id = new_id("art")
         guardrail_fields: dict[str, Any] = {
             "artifact_type": norm_type,
             "name": name,
@@ -317,6 +313,133 @@ class ArtifactService:
             "path": resolved_path if has_path else None,
             "path_reference": resolved_path if has_path else None,
         }
+        return self._persist_artifact(
+            workspace_id=workspace_id,
+            root_realpath=root_realpath,
+            artifact_type=norm_type,
+            name=name,
+            stored=stored,
+            stored_content=stored_content,
+            stored_path=stored_path,
+            size_bytes=size_bytes,
+            metadata=metadata,
+            agent_id=agent_id,
+            guardrail_fields=guardrail_fields,
+        )
+
+    def artifact_upload(
+        self,
+        *,
+        project_root: Any,
+        filename: Any,
+        data: Any,
+        media_type: Any = None,
+        metadata: Any = None,
+        agent_id: Any = None,
+    ) -> dict[str, Any]:
+        """Import browser-uploaded bytes into the normal artifact lifecycle.
+
+        Unlike inline ``artifact_put`` content, an uploaded document is a
+        managed file and is therefore not subject to the inline-text ceiling.
+        The HTTP adapter owns its transport-size limit.  This use case still
+        applies the same artifact permission, guardrail, governance, audience,
+        catalog and audit-event rules as agent-originated artifacts.
+        """
+        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        if not _is_nonempty_str(filename):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "filename is required for an artifact upload.",
+                {"filename": filename},
+            )
+        safe_name = str(filename).replace("\\", "/").rsplit("/", 1)[-1].strip()
+        if (
+            not safe_name
+            or len(safe_name) > 255
+            or any(ord(char) < 32 for char in safe_name)
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "filename must be a plain file name of at most 255 characters.",
+                {"filename": filename},
+            )
+        if not isinstance(data, (bytes, bytearray, memoryview)):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "artifact upload data must be bytes.",
+                {"data_type": type(data).__name__},
+            )
+        payload = bytes(data)
+        normalized_media = (
+            str(media_type).split(";", 1)[0].strip().lower()
+            if _is_nonempty_str(media_type)
+            else "application/octet-stream"
+        )
+        artifact_type = self._uploaded_artifact_type(safe_name, normalized_media)
+        if artifact_type in {"text", "json", "markdown", "html"}:
+            try:
+                decoded = payload.decode("utf-8")
+            except UnicodeDecodeError:
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    "Text document uploads must use UTF-8 encoding.",
+                    {"filename": safe_name, "media_type": normalized_media},
+                ) from None
+            if artifact_type == "json":
+                ensure_well_formed_json(decoded)
+
+        upload_metadata: dict[str, Any] = {
+            "source": "meta-harness",
+            "original_filename": safe_name,
+            "uploaded_media_type": normalized_media,
+        }
+        if metadata is not None:
+            metadata_blob = self._serialize_metadata(metadata)
+            upload_metadata.update(self._deserialize_metadata(metadata_blob))
+        guardrail_fields: dict[str, Any] = {
+            "artifact_type": artifact_type,
+            "name": safe_name,
+            # Agent file artifacts are inspected as path-based payloads too;
+            # raw uploaded bytes never enter a guardrail/event/database field.
+            "content": None,
+            "metadata": upload_metadata,
+            "path": safe_name,
+            "path_reference": safe_name,
+        }
+        return self._persist_artifact(
+            workspace_id=workspace_id,
+            root_realpath=root_realpath,
+            artifact_type=artifact_type,
+            name=safe_name,
+            stored=STORED_PATH,
+            stored_content=payload,
+            stored_path=None,
+            size_bytes=len(payload),
+            metadata=upload_metadata,
+            agent_id=agent_id,
+            guardrail_fields=guardrail_fields,
+        )
+
+    def _persist_artifact(
+        self,
+        *,
+        workspace_id: str,
+        root_realpath: str,
+        artifact_type: str,
+        name: str | None,
+        stored: str,
+        stored_content: str | bytes | None,
+        stored_path: str | None,
+        size_bytes: int,
+        metadata: Any,
+        agent_id: Any,
+        guardrail_fields: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Persist a validated payload through the shared artifact pipeline."""
+        metadata_blob = self._serialize_metadata(metadata)
+        metadata_value = self._deserialize_metadata(metadata_blob)
+        now = self._clock.now_iso()
+        artifact_id = new_id("art")
 
         stored_payload: StoredArtifactPayload | None = None
         artifact: Artifact | None = None
@@ -370,7 +493,7 @@ class ArtifactService:
                         else None
                     ),
                     artifact_id=artifact_id,
-                    artifact_type=norm_type,
+                    artifact_type=artifact_type,
                     storage_kind=stored,
                     name=name,
                     content=stored_content,
@@ -382,7 +505,7 @@ class ArtifactService:
                     uow,
                     artifact_id=artifact_id,
                     workspace_id=workspace_id,
-                    artifact_type=norm_type,
+                    artifact_type=artifact_type,
                     name=name,
                     # Payload, source path and free-form metadata are owned by
                     # ArtifactStore.  These legacy DB columns stay NULL.
@@ -423,7 +546,7 @@ class ArtifactService:
             "created_at": artifact.created_at,
         }
         if stored == STORED_PATH:
-            data["path"] = stored_payload.source_path
+            data["path"] = stored_payload.source_path or stored_payload.local_path
         return data
 
     # ------------------------------------------------------------------ #
@@ -436,7 +559,8 @@ class ArtifactService:
 
         Unknown ids and ids owned by another workspace both surface as
         ``NOT_FOUND`` with no field leakage (FR10 / BR9). ``stored=path`` returns
-        only the path + metadata, never the referenced file's bytes (FR11/BR10).
+        a readable source or managed local path plus metadata, never the file's
+        bytes inline (FR11/BR10).
 
         Audience gate (D-ART/BR7): when the artifact froze an outbound audience
         at ``artifact_put`` time, a reader whose tags do NOT satisfy it is
@@ -489,7 +613,11 @@ class ArtifactService:
                 else artifact.content
             )
         else:
-            data["path"] = descriptor.source_path if descriptor else artifact.path
+            data["path"] = (
+                descriptor.source_path or descriptor.local_path
+                if descriptor
+                else artifact.path
+            )
         return data
 
     # ------------------------------------------------------------------ #
@@ -560,7 +688,13 @@ class ArtifactService:
             "items": items,
         }
 
-    def get_for_operator(self, *, workspace_id: str, artifact_id: str) -> dict[str, Any]:
+    def get_for_operator(
+        self,
+        *,
+        workspace_id: str,
+        artifact_id: str,
+        include_content: bool = True,
+    ) -> dict[str, Any]:
         """Return one artifact without the agent-audience gate."""
         if not _is_nonempty_str(artifact_id):
             raise OktoNexusError(
@@ -577,7 +711,11 @@ class ArtifactService:
                 "artifact_id not found in the resolved workspace.",
                 {"artifact_id": artifact_id},
             )
-        return self._operator_shape(artifact, include_content=True)
+        return self._operator_shape(
+            artifact,
+            include_content=include_content,
+            include_manifest=True,
+        )
 
     def payload_for_operator(
         self, *, workspace_id: str, artifact_id: str
@@ -641,9 +779,13 @@ class ArtifactService:
         return legacy_kind, None
 
     def _operator_shape(
-        self, artifact: Artifact, *, include_content: bool
+        self,
+        artifact: Artifact,
+        *,
+        include_content: bool,
+        include_manifest: bool = False,
     ) -> dict[str, Any]:
-        if artifact.storage_path and not include_content:
+        if artifact.storage_path and not include_content and not include_manifest:
             stored = artifact.storage_kind or STORED_PATH
             descriptor = None
         else:
@@ -696,6 +838,27 @@ class ArtifactService:
         return artifact.artifact_type in {"text", "json", "markdown", "html"} or (
             media_type.startswith("text/") or media_type == "application/json"
         )
+
+    @staticmethod
+    def _uploaded_artifact_type(filename: str, media_type: str) -> str:
+        """Infer the closed artifact kind from a browser upload descriptor."""
+        extension = os.path.splitext(filename.lower())[1]
+        if extension in {".md", ".markdown"} or media_type == "text/markdown":
+            return "markdown"
+        if extension == ".json" or media_type == "application/json":
+            return "json"
+        if extension in {".html", ".htm"} or media_type == "text/html":
+            return "html"
+        if media_type.startswith("text/") or extension in {
+            ".txt",
+            ".csv",
+            ".log",
+            ".xml",
+            ".yaml",
+            ".yml",
+        }:
+            return "text"
+        return "file"
 
     def _resolve_workspace(self, project_root: Any) -> tuple[str, str]:
         """Resolve ``(workspace_id, root_realpath)`` from a client project_root.

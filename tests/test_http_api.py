@@ -1038,6 +1038,21 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
         )
         assert created.status_code == 200, created.text
 
+    uploaded = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "review-notes.md"},
+        content=b"# Review notes\n\nUse the managed copy.",
+        headers={**_h(key), "content-type": "text/markdown"},
+    )
+    assert uploaded.status_code == 200, uploaded.text
+    uploaded_artifact = uploaded.json()["data"]
+    artifact_id = uploaded_artifact["artifact_id"]
+    assert uploaded_artifact["artifact_type"] == "markdown"
+    assert uploaded_artifact["filename"] == "review-notes.md"
+    assert uploaded_artifact["created_by"] == "operator"
+    assert uploaded_artifact["metadata"]["source"] == "meta-harness"
+    assert "content" not in uploaded_artifact
+
     private_message = client.post(
         "/api/v1/meta-harness/send",
         json={
@@ -1047,6 +1062,7 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
             "to_agent_id": "alpha",
             "subject": "Review",
             "body": "Review the policy.",
+            "artifact_ids": [artifact_id],
         },
         headers=_h(key),
     )
@@ -1078,6 +1094,7 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
             "to_agent_id": "beta",
             "subject": "Implement",
             "body": "Implement the approved change.",
+            "artifact_ids": [artifact_id],
         },
         headers=_h(key),
     )
@@ -1108,6 +1125,7 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
         "strategy": "direct",
         "agent_id": "alpha",
     }
+    assert private_row["artifacts"] == [artifact_id]
     assert [d["recipient_agent_id"] for d in private_row["deliveries"]] == [
         "alpha"
     ]
@@ -1122,6 +1140,9 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
         "strategy": "direct",
         "agent_id": "beta",
     }
+    assert by_id[private_handoff.json()["data"]["handoff_id"]]["payload"][
+        "artifacts"
+    ] == [artifact_id]
     assert by_id[broadcast_handoff.json()["data"]["handoff_id"]]["target"] == {
         "strategy": "broadcast"
     }
@@ -1138,6 +1159,82 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
     )
     assert missing_agent.status_code == 422
     assert missing_agent.json()["error"]["code"] == "VALIDATION_ERROR"
+
+    readable = build_artifact_service(deps).artifact_get(
+        project_root=root_path,
+        artifact_id=artifact_id,
+        agent_id="alpha",
+    )
+    assert readable["stored"] == "path"
+    assert readable["path"]
+    with open(readable["path"], "rb") as uploaded_file:
+        assert uploaded_file.read().startswith(b"# Review notes")
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute(
+            "SELECT path, content, content_type, storage_path FROM artifacts "
+            "WHERE artifact_id = ?",
+            (artifact_id,),
+        ).fetchone()
+    assert row["path"] is None
+    assert row["content"] is None
+    assert row["content_type"] is None
+    assert row["storage_path"]
+
+
+def test_meta_harness_artifact_upload_validates_transport_and_workspace(serve_env):
+    deps, client, key = serve_env
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "upload-caller"},
+        headers=_h(key),
+    ).json()["data"]
+
+    forbidden = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": "missing", "filename": "notes.txt"},
+        content=b"notes",
+        headers={**_h(created["api_key"]), "content-type": "text/plain"},
+    )
+    assert forbidden.status_code == 403
+
+    missing_workspace = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": "missing", "filename": "notes.txt"},
+        content=b"notes",
+        headers={**_h(key), "content-type": "text/plain"},
+    )
+    assert missing_workspace.status_code == 404
+
+    root = deps.config.home_dir / "upload-validation"
+    root.mkdir()
+    ws = resolve_workspace_id(str(root))
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow,
+            workspace_id=ws,
+            root_realpath=resolve_realpath(str(root)),
+        )
+    malformed = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "broken.json"},
+        content=b"{broken",
+        headers={**_h(key), "content-type": "application/json"},
+    )
+    assert malformed.status_code == 422
+    assert malformed.json()["error"]["code"] == "VALIDATION_ERROR"
+
+    # Browser documents use managed file storage even when textual, so they
+    # are not incorrectly constrained by artifact_put's 64 KiB inline limit.
+    large_text = b"x" * (deps.config.max_inline_bytes + 1)
+    imported = client.post(
+        "/api/v1/meta-harness/artifacts",
+        params={"workspace": ws, "filename": "large-notes.txt"},
+        content=large_text,
+        headers={**_h(key), "content-type": "text/plain"},
+    )
+    assert imported.status_code == 200, imported.text
+    assert imported.json()["data"]["stored"] == "path"
+    assert imported.json()["data"]["size_bytes"] == len(large_text)
 
 
 def test_events_no_filters_is_backward_compatible(serve_env):

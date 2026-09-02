@@ -4,14 +4,19 @@ import {
   CheckCircle2,
   ChevronUp,
   CircleAlert,
+  Download,
+  FileText,
   LoaderCircle,
   MessageSquare,
+  Paperclip,
   Radio,
   Send,
+  X,
   UserRound,
   Waypoints,
 } from "lucide-react";
 import {
+  type ChangeEvent,
   type FormEvent,
   type ReactNode,
   useCallback,
@@ -23,6 +28,7 @@ import {
 import {
   api,
   type AgentRow,
+  type ArtifactItem,
   type GraphHandoff,
   type MessageRow,
   type MetaHarnessAudience,
@@ -37,6 +43,8 @@ import { agentColor } from "../graph/agentColor";
 
 const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
+const MAX_ATTACHMENTS = 10;
+const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
 
 type TimelineEntry = {
   id: string;
@@ -49,6 +57,7 @@ type TimelineEntry = {
   recipients: string[];
   subject: string | null;
   content: string;
+  artifacts: string[];
   status?: string;
   outcome?: "completed" | "rejected";
 };
@@ -67,13 +76,27 @@ function audienceOf(row: MessageRow | GraphHandoff): MetaHarnessAudience {
   return row.target?.strategy === "broadcast" ? "broadcast" : "private";
 }
 
-function bodyFromPayload(payload: unknown): { subject: string | null; body: string } {
+function artifactIds(value: unknown): string[] {
+  return Array.isArray(value)
+    ? value.filter(
+        (item): item is string =>
+          typeof item === "string" && Boolean(item.trim()),
+      )
+    : [];
+}
+
+function bodyFromPayload(payload: unknown): {
+  subject: string | null;
+  body: string;
+  artifacts: string[];
+} {
   if (payload && typeof payload === "object" && !Array.isArray(payload)) {
     const value = payload as Record<string, unknown>;
     if (typeof value.body === "string") {
       return {
         subject: typeof value.subject === "string" ? value.subject : null,
         body: value.body,
+        artifacts: artifactIds(value.artifacts),
       };
     }
     const legacyBody = value.request ?? value.prompt;
@@ -81,14 +104,22 @@ function bodyFromPayload(payload: unknown): { subject: string | null; body: stri
       return {
         subject: typeof value.subject === "string" ? value.subject : null,
         body: legacyBody,
+        artifacts: artifactIds(value.artifacts),
       };
     }
-    return { subject: null, body: JSON.stringify(value, null, 2) };
+    return {
+      subject: null,
+      body: JSON.stringify(value, null, 2),
+      artifacts: artifactIds(value.artifacts),
+    };
   }
-  if (typeof payload === "string") return { subject: null, body: payload };
+  if (typeof payload === "string") {
+    return { subject: null, body: payload, artifacts: [] };
+  }
   return {
     subject: null,
     body: payload == null ? "(empty handoff request)" : JSON.stringify(payload, null, 2),
+    artifacts: [],
   };
 }
 
@@ -177,6 +208,7 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
       recipients: recipients.length ? recipients : directTarget ? [directTarget] : [],
       subject: message.subject,
       content: message.body ?? message.preview,
+      artifacts: artifactIds(message.artifacts),
       status: outgoing
         ? recipients.length
           ? `${recipients.length} recipient${recipients.length === 1 ? "" : "s"}`
@@ -200,6 +232,7 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
       recipients,
       subject: request.subject,
       content: request.body,
+      artifacts: request.artifacts,
       status: handoff.status,
     });
 
@@ -223,6 +256,7 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
           ? handoff.rejected_reason || "(no reason provided)"
           : outcomeText(handoff.result || ""),
         status: handoff.status,
+        artifacts: [],
         outcome: rejected ? "rejected" : "completed",
       });
     }
@@ -283,6 +317,18 @@ function stamp(value: string): string {
   }).format(date);
 }
 
+function formatBytes(value: number): string {
+  if (value < 1024) return `${value} B`;
+  if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
+  return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+type PendingAttachment = {
+  id: string;
+  file: File;
+  artifact?: ArtifactItem;
+};
+
 function ChoiceButton({
   active,
   onClick,
@@ -319,11 +365,15 @@ function ChatTurn({
   agents,
   workspaces,
   showWorkspace,
+  artifactDetails,
+  onDownloadArtifact,
 }: {
   entry: TimelineEntry;
   agents: AgentRow[];
   workspaces: WorkspaceListItem[];
   showWorkspace: boolean;
+  artifactDetails: Record<string, ArtifactItem>;
+  onDownloadArtifact: (workspaceId: string, artifactId: string) => void;
 }) {
   const outgoing = entry.direction === "outgoing";
   const identity = outgoing ? OPERATOR : entry.agentId;
@@ -381,6 +431,43 @@ function ChatTurn({
             </div>
           )}
           <Markdown text={formatChatContent(entry.content)} />
+          {entry.artifacts.length > 0 && (
+            <div
+              className="mt-3 flex flex-wrap gap-2"
+              data-testid="meta-harness-turn-artifacts"
+            >
+              {entry.artifacts.map((artifactId) => {
+                const detail = artifactDetails[artifactId];
+                const label = detail?.name || detail?.filename || artifactId;
+                return (
+                  <button
+                    key={artifactId}
+                    type="button"
+                    onClick={() => onDownloadArtifact(entry.workspaceId, artifactId)}
+                    title={`Download ${label}`}
+                    className={`inline-flex max-w-full items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-xs transition-colors ${
+                      outgoing
+                        ? "border-white/25 bg-white/10 text-white hover:bg-white/20"
+                        : "border-surface-200 bg-surface-50 text-surface-700 hover:border-accent-300 dark:border-surface-600 dark:bg-surface-900/60 dark:text-surface-200"
+                    }`}
+                  >
+                    <FileText size={15} className="shrink-0" />
+                    <span className="min-w-0">
+                      <span className="block truncate font-medium">
+                        {label}
+                      </span>
+                      <span className={outgoing ? "text-white/65" : "text-surface-400"}>
+                        {detail
+                          ? `${humanize(detail.artifact_type)} · ${formatBytes(detail.size_bytes)}`
+                          : "Artifact"}
+                      </span>
+                    </span>
+                    <Download size={13} className="shrink-0 opacity-70" />
+                  </button>
+                );
+              })}
+            </div>
+          )}
           {entry.status && (
             <div className={`mt-2 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider ${outgoing ? "text-white/70" : "text-surface-400 dark:text-surface-500"}`}>
               {entry.outcome === "completed" ? <CheckCircle2 size={11} /> : entry.outcome === "rejected" ? <CircleAlert size={11} /> : null}
@@ -417,6 +504,10 @@ export function MetaHarnessView({
   const [audience, setAudience] = useState<MetaHarnessAudience>("private");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
+  const [attachments, setAttachments] = useState<PendingAttachment[]>([]);
+  const [artifactDetails, setArtifactDetails] = useState<
+    Record<string, ArtifactItem>
+  >({});
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [sending, setSending] = useState(false);
@@ -426,6 +517,7 @@ export function MetaHarnessView({
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const feedScopeRef = useRef(workspace);
   const preserveScrollRef = useRef(false);
@@ -523,6 +615,15 @@ export function MetaHarnessView({
     () => timeline.slice(-visibleCount),
     [timeline, visibleCount],
   );
+  const visibleArtifactRefs = useMemo(() => {
+    const refs = new Map<string, string>();
+    for (const entry of visibleTimeline) {
+      for (const artifactId of entry.artifacts) {
+        if (!refs.has(artifactId)) refs.set(artifactId, entry.workspaceId);
+      }
+    }
+    return refs;
+  }, [visibleTimeline]);
   const hasOlderMessages =
     visibleCount < timeline.length || messages.length < messageTotal;
 
@@ -537,6 +638,33 @@ export function MetaHarnessView({
     }
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [visibleTimeline.length, workspace, filterAgent]);
+
+  useEffect(() => {
+    const missing = [...visibleArtifactRefs].filter(
+      ([artifactId]) => !artifactDetails[artifactId],
+    );
+    if (!missing.length) return;
+    let active = true;
+    void Promise.allSettled(
+      missing.map(async ([artifactId, workspaceId]) => {
+        const detail = await api.artifactDetail(workspaceId, artifactId, false);
+        return [artifactId, detail] as const;
+      }),
+    ).then((results) => {
+      if (!active) return;
+      if (!results.some((result) => result.status === "fulfilled")) return;
+      setArtifactDetails((current) => {
+        const next = { ...current };
+        for (const result of results) {
+          if (result.status === "fulfilled") next[result.value[0]] = result.value[1];
+        }
+        return next;
+      });
+    });
+    return () => {
+      active = false;
+    };
+  }, [artifactDetails, visibleArtifactRefs]);
 
   const loadMoreMessages = async () => {
     if (loadingMore || !hasOlderMessages) return;
@@ -602,10 +730,52 @@ export function MetaHarnessView({
     input.style.overflowY = input.scrollHeight > maxHeight ? "auto" : "hidden";
   }, [body]);
 
+  const selectAttachments = (event: ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(event.target.files ?? []);
+    event.target.value = "";
+    if (!selected.length) return;
+    const oversized = selected.filter((file) => file.size > MAX_ATTACHMENT_BYTES);
+    const valid = selected.filter((file) => file.size <= MAX_ATTACHMENT_BYTES);
+    const available = Math.max(0, MAX_ATTACHMENTS - attachments.length);
+    const errors: string[] = [];
+    if (oversized.length) {
+      errors.push(
+        `${oversized.map((file) => file.name).join(", ")} exceeded the 25 MB limit`,
+      );
+    }
+    if (valid.length > available) {
+      errors.push(`a turn can include up to ${MAX_ATTACHMENTS} attachments`);
+    }
+    setError(errors.length ? `${errors.join("; ")}.` : null);
+    setAttachments((current) => [
+      ...current,
+      ...valid.slice(0, available).map((file) => ({
+        id: `${file.name}:${file.size}:${file.lastModified}:${crypto.randomUUID()}`,
+        file,
+      })),
+    ]);
+  };
+
+  const downloadArtifact = async (workspaceId: string, artifactId: string) => {
+    try {
+      const blob = await api.artifactBlob(workspaceId, artifactId);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = artifactDetails[artifactId]?.filename || artifactId;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (exc) {
+      setError((exc as Error).message);
+    }
+  };
+
   const submit = async (event?: FormEvent) => {
     event?.preventDefault();
     const content = body.trim();
-    if (!content || !sendWorkspace || sending) return;
+    if ((!content && !attachments.length) || !sendWorkspace || sending) return;
     if (audience === "private" && !targetAgentId) {
       setError("Choose an agent for a private turn.");
       return;
@@ -613,16 +783,42 @@ export function MetaHarnessView({
     setSending(true);
     setError(null);
     try {
+      let staged = [...attachments];
+      for (const attachment of staged) {
+        if (attachment.artifact?.workspace_id === sendWorkspace) continue;
+        const artifact = await api.uploadMetaHarnessArtifact(
+          sendWorkspace,
+          attachment.file,
+        );
+        staged = staged.map((item) =>
+          item.id === attachment.id ? { ...item, artifact } : item,
+        );
+        setAttachments(staged);
+        setArtifactDetails((current) => ({
+          ...current,
+          [artifact.artifact_id]: artifact,
+        }));
+      }
+      const artifactIds = staged
+        .map((attachment) => attachment.artifact?.artifact_id)
+        .filter((artifactId): artifactId is string => Boolean(artifactId));
+      const deliveredBody =
+        content ||
+        `Attached ${artifactIds.length === 1 ? "1 document" : `${artifactIds.length} documents`}: ${staged
+          .map((attachment) => attachment.file.name)
+          .join(", ")}.`;
       await api.metaHarnessSend({
         workspace: sendWorkspace,
         kind,
         audience,
         to_agent_id: audience === "private" ? targetAgentId : undefined,
         subject: subject.trim() || undefined,
-        body: content,
+        body: deliveredBody,
+        artifact_ids: artifactIds,
       });
       setSubject("");
       setBody("");
+      setAttachments([]);
       await loadFeed();
     } catch (exc) {
       setError((exc as Error).message);
@@ -633,7 +829,7 @@ export function MetaHarnessView({
 
   const cannotSend =
     sending ||
-    !body.trim() ||
+    (!body.trim() && !attachments.length) ||
     !sendWorkspace ||
     (audience === "private" && !targetAgentId);
 
@@ -710,6 +906,10 @@ export function MetaHarnessView({
                     agents={agents}
                     workspaces={workspaces}
                     showWorkspace={workspace === "all"}
+                    artifactDetails={artifactDetails}
+                    onDownloadArtifact={(workspaceId, artifactId) => {
+                      void downloadArtifact(workspaceId, artifactId);
+                    }}
                   />
                 ))}
               </div>
@@ -745,6 +945,51 @@ export function MetaHarnessView({
                   className="min-w-0 flex-1 bg-transparent py-2 text-sm text-surface-800 outline-none placeholder:text-surface-400 dark:text-surface-100"
                 />
               </div>
+              {attachments.length > 0 && (
+                <div
+                  className="flex flex-wrap gap-2 px-2 pt-2"
+                  data-testid="meta-harness-attachments"
+                >
+                  {attachments.map((attachment) => (
+                    <div
+                      key={attachment.id}
+                      className="flex min-w-0 max-w-full items-center gap-2 rounded-lg bg-surface-100 px-2.5 py-2 text-xs text-surface-700 dark:bg-surface-900 dark:text-surface-200"
+                    >
+                      {sending && !attachment.artifact ? (
+                        <LoaderCircle
+                          size={14}
+                          className="shrink-0 animate-spin text-accent-500"
+                        />
+                      ) : (
+                        <FileText size={14} className="shrink-0 text-accent-500" />
+                      )}
+                      <span className="min-w-0">
+                        <span className="block max-w-56 truncate font-medium">
+                          {attachment.file.name}
+                        </span>
+                        <span className="text-[10px] text-surface-400">
+                          {attachment.artifact
+                            ? "Ready as artifact"
+                            : formatBytes(attachment.file.size)}
+                        </span>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setAttachments((current) =>
+                            current.filter((item) => item.id !== attachment.id),
+                          )
+                        }
+                        disabled={sending}
+                        aria-label={`Remove ${attachment.file.name}`}
+                        className="rounded p-0.5 text-surface-400 hover:bg-surface-200 hover:text-surface-700 disabled:opacity-40 dark:hover:bg-surface-700 dark:hover:text-surface-100"
+                      >
+                        <X size={13} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
               <textarea
                 ref={inputRef}
                 value={body}
@@ -761,6 +1006,25 @@ export function MetaHarnessView({
                 className="max-h-[176px] min-h-[36px] w-full resize-none bg-transparent px-2 py-2 text-sm leading-5 text-surface-800 outline-none placeholder:text-surface-400 dark:text-surface-100"
               />
               <div className="flex flex-wrap items-center gap-2 border-t border-surface-100 pt-2 dark:border-surface-700">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  onChange={selectAttachments}
+                  className="hidden"
+                  data-testid="meta-harness-file-input"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={sending || attachments.length >= MAX_ATTACHMENTS}
+                  aria-label="Attach documents"
+                  title={`Attach up to ${MAX_ATTACHMENTS} documents (25 MB each)`}
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-surface-500 transition-colors hover:bg-surface-100 hover:text-accent-600 disabled:cursor-not-allowed disabled:opacity-40 dark:text-surface-400 dark:hover:bg-surface-700 dark:hover:text-accent-300"
+                  data-testid="meta-harness-attach"
+                >
+                  <Paperclip size={15} />
+                </button>
                 <div className="flex rounded-xl bg-surface-50 p-0.5 dark:bg-surface-900" aria-label="Delivery type">
                   <ChoiceButton active={kind === "message"} onClick={() => setKind("message")} icon={<MessageSquare size={13} />} testId="meta-kind-message">Message</ChoiceButton>
                   <ChoiceButton active={kind === "handoff"} onClick={() => setKind("handoff")} icon={<Waypoints size={13} />} testId="meta-kind-handoff">Handoff</ChoiceButton>

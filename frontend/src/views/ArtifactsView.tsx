@@ -408,15 +408,26 @@ function MetadataFields({
 function sanitizedHtmlDocument(html: string): string {
   const parsed = new DOMParser().parseFromString(html, "text/html");
   parsed
-    .querySelectorAll("script, iframe, object, embed, form, meta, base, link")
+    .querySelectorAll("script, iframe, object, embed, meta, base, link")
     .forEach((element) => element.remove());
   parsed.querySelectorAll("*").forEach((element) => {
     for (const attribute of Array.from(element.attributes)) {
       const name = attribute.name.toLowerCase();
       const value = attribute.value.trim().toLowerCase();
+      const uriAttribute = [
+        "action",
+        "background",
+        "cite",
+        "formaction",
+        "href",
+        "poster",
+        "src",
+        "xlink:href",
+      ].includes(name);
       if (
         name.startsWith("on") ||
-        ((name === "src" || name === "href") &&
+        name === "srcset" ||
+        (uriAttribute &&
           !value.startsWith("data:") &&
           !value.startsWith("blob:") &&
           !value.startsWith("#"))
@@ -425,16 +436,32 @@ function sanitizedHtmlDocument(html: string): string {
       }
     }
   });
+
+  // Preserve the document's own head styles and the attributes on html/body.
+  // The former renderer returned only parsed.body.innerHTML, which silently
+  // discarded the most common place for an HTML artifact's stylesheet.
+  for (const element of Array.from(parsed.head.children)) {
+    if (!["STYLE", "TITLE"].includes(element.tagName)) element.remove();
+  }
+  parsed.head.insertAdjacentHTML(
+    "afterbegin",
+    [
+      "<meta charset=\"utf-8\">",
+      "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">",
+      "<meta name=\"color-scheme\" content=\"light\">",
+      "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; font-src data: blob:; connect-src 'none'; form-action 'none'; base-uri 'none'; script-src 'none'\">",
+      "<style>",
+      ":where(html){color-scheme:light}",
+      ":where(body){margin:24px;color:#172033;line-height:1.55;overflow-wrap:anywhere}",
+      ":where(img){max-width:100%;height:auto}",
+      ":where(pre){overflow:auto}",
+      ":where(table){border-collapse:collapse}",
+      "</style>",
+    ].join(""),
+  );
   return [
-    "<!doctype html><html><head><meta charset=\"utf-8\">",
-    "<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'none'; img-src data: blob:; style-src 'unsafe-inline'; font-src data:; connect-src 'none'; form-action 'none'; base-uri 'none'\">",
-    "<style>:root{color-scheme:light;font-family:Inter,ui-sans-serif,system-ui,sans-serif}",
-    "body{margin:24px;color:#172033;line-height:1.55;overflow-wrap:anywhere}",
-    "img{max-width:100%;height:auto}pre{overflow:auto;padding:12px;border-radius:8px;background:#f1f5f9}",
-    "table{border-collapse:collapse}th,td{border:1px solid #cbd5e1;padding:6px 8px}</style>",
-    "</head><body>",
-    parsed.body.innerHTML,
-    "</body></html>",
+    "<!doctype html>",
+    parsed.documentElement.outerHTML,
   ].join("");
 }
 

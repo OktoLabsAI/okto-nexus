@@ -497,7 +497,8 @@ class SqliteObservabilityQueries:
             rows = uow.connection.execute(
                 f"""
                 SELECT m.message_id, m.workspace_id, m.channel_id, m.from_agent_id,
-                       m.created_at, m.subject, m.body, m.target, m.trace_id
+                       m.created_at, m.subject, m.body, m.target, m.artifacts,
+                       m.trace_id
                 FROM messages m WHERE {where_sql}
                 ORDER BY m.created_at DESC, m.message_id
                 LIMIT ? OFFSET ?
@@ -531,6 +532,9 @@ class SqliteObservabilityQueries:
                 }
                 if include_body:
                     item["body"] = body
+                artifacts = _loads(row["artifacts"])
+                if isinstance(artifacts, list) and artifacts:
+                    item["artifacts"] = artifacts
                 items.append(item)
         except sqlite3.Error as exc:
             raise _db_error("reading message history", exc) from exc
