@@ -5,11 +5,18 @@ import { type ReactNode, useState } from "react";
 import {
   Activity,
   Bot,
+  Brain,
+  CheckSquare,
+  FolderOpen,
   KanbanSquare,
   KeyRound,
+  MessageSquare,
   MessagesSquare,
   Rocket,
   Settings,
+  Shield,
+  ShieldAlert,
+  Tags,
   TerminalSquare,
   Waypoints,
   X,
@@ -68,6 +75,12 @@ const SECTIONS: Section[] = [
           The graph shows presence and traffic in real time (the ● Live chip
           at the top). Click any element to inspect it.
         </P>
+        <H>Send a smoke-test message</H>
+        <P>
+          Open <b>Meta-harness</b>, choose Message, select an audience and send
+          a turn. Replies appear in the same conversation, so it is the fastest
+          way to confirm that an agent is connected and responding.
+        </P>
       </>
     ),
   },
@@ -95,7 +108,9 @@ const SECTIONS: Section[] = [
             (reversible).
           </Li>
           <Li>
-            <b>Delete</b>: removes the identity for good.
+            <b>Delete</b>: removes a regular agent identity for good. The
+            reserved <code>operator</code> identity powers dashboard messaging
+            and Meta-harness, so neither the UI nor the API allows deleting it.
           </Li>
         </ul>
         <H>Permissions & presets</H>
@@ -219,6 +234,13 @@ const SECTIONS: Section[] = [
           operator can cancel Open/Claimed handoffs (confirm-guarded) — they
           leave the pool immediately.
         </P>
+        <H>Results in context</H>
+        <P>
+          Completed cards include the agent response, while rejected cards
+          include the rejection reason. Open a card to see the full request,
+          acceptance criteria, dependencies and any verification feedback
+          alongside that result.
+        </P>
       </>
     ),
   },
@@ -234,18 +256,27 @@ const SECTIONS: Section[] = [
           terminal handoff results in one chronological chat. Filter by one
           agent or keep the complete team conversation visible.
         </P>
-        <H>Conversation history</H>
+        <H>Compose a turn</H>
         <P>
-          The latest 20 turns load first. Scroll to the top and choose <b>Load
-          more messages</b> to prepend the next batch without losing your
-          reading position.
+          Choose <b>Message</b> or <b>Handoff</b>, then <b>Private</b> for the
+          agent selected in <b>To</b>, or <b>Broadcast</b> for the workspace.
+          Subject is optional. Press Enter to send or Shift+Enter for a new
+          line; the message field grows from one to eight lines.
         </P>
-        <H>Delivery and audience</H>
+        <H>Replies and history</H>
         <P>
-          Choose <b>Message</b> or <b>Handoff</b>, then choose <b>Private</b>{" "}
-          for one selected agent or <b>Broadcast</b> for the workspace. A
-          broadcast handoff is single-winner work: the first eligible agent to
-          claim it becomes responsible for the result.
+          Markdown and structured responses are formatted for reading instead
+          of shown as raw JSON. New live turns appear at the bottom in
+          chronological order. The latest 20 turns load first; at the top,
+          choose <b>Load more messages</b> to prepend an older batch without
+          losing your reading position.
+        </P>
+        <H>Handoffs from chat</H>
+        <P>
+          A broadcast handoff is still single-winner work: the first eligible
+          agent to claim it becomes responsible for the result. Terminal
+          results return to this conversation and also remain visible on the
+          Handoffs board.
         </P>
       </>
     ),
@@ -267,6 +298,213 @@ const SECTIONS: Section[] = [
           The chip at the top shows the connection state: ● Live, Connecting,
           Reconnecting. Any event triggers an incremental graph refresh (no
           page reload).
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "memory",
+    title: "Memory",
+    icon: <Brain size={14} />,
+    content: (
+      <>
+        <H>Workspace knowledge</H>
+        <P>
+          Memory is a shared, workspace-scoped store written by agents. Select
+          one workspace in the header, then search by text or filter by topic.
+          The mode chip tells you whether the result used semantic, lexical or
+          recent ordering; semantic results also show a relevance score.
+        </P>
+        <H>Versions and curation</H>
+        <P>
+          Turn on <b>Include superseded</b> to inspect replaced entries and use
+          the links in the detail panel to follow their lineage. Delete is
+          permanent physical curation: it cannot be undone and does not emit a
+          bus event.
+        </P>
+        <H>Feature availability</H>
+        <P>
+          The navigation entry appears when <code>feature_memory</code> is on.
+          Turning it off prevents agent reads and writes but keeps existing
+          entries stored.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "workspaces",
+    title: "Workspaces",
+    icon: <FolderOpen size={14} />,
+    content: (
+      <>
+        <H>Coordination overview</H>
+        <P>
+          Select a workspace to see its identity, presence roster, recent
+          messages and events, open handoffs and most active agent. This screen
+          is read-only: workspaces appear as agents coordinate through the bus.
+        </P>
+        <H>Coordination health</H>
+        <P>
+          The OK/WARN summary covers unclaimed work, completion time, rejection
+          rate, inbox backlog, agent presence and parked deliveries. Switch
+          between 1h, 24h and 7d; the cards show the thresholds that caused a
+          warning.
+        </P>
+        <H>Analytics</H>
+        <P>
+          Use the metric and time-window controls to explore activity by agent.
+          Analytics may sample the most recent messages when the workspace is
+          large; the header tells you when that happens.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "registry",
+    title: "Registry",
+    icon: <Tags size={14} />,
+    content: (
+      <>
+        <H>Controlled vocabulary</H>
+        <P>
+          Registry is the source of truth for the labels agents may use.{" "}
+          <b>Tags</b> define keys and allowed values for agent metadata,
+          audience selectors and tag routing. <b>Capabilities</b> define the
+          names agents may announce and that capability routing may target.
+        </P>
+        <H>Register before assigning</H>
+        <P>
+          Create a tag key or capability here before using it on an agent,
+          policy selector or guardrail assignment. Agents can discover the
+          current catalogs through <code>tag_list</code> and{" "}
+          <code>capability_list</code>.
+        </P>
+        <H>Safe deletion</H>
+        <P>
+          A tag, value or capability in use cannot be deleted. The in-use panel
+          identifies the agents, selectors or guardrail assignments that must
+          be changed first.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "policies",
+    title: "Policies",
+    icon: <Shield size={14} />,
+    content: (
+      <>
+        <H>Reusable governance</H>
+        <P>
+          A policy is a named, versioned package of communication scope and
+          governance rules such as denials, quotas and approval requirements.
+          Edit its name and description independently from its version history.
+        </P>
+        <H>Publish, then bind</H>
+        <P>
+          Publishing appends a new immutable version; previous versions remain
+          available for audit. A policy is only staged until you bind it to an
+          agent from <b>Agents</b>. Enforcement is driven by that binding and
+          applies immediately.
+        </P>
+        <H>Operate safely</H>
+        <P>
+          Export or import a policy as JSON to move it between stores. Policies
+          that are still bound cannot be deleted, and the in-use panel shows
+          every binding to remove. The <b>Recent denials</b> panel explains
+          actions rejected by active rules.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "guardrails",
+    title: "Guardrails",
+    icon: <ShieldAlert size={14} />,
+    content: (
+      <>
+        <H>1. Groups: choose the agents</H>
+        <P>
+          Groups are named, reusable lists of explicit agents. Open a group and
+          select members from the automatically populated agent list. Use a
+          group when the same rule must follow a curated team rather than a
+          capability.
+        </P>
+        <H>2. Guardrails: define the content rule</H>
+        <P>
+          Choose the content surface and field to inspect. <code>body</code>{" "}
+          means the main text content supplied on that surface. Define the match
+          as plain text or a regular expression; the regex assistant offers
+          examples, describes common tokens and validates the pattern before
+          publication.
+        </P>
+        <H>3. Assignments: decide where it applies</H>
+        <P>
+          Target all registered agents, an explicit group, or every agent that
+          announces a registered capability. Choose the latest active rule or
+          pin a version, then select <b>Audit</b> to record matches or{" "}
+          <b>Enforce</b> to block matching writes. An assignment can also be
+          disabled without deleting it.
+        </P>
+        <H>Versions and deletion</H>
+        <P>
+          Rule versions move through draft, active, deprecated and archived
+          states. A guardrail or group cannot be deleted while an assignment
+          references it; remove the assignment first.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "communication",
+    title: "Communication",
+    icon: <MessageSquare size={14} />,
+    content: (
+      <>
+        <H>Reusable styles</H>
+        <P>
+          Communication presets describe how an agent should respond: tone,
+          format, language, verbosity, structure and free-form notes. They
+          guide presentation; they do not grant delivery permissions.
+        </P>
+        <H>Version and bind</H>
+        <P>
+          Publishing appends an immutable version. Bind a preset to an agent
+          from <b>Agents</b>; only that agent receives the style through its{" "}
+          <code>whoami</code> response. An agent may use a shared preset or an
+          inline style of its own.
+        </P>
+        <H>Reuse safely</H>
+        <P>
+          Export and import presets as JSON. A preset that is still bound to an
+          agent cannot be deleted; the in-use panel lists the bindings to
+          update first.
+        </P>
+      </>
+    ),
+  },
+  {
+    id: "approvals",
+    title: "Approvals",
+    icon: <CheckSquare size={14} />,
+    content: (
+      <>
+        <H>Human-in-the-loop decisions</H>
+        <P>
+          Actions intercepted by a <code>require_approval</code> policy wait in{" "}
+          <b>Pending approvals</b>. Expand a row to inspect its workspace, target
+          and requested payload before deciding.
+        </P>
+        <H>Approve or reject</H>
+        <P>
+          Approving executes the original action with its normal effects.
+          Rejecting asks for a justification and sends it back to the requester.
+          Completed decisions remain visible under <b>Recent decisions</b>.
+        </P>
+        <H>Feature switch</H>
+        <P>
+          Turning off <code>feature_hitl</code> stops new interceptions. It
+          does not discard existing pending requests, which remain decidable.
         </P>
       </>
     ),
@@ -338,20 +576,30 @@ export function HelpModal({ onClose }: { onClose: () => void }) {
         className="relative w-[900px] max-w-[95vw] bg-white dark:bg-surface-900 rounded-xl shadow-2xl h-[85vh] flex flex-col overflow-hidden border border-surface-200/50 dark:border-surface-700/50"
         onClick={(e) => e.stopPropagation()}
         data-testid="help-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="help-modal-title"
       >
         <div className="px-5 py-3 border-b border-surface-200/60 dark:border-surface-700/50 flex items-center justify-between shrink-0">
-          <h2 className="font-display font-semibold text-sm text-surface-900 dark:text-surface-100">
+          <h2
+            id="help-modal-title"
+            className="font-display font-semibold text-sm text-surface-900 dark:text-surface-100"
+          >
             Help — Okto Nexus
           </h2>
           <button
             onClick={onClose}
             className="p-1.5 text-surface-400 hover:text-surface-600 dark:hover:text-surface-300 hover:bg-surface-100 dark:hover:bg-white/10 rounded-lg"
+            aria-label="Close help"
           >
             <X size={16} />
           </button>
         </div>
         <div className="flex flex-1 min-h-0">
-          <aside className="w-48 shrink-0 border-r border-surface-200/60 dark:border-surface-700/50 overflow-y-auto p-2">
+          <aside
+            className="w-48 shrink-0 border-r border-surface-200/60 dark:border-surface-700/50 overflow-y-auto p-2"
+            aria-label="Help topics"
+          >
             {SECTIONS.map((s) => (
               <button
                 key={s.id}
@@ -361,6 +609,7 @@ export function HelpModal({ onClose }: { onClose: () => void }) {
                     ? "bg-accent-100 text-accent-700 dark:bg-accent-900/60 dark:text-accent-200"
                     : "text-surface-600 hover:bg-surface-100 dark:text-surface-400 dark:hover:bg-surface-800"
                 }`}
+                aria-pressed={s.id === active}
               >
                 {s.icon}
                 {s.title}
