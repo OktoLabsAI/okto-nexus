@@ -47,6 +47,39 @@ def test_patch_persists_and_applies_to_live_config(loopback_client):
         assert deps2.config.session_stale_ttl_seconds == 120
 
 
+def test_meta_harness_receipt_display_defaults_inline_and_persists(loopback_client):
+    deps, client = loopback_client
+    items = client.get("/api/v1/settings").json()["data"]["items"]
+    setting = next(
+        item for item in items if item["key"] == "meta_harness_receipt_display"
+    )
+    assert setting == {
+        "key": "meta_harness_receipt_display",
+        "type": "enum",
+        "group": "interface",
+        "description": setting["description"],
+        "value": "inline",
+        "default": "inline",
+        "min": None,
+        "max": None,
+        "choices": ["inline", "timeline"],
+        "source": "default",
+        "editable": True,
+        "requires_restart": False,
+    }
+
+    response = client.patch(
+        "/api/v1/settings", json={"meta_harness_receipt_display": "timeline"}
+    )
+    assert response.status_code == 200
+    assert deps.config.meta_harness_receipt_display == "timeline"
+
+    deps2 = bootstrap({}, ["--home", str(deps.config.home_dir)])
+    app2 = build_app(deps2)
+    with TestClient(app2, client=("127.0.0.1", 50003)):
+        assert deps2.config.meta_harness_receipt_display == "timeline"
+
+
 def test_patch_rejects_out_of_range_unknown_and_bad_enum(loopback_client):
     _, client = loopback_client
     assert (
@@ -59,6 +92,13 @@ def test_patch_rejects_out_of_range_unknown_and_bad_enum(loopback_client):
     )
     assert (
         client.patch("/api/v1/settings", json={"trust_mode": "yolo"}).status_code
+        == 422
+    )
+    assert (
+        client.patch(
+            "/api/v1/settings",
+            json={"meta_harness_receipt_display": "popup"},
+        ).status_code
         == 422
     )
 

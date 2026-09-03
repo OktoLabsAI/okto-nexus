@@ -101,6 +101,26 @@ def test_knob_cli_flag_overrides_env(flag, field):
     assert getattr(config, field) == 99  # CLI > env precedence
 
 
+def test_meta_harness_receipt_display_config_pipeline():
+    assert load_config({}).meta_harness_receipt_display == "inline"
+    assert (
+        load_config(
+            {"OKTO_NEXUS_META_HARNESS_RECEIPT_DISPLAY": "timeline"}
+        ).meta_harness_receipt_display
+        == "timeline"
+    )
+    assert (
+        load_config(
+            {"OKTO_NEXUS_META_HARNESS_RECEIPT_DISPLAY": "timeline"},
+            ["--meta-harness-receipt-display", "inline"],
+        ).meta_harness_receipt_display
+        == "inline"
+    )
+    with pytest.raises(OktoNexusError) as exc:
+        load_config({"OKTO_NEXUS_META_HARNESS_RECEIPT_DISPLAY": "popup"})
+    assert exc.value.code == ErrorCode.CONFIG_ERROR.value
+
+
 # --------------------------------------------------------------------------- #
 # iso_to_epoch: ONE parser, tolerant to z/Z/offset/naive
 # --------------------------------------------------------------------------- #

@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.8` |
+| Package | `okto-nexus 0.1.9` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -359,7 +359,10 @@ The bundled dashboard provides:
 - **Handoffs** — a six-column Kanban including `VERIFYING`, claim details,
   dependency state, verification, cancellation, and results;
 - **Meta-harness** — an OpenAI-style chat for private or broadcast messages
-  and handoffs, with agent filtering and replies/results in one timeline;
+  and handoffs, with agent filtering, aggregated acknowledgement flags, and
+  replies/results in one timeline;
+- **Artifacts** — paginated deliverables with list/Explorer-style grid views,
+  type-aware icons, rich previews, metadata, and managed-payload downloads;
 - **Events** — filtered event history, trace navigation, and live SSE updates;
 - **Memory** — durable memory browse/search/curation when `feature_memory` is
   enabled;
@@ -705,7 +708,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.8 default surface:
+For the 0.1.9 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -753,6 +756,7 @@ an explicit value such as `--feature-trace true`.
 | `OKTO_NEXUS_TRUST_MODE` | `--trust-mode` | `open` | `open` or `strict` |
 | `OKTO_NEXUS_EMBEDDING_MODE` | `--embedding-mode` | `off` | `off`, `stub`, or `local` |
 | `OKTO_NEXUS_INBOX_READ_RECEIPTS` | `--inbox-read-receipts` | `true` | Sender inbox receipts |
+| `OKTO_NEXUS_META_HARNESS_RECEIPT_DISPLAY` | `--meta-harness-receipt-display` | `inline` | `inline` flags or legacy `timeline` messages |
 | `OKTO_NEXUS_EXPOSE_WORKSPACE_PATH` | `--expose-workspace-path` | `false` | Operator REST/dashboard path disclosure |
 | `OKTO_NEXUS_AUTO_PRUNE_ON_START` | `--auto-prune-on-start` | `false` | One bounded best-effort startup pass |
 
@@ -973,10 +977,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.8
+uv build --out-dir dist/release-0.1.9
 uvx twine check \
-  dist/release-0.1.8/okto_nexus-0.1.8-py3-none-any.whl \
-  dist/release-0.1.8/okto_nexus-0.1.8.tar.gz
+  dist/release-0.1.9/okto_nexus-0.1.9-py3-none-any.whl \
+  dist/release-0.1.9/okto_nexus-0.1.9.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1112,7 +1116,22 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.8 — current
+### 0.1.9 — current
+
+Dashboard presentation release. The MCP contract remains at surface revision
+33 and the latest database migration remains 028.
+
+- Bumped the package and distribution metadata from 0.1.8 to 0.1.9.
+- Added list/grid switching to the Artifacts catalog, including an
+  Explorer-style grid with type-aware file icons, names, and payload sizes.
+- Collapsed Meta-harness read-receipt notifications into acknowledgement flags
+  on their original messages by default. Grey flags identify incomplete target
+  sets; green flags mean every target acknowledged, and their detail modal
+  identifies pending recipients and delivery/read timestamps.
+- Added the `meta_harness_receipt_display` interface setting so operators can
+  restore separate receipt messages with the `timeline` mode.
+
+### 0.1.8
 
 Artifact storage and catalog release. The MCP contract is at surface revision
 33 and the latest database migration is 028.

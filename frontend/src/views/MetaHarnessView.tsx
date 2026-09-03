@@ -1,9 +1,11 @@
 import {
   ArrowDown,
   Bot,
+  CheckCheck,
   CheckCircle2,
   ChevronUp,
   CircleAlert,
+  Clock3,
   Download,
   FileText,
   LoaderCircle,
@@ -45,6 +47,7 @@ const OPERATOR = "operator";
 const TIMELINE_PAGE_SIZE = 20;
 const MAX_ATTACHMENTS = 10;
 const MAX_ATTACHMENT_BYTES = 25 * 1024 * 1024;
+type ReceiptDisplay = "inline" | "timeline";
 
 type TimelineEntry = {
   id: string;
@@ -58,6 +61,7 @@ type TimelineEntry = {
   subject: string | null;
   content: string;
   artifacts: string[];
+  deliveries?: MessageRow["deliveries"];
   status?: string;
   outcome?: "completed" | "rejected";
 };
@@ -190,10 +194,30 @@ function involvedAgent(entry: TimelineEntry, agentId: string): boolean {
   return entry.audience === "broadcast";
 }
 
-function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): TimelineEntry[] {
+function isReadReceiptMessage(message: MessageRow): boolean {
+  const body = message.body ?? message.preview;
+  try {
+    const payload = JSON.parse(body) as unknown;
+    return (
+      payload !== null &&
+      typeof payload === "object" &&
+      !Array.isArray(payload) &&
+      (payload as Record<string, unknown>).kind === "message.read_receipt"
+    );
+  } catch {
+    return false;
+  }
+}
+
+function buildTimeline(
+  messages: MessageRow[],
+  handoffs: GraphHandoff[],
+  receiptDisplay: ReceiptDisplay,
+): TimelineEntry[] {
   const rows: TimelineEntry[] = [];
 
   for (const message of messages) {
+    if (receiptDisplay === "inline" && isReadReceiptMessage(message)) continue;
     const outgoing = message.from_agent_id === OPERATOR;
     const recipients = message.deliveries.map((delivery) => delivery.recipient_agent_id);
     const directTarget = targetAgent(message);
@@ -209,6 +233,7 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
       subject: message.subject,
       content: message.body ?? message.preview,
       artifacts: artifactIds(message.artifacts),
+      deliveries: outgoing ? message.deliveries : undefined,
       status: outgoing
         ? recipients.length
           ? `${recipients.length} recipient${recipients.length === 1 ? "" : "s"}`
@@ -266,6 +291,145 @@ function buildTimeline(messages: MessageRow[], handoffs: GraphHandoff[]): Timeli
     (a, b) =>
       new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime() ||
       a.id.localeCompare(b.id),
+  );
+}
+
+function isAcknowledged(delivery: MessageRow["deliveries"][number]): boolean {
+  return delivery.status === "read" || Boolean(delivery.read_at);
+}
+
+function fullStamp(value: string | null | undefined): string {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+}
+
+function receiptState(delivery: MessageRow["deliveries"][number]): string {
+  if (isAcknowledged(delivery)) return "Acknowledged";
+  if (delivery.status === "delivered") return "Received · awaiting acknowledgement";
+  if (delivery.status === "parked") return "Parked · awaiting acknowledgement";
+  return "Waiting for receipt";
+}
+
+function ReceiptStatusFlag({
+  deliveries,
+  onOpen,
+}: {
+  deliveries: MessageRow["deliveries"];
+  onOpen: () => void;
+}) {
+  const acknowledged = deliveries.filter(isAcknowledged).length;
+  const complete = deliveries.length > 0 && acknowledged === deliveries.length;
+  const label = complete
+    ? `All ${deliveries.length} recipients acknowledged this message`
+    : `${acknowledged} of ${deliveries.length} recipients acknowledged this message`;
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className={`inline-flex items-center gap-1 border-0 bg-transparent p-0 text-[10px] font-semibold normal-case tracking-normal transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70 ${
+        complete
+          ? "text-emerald-100 drop-shadow-[0_0_4px_rgba(52,211,153,0.85)]"
+          : "text-surface-300"
+      }`}
+      aria-label={`${label}. Open details.`}
+      title={`${label}. Click for details.`}
+      data-testid="meta-harness-receipt-status"
+    >
+      <CheckCheck size={13} aria-hidden="true" />
+      <span>{acknowledged}/{deliveries.length} ack</span>
+    </button>
+  );
+}
+
+function ReceiptDetailsModal({
+  entry,
+  agents,
+  onClose,
+}: {
+  entry: TimelineEntry;
+  agents: AgentRow[];
+  onClose: () => void;
+}) {
+  const deliveries = entry.deliveries ?? [];
+  const acknowledged = deliveries.filter(isAcknowledged);
+  const pending = deliveries.filter((delivery) => !isAcknowledged(delivery));
+  const complete = deliveries.length > 0 && pending.length === 0;
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/45 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="receipt-details-title"
+      data-testid="meta-harness-receipt-modal"
+    >
+      <div className="flex max-h-[min(720px,90vh)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-surface-200 bg-white shadow-2xl dark:border-surface-700 dark:bg-surface-900">
+        <header className="flex items-start gap-3 border-b border-surface-200 px-5 py-4 dark:border-surface-700">
+          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${complete ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300" : "bg-surface-100 text-surface-500 dark:bg-surface-800 dark:text-surface-300"}`}>
+            <CheckCheck size={20} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <h3 id="receipt-details-title" className="font-display text-sm font-semibold text-surface-900 dark:text-surface-100">
+              Delivery and read receipts
+            </h3>
+            <p className="mt-0.5 text-xs text-surface-500 dark:text-surface-400">
+              {acknowledged.length} of {deliveries.length} target{deliveries.length === 1 ? "" : "s"} acknowledged this message.
+            </p>
+          </div>
+          <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-surface-400 hover:bg-surface-100 hover:text-surface-700 dark:hover:bg-surface-800 dark:hover:text-surface-200" aria-label="Close receipt details">
+            <X size={17} />
+          </button>
+        </header>
+
+        {!complete && pending.length > 0 && (
+          <div className="border-b border-surface-200 bg-surface-50 px-5 py-3 text-xs text-surface-600 dark:border-surface-700 dark:bg-surface-950/50 dark:text-surface-300">
+            <span className="font-semibold">Waiting for acknowledgement from:</span>{" "}
+            <span className="font-mono">{pending.map((delivery) => delivery.recipient_agent_id).join(", ")}</span>
+          </div>
+        )}
+
+        <div className="min-h-0 overflow-y-auto p-4">
+          <div className="space-y-2">
+            {deliveries.map((delivery) => {
+              const read = isAcknowledged(delivery);
+              const profile = agents.find((agent) => agent.agent_id === delivery.recipient_agent_id);
+              return (
+                <div key={delivery.delivery_id} className="rounded-xl border border-surface-200 px-4 py-3 dark:border-surface-700">
+                  <div className="flex items-center gap-3">
+                    <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full ${read ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300" : "bg-surface-100 text-surface-500 dark:bg-surface-800 dark:text-surface-300"}`}>
+                      {read ? <CheckCircle2 size={16} /> : <Clock3 size={16} />}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate font-mono text-xs font-semibold text-surface-800 dark:text-surface-100">
+                        {delivery.recipient_agent_id}
+                      </div>
+                      {profile?.role && <div className="truncate text-[11px] text-surface-400">{profile.role}</div>}
+                    </div>
+                    <span className={`chip ${read ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : "bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-300"}`}>
+                      {receiptState(delivery)}
+                    </span>
+                  </div>
+                  <dl className="mt-3 grid grid-cols-1 gap-2 border-t border-surface-100 pt-3 text-[11px] sm:grid-cols-3 dark:border-surface-800">
+                    <div><dt className="text-surface-400">Queued</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.created_at)}</dd></div>
+                    <div><dt className="text-surface-400">Received</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.delivered_at)}</dd></div>
+                    <div><dt className="text-surface-400">Acknowledged</dt><dd className="mt-0.5 text-surface-700 dark:text-surface-200">{fullStamp(delivery.read_at)}</dd></div>
+                  </dl>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -367,6 +531,8 @@ function ChatTurn({
   showWorkspace,
   artifactDetails,
   onDownloadArtifact,
+  showReceiptFlags,
+  onOpenReceipt,
 }: {
   entry: TimelineEntry;
   agents: AgentRow[];
@@ -374,6 +540,8 @@ function ChatTurn({
   showWorkspace: boolean;
   artifactDetails: Record<string, ArtifactItem>;
   onDownloadArtifact: (workspaceId: string, artifactId: string) => void;
+  showReceiptFlags: boolean;
+  onOpenReceipt: (entry: TimelineEntry) => void;
 }) {
   const outgoing = entry.direction === "outgoing";
   const identity = outgoing ? OPERATOR : entry.agentId;
@@ -469,9 +637,14 @@ function ChatTurn({
             </div>
           )}
           {entry.status && (
-            <div className={`mt-2 flex items-center gap-1 text-[10px] font-medium uppercase tracking-wider ${outgoing ? "text-white/70" : "text-surface-400 dark:text-surface-500"}`}>
-              {entry.outcome === "completed" ? <CheckCircle2 size={11} /> : entry.outcome === "rejected" ? <CircleAlert size={11} /> : null}
-              {entry.status}
+            <div className={`mt-2 flex items-center justify-between gap-2 text-[10px] font-medium uppercase tracking-wider ${outgoing ? "text-white/70" : "text-surface-400 dark:text-surface-500"}`}>
+              <span className="inline-flex items-center gap-1">
+                {entry.outcome === "completed" ? <CheckCircle2 size={11} /> : entry.outcome === "rejected" ? <CircleAlert size={11} /> : null}
+                {entry.status}
+              </span>
+              {showReceiptFlags && outgoing && entry.kind === "message" && Boolean(entry.deliveries?.length) && (
+                <ReceiptStatusFlag deliveries={entry.deliveries ?? []} onOpen={() => onOpenReceipt(entry)} />
+              )}
             </div>
           )}
         </div>
@@ -508,6 +681,8 @@ export function MetaHarnessView({
   const [artifactDetails, setArtifactDetails] = useState<
     Record<string, ArtifactItem>
   >({});
+  const [receiptDisplay, setReceiptDisplay] = useState<ReceiptDisplay>("inline");
+  const [receiptEntry, setReceiptEntry] = useState<TimelineEntry | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [sending, setSending] = useState(false);
@@ -544,6 +719,25 @@ export function MetaHarnessView({
         setTargetAgentId((current) => current || items.find((item) => item.agent_id !== OPERATOR && item.is_active)?.agent_id || "");
       })
       .catch((exc) => setError((exc as Error).message));
+  }, []);
+
+  useEffect(() => {
+    api
+      .settings()
+      .then(({ items }) => {
+        const value = items.find(
+          (item) => item.key === "meta_harness_receipt_display",
+        )?.value;
+        const next: ReceiptDisplay = value === "timeline" ? "timeline" : "inline";
+        timelineOrderRef.current.positions.clear();
+        timelineOrderRef.current.next = 0;
+        setReceiptDisplay(next);
+      })
+      .catch(() => {
+        // A settings read failure must not blank the conversation; the new
+        // inline presentation is the safe documented default.
+        setReceiptDisplay("inline");
+      });
   }, []);
 
   useEffect(() => {
@@ -605,11 +799,11 @@ export function MetaHarnessView({
   const timeline = useMemo(
     () =>
       preserveArrivalOrder(
-        buildTimeline(messages, handoffs),
+        buildTimeline(messages, handoffs, receiptDisplay),
         timelineOrderRef.current,
         workspace,
       ).filter((entry) => involvedAgent(entry, filterAgent)),
-    [messages, handoffs, filterAgent, workspace],
+    [messages, handoffs, receiptDisplay, filterAgent, workspace],
   );
   const visibleTimeline = useMemo(
     () => timeline.slice(-visibleCount),
@@ -910,6 +1104,8 @@ export function MetaHarnessView({
                     onDownloadArtifact={(workspaceId, artifactId) => {
                       void downloadArtifact(workspaceId, artifactId);
                     }}
+                    showReceiptFlags={receiptDisplay === "inline"}
+                    onOpenReceipt={setReceiptEntry}
                   />
                 ))}
               </div>
@@ -917,6 +1113,13 @@ export function MetaHarnessView({
             <div ref={bottomRef} />
           </div>
         </div>
+        {receiptEntry && (
+          <ReceiptDetailsModal
+            entry={receiptEntry}
+            agents={agents}
+            onClose={() => setReceiptEntry(null)}
+          />
+        )}
 
         <div className="shrink-0 border-t border-white bg-white px-4 py-3 dark:border-surface-950 dark:bg-surface-950">
           <form onSubmit={submit} className="mx-auto max-w-5xl" data-testid="meta-harness-composer">

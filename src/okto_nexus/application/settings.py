@@ -17,6 +17,7 @@ from typing import Any
 
 from ..config import (
     EMBEDDING_MODES,
+    META_HARNESS_RECEIPT_DISPLAY_MODES,
     METRICS_MODES,
     MIN_RETENTION_MESSAGES_KEEP_DAYS,
     NexusConfig,
@@ -232,6 +233,15 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         "Deliver a read receipt to the sender's inbox when a recipient "
         "acknowledges its message (receipts never generate receipts). "
         "Turn off to keep inboxes receipt-free.",
+    ),
+    SettingSpec(
+        "meta_harness_receipt_display",
+        "enum",
+        "How read receipts appear in Meta-harness: 'inline' hides receipt "
+        "notification turns and shows an aggregate acknowledgement flag on "
+        "the original message; 'timeline' keeps receipts as separate chat turns.",
+        choices=META_HARNESS_RECEIPT_DISPLAY_MODES,
+        group="interface",
     ),
     SettingSpec(
         "expose_workspace_path",

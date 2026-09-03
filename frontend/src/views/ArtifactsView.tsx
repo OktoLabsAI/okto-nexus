@@ -7,10 +7,17 @@ import {
   Database,
   Download,
   File,
+  FileArchive,
+  FileAudio,
   FileCode2,
+  FileImage,
   FileJson2,
+  FileSpreadsheet,
   FileText,
+  FileVideo,
+  LayoutGrid,
   HardDrive,
+  List as ListIcon,
   Maximize2,
   Search,
   Users,
@@ -31,6 +38,12 @@ const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
 
 const PAGE_SIZE = 20;
+const VIEW_STORAGE_KEY = "okto-nexus-artifacts-view";
+type ArtifactViewMode = "list" | "grid";
+type ArtifactDescriptor = Pick<
+  ArtifactItem,
+  "artifact_type" | "filename" | "media_type"
+>;
 
 function bytes(value: number): string {
   if (value < 1024) return `${value} B`;
@@ -48,14 +61,88 @@ function localDateBound(value: string, endOfDay: boolean): string {
   return new Date(`${value}T${time}`).toISOString();
 }
 
-function ArtifactIcon({ type }: { type: ArtifactItem["artifact_type"] }) {
-  const cls = "text-accent-600 dark:text-accent-400";
-  if (type === "json") return <FileJson2 size={17} className={cls} />;
-  if (type === "markdown" || type === "html") {
-    return <FileCode2 size={17} className={cls} />;
+function isImageArtifact(artifact: ArtifactDescriptor): boolean {
+  return (
+    artifact.media_type.toLowerCase().startsWith("image/") ||
+    /\.(avif|bmp|gif|ico|jpe?g|png|svg|webp)$/.test(
+      artifact.filename.toLowerCase(),
+    )
+  );
+}
+
+function isPdfArtifact(artifact: ArtifactDescriptor): boolean {
+  return (
+    artifact.media_type.toLowerCase() === "application/pdf" ||
+    artifact.filename.toLowerCase().endsWith(".pdf")
+  );
+}
+
+function isCsvArtifact(artifact: ArtifactDescriptor): boolean {
+  const mediaType = artifact.media_type.toLowerCase();
+  return (
+    mediaType === "text/csv" ||
+    mediaType === "application/csv" ||
+    mediaType === "text/comma-separated-values" ||
+    artifact.filename.toLowerCase().endsWith(".csv")
+  );
+}
+
+function ArtifactIcon({
+  item,
+  size = 17,
+  className = "",
+}: {
+  item: ArtifactDescriptor;
+  size?: number;
+  className?: string;
+}) {
+  const filename = item.filename.toLowerCase();
+  const mediaType = item.media_type.toLowerCase();
+  const iconProps = { size, className };
+
+  if (isImageArtifact(item)) {
+    return <FileImage {...iconProps} className={`text-violet-500 ${className}`} />;
   }
-  if (type === "text") return <FileText size={17} className={cls} />;
-  return <File size={17} className={cls} />;
+  if (mediaType.startsWith("video/")) {
+    return <FileVideo {...iconProps} className={`text-fuchsia-500 ${className}`} />;
+  }
+  if (mediaType.startsWith("audio/")) {
+    return <FileAudio {...iconProps} className={`text-pink-500 ${className}`} />;
+  }
+  if (
+    mediaType.includes("spreadsheet") ||
+    mediaType.includes("excel") ||
+    mediaType === "text/csv" ||
+    /\.(csv|tsv|xls|xlsx|ods)$/.test(filename)
+  ) {
+    return <FileSpreadsheet {...iconProps} className={`text-emerald-600 ${className}`} />;
+  }
+  if (
+    mediaType.includes("zip") ||
+    mediaType.includes("compressed") ||
+    /\.(zip|7z|rar|tar|gz|bz2)$/.test(filename)
+  ) {
+    return <FileArchive {...iconProps} className={`text-amber-600 ${className}`} />;
+  }
+  if (item.artifact_type === "json" || mediaType.includes("json")) {
+    return <FileJson2 {...iconProps} className={`text-amber-500 ${className}`} />;
+  }
+  if (
+    item.artifact_type === "html" ||
+    /\.(html?|css|js|jsx|ts|tsx|py|java|go|rs|sh|sql|xml|ya?ml)$/.test(filename)
+  ) {
+    return <FileCode2 {...iconProps} className={`text-sky-600 ${className}`} />;
+  }
+  if (
+    item.artifact_type === "markdown" ||
+    item.artifact_type === "text" ||
+    mediaType.startsWith("text/") ||
+    mediaType === "application/pdf" ||
+    /\.(md|txt|log|pdf|doc|docx|odt|rtf)$/.test(filename)
+  ) {
+    return <FileText {...iconProps} className={`text-blue-600 ${className}`} />;
+  }
+  return <File {...iconProps} className={`text-surface-500 ${className}`} />;
 }
 
 function ArtifactRow({
@@ -80,7 +167,7 @@ function ArtifactRow({
       data-testid="artifact-row"
     >
       <div className="flex items-center gap-2">
-        <ArtifactIcon type={item.artifact_type} />
+        <ArtifactIcon item={item} />
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-surface-800 dark:text-surface-100">
           {item.name || item.filename}
         </span>
@@ -95,6 +182,40 @@ function ArtifactRow({
         <span>&middot;</span>
         <span className="shrink-0">{bytes(item.size_bytes)}</span>
       </div>
+    </button>
+  );
+}
+
+function ArtifactGridItem({
+  item,
+  active,
+  onClick,
+}: {
+  item: ArtifactItem;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={`${item.filename}\n${bytes(item.size_bytes)}`}
+      className={`group flex min-h-40 min-w-0 flex-col items-center rounded-xl border px-3 py-4 text-center transition-colors ${
+        active
+          ? "border-accent-500 bg-accent-50 ring-1 ring-accent-500/30 dark:bg-accent-900/20"
+          : "border-transparent hover:border-surface-200 hover:bg-surface-50 dark:hover:border-surface-700 dark:hover:bg-surface-800/50"
+      }`}
+      data-testid="artifact-grid-item"
+    >
+      <span className="grid h-20 w-20 place-items-center rounded-xl bg-surface-100 transition-transform group-hover:scale-105 dark:bg-surface-800">
+        <ArtifactIcon item={item} size={54} className="drop-shadow-sm" />
+      </span>
+      <span className="mt-3 w-full truncate text-xs font-medium text-surface-800 dark:text-surface-100">
+        {item.name || item.filename}
+      </span>
+      <span className="mt-1 text-[11px] text-surface-500 dark:text-surface-400">
+        {bytes(item.size_bytes)}
+      </span>
     </button>
   );
 }
@@ -231,7 +352,7 @@ function ContentPreview({
       </div>
     );
   }
-  if (artifact.media_type.startsWith("image/") && blobUrl) {
+  if (isImageArtifact(artifact) && blobUrl) {
     return (
       <img
         src={blobUrl}
@@ -240,7 +361,7 @@ function ContentPreview({
       />
     );
   }
-  if (artifact.media_type === "application/pdf" && blobUrl) {
+  if (isPdfArtifact(artifact) && blobUrl) {
     return <iframe title={artifact.filename} src={blobUrl} className={`${expanded ? "h-full min-h-[70vh]" : "h-[55vh]"} w-full rounded-lg border border-surface-200 dark:border-surface-700`} />;
   }
   if (artifact.content == null) {
@@ -283,7 +404,8 @@ function isRichType(artifact: ArtifactDetail): boolean {
     artifact.artifact_type === "json" ||
     artifact.artifact_type === "html" ||
     artifact.media_type === "text/html" ||
-    artifact.media_type === "application/json"
+    artifact.media_type === "application/json" ||
+    isCsvArtifact(artifact)
   );
 }
 
@@ -465,8 +587,132 @@ function sanitizedHtmlDocument(html: string): string {
   ].join("");
 }
 
+function parseCsv(content: string): string[][] {
+  const source = content.replace(/^\uFEFF/, "");
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let field = "";
+  let quoted = false;
+
+  for (let index = 0; index < source.length; index += 1) {
+    const char = source[index];
+    if (quoted) {
+      if (char === '"') {
+        if (source[index + 1] === '"') {
+          field += '"';
+          index += 1;
+        } else {
+          quoted = false;
+        }
+      } else {
+        field += char;
+      }
+      continue;
+    }
+    if (char === '"' && field.length === 0) {
+      quoted = true;
+    } else if (char === ",") {
+      row.push(field);
+      field = "";
+    } else if (char === "\n" || char === "\r") {
+      if (char === "\r" && source[index + 1] === "\n") index += 1;
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else {
+      field += char;
+    }
+  }
+
+  if (field.length > 0 || row.length > 0 || source.endsWith(",")) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows;
+}
+
+function CsvTable({ content }: { content: string }) {
+  const rows = useMemo(() => parseCsv(content), [content]);
+  if (rows.length === 0) {
+    return (
+      <div className="rounded-xl border border-dashed border-surface-300 p-6 text-center text-sm text-surface-500 dark:border-surface-700">
+        This CSV file is empty.
+      </div>
+    );
+  }
+
+  const columnCount = rows.reduce(
+    (largest, csvRow) => Math.max(largest, csvRow.length),
+    0,
+  );
+  const headers = Array.from(
+    { length: columnCount },
+    (_, index) => rows[0]?.[index] || `Column ${index + 1}`,
+  );
+  const allDataRows = rows.slice(1);
+  const visibleRows = allDataRows.slice(0, 500);
+
+  return (
+    <div className="mx-auto max-w-full overflow-hidden rounded-xl border border-surface-200 bg-white shadow-sm dark:border-surface-700 dark:bg-surface-900">
+      <div className="max-h-[72vh] overflow-auto">
+        <table
+          className="min-w-full border-collapse text-left text-xs"
+          data-testid="artifact-csv-table"
+        >
+          <thead className="sticky top-0 z-10 bg-surface-100 text-surface-700 dark:bg-surface-800 dark:text-surface-200">
+            <tr>
+              {headers.map((header, index) => (
+                <th
+                  key={index}
+                  scope="col"
+                  className="whitespace-nowrap border-b border-r border-surface-200 px-3 py-2.5 font-semibold last:border-r-0 dark:border-surface-700"
+                >
+                  {header}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="text-surface-700 dark:text-surface-200">
+            {visibleRows.map((dataRow, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className="odd:bg-white even:bg-surface-50 dark:odd:bg-surface-900 dark:even:bg-surface-800/50"
+              >
+                {headers.map((_, columnIndex) => (
+                  <td
+                    key={columnIndex}
+                    className="max-w-md whitespace-pre-wrap break-words border-b border-r border-surface-200 px-3 py-2 align-top last:border-r-0 dark:border-surface-700"
+                  >
+                    {dataRow[columnIndex] ?? ""}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {allDataRows.length === 0 && (
+          <p className="p-4 text-center text-xs text-surface-500">
+            The CSV contains a header but no data rows.
+          </p>
+        )}
+      </div>
+      {allDataRows.length > visibleRows.length && (
+        <p className="border-t border-surface-200 px-3 py-2 text-xs text-surface-500 dark:border-surface-700">
+          Showing the first {visibleRows.length.toLocaleString()} of{" "}
+          {allDataRows.length.toLocaleString()} data rows. Use Raw or Download
+          for the complete file.
+        </p>
+      )}
+    </div>
+  );
+}
+
 function RichPreview({ artifact }: { artifact: ArtifactDetail }) {
   const content = artifact.content ?? "";
+  if (isCsvArtifact(artifact)) {
+    return <CsvTable content={content} />;
+  }
   if (artifact.artifact_type === "markdown") {
     return (
       <div className="mx-auto max-w-5xl rounded-xl border border-surface-200 bg-white p-6 text-sm shadow-sm dark:border-surface-700 dark:bg-surface-900">
@@ -514,7 +760,9 @@ function ExpandedArtifactModal({
   onClose: () => void;
   onDownload: () => void;
 }) {
-  const richCapable = isRichType(artifact) && artifact.content != null;
+  const imagePreview = isImageArtifact(artifact);
+  const richCapable =
+    !imagePreview && isRichType(artifact) && artifact.content != null;
   const [mode, setMode] = useState<"rich" | "raw">(
     richCapable ? "rich" : "raw",
   );
@@ -540,7 +788,7 @@ function ExpandedArtifactModal({
     >
       <div className="flex h-full max-h-[94vh] w-full max-w-[1500px] flex-col overflow-hidden rounded-2xl border border-surface-200 bg-surface-50 shadow-2xl dark:border-surface-700 dark:bg-surface-950">
         <header className="flex shrink-0 flex-wrap items-center gap-3 border-b border-surface-200 bg-white px-4 py-3 dark:border-surface-700 dark:bg-surface-900">
-          <ArtifactIcon type={artifact.artifact_type} />
+          <ArtifactIcon item={artifact} />
           <div className="min-w-0">
             <h2 id="expanded-artifact-title" className="truncate text-sm font-semibold text-surface-900 dark:text-surface-100">
               {artifact.name || artifact.filename}
@@ -577,7 +825,9 @@ function ExpandedArtifactModal({
           </button>
         </header>
         <div className="min-h-0 flex-1 overflow-auto p-4 sm:p-6">
-          {richCapable && mode === "rich" ? (
+          {imagePreview ? (
+            <ContentPreview artifact={artifact} blobUrl={blobUrl} expanded />
+          ) : richCapable && mode === "rich" ? (
             <RichPreview artifact={artifact} />
           ) : artifact.content != null ? (
             <pre className="min-h-full whitespace-pre-wrap rounded-xl bg-surface-950 p-5 font-mono text-xs leading-relaxed text-surface-100">
@@ -623,7 +873,15 @@ export function ArtifactsView({
   const [error, setError] = useState<string | null>(null);
   const [blobUrl, setBlobUrl] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
+  const [viewMode, setViewMode] = useState<ArtifactViewMode>(() =>
+    localStorage.getItem(VIEW_STORAGE_KEY) === "grid" ? "grid" : "list",
+  );
   const listRequestRef = useRef(0);
+
+  const changeViewMode = (mode: ArtifactViewMode) => {
+    localStorage.setItem(VIEW_STORAGE_KEY, mode);
+    setViewMode(mode);
+  };
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -705,8 +963,7 @@ export function ArtifactsView({
     setBlobUrl(null);
     if (
       !selected?.available ||
-      (!selected.media_type.startsWith("image/") &&
-        selected.media_type !== "application/pdf")
+      (!isImageArtifact(selected) && !isPdfArtifact(selected))
     ) {
       return;
     }
@@ -760,6 +1017,33 @@ export function ArtifactsView({
             <span className="chip bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-300">
               {total} artifact{total === 1 ? "" : "s"}
             </span>
+            <div
+              className="ml-auto flex rounded-lg border border-surface-200 bg-surface-50 p-0.5 dark:border-surface-700 dark:bg-surface-800"
+              aria-label="Artifact view"
+            >
+              <button
+                type="button"
+                onClick={() => changeViewMode("list")}
+                className={`rounded-md p-1.5 transition-colors ${viewMode === "list" ? "bg-white text-accent-600 shadow-sm dark:bg-surface-700 dark:text-accent-300" : "text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"}`}
+                aria-label="List view"
+                aria-pressed={viewMode === "list"}
+                title="List view"
+                data-testid="artifact-view-list"
+              >
+                <ListIcon size={15} />
+              </button>
+              <button
+                type="button"
+                onClick={() => changeViewMode("grid")}
+                className={`rounded-md p-1.5 transition-colors ${viewMode === "grid" ? "bg-white text-accent-600 shadow-sm dark:bg-surface-700 dark:text-accent-300" : "text-surface-400 hover:text-surface-700 dark:hover:text-surface-200"}`}
+                aria-label="Grid view"
+                aria-pressed={viewMode === "grid"}
+                title="Grid view"
+                data-testid="artifact-view-grid"
+              >
+                <LayoutGrid size={15} />
+              </button>
+            </div>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <ProducerFilter
@@ -852,6 +1136,17 @@ export function ArtifactsView({
               <p className="text-sm">No artifacts match this workspace and filter.</p>
               <p className="max-w-sm text-xs">Artifacts appear here after an agent uses <code>artifact_put</code>.</p>
             </div>
+          ) : viewMode === "grid" ? (
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(132px,1fr))] gap-3 p-4">
+              {items.map((item) => (
+                <ArtifactGridItem
+                  key={item.artifact_id}
+                  item={item}
+                  active={selected?.artifact_id === item.artifact_id}
+                  onClick={() => openDetail(item.artifact_id)}
+                />
+              ))}
+            </div>
           ) : (
             items.map((item) => (
               <ArtifactRow key={item.artifact_id} item={item} active={selected?.artifact_id === item.artifact_id} onClick={() => openDetail(item.artifact_id)} />
@@ -892,7 +1187,7 @@ export function ArtifactsView({
       {selected && (
         <ResizablePanel storageKey="artifact-detail" defaultWidth={500} testId="artifact-detail">
           <div className="flex items-start gap-3 border-b border-surface-200 pb-3 dark:border-surface-700/60">
-            <div className="mt-0.5 rounded-lg bg-accent-100 p-2 dark:bg-accent-900/30"><ArtifactIcon type={selected.artifact_type} /></div>
+            <div className="mt-0.5 rounded-lg bg-accent-100 p-2 dark:bg-accent-900/30"><ArtifactIcon item={selected} /></div>
             <div className="min-w-0 flex-1">
               <h3 className="truncate text-sm font-semibold text-surface-900 dark:text-surface-100">{selected.name || selected.filename}</h3>
               <p className="truncate text-xs text-surface-500">{selected.filename}</p>

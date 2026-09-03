@@ -129,6 +129,16 @@ EMBEDDING_MODES: tuple[str, ...] = (
     EMBEDDING_MODE_LOCAL,
 )
 
+#: Meta-harness read-receipt presentation. ``inline`` collapses receipt
+#: notifications into an aggregate status flag on the original message;
+#: ``timeline`` preserves the legacy, separate receipt turns.
+META_HARNESS_RECEIPT_DISPLAY_INLINE = "inline"
+META_HARNESS_RECEIPT_DISPLAY_TIMELINE = "timeline"
+META_HARNESS_RECEIPT_DISPLAY_MODES: tuple[str, ...] = (
+    META_HARNESS_RECEIPT_DISPLAY_INLINE,
+    META_HARNESS_RECEIPT_DISPLAY_TIMELINE,
+)
+
 
 @dataclass
 class NexusConfig:
@@ -171,6 +181,9 @@ class NexusConfig:
     # Deliver a read receipt to the SENDER's inbox when a recipient
     # acknowledges its message (opt-out; live-tunable - no restart).
     inbox_read_receipts: bool = True
+    # Dashboard presentation only; live-tunable and independent from whether
+    # inbox read-receipt notification messages are generated above.
+    meta_harness_receipt_display: str = META_HARNESS_RECEIPT_DISPLAY_INLINE
     # Expose each workspace's root_realpath on the OPERATOR surfaces
     # (GET /api/v1/workspaces + dashboard). Default OFF (defense-in-depth):
     # disclosing the absolute project path is opt-in. Independent of the
@@ -342,6 +355,12 @@ _ENUM_FIELDS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
         "--embedding-mode",
         EMBEDDING_MODE_OFF,
         EMBEDDING_MODES,
+    ),
+    "meta_harness_receipt_display": (
+        "OKTO_NEXUS_META_HARNESS_RECEIPT_DISPLAY",
+        "--meta-harness-receipt-display",
+        META_HARNESS_RECEIPT_DISPLAY_INLINE,
+        META_HARNESS_RECEIPT_DISPLAY_MODES,
     ),
 }
 
