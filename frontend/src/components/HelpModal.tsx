@@ -282,6 +282,16 @@ const SECTIONS: Section[] = [
           choose <b>Load more messages</b> to prepend an older batch without
           losing your reading position.
         </P>
+        <H>Read receipts</H>
+        <P>
+          Outgoing messages show an acknowledgement flag in their footer. It
+          stays grey until every target acknowledges the message and turns
+          green when all targets are done. Click the indicator to see each
+          recipient&apos;s queued, received and acknowledged timestamps and who is
+          still pending. Under <b>Settings → Interface behavior</b>, switch the
+          receipt display to <b>Timeline receipt messages</b> to restore the
+          separate receipt turns.
+        </P>
         <H>Handoffs from chat</H>
         <P>
           A broadcast handoff is still single-winner work: the first eligible
@@ -354,17 +364,20 @@ const SECTIONS: Section[] = [
           agent with <code>artifact_put</code>. Use the workspace, search and
           type filters, then narrow the results by one or more producing agents
           and a production date interval. Results are loaded in pages of 20.
-          Open a row to preview text, Markdown, HTML, JSON, images or PDFs and
-          download the original payload. Use the expand action in the right
-          detail panel for a large modal preview.
+          Switch between the existing list and an Explorer-style grid whose
+          file icons reflect common document, code, image, media, archive and
+          spreadsheet types. Open a row or tile to preview text, Markdown,
+          HTML, JSON, images or PDFs and download the original payload. Use the
+          expand action in the right detail panel for a large modal preview.
         </P>
         <H>Raw and Rich modes</H>
         <P>
-          Expanded Markdown, HTML and JSON previews offer a <b>Rich</b> /{" "}
+          Expanded Markdown, HTML, JSON and CSV previews offer a <b>Rich</b> /{" "}
           <b>Raw</b> toggle. Rich Markdown is rendered, Rich JSON becomes a
-          collapsible tree, and Rich HTML preserves embedded CSS and safe
-          document attributes while remaining isolated without scripts or
-          external resources.
+          collapsible tree, Rich CSV becomes a scrollable table, and Rich HTML
+          preserves embedded CSS and safe document attributes while remaining
+          isolated without scripts or external resources. Images render
+          directly in both preview sizes without a mode toggle.
         </P>
         <H>Where payloads live</H>
         <P>

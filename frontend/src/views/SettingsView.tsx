@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Database,
   Eraser,
+  MessagesSquare,
   Moon,
   RotateCcw,
   Save,
@@ -26,6 +27,15 @@ function labelOf(key: string): string {
     .replace(/_/g, " ")
     .replace(/\b(ttl|ms|md)\b/g, (m) => m.toUpperCase())
     .replace(/^./, (c) => c.toUpperCase());
+}
+
+function choiceLabel(item: SettingItem, choice: string): string {
+  if (item.key === "meta_harness_receipt_display") {
+    return choice === "inline"
+      ? "Status flags (default)"
+      : "Timeline receipt messages";
+  }
+  return choice;
 }
 
 function SettingField({
@@ -84,7 +94,7 @@ function SettingField({
           >
             {(item.choices ?? []).map((c) => (
               <option key={c} value={c}>
-                {c}
+                {choiceLabel(item, c)}
               </option>
             ))}
           </select>
@@ -154,7 +164,11 @@ export function SettingsView({
     [drafts, items],
   );
   const generalItems = useMemo(
-    () => items.filter((i) => i.group !== "features" && i.group !== "metrics"),
+    () => items.filter((i) => i.group === "general"),
+    [items],
+  );
+  const interfaceItems = useMemo(
+    () => items.filter((i) => i.group === "interface"),
     [items],
   );
   const featureItems = useMemo(
@@ -215,6 +229,31 @@ export function SettingsView({
             </button>
           </div>
         </section>
+
+        {interfaceItems.length > 0 && (
+          <section className="panel p-5 space-y-4" data-testid="interface-settings">
+            <div>
+              <h2 className="font-display font-semibold text-sm flex items-center gap-2">
+                <MessagesSquare size={14} /> Interface behavior
+              </h2>
+              <p className="mt-1 text-[11px] text-surface-400 dark:text-surface-500">
+                Presentation preferences shared by operators using this Nexus instance.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+              {interfaceItems.map((item) => (
+                <SettingField
+                  key={item.key}
+                  item={item}
+                  draft={drafts[item.key]}
+                  onChange={(value) =>
+                    setDrafts((current) => ({ ...current, [item.key]: value }))
+                  }
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Hub info */}
         <section className="panel p-5 space-y-3">

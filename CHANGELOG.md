@@ -2,6 +2,28 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.9 - 2026-09-03
+
+### Added
+
+- Added list/grid switching to the Artifacts catalog. The Explorer-style grid
+  uses type-aware icons and places each artifact's name and size below it.
+- Added aggregate acknowledgement flags to outgoing Meta-harness messages,
+  with a per-recipient modal showing queued, received, and read timestamps.
+- Added the `meta_harness_receipt_display` setting. Inline flags are the
+  default; `timeline` preserves the previous separate receipt messages.
+
+### Changed
+
+- Bumped the package and distribution metadata from 0.1.8 to 0.1.9.
+- Grey acknowledgement flags now identify messages still waiting on one or
+  more targets; they turn green only after every target acknowledges.
+- Meta-harness acknowledgement indicators now blend into the message footer
+  instead of appearing as badges, and their detail modal opens only on click.
+- Completed acknowledgement indicators use a stronger green treatment, image
+  artifacts render directly in both preview sizes without Raw/Rich controls,
+  and CSV artifacts gain a table renderer in the modal's Rich mode.
+
 ## 0.1.7 - 2026-09-02
 
 ### Added
