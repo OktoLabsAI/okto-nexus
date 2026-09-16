@@ -20,6 +20,10 @@ All notable changes to Okto Nexus are documented in this file.
 - Added a 128-character per-item ceiling (`MAX_DEPENDENCY_ID_LENGTH`) to
   `handoff_create`'s `depends_on` ids, mirroring `acceptance_criteria`'s
   per-item bound.
+- Rejected exact-duplicate artifact references on `message_create` (a
+  duplicate is a caller mistake, never silently deduped - mirroring the
+  handoff bounded-list contracts); the error names the offending index and
+  the duplicated reference.
 - Capped message artifact references at 20 (`MAX_ARTIFACTS`); over-limit lists
   now fail validation with `{count, max}` details before anything is written.
   Note: a HITL approval created before the upgrade with more than 20 artifact

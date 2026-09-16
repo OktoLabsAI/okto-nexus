@@ -167,8 +167,10 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
     """Normalise ``artifacts`` into a list of artifact-id reference strings.
 
     ``None`` -> ``[]``. The value must be a (non-string, non-mapping) sequence of
-    at most :data:`MAX_ARTIFACTS` non-empty strings; anything else raises
-    ``VALIDATION_ERROR``. Only references are stored - never inline artifact
+    at most :data:`MAX_ARTIFACTS` non-empty strings with NO exact duplicates (a
+    duplicate is a caller mistake, never silently deduped - mirroring the
+    handoff bounded-list contracts); anything else raises ``VALIDATION_ERROR``.
+    Only references are stored - never inline artifact
     blobs (identity is owned by the Artifacts spec; this slice merely echoes the
     references).
     """
@@ -190,13 +192,21 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
         ) from None
     check_list_size("artifacts", len(items), MAX_ARTIFACTS, noun="references")
     out: list[str] = []
-    for item in items:
+    seen: set[str] = set()
+    for index, item in enumerate(items):
         if not _is_nonempty_str(item):
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
                 "Each artifact reference must be a non-empty artifact_id string.",
                 {"artifact": item},
             )
+        if item in seen:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"artifacts[{index}] is an exact duplicate.",
+                {"index": index, "artifact": item},
+            )
+        seen.add(item)
         out.append(item)
     return out
 

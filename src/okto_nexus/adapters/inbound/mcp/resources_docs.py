@@ -138,8 +138,9 @@ or no target) reaches the workspace's PRESENT agents only; agents excluded for
 heartbeat staleness are reported in ``excluded_stale`` + ``warning``. In
 trust_mode=strict pass from_session_id + session_secret (from session_open). For
 large content, attach artifacts and keep ``body`` a short pointer
-(``artifacts``: artifact_id references, at most 20 - an over-limit list returns
-VALIDATION_ERROR with ``{count, max}`` details). ``target``:
+(``artifacts``: artifact_id references, at most 20, no exact duplicates - an
+over-limit list returns VALIDATION_ERROR with ``{count, max}`` details, a
+duplicate names the offending index and reference). ``target``:
 see okto-nexus://reference/target-grammar.
 
 Messages are for CONVERSATION and INFORMATION, not task ownership. Use a direct
