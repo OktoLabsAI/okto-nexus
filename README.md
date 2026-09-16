@@ -1118,7 +1118,27 @@ and the dashboard.
 
 ### 0.1.10 — current
 
+Validation-hardening release: lands the external PR backlog and closes the
+open validation bugs (#26–#30). The MCP contract remains at surface revision
+33 and the latest database migration remains 028.
+
 - Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
+- Capped message artifact references at 20 (`MAX_ARTIFACTS`) with `{count,
+  max}` diagnostics on both MCP and REST; the dashboard Meta-harness route
+  now defers to the domain cap (the legacy 10-attachment fence was removed)
+  and `VALIDATION_ERROR` details survive the REST envelope.
+- Rejected exact-duplicate artifact references; the error names the
+  offending index and the duplicated reference.
+- Capped tag selector value lists at 20 values per key with set-based
+  de-duplication, removing an O(n²) scan reachable from
+  `message_create`/`handoff_create` tag targets.
+- Added length caps to the routing target grammar identifier fields
+  (`agent_id`/`role`/`capability`, 256 chars) and to each `depends_on` id
+  (128 chars).
+- Resynced the dashboard ColorPicker draft when the `value` prop changes
+  while the component stays mounted.
+- Consolidated the duplicated bounded-list count check into the shared
+  domain helper `check_list_size`.
 
 ### 0.1.9
 
