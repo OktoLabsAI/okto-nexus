@@ -4,7 +4,7 @@
 // Reused in the agent create and edit forms. A live preview shows the actual
 // header gradient + contrast-aware text the graph card will render.
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import {
   agentColor,
@@ -49,6 +49,10 @@ export function ColorPicker({
   // Raw text of the hex field, held locally so partial typing (e.g. "#8b5")
   // doesn't propagate until it is a valid color. Seeded from the current value.
   const [draft, setDraft] = useState<string>(isHexColor(value) ? value : "");
+
+useEffect(() => {
+  setDraft(isHexColor(value) ? value : "");
+}, [value]);
 
   const seed = agentId.trim() || "agent";
   const auto = autoColor(seed);

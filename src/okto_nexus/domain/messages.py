@@ -31,6 +31,7 @@ from .targets import validate_target as _validate_target_grammar
 __all__ = [
     "SEED_CHANNEL_NAMES",
     "MAX_CHANNEL_NAME_LEN",
+    "MAX_ARTIFACTS",
     "MESSAGE_STREAM",
     "MESSAGE_CREATED_TYPE",
     "MESSAGE_DELIVERED_TYPE",
@@ -55,6 +56,10 @@ SEED_CHANNEL_NAMES: tuple[str, ...] = ("general",)
 
 #: Upper bound (characters, after trimming) on an agent-supplied channel name.
 MAX_CHANNEL_NAME_LEN = 64
+
+#: Maximum artifact references accepted on one message.  This mirrors the
+#: bounded list contracts used by handoff dependencies and acceptance criteria.
+MAX_ARTIFACTS = 20
 
 #: Event-log stream and type for the single ``message.created`` event emitted
 #: atomically with each new message row. The event is PUBLISHED on the
@@ -162,9 +167,10 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
     """Normalise ``artifacts`` into a list of artifact-id reference strings.
 
     ``None`` -> ``[]``. The value must be a (non-string, non-mapping) sequence of
-    non-empty strings; anything else raises ``VALIDATION_ERROR``. Only references
-    are stored - never inline artifact blobs (identity is owned by the Artifacts
-    spec; this slice merely echoes the references).
+    at most :data:`MAX_ARTIFACTS` non-empty strings; anything else raises
+    ``VALIDATION_ERROR``. Only references are stored - never inline artifact
+    blobs (identity is owned by the Artifacts spec; this slice merely echoes the
+    references).
     """
     if artifacts is None:
         return []
@@ -182,6 +188,13 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
             "artifacts must be a list of artifact_id reference strings.",
             {"artifacts_type": type(artifacts).__name__},
         ) from None
+    if len(items) > MAX_ARTIFACTS:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"artifacts accepts at most {MAX_ARTIFACTS} references "
+            f"(got {len(items)}).",
+            {"count": len(items), "max": MAX_ARTIFACTS},
+        )
     out: list[str] = []
     for item in items:
         if not _is_nonempty_str(item):

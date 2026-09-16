@@ -42,6 +42,7 @@ from okto_nexus.application.events import EventService
 from okto_nexus.application.messages import MessageService
 from okto_nexus.application.ports import Repos
 from okto_nexus.domain.ids import resolve_workspace_id
+from okto_nexus.domain.messages import MAX_ARTIFACTS
 from okto_nexus.domain.models import Channel
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
@@ -696,6 +697,51 @@ def test_message_create_validation_error(migrated_factory, tmp_config, tmp_path,
 # --------------------------------------------------------------------------- #
 # Artifacts as references; reply linkage
 # --------------------------------------------------------------------------- #
+def test_message_create_rejects_more_than_max_artifacts_before_write(
+    migrated_factory, tmp_config, tmp_path
+):
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+
+    with pytest.raises(OktoNexusError) as exc_info:
+        svc.create_message(
+            project_root=str(proj),
+            from_agent_id="a",
+            subject="s",
+            body="b",
+            artifacts=[f"art-{index}" for index in range(MAX_ARTIFACTS + 1)],
+        )
+
+    assert exc_info.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert exc_info.value.details == {
+        "count": MAX_ARTIFACTS + 1,
+        "max": MAX_ARTIFACTS,
+    }
+    assert count(migrated_factory, "messages") == 0
+
+
+def test_message_create_accepts_exactly_max_artifacts(
+    migrated_factory, tmp_config, tmp_path
+):
+    clock = StubClock()
+    svc = make_service(
+        migrated_factory, tmp_config, clock, emitter=real_emitter(clock)
+    )
+    proj = mkdir(tmp_path, "P")
+    artifacts = [f"art-{index}" for index in range(MAX_ARTIFACTS)]
+
+    created = svc.create_message(
+        project_root=str(proj),
+        from_agent_id="a",
+        subject="s",
+        body="b",
+        artifacts=artifacts,
+    )
+
+    assert created["artifacts"] == artifacts
+    assert count(migrated_factory, "messages") == 1
+
+
 def test_artifacts_stored_as_references_no_inline_blob(
     migrated_factory, tmp_config, tmp_path
 ):
