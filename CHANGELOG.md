@@ -2,6 +2,12 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.10 - 2026-09-16
+
+### Changed
+
+- Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
+
 ## 0.1.9 - 2026-09-03
 
 ### Added

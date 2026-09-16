@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.9` |
+| Package | `okto-nexus 0.1.10` |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -708,7 +708,7 @@ Transient SQLite lock/busy failures use `DB_ERROR` with
 
 ### Resident token footprint
 
-For the 0.1.9 default surface:
+For the 0.1.10 default surface:
 
 | Component | Characters |
 |---|---:|
@@ -977,10 +977,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.9
+uv build --out-dir dist/release-0.1.10
 uvx twine check \
-  dist/release-0.1.9/okto_nexus-0.1.9-py3-none-any.whl \
-  dist/release-0.1.9/okto_nexus-0.1.9.tar.gz
+  dist/release-0.1.10/okto_nexus-0.1.10-py3-none-any.whl \
+  dist/release-0.1.10/okto_nexus-0.1.10.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1116,7 +1116,11 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.9 — current
+### 0.1.10 — current
+
+- Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
+
+### 0.1.9
 
 Dashboard presentation release. The MCP contract remains at surface revision
 33 and the latest database migration remains 028.
