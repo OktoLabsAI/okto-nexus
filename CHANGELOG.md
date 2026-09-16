@@ -4,6 +4,17 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## 0.1.10 - 2026-09-16
 
+### Fixed
+
+- Capped message artifact references at 20 (`MAX_ARTIFACTS`); over-limit lists
+  now fail validation with `{count, max}` details before anything is written.
+  Note: a HITL approval created before the upgrade with more than 20 artifact
+  references becomes un-executable (each approve attempt re-validates and
+  reverts to pending); reject such pending approvals and resend within the cap.
+- Resynced the dashboard ColorPicker draft text when the `value` prop changes
+  while the component stays mounted, so opening another agent's edit form no
+  longer shows the previous agent's color.
+
 ### Changed
 
 - Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
