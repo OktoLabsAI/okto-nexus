@@ -20,6 +20,7 @@ from okto_nexus.domain.inbox import resolve_recipients
 from okto_nexus.domain.messages import validate_target as message_validate_target
 from okto_nexus.domain.routing import RoutingAgent, is_agent_eligible
 from okto_nexus.domain.targets import (
+    MAX_TARGET_FIELD_LENGTH,
     VALID_STRATEGIES,
     coerce_target,
     is_direct_target,
@@ -106,6 +107,50 @@ def test_validate_target_happy_paths_normalise():
         }
     )
     assert dwf["fallback"]["strategy"] == "role"
+
+
+def test_identifier_fields_length_capped():
+    # Issue #27: agent_id/role/capability are short routing identifiers -
+    # bounded like every other identifier-style domain field.
+    ok = "a" * MAX_TARGET_FIELD_LENGTH
+    assert validate_target({"strategy": "direct", "agent_id": ok})["agent_id"] == ok
+    assert validate_target({"strategy": "role", "role": ok})["role"] == ok
+    assert (
+        validate_target({"strategy": "capability", "capability": ok})["capability"]
+        == ok
+    )
+
+    oversized = "a" * (MAX_TARGET_FIELD_LENGTH + 1)
+    for bad in (
+        {"strategy": "direct", "agent_id": oversized},
+        {"strategy": "role", "role": oversized},
+        {"strategy": "capability", "capability": oversized},
+        {
+            "strategy": "direct_with_fallback",
+            "agent_id": oversized,
+            "fallback_after_seconds": 1,
+        },
+    ):
+        with pytest.raises(OktoNexusError) as ei:
+            validate_target(bad)
+        assert_validation_error(ei)
+        assert ei.value.details["max"] == MAX_TARGET_FIELD_LENGTH
+
+    # Any-of lists cap EACH name and the error names the offending index.
+    with pytest.raises(OktoNexusError) as ei:
+        validate_target({"strategy": "capability", "capability": ["ocr", oversized]})
+    assert_validation_error(ei)
+    assert ei.value.details["index"] == 1
+
+    # Non-string _require fields (fallback_after_seconds) pass through untouched.
+    dwf = validate_target(
+        {
+            "strategy": "direct_with_fallback",
+            "agent_id": "a",
+            "fallback_after_seconds": 30,
+        }
+    )
+    assert dwf["fallback_after_seconds"] == 30
 
 
 @pytest.mark.parametrize(

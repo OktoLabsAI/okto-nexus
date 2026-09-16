@@ -6,6 +6,16 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### Fixed
 
+- Capped tag selector value lists at 20 values per key (`MAX_TAG_VALUES`,
+  counted before de-duplication) and made the de-duplication set-based,
+  removing the O(n²) scan reachable from `message_create`/`handoff_create`
+  tag targets and agent tag registration.
+- Added a 256-character ceiling (`MAX_TARGET_FIELD_LENGTH`) to the routing
+  target grammar's identifier fields (`agent_id`, `role`, `capability`
+  names), so a target can no longer persist an arbitrarily large string.
+- Added a 128-character per-item ceiling (`MAX_DEPENDENCY_ID_LENGTH`) to
+  `handoff_create`'s `depends_on` ids, mirroring `acceptance_criteria`'s
+  per-item bound.
 - Capped message artifact references at 20 (`MAX_ARTIFACTS`); over-limit lists
   now fail validation with `{count, max}` details before anything is written.
   Note: a HITL approval created before the upgrade with more than 20 artifact
@@ -18,6 +28,9 @@ All notable changes to Okto Nexus are documented in this file.
 ### Changed
 
 - Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
+- Consolidated the duplicated bounded-list count check (acceptance criteria,
+  dependencies, message artifacts, tag values) into the shared domain helper
+  `check_list_size`.
 
 ## 0.1.9 - 2026-09-03
 

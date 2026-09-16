@@ -14,6 +14,7 @@ from __future__ import annotations
 import pytest
 
 from okto_nexus.domain.tag_selector import (
+    MAX_TAG_VALUES,
     iter_pairs,
     iter_selector_keys,
     iter_selector_pairs,
@@ -41,6 +42,34 @@ def test_validate_tags_none_and_empty_normalise_to_none():
 def test_validate_tags_normalises_values_and_dedupes():
     tags = validate_tags({"team": ["backend", "backend", " infra "], "env": "dev"})
     assert tags == {"team": ["backend", "infra"], "env": ["dev"]}
+
+
+def test_value_lists_capped_before_dedup():
+    # The cap counts the list AS GIVEN - repeats count toward it too, so the
+    # caller's input size is bounded before any processing runs.
+    ok = [f"v{i:02d}" for i in range(MAX_TAG_VALUES - 2)]
+    assert validate_tags({"team": ok + ["v00", "v00"]}) == {"team": ok}
+    with pytest.raises(OktoNexusError) as ei:
+        validate_tags({"team": ok + ["v00", "v00", "extra"]})
+    assert_validation_error(ei)
+    assert ei.value.details == {"count": MAX_TAG_VALUES + 1, "max": MAX_TAG_VALUES}
+
+
+def test_rich_expression_values_share_the_cap():
+    ok = [f"v{i:02d}" for i in range(MAX_TAG_VALUES)]
+    with pytest.raises(OktoNexusError) as ei:
+        validate_selector([{"key": "team", "operator": "In", "values": ok + ["extra"]}])
+    assert_validation_error(ei)
+    assert ei.value.details == {"count": MAX_TAG_VALUES + 1, "max": MAX_TAG_VALUES}
+
+
+def test_huge_value_list_fails_fast_instead_of_quadratic_scan():
+    # Regression (issue #26): a 50k-entry list used to run an O(n^2)
+    # membership scan; it now fails immediately on the count cap.
+    with pytest.raises(OktoNexusError) as ei:
+        validate_tags({"team": ["x"] * 50_000})
+    assert_validation_error(ei)
+    assert ei.value.details == {"count": 50_000, "max": MAX_TAG_VALUES}
 
 
 @pytest.mark.parametrize(

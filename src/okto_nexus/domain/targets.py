@@ -39,6 +39,11 @@ normalised to ``_``; ``kind`` is accepted as an alias of ``strategy``)::
 
 Malformed targets raise :class:`OktoNexusError` with ``VALIDATION_ERROR`` (the
 canonical catalogue code) and a prescriptive message.
+
+Every simple string field of the grammar (``agent_id``, ``role``, and each
+``capability`` name of the any-of list) is bounded to
+:data:`MAX_TARGET_FIELD_LENGTH` characters after strip - these are short
+routing IDENTIFIERS, never payload text.
 """
 
 from __future__ import annotations
@@ -52,6 +57,7 @@ from .tag_selector import validate_selector
 
 __all__ = [
     "VALID_STRATEGIES",
+    "MAX_TARGET_FIELD_LENGTH",
     "coerce_target",
     "normalize_strategy",
     "target_strategy",
@@ -73,9 +79,37 @@ VALID_STRATEGIES: frozenset[str] = frozenset(
     }
 )
 
+#: Upper bound (characters, after stripping) on the simple identifier fields
+#: of every strategy (``agent_id``, ``role``, ``capability`` names) - short
+#: routing identifiers, never payload text. Matches the identifier-style
+#: ceilings used elsewhere in the domain layer.
+MAX_TARGET_FIELD_LENGTH = 256
+
 
 def _is_blank(value: Any) -> bool:
     return value is None or (isinstance(value, str) and not value.strip())
+
+
+def _reject_oversized(
+    value: str, *, strategy: str, field: str, index: int | None = None
+) -> None:
+    """Reject a string target field longer than :data:`MAX_TARGET_FIELD_LENGTH`."""
+    length = len(value.strip())
+    if length > MAX_TARGET_FIELD_LENGTH:
+        where = f"{field}[{index}]" if index is not None else field
+        details: dict[str, Any] = {
+            "strategy": strategy,
+            "field": field,
+            "length": length,
+            "max": MAX_TARGET_FIELD_LENGTH,
+        }
+        if index is not None:
+            details["index"] = index
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"Target field {where!r} exceeds {MAX_TARGET_FIELD_LENGTH} characters.",
+            details,
+        )
 
 
 def coerce_target(target: Any, *, required: bool = False) -> Mapping[str, Any] | None:
@@ -173,6 +207,8 @@ def _require(resolved: Mapping[str, Any], key: str, strategy: str) -> Any:
             f"Target strategy {strategy!r} requires field {key!r}.",
             {"strategy": strategy, "missing_field": key},
         )
+    if isinstance(value, str):
+        _reject_oversized(value, strategy=strategy, field=key)
     return value
 
 
@@ -188,6 +224,10 @@ def _validate_capability(resolved: Mapping[str, Any]) -> Any:
                 "Capability target list must be a non-empty list of non-empty "
                 "capability names.",
                 {"capability": wanted},
+            )
+        for index, name in enumerate(names):
+            _reject_oversized(
+                name, strategy="capability", field="capability", index=index
             )
         return names
     raise OktoNexusError(

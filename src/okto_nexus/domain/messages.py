@@ -25,7 +25,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
-from .base import new_id, utf8_byte_len
+from .base import check_list_size, new_id, utf8_byte_len
 from .targets import validate_target as _validate_target_grammar
 
 __all__ = [
@@ -188,13 +188,7 @@ def normalize_artifacts(artifacts: Any) -> list[str]:
             "artifacts must be a list of artifact_id reference strings.",
             {"artifacts_type": type(artifacts).__name__},
         ) from None
-    if len(items) > MAX_ARTIFACTS:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            f"artifacts accepts at most {MAX_ARTIFACTS} references "
-            f"(got {len(items)}).",
-            {"count": len(items), "max": MAX_ARTIFACTS},
-        )
+    check_list_size("artifacts", len(items), MAX_ARTIFACTS, noun="references")
     out: list[str] = []
     for item in items:
         if not _is_nonempty_str(item):

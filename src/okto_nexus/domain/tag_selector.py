@@ -64,10 +64,12 @@ from collections.abc import Iterator, Mapping, Sequence
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .base import check_list_size
 
 __all__ = [
     "COMM_SCOPE_DIRECTIONS",
     "EXPRESSION_OPERATORS",
+    "MAX_TAG_VALUES",
     "iter_pairs",
     "iter_selector_keys",
     "iter_selector_pairs",
@@ -98,6 +100,12 @@ _PRESENCE_OPERATORS: frozenset[str] = frozenset({"Exists", "DoesNotExist"})
 #: fail-closed - a typo like "vaules" must never silently widen a selector).
 _EXPRESSION_FIELDS: frozenset[str] = frozenset({"key", "operator", "values"})
 
+#: Maximum values ONE tag key may carry - in a ``tags`` map, a flat selector,
+#: or a rich expression's ``values`` list. Checked on the list AS GIVEN
+#: (before de-duplication) so a caller-controlled list is bounded up front;
+#: mirrors the handoff bounded-list contracts (``MAX_DEPENDENCIES`` etc.).
+MAX_TAG_VALUES = 20
+
 
 def _is_blank(value: Any) -> bool:
     return value is None or (isinstance(value, str) and not value.strip())
@@ -113,7 +121,8 @@ def _validate_tag_map(value: Any, *, field: str) -> dict[str, list[str]]:
     """Shared shape validator for ``tags`` and flat ``selector`` maps.
 
     Both are ``{key: [value, ...]}``: non-empty string keys, each mapping to a
-    NON-EMPTY list of non-empty strings (a bare string is accepted and
+    NON-EMPTY list of at most :data:`MAX_TAG_VALUES` non-empty strings (a bare
+    string is accepted and
     normalised to a one-element list; an empty list is rejected - it can never
     match anything and would silently deaden the entry). Values are
     de-duplicated preserving first-seen order. Keys and values are
@@ -148,7 +157,9 @@ def _validate_tag_map(value: Any, *, field: str) -> dict[str, list[str]]:
 
 def _validate_value_list(raw_values: Any, *, label: str, key: str) -> list[str]:
     """Normalise one tag-value list: bare string accepted, non-empty strings
-    only, de-duplicated preserving first-seen order."""
+    only, at most :data:`MAX_TAG_VALUES` of them (counted as given), and
+    de-duplicated preserving first-seen order (set-membership, never a
+    linear rescan of the accumulated list)."""
     if isinstance(raw_values, str):
         candidates: Sequence[Any] = [raw_values]
     elif _is_listish(raw_values):
@@ -167,7 +178,9 @@ def _validate_value_list(raw_values: Any, *, label: str, key: str) -> list[str]:
             "one value.",
             {"key": key},
         )
+    check_list_size(label, len(candidates), MAX_TAG_VALUES, noun="values")
     values: list[str] = []
+    seen: set[str] = set()
     for raw in candidates:
         if _is_blank(raw) or not isinstance(raw, str):
             raise OktoNexusError(
@@ -176,7 +189,8 @@ def _validate_value_list(raw_values: Any, *, label: str, key: str) -> list[str]:
                 {"key": key, "value": raw},
             )
         candidate = raw.strip()
-        if candidate not in values:
+        if candidate not in seen:
+            seen.add(candidate)
             values.append(candidate)
     return values
 

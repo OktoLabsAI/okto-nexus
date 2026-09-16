@@ -54,6 +54,7 @@ from collections.abc import Iterable
 from typing import Any
 
 from ..errors import ErrorCode, OktoNexusError
+from .base import check_list_size
 from .targets import (
     VALID_STRATEGIES,
     is_direct_target,
@@ -86,6 +87,7 @@ __all__ = [
     "EVENT_UNBLOCKED",
     "EVENT_DEPENDENCY_FAILED",
     "MAX_DEPENDENCIES",
+    "MAX_DEPENDENCY_ID_LENGTH",
     "DEPENDENCY_SATISFYING_STATUSES",
     "DEPENDENCY_FAILED_STATUSES",
     "MAX_ACCEPTANCE_CRITERIA",
@@ -285,13 +287,7 @@ def validate_acceptance_criteria(raw: Any) -> list[str]:
             "verification is wanted.",
             {"acceptance_criteria": []},
         )
-    if len(raw) > MAX_ACCEPTANCE_CRITERIA:
-        raise OktoNexusError(
-            ErrorCode.VALIDATION_ERROR,
-            f"acceptance_criteria accepts at most {MAX_ACCEPTANCE_CRITERIA} "
-            f"items (got {len(raw)}).",
-            {"count": len(raw), "max": MAX_ACCEPTANCE_CRITERIA},
-        )
+    check_list_size("acceptance_criteria", len(raw), MAX_ACCEPTANCE_CRITERIA)
     normalized: list[str] = []
     seen: set[str] = set()
     for index, item in enumerate(raw):
@@ -465,6 +461,12 @@ def is_degenerate_self_claim(
 # Dependencies (I5) - depends_on grammar + pure satisfaction evaluator
 # --------------------------------------------------------------------------- #
 MAX_DEPENDENCIES = 20
+#: Upper bound (characters, after stripping) on ONE dependency id. Real ids
+#: are the fixed short ``hnd_<32 hex>`` shape; an oversized entry is a caller
+#: mistake the grammar rejects on SHAPE - exactly like its sibling
+#: :data:`MAX_CRITERION_LENGTH` - instead of leaning on the application
+#: layer's existence lookup to catch it.
+MAX_DEPENDENCY_ID_LENGTH = 128
 
 #: Satisfaction is STRICT: only a terminal, judged COMPLETED satisfies a
 #: dependency. VERIFYING deliberately does NOT (the I4 gate - delivered but
@@ -481,7 +483,8 @@ def validate_depends_on(raw: Any) -> list[str]:
     """Validate + normalise a ``depends_on`` id list (fail-closed grammar).
 
     Grammar: a JSON list of 1..MAX_DEPENDENCIES handoff ids (non-empty
-    strings after strip), with NO exact duplicates (a duplicate is a caller
+    strings after strip, each at most MAX_DEPENDENCY_ID_LENGTH characters),
+    with NO exact duplicates (a duplicate is a caller
     mistake, never silently deduped). Order is preserved; ids are returned
     stripped. An empty list is invalid: callers that want no dependencies
     OMIT the parameter entirely.
@@ -521,6 +524,12 @@ def validate_depends_on(raw: Any) -> list[str]:
                 {"index": index, "item": item},
             )
         handoff_id = item.strip()
+        if len(handoff_id) > MAX_DEPENDENCY_ID_LENGTH:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"depends_on[{index}] exceeds {MAX_DEPENDENCY_ID_LENGTH} characters.",
+                {"index": index, "length": len(handoff_id)},
+            )
         if handoff_id in seen:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
