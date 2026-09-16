@@ -6,6 +6,10 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### Fixed
 
+- Standardized the message artifact cap at 20 across transports: the dashboard
+  Meta-harness REST route no longer applies its own 10-attachment pydantic
+  fence, so over-limit lists are rejected by the domain `MAX_ARTIFACTS` with
+  the same `{count, max}` diagnostics on REST and MCP.
 - Capped tag selector value lists at 20 values per key (`MAX_TAG_VALUES`,
   counted before de-duplication) and made the de-duplication set-based,
   removing the O(n²) scan reachable from `message_create`/`handoff_create`
@@ -31,6 +35,11 @@ All notable changes to Okto Nexus are documented in this file.
 - Consolidated the duplicated bounded-list count check (acceptance criteria,
   dependencies, message artifacts, tag values) into the shared domain helper
   `check_list_size`.
+- REST error envelopes now carry `VALIDATION_ERROR` details (e.g. the
+  bounded-list `{count, max}` diagnostics) instead of the lean envelope.
+- Documented the 20-artifact cap in the `message_create` MCP parameter
+  description and in the `tool-docs/messages` reference resource (version
+  bumped to 4 so clients invalidate their cached doc).
 
 ## 0.1.9 - 2026-09-03
 

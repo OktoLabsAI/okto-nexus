@@ -109,7 +109,7 @@ _P_TARGET_MSG = (
     '{"strategy":"mixed","rules":[<sub-target>,...]}. Hierarchy/catalog rules, '
     "examples, edge-cases: okto-nexus://reference/target-grammar."
 )
-_P_ARTIFACTS = "List of artifact_id strings to attach (optional; reference large content instead of inlining it in body)."
+_P_ARTIFACTS = "List of artifact_id strings to attach (optional; at most 20; reference large content instead of inlining it in body)."
 _P_PARENT = "Message_id this is a reply to, to thread the conversation (optional)."
 _P_TRACE = (
     "Trajectory trace_id to stamp on this message (optional; non-empty string, "

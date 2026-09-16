@@ -61,7 +61,6 @@ from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
 
 
-META_HARNESS_MAX_ATTACHMENTS = 10
 META_HARNESS_MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 
 
@@ -114,11 +113,14 @@ def _map_error(exc: OktoNexusError) -> JSONResponse:
     # decision ({approval_id, status, decided_by, decided_at} - spec
     # 2948b2a2 AC6); the I5 dependency refusals carry their aggregate
     # counts ({handoff_id, pending, failed} - BR8: never ids) / the missing
-    # id list ({missing}); other codes keep the lean envelope.
+    # id list ({missing}); VALIDATION_ERROR carries its structured
+    # diagnostics (e.g. the bounded-list {count, max}); other codes keep
+    # the lean envelope.
     details = (
         exc.details
         if exc.code
         in (
+            ErrorCode.VALIDATION_ERROR,
             ErrorCode.TAG_IN_USE,
             ErrorCode.CAPABILITY_IN_USE,
             ErrorCode.POLICY_IN_USE,
@@ -314,9 +316,10 @@ class MetaHarnessSendBody(BaseModel):
     to_agent_id: str | None = Field(default=None, min_length=1)
     subject: str | None = None
     body: str = Field(min_length=1)
-    artifact_ids: list[str] = Field(
-        default_factory=list, max_length=META_HARNESS_MAX_ATTACHMENTS
-    )
+    # No pydantic length fence: the domain's MAX_ARTIFACTS (20) owns the cap -
+    # an over-limit list flows to create_message and maps back to 422 with the
+    # {count, max} details, byte-parity with the MCP envelope.
+    artifact_ids: list[str] = Field(default_factory=list)
 
 
 class VerifyHandoffBody(BaseModel):
@@ -1883,9 +1886,7 @@ def build_router() -> APIRouter:
 
         try:
             _require_operator()
-            payload, media_type, filename = await anyio.to_thread.run_sync(
-                _payload
-            )
+            payload, media_type, filename = await anyio.to_thread.run_sync(_payload)
         except OktoNexusError as exc:
             return _map_error(exc)
         encoded_filename = quote(filename, safe="")
@@ -1893,9 +1894,7 @@ def build_router() -> APIRouter:
             content=payload,
             media_type=media_type,
             headers={
-                "Content-Disposition": (
-                    f"inline; filename*=UTF-8''{encoded_filename}"
-                )
+                "Content-Disposition": (f"inline; filename*=UTF-8''{encoded_filename}")
             },
         )
 

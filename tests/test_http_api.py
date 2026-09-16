@@ -31,6 +31,7 @@ from okto_nexus.adapters.inbound.mcp.tools.artifacts import (  # noqa: E402
 )
 from okto_nexus.application.auth import AgentKeyAuthService  # noqa: E402
 from okto_nexus.domain.ids import resolve_realpath, resolve_workspace_id  # noqa: E402
+from okto_nexus.domain.messages import MAX_ARTIFACTS  # noqa: E402
 
 
 @pytest.fixture
@@ -518,7 +519,8 @@ def test_delete_operator_is_rejected_and_identity_survives(serve_env):
     assert error["code"] == "VALIDATION_ERROR"
     assert "cannot be deleted" in error["message"]
     assert (
-        client.get("/api/v1/agents/operator", headers=_h(operator_key)).status_code == 200
+        client.get("/api/v1/agents/operator", headers=_h(operator_key)).status_code
+        == 200
     )
 
 
@@ -1001,12 +1003,8 @@ def test_handoffs_include_terminal_agent_outcomes(serve_env):
         headers=_h(key),
     )
     assert response.status_code == 200
-    by_id = {
-        item["handoff_id"]: item for item in response.json()["data"]["items"]
-    }
-    assert by_id["hof_completed_with_result"]["result"] == (
-        '{"summary":"delivered"}'
-    )
+    by_id = {item["handoff_id"]: item for item in response.json()["data"]["items"]}
+    assert by_id["hof_completed_with_result"]["result"] == ('{"summary":"delivered"}')
     assert "rejected_reason" not in by_id["hof_completed_with_result"]
     assert by_id["hof_rejected_with_reason"]["rejected_reason"] == (
         "Missing required evidence"
@@ -1014,9 +1012,7 @@ def test_handoffs_include_terminal_agent_outcomes(serve_env):
     assert "result" not in by_id["hof_rejected_with_reason"]
 
 
-def test_meta_harness_sends_messages_and_handoffs_by_audience(
-    serve_env, tmp_path
-):
+def test_meta_harness_sends_messages_and_handoffs_by_audience(serve_env, tmp_path):
     deps, client, key = serve_env
     root = tmp_path / "meta-harness-project"
     root.mkdir()
@@ -1126,9 +1122,7 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
         "agent_id": "alpha",
     }
     assert private_row["artifacts"] == [artifact_id]
-    assert [d["recipient_agent_id"] for d in private_row["deliveries"]] == [
-        "alpha"
-    ]
+    assert [d["recipient_agent_id"] for d in private_row["deliveries"]] == ["alpha"]
 
     handoffs = client.get(
         "/api/v1/handoffs",
@@ -1179,6 +1173,48 @@ def test_meta_harness_sends_messages_and_handoffs_by_audience(
     assert row["content"] is None
     assert row["content_type"] is None
     assert row["storage_path"]
+
+
+def test_meta_harness_attachment_cap_is_the_domain_cap(serve_env, tmp_path):
+    # No REST-side length fence: an over-limit list flows to the domain's
+    # MAX_ARTIFACTS and maps back to 422 with the same {count, max}
+    # diagnostics the MCP envelope carries (byte-parity).
+    deps, client, key = serve_env
+    root = tmp_path / "meta-harness-cap-project"
+    root.mkdir()
+    root_path = str(root)
+    ws = resolve_workspace_id(root_path)
+    with deps.connection_factory.unit_of_work() as uow:
+        deps.repos.workspaces.upsert(
+            uow,
+            workspace_id=ws,
+            display_name="Meta-harness cap test",
+            root_realpath=resolve_realpath(root_path),
+        )
+    created = client.post(
+        "/api/v1/agents",
+        json={"agent_id": "alpha"},
+        headers=_h(key),
+    )
+    assert created.status_code == 200, created.text
+
+    response = client.post(
+        "/api/v1/meta-harness/send",
+        json={
+            "workspace": ws,
+            "kind": "message",
+            "audience": "private",
+            "to_agent_id": "alpha",
+            "subject": "Too many",
+            "body": "Over the cap.",
+            "artifact_ids": [f"art-{i}" for i in range(MAX_ARTIFACTS + 1)],
+        },
+        headers=_h(key),
+    )
+    assert response.status_code == 422, response.text
+    error = response.json()["error"]
+    assert error["code"] == "VALIDATION_ERROR"
+    assert error["details"] == {"count": MAX_ARTIFACTS + 1, "max": MAX_ARTIFACTS}
 
 
 def test_meta_harness_artifact_upload_validates_transport_and_workspace(serve_env):
