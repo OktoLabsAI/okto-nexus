@@ -269,7 +269,9 @@ def test_create_channel_name_length_boundary(migrated_factory, tmp_config, tmp_p
     assert ei.value.code == ErrorCode.VALIDATION_ERROR.value
 
 
-def test_create_channel_rejects_control_characters(migrated_factory, tmp_config, tmp_path):
+def test_create_channel_rejects_control_characters(
+    migrated_factory, tmp_config, tmp_path
+):
     svc = make_service(migrated_factory, tmp_config, StubClock())
     proj = mkdir(tmp_path, "P")
     # Interior control chars (so .strip() does not remove them): C0, NUL, DEL, C1.
@@ -305,7 +307,9 @@ def test_create_channel_idempotent_under_concurrent_race(
             return None if self._reads == 1 else winner
 
         def create(self, uow, **kwargs):
-            raise OktoNexusError(ErrorCode.DB_ERROR, "UNIQUE constraint failed: channels")
+            raise OktoNexusError(
+                ErrorCode.DB_ERROR, "UNIQUE constraint failed: channels"
+            )
 
         def get(self, uow, **kwargs):  # pragma: no cover - unused on this path
             return None
@@ -415,9 +419,7 @@ def test_message_create_atomic_single_event_same_commit(
 
     conn = migrated_factory.get_connection()
     try:
-        row = conn.execute(
-            "SELECT event_id, type, payload FROM events"
-        ).fetchone()
+        row = conn.execute("SELECT event_id, type, payload FROM events").fetchone()
     finally:
         conn.close()
     assert row["type"] == "message.created"
@@ -494,10 +496,14 @@ def test_directed_message_created_visibility_preserved_on_workspace_stream(
     assert directed["recipients"] == ["agentB"]
     events = _event_service(migrated_factory, tmp_config, clock)
 
-    for_b = events.event_get(project_root=str(proj), agent_id="agentB", stream="workspace")
+    for_b = events.event_get(
+        project_root=str(proj), agent_id="agentB", stream="workspace"
+    )
     assert any(e["event_id"] == directed["event_id"] for e in for_b["events"])
 
-    for_c = events.event_get(project_root=str(proj), agent_id="agentC", stream="workspace")
+    for_c = events.event_get(
+        project_root=str(proj), agent_id="agentC", stream="workspace"
+    )
     assert all(e["event_id"] != directed["event_id"] for e in for_c["events"])
 
 
@@ -544,9 +550,7 @@ def test_message_create_rolls_back_when_event_append_fails(
     migrated_factory, tmp_config, tmp_path
 ):
     clock = StubClock()
-    svc = make_service(
-        migrated_factory, tmp_config, clock, emitter=RaisingEmitter()
-    )
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=RaisingEmitter())
     proj = mkdir(tmp_path, "P")
 
     with pytest.raises(OktoNexusError) as ei:
@@ -569,9 +573,7 @@ def test_message_create_rolls_back_when_event_append_fails(
 def test_message_create_workspace_required(migrated_factory, tmp_config, bad):
     svc = make_service(migrated_factory, tmp_config, StubClock())
     with pytest.raises(OktoNexusError) as ei:
-        svc.create_message(
-            project_root=bad, from_agent_id="a", subject="s", body="b"
-        )
+        svc.create_message(project_root=bad, from_agent_id="a", subject="s", body="b")
     assert ei.value.code == ErrorCode.WORKSPACE_REQUIRED.value
     assert count(migrated_factory, "messages") == 0
 
@@ -680,12 +682,19 @@ def test_message_create_content_too_large_boundary(
         {"from_agent_id": "", "subject": "s", "body": "b"},
         {"from_agent_id": "a", "subject": "", "body": "b"},
         {"from_agent_id": "a", "subject": "s", "body": ""},
-        {"from_agent_id": "a", "subject": "s", "body": "b", "target": {"strategy": "nope"}},
+        {
+            "from_agent_id": "a",
+            "subject": "s",
+            "body": "b",
+            "target": {"strategy": "nope"},
+        },
         {"from_agent_id": "a", "subject": "s", "body": "b", "target": "not-json"},
         {"from_agent_id": "a", "subject": "s", "body": "b", "artifacts": [123]},
     ],
 )
-def test_message_create_validation_error(migrated_factory, tmp_config, tmp_path, kwargs):
+def test_message_create_validation_error(
+    migrated_factory, tmp_config, tmp_path, kwargs
+):
     svc = make_service(migrated_factory, tmp_config, StubClock())
     proj = mkdir(tmp_path, "P")
     with pytest.raises(OktoNexusError) as ei:
@@ -720,13 +729,34 @@ def test_message_create_rejects_more_than_max_artifacts_before_write(
     assert count(migrated_factory, "messages") == 0
 
 
+def test_message_create_rejects_duplicate_artifacts_before_write(
+    migrated_factory, tmp_config, tmp_path
+):
+    # A duplicate is a caller mistake, never silently deduped - the same
+    # contract depends_on / acceptance_criteria enforce. The error names the
+    # offending index and the duplicated reference.
+    svc = make_service(migrated_factory, tmp_config, StubClock())
+    proj = mkdir(tmp_path, "P")
+
+    with pytest.raises(OktoNexusError) as exc_info:
+        svc.create_message(
+            project_root=str(proj),
+            from_agent_id="a",
+            subject="s",
+            body="b",
+            artifacts=["art-ok", "art-ok"],
+        )
+
+    assert exc_info.value.code == ErrorCode.VALIDATION_ERROR.value
+    assert exc_info.value.details == {"index": 1, "artifact": "art-ok"}
+    assert count(migrated_factory, "messages") == 0
+
+
 def test_message_create_accepts_exactly_max_artifacts(
     migrated_factory, tmp_config, tmp_path
 ):
     clock = StubClock()
-    svc = make_service(
-        migrated_factory, tmp_config, clock, emitter=real_emitter(clock)
-    )
+    svc = make_service(migrated_factory, tmp_config, clock, emitter=real_emitter(clock))
     proj = mkdir(tmp_path, "P")
     artifacts = [f"art-{index}" for index in range(MAX_ARTIFACTS)]
 
@@ -812,9 +842,9 @@ def test_reply_linked_to_parent_in_channel(migrated_factory, tmp_config, tmp_pat
     assert ids == [parent, reply["message_id"]]
 
     # A reply whose parent lives in a different channel is rejected.
-    architecture = svc.create_channel(
-        project_root=str(proj), name="architecture"
-    )["channel"]["channel_id"]
+    architecture = svc.create_channel(project_root=str(proj), name="architecture")[
+        "channel"
+    ]["channel_id"]
     with pytest.raises(OktoNexusError) as ei:
         svc.create_message(
             project_root=str(proj),

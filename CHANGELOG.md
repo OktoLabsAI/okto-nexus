@@ -2,6 +2,49 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## 0.1.10 - 2026-09-16
+
+### Fixed
+
+- Standardized the message artifact cap at 20 across transports: the dashboard
+  Meta-harness REST route no longer applies its own 10-attachment pydantic
+  fence, so over-limit lists are rejected by the domain `MAX_ARTIFACTS` with
+  the same `{count, max}` diagnostics on REST and MCP.
+- Capped tag selector value lists at 20 values per key (`MAX_TAG_VALUES`,
+  counted before de-duplication) and made the de-duplication set-based,
+  removing the O(n²) scan reachable from `message_create`/`handoff_create`
+  tag targets and agent tag registration.
+- Added a 256-character ceiling (`MAX_TARGET_FIELD_LENGTH`) to the routing
+  target grammar's identifier fields (`agent_id`, `role`, `capability`
+  names), so a target can no longer persist an arbitrarily large string.
+- Added a 128-character per-item ceiling (`MAX_DEPENDENCY_ID_LENGTH`) to
+  `handoff_create`'s `depends_on` ids, mirroring `acceptance_criteria`'s
+  per-item bound.
+- Rejected exact-duplicate artifact references on `message_create` (a
+  duplicate is a caller mistake, never silently deduped - mirroring the
+  handoff bounded-list contracts); the error names the offending index and
+  the duplicated reference.
+- Capped message artifact references at 20 (`MAX_ARTIFACTS`); over-limit lists
+  now fail validation with `{count, max}` details before anything is written.
+  Note: a HITL approval created before the upgrade with more than 20 artifact
+  references becomes un-executable (each approve attempt re-validates and
+  reverts to pending); reject such pending approvals and resend within the cap.
+- Resynced the dashboard ColorPicker draft text when the `value` prop changes
+  while the component stays mounted, so opening another agent's edit form no
+  longer shows the previous agent's color.
+
+### Changed
+
+- Bumped the package and distribution metadata from 0.1.9 to 0.1.10.
+- Consolidated the duplicated bounded-list count check (acceptance criteria,
+  dependencies, message artifacts, tag values) into the shared domain helper
+  `check_list_size`.
+- REST error envelopes now carry `VALIDATION_ERROR` details (e.g. the
+  bounded-list `{count, max}` diagnostics) instead of the lean envelope.
+- Documented the 20-artifact cap in the `message_create` MCP parameter
+  description and in the `tool-docs/messages` reference resource (version
+  bumped to 4 so clients invalidate their cached doc).
+
 ## 0.1.9 - 2026-09-03
 
 ### Added

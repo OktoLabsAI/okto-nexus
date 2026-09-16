@@ -125,7 +125,7 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="3",
+    version="4",
     body="""\
 # message_create
 Persist a message and emit ``message.created`` in one transaction. The response
@@ -137,7 +137,10 @@ okto-nexus://reference/tool-docs/inbox). A broadcast (explicit broadcast target
 or no target) reaches the workspace's PRESENT agents only; agents excluded for
 heartbeat staleness are reported in ``excluded_stale`` + ``warning``. In
 trust_mode=strict pass from_session_id + session_secret (from session_open). For
-large content, attach an artifact and keep ``body`` a short pointer. ``target``:
+large content, attach artifacts and keep ``body`` a short pointer
+(``artifacts``: artifact_id references, at most 20, no exact duplicates - an
+over-limit list returns VALIDATION_ERROR with ``{count, max}`` details, a
+duplicate names the offending index and reference). ``target``:
 see okto-nexus://reference/target-grammar.
 
 Messages are for CONVERSATION and INFORMATION, not task ownership. Use a direct
@@ -189,7 +192,8 @@ inbox_lease_ttl_seconds knob - clamped
 {MIN_LEASE_SECONDS}..{MAX_LEASE_SECONDS}) or renew with inbox_extend.
 Pulling emits a ``message.delivered`` receipt to each message's sender. In
 trust_mode=strict pass session_id + session_secret.
-""" + """\
+"""
+    + """\
 
 # inbox_ack
 Acknowledge messages into history (read). Returns ``{acknowledged, read_message_ids}``
@@ -197,7 +201,8 @@ Acknowledge messages into history (read). Returns ``{acknowledged, read_message_
 ``message.read`` receipt to its sender; unless the operator opted out
 (inbox_read_receipts) the sender also gets a compact ``message.read_receipt``
 notification in its own inbox. Receipts never generate receipts.
-""" + f"""\
+"""
+    + f"""\
 
 # inbox_extend
 Renew the lease on in-flight messages you pulled but have not finished. New
@@ -210,7 +215,8 @@ READ-ONLY triage of pending (unread + in-flight) WITHOUT consuming. Envelope-onl
 by default: ``body_preview`` (first {PEEK_BODY_PREVIEW_CHARS} chars) +
 ``body_bytes`` instead of the full body. ``include_parked=true`` also shows
 dead-lettered messages; ``include_bodies=true`` opts into full bodies.
-""" + """\
+"""
+    + """\
 
 # inbox_count
 READ-ONLY lane sizes ``{unread, in_flight, read}``. Cheap between-turns check;

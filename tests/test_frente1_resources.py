@@ -162,7 +162,7 @@ def test_changed_guidance_resources_publish_new_cache_versions(surface):
     expected_versions = {
         "okto-nexus://reference/preflight": "4",
         "okto-nexus://reference/communication": "3",
-        "okto-nexus://reference/tool-docs/messages": "3",
+        "okto-nexus://reference/tool-docs/messages": "4",
         "okto-nexus://reference/tool-docs/handoff": "4",
         "okto-nexus://reference/tool-docs/identity": "5",
     }
@@ -202,9 +202,7 @@ def test_resident_instructions_match_the_intent_based_coordination_contract():
 def test_preflight_makes_profile_defaults_overridable_only_for_current_task(surface):
     """Role/style guide behaviour; a user request cannot weaken hard controls."""
     server, _ = surface
-    preflight = _normalised_resource(
-        server, "okto-nexus://reference/preflight"
-    )
+    preflight = _normalised_resource(server, "okto-nexus://reference/preflight")
 
     # agent_whoami is the source of both behavioural defaults.  The wording
     # deliberately calls them an operating contract, rather than merely
@@ -243,9 +241,7 @@ def test_preflight_makes_profile_defaults_overridable_only_for_current_task(surf
 def test_communication_resource_routes_all_executable_work_through_handoffs(surface):
     """The channel decision is based on intent, with handoff as task record."""
     server, _ = surface
-    communication = _normalised_resource(
-        server, "okto-nexus://reference/communication"
-    )
+    communication = _normalised_resource(server, "okto-nexus://reference/communication")
 
     assert "choose by intent" in communication
     assert re.search(
@@ -274,9 +270,7 @@ def test_communication_resource_routes_all_executable_work_through_handoffs(surf
 def test_communication_resource_keeps_broadcast_and_direct_informational(surface):
     """Messages coordinate conversation; they do not create task ownership."""
     server, _ = surface
-    communication = _normalised_resource(
-        server, "okto-nexus://reference/communication"
-    )
+    communication = _normalised_resource(server, "okto-nexus://reference/communication")
 
     # Broadcast is legitimate shared alignment/information, rather than a
     # generic "last resort", but any expectation of action becomes handoff(s).
@@ -293,7 +287,12 @@ def test_communication_resource_keeps_broadcast_and_direct_informational(surface
     # Direct messages cover conversational coordination.  Turning that
     # conversation into new executable work must create a traceable handoff.
     assert "direct message" in communication
-    for use in ("status checks", "questions", "clarifications", "informal coordination"):
+    for use in (
+        "status checks",
+        "questions",
+        "clarifications",
+        "informal coordination",
+    ):
         assert use in communication
     assert re.search(
         r"if (?:the )?conversation creates new work, create a handoff",
@@ -305,9 +304,7 @@ def test_communication_resource_keeps_broadcast_and_direct_informational(surface
 def test_communication_resource_disambiguates_the_two_broadcast_operations(surface):
     """Message fan-out and a claim-first handoff must never be conflated."""
     server, _ = surface
-    communication = _normalised_resource(
-        server, "okto-nexus://reference/communication"
-    )
+    communication = _normalised_resource(server, "okto-nexus://reference/communication")
 
     assert "a broadcast message is informational fan-out" in communication
     assert re.search(

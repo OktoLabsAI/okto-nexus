@@ -9,6 +9,7 @@ copy-pasted per slice (and had already diverged):
 
 * time: :func:`utc_now_iso` / :func:`iso_to_epoch` / :func:`iso_plus`;
 * the inclusive inline-content limit: :func:`check_inline_size`;
+* the bounded-list count cap: :func:`check_list_size`;
 * pagination input parsing: :func:`normalize_cursor` / :func:`clamp_limit`.
 """
 
@@ -39,8 +40,10 @@ def utc_now_iso() -> str:
     timestamps matches chronological ordering everywhere (e.g. the SQL ``<``
     used for inbox lease expiry).
     """
-    return datetime.now(timezone.utc).isoformat(timespec="microseconds").replace(
-        "+00:00", "Z"
+    return (
+        datetime.now(timezone.utc)
+        .isoformat(timespec="microseconds")
+        .replace("+00:00", "Z")
     )
 
 
@@ -141,6 +144,27 @@ def check_inline_size(field: str, value: Any, max_inline_bytes: int) -> None:
         )
 
 
+def check_list_size(
+    field: str, count: int, max_items: int, *, noun: str = "items"
+) -> None:
+    """Enforce the shared bounded-list count cap (fail-closed).
+
+    The single check for every list-shaped grammar field (previously
+    copy-pasted per slice): raises ``VALIDATION_ERROR`` with ``{count, max}``
+    details when ``count`` exceeds ``max_items``. ``field`` is the label as it
+    should appear in the message (e.g. ``"depends_on"``); ``noun`` matches the
+    field's items (``"ids"``, ``"references"``, ``"values"``). Count the list
+    AS GIVEN, before any de-duplication, so the cap bounds the caller's input
+    size up front.
+    """
+    if count > max_items:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"{field} accepts at most {max_items} {noun} (got {count}).",
+            {"count": count, "max": max_items},
+        )
+
+
 def _coerce_page_int(value: Any, *, message: str, details_key: str) -> int:
     """Coerce a pagination input (int or digit-string) to ``int``, fail-closed.
 
@@ -149,9 +173,7 @@ def _coerce_page_int(value: Any, *, message: str, details_key: str) -> int:
     tools, and MCP agents routinely send numbers as strings). Anything else
     raises ``VALIDATION_ERROR`` with the caller's message.
     """
-    invalid = OktoNexusError(
-        ErrorCode.VALIDATION_ERROR, message, {details_key: value}
-    )
+    invalid = OktoNexusError(ErrorCode.VALIDATION_ERROR, message, {details_key: value})
     if isinstance(value, bool):
         raise invalid
     if isinstance(value, int):

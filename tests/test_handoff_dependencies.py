@@ -34,6 +34,7 @@ from okto_nexus.domain.handoff import (
     EVENT_DEPENDENCY_FAILED,
     EVENT_UNBLOCKED,
     MAX_DEPENDENCIES,
+    MAX_DEPENDENCY_ID_LENGTH,
     STATUS_CANCELLED,
     STATUS_CLAIMED,
     STATUS_COMPLETED,
@@ -80,6 +81,16 @@ class TestDependsOnGrammar:
         ids = [f"hof_{i:02d}" for i in range(MAX_DEPENDENCIES + 1)]
         err = _rejects(validate_depends_on, ids, contains="at most")
         assert err.details == {"count": MAX_DEPENDENCIES + 1, "max": MAX_DEPENDENCIES}
+
+    def test_oversized_id_rejected_with_index_and_length(self):
+        # Issue #28: per-item shape cap, mirroring acceptance_criteria's
+        # MAX_CRITERION_LENGTH - never lean on the existence lookup.
+        ok = "hnd_" + "a" * (MAX_DEPENDENCY_ID_LENGTH - 4)
+        assert validate_depends_on([ok]) == [ok]
+        oversized = "z" * (MAX_DEPENDENCY_ID_LENGTH + 1)
+        err = _rejects(validate_depends_on, ["hof_ok", oversized], contains="exceeds")
+        assert err.details["index"] == 1
+        assert err.details["length"] == MAX_DEPENDENCY_ID_LENGTH + 1
 
     @pytest.mark.parametrize("raw", ["hof_a", {"id": "hof_a"}, 7, None, True])
     def test_non_list_rejected(self, raw):
