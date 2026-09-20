@@ -735,6 +735,86 @@ def test_send_only_connector_drains_its_finite_events_synchronously(tmp_path):
     assert events[0].kind == "error"
 
 
+class BroadcastSendOnlyConnector:
+    """cc-socks-shaped, matching ``ClaudeCodeAttachConnector`` AFTER its
+    RES-A2 fan-out fix: ``events()`` returns a SNAPSHOT of an append-only
+    history, never a destructive drain. Every call returns every event
+    recorded so far, including ones already handled by an earlier call -
+    this is the exact shape ``HarnessSupervisor.send`` must now cope with."""
+
+    def __init__(self, *, kind: str = "claude_code") -> None:
+        self.capabilities = HarnessCapabilities(
+            send_only=True,
+            steer_timing=None,
+            interrupt_requires_settle_wait=False,
+            multiplexes_sessions=False,
+            observes_session_end=False,
+        )
+        self._kind = kind
+        self._history: list[Any] = []
+        self.sent_commands: list[Any] = []
+        self.session: HarnessSession | None = None
+
+    def start(self, *, owning_agent_id: str) -> HarnessSession:
+        session_id = new_harness_session_id()
+        self.session = HarnessSession(
+            session_id=session_id,
+            harness_kind=self._kind,
+            owning_agent_id=owning_agent_id,
+            status=STATUS_STARTING,
+            capabilities=self.capabilities,
+            started_at=utc_now_iso(),
+        )
+        return self.session
+
+    def send(self, session: HarnessSession, command: Any) -> None:
+        self.sent_commands.append(command)
+        assert self.session is not None
+        self._history.append(
+            make_event(self.session.session_id, kind="turn_completed", native_event="agent_settled")
+        )
+
+    def events(self):
+        # Broadcast snapshot, never a drain - mirrors the real connector.
+        return iter(list(self._history))
+
+
+def test_send_only_connector_delivers_each_event_exactly_once_across_multiple_sends(tmp_path):
+    """RES-A2 follow-up regression: ``ClaudeCodeAttachConnector.events()`` is
+    now a broadcast snapshot of an append-only history rather than a
+    destructive drain (fixing a real fan-out defect where two concurrent
+    consumers used to split the stream). The supervisor's send_only branch
+    must therefore track its own cursor so that after N sends, event #1 is
+    NOT re-handled N times - each event is published/persisted/notified
+    exactly once, no matter how many times send() is called on the session."""
+    factory = make_factory(tmp_path)
+    clock = _Clock()
+    with factory.unit_of_work() as uow:
+        SqliteAgentRepo(clock).upsert(uow, agent_id="watcher")
+    messages = make_message_service(factory, clock)
+    supervisor = make_supervisor(factory, clock, messages=messages)
+    connector = BroadcastSendOnlyConnector()
+    session = supervisor.open(
+        kind="claude_code",
+        connector=connector,
+        owning_agent_id="harness-exactly-once",
+        project_root=mkproj(tmp_path),
+        notify_target={"strategy": "direct", "agent_id": "watcher"},
+    )
+
+    published: list[Any] = []
+    supervisor._subscribers.subscribe(  # type: ignore[attr-defined]
+        session.session_id, lambda event: published.append(event)
+    )
+
+    for _ in range(3):
+        supervisor.send(session.session_id, "send_turn", {"content": "hi"})
+
+    persisted = supervisor.replay_events(session.session_id)
+    assert len(persisted) == 3, f"expected 3 persisted events after 3 sends, got {len(persisted)}"
+    assert len(published) == 3, f"expected 3 published events after 3 sends, got {len(published)}"
+
+
 # --------------------------------------------------------------------------- #
 # D10: notable events also delivered as messages through the existing inbox
 # --------------------------------------------------------------------------- #

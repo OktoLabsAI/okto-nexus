@@ -277,6 +277,52 @@ def _watch_ready(
     )
 
 
+def _reap_live_harness_sessions(deps: "object") -> int:
+    """Best-effort child-process reap on serve shutdown (EV-OPS-001).
+
+    Covers a clean exit, ``SIGINT`` and ``SIGTERM`` alike: all three drive
+    ``server.run()`` back to a normal return (uvicorn's own signal handlers
+    flip ``should_exit`` and let the ASGI lifespan finish; the ``except
+    KeyboardInterrupt`` branch above only re-raises AFTER that already
+    happened), and this runs right after ``server.run()`` returns either
+    way - see the call site. For each session still in the supervisor's live
+    registry at that point, this calls :meth:`HarnessSupervisor.close`,
+    which sends a best-effort ``end`` and then invokes the connector's own
+    ``close()`` lifecycle helper - for ``PiRpcConnector`` (and the other
+    subprocess-backed connectors) that is a bounded SIGTERM-then-SIGKILL on
+    the child's own process group, i.e. an ACTUAL reap, not merely "the
+    child happened to exit" (the exact distinction EV-OPS-001 calls out).
+
+    Does NOT cover ``kill -9`` on this process or any other unclean exit
+    (segfault, OOM-kill, `launchd`/`systemd` skipping SIGTERM straight to
+    SIGKILL): a process that never runs this code cannot reap anything.
+    That gap is real and open - see the module docstring's note on
+    EV-OPS-001 and the CLI's own top-level help text is silent on it
+    deliberately, so it is not oversold as "fixed" here either.
+
+    Best-effort per session: one wedged connector's teardown must never
+    block the others from being tried, matching every other best-effort
+    teardown path in ``HarnessSupervisor`` (``close``, ``_best_effort_
+    teardown``). Returns the number of sessions the supervisor reported as
+    live going in, for the caller's own log line.
+    """
+    supervisor = getattr(deps, "harness_supervisor", None)
+    if supervisor is None:
+        return 0
+    sessions = supervisor.list_live()
+    for session in sessions:
+        try:
+            supervisor.close(session.session_id)
+        except Exception as exc:  # noqa: BLE001 - best-effort: shutdown must never hang or fail here
+            print(
+                f"[okto-nexus] failed to reap harness session "
+                f"{session.session_id!r} on shutdown "
+                f"({type(exc).__name__}: {exc})",
+                file=sys.stderr,
+            )
+    return len(sessions)
+
+
 def _warm_embeddings(deps: "object", done_event: "object") -> None:
     """Eagerly load the local embedding model at startup (mirrors the Pulse KG
     warm-up) so the model is hot BEFORE the first message/search and the
@@ -344,6 +390,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         )
         return 1
 
+    import signal
     import threading
 
     from ..mcp.server import bootstrap, maybe_auto_prune
@@ -441,14 +488,53 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             args=(server, host, port, embeddings_done),
             daemon=True,
         ).start()
+        if os.name == "posix":
+            # EV-OPS-001: without this, the reap in the `finally` below
+            # NEVER runs on a SIGTERM. uvicorn's own `capture_signals()`
+            # handles SIGTERM gracefully (sets `should_exit`, lets the
+            # graceful-shutdown window run) - but once that finishes, it
+            # deliberately RESTORES whatever handler was registered before
+            # it started and RE-RAISES the captured signal against it (its
+            # own comment: "trigger the expected behaviour now"), so the
+            # process's exit still looks signal-killed to a parent/shell.
+            # For SIGINT the "expected behaviour" is Python's own built-in
+            # handler, which raises ``KeyboardInterrupt`` - a normal
+            # exception this function already catches below, so execution
+            # (and this function's `finally`) still runs. For SIGTERM there
+            # is no such built-in handler: the restored disposition is
+            # ``SIG_DFL``, whose "expected behaviour" is immediate process
+            # termination - the interpreter never returns from
+            # ``server.run()`` at all, and the reap silently never happens.
+            # A benign handler here (registered BEFORE `server.run()`, so
+            # it is what gets saved as the "previous" handler and restored)
+            # replaces that immediate termination with an ordinary return
+            # to this function, so the SIGTERM path converges on exactly
+            # the same `finally`-runs-the-reap outcome as SIGINT/CTRL-C.
+            signal.signal(signal.SIGTERM, lambda *_: None)
         try:
-            server.run()
-        except KeyboardInterrupt:
-            # uvicorn already completed its graceful shutdown and re-raised
-            # the captured CTRL+C (its signal-forwarding contract). The work
-            # is DONE at this point - swallowing it turns a scary multi-page
-            # traceback into the calm goodbye the operator expects.
-            print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+            try:
+                server.run()
+            except KeyboardInterrupt:
+                # uvicorn already completed its graceful shutdown and
+                # re-raised the captured CTRL+C (its signal-forwarding
+                # contract). The work is DONE at this point - swallowing it
+                # turns a scary multi-page traceback into the calm goodbye
+                # the operator expects.
+                print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+        finally:
+            # EV-OPS-001: reap any harness session still live at this point
+            # (server exiting - clean, SIGINT, or SIGTERM - while a session
+            # was never explicitly closed) BEFORE the lock is released, so a
+            # takeover by the next `serve` never races a still-tearing-down
+            # child. See `_reap_live_harness_sessions`'s docstring for what
+            # this does and does NOT cover (SIGKILL is NOT covered).
+            reaped = _reap_live_harness_sessions(deps)
+            if reaped:
+                print(
+                    f"[okto-nexus] reaped {reaped} live harness session(s) "
+                    "on shutdown.",
+                    file=sys.stderr,
+                )
         return 0
     finally:
         lock.release()

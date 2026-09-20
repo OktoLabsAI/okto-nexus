@@ -140,6 +140,17 @@ class _LiveSession:
     project_root: str
     notify_target: Any = None
     pump_thread: "threading.Thread | None" = None
+    #: send_only cursor (RES-A2 follow-up): a send_only connector's
+    #: ``events()`` is now a BROADCAST snapshot of an append-only history
+    #: (see ``ClaudeCodeAttachConnector.events()``), not a destructive
+    #: drain - the port never promised destructive-drain semantics (see
+    #: ``HarnessConnector.events()``'s docstring, which only promises "an
+    #: iterable/iterator of normalised inbound events"). This tracks how
+    #: many of THIS session's send_only events have already been handled so
+    #: :meth:`HarnessSupervisor.send` can replay only the tail on each call,
+    #: keeping the "handle every event exactly once" invariant entirely on
+    #: the caller side without needing the connector to change behaviour.
+    send_only_events_handled: int = 0
     #: Handle returned by InboxDeliveryNotifier.subscribe for this session's
     #: owning_agent_id (SYS-03/UAT-05 follow-up); None when no notifier is
     #: wired. Unsubscribed in _claim_for_reap - the same single place
@@ -514,7 +525,20 @@ class HarnessSupervisor:
         )
         live.connector.send(live.session, command)
         if caps.send_only:
-            for event in live.connector.events():
+            # ``events()`` is a BROADCAST snapshot of an append-only history
+            # (RES-A2 fix in ClaudeCodeAttachConnector), never a destructive
+            # drain - the port's docstring only promises "an
+            # iterable/iterator of normalised inbound events", nothing about
+            # exactly-once delivery. A second call after a second send()
+            # would therefore re-include every event already handled on the
+            # first call. Materialise the snapshot once and replay only the
+            # tail past ``send_only_events_handled`` so each event is
+            # handled exactly once across this session's whole lifetime,
+            # regardless of how many times send() is called.
+            snapshot = list(live.connector.events())
+            new_events = snapshot[live.send_only_events_handled :]
+            live.send_only_events_handled = len(snapshot)
+            for event in new_events:
                 self._handle_event(session_id, event)
 
     def _require_verb_allowed(self, caps: HarnessCapabilities, verb: str) -> None:

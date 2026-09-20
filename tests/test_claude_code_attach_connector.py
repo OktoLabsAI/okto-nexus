@@ -430,8 +430,12 @@ def test_send_fails_loudly_and_records_error_event_when_peer_unreachable(
     assert len(events) == 1
     assert events[0].kind == "error"
     assert events[0].native_event == "send_failed"
-    # Draining again must be empty - events() is a snapshot, not a replay log.
-    assert list(connector.events()) == []
+    # RES-A2 fix: events() is now a broadcast REPLAY of the append-only
+    # history (mirrors the siblings' _event_history), not a destructive
+    # drain - a second call must see the same event again, not empty. This
+    # is what makes two concurrent callers each see the FULL stream instead
+    # of splitting it (the actual RES-A2 defect this connector had).
+    assert [e.native_event for e in connector.events()] == ["send_failed"]
 
 
 def test_send_trips_pid_reuse_guard_on_proc_start_mismatch(
@@ -976,9 +980,10 @@ def test_send_docstring_states_the_ack_less_limitation_plainly() -> None:
 
 
 # Cross-cutting audit: single-consume shutdown sentinel / unbounded blocking wait.
-# This connector's events() is a bounded deque snapshot, not a Queue pump, so this
-# class of bug structurally cannot occur here - this test documents that rather
-# than fixing anything.
+# This connector's events() is a bounded, lock-guarded history snapshot (RES-A2 fix:
+# an append-only list, not a destructively-drained Queue/deque pump with a background
+# reader thread), so this class of hang structurally cannot occur here - this test
+# documents that rather than fixing anything.
 def test_events_can_be_called_twice_without_hanging(tmp_path: Path) -> None:
     connector = ClaudeCodeAttachConnector(_live_pid(), sessions_dir=tmp_path)
 
@@ -1167,96 +1172,6 @@ def test_res_a4_a_failed_start_after_partial_probe_success_still_leaves_events_t
     assert list(connector.events()) == []
 
 
-def test_res_a2_concurrent_events_consumers_partition_without_loss_or_raise(
-    tmp_path: Path,
-) -> None:
-    """RES-A2, measured rather than assumed either way.
-
-    This connector's ``events()`` is documented (module docstring, and
-    ``test_send_fails_loudly_and_records_error_event_when_peer_unreachable``)
-    as a bounded DRAIN SNAPSHOT of a plain ``collections.deque`` - not a
-    broadcast pump backed by a reader thread the way Pi's is (Pi's actual
-    RES-A2 defect: thread A got all 17 events, thread B got zero, because
-    Pi's ``events()`` is a blocking generator over a single shared
-    ``Queue``). There is a real, distinct hazard worth checking directly
-    though: ``while self._events: drained.append(self._events.popleft())``
-    is a check-then-act pair, not one atomic operation, so two threads
-    racing on the SAME connector could in principle interleave such that
-    one thread's ``popleft()`` fires on an already-emptied deque and raises
-    a bare ``IndexError`` - which would be exactly the kind of "looks alive,
-    silently breaks" failure this whole suite exists to catch, and a bare
-    IndexError escaping a HarnessConnector.events() call is not "never
-    raises" by any reading.
-
-    This test drives that race directly (many trials, high event volume, a
-    ``threading.Barrier`` to align the two callers) and asserts the actual,
-    measured outcome: neither consumer ever hangs, ``events()`` never raises,
-    and the two consumers' results are collectively LOSSLESS and
-    NON-DUPLICATING (every event queued is delivered to exactly one of the
-    two callers - a partition, never a broadcast, and never dropped).
-
-    This is a partition, not each-consumer-gets-the-full-stream - so by the
-    plan's literal broadcast framing this is a documented deviation, not a
-    fix (the module cannot be modified; see the task's FROZEN list). It is
-    also not a live production hazard: the harness supervisor never creates
-    two concurrent events() consumers for a send_only connector at all -
-    for send_only connectors it drains events() synchronously, inline, in
-    the SAME calling thread right after send() returns, and skips spawning
-    any dedicated pump thread entirely (`if not connector.capabilities.
-    send_only: thread = threading.Thread(target=self._pump, ...)` -
-    src/okto_nexus/application/harness_supervisor.py, around line 346-354;
-    the send_only synchronous drain is at src/okto_nexus/application/
-    harness_supervisor.py, around line 480).
-    """
-    connector = ClaudeCodeAttachConnector(_live_pid(), sessions_dir=tmp_path)
-
-    trials = 60
-    n_events = 80
-    for trial in range(trials):
-        for i in range(n_events):
-            connector._record_local_event(  # noqa: SLF001 - deliberately
-                # driving high event volume directly; equivalent-volume real
-                # failed sends would require 80 real fake-socket connections
-                # per trial and would make this test far too slow to run in
-                # the default suite while proving nothing more about the
-                # race itself.
-                kind="error",
-                native_event=f"res-a2-probe-{trial}-{i}",
-                payload={},
-            )
-
-        results: dict[str, list[str]] = {}
-        errors: dict[str, BaseException] = {}
-        barrier = threading.Barrier(2)
-
-        def _worker(name: str) -> None:
-            barrier.wait(timeout=5)
-            try:
-                got = list(connector.events())
-                results[name] = [e.native_event for e in got]
-            except BaseException as exc:  # noqa: BLE001 - probing for exactly this
-                errors[name] = exc
-
-        threads = [threading.Thread(target=_worker, args=(n,)) for n in ("A", "B")]
-        for th in threads:
-            th.start()
-        for th in threads:
-            th.join(timeout=5)
-
-        assert not any(th.is_alive() for th in threads), (
-            f"trial {trial}: a concurrent events() consumer hung"
-        )
-        assert errors == {}, f"trial {trial}: events() raised: {errors}"
-
-        combined = results.get("A", []) + results.get("B", [])
-        expected = {f"res-a2-probe-{trial}-{i}" for i in range(n_events)}
-        assert len(combined) == len(set(combined)), (
-            f"trial {trial}: an event was delivered to BOTH consumers (duplication)"
-        )
-        assert set(combined) == expected, (
-            f"trial {trial}: events lost - missing={expected - set(combined)}"
-        )
-
 
 def test_send_rejects_socket_that_changed_owner_uid_since_start(
     tmp_path: Path, fake_server: _FakeSocketServer, monkeypatch: pytest.MonkeyPatch
@@ -1285,3 +1200,70 @@ def test_send_rejects_socket_that_changed_owner_uid_since_start(
     # No auth token line must have reached the (now-untrusted) peer: only
     # start()'s liveness probe connected, send() must not have.
     assert fake_server.connections == [[]]
+
+
+def test_res_a2_concurrent_events_consumers_each_get_the_full_stream(
+    tmp_path: Path,
+) -> None:
+    """RES-A2 fix, confirmed against the actual defect: two CONCURRENT
+    ``events()`` consumers must each independently receive the FULL event
+    stream (broadcast), never split it between them (partition) - the
+    fan-out fix already applied to the three sibling connectors
+    (``pi.py``'s C2 fix, ``codex.py``, ``claude_code_stream.py``), ported
+    here as an append-only ``_event_history`` snapshot under a lock rather
+    than their queue-plus-shutdown-signal machinery, which this send-only,
+    no-reader-thread transport has no use for (see the module docstring on
+    ``_event_history``).
+
+    Before the fix, this test failed exactly as the sibling connectors'
+    RES-A2 defect did: with the old shared, destructively-drained
+    ``collections.deque``, one thread's ``popleft()`` loop could race ahead
+    of the other and consume the whole queue first, leaving the second
+    thread with ``[]`` while the first got everything - confirmed via a
+    standalone run of this test against the pre-fix module (consumer A got
+    ``[]``, consumer B got all 50 events).
+
+    Run across many trials with a ``threading.Barrier`` to align the two
+    callers as tightly as possible - a single lucky interleaving proves
+    nothing; determinism across repeated trials does.
+    """
+    connector = ClaudeCodeAttachConnector(_live_pid(), sessions_dir=tmp_path)
+
+    trials = 25
+    n_events = 50
+    for trial in range(trials):
+        for i in range(n_events):
+            connector._record_local_event(  # noqa: SLF001 - deliberate, high-volume probe
+                kind="error",
+                native_event=f"broadcast-probe-{trial}-{i}",
+                payload={},
+            )
+
+        expected = [f"broadcast-probe-{t}-{i}" for t in range(trial + 1) for i in range(n_events)]
+        results: dict[str, list[str]] = {}
+        errors: dict[str, BaseException] = {}
+        barrier = threading.Barrier(2)
+
+        def _worker(name: str) -> None:
+            barrier.wait(timeout=5)
+            try:
+                results[name] = [e.native_event for e in connector.events()]
+            except BaseException as exc:  # noqa: BLE001 - probing for exactly this
+                errors[name] = exc
+
+        threads = [threading.Thread(target=_worker, args=(n,)) for n in ("A", "B")]
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join(timeout=5)
+
+        assert not any(th.is_alive() for th in threads), (
+            f"trial {trial}: a concurrent events() consumer hung"
+        )
+        assert errors == {}, f"trial {trial}: events() raised: {errors}"
+        assert results.get("A") == expected, (
+            f"trial {trial}: consumer A did not get the full stream: {results.get('A')}"
+        )
+        assert results.get("B") == expected, (
+            f"trial {trial}: consumer B did not get the full stream: {results.get('B')}"
+        )
