@@ -134,3 +134,64 @@ No polling and no frozen-port modification (git diff --stat on domain/harness.py
 ### codex
 
 Ran the connector's own 15 tests (14 passed, 1 skipped) and confirmed the report's headline claims empirically: no polling (readline()/Queue.get() block, the only time.sleep() is in a test helper off the event path), no diff on the two frozen port files (git diff --stat is empty, both are absent from git status), and the 'sandbox must be a bare string, not the tagged object the JSON Schema shows' + 'thread/started has no top-level threadId' findings both reproduce against the real installed codex 0.144.6 binary (probed live against http://192.168.31.152:8123, never .222, writing only to a scratch CODEX_HOME). However the connector has a genuine, reproducible deadlock in the event path that the report does not disclose or test, plus three more verified defects: a normalized-kind misclassification that quietly breaks the observes_session_end capability, an unguarded subprocess.Popen() that leaks a raw exception instead of following the codebase's own OktoNexusError pattern (visible by diffing against the sibling harness_claude_code.py connector written for the same port), and a handshake-ordering bug that can permanently wedge the connector after one failed initialize. Two of these (the reader-thread wedge, the missing-binary leak) are exactly the failure-mode classes the task asked me to check and are absent from the implementer's test list.
+
+---
+
+## Cross-cutting analysis (added by the orchestrator, 2026-09-20)
+
+Two defect CLASSES recurred across connectors written independently by different agents that
+never saw each other's code. These are not isolated incidents and must be audited for in every
+connector, including any added later.
+
+### Class A — one-shot shutdown signalling / unbounded blocking waits
+
+Occurrences: Codex (`events()` second consumer hangs), Pi (same, caught live as a 17-minute test
+hang — see EV-REV-001 D-08).
+
+A single `_SHUTDOWN` sentinel pushed once into a queue is consumed by whichever consumer calls
+`get()` first; every later consumer blocks forever on an unbounded `Queue.get()`.
+
+Standard fix (reference implementation: `adapters/outbound/harness/pi.py`): a `threading.Event`
+for shutdown, checked on every `queue.Empty` from a BOUNDED `get(timeout=1.0)`. Any number of
+callers, from any thread, observe shutdown within one poll period. The bounded timeout is NOT
+event polling — events still arrive by push the instant they are queued; the bounded wait exists
+only to recheck the shutdown flag.
+
+### Class B — unguarded per-line dispatch in the reader thread
+
+Occurrences: Codex (`_read_stdout` ~line 328), Claude Code stream-json (`_pump_stdout`).
+
+The reader loop calls dispatch with no exception guard. A syntactically valid but
+domain-invalid message raises, the exception unwinds the reader thread, and in the Codex case it
+lands in an unguarded `finally` that calls `self._proc.wait()` with NO timeout while the child is
+still healthy — so the thread blocks there forever, the shutdown sentinel is never pushed, and
+stdout stops being drained, producing a pipe-fill deadlock.
+
+Both connectors' existing malformed-input tests covered only `JSONDecodeError`, which IS caught.
+The structurally-valid-but-domain-invalid class was untested in both.
+
+Required in every connector: the per-message dispatch inside a reader loop is individually
+guarded; a bad message is surfaced as an error event and the loop CONTINUES; the reader thread
+can never exit without signalling shutdown; and no cleanup path contains an unbounded wait.
+
+### Why this matters beyond these two bugs
+
+Both classes share a failure signature: **the transport stops delivering events while appearing
+alive.** No exception reaches the supervisor, no process dies, nothing is logged. The session
+simply goes quiet forever.
+
+That is the worst possible failure mode for this feature, because the entire Definition of Done
+rests on push delivery. A connector that silently stops pushing is indistinguishable, from the
+hub's perspective, from a harness that has nothing to say.
+
+STANDING REQUIREMENT for all connectors: every blocking wait has a timeout and raises a clear
+error on expiry; every reader loop guards per-message dispatch and continues; a reader thread
+that exits for any reason MUST signal shutdown to every consumer. A wedged supervisor is worse
+than a crashed one — a crash is observable and recoverable, a hang silently consumes a slot.
+
+### Note on severity grading
+
+The cc-socks `probe()` bare-`ValueError` finding (embedded NUL in `messagingSocketPath`) was
+graded CRITICAL by the first review pass and MINOR by the re-run. This register reflects the
+LATER grading. The remediation brief used the earlier, harsher framing, so the defect is being
+fixed regardless; the discrepancy is recorded here rather than silently reconciled.
