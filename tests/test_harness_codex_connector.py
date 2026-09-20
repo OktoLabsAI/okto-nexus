@@ -185,7 +185,24 @@ def main():
             write_msg({"jsonrpc": "2.0", "id": req_id, "result": {}})
         elif method == "turn/interrupt":
             log({"method": "turn/interrupt", "params": params})
+            # RES-C2 fix: real capture (EV-CX-001-raw_capture_interrupt.jsonl,
+            # live-verified against codex 0.144.6/.152) shows the RPC result
+            # and turn/completed(status="interrupted") arrive TOGETHER, no
+            # separate settle notification and no delay - the fake used to
+            # ack and then emit NOTHING further, an omission that let no test
+            # observe correct-or-wrong post-interrupt ordering at all. Now
+            # matches the real wire: result first, then turn/completed with
+            # status "interrupted" for the SAME turnId, written back-to-back.
             write_msg({"jsonrpc": "2.0", "id": req_id, "result": {}})
+            write_msg(
+                {
+                    "method": "turn/completed",
+                    "params": {
+                        "threadId": params["threadId"],
+                        "turn": {"id": params["turnId"], "status": "interrupted"},
+                    },
+                }
+            )
         elif method == "thread/unsubscribe":
             log({"method": "thread/unsubscribe", "params": params})
             # Live-verified result shape (same probe as above): the real
@@ -415,6 +432,44 @@ def test_steer_and_interrupt_use_the_tracked_turn_id(connector: CodexAppServerCo
     interrupt_entry = _wait_for_log_entry(log_path, lambda e: e.get("method") == "turn/interrupt")
     assert interrupt_entry["params"]["turnId"] == turn_id
     assert interrupt_entry["params"]["threadId"] == session.metadata["thread_id"]
+
+    # RES-C2: the fake now emits turn/completed(status="interrupted") right
+    # after turn/interrupt's ack, matching the real wire capture
+    # (EV-CX-001-raw_capture_interrupt.jsonl, live-verified against codex
+    # 0.144.6/.152 - result and turn/completed(interrupted) arrive together,
+    # no separate settle event). Assert the ordering is actually observable
+    # now: a turn_completed event for THIS turn_id, carrying status
+    # "interrupted", is delivered on the event stream after the interrupt
+    # was issued.
+    completed = _collect_until(connector, lambda ev: ev.kind == "turn_completed")
+    interrupted_completion = completed[-1]
+    assert interrupted_completion.payload["turn"]["id"] == turn_id
+    assert interrupted_completion.payload["turn"]["status"] == "interrupted"
+
+
+def test_interrupt_clears_active_turn_id_so_a_second_interrupt_is_rejected(
+    connector: CodexAppServerConnector,
+) -> None:
+    """RES-C2 ordering, from the connector's own bookkeeping side: once the
+    fake's post-interrupt turn/completed (now emitted - see the test above)
+    is dispatched, ``_on_notification`` clears ``state.active_turn_id`` (the
+    same handling any other ``turn/completed`` gets). A second interrupt
+    issued after that point must therefore fail the same
+    no-active-turn VALIDATION_ERROR any interrupt with nothing to interrupt
+    does - proving the connector actually observes the completion, not just
+    that the wire bytes went by.
+    """
+    session = connector.start(owning_agent_id="nxs_agent")
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_HOLD"}))
+    _collect_until(connector, lambda ev: ev.kind == "turn_started")
+
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="interrupt", payload={}))
+    completed = _collect_until(connector, lambda ev: ev.kind == "turn_completed")
+    assert completed[-1].payload["turn"]["status"] == "interrupted"
+
+    with pytest.raises(OktoNexusError) as exc:
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="interrupt", payload={}))
+    assert exc.value.code == ErrorCode.VALIDATION_ERROR
 
 
 # --------------------------------------------------------------------------- #
@@ -875,27 +930,28 @@ def test_every_blocking_wait_in_module_carries_a_timeout() -> None:
 def test_two_concurrent_events_consumers_split_the_stream_instead_of_each_getting_the_full_stream(
     connector: CodexAppServerConnector,
 ) -> None:
-    """This is a REAL DEFECT report, not a normal regression test.
+    """DEFECT-WITNESS test, now proving the FIX (Phase-4 campaign, RES-A2).
 
     pi.py was remediated for this exact class (own mismatch note 9/C2):
-    ``events()`` now hands each caller its OWN subscriber queue seeded from
-    a shared history under a lock, so N concurrent consumers each see every
-    event. codex.py was never given the equivalent fix: ``events()`` here
-    still does ``self._event_queue.get(timeout=...)`` against ONE shared
-    ``queue.Queue`` (``_event_queue``, set in ``__init__``), so two
-    concurrent callers race for the SAME items and the stream is SPLIT
-    between them, not duplicated to each.
+    ``events()`` hands each caller its OWN subscriber queue seeded from a
+    shared history under a lock, so N concurrent consumers each see every
+    event. codex.py originally lacked the equivalent fix: ``events()`` did
+    ``self._event_queue.get(timeout=...)`` against ONE shared
+    ``queue.Queue``, so two concurrent callers raced for the SAME items and
+    the stream was SPLIT between them, not duplicated to each. This test
+    failed 3/3 deterministically against that code (recorded pre-fix
+    output: ``total=5`` instead of the expected ``total=10``). codex.py's
+    ``events()``/``_push_event`` now carry the same history+per-subscriber-
+    queue fan-out as pi.py (see codex.py's own mismatch note 14a); this
+    test now passes and stays as the regression guard for that fan-out.
 
     Deterministic proof, independent of which thread wins which item: with
     correct per-consumer fan-out the TOTAL item count across 2 concurrent
     consumers of an N-event stream is 2N (each gets all N); with a shared
     queue split it is exactly N (the items are partitioned). Both consumer
     threads are started and given time to genuinely park on the blocking
-    ``get()`` BEFORE any event is produced, so a pass would be unambiguous
+    ``get()`` BEFORE any event is produced, so a pass is unambiguous
     evidence of correct fan-out, not a lucky race.
-
-    ``adapters/outbound/harness/codex.py`` is FROZEN per task instructions;
-    this defect is reported here, not fixed.
     """
     session = connector.start(owning_agent_id="nxs_agent")
 
@@ -939,9 +995,9 @@ def test_two_concurrent_events_consumers_split_the_stream_instead_of_each_gettin
         f"expected each of 2 concurrent events() consumers to receive the FULL "
         f"{expected_full_stream}-event stream (total={2 * expected_full_stream}); got "
         f"total={total} (A={len(consumer_a)}, B={len(consumer_b)}) - the stream was SPLIT "
-        "between them. REAL DEFECT in adapters/outbound/harness/codex.py (FROZEN): "
-        "events() is backed by one shared queue.Queue with no per-consumer fan-out, "
-        "unlike pi.py's remediated equivalent (EV-REV-003 C2). Reported, not fixed."
+        "between them. events() should now fan out via per-consumer subscriber queues "
+        "seeded from a shared history (codex.py mismatch note 14a), matching pi.py's "
+        "remediated equivalent (its own C2 fix)."
     )
 
 
@@ -951,16 +1007,22 @@ def test_two_concurrent_events_consumers_split_the_stream_instead_of_each_gettin
 # except branch).
 # --------------------------------------------------------------------------- #
 def test_failed_start_leaves_events_terminable(tmp_path: Path) -> None:
-    """REAL DEFECT report. ``_spawn_and_initialize``'s failure path (mismatch
-    note 12) calls ``transport.close()`` on a failed handshake - but that
-    only sets ``_CodexTransport._closed`` (the TRANSPORT's own internal
-    flag, used solely to suppress ``_on_child_exit`` when its reader thread
-    reaches EOF after a deliberate close). It never sets
+    """DEFECT-WITNESS test, now proving the FIX (Phase-4 campaign, RES-A4).
+
+    ``_spawn_and_initialize``'s failure path (mismatch note 12) called
+    ``transport.close()`` on a failed handshake - but that only set
+    ``_CodexTransport._closed`` (the TRANSPORT's own internal flag, used
+    solely to suppress ``_on_child_exit`` when its reader thread reaches
+    EOF after a deliberate close). It never set
     ``CodexAppServerConnector._closed_event`` - the ONE flag ``events()``
     actually checks on every ``queue.Empty``. A caller of ``events()`` after
-    a failed ``start()`` (with no separate, explicit ``close()`` call) is
-    therefore never told to stop: the generator loops forever, bounded only
-    by this TEST's own timeout, not by the connector.
+    a failed ``start()`` (with no separate, explicit ``close()`` call) was
+    therefore never told to stop: the generator looped forever, bounded
+    only by this TEST's own timeout, not by the connector - reproduced 3/3
+    deterministically pre-fix (recorded: no termination within 5s). FIX:
+    ``_spawn_and_initialize``'s ``except`` clause now also sets
+    ``self._closed_event`` (codex.py's own mismatch note 14b), mirroring
+    pi.py's C3 fix; this test now passes and stays as the regression guard.
 
     Uses a child that reads (consumes) the ``initialize`` write but never
     answers it, so the handshake's own bounded ``request()`` times out
@@ -968,8 +1030,6 @@ def test_failed_start_leaves_events_terminable(tmp_path: Path) -> None:
     wedge_the_connector``, which this test does not duplicate - that one
     checks ``_transport is None``; this one checks ``events()`` termination,
     a different failure surface entirely).
-
-    ``adapters/outbound/harness/codex.py`` is FROZEN; reported, not fixed.
     """
     hang_script = "import sys, time\nsys.stdin.readline()\ntime.sleep(30)\n"
     conn = CodexAppServerConnector(
@@ -992,13 +1052,92 @@ def test_failed_start_leaves_events_terminable(tmp_path: Path) -> None:
     try:
         assert finished.is_set(), (
             "events() after a FAILED start() (no close() call) did not terminate within "
-            "5s. REAL DEFECT: _spawn_and_initialize's failure path never sets "
-            "CodexAppServerConnector._closed_event (it sets the TRANSPORT's own separate "
-            "internal _closed flag instead). adapters/outbound/harness/codex.py is FROZEN; "
-            "reported, not fixed."
+            "5s. _spawn_and_initialize's failure path should set "
+            "CodexAppServerConnector._closed_event, not just the TRANSPORT's own separate "
+            "internal _closed flag (codex.py mismatch note 14b)."
         )
     finally:
         conn.close()  # always clean up regardless of the assertion outcome
+
+
+def test_events_stays_live_after_a_failed_start_is_followed_by_a_successful_retry(
+    tmp_path: Path,
+) -> None:
+    """RES-A4 fix, second-order check: setting ``_closed_event`` on a FAILED
+    ``start()`` must not permanently poison a connector that is retried and
+    SUCCEEDS. ``_spawn_and_initialize`` only re-runs (``start()``'s guard is
+    ``if self._transport is None``) when the previous attempt never reached
+    ``self._transport = transport`` - i.e. exactly the failed-then-retry
+    path this test exercises, never the "already closed" path (``close()``
+    leaves ``self._transport`` non-``None``, so a post-``close()`` ``start()``
+    skips ``_spawn_and_initialize`` entirely and never reaches this clear).
+
+    Uses ONE script, invoked TWICE by the SAME connector instance (its
+    ``command`` is fixed at construction - a real retry re-spawns the exact
+    same argv): a marker file on disk makes the FIRST invocation hang (never
+    answers ``initialize``, so the handshake times out and ``start()`` #1
+    raises) and the SECOND invocation behave like a minimal, real app-server
+    (answers ``initialize`` and ``thread/start``, so ``start()`` #2
+    succeeds) - the same "flip behaviour via a stateful marker" shape used
+    throughout this file's fakes, applied across two separate process
+    spawns instead of within one.
+    """
+    marker = tmp_path / "spawned_once.marker"
+    script = tmp_path / "flaky_then_ok.py"
+    script.write_text(
+        "import json, os, sys, time\n"
+        f"marker = {str(marker)!r}\n"
+        "if not os.path.exists(marker):\n"
+        "    open(marker, 'w').close()\n"
+        "    sys.stdin.readline()\n"  # consume `initialize` without answering
+        "    time.sleep(30)\n"
+        "else:\n"
+        "    for raw in sys.stdin:\n"
+        "        line = raw.strip()\n"
+        "        if not line:\n"
+        "            continue\n"
+        "        msg = json.loads(line)\n"
+        "        if msg.get('method') == 'initialize':\n"
+        "            sys.stdout.write(json.dumps({'jsonrpc': '2.0', 'id': msg['id'], 'result': {}}) + chr(10))\n"
+        "            sys.stdout.flush()\n"
+        "        elif msg.get('method') == 'thread/start':\n"
+        "            sys.stdout.write(json.dumps({'jsonrpc': '2.0', 'id': msg['id'], 'result': {'thread': {'id': 'th_retry'}}}) + chr(10))\n"
+        "            sys.stdout.flush()\n",
+        encoding="utf-8",
+    )
+    conn = CodexAppServerConnector(
+        command=[sys.executable, str(script)],
+        handshake_timeout_s=0.3,
+    )
+    t: threading.Thread | None = None
+    try:
+        with pytest.raises(OktoNexusError):
+            conn.start(owning_agent_id="nxs_agent")  # spawn #1: hangs, times out, sets _closed_event
+
+        session = conn.start(owning_agent_id="nxs_agent")  # spawn #2 (retry): succeeds
+        assert session.session_id
+
+        collected: list[Any] = []
+        finished = threading.Event()
+
+        def drain() -> None:
+            for ev in conn.events():
+                collected.append(ev)
+            finished.set()
+
+        t = threading.Thread(target=drain, daemon=True)
+        t.start()
+        t.join(timeout=2.5)
+        assert not finished.is_set(), (
+            "events() on a connector that SUCCEEDED on retry terminated immediately, as if "
+            "still closed - the earlier failed start()'s _closed_event was never cleared on "
+            "the successful respawn (codex.py mismatch note 14c)."
+        )
+        assert collected == []
+    finally:
+        conn.close()
+        if t is not None:
+            t.join(timeout=3.0)
 
 
 # --------------------------------------------------------------------------- #
@@ -1007,9 +1146,9 @@ def test_failed_start_leaves_events_terminable(tmp_path: Path) -> None:
 # concurrently before the child dies (the existing
 # test_events_called_twice_after_unexpected_child_exit_returns_both_times
 # calls events() sequentially, one after the other; this is the true
-# concurrent shape). Expected to PASS even though RES-A2 (above) fails:
-# _closed_event is a single shared flag set unconditionally by
-# _on_child_exit, independent of how the (split) stream was delivered.
+# concurrent shape). _closed_event is a single shared flag set
+# unconditionally by _on_child_exit, independent of the (now fanned-out,
+# post-RES-A2-fix) per-consumer event delivery.
 # --------------------------------------------------------------------------- #
 def test_two_concurrent_events_consumers_are_both_signalled_on_child_death(
     connector: CodexAppServerConnector,

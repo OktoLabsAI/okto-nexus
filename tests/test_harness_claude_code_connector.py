@@ -484,19 +484,27 @@ def test_single_turn_maps_turn_started_then_turn_completed():
 
 
 def test_second_turn_reuses_same_nexus_session_id():
+    """Holds ONE ``events()`` iterator across both turns (the real usage
+    pattern - see ``harness_supervisor.py``'s single pump thread), not a
+    fresh ``connector.events()`` call per turn: post-RES-A2, a fresh call
+    is a NEW subscriber that replays the full history from the start
+    (matching ``harness/pi.py``'s reference fan-out), so re-subscribing
+    mid-session would immediately match the FIRST turn's already-seen
+    ``turn_completed`` in the backlog instead of advancing to the second."""
     connector = _connector("basic")
     session = connector.start(owning_agent_id="agent_test")
+    it = connector.events()
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "one"}))
-    _drain_until(connector.events(), lambda e: e.kind == "turn_completed")
+    _drain_until(it, lambda e: e.kind == "turn_completed")
 
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "two"}))
-    events = _drain_until(connector.events(), lambda e: e.kind == "turn_completed")
+    events = _drain_until(it, lambda e: e.kind == "turn_completed")
     assert all(e.session_id == session.session_id for e in events)
     completed = events[-1]
     assert "echo:two" in completed.payload["result"]
 
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
-    list(connector.events())
+    list(it)
 
 
 def test_unparseable_stdout_line_surfaced_not_dropped_and_does_not_hang():
@@ -644,6 +652,113 @@ def test_events_called_twice_both_return_after_close_not_just_one():
         "regression (see module docstring / harness/pi.py reference fix)"
     )
     assert result.get("events") == []
+
+
+def test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream():
+    """RES-A2 (see EV-CC-004): two CONCURRENT ``events()`` consumers must
+    each independently receive the FULL event stream, not split it between
+    them.
+
+    Pre-fix, this connector shares exactly ONE ``queue.Queue`` across every
+    ``events()`` call, so two concurrent consumers race for each item and
+    the stream is non-deterministically partitioned - reproduced 3/3 in
+    ``EV-CC-004-res-a2-probe.py`` (combined total always 7, individual
+    counts vary run to run, and whichever consumer does not win the
+    ``turn_completed`` race is left parked until ``_closed_event`` fires
+    from an unrelated cause). The fix (mirroring ``pi.py``'s C2 fix) gives
+    each ``events()`` call its own subscriber queue fed by a fan-out
+    ``_emit``, seeded from an append-only history snapshot - see that
+    module's ``events()`` docstring.
+
+    Both consumers are started and confirmed PARKED in their own queue's
+    blocking wait (via a ``threading.Event`` each sets on generator entry)
+    BEFORE the turn is sent, ruling out a thread-start race as an
+    alternative explanation - same choreography as the committed probe.
+    """
+    connector = _connector("slow_start")  # gap before first event gives both threads time to park
+    session = connector.start(owning_agent_id="agent_test")
+
+    it1 = connector.events()
+    it2 = connector.events()
+
+    out1: list[HarnessEvent] = []
+    out2: list[HarnessEvent] = []
+    started1 = threading.Event()
+    started2 = threading.Event()
+
+    def _drain(it, out: list[HarnessEvent], started: threading.Event) -> None:
+        started.set()
+        for ev in it:
+            out.append(ev)
+            if ev.kind == "turn_completed":
+                return
+
+    t1 = threading.Thread(target=_drain, args=(it1, out1, started1), daemon=True)
+    t2 = threading.Thread(target=_drain, args=(it2, out2, started2), daemon=True)
+    t1.start()
+    t2.start()
+    assert started1.wait(timeout=5.0)
+    assert started2.wait(timeout=5.0)
+    time.sleep(0.1)  # both threads have entered the generator; nothing pushed yet
+
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hello"}))
+
+    t1.join(timeout=10.0)
+    t2.join(timeout=10.0)
+    assert not t1.is_alive() and not t2.is_alive(), (
+        "a consumer hung waiting for turn_completed - it never saw the full "
+        "stream (RES-A2 split-stream regression)"
+    )
+
+    kinds1 = [e.kind for e in out1]
+    kinds2 = [e.kind for e in out2]
+    assert "turn_started" in kinds1, f"consumer1 missed turn_started; got {kinds1}"
+    assert "turn_started" in kinds2, f"consumer2 missed turn_started; got {kinds2}"
+    assert "turn_completed" in kinds1, f"consumer1 missed turn_completed; got {kinds1}"
+    assert "turn_completed" in kinds2, f"consumer2 missed turn_completed; got {kinds2}"
+    assert kinds1 == kinds2, (
+        "both consumers must see the SAME full stream, not a partition of "
+        f"it - consumer1={kinds1} consumer2={kinds2}"
+    )
+
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
+    for _ in connector.events():
+        pass
+
+
+def test_res_a4_failed_start_leaves_events_terminable_not_hung():
+    """RES-A4 (see EV-CC-004): a FAILED ``start()`` must still leave
+    ``events()`` terminable - never hang forever.
+
+    Pre-fix, ``start()``'s ``OSError`` path (a real ``subprocess.Popen``
+    failure - nonexistent binary path, no mocking) never sets
+    ``self._closed_event``, so a subsequent ``events()`` call loops
+    forever: ``get(timeout=...)`` -> ``queue.Empty`` ->
+    ``_closed_event.is_set()`` is ``False`` -> ``continue``, indefinitely.
+    Reproduced 3/3 in ``EV-CC-004-res-a4-probe.py``. Fix mirrors ``pi.py``'s
+    C3 fix: every failure path out of ``start()`` sets ``_closed_event``
+    before re-raising.
+    """
+    connector = ClaudeCodeStreamConnector(binary="/nonexistent/binary/definitely-not-here-xyz")
+    with pytest.raises(OktoNexusError) as exc_info:
+        connector.start(owning_agent_id="agent_test")
+    assert exc_info.value.code == "CONFIG_ERROR"
+
+    result: dict[str, object] = {}
+
+    def _drain() -> None:
+        result["events"] = list(connector.events())
+
+    t = threading.Thread(target=_drain, daemon=True)
+    t.start()
+    t.join(timeout=5.0)
+    assert not t.is_alive(), (
+        "events() hung after a failed start() - _closed_event was never set "
+        "(RES-A4 regression; see harness/pi.py's C3 fix for the reference "
+        "shape)"
+    )
+    assert result.get("events") == []
+    assert connector._closed_event.is_set()
 
 
 def test_finish_never_fabricates_process_exit_when_child_is_still_alive():
@@ -834,9 +949,7 @@ def test_request_interrupt_marks_the_head_pending_turn_not_the_tail():
     connector._handle_result({"subtype": "error_during_execution"})
     connector._handle_result({"subtype": "error_during_execution"})
 
-    events = []
-    while not connector._events.empty():
-        events.append(connector._events.get())
+    events = list(connector._event_history)
 
     kinds = [e.kind for e in events]
     interrupted_flags = [e.payload["interrupted_by_connector"] for e in events]
@@ -938,10 +1051,15 @@ def test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn():
     """
     connector = _connector("crash_early_interrupt")
     session = connector.start(owning_agent_id="agent_test")
+    # ONE iterator held across both turns - see
+    # test_second_turn_reuses_same_nexus_session_id for why a fresh
+    # connector.events() call mid-session (post-RES-A2) would instead
+    # re-see the first turn_completed from the replayed backlog.
+    it = connector.events()
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "first"}))
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="steer", payload={"content": "steered"}))
 
-    events = _drain_until(connector.events(), lambda e: e.kind == "turn_completed")
+    events = _drain_until(it, lambda e: e.kind == "turn_completed")
     assert not any(e.kind == "error" and e.native_event == "process_exit" for e in events)
     deferred = [e for e in events if e.native_event == "steer_interrupt_deferred_unsafe_window"]
     assert len(deferred) == 1
@@ -962,12 +1080,12 @@ def test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn():
     # to completion before "steered" is even queued behind it.
     assert "echo:first" in completed.payload["result"]
 
-    second = _drain_until(connector.events(), lambda e: e.kind == "turn_completed")
+    second = _drain_until(it, lambda e: e.kind == "turn_completed")
     assert second[-1].payload["subtype"] == "success"
     assert "echo:steered" in second[-1].payload["result"]
 
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
-    list(connector.events())
+    list(it)
 
 
 def test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag():
@@ -1140,18 +1258,31 @@ class _SleepPollEventsConnector(ClaudeCodeStreamConnector):
     _POLL_PERIOD_S = 0.3
 
     def events(self):  # type: ignore[override]
-        while True:
-            time.sleep(self._POLL_PERIOD_S)
-            drained_any = False
-            while True:
-                try:
-                    item = self._events.get_nowait()
-                except queue.Empty:
-                    break
-                drained_any = True
+        my_queue: queue.Queue = queue.Queue()
+        with self._history_lock:
+            backlog = list(self._event_history)
+            self._subscribers.append(my_queue)
+        try:
+            for item in backlog:
                 yield item
-            if not drained_any and self._closed_event.is_set():
-                return
+            while True:
+                time.sleep(self._POLL_PERIOD_S)
+                drained_any = False
+                while True:
+                    try:
+                        item = my_queue.get_nowait()
+                    except queue.Empty:
+                        break
+                    drained_any = True
+                    yield item
+                if not drained_any and self._closed_event.is_set():
+                    return
+        finally:
+            with self._history_lock:
+                try:
+                    self._subscribers.remove(my_queue)
+                except ValueError:
+                    pass
 
 
 def test_events_iterator_delivers_promptly_not_on_a_poll_interval():
@@ -1251,23 +1382,28 @@ def test_real_claude_single_trivial_turn():
 def test_real_claude_two_turns_share_session_and_process_survives():
     connector = ClaudeCodeStreamConnector()
     session = connector.start(owning_agent_id="agent_test")
+    # ONE iterator held across both turns - see
+    # test_second_turn_reuses_same_nexus_session_id for why a fresh
+    # connector.events() call mid-session (post-RES-A2) would instead
+    # re-see the first turn_completed from the replayed backlog.
+    it = connector.events()
     connector.send(
         session,
         HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "reply with the single word: one"}),
     )
-    first = _drain_until(connector.events(), lambda e: e.kind == "turn_completed", timeout_s=60)
+    first = _drain_until(it, lambda e: e.kind == "turn_completed", timeout_s=60)
     assert "one" in first[-1].payload["result"].lower()
 
     connector.send(
         session,
         HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "reply with the single word: two"}),
     )
-    second = _drain_until(connector.events(), lambda e: e.kind == "turn_completed", timeout_s=60)
+    second = _drain_until(it, lambda e: e.kind == "turn_completed", timeout_s=60)
     assert "two" in second[-1].payload["result"].lower()
     assert second[0].kind == "turn_started"  # system:init re-fired for turn 2
 
     connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
-    list(connector.events())
+    list(it)
 
 
 @requires_real_claude

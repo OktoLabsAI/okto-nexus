@@ -84,6 +84,7 @@ from .ports import (
     ConnectionFactory,
     EmbeddingProvider,
     EventEmitter,
+    InboxDeliveryNotifier,
     MessageDeliveryRepo,
     MessageRepo,
     MessageVectorStore,
@@ -125,6 +126,7 @@ class MessageService:
         governance: GovernanceService | None = None,
         approvals: ApprovalService | None = None,
         guardrails: GuardrailService | None = None,
+        inbox_notifier: InboxDeliveryNotifier | None = None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -164,6 +166,13 @@ class MessageService:
         # Communication guardrails (spec 9ae50ecb): when wired, content checks
         # run before governance/HITL and before any message row/delivery/event.
         self._guardrails = guardrails
+        # Inbox delivery push (ADR 0004 follow-up, SYS-03/UAT-05): when
+        # wired, every recipient's delivery is ALSO announced through this
+        # in-process registry, best-effort, AFTER the write uow commits -
+        # see _maybe_notify_inbox_subscribers. None = no-op (this slice's
+        # standing optional-dependency convention, same as governance/
+        # approvals/guardrails above).
+        self._inbox_notifier = inbox_notifier
 
     @contextmanager
     def _send_uow(
@@ -539,6 +548,13 @@ class MessageService:
         self._maybe_generate_embedding(
             message_id=message_id, subject=subject, body=body, created_at=now
         )
+        # Best-effort in-process push (ADR 0004 follow-up, SYS-03/UAT-05):
+        # AFTER the delivery rows already committed above, announce each one
+        # to anything subscribed to that recipient - most notably
+        # HarnessSupervisor, for a live session's owning_agent_id. See
+        # _maybe_notify_inbox_subscribers's own docstring for why this runs
+        # here (post-commit) and never inside the write uow.
+        self._maybe_notify_inbox_subscribers(recipients=recipients, data=data)
         return data
 
     # ------------------------------------------------------------------ #
@@ -582,6 +598,40 @@ class MessageService:
                 )
         except Exception:  # noqa: BLE001 - best-effort: a failed embed never aborts the send
             return
+
+    def _maybe_notify_inbox_subscribers(
+        self, *, recipients: Any, data: Mapping[str, Any]
+    ) -> None:
+        """Announce this delivery to each recipient's inbox subscribers,
+        BEST-EFFORT, AFTER the write uow that created the delivery rows has
+        already committed (ADR 0004 follow-up: closes the SYS-03/UAT-05
+        target-grammar gap - a message addressed at a live harness session's
+        owning_agent_id via direct/capability/role/tag now reaches its
+        connector).
+
+        Runs post-commit, never inside ``_send_uow``, for the same reason
+        :class:`~okto_nexus.application.ports.HarnessConnector` documents
+        for its own ``start``: a subscriber's callback (the supervisor
+        forwarding into a connector) can itself block on a transport write,
+        and must never do so while this service holds the SQLite WAL
+        writer lock. It is also why this is hand-off, not consumption: the
+        delivery row each recipient got is already durable by the time this
+        runs, so a subscriber raising - or no notifier being wired at all -
+        never loses or mutates it; it stays exactly where ADR 0001 already
+        left it, claimable through the ordinary inbox_pull/ack path
+        regardless of what happens here.
+
+        No-op when no notifier is wired (this slice's standing optional-
+        dependency convention - see governance/approvals/guardrails above).
+        """
+        notifier = self._inbox_notifier
+        if notifier is None:
+            return
+        for recipient_id in recipients:
+            try:
+                notifier.publish(recipient_id, data)
+            except Exception:  # noqa: BLE001 - best-effort, mirrors _maybe_generate_embedding
+                continue
 
     # ------------------------------------------------------------------ #
     # channel_create / channel_list

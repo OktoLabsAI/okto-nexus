@@ -457,3 +457,262 @@ def test_harness_turn_completed_event_is_also_delivered_as_a_message(ctx):
     assert len(rows) == 1
     assert session_id in rows[0]["subject"]
     assert "agent_settled" in rows[0]["body"]
+
+
+# --------------------------------------------------------------------------- #
+# H-1: harness_open backend selection (EV-SYS-002 - no silent ambient inherit)
+# --------------------------------------------------------------------------- #
+@pytest.fixture
+def capturing_ctx(tmp_path):
+    """Same shape as ``ctx``, but the fake factories capture the ``backend``
+    kwarg EXPLICITLY (the plain ``ctx`` fixture's factories swallow it via
+    ``**_ignored`` - real, but not proof the value was received)."""
+    project_root = str(tmp_path / "project")
+    (tmp_path / "project").mkdir()
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    connectors: dict[str, list[FakeConnector]] = {"pi": [], "codex": [], "claude_code": []}
+    received_backend: dict[str, list[Any]] = {"pi": [], "codex": [], "claude_code": []}
+
+    def _factory(kind: str):
+        def factory(*, project_root: str, substrate, target_pid, backend=None, **_ignored):
+            caps = _STREAM_CAPS
+            if kind == "claude_code" and substrate == "attach":
+                caps = _ATTACH_CAPS
+            received_backend[kind].append(backend)
+            conn = FakeConnector(kind=kind, capabilities=caps)
+            connectors[kind].append(conn)
+            return conn
+
+        return factory
+
+    deps.harness_connector_factories = {
+        "pi": _factory("pi"),
+        "codex": _factory("codex"),
+        "claude_code": _factory("claude_code"),
+    }
+    server = CaptureServer()
+    harness_tools.register(server, deps)
+    return deps, server, connectors, received_backend, project_root
+
+
+def test_harness_open_with_no_backend_inherits_ambient_default_visibly(capturing_ctx):
+    """Baseline (EV-SYS-002's own hazard): omitting backend keeps today's
+    ambient-inherit behaviour (a bare `pi` open silently used the OPERATOR's
+    own ~/.pi/agent/settings.json default provider) - but the response must
+    now say so explicitly rather than leaving it invisible."""
+    _deps, server, _connectors, received_backend, project_root = capturing_ctx
+    result = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+    assert result["ok"], result
+    assert received_backend["pi"] == [{}]
+    backend_info = result["data"]["backend"]
+    assert backend_info["explicit"] is False
+    assert backend_info["applied"] == {}
+    assert "ambient" in backend_info["note"]
+    assert "provider" in backend_info["note"] or "env" in backend_info["note"]
+
+
+def test_harness_open_backend_override_reaches_the_pi_connector_factory(capturing_ctx):
+    """The live hazard, fixed: an operator CAN say which provider/model this
+    session uses, and it actually reaches connector construction (not
+    dropped on the floor, per EV-SYS-002's own finding that the frozen
+    ``PiRpcConnector.__init__`` already accepts ``provider``/``model`` but
+    the factory never passed them)."""
+    _deps, server, _connectors, received_backend, project_root = capturing_ctx
+    backend = {"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]}
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="pi-1",
+        kind="pi",
+        project_root=project_root,
+        backend=backend,
+    )
+    assert result["ok"], result
+    assert received_backend["pi"] == [backend]
+    backend_info = result["data"]["backend"]
+    assert backend_info["explicit"] is True
+    assert backend_info["applied"] == backend
+
+
+def test_harness_open_backend_env_reaches_the_codex_connector_factory(capturing_ctx):
+    """codex's own backend selection is env-driven (CODEX_HOME + config.toml,
+    D5/EV-SYS-002), not a provider/model kwarg - ``env`` is the field that
+    must reach it."""
+    _deps, server, _connectors, received_backend, project_root = capturing_ctx
+    backend = {"env": {"CODEX_HOME": "/tmp/codex_home"}}
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="codex-1",
+        kind="codex",
+        project_root=project_root,
+        backend=backend,
+    )
+    assert result["ok"], result
+    assert received_backend["codex"] == [backend]
+
+
+def test_harness_open_rejects_backend_field_unsupported_for_kind(capturing_ctx):
+    """A backend field the connector cannot actually honour is a
+    VALIDATION_ERROR naming the supported set - never a silent drop (the
+    exact failure class H-2 catches on the agent_id description)."""
+    _deps, server, _connectors, received_backend, project_root = capturing_ctx
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="codex-1",
+        kind="codex",
+        project_root=project_root,
+        backend={"provider": "zai"},
+    )
+    assert not result["ok"]
+    assert result["error"]["code"] == "VALIDATION_ERROR"
+    assert "provider" in result["error"]["message"]
+    assert "env" in result["error"]["message"]
+    assert received_backend["codex"] == []
+
+
+def test_harness_open_rejects_backend_for_claude_code_attach_substrate(capturing_ctx):
+    _deps, server, _connectors, received_backend, project_root = capturing_ctx
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="cc-attach",
+        kind="claude_code",
+        project_root=project_root,
+        substrate="attach",
+        target_pid=4242,
+        backend={"env": {"X": "1"}},
+    )
+    assert not result["ok"]
+    assert result["error"]["code"] == "VALIDATION_ERROR"
+    assert "attach" in result["error"]["message"]
+    assert received_backend["claude_code"] == []
+
+
+def test_harness_open_rejects_non_object_backend(capturing_ctx):
+    _deps, server, _connectors, _received_backend, project_root = capturing_ctx
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="pi-1",
+        kind="pi",
+        project_root=project_root,
+        backend=["not", "an", "object"],
+    )
+    assert not result["ok"]
+    assert result["error"]["code"] == "VALIDATION_ERROR"
+
+
+def test_harness_open_rejects_wrong_typed_backend_env(capturing_ctx):
+    _deps, server, _connectors, _received_backend, project_root = capturing_ctx
+    result = _call(
+        server,
+        "harness_open",
+        agent_id="codex-1",
+        kind="codex",
+        project_root=project_root,
+        backend={"env": "not-an-object"},
+    )
+    assert not result["ok"]
+    assert result["error"]["code"] == "VALIDATION_ERROR"
+    assert "env" in result["error"]["message"]
+
+
+# --------------------------------------------------------------------------- #
+# H-2: shipped tool text must not claim the target grammar reaches a harness
+# --------------------------------------------------------------------------- #
+def test_harness_open_agent_id_description_documents_the_sys03_fix(tmp_path):
+    """Supersedes the pre-fix contract test of the same shape (H-2, surface
+    task, ``test_harness_open_agent_id_description_does_not_promise_target_
+    grammar_routing``): that assertion is now OBSOLETE, not wrong - it
+    correctly locked in the pre-fix docstring contract at the time it was
+    written. See docs/harness-integrations/evidence/EV-SYS-003-FOLLOWUP-
+    target-grammar-fix.md for the fix that made it obsolete.
+
+    EV-SYS-003/EV-UAT-05 originally falsified the claim that
+    message_create's target grammar (direct/capability/role/tag) reaches an
+    open harness session - it reported delivered_count:1 while the
+    connector's own wire trace gained zero bytes. That gap is now CLOSED
+    (HarnessSupervisor subscribes each live session's owning_agent_id to an
+    InboxDeliveryNotifier and forwards arriving messages as send_turn - see
+    application/harness_supervisor.py and the live SYS-03 re-run evidence).
+
+    The SHIPPED tool description must say so accurately: the target grammar
+    DOES now reach a live session (not an unqualified/silent claim - the
+    original defect was leaving an operator to believe this by omission
+    when it was false; the fix is leaving them to believe it correctly now
+    that it is true), qualified as best-effort/hand-off (never guaranteed
+    delivery the way harness_send is), and must still name harness_send/
+    steer/interrupt as the explicit, session_id-addressed alternative for
+    guaranteed delivery or a session that may not be live yet. Asserted
+    against the LIVE FastMCP tool schema - what an operator actually reads -
+    not the module's private string constant.
+    """
+    pytest.importorskip("mcp")
+    from okto_nexus.adapters.inbound.mcp.server import bootstrap as real_bootstrap
+    from okto_nexus.adapters.inbound.mcp.server import create_server
+
+    deps = real_bootstrap({}, ["--home", str(tmp_path / "home")])
+    server = create_server(deps)
+    tools = asyncio.run(server.list_tools())
+    harness_open_tool = next(t for t in tools if t.name == "harness_open")
+    agent_id_desc = harness_open_tool.inputSchema["properties"]["agent_id"]["description"]
+
+    # The pre-fix false-by-omission phrasing must not reappear verbatim.
+    assert "other agents then address it via the normal target" not in agent_id_desc
+    # The truthful, POSITIVE claim: input addressing via the target grammar
+    # now reaches a live session.
+    assert "direct/capability/role/tag" in agent_id_desc
+    idx = agent_id_desc.index("direct/capability/role/tag")
+    window = agent_id_desc[max(0, idx - 200) : idx]
+    assert "can now" in window or "now ADDRESS" in window, (
+        "the fixed behaviour must be stated as a positive, qualified claim "
+        "(what changed and why it is safe), not a bare unqualified promise"
+    )
+    # Hand-off/best-effort semantics are disclosed, not silently assumed.
+    assert "best-effort" in agent_id_desc or "hand-off" in agent_id_desc
+    # The explicit, guaranteed-delivery alternative is still named.
+    assert "harness_send" in agent_id_desc
+
+
+# --------------------------------------------------------------------------- #
+# H-1: the REAL (non-fake) connector factories - not exercised by any other
+# test here, since every other test injects a fake via
+# deps.harness_connector_factories. A wrong kwarg name in
+# _default_connector_factories() would otherwise only surface when a real
+# binary spawns.
+# --------------------------------------------------------------------------- #
+def test_default_connector_factories_pass_backend_into_the_real_pi_connector():
+    factories = harness_tools._default_connector_factories()
+    conn = factories["pi"](
+        project_root="/tmp",
+        substrate=None,
+        target_pid=None,
+        backend={"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]},
+    )
+    assert conn._provider == "zai"
+    assert conn._model == "glm-5.3"
+    assert conn._extra_args == ["--foo"]
+
+
+def test_default_connector_factories_pass_backend_env_into_the_real_codex_connector():
+    factories = harness_tools._default_connector_factories()
+    conn = factories["codex"](
+        project_root="/tmp",
+        substrate=None,
+        target_pid=None,
+        backend={"env": {"CODEX_HOME": "/tmp/codex_home"}},
+    )
+    assert conn._env == {"CODEX_HOME": "/tmp/codex_home"}
+
+
+def test_default_connector_factories_pass_backend_env_into_the_real_claude_code_stream_connector():
+    factories = harness_tools._default_connector_factories()
+    conn = factories["claude_code"](
+        project_root="/tmp",
+        substrate="stream",
+        target_pid=None,
+        backend={"env": {"ANTHROPIC_BASE_URL": "https://example.invalid"}},
+    )
+    assert conn._env == {"ANTHROPIC_BASE_URL": "https://example.invalid"}

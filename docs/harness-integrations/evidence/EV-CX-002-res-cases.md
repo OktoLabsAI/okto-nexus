@@ -2,10 +2,18 @@
 
 Captured: 2026-09-20. All runs against `tests/test_harness_codex_connector.py` (fake-server-backed
 unit level — RES is explicitly permitted to use a fake connector per the task's rules, as long as
-the fake can FAIL, not only succeed — see RES-C3 below). `adapters/outbound/harness/codex.py` is
-FROZEN per task instructions; where a defect was found it is reported here, NOT fixed.
+the fake can FAIL, not only succeed — see RES-C3 below).
 
-## ⚠️ TWO REAL, REPRODUCIBLE DEFECTS FOUND — reported, not fixed (frozen module)
+> **UPDATE — Phase-4 campaign follow-up pass, same day.** `adapters/outbound/harness/codex.py` was
+> NOT frozen for this follow-up task (only `domain/harness.py` and the `HarnessConnector`/
+> `HarnessSubscriberRegistry` Protocols in `application/ports.py` were). Both defects below (RES-A2,
+> RES-A4) and the RES-C2 fake divergence were FIXED this pass, following `harness/pi.py`'s own
+> remediated pattern (its C2/C3 fixes) exactly, per the follow-up task's explicit instruction. The
+> narrative below is left INTACT as the failing-first record; each defect section now also carries
+> the fix and the re-run showing it passing. See codex.py's own mismatch note 14 for the
+> in-module fix writeup.
+
+## ⚠️ TWO REAL, REPRODUCIBLE DEFECTS FOUND — FIXED in the Phase-4 follow-up pass (see update above)
 
 Both are logic bugs (not timing-sensitive races); each was re-run in isolation 3× and failed
 identically all 3 times — not contention artifacts from the loaded shared machine.
@@ -49,6 +57,24 @@ twice (Class A). A supervisor with more than one internal consumer of a codex se
 mid-stream, distinct from the ALREADY-covered "call after close" case in RES-A1) silently loses
 events with no exception, no crash, nothing logged.
 
+**FIXED, Phase-4 follow-up pass.** `events()`/`_push_event` now carry the same fan-out shape as
+`pi.py`'s own C2 fix: `_event_history` (an append-only record of every event ever pushed) plus one
+subscriber `queue.Queue` per `events()` call, both under one `_history_lock` so a push can never
+land in the gap between a new subscriber's backlog snapshot and its registration (see codex.py's
+mismatch note 14a). `_event_queue` is gone. Re-run 3× in isolation, same test, same command:
+
+    run 1: PASSED (0.36s)   run 2: PASSED (0.34s)   run 3: PASSED (0.36s)
+
+**Caveat disclosed, not silently inherited:** `pi.py` justifies never trimming its own equivalent
+history by "one connector IS one session" (`multiplexes_sessions=False`). That premise is false for
+codex (`multiplexes_sessions=True`), so `_event_history` can in principle grow across MANY
+sessions' worth of events over one connector's WHOLE process life, not just one session's — not
+reachable at today's actual wiring (`adapters/inbound/mcp/tools/harness.py`'s `_codex` factory
+spawns a fresh connector, and therefore a fresh child process, per `harness_open` call;
+grep-confirmed no other call site in `src/` re-uses a connector across sessions or re-subscribes to
+`events()`), but a real latent gap the moment multiplexing is ever actually wired up. See codex.py's
+own mismatch note 14a for the full writeup.
+
 ### Defect 2 — RES-A4 FAILS: a FAILED `start()` leaves `events()` permanently hanging
 
 **File:** same module, `CodexAppServerConnector._spawn_and_initialize` (mismatch note 12's own fix)
@@ -91,9 +117,19 @@ indistinguishable from a harness with nothing to say"). A boot-time (D8) harness
 regardless of its outcome — the exact "boot must assume a connector can fail in exactly that way"
 scenario ADR 0004 D8 calls out.
 
-**Both defects are reported here per ABSOLUTE RULE 2 (frozen file), not fixed.** The test file
-change that documents them (`tests/test_harness_codex_connector.py`) is NOT a modification to any
-frozen file.
+**FIXED, Phase-4 follow-up pass.** `_spawn_and_initialize`'s `except` clause now also sets
+`self._closed_event` (not just `transport.close()`), and the guarded region was widened to cover
+`transport.start()` itself, catching `BaseException` rather than `Exception` — mirroring how
+widely `pi.py`'s own C3 fix guards its equivalent spawn path (see codex.py's mismatch note 14b).
+Re-run 3× in isolation, same test, same command:
+
+    run 1: PASSED (1.34s)   run 2: PASSED (1.33s)   run 3: PASSED (1.34s)
+
+**Both defects were reported here per the earlier ABSOLUTE RULE 2 (frozen file) under the ORIGINAL
+task; the Phase-4 follow-up task explicitly lifted that freeze for this file and instructed the
+fix.** The test file change that originally documented them
+(`tests/test_harness_codex_connector.py`) was never a modification to any frozen file, and was
+updated this pass to describe the now-fixed status without weakening either assertion.
 
 ---
 
@@ -222,17 +258,27 @@ interrupt_use_the_tracked_turn_id` (the only existing test that exercises `turn/
 asserts the LOG entry recording that `turn/interrupt` was sent with the right `turnId`; it never
 waits for or asserts a resulting `turn/completed`.
 
-**This is a genuine RES-C2 divergence, disclosed per the case's own "Procedure when a fake is
-found to diverge" instruction**, though narrower in consequence than Pi's C1 (Pi's divergence
-inverted an ORDERING claim a test actively asserted and got backwards; codex's fake divergence is
-an OMISSION — it just never completes the turn, so no test can currently observe interrupt-then-
-complete ordering at all, correct OR wrong). Per the task's own scope note ("do not fix it inside a
-test-writing task" applies to the FROZEN connector, not to the test file's fake) — a full fix
-(teaching the fake to emit `turn/completed(status="interrupted")` after `turn/interrupt`, matching
-the real capture) was judged out of scope for THIS pass given the time budget, since `codex.py`
-itself is frozen and the case is about the fake's fidelity being AUDITED, not about growing new
-production-shaped assertions against it. Recorded here as an open finding rather than silently
-left uninvestigated.
+**This was a genuine RES-C2 divergence, disclosed per the case's own "Procedure when a fake is
+found to diverge" instruction**, narrower in consequence than Pi's C1 (Pi's divergence inverted an
+ORDERING claim a test actively asserted and got backwards; codex's fake divergence was an
+OMISSION — it just never completed the turn, so no test could observe interrupt-then-complete
+ordering at all, correct OR wrong).
+
+**FIXED, Phase-4 follow-up pass.** The fake's `turn/interrupt` handler now emits
+`{"method": "turn/completed", "params": {"threadId": ..., "turn": {"id": <turnId>,
+"status": "interrupted"}}}` immediately after the RPC ack, matching the real capture's ordering
+(same wire timestamp, no separate settle event). `test_steer_and_interrupt_use_the_tracked_turn_id`
+was extended to assert this: after issuing `interrupt`, it drains `events()` for the next
+`turn_completed` and asserts `payload["turn"]["id"] == turn_id` and
+`payload["turn"]["status"] == "interrupted"`. A second new test,
+`test_interrupt_clears_active_turn_id_so_a_second_interrupt_is_rejected`, proves the connector's
+own bookkeeping actually observes that completion (not just that the wire bytes went by): a second
+`interrupt()` issued after the first turn's `turn/completed(interrupted)` was delivered correctly
+raises `VALIDATION_ERROR` (no active turn), exercising `_on_notification`'s
+`state.active_turn_id = None` clear on the SAME code path any other `turn/completed` gets.
+
+    $ timeout 30 uv run python -m pytest -q tests/test_harness_codex_connector.py -k "interrupt or tracked_turn_id"
+    3 passed in 0.33s
 
 ## RES-C3 — the fake can FAIL, not only succeed
 
@@ -260,37 +306,45 @@ leaves `_transport is None` (the same wedge-guard the timeout-shaped failure alr
 
 ## Full file run + ruff
 
+Pre-fix (original pass, cited for the record):
+
     $ timeout 300 uv run python -m pytest -q tests/test_harness_codex_connector.py
     2 failed, 26 passed, 1 skipped in 20.70s
     (the 1 skipped is test_live_against_real_codex_lan_box under the default env - see EV-CX-001
     for its OKTO_NEXUS_CODEX_LIVE=1 run, which passes)
+
+Post-fix (Phase-4 follow-up pass, this file's tests only — the task instructed NOT running the
+full repo suite here since sibling connector agents are mid-write on other files):
+
+    $ timeout 300 uv run python -m pytest -q tests/test_harness_codex_connector.py
+    29 passed, 1 skipped in 8.86s
 
     $ uv run ruff check .
     All checks passed!
 
 ## Full repo suite (REG-01 context)
 
+Cited from the original pass, NOT re-run in this follow-up (task instruction: "Do not run the full
+suite; siblings are mid-write" — the number below is stale by construction the moment any sibling
+agent commits, and reconciling it is REG-01/the orchestrator's job, not this file's):
+
     $ timeout 900 uv run python -m pytest -q
     2 failed, 1822 passed, 4 skipped, 2 warnings in 158.42s
 
-The 2 failures are the two NEW, real, reproducible defects reported above — not pre-existing
-failures, and not regressions in any OTHER file. Every other test in the 1822-strong suite,
-including every pre-existing codex test, passes. The pass count is higher than EV-SYS-001's
-earlier baseline (1810 passed/4 skipped) because other agents are concurrently adding tests to
-this same branch per the task's own "several agents run concurrently" note — reconciling to that
-older baseline exactly was not attempted, since it is not this task's baseline to own.
+The 2 failures were the two defects reported above, now fixed (see each defect's own "FIXED"
+block); a fresh full-suite count reflecting that fix was not taken here per the instruction above.
 
 ## Case summary
 
 | Case | Status | Notes |
 |---|---|---|
 | RES-A1 | PASSED | existing tests, cited |
-| RES-A2 | **FAILED — real defect** | reported, not fixed (frozen module) |
+| RES-A2 | **PASSED (fixed this pass)** | was a real defect (split stream); fan-out fix mirrors pi.py's C2, re-run 3x |
 | RES-A3 | PASSED | new structural test |
-| RES-A4 | **FAILED — real defect** | reported, not fixed (frozen module) |
+| RES-A4 | **PASSED (fixed this pass)** | was a real defect (events() never terminates); _closed_event fix mirrors pi.py's C3, re-run 3x |
 | RES-B1 | PASSED | existing tests, cited |
 | RES-B2 | PASSED | new test, truly concurrent |
 | RES-B3 | PASSED | structural, same test as RES-A3 |
 | RES-C1 | PASSED | fake audited against 3 new raw captures |
-| RES-C2 | **DIVERGENCE FOUND** | fake omits post-interrupt turn/completed; disclosed, not fixed |
+| RES-C2 | **PASSED (fixed this pass)** | fake now emits post-interrupt turn/completed(interrupted), matching the real capture; ordering asserted by 2 tests |
 | RES-C3 | PASSED | 3 existing fail-modes cited + 1 new (rejected initialize) |

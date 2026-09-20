@@ -2076,6 +2076,67 @@ class MessageDeliveryRepo(Protocol):
         ...
 
 
+@runtime_checkable
+class InboxDeliveryNotifier(Protocol):
+    """In-process push registry for ordinary per-recipient inbox deliveries
+    (ADR 0004 follow-up: closes the SYS-03/UAT-05 target-grammar gap).
+
+    NOT one of the two ports ADR 0004 froze (``HarnessConnector`` /
+    ``HarnessSubscriberRegistry``) - this is a NEW port, added specifically
+    so :class:`~okto_nexus.application.harness_supervisor.HarnessSupervisor`
+    can learn, in-process and with no polling anywhere (D1), that an
+    ORDINARY ``message_create`` fan-out (``direct``/``capability``/``role``/
+    ``tag`` - the EXISTING target grammar, ADR 0001) just delivered to a
+    live harness session's ``owning_agent_id``. Structurally symmetric to
+    :class:`HarnessSubscriberRegistry` (same ``subscribe``/``unsubscribe``/
+    ``publish`` shape, same in-memory-only, no-queue contract) but keyed by
+    RECIPIENT ``agent_id`` rather than harness ``session_id``, and fired by
+    :class:`~okto_nexus.application.messages.MessageService` alongside its
+    EXISTING per-recipient inbox fan-out - never a second, parallel
+    delivery mechanism (the delivery row this describes is created exactly
+    as it always was, whether or not anything is subscribed).
+
+    Piggybacking on the existing ``EventEmitter``/``message.created`` event
+    was considered and rejected: ``emit`` is a SQLite write inside the same
+    write ``uow`` as the delivery row, so consuming it as a notification
+    signal would mean polling the event table after the fact - exactly what
+    D1 forbids anywhere in the harness path. This port is a plain in-memory
+    callback registry instead, with no storage and no poll loop possible.
+    """
+
+    def subscribe(self, agent_id: str, callback: Any) -> Any:
+        """Register ``callback`` to receive deliveries addressed at
+        ``agent_id``. Returns an opaque handle; pass it to
+        :meth:`unsubscribe` to stop receiving. ``callback`` is invoked
+        synchronously, in-process, with ONE positional argument - a
+        ``Mapping`` describing the delivered message (at minimum
+        ``message_id``, ``from_agent_id``, ``subject``, ``body``,
+        ``target``, ``created_at``) - never via a queue that requires
+        polling to drain."""
+        ...
+
+    def unsubscribe(self, handle: Any) -> None:
+        """Remove a previously registered subscription (idempotent - an
+        unknown/already-removed handle is a safe no-op)."""
+        ...
+
+    def publish(self, agent_id: str, message: Mapping[str, Any]) -> None:
+        """Notify every current subscriber of ``agent_id`` that ``message``
+        was just delivered to their inbox, now, synchronously, on the
+        calling thread. The caller (``MessageService.create_message``)
+        calls this AFTER its own write ``uow`` has already committed the
+        delivery row - never from inside it (a connector's ``send`` can
+        block, and this port's contract is the same as
+        ``HarnessConnector.start``'s own: never call into a transport while
+        holding the SQLite WAL writer lock a ``uow`` keeps open) - and
+        treats it as best-effort: a subscriber that raises, or no
+        subscriber being registered at all, never affects the delivery row
+        this call describes, which is already durable by the time this
+        runs.
+        """
+        ...
+
+
 # --------------------------------------------------------------------------- #
 # Semantic search: embedding provider + message vector store (external services
 # behind hexagonal ports - the domain NEVER imports sentence-transformers /

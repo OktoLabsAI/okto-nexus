@@ -37,7 +37,7 @@ from typing import Any, Callable
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
+from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector, _PiTransport  # noqa: SLF001 - see RES-A3/B3 unit test
 from okto_nexus.domain.harness import (
     STEER_TIMING_NEXT_TURN_BOUNDARY,
     HarnessCommand,
@@ -792,49 +792,77 @@ def test_res_b2_reader_thread_exit_signals_shutdown_to_every_concurrent_consumer
     assert finished["a"] and finished["b"]
 
 
+def test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises(
+    connector: PiRpcConnector, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The test above proves the GUARDED exit path (child death ->
+    `_on_child_exit` -> `_closed_event.set()`) unblocks every consumer -
+    but that same `_closed_event.set()` call already existed before this
+    fix too, so it proves nothing about the NEW unconditional backstop
+    (`_PiTransport._read_stdout`'s inner ``finally`` calling
+    `_on_reader_exit()`). This closes that gap directly: `_on_child_exit`
+    itself is made to raise, so the ONLY thing left able to signal
+    shutdown is the unconditional backstop. Patched BEFORE `start()` for
+    the same reason as the generic-dispatch-exception test above -
+    `_PiTransport` captures `connector._on_child_exit` as a plain callable
+    at construction time.
+    """
+
+    def exploding_on_child_exit(returncode: int | None, stderr_tail: str) -> None:
+        raise RuntimeError("boom - injected failure in the death-report path itself")
+
+    monkeypatch.setattr(connector, "_on_child_exit", exploding_on_child_exit)
+
+    session = connector.start(owning_agent_id="nxs_test_agent")
+    connector.send(
+        session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_CRASH"})
+    )
+
+    finished: dict[str, bool] = {"a": False, "b": False}
+
+    def consume(key: str) -> None:
+        list(connector.events())  # must RETURN, not hang, even though on_child_exit blew up
+        finished[key] = True
+
+    thread_a = threading.Thread(target=consume, args=("a",), daemon=True)
+    thread_b = threading.Thread(target=consume, args=("b",), daemon=True)
+    thread_a.start()
+    thread_b.start()
+    thread_a.join(timeout=8.0)
+    thread_b.join(timeout=8.0)
+
+    assert not thread_a.is_alive(), "consumer A never saw shutdown after on_child_exit raised"
+    assert not thread_b.is_alive(), "consumer B never saw shutdown after on_child_exit raised"
+    assert finished["a"] and finished["b"]
+    assert connector._closed_event.is_set()  # noqa: SLF001 - the unconditional backstop, not on_child_exit, set this
+
+
 # --------------------------------------------------------------------------- #
-# RES-B1 - DEFECT CHARACTERIZATION, not a passing-behaviour assertion.
+# RES-B1/A3/B3 - FIX verification (was: defect characterization only).
 #
-# pi.py is FROZEN (task rule 2): this test documents a REAL, empirically
-# reproduced defect rather than fixing it. See the evidence file
-# (RES-B1-pi-recursionerror-reader-hang.md) for the full writeup.
+# `_PiTransport._read_stdout` used to wrap ONLY `json.loads(line)` in
+# `except json.JSONDecodeError`. A syntactically VALID JSON line that is
+# pathologically deep (a balanced, deeply nested array) makes `json.loads`
+# raise `RecursionError` instead - NOT a `JSONDecodeError` subclass, so it
+# was NOT caught, unwound straight out of the reader loop, and landed on an
+# unbounded `self._proc.wait()` against a still-healthy child - wedging
+# every current and future `events()` consumer forever with no error
+# surfaced anywhere (see EV-PI-RES-001 for the original repro against
+# unfixed code: `done.wait(timeout=3.0)` was `False` every run).
 #
-# `_PiTransport._read_stdout` wraps ONLY `json.loads(line)` in
-# `except json.JSONDecodeError` (pi.py, inside `_read_stdout`). A
-# syntactically VALID JSON line that is pathologically deep (a balanced,
-# deeply nested array) makes `json.loads` raise `RecursionError` instead -
-# NOT a `JSONDecodeError` subclass, so it is NOT caught. The exception
-# unwinds straight out of the `for raw_line in self._proc.stdout:` loop,
-# past `self._dispatch(msg)` (never reached), into the bare `finally` block,
-# which calls `self._proc.wait()` with NO TIMEOUT. Since the child process
-# (real pi, or this test's fake) is still alive and healthy at that instant
-# - it is simply blocked reading its next stdin line, exactly like every
-# other moment between turns - that wait blocks FOREVER. Consequence,
-# confirmed by direct instrumentation (30s continuous observation, not
-# inferred): the reader thread is permanently dead, `_closed_event` is
-# NEVER set (the `_fail_all_pending`/`_on_child_exit` cleanup that would set
-# it never runs, because it is downstream of the wedged `proc.wait()`), and
-# EVERY consumer of `events()` - including ones that have not even
-# subscribed yet - hangs forever with no error, no log line, and
-# `is_alive()` still reporting the child as healthy. This is the exact
-# "looks alive, delivers nothing" signature class RES-A3/RES-B3 exist to
-# rule out, and it is NOT ruled out here.
-#
-# This directly narrows EV-REV-003's claim that the unbounded
-# `self._proc.wait()` in `_read_stdout`'s `finally` "only runs after stdout
-# hit EOF, child already exiting, not a genuine hang risk": that
-# characterization assumes the for-loop only ever exits via normal
-# `StopIteration`. It does not - an uncaught exception mid-loop, with the
-# child very much alive, is a real, reachable second exit path, and this
-# test proves it reaches exactly the unbounded wait EV-REV-003 dismissed.
-#
-# Bounded to a few seconds (not the true "forever") so this test itself
-# cannot wedge the suite: it proves the hang persists past a generous
-# window, then force-terminates the child via connector.close() (which
-# sends SIGTERM, unblocking the wedged proc.wait()) in a `finally`, exactly
-# as an external supervisor would have to do today to recover.
+# The fix (`_PiTransport._process_line` + `_wait_for_exit_bounded`) closes
+# this two ways, tested separately below: (1) `_process_line` wraps BOTH
+# the parse and the dispatch of a single line in a broad `except Exception`
+# so a bad line is surfaced as a `pi/transport_line_processing_error` event
+# and the reader loop CONTINUES - RES-B1's own trigger no longer even
+# reaches the `finally`'s wait; (2) `_wait_for_exit_bounded` bounds that
+# wait itself (RES-A3/B3), tested directly against a real, deliberately
+# still-alive child rather than through the full reader-thread path -
+# `_process_line`'s fix means the RecursionError case above no longer
+# reaches it at all, but the method's own contract ("never block forever
+# on a live child") needs to hold independent of which caller reaches it.
 # --------------------------------------------------------------------------- #
-def test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_wedges_the_reader(
+def test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_reader_recovers(
     connector: PiRpcConnector,
 ) -> None:
     session = connector.start(owning_agent_id="nxs_test_agent")
@@ -842,38 +870,119 @@ def test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_wedges_the_
         session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_DEEPNEST"})
     )
 
-    done = threading.Event()
-    collected: list[HarnessEvent] = []
+    events = _collect_until(connector, lambda ev: ev.native_event == "agent_settled", timeout_s=10.0)
 
-    def pump() -> None:
-        for ev in connector.events():
-            collected.append(ev)
-        done.set()  # only reached if events() actually returns
+    processing_errors = [ev for ev in events if ev.native_event == "pi/transport_line_processing_error"]
+    assert len(processing_errors) == 1
+    assert processing_errors[0].kind == "error"
+    assert "RecursionError" in processing_errors[0].payload["error"]
 
-    pump_thread = threading.Thread(target=pump, daemon=True)
-    pump_thread.start()
+    # The reader thread survived: the rest of the SAME turn (already
+    # scripted server-side to follow the pathological line) still arrived,
+    # ending in a normal settle - this is what "the loop must CONTINUE"
+    # means in practice, not just "an exception got swallowed somewhere".
+    assert events[-1].native_event == "agent_settled"
+    assert not connector._closed_event.is_set()  # noqa: SLF001 - this was NOT treated as fatal; session is still open
+    assert connector._transport.is_alive()  # noqa: SLF001 - the child was never touched, let alone killed
+
+
+def test_res_b1_generic_unexpected_exception_during_dispatch_is_surfaced_and_reader_recovers(
+    connector: PiRpcConnector, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The RecursionError above is ONE concrete instance of the failure
+    class this fix closes - `_process_line`'s second guard (around
+    `self._dispatch(msg)`) must catch ANY unexpected exception a future
+    push-event shape could raise, not just this one. `_dispatch` itself is
+    already tightly isinstance-guarded against every pathological wire
+    shape tried against it directly (see the RES-B1 evidence file's
+    9-shape probe) - there is no CURRENT real wire line that reaches this
+    second guard, so this injects one generic failure directly via
+    `_on_push_event` (the callback `_dispatch` calls for every non-response
+    line) to prove the guard's genericity, rather than relying on
+    `_dispatch` having a bug today. Patched BEFORE `start()`: `_PiTransport`
+    captures `connector._on_push_event` as a plain callable at construction
+    time, so patching afterwards would not take.
+    """
+    original_on_push_event = connector._on_push_event  # noqa: SLF001 - captured before patching, see docstring
+
+    def flaky_on_push_event(msg: dict[str, Any]) -> None:
+        if msg.get("type") == "turn_start":
+            raise RuntimeError("boom - injected generic dispatch failure")
+        original_on_push_event(msg)
+
+    monkeypatch.setattr(connector, "_on_push_event", flaky_on_push_event)
+
+    session = connector.start(owning_agent_id="nxs_test_agent")
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "hello"}))
+
+    events = _collect_until(connector, lambda ev: ev.native_event == "agent_settled", timeout_s=10.0)
+
+    processing_errors = [ev for ev in events if ev.native_event == "pi/transport_line_processing_error"]
+    assert len(processing_errors) == 1
+    assert "RuntimeError" in processing_errors[0].payload["error"]
+    assert "dispatch failed" in processing_errors[0].payload["error"]
+    # `turn_start` itself was swallowed by the injected failure (no
+    # `turn_started`-kind event for it), but everything AFTER it
+    # (message_start..agent_settled) still arrived - the reader survived.
+    assert events[-1].native_event == "agent_settled"
+    assert not any(ev.native_event == "turn_start" for ev in events)
+    assert not connector._closed_event.is_set()  # noqa: SLF001
+    assert connector._transport.is_alive()  # noqa: SLF001
+
+
+def test_res_a3_b3_wait_for_exit_bounded_never_blocks_forever_against_a_live_child(
+    tmp_path: Path,
+) -> None:
+    """RES-A3/B3, tested directly against `_PiTransport._wait_for_exit_bounded`
+    rather than through the full reader-thread/child-death machinery: the
+    two case IDs are about ONE specific call -
+    `_read_stdout`'s cleanup used to be a bare `self._proc.wait()` with NO
+    timeout at all - and this exercises exactly that call against a REAL
+    child process that is deliberately still alive (a plain
+    ``time.sleep(30)`` that never exits on its own and never reads
+    stdin), independent of whichever path in `_read_stdout` happens to
+    reach it. Against unfixed code (`_wait_for_exit_bounded` does not
+    exist at all - the old call site was the bare `self._proc.wait()`
+    inline), this fails immediately with `AttributeError`, which IS
+    "confirmed to fail" for a defect whose fix is "give this call a
+    timeout that did not exist before".
+    """
+    script = tmp_path / "sleep_forever.py"
+    script.write_text("import time\ntime.sleep(30)\n", encoding="utf-8")
+
+    transport = _PiTransport(
+        [sys.executable, str(script)],
+        cwd=None,
+        env=None,
+        on_push_event=lambda msg: None,
+        on_unmatched_response=lambda msg: None,
+        on_child_exit=lambda returncode, stderr_tail: None,
+        on_malformed_line=lambda line, error: None,
+        on_line_processing_error=lambda line, error: None,
+        on_reader_exit=lambda: None,
+    )
+    transport.start()
     try:
-        # Generous bound (3s) well past the ms-scale this connector answers
-        # everything else in. Current (defective) behaviour: this times out
-        # every time - the reader thread died on the RecursionError and
-        # nothing downstream of it ever runs.
-        finished_in_time = done.wait(timeout=3.0)
-        assert finished_in_time is False, (
-            "events() returned - if pi.py was fixed to catch RecursionError "
-            "(or any dispatch exception) and signal shutdown, update this "
-            "test to assert the FIXED behaviour and close out the defect "
-            "in the evidence file instead of characterizing it."
-        )
-        assert not connector._closed_event.is_set()  # noqa: SLF001 - white-box, proves the cleanup path never ran
-        assert connector._transport.is_alive()  # noqa: SLF001 - the child is genuinely still healthy, not the culprit
-        assert pump_thread.is_alive(), "reader died but somehow the consumer thread also exited"
+        assert transport.is_alive()  # sanity: genuinely a live, un-terminated child
+
+        t0 = time.monotonic()
+        # A short timeout so the test itself stays fast; the escalation
+        # ladder (TERM, then KILL) is the same one `_wait_for_exit_bounded`
+        # always runs, just compressed here rather than waiting out the
+        # production 5.0s default.
+        returncode = transport._wait_for_exit_bounded(timeout_s=0.3)  # noqa: SLF001 - white-box
+        elapsed = time.monotonic() - t0
+
+        # Bounded: the OLD code, called the same way against this same
+        # live child, would have blocked for the full 30s sleep (in effect
+        # forever, from a caller's point of view). This must return in a
+        # SMALL, DETERMINISTIC multiple of the timeout budget, not
+        # anywhere near 30s.
+        assert elapsed < 5.0, f"_wait_for_exit_bounded took {elapsed}s against a live child - not bounded"
+        assert returncode is not None
+        assert not transport.is_alive(), "child is still alive after _wait_for_exit_bounded - it must terminate it"
     finally:
-        # Recovery requires an EXTERNAL actor to kill the child - the
-        # connector cannot recover on its own from this state. This mirrors
-        # what a real supervisor would have to do.
-        connector.close()
-        pump_thread.join(timeout=5.0)
-        assert not connector._transport.is_alive()  # noqa: SLF001 - SIGTERM from close() did land
+        transport.close()
 
 
 # --------------------------------------------------------------------------- #

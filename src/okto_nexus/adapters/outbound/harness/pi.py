@@ -165,6 +165,20 @@ _DEFAULT_EVENT_KIND = "tool_activity"
 #: an IDLE call can block before it re-checks whether the connector closed.
 _EVENTS_POLL_S = 1.0
 
+#: RES-A3/B1/B3 fix: bound for `_PiTransport._read_stdout`'s cleanup wait on
+#: the child (`_wait_for_exit_bounded`). This used to be a bare
+#: `self._proc.wait()` with NO timeout at all - safe only under the
+#: (false) assumption that the reader loop can exit ONLY via clean EOF,
+#: i.e. the child is always already dying by the time this runs. It is
+#: not: an uncaught exception escaping the loop (see RES-B1 - a
+#: syntactically valid but pathologically deep JSON line makes
+#: `json.loads` raise `RecursionError`, which `except json.JSONDecodeError`
+#: does not catch) reaches the SAME wait against a child that is still
+#: perfectly healthy, and it hung forever, confirmed by direct
+#: instrumentation. Mirrors `close()`'s own `grace_s` default so the two
+#: escalation ladders (this one and `close()`'s) behave consistently.
+_READER_EXIT_WAIT_S = 5.0
+
 
 # --------------------------------------------------------------------------- #
 # Internal bookkeeping helpers
@@ -211,6 +225,8 @@ class _PiTransport:
         on_unmatched_response: Callable[[dict[str, Any]], None],
         on_child_exit: Callable[[int | None, str], None],
         on_malformed_line: Callable[[str, str], None],
+        on_line_processing_error: Callable[[str, str], None],
+        on_reader_exit: Callable[[], None],
     ) -> None:
         self._argv = list(argv)
         self._cwd = cwd
@@ -219,6 +235,23 @@ class _PiTransport:
         self._on_unmatched_response = on_unmatched_response
         self._on_child_exit = on_child_exit
         self._on_malformed_line = on_malformed_line
+        # RES-B1 fix: the ORIGINAL, narrower guard (`on_malformed_line`)
+        # only ever covered `json.JSONDecodeError`. This is the broad
+        # backstop - anything else a single line's parse or dispatch can
+        # raise (RecursionError being the confirmed, reproduced case) -
+        # kept as its own callback rather than folded into
+        # `on_malformed_line` so the two remain distinguishable downstream.
+        self._on_line_processing_error = on_line_processing_error
+        # RES-B1/B2 fix: fired UNCONDITIONALLY, as the very last act of
+        # `_read_stdout`, regardless of why or how it is exiting - even if
+        # `_wait_for_exit_bounded`, `_fail_all_pending` or `_on_child_exit`
+        # above it themselves raise. `on_child_exit` already signals
+        # shutdown on the expected (unexpected-death) path; this is the
+        # unconditional backstop underneath it so "a reader thread exiting
+        # for ANY reason signals shutdown to EVERY consumer" holds even for
+        # exit paths nobody has thought of yet, not only the ones this
+        # module's own callbacks handle today.
+        self._on_reader_exit = on_reader_exit
 
         self._proc: subprocess.Popen[str] | None = None
         self._write_lock = threading.Lock()
@@ -359,23 +392,113 @@ class _PiTransport:
                 line = raw_line.strip()
                 if not line:
                     continue
-                try:
-                    msg = json.loads(line)
-                except json.JSONDecodeError as exc:
-                    self._on_malformed_line(line, str(exc))
-                    continue
-                self._dispatch(msg)
+                self._process_line(line)
         finally:
-            if self._proc.stdout:
-                self._proc.stdout.close()
-            returncode = self._proc.wait() if self._proc else None
-            if not self._closed.is_set():
-                # M2 fix: fail every in-flight request FIRST, before the
-                # (potentially slow, app-level) on_child_exit callback - a
-                # caller blocked in request() must not wait out its timeout
-                # just because the reader thread noticed the death first.
-                self._fail_all_pending("pi process exited unexpectedly (child death).")
-                self._on_child_exit(returncode, self.stderr_tail())
+            # RES-B1/B2 fix: everything below used to be a single flat
+            # block, conditionally executed - if the (formerly unbounded)
+            # `proc.wait()` never returned, NOTHING here ever ran, including
+            # the shutdown signal. Split into an inner `finally` so the
+            # unconditional shutdown signal (`_on_reader_exit`) fires no
+            # matter what happens above it, and an outer one so a bounded
+            # wait plus the existing death-reporting path still runs first
+            # in the common case.
+            try:
+                if self._proc.stdout:
+                    self._proc.stdout.close()
+                returncode = self._wait_for_exit_bounded()
+                if not self._closed.is_set():
+                    # M2 fix: fail every in-flight request FIRST, before the
+                    # (potentially slow, app-level) on_child_exit callback -
+                    # a caller blocked in request() must not wait out its
+                    # timeout just because the reader thread noticed the
+                    # death first.
+                    self._fail_all_pending("pi process exited unexpectedly (child death).")
+                    self._on_child_exit(returncode, self.stderr_tail())
+            finally:
+                self._on_reader_exit()
+
+    def _process_line(self, line: str) -> None:
+        """Parse-and-dispatch ONE line, never letting it kill the reader
+        thread (RES-B1). A single bad line - malformed JSON, syntactically
+        VALID JSON that is still pathological (a pathologically deep,
+        balanced array makes ``json.loads`` raise ``RecursionError``, NOT
+        ``json.JSONDecodeError`` - confirmed live, see the RES-B1 evidence),
+        or a future push-event shape ``_dispatch`` does not yet handle -
+        must be surfaced as an ``error`` event and the loop must CONTINUE,
+        never die silently. ``except Exception`` (not a bare
+        ``except BaseException``) deliberately: ``RecursionError`` IS an
+        ``Exception`` subclass (``RecursionError`` -> ``RuntimeError`` ->
+        ``Exception``), so this already covers it, while still letting a
+        genuine ``KeyboardInterrupt``/``SystemExit`` propagate rather than
+        being swallowed by a background daemon thread.
+        """
+        try:
+            msg = json.loads(line)
+        except json.JSONDecodeError as exc:
+            # Unchanged from before this fix - the narrow, original guard.
+            self._safe_call(self._on_malformed_line, line, str(exc))
+            return
+        except Exception as exc:  # noqa: BLE001 - RES-B1's actual failure class
+            # The broad backstop this fix adds: `json.loads` can raise
+            # something that is NOT `json.JSONDecodeError` for a line that
+            # IS syntactically valid JSON (`RecursionError` on a
+            # pathologically deep balanced array, confirmed live). Routed
+            # through a SEPARATE callback (not `on_malformed_line`) so the
+            # two failure classes stay distinguishable in the event stream
+            # rather than conflating "the JSON was bad" with "the JSON was
+            # fine but something else about this line broke us".
+            self._safe_call(self._on_line_processing_error, line, f"{type(exc).__name__}: {exc}")
+            return
+        try:
+            self._dispatch(msg)
+        except Exception as exc:  # noqa: BLE001 - a future dispatch bug must not repeat RES-B1
+            self._safe_call(self._on_line_processing_error, line, f"dispatch failed: {type(exc).__name__}: {exc}")
+
+    @staticmethod
+    def _safe_call(callback: Callable[[str, str], None], line: str, error: str) -> None:
+        # The callback itself (ultimately `_push_event`) must not be able to
+        # put us back in the exact hole this method exists to climb out of -
+        # if IT raises, swallow that here rather than let it escape back
+        # into `_read_stdout`'s main loop and kill the reader thread anyway.
+        try:
+            callback(line, error)
+        except Exception:  # noqa: BLE001 - see comment above; this is the backstop itself
+            pass
+
+    def _wait_for_exit_bounded(self, timeout_s: float = _READER_EXIT_WAIT_S) -> int | None:
+        """RES-A3/B3 fix: the reader thread's cleanup used to call
+        ``self._proc.wait()`` with NO timeout at all, reached from the
+        SAME ``finally`` for two very different exits - a clean EOF (child
+        already exiting; this normally returns near-instantly) and an
+        exception escaping the loop above (the child may still be perfectly
+        healthy, simply idle on stdin) - and treated the two identically,
+        which is backwards: only the second case can hang forever, and it
+        is also the one where nothing has yet told the child to go away.
+        Escalates exactly like :meth:`close` (SIGTERM, then SIGKILL) rather
+        than inventing a second unbounded wait for the same problem - every
+        blocking wait in this module now carries a timeout.
+        """
+        if self._proc is None:
+            return None
+        try:
+            return self._proc.wait(timeout=timeout_s)
+        except subprocess.TimeoutExpired:
+            pass
+        self._terminate_group()
+        try:
+            return self._proc.wait(timeout=timeout_s)
+        except subprocess.TimeoutExpired:
+            pass
+        self._kill_group()
+        try:
+            return self._proc.wait(timeout=timeout_s)
+        except subprocess.TimeoutExpired:
+            # Truly stuck even past SIGKILL (e.g. an uninterruptible D-state
+            # child). Do not block the one thread whose job is to notice
+            # this over it any further - report what we can (`poll()` is
+            # non-blocking) and let the death-report event carry the
+            # ambiguity forward instead.
+            return self._proc.poll()
 
     def _read_stderr(self) -> None:
         assert self._proc is not None and self._proc.stderr is not None
@@ -579,6 +702,8 @@ class PiRpcConnector:
                 on_unmatched_response=self._on_unmatched_response,
                 on_child_exit=self._on_child_exit,
                 on_malformed_line=self._on_malformed_line,
+                on_line_processing_error=self._on_line_processing_error,
+                on_reader_exit=self._on_reader_exit,
             )
             try:
                 # transport.start() is INSIDE this try too (C3 audit): a
@@ -878,6 +1003,39 @@ class PiRpcConnector:
             "pi/transport_malformed_line",
             {"line": line, "error": error},
         )
+
+    def _on_line_processing_error(self, line: str, error: str) -> None:
+        """RES-B1 fix: the broad backstop, distinct from
+        :meth:`_on_malformed_line`. Fires for anything a single line's
+        parse (e.g. ``RecursionError`` on a pathologically deep but
+        syntactically VALID JSON line - confirmed live, not theoretical) or
+        dispatch can raise that is NOT a ``json.JSONDecodeError``. Kept as
+        its own native type rather than folded into
+        ``pi/transport_malformed_line`` so "the JSON was invalid" and "the
+        JSON was fine but something else about processing this line broke"
+        stay distinguishable to anything consuming this event stream.
+        """
+        self._push_event(
+            "error",
+            "pi/transport_line_processing_error",
+            {"line": line, "error": error},
+        )
+
+    def _on_reader_exit(self) -> None:
+        """RES-B1/B2 fix: called UNCONDITIONALLY as the reader thread's
+        very last act (see ``_PiTransport._read_stdout``'s inner
+        ``finally``), regardless of why or how it is exiting - even past a
+        failure in ``_wait_for_exit_bounded``, ``_fail_all_pending`` or
+        ``_on_child_exit`` themselves. ``threading.Event.set()`` is
+        idempotent, so this composes cleanly with the two OTHER places that
+        already set the same event (:meth:`_on_child_exit` for an
+        unexpected death, :meth:`close` for an intentional one): whichever
+        of them runs, every current and future :meth:`events` consumer is
+        guaranteed to observe shutdown within one ``_EVENTS_POLL_S`` period,
+        by construction, not by hoping every upstream step happened to
+        succeed.
+        """
+        self._closed_event.set()
 
     def _push_event(self, kind: str, native_type: str, payload: dict[str, Any]) -> None:
         session_id = self._session_id

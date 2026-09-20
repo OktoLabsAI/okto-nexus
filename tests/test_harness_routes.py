@@ -152,6 +152,77 @@ def test_harness_open_claude_code_attach_requires_target_pid(harness_env):
     assert r.json()["error"]["code"] == "VALIDATION_ERROR"
 
 
+def test_harness_open_default_backend_is_ambient_and_visible_in_response(harness_env):
+    """H-1 (EV-SYS-002), REST mirror: omitting backend keeps today's
+    ambient-inherit default, but the response must say so explicitly."""
+    _deps, client, root, _connectors, _op = harness_env
+    r = client.post(
+        "/api/v1/harness/sessions",
+        json={"agent_id": "pi-rest-backend-0", "kind": "pi", "project_root": root},
+    )
+    assert r.status_code == 200, r.text
+    backend_info = r.json()["data"]["backend"]
+    assert backend_info["explicit"] is False
+    assert backend_info["applied"] == {}
+    assert "ambient" in backend_info["note"]
+
+
+def test_harness_open_backend_override_is_honored_over_rest(harness_env):
+    """H-1 (EV-SYS-002): the operator can say which provider/model this
+    session uses over the REST mirror too - parity with the MCP tool is a
+    hard gate for this surface."""
+    _deps, client, root, connectors, _op = harness_env
+    backend = {"provider": "zai", "model": "glm-5.3"}
+    r = client.post(
+        "/api/v1/harness/sessions",
+        json={
+            "agent_id": "pi-rest-backend-1",
+            "kind": "pi",
+            "project_root": root,
+            "backend": backend,
+        },
+    )
+    assert r.status_code == 200, r.text
+    data = r.json()["data"]
+    assert data["backend"]["explicit"] is True
+    assert data["backend"]["applied"] == backend
+    assert len(connectors["pi"]) == 1
+
+
+def test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest(harness_env):
+    _deps, client, root, connectors, _op = harness_env
+    r = client.post(
+        "/api/v1/harness/sessions",
+        json={
+            "agent_id": "codex-rest-backend",
+            "kind": "codex",
+            "project_root": root,
+            "backend": {"provider": "zai"},
+        },
+    )
+    assert r.status_code == 422, r.text
+    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert connectors["codex"] == []
+
+
+def test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest(harness_env):
+    _deps, client, root, connectors, _op = harness_env
+    r = client.post(
+        "/api/v1/harness/sessions",
+        json={
+            "agent_id": "cc-rest-backend",
+            "kind": "claude_code",
+            "project_root": root,
+            "substrate": "attach",
+            "target_pid": 4242,
+            "backend": {"env": {"X": "1"}},
+        },
+    )
+    assert r.status_code == 422, r.text
+    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert connectors["claude_code"] == []
+
+
 def test_harness_open_as_non_operator_is_forbidden(harness_env):
     deps, client, root, _connectors, operator_key = harness_env
     created = client.post(

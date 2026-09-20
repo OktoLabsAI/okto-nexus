@@ -79,3 +79,14 @@ and correct per-session demultiplexing under concurrent load. That is a real, wo
 well-isolated mechanism — it is simply a *different* addressing scheme than "the existing target
 grammar" the case names, and a caller needs the harness's `session_id` (returned once, by
 `harness_open`) rather than its `agent_id` to use it.
+
+---
+
+## Addendum — the gap this file documents is now CLOSED
+
+This file's verdict (FAILED, as worded, at the commit under review) is left unchanged above: it
+was a correct, evidence-backed finding at the time it was captured. A follow-up build closed the
+gap in the same working tree, with its own failing-first evidence and a live re-run of this exact
+check reversing the result (real wire activity this time). See
+`EV-SYS-003-FOLLOWUP-target-grammar-fix.md` for the fix and its evidence; that file also carries
+forward this file's finding as the reproduction baseline rather than re-deriving it.

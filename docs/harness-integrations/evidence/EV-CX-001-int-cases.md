@@ -24,6 +24,11 @@ Raw captures committed alongside this file:
 - `EV-CX-001-raw_capture_interrupt.jsonl` — same, but fires `turn/interrupt` mid-turn
 - `EV-CX-001-raw_capture_thread_not_found.jsonl` — a thread started under one process, then a
   **fresh** `app-server` process started against the SAME `CODEX_HOME`/thread id
+- `EV-CX-001-raw_capture_steer.jsonl` — **added in the Phase-4 campaign's follow-up pass** (closes
+  the INT-05 gap this file previously disclosed below): same backend/binary, fires `turn/steer`
+  genuinely mid-stream (0.1ms after the first `item/agentMessage/delta`, while the original
+  "count from 1" stream is still flowing) and captures through the steered turn's own
+  `turn/completed`.
 
 ## INT-01 — spawn and handshake
 
@@ -99,22 +104,60 @@ repo's connector code.
 
 ## INT-05 — steer, real ordering semantics
 
-Not captured live in this pass (budget was spent on the interrupt/thread-not-found captures below,
-judged higher-value per the task's defect-class priorities). D6's documented steer timing for codex
-is `STEER_TIMING_IMMEDIATE` (unlike Pi's `NEXT_TURN_BOUNDARY`) — `capabilities.steer_timing ==
-STEER_TIMING_IMMEDIATE` is asserted by the EXISTING `test_capabilities_match_adr_d6` (cited, not
-new). The connector's own steer wire-shape (`turn/steer` with `expectedTurnId` + `threadId`) is
-exercised against a protocol-faithful fake by the EXISTING
-`test_steer_and_interrupt_use_the_tracked_turn_id`:
+**Closed in the Phase-4 campaign's follow-up pass** (previously PARTIAL/UNRUN in this file and
+`EV-INDEX.md`: only the capabilities flag and a fake-based ordering test had been checked; the one
+piece of proof INT actually requires — a live steer capture against the real binary — had not been
+taken). Now taken: `EV-CX-001-raw_capture_steer.jsonl`, same backend/binary as every other capture
+in this file (`http://192.168.31.152:8123/v1`, `qwen3.8-flash`, `codex-cli 0.144.6`).
+
+D6's documented steer timing for codex is `STEER_TIMING_IMMEDIATE` (unlike Pi's
+`NEXT_TURN_BOUNDARY`) — `capabilities.steer_timing == STEER_TIMING_IMMEDIATE` is asserted by the
+EXISTING `test_capabilities_match_adr_d6` (cited, not new). The connector's own steer wire-shape
+(`turn/steer` with `expectedTurnId` + `threadId`) is exercised against a protocol-faithful fake by
+`test_steer_and_interrupt_use_the_tracked_turn_id` (updated this pass to also assert the
+post-interrupt ordering — see RES-C2 below):
 
     $ timeout 60 uv run python -m pytest -q tests/test_harness_codex_connector.py::test_steer_and_interrupt_use_the_tracked_turn_id
     1 passed
 
-**Gap, disclosed rather than hidden:** whether codex's real `app-server` accepts a `turn/steer`
-immediately (no settle wait) the way `interrupt_requires_settle_wait=False` implies was NOT
-verified against the live binary in this pass — matching the module's own mismatch note 6, which
-flags this as unverified. A real steer capture (mirroring `capture_interrupt` below) would close
-this gap; not done here due to time budget.
+**Live capture, genuinely mid-stream** (not the pre-content-stream caveat INT-06's interrupt
+capture disclosed below): a "count slowly from 1 to 300" turn was started; `turn/steer`
+(`"Actually stop counting immediately and just reply with the single word: STEERED"`) was sent at
+`t=11.725`, **0.1ms after the first `item/agentMessage/delta` of the counting stream** (`t=11.7249`
+— the steer literally raced the very first content chunk and still landed mid-stream, not before
+any content existed). Real ordering observed, in arrival order:
+
+    t=11.725   >> turn/steer {expectedTurnId: <the counting turn's id>, input: [...STEERED...]}
+    t=11.7255  << {"id":4,"result":{}}                          (steer ack)
+    t=11.97..34.99  << item/agentMessage/delta  x N              (counting continues - "1\n2\n3\n...\n45")
+    t=34.9904  << item/completed  {item: agentMessage, text: "1\n2\n...\n45"}   (original item cut off, NOT reaching 300)
+    t=34.9964  << item/completed  {item: userMessage, content: [STEERED text]}  (the steer's own text lands as a real turn input item)
+    t=45.54..47.91  << item/reasoning/*   (model reasons about the steer)
+    t=47.918   << item/completed  {item: agentMessage, text: "STEERED"}         (new reply honours the steer)
+    t=47.9279  << turn/completed {status: "completed"}                         (NOT "interrupted" - same turn, no abort round-trip)
+
+What this capture DOES prove, directly from the bytes above (the plan's own INT-05 bar is
+"mid-turn steering takes effect, with the harness's real ordering semantics documented" — met):
+the real `app-server` accepts a `turn/steer` sent GENUINELY mid-stream (0.1ms after the first
+content delta of the turn it targets) with `expectedTurnId`, acks it in 0.5ms, the steer's own text
+is delivered back as a real `userMessage` item inside the SAME turn (`turn.id` unchanged
+throughout — no new thread, no new turn), the model goes on to honour it verbatim in a fresh
+`agentMessage` item ("STEERED"), and the turn completes normally (`status: "completed"`) — no
+`turn/interrupt`, no settle wait, no separate ack round-trip anywhere in the sequence. That is a
+real, live confirmation of `STEER_TIMING_IMMEDIATE`'s "immediate" half: the steer is accepted and
+acted on without needing an abort/interrupt cycle first, unlike Pi's `NEXT_TURN_BOUNDARY`.
+
+**What this capture does NOT prove, disclosed rather than overstated:** whether the original
+counting stream stopping at "45" (not "300") was the steer PREEMPTING continuation, or simply where
+the model happened to stop on its own, independent of the steer, is NOT distinguishable from this
+one capture alone — 23 SECONDS of `item/agentMessage/delta` kept arriving AFTER the steer's own ack
+(`t=11.7255` ack → deltas continue through `t=34.99`), which is the opposite of an instantaneous
+cut. Telling "steer preempted" apart from "model happened to stop there anyway" would need a control
+run (same prompt, no steer, see where it stops unprompted) not taken in this pass. Left as an open
+question, not asserted either way. Module mismatch note 6 (which flagged codex's real steer-timing
+tolerance as entirely unverified) is superseded by this capture for the parts stated above; note 6's
+own text is left in place in `codex.py` as the historical record of what was unverified before this
+capture, per the task's "no need to guess why, just report" evidence convention.
 
 ## INT-06 — interrupt, correct settle signal
 
@@ -190,7 +233,7 @@ unbounded.
 | INT-02 | PASSED | raw capture + `test_live_against_real_codex_lan_box` |
 | INT-03 | PASSED | raw capture, event-kind mapping check |
 | INT-04 | PASSED | raw capture, `client_initiated=0` machine-checked |
-| INT-05 | PARTIAL | capabilities + fake-based ordering test cited; live steer capture NOT taken (disclosed gap) |
+| INT-05 | PASSED | capabilities + fake-based ordering test cited; live steer capture NOW taken (`EV-CX-001-raw_capture_steer.jsonl`) - genuine mid-stream steer, 0.1ms after the first content delta |
 | INT-06 | PASSED (with caveat) | raw capture; interrupt fired pre-content-stream, disclosed |
 | INT-07 | PASSED | raw capture, verbatim `-32600` |
 | INT-08 | PASSED | 6 existing tests cited, run and green |

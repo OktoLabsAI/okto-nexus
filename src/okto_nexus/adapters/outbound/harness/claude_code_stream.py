@@ -272,9 +272,27 @@ class ClaudeCodeStreamConnector:
 
         self._proc: subprocess.Popen[str] | None = None
         self._session: HarnessSession | None = None
-        self._events: queue.Queue[HarnessEvent] = queue.Queue()
-        # Set once by _finish() (the stdout reader thread, on child exit).
-        # events() rechecks this on every queue.Empty from a BOUNDED
+        # RES-A2 fix (mirrors harness/pi.py's C2 fix): the pre-fix design
+        # shared exactly ONE queue.Queue across every events() call, so two
+        # concurrent consumers (or two calls from different threads) raced
+        # for each item and SPLIT the stream between them rather than each
+        # independently seeing the whole thing - see EV-CC-004-res-a2-probe.py
+        # for the reproduction. Fan-out instead: _event_history is the
+        # append-only record of every event ever emitted (never trimmed - a
+        # session's event count is bounded by its own lifetime), and each
+        # events() call gets its OWN subscriber queue, seeded with a
+        # snapshot of the history taken under _history_lock at subscribe
+        # time (so a LATE subscriber still gets everything from the start)
+        # and then fed live by _emit(). _history_lock also serialises
+        # history-append against backlog-snapshot so an emit can never land
+        # in the gap between a new subscriber's snapshot and its
+        # registration - see _emit()/events().
+        self._event_history: list[HarnessEvent] = []
+        self._history_lock = threading.Lock()
+        self._subscribers: list[queue.Queue[HarnessEvent]] = []
+        # Set once by _finish() (the stdout reader thread, on child exit) or
+        # by a failed start() (RES-A4 fix, see that method). events()
+        # rechecks this on every queue.Empty from a BOUNDED
         # get(timeout=_EVENTS_POLL_S) rather than relying on a single
         # push-once sentinel value travelling through the queue - a
         # sentinel can only ever be consumed by ONE caller, so any second
@@ -342,6 +360,16 @@ class ClaudeCodeStreamConnector:
                 {},
             )
 
+        # RES-A4 fix: clear any shutdown signal left by a PREVIOUS failed
+        # start() attempt on this same instance (see the except clauses
+        # below) - the CONFLICT guard above only blocks a retry after a
+        # SUCCESSFUL start (self._proc stays None on every failure path),
+        # so without this a successful retry's events() would see
+        # _closed_event already set and return prematurely the next time
+        # its queue happens to run momentarily dry, even though this
+        # session is healthy and still has real events coming.
+        self._closed_event.clear()
+
         argv = [self._binary, *self._argv]
         spawn_env = {**os.environ, **self._env} if self._env is not None else None
         try:
@@ -357,32 +385,45 @@ class ClaudeCodeStreamConnector:
                 encoding="utf-8",
                 errors="replace",
             )
+            self._proc = proc
+            session = HarnessSession(
+                session_id=new_harness_session_id(),
+                harness_kind="claude_code",
+                owning_agent_id=owning_agent_id,
+                status="STARTING",
+                capabilities=self.capabilities,
+                started_at=utc_now_iso(),
+            )
+            self._session = session
+
+            self._stdout_thread = threading.Thread(
+                target=self._pump_stdout, name="cc-connector-stdout", daemon=True
+            )
+            self._stderr_thread = threading.Thread(
+                target=self._pump_stderr, name="cc-connector-stderr", daemon=True
+            )
+            self._stdout_thread.start()
+            self._stderr_thread.start()
         except OSError as exc:
+            # RES-A4 fix: this path never used to set _closed_event, so a
+            # subsequent events() call looped forever (get(timeout=...) ->
+            # queue.Empty -> _closed_event.is_set() False -> continue,
+            # indefinitely) - see EV-CC-004-res-a4-probe.py. Mirrors
+            # harness/pi.py's C3 fix.
+            self._closed_event.set()
             raise OktoNexusError(
                 ErrorCode.CONFIG_ERROR,
                 f"failed to spawn Claude Code binary {self._binary!r}: {exc}",
                 {"binary": self._binary, "argv": list(self._argv)},
             ) from exc
-
-        self._proc = proc
-        session = HarnessSession(
-            session_id=new_harness_session_id(),
-            harness_kind="claude_code",
-            owning_agent_id=owning_agent_id,
-            status="STARTING",
-            capabilities=self.capabilities,
-            started_at=utc_now_iso(),
-        )
-        self._session = session
-
-        self._stdout_thread = threading.Thread(
-            target=self._pump_stdout, name="cc-connector-stdout", daemon=True
-        )
-        self._stderr_thread = threading.Thread(
-            target=self._pump_stderr, name="cc-connector-stderr", daemon=True
-        )
-        self._stdout_thread.start()
-        self._stderr_thread.start()
+        except BaseException:
+            # Backstop for any OTHER way this block can fail (e.g. a
+            # thread-start RuntimeError) - not just the one OSError path
+            # this connector itself anticipates. Caught broadly, same as
+            # harness/pi.py's C3 fix, so every way start() can fail still
+            # leaves events() terminable.
+            self._closed_event.set()
+            raise
         return session
 
     def send(self, session: HarnessSession, command: HarnessCommand) -> None:
@@ -415,8 +456,20 @@ class ClaudeCodeStreamConnector:
     def events(self) -> Iterator[HarnessEvent]:
         """Blocking generator over inbound events; ends when the child exits.
 
-        Backed by a thread-fed :class:`queue.Queue`: real events are still
-        delivered the instant the reader thread publishes them - a
+        RES-A2 fix (mirrors ``harness/pi.py``'s C2 fix): this call has its
+        OWN independent fan-out subscription - calling this a second time,
+        or from a second thread, no longer SPLITS the stream with the first
+        caller (the pre-fix defect: one shared ``queue.Queue`` meant two
+        concurrent consumers each got roughly half the events,
+        unpredictably, with no way to tell which half - see
+        ``EV-CC-004-res-a2-probe.py``). Each call registers a fresh
+        per-consumer queue, seeded with every event emitted since the
+        connector started (:attr:`_event_history`) so a LATE subscriber - a
+        supervisor that reconnects, or simply calls this after the turn
+        already started - still gets the full stream from the beginning,
+        not just what happens to be emitted after it subscribes.
+
+        Real events are still delivered the instant they are emitted - a
         ``Queue.get(timeout=_EVENTS_POLL_S)`` returns immediately once an
         item exists, exactly like an unbounded ``get()`` would (no sleep, no
         poll interval for events themselves - D1 is not violated). The
@@ -430,22 +483,32 @@ class ClaudeCodeStreamConnector:
         signal - no separate "ended" ``HarnessEvent`` kind exists in the
         port to synthesise.
 
-        This replaces an earlier single-consumption ``None`` sentinel
-        design: pushed into the queue exactly once by :meth:`_finish`, it
-        could only ever be observed by ONE generator, so any other live
-        caller of :meth:`events` - a second call, or the same caller
-        invoking it twice - blocked forever on an unbounded wait with
-        nothing left to receive. See ``harness/pi.py``'s ``events`` for the
-        same fix applied to the sibling connector that found this first.
+        This also still carries the earlier single-consumption ``None``
+        sentinel fix: shutdown is a ``threading.Event`` (:attr:`_closed_event`)
+        checked on every ``queue.Empty``, not a value travelling through the
+        queue that only one generator could ever consume.
         """
-        while True:
-            try:
-                item = self._events.get(timeout=_EVENTS_POLL_S)
-            except queue.Empty:
-                if self._closed_event.is_set():
-                    return
-                continue
-            yield item
+        my_queue: queue.Queue[HarnessEvent] = queue.Queue()
+        with self._history_lock:
+            backlog = list(self._event_history)
+            self._subscribers.append(my_queue)
+        try:
+            for item in backlog:
+                yield item
+            while True:
+                try:
+                    item = my_queue.get(timeout=_EVENTS_POLL_S)
+                except queue.Empty:
+                    if self._closed_event.is_set():
+                        return
+                    continue
+                yield item
+        finally:
+            with self._history_lock:
+                try:
+                    self._subscribers.remove(my_queue)
+                except ValueError:
+                    pass
 
     # ------------------------------------------------------------------ #
     # Outbound command handling
@@ -883,13 +946,26 @@ class ClaudeCodeStreamConnector:
 
     def _emit(self, kind: str, native_event: str, payload: dict[str, Any]) -> None:
         assert self._session is not None
-        self._events.put(
-            HarnessEvent(
-                session_id=self._session.session_id,
-                harness_kind="claude_code",
-                kind=kind,
-                native_event=native_event,
-                occurred_at=utc_now_iso(),
-                payload=payload,
-            )
+        event = HarnessEvent(
+            session_id=self._session.session_id,
+            harness_kind="claude_code",
+            kind=kind,
+            native_event=native_event,
+            occurred_at=utc_now_iso(),
+            payload=payload,
         )
+        # RES-A2 fix (mirrors harness/pi.py's C2 fix): append to the
+        # durable history and snapshot the subscriber list under the SAME
+        # lock a new events() call uses to take its own backlog snapshot -
+        # this is what makes the snapshot-then-subscribe in events()
+        # race-free: whichever of {this emit, a concurrent subscribe} takes
+        # the lock first fully happens before the other, so a new
+        # subscriber can never miss an event that raced its own
+        # registration, and never sees it twice. The actual queue.put()
+        # calls happen OUTSIDE the lock (subscribers is only read here, not
+        # mutated) so a slow/blocked consumer can never hold up _emit().
+        with self._history_lock:
+            self._event_history.append(event)
+            subscribers = list(self._subscribers)
+        for subscriber_queue in subscribers:
+            subscriber_queue.put(event)

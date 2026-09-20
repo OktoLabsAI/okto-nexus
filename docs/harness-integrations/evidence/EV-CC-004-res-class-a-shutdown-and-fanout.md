@@ -146,6 +146,15 @@ hazard** — narrower claim than "every blocking wait is bounded," disclosed rat
 RES-A3 **PASSES** with these two disclosed, justified exceptions — narrower than a flat "every wait
 is bounded," matching the module's own honesty.
 
+**RES-A3 stale-evidence note (added with the RES-A2/A4 fix, same session)**: the RES-A2 fix below
+adds two new `with self._history_lock:` critical sections (in `_emit()` and `events()`), which the
+grep pattern above (`\.get(|\.acquire(|\.join(|\.wait(|...`) does not textually match — `with lock:`
+is sugar over `lock.acquire()`/`lock.release()`, not the literal `.acquire(` the grep looks for.
+Re-checked directly rather than left implicit: both critical sections do only an in-memory list
+append/copy under the lock (no I/O, no nested wait, no call into anything that itself blocks) —
+identical in shape and duration to `pi.py`'s `_history_lock` critical sections, which this design
+mirrors exactly. RES-A3 still **PASSES**; nothing here is a new unbounded wait.
+
 ## RES-A4 — a FAILED `start()` still leaves `events()` terminable — **DEFECT, CONFIRMED**
 
 **This connector does NOT satisfy RES-A4.** `start()`'s failure path
@@ -244,3 +253,134 @@ Repro script committed: `EV-CC-004-res-a4-probe.py`.
     timeout 30 uv run python EV-CC-004-res-a2-probe.py    (x3)
     timeout 30 uv run python EV-CC-004-res-a4-probe.py    (x3)
     grep -n "..." src/okto_nexus/adapters/outbound/harness/claude_code_stream.py   (RES-A3)
+
+## Addendum, same day — RES-A2 and RES-A4 FIXED (`claude_code_stream.py` back in scope)
+
+The FROZEN designation above described the *previous* task's scope, not a permanent constraint —
+this connector was explicitly back in scope for a fix this session (module docstring's own
+framing, "this is the STABLE FLOOR"). Both defects are now fixed, mirroring `harness/pi.py`'s
+reference shapes (C2 fan-out, C3 shutdown-on-failed-start) exactly as this file's analysis above
+called for.
+
+### Failing-first: two new tests added to the suite, confirmed FAILING against the pre-fix code
+
+`test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream` (pytest port of
+`EV-CC-004-res-a2-probe.py`'s choreography: both consumers confirmed PARKED via a
+`threading.Event` each before the turn is sent) and
+`test_res_a4_failed_start_leaves_events_terminable_not_hung` (pytest port of
+`EV-CC-004-res-a4-probe.py`), run in isolation against the connector as committed above:
+
+    $ timeout 120 uv run python -m pytest -q tests/test_harness_claude_code_connector.py \
+        -k "test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream or test_res_a4_failed_start_leaves_events_terminable_not_hung"
+    FAILED ...::test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream
+    AssertionError: a consumer hung waiting for turn_completed - it never saw the full stream (RES-A2 split-stream regression)
+    FAILED ...::test_res_a4_failed_start_leaves_events_terminable_not_hung
+    AssertionError: events() hung after a failed start() - _closed_event was never set (RES-A4 regression; see harness/pi.py's C3 fix for the reference shape)
+    2 failed, 33 deselected in 15.22s
+
+Both fail exactly on the assertion that encodes the case's literal requirement, not on an
+unrelated error — failing-first confirmed.
+
+### The fix
+
+`__init__`: `self._events: queue.Queue[...]` replaced with `self._event_history: list[HarnessEvent]`
++ `self._history_lock: threading.Lock` + `self._subscribers: list[queue.Queue[HarnessEvent]]` —
+identical shape to `pi.py:541-543`'s C2 fix.
+
+`_emit()`: now builds the `HarnessEvent` once, appends it to `_event_history` and snapshots
+`_subscribers` under `_history_lock`, then `put()`s to each subscriber queue OUTSIDE the lock —
+identical ordering to `pi.py`'s `_push_event` (`pi.py:882-905`), which is what makes
+subscribe-vs-emit race-free (see that method's docstring, carried into this module's version).
+
+`events()`: now registers a fresh per-consumer `queue.Queue`, snapshots `_event_history` as its
+backlog under the SAME lock, yields the backlog, then drains its own queue with the existing
+bounded `get(timeout=_EVENTS_POLL_S)` / `_closed_event` loop, and removes itself from
+`_subscribers` in a `finally` — identical shape to `pi.py:679-699`'s `events()`.
+
+`start()`: the `subprocess.Popen` → session/registration → `self._stdout_thread.start()` /
+`self._stderr_thread.start()` sequence is now one `try` block with two `except` clauses:
+`except OSError` (the existing CONFIG_ERROR translation, now also setting `_closed_event` before
+raising) and `except BaseException` (a backstop for any OTHER failure in that sequence, e.g. a
+thread-start `RuntimeError` — not just the one `OSError` path this connector itself anticipates),
+mirroring `pi.py:594-613`'s C3 fix and its "caught as BaseException, not just the one exception
+this module raises" framing exactly. The already-started CONFLICT guard stays OUTSIDE the `try` —
+wrapping it would set `_closed_event` on every rejected `start()` of an already-healthy session,
+killing that live session's `events()` within one poll period; verified this does NOT happen (see
+`test_start_twice_raises_conflict`, still green below).
+
+One consequence of this fix, decided explicitly rather than silently inherited: after a failed
+`start()` sets `_closed_event`, `self._proc` is still `None` (never assigned on that path), so a
+retry `start()` on the SAME instance is permitted and will succeed — but `_closed_event` would
+otherwise still read `True` from the earlier failure, making the retried, healthy session's
+`events()` return prematurely the next time its queue happens to run momentarily dry, even with
+real events still to come. Fixed with one line: `start()` now calls `self._closed_event.clear()`
+immediately after the CONFLICT guard, before the `try` — so a fresh `start()` attempt always
+begins from a clean shutdown-signal state. Verified with a standalone probe: `start()` with a
+nonexistent binary (fails, `_closed_event` set), then the SAME connector's `_binary`/`_argv`
+corrected to a working fake script and `start()` called again (`_proc` was `None`, so this is
+accepted) — `_closed_event.is_set()` reads `False` immediately after the successful retry, and the
+retried session's `events()` correctly delivers its real event instead of returning empty.
+`harness/pi.py` has the same latent hole (not fixed here — out of scope, not this task's file).
+
+### Regression this fix surfaced, and why it is expected (not a new defect)
+
+Three pre-existing tests called `connector.events()` a SECOND time mid-session, expecting the new
+call to see only events NOT yet consumed by the first call — the old single shared-queue design's
+(buggy) behaviour. Under the correct fan-out design, every `events()` call is an independent
+subscriber that replays the FULL history from the start (this is the explicit design point of
+`pi.py`'s C2 fix: "a LATE subscriber ... still gets everything from the start, not just what
+happens to be pushed after it subscribes" — required so a real supervisor reconnecting mid-session
+never silently misses earlier events). Re-subscribing mid-session to only see "what's new" was
+never a promise this fix (or `pi.py`'s reference shape) makes; production code itself never does
+this either — `harness_supervisor.py` opens exactly ONE pump thread that calls `events()` once and
+iterates it for the connector's whole life (cited in this file's RES-A2 section above). The three
+tests (`test_second_turn_reuses_same_nexus_session_id`,
+`test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn`,
+`test_real_claude_two_turns_share_session_and_process_survives`) were updated to hold ONE
+`events()` iterator across all turns, matching the real usage pattern, with an inline comment at
+each site explaining why. No assertion in any of the three was weakened, loosened or removed —
+each still checks exactly what it checked before, against the same iterator's continued output.
+
+### Passing, post-fix
+
+    $ timeout 120 uv run python -m pytest -q tests/test_harness_claude_code_connector.py \
+        -k "test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream or test_res_a4_failed_start_leaves_events_terminable_not_hung"
+    2 passed in 4.73s
+
+    $ timeout 300 uv run python -m pytest -q tests/test_harness_claude_code_connector.py
+    35 passed in 92.44s   (33 pre-existing + 2 new; includes the 3 updated multi-turn tests, all green)
+
+    $ uv run ruff check .
+    All checks passed!
+
+Both committed repro scripts re-run post-fix, 3/3 each, now demonstrating the FIX using the exact
+scripts that demonstrated the defect (nothing in them was touched):
+
+    $ timeout 30 uv run python EV-CC-004-res-a2-probe.py     (x3)
+    t1 alive: False t2 alive: False
+    consumer1 got 7 events, kinds=['turn_started', 'tool_activity', 'tool_activity', 'output_delta', 'output_delta', 'tool_activity', 'turn_completed']
+    consumer2 got 7 events, kinds=['turn_started', 'tool_activity', 'tool_activity', 'output_delta', 'output_delta', 'tool_activity', 'turn_completed']
+    combined total across both consumers: 14
+    consumer1 saw turn_completed: True
+    consumer2 saw turn_completed: True
+    (identical on all 3 runs - both consumers now get the FULL stream, not a split of it)
+
+    $ timeout 30 uv run python EV-CC-004-res-a4-probe.py     (x3)
+    start() raised as expected: CONFIG_ERROR
+    events() thread alive after 5s join: False (elapsed 1.00s)
+    _closed_event.is_set(): True
+    events collected: []
+    (identical on all 3 runs - events() now terminates within one poll period instead of hanging)
+
+### Verdict update
+
+RES-A2 (H-CC): **FAILED — real defect** → **PASSED (fixed this session)**.
+RES-A4 (H-CC): **FAILED — real defect** → **PASSED (fixed this session)**.
+
+`EV-INDEX.md` is a cross-agent consolidation file owned by the orchestrator and is intentionally
+NOT edited here; the orchestrator should flip these two rows (RES-A2 H-CC, RES-A4 H-CC) from
+FAILED to PASSED, pointing at this addendum. Not stating a new RES-suite total here deliberately:
+the codex connector agent is concurrently fixing its own RES-A2/A4 rows in the same tree (see
+`git status` — `codex.py`/`EV-CX-002-res-cases.md` mid-write this session), so the orchestrator
+should recompute the RES suite's FAILED total once across ALL connectors' evidence, not have two
+agents each independently subtract from the same starting number.

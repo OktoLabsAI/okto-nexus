@@ -129,3 +129,12 @@ evidence-honesty rule.
 ## Files
 
 - `EV-UAT-05-target-grammar-results.json` — full request/response capture, both parts.
+
+## Addendum — INPUT-direction addressing now works
+
+Part A's verdict above (operator → harness addressing via the target grammar is FAILED, as
+worded) is left unchanged: it was correct at the time it was captured. A follow-up build closed
+the underlying gap (same root cause as SYS-03) in the same working tree; see
+`EV-SYS-003-FOLLOWUP-target-grammar-fix.md` for the fix and a live re-run reversing this result.
+Part B's finding (OUTPUT-direction delivery via `notify_target` genuinely works) is unaffected
+either way and stands as originally captured.

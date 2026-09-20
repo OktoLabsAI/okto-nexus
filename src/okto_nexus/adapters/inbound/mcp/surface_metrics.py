@@ -104,6 +104,36 @@ APPROVED_GROWTH: dict[str, int] = {
     # (179+58=237), harness_get (187+58=245), harness_event_list
     # (189+202=391). No pre-existing tool touched; no new resource.
     "harness_p35": 4065,
+    # H-1/H-2 harness-surface fixes (Phase-4 QA pass, ADR 0004 follow-up; no
+    # SURFACE_REVISION bump - see note below): H-1 adds an explicit
+    # ``backend`` override param to ``harness_open`` so a session no longer
+    # silently inherits the OPERATOR's own ambient provider config (a real
+    # hazard - EV-SYS-002), plus a matching ``backend`` field on the
+    # response so the resolved choice (explicit or inherited) is always
+    # visible, never silent. H-2 rewrites the ``agent_id`` param
+    # description, which falsely claimed the existing target grammar
+    # (direct/capability/role/tag) reaches a harness - EV-SYS-003/EV-UAT-05
+    # empirically falsified that; the corrected text states the true,
+    # qualified behaviour (output notifications route through the grammar
+    # via notify_target; input addressing does not yet - use
+    # harness_send/steer/interrupt by session_id instead). Net measured
+    # growth on the live server, same char-count proxy
+    # (``measure_resident_surface``): only ``harness_open`` changed, 1522 ->
+    # 3202 chars (+1680); no other tool's schema/docstring touched. Kept as
+    # its OWN ledger key (not folded into "harness_p35") so this fix's
+    # blast radius stays independently auditable from the original Phase-3.5
+    # landing.
+    #
+    # Deliberately NOT paired with a SURFACE_REVISION bump in this commit:
+    # bumping it cascades into ~7 test files that hard-assert
+    # ``SURFACE_REVISION == 34`` (test_health.py, test_memory.py,
+    # test_feature_flags.py, test_comm_presets.py, test_verification.py,
+    # test_replay_marker.py, test_handoff_dependencies.py) - none in this
+    # task's named file scope, and other agents are concurrently editing
+    # this same tree. The revision bump (-> 35) and that multi-file update
+    # are left to the orchestrator, who can land them together in one
+    # commit; this ledger entry keeps the 40% gate honest in the meantime.
+    "harness_backend_h1_h2": 1680,
 }
 
 #: Ledger entries whose tools are EXPERIMENTAL at the surface boundary

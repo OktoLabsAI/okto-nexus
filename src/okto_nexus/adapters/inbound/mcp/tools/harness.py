@@ -160,12 +160,42 @@ SUBSTRATE_STREAM = "stream"
 SUBSTRATE_ATTACH = "attach"
 CLAUDE_CODE_SUBSTRATES: tuple[str, ...] = (SUBSTRATE_STREAM, SUBSTRATE_ATTACH)
 
+#: harness_open's ``backend`` override, per kind - EXACTLY the kwargs each
+#: FROZEN connector's own ``__init__`` already accepts (see module docstring
+#: on why connector files are not touched here): pi's only override path is
+#: argv (``provider``/``model``/``extra_args``); codex and the claude_code
+#: "stream" substrate take no such argv, only ``env`` (matches D5/EV-SYS-002:
+#: codex's own provider/model/base_url selection is CODEX_HOME + config.toml,
+#: read from the process environment, not a flag). claude_code "attach" has
+#: no entry here on purpose - it spawns nothing (see
+#: :func:`_backend_not_applicable`).
+_BACKEND_FIELDS_BY_KIND: dict[str, frozenset[str]] = {
+    "pi": frozenset({"provider", "model", "extra_args", "env"}),
+    "codex": frozenset({"env"}),
+    "claude_code": frozenset({"env"}),
+}
+
 #: Reused parameter descriptions (kept DRY across the harness tools).
+#: _P_HARNESS_AGENT_ID below was last rewritten by the SYS-03/UAT-05 fix
+#: (target-grammar-reaches-a-harness), superseding the surface task's own
+#: H-2 disclosure text - see docs/harness-integrations/evidence/
+#: EV-SYS-003-FOLLOWUP-target-grammar-fix.md.
 _P_HARNESS_AGENT_ID = (
     "The agent_id this NEW harness session registers/upserts as (D3) - "
-    "existing or fresh; other agents then address it via the normal target "
-    "grammar (direct/capability/role/tag). NOT the caller's own agent_id. "
-    "REQUIRED."
+    "existing or fresh; NOT the caller's own agent_id. Registration is real: "
+    "the agent row exists (metadata.harness_kind set), this session's OWN "
+    "turn_completed/error notifications are deliverable through the normal "
+    "target grammar via notify_target below, AND (SYS-03/UAT-05 fix) other "
+    "agents can now ADDRESS a live turn TO this harness through "
+    "message_create's existing target grammar (direct/capability/role/tag) "
+    "while this session stays open/live - the message's body is forwarded "
+    "as an ordinary send_turn. This is best-effort, hand-off semantics: the "
+    "ordinary inbox delivery it rides on is never consumed by the forward "
+    "(see message_create's own docs), so a forward failure (e.g. this "
+    "session having just closed) never loses the message. For guaranteed "
+    "delivery, an explicit steer/interrupt, or addressing a session that "
+    "may not be live yet, use harness_send/harness_steer/harness_interrupt "
+    "with the session_id this tool returns instead. REQUIRED."
 )
 _P_KIND = 'Harness kind, one of: pi, codex, claude_code. REQUIRED.'
 _P_ROOT = "Absolute path to the project (defines the workspace scope for this session's persistence + notable-event messages)."
@@ -180,6 +210,27 @@ _P_TARGET_PID = (
     'Only valid with kind="claude_code", substrate="attach" (REQUIRED there, '
     "rejected otherwise): the OS pid of the already-running interactive "
     "Claude Code session to inject into."
+)
+_P_BACKEND = (
+    "Optional JSON object selecting this session's model backend EXPLICITLY, "
+    "instead of silently inheriting whatever the operator's own ambient CLI "
+    "config happens to resolve to (a real hazard: pi's default provider "
+    "comes from the OPERATOR's own ~/.pi/agent/settings.json on the machine "
+    "running okto-nexus serve - server-spawned children should not inherit "
+    "that silently). Supported fields depend on kind: pi accepts "
+    '{"provider", "model", "extra_args"} (argv overrides, e.g. '
+    '{"provider":"zai","model":"glm-5.3"}); codex and claude_code '
+    '(substrate="stream") accept {"env"} (a JSON object of extra environment '
+    "variables merged over okto-nexus serve's own process environment - this "
+    "is how codex's provider/model/base_url selection actually works, via "
+    "CODEX_HOME pointing at a config.toml, not a CLI flag; the same env "
+    "escape hatch also reaches pi). Rejected for claude_code "
+    'substrate="attach" (nothing is spawned there to configure). Passing a '
+    "field this kind does not support is a VALIDATION_ERROR naming the "
+    "supported set, not a silent no-op. Omitting backend entirely is "
+    "allowed and keeps today's default (inherit the connector's own ambient "
+    "config) - the response's backend.explicit field always says which "
+    "happened, so that choice is never silent."
 )
 _P_ROLE = "Logical role to store on the registered agent (optional); matched exactly/case-sensitively by role-strategy targets."
 _P_METADATA = "Free-form JSON object of extra attributes stored on the registered agent (optional)."
@@ -359,6 +410,8 @@ def build_service(deps: Any) -> HarnessSupervisor:
     # the existing per-recipient inbox. Reuse the messages slice's OWN
     # composition root rather than re-wiring a second MessageService here -
     # both then share the identical governance/approvals/policy composition.
+    # This SAME call also wires (idempotently, cached on deps) the shared
+    # InboxDeliveryNotifier this supervisor subscribes to below.
     messages = build_message_service(deps)
 
     supervisor = HarnessSupervisor(
@@ -369,31 +422,51 @@ def build_service(deps: Any) -> HarnessSupervisor:
         events=repos.harness_events,
         subscribers=InMemoryHarnessSubscriberRegistry(),
         messages=messages,
+        # SYS-03/UAT-05 follow-up: the SAME shared notifier build_message_
+        # service (above) just wired/reused on deps - this is what makes an
+        # ordinary target-grammar delivery (direct/capability/role/tag)
+        # addressed at a live session's owning_agent_id actually reach it.
+        inbox_notifier=deps.inbox_delivery_notifier,
     )
     deps.harness_supervisor = supervisor
     return supervisor
 
 
 def _default_connector_factories() -> dict[str, Any]:
-    def _pi(*, project_root: str, **_ignored: Any) -> HarnessConnector:
-        return PiRpcConnector(cwd=project_root)
+    def _pi(
+        *, project_root: str, backend: Mapping[str, Any] | None = None, **_ignored: Any
+    ) -> HarnessConnector:
+        backend = backend or {}
+        return PiRpcConnector(
+            cwd=project_root,
+            provider=backend.get("provider"),
+            model=backend.get("model"),
+            extra_args=backend.get("extra_args") or (),
+            env=backend.get("env"),
+        )
 
-    def _codex(*, project_root: str, **_ignored: Any) -> HarnessConnector:
-        return CodexAppServerConnector(cwd=project_root)
+    def _codex(
+        *, project_root: str, backend: Mapping[str, Any] | None = None, **_ignored: Any
+    ) -> HarnessConnector:
+        backend = backend or {}
+        return CodexAppServerConnector(cwd=project_root, env=backend.get("env"))
 
     def _claude_code(
         *,
         project_root: str,
         substrate: str,
         target_pid: int | None,
+        backend: Mapping[str, Any] | None = None,
         **_ignored: Any,
     ) -> HarnessConnector:
         if substrate == SUBSTRATE_ATTACH:
-            # build_connector() already enforced target_pid is not None for
-            # this substrate; a defensive re-check would only duplicate that
-            # message, so this branch trusts its caller (private helper).
+            # build_connector() already enforced target_pid is not None (and
+            # backend is empty) for this substrate; a defensive re-check
+            # would only duplicate that message, so this branch trusts its
+            # caller (private helper).
             return ClaudeCodeAttachConnector(target_pid)  # type: ignore[arg-type]
-        return ClaudeCodeStreamConnector(cwd=project_root)
+        backend = backend or {}
+        return ClaudeCodeStreamConnector(cwd=project_root, env=backend.get("env"))
 
     return {"pi": _pi, "codex": _codex, "claude_code": _claude_code}
 
@@ -419,6 +492,57 @@ def build_connector_factories(deps: Any) -> Mapping[str, Any]:
     return factories
 
 
+def resolve_substrate(kind: str, substrate: str | None) -> str | None:
+    """The same ``kind='claude_code'``-only substrate default
+    (``stream`` when omitted) :func:`build_connector` applies internally,
+    exposed so callers that need it for a DIFFERENT purpose (currently
+    :func:`describe_backend`) never re-derive it differently. Not a
+    validator - :func:`build_connector` still owns fail-closed validation.
+    """
+    if kind != "claude_code":
+        return None
+    return substrate or SUBSTRATE_STREAM
+
+
+def describe_backend(
+    kind: str, substrate: str | None, backend: Mapping[str, Any] | None
+) -> dict[str, Any]:
+    """Build the ``backend`` field ``harness_open`` returns (H-1 fix): make
+    the resolved backend choice VISIBLE in the response, whether the caller
+    supplied one or not - never a silent inherit. Called AFTER
+    :func:`build_connector` already validated ``backend`` against ``kind``,
+    so this never re-raises; it only describes.
+    """
+    resolved_substrate = resolve_substrate(kind, substrate)
+    if kind == "claude_code" and resolved_substrate == SUBSTRATE_ATTACH:
+        return {
+            "explicit": False,
+            "applied": {},
+            "note": (
+                "not applicable: substrate='attach' injects into an "
+                "already-running process and spawns nothing to configure."
+            ),
+        }
+    allowed = sorted(_BACKEND_FIELDS_BY_KIND[kind])
+    if not backend:
+        return {
+            "explicit": False,
+            "applied": {},
+            "note": (
+                f"no backend override supplied - this '{kind}' session "
+                "inherits its connector's own ambient default (its own "
+                "config file, or the okto-nexus serve process's own "
+                "environment), NOT a choice okto-nexus made. Supported "
+                f"override fields for this kind: {allowed}."
+            ),
+        }
+    return {
+        "explicit": True,
+        "applied": dict(backend),
+        "note": "backend override applied exactly as given.",
+    }
+
+
 def build_connector(
     factories: Mapping[str, Any],
     *,
@@ -426,13 +550,30 @@ def build_connector(
     project_root: str,
     substrate: str | None,
     target_pid: int | None,
+    backend: Mapping[str, Any] | None = None,
 ) -> HarnessConnector:
-    """Validate ``substrate``/``target_pid`` against ``kind`` (fail-closed,
-    BEFORE touching the factory table - see module docstring's substrate
-    note) and construct the connector. Shared verbatim by ``harness_open``
-    and its REST mirror so the two surfaces can never disagree on this
-    validation.
+    """Validate ``substrate``/``target_pid``/``backend`` against ``kind``
+    (fail-closed, BEFORE touching the factory table - see module docstring's
+    substrate note) and construct the connector. Shared verbatim by
+    ``harness_open`` and its REST mirror so the two surfaces can never
+    disagree on this validation.
+
+    ``backend`` (H-1 fix, EV-SYS-002): an explicit, per-kind override
+    instead of silently inheriting the operator's own ambient CLI config -
+    see :data:`_P_BACKEND`/:data:`_BACKEND_FIELDS_BY_KIND`. A field this
+    kind does not support is a VALIDATION_ERROR, never a silent drop (that
+    silent-drop shape is exactly the H-2 defect class, not repeated here).
     """
+    if backend is None:
+        backend_obj: dict[str, Any] = {}
+    elif isinstance(backend, Mapping):
+        backend_obj = dict(backend)
+    else:
+        raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            f"backend must be a JSON object (got {type(backend).__name__}).",
+            {"backend_type": type(backend).__name__},
+        )
     resolved_substrate: str | None
     if kind != "claude_code":
         if substrate is not None:
@@ -469,6 +610,59 @@ def build_connector(
                 {"substrate": resolved_substrate},
             )
 
+    # H-1 fix: backend is validated fail-closed, per kind/substrate - an
+    # unsupported field is a VALIDATION_ERROR naming what IS supported,
+    # never a silent drop (build_connector is the ONE place both surfaces
+    # construct a connector, so this can't drift between them - module
+    # docstring).
+    if kind == "claude_code" and resolved_substrate == SUBSTRATE_ATTACH:
+        if backend_obj:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "backend does not apply to substrate='attach' - it injects "
+                "into an already-running process and spawns nothing to "
+                "configure.",
+                {"kind": kind, "substrate": resolved_substrate, "backend": backend_obj},
+            )
+    else:
+        allowed = _BACKEND_FIELDS_BY_KIND.get(kind, frozenset())
+        unsupported = set(backend_obj) - allowed
+        if unsupported:
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                f"backend field(s) {sorted(unsupported)} are not supported "
+                f"for kind='{kind}'; supported: {sorted(allowed)}.",
+                {"kind": kind, "unsupported": sorted(unsupported), "supported": sorted(allowed)},
+            )
+        extra_args = backend_obj.get("extra_args")
+        if extra_args is not None and (
+            not isinstance(extra_args, (list, tuple))
+            or not all(isinstance(item, str) for item in extra_args)
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "backend.extra_args must be a JSON array of strings.",
+                {"kind": kind, "extra_args": extra_args},
+            )
+        env = backend_obj.get("env")
+        if env is not None and (
+            not isinstance(env, Mapping)
+            or not all(isinstance(k, str) and isinstance(v, str) for k, v in env.items())
+        ):
+            raise OktoNexusError(
+                ErrorCode.VALIDATION_ERROR,
+                "backend.env must be a JSON object of string -> string.",
+                {"kind": kind, "env": env},
+            )
+        for str_field in ("provider", "model"):
+            value = backend_obj.get(str_field)
+            if value is not None and not isinstance(value, str):
+                raise OktoNexusError(
+                    ErrorCode.VALIDATION_ERROR,
+                    f"backend.{str_field} must be a string.",
+                    {"kind": kind, str_field: value},
+                )
+
     factory = factories.get(kind)
     if factory is None:
         raise OktoNexusError(
@@ -480,6 +674,7 @@ def build_connector(
         project_root=project_root,
         substrate=resolved_substrate,
         target_pid=target_pid,
+        backend=backend_obj,
     )
 
 
@@ -529,18 +724,21 @@ def register(server: Any, deps: Any) -> None:
         project_root: Annotated[str, Field(description=_P_ROOT)],
         substrate: Annotated[str | None, Field(description=_P_SUBSTRATE)] = None,
         target_pid: Annotated[int | None, Field(description=_P_TARGET_PID)] = None,
+        backend: Annotated[Any, Field(description=_P_BACKEND)] = None,
         role: Annotated[str | None, Field(description=_P_ROLE)] = None,
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
     ) -> dict[str, Any]:
         """Open a harness session (spawn or attach), register it as an agent (D3), and track it. Bounded - a wedged connector raises INTERNAL_ERROR after the start timeout, never hangs (D8)."""
         validate_harness_kind(kind)
+        backend_obj = require_json_object_param("backend", backend)
         connector = build_connector(
             factories,
             kind=kind,
             project_root=project_root,
             substrate=substrate,
             target_pid=target_pid,
+            backend=backend_obj,
         )
         metadata_obj = require_json_object_param("metadata", metadata)
         notify_target_obj = require_json_object_param("notify_target", notify_target)
@@ -558,7 +756,10 @@ def register(server: Any, deps: Any) -> None:
                 else None,
             )
         )
-        return session_to_dict(session)
+        return {
+            **session_to_dict(session),
+            "backend": describe_backend(kind, substrate, backend_obj),
+        }
 
     @server.tool()
     @async_tool_envelope

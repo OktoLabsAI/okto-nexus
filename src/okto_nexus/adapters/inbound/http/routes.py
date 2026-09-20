@@ -63,6 +63,7 @@ from ..mcp.tools.harness import (
 )
 from ..mcp.tools.harness import build_service as _build_harness_supervisor
 from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_catalog
+from ..mcp.tools.harness import describe_backend as _harness_describe_backend
 from ..mcp.tools.harness import event_to_dict as _harness_event_to_dict
 from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
 from ..mcp.tools.harness import read_session as _harness_read_session
@@ -355,6 +356,11 @@ class HarnessSessionOpenBody(BaseModel):
     project_root: str = Field(min_length=1)
     substrate: str | None = None
     target_pid: int | None = None
+    # H-1 fix (EV-SYS-002): explicit per-session backend override, mirrors
+    # the MCP ``backend`` param exactly (_P_BACKEND in tools/harness.py owns
+    # the field-by-kind rules; both surfaces validate through the SAME
+    # ``build_connector``, so this body never drifts from the tool schema).
+    backend: dict[str, Any] | None = None
     role: str | None = None
     metadata: dict[str, Any] | None = None
     notify_target: dict[str, Any] | None = None
@@ -887,6 +893,7 @@ def build_router() -> APIRouter:
                 project_root=body.project_root,
                 substrate=body.substrate,
                 target_pid=body.target_pid,
+                backend=body.backend,
             )
             return supervisor.open(
                 kind=body.kind,
@@ -903,7 +910,12 @@ def build_router() -> APIRouter:
             session = await anyio.to_thread.run_sync(_open)
         except OktoNexusError as exc:
             return _map_error(exc)
-        return _ok(_harness_session_to_dict(session))
+        return _ok(
+            {
+                **_harness_session_to_dict(session),
+                "backend": _harness_describe_backend(body.kind, body.substrate, body.backend),
+            }
+        )
 
     @router.post("/harness/sessions/{session_id}/send")
     async def harness_send(

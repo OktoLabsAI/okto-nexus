@@ -58,6 +58,7 @@ are the ones a reviewer will want justified rather than assumed:
 
 from __future__ import annotations
 
+import functools
 import json
 import sys
 import threading
@@ -86,6 +87,7 @@ from .ports import (
     HarnessEventRepo,
     HarnessSessionRepo,
     HarnessSubscriberRegistry,
+    InboxDeliveryNotifier,
 )
 
 #: The normalised event kinds this supervisor treats as worth a message, on
@@ -111,6 +113,13 @@ _SEND_ONLY_ALLOWED_VERBS: frozenset[str] = frozenset({"send_turn"})
 #: meaningfully delays ``serve`` noticing and moving on to the next one.
 DEFAULT_START_TIMEOUT_SECONDS = 30.0
 DEFAULT_CLOSE_TIMEOUT_SECONDS = 10.0
+#: Bound for one forwarded inbox delivery (SYS-03/UAT-05 follow-up): a
+#: connector's own ``send`` can genuinely block on a transport write/ack
+#: (e.g. pi's ``_send_turn`` awaits a reply up to its own command timeout),
+#: and this forward runs on the CALLING thread of whatever fired
+#: ``message_create`` (an MCP tool call, an HTTP request) - it must never
+#: wedge that caller past a bound, per D8's "every wait bounded".
+DEFAULT_FORWARD_TIMEOUT_SECONDS = 10.0
 
 
 @dataclass(slots=True)
@@ -131,6 +140,11 @@ class _LiveSession:
     project_root: str
     notify_target: Any = None
     pump_thread: "threading.Thread | None" = None
+    #: Handle returned by InboxDeliveryNotifier.subscribe for this session's
+    #: owning_agent_id (SYS-03/UAT-05 follow-up); None when no notifier is
+    #: wired. Unsubscribed in _claim_for_reap - the same single place
+    #: anything leaves the live registry.
+    inbox_subscription: Any = None
 
 
 @dataclass(slots=True)
@@ -195,8 +209,10 @@ class HarnessSupervisor:
         events: HarnessEventRepo,
         subscribers: HarnessSubscriberRegistry,
         messages: MessageService | None = None,
+        inbox_notifier: InboxDeliveryNotifier | None = None,
         start_timeout_s: float = DEFAULT_START_TIMEOUT_SECONDS,
         close_timeout_s: float = DEFAULT_CLOSE_TIMEOUT_SECONDS,
+        forward_timeout_s: float = DEFAULT_FORWARD_TIMEOUT_SECONDS,
     ) -> None:
         self._cf = connection_factory
         self._clock = clock
@@ -205,8 +221,13 @@ class HarnessSupervisor:
         self._events = events
         self._subscribers = subscribers
         self._messages = messages
+        # SYS-03/UAT-05 follow-up: OPTIONAL, same standing convention as
+        # `messages` above - None means the target grammar still does not
+        # reach a harness (today's pre-fix behaviour), never an error.
+        self._inbox_notifier = inbox_notifier
         self._start_timeout_s = float(start_timeout_s)
         self._close_timeout_s = float(close_timeout_s)
+        self._forward_timeout_s = float(forward_timeout_s)
 
         self._lock = threading.RLock()
         self._live: dict[str, _LiveSession] = {}
@@ -355,6 +376,22 @@ class HarnessSupervisor:
             with self._lock:
                 live.pump_thread = thread
             thread.start()
+
+        # SYS-03/UAT-05 follow-up: subscribe THIS session to ordinary
+        # target-grammar deliveries addressed at its own owning_agent_id -
+        # see _on_inbox_delivery's docstring for the forwarding contract.
+        # Every send_only connector (not just full-duplex ones) is eligible:
+        # send_turn is the one verb send_only connectors always accept, and
+        # that is the only verb a forward ever issues.
+        if self._inbox_notifier is not None:
+            handle = self._inbox_notifier.subscribe(
+                owning_agent_id,
+                functools.partial(
+                    self._on_inbox_delivery, session.session_id, owning_agent_id
+                ),
+            )
+            with self._lock:
+                live.inbox_subscription = handle
         return session
 
     def open_declared(
@@ -495,6 +532,101 @@ class HarnessSupervisor:
                 "(capabilities.steer_timing is None).",
                 {"verb": verb},
             )
+
+    # ------------------------------------------------------------------ #
+    # Inbox delivery forwarding (SYS-03/UAT-05 follow-up): the existing
+    # target grammar (direct/capability/role/tag, ADR 0001) reaching a live
+    # harness session.
+    # ------------------------------------------------------------------ #
+    def _on_inbox_delivery(
+        self, session_id: str, owning_agent_id: str, message: Mapping[str, Any]
+    ) -> None:
+        """Callback registered with the shared ``InboxDeliveryNotifier`` on
+        :meth:`open`: an ordinary ``message_create`` fan-out just delivered
+        to THIS session's ``owning_agent_id`` inbox via the existing target
+        grammar. Forward it as a ``send_turn`` through THIS SAME
+        :meth:`send` - never a parallel delivery path, and never a
+        fabricated capability: ``send_turn`` is the one verb every
+        connector, including a ``send_only`` one (D7b/cc-socks), already
+        accepts (:data:`_SEND_ONLY_ALLOWED_VERBS`). Reusing :meth:`send`
+        also means this inherits its EXISTING capability guard
+        (:meth:`_require_verb_allowed`) and its live-session check
+        (:meth:`_require_live`) for free - there is nothing bespoke here to
+        get wrong independently of those.
+
+        Hand-off, not consumption (see
+        :meth:`~okto_nexus.application.messages.MessageService.
+        _maybe_notify_inbox_subscribers`'s docstring for the full
+        justification): the delivery row this callback describes was
+        ALREADY committed, durably, before this callback ever runs. A
+        failure anywhere in this method - a dead connector, a timed-out
+        transport write, this method raising outright - never loses the
+        message; it is still sitting exactly where it always would have
+        been, in the recipient's ordinary inbox, independent of whether the
+        push below ever fires. Bounded by :attr:`_forward_timeout_s`
+        (:meth:`_bounded_call`, the same non-polling ``Thread.join``
+        pattern :meth:`open`/:meth:`close` already use) so a wedged
+        connector can never turn an inbound message into a wedged caller
+        (D8) - every failure, including a timeout, is caught and logged via
+        :meth:`_log_best_effort_failure`, never raised back to the
+        publisher.
+
+        Two failure-isolation guards, both deliberate:
+
+        * A message whose ``from_agent_id`` is itself a CURRENTLY-LIVE
+          harness session's ``owning_agent_id`` (this one, or any other) is
+          never forwarded. Without this, D10's own notable-event
+          auto-message (a harness's ``turn_completed`` delivered as a
+          message FROM its own agent) can cascade: two live sessions each
+          ``notify_target``-ing the other's agent would ping-pong forever
+          (A's turn completes -> message -> forwarded into B as a turn ->
+          B's turn completes -> message -> forwarded into A -> ...), and
+          SYS-09 already proves multiple harnesses live concurrently in one
+          workspace, so this is reachable, not theoretical. This is
+          strictly BROADER than the trivial self-addressed case
+          (``notify_target`` pointed at the harness's own agent_id) that
+          the same check also catches - a ``direct`` target does NOT
+          exclude the sender at the routing layer the way group targets do
+          (see ``MessageService._resolve_recipients``'s own docstring).
+        * A message with no non-empty string ``body`` is skipped, not
+          forwarded as an empty turn every connector's own payload
+          validation would reject anyway (``pi``/``codex``:
+          ``payload['text']``; ``claude_code`` stream:
+          ``payload['content']`` - see the next paragraph) - this is not a
+          failure, just nothing to forward.
+
+        Payload shape: BOTH known keys are set (``text`` for pi/codex,
+        ``content`` for the claude_code stream connector) rather than
+        switching on ``harness_kind`` - each connector reads only its own
+        key via a plain ``.get(...)``, so the extra key is inert, and this
+        stays correct without updating this method for a future
+        connector's key choice as long as it also reads text/content.
+        """
+        from_agent_id = message.get("from_agent_id")
+        if isinstance(from_agent_id, str) and from_agent_id in self._live_owning_agent_ids():
+            return
+        body = message.get("body")
+        if not isinstance(body, str) or not body:
+            return
+        payload = {"text": body, "content": body}
+        try:
+            self._bounded_call(
+                lambda: self.send(session_id, "send_turn", payload),
+                timeout_s=self._forward_timeout_s,
+                label="forwarding an inbox delivery",
+            )
+        except Exception:  # noqa: BLE001 - best-effort: a forward failure must never wedge the caller
+            self._log_best_effort_failure(
+                "forwarding an inbox delivery to the harness connector", session_id
+            )
+
+    def _live_owning_agent_ids(self) -> frozenset[str]:
+        """The ``owning_agent_id`` of every CURRENTLY-live harness session -
+        the harness-to-harness cascade guard's own source of truth, read
+        fresh on every delivery (a session opening/closing between two
+        forwards is reflected immediately, with no caching to go stale)."""
+        with self._lock:
+            return frozenset(live.session.owning_agent_id for live in self._live.values())
 
     # ------------------------------------------------------------------ #
     # close (explicit, operator/agent-requested end)
@@ -769,9 +901,27 @@ class HarnessSupervisor:
         caller wins this call is the one, and only one, allowed to finish
         the reap - :meth:`_pump` and :meth:`close` both call this and both
         tolerate ``None`` back (a safe no-op: the OTHER caller already owns
-        it)."""
+        it).
+
+        ALSO the single place an inbox subscription (SYS-03/UAT-05
+        follow-up) is torn down - a reaped session must stop receiving
+        forwards, or it would keep calling into an already-gone connector
+        and logging best-effort failures forever."""
         with self._lock:
-            return self._live.pop(session_id, None)
+            live = self._live.pop(session_id, None)
+        if live is not None:
+            self._unsubscribe_inbox(live)
+        return live
+
+    def _unsubscribe_inbox(self, live: "_LiveSession") -> None:
+        if self._inbox_notifier is None or live.inbox_subscription is None:
+            return
+        try:
+            self._inbox_notifier.unsubscribe(live.inbox_subscription)
+        except Exception:  # noqa: BLE001 - best-effort: a broken notifier must never break a reap/close
+            self._log_best_effort_failure(
+                "unsubscribing from inbox deliveries", live.session.session_id
+            )
 
     def _finish_reap(self, live: "_LiveSession", *, error: BaseException | None) -> None:
         """Given an ALREADY-CLAIMED ``live`` (see :meth:`_claim_for_reap`),

@@ -555,7 +555,23 @@ class CodexAppServerConnector:
         self._transport: _CodexTransport | None = None
         self._start_lock = threading.Lock()
 
-        self._event_queue: "queue.Queue[HarnessEvent]" = queue.Queue()
+        # RES-A2 fix (mirrors ``harness/pi.py``'s own C2 fix - see that
+        # module's `__init__` for the full rationale): a SINGLE shared
+        # `queue.Queue` (the pre-fix design here) means every consumer of
+        # `events()` competes for the SAME items - two concurrent callers
+        # SPLIT the stream between them rather than each independently
+        # seeing the whole thing. Fan-out instead: `_event_history` is the
+        # append-only record of every event ever pushed, and each
+        # `events()` call gets its OWN subscriber queue, seeded with a
+        # snapshot of the history taken under `_history_lock` at subscribe
+        # time (so a LATE subscriber still gets everything from the start)
+        # and then fed live by `_push_event`. `_history_lock` also
+        # serialises history-append against backlog-snapshot so a push can
+        # never land in the gap between a new subscriber's snapshot and its
+        # registration.
+        self._event_history: list[HarnessEvent] = []
+        self._history_lock = threading.Lock()
+        self._subscribers: list["queue.Queue[HarnessEvent]"] = []
         self._sessions_by_id: dict[str, _ThreadState] = {}
         self._sessions_by_thread: dict[str, _ThreadState] = {}
         self._sessions_lock = threading.Lock()
@@ -643,7 +659,18 @@ class CodexAppServerConnector:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "unknown command verb.", {"verb": command.verb})
 
     def events(self) -> Iterator[HarnessEvent]:
-        """Blocking generator, bounded so it can NEVER block forever.
+        """Blocking generator, bounded so it can NEVER block forever, and
+        with its OWN independent fan-out subscription (RES-A2 fix, mirrors
+        ``harness/pi.py``'s own C2 fix) - calling this a second time, or
+        from a second thread, no longer SPLITS the stream with the first
+        caller (the pre-fix defect: one shared ``queue.Queue`` meant two
+        concurrent consumers each got roughly half the events,
+        unpredictably, with no way to tell which half). Each call
+        registers a fresh per-consumer queue, seeded with every event
+        pushed since the connector started (see ``_event_history`` on
+        ``__init__``) so a LATE subscriber still gets the full stream from
+        the beginning, not just what happens to be pushed after it
+        subscribes.
 
         Real events are still delivered the instant they are pushed - a
         ``Queue.get(timeout=_EVENTS_POLL_S)`` returns immediately once an
@@ -660,14 +687,27 @@ class CodexAppServerConnector:
         twice) on an unbounded wait with no timeout at all. See mismatch
         note 9.
         """
-        while True:
-            try:
-                item = self._event_queue.get(timeout=_EVENTS_POLL_S)
-            except queue.Empty:
-                if self._closed_event.is_set():
-                    return
-                continue
-            yield item
+        my_queue: "queue.Queue[HarnessEvent]" = queue.Queue()
+        with self._history_lock:
+            backlog = list(self._event_history)
+            self._subscribers.append(my_queue)
+        try:
+            for item in backlog:
+                yield item
+            while True:
+                try:
+                    item = my_queue.get(timeout=_EVENTS_POLL_S)
+                except queue.Empty:
+                    if self._closed_event.is_set():
+                        return
+                    continue
+                yield item
+        finally:
+            with self._history_lock:
+                try:
+                    self._subscribers.remove(my_queue)
+                except ValueError:
+                    pass
 
     # ------------------------------------------------------------------ #
     # Lifecycle helpers (not part of the port; connector-owned resources)
@@ -768,6 +808,20 @@ class CodexAppServerConnector:
         permanently wedging the connector. On failure here the half-spawned
         transport (and its child process) is torn down before the exception
         propagates, so a subsequent ``start()`` call gets a clean respawn.
+
+        RES-A4 fix (mirrors ``harness/pi.py``'s own C3 fix): this failure
+        path used to call ``transport.close()`` only - that sets the
+        TRANSPORT's own private ``_closed`` flag (suppresses ITS
+        ``on_child_exit`` callback), never this CONNECTOR's separate
+        ``_closed_event``, which is the ONE flag :meth:`events` actually
+        checks on every ``queue.Empty``. A caller of :meth:`events` after a
+        failed :meth:`start` (with no separate, explicit :meth:`close` call)
+        was therefore never told to stop - the generator looped forever.
+        FIX: the ``except`` clause now also sets ``self._closed_event``, and
+        the guarded region was widened to cover ``transport.start()`` itself
+        (not just the handshake request), catching ``BaseException`` rather
+        than ``Exception`` - the same "every way this can fail must still
+        leave events() terminable" widening pi.py's own note 10(c) applies.
         """
         transport = _CodexTransport(
             self._command,
@@ -779,14 +833,27 @@ class CodexAppServerConnector:
             on_malformed_line=self._on_malformed_line,
             on_dispatch_error=self._on_dispatch_error,
         )
-        transport.start()
         try:
+            transport.start()
             transport.request(
                 _METHOD_INITIALIZE, {"clientInfo": _client_info()}, timeout_s=self._handshake_timeout_s
             )
-        except Exception:
+        except BaseException:
             transport.close()  # reap the child; nothing else references it yet
+            self._closed_event.set()
             raise
+        # RES-A4 fix, second-order (mismatch note 14c): a PRIOR failed
+        # start() may have set `_closed_event` above. Since this method only
+        # re-runs when `self._transport is None` (start()'s own guard) -
+        # i.e. exactly the "failed, never reached this line, retried" path,
+        # never the "deliberately close()'d" one (`close()` never clears
+        # `self._transport`, so a post-close() start() skips this method
+        # entirely) - reaching here with a real, initialized transport means
+        # this connector is live again and `_closed_event` must be cleared,
+        # or `events()` on the now-healthy connector would see a stale
+        # "closed" flag from the earlier failure and return immediately on
+        # its very first idle poll.
+        self._closed_event.clear()
         self._transport = transport
 
     # ------------------------------------------------------------------ #
@@ -862,7 +929,18 @@ class CodexAppServerConnector:
             thread_id=thread_id,
             turn_id=turn_id,
         )
-        self._event_queue.put(event)
+        # RES-A2 fix: append to the durable history and fan out to every
+        # LIVE subscriber under the same lock a new `events()` call uses to
+        # take its backlog snapshot - this is what makes the
+        # snapshot-then-subscribe in `events()` race-free: whichever of
+        # {this push, a concurrent subscribe} takes the lock first fully
+        # happens before the other, so a new subscriber can never miss an
+        # event that raced its own registration, and never sees it twice.
+        with self._history_lock:
+            self._event_history.append(event)
+            subscribers = list(self._subscribers)
+        for subscriber_queue in subscribers:
+            subscriber_queue.put(event)
 
     def _on_unmatched_response(self, request_id: Any, result: Any, error: dict[str, Any] | None) -> None:
         """A response to a fire-and-forget :meth:`send` call (D2: no
@@ -1140,3 +1218,88 @@ class CodexAppServerConnector:
 #     the lookup and the (conditional) append now share ONE
 #     ``_sessions_lock`` acquisition, matching ``start()``'s own scope, so
 #     the two can no longer interleave.
+#
+# 14. TWO DEFECTS FOUND BY THE PHASE-4 CAMPAIGN'S DEFECT-WITNESS TESTS
+#     (RES-A2, RES-A4), FIXED THIS PASS - both are the exact same defect
+#     CLASS ``harness/pi.py`` independently shipped and fixed (its own notes
+#     9(b)/C2 and 10(c)/C3), reintroduced here because this module was
+#     written independently of that fix:
+#
+#     a) RES-A2 - ``events()`` fed every caller off ONE shared
+#        ``queue.Queue`` (``_event_queue``, set in ``__init__``): two
+#        concurrent consumers raced for the same items and the stream was
+#        SPLIT between them (a deterministic partition, not a flaky race -
+#        ``test_two_concurrent_events_consumers_split_the_stream_instead_of_
+#        each_getting_the_full_stream`` proved it 3/3 by asserting the total
+#        item count across both consumers of an N-event stream: 2N with
+#        correct fan-out, exactly N with a shared-queue split). FIX: the
+#        same fan-out shape as ``pi.py``'s C2 - ``_event_history`` (an
+#        append-only record) plus one subscriber ``Queue`` per ``events()``
+#        call, both under ``_history_lock`` so a push can never land in the
+#        gap between a new subscriber's backlog snapshot and its
+#        registration. ``_event_queue`` itself is gone; every push now goes
+#        through ``_push_event``'s history-append-then-fan-out.
+#
+#        HONEST CAVEAT this fix carries, NOT present in ``pi.py``'s own
+#        version of the same fix: ``pi.py`` justifies never trimming
+#        ``_event_history`` by "a session's event count is bounded by its
+#        own lifetime" - true there because ``multiplexes_sessions=False``
+#        (one ``PiRpcConnector`` IS one session). That premise does NOT hold
+#        here: ``multiplexes_sessions=True`` means ONE ``_event_history``
+#        can in principle accumulate events across MANY sessions' worth of
+#        turns over the connector's WHOLE process lifetime, not one
+#        session's. At today's actual wiring this is not reachable
+#        (``adapters/inbound/mcp/tools/harness.py``'s ``_codex`` factory
+#        constructs a brand-new ``CodexAppServerConnector`` - and therefore
+#        a brand-new child process - on every ``harness_open`` call, so no
+#        connector instance in production currently outlives more than one
+#        session; grep-confirmed, no other call site in ``src/`` re-uses a
+#        connector across sessions or re-subscribes to ``events()``), but it
+#        is a real, unbounded-growth latent gap the moment multiplexing is
+#        ever actually wired up as ``multiplexes_sessions=True`` implies it
+#        should be (see mismatch note 1) - reported here rather than
+#        silently inheriting a justification whose premise is false for this
+#        connector.
+#
+#     b) RES-A4 - ``_spawn_and_initialize``'s failure path called
+#        ``transport.close()`` on a failed/timed-out handshake, but that
+#        only sets the TRANSPORT's own private ``_closed`` flag (suppresses
+#        ITS ``on_child_exit`` callback) - never this CONNECTOR's separate
+#        ``_closed_event``, the ONE flag ``events()`` actually checks on
+#        every ``queue.Empty``. A caller of ``events()`` after a failed
+#        ``start()`` with no separate, explicit ``close()`` call was
+#        therefore never told to stop - proved deterministically 3/3 by
+#        ``test_failed_start_leaves_events_terminable`` (a child that
+#        consumes the ``initialize`` write but never answers it, so the
+#        handshake times out cleanly with no crash involved). FIX: the
+#        ``except`` clause now also sets ``self._closed_event``, and the
+#        guarded region was widened to cover ``transport.start()`` itself
+#        (not just the handshake ``request()``), catching ``BaseException``
+#        rather than ``Exception`` - matching how widely ``pi.py``'s own C3
+#        fix guards its equivalent spawn path, so no way of failing to
+#        start leaves this gap open again.
+#
+#     c) SECOND-ORDER DEFECT INTRODUCED BY (b) ABOVE, ALSO FIXED (found in
+#        this same pass's own self-review, not by an earlier agent): setting
+#        ``_closed_event`` on a failed start() and never clearing it anywhere
+#        would silently poison every FUTURE successful retry on the SAME
+#        connector instance - unlike ``pi.py`` (``multiplexes_sessions=
+#        False``, a second ``start()`` call always raises outright), codex's
+#        own mismatch note 12 explicitly promises "a subsequent ``start()``
+#        call gets a clean respawn" after a failed one. Without a clear,
+#        that respawn would succeed at the transport level while leaving
+#        ``events()`` observing a stale "closed" flag from the EARLIER
+#        failure and returning immediately on its very first idle poll -
+#        proved deterministically by
+#        ``test_events_stays_live_after_a_failed_start_is_followed_by_a_
+#        successful_retry`` (one connector instance, one failed spawn via a
+#        marker-file script that hangs on its first invocation, then a
+#        successful retry via the SAME script's second invocation
+#        behaving like a real minimal app-server). FIX:
+#        ``_spawn_and_initialize``'s success path now clears
+#        ``self._closed_event`` immediately before assigning
+#        ``self._transport``. This can only fire on the failed-then-retried
+#        path: this method only re-runs when ``self._transport is None``
+#        (``start()``'s own guard), which a deliberate ``close()`` never
+#        makes true again (``close()`` does not reset ``self._transport``),
+#        so a post-``close()`` ``start()`` never reaches this line at all.
