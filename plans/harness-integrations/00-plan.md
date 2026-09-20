@@ -64,7 +64,7 @@ TestClient). Without this, no DoD evidence is producible.
 
 Exit: fixture green; baseline recorded.
 
-### Phase 2 — Freeze the shared transport port (BLOCKS FAN-OUT)
+### Phase 2 — Freeze the shared transport port (COMPLETE — see EV-INF-002)
 
 Three connectors implementing against an unfrozen interface, all touching one registration
 point on one branch, will collide. The port lands first, alone, reviewed.
