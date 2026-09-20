@@ -135,10 +135,12 @@ EVENT_KINDS: frozenset[str] = frozenset(
     }
 )
 
-#: The closed set of normalised outbound command verbs. A connector that
-#: declares ``send_only=True`` (D7b) accepts only ``send_turn`` and MUST
-#: reject the rest at the adapter edge - fire-and-forget has no interrupt to
-#: correlate and no steering channel of its own.
+#: The closed set of normalised outbound command verbs. A connector whose
+#: capabilities declare ``steer_timing=None`` MUST reject ``steer``; the
+#: D7b (``cc-socks``) shape additionally has no interrupt-with-settle
+#: semantics and no correlated end signal, so in practice it accepts only
+#: ``send_turn`` at the adapter edge - a fact read off
+#: :class:`HarnessCapabilities`, never hardcoded per verb here.
 COMMAND_VERBS: frozenset[str] = frozenset({"send_turn", "steer", "interrupt", "end"})
 
 
@@ -211,7 +213,12 @@ class HarnessCapabilities:
     * ``steer_timing``: ``NEXT_TURN_BOUNDARY`` (Pi) means a ``steer`` command
       issued mid-turn is buffered by the harness, not applied immediately;
       the supervisor must not assume the very next event reflects it.
-      ``IMMEDIATE`` (Codex ``turn/steer``) has no such delay.
+      ``IMMEDIATE`` (Codex ``turn/steer``) has no such delay. ``None`` means
+      steering is UNSUPPORTED on this transport at all (D7b, ``cc-socks``:
+      fire-and-forget has no channel to deliver a mid-session steer over) -
+      the supervisor's "may I steer this session?" question is answered
+      entirely from this one field, with no out-of-band knowledge of
+      ``send_only`` required.
     * ``interrupt_requires_settle_wait``: Pi's ``abort`` does not resolve
       synchronously - a reprompt sent right after MUST wait for the aborted
       turn's own settle event first, or it races the harness's internal
@@ -228,30 +235,18 @@ class HarnessCapabilities:
     """
 
     send_only: bool
-    steer_timing: str
+    steer_timing: str | None
     interrupt_requires_settle_wait: bool
     multiplexes_sessions: bool
     observes_session_end: bool
 
     def __post_init__(self) -> None:
-        if self.steer_timing not in STEER_TIMINGS:
+        if self.steer_timing is not None and self.steer_timing not in STEER_TIMINGS:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
-                "steer_timing must be one of {IMMEDIATE, NEXT_TURN_BOUNDARY}.",
+                "steer_timing must be one of {IMMEDIATE, NEXT_TURN_BOUNDARY} or None "
+                "(None = steering unsupported on this transport).",
                 {"steer_timing": self.steer_timing, "supported": sorted(STEER_TIMINGS)},
-            )
-        if self.send_only and self.steer_timing != STEER_TIMING_NEXT_TURN_BOUNDARY:
-            # A send-only channel has no correlated ack, so there is no way to
-            # observe an "immediate" steer taking effect - only a later event
-            # on the peer's own channel could confirm it, which is exactly
-            # what NEXT_TURN_BOUNDARY already models. Declaring IMMEDIATE on a
-            # send-only connector is a contradiction the port refuses to
-            # accept, not a case the supervisor should special-case.
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "a send_only connector cannot declare IMMEDIATE steer_timing "
-                "(there is no channel to observe immediacy on).",
-                {"send_only": self.send_only, "steer_timing": self.steer_timing},
             )
 
 

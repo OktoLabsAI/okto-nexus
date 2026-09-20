@@ -87,18 +87,19 @@ def test_new_harness_session_id_is_prefixed_and_unique() -> None:
 # --------------------------------------------------------------------------- #
 # HarnessCapabilities - the control-flow-changing declaration
 # --------------------------------------------------------------------------- #
-def test_capabilities_send_only_requires_next_turn_boundary_steer_timing() -> None:
-    """A send-only connector cannot claim IMMEDIATE steer - no channel to
-    observe immediacy on. The port refuses the contradiction at construction."""
-    with pytest.raises(OktoNexusError) as exc:
-        HarnessCapabilities(
-            send_only=True,
-            steer_timing=STEER_TIMING_IMMEDIATE,
-            interrupt_requires_settle_wait=False,
-            multiplexes_sessions=False,
-            observes_session_end=True,
-        )
-    assert exc.value.code == ErrorCode.VALIDATION_ERROR
+def test_capabilities_steer_timing_none_means_steering_unsupported() -> None:
+    """A send-only connector (D7b) has no channel to deliver a steer at all -
+    ``steer_timing=None`` is how the supervisor answers "may I steer this
+    session?" from the capability struct alone, with no out-of-band knowledge
+    of ``send_only`` required."""
+    caps = HarnessCapabilities(
+        send_only=True,
+        steer_timing=None,
+        interrupt_requires_settle_wait=False,
+        multiplexes_sessions=False,
+        observes_session_end=False,
+    )
+    assert caps.steer_timing is None
 
 
 def test_capabilities_rejects_unknown_steer_timing() -> None:
@@ -157,15 +158,19 @@ def test_capabilities_claude_code_primary_shape() -> None:
 
 def test_capabilities_claude_code_attach_shape() -> None:
     """Claude Code D7b (cc-socks): fire-and-forget, send-only, Nexus attaches
-    to a session it did not spawn and cannot observe the end of."""
+    to a session it did not spawn and cannot observe the end of. Every
+    control-flow capability that requires a reply channel is set to its
+    "cannot" value - this is the degenerate case the port must still express
+    cleanly, not a sixth boolean bolted on to force a fit."""
     caps = HarnessCapabilities(
         send_only=True,
-        steer_timing=STEER_TIMING_NEXT_TURN_BOUNDARY,
+        steer_timing=None,
         interrupt_requires_settle_wait=False,
         multiplexes_sessions=False,
         observes_session_end=False,
     )
     assert caps.send_only is True
+    assert caps.steer_timing is None
     assert caps.observes_session_end is False
 
 

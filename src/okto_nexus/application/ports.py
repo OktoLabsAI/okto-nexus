@@ -1655,8 +1655,16 @@ class HarnessConnector(Protocol):
 
     capabilities: HarnessCapabilities
 
-    def start(self, uow: UnitOfWork, *, owning_agent_id: str) -> HarnessSession:
+    def start(self, *, owning_agent_id: str) -> HarnessSession:
         """Establish the session (spawn a child, or bind to a discovered peer).
+
+        Deliberately takes NO :class:`UnitOfWork`: unlike the repository
+        ports in this module, a connector is a transport, not persistence -
+        ``HarnessSession`` is never stored (see its docstring), and spawning
+        a child process or dialling a socket must never happen while holding
+        the SQLite WAL single-writer lock a ``uow`` would keep open. Whatever
+        durable record a caller wants of the session start is a separate,
+        explicit write against a repository, made outside this call.
 
         Returns the initial :class:`~okto_nexus.domain.harness.HarnessSession`
         in ``STARTING`` status. For a D7b attach connector the returned
