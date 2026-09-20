@@ -84,7 +84,7 @@ raises rather than silently spawning a second child the connector has no
 slot to track.
 
 Domain-level command payload convention (not part of the frozen port, but
-kept consistent with ``harness_codex.py``'s own choice so a supervisor can
+kept consistent with ``codex.py``'s own choice so a supervisor can
 build one ``HarnessCommand`` shape for both): ``send_turn``/``steer``
 read their text from ``command.payload["text"]``, translated to pi's native
 ``{"message": ...}`` field at the wire edge.
@@ -139,7 +139,7 @@ _TYPE_AGENT_SETTLED = "agent_settled"
 #: ``message_end``, ``turn_end``, ``tool_execution_start/update/end``,
 #: ``queue_update``, ``agent_end``, ``agent_settled``,
 #: ``extension_ui_request``) - deliberately lossy, same shape as
-#: ``harness_codex.py``'s own mapping. Every native type not named here
+#: ``codex.py``'s own mapping. Every native type not named here
 #: (and every one that IS) is preserved verbatim in
 #: :attr:`HarnessEvent.native_event`, so nothing is silently dropped, only
 #: coarsened (INT-03's requirement). See mismatch note 1 for why
@@ -994,7 +994,7 @@ class PiRpcConnector:
 #    of the ordinary event stream itself.
 #
 # 7. `SESSION_STATUSES`' `STARTING` has no legal `STARTING -> ENDED`
-#    transition (mirrors `harness_codex.py`'s own mismatch note 5): this
+#    transition (mirrors `codex.py`'s own mismatch note 5): this
 #    connector's `start()` happens to never expose that gap on its own happy
 #    path, because the `get_state` readiness probe is SYNCHRONOUS and
 #    blocking - a dead-on-arrival child (crash before the first response) is
@@ -1005,7 +1005,7 @@ class PiRpcConnector:
 #    `start()` shape can trigger.
 #
 # 8. This connector's `send()` is NOT purely fire-and-forget at the wire
-#    level, unlike `harness_codex.py`'s `send_fire_and_forget` (which never
+#    level, unlike `codex.py`'s `send_fire_and_forget` (which never
 #    waits for even the ack). Because mismatch 3 forces one-command-in-flight
 #    correlation, `_send_turn`/`_steer`/`_interrupt` all block briefly
 #    (bounded by `command_timeout_s`) on the IMMEDIATE ack response
@@ -1018,7 +1018,7 @@ class PiRpcConnector:
 #    for the entire timeout before raising. This is consistent with the port
 #    docstring's letter - `send()`'s RETURN VALUE never carries the reply,
 #    which is the contract's actual promise - but it is a real, and in the
-#    worst case NOT small, blocking window `harness_codex.py` does not have,
+#    worst case NOT small, blocking window `codex.py` does not have,
 #    traded deliberately for the correlation safety mismatch 3 requires on a
 #    wire with no id echo. (The child-death sub-case of this worst case is
 #    now bounded much tighter in practice by the M1/M2 fixes in note 10:

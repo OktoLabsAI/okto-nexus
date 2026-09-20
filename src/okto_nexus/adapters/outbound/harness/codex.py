@@ -52,8 +52,8 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, Callable, Iterator, Mapping, Sequence
 
-from ...domain.base import utc_now_iso
-from ...domain.harness import (
+from ....domain.base import utc_now_iso
+from ....domain.harness import (
     STATUS_STARTING,
     STEER_TIMING_IMMEDIATE,
     HarnessCapabilities,
@@ -62,7 +62,7 @@ from ...domain.harness import (
     HarnessSession,
     new_harness_session_id,
 )
-from ...errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 
 __all__ = ["CodexAppServerConnector"]
 
@@ -267,7 +267,7 @@ class _CodexTransport:
                 bufsize=1,  # line-buffered - no framing beyond LF is expected
             )
         except OSError as exc:
-            # Matches the house pattern harness_claude_code.py's start() uses
+            # Matches the house pattern claude_code_stream.py's start() uses
             # for the identical subprocess.Popen() call - a missing/
             # unreadable binary is a CONFIG_ERROR, not a raw FileNotFoundError
             # leaking past this module's own error-classification convention.

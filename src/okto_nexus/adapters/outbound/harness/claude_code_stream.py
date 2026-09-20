@@ -142,8 +142,8 @@ from collections import deque
 from collections.abc import Iterator, Mapping, Sequence
 from typing import Any
 
-from ...domain.base import utc_now_iso
-from ...domain.harness import (
+from ....domain.base import utc_now_iso
+from ....domain.harness import (
     COMMAND_VERBS,
     STEER_TIMING_IMMEDIATE,
     STEER_TIMING_NEXT_TURN_BOUNDARY,
@@ -153,7 +153,7 @@ from ...domain.harness import (
     HarnessSession,
     new_harness_session_id,
 )
-from ...errors import ErrorCode, OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 
 __all__ = ["ClaudeCodeStreamConnector"]
 

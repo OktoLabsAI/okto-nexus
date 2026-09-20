@@ -28,7 +28,7 @@ import pytest
 
 from okto_nexus.domain.harness import HarnessCommand, HarnessEvent, HarnessSession
 from okto_nexus.errors import OktoNexusError
-from okto_nexus.adapters.outbound.harness_claude_code import ClaudeCodeStreamConnector
+from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
 
 _HAS_REAL_CLAUDE = shutil.which("claude") is not None
 requires_real_claude = pytest.mark.skipif(
