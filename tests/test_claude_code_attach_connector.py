@@ -184,20 +184,31 @@ def test_discover_missing_directory_returns_empty(tmp_path: Path) -> None:
 # probe()
 # --------------------------------------------------------------------------- #
 def test_probe_missing_registry_is_negative_not_raising(tmp_path: Path) -> None:
+    """LIMITATION 3: reason is "registry_not_found", not the old generic
+    "not_found" fallback - a missing registry file (no session at this pid)
+    must not share a reason string with a missing KEY file (a different
+    cause; see test_probe_missing_key_file_reason_is_distinct_from_missing_registry),
+    and category="no_session" is the operator-facing triage bucket."""
     connector = ClaudeCodeAttachConnector(999_999, sessions_dir=tmp_path)
     result = connector.probe()
     assert isinstance(result, ProbeResult)
     assert result.ok is False
-    assert result.reason == "not_found"
+    assert result.reason == "registry_not_found"
+    assert result.category == "no_session"
 
 
 def test_probe_non_interactive_session_is_negative(tmp_path: Path) -> None:
+    """LIMITATION 3: reason is "not_interactive_session" (kind explicitly
+    present but not 'interactive' - a normal `claude -p` session, not
+    breakage), distinct from a registry that omits 'kind' entirely (schema
+    drift - see test_probe_registry_missing_kind_field_is_protocol_drift_not_headless)."""
     pid = _live_pid()
     _write_registry(tmp_path, pid, kind="headless")
     connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
     result = connector.probe()
     assert result.ok is False
-    assert result.reason == "validation_error"
+    assert result.reason == "not_interactive_session"
+    assert result.category == "no_session"
 
 
 def test_probe_protocol_mismatch_is_loud_and_negative(tmp_path: Path) -> None:
@@ -210,6 +221,8 @@ def test_probe_protocol_mismatch_is_loud_and_negative(tmp_path: Path) -> None:
     assert result.ok is False
     assert result.reason == "protocol_mismatch"
     assert result.peer_protocol == 2
+    assert result.category == "protocol_drift"
+    assert result.peer_protocol_verified is False
 
 
 def test_probe_succeeds_against_live_fake_socket(
@@ -489,7 +502,12 @@ def test_probe_never_raises_on_embedded_null_byte_in_socket_path(tmp_path: Path)
 
     assert isinstance(result, ProbeResult)
     assert result.ok is False
-    assert result.reason == "config_error"
+    # LIMITATION 3: was the literal string "config_error" (repeating the
+    # OktoNexusError code, not naming the cause) - now specific and, in
+    # particular, distinct from a malformed KEY file's reason (see
+    # test_key_file_unparseable_reason_is_distinct_from_socket_path_malformed).
+    assert result.reason == "socket_path_malformed"
+    assert result.category == "protocol_drift"
 
 
 def test_start_raises_oktonexuserror_not_valueerror_on_embedded_null_byte(
@@ -567,7 +585,11 @@ def test_probe_and_start_agree_when_key_file_exists_but_is_unparseable(
 
     result = connector.probe()
     assert result.ok is False
-    assert result.reason == "config_error"
+    # LIMITATION 3: distinct from the embedded-NUL socket-path case above -
+    # both previously shared the generic "config_error" reason despite being
+    # unrelated causes.
+    assert result.reason == "key_file_malformed_json"
+    assert result.category == "protocol_drift"
 
     with pytest.raises(OktoNexusError) as exc:
         connector.start(owning_agent_id="agent-1")
@@ -1267,3 +1289,373 @@ def test_res_a2_concurrent_events_consumers_each_get_the_full_stream(
         assert results.get("B") == expected, (
             f"trial {trial}: consumer B did not get the full stream: {results.get('B')}"
         )
+
+
+# --------------------------------------------------------------------------- #
+# LIMITATION 3 - cc-socks breakage detection (this task)
+#
+# The connector already had probe()/ProbeResult from an earlier round. The gap
+# this section closes: many genuinely different failure causes collapsed into
+# the SAME generic `reason` string via probe()'s `details.get("reason",
+# exc.code.lower())` fallback ("not_found" covered a missing registry file
+# AND a missing key file; "config_error" covered a corrupted registry, an
+# unparseable key file, a NUL byte in a socket path, and an ambiguous key-file
+# set - four unrelated causes, one string). That violates the task's own bar:
+# "an operator should be able to tell 'Claude Code changed its protocol'
+# apart from 'no session is running' and from 'wrong permissions' ...
+# distinct, attributable outcome - not one generic error."
+#
+# Every raise site in this module now sets an explicit, UNIQUE `reason` plus
+# a coarse `category` in `("ok", "protocol_drift", "no_session", "permission",
+# "internal")` - `category` is the operator's triage bucket (maps 1:1 onto the
+# task's three-way ask, plus "internal" for this code's own unanticipated
+# failures); `reason` stays the precise, machine-stable code. Neither is a
+# structural guarantee that a REAL future Claude Code release will be caught -
+# nobody can test the future. What is proven here is narrower and honest: five
+# specific, observable registry/key-file shapes each produce a distinct,
+# attributable outcome, and a change that moves one of those specific fields
+# will land in one of these buckets rather than a generic catch-all.
+# --------------------------------------------------------------------------- #
+
+
+def test_probe_missing_key_file_reason_is_distinct_from_missing_registry(
+    tmp_path: Path,
+) -> None:
+    """Registry and socket are fine; only the key file is absent. This must
+    NOT report the same reason as a missing registry file - conflating the
+    two loses exactly the attributability the task requires."""
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"))
+    # deliberately no _write_key() call
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+
+    result = connector.probe()
+
+    assert result.ok is False
+    assert result.reason == "key_file_not_found"
+    assert result.category == "no_session"
+    assert result.reason != "registry_not_found"
+
+
+def test_probe_registry_missing_kind_field_is_protocol_drift_not_headless(
+    tmp_path: Path,
+) -> None:
+    """A registry JSON that omits the 'kind' field entirely (every EV-CC-001
+    capture had one) is schema drift - a genuine signal Claude Code may have
+    changed cc-socks - and must be distinguishable from a registry that
+    explicitly and legitimately reports kind='headless' (a normal `claude -p`
+    session, not breakage). Before this fix both hit the exact same
+    generic-ish 'not interactive' branch with no way to tell them apart."""
+    pid = _live_pid()
+    payload = {
+        "pid": pid,
+        "sessionId": "sess-abc123",
+        "version": "2.1.278",
+        "peerProtocol": 1,
+        "messagingSocketPath": str(tmp_path / "peer.sock"),
+        # no "kind" key at all
+    }
+    (tmp_path / f"{pid}.json").write_text(json.dumps(payload), encoding="utf-8")
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+
+    result = connector.probe()
+
+    assert result.ok is False
+    assert result.reason == "registry_missing_kind_field"
+    assert result.category == "protocol_drift"
+
+    # The legitimate-headless-session case must land in a DIFFERENT bucket.
+    _write_registry(tmp_path, pid, kind="headless")
+    headless_result = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path).probe()
+    assert headless_result.reason == "not_interactive_session"
+    assert headless_result.category == "no_session"
+    assert headless_result.reason != result.reason
+
+
+@pytest.mark.skipif(os.geteuid() == 0, reason="root bypasses file permission checks")
+def test_probe_permission_denied_registry_is_a_distinct_permission_category(
+    tmp_path: Path,
+) -> None:
+    """A registry file this OS user cannot read (EACCES) must be attributed
+    to 'wrong permissions', not misreported as 'no session running' - the
+    exact conflation the task calls out (both previously mapped bare OSError
+    -> NOT_FOUND with a "the session may have ended" message, which is FALSE
+    for a permissions problem)."""
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"))
+    registry_path = tmp_path / f"{pid}.json"
+    registry_path.chmod(0o000)
+    try:
+        connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+        result = connector.probe()
+    finally:
+        registry_path.chmod(0o600)  # restore so tmp_path cleanup can remove it
+
+    assert result.ok is False
+    assert result.reason == "registry_unreadable"
+    assert result.category == "permission"
+    assert result.reason != "registry_not_found"
+
+
+@pytest.mark.skipif(os.geteuid() == 0, reason="root bypasses file permission checks")
+def test_probe_permission_denied_key_file_is_a_distinct_permission_category(
+    tmp_path: Path,
+) -> None:
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"))
+    key_path = _write_key(tmp_path, pid)
+    key_path.chmod(0o000)
+    try:
+        connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+        result = connector.probe()
+    finally:
+        key_path.chmod(0o600)
+
+    assert result.ok is False
+    assert result.reason == "key_file_unreadable"
+    assert result.category == "permission"
+
+
+def test_probe_success_reports_peer_protocol_verified_true_on_exact_match(
+    tmp_path: Path, fake_server: _FakeSocketServer
+) -> None:
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path), peer_protocol=1)
+    _write_key(tmp_path, pid)
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path, connect_timeout_s=1.0)
+
+    result = connector.probe()
+
+    assert result.ok is True
+    assert result.category == "ok"
+    assert result.peer_protocol_verified is True
+
+
+def test_probe_success_reports_peer_protocol_unverified_when_field_absent(
+    tmp_path: Path, fake_server: _FakeSocketServer
+) -> None:
+    """The registry omitting 'peerProtocol' entirely must NOT probe
+    identically to a confirmed match - schema drift alone (no contradicting
+    value) does not refuse (see _check_peer_protocol), but the earlier
+    module docstring's claim that this "downgrades to a warning" was not
+    actually backed by anything inspectable: ok=True and peer_protocol=None
+    look, to a caller who never thought to check peer_protocol is None,
+    identical to a fully confirmed probe. peer_protocol_verified makes the
+    distinction explicit and impossible to miss."""
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path), peer_protocol=None)
+    _write_key(tmp_path, pid)
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path, connect_timeout_s=1.0)
+
+    result = connector.probe()
+
+    assert result.ok is True  # schema drift alone is not refused
+    assert result.peer_protocol is None
+    assert result.peer_protocol_verified is False
+
+
+def test_probe_success_records_peer_features_without_enforcing_them(
+    tmp_path: Path, fake_server: _FakeSocketServer
+) -> None:
+    """peerFeatures is recorded (so a caller CAN watch for drift) but never
+    enforced - the connector consumes no named feature today, so gating on
+    this list would only produce false refusals on an unrelated Anthropic
+    addition. A registry with a feature list that has never been seen before
+    must still probe ok=True."""
+    pid = _live_pid()
+    _write_registry(
+        tmp_path,
+        pid,
+        socket_path=str(fake_server.sock_path),
+        peerFeatures=["notify_idle", "some_brand_new_future_feature"],
+    )
+    _write_key(tmp_path, pid)
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path, connect_timeout_s=1.0)
+
+    result = connector.probe()
+
+    assert result.ok is True
+    assert result.peer_features == ("notify_idle", "some_brand_new_future_feature")
+
+
+def test_probe_result_docstring_states_ok_is_not_proof_of_delivery() -> None:
+    """Mirrors test_send_docstring_states_the_ack_less_limitation_plainly:
+    a positive, binding assertion that ProbeResult's own docstring states
+    plainly that ok=True proves preconditions only, never delivery - the
+    task's explicit "do not let the probe imply otherwise" requirement."""
+    doc = (ProbeResult.__doc__ or "").lower()
+    assert "not proof" in doc or "never proves" in doc or "no probe can" in doc
+    assert "ack" in doc
+
+
+def test_probe_success_detail_does_not_claim_delivery(
+    tmp_path: Path, fake_server: _FakeSocketServer
+) -> None:
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path))
+    _write_key(tmp_path, pid)
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path, connect_timeout_s=1.0)
+
+    result = connector.probe()
+
+    detail = result.detail.lower()
+    # "will be received" is deliberately NOT in this list: the real detail
+    # text negates it ("is not proof of delivery ... cannot confirm a later
+    # send() reaches the peer") - a naive substring check on the positive
+    # phrase would false-positive on that negation. Check the positive
+    # over-claims that would actually be wrong if present verbatim.
+    for over_claim in ("delivered", "confirms delivery", "guarantees delivery"):
+        assert over_claim not in detail
+    assert "not proof of delivery" in detail
+
+
+def test_key_file_ambiguous_reason_is_specific(tmp_path: Path) -> None:
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"))
+    _write_key(tmp_path, pid, key_hash="aaaa")
+    _write_key(tmp_path, pid, key_hash="bbbb")
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+
+    result = connector.probe()
+
+    assert result.ok is False
+    assert result.reason == "key_file_ambiguous"
+    assert result.category == "protocol_drift"
+
+
+def test_key_file_missing_token_field_reason_is_specific(tmp_path: Path) -> None:
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"))
+    key_path = tmp_path / f"{pid}.deadbeef.key"
+    key_path.write_text(json.dumps({"procStart": "1", "pidDomain": "darwin"}), encoding="utf-8")
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+
+    result = connector.probe()
+
+    assert result.ok is False
+    assert result.reason == "key_file_missing_token_field"
+    assert result.category == "protocol_drift"
+
+
+def test_every_ok_false_probe_reason_maps_to_a_known_category(tmp_path: Path) -> None:
+    """Exercise several distinct real failure shapes end to end and confirm
+    `category` lands in the fixed, documented vocabulary. This is a spot
+    check, NOT the exhaustive audit (a hand-picked list of scenarios can
+    never enumerate every raise site) - see
+    test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category
+    below for the structural, source-level audit that actually is
+    exhaustive."""
+    known_categories = {"ok", "protocol_drift", "no_session", "permission", "internal"}
+
+    scenarios: list[ProbeResult] = []
+
+    connector = ClaudeCodeAttachConnector(999_999, sessions_dir=tmp_path)
+    scenarios.append(connector.probe())
+
+    pid = _live_pid()
+    _write_registry(tmp_path, pid, kind="headless")
+    scenarios.append(ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path).probe())
+
+    _write_registry(tmp_path, pid, socket_path=str(tmp_path / "peer.sock"), peer_protocol=2)
+    scenarios.append(ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path).probe())
+
+    for scenario in scenarios:
+        assert scenario.ok is False
+        assert scenario.category in known_categories, (scenario.reason, scenario.category)
+        assert scenario.category != "ok"
+
+
+#: Methods this audit holds to the reason+category contract: everything
+#: ``probe()``/``start()`` call to check an attach PRECONDITION (registry
+#: shape, process liveness, protocol value, key file shape, socket
+#: shape/ownership), plus the pid-reuse guard (an environmental "is this
+#: still the same session" check, the same family). Deliberately EXCLUDES
+#: ``send()``'s own basic input-validation raises (wrong verb, empty
+#: content, a session this connector never started) - those are ordinary
+#: API-contract violations by NEXUS'S OWN CALLER, not cc-socks breakage
+#: signals, and forcing them into "protocol_drift"/"no_session"/
+#: "permission" would misattribute a programming error as a transport
+#: problem. Named explicitly (not "every function") so a new attach-path
+#: check added later must be added here too, on purpose, not swept in or
+#: silently skipped by accident.
+_ATTACH_PRECONDITION_METHODS = {
+    "_read_registry",
+    "_resolve_socket_path",
+    "_find_key_file",
+    "_read_key",
+    "_check_process_alive",
+    "_check_peer_protocol",
+    "_check_socket_ownership",
+    "_check_socket_is_socket",
+    "start",
+    "_raise_pid_reuse_guard",
+}
+
+
+def test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category() -> None:
+    """Exhaustive structural audit (AST, not a hand-picked scenario list -
+    the earlier version of this test claimed to be exhaustive via a
+    hardcoded ``known_categories`` set while only ever exercising THREE
+    scenarios; a fourth raise site missing "category" entirely would have
+    silently passed it, because ``probe()``'s own fallback
+    (``details.get("category", _CATEGORY_INTERNAL)``) fills in a
+    valid-looking default for exactly that mistake).
+
+    Walks every ``OktoNexusError(...)`` call site inside
+    ``_ATTACH_PRECONDITION_METHODS`` above and asserts its ``details`` dict
+    literal has BOTH a ``"reason"`` key and a ``"category"`` key, so a raise
+    site that forgets either one fails this test even if no test happens to
+    exercise that exact code path today - this is the failing-first
+    regression test for the defect class this task closes (a raise site
+    with no explicit "reason" silently inherited a generic fallback string
+    from ``exc.code.lower()``, and no "category" existed at all before this
+    task).
+
+    First run against the pre-fix module found 3 unlisted misses beyond the
+    ones the hand-written tests above already targeted:
+    ``start()``'s own connect-then-close OSError branch and (before being
+    excluded above as out of scope) ``send()``'s three input-validation
+    raises - confirming this structural audit catches what scenario-based
+    tests alone did not.
+    """
+    import ast
+    import inspect
+
+    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+
+    source = inspect.getsource(mod)
+    tree = ast.parse(source)
+
+    missing: list[tuple[int, str]] = []
+    call_count = 0
+    for func_node in ast.walk(tree):
+        if not isinstance(func_node, ast.FunctionDef):
+            continue
+        if func_node.name not in _ATTACH_PRECONDITION_METHODS:
+            continue
+        for node in ast.walk(func_node):
+            if not (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)):
+                continue
+            if node.func.id != "OktoNexusError":
+                continue
+            call_count += 1
+            # Signature is OktoNexusError(code, message, details) - details
+            # is always the 3rd positional arg in this module (never a
+            # kwarg, never omitted: every call site attaches structured
+            # context).
+            details_arg = node.args[2] if len(node.args) >= 3 else None
+            if not isinstance(details_arg, ast.Dict):
+                missing.append((node.lineno, "details is not a literal dict"))
+                continue
+            keys = {
+                key.value
+                for key in details_arg.keys
+                if isinstance(key, ast.Constant) and isinstance(key.value, str)
+            }
+            missing_keys = {"reason", "category"} - keys
+            if missing_keys:
+                missing.append((node.lineno, f"missing {sorted(missing_keys)}"))
+
+    # Sanity floor so this audit can't silently pass by matching nothing.
+    assert call_count >= 15, f"expected many OktoNexusError call sites, found {call_count}"
+    assert missing == [], f"OktoNexusError call sites missing reason/category: {missing}"

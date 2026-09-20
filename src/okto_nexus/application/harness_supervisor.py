@@ -54,6 +54,71 @@ are the ones a reviewer will want justified rather than assumed:
   background pump for a ``send_only`` connector and :meth:`send` drains its
   finite ``events()`` synchronously right after every send instead - the one
   place that connector shape can ever produce an event.
+
+Harness-to-harness relaying, and its loop protection (limitation 2 closed
+here). :meth:`_on_inbox_delivery` forwards an ordinary target-grammar
+message into a live harness's connector - including a message sent BY
+another currently-live harness's own agent, e.g. via its ``notify_target``
+at :meth:`open` time. That is a deliberate relay (an operator/agent set
+``notify_target`` on session A to session B's own agent id - the API
+already treats that as an instruction to relay, D10), not an accident, and
+it must work. What must NOT work is the degenerate case: A and B (or a
+longer chain back to A) notify-targeting each other so that every
+``turn_completed`` re-triggers the next, forever.
+
+* **What distinguishes a legitimate relay from a runaway cascade: DEPTH.**
+  A cycle-check over the live session graph was considered and rejected -
+  it would forbid a deliberate, ACYCLIC A->B->C hand-off chain (three
+  DIFFERENT harnesses relaying in sequence, never revisiting a prior node)
+  for no real safety reason, and it requires maintaining a graph rather
+  than one integer. A bounded hop counter (:data:`DEFAULT_MAX_RELAY_DEPTH`,
+  overridable via the ``max_relay_depth`` constructor kwarg) provably
+  terminates in at most that many hops regardless of the chain's shape -
+  that termination guarantee is the actual property needed, so it is what
+  is built. A rate limit (N forwards per second) was also considered and
+  rejected: it bounds throughput, not chain length, so a slow cascade
+  (seconds between hops, well within any sane rate) would sail through it
+  indefinitely while a legitimate BURST of several independent, unrelated
+  relay hops in the same second would be throttled for no reason.
+* **Where the depth lives: supervisor-side, on the supervisor's OWN
+  ``_LiveSession`` bookkeeping - not on any frozen type.**
+  :class:`~okto_nexus.domain.harness.HarnessEvent` and
+  :class:`~okto_nexus.domain.harness.HarnessSession` are frozen (this
+  feature's own absolute rule); riding the depth on the message body that
+  :meth:`_deliver_notable_message` composes was considered, since that
+  body is this module's own JSON and not frozen - but it only threads
+  depth through the ONE call shape that originates a relay (a D10 auto
+  notable-message), not through a harness explicitly authoring an ordinary
+  message via ``message_create`` to hand work to another harness, which
+  carries free-text the supervisor does not compose and cannot annotate.
+  Attributing depth to the SOURCE SESSION itself (:attr:`_LiveSession.
+  relay_depth` / ``relay_depth_updated_at``), read off ``from_agent_id`` ->
+  its live session at forward time, covers both call shapes uniformly with
+  no change to ``MessageService`` (owned by a sibling agent this session;
+  ABSOLUTE RULE 3) and no new port. The depth is recorded on the TARGET
+  session's own bookkeeping inside :meth:`send` itself - the ONE place
+  anything ever writes :attr:`_LiveSession.relay_depth` - so a session
+  reached through the ORDINARY, non-relay path (a direct :meth:`send` call
+  from an MCP/HTTP tool) resets its bookkeeping to 0 rather than silently
+  inheriting a stale depth from an unrelated relay chain that happened
+  earlier in that same session's life. ``relay_depth_ttl_s`` bounds how
+  long a source session's depth stays "live" for this purpose, so a slow,
+  legitimate, sporadic relay pattern (hops minutes apart) never
+  accumulates depth across unrelated conversations the way a fast runaway
+  cascade would.
+* **The failure mode when the cap IS hit: LOUD, never a silent drop.**
+  This project's own recurring failure signature (EV-REV-003, SYS-10,
+  RES-claude-code-attach.md) is a conclusion presented as safe when it was
+  never actually observed to be. A refused relay publishes AND persists a
+  synthetic ``kind="error"`` :class:`~okto_nexus.domain.harness.HarnessEvent`
+  (:meth:`_report_relay_cascade_blocked`) attributed to the session whose
+  forward was refused, live (subscribers) AND durable (replay), plus a
+  stderr breadcrumb - never merely a ``return`` with nothing to observe.
+  This deliberately BYPASSES :meth:`_handle_event` /
+  :meth:`_deliver_notable_message`: routing the block event through the
+  normal notable-message path would create ANOTHER message from that
+  session's own agent, which would re-enter this SAME relay path on its
+  next delivery - the loop guard manufacturing a loop of its own.
 """
 
 from __future__ import annotations
@@ -62,6 +127,7 @@ import functools
 import json
 import sys
 import threading
+import time
 from dataclasses import dataclass
 from typing import Any, Iterable, Mapping
 
@@ -113,6 +179,23 @@ _SEND_ONLY_ALLOWED_VERBS: frozenset[str] = frozenset({"send_turn"})
 #: meaningfully delays ``serve`` noticing and moving on to the next one.
 DEFAULT_START_TIMEOUT_SECONDS = 30.0
 DEFAULT_CLOSE_TIMEOUT_SECONDS = 10.0
+#: Harness-to-harness relay loop protection (limitation 2; see the module
+#: docstring's "Harness-to-harness relaying" section for the full design
+#: rationale). A relay chain longer than this many hops is refused, loudly
+#: (:meth:`HarnessSupervisor._report_relay_cascade_blocked`), rather than
+#: run forever. 4 is generous enough for a deliberate multi-harness
+#: hand-off (A->B->C->D) while catching a 2-party ping-pong (A<->B) within
+#: two round trips.
+DEFAULT_MAX_RELAY_DEPTH = 4
+#: How long a source session's recorded relay depth stays "live" for the
+#: NEXT forward's depth computation before being treated as 0 (a fresh,
+#: unrelated chain) again. Generous relative to how fast a REAL cascade
+#: reproduces (sub-second to low-single-digit-second hops in every
+#: connector this project ships) so it never masks one, while still being
+#: short enough that two harnesses relaying sporadically, minutes apart,
+#: are never throttled by history that has nothing to do with their
+#: current exchange.
+DEFAULT_RELAY_DEPTH_TTL_SECONDS = 30.0
 #: Bound for one forwarded inbox delivery (SYS-03/UAT-05 follow-up): a
 #: connector's own ``send`` can genuinely block on a transport write/ack
 #: (e.g. pi's ``_send_turn`` awaits a reply up to its own command timeout),
@@ -156,6 +239,22 @@ class _LiveSession:
     #: wired. Unsubscribed in _claim_for_reap - the same single place
     #: anything leaves the live registry.
     inbox_subscription: Any = None
+    #: Harness-to-harness relay depth bookkeeping (limitation 2 fix - see
+    #: the module docstring's "Harness-to-harness relaying" section). The
+    #: depth this session's CURRENT activity was forwarded in at, 0 meaning
+    #: "not currently mid-relay-chain" (a fresh open, or the last thing
+    #: this session did was a direct, non-relay send()). Written ONLY by
+    #: HarnessSupervisor.send (its `_relay_depth` kwarg) - never by the
+    #: forwarding callback directly - so a direct send() through the
+    #: ordinary MCP/HTTP path always resets it, rather than silently
+    #: inheriting a stale value from an unrelated earlier relay chain.
+    relay_depth: int = 0
+    #: `time.monotonic()` timestamp of the last relay_depth write; paired
+    #: with `HarnessSupervisor._relay_depth_ttl_s` so a depth this old is
+    #: treated as expired (0) rather than extending an unrelated later
+    #: chain. Monotonic, not the injected Clock's `now_iso()`, because this
+    #: is purely an internal decay window, never a domain timestamp.
+    relay_depth_updated_at: float = 0.0
 
 
 @dataclass(slots=True)
@@ -224,6 +323,8 @@ class HarnessSupervisor:
         start_timeout_s: float = DEFAULT_START_TIMEOUT_SECONDS,
         close_timeout_s: float = DEFAULT_CLOSE_TIMEOUT_SECONDS,
         forward_timeout_s: float = DEFAULT_FORWARD_TIMEOUT_SECONDS,
+        max_relay_depth: int = DEFAULT_MAX_RELAY_DEPTH,
+        relay_depth_ttl_s: float = DEFAULT_RELAY_DEPTH_TTL_SECONDS,
     ) -> None:
         self._cf = connection_factory
         self._clock = clock
@@ -239,6 +340,10 @@ class HarnessSupervisor:
         self._start_timeout_s = float(start_timeout_s)
         self._close_timeout_s = float(close_timeout_s)
         self._forward_timeout_s = float(forward_timeout_s)
+        # Harness-to-harness relay loop protection (limitation 2) - see
+        # DEFAULT_MAX_RELAY_DEPTH / DEFAULT_RELAY_DEPTH_TTL_SECONDS.
+        self._max_relay_depth = int(max_relay_depth)
+        self._relay_depth_ttl_s = float(relay_depth_ttl_s)
 
         self._lock = threading.RLock()
         self._live: dict[str, _LiveSession] = {}
@@ -501,7 +606,12 @@ class HarnessSupervisor:
     # already carries the verb, so there is no reason to fork into three)
     # ------------------------------------------------------------------ #
     def send(
-        self, session_id: str, verb: str, payload: Mapping[str, Any] | None = None
+        self,
+        session_id: str,
+        verb: str,
+        payload: Mapping[str, Any] | None = None,
+        *,
+        _relay_depth: int | None = None,
     ) -> None:
         """Deliver ``verb`` (``send_turn`` / ``steer`` / ``interrupt`` / ``end``)
         to a live session. Capability-gates BEFORE calling the connector
@@ -516,10 +626,27 @@ class HarnessSupervisor:
         drain is bounded by construction (the connector's own docstring:
         "never blocks, never polls... a finite iterator"), not by a
         supervisor-imposed timeout.
+
+        ``_relay_depth`` is INTERNAL - only :meth:`_on_inbox_delivery`
+        passes it (see the module docstring's "Harness-to-harness
+        relaying" section), giving the depth ``_resolve_relay_depth``
+        already decided this forward may run at. Every OTHER caller (every
+        MCP/HTTP tool, ``_best_effort_teardown``, every direct test call)
+        leaves it ``None``, which resets this session's
+        :attr:`_LiveSession.relay_depth` bookkeeping to 0 - this is the
+        ONE place that field is ever written, deliberately, so a session
+        reached through the ordinary, non-relay path never inherits a
+        stale depth left over from an unrelated earlier relay chain.
+        Written BEFORE the connector is called, so a fast connector (the
+        real hazard this guards: one that replies before this call even
+        returns) can never race ahead of its own session's own bookkeeping.
         """
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)
+        with self._lock:
+            live.relay_depth = _relay_depth if _relay_depth is not None else 0
+            live.relay_depth_updated_at = time.monotonic()
         command = HarnessCommand(
             session_id=session_id, verb=verb, payload=dict(payload or {})
         )
@@ -595,23 +722,27 @@ class HarnessSupervisor:
         :meth:`_log_best_effort_failure`, never raised back to the
         publisher.
 
-        Two failure-isolation guards, both deliberate:
+        Guards, in order (see the module docstring's "Harness-to-harness
+        relaying" section for the full design rationale behind the second
+        one):
 
-        * A message whose ``from_agent_id`` is itself a CURRENTLY-LIVE
-          harness session's ``owning_agent_id`` (this one, or any other) is
-          never forwarded. Without this, D10's own notable-event
-          auto-message (a harness's ``turn_completed`` delivered as a
-          message FROM its own agent) can cascade: two live sessions each
-          ``notify_target``-ing the other's agent would ping-pong forever
-          (A's turn completes -> message -> forwarded into B as a turn ->
-          B's turn completes -> message -> forwarded into A -> ...), and
-          SYS-09 already proves multiple harnesses live concurrently in one
-          workspace, so this is reachable, not theoretical. This is
-          strictly BROADER than the trivial self-addressed case
-          (``notify_target`` pointed at the harness's own agent_id) that
-          the same check also catches - a ``direct`` target does NOT
-          exclude the sender at the routing layer the way group targets do
-          (see ``MessageService._resolve_recipients``'s own docstring).
+        * **Same-session self-address is unconditionally refused, at any
+          depth.** A message whose ``from_agent_id`` is THIS session's own
+          ``owning_agent_id`` is never forwarded, full stop - a ``direct``
+          target does not exclude the sender at the routing layer the way
+          group targets do (see ``MessageService._resolve_recipients``'s
+          own docstring), so a session's ``notify_target`` pointed at
+          itself is reachable and always degenerate: there is no legitimate
+          reading of "harness relays to itself" as intentional
+          orchestration, unlike A->B, so this is not depth-limited, it is
+          simply never done.
+        * **A message from ANY OTHER currently-live harness's agent IS now
+          forwarded** (the limitation 2 fix - this previously matched the
+          same blanket block as the self-address case above; it no longer
+          does), bounded by :meth:`_resolve_relay_depth`'s hop cap so a
+          deliberate A->B relay works while an A<->B (or longer) runaway
+          cascade is refused, loudly
+          (:meth:`_report_relay_cascade_blocked`), once the cap is reached.
         * A message with no non-empty string ``body`` is skipped, not
           forwarded as an empty turn every connector's own payload
           validation would reject anyway (``pi``/``codex``:
@@ -627,15 +758,25 @@ class HarnessSupervisor:
         connector's key choice as long as it also reads text/content.
         """
         from_agent_id = message.get("from_agent_id")
-        if isinstance(from_agent_id, str) and from_agent_id in self._live_owning_agent_ids():
+        if isinstance(from_agent_id, str) and from_agent_id == owning_agent_id:
             return
         body = message.get("body")
         if not isinstance(body, str) or not body:
             return
+        relay_depth = 0
+        if isinstance(from_agent_id, str):
+            relay_depth = self._resolve_relay_depth(from_agent_id)
+            if relay_depth is None:
+                self._report_relay_cascade_blocked(
+                    target_session_id=session_id, from_agent_id=from_agent_id
+                )
+                return
         payload = {"text": body, "content": body}
         try:
             self._bounded_call(
-                lambda: self.send(session_id, "send_turn", payload),
+                lambda: self.send(
+                    session_id, "send_turn", payload, _relay_depth=relay_depth
+                ),
                 timeout_s=self._forward_timeout_s,
                 label="forwarding an inbox delivery",
             )
@@ -644,13 +785,91 @@ class HarnessSupervisor:
                 "forwarding an inbox delivery to the harness connector", session_id
             )
 
-    def _live_owning_agent_ids(self) -> frozenset[str]:
-        """The ``owning_agent_id`` of every CURRENTLY-live harness session -
-        the harness-to-harness cascade guard's own source of truth, read
-        fresh on every delivery (a session opening/closing between two
-        forwards is reflected immediately, with no caching to go stale)."""
+    def _resolve_relay_depth(self, from_agent_id: str) -> int | None:
+        """The depth THIS forward would run at, or ``None`` if it would
+        exceed :attr:`_max_relay_depth` (the caller's signal to refuse the
+        forward and report it - see :meth:`_report_relay_cascade_blocked`).
+
+        Read-only - does NOT itself write :attr:`_LiveSession.relay_depth`;
+        that happens inside :meth:`send` (see its own docstring for why the
+        write belongs there, not here). ``from_agent_id``'s depth is looked
+        up against ITS OWN live session (0 if it has none, or if its own
+        last-recorded depth is older than :attr:`_relay_depth_ttl_s` - an
+        expired chain is treated as a fresh one), so a message from an
+        ordinary, non-harness sender (an operator) resolves to depth 1 -
+        the first hop of a brand new chain - exactly like a harness's own
+        first, organic ``turn_completed``.
+        """
+        now = time.monotonic()
         with self._lock:
-            return frozenset(live.session.owning_agent_id for live in self._live.values())
+            source_depth = 0
+            for live in self._live.values():
+                if live.session.owning_agent_id != from_agent_id:
+                    continue
+                if (
+                    live.relay_depth > 0
+                    and (now - live.relay_depth_updated_at) <= self._relay_depth_ttl_s
+                ):
+                    source_depth = live.relay_depth
+                break
+        new_depth = source_depth + 1
+        if new_depth > self._max_relay_depth:
+            return None
+        return new_depth
+
+    def _report_relay_cascade_blocked(
+        self, *, target_session_id: str, from_agent_id: str
+    ) -> None:
+        """LOUD, attributable refusal (never a silent drop - see the module
+        docstring) when :meth:`_resolve_relay_depth` refuses a forward.
+
+        Publishes AND persists a synthetic ``kind="error"``
+        :class:`~okto_nexus.domain.harness.HarnessEvent` for the session
+        the forward WOULD have reached, deliberately calling
+        :meth:`~HarnessSubscriberRegistry.publish`/:meth:`_persist_event`
+        directly rather than going through :meth:`_handle_event` /
+        :meth:`_deliver_notable_message`: routing this through the notable
+        -message path would create ANOTHER message from this session's own
+        agent, which would re-enter THIS SAME forwarding path on its next
+        delivery - the loop guard manufacturing a loop of its own. A
+        stderr breadcrumb is also printed, matching every other
+        best-effort failure in this module, so this is visible even to an
+        operator watching neither the subscriber stream nor event replay.
+
+        ``native_event`` is a value this module itself invents
+        (``"nexus/relay_depth_exceeded"``), disclosed here rather than left
+        implicit: :class:`HarnessEvent`'s own docstring describes
+        ``native_event`` as the harness's own name for an occurrence, and
+        this is the one synthetic exception - the supervisor's own
+        refusal, not anything any harness emitted.
+        """
+        with self._lock:
+            target = self._live.get(target_session_id)
+        if target is None:  # pragma: no cover - reaped between refusal and this report
+            return
+        event = HarnessEvent(
+            session_id=target_session_id,
+            harness_kind=target.session.harness_kind,
+            kind="error",
+            native_event="nexus/relay_depth_exceeded",
+            occurred_at=self._clock.now_iso(),
+            payload={
+                "reason": "harness-to-harness relay depth exceeded; forward refused",
+                "from_agent_id": from_agent_id,
+                "max_relay_depth": self._max_relay_depth,
+            },
+        )
+        try:
+            self._subscribers.publish(event)
+        except Exception:  # noqa: BLE001 - a broken registry must never hide the refusal itself
+            pass
+        self._persist_event(event)
+        print(
+            "[okto-nexus] harness supervisor: relay refused - depth would exceed "
+            f"max_relay_depth={self._max_relay_depth} (from '{from_agent_id}' into "
+            f"session {target_session_id}).",
+            file=sys.stderr,
+        )
 
     # ------------------------------------------------------------------ #
     # close (explicit, operator/agent-requested end)

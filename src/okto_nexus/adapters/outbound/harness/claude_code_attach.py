@@ -64,6 +64,33 @@ entry point here therefore fails LOUDLY with an actionable
 hang, never a retry loop) and :meth:`ClaudeCodeAttachConnector.probe` exists
 specifically so a supervisor can detect breakage before it ever calls
 :meth:`~ClaudeCodeAttachConnector.send`.
+
+LIMITATION 3 (this module's part of it): "the socket is missing" is only one
+of several ways this protocol can break, and treating it as the only one
+would miss shape changes that leave a socket present but unusable. Every
+locally checkable surface is therefore probed: the registry file's shape
+(including the total ABSENCE of a field this connector depends on, not
+merely a bad value - see ``_read_registry``'s ``"kind"`` check), the
+``peerProtocol`` version field, the key file's shape, and the socket's own
+file type/ownership. ``peerFeatures`` is recorded but deliberately NOT
+enforced (see ``_normalize_peer_features``) - this connector depends on no
+named feature, so refusing on an unrecognised entry would only produce false
+refusals. Every attach-precondition failure - everything :meth:`probe` or
+:meth:`start` can raise, plus the pid-reuse guard and :meth:`send`'s own
+transport-level ``OSError`` - carries a unique, machine-stable ``reason``
+PLUS a coarse ``category`` (``"protocol_drift"`` / ``"no_session"`` /
+``"permission"`` / ``"internal"``) so an operator can tell "Claude Code
+changed its protocol" apart from "no session is running" apart from "wrong
+permissions" - see :class:`ProbeResult`'s docstring for the full vocabulary.
+(:meth:`send`'s three basic input-validation raises - an unsupported verb,
+empty content, a session this connector never started - are ordinary
+API-contract errors from NEXUS'S OWN CALLER, not cc-socks signals, and are
+deliberately out of this scope.)
+None of this proves a real future protocol change will be caught: it proves
+that THESE specific, observable registry/key/socket shapes each produce a
+distinct, attributable outcome now, and that a change landing in one of
+those fields will not be silently swallowed by a generic catch-all the way
+an earlier version of this module would have swallowed it.
 """
 
 from __future__ import annotations
@@ -134,12 +161,41 @@ _INJECTION_BANNER = (
 _KEY_FILE_RE = re.compile(r"^(?P<pid>\d+)\.(?P<hash>[0-9a-fA-F]+)\.key$")
 
 #: The only ``peerProtocol`` value EV-CC-001 proved works. A registry
-#: reporting a DIFFERENT value is a loud, deliberate signal of a protocol
-#: bump this module has not been validated against (see ``probe``); a
-#: registry OMITTING the field entirely is treated as older/newer schema
-#: drift and only downgrades to a warning (module docstring, "graceful vs.
-#: loud" distinction).
+#: reporting a DIFFERENT, PRESENT value is refused loudly (CONFIG_ERROR,
+#: reason ``"protocol_mismatch"``) - deliberately NOT "warn and proceed".
+#: Why refuse rather than guess a numerically-higher value is a compatible
+#: bump: this transport is fire-and-forget with NO ack (EV-CC-001), so a
+#: wrong guess is silently unrecoverable - there is no response to notice
+#: the mistake in, ever. Proceeding on an unverified guess would write
+#: possibly-malformed frames into a user's live interactive session on a
+#: transport that is also a prompt-injection surface (module docstring).
+#: Refusing costs only the ATTACH upside (ADR 0004 D7b is explicit: "if D7b
+#: breaks, the core feature survives" because D7a stays primary) - that
+#: asymmetry (unrecoverable silent corruption vs. a recoverable, loud,
+#: reported refusal of an optional capability) is why this never becomes a
+#: soft warning. A registry OMITTING the field entirely does NOT refuse -
+#: schema drift alone, with no CONTRADICTING value, is not proof of
+#: incompatibility - but ``ProbeResult.peer_protocol_verified`` is
+#: ``False`` in that case so "confirmed compatible" and "unverified,
+#: proceeding anyway" are never silently the same thing to a caller.
 _PROVEN_PEER_PROTOCOL = 1
+
+#: Coarse triage buckets for ``ProbeResult.category`` / every
+#: ``OktoNexusError.details["category"]`` this module raises. ``reason``
+#: stays the precise, unique, machine-stable code (never shared across two
+#: different underlying causes - that collapsing is the exact defect this
+#: task closes); ``category`` groups those precise codes into the buckets
+#: an operator actually has to act on differently, mapping directly onto
+#: the task's own ask: tell "Claude Code changed its protocol"
+#: (``PROTOCOL_DRIFT``) apart from "no session is running"
+#: (``NO_SESSION``) apart from "wrong permissions" (``PERMISSION``), plus
+#: ``INTERNAL`` for this code's own unanticipated failures and ``OK`` for a
+#: clean probe.
+_CATEGORY_OK = "ok"
+_CATEGORY_PROTOCOL_DRIFT = "protocol_drift"
+_CATEGORY_NO_SESSION = "no_session"
+_CATEGORY_PERMISSION = "permission"
+_CATEGORY_INTERNAL = "internal"
 
 
 def _default_sessions_dir() -> Path:
@@ -220,9 +276,43 @@ class ProbeResult:
     Exists so a supervisor can poll ``probe()`` on an idle schedule and
     detect ``cc-socks`` breaking on a Claude Code upgrade BEFORE the next
     real ``send`` - the task's explicit "detect breakage early" requirement.
-    ``reason`` is always a short machine-stable code (e.g.
-    ``"process_not_found"``, ``"protocol_mismatch"``); ``detail`` is the
-    human-actionable message.
+    ``reason`` is always a short, UNIQUE, machine-stable code identifying the
+    SPECIFIC check that failed - e.g. ``"registry_not_found"`` is never the
+    same string as ``"key_file_not_found"``, and ``"registry_malformed_json"``
+    is never the same string as ``"key_file_malformed_json"``, even though an
+    earlier version of this module mapped several unrelated causes onto one
+    shared ``ErrorCode``-derived fallback string. ``category`` groups those
+    precise codes into the four buckets an operator actually has to triage
+    on, mapping directly onto the task's own three-way ask plus one more:
+    ``"ok"``, ``"protocol_drift"`` (the registry/key shape moved - Claude
+    Code likely changed cc-socks), ``"no_session"`` (nothing attachable at
+    this pid right now - normal, not evidence of breakage), ``"permission"``
+    (this OS user cannot read a file cc-socks itself wrote 0600 for this
+    SAME user - an environment problem, not a protocol change) or
+    ``"internal"`` (this probe's own code hit something unanticipated).
+    ``detail`` is the human-actionable message.
+
+    IMPORTANT - ``ok=True`` proves only that every LOCALLY CHECKABLE
+    precondition held at probe time: registry shape, process liveness, the
+    ``peerProtocol`` value (if present), key file shape, socket shape and
+    ownership, and a bare connect-then-close. ``cc-socks`` has NO
+    application-level ack (EV-CC-001), so this is NOT proof of delivery -
+    no probe can prove that a LATER ``send()`` is actually received or
+    rendered by the peer. Read ``ok=True`` as "attach preconditions look
+    sound", never as "delivery is guaranteed" or "delivery will succeed".
+
+    ``peer_protocol_verified`` is ``True`` only when the registry reported
+    ``peerProtocol`` and it exactly matched the one proven value
+    (``_PROVEN_PEER_PROTOCOL``). A registry OMITTING ``peerProtocol``
+    entirely still probes ``ok=True`` (schema drift alone, with no
+    contradicting value, is not refused - see ``_check_peer_protocol``), but
+    ``peer_protocol_verified=False`` in that case makes the "unverified, not
+    confirmed" distinction visible without a caller having to know to check
+    ``peer_protocol is None`` themselves.
+
+    ``peer_features`` is the raw ``peerFeatures`` list read from the
+    registry, recorded but deliberately never enforced - see the module
+    docstring's note on why gating delivery on that list was declined.
     """
 
     ok: bool
@@ -230,6 +320,9 @@ class ProbeResult:
     detail: str
     peer_protocol: int | None = None
     version: str | None = None
+    category: str = _CATEGORY_INTERNAL
+    peer_protocol_verified: bool = False
+    peer_features: tuple[str, ...] | None = None
 
 
 class ClaudeCodeAttachConnector:
@@ -326,13 +419,38 @@ class ClaudeCodeAttachConnector:
                 "have ended, the pid may be wrong, or this is not an "
                 "interactive session (`claude -p` sessions have no "
                 "registry entry).",
-                {"pid": self._pid, "path": str(path)},
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_not_found",
+                    "category": _CATEGORY_NO_SESSION,
+                },
+            ) from exc
+        except PermissionError as exc:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                f"Could not read the session registry at {path}: permission "
+                f"denied ({exc}). cc-socks registry files are written 0600 "
+                "for THIS SAME OS user - being unable to read one is an "
+                "environment/permissions problem, not evidence the "
+                "protocol changed or that no session is running.",
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_unreadable",
+                    "category": _CATEGORY_PERMISSION,
+                },
             ) from exc
         except OSError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"Could not read the session registry at {path}: {exc}.",
-                {"pid": self._pid, "path": str(path)},
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_read_failed",
+                    "category": _CATEGORY_INTERNAL,
+                },
             ) from exc
         try:
             data = json.loads(raw)
@@ -342,14 +460,46 @@ class ClaudeCodeAttachConnector:
                 f"Session registry at {path} is not valid JSON - cc-socks "
                 "registry schema has likely changed in a Claude Code "
                 "release.",
-                {"pid": self._pid, "path": str(path)},
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_malformed_json",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
             ) from exc
         if not isinstance(data, dict):
             raise OktoNexusError(
                 ErrorCode.CONFIG_ERROR,
                 f"Session registry at {path} did not decode to a JSON "
                 "object - cc-socks registry schema has likely changed.",
-                {"pid": self._pid, "path": str(path)},
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_malformed_shape",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
+            )
+        if "kind" not in data:
+            # Distinct from "kind present but not 'interactive'" below: EVERY
+            # registry EV-CC-001 captured had a 'kind' field. Its total
+            # absence is schema drift - a genuine signal the registry shape
+            # changed - not the normal, legitimate state of a `claude -p`
+            # (headless) session, which DOES have the field, just a
+            # different value. Conflating the two would misreport a real
+            # protocol-drift signal as the ordinary "nothing to attach to
+            # here" case.
+            raise OktoNexusError(
+                ErrorCode.CONFIG_ERROR,
+                f"Session registry at {path} has no 'kind' field - every "
+                "registry EV-CC-001 captured had one. cc-socks registry "
+                "schema has likely changed; refusing to guess whether this "
+                "session is attachable.",
+                {
+                    "pid": self._pid,
+                    "path": str(path),
+                    "reason": "registry_missing_kind_field",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
             )
         kind = data.get("kind")
         if kind != "interactive":
@@ -358,7 +508,12 @@ class ClaudeCodeAttachConnector:
                 f"pid {self._pid} is a {kind!r} Claude Code session, not "
                 "'interactive'. `claude -p` sessions have no cc-socks "
                 "socket and cannot be attached to.",
-                {"pid": self._pid, "kind": kind},
+                {
+                    "pid": self._pid,
+                    "kind": kind,
+                    "reason": "not_interactive_session",
+                    "category": _CATEGORY_NO_SESSION,
+                },
             )
         return data
 
@@ -378,7 +533,11 @@ class ClaudeCodeAttachConnector:
                     "messagingSocketPath containing an embedded null "
                     "character - cc-socks registry schema is corrupted or "
                     "has changed shape.",
-                    {"pid": self._pid, "reason": "config_error"},
+                    {
+                        "pid": self._pid,
+                        "reason": "socket_path_malformed",
+                        "category": _CATEGORY_PROTOCOL_DRIFT,
+                    },
                 )
             return Path(raw_path)
         # Registry omitted the field: schema drift, degrade to the
@@ -391,19 +550,38 @@ class ClaudeCodeAttachConnector:
             for entry in self._sessions_dir.glob(f"{self._pid}.*.key"):
                 if _KEY_FILE_RE.match(entry.name):
                     candidates.append(entry)
+        except PermissionError as exc:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                f"Could not list {self._sessions_dir} looking for pid "
+                f"{self._pid}'s auth token: permission denied ({exc}).",
+                {
+                    "pid": self._pid,
+                    "reason": "key_directory_unreadable",
+                    "category": _CATEGORY_PERMISSION,
+                },
+            ) from exc
         except OSError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"Could not list {self._sessions_dir} looking for pid "
                 f"{self._pid}'s auth token: {exc}.",
-                {"pid": self._pid},
+                {
+                    "pid": self._pid,
+                    "reason": "key_directory_read_failed",
+                    "category": _CATEGORY_INTERNAL,
+                },
             ) from exc
         if not candidates:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"No auth token file (<pid>.<hash>.key) for pid {self._pid} "
                 f"under {self._sessions_dir}. The session may have ended.",
-                {"pid": self._pid},
+                {
+                    "pid": self._pid,
+                    "reason": "key_file_not_found",
+                    "category": _CATEGORY_NO_SESSION,
+                },
             )
         if len(candidates) > 1:
             raise OktoNexusError(
@@ -411,18 +589,43 @@ class ClaudeCodeAttachConnector:
                 f"Found {len(candidates)} auth token files for pid "
                 f"{self._pid}; expected exactly one - cc-socks registry "
                 "schema has likely changed.",
-                {"pid": self._pid, "candidates": [str(c) for c in candidates]},
+                {
+                    "pid": self._pid,
+                    "candidates": [str(c) for c in candidates],
+                    "reason": "key_file_ambiguous",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
             )
         return candidates[0]
 
     def _read_key(self, key_path: Path) -> dict[str, Any]:
         try:
             raw = key_path.read_text(encoding="utf-8")
+        except PermissionError as exc:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                f"Could not read auth token file {key_path}: permission "
+                f"denied ({exc}). This file is written 0600 for THIS SAME "
+                "OS user - being unable to read it is an "
+                "environment/permissions problem, not a sign the session "
+                "ended or the protocol changed.",
+                {
+                    "pid": self._pid,
+                    "path": str(key_path),
+                    "reason": "key_file_unreadable",
+                    "category": _CATEGORY_PERMISSION,
+                },
+            ) from exc
         except OSError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"Could not read auth token file {key_path}: {exc}.",
-                {"pid": self._pid, "path": str(key_path)},
+                {
+                    "pid": self._pid,
+                    "path": str(key_path),
+                    "reason": "key_file_read_failed",
+                    "category": _CATEGORY_INTERNAL,
+                },
             ) from exc
         try:
             data = json.loads(raw)
@@ -431,7 +634,12 @@ class ClaudeCodeAttachConnector:
                 ErrorCode.CONFIG_ERROR,
                 f"Auth token file {key_path} is not valid JSON - cc-socks "
                 "token schema has likely changed.",
-                {"pid": self._pid, "path": str(key_path)},
+                {
+                    "pid": self._pid,
+                    "path": str(key_path),
+                    "reason": "key_file_malformed_json",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
             ) from exc
         token = data.get("peerToken") if isinstance(data, dict) else None
         if not isinstance(token, str) or not token:
@@ -439,7 +647,12 @@ class ClaudeCodeAttachConnector:
                 ErrorCode.CONFIG_ERROR,
                 f"Auth token file {key_path} has no usable 'peerToken' - "
                 "cc-socks token schema has likely changed.",
-                {"pid": self._pid, "path": str(key_path)},
+                {
+                    "pid": self._pid,
+                    "path": str(key_path),
+                    "reason": "key_file_missing_token_field",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
+                },
             )
         return data
 
@@ -461,19 +674,31 @@ class ClaudeCodeAttachConnector:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"No process with pid {self._pid} is running.",
-                {"pid": self._pid, "reason": "process_not_found"},
+                {
+                    "pid": self._pid,
+                    "reason": "process_not_found",
+                    "category": _CATEGORY_NO_SESSION,
+                },
             ) from exc
         except PermissionError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"pid {self._pid} exists but is not owned by this user.",
-                {"pid": self._pid, "reason": "process_not_owned"},
+                {
+                    "pid": self._pid,
+                    "reason": "process_not_owned",
+                    "category": _CATEGORY_PERMISSION,
+                },
             ) from exc
         except OSError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"Could not check whether pid {self._pid} is alive: {exc}.",
-                {"pid": self._pid, "reason": "process_check_failed"},
+                {
+                    "pid": self._pid,
+                    "reason": "process_check_failed",
+                    "category": _CATEGORY_INTERNAL,
+                },
             ) from exc
 
     def _check_peer_protocol(self, registry: dict[str, Any]) -> int | None:
@@ -483,12 +708,16 @@ class ClaudeCodeAttachConnector:
                 ErrorCode.CONFIG_ERROR,
                 f"pid {self._pid} reports peerProtocol={peer_protocol!r}; "
                 f"only {_PROVEN_PEER_PROTOCOL!r} is proven (EV-CC-001). "
-                "Refusing to guess at an unproven wire format.",
+                "Refusing to guess at an unproven wire format - see "
+                "_PROVEN_PEER_PROTOCOL's module comment for why an "
+                "unrecognised value (even a plausible-looking incremented "
+                "one) is refused rather than tried anyway.",
                 {
                     "pid": self._pid,
                     "peer_protocol": peer_protocol,
                     "version": registry.get("version"),
                     "reason": "protocol_mismatch",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
                 },
             )
         return peer_protocol if isinstance(peer_protocol, int) else None
@@ -518,13 +747,14 @@ class ClaudeCodeAttachConnector:
                     "socket_uid": st.st_uid,
                     "expected_uid": expected_uid,
                     "reason": "socket_owner_mismatch",
+                    "category": _CATEGORY_PERMISSION,
                 },
             )
 
     def _check_socket_is_socket(self, socket_path: Path) -> None:
         try:
             st = os.stat(socket_path)
-        except OSError as exc:
+        except FileNotFoundError as exc:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 f"Socket {socket_path} for pid {self._pid} is not "
@@ -533,6 +763,31 @@ class ClaudeCodeAttachConnector:
                     "pid": self._pid,
                     "socket_path": str(socket_path),
                     "reason": "socket_not_found",
+                    "category": _CATEGORY_NO_SESSION,
+                },
+            ) from exc
+        except PermissionError as exc:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                f"Socket {socket_path} for pid {self._pid} is not "
+                f"reachable: permission denied ({exc}).",
+                {
+                    "pid": self._pid,
+                    "socket_path": str(socket_path),
+                    "reason": "socket_path_unreadable",
+                    "category": _CATEGORY_PERMISSION,
+                },
+            ) from exc
+        except OSError as exc:
+            raise OktoNexusError(
+                ErrorCode.NOT_FOUND,
+                f"Socket {socket_path} for pid {self._pid} is not "
+                f"reachable: {exc}.",
+                {
+                    "pid": self._pid,
+                    "socket_path": str(socket_path),
+                    "reason": "socket_stat_failed",
+                    "category": _CATEGORY_INTERNAL,
                 },
             ) from exc
         if not stat.S_ISSOCK(st.st_mode):
@@ -544,6 +799,7 @@ class ClaudeCodeAttachConnector:
                     "pid": self._pid,
                     "socket_path": str(socket_path),
                     "reason": "not_a_socket",
+                    "category": _CATEGORY_PROTOCOL_DRIFT,
                 },
             )
         self._check_socket_ownership(socket_path, st)
@@ -566,14 +822,25 @@ class ClaudeCodeAttachConnector:
             return self._probe_body()
         except OktoNexusError as exc:
             details = exc.details or {}
+            peer_protocol = (
+                details.get("peer_protocol")
+                if isinstance(details.get("peer_protocol"), int)
+                else None
+            )
             return ProbeResult(
                 ok=False,
+                # Every raise site in this module now sets an explicit
+                # "reason" - the ``exc.code.lower()`` fallback stays only as
+                # a last-resort backstop for a site this review missed, not
+                # as the normal path (that collapsing several unrelated
+                # causes into one generic string was the defect this task
+                # closes - see the module-level LIMITATION 3 note).
                 reason=details.get("reason", exc.code.lower()),
                 detail=exc.message,
-                peer_protocol=details.get("peer_protocol")
-                if isinstance(details.get("peer_protocol"), int)
-                else None,
+                peer_protocol=peer_protocol,
                 version=details.get("version"),
+                category=details.get("category", _CATEGORY_INTERNAL),
+                peer_protocol_verified=False,
             )
         except Exception as exc:  # noqa: BLE001 - deliberate last-resort safety
             # net: "never raises" must hold against unknown-unknowns too, not
@@ -583,6 +850,7 @@ class ClaudeCodeAttachConnector:
                 ok=False,
                 reason="internal_error",
                 detail=f"Unexpected failure probing pid {self._pid}: {exc}",
+                category=_CATEGORY_INTERNAL,
             )
 
     def _probe_body(self) -> ProbeResult:
@@ -610,6 +878,11 @@ class ClaudeCodeAttachConnector:
                     "peer_protocol": peer_protocol,
                     "version": registry.get("version"),
                     "reason": "connect_failed",
+                    # The listener being gone is ordinarily "the session
+                    # just ended", not a protocol change - every shape check
+                    # above (registry, peerProtocol, key file, socket file
+                    # type/ownership) already passed by the time this runs.
+                    "category": _CATEGORY_NO_SESSION,
                 },
             ) from exc
         finally:
@@ -618,9 +891,23 @@ class ClaudeCodeAttachConnector:
         return ProbeResult(
             ok=True,
             reason="ok",
-            detail=f"pid {self._pid} is attachable.",
+            # Deliberately NOT "is attachable" / "attach will succeed" - see
+            # ProbeResult's own docstring: cc-socks is ack-less (EV-CC-001),
+            # so no probe, however thorough, can prove a later send()'s
+            # delivery. This states only what was actually checked.
+            detail=(
+                f"pid {self._pid}: every locally checkable attach "
+                "precondition holds (registry shape, process alive, "
+                "protocol value, key file, socket shape/ownership, and a "
+                "bare connect-then-close). This is not proof of delivery: "
+                "cc-socks has no ack, so it cannot confirm a later send() "
+                "reaches the peer."
+            ),
             peer_protocol=peer_protocol,
             version=registry.get("version"),
+            category=_CATEGORY_OK,
+            peer_protocol_verified=(peer_protocol == _PROVEN_PEER_PROTOCOL),
+            peer_features=_normalize_peer_features(registry.get("peerFeatures")),
         )
 
     # ------------------------------------------------------------------ #
@@ -664,7 +951,12 @@ class ClaudeCodeAttachConnector:
                 ErrorCode.NOT_FOUND,
                 f"Could not connect to {socket_path} for pid {self._pid}: "
                 f"{exc}. The session may have just ended.",
-                {"pid": self._pid, "socket_path": str(socket_path)},
+                {
+                    "pid": self._pid,
+                    "socket_path": str(socket_path),
+                    "reason": "connect_failed",
+                    "category": _CATEGORY_NO_SESSION,
+                },
             ) from exc
         finally:
             sock.close()
@@ -785,7 +1077,17 @@ class ClaudeCodeAttachConnector:
                 f"{self._socket_path}: {exc}. The session may have ended "
                 "or the cc-socks transport may have changed shape "
                 "(undocumented protocol - see ADR 0004 D7b).",
-                {"pid": self._pid, "socket_path": str(self._socket_path)},
+                {
+                    "pid": self._pid,
+                    "socket_path": str(self._socket_path),
+                    "reason": "send_socket_error",
+                    # Ambiguous by construction (module docstring: this is
+                    # exactly the "session ended" OR "protocol changed"
+                    # ambiguity this transport's lack of an ack makes
+                    # unresolvable from here) - left uncategorized on
+                    # purpose rather than guessing one of the two.
+                    "category": _CATEGORY_INTERNAL,
+                },
             )
             self._record_local_event(
                 kind="error",
@@ -947,7 +1249,15 @@ class ClaudeCodeAttachConnector:
         error = OktoNexusError(
             code,
             message,
-            {"pid": self._pid, "reason": "pid_reuse_guard_tripped"},
+            {
+                "pid": self._pid,
+                "reason": "pid_reuse_guard_tripped",
+                # The original session ended (and possibly the pid was
+                # recycled) - operationally the same triage bucket as any
+                # other "nothing valid to attach to right now" case, not a
+                # protocol-drift or permissions signal.
+                "category": _CATEGORY_NO_SESSION,
+            },
         )
         self._record_local_event(
             kind="error",
@@ -983,6 +1293,29 @@ class ClaudeCodeAttachConnector:
         # An illegal pair (e.g. already ERRORED) is left as-is rather than
         # raised: a transport-level transition failure must never mask the
         # real error send() is already raising.
+
+
+def _normalize_peer_features(raw: Any) -> tuple[str, ...] | None:
+    """Record the registry's ``peerFeatures`` list, never enforce it.
+
+    Declined-scope note (task's "design considerations" ask): this
+    connector consumes no named feature - it always sends exactly one
+    ``{"type":"user",...}`` frame after one ``{"type":"auth",...}`` line,
+    regardless of what ``peerFeatures`` lists. Refusing or warning on an
+    unrecognised entry would produce a false refusal every time Anthropic
+    adds a feature this module has no reason to care about - the same
+    "unknown-but-compatible bump" failure mode the task warns against for
+    ``peerProtocol``, except here there is no proven baseline to compare
+    against at all (the list's membership was never validated, only its
+    presence observed once in EV-CC-001). Recording it lets a caller diff
+    it across probes to *watch* for drift without this module refusing on
+    it - anything not a list of ``str`` (schema drift on the FIELD's own
+    shape) degrades to ``None`` rather than raising, since nothing here
+    depends on it.
+    """
+    if isinstance(raw, list) and all(isinstance(item, str) for item in raw):
+        return tuple(raw)
+    return None
 
 
 def _computed_socket_path(pid: int, env: Mapping[str, str]) -> Path:

@@ -112,7 +112,9 @@ def make_message_service(factory, clock, *, notifier: Any = None) -> MessageServ
     return MessageService(**kwargs)
 
 
-def make_supervisor(factory, clock, *, messages=None, notifier: Any = None) -> HarnessSupervisor:
+def make_supervisor(
+    factory, clock, *, messages=None, notifier: Any = None, max_relay_depth: int | None = None
+) -> HarnessSupervisor:
     from okto_nexus.adapters.outbound.sqlite.harness_repo import (
         SqliteHarnessEventRepo,
         SqliteHarnessSessionRepo,
@@ -131,6 +133,8 @@ def make_supervisor(factory, clock, *, messages=None, notifier: Any = None) -> H
     )
     if notifier is not None:
         kwargs["inbox_notifier"] = notifier
+    if max_relay_depth is not None:
+        kwargs["max_relay_depth"] = max_relay_depth
     return HarnessSupervisor(**kwargs)
 
 
@@ -139,16 +143,20 @@ def register_agent(factory, clock, agent_id: str, **fields: Any) -> None:
         SqliteAgentRepo(clock).upsert(uow, agent_id=agent_id, **fields)
 
 
-def wired(tmp_path, name: str = "home"):
+def wired(tmp_path, name: str = "home", *, max_relay_depth: int | None = None):
     """One factory + clock + notifier + supervisor + message service, all
     sharing the SAME notifier instance - exactly the composition-root shape
     ``tools/messages.py``/``tools/harness.py`` wire for real (one shared
-    ``deps.inbox_delivery_notifier``)."""
+    ``deps.inbox_delivery_notifier``). ``max_relay_depth`` lets a cascade
+    test shrink the cap so it is reached in a small, deterministic number
+    of hops instead of the production default."""
     factory = make_factory(tmp_path, name)
     clock = _Clock()
     notifier = InMemoryInboxDeliveryNotifier() if InMemoryInboxDeliveryNotifier else None
     messages = make_message_service(factory, clock, notifier=notifier)
-    supervisor = make_supervisor(factory, clock, messages=messages, notifier=notifier)
+    supervisor = make_supervisor(
+        factory, clock, messages=messages, notifier=notifier, max_relay_depth=max_relay_depth
+    )
     return factory, clock, supervisor, messages
 
 
@@ -423,18 +431,90 @@ def test_delivery_row_is_unaffected_by_forward_outcome_either_way(tmp_path):
 
 
 # --------------------------------------------------------------------------- #
-# Harness-to-harness feedback loop (D8 failure isolation, cascade class)
+# Harness-to-harness relaying (limitation 2: the blanket guard above blocked
+# INTENTIONAL A->B relaying along with the runaway cascade it was meant to
+# stop). Design, spelled out here because it is the part a reviewer will
+# want justified rather than assumed:
+#
+# * ``notify_target`` pointed at another harness's agent is ALREADY the
+#   operator's declared intent to relay (D10 lets any session set it to
+#   anything the target grammar can resolve) - the old guard was refusing
+#   to honour an intent the API already accepted, not adding real safety
+#   beyond "no two harnesses may ever talk to each other at all".
+# * What distinguishes a legitimate A->B relay from a runaway cascade is
+#   DEPTH: a bounded number of consecutive forward-hops. A cycle-check over
+#   the live session graph was considered and rejected - it would forbid a
+#   deliberate, non-cyclic A->B->C chain (three harnesses handing work off
+#   in sequence, each a DIFFERENT agent) for no safety reason, and it is
+#   more state to keep consistent than a single integer. A depth cap
+#   provably terminates in O(max_relay_depth) hops with no graph to
+#   maintain; that termination guarantee is the property actually needed,
+#   so it is what is built (``max_relay_depth`` / ``DEFAULT_MAX_RELAY_DEPTH``
+#   in ``harness_supervisor.py``).
+# * That depth cannot ride on ``HarnessEvent`` or any frozen domain type
+#   (ABSOLUTE RULE 2), and this task may not touch ``MessageService`` or
+#   ``ports.py`` (ABSOLUTE RULE 3 - those files belong to sibling agents).
+#   So the state lives ENTIRELY supervisor-side, on the supervisor's own
+#   non-frozen ``_LiveSession`` bookkeeping: the depth a forward runs at is
+#   read off the SOURCE session's own ``relay_depth`` (0 if it was never
+#   itself the target of a forward, or if that forward has aged out past
+#   ``relay_depth_ttl_s``) and recorded onto the TARGET session inside
+#   ``HarnessSupervisor.send`` itself - the ONE place anything ever writes
+#   that field, so a session receiving a turn through the ORDINARY,
+#   non-relay path (a direct ``send()`` call, e.g. from an MCP/HTTP tool)
+#   resets its bookkeeping to 0 instead of inheriting a stale depth from an
+#   unrelated, long-past relay chain.
+# * The failure mode when the cap IS hit is LOUD: a ``kind="error"``
+#   ``HarnessEvent`` (``native_event="nexus/relay_depth_exceeded"``) is
+#   published to the target session's live subscribers AND persisted
+#   (durable, replayable) - see
+#   ``test_runaway_harness_to_harness_cascade_is_stopped_and_observable``,
+#   which asserts on that event directly, not merely on the forward count
+#   plateauing. A silently dropped message is exactly how SYS-03 hid for a
+#   whole phase; this task's own brief is explicit that a fourth instance
+#   of that pattern is not acceptable.
 # --------------------------------------------------------------------------- #
-def test_harness_to_harness_notable_messages_do_not_cascade(tmp_path):
-    """D10 already delivers a harness's OWN notable event (turn_completed)
-    as an ordinary message from its owning_agent_id. Without a guard, two
-    live harnesses notify-targeting each other's registered agent would
-    ping-pong forever: A's turn_completed -> forwarded into B as a turn ->
-    B's own turn_completed -> forwarded back into A -> ... SYS-09 already
-    proves 3 harnesses live concurrently in the same workspace, so this is
-    live-reachable, not theoretical. The forward path must never re-inject
-    a message sent BY a currently-live harness's own owning_agent_id back
-    into ANY live harness session."""
+class _AutoReplyConnector(FakeConnector):
+    """A :class:`FakeConnector` whose ``send`` immediately manufactures a
+    ``turn_completed`` reply on ITS OWN event stream.
+
+    Justification against the real protocol (RES-C1): every one of the
+    four connector matrix entries (H-PI, H-CX, H-CC, H-CA-as-receiver)
+    eventually emits SOME turn-completion signal after being sent a turn -
+    that is the one, generic, harness-agnostic fact this fake claims to
+    model, nothing about any one harness's specific wire shape, ordering or
+    timing beyond it. It exists ONLY to build a fast, fully-owned,
+    deterministic repro of a runaway A->B->A->B... cascade - the real
+    hazard the depth cap defends against - without depending on, or
+    claiming to faithfully emulate, any real harness binary. Driving an
+    actual cascade against real pi/codex/claude_code children is exactly
+    the kind of un-bounded, non-deterministic wait this task's rule 5
+    forbids for a unit-level regression test.
+    """
+
+    def send(self, session, command):
+        super().send(session, command)
+        if command.verb == "send_turn":
+            self.push_event(
+                make_event(
+                    self.session.session_id,
+                    kind="turn_completed",
+                    native_event="agent_settled",
+                )
+            )
+
+
+def test_harness_to_harness_relay_succeeds_for_a_single_legitimate_hop(tmp_path):
+    """THE FIX (limitation 2): a message sent BY a currently-live harness's
+    own owning_agent_id, addressed at ANOTHER live harness via
+    ``notify_target``, now reaches that harness's connector - this
+    previously asserted the opposite (``len(...) == 0`` for both sides; see
+    git history for the pre-fix version of this test) because the old
+    guard blocked every harness-to-harness message unconditionally, the
+    exact limitation this task closes. Session B here never itself
+    completes a turn in response (plain ``FakeConnector``, no auto-reply),
+    so this is a clean single-hop check, independent of the cascade-cap
+    mechanics exercised separately below."""
     factory, clock, supervisor, messages = wired(tmp_path)
     connector_a = FakeConnector(kind="pi")
     connector_b = FakeConnector(kind="pi")
@@ -457,12 +537,137 @@ def test_harness_to_harness_notable_messages_do_not_cascade(tmp_path):
         make_event(session_a.session_id, kind="turn_completed", native_event="agent_settled")
     )
 
-    # Give the pump + D10 delivery + (if unguarded) the cascading forward
-    # every chance to run.
-    time.sleep(0.3)
-
-    assert len(_send_turn_commands(connector_b)) == 0
+    assert wait_until(lambda: len(_send_turn_commands(connector_b)) == 1)
+    # B never replied (no auto-reply connector here), so nothing relays
+    # back into A - this is a single legitimate hop, not a cascade.
+    time.sleep(0.2)
     assert len(_send_turn_commands(connector_a)) == 0
+
+
+def test_runaway_harness_to_harness_cascade_is_stopped_and_observable(tmp_path):
+    """The companion case: two live harnesses notify-targeting EACH OTHER,
+    with a connector that (like every real harness, see
+    ``_AutoReplyConnector``) completes whatever turn it is sent - forming
+    exactly the runaway A->B->A->B... loop the relay-depth cap exists to
+    stop. ``max_relay_depth=2`` makes the cap deterministic and fast to
+    reach (traced by hand below) rather than depending on the TTL.
+
+    Hand-traced expected sequence (asserted below, not merely bounded):
+      hop 1: A's manually-pushed turn_completed -> message A->B -> depth 1
+             (<=2, allowed) -> connector_b.send (command #1) -> B
+             auto-replies its own turn_completed.
+      hop 2: B's turn_completed -> message B->A -> depth 2 (<=2, allowed)
+             -> connector_a.send (command #1) -> A auto-replies.
+      hop 3: A's turn_completed -> message A->B -> depth 3 (>2) -> BLOCKED,
+             reported, never reaches connector_b.
+    """
+    factory, clock, supervisor, messages = wired(tmp_path, max_relay_depth=2)
+    connector_a = _AutoReplyConnector(kind="pi")
+    connector_b = _AutoReplyConnector(kind="pi")
+    session_a = supervisor.open(
+        kind="pi",
+        connector=connector_a,
+        owning_agent_id="cascade-a",
+        project_root=mkproj(tmp_path, "proj-cascade-a"),
+        notify_target={"strategy": "direct", "agent_id": "cascade-b"},
+    )
+    session_b = supervisor.open(
+        kind="pi",
+        connector=connector_b,
+        owning_agent_id="cascade-b",
+        project_root=mkproj(tmp_path, "proj-cascade-b"),
+        notify_target={"strategy": "direct", "agent_id": "cascade-a"},
+    )
+
+    blocked_events: list[Any] = []
+    supervisor.subscribers.subscribe(session_a.session_id, blocked_events.append)
+    supervisor.subscribers.subscribe(session_b.session_id, blocked_events.append)
+
+    connector_a.push_event(
+        make_event(session_a.session_id, kind="turn_completed", native_event="agent_settled")
+    )
+
+    def _cascade_was_blocked() -> bool:
+        return any(
+            e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
+            for e in blocked_events
+        )
+
+    # OBSERVABLE, not a silent drop: this is the assertion that actually
+    # discriminates the fix from the old blanket guard (which would also
+    # leave both send counts at 0 forever - see the pre-fix version of
+    # this test in git history, which asserted exactly that and PASSED for
+    # the wrong reason).
+    assert wait_until(_cascade_was_blocked, timeout_s=5.0), (
+        "expected a kind='error' native_event='nexus/relay_depth_exceeded' "
+        "HarnessEvent on the blocked hop; none was published"
+    )
+
+    # Exactly two hops happened (hand-traced above), then the third was
+    # refused - relaying DID work (unlike the old guard) but never ran away.
+    assert len(_send_turn_commands(connector_a)) == 1
+    assert len(_send_turn_commands(connector_b)) == 1
+    # Stability: no further growth once the cap fires (real termination,
+    # not a race that happens to look stopped at assertion time).
+    time.sleep(0.3)
+    assert len(_send_turn_commands(connector_a)) == 1
+    assert len(_send_turn_commands(connector_b)) == 1
+
+    # Durable too (replay_events), not only the live subscription above -
+    # this is what makes the stop auditable after the fact, same standard
+    # D10 already holds every other harness event to.
+    blocked = next(
+        e for e in blocked_events
+        if e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
+    )
+    replayed = supervisor.replay_events(blocked.session_id)
+    assert any(
+        e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
+        for e in replayed
+    )
+
+
+def test_relay_from_another_live_harness_into_a_send_only_connector_only_ever_issues_send_turn(
+    tmp_path,
+):
+    """Capability rules hold under relay, not only under an operator-
+    originated forward (``test_forward_to_a_send_only_connector_only_ever_
+    issues_send_turn`` above already covers that case): a send_only
+    connector (D7b/cc-socks) can RECEIVE a relayed ``send_turn`` from
+    ANOTHER LIVE HARNESS but must never be asked to steer - exactly as it
+    never could from an operator, since the relay path reuses
+    ``HarnessSupervisor.send``'s existing capability guard rather than a
+    relay-specific bypass."""
+    factory, clock, supervisor, messages = wired(tmp_path)
+    caps = HarnessCapabilities(
+        send_only=True,
+        steer_timing=None,
+        interrupt_requires_settle_wait=False,
+        multiplexes_sessions=False,
+        observes_session_end=False,
+    )
+    source_connector = FakeConnector(kind="pi")
+    source_session = supervisor.open(
+        kind="pi",
+        connector=source_connector,
+        owning_agent_id="relay-source",
+        project_root=mkproj(tmp_path, "proj-relay-source"),
+        notify_target={"strategy": "direct", "agent_id": "relay-target-sendonly"},
+    )
+    target_connector = FakeConnector(kind="claude_code", capabilities=caps)
+    supervisor.open(
+        kind="claude_code",
+        connector=target_connector,
+        owning_agent_id="relay-target-sendonly",
+        project_root=mkproj(tmp_path, "proj-relay-target"),
+    )
+
+    source_connector.push_event(
+        make_event(source_session.session_id, kind="turn_completed", native_event="agent_settled")
+    )
+
+    assert wait_until(lambda: len(target_connector.sent_commands) == 1)
+    assert all(c.verb == "send_turn" for c in target_connector.sent_commands)
 
 
 def test_self_addressed_direct_message_does_not_loop(tmp_path):
