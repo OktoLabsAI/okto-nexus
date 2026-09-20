@@ -2,7 +2,7 @@
 
 - Branch: `feature/harness-integrations` (no commit to `main` until fully validated)
 - Design authority: [ADR 0004](../../docs/design/0004-harness-integrations.md)
-- Status: Phase 0 in progress
+- Status: Phases 0 and 1 COMPLETE; Phase 2 (freeze the port) next
 - Last updated: 2026-09-20
 
 ## Definition of Done (verbatim from the request)
@@ -22,7 +22,7 @@ TestClient calls do not count toward the DoD gate.
 |---|---|---|---|
 | Pi | `pi --mode rpc`, LF-framed JSON lines over child stdio | push/push | prior art, v0.85.1 live |
 | Codex | `codex app-server`, JSON-RPC 2.0 over stdio | push/push | live turn completed |
-| Claude Code | OPEN — see Phase 0 | push/push | 2 of 3 candidates proven |
+| Claude Code | `claude -p` stream-json (primary) + `cc-socks` inject (attach) | push/push | both proven; MCP-notification eliminated |
 
 Claude Code candidate ranking, to be settled by Phase 0 spikes:
 1. `/tmp/cc-socks/<pid>.sock` — native per-session unix socket. No plugin, no MCP, no mount.
@@ -34,7 +34,7 @@ Claude Code candidate ranking, to be settled by Phase 0 spikes:
 
 ## Phases
 
-### Phase 0 — Close the Claude Code substrate question (IN PROGRESS)
+### Phase 0 — Close the Claude Code substrate question (COMPLETE)
 
 - S0.1 Spike: does the Streamable-HTTP `/mcp` mount propagate custom server-initiated
   notifications the way stdio does? (running)
@@ -47,7 +47,7 @@ Claude Code candidate ranking, to be settled by Phase 0 spikes:
 
 Exit: D7 amended and committed.
 
-### Phase 1 — Evidence infrastructure (BLOCKS EVERYTHING)
+### Phase 1 — Evidence infrastructure (COMPLETE)
 
 No test in this repo binds a real socket today (`test_http_api.py` uses an in-process
 TestClient). Without this, no DoD evidence is producible.

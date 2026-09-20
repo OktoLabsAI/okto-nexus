@@ -146,36 +146,53 @@ Threads are per-process — a `turn/start` against a `threadId` from an exited p
 with `-32600 thread not found`, so the connector must persist enough state to call
 `thread/resume` rather than assume in-memory thread survival.
 
-### D7 — Claude Code is driven via custom MCP server-initiated notifications
+### D7 — Claude Code: TWO substrates (amended 2026-09-20, supersedes the MCP-notification plan)
 
-Anthropic's own shipped Discord plugin is the precedent. A long-lived MCP server pushes an
-unsolicited server->client JSON-RPC notification the instant an external event arrives
-(`external_plugins/discord/server.ts:875-884`):
+The original D7 proposed custom MCP `notifications/claude/*` push, on the strength of the
+Discord plugin precedent. **That substrate was tested and ELIMINATED** (EV-CC-002): proven
+negative across headless-HTTP, headless-stdio and interactive-HTTP, with the spike server
+patched to declare `capabilities.experimental['claude/channel']` exactly as the Discord plugin
+does. The notification is sent and the channel is open; it is simply never rendered into model
+context. Discord's delivery must use host-side wiring not exposed to arbitrary MCP servers.
 
-    mcp.notification({
-      method: 'notifications/claude/channel',
-      params: { content, meta: { chat_id, message_id, user, ... } },
-    })
+Two substrates ship, covering two genuinely different use cases:
 
-Claude Code's MCP client accepts unsolicited notifications on a custom `notifications/claude/*`
-namespace. Nexus already mounts an MCP app at `/mcp`, so this reuses the existing app with no
-new process.
+**D7a — `claude -p` stream-json (PRIMARY).** Nexus spawns and owns the session:
 
-Hooks are rejected as the primary channel: every hook fires only at a fixed lifecycle boundary,
-so it cannot deliver a Nexus-initiated message mid-turn or while idle. `SendMessage`/`ListAgents`
-are rejected as unverified for external processes.
+    claude -p --output-format stream-json --input-format stream-json --verbose
 
-Fallback (empirically proven, v2.1.278): `claude -p --output-format stream-json
---input-format stream-json --verbose` holds one process across many turns on a stable
-`session_id` — the same shape as pi `--mode rpc`.
+Proven on v2.1.278: one process held across two turns 8s apart, stable `session_id`, both
+answered, process alive until stdin closed. Documented, supported, stable flag surface. Same
+shape as pi `--mode rpc` and codex `app-server`, so it reuses the connector pattern.
 
-OPEN: the Discord proof is over stdio. Whether Nexus's Streamable-HTTP `/mcp` mount propagates
-custom notifications identically is under active spike. If it does not, D7 falls back to the
-stream-json path above.
+**D7b — `cc-socks` injection (ATTACH).** For a session the user ALREADY has open, which D7a
+structurally cannot reach. Transport: `/tmp/cc-socks/<pid>.sock`, one per INTERACTIVE session
+(`claude -p` sessions have none). Wire format is newline-delimited JSON with a REQUIRED auth
+line first:
 
-Security: a server pushing arbitrary notifications is a prompt-injection vector. The Discord
-plugin hardens against message content posing as system authority; Nexus must do the same for
-pushed content.
+    {"type":"auth","token":"<peerToken>"}
+    {"type":"user","message":{"role":"user","content":"..."}}
+
+Auth: per-session bearer token at `~/.claude/sessions/<pid>.<hash>.key` (0600), PLUS kernel
+`SO_PEERCRED`/`LOCAL_PEERPID` verification of the connecting process. Registry backing
+`ListAgents` is `~/.claude/sessions/<pid>.json`.
+
+Proven first-hand (EV-CC-001): a pure-stdlib Python client, no plugin/MCP/hook, delivered a
+marked message into this feature's own orchestrating session.
+
+**Known limit:** Nexus can send INTO sessions but CANNOT appear AS a peer in another session's
+`ListAgents`. Those registry files are written only by Claude Code itself; there is no socket
+RPC to inject an entry.
+
+**Risk accepted deliberately:** `cc-socks` is an undocumented private protocol and can break on
+any Claude Code release with no deprecation notice. This is why D7a is primary: if D7b breaks,
+the core feature survives and only the attach-to-existing-session capability is lost. D7b must
+therefore be isolated behind the same connector port as everything else, degrade gracefully,
+and never be on the critical path of the other two harnesses.
+
+Security: content injected via D7b renders to the model as a peer message, so it is a
+prompt-injection surface. Pushed content must be treated by the receiver as untrusted data and
+must not be able to pose as system authority.
 
 ## Constraints this feature must respect
 
