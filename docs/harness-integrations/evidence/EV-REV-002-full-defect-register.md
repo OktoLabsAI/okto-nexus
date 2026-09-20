@@ -195,3 +195,37 @@ The cc-socks `probe()` bare-`ValueError` finding (embedded NUL in `messagingSock
 graded CRITICAL by the first review pass and MINOR by the re-run. This register reflects the
 LATER grading. The remediation brief used the earlier, harsher framing, so the defect is being
 fixed regardless; the discrepancy is recorded here rather than silently reconciled.
+
+### Class C — the fake server contradicts the captured protocol, so the test proves nothing
+
+Discovered on the Pi connector, 2026-09-20. This is the most instructive finding of the project.
+
+Our OWN captured protocol reference
+(`docs/harness-integrations/research/pi-rpc-protocol-reference.md` section 6b) documents pi's real
+abort ordering as:
+
+    agent_end -> agent_settled -> response(abort, success:true)
+
+The settle arrives BEFORE the ack. The connector's fake server emitted the OPPOSITE order: the
+abort ack immediately, then the turn completing ~20ms later.
+
+Consequence: a test asserting "immediately after `interrupt()` returns, a reprompt must be
+refused" passed green. Rebuilt against pi's REAL documented order, `interrupt()` returned in
+0.2ms with the settle gate ALREADY open, and an immediate `send_turn` SUCCEEDED 0.08ms later —
+precisely the sequence the test claims is impossible.
+
+The abort/settle hang — the single failure mode flagged most loudly in the connector's own brief
+as "the classic hang in this protocol" — was completely unprotected, behind a passing test.
+
+Root cause of the gap: `_awaiting_settle` is an untyped boolean with no turn/generation identity,
+so it cannot distinguish this turn's settle from any other. The wrong mock ordering meant no test
+could expose that.
+
+**Rule now in force for every connector:** a fake server's wire behaviour must be justified
+against captured bytes from the real binary, not against how the implementer assumes the protocol
+works. When a fake is found to diverge, the FAKE is corrected FIRST and the existing tests re-run;
+the resulting failures are the proof the defect was real and hidden. All four connectors were
+instructed to audit their fakes against the captured evidence.
+
+A mock that contradicts captured reality is worse than no mock: it manufactures false confidence,
+and it is exactly how a green suite ships a hang.
