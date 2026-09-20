@@ -92,20 +92,61 @@ longer chain back to A) notify-targeting each other so that every
   message via ``message_create`` to hand work to another harness, which
   carries free-text the supervisor does not compose and cannot annotate.
   Attributing depth to the SOURCE SESSION itself (:attr:`_LiveSession.
-  relay_depth` / ``relay_depth_updated_at``), read off ``from_agent_id`` ->
-  its live session at forward time, covers both call shapes uniformly with
-  no change to ``MessageService`` (owned by a sibling agent this session;
-  ABSOLUTE RULE 3) and no new port. The depth is recorded on the TARGET
-  session's own bookkeeping inside :meth:`send` itself - the ONE place
-  anything ever writes :attr:`_LiveSession.relay_depth` - so a session
-  reached through the ORDINARY, non-relay path (a direct :meth:`send` call
-  from an MCP/HTTP tool) resets its bookkeeping to 0 rather than silently
+  relay_depth`), read off ``from_agent_id`` -> its live session at forward
+  time, covers both call shapes uniformly with no change to
+  ``MessageService`` (owned by a sibling agent this session; ABSOLUTE RULE
+  3) and no new port. The depth is recorded on the TARGET session's own
+  bookkeeping inside :meth:`send` itself - the ONE place anything ever
+  writes :attr:`_LiveSession.relay_depth` - so a session reached through
+  the ORDINARY, non-relay path (a direct :meth:`send` call from an
+  MCP/HTTP tool) resets its bookkeeping to 0 rather than silently
   inheriting a stale depth from an unrelated relay chain that happened
-  earlier in that same session's life. ``relay_depth_ttl_s`` bounds how
-  long a source session's depth stays "live" for this purpose, so a slow,
-  legitimate, sporadic relay pattern (hops minutes apart) never
-  accumulates depth across unrelated conversations the way a fast runaway
-  cascade would.
+  earlier in that same session's life.
+* **CHAIN IDENTITY, not elapsed-time-since-last-hop, is what continues the
+  count (fixing a real, reproduced bypass in an earlier version of this
+  design).** An earlier version of this module reset a source session's
+  depth to 0 whenever ``now - relay_depth_updated_at`` (the time of the
+  MOST RECENT hop) exceeded a TTL. That is defeated by ANY cascade paced
+  slower than the TTL, at ANY TTL magnitude: two live harnesses relaying
+  to each other every 31 seconds against a 30-second TTL sail through the
+  cap forever, because EVERY hop's own elapsed-since-the-hop-before-it is
+  ``> TTL`` by construction, so every hop is (wrongly) treated as hop 1 of
+  a brand new chain. This is not an edge case for this feature: an AI
+  agent harness's real turn-completion cadence (model latency + tool use)
+  is routinely well over 30 seconds, so the slow shape is the NORMAL one,
+  not the exotic one. Fix: each chain is given an identity
+  (:attr:`_LiveSession.relay_chain_id`, a plain :func:`~okto_nexus.domain.
+  base.new_id` token) the first time its depth goes 0 -> 1, and hop
+  counting for an ACTIVE chain never consults elapsed time at all - it
+  only asks "does the source session's live bookkeeping already carry a
+  chain id, and does it match". Elapsed time is used for exactly one
+  thing now: :attr:`_relay_chain_max_age_s` bounds how long a chain's
+  identity survives with NO further hops at all
+  (:attr:`_LiveSession.relay_chain_started_at`, the time the chain BEGAN,
+  never refreshed per-hop) before the NEXT hop attempt is treated as the
+  start of an unrelated, fresh chain - this is what keeps a long-finished
+  or long-abandoned relay from permanently poisoning a genuinely new,
+  later conversation between the same pair (the concern the old TTL was
+  legitimately trying to address, just measured against the wrong clock).
+  Sized generously (:data:`DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS`, default
+  30 minutes) relative to any real hop cadence, so it never fires mid
+  cascade, fast or slow - though a cascade paced slower than THAT bound
+  per hop would still eventually re-mint a fresh chain id and escape the
+  cap; that residual is a deliberate, documented floor (see the class
+  docstring), not an oversight, since no purely time-based signal can
+  fully close it without a request-scoped conversation id threaded through
+  ``MessageService`` (out of scope here - see ABSOLUTE RULE 3). Options
+  considered and rejected: keeping the old per-hop TTL but simply making
+  it bigger (does not fix the defect - it only moves the pacing threshold
+  a real cascade must exceed to defeat it, and the task's own reproduction
+  is magnitude-independent, not tuned to 30s); a pure hop-rate limiter
+  (bounds throughput, not chain length - a legitimate burst of unrelated
+  hops in the same window would be throttled for no reason, exactly as
+  rejected for the ORIGINAL depth-cap-vs-rate-limit choice above); riding
+  a correlation id through message metadata composed by ``MessageService``
+  (that service is sibling-owned and frozen for this task; also does not
+  cover the auto-notable-message call shape any more completely than
+  session-side state already does).
 * **The failure mode when the cap IS hit: LOUD, never a silent drop.**
   This project's own recurring failure signature (EV-REV-003, SYS-10,
   RES-claude-code-attach.md) is a conclusion presented as safe when it was
@@ -187,15 +228,21 @@ DEFAULT_CLOSE_TIMEOUT_SECONDS = 10.0
 #: hand-off (A->B->C->D) while catching a 2-party ping-pong (A<->B) within
 #: two round trips.
 DEFAULT_MAX_RELAY_DEPTH = 4
-#: How long a source session's recorded relay depth stays "live" for the
-#: NEXT forward's depth computation before being treated as 0 (a fresh,
-#: unrelated chain) again. Generous relative to how fast a REAL cascade
-#: reproduces (sub-second to low-single-digit-second hops in every
-#: connector this project ships) so it never masks one, while still being
-#: short enough that two harnesses relaying sporadically, minutes apart,
-#: are never throttled by history that has nothing to do with their
-#: current exchange.
-DEFAULT_RELAY_DEPTH_TTL_SECONDS = 30.0
+#: How long a relay CHAIN's identity survives with NO further hops at all
+#: (measured from when the chain STARTED, :attr:`_LiveSession.
+#: relay_chain_started_at` - never refreshed per-hop, unlike the retired
+#: per-hop TTL this replaces) before the next forward attempt is treated
+#: as the start of a fresh, unrelated chain rather than a continuation.
+#: Deliberately generous relative to ANY real hop cadence this project's
+#: connectors produce (an AI agent harness's turn-completion latency is
+#: routinely tens of seconds) so an active cascade - fast OR slow - is
+#: never masked by this decaying mid-chain, while still being short enough
+#: that two harnesses relaying sporadically, hours apart, are never
+#: throttled by a chain that has nothing to do with their current
+#: exchange. See the module docstring's "CHAIN IDENTITY, not
+#: elapsed-time-since-last-hop" section for why this is measured against
+#: chain age rather than inter-hop gap.
+DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS = 1800.0
 #: Bound for one forwarded inbox delivery (SYS-03/UAT-05 follow-up): a
 #: connector's own ``send`` can genuinely block on a transport write/ack
 #: (e.g. pi's ``_send_turn`` awaits a reply up to its own command timeout),
@@ -249,12 +296,27 @@ class _LiveSession:
     #: ordinary MCP/HTTP path always resets it, rather than silently
     #: inheriting a stale value from an unrelated earlier relay chain.
     relay_depth: int = 0
-    #: `time.monotonic()` timestamp of the last relay_depth write; paired
-    #: with `HarnessSupervisor._relay_depth_ttl_s` so a depth this old is
-    #: treated as expired (0) rather than extending an unrelated later
-    #: chain. Monotonic, not the injected Clock's `now_iso()`, because this
-    #: is purely an internal decay window, never a domain timestamp.
-    relay_depth_updated_at: float = 0.0
+    #: Identity of the relay chain this session's CURRENT ``relay_depth``
+    #: belongs to (``None`` when ``relay_depth`` is 0 - not mid-chain).
+    #: Minted fresh (:func:`~okto_nexus.domain.base.new_id`) the first
+    #: time a chain starts (depth 0 -> 1); propagated unchanged by every
+    #: subsequent hop in the SAME chain. This - not elapsed time - is what
+    #: :meth:`HarnessSupervisor._resolve_relay_depth` checks to decide
+    #: whether a forward continues an existing chain or starts a new one;
+    #: see the module docstring's "CHAIN IDENTITY, not
+    #: elapsed-time-since-last-hop" section for why.
+    relay_chain_id: str | None = None
+    #: `time.monotonic()` timestamp of when THIS chain (``relay_chain_id``)
+    #: STARTED - set once, at depth 0 -> 1, and never refreshed by later
+    #: hops in the same chain (unlike the retired per-hop-gap timestamp
+    #: this replaces). Paired with
+    #: `HarnessSupervisor._relay_chain_max_age_s` purely as a
+    #: garbage-collection bound: a chain that has produced no hop at all
+    #: in that long is treated as finished, so a later, genuinely new
+    #: conversation between the same pair is not permanently poisoned by
+    #: it. Monotonic, not the injected Clock's `now_iso()`, because this is
+    #: purely an internal decay window, never a domain timestamp.
+    relay_chain_started_at: float = 0.0
 
 
 @dataclass(slots=True)
@@ -324,7 +386,7 @@ class HarnessSupervisor:
         close_timeout_s: float = DEFAULT_CLOSE_TIMEOUT_SECONDS,
         forward_timeout_s: float = DEFAULT_FORWARD_TIMEOUT_SECONDS,
         max_relay_depth: int = DEFAULT_MAX_RELAY_DEPTH,
-        relay_depth_ttl_s: float = DEFAULT_RELAY_DEPTH_TTL_SECONDS,
+        relay_chain_max_age_s: float = DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS,
     ) -> None:
         self._cf = connection_factory
         self._clock = clock
@@ -341,9 +403,15 @@ class HarnessSupervisor:
         self._close_timeout_s = float(close_timeout_s)
         self._forward_timeout_s = float(forward_timeout_s)
         # Harness-to-harness relay loop protection (limitation 2) - see
-        # DEFAULT_MAX_RELAY_DEPTH / DEFAULT_RELAY_DEPTH_TTL_SECONDS.
+        # DEFAULT_MAX_RELAY_DEPTH / DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS.
         self._max_relay_depth = int(max_relay_depth)
-        self._relay_depth_ttl_s = float(relay_depth_ttl_s)
+        self._relay_chain_max_age_s = float(relay_chain_max_age_s)
+        # Injectable purely so a test can advance "chain age" without a
+        # real sleep (RES-verify: a fake must match the real shape - this
+        # is the SAME `time.monotonic` the rest of this module uses,
+        # swapped only in tests that need to cross
+        # `_relay_chain_max_age_s` deterministically).
+        self._monotonic = time.monotonic
 
         self._lock = threading.RLock()
         self._live: dict[str, _LiveSession] = {}
@@ -612,6 +680,8 @@ class HarnessSupervisor:
         payload: Mapping[str, Any] | None = None,
         *,
         _relay_depth: int | None = None,
+        _relay_chain_id: str | None = None,
+        _relay_chain_started_at: float | None = None,
     ) -> None:
         """Deliver ``verb`` (``send_turn`` / ``steer`` / ``interrupt`` / ``end``)
         to a live session. Capability-gates BEFORE calling the connector
@@ -627,26 +697,45 @@ class HarnessSupervisor:
         "never blocks, never polls... a finite iterator"), not by a
         supervisor-imposed timeout.
 
-        ``_relay_depth`` is INTERNAL - only :meth:`_on_inbox_delivery`
-        passes it (see the module docstring's "Harness-to-harness
-        relaying" section), giving the depth ``_resolve_relay_depth``
-        already decided this forward may run at. Every OTHER caller (every
-        MCP/HTTP tool, ``_best_effort_teardown``, every direct test call)
-        leaves it ``None``, which resets this session's
-        :attr:`_LiveSession.relay_depth` bookkeeping to 0 - this is the
-        ONE place that field is ever written, deliberately, so a session
-        reached through the ordinary, non-relay path never inherits a
-        stale depth left over from an unrelated earlier relay chain.
-        Written BEFORE the connector is called, so a fast connector (the
-        real hazard this guards: one that replies before this call even
-        returns) can never race ahead of its own session's own bookkeeping.
+        ``_relay_depth``/``_relay_chain_id``/``_relay_chain_started_at``
+        are INTERNAL - only :meth:`_on_inbox_delivery` passes them (see
+        the module docstring's "Harness-to-harness relaying" section),
+        giving the depth, chain identity and chain-start-time
+        ``_resolve_relay_depth`` already decided this forward may run at.
+        Every OTHER caller (every MCP/HTTP tool, ``_best_effort_teardown``,
+        every direct test call) leaves all three ``None``, which resets
+        this session's :attr:`_LiveSession.relay_depth` /
+        :attr:`~_LiveSession.relay_chain_id` /
+        :attr:`~_LiveSession.relay_chain_started_at` bookkeeping to 0 /
+        ``None`` / 0.0 - this is the ONE place any of these fields is ever
+        written, deliberately, so a session reached through the ordinary,
+        non-relay path never inherits a stale depth left over from an
+        unrelated earlier relay chain. Written BEFORE the connector is
+        called, so a fast connector (the real hazard this guards: one that
+        replies before this call even returns) can never race ahead of its
+        own session's own bookkeeping.
+
+        ``relay_chain_started_at`` is always the ORIGINAL chain's start
+        time - :meth:`_resolve_relay_depth` computes it ONCE, when a chain
+        first goes 0 -> 1, and every LATER hop in that same chain (however
+        deep) passes the SAME value through unchanged, rather than each
+        session re-stamping "now" the first time IT personally becomes
+        part of the chain. Re-stamping per-session would silently reset
+        the chain's measured age on every hop - exactly the per-hop-gap
+        bug this design replaces (see the module docstring) - because a
+        session two hops deep would otherwise see its own bookkeeping as
+        having "just started", never ageing out even after the whole chain
+        has run far past :attr:`_relay_chain_max_age_s`.
         """
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)
         with self._lock:
             live.relay_depth = _relay_depth if _relay_depth is not None else 0
-            live.relay_depth_updated_at = time.monotonic()
+            live.relay_chain_id = _relay_chain_id if _relay_depth is not None else None
+            live.relay_chain_started_at = (
+                _relay_chain_started_at if _relay_depth is not None else 0.0
+            )
         command = HarnessCommand(
             session_id=session_id, verb=verb, payload=dict(payload or {})
         )
@@ -764,18 +853,26 @@ class HarnessSupervisor:
         if not isinstance(body, str) or not body:
             return
         relay_depth = 0
+        relay_chain_id: str | None = None
+        relay_chain_started_at: float | None = None
         if isinstance(from_agent_id, str):
-            relay_depth = self._resolve_relay_depth(from_agent_id)
-            if relay_depth is None:
+            resolved = self._resolve_relay_depth(from_agent_id)
+            if resolved is None:
                 self._report_relay_cascade_blocked(
                     target_session_id=session_id, from_agent_id=from_agent_id
                 )
                 return
+            relay_depth, relay_chain_id, relay_chain_started_at = resolved
         payload = {"text": body, "content": body}
         try:
             self._bounded_call(
                 lambda: self.send(
-                    session_id, "send_turn", payload, _relay_depth=relay_depth
+                    session_id,
+                    "send_turn",
+                    payload,
+                    _relay_depth=relay_depth,
+                    _relay_chain_id=relay_chain_id,
+                    _relay_chain_started_at=relay_chain_started_at,
                 ),
                 timeout_s=self._forward_timeout_s,
                 label="forwarding an inbox delivery",
@@ -785,37 +882,75 @@ class HarnessSupervisor:
                 "forwarding an inbox delivery to the harness connector", session_id
             )
 
-    def _resolve_relay_depth(self, from_agent_id: str) -> int | None:
-        """The depth THIS forward would run at, or ``None`` if it would
-        exceed :attr:`_max_relay_depth` (the caller's signal to refuse the
-        forward and report it - see :meth:`_report_relay_cascade_blocked`).
+    def _resolve_relay_depth(
+        self, from_agent_id: str
+    ) -> tuple[int, str, float] | None:
+        """The ``(depth, chain_id, chain_started_at)`` THIS forward would
+        run at, or ``None`` if depth would exceed :attr:`_max_relay_depth`
+        (the caller's signal to refuse the forward and report it - see
+        :meth:`_report_relay_cascade_blocked`).
 
-        Read-only - does NOT itself write :attr:`_LiveSession.relay_depth`;
-        that happens inside :meth:`send` (see its own docstring for why the
-        write belongs there, not here). ``from_agent_id``'s depth is looked
-        up against ITS OWN live session (0 if it has none, or if its own
-        last-recorded depth is older than :attr:`_relay_depth_ttl_s` - an
-        expired chain is treated as a fresh one), so a message from an
-        ordinary, non-harness sender (an operator) resolves to depth 1 -
-        the first hop of a brand new chain - exactly like a harness's own
-        first, organic ``turn_completed``.
+        Read-only - does NOT itself write :attr:`_LiveSession.relay_depth`
+        / :attr:`~_LiveSession.relay_chain_id` /
+        :attr:`~_LiveSession.relay_chain_started_at`; that happens inside
+        :meth:`send` (see its own docstring for why the write belongs
+        there, not here, and for why ``chain_started_at`` is always the
+        ORIGINAL chain's start time, computed exactly once below and
+        passed through unchanged by every later hop).
+
+        ``from_agent_id``'s depth/chain are looked up against ITS OWN live
+        session. Continuation is decided by CHAIN IDENTITY, never by how
+        much time elapsed since that session's last hop (the retired,
+        reproduced-bypass mechanism - see the module docstring's "CHAIN
+        IDENTITY, not elapsed-time-since-last-hop" section): if the source
+        session is already carrying a ``relay_chain_id`` (``relay_depth >
+        0``), THIS forward continues that exact chain at ``source_depth +
+        1``, regardless of how long ago the source's own last hop
+        happened - a cascade paced in minutes counts exactly the same as
+        one paced in milliseconds. The ONE time-based check left is
+        :attr:`_relay_chain_max_age_s` against
+        :attr:`~_LiveSession.relay_chain_started_at` (when the chain
+        BEGAN, not its last hop): a chain that has sat with zero further
+        hops for that long is treated as finished, so a later, genuinely
+        new conversation from the same source is not permanently poisoned
+        by it - see the class docstring for the residual this leaves (a
+        cascade paced slower than :attr:`_relay_chain_max_age_s` per hop
+        still eventually re-mints a fresh chain and escapes the cap; that
+        is a documented floor, not an oversight).
+
+        A message from an ordinary, non-harness sender (an operator, or a
+        harness with no live session / no active chain) resolves to depth
+        1 with a freshly minted chain id - the first hop of a brand new
+        chain - exactly like a harness's own first, organic
+        ``turn_completed``.
         """
-        now = time.monotonic()
+        now = self._monotonic()
         with self._lock:
             source_depth = 0
+            source_chain_id: str | None = None
+            source_chain_started_at: float | None = None
             for live in self._live.values():
                 if live.session.owning_agent_id != from_agent_id:
                     continue
-                if (
+                chain_alive = (
                     live.relay_depth > 0
-                    and (now - live.relay_depth_updated_at) <= self._relay_depth_ttl_s
-                ):
+                    and live.relay_chain_id is not None
+                    and (now - live.relay_chain_started_at)
+                    <= self._relay_chain_max_age_s
+                )
+                if chain_alive:
                     source_depth = live.relay_depth
+                    source_chain_id = live.relay_chain_id
+                    source_chain_started_at = live.relay_chain_started_at
                 break
         new_depth = source_depth + 1
+        chain_id = source_chain_id if source_chain_id is not None else new_id("relaychain")
+        chain_started_at = (
+            source_chain_started_at if source_chain_started_at is not None else now
+        )
         if new_depth > self._max_relay_depth:
             return None
-        return new_depth
+        return new_depth, chain_id, chain_started_at
 
     def _report_relay_cascade_blocked(
         self, *, target_session_id: str, from_agent_id: str

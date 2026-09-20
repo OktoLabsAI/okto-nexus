@@ -374,8 +374,49 @@ def run_watchdog(
     call)."""
     self_pid = os.getpid()
     last_descendants: set[int] = set()
-    while os.getppid() == serve_pid:
+    while True:
+        if os.getppid() != serve_pid:
+            break
         snapshot = _ps_snapshot()
+        # THE DISCOVERY RACE THIS BRACKET CLOSES: `os.getppid()` can flip
+        # to 1 (kernel reparenting `serve`'s dead children, including this
+        # watchdog itself) at any point AROUND `_ps_snapshot()`'s `ps -A`
+        # fork+exec - that call is not instantaneous. A snapshot taken
+        # while (or after) that flip has already happened is not "empty
+        # because the descendants really exited" - it is EMPTY (or
+        # partially, silently truncated) because `ps -A` no longer sees
+        # `serve_pid`'s subtree at all once `serve` is gone; the still-
+        # alive `pi` process and its wrapper are simply no longer
+        # discoverable BY WALKING FROM `serve_pid`, even though they are
+        # very much alive, just already reparented to init. Checking
+        # `os.getppid()` only BEFORE the snapshot (the old code) misses
+        # exactly this: the loop condition can pass, then the flip lands
+        # mid-`ps`, and the resulting corrupted snapshot is what
+        # unconditionally overwrote `last_descendants` next.
+        #
+        # The fix re-reads `os.getppid()` again immediately AFTER the
+        # snapshot and discards the snapshot (via `break`, keeping
+        # whatever `last_descendants` already held) unless BOTH reads
+        # agree `serve` was still this process's parent. That is a
+        # bracket around the snapshot, not a check on its contents - and
+        # deliberately not "treat an empty snapshot as untrustworthy":
+        # children legitimately DO all exit sometimes while `serve` is
+        # still alive, and in that case `last_descendants` MUST be
+        # allowed to go empty (the bracket here passes correctly, both
+        # `getppid()` reads see `serve_pid`, and the assignment below
+        # takes effect - see `test_watchdog_bracket_accepts_legitimate_
+        # empty_snapshot` in this module's test file). An "empty means
+        # keep the old set" rule would get that legitimate case wrong
+        # (pinning a stale, possibly since-recycled set of pids
+        # indefinitely) while ALSO failing to catch the non-empty-but-
+        # truncated variant of this same race (some descendants already
+        # reparented out of the walk, others not yet). Bracketing the
+        # read instead of inspecting the result catches both, and bounds
+        # the staleness of a discarded snapshot to at most one
+        # `poll_interval_s` - the same bound the pre-existing "spawned
+        # and killed within one poll interval" blind spot already
+        # discloses (module docstring), not a new or wider one.
+        #
         # `_descendants` walks the WHOLE tree under `serve_pid`, which
         # includes THIS process (a direct child of `serve_pid` by
         # construction) and, transiently, `_ps_snapshot`'s own `ps -A`
@@ -390,6 +431,8 @@ def run_watchdog(
         # run in 10-20 of repeated live SIGKILL reproduction during this
         # fix's own development, silently, with no traceback (a delivered
         # SIGTERM is not a Python exception) - this is not speculative.
+        if os.getppid() != serve_pid:
+            break
         last_descendants = _descendants(serve_pid, snapshot) - {self_pid}
         time.sleep(poll_interval_s)
     return reap_orphans(

@@ -456,14 +456,18 @@ def test_delivery_row_is_unaffected_by_forward_outcome_either_way(tmp_path):
 #   ``ports.py`` (ABSOLUTE RULE 3 - those files belong to sibling agents).
 #   So the state lives ENTIRELY supervisor-side, on the supervisor's own
 #   non-frozen ``_LiveSession`` bookkeeping: the depth a forward runs at is
-#   read off the SOURCE session's own ``relay_depth`` (0 if it was never
-#   itself the target of a forward, or if that forward has aged out past
-#   ``relay_depth_ttl_s``) and recorded onto the TARGET session inside
-#   ``HarnessSupervisor.send`` itself - the ONE place anything ever writes
-#   that field, so a session receiving a turn through the ORDINARY,
-#   non-relay path (a direct ``send()`` call, e.g. from an MCP/HTTP tool)
-#   resets its bookkeeping to 0 instead of inheriting a stale depth from an
-#   unrelated, long-past relay chain.
+#   read off the SOURCE session's own ``relay_depth``/``relay_chain_id`` (0
+#   / ``None`` if it was never itself the target of a forward, or if its
+#   chain has aged out past ``relay_chain_max_age_s`` with no further hops
+#   - see ``test_slow_paced_harness_to_harness_cascade_is_still_stopped``
+#   below: continuation is keyed on CHAIN IDENTITY, never on elapsed time
+#   since the source's own LAST hop, which is what let a cascade paced
+#   slower than the old per-hop TTL defeat the cap entirely) and recorded
+#   onto the TARGET session inside ``HarnessSupervisor.send`` itself - the
+#   ONE place anything ever writes those fields, so a session receiving a
+#   turn through the ORDINARY, non-relay path (a direct ``send()`` call,
+#   e.g. from an MCP/HTTP tool) resets its bookkeeping to 0 / ``None``
+#   instead of inheriting a stale chain from an unrelated, long-past relay.
 # * The failure mode when the cap IS hit is LOUD: a ``kind="error"``
 #   ``HarnessEvent`` (``native_event="nexus/relay_depth_exceeded"``) is
 #   published to the target session's live subscribers AND persisted
@@ -624,6 +628,238 @@ def test_runaway_harness_to_harness_cascade_is_stopped_and_observable(tmp_path):
     assert any(
         e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
         for e in replayed
+    )
+
+
+def test_slow_paced_harness_to_harness_cascade_is_still_stopped(tmp_path):
+    """FAILING-FIRST REPRO, now the regression guard for the fix it drove
+    (see ``harness_supervisor.py``'s module docstring, "CHAIN IDENTITY,
+    not elapsed-time-since-last-hop", for the full design record): the
+    pre-fix depth cap was defeated by ANY cascade paced slower than
+    ``relay_depth_ttl_s``, regardless of that TTL's magnitude, because
+    ``_resolve_relay_depth`` reset a source session's depth to 0 whenever
+    ``now - relay_depth_updated_at > relay_depth_ttl_s`` - a per-hop-GAP
+    check, which is wrong by construction: EVERY hop's own gap-since-the-
+    hop-before-it exceeds the TTL once pacing does, so every hop looked
+    like hop 1 of a brand new chain, forever. A real A<->B agent
+    conversation is paced by model latency and tool use (routinely tens of
+    seconds per hop, per the task brief) - SLOWER than the 30s production
+    default is the NORMAL shape, not the exotic one.
+
+    The captured pre-fix run of this exact scenario (8 hops, 0.15s spacing
+    against a 0.05s ``relay_depth_ttl_s``, cap 2): all 8 hops forwarded, 0
+    blocked. See ``scratchpad/failing_first_repro.log`` for that raw
+    capture, taken before any of this fix's code changes.
+
+    Post-fix, this drives the same 8 sequential A<->B hops, each spaced
+    0.15s apart, against ``max_relay_depth=2`` AND a deliberately tight
+    ``relay_chain_max_age_s=5.0`` (far bigger than any single 0.15s
+    inter-hop gap, but far smaller than the 1800s production default) -
+    proving the cap now holds on CHAIN IDENTITY, not on how that age bound
+    compares to hop pacing. No ``_AutoReplyConnector`` (that fake replies
+    with zero delay, well under any bound, which is why it alone never
+    caught this) - each hop is driven by hand so the pacing is explicit.
+    """
+    factory, clock, supervisor, messages = wired(tmp_path, max_relay_depth=2)
+    # `wired()`'s signature does not expose `relay_chain_max_age_s` (this
+    # file's shared helper deliberately keeps only what every OTHER test
+    # here needs). Rebuild the supervisor here, reusing the same
+    # factory/clock/messages/notifier `wired()` already wired together, to
+    # inject the tight age bound this test is specifically about.
+    import okto_nexus.application.harness_supervisor as hs_mod
+
+    supervisor = hs_mod.HarnessSupervisor(
+        connection_factory=factory,
+        clock=clock,
+        agents=supervisor._agents,
+        sessions=supervisor._sessions,
+        events=supervisor._events,
+        subscribers=InMemoryHarnessSubscriberRegistry(),
+        messages=messages,
+        inbox_notifier=supervisor._inbox_notifier,
+        start_timeout_s=5.0,
+        close_timeout_s=5.0,
+        max_relay_depth=2,
+        relay_chain_max_age_s=5.0,
+    )
+
+    connector_a = FakeConnector(kind="pi")
+    connector_b = FakeConnector(kind="pi")
+    session_a = supervisor.open(
+        kind="pi",
+        connector=connector_a,
+        owning_agent_id="slow-cascade-a",
+        project_root=mkproj(tmp_path, "proj-slow-cascade-a"),
+        notify_target={"strategy": "direct", "agent_id": "slow-cascade-b"},
+    )
+    session_b = supervisor.open(
+        kind="pi",
+        connector=connector_b,
+        owning_agent_id="slow-cascade-b",
+        project_root=mkproj(tmp_path, "proj-slow-cascade-b"),
+        notify_target={"strategy": "direct", "agent_id": "slow-cascade-a"},
+    )
+
+    blocked_events: list[Any] = []
+    supervisor.subscribers.subscribe(session_a.session_id, blocked_events.append)
+    supervisor.subscribers.subscribe(session_b.session_id, blocked_events.append)
+
+    def _cascade_was_blocked() -> bool:
+        return any(
+            e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
+            for e in blocked_events
+        )
+
+    # Drive 8 hops by hand, alternating A -> B -> A -> B..., each spaced
+    # 0.15s apart (well under relay_chain_max_age_s=5.0, so the chain
+    # never ages out mid-cascade). Each hop is "session X's own agent
+    # settled a turn", which the notify_target wiring forwards to the
+    # OTHER session as a send_turn.
+    sessions = [session_a, session_b]
+    connectors = [connector_a, connector_b]
+    hops_forwarded = 0
+    for hop in range(8):
+        time.sleep(0.15)
+        if _cascade_was_blocked():
+            break
+        src_idx = hop % 2
+        dst_idx = 1 - src_idx
+        before = len(_send_turn_commands(connectors[dst_idx]))
+        connectors[src_idx].push_event(
+            make_event(
+                sessions[src_idx].session_id,
+                kind="turn_completed",
+                native_event="agent_settled",
+            )
+        )
+        delivered = wait_until(
+            lambda: len(_send_turn_commands(connectors[dst_idx])) > before
+            or _cascade_was_blocked(),
+            timeout_s=2.0,
+        )
+        if not delivered:
+            break
+        if len(_send_turn_commands(connectors[dst_idx])) > before:
+            hops_forwarded += 1
+
+    total_forwarded = len(_send_turn_commands(connector_a)) + len(
+        _send_turn_commands(connector_b)
+    )
+    assert _cascade_was_blocked(), (
+        f"expected the depth cap (max_relay_depth=2) to refuse a hop within "
+        f"8 slow-paced (0.15s per hop) hops; instead {total_forwarded} hops "
+        "were forwarded and 0 were blocked - chain identity should have "
+        "kept counting regardless of pacing."
+    )
+    assert total_forwarded <= 2, (
+        f"expected at most 2 hops (max_relay_depth=2) to be forwarded "
+        f"before the cascade was blocked; {total_forwarded} were forwarded"
+    )
+
+
+def test_new_conversation_between_same_pair_long_after_an_earlier_finished_chain_is_not_blocked(
+    tmp_path,
+):
+    """The regression the slow-cascade fix above is most likely to
+    introduce (see the task brief): a chain that reached the depth cap
+    (blocked, never completed) must eventually heal, so a LATER, genuinely
+    UNRELATED conversation between the same A/B pair is not permanently
+    poisoned by the earlier one's leftover bookkeeping.
+
+    Drives the SAME two-hop-then-blocked shape as
+    ``test_runaway_harness_to_harness_cascade_is_stopped_and_observable``
+    (``max_relay_depth=2``), confirms the third hop is refused, then fakes
+    ``time.monotonic()`` jumping forward well past
+    ``relay_chain_max_age_s`` (no real sleep - see
+    ``HarnessSupervisor._monotonic``, injected exactly for this) with NO
+    further hops in between (a genuinely idle gap, not a fast-paced
+    cascade hiding behind a jump), and drives one more, brand new hop -
+    which must go through, not be blocked as "hop 4" of the old chain.
+    """
+    factory, clock, supervisor, messages = wired(tmp_path, max_relay_depth=2)
+    import okto_nexus.application.harness_supervisor as hs_mod
+
+    fake_time = [1_000.0]
+
+    def _fake_monotonic() -> float:
+        return fake_time[0]
+
+    supervisor = hs_mod.HarnessSupervisor(
+        connection_factory=factory,
+        clock=clock,
+        agents=supervisor._agents,
+        sessions=supervisor._sessions,
+        events=supervisor._events,
+        subscribers=InMemoryHarnessSubscriberRegistry(),
+        messages=messages,
+        inbox_notifier=supervisor._inbox_notifier,
+        start_timeout_s=5.0,
+        close_timeout_s=5.0,
+        max_relay_depth=2,
+        relay_chain_max_age_s=60.0,
+    )
+    supervisor._monotonic = _fake_monotonic
+
+    connector_a = _AutoReplyConnector(kind="pi")
+    connector_b = _AutoReplyConnector(kind="pi")
+    session_a = supervisor.open(
+        kind="pi",
+        connector=connector_a,
+        owning_agent_id="heal-a",
+        project_root=mkproj(tmp_path, "proj-heal-a"),
+        notify_target={"strategy": "direct", "agent_id": "heal-b"},
+    )
+    session_b = supervisor.open(
+        kind="pi",
+        connector=connector_b,
+        owning_agent_id="heal-b",
+        project_root=mkproj(tmp_path, "proj-heal-b"),
+        notify_target={"strategy": "direct", "agent_id": "heal-a"},
+    )
+
+    blocked_events: list[Any] = []
+    supervisor.subscribers.subscribe(session_a.session_id, blocked_events.append)
+    supervisor.subscribers.subscribe(session_b.session_id, blocked_events.append)
+
+    def _cascade_was_blocked() -> bool:
+        return any(
+            e.kind == "error" and e.native_event == "nexus/relay_depth_exceeded"
+            for e in blocked_events
+        )
+
+    # Old chain: A -> B (depth 1) -> A (depth 2, auto-reply) -> B (depth 3,
+    # BLOCKED). Same hand-traced shape as the fast-cascade test.
+    connector_a.push_event(
+        make_event(session_a.session_id, kind="turn_completed", native_event="agent_settled")
+    )
+    assert wait_until(_cascade_was_blocked, timeout_s=5.0), (
+        "setup failed: expected the old chain to hit the depth cap before "
+        "the healing assertion below means anything"
+    )
+    forwarded_before_heal = len(_send_turn_commands(connector_a)) + len(
+        _send_turn_commands(connector_b)
+    )
+    assert forwarded_before_heal == 2  # hand-traced: exactly 2 hops, then blocked
+
+    # No further hops for well over relay_chain_max_age_s=60.0 - a
+    # genuinely idle gap between conversations, not a slow-paced
+    # CONTINUATION of the same one (that shape is covered by
+    # test_slow_paced_harness_to_harness_cascade_is_still_stopped above,
+    # and must stay distinguishable from this one).
+    fake_time[0] += 120.0
+
+    # A brand new, independent turn from A - e.g. an operator's fresh
+    # request to A, well after the earlier chain finished (blocked) and
+    # went idle. This must reach B as a fresh hop 1, NOT be refused as a
+    # continuation of the dead chain.
+    before = len(_send_turn_commands(connector_b))
+    connector_a.push_event(
+        make_event(session_a.session_id, kind="turn_completed", native_event="agent_settled")
+    )
+    assert wait_until(lambda: len(_send_turn_commands(connector_b)) > before, timeout_s=5.0), (
+        "expected a new conversation long after the earlier chain finished "
+        "to reach the target harness; it was wrongly blocked as a "
+        "continuation of the stale, long-idle chain"
     )
 
 
