@@ -56,6 +56,54 @@ Severity: MAJOR (resource leak; contradicts a passing case's implied guarantee)
 > SIGKILL / OOM-kill / hard signals — OPEN, structurally unfixable by this
 > mechanism, not attempted.**
 
+> **STATUS UPDATE — 2026-09-20, post-`caae163`: the standalone PPID-based reaper this
+> file called "still genuinely open, not attempted" (below) WAS BUILT.**
+>
+> `src/okto_nexus/adapters/inbound/cli/harness_orphan_watchdog.py` is a process
+> independent of `serve`, spawned by `serve.py` via `subprocess.Popen(...,
+> start_new_session=True)` so a signal aimed at `serve` (including `SIGKILL`) never
+> reaches it. It detects `serve`'s death via its OWN `os.getppid()` (reparenting to
+> PID 1 is the kernel's own atomic bookkeeping, not a poll of `os.kill(serve_pid, 0)`),
+> keeps a rolling snapshot of `serve`'s descendants (`ps -A -o pid=,ppid=` walk, never a
+> name grep — the same blind spot this file's own "Two lessons" section names), and
+> reaps whatever the last snapshot before the parent's death shows, gated at reap time
+> on the candidate still being alive AND reparented to PID 1 (never touches a
+> legitimately-reparented process from a newer `serve`).
+>
+> `ec6937b` shipped a first version; an adversarial pass found it PARTIAL — under CPU
+> load, `run_watchdog`'s final poll iteration could race the kernel's SIGKILL-triggered
+> reparenting: `os.getppid()` could flip to 1 in the gap around `_ps_snapshot()`'s own
+> `ps -A` fork/exec, so the loop's pre-snapshot check was clean but the snapshot itself
+> already straddled the flip, and the empty/truncated result unconditionally overwrote a
+> good `last_descendants`. Reproduced 4/30 and 2/25 (~10-13%) under load, 0/20 in
+> isolation (why the builder didn't see it). `caae163` fixed this by bracketing: `run_
+> watchdog` re-checks `os.getppid() == serve_pid` AFTER `_ps_snapshot()` as well as
+> before, and discards a snapshot whose window straddled the reparenting flip instead of
+> using it to overwrite `last_descendants`.
+>
+> **What this closes, precisely, and what it does not:**
+> - It closes the specific gap this file names below ("a standalone PPID-based reaper
+>   ... that would additionally cover SIGKILL/OOM-kill/hard-signal termination" — that
+>   recommendation is now built, not merely proposed).
+> - It does NOT make SIGKILL orphaning categorically impossible. The watchdog is
+>   best-effort by construction: it has a disclosed one-poll-interval detection window
+>   (default 1s — a child spawned and `serve` SIGKILLed inside the same interval can be
+>   missed, per the module's own docstring), and a watchdog process can itself be killed,
+>   crash, or lose the race to reap before something else touches the same PID space.
+> - Evidence for the bracket fix (measured by the closing work; not re-run in this
+>   documentation-only pass): failing-first reproduction (`assert 555555 in set()`
+>   against the pre-fix code), a deterministic in-process reproduction of the traced
+>   ordering, and 30/30 clean end-to-end runs under 18 synthetic all-core busy loops
+>   (this project's report separately cites a 25/25 clean run at 2x CPU oversubscription,
+>   wall time inflated 1.33-1.81s vs 1.13s unloaded — these are two distinct runs, not
+>   one figure restated). Read plainly: 0 orphans observed across these adversarial-load
+>   runs against a prior measured ~10-13% leak rate is evidence the fix works under the
+>   tested conditions, consistent with a true residual rate below roughly 11% at 95%
+>   confidence from the 25-trial run alone — it is NOT proof the race is categorically
+>   closed for every timing and every platform.
+>
+> Tests: `tests/test_serve_harness_sigkill_reap.py` (new at `caae163`).
+
 Original status at discovery: orphans cleaned up; the underlying defect was OPEN.
 
 ## What was found
@@ -121,7 +169,10 @@ Two lessons, both recorded rather than fixed here:
   `_assert_no_orphan` walks `ps -A` output by PPID; the fake `pi` stub is located among
   the server's descendants by name only to pick which PID to watch, never to decide
   pass/fail.
-- **Still genuinely open, not attempted:** a standalone PPID-based reaper (e.g., a
+- ~~Still genuinely open, not attempted: a standalone PPID-based reaper (e.g., a
   process independent of `serve` itself, watching for orphaned descendants) that would
   additionally cover `SIGKILL`/OOM-kill/hard-signal termination, where no code inside
-  the killed process can run at all. This remains a recommendation only.
+  the killed process can run at all. This remains a recommendation only.~~ **BUILT at
+  `caae163`** — see the post-`caae163` status update above. Best-effort (disclosed
+  one-poll-interval detection window, watchdog itself is not un-killable), not a
+  categorical guarantee, but no longer "not attempted."
