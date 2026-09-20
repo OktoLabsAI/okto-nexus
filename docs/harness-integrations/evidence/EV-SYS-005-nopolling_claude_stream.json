@@ -1,0 +1,18 @@
+{
+  "harness": "claude",
+  "trace_file": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/sys_evidence/trace_claude.log",
+  "start_line": {
+    "t": 167.843791,
+    "tag": "OUT",
+    "text": "{\"type\": \"user\", \"message\": {\"role\": \"user\", \"content\": \"Reply with the single word: charlie\"}}"
+  },
+  "end_line": {
+    "t": 169.971702,
+    "tag": "IN",
+    "text": "{\"duration_api_ms\":1974,\"stop_reason\":\"end_turn\",\"session_id\":\"22017f84-1285-4cf6-beed-1d055989e3eb\",\"total_cost_usd\":0.31787849999999995,\"usage\":{\"input_tokens"
+  },
+  "window_seconds": 2.1279,
+  "n_push_lines_in_window": 14,
+  "n_client_out_lines_strictly_between": 0,
+  "client_out_lines_between": []
+}

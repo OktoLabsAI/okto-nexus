@@ -127,6 +127,17 @@ def handle_turn(text):
     if "TRIGGER_MALFORMED" in text:
         write_line("not-json-garbage-from-pi")
 
+    if "TRIGGER_DEEPNEST" in text:
+        # Syntactically VALID JSON (a balanced, deeply nested array) - NOT a
+        # json.JSONDecodeError. json.loads() itself raises RecursionError
+        # parsing it (Python's C/Python JSON decoder recurses per nesting
+        # level), which `except json.JSONDecodeError` in
+        # `_PiTransport._read_stdout` does NOT catch (RecursionError is not
+        # a ValueError subclass). See RES-B1 in the evidence file for the
+        # empirically confirmed consequence.
+        _depth = 20000
+        write_line("[" * _depth + "]" * _depth)
+
     if "TRIGGER_SPURIOUS_RESPONSE" in text:
         write_msg({"type": "response", "command": "get_session_stats", "success": True, "data": {}})
 
@@ -711,6 +722,158 @@ def test_events_fan_out_to_two_independent_concurrent_consumers(connector: PiRpc
             "agent_end",
             "agent_settled",
         ], (key, native_types)
+
+
+# --------------------------------------------------------------------------- #
+# RES-A1 - events() called TWICE (sequentially, not concurrently - see
+# test_events_fan_out_to_two_independent_concurrent_consumers for the
+# concurrent case, RES-A2) must return both times, neither call hanging.
+# --------------------------------------------------------------------------- #
+def test_res_a1_events_called_twice_sequentially_both_return(connector: PiRpcConnector) -> None:
+    session = connector.start(owning_agent_id="nxs_test_agent")
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "hello"}))
+
+    first_call = list(_iter_bounded(connector.events(), timeout_s=10.0, stop=lambda ev: ev.native_event == "agent_settled"))
+    assert any(ev.native_event == "agent_settled" for ev in first_call)
+    assert len(first_call) > 0
+
+    # A second, independent call to events() after the first has already
+    # finished draining - must ALSO see the full backlog (seeded from
+    # _event_history) and terminate on its own, not hang because the first
+    # call "already consumed" the stream.
+    second_call = list(_iter_bounded(connector.events(), timeout_s=10.0, stop=lambda ev: ev.native_event == "agent_settled"))
+    assert any(ev.native_event == "agent_settled" for ev in second_call)
+    assert [ev.native_event for ev in second_call] == [ev.native_event for ev in first_call]
+
+
+def _iter_bounded(gen, *, timeout_s: float, stop: Callable[[HarnessEvent], bool]):
+    """Drain a bare ``events()`` generator (no background pump) with a hard
+    wall-clock bound, so a hang in the generator fails the test loudly
+    instead of wedging the whole run. Used only where the point under test
+    is the generator's own termination, not concurrent fan-out.
+    """
+    deadline = time.monotonic() + timeout_s
+    for ev in gen:
+        yield ev
+        if stop(ev):
+            return
+        if time.monotonic() > deadline:
+            raise AssertionError(f"events() did not satisfy stop() within {timeout_s}s")
+
+
+# --------------------------------------------------------------------------- #
+# RES-B2 - a reader thread that exits for ANY reason (here: child crash) must
+# signal shutdown to EVERY consumer, not just whichever one happens to be
+# looking. Uses TWO independent concurrent consumers (bypassing the shared
+# `_pump_queue_for` test helper, same as RES-A2's fan-out test) so a
+# per-consumer-only signal (e.g. a single-use sentinel) would be caught.
+# --------------------------------------------------------------------------- #
+def test_res_b2_reader_thread_exit_signals_shutdown_to_every_concurrent_consumer(connector: PiRpcConnector) -> None:
+    session = connector.start(owning_agent_id="nxs_test_agent")
+    connector.send(
+        session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_CRASH"})
+    )
+
+    finished: dict[str, bool] = {"a": False, "b": False}
+
+    def consume(key: str) -> None:
+        list(connector.events())  # must RETURN, not hang, once the reader thread dies
+        finished[key] = True
+
+    thread_a = threading.Thread(target=consume, args=("a",), daemon=True)
+    thread_b = threading.Thread(target=consume, args=("b",), daemon=True)
+    thread_a.start()
+    thread_b.start()
+    thread_a.join(timeout=8.0)
+    thread_b.join(timeout=8.0)
+
+    assert not thread_a.is_alive(), "consumer A never saw shutdown after the reader thread died"
+    assert not thread_b.is_alive(), "consumer B never saw shutdown after the reader thread died"
+    assert finished["a"] and finished["b"]
+
+
+# --------------------------------------------------------------------------- #
+# RES-B1 - DEFECT CHARACTERIZATION, not a passing-behaviour assertion.
+#
+# pi.py is FROZEN (task rule 2): this test documents a REAL, empirically
+# reproduced defect rather than fixing it. See the evidence file
+# (RES-B1-pi-recursionerror-reader-hang.md) for the full writeup.
+#
+# `_PiTransport._read_stdout` wraps ONLY `json.loads(line)` in
+# `except json.JSONDecodeError` (pi.py, inside `_read_stdout`). A
+# syntactically VALID JSON line that is pathologically deep (a balanced,
+# deeply nested array) makes `json.loads` raise `RecursionError` instead -
+# NOT a `JSONDecodeError` subclass, so it is NOT caught. The exception
+# unwinds straight out of the `for raw_line in self._proc.stdout:` loop,
+# past `self._dispatch(msg)` (never reached), into the bare `finally` block,
+# which calls `self._proc.wait()` with NO TIMEOUT. Since the child process
+# (real pi, or this test's fake) is still alive and healthy at that instant
+# - it is simply blocked reading its next stdin line, exactly like every
+# other moment between turns - that wait blocks FOREVER. Consequence,
+# confirmed by direct instrumentation (30s continuous observation, not
+# inferred): the reader thread is permanently dead, `_closed_event` is
+# NEVER set (the `_fail_all_pending`/`_on_child_exit` cleanup that would set
+# it never runs, because it is downstream of the wedged `proc.wait()`), and
+# EVERY consumer of `events()` - including ones that have not even
+# subscribed yet - hangs forever with no error, no log line, and
+# `is_alive()` still reporting the child as healthy. This is the exact
+# "looks alive, delivers nothing" signature class RES-A3/RES-B3 exist to
+# rule out, and it is NOT ruled out here.
+#
+# This directly narrows EV-REV-003's claim that the unbounded
+# `self._proc.wait()` in `_read_stdout`'s `finally` "only runs after stdout
+# hit EOF, child already exiting, not a genuine hang risk": that
+# characterization assumes the for-loop only ever exits via normal
+# `StopIteration`. It does not - an uncaught exception mid-loop, with the
+# child very much alive, is a real, reachable second exit path, and this
+# test proves it reaches exactly the unbounded wait EV-REV-003 dismissed.
+#
+# Bounded to a few seconds (not the true "forever") so this test itself
+# cannot wedge the suite: it proves the hang persists past a generous
+# window, then force-terminates the child via connector.close() (which
+# sends SIGTERM, unblocking the wedged proc.wait()) in a `finally`, exactly
+# as an external supervisor would have to do today to recover.
+# --------------------------------------------------------------------------- #
+def test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_wedges_the_reader(
+    connector: PiRpcConnector,
+) -> None:
+    session = connector.start(owning_agent_id="nxs_test_agent")
+    connector.send(
+        session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_DEEPNEST"})
+    )
+
+    done = threading.Event()
+    collected: list[HarnessEvent] = []
+
+    def pump() -> None:
+        for ev in connector.events():
+            collected.append(ev)
+        done.set()  # only reached if events() actually returns
+
+    pump_thread = threading.Thread(target=pump, daemon=True)
+    pump_thread.start()
+    try:
+        # Generous bound (3s) well past the ms-scale this connector answers
+        # everything else in. Current (defective) behaviour: this times out
+        # every time - the reader thread died on the RecursionError and
+        # nothing downstream of it ever runs.
+        finished_in_time = done.wait(timeout=3.0)
+        assert finished_in_time is False, (
+            "events() returned - if pi.py was fixed to catch RecursionError "
+            "(or any dispatch exception) and signal shutdown, update this "
+            "test to assert the FIXED behaviour and close out the defect "
+            "in the evidence file instead of characterizing it."
+        )
+        assert not connector._closed_event.is_set()  # noqa: SLF001 - white-box, proves the cleanup path never ran
+        assert connector._transport.is_alive()  # noqa: SLF001 - the child is genuinely still healthy, not the culprit
+        assert pump_thread.is_alive(), "reader died but somehow the consumer thread also exited"
+    finally:
+        # Recovery requires an EXTERNAL actor to kill the child - the
+        # connector cannot recover on its own from this state. This mirrors
+        # what a real supervisor would have to do.
+        connector.close()
+        pump_thread.join(timeout=5.0)
+        assert not connector._transport.is_alive()  # noqa: SLF001 - SIGTERM from close() did land
 
 
 # --------------------------------------------------------------------------- #

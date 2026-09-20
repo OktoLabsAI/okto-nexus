@@ -811,6 +811,280 @@ def test_module_never_imports_or_instantiates_sleep_poll_waiter() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# RES-A3 (general) / RES-B3 (cleanup paths specifically): structural check,
+# not a timing check. Greps the module source for every blocking primitive
+# class named in the task (Queue.get, lock acquire, thread/lock .join(),
+# proc.wait(), socket recv/connect/select) and asserts each call site
+# carries an explicit timeout. This module is stdio-only (no sockets) and
+# never .join()s its daemon reader threads at all - both are asserted, not
+# assumed.
+# --------------------------------------------------------------------------- #
+def test_every_blocking_wait_in_module_carries_a_timeout() -> None:
+    import re
+
+    import okto_nexus.adapters.outbound.harness.codex as mod
+
+    source = Path(mod.__file__).read_text(encoding="utf-8")
+    # Real call sites only - drop comment/docstring lines (which reference
+    # these primitives by name in prose, e.g. "the reader thread's own
+    # ``proc.wait()``") and blank lines, so only actual code is checked.
+    lines = [
+        (i, line) for i, line in enumerate(source.splitlines(), 1)
+        if line.strip() and not line.strip().startswith(("#", "*", '"""', "'''"))
+    ]
+
+    queue_get_sites = [
+        (i, line) for i, line in lines
+        if re.search(r"\b(reply_q|self\._event_queue)\.get\(", line)
+    ]
+    assert queue_get_sites, "expected at least one Queue.get() call site - test is stale if the module's shape changed"
+    for lineno, line in queue_get_sites:
+        assert "timeout" in line, f"line {lineno}: Queue.get() with no visible timeout: {line!r}"
+
+    acquire_sites = [(i, line) for i, line in lines if ".acquire(" in line]
+    assert acquire_sites, "expected at least one lock .acquire() call site"
+    for lineno, line in acquire_sites:
+        assert "timeout" in line, f"line {lineno}: .acquire() with no visible timeout: {line!r}"
+
+    proc_wait_sites = [(i, line) for i, line in lines if re.search(r"\.wait\(", line)]
+    assert proc_wait_sites, "expected at least one proc.wait() call site"
+    for lineno, line in proc_wait_sites:
+        assert "timeout" in line, f"line {lineno}: .wait() with no visible timeout: {line!r}"
+
+    # `.join(` on a thread/lock, excluding string joins like `"\n".join(...)`
+    # (a `.join(` immediately preceded by a closing quote is a str.join, not
+    # a blocking primitive).
+    join_sites = [
+        (i, line) for i, line in lines
+        if re.search(r'(?<!["\'])\.join\(', line)
+    ]
+    assert join_sites == [], (
+        f"unexpected thread/lock .join() call site(s), verify bounded: {join_sites!r} "
+        "- this module was assumed to never join its daemon reader threads"
+    )
+
+    for prim in ("recv(", "connect(", "select("):
+        assert prim not in source, f"unexpected socket primitive {prim!r} - this module was assumed stdio-only"
+
+
+# --------------------------------------------------------------------------- #
+# RES-A2: two CONCURRENT events() consumers must each receive the FULL
+# stream, never a split of it (EV-REV-002/EV-REV-003 Class A/C2 - pi.py
+# failed exactly this: "thread A got all 17 events, thread B got zero").
+# --------------------------------------------------------------------------- #
+def test_two_concurrent_events_consumers_split_the_stream_instead_of_each_getting_the_full_stream(
+    connector: CodexAppServerConnector,
+) -> None:
+    """This is a REAL DEFECT report, not a normal regression test.
+
+    pi.py was remediated for this exact class (own mismatch note 9/C2):
+    ``events()`` now hands each caller its OWN subscriber queue seeded from
+    a shared history under a lock, so N concurrent consumers each see every
+    event. codex.py was never given the equivalent fix: ``events()`` here
+    still does ``self._event_queue.get(timeout=...)`` against ONE shared
+    ``queue.Queue`` (``_event_queue``, set in ``__init__``), so two
+    concurrent callers race for the SAME items and the stream is SPLIT
+    between them, not duplicated to each.
+
+    Deterministic proof, independent of which thread wins which item: with
+    correct per-consumer fan-out the TOTAL item count across 2 concurrent
+    consumers of an N-event stream is 2N (each gets all N); with a shared
+    queue split it is exactly N (the items are partitioned). Both consumer
+    threads are started and given time to genuinely park on the blocking
+    ``get()`` BEFORE any event is produced, so a pass would be unambiguous
+    evidence of correct fan-out, not a lucky race.
+
+    ``adapters/outbound/harness/codex.py`` is FROZEN per task instructions;
+    this defect is reported here, not fixed.
+    """
+    session = connector.start(owning_agent_id="nxs_agent")
+
+    consumer_a: list[HarnessEvent] = []
+    consumer_b: list[HarnessEvent] = []
+    a_done = threading.Event()
+    b_done = threading.Event()
+
+    def drain(sink: list[HarnessEvent], done_flag: threading.Event) -> None:
+        for ev in connector.events():
+            sink.append(ev)
+            if ev.kind == "turn_completed":
+                break
+        done_flag.set()
+
+    ta = threading.Thread(target=drain, args=(consumer_a, a_done), daemon=True)
+    tb = threading.Thread(target=drain, args=(consumer_b, b_done), daemon=True)
+    ta.start()
+    tb.start()
+    time.sleep(0.3)  # let both threads genuinely park on the blocking get()
+
+    connector.send(
+        session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "SPLIT_CHECK"})
+    )
+
+    ta.join(timeout=8.0)
+    tb.join(timeout=8.0)
+    if not a_done.is_set() or not b_done.is_set():
+        # A consumer that never saw turn_completed (because the OTHER
+        # consumer got it) would otherwise block until _closed_event fires -
+        # close() unblocks it within one _EVENTS_POLL_S poll period so this
+        # test itself stays bounded regardless of the defect's shape.
+        connector.close()
+        ta.join(timeout=3.0)
+        tb.join(timeout=3.0)
+    assert a_done.is_set() and b_done.is_set(), "a consumer thread never terminated even after close()"
+
+    total = len(consumer_a) + len(consumer_b)
+    expected_full_stream = 5  # turn_started, item/started, item/agentMessage/delta, item/completed, turn/completed
+    assert total == 2 * expected_full_stream, (
+        f"expected each of 2 concurrent events() consumers to receive the FULL "
+        f"{expected_full_stream}-event stream (total={2 * expected_full_stream}); got "
+        f"total={total} (A={len(consumer_a)}, B={len(consumer_b)}) - the stream was SPLIT "
+        "between them. REAL DEFECT in adapters/outbound/harness/codex.py (FROZEN): "
+        "events() is backed by one shared queue.Queue with no per-consumer fan-out, "
+        "unlike pi.py's remediated equivalent (EV-REV-003 C2). Reported, not fixed."
+    )
+
+
+# --------------------------------------------------------------------------- #
+# RES-A4: a FAILED start() must still leave events() terminable (EV-REV-003
+# C3 - pi.py was remediated for exactly this: _closed_event set in start()'s
+# except branch).
+# --------------------------------------------------------------------------- #
+def test_failed_start_leaves_events_terminable(tmp_path: Path) -> None:
+    """REAL DEFECT report. ``_spawn_and_initialize``'s failure path (mismatch
+    note 12) calls ``transport.close()`` on a failed handshake - but that
+    only sets ``_CodexTransport._closed`` (the TRANSPORT's own internal
+    flag, used solely to suppress ``_on_child_exit`` when its reader thread
+    reaches EOF after a deliberate close). It never sets
+    ``CodexAppServerConnector._closed_event`` - the ONE flag ``events()``
+    actually checks on every ``queue.Empty``. A caller of ``events()`` after
+    a failed ``start()`` (with no separate, explicit ``close()`` call) is
+    therefore never told to stop: the generator loops forever, bounded only
+    by this TEST's own timeout, not by the connector.
+
+    Uses a child that reads (consumes) the ``initialize`` write but never
+    answers it, so the handshake's own bounded ``request()`` times out
+    cleanly (the same shape as ``test_failed_handshake_does_not_permanently_
+    wedge_the_connector``, which this test does not duplicate - that one
+    checks ``_transport is None``; this one checks ``events()`` termination,
+    a different failure surface entirely).
+
+    ``adapters/outbound/harness/codex.py`` is FROZEN; reported, not fixed.
+    """
+    hang_script = "import sys, time\nsys.stdin.readline()\ntime.sleep(30)\n"
+    conn = CodexAppServerConnector(
+        command=[sys.executable, "-c", hang_script], handshake_timeout_s=0.3
+    )
+    with pytest.raises(OktoNexusError):
+        conn.start(owning_agent_id="nxs_agent")
+
+    collected: list[Any] = []
+    finished = threading.Event()
+
+    def drain() -> None:
+        for ev in conn.events():
+            collected.append(ev)
+        finished.set()
+
+    t = threading.Thread(target=drain, daemon=True)
+    t.start()
+    t.join(timeout=5.0)
+    try:
+        assert finished.is_set(), (
+            "events() after a FAILED start() (no close() call) did not terminate within "
+            "5s. REAL DEFECT: _spawn_and_initialize's failure path never sets "
+            "CodexAppServerConnector._closed_event (it sets the TRANSPORT's own separate "
+            "internal _closed flag instead). adapters/outbound/harness/codex.py is FROZEN; "
+            "reported, not fixed."
+        )
+    finally:
+        conn.close()  # always clean up regardless of the assertion outcome
+
+
+# --------------------------------------------------------------------------- #
+# RES-B2: a reader thread that exits for ANY reason signals shutdown to
+# EVERY consumer - exercised here with TWO consumers genuinely blocked
+# concurrently before the child dies (the existing
+# test_events_called_twice_after_unexpected_child_exit_returns_both_times
+# calls events() sequentially, one after the other; this is the true
+# concurrent shape). Expected to PASS even though RES-A2 (above) fails:
+# _closed_event is a single shared flag set unconditionally by
+# _on_child_exit, independent of how the (split) stream was delivered.
+# --------------------------------------------------------------------------- #
+def test_two_concurrent_events_consumers_are_both_signalled_on_child_death(
+    connector: CodexAppServerConnector,
+) -> None:
+    session = connector.start(owning_agent_id="nxs_agent")
+
+    consumer_a: list[HarnessEvent] = []
+    consumer_b: list[HarnessEvent] = []
+    a_done = threading.Event()
+    b_done = threading.Event()
+
+    def drain(sink: list[HarnessEvent], done_flag: threading.Event) -> None:
+        for ev in connector.events():
+            sink.append(ev)
+        done_flag.set()
+
+    ta = threading.Thread(target=drain, args=(consumer_a, a_done), daemon=True)
+    tb = threading.Thread(target=drain, args=(consumer_b, b_done), daemon=True)
+    ta.start()
+    tb.start()
+    time.sleep(0.3)  # both genuinely parked before the crash trigger fires
+
+    connector.send(
+        session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"text": "TRIGGER_CRASH"})
+    )
+
+    ta.join(timeout=15.0)
+    tb.join(timeout=15.0)
+    assert a_done.is_set(), "consumer A's events() did not terminate after child death"
+    assert b_done.is_set(), "consumer B's events() did not terminate after child death"
+
+
+# --------------------------------------------------------------------------- #
+# RES-C3: the fake must be able to FAIL, not only succeed. The existing
+# fake already rejects a turn/start (TRIGGER_ERROR), dies mid-turn
+# (TRIGGER_CRASH), and corrupts a line (TRIGGER_MALFORMED) - the one shape
+# missing from the suite is codex REJECTING the handshake itself (an
+# auth/protocol rejection), distinct from the already-covered "never
+# answers at all" timeout shape.
+# --------------------------------------------------------------------------- #
+_REJECT_INIT_SOURCE = r'''
+import json
+import sys
+
+def write(obj):
+    sys.stdout.write(json.dumps(obj) + "\n")
+    sys.stdout.flush()
+
+for raw in sys.stdin:
+    line = raw.strip()
+    if not line:
+        continue
+    msg = json.loads(line)
+    if msg.get("method") == "initialize":
+        write({"jsonrpc": "2.0", "id": msg["id"], "error": {"code": -32600, "message": "auth rejected"}})
+    else:
+        write({"jsonrpc": "2.0", "id": msg.get("id"), "error": {"code": -32601, "message": "unexpected"}})
+'''
+
+
+def test_rejected_initialize_surfaces_as_oktonexuserror(tmp_path: Path) -> None:
+    script = tmp_path / "reject_init.py"
+    script.write_text(_REJECT_INIT_SOURCE, encoding="utf-8")
+    conn = CodexAppServerConnector(command=[sys.executable, str(script)], handshake_timeout_s=5.0)
+    try:
+        with pytest.raises(OktoNexusError) as exc:
+            conn.start(owning_agent_id="nxs_agent")
+        assert "auth rejected" in str(exc.value)
+        # Same wedge-guard as the timeout-shaped failure: no transport left behind.
+        assert conn._transport is None
+    finally:
+        conn.close()
+
+
+# --------------------------------------------------------------------------- #
 # Live, opt-in: the real codex binary against the LAN backend (ADR 0004 D5)
 # --------------------------------------------------------------------------- #
 _LIVE_CODEX_CONFIG = """\

@@ -566,6 +566,46 @@ def test_child_death_without_result_surfaces_error_then_ends_cleanly():
     assert "simulated abrupt death" in error_events[0].payload["stderr_tail"]
 
 
+def test_unknown_verb_rejected_at_domain_layer_before_reaching_connector():
+    """INT-08 error edge: an unknown command verb.
+
+    ``HarnessCommand.__post_init__`` (frozen domain/harness.py) is the
+    PRIMARY gate - a verb outside :data:`COMMAND_VERBS` can never even be
+    constructed, so it can never reach :meth:`ClaudeCodeStreamConnector.send`
+    at all under normal use. NEW test (no prior coverage in this file
+    exercised the unknown-verb edge specifically).
+    """
+    with pytest.raises(OktoNexusError) as exc_info:
+        HarnessCommand(session_id="hsess_whatever", verb="not_a_real_verb")
+    assert exc_info.value.code == "VALIDATION_ERROR"
+
+
+def test_unknown_verb_backstop_at_connector_layer_if_domain_gate_is_bypassed():
+    """INT-08 error edge, continued: the connector's OWN backstop check
+    (``claude_code_stream.py``'s ``send()``, guarded by a comment noting
+    "backstop; HarnessCommand already validates this") in case a caller ever
+    constructs a command object bypassing ``__post_init__`` - e.g. a future
+    port implementation, or any object duck-typing ``HarnessCommand`` without
+    going through its constructor. Exercised here via ``object.__new__`` +
+    ``object.__setattr__`` (the dataclass is frozen) to actually reach that
+    second gate rather than only ever proving the first one works. Handled
+    without hanging or crashing (INT-08's bar), not just "rejected".
+    """
+    connector = _connector("basic")
+    session = connector.start(owning_agent_id="agent_test")
+    try:
+        forged = object.__new__(HarnessCommand)
+        object.__setattr__(forged, "session_id", session.session_id)
+        object.__setattr__(forged, "verb", "not_a_real_verb")
+        object.__setattr__(forged, "payload", {})
+        with pytest.raises(OktoNexusError) as exc_info:
+            connector.send(session, forged)
+        assert exc_info.value.code == "VALIDATION_ERROR"
+    finally:
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
+        list(connector.events())
+
+
 def test_events_called_twice_both_return_after_close_not_just_one():
     """Cross-cutting defect class (see two sibling connectors' reviews in
     the same journal): a single-consumption shutdown sentinel (one ``None``

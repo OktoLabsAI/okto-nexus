@@ -1,0 +1,12 @@
+{
+  "send_http_status": 200,
+  "send_call_seconds": 0.022,
+  "trace_lines_before": 31,
+  "trace_lines_after_lock_window": 45,
+  "settled_observed_wall": 1789927464.2443929,
+  "settled_observed_while_lock_still_held": true,
+  "settled_line": "347.415876 IN  {\"type\":\"agent_settled\"}",
+  "lock_thread_error": {},
+  "durable_events_total": 30,
+  "durable_events_mentioning_delta": 9
+}

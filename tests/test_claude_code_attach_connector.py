@@ -1029,6 +1029,235 @@ def test_start_rejects_socket_owned_by_a_different_uid(
     assert exc.value.details.get("reason") == "socket_owner_mismatch"
 
 
+# --------------------------------------------------------------------------- #
+# RES suite (plans/harness-integrations/01-test-plan.md, added 2026-09-20 -
+# resilience cases from EV-REV-002's three recurring defect classes)
+# --------------------------------------------------------------------------- #
+#
+# RES-A1 (events() called twice returns both times, does not hang) is ALREADY
+# covered above by test_events_can_be_called_twice_without_hanging - cited as
+# existing evidence, not duplicated here.
+#
+# RES-C1 (fake wire behaviour justified against captured bytes) and RES-C3
+# (fakes can fail, not only succeed) are ALREADY covered above:
+# test_send_delivers_auth_then_user_ndjson_lines asserts the exact
+# {"type":"auth","token":...} / {"type":"user","message":{...}} shape and
+# auth-then-user ordering documented verbatim in
+# docs/harness-integrations/evidence/EV-CC-001-cc-socks-external-inject.md
+# ("An auth line is REQUIRED first ... echo '{"type":"auth"...}'; echo
+# '{"type":"user","message":{"role":"user","content":"hello"}}'"); the
+# _AcceptThenCloseServer / _RejectAfterAuthServer / _CloseMidMessageServer
+# fakes above are all fakes that REJECT/drop rather than only ever succeed.
+#
+# RES-B1/B2/B3 (guarded per-line dispatch in a reader thread) and RES-C2 (the
+# fake emits the real interrupt/abort ordering) DO NOT APPLY to this
+# connector and are not faked here: cc-socks is SEND-ONLY with NO inbound
+# channel at all (module docstring; capabilities.send_only=True) - there is
+# no reader thread, no per-line dispatch loop, and no interrupt/abort verb on
+# this transport (send() rejects every verb other than "send_turn" -
+# claude_code_attach.py:702-710). The nearest structural analogue - malformed
+# JSON-shaped INPUT this connector actually parses (the registry/key files,
+# not a wire read loop) - is already covered by
+# test_probe_and_start_agree_when_key_file_exists_but_is_unparseable and the
+# two NUL-byte tests
+# (test_probe_never_raises_on_embedded_null_byte_in_socket_path,
+# test_start_raises_oktonexuserror_not_valueerror_on_embedded_null_byte):
+# each surfaces a structured OktoNexusError, never a bare exception, exactly
+# the discipline RES-B1 asks of a per-line dispatch loop this connector does
+# not have.
+
+
+def test_res_a3_and_b3_every_blocking_wait_in_the_module_carries_a_timeout() -> None:
+    """RES-A3 / RES-B3: structural check (grep, not timing) that every
+    blocking wait in claude_code_attach.py is bounded.
+
+    The module has exactly three ``socket.connect()`` call sites (probe's
+    connect-then-close, start()'s connect-then-close, send()'s real write)
+    and zero ``Queue.get``/lock-``acquire``/``thread.join``/``proc.wait``/
+    ``select`` call sites (there is no reader thread and nothing is
+    spawned - this connector only dials an existing socket). Every
+    ``connect()`` call must be immediately preceded by a
+    ``sock.settimeout(...)`` call on the same socket object within the
+    surrounding statement block, matching this connector's own
+    ``self._timeout_s`` (``connect_timeout_s``, defaulted and clamped to a
+    minimum of 0.001s in ``__init__``) - never an untimed default (which
+    for ``AF_UNIX`` stream sockets blocks indefinitely).
+    """
+    import inspect
+    import re
+
+    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+
+    source = inspect.getsource(mod)
+    lines = source.splitlines()
+
+    # No unbounded-wait primitives anywhere in the module at all - this
+    # connector spawns nothing and reads nothing off a queue.
+    unbounded_patterns = [
+        r"Queue\s*\(\s*\)\.get\s*\(\s*\)",  # a bare .get() with no timeout=
+        r"\.acquire\s*\(\s*\)",  # a bare lock.acquire() with no timeout
+        r"\.join\s*\(\s*\)",  # a bare thread.join() with no timeout
+        r"proc\.wait\s*\(\s*\)",
+        r"\.recv\s*\(",  # this connector never reads from the socket at all
+        r"select\.",
+    ]
+    for pattern in unbounded_patterns:
+        matches = [
+            (i + 1, ln) for i, ln in enumerate(lines) if re.search(pattern, ln)
+        ]
+        assert matches == [], f"unbounded-wait pattern {pattern!r} found: {matches}"
+
+    # Every genuine blocking primitive this module DOES call - socket.connect
+    # on an AF_UNIX stream socket - must be preceded by settimeout() first.
+    connect_lines = [i for i, ln in enumerate(lines) if re.search(r"\bsock\.connect\(", ln)]
+    assert len(connect_lines) == 3, (
+        f"expected exactly 3 sock.connect() call sites (probe/start/send), "
+        f"found {len(connect_lines)}: {connect_lines}"
+    )
+    for idx in connect_lines:
+        # settimeout must appear on the immediately preceding non-blank line
+        # of the same try block (the house pattern used at all three sites).
+        preceding = lines[idx - 1]
+        assert "sock.settimeout(self._timeout_s)" in preceding, (
+            f"connect() at source line {idx + 1} is not immediately preceded "
+            f"by a bounded settimeout(): {preceding!r}"
+        )
+
+    # And self._timeout_s itself can never be zero/None (an unbounded wait
+    # disguised as a "timeout") - __init__ clamps it to a positive minimum.
+    assert "max(float(connect_timeout_s), 0.001)" in source
+
+
+def test_res_a4_a_failed_start_still_leaves_events_terminable(tmp_path: Path) -> None:
+    """RES-A4: a connector whose start() fails (registry missing - the
+    real-world 'the session already ended' case) must still let events()
+    return promptly rather than looping/hanging - the Pi defect this case
+    guards against was an error path that closed the transport but not the
+    connector's own event-draining state, so events() spun forever."""
+    connector = ClaudeCodeAttachConnector(999_999, sessions_dir=tmp_path)
+
+    with pytest.raises(OktoNexusError):
+        connector.start(owning_agent_id="agent-1")
+
+    # Must return immediately, not hang - list() forces the (finite) iterator
+    # to completion; a hang here would fail the test via the harness's own
+    # bounded-command discipline (pytest has no default per-test timeout,
+    # but a genuine infinite loop would never return control to the test).
+    result = list(connector.events())
+    assert result == []
+
+
+def test_res_a4_a_failed_start_after_partial_probe_success_still_leaves_events_terminable(
+    tmp_path: Path,
+) -> None:
+    """A stricter RES-A4 variant: start() fails at a LATER stage (a
+    non-socket file at the resolved path - CONFIG_ERROR, not the earliest
+    possible NOT_FOUND) after already having read the registry and key
+    successfully. events() must still terminate."""
+    pid = _live_pid()
+    not_a_socket = tmp_path / "not-a-socket"
+    not_a_socket.write_text("plain file", encoding="utf-8")
+    _write_registry(tmp_path, pid, socket_path=str(not_a_socket))
+    _write_key(tmp_path, pid)
+    connector = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+
+    with pytest.raises(OktoNexusError):
+        connector.start(owning_agent_id="agent-1")
+
+    assert list(connector.events()) == []
+
+
+def test_res_a2_concurrent_events_consumers_partition_without_loss_or_raise(
+    tmp_path: Path,
+) -> None:
+    """RES-A2, measured rather than assumed either way.
+
+    This connector's ``events()`` is documented (module docstring, and
+    ``test_send_fails_loudly_and_records_error_event_when_peer_unreachable``)
+    as a bounded DRAIN SNAPSHOT of a plain ``collections.deque`` - not a
+    broadcast pump backed by a reader thread the way Pi's is (Pi's actual
+    RES-A2 defect: thread A got all 17 events, thread B got zero, because
+    Pi's ``events()`` is a blocking generator over a single shared
+    ``Queue``). There is a real, distinct hazard worth checking directly
+    though: ``while self._events: drained.append(self._events.popleft())``
+    is a check-then-act pair, not one atomic operation, so two threads
+    racing on the SAME connector could in principle interleave such that
+    one thread's ``popleft()`` fires on an already-emptied deque and raises
+    a bare ``IndexError`` - which would be exactly the kind of "looks alive,
+    silently breaks" failure this whole suite exists to catch, and a bare
+    IndexError escaping a HarnessConnector.events() call is not "never
+    raises" by any reading.
+
+    This test drives that race directly (many trials, high event volume, a
+    ``threading.Barrier`` to align the two callers) and asserts the actual,
+    measured outcome: neither consumer ever hangs, ``events()`` never raises,
+    and the two consumers' results are collectively LOSSLESS and
+    NON-DUPLICATING (every event queued is delivered to exactly one of the
+    two callers - a partition, never a broadcast, and never dropped).
+
+    This is a partition, not each-consumer-gets-the-full-stream - so by the
+    plan's literal broadcast framing this is a documented deviation, not a
+    fix (the module cannot be modified; see the task's FROZEN list). It is
+    also not a live production hazard: the harness supervisor never creates
+    two concurrent events() consumers for a send_only connector at all -
+    for send_only connectors it drains events() synchronously, inline, in
+    the SAME calling thread right after send() returns, and skips spawning
+    any dedicated pump thread entirely (`if not connector.capabilities.
+    send_only: thread = threading.Thread(target=self._pump, ...)` -
+    src/okto_nexus/application/harness_supervisor.py, around line 346-354;
+    the send_only synchronous drain is at src/okto_nexus/application/
+    harness_supervisor.py, around line 480).
+    """
+    connector = ClaudeCodeAttachConnector(_live_pid(), sessions_dir=tmp_path)
+
+    trials = 60
+    n_events = 80
+    for trial in range(trials):
+        for i in range(n_events):
+            connector._record_local_event(  # noqa: SLF001 - deliberately
+                # driving high event volume directly; equivalent-volume real
+                # failed sends would require 80 real fake-socket connections
+                # per trial and would make this test far too slow to run in
+                # the default suite while proving nothing more about the
+                # race itself.
+                kind="error",
+                native_event=f"res-a2-probe-{trial}-{i}",
+                payload={},
+            )
+
+        results: dict[str, list[str]] = {}
+        errors: dict[str, BaseException] = {}
+        barrier = threading.Barrier(2)
+
+        def _worker(name: str) -> None:
+            barrier.wait(timeout=5)
+            try:
+                got = list(connector.events())
+                results[name] = [e.native_event for e in got]
+            except BaseException as exc:  # noqa: BLE001 - probing for exactly this
+                errors[name] = exc
+
+        threads = [threading.Thread(target=_worker, args=(n,)) for n in ("A", "B")]
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join(timeout=5)
+
+        assert not any(th.is_alive() for th in threads), (
+            f"trial {trial}: a concurrent events() consumer hung"
+        )
+        assert errors == {}, f"trial {trial}: events() raised: {errors}"
+
+        combined = results.get("A", []) + results.get("B", [])
+        expected = {f"res-a2-probe-{trial}-{i}" for i in range(n_events)}
+        assert len(combined) == len(set(combined)), (
+            f"trial {trial}: an event was delivered to BOTH consumers (duplication)"
+        )
+        assert set(combined) == expected, (
+            f"trial {trial}: events lost - missing={expected - set(combined)}"
+        )
+
+
 def test_send_rejects_socket_that_changed_owner_uid_since_start(
     tmp_path: Path, fake_server: _FakeSocketServer, monkeypatch: pytest.MonkeyPatch
 ) -> None:
