@@ -1,8 +1,48 @@
 # RES — Claude Code ATTACH (`cc-socks`) resilience suite
 
+> **CORRECTION — 2026-09-20, added post-`1cc8522`, historical body below UNCHANGED.**
+> The RES-A2 verdict this file recorded ("partition (not broadcast) is the documented,
+> by-design behaviour") was **wrong**. It was a real defect, not a design choice: two
+> concurrent `events()` consumers on this connector split a single shared
+> `collections.deque` between them, so each consumer only ever saw *some* of the event
+> stream, never all of it. Calling that "documented, by-design" is exactly why the
+> defect survived Phase 5 unfixed — a reader of this file (including the Phase 5 six-
+> agent pass that closed 13 of 14 other findings) had every reason to conclude cc-socks
+> was fine, because this file told them so.
+>
+> Commit `1cc8522` fixed it, mirroring the fan-out fix already applied to `pi.py`,
+> `codex.py`, and `claude_code_stream.py`: `events()` is now a **broadcast snapshot**
+> over an append-only `_event_history` list, guarded by `_history_lock`
+> (`claude_code_attach.py:288-304`, `:815-849`), not a destructive drain over a shared
+> deque. Two concurrent consumers each receive the FULL stream now — re-verified live
+> in this session by running
+> `tests/test_harness_claude_code_connector.py::test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream`
+> (2 threads, parked-before-send choreography, `kinds1 == kinds2` assertion) — **PASSED**.
+>
+> The fix also exposed a second, real regression: `HarnessSupervisor.send()`'s
+> `send_only` branch used to re-drain `events()` after every `send()` assuming the old
+> destructive-drain semantics (each event handled exactly once because it left the
+> queue). Once `events()` became a non-destructive broadcast snapshot, that same branch
+> would have re-handled event #1 on every subsequent `send()` — N sends would persist,
+> publish, and inbox-notify each earlier event N times over, a duplication bug the
+> frozen port never promised destructive draining would prevent. Commit `1cc8522` also
+> added a per-session cursor (`harness_supervisor.py:143-153`, `:527-540`,
+> `send_only_events_handled`) so each event is still handled exactly once regardless of
+> how many times `send()` is called. Independently re-verified in this session (not
+> just by reading the committed test): 3 `send()` calls → exactly 3 persisted events,
+> exactly 3 published events, **and exactly 3 inbox notifications** (the inbox count was
+> not asserted by the committed test; confirmed separately via a scratch script reusing
+> the same fixtures).
+>
+> **RES-A2 (H-CA) status: PASSED as of `1cc8522`.** See `EV-INDEX.md` for the
+> authoritative current status of this and every other case. Everything below this
+> notice is the original Phase-4/pre-fix capture, preserved verbatim as history — do
+> not read its RES-A2 verdict as current.
+
 Captured: 2026-09-20 17:20–17:30 UTC
 Commit under test: `b661538dda0055a557beaddd8f83c5e770206c43`
-Module under test (FROZEN, not modified): `src/okto_nexus/adapters/outbound/harness/claude_code_attach.py`
+Module under test (FROZEN, not modified — status as of that commit; no longer frozen,
+see correction above): `src/okto_nexus/adapters/outbound/harness/claude_code_attach.py`
 Test file (NOT frozen, extended): `tests/test_claude_code_attach_connector.py`
 
 Command for every case below unless noted otherwise:
@@ -130,6 +170,14 @@ above checks the connector's own robustness regardless, since a future caller (a
 a different supervisor path) is not contractually forbidden from calling `events()` concurrently
 just because today's supervisor doesn't. **MEASURED — no loss/hang/raise found; partition
 (not broadcast) is the documented, by-design behaviour.**
+>
+> **[CORRECTED, see notice at top of file] This verdict was wrong.** Calling the
+> partition "by-design" was itself the failure — the module was never contractually a
+> partition-only transport, and the risk this paragraph waves off ("a future caller...
+> is not contractually forbidden from calling `events()` concurrently") materialized
+> immediately once `HarnessSupervisor`'s send_only drain path was fixed to treat
+> `events()` as idempotent-safe. Fixed in `1cc8522`: `events()` is now a broadcast
+> snapshot; see the top-of-file correction for the re-verification.
 
 ## RES-A3 — every blocking wait carries a timeout (structural, not timing)
 
@@ -272,7 +320,7 @@ not duplicated.**
 | Case | Status | Evidence |
 |---|---|---|
 | RES-A1 | PASSED (existing) | `test_events_can_be_called_twice_without_hanging` |
-| RES-A2 | MEASURED (partition, not broadcast; no loss/hang/raise across 5,260 trials) | new test + standalone probes |
+| RES-A2 | ~~MEASURED (partition, not broadcast...)~~ **CORRECTED: was a defect, FIXED in `1cc8522`, now PASSED (broadcast, re-verified live)** | new test + standalone probes (pre-fix); `test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream` (post-fix) |
 | RES-A3 | PASSED (structural) | new test, grep output above |
 | RES-A4 | PASSED (new) | 2 new tests |
 | RES-B1 | N/A (no reader loop) | nearest analogue cited: existing key-file/NUL-byte tests |
