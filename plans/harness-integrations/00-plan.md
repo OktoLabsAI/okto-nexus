@@ -81,7 +81,7 @@ Per-harness native envelopes are translated at the adapter edge, never in the do
 
 Exit: port merged, `test_import_boundary.py` green, no adapter written yet.
 
-### Phase 3 — Connectors (fan-out; one agent per connector)
+### Phase 3 — Connectors (fan-out; one agent per connector) — IN REMEDIATION
 
 Each owns one adapter module plus its own tests. Genuinely independent once Phase 2 lands.
 
@@ -95,7 +95,21 @@ Each owns one adapter module plus its own tests. Genuinely independent once Phas
 Any new tool must land on BOTH stdio and HTTP surfaces or `test_http_parity.py` fails.
 Any new table needs a `029_*.sql` migration.
 
-Exit: all three connectors green in isolation.
+Exit: all four connectors green in isolation AND every adversarial-review defect closed
+with a failing-first regression test. A green suite alone is explicitly NOT sufficient — all
+four connectors had green suites while carrying critical defects.
+
+### Phase 3.5 — Consolidation and supervisor wiring (BLOCKS PHASE 4)
+
+- S3.5.1 Consolidate the connectors into the `adapters/outbound/harness/` package. The repo's
+  convention for multi-file outbound adapters is a package (`embedding/`, `sqlite/`,
+  `telemetry/`, `tokenizer/`); only trivial single-file adapters are flat (`clock.py`,
+  `waiter.py`). Two connectors were written flat by agents unaware of the others and must move,
+  with their imports updated in the same commit.
+- S3.5.2 Wire the in-process supervisor into `serve` (D1): the subscriber registry, connector
+  lifecycle, and registration of each connector as an Agent via the existing `nxs_` key path (D3).
+- S3.5.3 Any new tool must land on BOTH the stdio and HTTP surfaces or `test_http_parity.py`
+  fails. Any new table needs a `029_*.sql` migration; if none is needed, strike REG-07 explicitly.
 
 ### Phase 4 — Test campaign and evidence
 
