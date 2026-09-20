@@ -43,13 +43,55 @@ so delivery is witnessed directly rather than inferred from a log.
 PID 87907 was a `claude -p` non-interactive session and had NO socket: the listener is bound to
 interactive sessions only. Nexus is a CLIENT of these sockets, so that does not constrain us.
 
-## Security properties observed
+## Wire protocol (recovered from the CLI bundle)
 
-Access control appears to be filesystem permissions alone (socket `0600`, directory `0700`).
-Any process running as the same user can connect and inject. Content injected this way is
-rendered to the model as a peer message, which makes it a prompt-injection surface: anything
-Nexus pushes over it must be treated as untrusted data by the receiver and must not be able to
-pose as system authority.
+Newline-delimited JSON. An auth line is REQUIRED first. Verbatim from a log string inside the
+shipped binary:
+
+    [uds-messaging] Inject messages (auth line REQUIRED here):
+    { echo '{"type":"auth","token":"'"$CLAUDE_CODE_MESSAGING_TOKEN"'"}';
+      echo '{"type":"user","message":{"role":"user","content":"hello"}}'; } | socat - UNIX-CONNECT:${socketPath}
+
+Other observed message types: `task-notification`, `poll-event`.
+Send is fire-and-forget: the connection is accepted with no synchronous ack.
+
+Socket path resolution: `${XDG_RUNTIME_DIR}/cc-socks/<pid>.sock`, falling back to
+`/tmp/cc-socks-<uid>/<pid>.sock` when the path would exceed 103 bytes.
+
+## Registry (what backs `ListAgents`)
+
+Plain JSON, one file per PID, at `~/.claude/sessions/<pid>.json`:
+
+    {"pid":92180,"sessionId":"...","cwd":"/Users/maheidem/Documents/dev/OktoLabsAI",
+     "startedAt":1789903982261,"version":"2.1.278","peerProtocol":1,
+     "peerFeatures":["notify_idle","reply_across_default_dirs","artifact_yield"],
+     "kind":"interactive","tmux":"cc-OktoLabsAI-6682-3:@15.%15",
+     "messagingSocketPath":"/tmp/cc-socks/92180.sock","name":"OktoNexus-dev","status":"busy"}
+
+Every field `ListAgents` prints comes from here.
+
+**An external process CANNOT register itself as a peer.** These files are written only by the
+Claude Code process itself; there is no socket RPC to inject a registry entry. Nexus can send
+INTO sessions, but cannot appear AS one in another session's `ListAgents`.
+
+## Security properties (corrected)
+
+An earlier draft of this file stated access control was filesystem permissions alone. That was
+WRONG. Two mechanisms apply:
+
+1. A per-session bearer token at `~/.claude/sessions/<pid>.<hash>.key`, mode `0600`, shape
+   `{"peerToken":"...","procStart":"...","pidDomain":"darwin"}`. The auth line must carry it.
+2. Kernel-level peer verification via `SO_PEERCRED`/`LOCAL_PEERPID`. The bundle describes the
+   resulting value as "Kernel-verified pid... never from the payload", and `ownerUids` is
+   checked. The connecting process's real uid/pid is attested by the kernel, not claimed.
+
+The practical boundary is therefore: any process running as the SAME OS USER that can read the
+token file can inject. That is a meaningfully stronger posture than bare file permissions,
+though it is still same-user trust, not capability isolation.
+
+Content injected this way renders to the model as a peer message, so it remains a
+prompt-injection surface: anything Nexus pushes must be treated by the receiver as untrusted
+data and must not be able to pose as system authority.
 
 ## Stability caveat
 
