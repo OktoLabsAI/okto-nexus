@@ -85,13 +85,96 @@ def emit(obj):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
 
+# --------------------------------------------------------------------- #
+# Single unbuffered reader over fd 0.
+#
+# The mid-generation window below used to poll readiness with
+# ``select.select([sys.stdin], ...)`` (kernel-level, on the raw fd) and
+# then read with ``sys.stdin.readline()`` (CPython's own buffered
+# ``TextIOWrapper``, layered on top of that same fd). Those two are NOT
+# the same buffer: if two lines land in the pipe before the child's next
+# read syscall - exactly what happens here, since the test writes an
+# ordinary ``send_turn`` immediately followed by an ``interrupt`` -
+# ``readline()`` can slurp BOTH into its internal buffer in one syscall
+# but hand back only the first. The first line (not a control_request)
+# gets deferred and the loop goes back to ``select()`` - which now
+# reports the kernel-level pipe as EMPTY forever, even though a complete,
+# already-read ``control_request`` line is sitting unread in
+# ``TextIOWrapper``'s private buffer. Depending on OS/process scheduling,
+# that a landing coincidence happens often enough to flake this suite
+# (reproduced independently of any timing budget - see
+# test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag).
+# The fix is structural, not a timing tweak: read fd 0 with ``os.read``
+# ONLY, through ONE shared line buffer, everywhere in this script (both
+# the mid-generation window and the top-level loop) - so a line can never
+# be stranded in a buffer nothing else looks at.
+_stdin_buf = ""
+_stdin_eof = False
+
+def _fill_stdin_buf():
+    global _stdin_buf, _stdin_eof
+    chunk = os.read(0, 65536)
+    if chunk == b"":
+        _stdin_eof = True
+    else:
+        _stdin_buf += chunk.decode("utf-8", errors="replace")
+
+def _pop_buffered_line():
+    global _stdin_buf
+    idx = _stdin_buf.find("\n")
+    if idx == -1:
+        return None
+    line, _stdin_buf = _stdin_buf[: idx + 1], _stdin_buf[idx + 1 :]
+    return line
+
+def _drain_eof_remainder():
+    global _stdin_buf
+    if _stdin_buf:
+        remainder, _stdin_buf = _stdin_buf, ""
+        return remainder
+    return ""
+
+def read_line_blocking():
+    # Block (no timeout) until one full line is available, or return "" on
+    # EOF. Always goes through the ONE shared buffer above.
+    while True:
+        line = _pop_buffered_line()
+        if line is not None:
+            return line
+        if _stdin_eof:
+            return _drain_eof_remainder()
+        _fill_stdin_buf()
+
+def read_line_within(timeout_s):
+    # Non-blocking-with-budget poll: returns a full line if one is already
+    # buffered or arrives within timeout_s (select-gated - never a busy
+    # spin), "" on EOF, or None if nothing arrived in the budget. Same
+    # shared buffer - a line that arrives here and isn't a control_request
+    # is left for a LATER caller (deferred_lines below), never silently
+    # owned by a buffer another reader can't see.
+    line = _pop_buffered_line()
+    if line is not None:
+        return line
+    if _stdin_eof:
+        return _drain_eof_remainder()
+    ready, _, _ = select.select([0], [], [], timeout_s)
+    if not ready:
+        return None
+    _fill_stdin_buf()
+    line = _pop_buffered_line()
+    if line is not None:
+        return line
+    if _stdin_eof:
+        return _drain_eof_remainder()
+    return None
+
 if scenario == "garbage_line":
     sys.stdout.write("not json at all\n")
     sys.stdout.flush()
 
 if scenario == "die_without_result":
     # Consume nothing useful; die as soon as any input arrives.
-    sys.stdin.readline()
+    read_line_blocking()
     sys.stderr.write("simulated abrupt death\n")
     sys.stderr.flush()
     sys.exit(2)
@@ -106,7 +189,7 @@ if scenario == "eof_without_exit":
     # end promptly on every platform - verified empirically (macOS/CPython
     # 3.13: EOF was NOT observed by the parent until full process exit).
     # `os.close(fd)` on the raw fd does.
-    sys.stdin.readline()
+    read_line_blocking()
     sys.stdout.flush()
     sys.stderr.flush()
     os.close(1)
@@ -135,7 +218,7 @@ deferred_lines = []  # lines read-but-not-consumed by the mid-generation select 
 def next_raw_line():
     if deferred_lines:
         return deferred_lines.pop(0)
-    return sys.stdin.readline()
+    return read_line_blocking()
 
 while True:
     raw = next_raw_line()
@@ -187,10 +270,9 @@ while True:
         # a mid-generation interrupt structurally impossible to simulate.
         deadline = time.monotonic() + 2.0
         while time.monotonic() < deadline:
-            ready, _, _ = select.select([sys.stdin], [], [], 0.05)
-            if not ready:
+            raw2 = read_line_within(0.05)
+            if raw2 is None:
                 continue
-            raw2 = sys.stdin.readline()
             if raw2 == "":
                 sys.exit(0)  # stdin closed mid-generation: exit like the real CLI's clean path.
             raw2 = raw2.strip()
