@@ -95,6 +95,50 @@ and the guard silently no-ops. It currently still fails safe only because `_curr
 independently re-reads the same absent path immediately after, but nothing tests or asserts that
 coincidence.
 
+## D-08 CRITICAL (FIXED 2026-09-20) — Pi: second `events()` call deadlocks forever
+
+Caught in the act: the Pi connector's own test suite HUNG for 17 minutes. Diagnosed from outside
+the agent's process — PIDs 11321/11323/11325 sat with zero output and, decisively, NO
+`pi --mode rpc` child was alive, proving the wait was internal rather than a slow subprocess.
+
+Root cause: `PiRpcConnector.events()` used an UNBOUNDED `queue.Queue.get()` terminated by a
+single-consumption `_SHUTDOWN` sentinel pushed once by `close()`. A test called `events()` twice
+(a pump thread plus a direct `list(...)`). The first generator consumed the only sentinel; the
+second blocked forever with nothing left to wake it.
+
+Fix: replaced the sentinel with a `threading.Event` (`_closed_event`), checked on every
+`queue.Empty` from a BOUNDED `Queue.get(timeout=1.0)`. Any number of callers, any number of
+calls, from any thread now observe shutdown within one poll period. Also changed
+`_PiTransport.request()`'s lock acquisition from a bare `with` to `acquire(timeout=timeout_s)`
+raising INTERNAL_ERROR on expiry, so it is no longer merely transitively bounded by another
+caller's timeout.
+
+Verified: `timeout 120 uv run python -m pytest -q tests/test_harness_pi_connector.py`
+-> 17 passed, 1 skipped, stable across 5 repeated runs (1.4-1.5s each). `ruff` clean.
+
+**NOT a polling violation.** The 1s timeout is a bounded liveness recheck of the shutdown flag,
+not event polling — events are still delivered by push the instant they are queued. This
+distinction is recorded here so a later reviewer does not misread it as a DoD breach.
+
+## CROSS-CUTTING FINDING — the single-consume sentinel is a recurring defect class
+
+**D-04 (Codex) and D-08 (Pi) are the SAME BUG, written independently by two different agents.**
+Both used a one-shot sentinel object to signal shutdown through a queue, and both therefore hang
+forever on a second consumer. cc-socks avoids it only incidentally, by draining a bounded deque
+rather than blocking on a queue.
+
+This is a defect CLASS, not two incidents. Remediation must:
+1. Audit EVERY connector (including `claude_code` stream-json, not yet reviewed) for one-shot
+   shutdown signalling and for ANY unbounded blocking wait.
+2. Standardise on Pi's pattern: a `threading.Event` for shutdown plus bounded waits everywhere.
+3. Add, per connector, a test that calls `events()` twice and asserts the second call returns
+   rather than hangs — with an explicit test timeout so a regression fails in seconds instead of
+   wedging CI.
+
+Standing requirement for all four connectors: **every blocking wait has a timeout and raises a
+clear error on expiry.** A wedged supervisor is worse than a crashed one — a crash is observable
+and recoverable, a hang silently consumes a slot forever.
+
 ## Related limitation (not a defect — protocol reality)
 
 cc-socks `send()` treats a clean socket write as delivery success and transitions to RUNNING.
