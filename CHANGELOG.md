@@ -2,6 +2,28 @@
 
 All notable changes to Okto Nexus are documented in this file.
 
+## Unreleased
+
+### Added
+
+- Added native, bidirectional, non-polling harness sessions (ADR 0004):
+  Nexus can now spawn and hold live sessions with `pi`, `codex`, and
+  `claude_code` (`stream` substrate), plus send-only injection into an
+  already-running interactive Claude Code session via `cc-socks`
+  (`claude_code`/`attach`). New MCP tools `harness_list`, `harness_open`,
+  `harness_send`, `harness_steer`, `harness_interrupt`, `harness_close`,
+  `harness_get`, `harness_event_list`, mirrored at full parity on
+  `GET /api/v1/harness/kinds` and `/api/v1/harness/sessions/...`. A live
+  session's `turn_completed`/`error` events are also delivered as ordinary
+  messages through the existing per-recipient inbox (`notify_target`), and
+  the existing routing grammar (`direct`/`capability`/`role`/`tag`) can now
+  address a live session's turn input directly through `message_create`, as
+  a best-effort hand-off (see the operator guide for its real limits).
+  `harness_open`'s `backend` parameter lets a caller select the session's
+  model provider/model explicitly instead of silently inheriting the
+  operator's own ambient CLI config. New operator documentation:
+  [`docs/harness-integrations/operator-guide.md`](docs/harness-integrations/operator-guide.md).
+
 ## 0.1.10 - 2026-09-16
 
 ### Fixed

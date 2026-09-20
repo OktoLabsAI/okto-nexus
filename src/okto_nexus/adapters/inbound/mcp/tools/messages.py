@@ -64,6 +64,7 @@ from okto_nexus.adapters.outbound.sqlite.messages_repo import (
     SqliteMessageDeliveryRepo,
     SqliteMessageRepo,
 )
+from okto_nexus.adapters.outbound.inbox_notifier import InMemoryInboxDeliveryNotifier
 from okto_nexus.application.approvals import ApprovalService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.messages import MessageService
@@ -125,8 +126,21 @@ def build_service(deps: Any) -> MessageService:
     its peers share a single concrete instance and a single event append path.
     The agents/sessions/deliveries repos back recipient resolution and the inbox
     fan-out performed by ``message_create`` (ADR 0001).
+
+    Also wires (idempotently, cached on ``deps``) the ONE process-wide
+    ``InboxDeliveryNotifier`` (ADR 0004 follow-up, SYS-03/UAT-05): every
+    ``MessageService`` built by this function - this slice registers its
+    own tools with one, and ``tools/harness.py::build_service`` reuses THIS
+    function to build the notable-event-delivery instance it wires into
+    ``HarnessSupervisor`` - shares the SAME notifier object, which is what
+    lets a live harness session's ``open()``-time subscription actually see
+    every ``create_message`` fan-out, regardless of which composition path
+    built the ``MessageService`` that ran it.
     """
     repos = deps.repos
+
+    if getattr(deps, "inbox_delivery_notifier", None) is None:
+        deps.inbox_delivery_notifier = InMemoryInboxDeliveryNotifier()
 
     if getattr(repos, "channels", None) is None:
         repos.channels = SqliteChannelRepo(deps.clock)
@@ -214,6 +228,7 @@ def build_service(deps: Any) -> MessageService:
         governance=governance,
         approvals=approvals,
         guardrails=guardrails,
+        inbox_notifier=deps.inbox_delivery_notifier,
     )
 
     # Approved re-execution (BR2): one executor per intercepted action key.

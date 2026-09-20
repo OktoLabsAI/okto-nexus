@@ -30,6 +30,7 @@ from ..domain.approvals import Approval
 from ..domain.artifacts import StoredArtifactPayload
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
+from ..domain.harness import HarnessCapabilities, HarnessCommand, HarnessEvent, HarnessSession
 from ..domain.guardrails import (
     AgentGroupMember,
     AgentGroupRecord,
@@ -1625,6 +1626,213 @@ class EventEmitter(Protocol):
 
 
 # --------------------------------------------------------------------------- #
+# Harness connectors (Phase 2 of the harness-integrations feature; ADR 0004)
+# --------------------------------------------------------------------------- #
+@runtime_checkable
+class HarnessConnector(Protocol):
+    """One per-harness transport, uniform across Pi / Codex / Claude Code (D2).
+
+    A connector attaches INTO Nexus and internally owns its own child pipes
+    or socket, reconciling the topology asymmetry between Nexus-as-parent
+    (Pi, Codex spawn a child Nexus owns) and Nexus-as-server (Claude Code's
+    peer dials in) behind one shape (ADR 0004 D2). It authenticates as an
+    ordinary agent via an ``nxs_`` key (D3) - this port has no credential
+    method of its own, the existing agent registry covers it.
+
+    ``capabilities`` is fixed for the connector's lifetime (a connector does
+    not renegotiate mid-session) and is what the supervisor consults before
+    issuing a command it might not be able to complete synchronously - see
+    :class:`~okto_nexus.domain.harness.HarnessCapabilities`.
+
+    :meth:`send` is fire-and-forget from the caller's point of view even on
+    full-duplex transports: any reply is delivered later as a
+    :class:`~okto_nexus.domain.harness.HarnessEvent` through :meth:`events`,
+    never as this call's return value. This is what makes a ``send_only``
+    connector (D7b, ``cc-socks``) satisfy the SAME port as a full-duplex one
+    (Pi, Codex, Claude Code primary) with no special-cased call shape - only
+    the capability declaration differs, never the method signature.
+    """
+
+    capabilities: HarnessCapabilities
+
+    def start(self, *, owning_agent_id: str) -> HarnessSession:
+        """Establish the session (spawn a child, or bind to a discovered peer).
+
+        Deliberately takes NO :class:`UnitOfWork`: unlike the repository
+        ports in this module, a connector is a transport, not persistence -
+        ``HarnessSession`` is never stored (see its docstring), and spawning
+        a child process or dialling a socket must never happen while holding
+        the SQLite WAL single-writer lock a ``uow`` would keep open. Whatever
+        durable record a caller wants of the session start is a separate,
+        explicit write against a repository, made outside this call.
+
+        Returns the initial :class:`~okto_nexus.domain.harness.HarnessSession`
+        in ``STARTING`` status. For a D7b attach connector the returned
+        session's id is the OBSERVED peer identity, not server-minted (see
+        the ``HarnessSession`` docstring) - ``start`` binds to an already-live
+        peer rather than spawning one.
+        """
+        ...
+
+    def send(self, session: HarnessSession, command: HarnessCommand) -> None:
+        """Deliver ``command`` to the session. Never blocks for a reply.
+
+        Raises if ``command.verb`` is not one the connector's
+        ``capabilities`` can honour for this session (e.g. ``steer`` against
+        a ``send_only`` connector) - the caller is expected to have checked
+        ``capabilities`` first; this is the backstop, not the primary gate.
+        """
+        ...
+
+    def events(self) -> Any:
+        """Return an iterable/iterator of normalised inbound
+        :class:`~okto_nexus.domain.harness.HarnessEvent` occurrences.
+
+        Typed ``Any`` here (rather than a concrete generator/queue type) so
+        adapters are free to back this with whatever their transport's
+        native pump looks like (a thread-fed queue for child-process stdio,
+        an asyncio stream for a socket); the CALLER only ever sees
+        ``HarnessEvent`` instances out of it, never a native envelope.
+        """
+        ...
+
+
+@runtime_checkable
+class HarnessSubscriberRegistry(Protocol):
+    """In-process push registry for harness events (D1).
+
+    D1 is explicit that the supervisor lives in-process with ``serve`` and
+    that push is via an in-memory registry - the SQLite write of a
+    :class:`~okto_nexus.domain.harness.HarnessEvent` is durability only, NEVER
+    the notification path, and ``SleepPollWaiter`` must not appear anywhere
+    in the harness path. This port is that registry's contract: callers
+    :meth:`subscribe` to a session and are :meth:`publish`-ed to directly, in
+    the same process, with no polling loop in between.
+    """
+
+    def subscribe(self, session_id: str, callback: Any) -> Any:
+        """Register ``callback`` to receive events for ``session_id``.
+
+        Returns an opaque handle; pass it to :meth:`unsubscribe` to stop
+        receiving. ``callback`` is invoked with a single
+        :class:`~okto_nexus.domain.harness.HarnessEvent` positional argument,
+        synchronously, in-process - never via a queue that requires polling
+        to drain.
+        """
+        ...
+
+    def unsubscribe(self, handle: Any) -> None:
+        """Remove a previously registered subscription."""
+        ...
+
+    def publish(self, event: HarnessEvent) -> None:
+        """Push ``event`` to every subscriber currently registered for its
+        ``session_id``. Does not touch storage; durable persistence of the
+        event is a separate, explicit write the caller performs alongside
+        this call (D1), not a side effect of it.
+        """
+        ...
+
+
+@runtime_checkable
+class HarnessSessionRepo(Protocol):
+    """Durable record of harness-connector sessions (D10; migration 029).
+
+    This is NEVER the notification path (D1) and never the supervisor's own
+    source of truth for "is this session live right now" - that is the
+    supervisor's in-memory registry, populated from the very
+    :class:`~okto_nexus.domain.harness.HarnessSession` a connector's
+    :meth:`~HarnessConnector.start` returned. This repo exists purely so a
+    session survives a restart for audit/replay and so ``harness_events``
+    rows have a parent to join against. A row left ``RUNNING`` after an
+    unclean process exit is expected (there was no chance to write
+    ``ENDED``) and reconciling that is a future reaper's job, not this
+    port's - callers must not treat a persisted ``RUNNING`` row as proof of
+    liveness.
+    """
+
+    def create(
+        self, uow: UnitOfWork, *, session: HarnessSession, created_at: str
+    ) -> None:
+        """Insert the durable row for a session the supervisor just opened.
+
+        ``session.capabilities`` is snapshotted (JSON) at THIS moment - a
+        connector's capabilities are fixed for its whole lifetime (see the
+        :class:`HarnessConnector` docstring), so there is nothing to
+        reconcile on a later read.
+        """
+        ...
+
+    def update_status(
+        self,
+        uow: UnitOfWork,
+        *,
+        session_id: str,
+        status: str,
+        updated_at: str,
+        ended_at: str | None = None,
+    ) -> bool:
+        """Overwrite ``status`` (and ``ended_at`` once a terminal one is
+        reached). Returns ``True`` if the row existed.
+
+        Never validates the transition itself -
+        :func:`okto_nexus.domain.harness.can_transition_session` is the
+        supervisor's job, BEFORE calling this; this method is a plain,
+        unconditional write.
+        """
+        ...
+
+    def get(self, uow: UnitOfWork, *, session_id: str) -> HarnessSession | None:
+        """Return the durable row, or ``None`` if no such session was ever
+        opened."""
+        ...
+
+    def list(
+        self, uow: UnitOfWork, *, status: str | None = None
+    ) -> list[HarnessSession]:
+        """Return sessions, newest-started first; ``status`` filters to one
+        value when given."""
+        ...
+
+
+@runtime_checkable
+class HarnessEventRepo(Protocol):
+    """Durable, append-only, per-session-sequenced event log (D10; migration 029).
+
+    This is the audit trail D10 asks for: every event a connector emits is
+    persisted here with ``event.native_event`` carried VERBATIM, AFTER it has
+    already been fanned out in-memory via
+    :meth:`HarnessSubscriberRegistry.publish` - this repo is durability ONLY
+    and must never gate or delay that in-memory push (D1). ``sequence`` is
+    assigned by the adapter, monotonic PER ``session_id`` starting at 1, so
+    one session's full event stream replays in order independent of any
+    other session's or the global event log's numbering.
+    """
+
+    def append(
+        self, uow: UnitOfWork, *, event_id: str, event: HarnessEvent, created_at: str
+    ) -> int:
+        """Insert ``event`` (``event_id`` minted by the caller, matching the
+        rest of the codebase's id-minting convention); return the assigned
+        per-session ``sequence``."""
+        ...
+
+    def list_for_session(
+        self,
+        uow: UnitOfWork,
+        *,
+        session_id: str,
+        after_sequence: int = 0,
+        limit: int = 200,
+    ) -> list[HarnessEvent]:
+        """Return events for ``session_id`` with ``sequence > after_sequence``,
+        oldest first - the replay/debug read path (a future ``harness_events``
+        tool) and exactly what lets a session be replayed to demonstrate push
+        delivery after the fact."""
+        ...
+
+
+# --------------------------------------------------------------------------- #
 # Channels / messages
 # --------------------------------------------------------------------------- #
 @runtime_checkable
@@ -1864,6 +2072,67 @@ class MessageDeliveryRepo(Protocol):
         One mapping per recipient with ``recipient_agent_id``, the EFFECTIVE
         ``status`` at ``now``, ``attempts`` and ``read_at`` (plain mappings:
         ``attempts`` is delivery-bookkeeping, not part of the domain model).
+        """
+        ...
+
+
+@runtime_checkable
+class InboxDeliveryNotifier(Protocol):
+    """In-process push registry for ordinary per-recipient inbox deliveries
+    (ADR 0004 follow-up: closes the SYS-03/UAT-05 target-grammar gap).
+
+    NOT one of the two ports ADR 0004 froze (``HarnessConnector`` /
+    ``HarnessSubscriberRegistry``) - this is a NEW port, added specifically
+    so :class:`~okto_nexus.application.harness_supervisor.HarnessSupervisor`
+    can learn, in-process and with no polling anywhere (D1), that an
+    ORDINARY ``message_create`` fan-out (``direct``/``capability``/``role``/
+    ``tag`` - the EXISTING target grammar, ADR 0001) just delivered to a
+    live harness session's ``owning_agent_id``. Structurally symmetric to
+    :class:`HarnessSubscriberRegistry` (same ``subscribe``/``unsubscribe``/
+    ``publish`` shape, same in-memory-only, no-queue contract) but keyed by
+    RECIPIENT ``agent_id`` rather than harness ``session_id``, and fired by
+    :class:`~okto_nexus.application.messages.MessageService` alongside its
+    EXISTING per-recipient inbox fan-out - never a second, parallel
+    delivery mechanism (the delivery row this describes is created exactly
+    as it always was, whether or not anything is subscribed).
+
+    Piggybacking on the existing ``EventEmitter``/``message.created`` event
+    was considered and rejected: ``emit`` is a SQLite write inside the same
+    write ``uow`` as the delivery row, so consuming it as a notification
+    signal would mean polling the event table after the fact - exactly what
+    D1 forbids anywhere in the harness path. This port is a plain in-memory
+    callback registry instead, with no storage and no poll loop possible.
+    """
+
+    def subscribe(self, agent_id: str, callback: Any) -> Any:
+        """Register ``callback`` to receive deliveries addressed at
+        ``agent_id``. Returns an opaque handle; pass it to
+        :meth:`unsubscribe` to stop receiving. ``callback`` is invoked
+        synchronously, in-process, with ONE positional argument - a
+        ``Mapping`` describing the delivered message (at minimum
+        ``message_id``, ``from_agent_id``, ``subject``, ``body``,
+        ``target``, ``created_at``) - never via a queue that requires
+        polling to drain."""
+        ...
+
+    def unsubscribe(self, handle: Any) -> None:
+        """Remove a previously registered subscription (idempotent - an
+        unknown/already-removed handle is a safe no-op)."""
+        ...
+
+    def publish(self, agent_id: str, message: Mapping[str, Any]) -> None:
+        """Notify every current subscriber of ``agent_id`` that ``message``
+        was just delivered to their inbox, now, synchronously, on the
+        calling thread. The caller (``MessageService.create_message``)
+        calls this AFTER its own write ``uow`` has already committed the
+        delivery row - never from inside it (a connector's ``send`` can
+        block, and this port's contract is the same as
+        ``HarnessConnector.start``'s own: never call into a transport while
+        holding the SQLite WAL writer lock a ``uow`` keeps open) - and
+        treats it as best-effort: a subscriber that raises, or no
+        subscriber being registered at all, never affects the delivery row
+        this call describes, which is already durable by the time this
+        runs.
         """
         ...
 
@@ -2560,3 +2829,5 @@ class Repos:
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None
     poll_tokens: PollTokenRepo | None = None
+    harness_sessions: HarnessSessionRepo | None = None
+    harness_events: HarnessEventRepo | None = None

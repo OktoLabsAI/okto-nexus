@@ -1,0 +1,113 @@
+{
+  "target_pid": 87703,
+  "marker": "UAT04-INJECT-1789928663",
+  "open_status": 200,
+  "open_response": {
+    "ok": true,
+    "data": {
+      "session_id": "87703.2476c6371e4795bae367c0742f4c2bcef59464363ea3f27c38b16bb1d6b2457c",
+      "kind": "claude_code",
+      "owning_agent_id": "uat04_attach_agent",
+      "status": "RUNNING",
+      "capabilities": {
+        "send_only": true,
+        "steer_timing": null,
+        "interrupt_requires_settle_wait": false,
+        "multiplexes_sessions": false,
+        "observes_session_end": false
+      },
+      "started_at": "2026-09-20T18:24:23.430072Z",
+      "ended_at": null,
+      "metadata": {
+        "pid": 87703,
+        "registry_session_id": "b9589110-4e57-4e9c-985f-3ae0dae8d6bb",
+        "name": "attach-project-b0",
+        "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/attach_project",
+        "tmux": "uat04-cc-attach:@19.%19",
+        "version": "2.1.278",
+        "peer_protocol": 1,
+        "socket_path": "/tmp/cc-socks/87703.sock",
+        "socket_path_source": "registry",
+        "guard_proc_start_known": true
+      }
+    }
+  },
+  "open_seconds": 0.014,
+  "session_id": "87703.2476c6371e4795bae367c0742f4c2bcef59464363ea3f27c38b16bb1d6b2457c",
+  "send_status": 200,
+  "send_response": {
+    "ok": true,
+    "data": {
+      "session_id": "87703.2476c6371e4795bae367c0742f4c2bcef59464363ea3f27c38b16bb1d6b2457c",
+      "verb": "send_turn"
+    }
+  },
+  "send_seconds": 0.001,
+  "get_after_send": {
+    "status": 200,
+    "data": {
+      "ok": true,
+      "data": {
+        "session_id": "87703.2476c6371e4795bae367c0742f4c2bcef59464363ea3f27c38b16bb1d6b2457c",
+        "kind": "claude_code",
+        "owning_agent_id": "uat04_attach_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": true,
+          "steer_timing": null,
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": false,
+          "observes_session_end": false
+        },
+        "started_at": "2026-09-20T18:24:23.430072Z",
+        "ended_at": null,
+        "metadata": {
+          "pid": 87703,
+          "registry_session_id": "b9589110-4e57-4e9c-985f-3ae0dae8d6bb",
+          "name": "attach-project-b0",
+          "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/attach_project",
+          "tmux": "uat04-cc-attach:@19.%19",
+          "version": "2.1.278",
+          "peer_protocol": 1,
+          "socket_path": "/tmp/cc-socks/87703.sock",
+          "socket_path_source": "registry",
+          "guard_proc_start_known": true
+        },
+        "live": true
+      }
+    }
+  },
+  "close": {
+    "status": 200,
+    "response": {
+      "ok": true,
+      "data": {
+        "session_id": "87703.2476c6371e4795bae367c0742f4c2bcef59464363ea3f27c38b16bb1d6b2457c",
+        "kind": "claude_code",
+        "owning_agent_id": "uat04_attach_agent",
+        "status": "RUNNING",
+        "capabilities": {
+          "send_only": true,
+          "steer_timing": null,
+          "interrupt_requires_settle_wait": false,
+          "multiplexes_sessions": false,
+          "observes_session_end": false
+        },
+        "started_at": "2026-09-20T18:24:23.430072Z",
+        "ended_at": null,
+        "metadata": {
+          "pid": 87703,
+          "registry_session_id": "b9589110-4e57-4e9c-985f-3ae0dae8d6bb",
+          "name": "attach-project-b0",
+          "cwd": "/private/tmp/claude-501/-Users-maheidem-Documents-dev-OktoLabsAI/d964d04a-26e1-4484-bc9c-51ccc97fd32b/scratchpad/uat/attach_project",
+          "tmux": "uat04-cc-attach:@19.%19",
+          "version": "2.1.278",
+          "peer_protocol": 1,
+          "socket_path": "/tmp/cc-socks/87703.sock",
+          "socket_path_source": "registry",
+          "guard_proc_start_known": true
+        }
+      }
+    }
+  }
+}

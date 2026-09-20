@@ -433,7 +433,14 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: path submissions are imported into managed storage, and ``html`` joins the
 #: closed artifact_type enum for safe dashboard preview. Tool names and
 #: parameters are unchanged; the artifact reference resource is now v4.
-SURFACE_REVISION = 33
+#: 34 = harness connectors (Phase 3.5, ADR 0004): NEW tools ``harness_list``
+#: (kind/substrate capability catalog), ``harness_open``, ``harness_send``,
+#: ``harness_steer``, ``harness_interrupt``, ``harness_close``,
+#: ``harness_get``, ``harness_event_list`` (durable replay). Mirrored on REST
+#: under ``/api/v1/harness/...`` (operator-gated for the mutating verbs, like
+#: ``POST /agents``/``POST /sessions/{id}/close``). Boot-time declared
+#: harnesses are NOT wired into ``serve`` yet - on-demand open only.
+SURFACE_REVISION = 34
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

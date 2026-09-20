@@ -1,0 +1,22 @@
+{
+    "ok": true,
+    "data": {
+        "session_id": "hsess_066f968502bd44f48aa49f100878550c",
+        "kind": "pi",
+        "owning_agent_id": "sys_pi_agent",
+        "status": "ENDED",
+        "capabilities": {
+            "send_only": false,
+            "steer_timing": "NEXT_TURN_BOUNDARY",
+            "interrupt_requires_settle_wait": true,
+            "multiplexes_sessions": false,
+            "observes_session_end": true
+        },
+        "started_at": "2026-09-20T17:58:37.816898Z",
+        "ended_at": "2026-09-20T18:05:48.938641Z",
+        "metadata": {
+            "pi_session_id": "hsess_066f968502bd44f48aa49f100878550c"
+        },
+        "live": false
+    }
+}

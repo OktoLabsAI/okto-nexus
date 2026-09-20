@@ -1,0 +1,44 @@
+================================================================================
+PART 1: SPAWN AND HANDSHAKE
+================================================================================
+pid=74768
+[t=1.343] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"3293a56c-e385-42cc-a2dd-fb2efbc32563","method":"setStatus","statusKey":"statusline"}
+[t=1.358] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"611f43d4-6937-47f1-a08c-6edd689a8dcb","method":"setStatus","statusKey":"goal"}
+[t=1.358] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"5781d47a-dc37-4690-9bbc-d86a9b0f3230","method":"setStatus","statusKey":"mcp","statusText":"\u001b[38;2;138;190;183m🔌 MCP: 11 servers enabled (1 disabled)\u001b[39m"}
+[t=1.358] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"39cdf590-99d3-49e0-ad8e-c59d09e8385f","method":"notify","message":"🧠 Thinking Saver loaded — thinking offload + soft compact ≥80% (control panel: /ctx)","notifyType":"info"}
+[t=1.358] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"6228d6f3-05fd-4094-bd9a-a43d17d28fe7","method":"setStatus","statusKey":"delegate"}
+[t=1.371] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"1e99244b-8bd2-4e0e-8938-510374682568","method":"setStatus","statusKey":"model-discovery-thinking-profile"}
+[t=1.385] <<< STDOUT [handshake]: {"type":"extension_ui_request","id":"57815241-964c-4d4a-b582-7e90087652d1","method":"notify","message":"Slack: 24 tool(s) ready","notifyType":"info"}
+Unprompted bytes emitted before any command sent: 7 lines
+
+================================================================================
+PART 2+3: FULL TURN + PUSH VS PULL
+================================================================================
+[t=3.012] >>> SEND: {"type": "prompt", "message": "Reply with the single word: ok"}
+[t=3.185] <<< STDOUT [turn]: {"type":"response","command":"prompt","success":true}
+[t=3.186] <<< STDOUT [turn]: {"type":"agent_start"}
+[t=3.186] <<< STDOUT [turn]: {"type":"turn_start"}
+[t=3.186] <<< STDOUT [turn]: {"type":"message_start","message":{"role":"user","content":[{"type":"text","text":"Reply with the single word: ok"}],"timestamp":1789907945563}}
+[t=3.186] <<< STDOUT [turn]: {"type":"message_end","message":{"role":"user","content":[{"type":"text","text":"Reply with the single word: ok"}],"timestamp":1789907945563}}
+[t=10.410] <<< STDOUT [turn]: {"type":"message_start","message":{"role":"assistant","content":[{"type":"text","text":"ok"}],"api":"openai-completions","provider":"zai","model":"glm-5.3","usage":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0,"totalTokens":0,"cost":{"input":0,"output":0,"cacheRead":0,"cacheWrite":0,"total":0}},"stopReason":"pending","timestamp":1789907945572}}
+[t=10.410] <<< STDOUT [turn]: {"type":"message_update","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"assistantMessageEvent":{"type":"text_start","contentIndex":0}}
+[t=10.410] <<< STDOUT [turn]: {"type":"message_update","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"assistantMessageEvent":{"type":"text_delta","contentIndex":0,"delta":"ok"}}
+[t=10.411] <<< STDOUT [turn]: {"type":"message_update","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"assistantMessageEvent":{"type":"text_end","contentIndex":0,"content":"ok"}}
+[t=10.411] <<< STDOUT [turn]: {"type":"message_end","message":{"role":"assistant","content":[{"type":"text","text":"ok"}],"api":"openai-completions","provider":"zai","model":"glm-5.3","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"stopReason":"stop","timestamp":1789907945572,"responseId":"202609202039077bf5a52448304957","rawStopReason":"stop"}}
+[t=10.411] <<< STDOUT [turn]: {"type":"turn_end","message":{"role":"assistant","content":[{"type":"text","text":"ok"}],"api":"openai-completions","provider":"zai","model":"glm-5.3","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"stopReason":"stop","timestamp":1789907945572,"responseId":"202609202039077bf5a52448304957","rawStopReason":"stop"},"toolResults":[]}
+[t=10.411] <<< STDOUT [turn]: {"type":"agent_end","messages":[{"role":"user","content":[{"type":"text","text":"Reply with the single word: ok"}],"timestamp":1789907945563},{"role":"assistant","content":[{"type":"text","text":"ok"}],"api":"openai-completions","provider":"zai","model":"glm-5.3","usage":{"input":24824,"output":3,"cacheRead":0,"cacheWrite":0,"reasoning":0,"totalTokens":24827,"cost":{"input":0.034753599999999996,"output":0.0000132,"cacheRead":0,"cacheWrite":0,"total":0.034766799999999994}},"stopReason":"stop","timestamp":1789907945572,"responseId":"202609202039077bf5a52448304957","rawStopReason":"stop"}],"willRetry":false}
+[t=10.411] <<< STDOUT [turn]: {"type":"agent_settled"}
+send_t=3.012; total lines during turn window: 13
+[t=28.031] >>> SEND: {"type": "get_last_assistant_text"}
+[t=28.031] <<< STDOUT [get_last_assistant_text]: {"type":"response","command":"get_last_assistant_text","success":true,"data":{"text":"ok"}}
+[t=31.042] >>> SEND: {"type": "get_state"}
+[t=31.042] <<< STDOUT [get_state]: {"type":"response","command":"get_state","success":true,"data":{"model":{"id":"glm-5.3","name":"GLM-5.3","api":"openai-completions","provider":"zai","baseUrl":"https://api.z.ai/api/coding/paas/v4","reasoning":true,"thinkingLevelMap":{"off":null,"minimal":null,"low":"low","medium":null,"high":"high","xhigh":null,"max":"max"},"input":["text"],"cost":{"input":1.4,"output":4.4,"cacheRead":0.26,"cacheWrite":0},"compat":{"supportsStore":false,"supportsDeveloperRole":false,"supportsReasoningEffort":true,"maxTokensField":"max_tokens","thinkingFormat":"zai","zaiToolStream":true},"contextWindow":1000000,"maxTokens":131072},"thinkingLevel":"low","isStreaming":false,"isCompacting":false,"steeringMode":"one-at-a-time","followUpMode":"one-at-a-time","sessionFile":"/Users/maheidem/.pi/agent/sessions/--private-tmp-claude-501--Users-maheidem-Documents-dev-OktoLabsAI-d964d04a-26e1-4484-bc9c-51ccc97fd32b-scratchpad--/2026-09-20T12-39-02-519Z_spike-verify-9f2a.jsonl","sessionId":"spike-verify-9f2a","autoCompactionEnabled":true,"messageCount":2,"pendingMessageCount":0}}
+
+================================================================================
+PART 6: SESSION PERSISTENCE (part A - before kill)
+================================================================================
+process killed.
+session files found:
+/Users/maheidem/.pi/agent/sessions/--private-tmp-claude-501--Users-maheidem-Documents-dev-OktoLabsAI-d964d04a-26e1-4484-bc9c-51ccc97fd32b-scratchpad--/2026-09-20T12-39-02-519Z_spike-verify-9f2a.jsonl
+
+Spawn PART 1-3 done. See raw_capture.log

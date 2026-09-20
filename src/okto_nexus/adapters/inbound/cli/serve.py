@@ -277,6 +277,164 @@ def _watch_ready(
     )
 
 
+def _reap_live_harness_sessions(deps: "object") -> int:
+    """Best-effort child-process reap on serve shutdown (EV-OPS-001).
+
+    Covers a clean exit, ``SIGINT`` and ``SIGTERM`` alike: all three drive
+    ``server.run()`` back to a normal return (uvicorn's own signal handlers
+    flip ``should_exit`` and let the ASGI lifespan finish; the ``except
+    KeyboardInterrupt`` branch above only re-raises AFTER that already
+    happened), and this runs right after ``server.run()`` returns either
+    way - see the call site. For each session still in the supervisor's live
+    registry at that point, this calls :meth:`HarnessSupervisor.close`,
+    which sends a best-effort ``end`` and then invokes the connector's own
+    ``close()`` lifecycle helper - for ``PiRpcConnector`` (and the other
+    subprocess-backed connectors) that is a bounded SIGTERM-then-SIGKILL on
+    the child's own process group, i.e. an ACTUAL reap, not merely "the
+    child happened to exit" (the exact distinction EV-OPS-001 calls out).
+
+    Does NOT cover ``kill -9`` on this process or any other unclean exit
+    (segfault, OOM-kill, `launchd`/`systemd` skipping SIGTERM straight to
+    SIGKILL): a process that never runs this code cannot reap anything.
+    That gap is why ``_spawn_harness_orphan_watchdog`` below exists - an
+    INDEPENDENT process, not this one, is the only thing that can reap a
+    session this function never got the chance to. See that function's
+    docstring and ``adapters/inbound/cli/harness_orphan_watchdog.py`` for
+    the full design and its own disclosed residual limits (it is a
+    best-effort backstop, not an absolute guarantee - see that module's
+    "bounded lifetime" section).
+
+    Best-effort per session: one wedged connector's teardown must never
+    block the others from being tried, matching every other best-effort
+    teardown path in ``HarnessSupervisor`` (``close``, ``_best_effort_
+    teardown``). Returns the number of sessions the supervisor reported as
+    live going in, for the caller's own log line.
+    """
+    supervisor = getattr(deps, "harness_supervisor", None)
+    if supervisor is None:
+        return 0
+    sessions = supervisor.list_live()
+    for session in sessions:
+        try:
+            supervisor.close(session.session_id)
+        except Exception as exc:  # noqa: BLE001 - best-effort: shutdown must never hang or fail here
+            print(
+                f"[okto-nexus] failed to reap harness session "
+                f"{session.session_id!r} on shutdown "
+                f"({type(exc).__name__}: {exc})",
+                file=sys.stderr,
+            )
+    return len(sessions)
+
+
+#: Env var overriding the harness-orphan-watchdog's poll interval (seconds).
+#: Undocumented in ``SERVE_USAGE`` deliberately - this is a test/ops knob
+#: for the watchdog's own detection-latency-vs-overhead trade-off (see
+#: ``harness_orphan_watchdog.DEFAULT_POLL_INTERVAL_S``), not a supported
+#: end-user setting.
+_WATCHDOG_POLL_INTERVAL_ENV = "OKTO_NEXUS_HARNESS_WATCHDOG_POLL_INTERVAL_S"
+
+_WATCHDOG_MODULE = "okto_nexus.adapters.inbound.cli.harness_orphan_watchdog"
+
+
+def _spawn_harness_orphan_watchdog(env: Mapping[str, str]) -> "object | None":
+    """Best-effort spawn of the independent SIGKILL-orphan reaper (EV-OPS-001
+    LIMITATION 1; see ``harness_orphan_watchdog.py`` for the full design).
+
+    Spawned as a DETACHED direct child (``start_new_session=True``, no
+    intermediate shell) so it (a) is never touched by a signal aimed at
+    this process alone or at this process's own group, and (b) has this
+    process's pid as its OWN ``os.getppid()`` from the instant it starts -
+    the watchdog's entire "is serve gone yet" detection depends on that
+    parent/child relationship holding exactly, so nothing here may
+    interpose a shell or wrapper between this call and the watchdog
+    process.
+
+    ``stdin``/``stdout``/``stderr`` are ALL redirected to ``DEVNULL``,
+    never inherited: this process's own stdout/stderr may be a pipe a
+    caller is reading to EOF (a test harness's ``process.communicate()``,
+    an operator's shell) - a still-running watchdog holding that pipe's
+    write end open after this process exits would leave that reader
+    hanging well past this process's own exit, an unrelated hang this
+    function must not introduce.
+
+    Best-effort and POSIX-only (mirrors the SIGTERM-handler guard above):
+    a spawn failure (missing ``ps``, a sandboxed environment that refuses
+    ``fork``/``exec``, ...) is logged and swallowed - ``serve`` must still
+    start with or without this backstop, exactly as it already does
+    without the embedding warm-up or the readiness banner. Returns the
+    ``Popen`` handle (for ``_stop_harness_orphan_watchdog`` below) or
+    ``None`` if nothing was spawned.
+    """
+    if os.name != "posix":
+        return None
+    import subprocess
+
+    argv = [
+        sys.executable,
+        "-m",
+        _WATCHDOG_MODULE,
+        "--serve-pid",
+        str(os.getpid()),
+    ]
+    poll_interval = env.get(_WATCHDOG_POLL_INTERVAL_ENV)
+    if poll_interval:
+        argv += ["--poll-interval-s", str(poll_interval)]
+    try:
+        return subprocess.Popen(
+            argv,
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True,
+            close_fds=True,
+        )
+    except OSError as exc:  # noqa: BLE001 - best-effort: serve must still start
+        print(
+            f"[okto-nexus] failed to start the harness-orphan watchdog "
+            f"({type(exc).__name__}: {exc}); SIGKILL on this process will "
+            "leave any live harness child unreaped.",
+            file=sys.stderr,
+        )
+        return None
+
+
+def _stop_harness_orphan_watchdog(watchdog: "object | None") -> None:
+    """Explicitly stop the watchdog on every path THIS process can still run
+    code on (clean exit, SIGINT, SIGTERM - the same three ``_reap_live_
+    harness_sessions`` above already covers). Only the SIGKILL path this
+    watchdog exists for skips this call entirely (by definition - see the
+    module top), in which case the watchdog's own bounded self-reap loop
+    (``run_watchdog`` in ``harness_orphan_watchdog.py``) is what notices
+    and stops it instead. Best-effort and never raises: a watchdog that
+    fails to stop promptly here is, at worst, a few seconds of an idle
+    polling loop that self-terminates on its own the moment it next
+    observes ``os.getppid() != this process's pid`` - not a hang, and
+    never allowed to become one.
+    """
+    if watchdog is None:
+        return
+    import signal
+    import subprocess
+
+    if watchdog.poll() is not None:
+        return
+    try:
+        watchdog.send_signal(signal.SIGTERM)
+    except OSError:
+        return
+    try:
+        watchdog.wait(timeout=2.0)
+        return
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        watchdog.kill()
+        watchdog.wait(timeout=2.0)
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+
 def _warm_embeddings(deps: "object", done_event: "object") -> None:
     """Eagerly load the local embedding model at startup (mirrors the Pulse KG
     warm-up) so the model is hot BEFORE the first message/search and the
@@ -344,6 +502,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         )
         return 1
 
+    import signal
     import threading
 
     from ..mcp.server import bootstrap, maybe_auto_prune
@@ -441,14 +600,65 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             args=(server, host, port, embeddings_done),
             daemon=True,
         ).start()
+        if os.name == "posix":
+            # EV-OPS-001: without this, the reap in the `finally` below
+            # NEVER runs on a SIGTERM. uvicorn's own `capture_signals()`
+            # handles SIGTERM gracefully (sets `should_exit`, lets the
+            # graceful-shutdown window run) - but once that finishes, it
+            # deliberately RESTORES whatever handler was registered before
+            # it started and RE-RAISES the captured signal against it (its
+            # own comment: "trigger the expected behaviour now"), so the
+            # process's exit still looks signal-killed to a parent/shell.
+            # For SIGINT the "expected behaviour" is Python's own built-in
+            # handler, which raises ``KeyboardInterrupt`` - a normal
+            # exception this function already catches below, so execution
+            # (and this function's `finally`) still runs. For SIGTERM there
+            # is no such built-in handler: the restored disposition is
+            # ``SIG_DFL``, whose "expected behaviour" is immediate process
+            # termination - the interpreter never returns from
+            # ``server.run()`` at all, and the reap silently never happens.
+            # A benign handler here (registered BEFORE `server.run()`, so
+            # it is what gets saved as the "previous" handler and restored)
+            # replaces that immediate termination with an ordinary return
+            # to this function, so the SIGTERM path converges on exactly
+            # the same `finally`-runs-the-reap outcome as SIGINT/CTRL-C.
+            signal.signal(signal.SIGTERM, lambda *_: None)
+        # EV-OPS-001 LIMITATION 1: SIGTERM/SIGINT/clean exit are covered by
+        # the `finally` block below alone - this process still runs code on
+        # those paths. SIGKILL runs no code in this process at all, so the
+        # only way to close that gap is a SEPARATE process that notices
+        # this one is gone. See `_spawn_harness_orphan_watchdog`'s
+        # docstring and `harness_orphan_watchdog.py` for the full design.
+        watchdog = _spawn_harness_orphan_watchdog(env)
         try:
-            server.run()
-        except KeyboardInterrupt:
-            # uvicorn already completed its graceful shutdown and re-raised
-            # the captured CTRL+C (its signal-forwarding contract). The work
-            # is DONE at this point - swallowing it turns a scary multi-page
-            # traceback into the calm goodbye the operator expects.
-            print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+            try:
+                server.run()
+            except KeyboardInterrupt:
+                # uvicorn already completed its graceful shutdown and
+                # re-raised the captured CTRL+C (its signal-forwarding
+                # contract). The work is DONE at this point - swallowing it
+                # turns a scary multi-page traceback into the calm goodbye
+                # the operator expects.
+                print("[okto-nexus] Shutdown complete.", file=sys.stderr)
+        finally:
+            # EV-OPS-001: reap any harness session still live at this point
+            # (server exiting - clean, SIGINT, or SIGTERM - while a session
+            # was never explicitly closed) BEFORE the lock is released, so a
+            # takeover by the next `serve` never races a still-tearing-down
+            # child. See `_reap_live_harness_sessions`'s docstring for what
+            # this does and does NOT cover (SIGKILL is NOT covered).
+            reaped = _reap_live_harness_sessions(deps)
+            if reaped:
+                print(
+                    f"[okto-nexus] reaped {reaped} live harness session(s) "
+                    "on shutdown.",
+                    file=sys.stderr,
+                )
+            # This process is about to exit normally - the watchdog's own
+            # job (react to THIS process disappearing) is therefore already
+            # moot; stop it explicitly rather than leaving it to notice on
+            # its own next poll. See `_stop_harness_orphan_watchdog`.
+            _stop_harness_orphan_watchdog(watchdog)
         return 0
     finally:
         lock.release()

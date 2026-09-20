@@ -1,0 +1,33 @@
+{
+  "pi_shim_pid_killed": 61688,
+  "info_status_before": 200,
+  "info_status_after": 200,
+  "pi_shim_alive_1s_after_sigkill": false,
+  "pi_session_final_status": "ENDED",
+  "sibling_send_results": {
+    "codex": {
+      "send_status": 200,
+      "send_response": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_d7c8c068a0624872a79717094feba6dd",
+          "verb": "send_turn"
+        }
+      }
+    },
+    "cc_stream": {
+      "send_status": 200,
+      "send_response": {
+        "ok": true,
+        "data": {
+          "session_id": "hsess_c7f18beb4af34fdd92e9044ef1ed56b0",
+          "verb": "send_turn"
+        }
+      }
+    }
+  },
+  "sibling_completed_after_pi_died": {
+    "codex": true,
+    "cc_stream": true
+  }
+}
