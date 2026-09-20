@@ -194,6 +194,38 @@ Security: content injected via D7b renders to the model as a peer message, so it
 prompt-injection surface. Pushed content must be treated by the receiver as untrusted data and
 must not be able to pose as system authority.
 
+### D8 — Harness sessions start BOTH ways: declared at boot AND on demand
+
+`serve` reads a config listing harnesses to bring up at launch, AND an operator/agent can open a
+session on demand through the API. Both paths converge on the same connector lifecycle.
+
+Consequence, and it is a real cost: a harness declared at boot can wedge startup if its child
+misbehaves. Boot-time startup MUST therefore be failure-isolated — a harness that fails to come
+up is reported and skipped, never fatal to `serve`. This is directly informed by Phase 3: three of
+four connectors shipped a defect class whose signature is "looks alive, delivers nothing", so boot
+must assume a connector can fail in exactly that way.
+
+### D9 — The harness surface lands on BOTH MCP tools and HTTP routes, at full parity
+
+`tests/test_http_parity.py` already enforces that the stdio and HTTP tool surfaces stay identical.
+Harnesses become first-class alongside agents and handoffs rather than a dashboard-only side
+channel. No parity exemption is taken.
+
+### D10 — Harness output is BOTH a durable event record AND, when notable, a message
+
+- The full native event stream is persisted for replay and debugging, preserving fidelity to what
+  the harness actually emitted (`native_event` is carried verbatim — see EV-INF-002).
+- Notable events — turn completion above all — are ALSO surfaced as messages through the existing
+  per-recipient inbox (ADR 0001), so the existing target grammar (`direct` / `capability` /
+  `role` / `tag`) addresses harnesses with no new delivery concept.
+
+This is the largest of the three options and requires a `029_*.sql` migration for the event table.
+REG-07 (migration applies cleanly from empty and is idempotent) is therefore IN SCOPE, not struck.
+
+Rationale for accepting the extra scope: the durable stream is what makes the no-polling claim
+auditable after the fact. Without it, an SYS-05 wire trace is a one-shot artifact; with it, any
+session can be replayed to show push delivery. The evidence requirement effectively demands it.
+
 ## Constraints this feature must respect
 
 - `tests/test_http_parity.py` enforces the stdio and HTTP tool surfaces stay identical — any new

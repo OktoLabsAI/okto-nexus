@@ -108,6 +108,12 @@ four connectors had green suites while carrying critical defects.
   with their imports updated in the same commit.
 - S3.5.2 Wire the in-process supervisor into `serve` (D1): the subscriber registry, connector
   lifecycle, and registration of each connector as an Agent via the existing `nxs_` key path (D3).
+- S3.5.4 Boot-time harness startup from config (D8), FAILURE-ISOLATED: a harness that fails to
+  start is reported and skipped, never fatal to `serve`.
+- S3.5.5 On-demand session open/close through the API (D8).
+- S3.5.6 Surface on BOTH MCP tools and HTTP routes at full parity (D9) — no parity exemption.
+- S3.5.7 Durable harness-event records plus message surfacing of notable events (D10). Requires a
+  `029_*.sql` migration, so REG-07 is IN SCOPE.
 - S3.5.3 Any new tool must land on BOTH the stdio and HTTP surfaces or `test_http_parity.py`
   fails. Any new table needs a `029_*.sql` migration; if none is needed, strike REG-07 explicitly.
 
