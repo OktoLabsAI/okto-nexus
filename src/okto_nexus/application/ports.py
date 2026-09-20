@@ -30,6 +30,7 @@ from ..domain.approvals import Approval
 from ..domain.artifacts import StoredArtifactPayload
 from ..domain.comm_preset import CommPresetRecord, CommPresetVersion
 from ..domain.governance import Policy
+from ..domain.harness import HarnessCapabilities, HarnessCommand, HarnessEvent, HarnessSession
 from ..domain.guardrails import (
     AgentGroupMember,
     AgentGroupRecord,
@@ -1621,6 +1622,107 @@ class EventEmitter(Protocol):
         target: str | None = None,
     ) -> int:
         """Emit an event inside ``uow``; return the assigned ``event_id``."""
+        ...
+
+
+# --------------------------------------------------------------------------- #
+# Harness connectors (Phase 2 of the harness-integrations feature; ADR 0004)
+# --------------------------------------------------------------------------- #
+@runtime_checkable
+class HarnessConnector(Protocol):
+    """One per-harness transport, uniform across Pi / Codex / Claude Code (D2).
+
+    A connector attaches INTO Nexus and internally owns its own child pipes
+    or socket, reconciling the topology asymmetry between Nexus-as-parent
+    (Pi, Codex spawn a child Nexus owns) and Nexus-as-server (Claude Code's
+    peer dials in) behind one shape (ADR 0004 D2). It authenticates as an
+    ordinary agent via an ``nxs_`` key (D3) - this port has no credential
+    method of its own, the existing agent registry covers it.
+
+    ``capabilities`` is fixed for the connector's lifetime (a connector does
+    not renegotiate mid-session) and is what the supervisor consults before
+    issuing a command it might not be able to complete synchronously - see
+    :class:`~okto_nexus.domain.harness.HarnessCapabilities`.
+
+    :meth:`send` is fire-and-forget from the caller's point of view even on
+    full-duplex transports: any reply is delivered later as a
+    :class:`~okto_nexus.domain.harness.HarnessEvent` through :meth:`events`,
+    never as this call's return value. This is what makes a ``send_only``
+    connector (D7b, ``cc-socks``) satisfy the SAME port as a full-duplex one
+    (Pi, Codex, Claude Code primary) with no special-cased call shape - only
+    the capability declaration differs, never the method signature.
+    """
+
+    capabilities: HarnessCapabilities
+
+    def start(self, uow: UnitOfWork, *, owning_agent_id: str) -> HarnessSession:
+        """Establish the session (spawn a child, or bind to a discovered peer).
+
+        Returns the initial :class:`~okto_nexus.domain.harness.HarnessSession`
+        in ``STARTING`` status. For a D7b attach connector the returned
+        session's id is the OBSERVED peer identity, not server-minted (see
+        the ``HarnessSession`` docstring) - ``start`` binds to an already-live
+        peer rather than spawning one.
+        """
+        ...
+
+    def send(self, session: HarnessSession, command: HarnessCommand) -> None:
+        """Deliver ``command`` to the session. Never blocks for a reply.
+
+        Raises if ``command.verb`` is not one the connector's
+        ``capabilities`` can honour for this session (e.g. ``steer`` against
+        a ``send_only`` connector) - the caller is expected to have checked
+        ``capabilities`` first; this is the backstop, not the primary gate.
+        """
+        ...
+
+    def events(self) -> Any:
+        """Return an iterable/iterator of normalised inbound
+        :class:`~okto_nexus.domain.harness.HarnessEvent` occurrences.
+
+        Typed ``Any`` here (rather than a concrete generator/queue type) so
+        adapters are free to back this with whatever their transport's
+        native pump looks like (a thread-fed queue for child-process stdio,
+        an asyncio stream for a socket); the CALLER only ever sees
+        ``HarnessEvent`` instances out of it, never a native envelope.
+        """
+        ...
+
+
+@runtime_checkable
+class HarnessSubscriberRegistry(Protocol):
+    """In-process push registry for harness events (D1).
+
+    D1 is explicit that the supervisor lives in-process with ``serve`` and
+    that push is via an in-memory registry - the SQLite write of a
+    :class:`~okto_nexus.domain.harness.HarnessEvent` is durability only, NEVER
+    the notification path, and ``SleepPollWaiter`` must not appear anywhere
+    in the harness path. This port is that registry's contract: callers
+    :meth:`subscribe` to a session and are :meth:`publish`-ed to directly, in
+    the same process, with no polling loop in between.
+    """
+
+    def subscribe(self, session_id: str, callback: Any) -> Any:
+        """Register ``callback`` to receive events for ``session_id``.
+
+        Returns an opaque handle; pass it to :meth:`unsubscribe` to stop
+        receiving. ``callback`` is invoked with a single
+        :class:`~okto_nexus.domain.harness.HarnessEvent` positional argument,
+        synchronously, in-process - never via a queue that requires polling
+        to drain.
+        """
+        ...
+
+    def unsubscribe(self, handle: Any) -> None:
+        """Remove a previously registered subscription."""
+        ...
+
+    def publish(self, event: HarnessEvent) -> None:
+        """Push ``event`` to every subscriber currently registered for its
+        ``session_id``. Does not touch storage; durable persistence of the
+        event is a separate, explicit write the caller performs alongside
+        this call (D1), not a side effect of it.
+        """
         ...
 
 
