@@ -1,196 +1,243 @@
-# EV-INDEX — Phase 4 campaign consolidation
+# EV-INDEX — corrected for Phase 5 (`c3a6b42`)
 
-Captured: 2026-09-20. Commit under review: `b661538` (`feature/harness-integrations`).
-Built by reading every file in `docs/harness-integrations/evidence/` directly — not from the
-stage summaries handed to this task, which do not reconcile with the evidence (see "Deltas from
-the stage summaries" below).
+Captured: 2026-09-20. Commit under review: `c3a6b42` (`feature/harness-integrations`), the tip of
+the Phase 5 "close the Phase 4 failures" pass. This supersedes the Phase 4 index (preserved at
+`b661538`/`e4b2fe7`, git-history-only now) which was STALE at HEAD: it predates the Phase 5 commit
+that closed 13 of its FAILED rows and its 1 UNRUN row.
 
-Legend: **PASSED** = committed evidence file with real captured output proves the case.
-**FAILED** = committed evidence proves the case's literal claim does NOT hold (a real,
-reproduced defect or a falsified claim — not a flake). **NOT-APPLICABLE** = a capability the
-case exercises does not exist on this connector, by frozen design, with the reason stated.
-**UNRUN** = the task's own definition is "no evidence file exists." This index extends that by
-one case (INT-05/H-CX): an evidence file DOES exist, but it self-reports that the one piece of
-proof INT actually requires — a real-binary capture — was not taken, only a capability-flag
-assertion and a fake-based ordering test. Treating that as UNRUN rather than PASSED is the
-stricter, evidence-rule-consistent reading; it is called out explicitly here so it is not
-mistaken for a zero-evidence case.
+This index was built by (1) reading every changed file in the `c3a6b42` diff against `e4b2fe7`,
+(2) reading the new/updated evidence files, and (3) INDEPENDENTLY RE-TESTING every one of the 14
+previously-failing cases myself — not by trusting the six agents' reports. Three findings below
+come from my own live reproduction, not from the committed evidence files:
 
-Granularity: INT and RES are written `{H}`-per-case in the plan, so this index gives one row per
-(case × harness) rather than collapsing harnesses together — collapsing hides exactly the rows
-that differ by harness (e.g. RES-A2 passes for pi, fails for codex and claude-code stream).
+- **RES-B1 (H-PI), the critical case** — reproduced live via a route the new unit test does NOT
+  take: writing a 60,000-deep balanced JSON array directly to the real `pi` child's stdin pipe
+  (not through `_PiTransport.request()`). Result: `RecursionError` surfaced as a `line_error`
+  event, `is_alive()` stayed `True` throughout, and a genuine subsequent push event
+  (`{"type": "push", "kind": "queue_update"}`) was delivered 1 second later. Confirms the reader
+  thread survives and keeps delivering. No unbounded `self._proc.wait()` remains anywhere in
+  `pi.py` (`grep -n "\.wait("` — every call site now carries a `timeout=`).
+- **SYS-03/UAT-05** — the committed evidence (`EV-SYS-003-FOLLOWUP-target-grammar-fix.md`) only
+  live-reproduces the `direct` strategy against a real hub/real pi child (event count 7→11). The
+  task explicitly requires testing `direct` AND at least one of `capability`/`role`/`tag`; that
+  second live test was missing. I ran it myself: real `okto-nexus serve` (port 8392), a real `pi`
+  child (backend `zai/glm-5.3`), a second agent identity (`sys03role_probe`) sending
+  `message_create` with `{"strategy": "role", "role": "reviewer"}` — event count went 0 → 12, with
+  real `turn_started`/`output_delta`/`turn_completed` events, confirming the fix is not
+  `direct`-only.
+- **EV-OPS-001 (orphaned harness children on unclean server exit)** — NOT touched by the Phase 5
+  diff (`git diff --stat e4b2fe7..HEAD` has zero hits for `serve`/`signal`/`main`, and no new/
+  changed evidence file exists for it). I tested it directly anyway, since the task asked for a
+  real result either way: real `serve`, real live `pi` session (PID 9458, PPID = the serve
+  process's PID 9205), then `kill -9` on the serve process. Result THIS run: no orphan — PID 9458
+  was gone within 2s, not reparented to `launchd`. This differs from EV-OPS-001's original finding
+  (two `pi --mode rpc` children survived 1.5h, PPID=1), but that finding was against a PATH-shim
+  wrapper (`python3 .../bin/pi`) built because `harness_open` lacked backend selection at the
+  time — the shim no longer exists now that backend selection landed. My result is consistent with
+  "the real `pi` binary notices its stdin pipe break (EOF) when the parent dies and exits itself,"
+  which is incidental self-cleanup, NOT a deliberate reap by `okto-nexus serve`. Nothing in the
+  code guarantees this (no SIGCHLD/atexit/process-group-kill logic was added), so a differently-
+  timed kill (e.g., mid-turn, mid-write) or a future harness binary that doesn't watch stdin could
+  still orphan. **Scored NOT-APPLICABLE-TO-THIS-RUN below, not PASSED** — see SYS-10 row.
+
+Legend unchanged from Phase 4: **PASSED** = committed evidence (or, where noted, my own live
+reproduction this session) proves the case. **FAILED** = proven not to hold. **NOT-APPLICABLE** =
+capability doesn't exist on this connector, by design, reason stated. **UNRUN** = no evidence
+file exists.
 
 H-PI = pi 0.85.1, H-CX = codex 0.144.6, H-CC = Claude Code stream-json (D7a),
 H-CA = Claude Code cc-socks attach (D7b).
 
 ---
 
-## INT — Integration suite (32 rows: 8 cases × 4 harnesses)
+## Rows changed since Phase 4 (the 14 originally-failing cases)
 
-| Case ID | Status | Evidence file | Note |
-|---|---|---|---|
-| INT-01 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | Real binary, handshake 0.959s |
-| INT-02 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | |
-| INT-03 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | |
-| INT-04 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | 12 push lines, 0 client writes, machine-checked |
-| INT-05 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | Real tool call, NEXT_TURN_BOUNDARY confirmed live |
-| INT-06 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | settle-before-ack confirmed live |
-| INT-07 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | Both halves: no built-in resume (by design) + `extra_args` escape hatch proven; session_id cosmetic mismatch on reconnect disclosed |
-| INT-08 (H-PI) | PASSED | EV-PI-INT-001-live-real-pi.md | Real SIGKILL, 10ms detection |
-| INT-01 (H-CX) | PASSED | EV-CX-001-int-cases.md | Raw capture + `test_live_against_real_codex_lan_box` |
-| INT-02 (H-CX) | PASSED | EV-CX-001-int-cases.md | |
-| INT-03 (H-CX) | PASSED | EV-CX-001-int-cases.md | |
-| INT-04 (H-CX) | PASSED | EV-CX-001-int-cases.md | `client_initiated=0`, machine-checked over 45.71s |
-| INT-05 (H-CX) | **UNRUN** | EV-CX-001-int-cases.md | Evidence file self-labels "PARTIAL": capability flag + fake-ordering test only; live steer capture against the real binary explicitly NOT taken (disclosed gap, time-budget). INT requires real-binary proof — not met. |
-| INT-06 (H-CX) | PASSED | EV-CX-001-int-cases.md | Caveat disclosed: interrupt fired pre-content-stream, not genuine mid-stream cancel |
-| INT-07 (H-CX) | PASSED | EV-CX-001-int-cases.md | Verbatim `-32600 thread not found` on fresh process |
-| INT-08 (H-CX) | PASSED | EV-CX-001-int-cases.md | 6 existing tests, all green |
-| INT-01 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | |
-| INT-02 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | |
-| INT-03 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | |
-| INT-04 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | 4-turn trace, 1 interrupt, zero stray client writes |
-| INT-05 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | Real IMMEDIATE steer confirmed |
-| INT-06 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | Minor finding disclosed: `end()` immediately after `interrupt()` with no intervening turn → real exit(1), 3/3 reproducible |
-| INT-07 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | Stable session_id across turns proven; no process-restart resume exists at all (stated as genuine gap, not silently assumed) |
-| INT-08 (H-CC) | PASSED | EV-CC-003-int-wire-trace-and-lifecycle.md | Incl. 2 new tests this session (unknown-verb) |
-| INT-01 (H-CA) | PASSED | INT-01-02-08-claude-code-attach-real-session.md | Real live interactive session, dedicated disposable pid |
-| INT-02 (H-CA) | PASSED | INT-01-02-08-claude-code-attach-real-session.md | Send-half proven via tmux capture-pane; receive-half N/A per capabilities. New finding: CC 2.1.278 now gates cross-session inbound behind an operator approval prompt — not in ADR D7b |
-| INT-03 (H-CA) | NOT-APPLICABLE | INT-01-02-08-claude-code-attach-real-session.md | `send_only=True`, no inbound channel of any kind — nothing to trace fidelity against |
-| INT-04 (H-CA) | NOT-APPLICABLE | INT-01-02-08-claude-code-attach-real-session.md | No read loop exists to poll with (trivially true, not tested) |
-| INT-05 (H-CA) | NOT-APPLICABLE | INT-01-02-08-claude-code-attach-real-session.md | `steer_timing=None`; no steer verb on this transport |
-| INT-06 (H-CA) | NOT-APPLICABLE | INT-01-02-08-claude-code-attach-real-session.md | No interrupt verb on this transport |
-| INT-07 (H-CA) | NOT-APPLICABLE | INT-01-02-08-claude-code-attach-real-session.md | `observes_session_end=False`; connector never spawns anything to reconnect to |
-| INT-08 (H-CA) | PASSED | INT-01-02-08-claude-code-attach-real-session.md | All 4 sub-cases incl. real abrupt child death (tmux kill) |
+| Case ID | Phase 4 status | Phase 5 status | Evidence | Note |
+|---|---|---|---|---|
+| INT-05 (H-CX) | UNRUN | **PASSED** | EV-CX-001-int-cases.md + EV-CX-001-raw_capture_steer.jsonl | Real live steer capture against the real codex binary now taken; steer landed genuinely mid-stream (t=11.72s into a counting turn), full re-ack→item/completed(steered)→reasoning→completed ordering captured |
+| RES-A2 (H-CC) | FAILED — real defect | **PASSED** | EV-CC-004-res-class-a-shutdown-and-fanout.md | Per-consumer subscriber queues + `_event_history` backlog replace the single shared queue (mirrors pi's earlier C2 fix); code read confirms broadcast, not partition; covered by suite |
+| RES-A4 (H-CC) | FAILED — real defect | **PASSED** | EV-CC-004-res-class-a-shutdown-and-fanout.md | `start()`'s `OSError`/thread-start-failure paths now set `_closed_event` unconditionally; `events()` terminates |
+| RES-A2 (H-CX) | FAILED — real defect | **PASSED** | EV-CX-002-res-cases.md | Same shared-queue→per-consumer fan-out fix ported to codex.py; new test passes in the suite |
+| RES-A4 (H-CX) | FAILED — real defect | **PASSED** | EV-CX-002-res-cases.md | Same `_closed_event` fix ported to codex.py |
+| RES-C2 (H-CX) | FAILED — divergence | **PASSED** | EV-CX-002-res-cases.md | Fake's interrupt handler now emits `turn/completed(status="interrupted")`, matching the real capture's ack+complete ordering |
+| RES-A3 (H-PI) | FAILED — defect confirmed | **PASSED** | pi.py `_wait_for_exit_bounded` + my own live repro (see above) | Every `proc.wait()` call site now bounded (`timeout=`), escalates SIGTERM→SIGKILL like `close()` |
+| RES-B1 (H-PI) | FAILED — CRITICAL | **PASSED** | pi.py `_process_line`'s broad `except Exception` backstop + my own live repro (see above) | Deeply-nested-JSON RecursionError now caught by a second, broader except clause (`on_line_processing_error`), reader loop continues; confirmed live via raw stdin injection, a route the new unit test does not take |
+| RES-B3 (H-PI) | FAILED — defect confirmed | **PASSED** | Same fix as RES-A3 (same line) | |
+| SYS-03 | FAILED — falsified as worded | **PASSED** | EV-SYS-003-FOLLOWUP-target-grammar-fix.md (direct, live) + my own live repro (role, live) | New `InboxDeliveryNotifier` port + `HarnessSupervisor._on_inbox_delivery` forwards `message_create` deliveries to a live harness session's connector via the existing `send()`; verified for TWO strategies against a real hub/real pi child, not just `direct` |
+| UAT-05 | FAILED — as worded | **PASSED** | Same fix as SYS-03 | Same forward mechanism closes the input-direction gap UAT-05 found |
+| UAT-07 | FAILED — as worded | **PASSED** | docs/harness-integrations/operator-guide.md (397 lines, new) | Real operator-facing doc now exists; `_P_HARNESS_AGENT_ID`'s docstring rewritten to state the true, qualified post-fix behavior instead of the pre-fix false claim; doc points to EV-INDEX.md for proof rather than asserting unverified claims |
+| REG-01 | FAILED — as worded | **PASSED** | This file's own full-suite run | `timeout 900 uv run python -m pytest -q` → **1857 passed, 4 skipped, 0 failed**, reproduced by me this session, matching the task's own reference number exactly |
+| RES-A2 (H-CA) | FAILED — measured partition | **STILL FAILED — NOT TOUCHED** | RES-claude-code-attach.md (unchanged) | `claude_code_attach.py` (cc-socks) was NOT modified by the Phase 5 diff (`git diff --stat e4b2fe7..HEAD` has zero hits for this file). The deque-partition defect is exactly as Phase 4 left it. Same "latent, not reachable via the current supervisor" caveat as before still applies, but this is NOT one of the 13 the task's six agents actually closed — it was left open and Phase 5's own commit message ("close the Phase 4 failures") overstates this by omission. |
 
-## RES — Resilience suite (40 rows: 10 cases × 4 connectors)
-
-| Case ID | Status | Evidence file | Note |
-|---|---|---|---|
-| RES-A1 (H-CA) | PASSED | RES-claude-code-attach.md | Existing test cited |
-| RES-A2 (H-CA) | **FAILED** | RES-claude-code-attach.md | Case demands each consumer receive the FULL stream. Measured: 5,260 trials, zero loss/hang/raise, but the deque **partitions** across concurrent consumers rather than broadcasting to both — the literal requirement does not hold. Evidence file itself calls this "a documented deviation from the broadcast framing." Not reachable via the current supervisor (send_only connectors are always drained synchronously by one caller) — same "latent, not fixed" framing as the H-CC/H-CX RES-A2 failures below. |
-| RES-A3 (H-CA) | PASSED | RES-claude-code-attach.md | Structural: zero blocking primitives in the module |
-| RES-A4 (H-CA) | PASSED | RES-claude-code-attach.md | 2 new tests |
-| RES-B1 (H-CA) | NOT-APPLICABLE | RES-claude-code-attach.md | No reader loop exists (send-only, no inbound channel). Nearest analogue (malformed registry/key-file JSON, NUL-byte path) is tested and passes. |
-| RES-B2 (H-CA) | NOT-APPLICABLE | RES-claude-code-attach.md | No reader thread exists |
-| RES-B3 (H-CA) | PASSED | RES-claude-code-attach.md | Same structural check as RES-A3 |
-| RES-C1 (H-CA) | PASSED | RES-claude-code-attach.md | Justified against EV-CC-001's captured wire bytes |
-| RES-C2 (H-CA) | NOT-APPLICABLE | RES-claude-code-attach.md | No interrupt/abort verb exists on this transport |
-| RES-C3 (H-CA) | PASSED | RES-claude-code-attach.md | 3 fakes that genuinely reject/drop |
-| RES-A1 (H-CC) | PASSED | EV-CC-004-res-class-a-shutdown-and-fanout.md | Existing test |
-| RES-A2 (H-CC) | **FAILED — real defect** | EV-CC-004-res-class-a-shutdown-and-fanout.md | Single shared `queue.Queue`; two concurrent consumers split (not duplicate) a 7-event stream, 3/3 runs. Frozen module, reported not fixed. Reachability audited: latent — `harness_supervisor.py` only ever starts one pump thread per connector, so not reachable through today's own wiring, but a real, unguarded port-contract violation. |
-| RES-A3 (H-CC) | PASSED | EV-CC-004-res-class-a-shutdown-and-fanout.md | Structural, with 2 disclosed narrow exceptions (justified, not hazards) |
-| RES-A4 (H-CC) | **FAILED — real defect** | EV-CC-004-res-class-a-shutdown-and-fanout.md | `start()`'s `OSError` path never sets `_closed_event`; `events()` loops forever after a failed start. 100%-reproducible, 3/3 runs. Frozen module, reported not fixed. Reachability audited: latent (supervisor never calls `events()` after a `start()` failure), but a real defect at the connector's own API boundary — the exact pattern the sibling `pi.py`'s "C3 fix" exists to prevent. |
-| RES-B1 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | Existing test (shape-drifted stream_event) |
-| RES-B2 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | Structural (single `try/finally`) + 2 existing tests |
-| RES-B3 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | 3 bounded calls, ~20s worst case bound |
-| RES-C1 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | New: first raw wire capture for this connector, field-by-field justified. One divergence disclosed: fake never reproduces the real binary's post-interrupt-end exit(1); sits unasserted inside a currently-green test |
-| RES-C2 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | Fake's ack-then-result ordering matches the real capture |
-| RES-C3 (H-CC) | PASSED | EV-CC-005-res-class-b-and-c.md | 4 genuine failure-capable fake scenarios |
-| RES-A1 (H-CX) | PASSED | EV-CX-002-res-cases.md | 2 existing tests |
-| RES-A2 (H-CX) | **FAILED — real defect** | EV-CX-002-res-cases.md | New test FAILS in the suite (`total=5, A=5, B=0`), 3/3 isolated re-runs, identical every time (deterministic starvation, not a coin-flip race). Same one-shared-queue defect class as H-CC. Frozen module, reported not fixed. |
-| RES-A3 (H-CX) | PASSED | EV-CX-002-res-cases.md | New structural source-parsing test |
-| RES-A4 (H-CX) | **FAILED — real defect** | EV-CX-002-res-cases.md | New test FAILS in the suite. `transport.close()` sets the transport's own private flag, never the connector's `_closed_event`; `events()` never terminates after a failed `start()` with no explicit `close()`. 3/3 isolated re-runs, deterministic. Frozen module, reported not fixed. |
-| RES-B1 (H-CX) | PASSED | EV-CX-002-res-cases.md | Both case-specified shapes (empty method, array params) covered by existing tests |
-| RES-B2 (H-CX) | PASSED | EV-CX-002-res-cases.md | New, truly-concurrent test (child-death path) |
-| RES-B3 (H-CX) | PASSED | EV-CX-002-res-cases.md | Same structural test as RES-A3 |
-| RES-C1 (H-CX) | PASSED | EV-CX-002-res-cases.md | Justified against 3 new raw captures (turn, interrupt, thread-not-found) |
-| RES-C2 (H-CX) | **FAILED — divergence found** | EV-CX-002-res-cases.md | Case requires the fake to emit the REAL interrupt ordering. Real capture: ack + `turn/completed(interrupted)` together. The fake's handler acks and then emits **nothing further** — it never completes the interrupted turn at all, so no test can currently observe correct-or-wrong post-interrupt ordering. This is an omission, not an inversion (narrower than Pi's original C1), but the case's literal requirement ("emits the REAL ordering") is not met — the fake doesn't emit that state transition at all. Disclosed, not fixed (out of this pass's time budget per the evidence file). |
-| RES-C3 (H-CX) | PASSED | EV-CX-002-res-cases.md | 3 existing fail-modes + 1 new (rejected initialize) |
-| RES-A1 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | New sequential-recall test |
-| RES-A2 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | Pre-existing fan-out fix (C2), re-run and confirmed |
-| RES-A3 (H-PI) | **FAILED — defect confirmed** | EV-PI-RES-001-resilience-cases.md | `self._proc.wait()` at `pi.py:371`, no timeout, in `_read_stdout`'s `finally`. Reachable via a real exception mid-loop (see RES-B1) against a healthy child. Explicitly **supersedes EV-REV-003's earlier downgrade** of this same line ("not a genuine hang risk") — that downgrade assumed the loop could only exit via clean EOF; it can also exit via an uncaught exception, which lands on the same unbounded wait. |
-| RES-A4 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | Pre-existing C3 fix, re-run and confirmed |
-| RES-B1 (H-PI) | **FAILED — CRITICAL defect confirmed** | EV-PI-RES-001-resilience-cases.md | A syntactically-valid, deeply-nested JSON array (`RecursionError`, not `json.JSONDecodeError`) escapes the reader loop's only guard, lands on the unbounded `proc.wait()` above, and wedges every current and future `events()` consumer forever with no error surfaced anywhere. 30s continuous observation: never self-recovers; `is_alive()` stays `True` throughout, actively misleading. Frozen module, reported not fixed. |
-| RES-B2 (H-PI) | PASSED (with a stated gap) | EV-PI-RES-001-resilience-cases.md | Passes for the exit path it actually tests: two concurrent consumers both observe shutdown on a guarded child-death exit (new test, cited). It does NOT independently prove the property for the RES-B1 exit path (uncaught-exception-mid-loop), where by construction no shutdown signal is ever sent — the evidence file states this plainly as a corollary of RES-B1, not as a fourth separate defect. Counted as PASSED here (not FAILED) so the RES-A3/B1/B3 root cause is not booked four times in the totals; the gap is real and is fully captured under RES-B1/A3/B3 below. |
-| RES-B3 (H-PI) | **FAILED — defect confirmed** | EV-PI-RES-001-resilience-cases.md | Same line 371 as RES-A3 |
-| RES-C1 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | Cited (EV-REV-003) + independently reconfirmed live this session |
-| RES-C2 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | Cited (EV-REV-003, the C1 fix) |
-| RES-C3 (H-PI) | PASSED | EV-PI-RES-001-resilience-cases.md | 5 existing fail modes + 1 new (RES-B1's own trigger) |
-
-## SYS — System suite (10 rows)
-
-| Case ID | Status | Evidence file | Note |
-|---|---|---|---|
-| SYS-01 | PASSED | EV-SYS-002-boot-and-registration.md | Honest note carried from EV-SYS-001 F-02: signal is `schema_version=29`, no dedicated `"harness"` field, matching the repo's own `/info` convention |
-| SYS-02 | PASSED | EV-SYS-002-boot-and-registration.md | All 4 kind/substrate combos on one real hub, D3 registration confirmed for all 4 |
-| SYS-03 | **FAILED — falsified as worded** | EV-SYS-003-target-grammar-gap.md | Plan claims "a message routed via the existing target grammar reaches each harness." Empirically false: `message_create` reports success (`delivered_count:1`) but the pi child's own wire trace gained zero bytes. Static grep confirms zero call sites from the target-grammar resolver into `HarnessSupervisor.send`. A different, working mechanism exists (direct `session_id` addressing via `POST /harness/sessions/{id}/send`) but that is not what the case asked for. This also undercuts UAT-05 (see below). |
-| SYS-04 | PASSED | EV-SYS-004-005-009-multiharness-round-trip.md | Durable, replayable records with correct content for pi/codex/claude_code-stream. N/A for cc-socks attach by design (no harness→hub direction on that transport) — hub→harness half proven instead |
-| SYS-05 | PASSED | EV-SYS-004-005-009-multiharness-round-trip.md | Externally-observable half (wire trace, all 3 full-duplex harnesses, zero client-initiated writes in every push window) machine-checked. In-process fan-out is stated honestly as unobservable from outside this phase (no external push surface ships yet) and is instead carried by the SYS-06/SYS-07 structural proofs |
-| SYS-06 | PASSED | EV-SYS-006-no-sleeppollwaiter-structural.md | Real transitive import-closure over 90 modules (0 hits) + targeted grep, both structural not timing |
-| SYS-07 | PASSED | EV-SYS-007-durability.md | Code-ordering (publish before persist, unconditional) + real subscriber-crash exercise + real `BEGIN EXCLUSIVE` DB-lock contention against the live server. Disclosed: the "a write that ACTUALLY fails past its busy-timeout" branch was not forced to fire empirically, only verified by code reading |
-| SYS-08 | PASSED | EV-SYS-008-isolation.md | Real SIGKILL to pi's child; hub stayed up, both siblings completed fresh real turns afterward. Disclosed nuance: the killed session's terminal status reads `ENDED`, not `ERRORED` — an unexpected crash and a graceful close currently look identical from the outside |
-| SYS-09 | PASSED | EV-SYS-004-005-009-multiharness-round-trip.md | 3 harnesses, distinct prompts, fully concurrent, zero cross-talk in either direction |
-| SYS-10 | PASSED | EV-SYS-010-clean-shutdown.md | Targeted (12 original descendant pids) + broad `ps` sweep, both clean after group SIGTERM |
-
-## REG — Regression suite (7 rows)
-
-| Case ID | Status | Evidence file | Note |
-|---|---|---|---|
-| REG-01 | **FAILED — as worded** | this file + EV-CX-002-res-cases.md | Real, reproduced run this session: **2 failed, 1822 passed, 4 skipped** (160.80s). Baseline arithmetic, accounted for: EV-SYS-001's own independently-reproduced reference was 1810 passed/4 skipped; `git diff` shows exactly 14 new `def test_` functions added across the four connector test files this Phase-4 campaign touched (4 + 2 + 5 + 3); 1810 + 14 − 2 (the two that fail) = **1822**, matching exactly — the delta is fully explained, nothing unaccounted for. The plan's bar is "zero pre-existing failures." The 2 failures are not flakes or regressions in unrelated code — they are two tests the codex-connector agent deliberately committed *failing*, each asserting a specific real defect (RES-A2, RES-A4 above) in the FROZEN `codex.py`. Read charitably this is "0 accidental regressions, 2 intentional defect-witness failures"; read against the plan's literal "zero...failures" text, the gate is red. Also flagged: **inconsistent convention across the three connector-owning agents** — codex committed failing assertions; claude-code-stream explicitly declined to (its own EV-CC-004 states why) and used scratchpad repro scripts instead; pi wrote a test that *passes* while proving the same class of defect via instrumentation. All three are legitimate under "do not fix frozen code," but the resulting suite-level number is genuinely ambiguous as a result, not a reporting error. |
-| REG-02 | PASSED | this file | `tests/test_http_parity.py` — 5 passed together with REG-03 |
-| REG-03 | PASSED | this file | `tests/test_import_boundary.py` — passed |
-| REG-04 | PASSED | this file (full-suite run) | `tests/test_serve_lock.py` (5 tests) ran clean inside the full 1822-passed run; no dedicated evidence file exists for it, confirmed by direct collection |
-| REG-05 | PASSED | this file (full-suite run) | Replay suite (`test_replay_cli.py`, `test_replay_domain.py`, `test_replay_harness.py`, `test_replay_http.py`, `test_replay_marker.py`) ran clean inside the full run; no dedicated evidence file exists, confirmed by direct collection |
-| REG-06 | PASSED | this file | `uv run ruff check .` → All checks passed |
-| REG-07 | PASSED | EV-SYS-001-phase35-real-socket.md | Real SQLite file, 3 sequential `MigrationRunner.apply()` calls (empty→29, idempotent-same-factory, idempotent-fresh-factory) |
-
-## UAT — User Acceptance suite (7 rows)
-
-| Case ID | Status | Evidence file | Note |
-|---|---|---|---|
-| UAT-01 | PASSED | EV-UAT-01-02-03-two-turn-conversations.md | Real pi, real 2-turn conversation, same session, public HTTP surface only |
-| UAT-02 | PASSED | EV-UAT-01-02-03-two-turn-conversations.md | Real codex, LAN box. First attempt failed on a scratch-config setup bug (disclosed, root-caused, not a connector defect), re-run passed |
-| UAT-03 | PASSED | EV-UAT-01-02-03-two-turn-conversations.md | Real claude, stable session_id across 2 turns |
-| UAT-04 | PASSED | EV-UAT-04-cc-socks-inject-real-session.md | Real injection into a dedicated, disposable interactive session; end-to-end proof after approving CC's own approval gate |
-| UAT-05 | **FAILED — as worded** | EV-UAT-05-target-grammar-asymmetry.md | Case asks whether an operator addresses a harness THROUGH the target grammar (input direction). Empirically falsified, independently reproducing SYS-03. The OUTPUT direction (harness activity delivered via the grammar through `notify_target`) genuinely works — a real, useful finding — but is not what the case asked. Net: "first-class agent" holds for output, not for input. |
-| UAT-06 | PASSED | EV-UAT-06-graceful-degradation.md | Simulated real cc-socks registry breakage: fails in 13ms with an actionable error; primary D7a path unaffected on the same hub immediately after |
-| UAT-07 | **FAILED — as worded** | EV-UAT-07-documentation-gap.md | Zero operator-facing documentation exists anywhere under `docs/`, `README.md`, or `CHANGELOG.md` for this feature. The fair "kinds endpoint + live MCP tool schema" version gets further but surfaces a materially FALSE claim in shipped tool text (`_P_HARNESS_AGENT_ID` tells operators to use the target grammar — the exact claim SYS-03/UAT-05 falsified) and omits the backend-selection safety gap (below) entirely. |
+**Correction to the task's premise:** the task states "Six agents just reported closing 14
+failures." Verified count: **13 of the 14** are genuinely closed (with the two caveats above: the
+SYS-03/UAT-05 fix's live proof needed a second strategy test, which I supplied; EV-OPS-001 is a
+15th, separately-tracked open item, not one of the 14, and was never claimed fixed). RES-A2 (H-CA)
+— the deque-partition defect in Claude Code's cc-socks attach connector — remains open. This is a
+real, checkable gap in the "14 closed" claim, not a rounding issue.
 
 ---
 
-## Totals
+## Everything else (unchanged from Phase 4, still holds at `c3a6b42`)
+
+All PASSED/NOT-APPLICABLE rows not listed above are carried forward unchanged; Phase 5 touched
+only the connectors/files listed in its own diffstat (`claude_code_stream.py`, `codex.py`,
+`pi.py`, `harness_supervisor.py`, `ports.py`, `messages.py`, `inbox_notifier.py`, the MCP
+`harness.py`/`messages.py` tool composition roots, `routes.py`, `surface_metrics.py`, plus tests
+and docs) and nothing else in the application regressed (full suite: 1857 passed, 4 skipped,
+0 failed — see Totals). The full Phase 4 tables (INT 32 rows, RES 40 rows, SYS 10 rows, REG 7
+rows, UAT 7 rows) are reproduced below with the 13 corrected rows folded in and re-totaled.
+
+### INT — Integration suite (32 rows)
+
+Unchanged from Phase 4 except INT-05 (H-CX), corrected above. 26 PASSED, 5 NOT-APPLICABLE (all
+H-CA structural non-capabilities), **1 → now PASSED** (INT-05/H-CX). **New total: 27 PASSED, 5
+NOT-APPLICABLE, 0 UNRUN.**
+
+### RES — Resilience suite (40 rows)
+
+Phase 4: 28 PASSED, 9 FAILED, 3 NOT-APPLICABLE. Phase 5 fixed 8 of the 9 FAILED rows (RES-A2/A4
+H-CC, RES-A2/A4/C2 H-CX, RES-A3/B1/B3 H-PI — the last three being one root cause, counted once in
+the defect register). **RES-A2 (H-CA) remains FAILED — not touched.** **New total: 36 PASSED, 1
+FAILED (RES-A2/H-CA), 3 NOT-APPLICABLE.**
+
+### SYS — System suite (10 rows)
+
+Phase 4: 9 PASSED, 1 FAILED (SYS-03). Phase 5 fixed SYS-03, verified for two target-grammar
+strategies (direct + role), not just the one the committed evidence covered. **New total: 10
+PASSED, 0 FAILED.**
+
+Separately tracked, NOT one of the 10 plan rows: **EV-OPS-001** (orphaned children on unclean
+server exit) remains genuinely open — no code change addresses it, and my own live retest (SIGKILL
+to a live server with a live pi session) did not reproduce THIS run's orphan, but nothing
+guarantees it can't recur (see note at top of this file). SYS-10 itself still only proves the
+explicit-close teardown path, exactly as Phase 4 disclosed; it was never split into two cases as
+EV-OPS-001 recommended.
+
+### REG — Regression suite (7 rows)
+
+Phase 4: 6 PASSED, 1 FAILED (REG-01, "2 intentional defect-witness failures"). Phase 5's fixes
+also removed the two failing defect-witness tests' failure condition (the defects themselves are
+fixed, so the tests that asserted them now pass instead of fail). **New total: 7 PASSED, 0
+FAILED.** Reproduced directly this session:
+
+```
+$ timeout 900 uv run python -m pytest -q
+1857 passed, 4 skipped, 2 warnings in 155.12s (0:02:35)
+$ timeout 200 uv run python -m pytest -q tests/test_http_parity.py tests/test_import_boundary.py
+5 passed in 0.68s
+$ uv run ruff check .
+All checks passed!
+```
+
+This EXACTLY matches the task's own reference point ("1857 passed, 4 skipped, 0 failed at
+c3a6b42"). One pre-existing warning is a `PytestUnhandledThreadExceptionWarning` from
+`test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises` — an intentional
+test of `pi.py`'s own exception-in-callback backstop, not a failure; the warning is the test
+deliberately triggering the exact condition it's proving is survived.
+
+### UAT — User Acceptance suite (7 rows)
+
+Phase 4: 5 PASSED, 2 FAILED (UAT-05, UAT-07). Phase 5 fixed both. **New total: 7 PASSED, 0
+FAILED.** UAT-07 spot-checked directly (see "Docs" section of the verdict below) — the guide is
+usable, not narrated, and does not claim behavior that doesn't exist.
+
+---
+
+## Totals (c3a6b42, corrected)
 
 | Suite | PASSED | FAILED | NOT-APPLICABLE | UNRUN | Total |
 |---|---|---|---|---|---|
-| INT | 26 | 0 | 5 | 1 | 32 |
-| RES | 28 | 9 | 3 | 0 | 40 |
-| SYS | 9 | 1 | 0 | 0 | 10 |
-| REG | 6 | 1 | 0 | 0 | 7 |
-| UAT | 5 | 2 | 0 | 0 | 7 |
-| **Total** | **74** | **13** | **8** | **1** | **96** |
+| INT | 27 | 0 | 5 | 0 | 32 |
+| RES | 36 | 1 | 3 | 0 | 40 |
+| SYS | 10 | 0 | 0 | 0 | 10 |
+| REG | 7 | 0 | 0 | 0 | 7 |
+| UAT | 7 | 0 | 0 | 0 | 7 |
+| **Total** | **87** | **1** | **8** | **0** | **96** |
 
-The RES FAILED count (9) is not 9 independent defects: pi's 3 FAILED rows (RES-A3, RES-B1,
-RES-B3) are three views of ONE root cause (`pi.py:371`'s unbounded `proc.wait()`, reached via the
-`RecursionError` gap), stated as one defect in the defect register below, not three. The other 6
-FAILED rows (H-CC RES-A2/A4, H-CX RES-A2/A4/C2, H-CA RES-A2) are five genuinely distinct findings.
+Remaining open items, ranked:
 
-No case in this campaign has zero evidence — the UNRUN count (1) is INT-05/H-CX, which has an
-evidence file that explicitly discloses its own real-binary proof is missing, not a case nobody
-looked at. Every FAILED row above is a reproduced defect or an empirically falsified claim with
-committed real output, not a guess.
+1. **RES-A2 (H-CA)** — cc-socks attach's `events()` still partitions (not broadcasts) across
+   concurrent consumers. Not touched by Phase 5. Same "latent under today's wiring" caveat as
+   before, but a real port-contract violation if a future caller ever registers two concurrent
+   consumers on one attach session.
+2. **EV-OPS-001** — no deliberate child-reaping logic exists in `serve`'s shutdown path. My retest
+   this session did not reproduce an orphan for a SIGKILL against an idle live session with the
+   real `pi` binary, but this is incidental (stdin EOF causes `pi` to self-exit), not a guarantee —
+   untested: mid-turn kill, mid-write kill, SIGTERM vs SIGKILL, and the codex/claude_code
+   connectors under the same scenario. SYS-10 was never split as EV-OPS-001 itself recommended.
 
-## Deltas from the stage summaries handed to this task
+---
 
-The task's own stage summaries (INT 15P/3F, 14P/3F, 16P/2F, 12P/0F; SYS 7P/1F; UAT 5P/2F) do not
-reconcile against the evidence files read directly for this index. Stated as fact, not theory:
+## Evidence quality spot-check (adversarial sample, 4 files: 1 INT, 1 SYS, 1 UAT, 1 RES)
 
-- Summed, the four INT stage numbers give 57 passed / 8 failed across 65 rows — neither the row
-  count (65) nor the failed count (8, where this index finds 0 FAILED in INT; every INT defect
-  this index found lives in RES) matches this index's INT table (32 rows, 26P/5NA/1 UNRUN, 0
-  FAILED). The two suites cannot be reconciled from the summary numbers alone with the information
-  available in this task; this index does not guess why and instead reports its own count, built
-  from the evidence files directly, as the instruction requires.
-- SYS "7P/1F" undercounts against this index's 10-row SYS table (9 PASSED / 1 FAILED, SYS-03) —
-  SYS-04 and SYS-05 both have real, dedicated evidence files this index credits as PASSED that the
-  7-count total does not appear to include.
-- UAT "5P/2F" matches this index's UAT verdicts exactly (5 PASSED; UAT-05 and UAT-07 FAILED).
+- **EV-CX-001-int-cases.md (INT)** — the new `EV-CX-001-raw_capture_steer.jsonl` capture is real
+  captured wire bytes with monotonic timestamps (t=11.725 steer write, t=11.7255 ack, t=34.9964
+  item/completed with steered content) — not narrated. The file's own conclusion ("steer literally
+  raced the first content chunk and still landed mid-stream") is exactly what the timestamps show,
+  not an overreach.
+- **EV-SYS-003-FOLLOWUP-target-grammar-fix.md (SYS)** — real captured `harness_event_list` output
+  before/after (7→11), with the new events' native kinds listed. Conclusion is properly scoped to
+  what was tested: explicitly states only `direct` was live-verified and disclosed `tag`'s
+  pre-fix-failure was inferred, not independently captured. This IS the honest disclosure pattern
+  the task's rule 6 asks for — the one gap (no live capability/role/tag rerun) is exactly what I
+  closed independently above, not a fabricated claim.
+- **EV-UAT-07 fix (docs/harness-integrations/operator-guide.md, UAT)** — read start-to-finish.
+  Followed the "attach a pi session and send a turn" walkthrough manually against my own SYS-03
+  live-test session; the documented `harness_open`/`harness_event_list` call shapes match what the
+  live server actually returned, field for field. Not narrated — it reads as instructions an
+  operator could execute verbatim.
+- **EV-PI-RES-001 / pi.py's RES-B1 fix (RES)** — the code comments make a specific, falsifiable
+  claim ("RecursionError... confirmed live") and my own independent repro (different route,
+  different injected payload) reproduces the same behavior. No overreach found in this sample.
 
-This index is built from the evidence files, not the summaries, per the task's own instruction.
+No new instance of the EV-REV-003/SYS-10 "conclusion exceeds the test" pattern was found in this
+sample, beyond the EV-OPS-001 gap already tracked above (which the evidence itself does NOT
+overclaim — EV-OPS-001 was written as an explicit, disclosed open finding, not a false PASS).
 
-## Process nit (not a status, worth recording)
+---
 
-The plan's own exit criteria say a struck case "carries a written justification in this file"
-(`plans/harness-integrations/01-test-plan.md`). H-CA's five struck INT cases (INT-03..07) and its
-three struck RES cases (RES-B1, RES-B2, RES-C2) carry their justification only in the evidence
-files, not in the plan itself — the plan was never amended to record the strikes. Not scored as a
-case status above; flagged here because the exit criteria technically require it.
+## VERDICT
+
+**The DoD is met for 3 of the 4 harnesses' full-duplex paths, and NOT fully met overall.** Plain
+language:
+
+- **No-polling**: TRUE, both directions. Structural grep across the entire harness path (pi,
+  codex, claude_code stream, the new `InboxDeliveryNotifier`) found zero `time.sleep` loops and
+  zero `SleepPollWaiter` usage; the only bounded waits are `Queue.get(timeout=...)` used to
+  re-check a shutdown flag, which is not polling by the task's own stated distinction — no event
+  is ever missed by that timeout, only idle-wait re-checks happen on it.
+- **Native, non-polling communication with pi, codex, and claude_code (stream)**: TRUE, and the
+  previously-broken target-grammar routing (`direct`/`capability`/`role`/`tag` reaching a live
+  harness) now genuinely works — verified against a real hub, a real pi child, and two different
+  target strategies (not just the one the shipped evidence covered).
+- **claude_code (cc-socks attach)**: the send-half works and is well-evidenced; RES-A2's
+  fan-out-partition defect in this connector was NOT touched by this fix pass and remains exactly
+  as broken as Phase 4 found it. It is currently unreachable through the real supervisor (only one
+  consumer is ever registered today), so it is not a live operator-facing bug today — but it is a
+  real, uncorrected defect in a connector the DoD names as one of the "3 harnesses."
+- **Evidences / full system / integration / regression / UAT test cases with undisputable
+  evidence**: largely TRUE now. 87 of 96 plan rows are genuinely PASSED with real captured output
+  (not narrated), including a fresh, reproduced 1857/4/0 full-suite run and my own independent
+  re-verification of the two most consequential fixes (RES-B1's RecursionError wedge, and the
+  SYS-03/UAT-05 target-grammar routing) via routes the shipped tests did not themselves exercise.
+  One case (RES-A2/H-CA) is honestly FAILED, not swept under a green table.
+- **EV-OPS-001 is real and still open.** It sits outside the plan's 55 named cases (it was found
+  by a process sweep, not a test), so it does not move any row in the table above to FAILED, but
+  it is a genuine, unresolved resource-leak risk under the exact "server exits with a live
+  session" scenario an operator will eventually hit.
+
+**What remains, ranked:**
+1. Fix `claude_code_attach.py`'s RES-A2 fan-out defect (per-consumer queues, same pattern already
+   applied to pi/codex/claude_code-stream).
+2. Add deliberate child-reaping to `serve`'s shutdown path (signal handler or `atexit` sweep over
+   tracked harness PIDs/process groups) so EV-OPS-001 stops depending on each harness binary's own
+   incidental EOF-handling behavior, and split SYS-10 into the two cases EV-OPS-001 itself asked
+   for.
+3. (Minor, disclosed, not a gate item) `surface_metrics.py`'s `harness_backend_h1_h2` ledger entry
+   (1680) is stale after the `_P_HARNESS_AGENT_ID` docstring's latest rewrite; low priority.
+
+**What a reviewer should spot-check first:** RES-A2 (H-CA) in `RES-claude-code-attach.md` (confirm
+it's genuinely untouched — `git diff e4b2fe7..HEAD -- src/okto_nexus/adapters/outbound/harness/claude_code_attach.py`
+returns nothing), and EV-OPS-001's open status (confirm no shutdown-signal-handling code exists in
+`serve`'s entrypoint that this index missed).
