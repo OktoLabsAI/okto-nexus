@@ -41,3 +41,6 @@ frontend/node_modules/
 
 frontend/tsconfig.tsbuildinfo
 
+
+# local-only harness credentials (never commit)
+.secrets/
