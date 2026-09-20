@@ -2,7 +2,9 @@
 
 - Branch: `feature/harness-integrations` (no commit to `main` until fully validated)
 - Design authority: [ADR 0004](../../docs/design/0004-harness-integrations.md)
-- Status: Phases 0 and 1 COMPLETE; Phase 2 (freeze the port) next
+- Status: Phases 0, 1 and 2 COMPLETE (port frozen: `domain/harness.py` +
+  `HarnessConnector`/`HarnessSubscriberRegistry` in `application/ports.py`,
+  commit `b0db60b`); Phase 3 (connectors, one agent each) next
 - Last updated: 2026-09-20
 
 ## Definition of Done (verbatim from the request)
