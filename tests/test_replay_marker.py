@@ -1,7 +1,7 @@
 """TC5 - surface + marker tests (spec c7c1f834, TS11 + TS13).
 
 TS11: the ``replay`` pytest marker is registered (no unknown-marker warning) and
-selectable. TS13: SURFACE_REVISION stays 24 (no new MCP tool) and
+selectable. TS13: SURFACE_REVISION stays 24 at THIS test's original landing (no new MCP tool) and
 ``nexus_info.features`` exposes ``feature_replay`` derived from
 FEATURE_FLAG_FIELDS, reflecting the live flag. (Full stdio<->HTTP tool parity is
 owned by test_http_parity; here we assert the surface revision + feature echo.)
@@ -46,9 +46,10 @@ def test_ts13_surface_revision_unchanged() -> None:
     # I8 shipped no MCP tool (BR7); the surface later moved to 25 when the
     # attachable-policies B3 reshaped agent_whoami/artifact_get (spec 80624c1a),
     # then to 26 when communication presets added the self-only whoami block
-    # (spec 6f961722), and ultimately to 33 for adapter-backed artifact payloads
-    # plus the HTML artifact type - still no new MCP tool.
-    assert SURFACE_REVISION == 33
+    # (spec 6f961722), to 33 for adapter-backed artifact payloads plus the HTML
+    # artifact type, and to 34 for the harness-connector surface (ADR 0004) -
+    # still no replay-slice tool touched.
+    assert SURFACE_REVISION == 34
 
 
 def test_ts13_feature_replay_is_a_declared_flag() -> None:
@@ -58,7 +59,7 @@ def test_ts13_feature_replay_is_a_declared_flag() -> None:
 def test_ts13_nexus_info_features_reflect_flag_off() -> None:
     hub = build_hub()  # default: feature_replay OFF
     info = _ok(hub.tools["nexus_info"]())
-    assert info["surface_revision"] == 33
+    assert info["surface_revision"] == 34
     assert "feature_replay" in info["features"]
     assert info["features"]["feature_replay"] is False
     # features are exactly the declared flag fields

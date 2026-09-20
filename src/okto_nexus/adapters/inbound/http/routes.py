@@ -35,6 +35,7 @@ from ....domain.approvals import (
     validate_status_filter,
 )
 from ....domain.base import new_id
+from ....domain.harness import validate_harness_kind
 from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
 from ....domain.health import is_valid_window as is_valid_health_window
 from ....domain.messages import normalize_artifacts
@@ -56,6 +57,16 @@ from ..mcp.projection import (
 )
 from ..mcp.tools.artifacts import build_service as _build_artifact_service
 from ..mcp.tools.handoff import build_service as _build_handoff_service
+from ..mcp.tools.harness import build_connector as _harness_build_connector
+from ..mcp.tools.harness import (
+    build_connector_factories as _build_harness_connector_factories,
+)
+from ..mcp.tools.harness import build_service as _build_harness_supervisor
+from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_catalog
+from ..mcp.tools.harness import event_to_dict as _harness_event_to_dict
+from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
+from ..mcp.tools.harness import read_session as _harness_read_session
+from ..mcp.tools.harness import session_to_dict as _harness_session_to_dict
 from ..mcp.tools.messages import build_service as _build_message_service
 from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
@@ -328,6 +339,33 @@ class VerifyHandoffBody(BaseModel):
     # to 422 through _map_error.
     verdict: str = Field(min_length=1)
     feedback: str | None = None
+
+
+class HarnessSessionOpenBody(BaseModel):
+    """Body for ``POST /harness/sessions`` (ADR 0004 Phase 3.5).
+
+    Named ``HarnessSession*`` (not ``Harness*``) to stay visually distinct
+    from the PRE-EXISTING, unrelated ``MetaHarnessSendBody`` above (the
+    dashboard's own "meta-harness" operator-send feature, nothing to do with
+    the pi/codex/claude_code connector sessions this body opens).
+    """
+
+    agent_id: str = Field(min_length=1, max_length=128)
+    kind: str = Field(min_length=1)
+    project_root: str = Field(min_length=1)
+    substrate: str | None = None
+    target_pid: int | None = None
+    role: str | None = None
+    metadata: dict[str, Any] | None = None
+    notify_target: dict[str, Any] | None = None
+
+
+class HarnessSessionCommandBody(BaseModel):
+    """Body for the harness send/steer/interrupt routes - ``payload`` shape
+    is harness-native and opaque (see ``tools/harness.py``'s module
+    docstring)."""
+
+    payload: dict[str, Any] | None = None
 
 
 def _tag_service(deps) -> TagCatalogService:
@@ -818,6 +856,148 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"items": rows})
+
+    # ------------------------------------------------------------------ #
+    # Harness connectors (ADR 0004, Phase 3.5) - REST mirror of the MCP
+    # harness_* tools (tools/harness.py). Every handler reuses that module's
+    # OWN composition-root/serialisation functions (never re-implements
+    # them), so the two surfaces can never drift on shape or validation.
+    # Mutating verbs are operator-only (spawning/controlling a local child
+    # process is exactly the class of action ``POST /agents`` and
+    # ``POST /sessions/{id}/close`` already gate this way); reads are open,
+    # matching the rest of this dashboard surface (``GET /agents`` etc.).
+    # ------------------------------------------------------------------ #
+    @router.get("/harness/kinds")
+    async def harness_kinds(request: Request) -> JSONResponse:
+        return _ok({"harnesses": _harness_capabilities_catalog()})
+
+    @router.post("/harness/sessions")
+    async def harness_open(
+        request: Request, body: HarnessSessionOpenBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        factories = _build_harness_connector_factories(deps)
+
+        def _open():
+            validate_harness_kind(body.kind)
+            connector = _harness_build_connector(
+                factories,
+                kind=body.kind,
+                project_root=body.project_root,
+                substrate=body.substrate,
+                target_pid=body.target_pid,
+            )
+            return supervisor.open(
+                kind=body.kind,
+                connector=connector,
+                owning_agent_id=body.agent_id,
+                project_root=body.project_root,
+                role=body.role,
+                metadata=body.metadata,
+                notify_target=body.notify_target,
+            )
+
+        try:
+            _require_operator()
+            session = await anyio.to_thread.run_sync(_open)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(_harness_session_to_dict(session))
+
+    @router.post("/harness/sessions/{session_id}/send")
+    async def harness_send(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        payload = _harness_normalize_payload(body.payload, required=True)
+        try:
+            _require_operator()
+            await anyio.to_thread.run_sync(
+                lambda: supervisor.send(session_id, "send_turn", payload)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"session_id": session_id, "verb": "send_turn"})
+
+    @router.post("/harness/sessions/{session_id}/steer")
+    async def harness_steer(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        payload = _harness_normalize_payload(body.payload, required=True)
+        try:
+            _require_operator()
+            await anyio.to_thread.run_sync(
+                lambda: supervisor.send(session_id, "steer", payload)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"session_id": session_id, "verb": "steer"})
+
+    @router.post("/harness/sessions/{session_id}/interrupt")
+    async def harness_interrupt(
+        request: Request, session_id: str, body: HarnessSessionCommandBody
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        payload = _harness_normalize_payload(body.payload, required=False)
+        try:
+            _require_operator()
+            await anyio.to_thread.run_sync(
+                lambda: supervisor.send(session_id, "interrupt", payload)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok({"session_id": session_id, "verb": "interrupt"})
+
+    @router.post("/harness/sessions/{session_id}/close")
+    async def harness_close(request: Request, session_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            _require_operator()
+            session = await anyio.to_thread.run_sync(
+                lambda: supervisor.close(session_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(_harness_session_to_dict(session))
+
+    @router.get("/harness/sessions/{session_id}")
+    async def harness_get(request: Request, session_id: str) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        try:
+            result = await anyio.to_thread.run_sync(
+                lambda: _harness_read_session(deps, supervisor, session_id)
+            )
+        except OktoNexusError as exc:
+            return _map_error(exc)
+        return _ok(result)
+
+    @router.get("/harness/sessions/{session_id}/events")
+    async def harness_event_list(
+        request: Request,
+        session_id: str,
+        after_sequence: int = 0,
+        limit: int = 200,
+    ) -> JSONResponse:
+        deps = request.app.state.deps
+        supervisor = _build_harness_supervisor(deps)
+        events = await anyio.to_thread.run_sync(
+            lambda: supervisor.replay_events(
+                session_id, after_sequence=after_sequence, limit=limit
+            )
+        )
+        return _ok(
+            {
+                "events": [_harness_event_to_dict(e) for e in events],
+                "count": len(events),
+            }
+        )
 
     @router.get("/events/cursor")
     async def poll_events_cursor(

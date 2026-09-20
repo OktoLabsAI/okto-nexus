@@ -1734,6 +1734,104 @@ class HarnessSubscriberRegistry(Protocol):
         ...
 
 
+@runtime_checkable
+class HarnessSessionRepo(Protocol):
+    """Durable record of harness-connector sessions (D10; migration 029).
+
+    This is NEVER the notification path (D1) and never the supervisor's own
+    source of truth for "is this session live right now" - that is the
+    supervisor's in-memory registry, populated from the very
+    :class:`~okto_nexus.domain.harness.HarnessSession` a connector's
+    :meth:`~HarnessConnector.start` returned. This repo exists purely so a
+    session survives a restart for audit/replay and so ``harness_events``
+    rows have a parent to join against. A row left ``RUNNING`` after an
+    unclean process exit is expected (there was no chance to write
+    ``ENDED``) and reconciling that is a future reaper's job, not this
+    port's - callers must not treat a persisted ``RUNNING`` row as proof of
+    liveness.
+    """
+
+    def create(
+        self, uow: UnitOfWork, *, session: HarnessSession, created_at: str
+    ) -> None:
+        """Insert the durable row for a session the supervisor just opened.
+
+        ``session.capabilities`` is snapshotted (JSON) at THIS moment - a
+        connector's capabilities are fixed for its whole lifetime (see the
+        :class:`HarnessConnector` docstring), so there is nothing to
+        reconcile on a later read.
+        """
+        ...
+
+    def update_status(
+        self,
+        uow: UnitOfWork,
+        *,
+        session_id: str,
+        status: str,
+        updated_at: str,
+        ended_at: str | None = None,
+    ) -> bool:
+        """Overwrite ``status`` (and ``ended_at`` once a terminal one is
+        reached). Returns ``True`` if the row existed.
+
+        Never validates the transition itself -
+        :func:`okto_nexus.domain.harness.can_transition_session` is the
+        supervisor's job, BEFORE calling this; this method is a plain,
+        unconditional write.
+        """
+        ...
+
+    def get(self, uow: UnitOfWork, *, session_id: str) -> HarnessSession | None:
+        """Return the durable row, or ``None`` if no such session was ever
+        opened."""
+        ...
+
+    def list(
+        self, uow: UnitOfWork, *, status: str | None = None
+    ) -> list[HarnessSession]:
+        """Return sessions, newest-started first; ``status`` filters to one
+        value when given."""
+        ...
+
+
+@runtime_checkable
+class HarnessEventRepo(Protocol):
+    """Durable, append-only, per-session-sequenced event log (D10; migration 029).
+
+    This is the audit trail D10 asks for: every event a connector emits is
+    persisted here with ``event.native_event`` carried VERBATIM, AFTER it has
+    already been fanned out in-memory via
+    :meth:`HarnessSubscriberRegistry.publish` - this repo is durability ONLY
+    and must never gate or delay that in-memory push (D1). ``sequence`` is
+    assigned by the adapter, monotonic PER ``session_id`` starting at 1, so
+    one session's full event stream replays in order independent of any
+    other session's or the global event log's numbering.
+    """
+
+    def append(
+        self, uow: UnitOfWork, *, event_id: str, event: HarnessEvent, created_at: str
+    ) -> int:
+        """Insert ``event`` (``event_id`` minted by the caller, matching the
+        rest of the codebase's id-minting convention); return the assigned
+        per-session ``sequence``."""
+        ...
+
+    def list_for_session(
+        self,
+        uow: UnitOfWork,
+        *,
+        session_id: str,
+        after_sequence: int = 0,
+        limit: int = 200,
+    ) -> list[HarnessEvent]:
+        """Return events for ``session_id`` with ``sequence > after_sequence``,
+        oldest first - the replay/debug read path (a future ``harness_events``
+        tool) and exactly what lets a session be replayed to demonstrate push
+        delivery after the fact."""
+        ...
+
+
 # --------------------------------------------------------------------------- #
 # Channels / messages
 # --------------------------------------------------------------------------- #
@@ -2670,3 +2768,5 @@ class Repos:
     comm_bindings: AgentCommBindingRepo | None = None
     approvals: ApprovalRepo | None = None
     poll_tokens: PollTokenRepo | None = None
+    harness_sessions: HarnessSessionRepo | None = None
+    harness_events: HarnessEventRepo | None = None

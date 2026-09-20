@@ -95,6 +95,15 @@ APPROVED_GROWTH: dict[str, int] = {
     # stale handoff_list_available docstring removed 19 chars. Deep prose lives
     # in versioned resources and is not resident. Net measured growth: 1221.
     "coordination_guidance_r32": 1221,
+    # Harness connectors, Phase 3.5 supervisor surface (ADR 0004,
+    # SURFACE_REVISION 34): EIGHT new tools measured on the live server at
+    # landing time (docstring + params, each docstring kept under the
+    # 200-char S2 budget) - harness_list (194+0=194), harness_open
+    # (179+1343=1522), harness_send (165+369=534), harness_steer
+    # (200+370=570), harness_interrupt (189+183=372), harness_close
+    # (179+58=237), harness_get (187+58=245), harness_event_list
+    # (189+202=391). No pre-existing tool touched; no new resource.
+    "harness_p35": 4065,
 }
 
 #: Ledger entries whose tools are EXPERIMENTAL at the surface boundary
