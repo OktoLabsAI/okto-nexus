@@ -47,10 +47,14 @@ def test_validate_harness_kind_accepts_known() -> None:
         assert validate_harness_kind(kind) == kind
 
 
-def test_validate_harness_kind_rejects_unknown() -> None:
+def test_validate_harness_kind_rejects_invalid_identifier() -> None:
     with pytest.raises(OktoNexusError) as exc:
-        validate_harness_kind("gemini_cli")
+        validate_harness_kind("../untrusted.module")
     assert exc.value.code == ErrorCode.VALIDATION_ERROR
+
+
+def test_domain_accepts_identifiers_beyond_builtin_products() -> None:
+    assert validate_harness_kind("additional.fixture") == "additional.fixture"
 
 
 def test_validate_session_status_accepts_known() -> None:
@@ -198,7 +202,7 @@ def test_harness_session_construction_valid() -> None:
     assert session.metadata == {}
 
 
-def test_harness_session_rejects_unknown_kind() -> None:
+def test_harness_session_rejects_invalid_adapter_identifier() -> None:
     caps = HarnessCapabilities(
         send_only=False,
         steer_timing=STEER_TIMING_IMMEDIATE,
@@ -209,7 +213,7 @@ def test_harness_session_rejects_unknown_kind() -> None:
     with pytest.raises(OktoNexusError):
         HarnessSession(
             session_id="hsess_x",
-            harness_kind="not_a_harness",
+            harness_kind="not a harness",
             owning_agent_id="agt_abc123",
             status="STARTING",
             capabilities=caps,

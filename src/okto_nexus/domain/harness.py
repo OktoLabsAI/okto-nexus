@@ -156,17 +156,9 @@ def new_harness_session_id() -> str:
 
 
 def validate_harness_kind(kind: Any) -> str:
-    """Return ``kind`` if it is one of :data:`HARNESS_KINDS`.
-
-    Raises ``VALIDATION_ERROR`` (canonical catalogue code) otherwise.
-    """
-    if isinstance(kind, str) and kind in HARNESS_KINDS:
-        return kind
-    raise OktoNexusError(
-        ErrorCode.VALIDATION_ERROR,
-        "harness kind must be one of {pi, codex, claude_code}.",
-        {"kind": kind, "supported": sorted(HARNESS_KINDS)},
-    )
+    """Validate syntax only. Trusted composition owns adapter registration."""
+    from .endpoints import adapter_identifier
+    return adapter_identifier(kind)
 
 
 def validate_session_status(status: Any) -> str:

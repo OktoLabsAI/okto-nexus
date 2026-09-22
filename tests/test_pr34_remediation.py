@@ -39,6 +39,14 @@ def runtime(tmp_path, request):
         return build
 
     deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
+    if getattr(request, "param", None) == "additional":
+        from okto_nexus.application.adapter_registry import AdapterDescriptor, AdapterRegistry
+        from okto_nexus.domain.endpoints import EndpointCapabilities
+        registry = AdapterRegistry()
+        registry.register(AdapterDescriptor("fixture.additional.v1", "fixture.additional.v1", None,
+            "fixture-no-process", factory("fixture.additional.v1"), lambda _: None,
+            EndpointCapabilities(conversation=True, events=True), FakeConnector().capabilities))
+        deps.harness_adapter_registry = registry
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     _, operator_key = ensure_operator_key(deps, auth)
     with deps.connection_factory.unit_of_work() as uow:
@@ -337,3 +345,18 @@ def test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected(runti
     assert result["data"]["metadata"]["connection_note"] == "fixture"
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert deps.repos.agents.get(uow, "worker").metadata == {"keep": "profile"}
+
+
+@pytest.mark.parametrize("runtime", ["additional"], indirect=True)
+def test_p02_additional_adapter_through_production_mcp_and_rest(runtime):
+    _, client, root, peers, key, _ = runtime
+    catalog = tool(client, key, "harness_list", {})
+    assert catalog["data"]["harnesses"][0]["adapter_id"] == "fixture.additional.v1"
+    opened = tool(client, key, "harness_open", {"agent_id": "worker",
+        "kind": "fixture.additional.v1", "project_root": root})
+    assert opened["ok"], opened
+    sid = opened["data"]["session_id"]
+    response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": key},
+                           json={"payload": {"text": "fixture command"}})
+    assert response.status_code == 200, response.text
+    assert len(peers[0].sent) == 1

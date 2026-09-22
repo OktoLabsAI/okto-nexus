@@ -262,7 +262,7 @@
       "depends_on_phases": [
         "P01"
       ],
-      "status": "NOT_STARTED",
+      "status": "COMPLETED",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P02",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -287,42 +287,82 @@
         {
           "task_id": "P02-T01",
           "title": "Definir AgentEndpoint, RequestContext, ExecutionGrant e separar capacidades/permissões.",
-          "status": "NOT_STARTED",
+          "status": "COMPLETED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/domain/endpoints.py",
+            "src/okto_nexus/domain/delivery.py",
+            "src/okto_nexus/domain/runtime_context.py",
+            "src/okto_nexus/application/adapter_registry.py",
+            "src/okto_nexus/adapters/outbound/harness/envelope.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P02_CONTRACTS.md",
+            "plans/pr34-remediation/evidence/p02-gate.log",
+            "plans/pr34-remediation/evidence/p02-contracts.log"
+          ],
+          "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
         },
         {
           "task_id": "P02-T02",
           "title": "Definir envelope, dispatch outcome, causalidade, consumo e correlação versionados.",
-          "status": "NOT_STARTED",
+          "status": "COMPLETED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/domain/endpoints.py",
+            "src/okto_nexus/domain/delivery.py",
+            "src/okto_nexus/domain/runtime_context.py",
+            "src/okto_nexus/application/adapter_registry.py",
+            "src/okto_nexus/adapters/outbound/harness/envelope.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P02_CONTRACTS.md",
+            "plans/pr34-remediation/evidence/p02-gate.log",
+            "plans/pr34-remediation/evidence/p02-contracts.log"
+          ],
+          "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
         },
         {
           "task_id": "P02-T03",
           "title": "Implementar AdapterRegistry e validação por descriptor sem produtos no domínio.",
-          "status": "NOT_STARTED",
+          "status": "COMPLETED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/domain/endpoints.py",
+            "src/okto_nexus/domain/delivery.py",
+            "src/okto_nexus/domain/runtime_context.py",
+            "src/okto_nexus/application/adapter_registry.py",
+            "src/okto_nexus/adapters/outbound/harness/envelope.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P02_CONTRACTS.md",
+            "plans/pr34-remediation/evidence/p02-gate.log",
+            "plans/pr34-remediation/evidence/p02-contracts.log"
+          ],
+          "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
         },
         {
           "task_id": "P02-T04",
           "title": "Provar extensão por quinto adapter fake e endpoint que não exige runtime local.",
-          "status": "NOT_STARTED",
+          "status": "COMPLETED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/domain/endpoints.py",
+            "src/okto_nexus/domain/delivery.py",
+            "src/okto_nexus/domain/runtime_context.py",
+            "src/okto_nexus/application/adapter_registry.py",
+            "src/okto_nexus/adapters/outbound/harness/envelope.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P02_CONTRACTS.md",
+            "plans/pr34-remediation/evidence/p02-gate.log",
+            "plans/pr34-remediation/evidence/p02-contracts.log"
+          ],
+          "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
         }
       ]
     },

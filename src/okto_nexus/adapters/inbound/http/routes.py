@@ -881,7 +881,7 @@ def build_router() -> APIRouter:
             _harness_authorize(request.app.state.deps)
         except OktoNexusError as exc:
             return _map_error(exc)
-        return _ok({"harnesses": _harness_capabilities_catalog()})
+        return _ok({"harnesses": _harness_capabilities_catalog(_build_harness_connector_factories(request.app.state.deps))})
 
     @router.post("/harness/sessions")
     async def harness_open(

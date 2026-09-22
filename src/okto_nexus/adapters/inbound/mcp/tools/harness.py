@@ -145,6 +145,9 @@ from okto_nexus.adapters.outbound.sqlite.harness_repo import (
 )
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.harness_supervisor import HarnessSupervisor
+from okto_nexus.application.adapter_registry import AdapterRegistry, AdapterDescriptor
+from okto_nexus.domain.endpoints import EndpointCapabilities
+from okto_nexus.adapters.outbound.harness.envelope import EnvelopeConnector
 from okto_nexus.application.ports import HarnessConnector
 from okto_nexus.domain.harness import (
     HARNESS_KINDS,
@@ -233,7 +236,7 @@ _P_HARNESS_AGENT_ID = (
     "Existing canonical agent to connect. Requires authorized runtime control; "
     "does not create identity or change its profile."
 )
-_P_KIND = 'Harness kind, one of: pi, codex, claude_code. REQUIRED.'
+_P_KIND = "Registered adapter kind; discover allowed choices with harness_list."
 _P_ROOT = "Absolute path to the project (defines the workspace scope for this session's persistence + notable-event messages)."
 _P_SUBSTRATE = (
     'Only meaningful when kind="claude_code" (rejected otherwise): one of '
@@ -332,7 +335,16 @@ def event_to_dict(event: HarnessEvent) -> dict[str, Any]:
     }
 
 
-def capabilities_catalog() -> list[dict[str, Any]]:
+def capabilities_catalog(registry=None) -> list[dict[str, Any]]:
+    if isinstance(registry, AdapterRegistry):
+        return [{"adapter_id": d.adapter_id, "kind": d.kind, "substrate": d.substrate,
+                 "contract_version": d.contract_version, "protocol": d.protocol,
+                 "capabilities": capabilities_to_dict(d.legacy_capabilities)}
+                for d in registry.descriptors()]
+    return _legacy_capabilities_catalog()
+
+
+def _legacy_capabilities_catalog() -> list[dict[str, Any]]:
     """List every (kind, substrate) this server can open, with capabilities
     read straight off each REAL connector class (never hand-typed into a
     table - the task's explicit "from each connector's OWN declaration"
@@ -508,25 +520,36 @@ def _default_connector_factories() -> dict[str, Any]:
     return {"pi": _pi, "codex": _codex, "claude_code": _claude_code}
 
 
-def build_connector_factories(deps: Any) -> Mapping[str, Any]:
-    """Idempotent ``kind -> connector-factory`` table, cached on ``deps``
-    (the same shape as :func:`build_service`).
-
-    This IS the composition-root extension point
-    :class:`~okto_nexus.application.harness_supervisor.HarnessBootSpec`'s
-    docstring says does not exist yet ("nothing analogous wires connectors
-    here, deliberately") - a future config-driven boot sequence, or an
-    operator wanting non-default connector construction (a specific
-    ``pi``/``codex`` provider, a pinned binary path), overrides this
-    dictionary on ``deps`` before the first tool/route call. Tests use the
-    SAME override point to inject a fake connector instead of spawning a
-    real ``pi``/``codex``/``claude`` binary.
-    """
+def build_connector_factories(deps: Any):
+    """Trusted registry in production; explicit legacy injection stays compatible."""
+    registry = getattr(deps, "harness_adapter_registry", None)
+    if registry is not None:
+        return registry
     factories = getattr(deps, "harness_connector_factories", None)
-    if factories is None:
-        factories = _default_connector_factories()
-        deps.harness_connector_factories = factories
-    return factories
+    if factories is not None:
+        return factories
+    registry = AdapterRegistry()
+    native_factories = _default_connector_factories()
+    for entry in _legacy_capabilities_catalog():
+        kind, substrate = entry["kind"], entry["substrate"]
+        caps = HarnessCapabilities(**entry["capabilities"])
+        def factory(*, project_root, target_pid=None, backend=None, kind=kind, substrate=substrate, **_):
+            native = build_connector(native_factories, kind=kind, substrate=substrate,
+                                     project_root=project_root, target_pid=target_pid, backend=backend)
+            return EnvelopeConnector(native, payload_key="content" if kind == "claude_code" else "text")
+        registry.register(AdapterDescriptor(
+            adapter_id=kind + ("." + substrate if substrate else ""),
+            kind=kind, substrate=substrate,
+            protocol={"pi": "rpc-jsonl", "codex": "json-rpc-stdio"}.get(kind, substrate),
+            factory=factory, config_validator=lambda config: runtime_object("backend", config),
+            capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only,
+                multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
+                interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
+                observes_stop=caps.observes_session_end),
+            legacy_capabilities=caps,
+        ))
+    deps.harness_adapter_registry = registry
+    return registry
 
 
 def resolve_substrate(kind: str, substrate: str | None) -> str | None:
@@ -560,7 +583,7 @@ def describe_backend(
                 "already-running process and spawns nothing to configure."
             ),
         }
-    allowed = sorted(_BACKEND_FIELDS_BY_KIND[kind])
+    allowed = sorted(_BACKEND_FIELDS_BY_KIND.get(kind, ()))
     if not backend:
         return {
             "explicit": False,
@@ -602,6 +625,11 @@ def build_connector(
     kind does not support is a VALIDATION_ERROR, never a silent drop (that
     silent-drop shape is exactly the H-2 defect class, not repeated here).
     """
+    if isinstance(factories, AdapterRegistry):
+        descriptor = factories.resolve(kind, resolve_substrate(kind, substrate))
+        descriptor.config_validator(dict(backend or {}))
+        return descriptor.factory(project_root=project_root, substrate=substrate,
+                                  target_pid=target_pid, backend=backend)
     if backend is None:
         backend_obj: dict[str, Any] = {}
     elif isinstance(backend, Mapping):
@@ -660,7 +688,7 @@ def build_connector(
                 "backend does not apply to substrate='attach' - it injects "
                 "into an already-running process and spawns nothing to "
                 "configure.",
-                {"kind": kind, "substrate": resolved_substrate, "backend": backend_obj},
+                {"kind": kind, "substrate": resolved_substrate},
             )
     else:
         allowed = _BACKEND_FIELDS_BY_KIND.get(kind, frozenset())
@@ -755,7 +783,7 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     def harness_list() -> dict[str, Any]:
         """List available harness kinds/substrates and their DECLARED capabilities (send_only, steer_timing, etc.), read from each connector's own declaration. Check before harness_steer/harness_interrupt."""
-        return {"harnesses": capabilities_catalog()}
+        return {"harnesses": capabilities_catalog(factories)}
 
     @server.tool()
     @async_tool_envelope
