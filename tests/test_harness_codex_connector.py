@@ -400,6 +400,74 @@ def test_turn_start_error_response_becomes_error_event(connector: CodexAppServer
     assert error_event.payload["message"] == "boom"
 
 
+def test_fast_native_error_before_write_returns_keeps_request_attribution(connector, monkeypatch):
+    session = connector.start(owning_agent_id="fixture")
+    transport = connector._transport
+    response_seen = threading.Event()
+    original_response = transport._on_unmatched_response
+    original_write = transport._write
+
+    def observe_response(*args):
+        original_response(*args)
+        response_seen.set()
+
+    def write_with_fast_peer(payload):
+        original_write(payload)
+        assert response_seen.wait(2), "scripted native response did not arrive"
+
+    monkeypatch.setattr(transport, "_on_unmatched_response", observe_response)
+    monkeypatch.setattr(transport, "_write", write_with_fast_peer)
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn",
+        payload={"text": "TRIGGER_ERROR"}))
+    errors = [event for event in connector._event_history if event.native_event == "jsonrpc/error_response"]
+    assert len(errors) == 1, "response arrived before post-write request registration and was lost"
+    assert errors[0].session_id == session.session_id
+    assert errors[0].payload["message"] == "boom"
+    assert not connector._ff_pending
+
+
+def test_close_pending_start_waits_for_native_identity_then_interrupts(connector, monkeypatch):
+    session = connector.start(owning_agent_id="fixture")
+    arrived, release, finished = threading.Event(), threading.Event(), threading.Event()
+    original = connector._transport._on_notification
+    errors = []
+
+    def delayed_notification(method, params):
+        if method == "turn/started":
+            arrived.set()
+            assert release.wait(5)
+        original(method, params)
+
+    monkeypatch.setattr(connector._transport, "_on_notification", delayed_notification)
+    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn",
+        payload={"text": "TRIGGER_HOLD"}))
+
+    def close():
+        try:
+            connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
+        except Exception as exc:
+            errors.append(exc)
+        finally:
+            finished.set()
+
+    closer = threading.Thread(target=close, daemon=True)
+    try:
+        assert arrived.wait(2)
+        with pytest.raises(OktoNexusError, match="pending or active turn"):
+            connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn",
+                payload={"text": "must not race the pending start"}))
+        closer.start()
+        assert not finished.wait(.1), "unsubscribe raced turn/start's native identity"
+    finally:
+        release.set()
+        if closer.ident:
+            closer.join(5)
+    assert finished.is_set() and not errors
+    terminals = [event for event in connector._event_history if event.native_event == "turn/completed"]
+    assert len(terminals) == 1
+    assert terminals[0].payload["turn"]["status"] == "interrupted"
+
+
 # --------------------------------------------------------------------------- #
 # steer / interrupt: fail fast with no active turn; use the tracked turnId
 # --------------------------------------------------------------------------- #

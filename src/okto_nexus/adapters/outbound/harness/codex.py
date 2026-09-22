@@ -52,6 +52,7 @@ import json
 import queue
 import subprocess
 import threading
+import time
 from collections import deque
 from dataclasses import dataclass
 from typing import Any, Callable, Iterator, Mapping, Sequence
@@ -190,6 +191,7 @@ class _ThreadState:
     ended: bool = False
     closing: bool = False
     close_unconfirmed: bool = False
+    pending_start_id: int | None = None
 
 
 class _StderrTail:
@@ -370,7 +372,7 @@ class _CodexTransport:
             )
         return value
 
-    def send_fire_and_forget(self, method: str, params: Mapping[str, Any]) -> int:
+    def send_fire_and_forget(self, method: str, params: Mapping[str, Any], *, on_allocated=None) -> int:
         """Send a request whose response is NOT awaited by the caller (D2).
 
         Returns the allocated id so the connector can correlate a LATE
@@ -380,6 +382,8 @@ class _CodexTransport:
         "an unwaited response is not a discarded response".
         """
         request_id = self._allocate_id()
+        if on_allocated is not None:
+            on_allocated(request_id)
         self._write({"jsonrpc": "2.0", "id": request_id, "method": method, "params": dict(params)})
         return request_id
 
@@ -600,7 +604,7 @@ class CodexAppServerConnector:
 
         # Pending fire-and-forget request ids -> the session an ERROR
         # response (if any) should be surfaced against.
-        self._ff_pending: dict[int, str] = {}
+        self._ff_pending: dict[int, tuple[str, str]] = {}
         self._ff_pending_lock = threading.Lock()
 
     # ------------------------------------------------------------------ #
@@ -674,7 +678,8 @@ class CodexAppServerConnector:
         result = observe_owned_process(self._transport._proc if self._transport else None)
         with self._sessions_lock:
             state = self._sessions_by_id.get(session.session_id)
-            result["active_turn"] = bool(state and (state.active_turn_id or state.close_unconfirmed))
+            result["active_turn"] = bool(state and (
+                state.active_turn_id or state.pending_start_id is not None or state.close_unconfirmed))
         return result
 
     def events(self, *, session_id=None) -> Iterator[HarnessEvent]:
@@ -760,9 +765,24 @@ class CodexAppServerConnector:
 
     def _send_turn(self, state: _ThreadState, command: HarnessCommand) -> None:
         params: dict[str, Any] = {"threadId": state.thread_id, "input": self._text_input(command)}
-        request_id = self._transport.send_fire_and_forget(_METHOD_TURN_START, params)  # type: ignore[union-attr]
-        with self._ff_pending_lock:
-            self._ff_pending[request_id] = state.session_id
+        self._send_request(state, _METHOD_TURN_START, params)
+
+    def _send_request(self, state, method, params, *, allow_closing=False):
+        def register(request_id):
+            # Register BEFORE the external write, without holding either lock
+            # while writing. Fast native replies cannot outrun attribution.
+            with self._turn_changed:
+                if state.ended or (state.closing and not allow_closing):
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Codex thread is closing.", {})
+                if method == _METHOD_TURN_START and (state.active_turn_id or state.pending_start_id is not None):
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Codex thread already has a pending or active turn.", {})
+                with self._ff_pending_lock:
+                    if len(self._ff_pending) >= 64:
+                        raise OktoNexusError(ErrorCode.CONFLICT, "Codex pending request capacity exhausted.", {})
+                    self._ff_pending[request_id] = (state.session_id, method)
+                if method == _METHOD_TURN_START:
+                    state.pending_start_id = request_id
+        return self._transport.send_fire_and_forget(method, params, on_allocated=register)
 
     def _steer(self, state: _ThreadState, command: HarnessCommand) -> None:
         if state.active_turn_id is None:
@@ -776,9 +796,7 @@ class CodexAppServerConnector:
             "expectedTurnId": state.active_turn_id,
             "input": self._text_input(command),
         }
-        request_id = self._transport.send_fire_and_forget(_METHOD_TURN_STEER, params)  # type: ignore[union-attr]
-        with self._ff_pending_lock:
-            self._ff_pending[request_id] = state.session_id
+        self._send_request(state, _METHOD_TURN_STEER, params)
 
     def _interrupt(self, state: _ThreadState) -> None:
         if state.active_turn_id is None:
@@ -788,9 +806,7 @@ class CodexAppServerConnector:
                 {"session_id": state.session_id},
             )
         params = {"threadId": state.thread_id, "turnId": state.active_turn_id}
-        request_id = self._transport.send_fire_and_forget(_METHOD_TURN_INTERRUPT, params)  # type: ignore[union-attr]
-        with self._ff_pending_lock:
-            self._ff_pending[request_id] = state.session_id
+        self._send_request(state, _METHOD_TURN_INTERRUPT, params)
 
     def _end(self, state: _ThreadState) -> None:
         """Interrupt an observed active turn, await its terminal, then detach.
@@ -798,30 +814,31 @@ class CodexAppServerConnector:
         An interrupt response is not completion. A deadline leaves the binding
         uncertain; never kill sibling threads to manufacture a stopped state.
         """
+        deadline = time.monotonic() + self._close_settle_timeout_s
         with self._turn_changed:
             if state.closing:
                 return
             state.closing = True
+            self._turn_changed.wait_for(
+                lambda: state.pending_start_id is None or state.active_turn_id is not None,
+                timeout=max(0, deadline - time.monotonic()))
+            state.close_unconfirmed = state.pending_start_id is not None
             turn_id = state.active_turn_id
         if turn_id is not None:
             params = {"threadId": state.thread_id, "turnId": turn_id}
-            request_id = self._transport.send_fire_and_forget(_METHOD_TURN_INTERRUPT, params)
-            with self._ff_pending_lock:
-                self._ff_pending[request_id] = state.session_id
+            self._send_request(state, _METHOD_TURN_INTERRUPT, params, allow_closing=True)
             with self._turn_changed:
                 settled = self._turn_changed.wait_for(
                     lambda: state.active_turn_id != turn_id or self._closed_event.is_set(),
-                    timeout=self._close_settle_timeout_s,
+                    timeout=max(0, deadline - time.monotonic()),
                 )
                 state.close_unconfirmed = not settled or state.active_turn_id is not None
-            if state.close_unconfirmed:
-                self._push_event(state.session_id, "transport/close_unsettled",
-                    {"reason": "interrupt_terminal_not_observed", "turn_id": turn_id},
-                    thread_id=state.thread_id, turn_id=turn_id)
+        if state.close_unconfirmed:
+            self._push_event(state.session_id, "transport/close_unsettled",
+                {"reason": "turn_start_or_interrupt_terminal_not_observed", "turn_id": turn_id},
+                thread_id=state.thread_id, turn_id=turn_id)
         params = {"threadId": state.thread_id}
-        request_id = self._transport.send_fire_and_forget(_METHOD_THREAD_UNSUBSCRIBE, params)  # type: ignore[union-attr]
-        with self._ff_pending_lock:
-            self._ff_pending[request_id] = state.session_id
+        self._send_request(state, _METHOD_THREAD_UNSUBSCRIBE, params, allow_closing=True)
         with self._sessions_lock:
             state.ended = True
             # Deliberately NOT popped from _sessions_by_thread (see mismatch
@@ -914,6 +931,8 @@ class CodexAppServerConnector:
                     state = self._sessions_by_thread.get(thread_id)
                     if state is not None and turn_id is not None:
                         state.active_turn_id = turn_id
+                        state.pending_start_id = None
+                        self._turn_changed.notify_all()
             if method == _METHOD_TURN_COMPLETED:
                 turn_id = (params.get("turn") or {}).get("id")
                 with self._turn_changed:
@@ -1006,10 +1025,19 @@ class CodexAppServerConnector:
         never silently swallowed.
         """
         with self._ff_pending_lock:
-            session_id = self._ff_pending.pop(request_id, None)
-        if error is None or session_id is None:
+            pending = self._ff_pending.pop(request_id, None)
+        if pending is None:
+            return
+        session_id, method = pending
+        if error is None:
             return
         self._push_event(session_id, "jsonrpc/error_response", error, thread_id=None, turn_id=None)
+        if method == _METHOD_TURN_START:
+            with self._turn_changed:
+                state = self._sessions_by_id.get(session_id)
+                if state is not None and state.pending_start_id == request_id:
+                    state.pending_start_id = None
+                    self._turn_changed.notify_all()
 
     def _on_child_exit(self, returncode: int | None, stderr_tail: str) -> None:
         with self._sessions_lock:

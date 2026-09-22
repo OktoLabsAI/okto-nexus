@@ -90,3 +90,11 @@ temporary auth copy removed. See P07_CODEX_ACTIVE_CLOSE.md and
 The test module now contains three opt-in cases; default execution skips all
 three. Prior two-turn counts above are historical results, not current collection
 counts or claims of coverage for subsequent changes.
+
+After native request ordering/pending-start fencing (parent 1780f15 plus working
+tree), the same isolated Codex configuration ran
+`pytest tests/test_runtime_native_campaign.py -q -k codex --tb=short`:
+**2 passed, 1 deselected in 18.04s**. This re-executes both two-turn canonical
+delivery and active-close interruption, including the final atomic-close lock
+refinement. Evidence: `evidence/p07-native-codex-request-race-gate.log` and
+P07_CODEX_REQUEST_ORDERING.md. Temporary authentication copies checked absent.

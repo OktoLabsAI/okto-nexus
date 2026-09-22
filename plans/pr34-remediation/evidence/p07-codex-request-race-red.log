@@ -1,0 +1,19 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+____ test_fast_native_error_before_write_returns_keeps_request_attribution ____
+tests\test_harness_codex_connector.py:423: in test_fast_native_error_before_write_returns_keeps_request_attribution
+    assert len(errors) == 1, "response arrived before post-write request registration and was lost"
+E   AssertionError: response arrived before post-write request registration and was lost
+E   assert 0 == 1
+E    +  where 0 = len([])
+_____ test_close_pending_start_waits_for_native_identity_then_interrupts ______
+tests\test_harness_codex_connector.py:457: in test_close_pending_start_waits_for_native_identity_then_interrupts
+    assert not finished.wait(.1), "unsubscribe raced turn/start's native identity"
+E   AssertionError: unsubscribe raced turn/start's native identity
+E   assert not True
+E    +  where True = wait(0.1)
+E    +    where wait = <threading.Event at 0x1e212f60670: set>.wait
+=========================== short test summary info ===========================
+FAILED tests/test_harness_codex_connector.py::test_fast_native_error_before_write_returns_keeps_request_attribution
+FAILED tests/test_harness_codex_connector.py::test_close_pending_start_waits_for_native_identity_then_interrupts
+2 failed, 31 deselected in 0.50s

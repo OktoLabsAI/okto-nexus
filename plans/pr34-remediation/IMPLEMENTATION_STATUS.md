@@ -81,3 +81,11 @@ unsubscribe. Shared-thread fixture proves sibling survival and stale-terminal
 quarantine; real isolated Codex active-close campaign PASS (one test, 5.39s).
 See P07_CODEX_ACTIVE_CLOSE.md. Turn/start correlation, durable controls, buffers,
 POSIX ownership and remaining matrix gates are still pending.
+
+Active-close checkpoint pushed: 1780f15. Request-ordering unit now registers
+Codex native correlation before writes and fences pending/active turn admission;
+close waits for pending turn identity under the same deadline. Two behavioral
+REDs corrected. Gate: 45 passed, 4 skipped; REAL Codex two-turn plus active-close
+campaign: 2 passed, 1 deselected (18.04s), isolated auth copies removed. See
+P07_CODEX_REQUEST_ORDERING.md. Native histories/queues and general durable
+controls/correlation, POSIX ownership and boot/recovery remain pending.
