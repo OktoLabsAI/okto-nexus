@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "ab7d56c",
+  "execution_head": "fdfc994",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1031,7 +1031,15 @@
             "src/okto_nexus/adapters/outbound/harness/owned_process.py",
             "src/okto_nexus/adapters/outbound/harness/windows_process.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "fdfc994 + bounded framing working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_protocol_limits.py tests/test_harness_codex_connector.py tests/test_harness_pi_connector.py tests/test_harness_claude_code_connector.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py -q --tb=short",
+              "result": "PASS",
+              "observed": "104 passed, 9 skipped, 1 known injected Pi warning; all native model flags disabled. Native buffers and full lifecycle matrix still pending.",
+              "evidence": "plans/pr34-remediation/P07_PROTOCOL_LIMITS.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P07_PROCESS_OWNERSHIP.md",
             "plans/pr34-remediation/evidence/p07-process-ownership.log"
@@ -2577,7 +2585,8 @@
       "stimulus": "NDJSON fragmentado, UTF-8, stdout/stderr cheios, frame muito grande ou inválido.",
       "expected": "Parser limitado; erro atribuível; nenhum deadlock ou overflow ilimitado.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": ["plans/pr34-remediation/P07_PROTOCOL_LIMITS.md"],
+      "notes": "Partial executed framing and actual REST fault/journal evidence; native event history/subscriber memory bounds and full pressure matrix remain pending. Aggregate not certified."
     },
     {
       "test_id": "T-LIFE-12",

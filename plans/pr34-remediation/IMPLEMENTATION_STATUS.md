@@ -67,3 +67,10 @@ unsupported POSIX operations before effects and reports the platform contract
 without removing the adapter. See P07_ATTACH_PLATFORM.md: 13 passed, 57 POSIX
 fixtures NOT_RUN on Windows; full collection succeeds (2011 tests). Native attach
 remains NOT_RUN. Next: bounded native readers/buffers and remaining P07 recovery.
+
+Attach-platform checkpoint pushed: fdfc994. Native framing unit bounds stdout
+frames and stderr chunks in all three managed adapters. Three behavioral RED
+reproductions corrected; expanded checks include a durable fault through actual
+REST composition. Gate: 104 passed, 9 skipped, 1 known injected Pi warning. See
+P07_PROTOCOL_LIMITS.md. Native history/subscriber buffers, active-turn close,
+POSIX ownership and boot/recovery remain pending; final gate NOT PASSED.

@@ -44,6 +44,7 @@ frozen port cleanly - reported instead of smoothed over, per instructions.
 from __future__ import annotations
 
 from .owned_process import spawn_owned_process, observe_owned_process
+from .framing import FrameLimitExceeded, protocol_lines, stderr_chunks
 
 from .environment import child_environment
 
@@ -400,7 +401,7 @@ class _CodexTransport:
     def _read_stdout(self) -> None:
         assert self._proc is not None and self._proc.stdout is not None
         try:
-            for raw_line in self._proc.stdout:
+            for raw_line in protocol_lines(self._proc.stdout):
                 line = raw_line.strip()
                 if not line:
                     continue
@@ -424,6 +425,9 @@ class _CodexTransport:
                         self._on_dispatch_error(line, repr(exc))
                     except Exception:  # noqa: BLE001 - never let the guard itself wedge the reader
                         pass
+        except FrameLimitExceeded as exc:
+            self._proc.kill()
+            self._on_malformed_line("", str(exc))
         finally:
             if self._proc.stdout:
                 self._proc.stdout.close()
@@ -450,7 +454,7 @@ class _CodexTransport:
 
     def _read_stderr(self) -> None:
         assert self._proc is not None and self._proc.stderr is not None
-        for raw_line in self._proc.stderr:
+        for raw_line in stderr_chunks(self._proc.stderr):
             self._stderr_tail.add(raw_line.rstrip("\n"))
 
     def _dispatch(self, msg: dict[str, Any]) -> None:

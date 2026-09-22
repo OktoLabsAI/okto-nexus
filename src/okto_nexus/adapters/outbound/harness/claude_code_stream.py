@@ -134,6 +134,7 @@ woken the instant an event is published, not on some fixed interval.
 from __future__ import annotations
 
 from .owned_process import spawn_owned_process, observe_owned_process
+from .framing import FrameLimitExceeded, MAX_FRAME_CHARS, protocol_lines, stderr_chunks
 
 from .environment import child_environment
 
@@ -769,7 +770,7 @@ class ClaudeCodeStreamConnector:
         """
         assert self._proc is not None and self._proc.stdout is not None
         try:
-            for raw_line in self._proc.stdout:
+            for raw_line in protocol_lines(self._proc.stdout):
                 line = raw_line.rstrip("\n")
                 if not line:
                     continue
@@ -781,6 +782,9 @@ class ClaudeCodeStreamConnector:
                         "stdout_dispatch_error",
                         {"raw": line[:2000], "error": repr(exc)},
                     )
+        except FrameLimitExceeded:
+            self._proc.kill()
+            self._emit("error", "transport_frame_limit_exceeded", {"limit_chars": MAX_FRAME_CHARS})
         finally:
             self._finish()
 
@@ -793,7 +797,7 @@ class ClaudeCodeStreamConnector:
         prose, not the protocol.
         """
         assert self._proc is not None and self._proc.stderr is not None
-        for raw_line in self._proc.stderr:
+        for raw_line in stderr_chunks(self._proc.stderr):
             line = raw_line.rstrip("\n")
             if not line:
                 continue

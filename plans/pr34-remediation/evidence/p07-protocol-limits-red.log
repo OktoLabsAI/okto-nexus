@@ -1,0 +1,28 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+____ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex] ____
+tests\test_runtime_protocol_limits.py:52: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    assert detected.wait(5), "reader waited for EOF/newline instead of enforcing a frame limit"
+E   AssertionError: reader waited for EOF/newline instead of enforcing a frame limit
+E   assert False
+E    +  where False = wait(5)
+E    +    where wait = <threading.Event at 0x1366b8ebb10: unset>.wait
+_____ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi] ______
+tests\test_runtime_protocol_limits.py:52: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    assert detected.wait(5), "reader waited for EOF/newline instead of enforcing a frame limit"
+E   AssertionError: reader waited for EOF/newline instead of enforcing a frame limit
+E   assert False
+E    +  where False = wait(5)
+E    +    where wait = <threading.Event at 0x1366b98dd90: unset>.wait
+___ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude] ____
+tests\test_runtime_protocol_limits.py:52: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    assert detected.wait(5), "reader waited for EOF/newline instead of enforcing a frame limit"
+E   AssertionError: reader waited for EOF/newline instead of enforcing a frame limit
+E   assert False
+E    +  where False = wait(5)
+E    +    where wait = <threading.Event at 0x1366ba60350: unset>.wait
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex]
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi]
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude]
+3 failed in 15.36s
