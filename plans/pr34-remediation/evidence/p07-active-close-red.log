@@ -1,0 +1,12 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_ test_active_close_observes_interrupt_completion_before_detaching_shared_thread _
+tests\test_runtime_shared_connection.py:43: in test_active_close_observes_interrupt_completion_before_detaching_shared_thread
+    assert closed.json()["data"]["lifecycle_state"] == "detached"
+E   AssertionError: assert 'outcome_unknown' == 'detached'
+E     
+E     - detached
+E     + outcome_unknown
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread
+1 failed, 6 deselected in 5.46s

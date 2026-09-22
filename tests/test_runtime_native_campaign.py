@@ -44,6 +44,15 @@ def native_auth_config(tmp_path, kind):
 
 @pytest.mark.parametrize("kind", ["codex", "claude_code"])
 def test_native_two_turns_via_canonical_inbox_and_journal(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config)
+
+
+@pytest.mark.parametrize("kind", ["codex"])
+def test_native_active_close_observes_interrupt_terminal(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, active_close=True)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
@@ -98,6 +107,30 @@ def test_native_two_turns_via_canonical_inbox_and_journal(tmp_path, kind, native
             assert operator_key not in json.dumps(native._env)
             assert not any("NEXUS" in name and name != "_NEXUS_PROFILE_ENV_SEALED" for name in native._env)
             runtime = deps, client, str(root), [], operator_key, caller_key
+            if active_close:
+                sent = send_message(runtime, subject="native interrupt fixture",
+                    body="Write a 1000-word fictional story about a lighthouse. Do not use tools or modify files.")
+                assert len(sent["runtime_operations"]) == 1
+                deadline = time.monotonic() + 30
+                started = None
+                while time.monotonic() < deadline:
+                    events = deps.harness_supervisor.replay_events(session_id)
+                    started = next((item for item in events if item.native_event == "turn/started"), None)
+                    if started:
+                        break
+                    time.sleep(.02)
+                assert started is not None, "no native turn/started observed"
+                response = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
+                assert response.status_code == 200, response.text
+                assert response.json()["data"]["lifecycle_state"] == "stopped"
+                events = deps.harness_supervisor.replay_events(session_id)
+                terminals = [item for item in events if item.native_event == "turn/completed"]
+                assert len(terminals) == 1
+                assert terminals[0].turn_id == started.turn_id
+                assert terminals[0].payload["turn"]["status"] == "interrupted"
+                assert terminals[0].sequence < events[-1].sequence
+                assert native_process.wait(timeout=15) is not None
+                return
             cursor = 0
             native_sessions, native_threads = set(), set()
             for index in range(2):

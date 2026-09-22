@@ -77,3 +77,16 @@ implement. Validation check: **2 passed, 2 skipped, 16 deselected**, using
 `evidence/p07-profile-capabilities.log`. The first test assertion expected HTTP 400;
 the existing API correctly uses 422 for VALIDATION_ERROR and the assertion was
 corrected. This was a test expectation error, not a behavior reproduction.
+
+## Subsequent Codex active-close campaign
+
+Parent `866753a` plus the active-close working tree: explicit same Codex paths,
+fresh isolated configuration and canonical inbox delivery. Command:
+`pytest tests/test_runtime_native_campaign.py -q -k active_close --tb=short`.
+**1 passed, 2 deselected, 5.39s**. Codex 0.155.1 / observed gpt-6-astra.
+Matching native interrupted terminal was journaled before observed process stop;
+temporary auth copy removed. See P07_CODEX_ACTIVE_CLOSE.md and
+`evidence/p07-native-codex-active-close-observations.json` for scope and limits.
+The test module now contains three opt-in cases; default execution skips all
+three. Prior two-turn counts above are historical results, not current collection
+counts or claims of coverage for subsequent changes.

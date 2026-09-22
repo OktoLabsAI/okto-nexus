@@ -74,3 +74,10 @@ reproductions corrected; expanded checks include a durable fault through actual
 REST composition. Gate: 104 passed, 9 skipped, 1 known injected Pi warning. See
 P07_PROTOCOL_LIMITS.md. Native history/subscriber buffers, active-turn close,
 POSIX ownership and boot/recovery remain pending; final gate NOT PASSED.
+
+Bounded-framing checkpoint pushed: 866753a. Subsequent Codex active-close unit
+interrupts an observed active turn and awaits its matching terminal before
+unsubscribe. Shared-thread fixture proves sibling survival and stale-terminal
+quarantine; real isolated Codex active-close campaign PASS (one test, 5.39s).
+See P07_CODEX_ACTIVE_CLOSE.md. Turn/start correlation, durable controls, buffers,
+POSIX ownership and remaining matrix gates are still pending.

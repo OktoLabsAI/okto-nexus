@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "fdfc994",
+  "execution_head": "866753a",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1086,7 +1086,10 @@
             "src/okto_nexus/application/runtime_lifecycle.py",
             "src/okto_nexus/application/harness_supervisor.py",
             "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
-            "src/okto_nexus/migrations/034_runtime_event_origin.sql"
+            "src/okto_nexus/migrations/034_runtime_event_origin.sql",
+            "src/okto_nexus/adapters/outbound/harness/codex.py",
+            "tests/test_runtime_shared_connection.py",
+            "tests/test_runtime_native_campaign.py"
           ],
           "test_results": [
             {
@@ -1095,14 +1098,29 @@
               "result": "PASS",
               "observed": "34 passed; broader gate 189 passed, 9 skipped, 1 deselected; all native model flags disabled",
               "evidence": "plans/pr34-remediation/evidence/p07-shared-presence.log"
+            },
+            {
+              "sha": "866753a + active-close working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_shared_connection.py tests/test_harness_codex_connector.py -q --tb=short",
+              "result": "PASS",
+              "observed": "38 passed, 1 skipped; matching terminal settles close, stale terminal preserves uncertainty and sibling process",
+              "evidence": "plans/pr34-remediation/evidence/p07-active-close-atomic-gate.log"
+            },
+            {
+              "sha": "866753a + active-close working tree before final lock refinement",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k active_close --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 2 deselected; real isolated Codex 0.155.1/gpt-6-astra interrupted terminal before stopped; auth copy removed",
+              "evidence": "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
             "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
-            "plans/pr34-remediation/evidence/p07-shared-presence.log"
+            "plans/pr34-remediation/evidence/p07-shared-presence.log",
+            "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md"
           ],
-          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending."
+          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending."
         },
         {
           "task_id": "P07-T06",
@@ -2585,7 +2603,9 @@
       "stimulus": "NDJSON fragmentado, UTF-8, stdout/stderr cheios, frame muito grande ou inválido.",
       "expected": "Parser limitado; erro atribuível; nenhum deadlock ou overflow ilimitado.",
       "execution_status": "NOT_RUN",
-      "evidence": ["plans/pr34-remediation/P07_PROTOCOL_LIMITS.md"],
+      "evidence": [
+        "plans/pr34-remediation/P07_PROTOCOL_LIMITS.md"
+      ],
       "notes": "Partial executed framing and actual REST fault/journal evidence; native event history/subscriber memory bounds and full pressure matrix remain pending. Aggregate not certified."
     },
     {

@@ -188,6 +188,8 @@ class _ThreadState:
     owning_agent_id: str
     active_turn_id: str | None = None
     ended: bool = False
+    closing: bool = False
+    close_unconfirmed: bool = False
 
 
 class _StderrTail:
@@ -579,7 +581,9 @@ class CodexAppServerConnector:
         self._subscriber_sessions = {}
         self._sessions_by_id: dict[str, _ThreadState] = {}
         self._sessions_by_thread: dict[str, _ThreadState] = {}
-        self._sessions_lock = threading.Lock()
+        self._sessions_lock = threading.RLock()
+        self._turn_changed = threading.Condition(self._sessions_lock)
+        self._close_settle_timeout_s = 2.5
         # Set exactly once, by close() or an unexpected child exit. events()
         # polls this (bounded by _EVENTS_POLL_S) instead of relying on a
         # single-consumption sentinel object in the queue - see that
@@ -639,7 +643,7 @@ class CodexAppServerConnector:
     def send(self, session: HarnessSession, command: HarnessCommand) -> None:
         with self._sessions_lock:
             state = self._sessions_by_id.get(session.session_id)
-        if state is None or state.ended:
+        if state is None or state.ended or (state.closing and command.verb != "end"):
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 "no live codex thread for this session (never started, or already ended).",
@@ -670,7 +674,7 @@ class CodexAppServerConnector:
         result = observe_owned_process(self._transport._proc if self._transport else None)
         with self._sessions_lock:
             state = self._sessions_by_id.get(session.session_id)
-            result["active_turn"] = bool(state and state.active_turn_id)
+            result["active_turn"] = bool(state and (state.active_turn_id or state.close_unconfirmed))
         return result
 
     def events(self, *, session_id=None) -> Iterator[HarnessEvent]:
@@ -789,13 +793,31 @@ class CodexAppServerConnector:
             self._ff_pending[request_id] = state.session_id
 
     def _end(self, state: _ThreadState) -> None:
-        """Best-effort local teardown (see the "COMMAND_VERBS has 'end', codex
-        has no thread/end" mismatch note). Ending ONE multiplexed session
-        must never tear down the shared child - only ``close()`` does that.
-        ``thread/unsubscribe`` is the closest real method (stop receiving
-        updates for this thread) short of the destructive
-        ``thread/archive``/``thread/delete``.
+        """Interrupt an observed active turn, await its terminal, then detach.
+
+        An interrupt response is not completion. A deadline leaves the binding
+        uncertain; never kill sibling threads to manufacture a stopped state.
         """
+        with self._turn_changed:
+            if state.closing:
+                return
+            state.closing = True
+            turn_id = state.active_turn_id
+        if turn_id is not None:
+            params = {"threadId": state.thread_id, "turnId": turn_id}
+            request_id = self._transport.send_fire_and_forget(_METHOD_TURN_INTERRUPT, params)
+            with self._ff_pending_lock:
+                self._ff_pending[request_id] = state.session_id
+            with self._turn_changed:
+                settled = self._turn_changed.wait_for(
+                    lambda: state.active_turn_id != turn_id or self._closed_event.is_set(),
+                    timeout=self._close_settle_timeout_s,
+                )
+                state.close_unconfirmed = not settled or state.active_turn_id is not None
+            if state.close_unconfirmed:
+                self._push_event(state.session_id, "transport/close_unsettled",
+                    {"reason": "interrupt_terminal_not_observed", "turn_id": turn_id},
+                    thread_id=state.thread_id, turn_id=turn_id)
         params = {"threadId": state.thread_id}
         request_id = self._transport.send_fire_and_forget(_METHOD_THREAD_UNSUBSCRIBE, params)  # type: ignore[union-attr]
         with self._ff_pending_lock:
@@ -892,12 +914,18 @@ class CodexAppServerConnector:
                     state = self._sessions_by_thread.get(thread_id)
                     if state is not None and turn_id is not None:
                         state.active_turn_id = turn_id
-            elif method == _METHOD_TURN_COMPLETED:
-                with self._sessions_lock:
+            if method == _METHOD_TURN_COMPLETED:
+                turn_id = (params.get("turn") or {}).get("id")
+                with self._turn_changed:
                     state = self._sessions_by_thread.get(thread_id)
-                    if state is not None:
+                    # An old terminal must never settle a newer turn. Queue
+                    # the native terminal before waking teardown to unsubscribe.
+                    self._emit_for_thread(thread_id, method, params)
+                    if state is not None and turn_id is not None and state.active_turn_id == turn_id:
                         state.active_turn_id = None
-            self._emit_for_thread(thread_id, method, params)
+                        self._turn_changed.notify_all()
+            else:
+                self._emit_for_thread(thread_id, method, params)
             return
 
         # Connection-scoped: no threadId (nor a nested thread.id) to
@@ -1074,8 +1102,10 @@ class CodexAppServerConnector:
 #    ONE child process, ending a single session must never tear down that
 #    shared process - only ``close()`` (not part of the port; a connector
 #    lifecycle method) does that, when the LAST session is done with it.
-#    This connector maps ``end`` to ``thread/unsubscribe`` and marks the
-#    session locally ended; it does not call ``thread/archive`` or
+#    This connector interrupts an observed active turn, awaits its matching
+#    terminal under a deadline, then sends ``thread/unsubscribe`` and marks the
+#    session locally ended. A missing terminal leaves close_unconfirmed true.
+#    It does not call ``thread/archive`` or
 #    ``thread/delete``, since those destroy the codex-side rollout, which
 #    ``end`` has no documented licence to do.
 #

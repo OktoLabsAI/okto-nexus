@@ -1,0 +1,33 @@
+{
+  "parent_sha": "866753a",
+  "kind": "codex",
+  "version": "0.155.1",
+  "scenario": "active close during canonical inbox turn",
+  "models_or_providers_observed": [
+    "gpt-6-astra",
+    "openai"
+  ],
+  "event_count": 11,
+  "native_event_types": [
+    "item/completed",
+    "item/started",
+    "mcpServer/startupStatus/updated",
+    "nexus/runtime_state",
+    "thread/started",
+    "thread/status/changed",
+    "turn/completed",
+    "turn/started"
+  ],
+  "terminals": [
+    {
+      "sequence": 10,
+      "status": "interrupted"
+    }
+  ],
+  "lifecycle_states": [
+    "stop_requested",
+    "stopped"
+  ],
+  "temporary_auth_removed": true,
+  "result_count": 1
+}
