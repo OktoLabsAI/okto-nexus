@@ -511,12 +511,14 @@ def session_to_dict(session: HarnessSession) -> dict[str, Any]:
         "workspace_id": session.workspace_id,
         "presence_session_id": session.presence_session_id,
         "lifecycle_state": session.lifecycle_state,
+        "connection_id": session.connection_id,
     }
 
 
 def event_to_dict(event: HarnessEvent) -> dict[str, Any]:
     return {
         "event_id": event.event_id,
+        "origin": event.origin,
         "sequence": event.sequence,
         "session_id": event.session_id,
         "harness_kind": event.harness_kind,
@@ -656,8 +658,9 @@ def build_service(deps: Any) -> HarnessSupervisor:
     from ....outbound.sqlite.runtime_journal_repo import SqliteRuntimeJournalRepo
     supervisor.event_ingress = RuntimeEventIngress(
         journal=FileRuntimeEventJournal(deps.config.home_dir), connection_factory=deps.connection_factory,
-        repo=SqliteRuntimeJournalRepo(), events=repos.harness_events, clock=deps.clock,
-        publish=supervisor.subscribers.publish)
+        repo=SqliteRuntimeJournalRepo(presence=deps.repos.sessions, sessions=repos.harness_sessions),
+        events=repos.harness_events, clock=deps.clock,
+        publish=supervisor.publish_projected_event)
     deps.harness_supervisor = supervisor
     return supervisor
 

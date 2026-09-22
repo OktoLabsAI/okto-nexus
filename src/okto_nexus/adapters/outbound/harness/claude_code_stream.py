@@ -133,7 +133,7 @@ woken the instant an event is published, not on some fixed interval.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process
+from .owned_process import spawn_owned_process, observe_owned_process
 
 from .environment import child_environment
 
@@ -648,6 +648,18 @@ class ClaudeCodeStreamConnector:
         self._write_json(
             {"type": "control_request", "request_id": request_id, "request": {"subtype": "interrupt"}}
         )
+
+    def observe_lifecycle(self, session):
+        return observe_owned_process(self._proc)
+
+    def close(self):
+        self._end()
+        if self._proc is not None:
+            try:
+                self._proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self._proc.kill()
+                self._proc.wait(timeout=5)
 
     def _end(self) -> None:
         """Close stdin. Verified empirically: this drains any in-flight turn

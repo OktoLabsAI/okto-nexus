@@ -58,7 +58,7 @@ class SqliteHarnessSessionRepo:
 
     _COLUMNS = (
         "session_id, kind, owning_agent_id, status, capabilities, metadata, "
-        "started_at, ended_at, created_at, updated_at, endpoint_id, workspace_id, presence_session_id, lifecycle_state"
+        "started_at, ended_at, created_at, updated_at, endpoint_id, workspace_id, presence_session_id, lifecycle_state, connection_id"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -78,8 +78,8 @@ class SqliteHarnessSessionRepo:
                 """
                 INSERT INTO harness_sessions
                     (session_id, kind, owning_agent_id, status, capabilities,
-                     metadata, started_at, ended_at, created_at, updated_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     metadata, started_at, ended_at, created_at, updated_at, connection_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session.session_id,
@@ -92,6 +92,7 @@ class SqliteHarnessSessionRepo:
                     session.ended_at,
                     created_at,
                     created_at,
+                    session.connection_id,
                 ),
             )
         except sqlite3.Error as exc:
@@ -162,6 +163,7 @@ class SqliteHarnessSessionRepo:
             metadata=_loads(row["metadata"], {}),
             endpoint_id=row["endpoint_id"], workspace_id=row["workspace_id"],
             presence_session_id=row["presence_session_id"], lifecycle_state=row["lifecycle_state"],
+            connection_id=row["connection_id"],
         )
 
 
@@ -170,7 +172,7 @@ class SqliteHarnessEventRepo:
 
     _COLUMNS = (
         "session_id, harness_kind, kind, native_event, payload, thread_id, "
-        "turn_id, occurred_at, event_id, sequence"
+        "turn_id, occurred_at, event_id, sequence, origin"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -213,8 +215,8 @@ class SqliteHarnessEventRepo:
                 """
                 INSERT INTO harness_events
                     (event_id, session_id, harness_kind, kind, native_event,
-                     payload, thread_id, turn_id, occurred_at, sequence, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     payload, thread_id, turn_id, occurred_at, sequence, created_at, origin)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     event_id,
@@ -228,6 +230,7 @@ class SqliteHarnessEventRepo:
                     event.occurred_at,
                     sequence,
                     created_at,
+                    event.origin,
                 ),
             )
         except sqlite3.Error as exc:
@@ -266,4 +269,5 @@ class SqliteHarnessEventRepo:
             turn_id=row["turn_id"],
             event_id=row["event_id"],
             sequence=row["sequence"],
+            origin=row["origin"],
         )

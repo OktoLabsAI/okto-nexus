@@ -6,6 +6,11 @@ import subprocess
 from ....application.runtime_lifecycle import current_lifecycle
 
 
+def observe_owned_process(process):
+    exit_code = process.poll() if process is not None else None
+    return {"stop_observed": exit_code is not None, "exit_code": exit_code}
+
+
 def spawn_owned_process(argv, **kwargs):
     scope = current_lifecycle.get()
     if scope is not None:

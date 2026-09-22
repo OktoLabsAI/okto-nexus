@@ -247,20 +247,12 @@ class HarnessCapabilities:
 # --------------------------------------------------------------------------- #
 @dataclass(slots=True)
 class HarnessSession:
-    """A live (or ended) harness-connector session - NOT persisted (no table).
+    """Runtime connection/session of an existing canonical agent.
 
-    Durability of harness activity is via :class:`HarnessEvent` rows written
-    for record-keeping only (D1: the SQLite write is durability, never the
-    notification path); ``HarnessSession`` itself is the supervisor's
-    in-memory bookkeeping record and is never queried from storage.
-
-    ``session_id`` is normally server-minted (:func:`new_harness_session_id`).
-    The one exception is a D7b (``cc-socks``) attach session: its identity is
-    OBSERVED from the peer's own registry
-    (``~/.claude/sessions/<pid>.<hash>.key``), so the adapter passes that
-    discovered id straight through rather than minting a new one - Nexus does
-    not own that namespace and must not invent a competing one.
-    """
+    The durable row preserves runtime metadata, endpoint/workspace/presence and
+    connection IDs. It never defines or rewrites the agent profile. `status`
+    is the legacy execution vocabulary; `lifecycle_state` distinguishes a
+    ready connection, stop request, detach, observed stop and unknown outcome."""
 
     session_id: str
     harness_kind: str
@@ -274,6 +266,7 @@ class HarnessSession:
     workspace_id: str | None = None
     presence_session_id: str | None = None
     lifecycle_state: str = "legacy_unlinked"
+    connection_id: str | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)
@@ -308,6 +301,7 @@ class HarnessEvent:
     turn_id: str | None = None
     event_id: str | None = None
     sequence: int | None = None
+    origin: str = "native"
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)
@@ -318,6 +312,8 @@ class HarnessEvent:
                 "{turn_started, output_delta, turn_completed, tool_activity, error}.",
                 {"kind": self.kind, "supported": sorted(EVENT_KINDS)},
             )
+        if self.origin not in {"native", "nexus"}:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid event origin.", {})
         if not self.native_event:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,

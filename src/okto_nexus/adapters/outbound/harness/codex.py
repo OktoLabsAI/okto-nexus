@@ -43,7 +43,7 @@ frozen port cleanly - reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process
+from .owned_process import spawn_owned_process, observe_owned_process
 
 from .environment import child_environment
 
@@ -572,6 +572,7 @@ class CodexAppServerConnector:
         self._event_history: list[HarnessEvent] = []
         self._history_lock = threading.Lock()
         self._subscribers: list["queue.Queue[HarnessEvent]"] = []
+        self._subscriber_sessions = {}
         self._sessions_by_id: dict[str, _ThreadState] = {}
         self._sessions_by_thread: dict[str, _ThreadState] = {}
         self._sessions_lock = threading.Lock()
@@ -658,7 +659,17 @@ class CodexAppServerConnector:
         else:  # pragma: no cover - HarnessCommand.__post_init__ already closes this set
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "unknown command verb.", {"verb": command.verb})
 
-    def events(self) -> Iterator[HarnessEvent]:
+    def events_for_session(self, session_id):
+        return self.events(session_id=session_id)
+
+    def observe_lifecycle(self, session):
+        result = observe_owned_process(self._transport._proc if self._transport else None)
+        with self._sessions_lock:
+            state = self._sessions_by_id.get(session.session_id)
+            result["active_turn"] = bool(state and state.active_turn_id)
+        return result
+
+    def events(self, *, session_id=None) -> Iterator[HarnessEvent]:
         """Blocking generator, bounded so it can NEVER block forever, and
         with its OWN independent fan-out subscription (RES-A2 fix, mirrors
         ``harness/pi.py``'s own C2 fix) - calling this a second time, or
@@ -691,21 +702,30 @@ class CodexAppServerConnector:
         with self._history_lock:
             backlog = list(self._event_history)
             self._subscribers.append(my_queue)
+            self._subscriber_sessions[my_queue] = session_id
         try:
             for item in backlog:
-                yield item
+                if session_id is None or item.session_id == session_id:
+                    yield item
             while True:
                 try:
                     item = my_queue.get(timeout=_EVENTS_POLL_S)
                 except queue.Empty:
                     if self._closed_event.is_set():
                         return
+                    if session_id is not None:
+                        with self._sessions_lock:
+                            state = self._sessions_by_id.get(session_id)
+                            if state is None or state.ended:
+                                return
                     continue
-                yield item
+                if session_id is None or item.session_id == session_id:
+                    yield item
         finally:
             with self._history_lock:
                 try:
                     self._subscribers.remove(my_queue)
+                    self._subscriber_sessions.pop(my_queue, None)
                 except ValueError:
                     pass
 
@@ -938,7 +958,8 @@ class CodexAppServerConnector:
         # event that raced its own registration, and never sees it twice.
         with self._history_lock:
             self._event_history.append(event)
-            subscribers = list(self._subscribers)
+            subscribers = [subscriber for subscriber in self._subscribers
+                           if self._subscriber_sessions.get(subscriber) in (None, session_id)]
         for subscriber_queue in subscribers:
             subscriber_queue.put(event)
 

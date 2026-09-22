@@ -10,6 +10,7 @@ class EnvelopeConnector:
         self.native = native
         self.capabilities = native.capabilities
         self.payload_key = payload_key
+        self.connection_key = id(native)
 
     def start(self, *, owning_agent_id):
         return self.native.start(owning_agent_id=owning_agent_id)
@@ -29,5 +30,14 @@ class EnvelopeConnector:
     def events(self):
         return self.native.events()
 
+    def events_for_session(self, session_id):
+        scoped = getattr(self.native, "events_for_session", None)
+        return scoped(session_id) if callable(scoped) else self.native.events()
+
+    def observe_lifecycle(self, session):
+        observe = getattr(self.native, "observe_lifecycle", None)
+        return observe(session) if callable(observe) else {"stop_observed": False}
+
     def close(self):
-        return self.native.close()
+        close = getattr(self.native, "close", None)
+        return close() if callable(close) else None

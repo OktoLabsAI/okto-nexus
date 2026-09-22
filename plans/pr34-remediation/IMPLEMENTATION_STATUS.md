@@ -51,3 +51,13 @@ NATIVE_CAMPAIGN.md and evidence/p07-native-observations.json. These supersede
 historical NOT_RUN statements only for those two basic flows. Native steer,
 interrupt, HITL, multiplexing and load scenarios remain unverified; Pi and Claude
 attach native remain NOT_RUN. No merge or final-gate claim.
+
+P08/native checkpoint pushed: 0ad7c0f. Subsequent P07/P08 unit fixes shared Codex
+process lifetime and session event fanout, reuses connection_id, and adds migration
+034 for native versus Nexus event origin. Close transitions/presence now project
+from durable lifecycle records; detach is not fabricated ENDED. Behavioral RED
+reproduced the shared-process kill before correction. Gate: 189 passed, 9 skipped,
+1 P10 relay case deselected; expanded/presence gate: 34 passed. See
+P07_SHARED_LIFECYCLE.md. Next dependencies: active-turn stop/settle, native buffer
+limits, POSIX ownership/boot recovery, operation correlation and scoped work/HITL.
+These fixture runs do not replace or expand the earlier native campaign claims.

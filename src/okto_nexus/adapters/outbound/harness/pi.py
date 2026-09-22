@@ -96,7 +96,7 @@ reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process
+from .owned_process import spawn_owned_process, observe_owned_process
 
 from .environment import child_environment
 
@@ -831,6 +831,9 @@ class PiRpcConnector:
         if self._transport is not None:
             self._transport.close()
         self._closed_event.set()
+
+    def observe_lifecycle(self, session):
+        return observe_owned_process(self._transport._proc if self._transport else None)
 
     # ------------------------------------------------------------------ #
     # Command translation

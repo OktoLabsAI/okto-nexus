@@ -1797,17 +1797,13 @@ class HarnessSessionRepo(Protocol):
 
 @runtime_checkable
 class HarnessEventRepo(Protocol):
-    """Durable, append-only, per-session-sequenced event log (D10; migration 029).
+    """Idempotent projection of stable runtime event IDs and sequences.
 
-    This is the audit trail D10 asks for: every event a connector emits is
-    persisted here with ``event.native_event`` carried VERBATIM, AFTER it has
-    already been fanned out in-memory via
-    :meth:`HarnessSubscriberRegistry.publish` - this repo is durability ONLY
-    and must never gate or delay that in-memory push (D1). ``sequence`` is
-    assigned by the adapter, monotonic PER ``session_id`` starting at 1, so
-    one session's full event stream replays in order independent of any
-    other session's or the global event log's numbering.
-    """
+    Production ingress first captures and fsyncs its journal record. The
+    projector inserts event/result/checkpoint in one UoW, then publishes.
+    Legacy callers may omit event.sequence and receive a per-session sequence
+    allocated by this repo. Neither path infers native execution completion
+    from transport delivery or from a capability declaration."""
 
     def append(
         self, uow: UnitOfWork, *, event_id: str, event: HarnessEvent, created_at: str

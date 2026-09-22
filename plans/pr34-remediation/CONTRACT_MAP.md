@@ -26,3 +26,22 @@ Layering rules remain: no sqlite3/mcp imports in domain/application.
 Full legacy schemas, flags, SQLite definitions and measured surface are in
 `evidence/p00-contracts.json`. OFF surface must match merge-base's 43-tool
 legacy set, allowing explicitly recorded version/flag/schema metadata changes.
+
+
+## Additive runtime event/lifecycle mapping (0.2.0)
+
+- Event ingress port: `application/runtime_event_ingress.RuntimeEventJournal`;
+  file adapter: `adapters/outbound/harness/event_journal.FileRuntimeEventJournal`.
+- Captured result and checkpoint: migration 033 `runtime_results` /
+  `runtime_journal_checkpoint`, projected atomically with existing `harness_events`.
+- `HarnessEvent.event_id` / `sequence` expose existing persistence identities;
+  optional `origin` defaults to native for old records. Migration 034 stores
+  origin explicitly; peer payload strings cannot set the Nexus event origin.
+- Shared process ownership: `RuntimeConnectionLifecycle` leases. Persisted
+  connection IDs reuse migration 030's `harness_sessions.connection_id`.
+- Runtime lifecycle vocabulary uses `protocol_ready`, `stop_requested`, `stopped`,
+  `detached`, `outcome_unknown`. Legacy session `status` is not used to infer
+  observed process exit; in particular a detached runtime can retain its last
+  RUNNING value while its lifecycle truth is detached.
+- Native per-connection/thread IDs remain distinct from canonical agent and
+  runtime-session IDs. No new identity registry was introduced.

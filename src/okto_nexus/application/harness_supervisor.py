@@ -165,7 +165,7 @@ longer chain back to A) notify-targeting each other so that every
 from __future__ import annotations
 
 from .runtime_authorization import require_runtime_agent
-from .runtime_lifecycle import RuntimeLifecycle
+from .runtime_lifecycle import RuntimeLifecycle, RuntimeConnectionLifecycle
 
 import functools
 import json
@@ -273,6 +273,7 @@ class _LiveSession:
     project_root: str
     notify_target: Any = None
     lifecycle: RuntimeLifecycle | None = None
+    pump_error: BaseException | None = None
     pump_thread: "threading.Thread | None" = None
     #: send_only cursor (RES-A2 follow-up): a send_only connector's
     #: ``events()`` is now a BROADCAST snapshot of an append-only history
@@ -432,6 +433,8 @@ class HarnessSupervisor:
         self._call_slots = threading.BoundedSemaphore(4)
         self._max_live_runtimes = 16
         self.event_ingress = None
+        self._connections = {}
+        self._closing = {}
 
     # ------------------------------------------------------------------ #
     # subscriber registry passthrough (so a caller needs only ONE reference)
@@ -455,11 +458,11 @@ class HarnessSupervisor:
         endpoint_id = kwargs.get("endpoint_id")
         binding_key = endpoint_id or "legacy:" + str(agent_id)
         with self._lock:
-            if len(self._live) + len(self._opening_agents) >= self._max_live_runtimes:
+            if len(self._live) + len(self._opening_agents) + len(self._closing) >= self._max_live_runtimes:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Runtime capacity exhausted.", {})
             if binding_key in self._quarantined_bindings or binding_key in self._opening_agents or any(
                 live.session.endpoint_id == endpoint_id if endpoint_id else live.session.owning_agent_id == agent_id
-                for live in self._live.values()
+                for live in (*self._live.values(), *self._closing.values())
             ):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                     "An executor is already active or starting for this agent.", {})
@@ -514,11 +517,28 @@ class HarnessSupervisor:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                 "Configure capabilities through the canonical identity API.", {})
 
+        profile_id = None
+        if endpoint_id and self._endpoint_repo:
+            with self._cf.unit_of_work(write=False) as uow:
+                endpoint = self._endpoint_repo.get(uow, endpoint_id)
+                profile_id = endpoint["profile_id"] if endpoint else None
+        connection_key = getattr(connector, "connection_key", id(connector))
+        context = (owning_agent_id, project_root, profile_id, profile_revision, kind)
+        with self._lock:
+            self._connections = {key: value for key, value in self._connections.items() if not value.closed}
+            connection = self._connections.setdefault(connection_key, RuntimeConnectionLifecycle(context=context))
+            if connection.context != context:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Shared connection binding context differs.", {})
+            try:
+                lifecycle = connection.new_scope(multiplexing=connector.capabilities.multiplexes_sessions)
+            except RuntimeError as exc:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Connection cannot admit another runtime session.", {}) from exc
         session, lifecycle = self._bounded_start(connector, owning_agent_id=owning_agent_id, kind=kind,
-            binding_key=endpoint_id or "legacy:" + owning_agent_id)
+            binding_key=endpoint_id or "legacy:" + owning_agent_id, lifecycle=lifecycle)
+        session.connection_id = lifecycle.connection_id
         if session.harness_kind != kind:
+            self._best_effort_teardown(connector, session, lifecycle=lifecycle)
             lifecycle.cancel()
-            self._best_effort_teardown(connector, session)
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,
                 "connector returned a session whose harness_kind does not "
@@ -526,8 +546,8 @@ class HarnessSupervisor:
                 {"requested_kind": kind, "returned_kind": session.harness_kind},
             )
         if not can_transition_session(session.status, STATUS_RUNNING):
+            self._best_effort_teardown(connector, session, lifecycle=lifecycle)
             lifecycle.cancel()
-            self._best_effort_teardown(connector, session)
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,
                 "connector.start() returned a session in an unexpected "
@@ -556,8 +576,8 @@ class HarnessSupervisor:
                         endpoint_id=endpoint_id, workspace_id=workspace_id, presence_session_id=presence_id,
                         open_request_id=open_request_id, profile_revision=profile_revision)
         except Exception as exc:  # noqa: BLE001 - a started connector needs tearing down either way
+            self._best_effort_teardown(connector, session, lifecycle=lifecycle)
             lifecycle.cancel()
-            self._best_effort_teardown(connector, session)
             if isinstance(exc, OktoNexusError):
                 raise
             raise OktoNexusError(
@@ -653,6 +673,7 @@ class HarnessSupervisor:
     def _bounded_start(
         self, connector: HarnessConnector, *, owning_agent_id: str, kind: str,
         binding_key: str | None = None,
+        lifecycle: RuntimeLifecycle | None = None,
     ) -> tuple[HarnessSession, RuntimeLifecycle]:
         """Timeout cancels owned resources, never creates replacement threads.
 
@@ -660,8 +681,10 @@ class HarnessSupervisor:
         actual worker exits. Cancellation cannot declare a turn completed.
         """
         if not self._start_slots.acquire(blocking=False):
+            if lifecycle is not None:
+                lifecycle.cancel()
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime startup capacity exhausted.", {})
-        lifecycle = RuntimeLifecycle()
+        lifecycle = lifecycle or RuntimeLifecycle()
         outcome: dict[str, Any] = {}
         completion_lock = threading.Lock()
         timed_out = False
@@ -683,7 +706,16 @@ class HarnessSupervisor:
                     # Attach closes only its connection, never the external process.
                     # Use this already-reserved startup worker. A wedged close
                     # retains its slot and quarantine, with no replacement thread.
-                    close = getattr(connector, "close", None)
+                    # Never close a shared process while another startup/live
+                    # lease still needs it. A known late session can be ended
+                    # independently without tearing down the connection.
+                    late_session = outcome.get("session")
+                    if isinstance(late_session, HarnessSession):
+                        try:
+                            connector.send(late_session, HarnessCommand(session_id=late_session.session_id, verb="end"))
+                        except Exception:
+                            cleanup_failed = True
+                    close = getattr(connector, "close", None) if lifecycle.claim_exclusive_teardown() else None
                     if callable(close):
                         try:
                             close()
@@ -700,6 +732,7 @@ class HarnessSupervisor:
             thread.start()
         except BaseException:
             self._start_slots.release()
+            lifecycle.cancel()
             raise
         thread.join(self._start_timeout_s)
         with completion_lock:
@@ -1070,52 +1103,49 @@ class HarnessSupervisor:
     # close (explicit, operator/agent-requested end)
     # ------------------------------------------------------------------ #
     def close(self, session_id: str) -> HarnessSession:
-        """End a live session and stop tracking it.
+        """Request stop once, drain bounded output and return observed state.
 
-        CLAIMS the session first (:meth:`_claim_for_reap`) - this is what
-        makes ``close`` deterministic and race-free against the full-duplex
-        pump thread (:meth:`_pump`), which claims the SAME way once it
-        notices the connector actually stopped: whichever of the two calls
-        this first wins outright, and the other's claim comes back ``None``
-        (a safe no-op) since :meth:`_claim_for_reap` is the ONLY place
-        anything removes a session from the live registry.
-
-        Deliberately does NOT mutate ``live.session.status`` before the
-        connector calls below: the connector still sees the SAME
-        :class:`~okto_nexus.domain.harness.HarnessSession` object it started
-        with, in whatever status it was actually in, exactly as if ``close``
-        had not touched it yet. Only :meth:`_finish_reap`, called LAST,
-        writes the terminal status - so a connector that ever starts
-        inspecting ``session.status`` internally (none of the four shipped
-        ones currently do; ``claude_code_attach.py`` tracks its OWN separate
-        copy) is never handed an already-``ENDED`` session while being asked
-        to end it.
-
-        Best-effort on the connector side (a ``send(verb="end")`` when the
-        connector supports it, then its own non-port ``close()`` lifecycle
-        helper when it exposes one - see the four connector modules'
-        "Lifecycle helpers (not part of the port)" sections; not every
-        connector has one, and this call tolerates that). ALWAYS returns the
-        final in-memory :class:`HarnessSession`, even when every best-effort
-        step below failed - a stuck connector must never make ``close``
-        itself hang or fail (D8: a wedged supervisor is worse than a crashed
-        one).
-        """
+        Concurrent/repeated closes reuse the same runtime state. Shared connections
+        are torn down only by their final lease. A journal failure is surfaced;
+        a captured lifecycle event whose SQLite projection failed remains pending.
+        Detach, stop requested and observed process exit are different facts."""
         live = self._claim_for_reap(session_id)
         if live is None:
+            with self._lock:
+                closing = self._closing.get(session_id)
+            if closing:
+                return closing.session
+            with self._cf.unit_of_work(write=False) as uow:
+                previous = self._sessions.get(uow, session_id=session_id)
+            if previous and previous.lifecycle_state in {"stopped", "detached", "outcome_unknown"}:
+                return previous
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 "no live harness session with this id.",
                 {"session_id": session_id},
             )
-        self._best_effort_teardown(live.connector, live.session)
+        capture_error = None
+        if self.event_ingress:
+            try:
+                self._capture_lifecycle(live, "stop_requested", stop_observed=False)
+            except Exception as exc:
+                capture_error = exc
+        self._best_effort_teardown(live.connector, live.session, lifecycle=live.lifecycle)
         if live.lifecycle is not None:
-            live.lifecycle.cancel()
-        self._finish_reap(live, error=None)
+            failures = live.lifecycle.cancel()
+            if failures:
+                capture_error = RuntimeError("Owned-resource teardown is unconfirmed")
+        if live.pump_thread and live.pump_thread is not threading.current_thread():
+            live.pump_thread.join(self._close_timeout_s)
+            if live.pump_thread.is_alive():
+                capture_error = RuntimeError("Runtime event drain deadline expired")
+        self._finish_reap(live, error=capture_error or live.pump_error)
+        if capture_error:
+            raise capture_error
         return live.session
 
     def _best_effort_teardown(
-        self, connector: HarnessConnector, session: HarnessSession
+        self, connector: HarnessConnector, session: HarnessSession, *, lifecycle=None
     ) -> None:
         """Ask a connector to stop, tolerating every failure (bounded, never
         raises): a ``send(verb="end")`` when capabilities allow it, then the
@@ -1139,7 +1169,8 @@ class HarnessSupervisor:
                 self._log_best_effort_failure(
                     "sending 'end' to harness connector", session.session_id
                 )
-        close_fn = getattr(connector, "close", None)
+        exclusive = lifecycle is None or lifecycle.claim_exclusive_teardown()
+        close_fn = getattr(connector, "close", None) if exclusive else None
         if callable(close_fn):
             try:
                 self._bounded_call(
@@ -1257,24 +1288,29 @@ class HarnessSupervisor:
         if live is None:  # pragma: no cover - defensive: reaped before the thread ran
             return
         try:
-            for event in live.connector.events():
+            scoped = getattr(live.connector, "events_for_session", None)
+            events = scoped(session_id) if callable(scoped) else live.connector.events()
+            for event in events:
                 if event.session_id == session_id:
-                    self._handle_event(session_id, event)
+                    self._handle_event(session_id, event, connection_id=live.session.connection_id)
         except BaseException as exc:  # noqa: BLE001 - the pump is this session's only watchdog
+            live.pump_error = exc
             self._reap(session_id, error=exc)
             return
         self._reap(session_id, error=None)
 
-    def _handle_event(self, session_id: str, event: HarnessEvent) -> None:
-        """Publish -> persist -> (maybe) notable message, IN THAT ORDER and
-        no other (the spec's exact event-flow requirement): the in-memory
-        push happens first and unconditionally; the durable write and the
-        inbox delivery are both best-effort AFTER it and can never delay or
-        gate it."""
+    def _handle_event(self, session_id: str, event: HarnessEvent, *, connection_id=None) -> None:
+        """Capture a native event with stable connection provenance.
+
+        Production capture fsyncs before projection/publication. The remaining
+        legacy branch has no journal and is not used by serve/MCP/REST."""
         if self.event_ingress:
             # Production capture is journal-first. A pending authorized result
             # is not automatically broadcast as a new executable conversation.
-            return self.event_ingress.capture(event)
+            with self._lock:
+                live = self._live.get(session_id)
+            connection_id = connection_id or (live.session.connection_id if live else None)
+            return self.event_ingress.capture(event, connection_id=connection_id)
         presence_id = self._presence_by_runtime.get(session_id)
         if presence_id and self._presence_sessions:
             try:
@@ -1356,6 +1392,8 @@ class HarnessSupervisor:
         docstring for why that ordering matters."""
         live = self._claim_for_reap(session_id)
         if live is not None:
+            if live.lifecycle is not None:
+                live.lifecycle.cancel()
             self._finish_reap(live, error=error)
 
     def _claim_for_reap(self, session_id: str) -> "_LiveSession | None":
@@ -1373,6 +1411,9 @@ class HarnessSupervisor:
         and logging best-effort failures forever."""
         with self._lock:
             live = self._live.pop(session_id, None)
+            if live is not None:
+                self._closing[session_id] = live
+                live.session.lifecycle_state = "stop_requested"
         if live is not None:
             self._unsubscribe_inbox(live)
         return live
@@ -1387,17 +1428,55 @@ class HarnessSupervisor:
                 "unsubscribing from inbox deliveries", live.session.session_id
             )
 
-    def _finish_reap(self, live: "_LiveSession", *, error: BaseException | None) -> None:
-        """Given an ALREADY-CLAIMED ``live`` (see :meth:`_claim_for_reap`),
-        transition and persist a terminal status - ONLY for a connector that
-        declares ``observes_session_end=True``.
+    def _capture_lifecycle(self, live, state, *, stop_observed, error=False):
+        event = HarnessEvent(session_id=live.session.session_id,
+            harness_kind=live.session.harness_kind, kind="tool_activity", origin="nexus",
+            native_event="nexus/runtime_state", occurred_at=self._clock.now_iso(),
+            payload={"lifecycle_state": state, "stop_observed": stop_observed, "error": bool(error)})
+        self.event_ingress.capture(event, connection_id=live.session.connection_id)
+        live.session.lifecycle_state = state
+        if state == "stopped" and stop_observed:
+            live.session.status = STATUS_ERRORED if error else STATUS_ENDED
+            live.session.ended_at = event.occurred_at
+        if self.event_ingress.projection_pending:
+            live.session.metadata["lifecycle_projection_pending"] = True
 
-        A non-observing connector (D7b/cc-socks) never gets a fabricated
-        ``ENDED``/``ERRORED`` here - per the domain module's own docstring,
-        such a session "is abandoned by the peer, not transitioned". Nexus
-        still stops TRACKING it (the claim already did that), it just never
-        pretends to know how the peer's own session actually ended.
-        """
+    def publish_projected_event(self, event):
+        """Release a closing runtime only after its state projection commits."""
+        if (event.origin == "nexus" and event.native_event == "nexus/runtime_state"
+                and event.payload.get("lifecycle_state") != "stop_requested"):
+            with self._lock:
+                live = self._closing.pop(event.session_id, None)
+                if live:
+                    live.session.metadata.pop("lifecycle_projection_pending", None)
+        self._subscribers.publish(event)
+
+    def _finish_reap(self, live: "_LiveSession", *, error: BaseException | None) -> None:
+        """Record observed lifecycle through the production journal/projector.
+
+        Capability declarations alone never prove process exit. A detached or
+        unknown runtime does not receive a fabricated ENDED status. The branch
+        without an ingress service exists only for legacy standalone composition."""
+        if self.event_ingress:
+            observe = getattr(live.connector, "observe_lifecycle", None)
+            try:
+                observation = observe(live.session) if callable(observe) else {}
+            except Exception:
+                observation = {}
+            stopped = observation.get("stop_observed") is True
+            unknown = bool(error or observation.get("active_turn"))
+            state = "outcome_unknown" if unknown else "stopped" if stopped else "detached"
+            self._capture_lifecycle(live, state, stop_observed=stopped, error=error is not None)
+            self._presence_by_runtime.pop(live.session.session_id, None)
+            with self._lock:
+                if not self.event_ingress.projection_pending:
+                    self._closing.pop(live.session.session_id, None)
+                if state == "outcome_unknown":
+                    self._quarantined_bindings.add(live.session.endpoint_id or "legacy:" + live.session.owning_agent_id)
+            return
+        # Compatibility-only supervisor instances without the production journal.
+        with self._lock:
+            self._closing.pop(live.session.session_id, None)
         presence_id = self._presence_by_runtime.pop(live.session.session_id, None)
         if presence_id and self._presence_sessions:
             try:

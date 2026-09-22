@@ -1,0 +1,14 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_closing_one_codex_session_preserves_other_thread_and_process ______
+tests\test_runtime_shared_connection.py:31: in test_closing_one_codex_session_preserves_other_thread_and_process
+    assert process.poll() is None, "closing a session killed another authorized session's process"
+E   AssertionError: closing a session killed another authorized session's process
+E   assert 1 is None
+E    +  where 1 = poll()
+E    +    where poll = <OwnedWindowsPopen: returncode: 1 args: ['D:\\Projetos\\Techridy\\okto_labs_...>.poll
+-------------------------- Captured stderr teardown ---------------------------
+[okto-nexus] harness supervisor: sending 'end' to harness connector failed for session hsess_c624d964394d46608302470f2fc59a84 (OktoNexusError); continuing.
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_shared_connection.py::test_closing_one_codex_session_preserves_other_thread_and_process
+1 failed in 3.55s
