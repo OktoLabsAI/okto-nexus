@@ -24,7 +24,7 @@ Commands/results:
 
 ## Pending gates
 
-P01 containment and P02 contracts implemented; P03–P07 in progress; P08–P12 NOT_STARTED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
+P01 containment and P02 contracts implemented; P03–P08 in progress; P09–P12 NOT_STARTED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
 Current: P03 approved endpoint/profile persistence and canonical presence; see P03_ENDPOINTS.md. Next dependency: scoped runtime grants and lifecycle verification. Remaining seven red regressions belong to later phases. No legacy producer may be switched to a private, unintegrated dispatcher. Update this file and `05_BACKLOG.json` per unit.
 
@@ -37,3 +37,17 @@ P03 checkpoint pushed: dc67cdd. P04 scoped grants/control checkpoint: parent dc6
 P04 checkpoint pushed: 2fb9f59. P05/P06 checkpoint: migration 032, transactional transport intents and inbox exclusion, bounded serve-owned dispatcher, IPC wake, authenticated stdio owner proxy and idempotent open. See P05_P06_DURABLE_DELIVERY.md: 77 selected tests PASS, one additional owner-proxy PASS, 176 canonical tests PASS. Three legacy regressions still pending. No native connector/model execution yet. Next: process ownership/lifecycle (P07), then durable event/result projection (P08); pending gates remain explicit.
 
 P05/P06 checkpoint pushed: 62ef22b. P07 process ownership unit: Windows atomic Job launch in all three spawning adapters, bounded startup/control helpers and cancellation, Codex EOF handshake release. Eight ownership tests PASS, including actual REST composition and three abrupt fixture owner kills. See P07_PROCESS_OWNERSHIP.md for failing intermediate checks, platform limits and pending gates. Next: shared-connection lifecycle, POSIX ownership and durable event journal. Native campaigns remain without accepted results.
+
+P07 process checkpoint pushed: 93d5fab. P08 journal unit: additive migration 033,
+production journal-first capture and atomic event/result/checkpoint projector.
+96 integrated tests PASS (one P10 relay regression deselected), plus 10 expanded
+journal tests PASS. See P08_EVENT_JOURNAL.md for commands, partial coverage and
+remaining correlation/publication/retention/lifecycle dependencies.
+
+Native update: REAL Codex 0.155.1 and Claude Code 2.1.277 each passed two turns
+through production serve/MCP/inbox/outbox/journal, preserved canonical identity,
+and reaped their managed process. Temporary login copies removed. See
+NATIVE_CAMPAIGN.md and evidence/p07-native-observations.json. These supersede
+historical NOT_RUN statements only for those two basic flows. Native steer,
+interrupt, HITL, multiplexing and load scenarios remain unverified; Pi and Claude
+attach native remain NOT_RUN. No merge or final-gate claim.

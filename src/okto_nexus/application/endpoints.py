@@ -32,6 +32,9 @@ class EndpointService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported runtime profile configuration.", {})
         if descriptor.kind != "pi" and set(config) & {"provider", "model", "extra_args"}:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "This adapter selects its backend through its approved environment/configuration.", {})
+        if descriptor.kind != "codex" and set(config) & {"sandbox", "approval_policy"}:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                "These sandbox/approval options are implemented only by the Codex adapter; do not infer them for this runtime.", {})
         command = config.get("command")
         if command is not None and (not isinstance(command, list) or not command or
                                    any(not isinstance(x, str) or not x for x in command) or

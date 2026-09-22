@@ -306,6 +306,8 @@ class HarnessEvent:
     payload: dict[str, Any] = field(default_factory=dict)
     thread_id: str | None = None
     turn_id: str | None = None
+    event_id: str | None = None
+    sequence: int | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)

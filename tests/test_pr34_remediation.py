@@ -265,9 +265,21 @@ def test_terminal_storage_failure_is_not_silently_accepted(runtime, monkeypatch)
     monkeypatch.setattr(deps.repos.harness_events, "append", unavailable)
     event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
                          native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={"text": "final"})
-    # Before a durable journal exists, storage failure must at least fail loudly.
-    with pytest.raises(Exception):
-        deps.harness_supervisor._handle_event(session_id, event)
+    # A failed projection is now durable in the ingress journal, rather than
+    # pretending the event was saved in SQLite or discarding the final result.
+    ingress = deps.harness_supervisor.event_ingress
+    captured = deps.harness_supervisor._handle_event(session_id, event)
+    assert ingress.projection_pending
+    assert ingress.journal.read_after(0)[0]["event"]["event_id"] == captured.event_id
+    assert ingress.journal.read_after(0)[0]["event"]["payload"] == {"text": "final"}
+    assert deps.harness_supervisor.replay_events(session_id) == []
+    monkeypatch.undo()
+    ingress.recover()
+    replay = deps.harness_supervisor.replay_events(session_id)
+    assert replay[0].event_id == captured.event_id
+    assert replay[0].payload == {"text": "final"}
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT count(*) FROM runtime_results").fetchone()[0] == 1
 
 
 def test_expired_relay_does_not_mint_new_root(runtime):

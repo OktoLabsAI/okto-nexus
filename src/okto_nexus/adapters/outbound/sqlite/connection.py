@@ -125,6 +125,10 @@ class ConnectionFactory:
             conn.execute(f"PRAGMA busy_timeout={int(self._config.busy_timeout_ms)}")
             self._enable_wal(conn)
             conn.execute("PRAGMA foreign_keys=ON")
+            if self._config.feature_harness_integrations and conn.execute("PRAGMA synchronous").fetchone()[0] < 2:
+                conn.close()
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+                    "Durable runtime writes require SQLite synchronous=FULL or stronger.", {})
             return conn
         except sqlite3.Error as exc:
             raise OktoNexusError(

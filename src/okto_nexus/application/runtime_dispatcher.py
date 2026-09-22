@@ -22,6 +22,7 @@ class RuntimeDispatcher:
         self._inflight = {}
         self._threads = []
         self.wake_channel = None
+        self.event_ingress = None
 
     def start(self):
         if self.epoch is not None:
@@ -31,6 +32,15 @@ class RuntimeDispatcher:
             self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now, lease_expires_at=iso_plus(now, 40))
         if self.epoch is None:
             return False
+        if self.event_ingress:
+            try:
+                self.event_ingress.start()
+            except BaseException:
+                self.event_ingress.close()
+                with self.cf.unit_of_work() as uow:
+                    self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())
+                self.epoch = None
+                raise
         if self.wake_channel:
             self.wake_channel.start(self.wake, self.owner_id)
         for index in range(self.workers):
@@ -59,6 +69,8 @@ class RuntimeDispatcher:
                         self._stop.set()
                         break
                 self._expire_sends()
+                if self.event_ingress:
+                    self.event_ingress.recover()
                 if signaled or time.monotonic() - recovered >= self.recovery_seconds:
                     self.scan_once()
                     recovered = time.monotonic()
@@ -122,6 +134,8 @@ class RuntimeDispatcher:
                     return
             with self._lock:
                 self._inflight[operation["operation_id"]] = (attempt, time.monotonic())
+            if self.event_ingress:
+                self.event_ingress.journal.check_admission()
             # Secret resolution, process startup and transport are ALL outside
             # the write transaction. Crash from here is ambiguous, not retryable.
             self.dispatch(operation | {"owner_id": self.owner_id, "owner_epoch": self.epoch, "attempt_id": attempt})

@@ -431,6 +431,7 @@ class HarnessSupervisor:
         self._start_slots = threading.BoundedSemaphore(4)
         self._call_slots = threading.BoundedSemaphore(4)
         self._max_live_runtimes = 16
+        self.event_ingress = None
 
     # ------------------------------------------------------------------ #
     # subscriber registry passthrough (so a caller needs only ONE reference)
@@ -446,6 +447,8 @@ class HarnessSupervisor:
     # ------------------------------------------------------------------ #
     def open(self, **kwargs) -> HarnessSession:
         """One live runtime per endpoint; distinct bindings keep one identity."""
+        if self.event_ingress:
+            self.event_ingress.journal.check_admission()
         if not self._runtime_enabled():
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
         agent_id = kwargs.get("owning_agent_id")
@@ -782,6 +785,8 @@ class HarnessSupervisor:
         """
         if not self._runtime_enabled():
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
+        if self.event_ingress and verb in {"send_turn", "steer"}:
+            self.event_ingress.journal.check_admission()
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)
@@ -1216,6 +1221,10 @@ class HarnessSupervisor:
         order, straight from :class:`HarnessEventRepo` - independent of
         whether the session is still live. This is what makes the
         no-polling push claim checkable after the fact."""
+        if (not isinstance(after_sequence, int) or isinstance(after_sequence, bool) or after_sequence < 0
+                or not isinstance(limit, int) or isinstance(limit, bool) or not 1 <= limit <= 1000):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                "Event replay requires a nonnegative cursor and a limit from 1 to 1000.", {})
         with self._cf.unit_of_work(write=False) as uow:
             return self._events.list_for_session(
                 uow, session_id=session_id, after_sequence=after_sequence, limit=limit
@@ -1249,7 +1258,8 @@ class HarnessSupervisor:
             return
         try:
             for event in live.connector.events():
-                self._handle_event(session_id, event)
+                if event.session_id == session_id:
+                    self._handle_event(session_id, event)
         except BaseException as exc:  # noqa: BLE001 - the pump is this session's only watchdog
             self._reap(session_id, error=exc)
             return
@@ -1261,6 +1271,10 @@ class HarnessSupervisor:
         push happens first and unconditionally; the durable write and the
         inbox delivery are both best-effort AFTER it and can never delay or
         gate it."""
+        if self.event_ingress:
+            # Production capture is journal-first. A pending authorized result
+            # is not automatically broadcast as a new executable conversation.
+            return self.event_ingress.capture(event)
         presence_id = self._presence_by_runtime.get(session_id)
         if presence_id and self._presence_sessions:
             try:

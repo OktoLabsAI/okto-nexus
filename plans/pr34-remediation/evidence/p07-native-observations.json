@@ -1,0 +1,150 @@
+[
+  {
+    "kind": "codex",
+    "version": "codex-cli 0.155.1",
+    "models_or_providers_observed": [
+      "gpt-6-astra",
+      "openai"
+    ],
+    "event_count": 41,
+    "event_sequences": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41
+    ],
+    "native_event_types": [
+      "account/rateLimits/updated",
+      "item/agentMessage/delta",
+      "item/completed",
+      "item/started",
+      "mcpServer/startupStatus/updated",
+      "thread/started",
+      "thread/status/changed",
+      "thread/tokenUsage/updated",
+      "turn/completed",
+      "turn/started"
+    ],
+    "result_count": 2,
+    "outbox_states": [
+      {
+        "status": "SENT_UNCONFIRMED",
+        "ack_level": "TRANSPORT_WRITE",
+        "attempt_count": 1
+      },
+      {
+        "status": "SENT_UNCONFIRMED",
+        "ack_level": "TRANSPORT_WRITE",
+        "attempt_count": 1
+      }
+    ],
+    "temporary_auth_copy_removed": true,
+    "configuration": "isolated; no inherited settings/hooks/MCP; Codex read-only/on-request; Claude default native permissions"
+  },
+  {
+    "kind": "claude_code",
+    "version": "2.1.277 (Claude Code)",
+    "models_or_providers_observed": [
+      "claude-opus-5",
+      "claude-opus-5[1m]"
+    ],
+    "event_count": 28,
+    "event_sequences": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28
+    ],
+    "native_event_types": [
+      "assistant",
+      "process_exit",
+      "rate_limit_event",
+      "result:success",
+      "stream_event:content_block_delta",
+      "stream_event:content_block_start",
+      "stream_event:content_block_stop",
+      "stream_event:message_delta",
+      "stream_event:message_start",
+      "stream_event:message_stop",
+      "system:commands_changed",
+      "system:init",
+      "system:status"
+    ],
+    "result_count": 2,
+    "outbox_states": [
+      {
+        "status": "SENT_UNCONFIRMED",
+        "ack_level": "TRANSPORT_WRITE",
+        "attempt_count": 1
+      },
+      {
+        "status": "SENT_UNCONFIRMED",
+        "ack_level": "TRANSPORT_WRITE",
+        "attempt_count": 1
+      }
+    ],
+    "temporary_auth_copy_removed": true,
+    "configuration": "isolated; no inherited settings/hooks/MCP; Codex read-only/on-request; Claude default native permissions"
+  }
+]

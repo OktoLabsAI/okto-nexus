@@ -308,8 +308,11 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
     """Low-level construction, only after explicit control or durable delivery admission."""
     effective_backend = {}
     if profile is not None:
-        effective_backend["env"] = profile_environment(profile, deps.config.home_dir)
         config = profile["config"]
+        if kind != "codex" and set(config) & {"sandbox", "approval_policy"}:
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+                "This profile claims controls unsupported by its adapter; review the profile before opening.", {})
+        effective_backend["env"] = profile_environment(profile, deps.config.home_dir)
         if kind == "codex":
             effective_backend["thread_start_overrides"] = {
                 "sandbox": config.get("sandbox", "read-only"),
@@ -383,7 +386,8 @@ def build_dispatcher(deps):
         supervisor.send(session_id, "send_turn", {"envelope": outbox.decode(operation)})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
-                                   validate=validate, dispatch=dispatch)
+                                  validate=validate, dispatch=dispatch)
+    dispatcher.event_ingress = supervisor.event_ingress
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
     deps.runtime_dispatcher = dispatcher
     return dispatcher
@@ -512,6 +516,8 @@ def session_to_dict(session: HarnessSession) -> dict[str, Any]:
 
 def event_to_dict(event: HarnessEvent) -> dict[str, Any]:
     return {
+        "event_id": event.event_id,
+        "sequence": event.sequence,
         "session_id": event.session_id,
         "harness_kind": event.harness_kind,
         "kind": event.kind,
@@ -645,6 +651,13 @@ def build_service(deps: Any) -> HarnessSupervisor:
         endpoint_repo=SqliteEndpointRepo(),
         presence_sessions=deps.repos.sessions,
     )
+    from .....application.runtime_event_ingress import RuntimeEventIngress
+    from ....outbound.harness.event_journal import FileRuntimeEventJournal
+    from ....outbound.sqlite.runtime_journal_repo import SqliteRuntimeJournalRepo
+    supervisor.event_ingress = RuntimeEventIngress(
+        journal=FileRuntimeEventJournal(deps.config.home_dir), connection_factory=deps.connection_factory,
+        repo=SqliteRuntimeJournalRepo(), events=repos.harness_events, clock=deps.clock,
+        publish=supervisor.subscribers.publish)
     deps.harness_supervisor = supervisor
     return supervisor
 

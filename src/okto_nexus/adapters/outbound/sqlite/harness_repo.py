@@ -170,7 +170,7 @@ class SqliteHarnessEventRepo:
 
     _COLUMNS = (
         "session_id, harness_kind, kind, native_event, payload, thread_id, "
-        "turn_id, occurred_at"
+        "turn_id, occurred_at, event_id, sequence"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -192,12 +192,23 @@ class SqliteHarnessEventRepo:
         structural backstop if that invariant is ever violated.
         """
         try:
+            existing = uow.connection.execute(
+                f"SELECT {self._COLUMNS} FROM harness_events WHERE event_id=?", (event_id,)
+            ).fetchone()
+            if existing is not None:
+                stored = self._row(existing)
+                from dataclasses import replace
+                if replace(stored, event_id=None, sequence=None) != replace(event, event_id=None, sequence=None):
+                    raise ValueError("Harness event identity collision")
+                if event.sequence is not None and stored.sequence != event.sequence:
+                    raise ValueError("Harness event sequence collision")
+                return int(existing["sequence"])
             row = uow.connection.execute(
                 "SELECT COALESCE(MAX(sequence), 0) + 1 FROM harness_events "
                 "WHERE session_id = ?",
                 (event.session_id,),
             ).fetchone()
-            sequence = int(row[0])
+            sequence = event.sequence if event.sequence is not None else int(row[0])
             uow.connection.execute(
                 """
                 INSERT INTO harness_events
@@ -253,4 +264,6 @@ class SqliteHarnessEventRepo:
             payload=_loads(row["payload"], {}),
             thread_id=row["thread_id"],
             turn_id=row["turn_id"],
+            event_id=row["event_id"],
+            sequence=row["sequence"],
         )

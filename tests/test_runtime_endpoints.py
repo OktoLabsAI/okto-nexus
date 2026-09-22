@@ -153,3 +153,10 @@ def test_p03_profile_rejects_unsafe_defaults_and_plain_secrets(runtime, config):
     assert response.status_code == 422, response.text
     assert peers == []
     assert "fixture-secret" not in response.text
+@pytest.mark.parametrize("adapter", ["pi", "claude_code.stream"])
+def test_profile_cannot_claim_unimplemented_sandbox_controls(runtime, adapter):
+    _, client, _, _, operator_key, _ = runtime
+    response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator_key},
+        json={"profile_id": "unsupported-controls", "adapter_id": adapter,
+              "config": {"sandbox": "read-only", "approval_policy": "on-request"}})
+    assert response.status_code == 422, response.text

@@ -474,6 +474,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             if dispatcher:
                 await anyio.to_thread.run_sync(dispatcher.close)
+            supervisor = getattr(deps, "harness_supervisor", None)
+            if supervisor and supervisor.event_ingress:
+                for runtime in supervisor.list_live():
+                    with contextlib.suppress(Exception):
+                        await anyio.to_thread.run_sync(supervisor.close, runtime.session_id)
+                with contextlib.suppress(Exception):
+                    await anyio.to_thread.run_sync(supervisor.event_ingress.recover)
+                await anyio.to_thread.run_sync(supervisor.event_ingress.close)
             if telemetry is not None:
                 telemetry.record_event(
                     EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}

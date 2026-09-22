@@ -6,8 +6,8 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "62ef22b",
-  "notice": "Execution in progress; evidence under plans/pr34-remediation. Native Codex and Claude authorized; Pi native NOT_RUN. Final gate NOT PASSED.",
+  "execution_head": "93d5fab269e13aa766d970fb913554cb7376cc42",
+  "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
     "IN_PROGRESS",
@@ -944,22 +944,58 @@
         {
           "task_id": "P07-T01",
           "title": "Migrar os quatro adapters para envelope/resultado canônicos com tradução na borda.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k codex --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-codex.log"
+            },
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k claude_code --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-claude.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+            "plans/pr34-remediation/evidence/p07-native-observations.json"
+          ],
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md."
         },
         {
           "task_id": "P07-T02",
           "title": "Preservar multi-turn, Pi settle, Codex multiplexação e características reais de Claude.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k codex --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-codex.log"
+            },
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k claude_code --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-claude.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+            "plans/pr34-remediation/evidence/p07-native-observations.json"
+          ],
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md."
         },
         {
           "task_id": "P07-T03",
@@ -1010,12 +1046,30 @@
         {
           "task_id": "P07-T06",
           "title": "Integrar boot/recovery pela mesma composição e validar versões/plataformas.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k codex --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-codex.log"
+            },
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k claude_code --tb=short",
+              "result": "PASS",
+              "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
+              "evidence": "plans/pr34-remediation/evidence/p07-native-claude.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+            "plans/pr34-remediation/evidence/p07-native-observations.json"
+          ],
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md."
         }
       ]
     },
@@ -1025,7 +1079,7 @@
       "depends_on_phases": [
         "P07"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P08",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -1055,52 +1109,137 @@
         {
           "task_id": "P08-T01",
           "title": "Implementar port/journal append-only com IDs/sequence, checksums e limites.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_event_ingress.py",
+            "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+            "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+          ],
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py -q",
+              "result": "PASS",
+              "observed": "10 passed; partial phase coverage",
+              "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+            "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+          ],
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
         },
         {
           "task_id": "P08-T02",
           "title": "Implementar flush/group commit, fsync terminal e durable watermark.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_event_ingress.py",
+            "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+            "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+          ],
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py -q",
+              "result": "PASS",
+              "observed": "10 passed; partial phase coverage",
+              "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+            "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+          ],
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
         },
         {
           "task_id": "P08-T03",
           "title": "Implementar projector idempotente com resultados, artifacts, notificações e checkpoint.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_event_ingress.py",
+            "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+            "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+          ],
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py -q",
+              "result": "PASS",
+              "observed": "10 passed; partial phase coverage",
+              "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+            "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+          ],
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
         },
         {
           "task_id": "P08-T04",
           "title": "Tratar DB indisponível, corrupção, espaço insuficiente e lacunas não recuperáveis.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_event_ingress.py",
+            "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+            "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+          ],
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py -q",
+              "result": "PASS",
+              "observed": "10 passed; partial phase coverage",
+              "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+            "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+          ],
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
         },
         {
           "task_id": "P08-T05",
           "title": "Corrigir replay/cursor/sequence/ACL e validar todos os cortes de crash.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_event_ingress.py",
+            "src/okto_nexus/adapters/outbound/harness/event_journal.py",
+            "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+          ],
+          "test_results": [
+            {
+              "sha": "93d5fab + P08 working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py -q",
+              "result": "PASS",
+              "observed": "10 passed; partial phase coverage",
+              "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+            "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+          ],
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
         }
       ]
     },
@@ -2342,7 +2481,11 @@
       "stimulus": "Dois ou mais turnos no mesmo stream-json.",
       "expected": "Identidade nativa estável conforme protocolo e respostas correlacionadas.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+      ],
+      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
     },
     {
       "test_id": "T-LIFE-11",
@@ -2381,7 +2524,11 @@
       "stimulus": "Receber resultado final com projeção bloqueada.",
       "expected": "Journal durável preserva resultado; volta do SQLite permite projeção única.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+      ],
+      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
     },
     {
       "test_id": "T-JRN-02",
@@ -2407,7 +2554,11 @@
       "stimulus": "Commit de projeção ocorre antes de atualizar checkpoint externo.",
       "expected": "Replay vê event_uid já aplicado; nenhum receipt/resultado duplicado.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+      ],
+      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
     },
     {
       "test_id": "T-JRN-04",
@@ -2445,8 +2596,12 @@
       ],
       "stimulus": "Dois eventos legítimos idênticos no conteúdo.",
       "expected": "Ambos preservados; dedupe por identidade estável, não por texto.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "tests/test_runtime_event_journal.py::test_reopen_preserves_distinct_equal_text_and_stable_cursors"
+      ],
+      "notes": "Parent 93d5fab + P08 unit: five equal-text events retain five distinct UIDs and sequential cursors after reopen. No native replay-dedup claim."
     },
     {
       "test_id": "T-JRN-07",
@@ -2511,7 +2666,11 @@
       "stimulus": "Várias páginas com append concorrente, limite inválido e cursor retido/expirado.",
       "expected": "Sequência/cursor explícitos; sem omissões, repeats indevidos ou vazamento de ACL.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+      ],
+      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
     },
     {
       "test_id": "T-JRN-12",
