@@ -297,7 +297,7 @@ def test_p01_enabled_authorized_connectors_remain_usable(runtime, kind, substrat
     assert opened["ok"], opened
     sid = opened["data"]["session_id"]
     sent = tool(client, key, "harness_send", {"session_id": sid,
-                "payload": {"text": "test", "content": "test"}})
+                "payload": {"content" if kind == "claude_code" else "text": "test"}})
     assert sent["ok"], sent
     assert len(peers[0].sent) == 1
     assert tool(client, key, "harness_close", {"session_id": sid})["ok"]

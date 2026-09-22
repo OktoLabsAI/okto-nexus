@@ -13,10 +13,11 @@ def authorize_runtime(context: RuntimeRequestContext, *, config, agents,
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                             "Harness integrations are disabled.", {})
     allowed = context.trusted_local_operator and context.authentication_source == "http_loopback"
-    if context.actor_agent_id == "operator":
+    if context.actor_agent_id == "operator" and context.authentication_source == "agent_key":
         with connection_factory.unit_of_work(write=False) as uow:
             actor = agents.get(uow, context.actor_agent_id)
-            allowed = actor is not None and actor.is_active
+            allowed = bool(actor and actor.is_active and context.credential_binding
+                           and context.credential_binding == actor.api_key_hash)
     if not allowed:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                             "Runtime access requires an authorized operator or explicit delegation.", {})

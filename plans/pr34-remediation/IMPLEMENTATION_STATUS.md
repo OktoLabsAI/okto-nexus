@@ -24,10 +24,12 @@ Commands/results:
 
 ## Pending gates
 
-P01 containment and P02 contracts implemented; P03 in progress; P04–P12 NOT_STARTED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
+P01 containment and P02 contracts implemented; P03 and P04 in progress; P05–P12 NOT_STARTED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
 Current: P03 approved endpoint/profile persistence and canonical presence; see P03_ENDPOINTS.md. Next dependency: scoped runtime grants and lifecycle verification. Remaining seven red regressions belong to later phases. No legacy producer may be switched to a private, unintegrated dispatcher. Update this file and `05_BACKLOG.json` per unit.
 
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
 P03: migration 030, profiles/endpoints, canonical runtime presence and isolated child environments implemented. 19 tests PASS (evidence/p03-gate.log). Seven later-phase regressions remain outstanding. Native Codex/Claude/Pi/attach NOT_RUN so far. All phase statuses use backlog vocabulary; IMPLEMENTED does not imply VERIFIED.
+
+P03 checkpoint pushed: dc67cdd. P04 scoped grants/control checkpoint: parent dc67cdd; 59 selected tests PASS plus two concurrency/opacity tests PASS. Actual authenticated stdio subprocess tested; native harnesses remain NOT_RUN. See P04_AUTHORIZATION.md for exact commands and pending gates. Next: transactional canonical delivery/transport operations (P05).

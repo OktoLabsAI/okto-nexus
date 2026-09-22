@@ -117,7 +117,7 @@ from typing import Annotated, Any, Mapping
 import anyio.to_thread
 from pydantic import Field
 
-from okto_nexus.application.runtime_authorization import authorize_runtime, require_runtime_agent
+from okto_nexus.application.runtime_authorization import require_runtime_agent
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.adapters.inbound.http.identity_ctx import get_authenticated_agent, trusted_local_operator
 
@@ -147,6 +147,9 @@ from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.harness_supervisor import HarnessSupervisor
 from okto_nexus.application.adapter_registry import AdapterRegistry, AdapterDescriptor
 from okto_nexus.application.endpoints import EndpointService
+from okto_nexus.application.runtime_access import RuntimeAccessService
+from okto_nexus.application.runtime_control import RuntimeControlService, validate_runtime_payload
+from okto_nexus.adapters.outbound.sqlite.runtime_grants_repo import SqliteRuntimeGrantRepo
 from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
 from okto_nexus.adapters.outbound.harness.environment import profile_environment
 from okto_nexus.domain.endpoints import EndpointCapabilities
@@ -164,7 +167,14 @@ from okto_nexus.envelope import (
 )
 from okto_nexus.errors import ErrorCode, OktoNexusError
 
-def authorize_request(deps, *, substrate=None):
+def build_access_service(deps):
+    return RuntimeAccessService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
+        endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(), config=deps.config, clock=deps.clock,
+        registry=build_connector_factories(deps))
+
+
+def authorize_request(deps, *, substrate=None, action="admin", session_id=None, endpoint_id=None,
+                      represented_agent_id=None, workspace_id=None, consume=False):
     """Same authenticated admission policy for MCP, REST and local HTTP."""
     actor = get_authenticated_agent()
     local = trusted_local_operator.get()
@@ -172,23 +182,43 @@ def authorize_request(deps, *, substrate=None):
         actor.agent_id if actor else None,
         "http_loopback" if local else "agent_key" if actor else "unauthenticated",
         trusted_local_operator=local,
+        credential_binding=actor.api_key_hash if actor else None,
     )
-    authorize_runtime(context, config=deps.config, agents=deps.repos.agents,
-                      connection_factory=deps.connection_factory, substrate=substrate)
+    build_access_service(deps).authorize(context, action=action, substrate=substrate,
+        session_id=session_id, endpoint_id=endpoint_id, represented_agent_id=represented_agent_id,
+        workspace_id=workspace_id, consume=consume)
     return context
+
+
+def authorized_send(deps, supervisor, session_id, verb, payload):
+    context = authorize_request(deps, action="send" if verb == "send_turn" else verb, session_id=session_id)
+    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor).send(
+        context, session_id=session_id, verb=verb, payload=payload)
+
+
+def authorized_close(deps, supervisor, session_id):
+    context = authorize_request(deps, action="close", session_id=session_id)
+    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor).close(context, session_id=session_id)
 
 
 def runtime_tool_guard(deps):
     def decorate(fn):
+        action = {"harness_open": "access", "harness_send": "send", "harness_steer": "steer",
+                  "harness_interrupt": "interrupt", "harness_close": "close", "harness_get": "read",
+                  "harness_event_list": "events"}.get(fn.__name__, "admin")
+        def check(args, kwargs):
+            arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
+            authorize_request(deps, action=action, substrate=arguments.get("substrate"),
+                              session_id=arguments.get("session_id"))
         if inspect.iscoroutinefunction(fn):
             @functools.wraps(fn)
             async def guarded(*args, **kwargs):
-                authorize_request(deps, substrate=kwargs.get("substrate"))
+                check(args, kwargs)
                 return await fn(*args, **kwargs)
         else:
             @functools.wraps(fn)
             def guarded(*args, **kwargs):
-                authorize_request(deps)
+                check(args, kwargs)
                 return fn(*args, **kwargs)
         return guarded
     return decorate
@@ -210,20 +240,20 @@ def runtime_object(name, value):
 def build_endpoint_service(deps):
     return EndpointService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
         workspaces=deps.repos.workspaces, repo=SqliteEndpointRepo(), registry=build_connector_factories(deps),
-        config=deps.config, clock=deps.clock)
+        config=deps.config, clock=deps.clock, access=build_access_service(deps))
 
 
 def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpoint_id=None,
                     backend=None, target_pid=None, role=None):
-    context = authorize_request(deps, substrate=substrate)
-    require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
-                          agent_id=agent_id, role=role)
+    context = authorize_request(deps, substrate=substrate, action="access")
     if backend:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                             "Configure backend options in an approved runtime profile; per-call overrides are disabled.", {})
     service = build_endpoint_service(deps)
     endpoint, profile = service.resolve(context, endpoint_id=endpoint_id, agent_id=agent_id,
         kind=kind, substrate=resolve_substrate(kind, substrate), project_root=project_root)
+    require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
+                          agent_id=agent_id, role=role)
     effective_backend = {}
     if profile is not None:
         effective_backend["env"] = profile_environment(profile, deps.config.home_dir)
@@ -450,31 +480,7 @@ def _legacy_capabilities_catalog() -> list[dict[str, Any]]:
 
 
 def normalize_payload(value: Any, *, required: bool) -> dict[str, Any]:
-    """Validate a tool/route payload parameter: a JSON object, or ``None``
-    when not ``required`` (-> ``{}``). Deliberately narrower than
-    :func:`~okto_nexus.envelope.require_json_object_param` (which also
-    accepts a JSON-ENCODED STRING for slices whose application layer parses
-    one): :class:`~okto_nexus.domain.harness.HarnessCommand`/the connectors'
-    own ``payload.get(...)`` reads expect a real mapping, not a string, so
-    accepting one here would only defer the failure to a less legible spot
-    inside the connector.
-    """
-    if value is None:
-        if required:
-            raise OktoNexusError(
-                ErrorCode.VALIDATION_ERROR,
-                "payload is required and must be a JSON object (shape is "
-                "harness-native - see the tool/route description).",
-                {},
-            )
-        return {}
-    if isinstance(value, Mapping):
-        return dict(value)
-    raise OktoNexusError(
-        ErrorCode.VALIDATION_ERROR,
-        f"payload must be a JSON object (got {type(value).__name__}).",
-        {"payload_type": type(value).__name__},
-    )
+    return validate_runtime_payload(value, required=required)
 
 
 # --------------------------------------------------------------------------- #
@@ -891,7 +897,7 @@ def register(server: Any, deps: Any) -> None:
         """Send a turn to a live session (send_turn). Never blocks for a reply - the answer arrives later as harness events (subscribe out-of-band, or poll harness_event_list)."""
         body = normalize_payload(payload, required=True)
         await anyio.to_thread.run_sync(
-            functools.partial(supervisor.send, session_id, "send_turn", body)
+            functools.partial(authorized_send, deps, supervisor, session_id, "send_turn", body)
         )
         return {"session_id": session_id, "verb": "send_turn"}
 
@@ -905,7 +911,7 @@ def register(server: Any, deps: Any) -> None:
         """Steer a live session's in-flight turn. Rejected if the connector's steer_timing is null (unsupported - check harness_list). NEXT_TURN_BOUNDARY buffers until the next turn; IMMEDIATE can land mid-turn."""
         body = normalize_payload(payload, required=True)
         await anyio.to_thread.run_sync(
-            functools.partial(supervisor.send, session_id, "steer", body)
+            functools.partial(authorized_send, deps, supervisor, session_id, "steer", body)
         )
         return {"session_id": session_id, "verb": "steer"}
 
@@ -919,7 +925,7 @@ def register(server: Any, deps: Any) -> None:
         """Interrupt a live session's in-flight turn (abort). If interrupt_requires_settle_wait is true, a send/steer right after may be refused (CONFLICT) until the aborted turn's settle event lands."""
         body = normalize_payload(payload, required=False)
         await anyio.to_thread.run_sync(
-            functools.partial(supervisor.send, session_id, "interrupt", body)
+            functools.partial(authorized_send, deps, supervisor, session_id, "interrupt", body)
         )
         return {"session_id": session_id, "verb": "interrupt"}
 
@@ -931,7 +937,7 @@ def register(server: Any, deps: Any) -> None:
     ) -> dict[str, Any]:
         """End a live session (best-effort teardown: send(end) then close()) and stop tracking it. Always returns the final session state, even if teardown failed - close() never hangs (D8)."""
         session = await anyio.to_thread.run_sync(
-            functools.partial(supervisor.close, session_id)
+            functools.partial(authorized_close, deps, supervisor, session_id)
         )
         return session_to_dict(session)
 

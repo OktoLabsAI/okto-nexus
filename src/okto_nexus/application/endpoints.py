@@ -8,11 +8,14 @@ from .runtime_authorization import authorize_runtime, require_runtime_agent
 
 
 class EndpointService:
-    def __init__(self, *, connection_factory, agents, workspaces, repo, registry, config, clock):
+    def __init__(self, *, connection_factory, agents, workspaces, repo, registry, config, clock, access=None):
         self.cf, self.agents, self.workspaces, self.repo = connection_factory, agents, workspaces, repo
         self.registry, self.config, self.clock = registry, config, clock
+        self.access = access
 
     def authorize(self, context):
+        if self.access:
+            return self.access.authorize(context)
         authorize_runtime(context, config=self.config, agents=self.agents, connection_factory=self.cf)
 
     def create_profile(self, context, *, profile_id, adapter_id, config=None, secret_refs=None,
@@ -115,8 +118,12 @@ class EndpointService:
                 "recovery": "Review legacy bindings and restore damaged agent profiles only from a trusted backup; historical sessions do not prove liveness."}
 
     def resolve(self, context, *, endpoint_id, agent_id, kind, substrate, project_root):
-        self.authorize(context)
         workspace_id = resolve_workspace_id(project_root)
+        if self.access:
+            self.access.authorize(context, action="open" if endpoint_id else "admin", substrate=substrate,
+                                  endpoint_id=endpoint_id, represented_agent_id=agent_id, workspace_id=workspace_id)
+        else:
+            self.authorize(context)
         with self.cf.unit_of_work(write=False) as uow:
             candidates = [self.repo.get(uow, endpoint_id)] if endpoint_id else self.repo.list(
                 uow, agent_id=agent_id, workspace_id=workspace_id)
@@ -130,4 +137,7 @@ class EndpointService:
             profile = self.repo.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
             if profile is not None and not profile["enabled"]:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime profile is disabled.", {})
+        if self.access:
+            self.access.authorize(context, action="open", endpoint_id=endpoint["endpoint_id"],
+                                  represented_agent_id=agent_id, workspace_id=workspace_id, substrate=substrate)
         return endpoint, profile
