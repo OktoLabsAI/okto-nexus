@@ -1,0 +1,2800 @@
+{
+  "head_sha": "830796518aaed18c5c6cc7c691bf3394a7f3781e",
+  "source_baseline": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+  "surface_revision": 34,
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "tools": [
+    {
+      "name": "artifact_put",
+      "title": null,
+      "description": "Register a file/text/json/markdown/html artifact in the resolved workspace. Docs: okto-nexus://reference/tool-docs/artifacts.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "artifact_type": {
+            "description": "Artifact classification - one of: file, text, json, markdown, html. REQUIRED.",
+            "title": "Artifact Type",
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Human-friendly name/label for the artifact (optional).",
+            "title": "Name"
+          },
+          "path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Filesystem path to import into Nexus-managed artifact storage (must stay within the workspace root). Provide this OR content - at least one REQUIRED.",
+            "title": "Path"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "UTF-8 content stored outside the database (bounded by max_inline_bytes; json must be well-formed). Provide this OR path - at least one REQUIRED.",
+            "title": "Content"
+          },
+          "metadata": {
+            "default": null,
+            "description": "Free-form JSON object stored with the artifact (optional).",
+            "title": "Metadata"
+          }
+        },
+        "required": [
+          "project_root",
+          "artifact_type"
+        ],
+        "title": "artifact_putArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "artifact_putDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "artifact_get",
+      "title": null,
+      "description": "Retrieve an artifact by id within the workspace resolved from project_root. Reads are audience-scoped: a caller outside the frozen audience gets NOT_FOUND (indistinguishable from a missing id).",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "artifact_id": {
+            "description": "The artifact_id to retrieve. REQUIRED.",
+            "title": "Artifact Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_root",
+          "artifact_id"
+        ],
+        "title": "artifact_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "artifact_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "event_get",
+      "title": null,
+      "description": "Read a cursor-paginated page of the event log (non-blocking). Actors outside your comm scope are omitted; yours and system events always show. Docs: okto-nexus://reference/tool-docs/events.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id; scopes per-event visibility (you only see events you may see).",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "stream": {
+            "description": "Event stream to read - one of: workspace, agent, handoff. message.created, the message.delivered/message.read receipts and artifact.created are on workspace.",
+            "title": "Stream",
+            "type": "string"
+          },
+          "cursor": {
+            "default": null,
+            "description": "Pagination cursor: the last event_id you consumed; returns event_id > cursor (optional; omit/0 = from the beginning).",
+            "title": "Cursor"
+          },
+          "limit": {
+            "default": null,
+            "description": "Max events per page (optional; default 100, clamped to the server maximum, default 1000).",
+            "title": "Limit"
+          },
+          "filters": {
+            "default": null,
+            "description": "Equality filters, AND-combined (optional). Keys: type, agent_id, task_id, handoff_id, trace_id. e.g. {\"type\":\"message.created\"}.",
+            "title": "Filters"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens).",
+            "title": "Profile"
+          }
+        },
+        "required": [
+          "project_root",
+          "agent_id",
+          "stream"
+        ],
+        "title": "event_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "event_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "event_cursor",
+      "title": null,
+      "description": "Return the stream's CURRENT END as a cursor (O(1), no scan) - the pre-flight monitor anchor so you see only events appended after now. Returns {cursor} (0 for empty).",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id; scopes per-event visibility (you only see events you may see).",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "stream": {
+            "description": "Event stream to read - one of: workspace, agent, handoff. message.created, the message.delivered/message.read receipts and artifact.created are on workspace.",
+            "title": "Stream",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_root",
+          "agent_id",
+          "stream"
+        ],
+        "title": "event_cursorArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "event_cursorDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "event_wait",
+      "title": null,
+      "description": "Read the event log; optionally long-poll (0/omitted/null = snapshot; >0 blocks). Scoped like event_get (actors outside your comm scope omitted). Patterns: okto-nexus://reference/monitoring.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id; scopes per-event visibility (you only see events you may see).",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "stream": {
+            "description": "Event stream to read - one of: workspace, agent, handoff. message.created, the message.delivered/message.read receipts and artifact.created are on workspace.",
+            "title": "Stream",
+            "type": "string"
+          },
+          "cursor": {
+            "default": null,
+            "description": "Pagination cursor: the last event_id you consumed; returns event_id > cursor (optional; omit/0 = from the beginning).",
+            "title": "Cursor"
+          },
+          "limit": {
+            "default": null,
+            "description": "Max events per page (optional; default 100, clamped to the server maximum, default 1000).",
+            "title": "Limit"
+          },
+          "filters": {
+            "default": null,
+            "description": "Equality filters, AND-combined (optional). Keys: type, agent_id, task_id, handoff_id, trace_id. e.g. {\"type\":\"message.created\"}.",
+            "title": "Filters"
+          },
+          "timeout_seconds": {
+            "default": 0,
+            "description": "Long-poll bound in SECONDS (optional; default 0). 0/omitted/null = an immediate non-blocking snapshot; >0 OPTS IN to a BLOCKING long-poll until an event arrives or the timeout elapses.",
+            "title": "Timeout Seconds"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens).",
+            "title": "Profile"
+          }
+        },
+        "required": [
+          "project_root",
+          "agent_id",
+          "stream"
+        ],
+        "title": "event_waitArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "event_waitDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_create",
+      "title": null,
+      "description": "Create an OPEN handoff (validates target/visibility); emit handoff.created. After creating, poll handoff_get for status/result. Full docs: okto-nexus://reference/tool-docs/handoff.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "from_agent_id": {
+            "description": "Your agent_id (the creator); recorded as the handoff's originator - the owner is whichever agent later claims it (handoff_claim), not necessarily you.",
+            "title": "From Agent Id",
+            "type": "string"
+          },
+          "target": {
+            "description": "Routing target as a raw JSON object - which agents may CLAIM this handoff (REQUIRED). strategy one of: direct {\"strategy\":\"direct\",\"agent_id\":\"<id>\"}; capability {\"strategy\":\"capability\",\"capability\":\"<cap>\"}; role {\"strategy\":\"role\",\"role\":\"<role>\"}; tag {\"strategy\":\"tag\",\"selector\":{\"<key>\":[\"<value>\",...]}} (flat: AND across keys, OR within values) or rich [{\"key\":\"<k>\",\"operator\":\"In|NotIn|Exists|DoesNotExist\",\"values\":[\"<v>\",...]}] (ANDed; CAUTION: NotIn/DoesNotExist also match agents MISSING the key); broadcast {\"strategy\":\"broadcast\"}; mixed {\"strategy\":\"mixed\",\"rules\":[<sub-target>,...]}; direct_with_fallback {\"strategy\":\"direct_with_fallback\",\"agent_id\":\"<id>\",\"fallback_after_seconds\":<n>}. Competing-consumers: the first to handoff_claim wins. Hierarchy/catalog rules, examples, edge-cases: okto-nexus://reference/target-grammar.",
+            "title": "Target"
+          },
+          "visibility": {
+            "description": "Who may SEE the handoff (separate from who may CLAIM it = target). one of: public, eligible, private. REQUIRED (case-insensitive).",
+            "title": "Visibility",
+            "type": "string"
+          },
+          "payload": {
+            "default": null,
+            "description": "Inline work content (optional; raw JSON object/array, string, or null - NOT JSON-encoded). Returned only to the claimant by handoff_claim / claimant handoff_get. For large content pass an artifact_id.",
+            "title": "Payload"
+          },
+          "trace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Trajectory trace_id to stamp on this handoff (optional; non-empty string, max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; omitted = generate one.",
+            "title": "Trace Id"
+          },
+          "acceptance_criteria": {
+            "default": null,
+            "description": "Verification contract (optional; raw JSON list of 1..20 unique non-empty strings, max 500 chars each; IMMUTABLE). handoff_complete then parks the handoff in VERIFYING until the handoff_verify verdict. Needs feature_verification ON (rejected while OFF, never ignored).",
+            "title": "Acceptance Criteria"
+          },
+          "verify_by": {
+            "default": null,
+            "description": "Who verifies (optional; only WITH acceptance_criteria; raw JSON object). one of: {\"kind\":\"creator\"} (default); {\"kind\":\"agent\",\"agent_id\":\"<id>\"} (must be registered); {\"kind\":\"capability\",\"capability\":\"<name>\"} (in the catalog; resolved at verify time). The claimant never verifies their own delivery.",
+            "title": "Verify By"
+          },
+          "depends_on": {
+            "default": null,
+            "description": "Handoff ids this one depends on (optional; raw JSON list of 1..20 unique existing ids; IMMUTABLE). Blocked - unlisted/unclaimable - until ALL are COMPLETED. Needs feature_dag ON (rejected while OFF).",
+            "title": "Depends On"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Session_id attributing this operation to a specific open session of yours (optional).",
+            "title": "Session Id"
+          }
+        },
+        "required": [
+          "project_root",
+          "from_agent_id",
+          "target",
+          "visibility"
+        ],
+        "title": "handoff_createArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_createDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_list_available",
+      "title": null,
+      "description": "Expire leases, then list OPEN handoffs visible+eligible to the caller (paginated); entries are metadata-only until claimed.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "cursor": {
+            "default": null,
+            "description": "Opaque pagination cursor: pass back the next_cursor from the previous page to continue (optional; omit or '0' to start from the beginning).",
+            "title": "Cursor"
+          },
+          "limit": {
+            "default": null,
+            "description": "Max handoffs per page (optional; default applied by the server, clamped to the maximum).",
+            "title": "Limit"
+          },
+          "timeout_seconds": {
+            "default": null,
+            "description": "Long-poll bound in SECONDS (optional). 0/omitted = non-blocking snapshot; >0 OPTS IN to blocking until a claimable handoff appears or the timeout elapses.",
+            "title": "Timeout Seconds"
+          }
+        },
+        "required": [
+          "project_root",
+          "agent_id"
+        ],
+        "title": "handoff_list_availableArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_list_availableDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_claim",
+      "title": null,
+      "description": "Atomically claim an OPEN handoff; single winner, others get a structured error. Returns the payload + claimed_by/lease_expires_at. In strict mode pass session_id + session_secret.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id"
+        ],
+        "title": "handoff_claimArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_claimDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_complete",
+      "title": null,
+      "description": "Owner-only delivery of a CLAIMED handoff: -> COMPLETED, or -> VERIFYING when acceptance_criteria were set (verifier decides via handoff_verify). In strict mode pass session creds.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "result": {
+            "default": null,
+            "description": "Completion result (optional; string or JSON) persisted on the handoff, recorded with handoff.completed, and delivered to the creator inbox.",
+            "title": "Result"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id"
+        ],
+        "title": "handoff_completeArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_completeDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_verify",
+      "title": null,
+      "description": "Verifier-only verdict on a VERIFYING handoff: 'pass' -> COMPLETED (verified_by), 'fail' -> CLAIMED for rework (feedback + renewed lease). In strict mode pass session creds.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (the verifier); must satisfy the handoff's verify_by resolved AT VERIFY TIME. The claimant (claimed_by) is always refused. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "verdict": {
+            "description": "The verdict. one of: pass (VERIFYING -> COMPLETED; handoff.completed carries verified_by), fail (VERIFYING -> CLAIMED for rework, lease renewed). REQUIRED (lowercase).",
+            "title": "Verdict",
+            "type": "string"
+          },
+          "feedback": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Rework guidance (optional; max 2000 chars; only with verdict 'fail'). Persisted (each fail overwrites the previous) and delivered to the claimant's inbox.",
+            "title": "Feedback"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id",
+          "verdict"
+        ],
+        "title": "handoff_verifyArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_verifyDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_reject",
+      "title": null,
+      "description": "Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED). In trust_mode=strict pass session_id + session_secret.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Human-readable reason (optional) persisted on the handoff, recorded with the rejection, and delivered to the creator inbox.",
+            "title": "Reason"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id"
+        ],
+        "title": "handoff_rejectArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_rejectDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_cancel",
+      "title": null,
+      "description": "Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a pool target matching zero agents). Only OPEN handoffs cancel. In strict mode pass session creds.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id; must be the handoff's creator. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Human-readable reason recorded with the handoff.cancelled event (optional).",
+            "title": "Reason"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id"
+        ],
+        "title": "handoff_cancelArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_cancelDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "handoff_get",
+      "title": null,
+      "description": "Read a handoff by id: status, claimant, payload, result/rejected_reason + verification/dependency fields if set. The creator's path to the outcome. Full docs: okto-nexus://reference/tool-docs/handoff.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "handoff_id": {
+            "description": "The handoff_id to act on. REQUIRED.",
+            "title": "Handoff Id",
+            "type": "string"
+          },
+          "agent_id": {
+            "description": "Your agent_id (REQUIRED). Creator and claimant always read; others are gated by the handoff visibility.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_root",
+          "handoff_id",
+          "agent_id"
+        ],
+        "title": "handoff_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "handoff_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_list",
+      "title": null,
+      "description": "List available harness kinds/substrates and their DECLARED capabilities (send_only, steer_timing, etc.), read from each connector's own declaration. Check before harness_steer/harness_interrupt.",
+      "inputSchema": {
+        "properties": {},
+        "title": "harness_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_open",
+      "title": null,
+      "description": "Open a harness session (spawn or attach), register it as an agent (D3), and track it. Bounded - a wedged connector raises INTERNAL_ERROR after the start timeout, never hangs (D8).",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "The agent_id this NEW harness session registers/upserts as (D3) - existing or fresh; NOT the caller's own agent_id. Registration is real: the agent row exists (metadata.harness_kind set), this session's OWN turn_completed/error notifications are deliverable through the normal target grammar via notify_target below, AND (SYS-03/UAT-05 fix) other agents can now ADDRESS a live turn TO this harness through message_create's existing target grammar (direct/capability/role/tag) while this session stays open/live - the message's body is forwarded as an ordinary send_turn. This is best-effort, hand-off semantics: the ordinary inbox delivery it rides on is never consumed by the forward (see message_create's own docs), so a forward failure (e.g. this session having just closed) never loses the message. For guaranteed delivery, an explicit steer/interrupt, or addressing a session that may not be live yet, use harness_send/harness_steer/harness_interrupt with the session_id this tool returns instead. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "kind": {
+            "description": "Harness kind, one of: pi, codex, claude_code. REQUIRED.",
+            "title": "Kind",
+            "type": "string"
+          },
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope for this session's persistence + notable-event messages).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "substrate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Only meaningful when kind=\"claude_code\" (rejected otherwise): one of stream (D7a - Nexus spawns and owns a \"claude -p\" child; default), attach (D7b, cc-socks - send-only injection into an ALREADY-RUNNING interactive session identified by target_pid; steering/interrupt are unsupported on this substrate - see harness_list).",
+            "title": "Substrate"
+          },
+          "target_pid": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Only valid with kind=\"claude_code\", substrate=\"attach\" (REQUIRED there, rejected otherwise): the OS pid of the already-running interactive Claude Code session to inject into.",
+            "title": "Target Pid"
+          },
+          "backend": {
+            "default": null,
+            "description": "Optional JSON object selecting this session's model backend EXPLICITLY, instead of silently inheriting whatever the operator's own ambient CLI config happens to resolve to (a real hazard: pi's default provider comes from the OPERATOR's own ~/.pi/agent/settings.json on the machine running okto-nexus serve - server-spawned children should not inherit that silently). Supported fields depend on kind: pi accepts {\"provider\", \"model\", \"extra_args\"} (argv overrides, e.g. {\"provider\":\"zai\",\"model\":\"glm-5.3\"}); codex and claude_code (substrate=\"stream\") accept {\"env\"} (a JSON object of extra environment variables merged over okto-nexus serve's own process environment - this is how codex's provider/model/base_url selection actually works, via CODEX_HOME pointing at a config.toml, not a CLI flag; the same env escape hatch also reaches pi). Rejected for claude_code substrate=\"attach\" (nothing is spawned there to configure). Passing a field this kind does not support is a VALIDATION_ERROR naming the supported set, not a silent no-op. Omitting backend entirely is allowed and keeps today's default (inherit the connector's own ambient config) - the response's backend.explicit field always says which happened, so that choice is never silent.",
+            "title": "Backend"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Logical role to store on the registered agent (optional); matched exactly/case-sensitively by role-strategy targets.",
+            "title": "Role"
+          },
+          "metadata": {
+            "default": null,
+            "description": "Free-form JSON object of extra attributes stored on the registered agent (optional).",
+            "title": "Metadata"
+          },
+          "notify_target": {
+            "default": null,
+            "description": "Routing target (optional; raw JSON object, same grammar as message_create/handoff_create) for the D10 notable-event messages (turn_completed, error) this session's activity generates. Default when omitted: {\"strategy\":\"broadcast\"} (this session's own workspace).",
+            "title": "Notify Target"
+          }
+        },
+        "required": [
+          "agent_id",
+          "kind",
+          "project_root"
+        ],
+        "title": "harness_openArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_openDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_send",
+      "title": null,
+      "description": "Send a turn to a live session (send_turn). Never blocks for a reply - the answer arrives later as harness events (subscribe out-of-band, or poll harness_event_list).",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "payload": {
+            "description": "The turn content, as a raw JSON object (REQUIRED) - shape is HARNESS-NATIVE and opaque to Nexus (D2), and is NOT uniform across connectors: pi and codex read {\"text\": \"<prompt>\"}; both claude_code substrates read {\"content\": \"<prompt>\"}. Check harness_list's kind for which one this session's connector expects.",
+            "title": "Payload"
+          }
+        },
+        "required": [
+          "session_id",
+          "payload"
+        ],
+        "title": "harness_sendArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_sendDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_steer",
+      "title": null,
+      "description": "Steer a live session's in-flight turn. Rejected if the connector's steer_timing is null (unsupported - check harness_list). NEXT_TURN_BOUNDARY buffers until the next turn; IMMEDIATE can land mid-turn.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "payload": {
+            "description": "The steer content, as a raw JSON object (REQUIRED) - shape is HARNESS-NATIVE and opaque to Nexus (D2), and is NOT uniform across connectors: pi and codex read {\"text\": \"<prompt>\"}; both claude_code substrates read {\"content\": \"<prompt>\"}. Check harness_list's kind for which one this session's connector expects.",
+            "title": "Payload"
+          }
+        },
+        "required": [
+          "session_id",
+          "payload"
+        ],
+        "title": "harness_steerArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_steerDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_interrupt",
+      "title": null,
+      "description": "Interrupt a live session's in-flight turn (abort). If interrupt_requires_settle_wait is true, a send/steer right after may be refused (CONFLICT) until the aborted turn's settle event lands.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "payload": {
+            "default": null,
+            "description": "Extra JSON object passed through to the connector (optional; most connectors ignore it - interrupt is abort, not a reprompt).",
+            "title": "Payload"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "harness_interruptArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_interruptDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_close",
+      "title": null,
+      "description": "End a live session (best-effort teardown: send(end) then close()) and stop tracking it. Always returns the final session state, even if teardown failed - close() never hangs (D8).",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "harness_closeArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_closeDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_get",
+      "title": null,
+      "description": "Read one harness session: the LIVE in-memory view if still tracked (live:true), else the last durable row (live:false - RUNNING there is NOT proof of liveness). NOT_FOUND if never opened.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "harness_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "harness_event_list",
+      "title": null,
+      "description": "Durable replay of a session's events (D10), oldest first, independent of liveness. Makes the no-polling push claim checkable after the fact; native_event is the harness's own verbatim name.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The harness session_id returned by harness_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "after_sequence": {
+            "default": 0,
+            "description": "Only return events with sequence > this value (optional; default 0 = from the start).",
+            "title": "After Sequence",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 200,
+            "description": "Max events to return, oldest first (optional; default 200).",
+            "title": "Limit",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "harness_event_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "harness_event_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "coordination_health",
+      "title": null,
+      "description": "Windowed coordination-health report for the workspace: aggregated ok|warn status, 7 metric blocks and thresholds. Requires feature_health and health.read.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "window": {
+            "default": "24h",
+            "description": "Report window - one of: 1h, 24h, 7d (default: 24h).",
+            "title": "Window",
+            "type": "string"
+          },
+          "agent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your agent_id for permission evaluation in open stdio mode (optional; authenticated HTTP MCP uses the API-key identity).",
+            "title": "Agent Id"
+          }
+        },
+        "required": [
+          "project_root"
+        ],
+        "title": "coordination_healthArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "coordination_healthDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "workspace_resolve",
+      "title": null,
+      "description": "Resolve a project_root to its deterministic workspace_id and upsert it.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project; the server derives workspace_id = sha256(realpath).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Human-friendly label to store/refresh for the workspace (optional).",
+            "title": "Display Name"
+          }
+        },
+        "required": [
+          "project_root"
+        ],
+        "title": "workspace_resolveArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "workspace_resolveDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "agent_register",
+      "title": null,
+      "description": "Update YOUR OWN profile (role/capabilities/metadata); SELF-ONLY (else PERMISSION_DENIED). Capabilities are fail-closed against the central catalog. Docs: okto-nexus://reference/tool-docs/identity.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "The logical agent identity (stable, opaque string); agents are GLOBAL, not per-workspace. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Logical role, e.g. validator, worker (optional); matched exactly/case-sensitively by role-strategy targets.",
+            "title": "Role"
+          },
+          "capabilities": {
+            "default": null,
+            "description": "What this agent can do - used by capability routing + capability_list discovery (optional). Accepts a flag-map ({\"ocr\":true}), a list ([\"ocr\",\"pdf\"]), or a single name string. Blank names dropped. FAIL-CLOSED: every name must already exist in the central capability catalog (discover with capability_list).",
+            "title": "Capabilities"
+          },
+          "metadata": {
+            "default": null,
+            "description": "Free-form JSON object of extra attributes stored with the agent (optional).",
+            "title": "Metadata"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "agent_registerArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "agent_registerDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "agent_whoami",
+      "title": null,
+      "description": "Return YOUR OWN profile: agent_id, role, capabilities, metadata, permissions, effective_policies + governance, plus communication style when set. Docs: okto-nexus://reference/tool-docs/identity.",
+      "inputSchema": {
+        "properties": {},
+        "title": "agent_whoamiArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "agent_whoamiDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "session_open",
+      "title": null,
+      "description": "Open a session bound to (agent_id, workspace_id); returns a per-session session_secret (ONLY here - keep it; required by sensitive verbs in strict mode). Heartbeat to receive broadcasts.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id; the session is bound to this identity. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Workspace_id (from workspace_resolve) the session operates in (optional; omit for an unbound session).",
+            "title": "Workspace Id"
+          },
+          "metadata": {
+            "default": null,
+            "description": "Free-form JSON object stored with the session (optional).",
+            "title": "Metadata"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "session_openArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "session_openDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "session_heartbeat",
+      "title": null,
+      "description": "Advance a session heartbeat and report the derived status; keeps you PRESENT (in the broadcast audience) and clear of the stale-session reaper.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The session_id returned by session_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Workspace_id scope guard (optional); when given it must match the session's workspace.",
+            "title": "Workspace Id"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "session_heartbeatArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "session_heartbeatDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "session_close",
+      "title": null,
+      "description": "Close a session (idempotent); repeating returns ok and stays closed.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "The session_id returned by session_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Workspace_id scope guard (optional); when given it must match the session's workspace.",
+            "title": "Workspace Id"
+          }
+        },
+        "required": [
+          "session_id"
+        ],
+        "title": "session_closeArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "session_closeDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "workspace_list",
+      "title": null,
+      "description": "GLOBAL-ADMIN: enumerate ALL workspaces. Paths OMITTED by default (include_paths=true is an admin/ops opt-in). For discovery use agent_list / capability_list.",
+      "inputSchema": {
+        "properties": {
+          "include_paths": {
+            "default": false,
+            "description": "Also return each workspace on-disk root_realpath (default false; paths OMITTED by default - opt-in defense-in-depth). For routine discovery use agent_list / capability_list.",
+            "title": "Include Paths",
+            "type": "boolean"
+          },
+          "agent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your agent_id for permission evaluation in open stdio mode (optional; authenticated HTTP MCP uses the API-key identity).",
+            "title": "Agent Id"
+          }
+        },
+        "title": "workspace_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "workspace_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "agent_list",
+      "title": null,
+      "description": "List registered agents (global), each with role/capabilities and last_seen_at. Authenticated callers see only agents their comm scope can reach (plus themselves); anonymous callers see all.",
+      "inputSchema": {
+        "properties": {},
+        "title": "agent_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "agent_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "agent_get",
+      "title": null,
+      "description": "Return one agent's details incl. last_seen_at. Scoped by reachability: an agent outside your comm scope reads as NOT_FOUND, indistinguishable from a non-existent agent_id.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "The agent_id to look up. REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "agent_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "agent_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "capability_list",
+      "title": null,
+      "description": "List the capability catalog merged with owners: every registered name (with description; agent_count 0 if unowned), agents scoped to your comm reach. Normalised as capability routing matches.",
+      "inputSchema": {
+        "properties": {},
+        "title": "capability_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "capability_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_pull",
+      "title": null,
+      "description": "Take your unread messages into in-flight and return them WITH body (index-free; no cursor). At-least-once: unacked pulls are redelivered. Docs: okto-nexus://reference/tool-docs/inbox.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Max messages to return (optional; default 50, max 200; must be a positive integer).",
+            "title": "Limit"
+          },
+          "lease_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Lease (seconds) before pulled messages are redelivered (optional; default 300, clamped 10..3600); renew mid-turn with inbox_extend.",
+            "title": "Lease Seconds"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens).",
+            "title": "Profile"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "inbox_pullArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_pullDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_ack",
+      "title": null,
+      "description": "Acknowledge messages into history (read). Returns {acknowledged, read_message_ids}. Emits a message.read receipt to each sender.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "message_ids": {
+            "description": "The message_id(s) to acknowledge - a single id or a list. REQUIRED. Idempotent (already-read/foreign ids are no-ops).",
+            "title": "Message Ids"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "agent_id",
+          "message_ids"
+        ],
+        "title": "inbox_ackArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_ackDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_extend",
+      "title": null,
+      "description": "Renew the lease on in-flight messages you pulled but have not finished (now + extend_seconds). All-or-nothing: if any id is not in-flight the call fails per-message and nothing is extended.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "message_ids": {
+            "description": "The message_id(s) whose lease to renew - id or list. REQUIRED. All must be in-flight; otherwise the call fails per-message and nothing is extended.",
+            "title": "Message Ids"
+          },
+          "extend_seconds": {
+            "description": "New lease duration in seconds, counted from now (REQUIRED; clamped to 10..3600).",
+            "title": "Extend Seconds",
+            "type": "integer"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED together with session_secret in trust_mode=strict).",
+            "title": "Session Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "agent_id",
+          "message_ids",
+          "extend_seconds"
+        ],
+        "title": "inbox_extendArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_extendDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_peek",
+      "title": null,
+      "description": "Triage pending messages (unread + in-flight) WITHOUT consuming. READ-ONLY, envelope-only by default (body_preview + body_bytes). include_parked/include_bodies opt in.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Max messages to return (optional; default 50, max 200; must be a positive integer).",
+            "title": "Limit"
+          },
+          "include_parked": {
+            "default": false,
+            "description": "Also show parked (dead-letter) messages that exhausted redelivery (optional; default false).",
+            "title": "Include Parked",
+            "type": "boolean"
+          },
+          "include_bodies": {
+            "default": false,
+            "description": "Return the FULL body instead of the envelope-only body_preview (first 200 chars) + body_bytes (optional; default false; inbox_pull is the way to consume a message).",
+            "title": "Include Bodies",
+            "type": "boolean"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens).",
+            "title": "Profile"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "inbox_peekArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_peekDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_count",
+      "title": null,
+      "description": "Return your inbox lane sizes {unread, in_flight, read}. Cheap READ-ONLY between-turns check (pull when unread > 0). Expired in-flight leases count as unread; parked excluded.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "inbox_countArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_countDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "inbox_history",
+      "title": null,
+      "description": "List your acknowledged (read) messages, newest-first, keyset-paginated (stable pages even while you keep acknowledging). READ-ONLY.",
+      "inputSchema": {
+        "properties": {
+          "agent_id": {
+            "description": "Your agent_id - the GLOBAL inbox to read (a direct message reaches you in any workspace). REQUIRED.",
+            "title": "Agent Id",
+            "type": "string"
+          },
+          "cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Opaque pagination cursor: pass back the previous page next_cursor (optional; omit = from the newest read messages).",
+            "title": "Cursor"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Max messages to return (optional; default 50, max 200; must be a positive integer).",
+            "title": "Limit"
+          },
+          "profile": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Response size profile - one of: default, summary, full (optional; summary trims per-call tokens).",
+            "title": "Profile"
+          }
+        },
+        "required": [
+          "agent_id"
+        ],
+        "title": "inbox_historyArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "inbox_historyDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "message_status",
+      "title": null,
+      "description": "Track a message you SENT: per-recipient delivery states {recipient, status, attempts, read_at} (unread/delivered/read/parked). READ-ONLY.",
+      "inputSchema": {
+        "properties": {
+          "message_id": {
+            "description": "The message_id from message_create whose per-recipient delivery states you want to track. REQUIRED.",
+            "title": "Message Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message_id"
+        ],
+        "title": "message_statusArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "message_statusDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "message_create",
+      "title": null,
+      "description": "Persist a message and fan it out to recipient inboxes; emit message.created. The response confirms delivery (recipients + delivered_count). Full docs: okto-nexus://reference/tool-docs/messages.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "from_agent_id": {
+            "description": "Your agent_id (the sender); recorded as the author - recipients reply by targeting it.",
+            "title": "From Agent Id",
+            "type": "string"
+          },
+          "subject": {
+            "description": "Short message subject/title (one line).",
+            "title": "Subject",
+            "type": "string"
+          },
+          "body": {
+            "description": "Message body (inline text). For large content, attach an artifact and keep body a short pointer.",
+            "title": "Body",
+            "type": "string"
+          },
+          "channel_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Channel_id to post into (optional; omit = no channel). Organizational label only; does NOT decide recipients (the target does).",
+            "title": "Channel Id"
+          },
+          "from_session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your session_id from session_open (optional in trust_mode=open; REQUIRED with session_secret in trust_mode=strict).",
+            "title": "From Session Id"
+          },
+          "target": {
+            "default": null,
+            "description": "Routing target as a raw JSON object (optional; omit = broadcast to present agents). strategy one of: direct {\"strategy\":\"direct\",\"agent_id\":\"<id>\"}; capability {\"strategy\":\"capability\",\"capability\":\"<cap>\"}; role {\"strategy\":\"role\",\"role\":\"<role>\"}; tag {\"strategy\":\"tag\",\"selector\":{\"<key>\":[\"<value>\",...]}} (flat: AND across keys, OR within values) or rich [{\"key\":\"<k>\",\"operator\":\"In|NotIn|Exists|DoesNotExist\",\"values\":[\"<v>\",...]}] (ANDed; CAUTION: NotIn/DoesNotExist also match agents MISSING the key); broadcast {\"strategy\":\"broadcast\"}; mixed {\"strategy\":\"mixed\",\"rules\":[<sub-target>,...]}. Hierarchy/catalog rules, examples, edge-cases: okto-nexus://reference/target-grammar.",
+            "title": "Target"
+          },
+          "artifacts": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "List of artifact_id strings to attach (optional; at most 20, no exact duplicates; reference large content instead of inlining it in body).",
+            "title": "Artifacts"
+          },
+          "parent_message_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Message_id this is a reply to, to thread the conversation (optional).",
+            "title": "Parent Message Id"
+          },
+          "trace_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Trajectory trace_id to stamp on this message (optional; non-empty string, max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; omitted = inherit the reply parent's trace, or generate one.",
+            "title": "Trace Id"
+          },
+          "session_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "session_secret from session_open for from_session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode).",
+            "title": "Session Secret"
+          }
+        },
+        "required": [
+          "project_root",
+          "from_agent_id",
+          "subject",
+          "body"
+        ],
+        "title": "message_createArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "message_createDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "channel_create",
+      "title": null,
+      "description": "Create a channel by name (idempotent; created=false if it already existed). Channels are organizational labels, not ACLs.",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          },
+          "name": {
+            "description": "Channel name (REQUIRED; short topic label, max 64 chars, unique per workspace). Idempotent by name (existing -> created=false).",
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_root",
+          "name"
+        ],
+        "title": "channel_createArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "channel_createDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "channel_list",
+      "title": null,
+      "description": "Return the workspace channels (``general`` is seeded by default).",
+      "inputSchema": {
+        "properties": {
+          "project_root": {
+            "description": "Absolute path to the project (defines the workspace scope).",
+            "title": "Project Root",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_root"
+        ],
+        "title": "channel_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "channel_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "message_get",
+      "title": null,
+      "description": "MIGRATED (S3): replaced by inbox_pull / inbox_peek / inbox_history. Always returns ok:false code=MIGRATED with the replacement call.",
+      "inputSchema": {
+        "properties": {},
+        "title": "message_getArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "message_getDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "message_list",
+      "title": null,
+      "description": "MIGRATED (S3): replaced by inbox_peek / inbox_history (your messages) and event_get (bus traffic). Always returns ok:false code=MIGRATED.",
+      "inputSchema": {
+        "properties": {},
+        "title": "message_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "message_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "message_wait",
+      "title": null,
+      "description": "MIGRATED (S3): replaced by inbox_count polling (cheap) or event_wait (explicit blocking). Always returns ok:false code=MIGRATED.",
+      "inputSchema": {
+        "properties": {},
+        "title": "message_waitArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "message_waitDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "poll_token_issue",
+      "title": null,
+      "description": "Issue an ephemeral read-only monitor bearer (nxsept_...) for this authenticated agent's session workspace. Store only in the background monitor; never persist the raw token.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "session_id returned by session_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "session_secret": {
+            "description": "session_secret returned by session_open. REQUIRED.",
+            "title": "Session Secret",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "session_secret"
+        ],
+        "title": "poll_token_issueArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "poll_token_issueDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "poll_token_renew",
+      "title": null,
+      "description": "Rotate and extend the active ephemeral poll token for this session. The previous raw nxsept_ bearer stops working immediately.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "session_id returned by session_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "session_secret": {
+            "description": "session_secret returned by session_open. REQUIRED.",
+            "title": "Session Secret",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "session_secret"
+        ],
+        "title": "poll_token_renewArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "poll_token_renewDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "poll_token_revoke",
+      "title": null,
+      "description": "Revoke the active ephemeral poll token for this session.",
+      "inputSchema": {
+        "properties": {
+          "session_id": {
+            "description": "session_id returned by session_open. REQUIRED.",
+            "title": "Session Id",
+            "type": "string"
+          },
+          "session_secret": {
+            "description": "session_secret returned by session_open. REQUIRED.",
+            "title": "Session Secret",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session_id",
+          "session_secret"
+        ],
+        "title": "poll_token_revokeArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "poll_token_revokeDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "shared_md_render",
+      "title": null,
+      "description": "Render the per-workspace human-readable shared.md (atomic overwrite).",
+      "inputSchema": {
+        "properties": {
+          "workspace_id": {
+            "description": "The target workspace_id (from workspace_resolve) whose shared.md is rendered. REQUIRED - NB: this tool takes the workspace_id directly, not project_root.",
+            "title": "Workspace Id",
+            "type": "string"
+          },
+          "limit_events": {
+            "default": 50,
+            "description": "How many of the most recent events to include in the rendered timeline (optional; default: 50, clamped to the configured maximum).",
+            "title": "Limit Events",
+            "type": "integer"
+          },
+          "agent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Your agent_id for permission evaluation in open stdio mode (optional; authenticated HTTP MCP uses the API-key identity).",
+            "title": "Agent Id"
+          }
+        },
+        "required": [
+          "workspace_id"
+        ],
+        "title": "shared_md_renderArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "shared_md_renderDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "tag_list",
+      "title": null,
+      "description": "List the global operator-managed tag catalog (keys + values) that agent tags, comm_scope and tag targets are validated against fail-closed.",
+      "inputSchema": {
+        "properties": {},
+        "title": "tag_listArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "tag_listDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    },
+    {
+      "name": "nexus_info",
+      "title": null,
+      "description": "Report server versions: package_version, schema_version, surface_revision, resource_versions, features (read-only {feature_*: bool}). Call when behaviour disagrees with cached schemas.",
+      "inputSchema": {
+        "properties": {},
+        "title": "nexus_infoArguments",
+        "type": "object"
+      },
+      "outputSchema": {
+        "additionalProperties": true,
+        "title": "nexus_infoDictOutput",
+        "type": "object"
+      },
+      "icons": null,
+      "annotations": null,
+      "meta": null,
+      "execution": null
+    }
+  ],
+  "capabilities": [
+    {
+      "kind": "claude_code",
+      "substrate": "stream",
+      "capabilities": {
+        "send_only": false,
+        "steer_timing": "IMMEDIATE",
+        "interrupt_requires_settle_wait": false,
+        "multiplexes_sessions": false,
+        "observes_session_end": true
+      }
+    },
+    {
+      "kind": "claude_code",
+      "substrate": "attach",
+      "capabilities": {
+        "send_only": true,
+        "steer_timing": null,
+        "interrupt_requires_settle_wait": false,
+        "multiplexes_sessions": false,
+        "observes_session_end": false
+      }
+    },
+    {
+      "kind": "codex",
+      "substrate": null,
+      "capabilities": {
+        "send_only": false,
+        "steer_timing": "IMMEDIATE",
+        "interrupt_requires_settle_wait": false,
+        "multiplexes_sessions": true,
+        "observes_session_end": true
+      }
+    },
+    {
+      "kind": "pi",
+      "substrate": null,
+      "capabilities": {
+        "send_only": false,
+        "steer_timing": "NEXT_TURN_BOUNDARY",
+        "interrupt_requires_settle_wait": true,
+        "multiplexes_sessions": false,
+        "observes_session_end": true
+      }
+    }
+  ],
+  "metrics": {
+    "instructions": 5232,
+    "docstrings": 8031,
+    "params": 20426,
+    "cuttable": 33689,
+    "total": 45744,
+    "cuttable_tokens": 8422,
+    "total_tokens": 11436
+  },
+  "schema": [
+    {
+      "name": "agent_comm_binding",
+      "sql": "CREATE TABLE agent_comm_binding (\n    agent_id TEXT PRIMARY KEY REFERENCES agents(agent_id) ON DELETE CASCADE,\n    source TEXT NOT NULL,\n    preset_id TEXT REFERENCES comm_presets(preset_id),\n    mode TEXT,\n    pinned_version INTEGER,\n    content TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "agent_group_members",
+      "sql": "CREATE TABLE agent_group_members (\n    group_id TEXT NOT NULL REFERENCES agent_groups(group_id) ON DELETE CASCADE,\n    agent_id TEXT NOT NULL REFERENCES agents(agent_id) ON DELETE CASCADE,\n    created_at TEXT NOT NULL,\n    PRIMARY KEY (group_id, agent_id)\n)"
+    },
+    {
+      "name": "agent_groups",
+      "sql": "CREATE TABLE agent_groups (\n    group_id TEXT PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n)"
+    },
+    {
+      "name": "agent_policy_bindings",
+      "sql": "CREATE TABLE agent_policy_bindings (\n    agent_id TEXT NOT NULL REFERENCES agents(agent_id) ON DELETE CASCADE,\n    position INTEGER NOT NULL,\n    source TEXT NOT NULL,\n    policy_id TEXT REFERENCES policies(policy_id),\n    mode TEXT,\n    pinned_version INTEGER,\n    audience TEXT,\n    governance TEXT,\n    created_at TEXT NOT NULL,\n    PRIMARY KEY (agent_id, position)\n)"
+    },
+    {
+      "name": "agents",
+      "sql": "CREATE TABLE agents (\n    agent_id TEXT PRIMARY KEY,\n    role TEXT,\n    capabilities TEXT,\n    metadata TEXT,\n    created_at TEXT NOT NULL\n, last_seen_at TEXT, api_key_hash TEXT, is_active INTEGER NOT NULL DEFAULT 1, permissions TEXT, preset_id TEXT, tags TEXT, comm_scope TEXT, color TEXT)"
+    },
+    {
+      "name": "approvals",
+      "sql": "CREATE TABLE approvals (\n    approval_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL,\n    agent_id TEXT NOT NULL,\n    action TEXT NOT NULL,\n    policy_id TEXT NOT NULL,\n    request_payload TEXT NOT NULL,\n    status TEXT NOT NULL DEFAULT 'pending',\n    decided_by TEXT,\n    justification TEXT,\n    executed_result TEXT,\n    trace_id TEXT,\n    created_at TEXT NOT NULL,\n    decided_at TEXT\n)"
+    },
+    {
+      "name": "artifacts",
+      "sql": "CREATE TABLE artifacts (\n    artifact_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    artifact_type TEXT NOT NULL,\n    name TEXT,\n    path TEXT,\n    content TEXT,\n    size_bytes INTEGER,\n    content_type TEXT,\n    created_at TEXT NOT NULL\n, created_by TEXT, audience TEXT, storage_path TEXT, storage_kind TEXT CHECK (storage_kind IN ('inline', 'path')), filename TEXT, media_type TEXT)"
+    },
+    {
+      "name": "capability_names",
+      "sql": "CREATE TABLE capability_names (\n    name TEXT PRIMARY KEY,\n    description TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "channels",
+      "sql": "CREATE TABLE channels (\n    channel_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    name TEXT NOT NULL,\n    created_at TEXT NOT NULL,\n    UNIQUE (workspace_id, name)\n)"
+    },
+    {
+      "name": "comm_preset_versions",
+      "sql": "CREATE TABLE comm_preset_versions (\n    preset_id TEXT NOT NULL REFERENCES comm_presets(preset_id) ON DELETE CASCADE,\n    version INTEGER NOT NULL,\n    content TEXT NOT NULL,\n    published_at TEXT NOT NULL,\n    PRIMARY KEY (preset_id, version)\n)"
+    },
+    {
+      "name": "comm_presets",
+      "sql": "CREATE TABLE comm_presets (\n    preset_id TEXT PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n)"
+    },
+    {
+      "name": "ephemeral_poll_tokens",
+      "sql": "CREATE TABLE ephemeral_poll_tokens (\n    token_id TEXT PRIMARY KEY,\n    token_hash TEXT NOT NULL UNIQUE,\n    agent_id TEXT NOT NULL REFERENCES agents(agent_id) ON DELETE CASCADE,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id) ON DELETE CASCADE,\n    session_id TEXT NOT NULL REFERENCES sessions(session_id) ON DELETE CASCADE,\n    issue_cursor INTEGER NOT NULL DEFAULT 0 CHECK (issue_cursor >= 0),\n    scope TEXT NOT NULL,\n    expires_at TEXT NOT NULL,\n    revoked_at TEXT,\n    created_at TEXT NOT NULL,\n    renewed_at TEXT,\n    last_used_at TEXT\n)"
+    },
+    {
+      "name": "events",
+      "sql": "CREATE TABLE events (\n    event_id INTEGER PRIMARY KEY AUTOINCREMENT,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    stream TEXT NOT NULL,\n    type TEXT NOT NULL,\n    actor_agent_id TEXT,\n    payload TEXT,\n    visibility TEXT,\n    target TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "governance_policies",
+      "sql": "CREATE TABLE governance_policies (\n    policy_id TEXT PRIMARY KEY,\n    subject_kind TEXT NOT NULL,\n    subject_value TEXT,\n    action TEXT NOT NULL,\n    limit_kind TEXT NOT NULL,\n    limit_value INTEGER,\n    time_window TEXT,\n    enabled INTEGER NOT NULL DEFAULT 1,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n)"
+    },
+    {
+      "name": "guardrail_assignments",
+      "sql": "CREATE TABLE guardrail_assignments (\n    assignment_id TEXT PRIMARY KEY,\n    scope_kind TEXT NOT NULL CHECK (scope_kind IN ('global', 'agent_group', 'capability')),\n    group_id TEXT REFERENCES agent_groups(group_id),\n    capability TEXT REFERENCES capability_names(name),\n    guardrail_id TEXT NOT NULL REFERENCES guardrails(guardrail_id),\n    version_mode TEXT NOT NULL CHECK (version_mode IN ('latest', 'pinned')),\n    pinned_version INTEGER,\n    mode TEXT NOT NULL DEFAULT 'audit' CHECK (mode IN ('audit', 'warn', 'enforce')),\n    priority INTEGER NOT NULL DEFAULT 100,\n    enabled INTEGER NOT NULL DEFAULT 1 CHECK (enabled IN (0, 1)),\n    created_at TEXT NOT NULL,\n    updated_at TEXT,\n    CHECK (\n        (scope_kind = 'global' AND group_id IS NULL AND capability IS NULL)\n        OR (scope_kind = 'agent_group' AND group_id IS NOT NULL AND capability IS NULL)\n        OR (scope_kind = 'capability' AND group_id IS NULL AND capability IS NOT NULL)\n    ),\n    CHECK ((version_mode = 'latest' AND pinned_version IS NULL) OR (version_mode = 'pinned' AND pinned_version > 0)),\n    CHECK (priority >= 0),\n    FOREIGN KEY (guardrail_id, pinned_version) REFERENCES guardrail_versions(guardrail_id, version)\n)"
+    },
+    {
+      "name": "guardrail_versions",
+      "sql": "CREATE TABLE guardrail_versions (\n    guardrail_id TEXT NOT NULL REFERENCES guardrails(guardrail_id) ON DELETE CASCADE,\n    version INTEGER NOT NULL,\n    status TEXT NOT NULL CHECK (status IN ('draft', 'active', 'deprecated', 'archived')),\n    evaluator_kind TEXT NOT NULL CHECK (evaluator_kind IN ('deterministic', 'llm')),\n    evaluator_config TEXT NOT NULL,\n    surfaces TEXT NOT NULL,\n    field_targets TEXT NOT NULL,\n    created_at TEXT NOT NULL,\n    updated_at TEXT,\n    activated_at TEXT,\n    PRIMARY KEY (guardrail_id, version),\n    CHECK (version > 0)\n)"
+    },
+    {
+      "name": "guardrails",
+      "sql": "CREATE TABLE guardrails (\n    guardrail_id TEXT PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n)"
+    },
+    {
+      "name": "handoff_dependencies",
+      "sql": "CREATE TABLE handoff_dependencies (\n    handoff_id TEXT NOT NULL,\n    depends_on_id TEXT NOT NULL,\n    workspace_id TEXT NOT NULL,\n    created_at TEXT NOT NULL,\n    PRIMARY KEY (handoff_id, depends_on_id)\n)"
+    },
+    {
+      "name": "handoffs",
+      "sql": "CREATE TABLE handoffs (\n    handoff_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    task_id TEXT REFERENCES tasks(task_id),\n    from_agent_id TEXT,\n    target TEXT,\n    visibility TEXT,\n    status TEXT NOT NULL,\n    claimed_by TEXT,\n    lease_expires_at TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n, payload TEXT, result TEXT, rejected_reason TEXT, trace_id TEXT, acceptance_criteria TEXT, verify_by TEXT, verification_feedback TEXT)"
+    },
+    {
+      "name": "harness_events",
+      "sql": "CREATE TABLE harness_events (\n    event_id TEXT PRIMARY KEY,\n    session_id TEXT NOT NULL REFERENCES harness_sessions(session_id) ON DELETE CASCADE,\n    harness_kind TEXT NOT NULL,\n    kind TEXT NOT NULL,\n    native_event TEXT NOT NULL,\n    payload TEXT,\n    thread_id TEXT,\n    turn_id TEXT,\n    occurred_at TEXT NOT NULL,\n    sequence INTEGER NOT NULL,\n    created_at TEXT NOT NULL,\n    UNIQUE (session_id, sequence)\n)"
+    },
+    {
+      "name": "harness_sessions",
+      "sql": "CREATE TABLE harness_sessions (\n    session_id TEXT PRIMARY KEY,\n    kind TEXT NOT NULL,\n    owning_agent_id TEXT NOT NULL REFERENCES agents(agent_id) ON DELETE CASCADE,\n    status TEXT NOT NULL,\n    capabilities TEXT NOT NULL,\n    metadata TEXT,\n    started_at TEXT NOT NULL,\n    ended_at TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "idx_agent_comm_binding_preset",
+      "sql": "CREATE INDEX idx_agent_comm_binding_preset ON agent_comm_binding (preset_id)"
+    },
+    {
+      "name": "idx_agent_group_members_agent",
+      "sql": "CREATE INDEX idx_agent_group_members_agent ON agent_group_members (agent_id, group_id)"
+    },
+    {
+      "name": "idx_agent_policy_bindings_policy",
+      "sql": "CREATE INDEX idx_agent_policy_bindings_policy ON agent_policy_bindings (policy_id)"
+    },
+    {
+      "name": "idx_agents_api_key_hash",
+      "sql": "CREATE UNIQUE INDEX idx_agents_api_key_hash\n    ON agents (api_key_hash) WHERE api_key_hash IS NOT NULL"
+    },
+    {
+      "name": "idx_approvals_pending",
+      "sql": "CREATE INDEX idx_approvals_pending ON approvals (workspace_id, created_at) WHERE status = 'pending'"
+    },
+    {
+      "name": "idx_approvals_workspace_time",
+      "sql": "CREATE INDEX idx_approvals_workspace_time ON approvals (workspace_id, created_at)"
+    },
+    {
+      "name": "idx_artifacts_agent_time",
+      "sql": "CREATE INDEX idx_artifacts_agent_time ON artifacts (created_by, created_at)"
+    },
+    {
+      "name": "idx_artifacts_created_at",
+      "sql": "CREATE INDEX idx_artifacts_created_at\nON artifacts (created_at DESC, artifact_id DESC)"
+    },
+    {
+      "name": "idx_artifacts_storage_path",
+      "sql": "CREATE INDEX idx_artifacts_storage_path ON artifacts (storage_path)"
+    },
+    {
+      "name": "idx_artifacts_workspace",
+      "sql": "CREATE INDEX idx_artifacts_workspace ON artifacts (workspace_id, artifact_type)"
+    },
+    {
+      "name": "idx_artifacts_workspace_created_at",
+      "sql": "CREATE INDEX idx_artifacts_workspace_created_at\nON artifacts (workspace_id, created_at DESC, artifact_id DESC)"
+    },
+    {
+      "name": "idx_channels_workspace",
+      "sql": "CREATE INDEX idx_channels_workspace ON channels (workspace_id, name)"
+    },
+    {
+      "name": "idx_deliveries_history",
+      "sql": "CREATE INDEX idx_deliveries_history ON message_deliveries (recipient_agent_id, status, read_at DESC, delivery_id DESC)"
+    },
+    {
+      "name": "idx_deliveries_inbox",
+      "sql": "CREATE INDEX idx_deliveries_inbox ON message_deliveries (recipient_agent_id, status)"
+    },
+    {
+      "name": "idx_deliveries_lease",
+      "sql": "CREATE INDEX idx_deliveries_lease ON message_deliveries (status, lease_expires_at)"
+    },
+    {
+      "name": "idx_ept_active_agent_workspace",
+      "sql": "CREATE UNIQUE INDEX idx_ept_active_agent_workspace\nON ephemeral_poll_tokens (agent_id, workspace_id)\nWHERE revoked_at IS NULL"
+    },
+    {
+      "name": "idx_ept_hash",
+      "sql": "CREATE INDEX idx_ept_hash\nON ephemeral_poll_tokens (token_hash)"
+    },
+    {
+      "name": "idx_ept_session",
+      "sql": "CREATE INDEX idx_ept_session\nON ephemeral_poll_tokens (session_id, revoked_at)"
+    },
+    {
+      "name": "idx_events_stream",
+      "sql": "CREATE INDEX idx_events_stream ON events (workspace_id, stream, event_id)"
+    },
+    {
+      "name": "idx_events_workspace",
+      "sql": "CREATE INDEX idx_events_workspace ON events (workspace_id, event_id)"
+    },
+    {
+      "name": "idx_events_workspace_created",
+      "sql": "CREATE INDEX idx_events_workspace_created\n    ON events (workspace_id, created_at)"
+    },
+    {
+      "name": "idx_guardrail_assignments_capability",
+      "sql": "CREATE INDEX idx_guardrail_assignments_capability ON guardrail_assignments (capability, enabled, priority)"
+    },
+    {
+      "name": "idx_guardrail_assignments_guardrail",
+      "sql": "CREATE INDEX idx_guardrail_assignments_guardrail ON guardrail_assignments (guardrail_id)"
+    },
+    {
+      "name": "idx_guardrail_assignments_scope",
+      "sql": "CREATE INDEX idx_guardrail_assignments_scope ON guardrail_assignments (scope_kind, group_id, capability, enabled, priority)"
+    },
+    {
+      "name": "idx_guardrail_versions_status",
+      "sql": "CREATE INDEX idx_guardrail_versions_status ON guardrail_versions (guardrail_id, status, version)"
+    },
+    {
+      "name": "idx_handoff_deps_reverse",
+      "sql": "CREATE INDEX idx_handoff_deps_reverse\n    ON handoff_dependencies (depends_on_id)"
+    },
+    {
+      "name": "idx_handoffs_agent_time",
+      "sql": "CREATE INDEX idx_handoffs_agent_time ON handoffs (from_agent_id, created_at)"
+    },
+    {
+      "name": "idx_handoffs_target",
+      "sql": "CREATE INDEX idx_handoffs_target ON handoffs (workspace_id, target, status)"
+    },
+    {
+      "name": "idx_handoffs_trace",
+      "sql": "CREATE INDEX idx_handoffs_trace\n    ON handoffs (workspace_id, trace_id) WHERE trace_id IS NOT NULL"
+    },
+    {
+      "name": "idx_handoffs_workspace",
+      "sql": "CREATE INDEX idx_handoffs_workspace ON handoffs (workspace_id, status)"
+    },
+    {
+      "name": "idx_harness_events_session_sequence",
+      "sql": "CREATE INDEX idx_harness_events_session_sequence\nON harness_events (session_id, sequence)"
+    },
+    {
+      "name": "idx_harness_sessions_owning_agent",
+      "sql": "CREATE INDEX idx_harness_sessions_owning_agent\nON harness_sessions (owning_agent_id)"
+    },
+    {
+      "name": "idx_harness_sessions_status",
+      "sql": "CREATE INDEX idx_harness_sessions_status\nON harness_sessions (status)"
+    },
+    {
+      "name": "idx_memories_superseded_by",
+      "sql": "CREATE INDEX idx_memories_superseded_by ON memories (superseded_by)"
+    },
+    {
+      "name": "idx_memories_ws_created",
+      "sql": "CREATE INDEX idx_memories_ws_created ON memories (workspace_id, created_at DESC)"
+    },
+    {
+      "name": "idx_memories_ws_live",
+      "sql": "CREATE INDEX idx_memories_ws_live ON memories (workspace_id, created_at DESC) WHERE superseded_by IS NULL"
+    },
+    {
+      "name": "idx_memory_embeddings_dim",
+      "sql": "CREATE INDEX idx_memory_embeddings_dim ON memory_embeddings (dim)"
+    },
+    {
+      "name": "idx_message_embeddings_dim",
+      "sql": "CREATE INDEX idx_message_embeddings_dim ON message_embeddings (dim)"
+    },
+    {
+      "name": "idx_messages_agent_time",
+      "sql": "CREATE INDEX idx_messages_agent_time ON messages (from_agent_id, created_at)"
+    },
+    {
+      "name": "idx_messages_channel",
+      "sql": "CREATE INDEX idx_messages_channel ON messages (workspace_id, channel_id, created_at)"
+    },
+    {
+      "name": "idx_messages_trace",
+      "sql": "CREATE INDEX idx_messages_trace\n    ON messages (workspace_id, trace_id) WHERE trace_id IS NOT NULL"
+    },
+    {
+      "name": "idx_messages_workspace",
+      "sql": "CREATE INDEX idx_messages_workspace ON messages (workspace_id, created_at)"
+    },
+    {
+      "name": "idx_sessions_agent",
+      "sql": "CREATE INDEX idx_sessions_agent ON sessions (workspace_id, agent_id)"
+    },
+    {
+      "name": "idx_sessions_workspace",
+      "sql": "CREATE INDEX idx_sessions_workspace ON sessions (workspace_id, status)"
+    },
+    {
+      "name": "idx_tasks_workspace",
+      "sql": "CREATE INDEX idx_tasks_workspace ON tasks (workspace_id, status)"
+    },
+    {
+      "name": "memories",
+      "sql": "CREATE TABLE memories (\n    memory_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL,\n    author_agent_id TEXT NOT NULL,\n    title TEXT NOT NULL,\n    content TEXT NOT NULL,\n    topics TEXT NOT NULL DEFAULT '[]',\n    source_kind TEXT,\n    source_id TEXT,\n    supersedes TEXT,\n    superseded_by TEXT,\n    trace_id TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "memory_embeddings",
+      "sql": "CREATE TABLE memory_embeddings (\n    memory_id TEXT PRIMARY KEY REFERENCES memories(memory_id) ON DELETE CASCADE,\n    vec BLOB NOT NULL,\n    model TEXT NOT NULL,\n    dim INTEGER NOT NULL,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "message_deliveries",
+      "sql": "CREATE TABLE message_deliveries (\n    delivery_id TEXT PRIMARY KEY,\n    message_id TEXT NOT NULL REFERENCES messages(message_id),\n    recipient_agent_id TEXT NOT NULL REFERENCES agents(agent_id),\n    status TEXT NOT NULL,\n    delivered_at TEXT,\n    lease_expires_at TEXT,\n    read_at TEXT,\n    created_at TEXT NOT NULL, attempts INTEGER NOT NULL DEFAULT 0,\n    UNIQUE (message_id, recipient_agent_id)\n)"
+    },
+    {
+      "name": "message_embeddings",
+      "sql": "CREATE TABLE message_embeddings (\n    message_id TEXT PRIMARY KEY REFERENCES messages(message_id) ON DELETE CASCADE,\n    vec BLOB NOT NULL,\n    model TEXT NOT NULL,\n    dim INTEGER NOT NULL,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "messages",
+      "sql": "CREATE TABLE messages (\n    message_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    channel_id TEXT REFERENCES channels(channel_id),\n    from_agent_id TEXT NOT NULL,\n    from_session_id TEXT,\n    target TEXT,\n    subject TEXT,\n    body TEXT,\n    artifacts TEXT,\n    parent_message_id TEXT REFERENCES messages(message_id),\n    created_at TEXT NOT NULL\n, trace_id TEXT)"
+    },
+    {
+      "name": "permission_presets",
+      "sql": "CREATE TABLE permission_presets (\n    preset_id TEXT PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT,\n    flags TEXT NOT NULL,\n    created_at TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "policies",
+      "sql": "CREATE TABLE policies (\n    policy_id TEXT PRIMARY KEY,\n    name TEXT NOT NULL UNIQUE,\n    description TEXT,\n    created_at TEXT NOT NULL,\n    updated_at TEXT\n)"
+    },
+    {
+      "name": "policy_versions",
+      "sql": "CREATE TABLE policy_versions (\n    policy_id TEXT NOT NULL REFERENCES policies(policy_id) ON DELETE CASCADE,\n    version INTEGER NOT NULL,\n    audience TEXT,\n    governance TEXT,\n    published_at TEXT NOT NULL,\n    PRIMARY KEY (policy_id, version)\n)"
+    },
+    {
+      "name": "schema_migrations",
+      "sql": "CREATE TABLE schema_migrations (version INTEGER PRIMARY KEY, applied_at TEXT NOT NULL)"
+    },
+    {
+      "name": "sessions",
+      "sql": "CREATE TABLE sessions (\n    session_id TEXT PRIMARY KEY,\n    agent_id TEXT NOT NULL REFERENCES agents(agent_id),\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    status TEXT NOT NULL,\n    started_at TEXT NOT NULL,\n    last_heartbeat_at TEXT\n, closed_at TEXT, session_secret TEXT)"
+    },
+    {
+      "name": "settings",
+      "sql": "CREATE TABLE settings (\n    key TEXT PRIMARY KEY,\n    value TEXT NOT NULL,\n    updated_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "sqlite_sequence",
+      "sql": "CREATE TABLE sqlite_sequence(name,seq)"
+    },
+    {
+      "name": "tag_keys",
+      "sql": "CREATE TABLE tag_keys (\n    key TEXT PRIMARY KEY,\n    description TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "tag_values",
+      "sql": "CREATE TABLE tag_values (\n    key TEXT NOT NULL REFERENCES tag_keys(key) ON DELETE CASCADE,\n    value TEXT NOT NULL,\n    description TEXT,\n    created_at TEXT NOT NULL,\n    PRIMARY KEY (key, value)\n)"
+    },
+    {
+      "name": "tasks",
+      "sql": "CREATE TABLE tasks (\n    task_id TEXT PRIMARY KEY,\n    workspace_id TEXT NOT NULL REFERENCES workspaces(workspace_id),\n    title TEXT NOT NULL,\n    description TEXT,\n    status TEXT NOT NULL,\n    created_by TEXT,\n    created_at TEXT NOT NULL\n)"
+    },
+    {
+      "name": "workspaces",
+      "sql": "CREATE TABLE workspaces (\n    workspace_id TEXT PRIMARY KEY,\n    display_name TEXT,\n    root_realpath TEXT,\n    created_at TEXT NOT NULL,\n    last_seen_at TEXT\n)"
+    }
+  ],
+  "config": {
+    "feature_trace": false,
+    "feature_hitl": false,
+    "feature_verification": false,
+    "feature_dag": false,
+    "feature_memory": false,
+    "feature_health": false,
+    "feature_replay": false
+  },
+  "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

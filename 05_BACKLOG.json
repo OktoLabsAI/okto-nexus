@@ -1,0 +1,2955 @@
+{
+  "schema_version": 1,
+  "plan_version": "1.0",
+  "created_on": "2026-09-22",
+  "repository": "OktoLabsAI/okto-nexus",
+  "pull_request": 34,
+  "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+  "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
+  "execution_head": null,
+  "notice": "Plano de execução. Nenhuma tarefa ou teste listado aqui foi executado por este pacote.",
+  "task_status_vocabulary": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "BLOCKED",
+    "IMPLEMENTED",
+    "VERIFIED"
+  ],
+  "test_status_vocabulary": [
+    "NOT_RUN",
+    "PASS",
+    "FAIL",
+    "NOT_APPLICABLE"
+  ],
+  "completion_rule": "VERIFIED exige código/contrato atendido e evidência dos gates aplicáveis; NOT_RUN não equivale a PASS.",
+  "phases": [
+    {
+      "phase_id": "P00",
+      "title": "Baseline e reprodução",
+      "depends_on_phases": [],
+      "status": "COMPLETED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P00",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ID-01",
+        "T-ID-02",
+        "T-ID-03",
+        "T-ID-04",
+        "T-ID-05",
+        "T-ID-06",
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-RELAY-01",
+        "T-RELAY-02",
+        "T-RELAY-03",
+        "T-RELAY-04",
+        "T-RELAY-05",
+        "T-RELAY-06",
+        "T-RELAY-07",
+        "T-RELAY-08",
+        "T-RELAY-09",
+        "T-RELAY-10",
+        "T-RELAY-11",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "tasks": [
+        {
+          "task_id": "P00-T01",
+          "title": "Capturar HEAD/base/instruções, preservar worktree e inventariar schema/configuração.",
+          "status": "COMPLETED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [
+            "plans/pr34-remediation/BASELINE.md",
+            "plans/pr34-remediation/DEFECT_REGISTER.md",
+            "plans/pr34-remediation/CONTRACT_MAP.md"
+          ],
+          "notes": "Baseline source d7d87d0; 20 behavioral failures reproduced; existing-suite failures retained explicitly. Native verification NOT_RUN, not a baseline PASS."
+        },
+        {
+          "task_id": "P00-T02",
+          "title": "Mapear casos de uso, autenticação, inbox/handoff, notificações e composition roots.",
+          "status": "COMPLETED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [
+            "plans/pr34-remediation/BASELINE.md",
+            "plans/pr34-remediation/DEFECT_REGISTER.md",
+            "plans/pr34-remediation/CONTRACT_MAP.md"
+          ],
+          "notes": "Baseline source d7d87d0; 20 behavioral failures reproduced; existing-suite failures retained explicitly. Native verification NOT_RUN, not a baseline PASS."
+        },
+        {
+          "task_id": "P00-T03",
+          "title": "Reproduzir achados atuais com testes de comportamento e registrar achados já corrigidos.",
+          "status": "COMPLETED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [
+            "plans/pr34-remediation/BASELINE.md",
+            "plans/pr34-remediation/DEFECT_REGISTER.md",
+            "plans/pr34-remediation/CONTRACT_MAP.md"
+          ],
+          "notes": "Baseline source d7d87d0; 20 behavioral failures reproduced; existing-suite failures retained explicitly. Native verification NOT_RUN, not a baseline PASS."
+        },
+        {
+          "task_id": "P00-T04",
+          "title": "Capturar contratos, baseline de testes e capability matrix com versões/ambientes disponíveis.",
+          "status": "COMPLETED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [
+            "plans/pr34-remediation/BASELINE.md",
+            "plans/pr34-remediation/DEFECT_REGISTER.md",
+            "plans/pr34-remediation/CONTRACT_MAP.md"
+          ],
+          "notes": "Baseline source d7d87d0; 20 behavioral failures reproduced; existing-suite failures retained explicitly. Native verification NOT_RUN, not a baseline PASS."
+        }
+      ]
+    },
+    {
+      "phase_id": "P01",
+      "title": "Contenção segura",
+      "depends_on_phases": [
+        "P00"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P01",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ID-01",
+        "T-ID-02",
+        "T-ID-03",
+        "T-ID-04",
+        "T-ID-05",
+        "T-ID-06",
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "tasks": [
+        {
+          "task_id": "P01-T01",
+          "title": "Remover mutações canônicas de Agent do lifecycle e negar criação implícita.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P01-T02",
+          "title": "Aplicar autorização conservadora uniforme aos controles e leituras.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P01-T03",
+          "title": "Implementar opt-ins e guardas runtime sem mascarar feature habilitada.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P01-T04",
+          "title": "Adicionar proteção temporária de executor único e regressão ON/OFF.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P02",
+      "title": "Contratos e registro",
+      "depends_on_phases": [
+        "P01"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P02",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "tasks": [
+        {
+          "task_id": "P02-T01",
+          "title": "Definir AgentEndpoint, RequestContext, ExecutionGrant e separar capacidades/permissões.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P02-T02",
+          "title": "Definir envelope, dispatch outcome, causalidade, consumo e correlação versionados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P02-T03",
+          "title": "Implementar AdapterRegistry e validação por descriptor sem produtos no domínio.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P02-T04",
+          "title": "Provar extensão por quinto adapter fake e endpoint que não exige runtime local.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P03",
+      "title": "Persistência e presença",
+      "depends_on_phases": [
+        "P02"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P03",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ID-01",
+        "T-ID-02",
+        "T-ID-03",
+        "T-ID-04",
+        "T-ID-05",
+        "T-ID-06",
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-PRES-01",
+        "T-PRES-02",
+        "T-PRES-03",
+        "T-PRES-04",
+        "T-MIG-01",
+        "T-MIG-02",
+        "T-MIG-03",
+        "T-MIG-04",
+        "T-MIG-05",
+        "T-MIG-06",
+        "T-MIG-07",
+        "T-MIG-08",
+        "T-MIG-09"
+      ],
+      "tasks": [
+        {
+          "task_id": "P03-T01",
+          "title": "Criar migrações aditivas, constraints e índices, reaproveitando sessões/eventos.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P03-T02",
+          "title": "Implementar perfis aprovados, secret refs, config redigida e herança ambiente explícita.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P03-T03",
+          "title": "Vincular runtimes à presença/workspace canônicos sem fechar outros bindings.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P03-T04",
+          "title": "Migrar histórico conservadoramente e diagnosticar perfis antigos danificados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P03-T05",
+          "title": "Validar upgrade, backup e writer compatibility com a integração ativa.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P04",
+      "title": "Autorização e delegação",
+      "depends_on_phases": [
+        "P03"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P04",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-WORK-01",
+        "T-WORK-02",
+        "T-WORK-03",
+        "T-WORK-04",
+        "T-WORK-05",
+        "T-WORK-06",
+        "T-WORK-07",
+        "T-WORK-08",
+        "T-WORK-09",
+        "T-WORK-10",
+        "T-WORK-11",
+        "T-WORK-12"
+      ],
+      "tasks": [
+        {
+          "task_id": "P04-T01",
+          "title": "Centralizar ações e RequestContext nos casos de uso de todas as superfícies.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P04-T02",
+          "title": "Implementar/reaproveitar grants limitados e revalidação no enqueue/dispatch.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P04-T03",
+          "title": "Proteger replay/discovery/artifacts e configurar acesso restrito do runtime ao Nexus.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P04-T04",
+          "title": "Bloquear native passthrough/secret/env/cwd indevidos e comprovar testes negativos/positivos.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P05",
+      "title": "Outbox, seleção e consumo",
+      "depends_on_phases": [
+        "P04"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P05",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-CONS-01",
+        "T-CONS-02",
+        "T-CONS-03",
+        "T-CONS-04",
+        "T-CONS-05",
+        "T-CONS-06",
+        "T-CONS-07",
+        "T-CONS-08",
+        "T-PRES-01",
+        "T-PRES-02",
+        "T-PRES-03",
+        "T-PRES-04"
+      ],
+      "tasks": [
+        {
+          "task_id": "P05-T01",
+          "title": "Criar intents transacionais para todos os produtores, incluindo approval e handoff sintético.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P05-T02",
+          "title": "Implementar idempotency key/hash/uniqueness e retorno autorizado de operações existentes.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P05-T03",
+          "title": "Implementar resolução de endpoint/lane/contexto e afinidade de continuidade.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P05-T04",
+          "title": "Coordenar reserva de consumo entre inbox/pull e push sem misturar leases/contadores.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P05-T05",
+          "title": "Definir ACK, unknown, mirror e fallback seguro, com invariantes testados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P05-T06",
+          "title": "Preservar delivered_count e comportamento de destinatários legados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P06",
+      "title": "Dispatcher e recuperação",
+      "depends_on_phases": [
+        "P05"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P06",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-CONS-01",
+        "T-CONS-02",
+        "T-CONS-03",
+        "T-CONS-04",
+        "T-CONS-05",
+        "T-CONS-06",
+        "T-CONS-07",
+        "T-CONS-08",
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11"
+      ],
+      "tasks": [
+        {
+          "task_id": "P06-T01",
+          "title": "Implementar lifecycle do dispatcher, owner único/epoch e claims CAS.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P06-T02",
+          "title": "Remover envio externo do callback e adicionar wakeup/IPC/generation seguros.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P06-T03",
+          "title": "Implementar timers, startup drain e reconciliação indexada de sinais perdidos.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P06-T04",
+          "title": "Classificar tentativas/ambiguidade e impedir failover/retry automático inseguro.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P06-T05",
+          "title": "Aplicar filas limitadas, quotas, ordenação, controles prioritários e quarentena.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P07",
+      "title": "Adapters e lifecycle",
+      "depends_on_phases": [
+        "P06"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P07",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11",
+        "T-LIFE-01",
+        "T-LIFE-02",
+        "T-LIFE-03",
+        "T-LIFE-04",
+        "T-LIFE-05",
+        "T-LIFE-06",
+        "T-LIFE-07",
+        "T-LIFE-08",
+        "T-LIFE-09",
+        "T-LIFE-10",
+        "T-LIFE-11",
+        "T-LIFE-12"
+      ],
+      "tasks": [
+        {
+          "task_id": "P07-T01",
+          "title": "Migrar os quatro adapters para envelope/resultado canônicos com tradução na borda.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P07-T02",
+          "title": "Preservar multi-turn, Pi settle, Codex multiplexação e características reais de Claude.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P07-T03",
+          "title": "Implementar deadlines, expected-turn/fences e tratamento de respostas tardias.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P07-T04",
+          "title": "Reforçar abertura idempotente, spawn/ownership desde nascimento e reaping por identidade.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P07-T05",
+          "title": "Implementar close/detach observáveis e drenar eventos sem subscription races.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P07-T06",
+          "title": "Integrar boot/recovery pela mesma composição e validar versões/plataformas.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P08",
+      "title": "Journal e resultados",
+      "depends_on_phases": [
+        "P07"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P08",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-JRN-01",
+        "T-JRN-02",
+        "T-JRN-03",
+        "T-JRN-04",
+        "T-JRN-05",
+        "T-JRN-06",
+        "T-JRN-07",
+        "T-JRN-08",
+        "T-JRN-09",
+        "T-JRN-10",
+        "T-JRN-11",
+        "T-JRN-12",
+        "T-JRN-13",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "tasks": [
+        {
+          "task_id": "P08-T01",
+          "title": "Implementar port/journal append-only com IDs/sequence, checksums e limites.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P08-T02",
+          "title": "Implementar flush/group commit, fsync terminal e durable watermark.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P08-T03",
+          "title": "Implementar projector idempotente com resultados, artifacts, notificações e checkpoint.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P08-T04",
+          "title": "Tratar DB indisponível, corrupção, espaço insuficiente e lacunas não recuperáveis.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P08-T05",
+          "title": "Corrigir replay/cursor/sequence/ACL e validar todos os cortes de crash.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P09",
+      "title": "Trabalho, bootstrap e approvals",
+      "depends_on_phases": [
+        "P08"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P09",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-CONS-01",
+        "T-CONS-02",
+        "T-CONS-03",
+        "T-CONS-04",
+        "T-CONS-05",
+        "T-CONS-06",
+        "T-CONS-07",
+        "T-CONS-08",
+        "T-WORK-01",
+        "T-WORK-02",
+        "T-WORK-03",
+        "T-WORK-04",
+        "T-WORK-05",
+        "T-WORK-06",
+        "T-WORK-07",
+        "T-WORK-08",
+        "T-WORK-09",
+        "T-WORK-10",
+        "T-WORK-11",
+        "T-WORK-12"
+      ],
+      "tasks": [
+        {
+          "task_id": "P09-T01",
+          "title": "Integrar handoff/claim/grant/dispatch e oferta competitiva sem payload duplicado.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P09-T02",
+          "title": "Coalescer notificação sintética e execução, preservando conversa sem bypass.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P09-T03",
+          "title": "Inicializar identidade/perfil/contexto do runtime pelo core autorizado.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P09-T04",
+          "title": "Integrar conclusão estruturada/autenticada e preservar verify/evidence/claim epoch.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P09-T05",
+          "title": "Mapear approvals/input nativos e tratar interrupt/cancel/late result sem falsa conclusão.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P10",
+      "title": "Relay e budgets",
+      "depends_on_phases": [
+        "P09"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P10",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-RELAY-01",
+        "T-RELAY-02",
+        "T-RELAY-03",
+        "T-RELAY-04",
+        "T-RELAY-05",
+        "T-RELAY-06",
+        "T-RELAY-07",
+        "T-RELAY-08",
+        "T-RELAY-09",
+        "T-RELAY-10",
+        "T-RELAY-11"
+      ],
+      "tasks": [
+        {
+          "task_id": "P10-T01",
+          "title": "Persistir roots/parents/budgets e derivar causalidade exclusivamente de contexto confiável.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P10-T02",
+          "title": "Aplicar profundidade, deadline e quotas totais com reserva atômica.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P10-T03",
+          "title": "Preservar colaboração bidirecional limitada e novos roots legitimamente independentes.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P10-T04",
+          "title": "Impedir reexecução por receipts/erros e tornar notify_target explícito/autorizado.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P10-T05",
+          "title": "Testar cadeia lenta, restart, fan-out, mesmas identidades e conversas intercaladas.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P11",
+      "title": "Superfícies e operação",
+      "depends_on_phases": [
+        "P10"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P11",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-PRES-01",
+        "T-PRES-02",
+        "T-PRES-03",
+        "T-PRES-04",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08",
+        "T-MIG-01",
+        "T-MIG-02",
+        "T-MIG-03",
+        "T-MIG-04",
+        "T-MIG-05",
+        "T-MIG-06",
+        "T-MIG-07",
+        "T-MIG-08",
+        "T-MIG-09"
+      ],
+      "tasks": [
+        {
+          "task_id": "P11-T01",
+          "title": "Adaptar oito tools/rotas como façades opcionais e normalizar payloads legados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P11-T02",
+          "title": "Expor catálogo/bindings/operação/replay e gestão administrativa sem duplicação de tools.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P11-T03",
+          "title": "Adicionar diagnóstico de unknown/backlog/approval e visão de agente com endpoints.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P11-T04",
+          "title": "Atualizar ADR/resources/guia/changelog/surface revision e medir impacto de schema.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P11-T05",
+          "title": "Ensaiar cutover único, ativação/desativação e rollback com operações em trânsito.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    },
+    {
+      "phase_id": "P12",
+      "title": "Validação e entrega",
+      "depends_on_phases": [
+        "P11"
+      ],
+      "status": "NOT_STARTED",
+      "specification": "01_PLANO_IMPLEMENTACAO.md: P12",
+      "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
+      "test_ids": [
+        "T-LIFE-01",
+        "T-LIFE-02",
+        "T-LIFE-03",
+        "T-LIFE-04",
+        "T-LIFE-05",
+        "T-LIFE-06",
+        "T-LIFE-07",
+        "T-LIFE-08",
+        "T-LIFE-09",
+        "T-LIFE-10",
+        "T-LIFE-11",
+        "T-LIFE-12",
+        "T-JRN-01",
+        "T-JRN-02",
+        "T-JRN-03",
+        "T-JRN-04",
+        "T-JRN-05",
+        "T-JRN-06",
+        "T-JRN-07",
+        "T-JRN-08",
+        "T-JRN-09",
+        "T-JRN-10",
+        "T-JRN-11",
+        "T-JRN-12",
+        "T-JRN-13",
+        "T-MIG-01",
+        "T-MIG-02",
+        "T-MIG-03",
+        "T-MIG-04",
+        "T-MIG-05",
+        "T-MIG-06",
+        "T-MIG-07",
+        "T-MIG-08",
+        "T-MIG-09",
+        "T-E2E-01",
+        "T-E2E-02",
+        "T-E2E-03",
+        "T-E2E-04",
+        "T-E2E-05",
+        "T-E2E-06",
+        "T-E2E-07"
+      ],
+      "tasks": [
+        {
+          "task_id": "P12-T01",
+          "title": "Rodar regressão completa e matriz adversarial pela composição real.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P12-T02",
+          "title": "Executar testes nativos dos quatro conectores com backends/sessões aprovados.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P12-T03",
+          "title": "Rodar crash/stress/leak e benchmarks comparáveis, classificando polling e controles.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P12-T04",
+          "title": "Validar backup/restore/upgrade/rollback e integridade do cadastro/histórico.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        },
+        {
+          "task_id": "P12-T05",
+          "title": "Gerar evidence index por SHA, mapa F01–F14 e parecer de prontidão sem merge automático.",
+          "status": "NOT_STARTED",
+          "owner": "Codex",
+          "implementation_refs": [],
+          "test_results": [],
+          "evidence": [],
+          "notes": ""
+        }
+      ]
+    }
+  ],
+  "tests": [
+    {
+      "test_id": "T-ID-01",
+      "group": "ID",
+      "name": "Perfil preservado",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Abrir, fechar e reabrir conexão com capabilities, metadata, role, tags, permissions e comm_scope existentes.",
+      "expected": "Todos os campos canônicos permanecem idênticos; apenas dados de conexão/presença mudam.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ID-02",
+      "group": "ID",
+      "name": "Agente inexistente",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Abrir harness para agent_id não cadastrado por MCP e REST.",
+      "expected": "Erro prescritivo antes de spawn; nenhum Agent é criado implicitamente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ID-03",
+      "group": "ID",
+      "name": "Abertura concorrente",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Duas aberturas autorizadas para o mesmo agente, incluindo a mesma idempotency key.",
+      "expected": "Pedidos distintos criam bindings válidos; pedido repetido não duplica processo/sessão nem altera perfil.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ID-04",
+      "group": "ID",
+      "name": "Metadata legada",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Passar role/metadata antigos, incluindo JSON em string e campos conflitantes.",
+      "expected": "Normalização/depreciação explícita; nenhum descarte silencioso ou profile overwrite.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ID-05",
+      "group": "ID",
+      "name": "Catálogo de habilidades",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Usar capabilities existentes e desconhecidas pelas superfícies canônicas.",
+      "expected": "Validação de catálogo preservada; abrir conexão não contorna nem apaga catálogo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ID-06",
+      "group": "ID",
+      "name": "Falha de start",
+      "phases": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "stimulus": "Handshake, persistência ou validação de sessão falham depois do spawn.",
+      "expected": "Sem identidade fantasma; processo próprio reconciliado e nenhum estado RUNNING inventado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-01",
+      "group": "AUTH",
+      "name": "MCP versus REST",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Mesmo ator tenta abrir/enviar/steer/interrupt/close no mesmo recurso em ambas as superfícies.",
+      "expected": "Mesma decisão canônica, com zero efeitos externos nos casos negados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-02",
+      "group": "AUTH",
+      "name": "Sessão alheia",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Agente autenticado conhece session_id de outro agente e tenta controlá-lo.",
+      "expected": "Negação opaca e auditada, sem controle por conhecimento do ID.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-03",
+      "group": "AUTH",
+      "name": "Leitura alheia",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Tentar replay, get, endpoint listing e resultados fora da audiência.",
+      "expected": "Nenhum payload, path, backend privado ou existência indevida é exposto.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-04",
+      "group": "AUTH",
+      "name": "Grant válido",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Delegação estreita autoriza uma ação específica em workspace/endpoint/handoff.",
+      "expected": "Ação permitida funciona; ações e recursos adjacentes continuam negados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-05",
+      "group": "AUTH",
+      "name": "Revogação antes do envio",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Enfileirar comando autorizado, revogar grant/policy antes de dispatch.",
+      "expected": "Nova validação impede envio; intenção tem estado/motivo explícito.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-06",
+      "group": "AUTH",
+      "name": "Revogação após aceitação",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Revogar grant durante turno e receber resultado final.",
+      "expected": "Evidência histórica é preservada; novos comandos/transições/publicações respeitam autoridade atual.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-07",
+      "group": "AUTH",
+      "name": "Impersonação no payload",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Forjar actor/from_agent/grant/root no corpo ou num native event.",
+      "expected": "Identidade autoritativa vem do contexto e correlação confiáveis, não desses campos.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-08",
+      "group": "AUTH",
+      "name": "Stdio sem identidade",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Chamar controles novos no modo stdio legado sem contexto verificável.",
+      "expected": "Não vira operador implicitamente; configuração local confiável habilita só o escopo previsto.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-09",
+      "group": "AUTH",
+      "name": "Segredos de backend",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Fornecer secrets em env/refs e inspecionar respostas, logs, journal e erros.",
+      "expected": "Secrets não aparecem; perfil efetivo redigido continua diagnosticável.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-10",
+      "group": "AUTH",
+      "name": "Bypass por opções nativas",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Tentar mudar cwd/sandbox/provider/env/argv fora do perfil aprovado.",
+      "expected": "Negação antes de spawn/write; adapter não aceita passthrough genérico.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-11",
+      "group": "AUTH",
+      "name": "EPT e caminho de monitoração",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Usar credencial read-only/monitor para novos controles de runtime.",
+      "expected": "Escopo read-only preservado; nenhum upgrade de autoridade.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-AUTH-12",
+      "group": "AUTH",
+      "name": "Idempotência não vaza dados",
+      "phases": [
+        "P01",
+        "P04",
+        "P11"
+      ],
+      "stimulus": "Ator diferente reutiliza chave/operation_id de request existente.",
+      "expected": "Autorização acontece antes de retornar o resultado persistido.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-01",
+      "group": "ENDP",
+      "name": "Duas conexões, uma entrega",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Mesmo Agent possui dois endpoints executores elegíveis.",
+      "expected": "A policy escolhe um binding; não ocorre fan-out executor dentro do Agent.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-02",
+      "group": "ENDP",
+      "name": "Dois workspaces",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Mesmo Agent possui runtimes em projetos diferentes.",
+      "expected": "A execução usa o workspace/contexto autorizado da solicitação.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-03",
+      "group": "ENDP",
+      "name": "Continuação fixada",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Enviar conversa e depois steer/interrupt enquanto muda a prioridade dos endpoints.",
+      "expected": "Controle continua vinculado à sessão/turno original, ou falha claramente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-04",
+      "group": "ENDP",
+      "name": "Binding ambíguo",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Duas sessões não intercambiáveis sem default ou seletor explícito.",
+      "expected": "AMBIGUOUS_BINDING; não usa a primeira entrada da registry.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-05",
+      "group": "ENDP",
+      "name": "Fallback seguro",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Endpoint A falha antes de qualquer envio e B é fallback aprovado.",
+      "expected": "Uma tentativa em B, mesma operação lógica, seleção/auditoria consistentes.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-06",
+      "group": "ENDP",
+      "name": "Fallback inseguro",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "A pode ter aceitado; B está disponível.",
+      "expected": "B não executa automaticamente; operação permanece reconciliável/unknown.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-07",
+      "group": "ENDP",
+      "name": "Capabilities efetivas",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Descriptor anuncia operação que a versão/configuração real não suporta.",
+      "expected": "Operação indisponível com motivo; não é enviada na esperança de funcionar.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-ENDP-08",
+      "group": "ENDP",
+      "name": "Extensão adicional",
+      "phases": [
+        "P02",
+        "P03",
+        "P05",
+        "P07"
+      ],
+      "stimulus": "Registrar um quinto adapter fake e um endpoint sem runtime local.",
+      "expected": "Funciona pelo registro sem novo branch por produto no domínio/supervisor.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-01",
+      "group": "TX",
+      "name": "Rollback de criação",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Falhar entre writes de message, delivery, evento e outbox.",
+      "expected": "Tudo é revertido; nenhuma entrega sem intenção requerida ou vice-versa.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-02",
+      "group": "TX",
+      "name": "Crash após commit",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Matar processo depois do commit e antes de wake.",
+      "expected": "Entrega/intent persistem; restart ou reconciliação retoma sem duplicar.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-03",
+      "group": "TX",
+      "name": "Request repetida",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Repetir a mesma chave e payload com concorrência.",
+      "expected": "Uma única operação lógica e um único conjunto de efeitos canônicos.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-04",
+      "group": "TX",
+      "name": "Chave com outro payload",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Reutilizar idempotency key alterando conteúdo/target/contexto.",
+      "expected": "Conflito; operação original não muda.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-05",
+      "group": "TX",
+      "name": "Aprovação pendente",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Policy exige HITL antes de enviar.",
+      "expected": "Nenhuma intent executável antes da decisão; aprovação repetida gera uma única execução.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-06",
+      "group": "TX",
+      "name": "Todos os produtores",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Criar mensagem por MCP, REST, handoff sintético, aprovação e projector.",
+      "expected": "Todos usam a transação/planejamento corretos; não há produtor que contorne outbox/coalescência.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-07",
+      "group": "TX",
+      "name": "Sem IO no UoW",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Instrumentar network, spawn, secret resolver, model e callback de transporte.",
+      "expected": "Nenhum é chamado dentro da transação de escrita.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-TX-08",
+      "group": "TX",
+      "name": "Writer incompatível",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Tentar escrever com processo/schema capability antigo enquanto integração gerenciada está ativa.",
+      "expected": "Defesa explícita de incompatibilidade; não gerar mensagens sem reservas/intents exigidas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-01",
+      "group": "CONS",
+      "name": "Pull versus push concorrentes",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Dois consumers disputam a mesma MessageDelivery em barreira controlada.",
+      "expected": "Uma reserva executora vence; payload não é entregue a dois executores.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-02",
+      "group": "CONS",
+      "name": "Push aceito e pull posterior",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Observar ACK confiável do harness e depois fazer inbox_pull.",
+      "expected": "Ack/receipt canônicos aplicados uma vez; não iniciar nova execução pelo pull.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-03",
+      "group": "CONS",
+      "name": "Falha anterior ao envio",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Forçar NOT_SENT após reservar consumo.",
+      "expected": "Reserva liberável e fallback MCP utilizável; mensagem não desaparece.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-04",
+      "group": "CONS",
+      "name": "Envio desconhecido",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Perder confirmação depois de write e vencer lease.",
+      "expected": "Incerteza visível; lease não libera outro executor automaticamente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-05",
+      "group": "CONS",
+      "name": "Takeover explícito",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Operador autorizado decide repetir operação desconhecida com razão e risco.",
+      "expected": "Auditoria/correlação de risco; sem fingir garantia exactly-once.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-06",
+      "group": "CONS",
+      "name": "Retry do transporte",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Várias falhas de socket seguras antes de aceitação.",
+      "expected": "Contador/lease da inbox não é consumido como tentativa de transporte.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-07",
+      "group": "CONS",
+      "name": "Mirror-only",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Configurar observador e executor para a mesma entrega.",
+      "expected": "Observador não inicia outro send_turn executor; configuração insegura é rejeitada.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-CONS-08",
+      "group": "CONS",
+      "name": "Receipts duplicados",
+      "phases": [
+        "P05",
+        "P06",
+        "P09"
+      ],
+      "stimulus": "Reaplicar ACK e projetar receipt após restart.",
+      "expected": "Ack e read_receipt idempotentes, sem cascata automática de respostas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-01",
+      "group": "DISP",
+      "name": "Retorno independente do harness",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Travar write/aceitação do adapter e chamar message_create.",
+      "expected": "Chamada termina após commit/wake sem precisar destravar adapter.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-02",
+      "group": "DISP",
+      "name": "Wakeup perdido",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Descartar IPC/sinal pós-commit mantendo serve vivo.",
+      "expected": "Reconciliação indexada recupera intent no prazo configurado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-03",
+      "group": "DISP",
+      "name": "Lost wakeup race",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Commit acontece entre drainage e entrada na espera.",
+      "expected": "Generation/deadline impede dormir indefinidamente com trabalho pendente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-04",
+      "group": "DISP",
+      "name": "Stdio escritor separado",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Processo stdio atualizado escreve no mesmo store.",
+      "expected": "Serve recebe wake/reconcilia; stdio não cria supervisor/filho próprio.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-05",
+      "group": "DISP",
+      "name": "Dois owners",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Iniciar serves concorrentes e simular perda/retomada de owner epoch.",
+      "expected": "Um proprietário válido; owner antigo não comita resultados nem despacha nova execução.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-06",
+      "group": "DISP",
+      "name": "SENDING expirado",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Crash após send-intent; tornar o processo antigo lento e expirar lease.",
+      "expected": "Estado ambíguo, não retry cego; fencing não é confundido com cancelamento externo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-07",
+      "group": "DISP",
+      "name": "Thread travada",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Repetir falhas de uma API bloqueante não cancelável.",
+      "expected": "Limite de threads/slots preservado e endpoint quarentenado, sem crescimento ilimitado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-08",
+      "group": "DISP",
+      "name": "Ordem e controle",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Fila de send_turn com steer/interrupt urgente e expected_turn.",
+      "expected": "Turnos ordenados; controle correto não espera atrás de toda a fila nem afeta turno futuro.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-09",
+      "group": "DISP",
+      "name": "Fairness",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Um endpoint lento e outro saudável sob backlog.",
+      "expected": "Endpoint saudável continua processando; quotas por agente impedem multiplicar limite com endpoints.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-10",
+      "group": "DISP",
+      "name": "Backlog cheio",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Exceder limites de quantidade e bytes.",
+      "expected": "Backpressure antes de efeitos indevidos; estado informado, sem descarte de resultados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-DISP-11",
+      "group": "DISP",
+      "name": "Backoff",
+      "phases": [
+        "P06",
+        "P07"
+      ],
+      "stimulus": "Falhas retryable seguras com clock/jitter injetados.",
+      "expected": "Retry no deadline correto, sem sleep loop/hot polling nem tempestade de tentativas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-01",
+      "group": "LIFE",
+      "name": "Boot idempotente",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Reiniciar serve com specs estáveis e falha em um conector.",
+      "expected": "Sem identidades/filhos duplicados; falha isolada e outros endpoints disponíveis.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-02",
+      "group": "LIFE",
+      "name": "Janela de spawn",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Matar owner entre nascimento do filho, registro e handshake.",
+      "expected": "Mecanismo de birth/ownership reconcilia filho sem depender só de snapshot periódico.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-03",
+      "group": "LIFE",
+      "name": "SIGTERM",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Encerrar serve com turnos e journal pendentes.",
+      "expected": "Shutdown limitado, eventos capturados drenados, processos próprios encerrados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-04",
+      "group": "LIFE",
+      "name": "SIGKILL sob carga",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Repetir kill com pressão de scheduler comprovada.",
+      "expected": "Registrar reaps/leaks; nenhuma garantia fictícia baseada só numa execução verde.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-05",
+      "group": "LIFE",
+      "name": "PID reutilizado",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Simular reutilização de PID e validar identidade do processo.",
+      "expected": "Processo não pertencente ao Nexus não é encerrado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-06",
+      "group": "LIFE",
+      "name": "Attach preservado",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Close/kill do serve com sessão externa dedicada anexada.",
+      "expected": "Nexus desanexa; não mata o processo externo nem inventa ENDED do peer.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "group": "LIFE",
+      "name": "Close concorrente",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Close e EOF/erro da pump ocorrem simultaneamente; chamar close novamente.",
+      "expected": "Teardown/estado idempotentes; finais capturados e nenhuma subscription pendurada.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "group": "LIFE",
+      "name": "Multiplexação",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Duas sessões Codex usam o mesmo processo e uma encerra.",
+      "expected": "Um leitor demultiplexa sem perda; fechar uma sessão não mata a outra.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-09",
+      "group": "LIFE",
+      "name": "Pi settle",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Abort e novo prompt/steer em sequência com eventos atrasados.",
+      "expected": "Novo comando não corre contra teardown do turno anterior; timing real respeitado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-10",
+      "group": "LIFE",
+      "name": "Claude multi-turn",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Dois ou mais turnos no mesmo stream-json.",
+      "expected": "Identidade nativa estável conforme protocolo e respostas correlacionadas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-11",
+      "group": "LIFE",
+      "name": "Frame inválido e buffers",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "NDJSON fragmentado, UTF-8, stdout/stderr cheios, frame muito grande ou inválido.",
+      "expected": "Parser limitado; erro atribuível; nenhum deadlock ou overflow ilimitado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "group": "LIFE",
+      "name": "Drift de protocolo",
+      "phases": [
+        "P07",
+        "P12"
+      ],
+      "stimulus": "Binário/schema incompatível com o descriptor.",
+      "expected": "Capacidade/binding degradado com diagnóstico; outros conectores permanecem operacionais.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-01",
+      "group": "JRN",
+      "name": "SQLite indisponível",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Receber resultado final com projeção bloqueada.",
+      "expected": "Journal durável preserva resultado; volta do SQLite permite projeção única.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-02",
+      "group": "JRN",
+      "name": "Crash após journal",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Crash após fsync e antes do commit de projeção.",
+      "expected": "Replay recompõe evento/resultado/intent sem duplicidade.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-03",
+      "group": "JRN",
+      "name": "Crash após projeção",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Commit de projeção ocorre antes de atualizar checkpoint externo.",
+      "expected": "Replay vê event_uid já aplicado; nenhum receipt/resultado duplicado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-04",
+      "group": "JRN",
+      "name": "Cauda truncada",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Cortar último registro durante append.",
+      "expected": "Recuperar prefixo íntegro; expor lacuna, não interpretar bytes parciais como resultado válido.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-05",
+      "group": "JRN",
+      "name": "Corrupção no meio",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Checksum inválido em segmento já fechado.",
+      "expected": "Parada/quarentena e diagnóstico, sem pular silenciosamente conteúdo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-06",
+      "group": "JRN",
+      "name": "Mesmo texto, eventos diferentes",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Dois eventos legítimos idênticos no conteúdo.",
+      "expected": "Ambos preservados; dedupe por identidade estável, não por texto.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-07",
+      "group": "JRN",
+      "name": "Evento duplicado",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Repetir o mesmo evento/native ref após reconnect/replay.",
+      "expected": "Uma projeção canônica, com vínculo correto à tentativa original.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-08",
+      "group": "JRN",
+      "name": "Deltas e terminal",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Acumular deltas transitórios e finalizar turno.",
+      "expected": "Terminal durável inclui/referencia texto completo e flush dos registros necessários.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-09",
+      "group": "JRN",
+      "name": "Falta de espaço",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Esgotar quota/disco de journal e storage.",
+      "expected": "Nova admissão bloqueada; resultados não são chamados de duráveis; buffers finitos e alerta.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-10",
+      "group": "JRN",
+      "name": "Resultado anterior à captura",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Matar processo antes de capturar evento, sem replay nativo disponível.",
+      "expected": "Execução UNKNOWN/resultado indisponível detectável, sem sucesso ou recuperação inventados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-11",
+      "group": "JRN",
+      "name": "Replay paginado",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Várias páginas com append concorrente, limite inválido e cursor retido/expirado.",
+      "expected": "Sequência/cursor explícitos; sem omissões, repeats indevidos ou vazamento de ACL.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-12",
+      "group": "JRN",
+      "name": "Artifact e UoW",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Falhar entre gravação de artifact e commit de refs.",
+      "expected": "Nenhuma referência confirmada para arquivo inexistente; órfão recolhível quando aplicável.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-JRN-13",
+      "group": "JRN",
+      "name": "Resultado negado por policy",
+      "phases": [
+        "P08",
+        "P12"
+      ],
+      "stimulus": "Guardrail/approval bloqueia divulgação do resultado.",
+      "expected": "Original protegido continua durável; publicação pendente/negada não apaga evidência.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-01",
+      "group": "WORK",
+      "name": "Claim competitivo",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Vários agentes e endpoints tentam executar uma oferta.",
+      "expected": "Um claimant e uma execução; demais recebem apenas informação permitida.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-02",
+      "group": "WORK",
+      "name": "Oferta sem payload",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Agente elegível observa handoff ainda não claimed.",
+      "expected": "Payload executável restrito conforme o core; não vaza pelo envelope de oferta.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-03",
+      "group": "WORK",
+      "name": "Coalescência",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Handoff cria mensagem sintética e intent de dispatch.",
+      "expected": "Só uma entrada executora; notificação não gera outro turno de trabalho.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-04",
+      "group": "WORK",
+      "name": "Bootstrap canônico",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Runtime inicia como agente com role, profile e capabilities existentes.",
+      "expected": "Obtém contexto autorizado correto, sem novo Agent nem secrets/perfis alheios.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-05",
+      "group": "WORK",
+      "name": "Fim de turno não é aceite",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Emitir turn_completed sem evidências/complete explícito.",
+      "expected": "Turno encerra; handoff não é marcado COMPLETED indevidamente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-06",
+      "group": "WORK",
+      "name": "Conclusão válida",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Claimant autorizado entrega resultado/evidências pelo caminho canônico.",
+      "expected": "Mesmas validações/transições de complete/verify/reject já existentes.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-07",
+      "group": "WORK",
+      "name": "Resultado de claim antigo",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Cancelar/reatribuir com política explícita e receber final tardio.",
+      "expected": "Evidência registrada no claim antigo; novo trabalho não é concluído por ela.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-08",
+      "group": "WORK",
+      "name": "Interrupt aceito",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Peer aceita pedido de cancelamento sem sinal final imediato.",
+      "expected": "Estado INTERRUPT_REQUESTED; não declarar interrupção concluída antecipadamente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-09",
+      "group": "WORK",
+      "name": "Approval nativo",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Runtime pede aprovação e recebe allow/deny pelo HITL.",
+      "expected": "Correlação e escopo corretos; nenhuma autoaprovação ou troca silenciosa para sandbox permissivo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-10",
+      "group": "WORK",
+      "name": "Approval repetido/tardio",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Duplicar decisão e entregar decisão após encerrar o turno.",
+      "expected": "Idempotência; decisão não alcança outro turno.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-11",
+      "group": "WORK",
+      "name": "Perfil incompatível",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Trabalho exige approvals/sandbox que aquele adapter não implementa.",
+      "expected": "Não elegível para esse trabalho; capacidades conversacionais compatíveis continuam úteis.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-WORK-12",
+      "group": "WORK",
+      "name": "Attach gerenciado",
+      "phases": [
+        "P04",
+        "P09"
+      ],
+      "stimulus": "Executar attach sem ACK e depois com canal Nexus autenticado externo.",
+      "expected": "Sem canal, não anunciar managed work confiável; com canal, claim/ack/complete são validados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-01",
+      "group": "RELAY",
+      "name": "Cadeia legítima",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "A→B e A→B→C com grants/targets válidos.",
+      "expected": "Entrega e resposta funcionam dentro do orçamento, sem bloqueio genérico entre harnesses.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-02",
+      "group": "RELAY",
+      "name": "Cadeia lenta",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Hops a cada dez minutos, max depth quatro, deadline trinta minutos.",
+      "expected": "Deadline/root não reinicia depth; continuação expirada é bloqueada.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-03",
+      "group": "RELAY",
+      "name": "Restart no meio",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Reiniciar Nexus entre hops.",
+      "expected": "Root/depth/budget/correlação persistem.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-04",
+      "group": "RELAY",
+      "name": "Conversas intercaladas",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Mesma sessão participa de dois roots simultâneos/alternados.",
+      "expected": "Cada saída herda o pai correto, sem usar o estado da última mensagem da sessão.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-05",
+      "group": "RELAY",
+      "name": "Múltiplos endpoints",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Mesmo Agent envia respostas por conexões diferentes.",
+      "expected": "Root decorre da operação, não da primeira sessão encontrada em memória.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-06",
+      "group": "RELAY",
+      "name": "Fan-out concorrente",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Muitos filhos tentam reservar último orçamento disponível.",
+      "expected": "Reserva atômica respeita limite total; profundidade sozinha não é o único controle.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-07",
+      "group": "RELAY",
+      "name": "Retry de filho",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Repetir a mesma criação de mensagem filha.",
+      "expected": "Não consome budget duas vezes nem cria outro filho.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-08",
+      "group": "RELAY",
+      "name": "Nova conversa legítima",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Entrada nova autenticada após root anterior encerrado.",
+      "expected": "Novo root permitido sob quotas; não herda bloqueio da sessão anterior.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-09",
+      "group": "RELAY",
+      "name": "Loop de receipt/erro",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Resultado, receipt, erro sintético e bloqueio de relay são publicados.",
+      "expected": "Não geram turnos automaticamente nem criam loop no handler de erro.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-10",
+      "group": "RELAY",
+      "name": "Spoofing/trace desligado",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Modelo forja root/depth e feature_trace está desligada.",
+      "expected": "Servidor mantém causalidade real e limites independentemente de telemetry.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-RELAY-11",
+      "group": "RELAY",
+      "name": "Resposta broadcast explícita",
+      "phases": [
+        "P10"
+      ],
+      "stimulus": "Configurar notify_target broadcast autorizado e depois removê-lo.",
+      "expected": "Broadcast explícito funciona; default não divulga resultado privado a toda audiência.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-PRES-01",
+      "group": "PRES",
+      "name": "Targets reais",
+      "phases": [
+        "P03",
+        "P05",
+        "P11"
+      ],
+      "stimulus": "Usar direct/capability/role/tag/broadcast pelas superfícies reais.",
+      "expected": "Harnesses elegíveis recebem pela mesma semântica, sem inserts manuais de presença em produção.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-PRES-02",
+      "group": "PRES",
+      "name": "Heartbeat por binding",
+      "phases": [
+        "P03",
+        "P05",
+        "P11"
+      ],
+      "stimulus": "Dois runtimes do mesmo Agent, fechar apenas um.",
+      "expected": "Presença restante mantém agente elegível apenas nos workspaces realmente ativos.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-PRES-03",
+      "group": "PRES",
+      "name": "Stale e crash",
+      "phases": [
+        "P03",
+        "P05",
+        "P11"
+      ],
+      "stimulus": "Processo some mas linha histórica continua RUNNING.",
+      "expected": "Não sustentar presença/liveness com o registro antigo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-PRES-04",
+      "group": "PRES",
+      "name": "Audiencia e privacidade",
+      "phases": [
+        "P03",
+        "P05",
+        "P11"
+      ],
+      "stimulus": "Policies inbound/outbound excluem participantes.",
+      "expected": "Resolver e projeção respeitam as mesmas exclusões sem expor policies privadas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-01",
+      "group": "API",
+      "name": "Flag desligada",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Inicializar MCP stdio/HTTP e REST sem integração habilitada.",
+      "expected": "Baseline legada preservada e sem novas tools/processos implícitos.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-02",
+      "group": "API",
+      "name": "Flag ligada",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Exercitar os oito nomes e as rotas equivalentes com autorização.",
+      "expected": "Façades reusam casos de uso; recursos preservados e respostas honestas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-03",
+      "group": "API",
+      "name": "Schema em cache",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Desabilitar feature/permissão depois de um cliente guardar o schema.",
+      "expected": "Handler runtime ainda nega efeitos não autorizados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-04",
+      "group": "API",
+      "name": "Payload compatível",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "text/content/canônico, JSON-string e conflitos.",
+      "expected": "Normalização explícita; dados não são ignorados nem interpretados como autoridade.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-05",
+      "group": "API",
+      "name": "Estado por operação",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Comando aceito retorna operation_id; observar execução por evento/replay.",
+      "expected": "Queued, accepted, unconfirmed e final são distinguíveis sem exigir status polling nominal.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-06",
+      "group": "API",
+      "name": "Descoberta unificada",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Ler agente com múltiplos endpoints e capabilities parciais.",
+      "expected": "Uma identidade e projeção segura de habilidades/capacidades, sem segredos.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-07",
+      "group": "API",
+      "name": "Métrica da superfície",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Comparar schema/descrições com flags OFF/ON.",
+      "expected": "Crescimento real medido; nenhuma isenção fictícia ou duplicação de tool por adapter.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-API-08",
+      "group": "API",
+      "name": "UI diagnóstica",
+      "phases": [
+        "P01",
+        "P02",
+        "P11"
+      ],
+      "stimulus": "Abrir operação UNKNOWN/ambígua/pending approval e processo detached.",
+      "expected": "Usuário identifica causa e opções autorizadas sem estado de sucesso enganoso.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-01",
+      "group": "MIG",
+      "name": "Antes de 029",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Migrar store com dados legados.",
+      "expected": "Dados intactos, nenhum dispatch ou endpoint executor implicitamente criado.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-02",
+      "group": "MIG",
+      "name": "029 existente",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Migrar eventos/sessões com e sem dados suficientes de workspace.",
+      "expected": "Histórico preservado; desconhecidos ficam pending-review/legacy-unlinked.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-03",
+      "group": "MIG",
+      "name": "Perfil já danificado",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Store apresenta capabilities/metadata apagados anteriormente.",
+      "expected": "Não inventar conteúdo; emitir diagnóstico e restaurar só com fonte confiável.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-04",
+      "group": "MIG",
+      "name": "Idempotência do runner",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Interromper backfill e executar novamente.",
+      "expected": "Sem duplicar bindings/events ou perder dados; constraints consistentes.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-05",
+      "group": "MIG",
+      "name": "Histórico unread",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Ativar integração com backlog antigo.",
+      "expected": "Não disparar automaticamente trabalhos anteriores; replay exige seleção/ação explícita.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-06",
+      "group": "MIG",
+      "name": "Cutover único",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Transição callback antigo→dispatcher novo.",
+      "expected": "Nunca dois envios reais para a mesma entrega.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-07",
+      "group": "MIG",
+      "name": "Rollback ativo",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Desabilitar feature com intents SENDING/accepted e journal pendente.",
+      "expected": "Drenagem/reconciliação seguras; unknown não libera executor concorrente.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-08",
+      "group": "MIG",
+      "name": "Backup/restore",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Fazer backup consistente e restaurar store+journal/artifacts.",
+      "expected": "Ponto de consistência verificável; sem owner anterior ativo nem refs confirmadas quebradas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-MIG-09",
+      "group": "MIG",
+      "name": "Retenção e exclusão",
+      "phases": [
+        "P03",
+        "P11",
+        "P12"
+      ],
+      "stimulus": "Prunar histórico/desativar Agent com dedupe e operações pendentes.",
+      "expected": "Não apagar fences/refs necessários nem causar replay como trabalho novo.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-01",
+      "group": "E2E",
+      "name": "Três full-duplex simultâneos",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Pi, Codex e Claude stream no mesmo hub com backends aprovados.",
+      "expected": "Conversas multi-turn, correlação e isolamento demonstrados por trace real.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-02",
+      "group": "E2E",
+      "name": "Attach real dedicado",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Injetar marcador em sessão de teste aprovada pelo operador.",
+      "expected": "Injeção demonstrada separadamente de ACK/resultado, que não são inventados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-03",
+      "group": "E2E",
+      "name": "No-polling nativo",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Capturar frames do começo ao fim do turno.",
+      "expected": "Zero consultas de status; steer/interrupt/approval legítimos classificados à parte.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-04",
+      "group": "E2E",
+      "name": "Leaks repetidos",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Executar ciclos start/stop/crash/recovery sob carga.",
+      "expected": "Threads/processos/FDs/memória dentro dos limites; sample size e falhas documentados.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-05",
+      "group": "E2E",
+      "name": "Performance comparável",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Benchmark antes/depois na mesma configuração, incluindo journal/authorization.",
+      "expected": "Percentis e overhead medidos; sem remover segurança ou durabilidade para melhorar números.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-06",
+      "group": "E2E",
+      "name": "Composição real",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Repetir caminhos críticos por servidor real e múltiplos processos.",
+      "expected": "Wiring de auth/flags/dispatch/journal/presença realmente usado, não só services montados em fixtures.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-07",
+      "group": "E2E",
+      "name": "Relatório honesto",
+      "phases": [
+        "P12"
+      ],
+      "stimulus": "Gerar índice a partir dos resultados e comparar com o SHA executado.",
+      "expected": "PASS/FAIL/NOT_RUN/NOT_APPLICABLE corretos; versões e limitações explícitas.",
+      "execution_status": "NOT_RUN",
+      "evidence": []
+    }
+  ]
+}

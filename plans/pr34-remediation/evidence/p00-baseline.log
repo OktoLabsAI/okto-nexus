@@ -1,0 +1,1031 @@
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+........................................................................ [ 15%]
+........................................................................ [ 19%]
+..........................................................s............. [ 23%]
+........................................................................ [ 27%]
+........................................................................ [ 31%]
+........................................................................ [ 35%]
+F.F..F...F.FF............................F.........s.................... [ 39%]
+.............................................s.......................... [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 51%]
+........................................................................ [ 55%]
+........................................................................ [ 59%]
+........................................................................ [ 62%]
+........................................................................ [ 66%]
+........................................................................ [ 70%]
+........................................................................ [ 74%]
+..........................................FFFFFF........................ [ 78%]
+........................................................................ [ 82%]
+........................................................................ [ 86%]
+........................................................................ [ 90%]
+........................................................................ [ 94%]
+........................................................................ [ 98%]
+..............................                                           [100%]
+================================== FAILURES ===================================
+__ test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream ___
+
+    def test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream():
+        """RES-A2 (see EV-CC-004): two CONCURRENT ``events()`` consumers must
+        each independently receive the FULL event stream, not split it between
+        them.
+    
+        Pre-fix, this connector shares exactly ONE ``queue.Queue`` across every
+        ``events()`` call, so two concurrent consumers race for each item and
+        the stream is non-deterministically partitioned - reproduced 3/3 in
+        ``EV-CC-004-res-a2-probe.py`` (combined total always 7, individual
+        counts vary run to run, and whichever consumer does not win the
+        ``turn_completed`` race is left parked until ``_closed_event`` fires
+        from an unrelated cause). The fix (mirroring ``pi.py``'s C2 fix) gives
+        each ``events()`` call its own subscriber queue fed by a fan-out
+        ``_emit``, seeded from an append-only history snapshot - see that
+        module's ``events()`` docstring.
+    
+        Both consumers are started and confirmed PARKED in their own queue's
+        blocking wait (via a ``threading.Event`` each sets on generator entry)
+        BEFORE the turn is sent, ruling out a thread-start race as an
+        alternative explanation - same choreography as the committed probe.
+        """
+        connector = _connector("slow_start")  # gap before first event gives both threads time to park
+        session = connector.start(owning_agent_id="agent_test")
+    
+        it1 = connector.events()
+        it2 = connector.events()
+    
+        out1: list[HarnessEvent] = []
+        out2: list[HarnessEvent] = []
+        started1 = threading.Event()
+        started2 = threading.Event()
+    
+        def _drain(it, out: list[HarnessEvent], started: threading.Event) -> None:
+            started.set()
+            for ev in it:
+                out.append(ev)
+                if ev.kind == "turn_completed":
+                    return
+    
+        t1 = threading.Thread(target=_drain, args=(it1, out1, started1), daemon=True)
+        t2 = threading.Thread(target=_drain, args=(it2, out2, started2), daemon=True)
+        t1.start()
+        t2.start()
+        assert started1.wait(timeout=5.0)
+        assert started2.wait(timeout=5.0)
+        time.sleep(0.1)  # both threads have entered the generator; nothing pushed yet
+    
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hello"}))
+    
+        t1.join(timeout=10.0)
+        t2.join(timeout=10.0)
+        assert not t1.is_alive() and not t2.is_alive(), (
+            "a consumer hung waiting for turn_completed - it never saw the full "
+            "stream (RES-A2 split-stream regression)"
+        )
+    
+        kinds1 = [e.kind for e in out1]
+        kinds2 = [e.kind for e in out2]
+        assert "turn_started" in kinds1, f"consumer1 missed turn_started; got {kinds1}"
+        assert "turn_started" in kinds2, f"consumer2 missed turn_started; got {kinds2}"
+>       assert "turn_completed" in kinds1, f"consumer1 missed turn_completed; got {kinds1}"
+E       AssertionError: consumer1 missed turn_completed; got ['turn_started', 'tool_activity', 'tool_activity', 'error']
+E       assert 'turn_completed' in ['turn_started', 'tool_activity', 'tool_activity', 'error']
+
+tests\test_harness_claude_code_connector.py:717: AssertionError
+_____ test_finish_never_fabricates_process_exit_when_child_is_still_alive _____
+
+    def test_finish_never_fabricates_process_exit_when_child_is_still_alive():
+        """Covers the OTHER half of defect 1's why_it_matters (journal
+        wf_de1d2ad9-17f, line 17, CRITICAL) via a DIFFERENT route than the
+        reviewer's own repro: their mechanism was a dispatch error killing the
+        reader thread outright, which is no longer reachable at all once
+        :meth:`_pump_stdout`'s per-line guard is in place (see
+        test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader) -
+        the loop never aborts early any more. This test instead reaches the
+        SAME ``_finish`` branch the honest way: genuine raw-fd EOF on both
+        stdout/stderr while the child process itself is still alive (verified
+        empirically that ``sys.stdout.close()`` at the TextIOWrapper level does
+        NOT reliably release the pipe's write end promptly on this platform -
+        ``os.close(fd)`` does; see the ``eof_without_exit`` fake scenario).
+        Either way, ``_finish`` must not FABRICATE a ``process_exit``/
+        session-end signal it never actually observed - ``proc.poll()`` proves
+        the child is still alive at exactly that moment - and must say so
+        honestly and kill the leaked child rather than abandoning it.
+    
+        Explicitly bounded (not a bare ``list(events())``): a background thread
+        with a hard ``join(timeout=25.0)``, so a regression that removes
+        ``_finish``'s own internal backstop fails this test in seconds instead
+        of hanging the suite - the same pattern as
+        test_events_called_twice_both_return_after_close_not_just_one.
+        """
+        connector = _connector("eof_without_exit")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hello"}))
+    
+        result: dict[str, object] = {}
+    
+        def _drain() -> None:
+            result["events"] = list(connector.events())
+    
+        t = threading.Thread(target=_drain, daemon=True)
+        t.start()
+        t.join(timeout=25.0)
+>       assert not t.is_alive(), "events() did not terminate - _finish's internal backstop appears to have regressed"
+E       AssertionError: events() did not terminate - _finish's internal backstop appears to have regressed
+E       assert not True
+E        +  where True = is_alive()
+E        +    where is_alive = <Thread(Thread-52 (_drain), started daemon 34300)>.is_alive
+
+tests\test_harness_claude_code_connector.py:800: AssertionError
+_ test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted __
+
+    def test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted():
+        connector = _connector("slow_start")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hello"}))
+    
+        # Wait for the connector to actually observe generation start before
+        # interrupting - this is the safe window (the fake's 0.5s sleep before
+        # message_start makes this reliable without a race).
+        for event in connector.events():
+            if event.native_event == "stream_event:content_block_start":
+                break
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="interrupt"))
+    
+>       events = _drain_until(connector.events(), lambda e: e.kind == "turn_completed")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_harness_claude_code_connector.py:868: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+events_iter = <generator object ClaudeCodeStreamConnector.events at 0x0000023A9F03F640>
+predicate = <function test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted.<locals>.<lambda> at 0x0000023AA1359B20>
+
+    def _drain_until(
+        events_iter, predicate, *, timeout_s: float = 10.0
+    ) -> list[HarnessEvent]:
+        """Collect events from ``events_iter`` until ``predicate`` matches one.
+    
+        Uses a background thread + blocking ``next()`` with an overall wall-clock
+        budget so a connector bug that hangs the iterator fails the test instead
+        of the test suite itself. Deliberately NOT a sleep-poll loop over the
+        connector's own queue - only a coarse outer safety timer for the test.
+        """
+        import queue as _queue
+        import threading as _threading
+    
+        out: _queue.Queue = _queue.Queue()
+    
+        def _pump():
+            try:
+                for event in events_iter:
+                    out.put(("event", event))
+                    if predicate(event):
+                        out.put(("done", None))
+                        return
+                out.put(("exhausted", None))
+            except Exception as exc:  # pragma: no cover - surfaced via assertion below
+                out.put(("error", exc))
+    
+        t = _threading.Thread(target=_pump, daemon=True)
+        t.start()
+    
+        collected: list[HarnessEvent] = []
+        deadline = time.monotonic() + timeout_s
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}")
+            try:
+                kind, payload = out.get(timeout=remaining)
+            except _queue.Empty:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}") from None
+            if kind == "event":
+                collected.append(payload)
+            elif kind == "done":
+                return collected
+            elif kind == "exhausted":
+>               raise AssertionError(f"events() exhausted before predicate matched; collected: {collected}")
+E               AssertionError: events() exhausted before predicate matched; collected: [HarnessEvent(session_id='hsess_7bc27b61e5664735a0b92de4351b9246', harness_kind='claude_code', kind='turn_started', native_event='system:init', occurred_at='2026-09-22T15:47:15.313344Z', payload={'type': 'system', 'subtype': 'init', 'session_id': 'fake-native-session-id'}, thread_id=None, turn_id=None), HarnessEvent(session_id='hsess_7bc27b61e5664735a0b92de4351b9246', harness_kind='claude_code', kind='tool_activity', native_event='stream_event:message_start', occurred_at='2026-09-22T15:47:15.813808Z', payload={'type': 'stream_event', 'event': {'type': 'message_start'}}, thread_id=None, turn_id=None), HarnessEvent(session_id='hsess_7bc27b61e5664735a0b92de4351b9246', harness_kind='claude_code', kind='tool_activity', native_event='stream_event:content_block_start', occurred_at='2026-09-22T15:47:15.814015Z', payload={'type': 'stream_event', 'event': {'type': 'content_block_start'}}, thread_id=None, turn_id=None), HarnessEvent(session_id='hsess_7bc27b61e5664735a0b92de4351b9246', harness_kind='claude_code', kind='error', native_event='process_exit', occurred_at='2026-09-22T15:47:15.848172Z', payload={'exit_code': 1, 'stderr_tail': ['Traceback (most recent call last):', '  File "<string>", line 197, in <module>', '    raw2 = read_line_within(0.05)', '  File "<string>", line 84, in read_line_within', '    ready, _, _ = select.select([0], [], [], timeout_s)', '                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^', 'OSError: [WinError 10093] O aplicativo n\ufffdo chamou WSAStartup ou WSAStartup falhou']}, thread_id=None, turn_id=None)]
+
+tests\test_harness_claude_code_connector.py:367: AssertionError
+_ test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one _
+
+    def test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one():
+        connector = _connector("slow_start")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "first"}))
+    
+        it = connector.events()
+        for event in it:
+            if event.native_event == "stream_event:content_block_start":
+                break
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="steer", payload={"content": "steered"}))
+    
+>       first_turn = _drain_until(it, lambda e: e.kind == "turn_completed")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_harness_claude_code_connector.py:1032: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+events_iter = <generator object ClaudeCodeStreamConnector.events at 0x0000023AA1602840>
+predicate = <function test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one.<locals>.<lambda> at 0x0000023AA1AE45E0>
+
+    def _drain_until(
+        events_iter, predicate, *, timeout_s: float = 10.0
+    ) -> list[HarnessEvent]:
+        """Collect events from ``events_iter`` until ``predicate`` matches one.
+    
+        Uses a background thread + blocking ``next()`` with an overall wall-clock
+        budget so a connector bug that hangs the iterator fails the test instead
+        of the test suite itself. Deliberately NOT a sleep-poll loop over the
+        connector's own queue - only a coarse outer safety timer for the test.
+        """
+        import queue as _queue
+        import threading as _threading
+    
+        out: _queue.Queue = _queue.Queue()
+    
+        def _pump():
+            try:
+                for event in events_iter:
+                    out.put(("event", event))
+                    if predicate(event):
+                        out.put(("done", None))
+                        return
+                out.put(("exhausted", None))
+            except Exception as exc:  # pragma: no cover - surfaced via assertion below
+                out.put(("error", exc))
+    
+        t = _threading.Thread(target=_pump, daemon=True)
+        t.start()
+    
+        collected: list[HarnessEvent] = []
+        deadline = time.monotonic() + timeout_s
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}")
+            try:
+                kind, payload = out.get(timeout=remaining)
+            except _queue.Empty:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}") from None
+            if kind == "event":
+                collected.append(payload)
+            elif kind == "done":
+                return collected
+            elif kind == "exhausted":
+>               raise AssertionError(f"events() exhausted before predicate matched; collected: {collected}")
+E               AssertionError: events() exhausted before predicate matched; collected: [HarnessEvent(session_id='hsess_afaae2c00bd44000bdf202d285261039', harness_kind='claude_code', kind='error', native_event='process_exit', occurred_at='2026-09-22T15:47:28.689477Z', payload={'exit_code': 1, 'stderr_tail': ['Traceback (most recent call last):', '  File "<string>", line 197, in <module>', '    raw2 = read_line_within(0.05)', '  File "<string>", line 84, in read_line_within', '    ready, _, _ = select.select([0], [], [], timeout_s)', '                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^', 'OSError: [WinError 10093] O aplicativo n\ufffdo chamou WSAStartup ou WSAStartup falhou']}, thread_id=None, turn_id=None)]
+
+tests\test_harness_claude_code_connector.py:367: AssertionError
+_ test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag _
+
+    def test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag():
+        """Defect (adversarial recheck, MAJOR, new): ``_send_turn`` used to call
+        ``self._turn_generating.clear()`` UNCONDITIONALLY, even when it is
+        queuing an ORDINARY second turn behind one that is already, genuinely
+        generating. ``_turn_generating`` is meant to track whether the HEAD
+        turn (the one actually running right now) has started producing
+        output - that is what the interrupt safety gate in ``_interrupt()``/
+        ``_steer()`` reads to decide whether a real ``control_request`` is safe
+        to forward. Clearing it here has nothing to do with the head turn: it
+        only reflects that the NEW (tail) turn hasn't started yet. The bug
+        silently defeats a SUBSEQUENT interrupt: the connector believes no turn
+        is generating, degrades the interrupt to a documented no-op, and the
+        turn that is genuinely running is never actually interrupted.
+    
+        Reproduced with the real multi-turn shape this connector exists for:
+        send turn 1, wait for the connector to observe it has started
+        generating (``stream_event:content_block_start``), send an ORDINARY
+        second turn while turn 1 is still in flight (nothing in the port
+        forbids this - it is the normal multi-turn path), THEN interrupt.
+        Correct behaviour: the interrupt is forwarded for real (turn 1 is
+        genuinely generating) and turn 1's belated result is classified
+        ``turn_completed``/``interrupted_by_connector=True`` - never deferred
+        as an "unsafe window" no-op.
+        """
+        connector = _connector("slow_start")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "first"}))
+    
+        it = connector.events()
+        for event in it:
+            if event.native_event == "stream_event:content_block_start":
+                break
+    
+        # Turn 1 is now genuinely generating (_turn_generating is set). An
+        # ORDINARY second send_turn queued behind it must not desync that flag.
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "second"}))
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="interrupt"))
+    
+>       first_turn = _drain_until(it, lambda e: e.kind == "turn_completed")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_harness_claude_code_connector.py:1129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+events_iter = <generator object ClaudeCodeStreamConnector.events at 0x0000023AA1601740>
+predicate = <function test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag.<locals>.<lambda> at 0x0000023AA1AE4E00>
+
+    def _drain_until(
+        events_iter, predicate, *, timeout_s: float = 10.0
+    ) -> list[HarnessEvent]:
+        """Collect events from ``events_iter`` until ``predicate`` matches one.
+    
+        Uses a background thread + blocking ``next()`` with an overall wall-clock
+        budget so a connector bug that hangs the iterator fails the test instead
+        of the test suite itself. Deliberately NOT a sleep-poll loop over the
+        connector's own queue - only a coarse outer safety timer for the test.
+        """
+        import queue as _queue
+        import threading as _threading
+    
+        out: _queue.Queue = _queue.Queue()
+    
+        def _pump():
+            try:
+                for event in events_iter:
+                    out.put(("event", event))
+                    if predicate(event):
+                        out.put(("done", None))
+                        return
+                out.put(("exhausted", None))
+            except Exception as exc:  # pragma: no cover - surfaced via assertion below
+                out.put(("error", exc))
+    
+        t = _threading.Thread(target=_pump, daemon=True)
+        t.start()
+    
+        collected: list[HarnessEvent] = []
+        deadline = time.monotonic() + timeout_s
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}")
+            try:
+                kind, payload = out.get(timeout=remaining)
+            except _queue.Empty:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}") from None
+            if kind == "event":
+                collected.append(payload)
+            elif kind == "done":
+                return collected
+            elif kind == "exhausted":
+>               raise AssertionError(f"events() exhausted before predicate matched; collected: {collected}")
+E               AssertionError: events() exhausted before predicate matched; collected: [HarnessEvent(session_id='hsess_0fe709d6374c455387db2bd0cacea697', harness_kind='claude_code', kind='error', native_event='process_exit', occurred_at='2026-09-22T15:47:31.453476Z', payload={'exit_code': 1, 'stderr_tail': ['Traceback (most recent call last):', '  File "<string>", line 197, in <module>', '    raw2 = read_line_within(0.05)', '  File "<string>", line 84, in read_line_within', '    ready, _, _ = select.select([0], [], [], timeout_s)', '                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^', 'OSError: [WinError 10093] O aplicativo n\ufffdo chamou WSAStartup ou WSAStartup falhou']}, thread_id=None, turn_id=None)]
+
+tests\test_harness_claude_code_connector.py:367: AssertionError
+_ test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly _
+
+    def test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly():
+        """Coverage gap (journal wf_de1d2ad9-17f, line 17, major finding): no
+        prior test ever left >1 turn genuinely outstanding in ``_pending_turns``
+        at the moment ``_request_interrupt()`` marks an entry - the existing
+        steer tests only ever have a single pending entry at that exact moment
+        (``_steer()`` appends its OWN new entry only AFTER calling
+        ``_request_interrupt()``, so ``[-1]`` and ``[0]`` were indistinguishable
+        there). This is a full connector-integration reproduction of the shape
+        the marking-bug fix (see
+        ``test_request_interrupt_marks_the_head_pending_turn_not_the_tail`` for
+        the isolated logic-only version) must hold under: an ordinary
+        ``interrupt()`` while a SECOND, ordinary ``send_turn`` is already queued
+        behind the first - nothing in ``send()``/the port forbids this.
+        """
+        connector = _connector("slow_start")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "first"}))
+        # Queue a SECOND turn immediately, BEFORE turn 1 has even started
+        # generating - matching the review's exact failure_scenario ordering.
+        # _pending_turns is genuinely [False, False] (length 2) at the moment
+        # interrupt() below marks an entry; the fake's mid-generation select
+        # loop defers (not drops) this queued line until turn 1 resolves,
+        # mirroring the real CLI's documented strict-queueing behaviour.
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "second"}))
+    
+        it = connector.events()
+        for event in it:
+            if event.native_event == "stream_event:content_block_start":
+                break
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="interrupt"))
+    
+>       first_turn = _drain_until(it, lambda e: e.kind == "turn_completed")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_harness_claude_code_connector.py:1180: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+events_iter = <generator object ClaudeCodeStreamConnector.events at 0x0000023AA1600D40>
+predicate = <function test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly.<locals>.<lambda> at 0x0000023AA1AE72E0>
+
+    def _drain_until(
+        events_iter, predicate, *, timeout_s: float = 10.0
+    ) -> list[HarnessEvent]:
+        """Collect events from ``events_iter`` until ``predicate`` matches one.
+    
+        Uses a background thread + blocking ``next()`` with an overall wall-clock
+        budget so a connector bug that hangs the iterator fails the test instead
+        of the test suite itself. Deliberately NOT a sleep-poll loop over the
+        connector's own queue - only a coarse outer safety timer for the test.
+        """
+        import queue as _queue
+        import threading as _threading
+    
+        out: _queue.Queue = _queue.Queue()
+    
+        def _pump():
+            try:
+                for event in events_iter:
+                    out.put(("event", event))
+                    if predicate(event):
+                        out.put(("done", None))
+                        return
+                out.put(("exhausted", None))
+            except Exception as exc:  # pragma: no cover - surfaced via assertion below
+                out.put(("error", exc))
+    
+        t = _threading.Thread(target=_pump, daemon=True)
+        t.start()
+    
+        collected: list[HarnessEvent] = []
+        deadline = time.monotonic() + timeout_s
+        while True:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}")
+            try:
+                kind, payload = out.get(timeout=remaining)
+            except _queue.Empty:
+                raise AssertionError(f"timed out waiting for matching event; collected so far: {collected}") from None
+            if kind == "event":
+                collected.append(payload)
+            elif kind == "done":
+                return collected
+            elif kind == "exhausted":
+>               raise AssertionError(f"events() exhausted before predicate matched; collected: {collected}")
+E               AssertionError: events() exhausted before predicate matched; collected: [HarnessEvent(session_id='hsess_01a77029e36c477cbbbc9f13cc63fcc8', harness_kind='claude_code', kind='error', native_event='process_exit', occurred_at='2026-09-22T15:47:33.127678Z', payload={'exit_code': 1, 'stderr_tail': ['Traceback (most recent call last):', '  File "<string>", line 197, in <module>', '    raw2 = read_line_within(0.05)', '  File "<string>", line 84, in read_line_within', '    ready, _, _ = select.select([0], [], [], timeout_s)', '                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^', 'OSError: [WinError 10093] O aplicativo n\ufffdo chamou WSAStartup ou WSAStartup falhou']}, thread_id=None, turn_id=None)]
+
+tests\test_harness_claude_code_connector.py:367: AssertionError
+_______ test_failed_handshake_does_not_permanently_wedge_the_connector ________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_failed_handshake_does_not0')
+
+    def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Path) -> None:
+        pid_path = tmp_path / "hung_child.pid"
+        # A child that never answers `initialize` at all (writes nothing back),
+        # so the handshake's own bounded request() times out.
+        hang_script = (
+            "import os, sys, time\n"
+            f"open({str(pid_path)!r}, 'w').write(str(os.getpid()))\n"
+            "sys.stdin.readline()\n"  # consume the initialize write without answering
+            "time.sleep(30)\n"
+        )
+        conn = CodexAppServerConnector(
+            command=[sys.executable, "-c", hang_script],
+            handshake_timeout_s=0.3,
+        )
+        try:
+            with pytest.raises(OktoNexusError):
+                conn.start(owning_agent_id="nxs_agent")
+    
+            # The wedge fix: a failed handshake must not leave a transport
+            # behind, or every FUTURE start() would skip respawning entirely.
+            assert conn._transport is None
+    
+            # The half-spawned child must have been reaped, not leaked.
+            pid = int(pid_path.read_text().strip())
+            deadline = time.monotonic() + 5.0
+            reaped = False
+            while time.monotonic() < deadline:
+                try:
+>                   os.kill(pid, 0)
+E                   OSError: [WinError 11] Foi feita uma tentativa de se carregar um programa com um formato incorreto
+
+tests\test_harness_codex_connector.py:768: OSError
+___________ test_sigterm_with_live_session_reaps_the_harness_child ____________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_with_live_session0')
+
+    def test_sigterm_with_live_session_reaps_the_harness_child(tmp_path):
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           _open_pi_session(server.base_url, project)
+
+tests\test_serve_harness_shutdown_reap.py:327: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:64745'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_with_live_session0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                # Ignored by the fake `pi` stub, kept for hygiene/consistency
+                # with every other harness test in this repo (D4/D5 box-safety:
+                # `pi`'s own default provider `local-mac` resolves to the
+                # off-limits LAN box).
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_shutdown_reap.py:256: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_with_live_session0')
+
+    def test_sigterm_with_live_session_reaps_the_harness_child(tmp_path):
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+    
+            _signal_serve_pid_only(server, signal.SIGTERM)
+            server.process.wait(timeout=30)
+    
+            _assert_no_orphan(pi_pid)
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_shutdown_reap.py:335: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_shutdown_reap.py:229: AttributeError
+____________ test_sigint_with_live_session_reaps_the_harness_child ____________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigint_with_live_session_0')
+
+    def test_sigint_with_live_session_reaps_the_harness_child(tmp_path):
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           _open_pi_session(server.base_url, project)
+
+tests\test_serve_harness_shutdown_reap.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:60030'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigint_with_live_session_0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                # Ignored by the fake `pi` stub, kept for hygiene/consistency
+                # with every other harness test in this repo (D4/D5 box-safety:
+                # `pi`'s own default provider `local-mac` resolves to the
+                # off-limits LAN box).
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_shutdown_reap.py:256: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigint_with_live_session_0')
+
+    def test_sigint_with_live_session_reaps_the_harness_child(tmp_path):
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+    
+            _signal_serve_pid_only(server, signal.SIGINT)
+            server.process.wait(timeout=30)
+    
+            _assert_no_orphan(pi_pid)
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_shutdown_reap.py:351: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_shutdown_reap.py:229: AttributeError
+__________ test_clean_shutdown_after_explicit_close_leaves_no_orphan __________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_after_expl0')
+
+    def test_clean_shutdown_after_explicit_close_leaves_no_orphan(tmp_path):
+        """Sanity companion to SYS-10 (EV-SYS-010): the explicit-close path this
+        file's two SIGTERM/SIGINT cases do NOT exercise. Kept here (not just
+        trusted from SYS-10) so this module alone proves all three shutdown
+        paths the task asked for, with the same PPID-based assertion."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           session_id = _open_pi_session(server.base_url, project)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_serve_harness_shutdown_reap.py:363: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:59636'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_after_expl0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                # Ignored by the fake `pi` stub, kept for hygiene/consistency
+                # with every other harness test in this repo (D4/D5 box-safety:
+                # `pi`'s own default provider `local-mac` resolves to the
+                # off-limits LAN box).
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_shutdown_reap.py:256: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_after_expl0')
+
+    def test_clean_shutdown_after_explicit_close_leaves_no_orphan(tmp_path):
+        """Sanity companion to SYS-10 (EV-SYS-010): the explicit-close path this
+        file's two SIGTERM/SIGINT cases do NOT exercise. Kept here (not just
+        trusted from SYS-10) so this module alone proves all three shutdown
+        paths the task asked for, with the same PPID-based assertion."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            session_id = _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+    
+            close = httpx.post(
+                f"{server.base_url}/api/v1/harness/sessions/{session_id}/close",
+                timeout=30.0,
+            )
+            assert close.status_code == 200, close.text
+    
+            _signal_serve_pid_only(server, signal.SIGTERM)
+            server.process.wait(timeout=30)
+    
+            _assert_no_orphan(pi_pid)
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_shutdown_reap.py:377: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_shutdown_reap.py:229: AttributeError
+____ test_sigkill_with_live_session_is_reaped_and_watchdog_self_terminates ____
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigkill_with_live_session0')
+
+    def test_sigkill_with_live_session_is_reaped_and_watchdog_self_terminates(tmp_path):
+        """The core LIMITATION 1 case: `SIGKILL` on `serve` with a live harness
+        session. Runs no code in the killed process by construction, so the
+        ONLY thing that can reap the `pi` child is the independent watchdog.
+        Also asserts the watchdog itself is gone afterwards (point: a watchdog
+        that outlives its own job is a leak in its own right)."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           _open_pi_session(server.base_url, project)
+
+tests\test_serve_harness_sigkill_reap.py:360: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:62088'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigkill_with_live_session0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_sigkill_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_sigkill_reap.py:263: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigkill_with_live_session0')
+
+    def test_sigkill_with_live_session_is_reaped_and_watchdog_self_terminates(tmp_path):
+        """The core LIMITATION 1 case: `SIGKILL` on `serve` with a live harness
+        session. Runs no code in the killed process by construction, so the
+        ONLY thing that can reap the `pi` child is the independent watchdog.
+        Also asserts the watchdog itself is gone afterwards (point: a watchdog
+        that outlives its own job is a leak in its own right)."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+            watchdog_pid = _find_watchdog_child(server.process.pid)
+            assert watchdog_pid != pi_pid
+    
+            os.kill(server.process.pid, signal.SIGKILL)
+            server.process.wait(timeout=10)
+    
+            # Bound: poll-interval-to-notice + term_grace(3s) + kill_grace(2s) +
+            # slack. Generous on purpose - this asserts eventual convergence,
+            # not speed.
+            _assert_eventually_reaped(pi_pid, timeout_s=20.0)
+            _assert_eventually_gone(watchdog_pid, timeout_s=20.0, what="watchdog")
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_sigkill_reap.py:374: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_sigkill_reap.py:240: AttributeError
+_______________ test_clean_shutdown_stops_the_watchdog_promptly _______________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_stops_the_0')
+
+    def test_clean_shutdown_stops_the_watchdog_promptly(tmp_path):
+        """Companion to the SIGKILL case: on a path `serve` CAN run its own
+        `finally` (explicit session close + SIGTERM here), `serve` itself is
+        expected to stop the watchdog rather than leave it to self-detect - see
+        `_stop_harness_orphan_watchdog` in `serve.py`. Confirms that happens
+        promptly (well under the watchdog's own bounded reap window), i.e. the
+        graceful paths do not regress into leaving an idle watchdog running."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           session_id = _open_pi_session(server.base_url, project)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_serve_harness_sigkill_reap.py:388: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:64183'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_stops_the_0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_sigkill_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_sigkill_reap.py:263: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_clean_shutdown_stops_the_0')
+
+    def test_clean_shutdown_stops_the_watchdog_promptly(tmp_path):
+        """Companion to the SIGKILL case: on a path `serve` CAN run its own
+        `finally` (explicit session close + SIGTERM here), `serve` itself is
+        expected to stop the watchdog rather than leave it to self-detect - see
+        `_stop_harness_orphan_watchdog` in `serve.py`. Confirms that happens
+        promptly (well under the watchdog's own bounded reap window), i.e. the
+        graceful paths do not regress into leaving an idle watchdog running."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            session_id = _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+            watchdog_pid = _find_watchdog_child(server.process.pid)
+    
+            close = httpx.post(
+                f"{server.base_url}/api/v1/harness/sessions/{session_id}/close",
+                timeout=30.0,
+            )
+            assert close.status_code == 200, close.text
+    
+            _signal_serve_pid_only(server, signal.SIGTERM)
+            server.process.wait(timeout=30)
+    
+            _assert_eventually_gone(pi_pid, timeout_s=15.0, what="pi child")
+            # Explicit-stop path: this should be fast, not bounded by the
+            # watchdog's own multi-second self-reap grace windows.
+            _assert_eventually_gone(watchdog_pid, timeout_s=5.0, what="watchdog")
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_sigkill_reap.py:406: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_sigkill_reap.py:240: AttributeError
+______________ test_sigterm_shutdown_stops_the_watchdog_promptly ______________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_shutdown_stops_th0')
+
+    def test_sigterm_shutdown_stops_the_watchdog_promptly(tmp_path):
+        """Same prompt-stop expectation as the clean-shutdown case above, on the
+        SIGTERM path instead of an explicit close - the other path `serve`'s
+        own `finally` runs on and therefore also explicitly stops the
+        watchdog."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+>           _open_pi_session(server.base_url, project)
+
+tests\test_serve_harness_sigkill_reap.py:418: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+base_url = 'http://127.0.0.1:50608'
+project_root = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_shutdown_stops_th0/project')
+
+    def _open_pi_session(base_url: str, project_root: Path) -> str:
+        resp = httpx.post(
+            f"{base_url}/api/v1/harness/sessions",
+            json={
+                "agent_id": "ev_ops_001_sigkill_probe",
+                "kind": "pi",
+                "project_root": str(project_root),
+                "backend": {"provider": "zai", "model": "glm-5.3"},
+            },
+            timeout=30.0,
+        )
+>       assert resp.status_code == 200, resp.text
+E       AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'pi' failed to start: [WinError 2] O sistema n�o pode encontrar o arquivo especificado"}}
+E       assert 500 == 200
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests\test_serve_harness_sigkill_reap.py:263: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-691/test_sigterm_shutdown_stops_th0')
+
+    def test_sigterm_shutdown_stops_the_watchdog_promptly(tmp_path):
+        """Same prompt-stop expectation as the clean-shutdown case above, on the
+        SIGTERM path instead of an explicit close - the other path `serve`'s
+        own `finally` runs on and therefore also explicitly stops the
+        watchdog."""
+        server = _spawn_server(tmp_path)
+        try:
+            project = tmp_path / "project"
+            project.mkdir()
+            _open_pi_session(server.base_url, project)
+            pi_pid = _find_pi_child(server.process.pid)
+            watchdog_pid = _find_watchdog_child(server.process.pid)
+    
+            _signal_serve_pid_only(server, signal.SIGTERM)
+            server.process.wait(timeout=30)
+    
+            _assert_eventually_gone(pi_pid, timeout_s=15.0, what="pi child")
+            _assert_eventually_gone(watchdog_pid, timeout_s=5.0, what="watchdog")
+        finally:
+>           _hard_kill(server.process)
+
+tests\test_serve_harness_sigkill_reap.py:428: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+process = <Popen: returncode: None args: ['D:\\Projetos\\Techridy\\okto_labs_okto_nexu...>
+
+    def _hard_kill(process: subprocess.Popen) -> None:
+        if process.poll() is not None:
+            return
+        try:
+>           os.killpg(process.pid, signal.SIGKILL)
+            ^^^^^^^^^
+E           AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?
+
+tests\test_serve_harness_sigkill_reap.py:240: AttributeError
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_harness_pi_connector.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread pi-stdout
+  
+  Traceback (most recent call last):
+    File "C:\Python313\Lib\threading.py", line 1041, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "C:\Python313\Lib\threading.py", line 992, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\outbound\harness\pi.py", line 416, in _read_stdout
+      self._on_child_exit(returncode, self.stderr_tail())
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_harness_pi_connector.py", line 812, in exploding_on_child_exit
+      raise RuntimeError("boom - injected failure in the death-report path itself")
+  RuntimeError: boom - injected failure in the death-report path itself
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_harness_claude_code_connector.py::test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream
+FAILED tests/test_harness_claude_code_connector.py::test_finish_never_fabricates_process_exit_when_child_is_still_alive
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted
+FAILED tests/test_harness_claude_code_connector.py::test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one
+FAILED tests/test_harness_claude_code_connector.py::test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly
+FAILED tests/test_harness_codex_connector.py::test_failed_handshake_does_not_permanently_wedge_the_connector
+FAILED tests/test_serve_harness_shutdown_reap.py::test_sigterm_with_live_session_reaps_the_harness_child
+FAILED tests/test_serve_harness_shutdown_reap.py::test_sigint_with_live_session_reaps_the_harness_child
+FAILED tests/test_serve_harness_shutdown_reap.py::test_clean_shutdown_after_explicit_close_leaves_no_orphan
+FAILED tests/test_serve_harness_sigkill_reap.py::test_sigkill_with_live_session_is_reaped_and_watchdog_self_terminates
+FAILED tests/test_serve_harness_sigkill_reap.py::test_clean_shutdown_stops_the_watchdog_promptly
+FAILED tests/test_serve_harness_sigkill_reap.py::test_sigterm_shutdown_stops_the_watchdog_promptly
+13 failed, 1814 passed, 4 skipped, 2 warnings in 337.87s (0:05:37)
+EXIT_CODE=1

@@ -1,0 +1,405 @@
+FFFFFFFFFFFFFFFFFFFF                                                     [100%]
+================================== FAILURES ===================================
+___________________ test_profile_is_unchanged_by_open_close ___________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_profi...2E40>], 'nxs_8e5cdb78ff98cc279dd989a9431f2f07657ba03bb90b2295', 'nxs_d21971942911dfe213ab699423dfafb3e9018ee0b7c85846')
+
+    def test_profile_is_unchanged_by_open_close(runtime):
+        deps, _, _, _, _, _ = runtime
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            before = asdict(deps.repos.agents.get(uow, "worker"))
+        response = open_rest(runtime)
+        assert response.status_code == 200, response.text
+        deps.harness_supervisor.close(response.json()["data"]["session_id"])
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            after = asdict(deps.repos.agents.get(uow, "worker"))
+>       assert after == before
+E       AssertionError: assert {'agent_id': ...r': None, ...} == {'agent_id': ...r': None, ...}
+E         
+E         Omitting 11 identical items, use -vv to show
+E         Differing items:
+E         {'capabilities': {}} != {'capabilities': {'review': True}}
+E         {'metadata': {'harness_kind': 'pi'}} != {'metadata': {'keep': 'profile'}}
+E         Use -v to get more diff
+
+tests\test_pr34_remediation.py:104: AssertionError
+________________ test_unknown_agent_is_rejected_before_factory ________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_unkno...11D0>], 'nxs_58f0fccfed1737c52bfea71749559054438e580f64a7241d', 'nxs_fa85d39089bcf053e607bffcd269b271b03105f42db6752a')
+
+    def test_unknown_agent_is_rejected_before_factory(runtime):
+        _, _, _, peers, _, _ = runtime
+        response = open_rest(runtime, "does-not-exist")
+>       assert response.status_code == 404, response.text
+E       AssertionError: {"ok":true,"data":{"session_id":"hsess_970956d1396742fdb60a2f66a01b0e0d","kind":"pi","owning_agent_id":"does-not-exist","status":"RUNNING","capabilities":{"send_only":false,"steer_timing":"IMMEDIATE","interrupt_requires_settle_wait":false,"multiplexes_sessions":false,"observes_session_end":true},"started_at":"2026-09-22T15:51:16.658355Z","ended_at":null,"metadata":{},"backend":{"explicit":false,"applied":{},"note":"no backend override supplied - this 'pi' session inherits its connector's own ambient default (its own config file, or the okto-nexus serve process's own environment), NOT a choice okto-nexus made. Supported override fields for this kind: ['env', 'extra_args', 'model', 'provider']."}}}
+E       assert 200 == 404
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests\test_pr34_remediation.py:110: AssertionError
+______________ test_authenticated_mcp_cannot_open_another_agent _______________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...8690>], 'nxs_68b07c946e837b95a4fd823f9b8705b550cbd0329b86b1a1', 'nxs_333da791e72c244b17bf2e218ae5b7ac69f03044b5cb4b33')
+
+    def test_authenticated_mcp_cannot_open_another_agent(runtime):
+        _, client, root, peers, _, caller = runtime
+        result = tool(client, caller, "harness_open", {
+            "agent_id": "worker", "kind": "pi", "project_root": root})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'backend': {'applied': {}, 'explicit': False, 'note': "no backend override supplied - this 'pi' session inhe...ions': False, 'observes_session_end': True, 'send_only': False, ...}, 'ended_at': None, 'kind': 'pi', ...}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:118: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_send-args0] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...6520>], 'nxs_4b28be545b5dbd32bd03369af450ebf31fdefc58064f27ba', 'nxs_4aad0bd5932be8da7852aacb0b8cf1acceb54dd87d6024eb')
+name = 'harness_send', args = {'payload': {'text': 'unauthorized'}}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'session_id': 'hsess_24118abbcf034965bc61e018d06e160d', 'verb': 'send_turn'}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_steer-args1] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...83E0>], 'nxs_47783ff78adec95772efbd95344abbefcbd4f34740b34a69', 'nxs_06b2916318c0e6d6cb092da9261348756e8a1094b6d920f6')
+name = 'harness_steer', args = {'payload': {'text': 'unauthorized'}}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'session_id': 'hsess_a1139efab4ee41109f6c71d88aca1af8', 'verb': 'steer'}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_interrupt-args2] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...1250>], 'nxs_d70fae77c813731d79f366d1d41b7219083346d775050cf0', 'nxs_7d5db843fc4d04bf6765718f8362423f2eb1e2fac4b9780f')
+name = 'harness_interrupt', args = {}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'session_id': 'hsess_ab5d0e6cef6c4adfab1ab396716c7869', 'verb': 'interrupt'}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_close-args3] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...88D0>], 'nxs_b7867c9fbbea60ef777eec87d7f3dca21319f58b9b925bd0', 'nxs_5451998f0ca0a5b2eeb0b1de44e3b08e65ac2d1ce71db6ca')
+name = 'harness_close', args = {}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'capabilities': {'interrupt_requires_settle_wait': False, 'multiplexes_sessions': False, 'observes_session_e...e, 'send_only': False, ...}, 'ended_at': '2026-09-22T15:51:21.985585Z', 'kind': 'pi', 'metadata': {}, ...}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_get-args4] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...C5A0>], 'nxs_ab9071d36cf7f4e6fef7ade8410f4837b38920c778cffe42', 'nxs_fb48f22bb557d9d2bd204f9454823951a5db65f2180abbe5')
+name = 'harness_get', args = {}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'capabilities': {'interrupt_requires_settle_wait': False, 'multiplexes_sessions': False, 'observes_session_end': True, 'send_only': False, ...}, 'ended_at': None, 'kind': 'pi', 'live': True, ...}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+_ test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_event_list-args5] _
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_authe...4E50>], 'nxs_b01905e9e8458db80660ea6d1878f1dedb135dd7314935ab', 'nxs_040eb1955e8578261f68e0c7e0dd2ec7dbc3946e8de08ea3')
+name = 'harness_event_list', args = {}
+
+    @pytest.mark.parametrize("name,args", [
+        ("harness_send", {"payload": {"text": "unauthorized"}}),
+        ("harness_steer", {"payload": {"text": "unauthorized"}}),
+        ("harness_interrupt", {}), ("harness_close", {}),
+        ("harness_get", {}), ("harness_event_list", {}),
+    ])
+    def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name, args):
+        _, client, _, peers, _, caller = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        result = tool(client, caller, name, {"session_id": session_id, **args})
+>       assert result["ok"] is False, result
+E       AssertionError: {'data': {'count': 0, 'events': []}, 'ok': True}
+E       assert True is False
+
+tests\test_pr34_remediation.py:134: AssertionError
+__________ test_unconfigured_surface_does_not_publish_harness_tools ___________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_uncon...t', [], 'nxs_9f5b97748d65b512f37d3cf419b211a1a7c79b4084f1fc39', 'nxs_3ad0f8319bb4eca9d1cf042b51a2905e3dff93ecc081f903')
+
+    def test_unconfigured_surface_does_not_publish_harness_tools(runtime):
+        _, client, _, _, key, _ = runtime
+        result = mcp_call(client, key, "tools/list", {})
+>       assert not [t["name"] for t in result["tools"] if t["name"].startswith("harness_")]
+E       AssertionError: assert not ['harness_list', 'harness_open', 'harness_send', 'harness_steer', 'harness_interrupt', 'harness_close', ...]
+
+tests\test_pr34_remediation.py:142: AssertionError
+______________ test_backend_diagnostics_do_not_echo_credentials _______________
+
+    def test_backend_diagnostics_do_not_echo_credentials():
+        result = harness.describe_backend("codex", None, {"env": {"API_TOKEN": "fixture-secret"}})
+>       assert "fixture-secret" not in json.dumps(result)
+E       assert 'fixture-secret' not in '{"explicit"... as given."}'
+E         
+E         'fixture-secret' is contained here:
+E           _TOKEN": "fixture-secret"}}, "note": "backend override applied exactly as given."}
+E         ?           ++++++++++++++
+
+tests\test_pr34_remediation.py:147: AssertionError
+___________________ test_replay_keeps_event_id_and_sequence ___________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_repla...9450>], 'nxs_97275649ea49537ed52eaeb246e362030b18fd3fdc8e4c21', 'nxs_3725e277d5ed39254fe7faef8105b0845e2f6de3f784999e')
+
+    def test_replay_keeps_event_id_and_sequence(runtime):
+        deps, _, _, _, _, _ = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        from okto_nexus.domain.harness import HarnessEvent
+        event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
+                             native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={})
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.harness_events.append(uow, event_id="event-fixture", event=event,
+                                            created_at=deps.clock.now_iso())
+        replay = deps.harness_supervisor.replay_events(session_id)
+        serialized = harness.event_to_dict(replay[0])
+>       assert serialized.get("sequence") == 1
+E       AssertionError: assert None == 1
+E        +  where None = <built-in method get of dict object at 0x000001F5D613D640>('sequence')
+E        +    where <built-in method get of dict object at 0x000001F5D613D640> = {'harness_kind': 'pi', 'kind': 'turn_completed', 'native_event': 'agent_settled', 'occurred_at': '2026-09-22T15:51:26.618822Z', ...}.get
+
+tests\test_pr34_remediation.py:162: AssertionError
+________ test_keyed_loopback_rest_does_not_upgrade_caller_to_operator _________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_keyed...64E0>], 'nxs_9980139f8dfa13577b64ab26c03a19dc79a3703517687948', 'nxs_c3bb3c2df4d8bbf4820a865c9f89f5b2ac90caf187996061')
+
+    def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
+        _, client, root, peers, _, caller = runtime
+        response = client.post("/api/v1/harness/sessions", headers={"x-api-key": caller},
+            json={"agent_id": "worker", "kind": "pi", "project_root": root})
+>       assert response.status_code == 403, response.text
+E       AssertionError: {"ok":true,"data":{"session_id":"hsess_711bcb573fc44c59aedbf3ba7af89c11","kind":"pi","owning_agent_id":"worker","status":"RUNNING","capabilities":{"send_only":false,"steer_timing":"IMMEDIATE","interrupt_requires_settle_wait":false,"multiplexes_sessions":false,"observes_session_end":true},"started_at":"2026-09-22T15:51:27.597318Z","ended_at":null,"metadata":{},"backend":{"explicit":false,"applied":{},"note":"no backend override supplied - this 'pi' session inherits its connector's own ambient default (its own config file, or the okto-nexus serve process's own environment), NOT a choice okto-nexus made. Supported override fields for this kind: ['env', 'extra_args', 'model', 'provider']."}}}
+E       assert 200 == 403
+E        +  where 200 = <Response [200 OK]>.status_code
+
+tests\test_pr34_remediation.py:170: AssertionError
+_____________ test_one_delivery_does_not_execute_on_two_sessions ______________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_one_d...44B0>], 'nxs_17f1dc4f2f34e9005836e0dcf684aa3a8ca0ecfbb4f8065c', 'nxs_825b023396d7d13bec03f7750b741e3a296e56e2840360aa')
+
+    def test_one_delivery_does_not_execute_on_two_sessions(runtime):
+        deps, _, root, peers, _, _ = runtime
+        for _ in range(2):
+            assert open_rest(runtime).status_code == 200
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        messages = build_service(deps)
+        messages.create_message(project_root=root, from_agent_id="caller", subject="conversation",
+                                body="one logical delivery", target={"strategy": "direct", "agent_id": "worker"})
+>       assert sum(len(peer.sent) for peer in peers) <= 1
+E       assert 2 <= 1
+E        +  where 2 = sum(<generator object test_one_delivery_does_not_execute_on_two_sessions.<locals>.<genexpr> at 0x000001F5D902CAD0>)
+
+tests\test_pr34_remediation.py:182: AssertionError
+_________ test_forward_preserves_sender_subject_and_message_identity __________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_forwa...5630>], 'nxs_78629924dbae7ee7c50964079162c3ad16ac3c8a80ed58af', 'nxs_31fa59699b59c5700706041937a2b5a94b384403e3b994d5')
+
+    def test_forward_preserves_sender_subject_and_message_identity(runtime):
+        deps, _, root, peers, _, _ = runtime
+        assert open_rest(runtime).status_code == 200
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        result = build_service(deps).create_message(project_root=root, from_agent_id="caller",
+            subject="correlation-subject", body="body-only", target={"strategy": "direct", "agent_id": "worker"})
+        wire = json.dumps(peers[0].sent[0].payload)
+>       assert "caller" in wire and "correlation-subject" in wire and result["message_id"] in wire
+E       assert ('caller' in '{"text": "body-only", "content": "body-only"}')
+
+tests\test_pr34_remediation.py:192: AssertionError
+___________ test_terminal_storage_failure_is_not_silently_accepted ____________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_termi...B380>], 'nxs_f3898e3b872818a0d42574d3b15159f870cfaab92839135d', 'nxs_423795aa9fe0b83a0a4a721b9f21fb1b9674bca76f1cb923')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F5D71F5BA0>
+
+    def test_terminal_storage_failure_is_not_silently_accepted(runtime, monkeypatch):
+        deps, _, _, _, _, _ = runtime
+        session_id = open_rest(runtime).json()["data"]["session_id"]
+        from okto_nexus.domain.harness import HarnessEvent
+        def unavailable(*args, **kwargs):
+            raise OSError("fixture storage unavailable")
+        monkeypatch.setattr(deps.repos.harness_events, "append", unavailable)
+        event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
+                             native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={"text": "final"})
+        # Before a durable journal exists, storage failure must at least fail loudly.
+>       with pytest.raises(Exception):
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'Exception'>
+
+tests\test_pr34_remediation.py:205: Failed
+---------------------------- Captured stderr call -----------------------------
+[okto-nexus] harness supervisor: persisting harness event failed for session hsess_10522ddde6eb403b8d1fb44312316bba (OSError); continuing.
+__________________ test_expired_relay_does_not_mint_new_root __________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_expir...AF90>], 'nxs_6fdebfde1283c209eadbe34e230638e8fb9976e60f0c095a', 'nxs_a997c5cfa35fe5ed02c1a67df39481c786e847eb281200df')
+
+    def test_expired_relay_does_not_mint_new_root(runtime):
+        deps, _, _, _, _, _ = runtime
+        session_id = open_rest(runtime).json()["data"]["session_id"]
+        supervisor = deps.harness_supervisor
+        live = supervisor._live[session_id]
+        live.relay_depth = supervisor._max_relay_depth
+        live.relay_chain_id = "fixture-existing-root"
+        live.relay_chain_started_at = supervisor._monotonic() - supervisor._relay_chain_max_age_s - 1
+>       assert supervisor._resolve_relay_depth("worker") is None
+E       AssertionError: assert (1, 'relaychain_832e4717ec804539a81056311a77c834', 566358.6008717) is None
+E        +  where (1, 'relaychain_832e4717ec804539a81056311a77c834', 566358.6008717) = _resolve_relay_depth('worker')
+E        +    where _resolve_relay_depth = <okto_nexus.application.harness_supervisor.HarnessSupervisor object at 0x000001F5D914A890>._resolve_relay_depth
+
+tests\test_pr34_remediation.py:217: AssertionError
+___________ test_open_does_not_fabricate_credential_authentication ____________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_open_...3410>], 'nxs_ea09d0529cf3b6b100774295cb8a32a456ff32ab2c751f17', 'nxs_7f1577fcfba52d77f0bfd1186a3e6af208f97746dbc403cd')
+
+    def test_open_does_not_fabricate_credential_authentication(runtime):
+        # Regression for the old D3 claim: opening an unknown identity used to be
+        # treated as registration/authentication without any credential proof.
+        deps, _, _, _, _, _ = runtime
+        open_rest(runtime, "new-identity")
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+>           assert deps.repos.agents.get(uow, "new-identity") is None
+E           AssertionError: assert Agent(agent_id='new-identity', created_at='2026-09-22T15:51:32.498768Z', role=None, capabilities={}, metadata={'harnes...een_at=None, api_key_hash=None, is_active=True, permissions=None, preset_id=None, tags={}, comm_scope=None, color=None) is None
+E            +  where Agent(agent_id='new-identity', created_at='2026-09-22T15:51:32.498768Z', role=None, capabilities={}, metadata={'harnes...een_at=None, api_key_hash=None, is_active=True, permissions=None, preset_id=None, tags={}, comm_scope=None, color=None) = get(<okto_nexus.adapters.outbound.sqlite.connection.SqliteUnitOfWork object at 0x000001F5D6FC4D70>, 'new-identity')
+E            +    where get = <okto_nexus.adapters.outbound.sqlite.identity_repo.SqliteAgentRepo object at 0x000001F5D91E9D90>.get
+E            +      where <okto_nexus.adapters.outbound.sqlite.identity_repo.SqliteAgentRepo object at 0x000001F5D91E9D90> = Repos(workspaces=<okto_nexus.adapters.outbound.sqlite.identity_repo.SqliteWorkspaceRepo object at 0x000001F5D91EAD50>,... harness_events=<okto_nexus.adapters.outbound.sqlite.harness_repo.SqliteHarnessEventRepo object at 0x000001F5D6091190>).agents
+E            +        where Repos(workspaces=<okto_nexus.adapters.outbound.sqlite.identity_repo.SqliteWorkspaceRepo object at 0x000001F5D91EAD50>,... harness_events=<okto_nexus.adapters.outbound.sqlite.harness_repo.SqliteHarnessEventRepo object at 0x000001F5D6091190>) = Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_open_d...x000001F5D60904D0>, telemetry=<okto_nexus.application.telemetry.service.TelemetryService object at 0x000001F5D6090350>).repos
+
+tests\test_pr34_remediation.py:226: AssertionError
+_____________ test_committed_delivery_survives_lost_notification ______________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-694/test_commi...7070>], 'nxs_8b5823e07ccb401b4152577c5197cc5f87cf484740fb5abc', 'nxs_632d3d387ea07dc48c07bc1609b1e769f2a041c85d290b24')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F5D71F4E90>
+
+    def test_committed_delivery_survives_lost_notification(runtime, monkeypatch):
+        deps, _, root, _, _, _ = runtime
+        open_rest(runtime)
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        messages = build_service(deps)
+        monkeypatch.setattr(messages, "_maybe_notify_inbox_subscribers", lambda **kwargs: None)
+        result = messages.create_message(project_root=root, from_agent_id="caller", subject="recovery",
+            body="lost wake fixture", target={"strategy": "direct", "agent_id": "worker"})
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            # Inspect durable transport state, not the existence of a proposed
+            # Python module. The baseline only has the logical inbox delivery.
+            tables = {row[0] for row in uow.connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+>           assert "delivery_outbox" in tables, f"No durable attempt/intent for committed {result['message_id']}"
+E           AssertionError: No durable attempt/intent for committed msg_abbb00fad6644f7fb230a9a0f175f2eb
+E           assert 'delivery_outbox' in {'agent_comm_binding', 'agent_group_members', 'agent_groups', 'agent_policy_bindings', 'agents', 'approvals', ...}
+
+tests\test_pr34_remediation.py:241: AssertionError
+_______ test_additional_adapter_is_not_rejected_by_domain_product_enum ________
+
+    def test_additional_adapter_is_not_rejected_by_domain_product_enum():
+        from okto_nexus.domain.harness import HarnessSession, STATUS_STARTING
+        peer = FakeConnector(kind="fixture.additional.v1")
+>       session = HarnessSession(session_id="fixture-session", harness_kind="fixture.additional.v1",
+                                 owning_agent_id="worker", status=STATUS_STARTING,
+                                 capabilities=peer.capabilities, started_at="2026-09-22T00:00:00.000000Z")
+
+tests\test_pr34_remediation.py:250: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:11: in __init__
+    ???
+src\okto_nexus\domain\harness.py:283: in __post_init__
+    validate_harness_kind(self.harness_kind)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kind = 'fixture.additional.v1'
+
+    def validate_harness_kind(kind: Any) -> str:
+        """Return ``kind`` if it is one of :data:`HARNESS_KINDS`.
+    
+        Raises ``VALIDATION_ERROR`` (canonical catalogue code) otherwise.
+        """
+        if isinstance(kind, str) and kind in HARNESS_KINDS:
+            return kind
+>       raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "harness kind must be one of {pi, codex, claude_code}.",
+            {"kind": kind, "supported": sorted(HARNESS_KINDS)},
+        )
+E       okto_nexus.errors.OktoNexusError: VALIDATION_ERROR: harness kind must be one of {pi, codex, claude_code}.
+
+src\okto_nexus\domain\harness.py:165: OktoNexusError
+=========================== short test summary info ===========================
+FAILED tests/test_pr34_remediation.py::test_profile_is_unchanged_by_open_close
+FAILED tests/test_pr34_remediation.py::test_unknown_agent_is_rejected_before_factory
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_open_another_agent
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_send-args0]
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_steer-args1]
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_interrupt-args2]
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_close-args3]
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_get-args4]
+FAILED tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_event_list-args5]
+FAILED tests/test_pr34_remediation.py::test_unconfigured_surface_does_not_publish_harness_tools
+FAILED tests/test_pr34_remediation.py::test_backend_diagnostics_do_not_echo_credentials
+FAILED tests/test_pr34_remediation.py::test_replay_keeps_event_id_and_sequence
+FAILED tests/test_pr34_remediation.py::test_keyed_loopback_rest_does_not_upgrade_caller_to_operator
+FAILED tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions
+FAILED tests/test_pr34_remediation.py::test_forward_preserves_sender_subject_and_message_identity
+FAILED tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted
+FAILED tests/test_pr34_remediation.py::test_expired_relay_does_not_mint_new_root
+FAILED tests/test_pr34_remediation.py::test_open_does_not_fabricate_credential_authentication
+FAILED tests/test_pr34_remediation.py::test_committed_delivery_survives_lost_notification
+FAILED tests/test_pr34_remediation.py::test_additional_adapter_is_not_rejected_by_domain_product_enum
+20 failed in 21.47s
+EXIT_CODE=1
