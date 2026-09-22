@@ -270,6 +270,10 @@ class HarnessSession:
     started_at: str
     ended_at: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
+    endpoint_id: str | None = None
+    workspace_id: str | None = None
+    presence_session_id: str | None = None
+    lifecycle_state: str = "legacy_unlinked"
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)

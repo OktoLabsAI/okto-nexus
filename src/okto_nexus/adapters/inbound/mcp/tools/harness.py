@@ -146,6 +146,9 @@ from okto_nexus.adapters.outbound.sqlite.harness_repo import (
 from okto_nexus.adapters.outbound.sqlite.identity_repo import SqliteAgentRepo
 from okto_nexus.application.harness_supervisor import HarnessSupervisor
 from okto_nexus.application.adapter_registry import AdapterRegistry, AdapterDescriptor
+from okto_nexus.application.endpoints import EndpointService
+from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
+from okto_nexus.adapters.outbound.harness.environment import profile_environment
 from okto_nexus.domain.endpoints import EndpointCapabilities
 from okto_nexus.adapters.outbound.harness.envelope import EnvelopeConnector
 from okto_nexus.application.ports import HarnessConnector
@@ -154,7 +157,6 @@ from okto_nexus.domain.harness import (
     HarnessCapabilities,
     HarnessEvent,
     HarnessSession,
-    validate_harness_kind,
 )
 from okto_nexus.envelope import (
     async_tool_envelope,
@@ -205,6 +207,50 @@ def runtime_object(name, value):
     return dict(value) if value is not None else None
 
 
+def build_endpoint_service(deps):
+    return EndpointService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
+        workspaces=deps.repos.workspaces, repo=SqliteEndpointRepo(), registry=build_connector_factories(deps),
+        config=deps.config, clock=deps.clock)
+
+
+def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpoint_id=None,
+                    backend=None, target_pid=None, role=None):
+    context = authorize_request(deps, substrate=substrate)
+    require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
+                          agent_id=agent_id, role=role)
+    if backend:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                            "Configure backend options in an approved runtime profile; per-call overrides are disabled.", {})
+    service = build_endpoint_service(deps)
+    endpoint, profile = service.resolve(context, endpoint_id=endpoint_id, agent_id=agent_id,
+        kind=kind, substrate=resolve_substrate(kind, substrate), project_root=project_root)
+    effective_backend = {}
+    if profile is not None:
+        effective_backend["env"] = profile_environment(profile, deps.config.home_dir)
+        config = profile["config"]
+        if kind == "codex":
+            effective_backend["thread_start_overrides"] = {
+                "sandbox": config.get("sandbox", "read-only"),
+                "approvalPolicy": config.get("approval_policy", "on-request"),
+            }
+            if config.get("command"):
+                effective_backend["command"] = config["command"]
+        elif kind == "pi":
+            effective_backend.update({k: config[k] for k in ("command", "provider", "model", "extra_args") if k in config})
+        elif kind == "claude_code" and config.get("command"):
+            if len(config["command"]) != 1:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Claude profile command must name one executable.", {})
+            effective_backend["binary"] = config["command"][0]
+    configured_pid = endpoint["public_config"].get("target_pid")
+    if target_pid is not None and target_pid != configured_pid:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach target does not match the approved endpoint.", {})
+    connector = build_connector(build_connector_factories(deps), kind=kind, project_root=project_root,
+                                substrate=substrate, target_pid=configured_pid, backend=effective_backend)
+    return connector, endpoint, {"profile_id": endpoint["profile_id"],
+        "inherit_ambient": bool(profile and profile["inherit_ambient"]),
+        "revision": profile["revision"] if profile else None}
+
+
 #: Substrate vocabulary for ``kind="claude_code"`` ONLY (see module docstring
 #: - the port's ``HARNESS_KINDS`` has no room for a fourth member). Every
 #: other kind's ``substrate`` is ``None``.
@@ -222,9 +268,9 @@ CLAUDE_CODE_SUBSTRATES: tuple[str, ...] = (SUBSTRATE_STREAM, SUBSTRATE_ATTACH)
 #: no entry here on purpose - it spawns nothing (see
 #: :func:`_backend_not_applicable`).
 _BACKEND_FIELDS_BY_KIND: dict[str, frozenset[str]] = {
-    "pi": frozenset({"provider", "model", "extra_args", "env"}),
-    "codex": frozenset({"env"}),
-    "claude_code": frozenset({"env"}),
+    "pi": frozenset({"command", "provider", "model", "extra_args", "env"}),
+    "codex": frozenset({"env", "command", "thread_start_overrides"}),
+    "claude_code": frozenset({"env", "binary"}),
 }
 
 #: Reused parameter descriptions (kept DRY across the harness tools).
@@ -319,6 +365,10 @@ def session_to_dict(session: HarnessSession) -> dict[str, Any]:
         "started_at": session.started_at,
         "ended_at": session.ended_at,
         "metadata": dict(session.metadata),
+        "endpoint_id": session.endpoint_id,
+        "workspace_id": session.workspace_id,
+        "presence_session_id": session.presence_session_id,
+        "lifecycle_state": session.lifecycle_state,
     }
 
 
@@ -476,6 +526,8 @@ def build_service(deps: Any) -> HarnessSupervisor:
         # addressed at a live session's owning_agent_id actually reach it.
         inbox_notifier=deps.inbox_delivery_notifier,
         runtime_enabled=lambda: deps.config.feature_harness_integrations,
+        endpoint_repo=SqliteEndpointRepo(),
+        presence_sessions=deps.repos.sessions,
     )
     deps.harness_supervisor = supervisor
     return supervisor
@@ -487,6 +539,7 @@ def _default_connector_factories() -> dict[str, Any]:
     ) -> HarnessConnector:
         backend = backend or {}
         return PiRpcConnector(
+            command=backend.get("command", ("pi", "--mode", "rpc")),
             cwd=project_root,
             provider=backend.get("provider"),
             model=backend.get("model"),
@@ -498,7 +551,9 @@ def _default_connector_factories() -> dict[str, Any]:
         *, project_root: str, backend: Mapping[str, Any] | None = None, **_ignored: Any
     ) -> HarnessConnector:
         backend = backend or {}
-        return CodexAppServerConnector(cwd=project_root, env=backend.get("env"))
+        return CodexAppServerConnector(cwd=project_root, env=backend.get("env"),
+            command=backend.get("command", ("codex", "app-server")),
+            thread_start_overrides=backend.get("thread_start_overrides"))
 
     def _claude_code(
         *,
@@ -515,7 +570,8 @@ def _default_connector_factories() -> dict[str, Any]:
             # caller (private helper).
             return ClaudeCodeAttachConnector(target_pid)  # type: ignore[arg-type]
         backend = backend or {}
-        return ClaudeCodeStreamConnector(cwd=project_root, env=backend.get("env"))
+        return ClaudeCodeStreamConnector(cwd=project_root, env=backend.get("env"),
+            binary=backend.get("binary", "claude"))
 
     return {"pi": _pi, "codex": _codex, "claude_code": _claude_code}
 
@@ -526,10 +582,8 @@ def build_connector_factories(deps: Any):
     if registry is not None:
         return registry
     factories = getattr(deps, "harness_connector_factories", None)
-    if factories is not None:
-        return factories
     registry = AdapterRegistry()
-    native_factories = _default_connector_factories()
+    native_factories = factories if factories is not None else _default_connector_factories()
     for entry in _legacy_capabilities_catalog():
         kind, substrate = entry["kind"], entry["substrate"]
         caps = HarnessCapabilities(**entry["capabilities"])
@@ -795,25 +849,18 @@ def register(server: Any, deps: Any) -> None:
         substrate: Annotated[str | None, Field(description=_P_SUBSTRATE)] = None,
         target_pid: Annotated[int | None, Field(description=_P_TARGET_PID)] = None,
         backend: Annotated[Any, Field(description=_P_BACKEND)] = None,
+        endpoint_id: Annotated[str | None, Field(description="Approved endpoint binding; required when selection is ambiguous.")] = None,
         role: Annotated[str | None, Field(description=_P_ROLE)] = None,
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
     ) -> dict[str, Any]:
         """Open a runtime for an existing agent. Requires operator authority and opt-in; never changes the agent profile."""
-        require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
-                              agent_id=agent_id, role=role)
-        validate_harness_kind(kind)
-        backend_obj = runtime_object("backend", backend)
         metadata_obj = runtime_object("metadata", metadata)
         notify_target_obj = runtime_object("notify_target", notify_target)
-        connector = build_connector(
-            factories,
-            kind=kind,
-            project_root=project_root,
-            substrate=substrate,
-            target_pid=target_pid,
-            backend=backend_obj,
-        )
+        connector, endpoint, profile_view = await anyio.to_thread.run_sync(functools.partial(
+            prepare_runtime, deps, agent_id=agent_id, kind=kind, project_root=project_root,
+            substrate=substrate, endpoint_id=endpoint_id, backend=runtime_object("backend", backend),
+            target_pid=target_pid, role=role))
         session = await anyio.to_thread.run_sync(
             functools.partial(
                 supervisor.open,
@@ -822,6 +869,7 @@ def register(server: Any, deps: Any) -> None:
                 owning_agent_id=agent_id,
                 project_root=project_root,
                 role=role,
+                endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
                 metadata=dict(metadata_obj) if isinstance(metadata_obj, Mapping) else None,
                 notify_target=dict(notify_target_obj)
                 if isinstance(notify_target_obj, Mapping)
@@ -830,7 +878,7 @@ def register(server: Any, deps: Any) -> None:
         )
         return {
             **session_to_dict(session),
-            "backend": describe_backend(kind, substrate, backend_obj),
+            "backend": profile_view,
         }
 
     @server.tool()

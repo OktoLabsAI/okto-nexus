@@ -6,8 +6,8 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": null,
-  "notice": "Plano de execução. Nenhuma tarefa ou teste listado aqui foi executado por este pacote.",
+  "execution_head": "8207e7b",
+  "notice": "Execution in progress; evidence under plans/pr34-remediation. Native Codex and Claude authorized; Pi native NOT_RUN. Final gate NOT PASSED.",
   "task_status_vocabulary": [
     "NOT_STARTED",
     "IN_PROGRESS",
@@ -27,7 +27,7 @@
       "phase_id": "P00",
       "title": "Baseline e reprodução",
       "depends_on_phases": [],
-      "status": "COMPLETED",
+      "status": "IMPLEMENTED",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P00",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -89,7 +89,7 @@
         {
           "task_id": "P00-T01",
           "title": "Capturar HEAD/base/instruções, preservar worktree e inventariar schema/configuração.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
@@ -103,7 +103,7 @@
         {
           "task_id": "P00-T02",
           "title": "Mapear casos de uso, autenticação, inbox/handoff, notificações e composition roots.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
@@ -117,7 +117,7 @@
         {
           "task_id": "P00-T03",
           "title": "Reproduzir achados atuais com testes de comportamento e registrar achados já corrigidos.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
@@ -131,7 +131,7 @@
         {
           "task_id": "P00-T04",
           "title": "Capturar contratos, baseline de testes e capability matrix com versões/ambientes disponíveis.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
@@ -262,7 +262,7 @@
       "depends_on_phases": [
         "P01"
       ],
-      "status": "COMPLETED",
+      "status": "IMPLEMENTED",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P02",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -287,7 +287,7 @@
         {
           "task_id": "P02-T01",
           "title": "Definir AgentEndpoint, RequestContext, ExecutionGrant e separar capacidades/permissões.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/domain/endpoints.py",
@@ -307,7 +307,7 @@
         {
           "task_id": "P02-T02",
           "title": "Definir envelope, dispatch outcome, causalidade, consumo e correlação versionados.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/domain/endpoints.py",
@@ -327,7 +327,7 @@
         {
           "task_id": "P02-T03",
           "title": "Implementar AdapterRegistry e validação por descriptor sem produtos no domínio.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/domain/endpoints.py",
@@ -347,7 +347,7 @@
         {
           "task_id": "P02-T04",
           "title": "Provar extensão por quinto adapter fake e endpoint que não exige runtime local.",
-          "status": "COMPLETED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/domain/endpoints.py",
@@ -372,7 +372,7 @@
       "depends_on_phases": [
         "P02"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P03",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -412,52 +412,87 @@
         {
           "task_id": "P03-T01",
           "title": "Criar migrações aditivas, constraints e índices, reaproveitando sessões/eventos.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/harness_supervisor.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P03_ENDPOINTS.md",
+            "plans/pr34-remediation/evidence/p03-gate.log"
+          ],
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
         {
           "task_id": "P03-T02",
           "title": "Implementar perfis aprovados, secret refs, config redigida e herança ambiente explícita.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/harness_supervisor.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P03_ENDPOINTS.md",
+            "plans/pr34-remediation/evidence/p03-gate.log"
+          ],
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
         {
           "task_id": "P03-T03",
           "title": "Vincular runtimes à presença/workspace canônicos sem fechar outros bindings.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/harness_supervisor.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P03_ENDPOINTS.md",
+            "plans/pr34-remediation/evidence/p03-gate.log"
+          ],
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
         {
           "task_id": "P03-T04",
           "title": "Migrar histórico conservadoramente e diagnosticar perfis antigos danificados.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/harness_supervisor.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P03_ENDPOINTS.md",
+            "plans/pr34-remediation/evidence/p03-gate.log"
+          ],
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
         {
           "task_id": "P03-T05",
           "title": "Validar upgrade, backup e writer compatibility com a integração ativa.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/harness_supervisor.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P03_ENDPOINTS.md",
+            "plans/pr34-remediation/evidence/p03-gate.log"
+          ],
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         }
       ]
     },

@@ -96,6 +96,8 @@ reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
+from .environment import child_environment
+
 import itertools
 import json
 import os
@@ -263,9 +265,7 @@ class _PiTransport:
 
     # ------------------------------------------------------------------ #
     def start(self) -> None:
-        full_env = os.environ.copy()
-        if self._env:
-            full_env.update(self._env)
+        full_env = child_environment(self._env)
         popen_kwargs: dict[str, Any] = dict(
             cwd=self._cwd,
             env=full_env,

@@ -35,7 +35,6 @@ from ....domain.approvals import (
     validate_status_filter,
 )
 from ....domain.base import new_id
-from ....domain.harness import validate_harness_kind
 from ....domain.health import DEFAULT_WINDOW as HEALTH_DEFAULT_WINDOW
 from ....domain.health import is_valid_window as is_valid_health_window
 from ....domain.messages import normalize_artifacts
@@ -58,14 +57,13 @@ from ..mcp.projection import (
 from ..mcp.tools.artifacts import build_service as _build_artifact_service
 from ..mcp.tools.handoff import build_service as _build_handoff_service
 from ..mcp.tools.harness import authorize_request as _harness_authorize
-from ....application.runtime_authorization import require_runtime_agent
-from ..mcp.tools.harness import build_connector as _harness_build_connector
+from ..mcp.tools.harness import build_endpoint_service as _harness_endpoints
+from ..mcp.tools.harness import prepare_runtime as _harness_prepare
 from ..mcp.tools.harness import (
     build_connector_factories as _build_harness_connector_factories,
 )
 from ..mcp.tools.harness import build_service as _build_harness_supervisor
 from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_catalog
-from ..mcp.tools.harness import describe_backend as _harness_describe_backend
 from ..mcp.tools.harness import event_to_dict as _harness_event_to_dict
 from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
 from ..mcp.tools.harness import read_session as _harness_read_session
@@ -356,6 +354,7 @@ class HarnessSessionOpenBody(BaseModel):
     agent_id: str = Field(min_length=1, max_length=128)
     kind: str = Field(min_length=1)
     project_root: str = Field(min_length=1)
+    endpoint_id: str | None = None
     substrate: str | None = None
     target_pid: int | None = None
     # H-1 fix (EV-SYS-002): explicit per-session backend override, mirrors
@@ -374,6 +373,29 @@ class HarnessSessionCommandBody(BaseModel):
     docstring)."""
 
     payload: dict[str, Any] | None = None
+
+
+class RuntimeProfileBody(BaseModel):
+    profile_id: str = Field(min_length=1, max_length=128)
+    adapter_id: str
+    config: dict[str, Any] = Field(default_factory=dict)
+    secret_refs: dict[str, str] = Field(default_factory=dict)
+    inherit_ambient: bool = False
+    enabled: bool = False
+
+
+class RuntimeEndpointBody(BaseModel):
+    endpoint_id: str = Field(min_length=1, max_length=128)
+    agent_id: str
+    adapter_id: str
+    project_root: str
+    profile_id: str | None = None
+    enabled: bool = False
+    priority: int = 0
+    selection_group: str | None = None
+    response_policy: str = "explicit"
+    consumption: str = "exclusive"
+    public_config: dict[str, Any] = Field(default_factory=dict)
 
 
 def _tag_service(deps) -> TagCatalogService:
@@ -875,6 +897,47 @@ def build_router() -> APIRouter:
     # ``POST /sessions/{id}/close`` already gate this way); reads are open,
     # matching the rest of this dashboard surface (``GET /agents`` etc.).
     # ------------------------------------------------------------------ #
+    @router.post("/harness/profiles")
+    async def runtime_profile_create(request: Request, body: RuntimeProfileBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_profile(
+                context, **body.model_dump()))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/endpoints")
+    async def runtime_endpoint_create(request: Request, body: RuntimeEndpointBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).create_endpoint(
+                context, **body.model_dump()))
+            return _ok(result)
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/endpoints")
+    async def runtime_endpoints(request: Request, agent_id: str | None = None) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).list(context, agent_id=agent_id))
+            return _ok({"items": result})
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/diagnostics")
+    async def runtime_diagnostics(request: Request) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).diagnostics(context)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/kinds")
     async def harness_kinds(request: Request) -> JSONResponse:
         try:
@@ -893,27 +956,21 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
-        factories = _build_harness_connector_factories(deps)
+        profile_view = {}
 
         def _open():
-            _harness_authorize(deps, substrate=body.substrate)
-            require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
-                                  agent_id=body.agent_id, role=body.role)
-            validate_harness_kind(body.kind)
-            connector = _harness_build_connector(
-                factories,
-                kind=body.kind,
-                project_root=body.project_root,
-                substrate=body.substrate,
-                target_pid=body.target_pid,
-                backend=body.backend,
-            )
+            nonlocal profile_view
+            connector, endpoint, profile_view = _harness_prepare(deps,
+                agent_id=body.agent_id, kind=body.kind, project_root=body.project_root,
+                substrate=body.substrate, endpoint_id=body.endpoint_id, backend=body.backend,
+                target_pid=body.target_pid, role=body.role)
             return supervisor.open(
                 kind=body.kind,
                 connector=connector,
                 owning_agent_id=body.agent_id,
                 project_root=body.project_root,
                 role=body.role,
+                endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
                 metadata=body.metadata,
                 notify_target=body.notify_target,
             )
@@ -925,7 +982,7 @@ def build_router() -> APIRouter:
         return _ok(
             {
                 **_harness_session_to_dict(session),
-                "backend": _harness_describe_backend(body.kind, body.substrate, body.backend),
+                "backend": profile_view,
             }
         )
 

@@ -43,8 +43,9 @@ frozen port cleanly - reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
+from .environment import child_environment
+
 import json
-import os
 import queue
 import subprocess
 import threading
@@ -251,9 +252,7 @@ class _CodexTransport:
 
     # ------------------------------------------------------------------ #
     def start(self) -> None:
-        full_env = os.environ.copy()
-        if self._env:
-            full_env.update(self._env)
+        full_env = child_environment(self._env)
         try:
             self._proc = subprocess.Popen(
                 self._command,
@@ -603,8 +602,8 @@ class CodexAppServerConnector:
                 self._spawn_and_initialize()
 
         thread_start_params: dict[str, Any] = {
-            "approvalPolicy": "never",
-            "sandbox": "danger-full-access",
+            "approvalPolicy": "on-request",
+            "sandbox": "read-only",
         }
         thread_start_params.update(self._thread_start_overrides)
         result = self._transport.request(  # type: ignore[union-attr]

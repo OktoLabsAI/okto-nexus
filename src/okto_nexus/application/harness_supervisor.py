@@ -390,8 +390,13 @@ class HarnessSupervisor:
         max_relay_depth: int = DEFAULT_MAX_RELAY_DEPTH,
         relay_chain_max_age_s: float = DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS,
         runtime_enabled=None,
+        endpoint_repo=None,
+        presence_sessions=None,
     ) -> None:
         self._cf = connection_factory
+        self._endpoint_repo = endpoint_repo
+        self._presence_sessions = presence_sessions
+        self._presence_by_runtime: dict[str, str] = {}
         self._runtime_enabled = runtime_enabled or (lambda: True)
         self._clock = clock
         self._agents = agents
@@ -462,6 +467,8 @@ class HarnessSupervisor:
         agent_capabilities: Mapping[str, Any] | None = None,
         metadata: Mapping[str, Any] | None = None,
         notify_target: Any = None,
+        endpoint_id: str | None = None,
+        workspace_id: str | None = None,
     ) -> HarnessSession:
         """Validate existing identity, start outside the UoW, persist session.
 
@@ -516,6 +523,16 @@ class HarnessSupervisor:
                 if metadata:
                     session.metadata.update(metadata)
                 self._sessions.create(uow, session=session, created_at=now)
+                if endpoint_id and workspace_id and self._presence_sessions and self._endpoint_repo:
+                    presence_id = new_id("ses")
+                    session.endpoint_id = endpoint_id
+                    session.workspace_id = workspace_id
+                    session.presence_session_id = presence_id
+                    session.lifecycle_state = "protocol_ready"
+                    self._presence_sessions.create(uow, session_id=presence_id, agent_id=owning_agent_id,
+                        workspace_id=workspace_id, status="active", started_at=now, session_secret=new_id("secret"))
+                    self._endpoint_repo.bind_session(uow, session_id=session.session_id,
+                        endpoint_id=endpoint_id, workspace_id=workspace_id, presence_session_id=presence_id)
         except Exception as exc:  # noqa: BLE001 - a started connector needs tearing down either way
             self._best_effort_teardown(connector, session)
             if isinstance(exc, OktoNexusError):
@@ -528,6 +545,8 @@ class HarnessSupervisor:
             ) from exc
 
         with self._lock:
+            if session.presence_session_id:
+                self._presence_by_runtime[session.session_id] = session.presence_session_id
             if session.session_id in self._live:  # pragma: no cover - defensive
                 raise OktoNexusError(
                     ErrorCode.INTERNAL_ERROR,
@@ -1194,6 +1213,13 @@ class HarnessSupervisor:
         push happens first and unconditionally; the durable write and the
         inbox delivery are both best-effort AFTER it and can never delay or
         gate it."""
+        presence_id = self._presence_by_runtime.get(session_id)
+        if presence_id and self._presence_sessions:
+            try:
+                with self._cf.unit_of_work() as uow:
+                    self._presence_sessions.heartbeat(uow, session_id=presence_id, at=self._clock.now_iso())
+            except Exception:
+                self._log_best_effort_failure("recording observed runtime presence", session_id)
         try:
             self._subscribers.publish(event)
         except Exception:  # noqa: BLE001 - a broken registry must never break the pump
@@ -1310,6 +1336,15 @@ class HarnessSupervisor:
         still stops TRACKING it (the claim already did that), it just never
         pretends to know how the peer's own session actually ended.
         """
+        presence_id = self._presence_by_runtime.pop(live.session.session_id, None)
+        if presence_id and self._presence_sessions:
+            try:
+                with self._cf.unit_of_work() as uow:
+                    self._presence_sessions.close(uow, session_id=presence_id, at=self._clock.now_iso())
+                    self._endpoint_repo.detach_session(uow, session_id=live.session.session_id)
+                live.session.lifecycle_state = "detached"
+            except Exception:
+                self._log_best_effort_failure("closing runtime presence", live.session.session_id)
         caps = live.connector.capabilities
         if not caps.observes_session_end:
             return

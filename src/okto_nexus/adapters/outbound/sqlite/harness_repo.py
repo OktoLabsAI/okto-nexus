@@ -58,7 +58,7 @@ class SqliteHarnessSessionRepo:
 
     _COLUMNS = (
         "session_id, kind, owning_agent_id, status, capabilities, metadata, "
-        "started_at, ended_at, created_at, updated_at"
+        "started_at, ended_at, created_at, updated_at, endpoint_id, workspace_id, presence_session_id, lifecycle_state"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -160,6 +160,8 @@ class SqliteHarnessSessionRepo:
             started_at=row["started_at"],
             ended_at=row["ended_at"],
             metadata=_loads(row["metadata"], {}),
+            endpoint_id=row["endpoint_id"], workspace_id=row["workspace_id"],
+            presence_session_id=row["presence_session_id"], lifecycle_state=row["lifecycle_state"],
         )
 
 

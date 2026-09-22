@@ -69,6 +69,22 @@ def runtime(tmp_path, request):
     thread.start()
     assert ready.wait(10), "production HTTP app did not start"
     with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
+        if deps.config.feature_harness_integrations:
+            kinds = [("fixture.additional.v1", None)] if getattr(request, "param", None) == "additional" else [
+                ("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
+            for kind, substrate in kinds:
+                adapter_id = kind + ("." + substrate if substrate else "")
+                profile_id = "profile-" + adapter_id
+                if substrate != "attach":
+                    response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator_key},
+                        json={"profile_id": profile_id, "adapter_id": adapter_id, "enabled": True})
+                    assert response.status_code == 200, response.text
+                response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator_key},
+                    json={"endpoint_id": "endpoint-" + adapter_id, "agent_id": "worker", "adapter_id": adapter_id,
+                          "project_root": str(root), "enabled": True,
+                          "profile_id": profile_id if substrate != "attach" else None,
+                          "public_config": {"target_pid": 12345} if substrate == "attach" else {}})
+                assert response.status_code == 200, response.text
         yield deps, client, str(root), peers, operator_key, caller_key
     supervisor = getattr(deps, "harness_supervisor", None)
     if supervisor:
