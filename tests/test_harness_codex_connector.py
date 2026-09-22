@@ -737,7 +737,17 @@ def test_missing_binary_raises_config_error_not_raw_oserror() -> None:
 # self._transport is set only after initialize succeeds, so a later start()
 # retries the spawn instead of firing thread/start at a dead connection.
 # --------------------------------------------------------------------------- #
-def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Path) -> None:
+def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Path, monkeypatch) -> None:
+    from okto_nexus.adapters.outbound.harness import codex as codex_module
+    original_spawn = codex_module.spawn_owned_process
+    spawned = []
+
+    def capture_owned_process(*args, **kwargs):
+        process = original_spawn(*args, **kwargs)
+        spawned.append(process)
+        return process
+
+    monkeypatch.setattr(codex_module, "spawn_owned_process", capture_owned_process)
     pid_path = tmp_path / "hung_child.pid"
     # A child that never answers `initialize` at all (writes nothing back),
     # so the handshake's own bounded request() times out.
@@ -759,18 +769,11 @@ def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Pat
         # behind, or every FUTURE start() would skip respawning entirely.
         assert conn._transport is None
 
-        # The half-spawned child must have been reaped, not leaked.
-        pid = int(pid_path.read_text().strip())
-        deadline = time.monotonic() + 5.0
-        reaped = False
-        while time.monotonic() < deadline:
-            try:
-                os.kill(pid, 0)
-            except ProcessLookupError:
-                reaped = True
-                break
-            time.sleep(0.05)
-        assert reaped, f"child pid {pid} from the failed handshake was never reaped"
+        # Wait on the exact owned process instance, not a numeric PID.
+        # os.kill(pid, 0) is not a harmless liveness query on Windows.
+        assert pid_path.exists(), "handshake must actually reach the child"
+        assert len(spawned) == 1
+        assert spawned[0].wait(timeout=5) is not None
     finally:
         conn.close()
 

@@ -9,8 +9,8 @@ require the real binary to be present unless marked"):
   against claude 2.1.278 - including the fatal early-interrupt race window
   this connector must gate against. These exercise the connector's
   threading, event-mapping and error-handling logic deterministically.
-* REAL-BINARY tests (``@pytest.mark.skipif`` when ``claude`` is not on
-  PATH): drive the actual CLI with trivial prompts, mirroring the manual
+* REAL-BINARY tests (explicit ``OKTO_NEXUS_CLAUDE_LIVE=1`` opt-in
+  and ``claude`` on PATH): drive the actual CLI with trivial prompts, mirroring the manual
   protocol probes this connector's design was built from. No new pytest
   marker is registered (``pyproject.toml`` only registers ``replay``);
   ``skipif`` needs none.
@@ -19,6 +19,7 @@ require the real binary to be present unless marked"):
 from __future__ import annotations
 
 import queue
+import os
 import shutil
 import sys
 import threading
@@ -32,7 +33,8 @@ from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeSt
 
 _HAS_REAL_CLAUDE = shutil.which("claude") is not None
 requires_real_claude = pytest.mark.skipif(
-    not _HAS_REAL_CLAUDE, reason="requires the real `claude` CLI on PATH"
+    not _HAS_REAL_CLAUDE or os.environ.get("OKTO_NEXUS_CLAUDE_LIVE") != "1",
+    reason="requires an explicitly configured isolated Claude campaign (OKTO_NEXUS_CLAUDE_LIVE=1)"
 )
 
 
@@ -75,7 +77,7 @@ requires_real_claude = pytest.mark.skipif(
 #                             the process is genuinely still alive when
 #                             _finish()'s proc.wait() times out.
 _FAKE_CLAUDE_SCRIPT = r"""
-import json, os, select, sys, time
+import json, os, sys, time
 
 scenario = os.environ.get("FAKE_CC_SCENARIO", "basic")
 session_id = "fake-native-session-id"
@@ -85,88 +87,49 @@ def emit(obj):
     sys.stdout.write(json.dumps(obj) + "\n")
     sys.stdout.flush()
 
-# --------------------------------------------------------------------- #
-# Single unbuffered reader over fd 0.
-#
-# The mid-generation window below used to poll readiness with
-# ``select.select([sys.stdin], ...)`` (kernel-level, on the raw fd) and
-# then read with ``sys.stdin.readline()`` (CPython's own buffered
-# ``TextIOWrapper``, layered on top of that same fd). Those two are NOT
-# the same buffer: if two lines land in the pipe before the child's next
-# read syscall - exactly what happens here, since the test writes an
-# ordinary ``send_turn`` immediately followed by an ``interrupt`` -
-# ``readline()`` can slurp BOTH into its internal buffer in one syscall
-# but hand back only the first. The first line (not a control_request)
-# gets deferred and the loop goes back to ``select()`` - which now
-# reports the kernel-level pipe as EMPTY forever, even though a complete,
-# already-read ``control_request`` line is sitting unread in
-# ``TextIOWrapper``'s private buffer. Depending on OS/process scheduling,
-# that a landing coincidence happens often enough to flake this suite
-# (reproduced independently of any timing budget - see
-# test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag).
-# The fix is structural, not a timing tweak: read fd 0 with ``os.read``
-# ONLY, through ONE shared line buffer, everywhere in this script (both
-# the mid-generation window and the top-level loop) - so a line can never
-# be stranded in a buffer nothing else looks at.
-_stdin_buf = ""
+# One raw-fd reader and a bounded line queue work on Windows and POSIX.
+# select() on Windows accepts sockets, not subprocess stdin pipes. Keeping
+# one reader also prevents buffered-read/select disagreements on POSIX.
+import queue, threading, codecs
+_lines = queue.Queue(maxsize=128)
 _stdin_eof = False
 
-def _fill_stdin_buf():
-    global _stdin_buf, _stdin_eof
-    chunk = os.read(0, 65536)
-    if chunk == b"":
-        _stdin_eof = True
-    else:
-        _stdin_buf += chunk.decode("utf-8", errors="replace")
+def _read_stdin():
+    decoder = codecs.getincrementaldecoder("utf-8")()
+    pending = ""
+    while True:
+        chunk = os.read(0, 65536)
+        if not chunk:
+            pending += decoder.decode(b"", final=True)
+            if pending:
+                _lines.put(pending)
+            _lines.put("")
+            return
+        pending += decoder.decode(chunk)
+        while "\n" in pending:
+            line, pending = pending.split("\n", 1)
+            _lines.put(line + "\n")
 
-def _pop_buffered_line():
-    global _stdin_buf
-    idx = _stdin_buf.find("\n")
-    if idx == -1:
-        return None
-    line, _stdin_buf = _stdin_buf[: idx + 1], _stdin_buf[idx + 1 :]
-    return line
-
-def _drain_eof_remainder():
-    global _stdin_buf
-    if _stdin_buf:
-        remainder, _stdin_buf = _stdin_buf, ""
-        return remainder
-    return ""
+threading.Thread(target=_read_stdin, daemon=True).start()
 
 def read_line_blocking():
-    # Block (no timeout) until one full line is available, or return "" on
-    # EOF. Always goes through the ONE shared buffer above.
-    while True:
-        line = _pop_buffered_line()
-        if line is not None:
-            return line
-        if _stdin_eof:
-            return _drain_eof_remainder()
-        _fill_stdin_buf()
+    global _stdin_eof
+    if _stdin_eof:
+        return ""
+    line = _lines.get()
+    _stdin_eof = line == ""
+    return line
 
 def read_line_within(timeout_s):
-    # Non-blocking-with-budget poll: returns a full line if one is already
-    # buffered or arrives within timeout_s (select-gated - never a busy
-    # spin), "" on EOF, or None if nothing arrived in the budget. Same
-    # shared buffer - a line that arrives here and isn't a control_request
-    # is left for a LATER caller (deferred_lines below), never silently
-    # owned by a buffer another reader can't see.
-    line = _pop_buffered_line()
-    if line is not None:
-        return line
+    global _stdin_eof
     if _stdin_eof:
-        return _drain_eof_remainder()
-    ready, _, _ = select.select([0], [], [], timeout_s)
-    if not ready:
+        return ""
+    try:
+        line = _lines.get(timeout=timeout_s)
+    except queue.Empty:
         return None
-    _fill_stdin_buf()
-    line = _pop_buffered_line()
-    if line is not None:
-        return line
-    if _stdin_eof:
-        return _drain_eof_remainder()
-    return None
+    _stdin_eof = line == ""
+    return line
 
 if scenario == "garbage_line":
     sys.stdout.write("not json at all\n")
@@ -314,7 +277,9 @@ sys.exit(0)
 def _connector(scenario: str, **env_overrides: str) -> ClaudeCodeStreamConnector:
     env = {"FAKE_CC_SCENARIO": scenario, **env_overrides}
     return ClaudeCodeStreamConnector(
-        binary=sys.executable,
+        # The Windows venv redirector retains inherited stdout while its
+        # child runs. Use the actual interpreter for the raw-EOF fixture.
+        binary=getattr(sys, "_base_executable", sys.executable),
         argv=("-u", "-c", _FAKE_CLAUDE_SCRIPT),
         env=env,
     )

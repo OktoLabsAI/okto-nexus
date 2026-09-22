@@ -1,0 +1,30 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+____________ test_rest_owner_start_timeout_has_no_running_session _____________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-752/test_rest_...t', [], '<disposable-fixture-key-redacted>', '<disposable-fixture-key-redacted>')
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-752/test_rest_owner_start_timeout_0')
+
+    def test_rest_owner_start_timeout_has_no_running_session(runtime, tmp_path):
+        deps, client, root, _, operator_key, _ = runtime
+        marker = tmp_path / "production-spawn.pid"
+        code = f"import os,time; open({str(marker)!r},'w').write(str(os.getpid())); time.sleep(60)"
+        deps.harness_connector_factories["codex"] = lambda **_: CodexAppServerConnector(
+            command=[sys.executable, "-c", code], env=fixture_environment(), handshake_timeout_s=30)
+        supervisor = deps.harness_supervisor
+        supervisor._start_timeout_s = 1
+        response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator_key},
+            json={"agent_id": "worker", "kind": "codex", "project_root": root,
+                  "request_key": "fixture-timeout"})
+        assert response.status_code >= 400
+        assert marker.exists(), response.text
+        assert wait_until(lambda: not supervisor._quarantined_bindings)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+>           assert uow.conn.execute("SELECT count(*) FROM harness_sessions").fetchone()[0] == 0
+                   ^^^^^^^^
+E           AttributeError: 'SqliteUnitOfWork' object has no attribute 'conn'
+
+tests\test_runtime_process_ownership.py:121: AttributeError
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session
+1 failed, 7 deselected in 4.93s

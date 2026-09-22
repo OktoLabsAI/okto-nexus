@@ -1,0 +1,65 @@
+....................F.........s...........................s............. [ 75%]
+.......................                                                  [100%]
+================================== FAILURES ===================================
+_______ test_failed_handshake_does_not_permanently_wedge_the_connector ________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-748/test_failed_handshake_does_not0')
+
+    def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Path) -> None:
+        pid_path = tmp_path / "hung_child.pid"
+        # A child that never answers `initialize` at all (writes nothing back),
+        # so the handshake's own bounded request() times out.
+        hang_script = (
+            "import os, sys, time\n"
+            f"open({str(pid_path)!r}, 'w').write(str(os.getpid()))\n"
+            "sys.stdin.readline()\n"  # consume the initialize write without answering
+            "time.sleep(30)\n"
+        )
+        conn = CodexAppServerConnector(
+            command=[sys.executable, "-c", hang_script],
+            handshake_timeout_s=0.3,
+        )
+        try:
+            with pytest.raises(OktoNexusError):
+                conn.start(owning_agent_id="nxs_agent")
+    
+            # The wedge fix: a failed handshake must not leave a transport
+            # behind, or every FUTURE start() would skip respawning entirely.
+            assert conn._transport is None
+    
+            # The half-spawned child must have been reaped, not leaked.
+            pid = int(pid_path.read_text().strip())
+            deadline = time.monotonic() + 5.0
+            reaped = False
+            while time.monotonic() < deadline:
+                try:
+>                   os.kill(pid, 0)
+E                   OSError: [WinError 11] Foi feita uma tentativa de se carregar um programa com um formato incorreto
+
+tests\test_harness_codex_connector.py:768: OSError
+============================== warnings summary ===============================
+tests/test_harness_pi_connector.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread pi-stdout
+  
+  Traceback (most recent call last):
+    File "C:\Python313\Lib\threading.py", line 1041, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "C:\Python313\Lib\threading.py", line 992, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\outbound\harness\pi.py", line 418, in _read_stdout
+      self._on_child_exit(returncode, self.stderr_tail())
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_harness_pi_connector.py", line 812, in exploding_on_child_exit
+      raise RuntimeError("boom - injected failure in the death-report path itself")
+  RuntimeError: boom - injected failure in the death-report path itself
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_harness_codex_connector.py::test_failed_handshake_does_not_permanently_wedge_the_connector
+1 failed, 92 passed, 2 skipped, 1 warning in 77.30s (0:01:17)

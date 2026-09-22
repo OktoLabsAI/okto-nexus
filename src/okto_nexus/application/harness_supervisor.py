@@ -165,6 +165,7 @@ longer chain back to A) notify-targeting each other so that every
 from __future__ import annotations
 
 from .runtime_authorization import require_runtime_agent
+from .runtime_lifecycle import RuntimeLifecycle
 
 import functools
 import json
@@ -271,6 +272,7 @@ class _LiveSession:
     session: HarnessSession
     project_root: str
     notify_target: Any = None
+    lifecycle: RuntimeLifecycle | None = None
     pump_thread: "threading.Thread | None" = None
     #: send_only cursor (RES-A2 follow-up): a send_only connector's
     #: ``events()`` is now a BROADCAST snapshot of an append-only history
@@ -425,6 +427,10 @@ class HarnessSupervisor:
         self._lock = threading.RLock()
         self._live: dict[str, _LiveSession] = {}
         self._opening_agents: set[str] = set()
+        self._quarantined_bindings: set[str] = set()
+        self._start_slots = threading.BoundedSemaphore(4)
+        self._call_slots = threading.BoundedSemaphore(4)
+        self._max_live_runtimes = 16
 
     # ------------------------------------------------------------------ #
     # subscriber registry passthrough (so a caller needs only ONE reference)
@@ -446,7 +452,9 @@ class HarnessSupervisor:
         endpoint_id = kwargs.get("endpoint_id")
         binding_key = endpoint_id or "legacy:" + str(agent_id)
         with self._lock:
-            if binding_key in self._opening_agents or any(
+            if len(self._live) + len(self._opening_agents) >= self._max_live_runtimes:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Runtime capacity exhausted.", {})
+            if binding_key in self._quarantined_bindings or binding_key in self._opening_agents or any(
                 live.session.endpoint_id == endpoint_id if endpoint_id else live.session.owning_agent_id == agent_id
                 for live in self._live.values()
             ):
@@ -503,8 +511,11 @@ class HarnessSupervisor:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                 "Configure capabilities through the canonical identity API.", {})
 
-        session = self._bounded_start(connector, owning_agent_id=owning_agent_id, kind=kind)
-        if session.harness_kind != kind:  # pragma: no cover - defensive, connector bug
+        session, lifecycle = self._bounded_start(connector, owning_agent_id=owning_agent_id, kind=kind,
+            binding_key=endpoint_id or "legacy:" + owning_agent_id)
+        if session.harness_kind != kind:
+            lifecycle.cancel()
+            self._best_effort_teardown(connector, session)
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,
                 "connector returned a session whose harness_kind does not "
@@ -512,6 +523,8 @@ class HarnessSupervisor:
                 {"requested_kind": kind, "returned_kind": session.harness_kind},
             )
         if not can_transition_session(session.status, STATUS_RUNNING):
+            lifecycle.cancel()
+            self._best_effort_teardown(connector, session)
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,
                 "connector.start() returned a session in an unexpected "
@@ -540,6 +553,7 @@ class HarnessSupervisor:
                         endpoint_id=endpoint_id, workspace_id=workspace_id, presence_session_id=presence_id,
                         open_request_id=open_request_id, profile_revision=profile_revision)
         except Exception as exc:  # noqa: BLE001 - a started connector needs tearing down either way
+            lifecycle.cancel()
             self._best_effort_teardown(connector, session)
             if isinstance(exc, OktoNexusError):
                 raise
@@ -564,6 +578,7 @@ class HarnessSupervisor:
                 session=session,
                 project_root=project_root,
                 notify_target=notify_target,
+                lifecycle=lifecycle,
             )
             self._live[session.session_id] = live
 
@@ -633,62 +648,79 @@ class HarnessSupervisor:
         return results
 
     def _bounded_start(
-        self, connector: HarnessConnector, *, owning_agent_id: str, kind: str
-    ) -> HarnessSession:
-        """Run ``connector.start()`` on a helper thread, bounded by
-        ``start_timeout_s`` (D8: "every supervisor-side wait is bounded and
-        raises a clear error on expiry... a wedged supervisor is worse than
-        a crashed one"). ``Thread.join(timeout)`` is a plain blocking wait on
-        a condition variable - not a re-checking sleep loop - so this bound
-        introduces no polling.
+        self, connector: HarnessConnector, *, owning_agent_id: str, kind: str,
+        binding_key: str | None = None,
+    ) -> tuple[HarnessSession, RuntimeLifecycle]:
+        """Timeout cancels owned resources, never creates replacement threads.
 
-        Python gives no safe way to cancel a running thread: if ``start()``
-        is genuinely wedged (not merely slow), the helper thread is
-        abandoned (``daemon=True``, so it can never block process exit) and
-        this call still returns - within the bound, every time. That is the
-        D8 requirement; it does not claim the abandoned thread's resources
-        (a half-spawned child process, an open socket) are reclaimed, which
-        for a wedged connector they generally are not - reported honestly
-        rather than smoothed over, per the standing instruction the four
-        connector modules themselves follow.
+        A blocked native API retains its slot and binding quarantine until its
+        actual worker exits. Cancellation cannot declare a turn completed.
         """
+        if not self._start_slots.acquire(blocking=False):
+            raise OktoNexusError(ErrorCode.CONFLICT, "Runtime startup capacity exhausted.", {})
+        lifecycle = RuntimeLifecycle()
         outcome: dict[str, Any] = {}
+        completion_lock = threading.Lock()
+        timed_out = False
 
         def _run() -> None:
             try:
-                outcome["session"] = connector.start(owning_agent_id=owning_agent_id)
-            except BaseException as exc:  # noqa: BLE001 - re-raised on the caller's thread below
+                with lifecycle.activate():
+                    outcome["session"] = connector.start(owning_agent_id=owning_agent_id)
+            except BaseException as exc:
                 outcome["error"] = exc
+                lifecycle.cancel()
+            finally:
+                with completion_lock:
+                    cleanup_late = timed_out
+                    if not cleanup_late:
+                        outcome["done"] = True
+                if cleanup_late:
+                    cleanup_failed = bool(lifecycle.cancel())
+                    # Attach closes only its connection, never the external process.
+                    # Use this already-reserved startup worker. A wedged close
+                    # retains its slot and quarantine, with no replacement thread.
+                    close = getattr(connector, "close", None)
+                    if callable(close):
+                        try:
+                            close()
+                        except Exception:
+                            cleanup_failed = True
+                            self._log_best_effort_failure("late startup close", kind)
+                    if not cleanup_failed:
+                        with self._lock:
+                            self._quarantined_bindings.discard(binding_key)
+                self._start_slots.release()
 
-        thread = threading.Thread(
-            target=_run, daemon=True, name=f"harness-start-{kind}"
-        )
-        thread.start()
+        thread = threading.Thread(target=_run, daemon=True, name=f"harness-start-{kind}")
+        try:
+            thread.start()
+        except BaseException:
+            self._start_slots.release()
+            raise
         thread.join(self._start_timeout_s)
-        if thread.is_alive():
-            raise OktoNexusError(
-                ErrorCode.INTERNAL_ERROR,
-                f"harness '{kind}' did not start within {self._start_timeout_s}s "
-                "(the connector may be wedged); the attempt was abandoned.",
-                {"kind": kind, "timeout_s": self._start_timeout_s},
-            )
+        with completion_lock:
+            if not outcome.get("done"):
+                timed_out = True
+                with self._lock:
+                    self._quarantined_bindings.add(binding_key)
+                failures = lifecycle.cancel()
+                raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
+                    f"harness '{kind}' did not start within {self._start_timeout_s}s; cancellation requested.",
+                    {"kind": kind, "timeout_s": self._start_timeout_s, "cleanup_failures": failures})
         if "error" in outcome:
             exc = outcome["error"]
             if isinstance(exc, OktoNexusError):
                 raise exc
-            raise OktoNexusError(
-                ErrorCode.INTERNAL_ERROR,
+            raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
                 f"harness '{kind}' failed to start: {exc}",
-                {"kind": kind, "exception_type": type(exc).__name__},
-            ) from exc
+                {"kind": kind, "exception_type": type(exc).__name__}) from exc
         session = outcome.get("session")
-        if not isinstance(session, HarnessSession):  # pragma: no cover - defensive
-            raise OktoNexusError(
-                ErrorCode.INTERNAL_ERROR,
-                f"harness '{kind}' connector.start() returned no session.",
-                {"kind": kind},
-            )
-        return session
+        if not isinstance(session, HarnessSession):
+            lifecycle.cancel()
+            raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
+                f"harness '{kind}' connector.start() returned no session.", {"kind": kind})
+        return session, lifecycle
 
     # ------------------------------------------------------------------ #
     # send / steer / interrupt (one verb-dispatch method - HarnessCommand
@@ -1072,6 +1104,8 @@ class HarnessSupervisor:
                 {"session_id": session_id},
             )
         self._best_effort_teardown(live.connector, live.session)
+        if live.lifecycle is not None:
+            live.lifecycle.cancel()
         self._finish_reap(live, error=None)
         return live.session
 
@@ -1122,6 +1156,8 @@ class HarnessSupervisor:
         caller's ``except Exception`` and break the "``close`` never raises"
         contract for exactly the class of failure this method exists to
         bound."""
+        if not self._call_slots.acquire(blocking=False):
+            raise OktoNexusError(ErrorCode.CONFLICT, "Runtime control capacity exhausted.", {})
         outcome: dict[str, Any] = {}
 
         def _run() -> None:
@@ -1129,9 +1165,15 @@ class HarnessSupervisor:
                 fn()
             except BaseException as exc:  # noqa: BLE001 - re-raised (normalised) below
                 outcome["error"] = exc
+            finally:
+                self._call_slots.release()
 
         thread = threading.Thread(target=_run, daemon=True, name=f"harness-{label}")
-        thread.start()
+        try:
+            thread.start()
+        except BaseException:
+            self._call_slots.release()
+            raise
         thread.join(timeout_s)
         if thread.is_alive():
             raise OktoNexusError(

@@ -1,0 +1,50 @@
+..............................s.......................F...........       [100%]
+================================== FAILURES ===================================
+_____ test_finish_never_fabricates_process_exit_when_child_is_still_alive _____
+
+    def test_finish_never_fabricates_process_exit_when_child_is_still_alive():
+        """Covers the OTHER half of defect 1's why_it_matters (journal
+        wf_de1d2ad9-17f, line 17, CRITICAL) via a DIFFERENT route than the
+        reviewer's own repro: their mechanism was a dispatch error killing the
+        reader thread outright, which is no longer reachable at all once
+        :meth:`_pump_stdout`'s per-line guard is in place (see
+        test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader) -
+        the loop never aborts early any more. This test instead reaches the
+        SAME ``_finish`` branch the honest way: genuine raw-fd EOF on both
+        stdout/stderr while the child process itself is still alive (verified
+        empirically that ``sys.stdout.close()`` at the TextIOWrapper level does
+        NOT reliably release the pipe's write end promptly on this platform -
+        ``os.close(fd)`` does; see the ``eof_without_exit`` fake scenario).
+        Either way, ``_finish`` must not FABRICATE a ``process_exit``/
+        session-end signal it never actually observed - ``proc.poll()`` proves
+        the child is still alive at exactly that moment - and must say so
+        honestly and kill the leaked child rather than abandoning it.
+    
+        Explicitly bounded (not a bare ``list(events())``): a background thread
+        with a hard ``join(timeout=25.0)``, so a regression that removes
+        ``_finish``'s own internal backstop fails this test in seconds instead
+        of hanging the suite - the same pattern as
+        test_events_called_twice_both_return_after_close_not_just_one.
+        """
+        connector = _connector("eof_without_exit")
+        session = connector.start(owning_agent_id="agent_test")
+        connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hello"}))
+    
+        result: dict[str, object] = {}
+    
+        def _drain() -> None:
+            result["events"] = list(connector.events())
+    
+        t = threading.Thread(target=_drain, daemon=True)
+        t.start()
+        t.join(timeout=25.0)
+>       assert not t.is_alive(), "events() did not terminate - _finish's internal backstop appears to have regressed"
+E       AssertionError: events() did not terminate - _finish's internal backstop appears to have regressed
+E       assert not True
+E        +  where True = is_alive()
+E        +    where is_alive = <Thread(Thread-35 (_drain), started daemon 46184)>.is_alive
+
+tests\test_harness_claude_code_connector.py:763: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_harness_claude_code_connector.py::test_finish_never_fabricates_process_exit_when_child_is_still_alive
+1 failed, 64 passed, 1 skipped, 7 deselected in 92.28s (0:01:32)

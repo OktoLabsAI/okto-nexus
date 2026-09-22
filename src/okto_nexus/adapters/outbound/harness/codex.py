@@ -43,6 +43,8 @@ frozen port cleanly - reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
+from .owned_process import spawn_owned_process
+
 from .environment import child_environment
 
 import json
@@ -254,7 +256,7 @@ class _CodexTransport:
     def start(self) -> None:
         full_env = child_environment(self._env)
         try:
-            self._proc = subprocess.Popen(
+            self._proc = spawn_owned_process(
                 self._command,
                 cwd=self._cwd,
                 env=full_env,
@@ -338,8 +340,15 @@ class _CodexTransport:
         request_id = self._allocate_id()
         reply_q: queue.Queue[Any] = queue.Queue(maxsize=1)
         with self._pending_lock:
+            if self._closed.is_set():
+                raise OktoNexusError(ErrorCode.INTERNAL_ERROR, "codex transport is closed.", {})
             self._pending[request_id] = reply_q
-        self._write({"jsonrpc": "2.0", "id": request_id, "method": method, "params": dict(params)})
+        try:
+            self._write({"jsonrpc": "2.0", "id": request_id, "method": method, "params": dict(params)})
+        except BaseException:
+            with self._pending_lock:
+                self._pending.pop(request_id, None)
+            raise
         try:
             kind, value = reply_q.get(timeout=timeout_s)
         except queue.Empty as exc:
@@ -374,12 +383,8 @@ class _CodexTransport:
     def reply_method_not_found(self, request_id: Any) -> None:
         """Answer a server->client REQUEST we do not implement.
 
-        Approval round-trips (``item/commandExecution/requestApproval`` and
-        the other nine ``ServerRequest`` methods) are out of scope for the
-        unattended ``approvalPolicy="never"`` posture this connector always
-        sets (D6) - but codex is still entitled to SOME reply, or the turn
-        that triggered the request hangs. ``-32601`` is the standard
-        JSON-RPC "method not found" code.
+        Unsupported native requests receive JSON-RPC -32601. This is a
+        visible limitation, never an implicit approval or sandbox bypass.
         """
         self._write(
             {
@@ -438,7 +443,9 @@ class _CodexTransport:
                     returncode = self._proc.wait(timeout=_PROC_WAIT_TIMEOUT_S)
                 except subprocess.TimeoutExpired:
                     returncode = None
-            if not self._closed.is_set():
+            was_closed = self._closed.is_set()
+            self._fail_pending("codex child exited before replying")
+            if not was_closed:
                 self._on_child_exit(returncode, self.stderr_tail())
 
     def _read_stderr(self) -> None:
@@ -487,12 +494,17 @@ class _CodexTransport:
             except subprocess.TimeoutExpired:
                 self._proc.kill()
                 self._proc.wait(timeout=grace_s)
-        # Unblock anyone parked in request(): fail every still-pending call.
+        self._fail_pending("connector closed")
+
+    def _fail_pending(self, reason: str) -> None:
+        # EOF during initialize must release startup capacity immediately,
+        # even when the connector has not yet installed this transport.
         with self._pending_lock:
+            self._closed.set()
             pending = list(self._pending.items())
             self._pending.clear()
         for _request_id, reply_q in pending:
-            reply_q.put(("error", {"code": -1, "message": "connector closed"}))
+            reply_q.put_nowait(("error", {"code": -1, "message": reason}))
 
 
 # --------------------------------------------------------------------------- #
@@ -511,22 +523,11 @@ class CodexAppServerConnector:
     "multiplexes_sessions has no expression in the port" for why this is an
     implicit contract rather than something the Protocol states.
 
-    Unattended by construction: every ``thread/start`` sets
-    ``approvalPolicy="never"`` and ``sandbox="danger-full-access"`` unless
-    overridden, matching D6's proven-empty-approval-round-trip posture and
-    the ADR's own ``-a never -s danger-full-access`` spelling (``app-server``
-    takes them as plain-string ``ThreadStartParams`` fields, not CLI flags -
-    confirmed against ``codex app-server --help``, which has no ``-a``/``-s``
-    of its own).
-
-    ``sandbox`` as a PLAIN STRING (``"danger-full-access"``, not the tagged
-    object ``{"type": "dangerFullAccess"}`` the JSON Schema dump's
-    ``SandboxPolicy`` definitions show) was verified against the live
-    0.144.6 binary, not read off the schema: the object form is REJECTED at
-    request time with error code -32600, message "unknown variant `type`,
-    expected one of `read-only`, `workspace-write`, `danger-full-access`" -
-    that object shape is what a *response* echoes back, not what a
-    *request* accepts. See the module's mismatch note on this.
+    Every ``thread/start`` defaults to ``approvalPolicy="on-request"`` and
+    ``sandbox="read-only"``. Only an explicitly approved runtime profile
+    may override those controls. The approval bridge is tracked separately;
+    an unsupported native request currently gets an explicit protocol error.
+    Sandbox request values use the native string form.
     """
 
     def __init__(

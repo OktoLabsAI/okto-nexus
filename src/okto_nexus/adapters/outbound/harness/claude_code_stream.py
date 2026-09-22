@@ -133,6 +133,8 @@ woken the instant an event is published, not on some fixed interval.
 
 from __future__ import annotations
 
+from .owned_process import spawn_owned_process
+
 from .environment import child_environment
 
 import json
@@ -374,7 +376,7 @@ class ClaudeCodeStreamConnector:
         argv = [self._binary, *self._argv]
         spawn_env = child_environment(self._env)
         try:
-            proc = subprocess.Popen(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+            proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
                 argv,
                 stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,

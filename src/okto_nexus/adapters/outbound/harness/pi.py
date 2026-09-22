@@ -96,6 +96,8 @@ reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
+from .owned_process import spawn_owned_process
+
 from .environment import child_environment
 
 import itertools
@@ -280,7 +282,7 @@ class _PiTransport:
             # New process group so close() can kill the whole tree, not just
             # the immediate child (quality bar: leave no orphans).
             popen_kwargs["start_new_session"] = True
-        self._proc = subprocess.Popen(self._argv, **popen_kwargs)
+        self._proc = spawn_owned_process(self._argv, **popen_kwargs)
         threading.Thread(target=self._read_stdout, daemon=True, name="pi-stdout").start()
         threading.Thread(target=self._read_stderr, daemon=True, name="pi-stderr").start()
 
