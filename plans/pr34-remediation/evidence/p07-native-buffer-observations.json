@@ -1,0 +1,47 @@
+[
+  {
+    "kind": "codex",
+    "scenario": "active_close",
+    "models_or_providers": [
+      "gpt-6-astra",
+      "openai"
+    ],
+    "event_count": 10,
+    "result_count": 1,
+    "temporary_auth_removed": true,
+    "lifecycle_states": [
+      "stop_requested",
+      "stopped"
+    ]
+  },
+  {
+    "kind": "codex",
+    "scenario": "two_turns",
+    "models_or_providers": [
+      "gpt-6-astra",
+      "openai"
+    ],
+    "event_count": 44,
+    "result_count": 2,
+    "temporary_auth_removed": true,
+    "lifecycle_states": [
+      "stop_requested",
+      "stopped"
+    ]
+  },
+  {
+    "kind": "claude_code",
+    "scenario": "two_turns",
+    "models_or_providers": [
+      "claude-opus-5",
+      "claude-opus-5[1m]"
+    ],
+    "event_count": 29,
+    "result_count": 2,
+    "temporary_auth_removed": true,
+    "lifecycle_states": [
+      "stop_requested",
+      "stopped"
+    ]
+  }
+]

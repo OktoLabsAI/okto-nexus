@@ -98,6 +98,7 @@ from __future__ import annotations
 
 from .owned_process import spawn_owned_process, observe_owned_process
 from .framing import FrameLimitExceeded, protocol_lines, stderr_chunks
+from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
 from .environment import child_environment
 
@@ -594,6 +595,8 @@ class PiRpcConnector:
     rather than silently orphaning or replacing the first child.
     """
 
+    event_stream_contract_version = 2
+
     def __init__(
         self,
         *,
@@ -650,24 +653,9 @@ class PiRpcConnector:
         self._awaiting_settle_generation: int | None = None
         self._next_settle_generation = itertools.count(1)
 
-        # C2 fix: a SINGLE shared `queue.Queue` (the pre-fix design) means
-        # every consumer of `events()` competes for the SAME items - two
-        # concurrent callers (or two calls from different threads) SPLIT the
-        # stream between them rather than each independently seeing the
-        # whole thing, directly contradicting this module's own note 9 claim
-        # that a second/later `events()` call is a safe, independent
-        # consumer. Fan-out instead: `_event_history` is the append-only
-        # record of every event ever pushed (never trimmed - a session's
-        # event count is bounded by its own lifetime, not unbounded), and
-        # each `events()` call gets its OWN subscriber queue, seeded with a
-        # snapshot of the history taken under `_history_lock` at subscribe
-        # time (so a LATE subscriber still gets everything from the start,
-        # not just what is pushed after it subscribes) and then fed live by
-        # `_push_event`. `_history_lock` also serialises history-append
-        # against backlog-snapshot so a push can never land in the gap
-        # between a new subscriber's snapshot and its registration (see
-        # `_push_event`/`events()`).
-        self._event_history: list[HarnessEvent] = []
+        # Native stream v2 retains a bounded replay window. Live consumers
+        # receive ordered independent queues; durable history belongs to Nexus.
+        self._event_history = NativeEventHistory()
         self._history_lock = threading.Lock()
         self._subscribers: list["queue.Queue[HarnessEvent]"] = []
         # Set exactly once, by close() or an unexpected child exit. events()
@@ -779,37 +767,14 @@ class PiRpcConnector:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "unknown command verb.", {"verb": command.verb})
 
     def events(self) -> Iterator[HarnessEvent]:
-        """Blocking generator, bounded so it can NEVER block forever, and
-        with its OWN independent fan-out subscription (C2 fix) - calling
-        this a second time, or from a second thread, no longer SPLITS the
-        stream with the first caller (the pre-fix defect: one shared
-        ``queue.Queue`` meant two concurrent consumers each got roughly
-        half the events, unpredictably, with no way to tell which half).
-        Each call registers a fresh per-consumer queue, seeded with every
-        event pushed since the connector started (see ``_event_history`` on
-        ``__init__``) so a LATE subscriber - a supervisor that reconnects,
-        or simply calls this after the turn already started - still gets
-        the full stream from the beginning, not just what happens to be
-        pushed after it subscribes.
+        """Native stream v2: bounded replay, explicit expiration/overflow.
 
-        Real events are still delivered the instant they are pushed - a
-        ``Queue.get(timeout=_EVENTS_POLL_S)`` returns immediately once an
-        item exists, exactly like an unbounded ``get()`` would, so this is
-        NOT polling for events (D1 is not violated: nothing here re-checks
-        store state in a sleep loop). The timeout only bounds how long an
-        IDLE wait can run before re-checking :attr:`_closed_event`, so a
-        call to this method - EVEN A SECOND OR LATER CALL, EVEN FROM ANOTHER
-        THREAD - always terminates within one poll period of :meth:`close`,
-        never later. This replaces an earlier single-consumption sentinel
-        design that could only ever be observed by ONE generator instance,
-        found in review to deadlock any second caller of :meth:`events` (or
-        the same caller invoking it twice) on an unbounded wait with no
-        timeout at all - see mismatch note 9.
+        Durable replay uses Nexus journal/SQLite, not this transient history.
+        Each subscriber has a bounded independent queue; gaps raise explicitly.
+        Idle waits only check shutdown and never poll native protocol status.
         """
-        my_queue: "queue.Queue[HarnessEvent]" = queue.Queue()
         with self._history_lock:
-            backlog = list(self._event_history)
-            self._subscribers.append(my_queue)
+            my_queue, backlog = subscribe(self._event_history, self._subscribers)
         try:
             for item in backlog:
                 yield item
@@ -1058,18 +1023,17 @@ class PiRpcConnector:
             occurred_at=utc_now_iso(),
             payload=payload,
         )
-        # C2 fix: append to the durable history and fan out to every LIVE
-        # subscriber under the same lock a new `events()` call uses to take
-        # its backlog snapshot - this is what makes the snapshot-then-
-        # subscribe in `events()` race-free: whichever of {this push,
-        # a concurrent subscribe} takes the lock first fully happens before
-        # the other, so a new subscriber can never miss an event that raced
-        # its own registration, and never sees it twice.
+        # Append and nonblocking fanout share one ordering lock. Overflow
+        # stops the owned process; every affected reader observes an explicit gap.
         with self._history_lock:
-            self._event_history.append(event)
+            retained = self._event_history.append(event)
             subscribers = list(self._subscribers)
-        for subscriber_queue in subscribers:
-            subscriber_queue.put(event)
+            overflow = not retained
+            for subscriber_queue in subscribers:
+                if subscriber_queue.put(event) is False:
+                    overflow = True
+        if overflow:
+            stop_overflowed_process(self._transport._proc if self._transport else None)
 
 
 # --------------------------------------------------------------------------- #

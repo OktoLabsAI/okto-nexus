@@ -135,6 +135,7 @@ from __future__ import annotations
 
 from .owned_process import spawn_owned_process, observe_owned_process
 from .framing import FrameLimitExceeded, MAX_FRAME_CHARS, protocol_lines, stderr_chunks
+from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
 from .environment import child_environment
 
@@ -236,6 +237,8 @@ class ClaudeCodeStreamConnector:
       observable and terminates :meth:`events`.
     """
 
+    event_stream_contract_version = 2
+
     def __init__(
         self,
         *,
@@ -276,22 +279,9 @@ class ClaudeCodeStreamConnector:
 
         self._proc: subprocess.Popen[str] | None = None
         self._session: HarnessSession | None = None
-        # RES-A2 fix (mirrors harness/pi.py's C2 fix): the pre-fix design
-        # shared exactly ONE queue.Queue across every events() call, so two
-        # concurrent consumers (or two calls from different threads) raced
-        # for each item and SPLIT the stream between them rather than each
-        # independently seeing the whole thing - see EV-CC-004-res-a2-probe.py
-        # for the reproduction. Fan-out instead: _event_history is the
-        # append-only record of every event ever emitted (never trimmed - a
-        # session's event count is bounded by its own lifetime), and each
-        # events() call gets its OWN subscriber queue, seeded with a
-        # snapshot of the history taken under _history_lock at subscribe
-        # time (so a LATE subscriber still gets everything from the start)
-        # and then fed live by _emit(). _history_lock also serialises
-        # history-append against backlog-snapshot so an emit can never land
-        # in the gap between a new subscriber's snapshot and its
-        # registration - see _emit()/events().
-        self._event_history: list[HarnessEvent] = []
+        # Native stream v2 retains a bounded replay window. Live consumers
+        # receive ordered independent queues; durable history belongs to Nexus.
+        self._event_history = NativeEventHistory()
         self._history_lock = threading.Lock()
         self._subscribers: list[queue.Queue[HarnessEvent]] = []
         # Set once by _finish() (the stdout reader thread, on child exit) or
@@ -458,44 +448,14 @@ class ClaudeCodeStreamConnector:
             self._end()
 
     def events(self) -> Iterator[HarnessEvent]:
-        """Blocking generator over inbound events; ends when the child exits.
+        """Native stream v2: bounded replay, explicit expiration/overflow.
 
-        RES-A2 fix (mirrors ``harness/pi.py``'s C2 fix): this call has its
-        OWN independent fan-out subscription - calling this a second time,
-        or from a second thread, no longer SPLITS the stream with the first
-        caller (the pre-fix defect: one shared ``queue.Queue`` meant two
-        concurrent consumers each got roughly half the events,
-        unpredictably, with no way to tell which half - see
-        ``EV-CC-004-res-a2-probe.py``). Each call registers a fresh
-        per-consumer queue, seeded with every event emitted since the
-        connector started (:attr:`_event_history`) so a LATE subscriber - a
-        supervisor that reconnects, or simply calls this after the turn
-        already started - still gets the full stream from the beginning,
-        not just what happens to be emitted after it subscribes.
-
-        Real events are still delivered the instant they are emitted - a
-        ``Queue.get(timeout=_EVENTS_POLL_S)`` returns immediately once an
-        item exists, exactly like an unbounded ``get()`` would (no sleep, no
-        poll interval for events themselves - D1 is not violated). The
-        timeout only bounds how long an IDLE wait can run before
-        re-checking :attr:`_closed_event`, so this call - EVEN A SECOND OR
-        LATER CALL, EVEN FROM ANOTHER THREAD - always terminates within one
-        poll period of the child exiting, never later, and never returns
-        while events remain queued (the ``queue.Empty`` branch only fires
-        once the queue is genuinely drained). Per the module docstring, that
-        termination IS this connector's ``observes_session_end=True``
-        signal - no separate "ended" ``HarnessEvent`` kind exists in the
-        port to synthesise.
-
-        This also still carries the earlier single-consumption ``None``
-        sentinel fix: shutdown is a ``threading.Event`` (:attr:`_closed_event`)
-        checked on every ``queue.Empty``, not a value travelling through the
-        queue that only one generator could ever consume.
+        Durable replay uses Nexus journal/SQLite, not this transient history.
+        Each subscriber has a bounded independent queue; gaps raise explicitly.
+        Idle waits only check shutdown and never poll native protocol status.
         """
-        my_queue: queue.Queue[HarnessEvent] = queue.Queue()
         with self._history_lock:
-            backlog = list(self._event_history)
-            self._subscribers.append(my_queue)
+            my_queue, backlog = subscribe(self._event_history, self._subscribers)
         try:
             for item in backlog:
                 yield item
@@ -973,18 +933,14 @@ class ClaudeCodeStreamConnector:
             occurred_at=utc_now_iso(),
             payload=payload,
         )
-        # RES-A2 fix (mirrors harness/pi.py's C2 fix): append to the
-        # durable history and snapshot the subscriber list under the SAME
-        # lock a new events() call uses to take its own backlog snapshot -
-        # this is what makes the snapshot-then-subscribe in events()
-        # race-free: whichever of {this emit, a concurrent subscribe} takes
-        # the lock first fully happens before the other, so a new
-        # subscriber can never miss an event that raced its own
-        # registration, and never sees it twice. The actual queue.put()
-        # calls happen OUTSIDE the lock (subscribers is only read here, not
-        # mutated) so a slow/blocked consumer can never hold up _emit().
+        # Append and nonblocking fanout share one ordering lock. Overflow
+        # stops the owned process; every affected reader observes an explicit gap.
         with self._history_lock:
-            self._event_history.append(event)
+            retained = self._event_history.append(event)
             subscribers = list(self._subscribers)
-        for subscriber_queue in subscribers:
-            subscriber_queue.put(event)
+            overflow = not retained
+            for subscriber_queue in subscribers:
+                if subscriber_queue.put(event) is False:
+                    overflow = True
+        if overflow:
+            stop_overflowed_process(self._proc)

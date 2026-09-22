@@ -98,3 +98,11 @@ tree), the same isolated Codex configuration ran
 delivery and active-close interruption, including the final atomic-close lock
 refinement. Evidence: `evidence/p07-native-codex-request-race-gate.log` and
 P07_CODEX_REQUEST_ORDERING.md. Temporary authentication copies checked absent.
+
+After bounded native stream v2 (parent 2b6b3a9 plus working tree), fresh isolated
+campaigns reran the authorized paths: Codex **2 passed, 1 deselected, 15.51s**;
+Claude stream **1 passed, 2 deselected, 10.55s**. Commands retain the same explicit
+paths/configuration above and select `-k codex` / `-k claude_code` respectively.
+See P07_EVENT_BUFFERS.md and `evidence/p07-native-buffer-observations.json`.
+These prove normal enabled operation with bounded history/fanout, not real native
+pressure/fault campaigns. All login copies removed; Pi and attach native NOT_RUN.

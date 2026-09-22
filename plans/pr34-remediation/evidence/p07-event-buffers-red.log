@@ -1,0 +1,60 @@
+FFFFFFF                                                                  [100%]
+================================== FAILURES ===================================
+____ test_native_history_has_byte_bound_and_explicit_expired_replay[codex] ____
+tests\test_runtime_event_buffers.py:39: in test_native_history_has_byte_bound_and_explicit_expired_replay
+    assert len(peer._event_history) <= 512, "native history retained over four MiB of payload"
+E   AssertionError: native history retained over four MiB of payload
+E   assert 1024 <= 512
+E    +  where 1024 = len([HarnessEvent(session_id='fixture', harness_kind='codex', kind='output_delta', native_event='item/agentMessage/delta',...xxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id='thread', turn_id='turn', event_id=None, sequence=None, origin='native'), ...])
+E    +    where [HarnessEvent(session_id='fixture', harness_kind='codex', kind='output_delta', native_event='item/agentMessage/delta',...xxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id='thread', turn_id='turn', event_id=None, sequence=None, origin='native'), ...] = <okto_nexus.adapters.outbound.harness.codex.CodexAppServerConnector object at 0x000001BB840A8980>._event_history
+_____ test_native_history_has_byte_bound_and_explicit_expired_replay[pi] ______
+tests\test_runtime_event_buffers.py:39: in test_native_history_has_byte_bound_and_explicit_expired_replay
+    assert len(peer._event_history) <= 512, "native history retained over four MiB of payload"
+E   AssertionError: native history retained over four MiB of payload
+E   assert 1024 <= 512
+E    +  where 1024 = len([HarnessEvent(session_id='fixture', harness_kind='pi', kind='output_delta', native_event='fixture_delta', occurred_at=...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...])
+E    +    where [HarnessEvent(session_id='fixture', harness_kind='pi', kind='output_delta', native_event='fixture_delta', occurred_at=...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...] = <okto_nexus.adapters.outbound.harness.pi.PiRpcConnector object at 0x000001BB840A9160>._event_history
+___ test_native_history_has_byte_bound_and_explicit_expired_replay[claude] ____
+tests\test_runtime_event_buffers.py:39: in test_native_history_has_byte_bound_and_explicit_expired_replay
+    assert len(peer._event_history) <= 512, "native history retained over four MiB of payload"
+E   AssertionError: native history retained over four MiB of payload
+E   assert 1024 <= 512
+E    +  where 1024 = len([HarnessEvent(session_id='fixture', harness_kind='claude_code', kind='output_delta', native_event='fixture_delta', occ...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...])
+E    +    where [HarnessEvent(session_id='fixture', harness_kind='claude_code', kind='output_delta', native_event='fixture_delta', occ...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...] = <okto_nexus.adapters.outbound.harness.claude_code_stream.ClaudeCodeStreamConnector object at 0x000001BB840ABA10>._event_history
+___ test_native_history_has_byte_bound_and_explicit_expired_replay[attach] ____
+tests\test_runtime_event_buffers.py:39: in test_native_history_has_byte_bound_and_explicit_expired_replay
+    assert len(peer._event_history) <= 512, "native history retained over four MiB of payload"
+E   AssertionError: native history retained over four MiB of payload
+E   assert 1024 <= 512
+E    +  where 1024 = len([HarnessEvent(session_id='4242', harness_kind='claude_code', kind='error', native_event='fixture_error', occurred_at='...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...])
+E    +    where [HarnessEvent(session_id='4242', harness_kind='claude_code', kind='error', native_event='fixture_error', occurred_at='...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}, thread_id=None, turn_id=None, event_id=None, sequence=None, origin='native'), ...] = <okto_nexus.adapters.outbound.harness.claude_code_attach.ClaudeCodeAttachConnector object at 0x000001BB840A9160>._event_history
+__________ test_slow_subscriber_is_bounded_and_reports_a_gap[codex] ___________
+tests\test_runtime_event_buffers.py:52: in test_slow_subscriber_is_bounded_and_reports_a_gap
+    assert peer._subscribers[0].qsize() <= 128, "subscriber retained an unbounded backlog"
+E   AssertionError: subscriber retained an unbounded backlog
+E   assert 1024 <= 128
+E    +  where 1024 = qsize()
+E    +    where qsize = <queue.Queue object at 0x000001BB840ABA10>.qsize
+____________ test_slow_subscriber_is_bounded_and_reports_a_gap[pi] ____________
+tests\test_runtime_event_buffers.py:52: in test_slow_subscriber_is_bounded_and_reports_a_gap
+    assert peer._subscribers[0].qsize() <= 128, "subscriber retained an unbounded backlog"
+E   AssertionError: subscriber retained an unbounded backlog
+E   assert 1024 <= 128
+E    +  where 1024 = qsize()
+E    +    where qsize = <queue.Queue object at 0x000001BB8433CCD0>.qsize
+__________ test_slow_subscriber_is_bounded_and_reports_a_gap[claude] __________
+tests\test_runtime_event_buffers.py:52: in test_slow_subscriber_is_bounded_and_reports_a_gap
+    assert peer._subscribers[0].qsize() <= 128, "subscriber retained an unbounded backlog"
+E   AssertionError: subscriber retained an unbounded backlog
+E   assert 1024 <= 128
+E    +  where 1024 = qsize()
+E    +    where qsize = <queue.Queue object at 0x000001BB8433CE10>.qsize
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[codex]
+FAILED tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[pi]
+FAILED tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[claude]
+FAILED tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[attach]
+FAILED tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[codex]
+FAILED tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[pi]
+FAILED tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[claude]
+7 failed in 0.49s

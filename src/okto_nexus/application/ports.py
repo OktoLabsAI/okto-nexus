@@ -1693,6 +1693,13 @@ class HarnessConnector(Protocol):
         native pump looks like (a thread-fed queue for child-process stdio,
         an asyncio stream for a socket); the CALLER only ever sees
         ``HarnessEvent`` instances out of it, never a native envelope.
+
+        Built-in native stream contract v2 retains only a bounded transient
+        replay window and bounded independent subscriptions. An expired replay
+        or subscriber overflow raises explicitly; callers must record uncertain
+        outcomes rather than treat generator failure as successful completion.
+        Durable historical replay uses the canonical event repository/journal.
+        Legacy trusted injected connectors may still expose stream contract v1.
         """
         ...
 

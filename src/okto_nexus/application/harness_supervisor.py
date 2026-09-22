@@ -1432,7 +1432,8 @@ class HarnessSupervisor:
         event = HarnessEvent(session_id=live.session.session_id,
             harness_kind=live.session.harness_kind, kind="tool_activity", origin="nexus",
             native_event="nexus/runtime_state", occurred_at=self._clock.now_iso(),
-            payload={"lifecycle_state": state, "stop_observed": stop_observed, "error": bool(error)})
+            payload={"lifecycle_state": state, "stop_observed": stop_observed, "error": bool(error),
+                     "failure_type": type(error).__name__ if isinstance(error, BaseException) else None})
         self.event_ingress.capture(event, connection_id=live.session.connection_id)
         live.session.lifecycle_state = state
         if state == "stopped" and stop_observed:
@@ -1466,7 +1467,7 @@ class HarnessSupervisor:
             stopped = observation.get("stop_observed") is True
             unknown = bool(error or observation.get("active_turn"))
             state = "outcome_unknown" if unknown else "stopped" if stopped else "detached"
-            self._capture_lifecycle(live, state, stop_observed=stopped, error=error is not None)
+            self._capture_lifecycle(live, state, stop_observed=stopped, error=error)
             self._presence_by_runtime.pop(live.session.session_id, None)
             with self._lock:
                 if not self.event_ingress.projection_pending:

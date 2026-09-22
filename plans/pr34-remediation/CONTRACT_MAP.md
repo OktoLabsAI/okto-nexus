@@ -45,3 +45,16 @@ legacy set, allowing explicitly recorded version/flag/schema metadata changes.
   RUNNING value while its lifecycle truth is detached.
 - Native per-connection/thread IDs remain distinct from canonical agent and
   runtime-session IDs. No new identity registry was introduced.
+
+## Native transient event stream v2
+
+The four built-in connectors declare `event_stream_contract_version = 2`;
+EnvelopeConnector forwards it, defaulting to 1 for legacy trusted extensions.
+This versions native `events()` replay semantics separately from the unchanged
+canonical delivery envelope/adapter registration v1 and durable journal v1.
+Native in-memory history is a bounded window. Expired replay raises explicitly;
+live subscribers have bounded independent queues and overflow raises after
+draining the retained prefix. The supervisor records uncertainty and quarantines
+the affected binding. Historical replay goes through the authenticated canonical
+event repository, never an assumption that a native list contains all events.
+See P07_EVENT_BUFFERS.md for exact limits, validation and remaining boundaries.

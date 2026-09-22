@@ -95,6 +95,8 @@ an earlier version of this module would have swallowed it.
 
 from __future__ import annotations
 
+from .event_buffers import NativeEventHistory
+
 import json
 import os
 import re
@@ -357,6 +359,8 @@ class ClaudeCodeAttachConnector:
     default and gets the real path.
     """
 
+    event_stream_contract_version = 2
+
     def __init__(
         self,
         target_pid: int,
@@ -376,37 +380,9 @@ class ClaudeCodeAttachConnector:
         self._socket_path: Path | None = None
         self._key_path: Path | None = None
         self._proc_start: Any = None
-        # Locally-originated events only (probe/send failures surfaced
-        # through the uniform HarnessConnector.events() path in ADDITION to
-        # the exception send() itself raises - see module docstring and the
-        # port gap noted in this task's report). Never fed a synthesized
-        # peer reply: this transport has none.
-        #
-        # RES-A2 fix (fan-out, mirrors pi.py's/codex.py's/claude_code_stream.py's
-        # own C2 fix): the ORIGINAL implementation was a single shared
-        # ``collections.deque`` that ``events()`` destructively drained
-        # (``while self._events: ...popleft()``) - two concurrent callers
-        # raced over the SAME deque and split the queued events between them
-        # (a partition), each seeing an unpredictable subset, never the full
-        # stream either claimed to see. This is now an append-only history
-        # (never trimmed - this connector's whole-session event count is
-        # bounded by the session's own lifetime, exactly like the siblings'
-        # ``_event_history``) plus a lock guarding every read/append so a
-        # snapshot taken by one caller can never observe a torn write from
-        # another. Unlike the siblings, there is NO per-subscriber
-        # ``queue.Queue``, background reader thread, or shutdown
-        # ``threading.Event``: this transport mints events synchronously,
-        # inline, from ``send()``'s own call stack - there is no live push
-        # after a caller subscribes for a queue-plus-shutdown-signal pair to
-        # coordinate, so that machinery would be dead code here (see the
-        # module docstring's fan-out note and this task's report for why it
-        # is deliberately NOT ported). Every call to :meth:`events` is a full,
-        # idempotent REPLAY of the history taken under this lock (broadcast,
-        # not drain) - the direct consequence of the fix, not merely
-        # incidental: a caller that invokes ``events()`` a second time (or a
-        # concurrent second caller) sees every event ever recorded, exactly
-        # like a late subscriber to the siblings' history-backed queue does.
-        self._event_history: list[HarnessEvent] = []
+        # Native stream v2 retains bounded local diagnostics only. Attach has
+        # no native reply channel; durable history belongs to Nexus.
+        self._event_history = NativeEventHistory()
         self._history_lock = threading.Lock()
 
     # ------------------------------------------------------------------ #
@@ -1133,37 +1109,10 @@ class ClaudeCodeAttachConnector:
         self._transition(STATUS_RUNNING)
 
     def events(self) -> Iterator[HarnessEvent]:
-        """Return the full locally-originated event history; never blocks,
-        never polls.
+        """Native stream v2: bounded replay, explicit expiration/overflow.
 
-        ``cc-socks`` has NO inbound channel - no ack, no reply, nothing a
-        real peer ever sends back on this socket (module docstring). This is
-        therefore never fed a synthesized peer message. It carries only
-        events THIS connector originates about its own transport (currently:
-        ``kind="error"`` on a failed send or a tripped pid-reuse guard - see
-        :meth:`send`), so breakage reaches a supervisor iterating every
-        connector's ``events()`` uniformly, in addition to the exception
-        ``send`` itself raises (the port's own documented contract).
-
-        RES-A2 fix (fan-out, mirrors the ``_event_history`` pattern in
-        ``pi.py``/``codex.py``/``claude_code_stream.py``): this returns a
-        SNAPSHOT of :attr:`_event_history`, taken atomically under
-        :attr:`_history_lock` - a finite iterator, never a blocking pump, so
-        nothing here can violate the "no polling" rule by looping
-        internally. The history is append-only and never trimmed, so this
-        call is now a BROADCAST, not a drain: two concurrent callers (or the
-        same caller invoking this twice) each get the FULL event stream
-        recorded so far, exactly like a late subscriber to a sibling
-        connector's queue-backed history sees everything from the start.
-        This is a deliberate behaviour change from the earlier
-        ``collections.deque``-drain implementation (which destructively
-        popped a SHARED deque and so split the stream between concurrent
-        callers - the actual RES-A2 defect) - callers that relied on "a
-        second call returns empty" must now track their own last-seen
-        position if they want drain-once semantics; none of this
-        connector's real callers do (the supervisor iterates ``events()``
-        once per ``send()`` in the same thread, synchronously - see the
-        module docstring).
+        Durable replay uses Nexus journal/SQLite, not this transient history.
+        Attach reports only local diagnostics and never blocks for a peer reply.
         """
         with self._history_lock:
             snapshot = list(self._event_history)

@@ -89,3 +89,12 @@ REDs corrected. Gate: 45 passed, 4 skipped; REAL Codex two-turn plus active-clos
 campaign: 2 passed, 1 deselected (18.04s), isolated auth copies removed. See
 P07_CODEX_REQUEST_ORDERING.md. Native histories/queues and general durable
 controls/correlation, POSIX ownership and boot/recovery remain pending.
+
+Request-ordering checkpoint pushed: 2b6b3a9. Native stream v2 unit bounds all four
+event histories and the three managed fanout paths, makes expired replay/overflow
+explicit and records uncertain lifecycle with a failure type. Integrated gate:
+169 passed, 9 skipped, 1 P10 case deselected, 1 known Pi warning. Fresh REAL native
+campaigns: Codex 2 passed (two turns + active close); Claude stream 1 passed (two
+turns). Temporary auth copies removed. See P07_EVENT_BUFFERS.md. Remaining native
+early-event/turn bookkeeping, durable control/result correlation, POSIX ownership
+and boot/recovery are explicitly unfinished. Final gate still NOT PASSED.

@@ -11,6 +11,7 @@ class EnvelopeConnector:
         self.capabilities = native.capabilities
         self.payload_key = payload_key
         self.connection_key = id(native)
+        self.event_stream_contract_version = getattr(native, "event_stream_contract_version", 1)
 
     def start(self, *, owning_agent_id):
         return self.native.start(owning_agent_id=owning_agent_id)
