@@ -61,3 +61,9 @@ reproduced the shared-process kill before correction. Gate: 189 passed, 9 skippe
 P07_SHARED_LIFECYCLE.md. Next dependencies: active-turn stop/settle, native buffer
 limits, POSIX ownership/boot recovery, operation correlation and scoped work/HITL.
 These fixture runs do not replace or expand the earlier native campaign claims.
+
+Shared-lifecycle checkpoint pushed: ab7d56c. Attach platform unit now rejects
+unsupported POSIX operations before effects and reports the platform contract
+without removing the adapter. See P07_ATTACH_PLATFORM.md: 13 passed, 57 POSIX
+fixtures NOT_RUN on Windows; full collection succeeds (2011 tests). Native attach
+remains NOT_RUN. Next: bounded native readers/buffers and remaining P07 recovery.

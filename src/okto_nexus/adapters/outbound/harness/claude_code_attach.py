@@ -198,6 +198,18 @@ _CATEGORY_PERMISSION = "permission"
 _CATEGORY_INTERNAL = "internal"
 
 
+def _require_attach_platform() -> None:
+    # AF_UNIX alone is insufficient: ownership and signal-zero semantics are
+    # POSIX contracts. On Windows os.kill(pid, 0) is not a liveness probe.
+    if os.name != "posix" or not hasattr(os, "getuid") or not hasattr(socket, "AF_UNIX"):
+        raise OktoNexusError(
+            ErrorCode.CONFIG_ERROR,
+            "Claude cc-socks attach requires POSIX process and socket ownership checks. "
+            "Use the managed Claude stream connector on this platform.",
+            {"reason": "platform_unsupported", "category": "unsupported_platform"},
+        )
+
+
 def _default_sessions_dir() -> Path:
     return Path.home() / ".claude" / "sessions"
 
@@ -235,6 +247,7 @@ def discover_attachable_sessions(
     job, and it fails loudly). ``claude -p`` sessions have no socket and are
     never returned (``kind`` must be ``"interactive"``).
     """
+    _require_attach_platform()
     directory = sessions_dir or _default_sessions_dir()
     results: list[AttachableSession] = []
     try:
@@ -668,6 +681,7 @@ class ClaudeCodeAttachConnector:
     # is "raise loudly", not "never raise").
     # ------------------------------------------------------------------ #
     def _check_process_alive(self) -> None:
+        _require_attach_platform()
         try:
             os.kill(self._pid, 0)
         except ProcessLookupError as exc:
@@ -819,6 +833,7 @@ class ClaudeCodeAttachConnector:
         has named branches for.
         """
         try:
+            _require_attach_platform()
             return self._probe_body()
         except OktoNexusError as exc:
             details = exc.details or {}
@@ -854,6 +869,7 @@ class ClaudeCodeAttachConnector:
             )
 
     def _probe_body(self) -> ProbeResult:
+        _require_attach_platform()
         registry = self._read_registry()
         self._check_process_alive()
         peer_protocol = self._check_peer_protocol(registry)
@@ -927,6 +943,7 @@ class ClaudeCodeAttachConnector:
         this connector never spawns anything, it only binds (see the
         ``HarnessSession`` docstring on observed vs. minted identity).
         """
+        _require_attach_platform()
         registry = self._read_registry()
         self._check_process_alive()
         peer_protocol = self._check_peer_protocol(registry)
@@ -1009,6 +1026,7 @@ class ClaudeCodeAttachConnector:
         fail", nothing stronger - never read it as "the peer accepted the
         message".
         """
+        _require_attach_platform()
         if self._session is None or session.session_id != self._session.session_id:
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,

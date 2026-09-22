@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "0ad7c0f",
+  "execution_head": "ab7d56c",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -961,11 +961,19 @@
               "result": "PASS",
               "observed": "1 passed, 1 deselected; explicit isolated local configuration, two turns only",
               "evidence": "plans/pr34-remediation/evidence/p07-native-claude.log"
+            },
+            {
+              "sha": "ab7d56c + attach platform working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_attach_platform.py tests/test_claude_code_attach_connector.py tests/test_runtime_contracts.py -q --tb=short",
+              "result": "PASS",
+              "observed": "13 passed; 57 POSIX fixtures NOT_RUN on Windows. Native attach NOT_RUN. Full collection separately succeeds: 2011 tests.",
+              "evidence": "plans/pr34-remediation/P07_ATTACH_PLATFORM.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
-            "plans/pr34-remediation/evidence/p07-native-observations.json"
+            "plans/pr34-remediation/evidence/p07-native-observations.json",
+            "plans/pr34-remediation/P07_ATTACH_PLATFORM.md"
           ],
           "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md."
         },

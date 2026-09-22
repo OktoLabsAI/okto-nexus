@@ -1,0 +1,18 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_unsupported_attach_has_no_registry_process_or_socket_effects ______
+tests\test_runtime_attach_platform.py:19: in test_unsupported_attach_has_no_registry_process_or_socket_effects
+    probe = connector.probe()
+            ^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\outbound\harness\claude_code_attach.py:822: in probe
+    return self._probe_body()
+           ^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\outbound\harness\claude_code_attach.py:857: in _probe_body
+    registry = self._read_registry()
+               ^^^^^^^^^^^^^^^^^^^^^
+tests\test_runtime_attach_platform.py:12: in forbidden
+    pytest.fail("unsupported attach touched registry, process, or socket")
+E   Failed: unsupported attach touched registry, process, or socket
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_attach_platform.py::test_unsupported_attach_has_no_registry_process_or_socket_effects
+1 failed in 0.34s

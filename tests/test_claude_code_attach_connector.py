@@ -39,6 +39,12 @@ from okto_nexus.domain.harness import (
 from okto_nexus.errors import OktoNexusError
 
 
+pytestmark = pytest.mark.skipif(
+    os.name != "posix",
+    reason="NOT_RUN: attach fixture requires POSIX UID, process, and socket ownership semantics",
+)
+
+
 # --------------------------------------------------------------------------- #
 # Fixtures
 # --------------------------------------------------------------------------- #
@@ -1372,7 +1378,7 @@ def test_probe_registry_missing_kind_field_is_protocol_drift_not_headless(
     assert headless_result.reason != result.reason
 
 
-@pytest.mark.skipif(os.geteuid() == 0, reason="root bypasses file permission checks")
+@pytest.mark.skipif(os.name != "posix" or os.geteuid() == 0, reason="requires non-root POSIX")
 def test_probe_permission_denied_registry_is_a_distinct_permission_category(
     tmp_path: Path,
 ) -> None:
@@ -1397,7 +1403,7 @@ def test_probe_permission_denied_registry_is_a_distinct_permission_category(
     assert result.reason != "registry_not_found"
 
 
-@pytest.mark.skipif(os.geteuid() == 0, reason="root bypasses file permission checks")
+@pytest.mark.skipif(os.name != "posix" or os.geteuid() == 0, reason="requires non-root POSIX")
 def test_probe_permission_denied_key_file_is_a_distinct_permission_category(
     tmp_path: Path,
 ) -> None:
