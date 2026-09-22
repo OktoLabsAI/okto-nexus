@@ -4,6 +4,13 @@ All notable changes to Okto Nexus are documented in this file.
 
 ## Unreleased
 
+### 0.2.0 development
+
+- Start the PR #34 remediation on `feature/v0.2.0`. Package metadata is
+  0.2.0; implementation and acceptance gates are tracked in
+  `plans/pr34-remediation/IMPLEMENTATION_STATUS.md`. This is not a release
+  readiness claim.
+
 ### Added
 
 - Added native, bidirectional, non-polling harness sessions (ADR 0004):

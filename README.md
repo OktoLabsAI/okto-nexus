@@ -19,7 +19,7 @@ the derived `shared.md` view live outside that database.
 
 | Release fact | Value |
 |---|---|
-| Package | `okto-nexus 0.1.10` |
+| Package | `okto-nexus 0.2.0` (development) |
 | Python | `>=3.11` |
 | MCP surface | 43 tools by default; 46 with memory enabled |
 | MCP resources | 12 versioned reference resources |
@@ -977,10 +977,10 @@ Release checks:
 
 ```bash
 uv lock --check
-uv build --out-dir dist/release-0.1.10
+uv build --out-dir dist/release-0.2.0
 uvx twine check \
-  dist/release-0.1.10/okto_nexus-0.1.10-py3-none-any.whl \
-  dist/release-0.1.10/okto_nexus-0.1.10.tar.gz
+  dist/release-0.2.0/okto_nexus-0.2.0-py3-none-any.whl \
+  dist/release-0.2.0/okto_nexus-0.2.0.tar.gz
 ```
 
 Publish only explicitly named current-version artifacts. The top-level
@@ -1116,7 +1116,7 @@ and the dashboard.
 
 ## Release notes
 
-### 0.1.10 — current
+### 0.1.10 — previous release
 
 Validation-hardening release: lands the external PR backlog and closes the
 open validation bugs (#26–#30). The MCP contract remains at surface revision
