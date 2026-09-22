@@ -110,10 +110,17 @@ harness. It does NOT import the MCP SDK; the live server is passed into
 from __future__ import annotations
 
 import functools
+import inspect
+import json
 from typing import Annotated, Any, Mapping
 
 import anyio.to_thread
 from pydantic import Field
+
+from okto_nexus.application.runtime_authorization import authorize_runtime, require_runtime_agent
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+from okto_nexus.adapters.inbound.http.identity_ctx import get_authenticated_agent, trusted_local_operator
+
 
 from okto_nexus.adapters.inbound.mcp.tools.messages import (
     build_service as build_message_service,
@@ -148,10 +155,52 @@ from okto_nexus.domain.harness import (
 )
 from okto_nexus.envelope import (
     async_tool_envelope,
-    require_json_object_param,
     tool_envelope,
 )
 from okto_nexus.errors import ErrorCode, OktoNexusError
+
+def authorize_request(deps, *, substrate=None):
+    """Same authenticated admission policy for MCP, REST and local HTTP."""
+    actor = get_authenticated_agent()
+    local = trusted_local_operator.get()
+    context = RuntimeRequestContext(
+        actor.agent_id if actor else None,
+        "http_loopback" if local else "agent_key" if actor else "unauthenticated",
+        trusted_local_operator=local,
+    )
+    authorize_runtime(context, config=deps.config, agents=deps.repos.agents,
+                      connection_factory=deps.connection_factory, substrate=substrate)
+    return context
+
+
+def runtime_tool_guard(deps):
+    def decorate(fn):
+        if inspect.iscoroutinefunction(fn):
+            @functools.wraps(fn)
+            async def guarded(*args, **kwargs):
+                authorize_request(deps, substrate=kwargs.get("substrate"))
+                return await fn(*args, **kwargs)
+        else:
+            @functools.wraps(fn)
+            def guarded(*args, **kwargs):
+                authorize_request(deps)
+                return fn(*args, **kwargs)
+        return guarded
+    return decorate
+
+
+def runtime_object(name, value):
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except (ValueError, TypeError):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                f"{name} must contain a JSON object.", {}) from None
+    if value is not None and not isinstance(value, Mapping):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                            f"{name} must be a JSON object.", {})
+    return dict(value) if value is not None else None
+
 
 #: Substrate vocabulary for ``kind="claude_code"`` ONLY (see module docstring
 #: - the port's ``HARNESS_KINDS`` has no room for a fourth member). Every
@@ -181,21 +230,8 @@ _BACKEND_FIELDS_BY_KIND: dict[str, frozenset[str]] = {
 #: H-2 disclosure text - see docs/harness-integrations/evidence/
 #: EV-SYS-003-FOLLOWUP-target-grammar-fix.md.
 _P_HARNESS_AGENT_ID = (
-    "The agent_id this NEW harness session registers/upserts as (D3) - "
-    "existing or fresh; NOT the caller's own agent_id. Registration is real: "
-    "the agent row exists (metadata.harness_kind set), this session's OWN "
-    "turn_completed/error notifications are deliverable through the normal "
-    "target grammar via notify_target below, AND (SYS-03/UAT-05 fix) other "
-    "agents can now ADDRESS a live turn TO this harness through "
-    "message_create's existing target grammar (direct/capability/role/tag) "
-    "while this session stays open/live - the message's body is forwarded "
-    "as an ordinary send_turn. This is best-effort, hand-off semantics: the "
-    "ordinary inbox delivery it rides on is never consumed by the forward "
-    "(see message_create's own docs), so a forward failure (e.g. this "
-    "session having just closed) never loses the message. For guaranteed "
-    "delivery, an explicit steer/interrupt, or addressing a session that "
-    "may not be live yet, use harness_send/harness_steer/harness_interrupt "
-    "with the session_id this tool returns instead. REQUIRED."
+    "Existing canonical agent to connect. Requires authorized runtime control; "
+    "does not create identity or change its profile."
 )
 _P_KIND = 'Harness kind, one of: pi, codex, claude_code. REQUIRED.'
 _P_ROOT = "Absolute path to the project (defines the workspace scope for this session's persistence + notable-event messages)."
@@ -232,7 +268,7 @@ _P_BACKEND = (
     "config) - the response's backend.explicit field always says which "
     "happened, so that choice is never silent."
 )
-_P_ROLE = "Logical role to store on the registered agent (optional); matched exactly/case-sensitively by role-strategy targets."
+_P_ROLE = "Deprecated compatibility field: must match the existing agent role; never modifies it."
 _P_METADATA = "Free-form JSON object of extra attributes stored on the registered agent (optional)."
 _P_NOTIFY_TARGET = (
     "Routing target (optional; raw JSON object, same grammar as "
@@ -427,6 +463,7 @@ def build_service(deps: Any) -> HarnessSupervisor:
         # ordinary target-grammar delivery (direct/capability/role/tag)
         # addressed at a live session's owning_agent_id actually reach it.
         inbox_notifier=deps.inbox_delivery_notifier,
+        runtime_enabled=lambda: deps.config.feature_harness_integrations,
     )
     deps.harness_supervisor = supervisor
     return supervisor
@@ -538,8 +575,9 @@ def describe_backend(
         }
     return {
         "explicit": True,
-        "applied": dict(backend),
-        "note": "backend override applied exactly as given.",
+        "applied": {key: value if key in {"provider", "model"} else "[REDACTED]"
+                    for key, value in backend.items()},
+        "note": "Backend override applied; environment and arguments are redacted.",
     }
 
 
@@ -707,17 +745,21 @@ def read_session(deps: Any, supervisor: HarnessSupervisor, session_id: str) -> d
 # MCP tools
 # --------------------------------------------------------------------------- #
 def register(server: Any, deps: Any) -> None:
+    if not deps.config.feature_harness_integrations:
+        return
     supervisor = build_service(deps)
     factories = build_connector_factories(deps)
 
     @server.tool()
     @tool_envelope
+    @runtime_tool_guard(deps)
     def harness_list() -> dict[str, Any]:
         """List available harness kinds/substrates and their DECLARED capabilities (send_only, steer_timing, etc.), read from each connector's own declaration. Check before harness_steer/harness_interrupt."""
         return {"harnesses": capabilities_catalog()}
 
     @server.tool()
     @async_tool_envelope
+    @runtime_tool_guard(deps)
     async def harness_open(
         agent_id: Annotated[str, Field(description=_P_HARNESS_AGENT_ID)],
         kind: Annotated[str, Field(description=_P_KIND)],
@@ -729,9 +771,13 @@ def register(server: Any, deps: Any) -> None:
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
     ) -> dict[str, Any]:
-        """Open a harness session (spawn or attach), register it as an agent (D3), and track it. Bounded - a wedged connector raises INTERNAL_ERROR after the start timeout, never hangs (D8)."""
+        """Open a runtime for an existing agent. Requires operator authority and opt-in; never changes the agent profile."""
+        require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
+                              agent_id=agent_id, role=role)
         validate_harness_kind(kind)
-        backend_obj = require_json_object_param("backend", backend)
+        backend_obj = runtime_object("backend", backend)
+        metadata_obj = runtime_object("metadata", metadata)
+        notify_target_obj = runtime_object("notify_target", notify_target)
         connector = build_connector(
             factories,
             kind=kind,
@@ -740,8 +786,6 @@ def register(server: Any, deps: Any) -> None:
             target_pid=target_pid,
             backend=backend_obj,
         )
-        metadata_obj = require_json_object_param("metadata", metadata)
-        notify_target_obj = require_json_object_param("notify_target", notify_target)
         session = await anyio.to_thread.run_sync(
             functools.partial(
                 supervisor.open,
@@ -763,6 +807,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @async_tool_envelope
+    @runtime_tool_guard(deps)
     async def harness_send(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_TURN)],
@@ -776,6 +821,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @async_tool_envelope
+    @runtime_tool_guard(deps)
     async def harness_steer(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_STEER)],
@@ -789,6 +835,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @async_tool_envelope
+    @runtime_tool_guard(deps)
     async def harness_interrupt(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_INTERRUPT)] = None,
@@ -802,6 +849,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @async_tool_envelope
+    @runtime_tool_guard(deps)
     async def harness_close(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
     ) -> dict[str, Any]:
@@ -813,6 +861,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
+    @runtime_tool_guard(deps)
     def harness_get(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
     ) -> dict[str, Any]:
@@ -821,6 +870,7 @@ def register(server: Any, deps: Any) -> None:
 
     @server.tool()
     @tool_envelope
+    @runtime_tool_guard(deps)
     def harness_event_list(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         after_sequence: Annotated[int, Field(description=_P_AFTER_SEQUENCE)] = 0,

@@ -164,6 +164,8 @@ longer chain back to A) notify-targeting each other so that every
 
 from __future__ import annotations
 
+from .runtime_authorization import require_runtime_agent
+
 import functools
 import json
 import sys
@@ -387,8 +389,10 @@ class HarnessSupervisor:
         forward_timeout_s: float = DEFAULT_FORWARD_TIMEOUT_SECONDS,
         max_relay_depth: int = DEFAULT_MAX_RELAY_DEPTH,
         relay_chain_max_age_s: float = DEFAULT_RELAY_CHAIN_MAX_AGE_SECONDS,
+        runtime_enabled=None,
     ) -> None:
         self._cf = connection_factory
+        self._runtime_enabled = runtime_enabled or (lambda: True)
         self._clock = clock
         self._agents = agents
         self._sessions = sessions
@@ -415,6 +419,7 @@ class HarnessSupervisor:
 
         self._lock = threading.RLock()
         self._live: dict[str, _LiveSession] = {}
+        self._opening_agents: set[str] = set()
 
     # ------------------------------------------------------------------ #
     # subscriber registry passthrough (so a caller needs only ONE reference)
@@ -428,7 +433,25 @@ class HarnessSupervisor:
     # ------------------------------------------------------------------ #
     # open (on-demand AND boot-declared converge here - D8)
     # ------------------------------------------------------------------ #
-    def open(
+    def open(self, **kwargs) -> HarnessSession:
+        """P01 admission fence: one executor per identity until durable selection."""
+        if not self._runtime_enabled():
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
+        agent_id = kwargs.get("owning_agent_id")
+        with self._lock:
+            if agent_id in self._opening_agents or any(
+                live.session.owning_agent_id == agent_id for live in self._live.values()
+            ):
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                                    "An executor is already active or starting for this agent.", {})
+            self._opening_agents.add(agent_id)
+        try:
+            return self._open(**kwargs)
+        finally:
+            with self._lock:
+                self._opening_agents.discard(agent_id)
+
+    def _open(
         self,
         *,
         kind: str,
@@ -440,37 +463,11 @@ class HarnessSupervisor:
         metadata: Mapping[str, Any] | None = None,
         notify_target: Any = None,
     ) -> HarnessSession:
-        """Open one harness session. Bounded; never leaves partial state.
+        """Validate existing identity, start outside the UoW, persist session.
 
-        Order: bounded ``connector.start()`` -> ONE transaction that BOTH
-        registers ``owning_agent_id`` as an ordinary Agent (D3) AND persists
-        the durable session row -> add to the live registry -> start the
-        background pump (full-duplex connectors only; see the module
-        docstring).
-
-        The agent registration deliberately happens AFTER a successful
-        ``start()``, not before: this connector's identity needs no key and
-        nothing calls back into Nexus to authenticate DURING ``start()``, so
-        registering early buys nothing - and it costs a real hazard.
-        Registering before a bounded-but-failed or wedged ``start()`` would
-        leave a real, ACTIVE, routable Agent row (reachable by
-        ``direct``/``capability``/``role``/``tag``) for a harness that never
-        actually came up - exactly the "looks alive, delivers nothing"
-        failure class D8 exists to prevent, now installed in the routing
-        registry itself rather than merely in a session that never went
-        live. Registering together with ``sessions.create`` in ONE
-        transaction means a failure on EITHER write leaves NEITHER a phantom
-        agent NOR a live session with no durable row to back it - see the
-        failure branch below, which also tears the connector back down
-        before propagating (the connector DID start successfully by this
-        point, so there is something to tear down).
-
-        Any failure before the live-registry insert raises WITHOUT ever
-        having mutated the live registry, so a failed ``open`` can never
-        corrupt or affect an already-open session (D8's isolation
-        requirement) - the caller (an on-demand tool call, or the boot loop
-        in :meth:`open_declared`) is the one responsible for not letting one
-        failure stop it from trying the next harness.
+        Metadata belongs to the runtime session. Canonical profile fields are
+        never written. A failed persistence attempts teardown of the child.
+        Startup/close reconciliation is strengthened in the lifecycle phase.
         """
         validate_harness_kind(kind)
         if not isinstance(connector, HarnessConnector):
@@ -487,6 +484,12 @@ class HarnessSupervisor:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR, "project_root is required.", {}
             )
+
+        require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+                              agent_id=owning_agent_id, role=role)
+        if agent_capabilities is not None:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                "Configure capabilities through the canonical identity API.", {})
 
         session = self._bounded_start(connector, owning_agent_id=owning_agent_id, kind=kind)
         if session.harness_kind != kind:  # pragma: no cover - defensive, connector bug
@@ -508,17 +511,10 @@ class HarnessSupervisor:
         now = self._clock.now_iso()
         try:
             with self._cf.unit_of_work() as uow:
-                # D3: the connector authenticates as an ordinary agent via
-                # the EXISTING nxs_ key path - reusing AgentRepo.upsert (the
-                # same idempotent registration agent_register itself
-                # performs) is that reuse, not a new credential scheme.
-                self._agents.upsert(
-                    uow,
-                    agent_id=owning_agent_id,
-                    role=role,
-                    capabilities=dict(agent_capabilities or {}),
-                    metadata={**dict(metadata or {}), "harness_kind": kind},
-                )
+                # A runtime is a connection of an existing identity. Never
+                # upsert its role, capabilities, metadata or credentials.
+                if metadata:
+                    session.metadata.update(metadata)
                 self._sessions.create(uow, session=session, created_at=now)
         except Exception as exc:  # noqa: BLE001 - a started connector needs tearing down either way
             self._best_effort_teardown(connector, session)
@@ -727,6 +723,8 @@ class HarnessSupervisor:
         having "just started", never ageing out even after the whole chain
         has run far past :attr:`_relay_chain_max_age_s`.
         """
+        if not self._runtime_enabled():
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)

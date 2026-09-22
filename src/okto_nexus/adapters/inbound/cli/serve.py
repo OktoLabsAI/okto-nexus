@@ -629,7 +629,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         # only way to close that gap is a SEPARATE process that notices
         # this one is gone. See `_spawn_harness_orphan_watchdog`'s
         # docstring and `harness_orphan_watchdog.py` for the full design.
-        watchdog = _spawn_harness_orphan_watchdog(env)
+        watchdog = (_spawn_harness_orphan_watchdog(env)
+                    if deps.config.feature_harness_integrations else None)
         try:
             try:
                 server.run()

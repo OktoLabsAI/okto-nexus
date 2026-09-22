@@ -178,7 +178,8 @@ async def measure_resident_surface(server: Any) -> dict[str, int]:
 
 
 def cuttable_reduction_pct(
-    current_cuttable: int, *, include_experimental: bool = False
+    current_cuttable: int, *, include_experimental: bool = False,
+    include_harness: bool = False,
 ) -> float:
     """Reduction of the cuttable surface vs the frozen baseline (0..1).
 
@@ -196,5 +197,6 @@ def cuttable_reduction_pct(
         cost
         for key, cost in APPROVED_GROWTH.items()
         if include_experimental or key not in EXPERIMENTAL_GROWTH_KEYS
+        if include_harness or not key.startswith("harness_")
     )
     return (base - (int(current_cuttable) - approved)) / base

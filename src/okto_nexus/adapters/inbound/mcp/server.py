@@ -440,7 +440,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: under ``/api/v1/harness/...`` (operator-gated for the mutating verbs, like
 #: ``POST /agents``/``POST /sessions/{id}/close``). Boot-time declared
 #: harnesses are NOT wired into ``serve`` yet - on-demand open only.
-SURFACE_REVISION = 34
+SURFACE_REVISION = 35
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -449,6 +449,7 @@ SURFACE_REVISION = 34
 # experimental module still keep the service-level runtime guard as a fallback.
 _EXPERIMENTAL_TOOL_MODULE_FLAGS = {
     f"{_tools_pkg.__name__}.memory": "feature_memory",
+    f"{_tools_pkg.__name__}.harness": "feature_harness_integrations",
 }
 
 

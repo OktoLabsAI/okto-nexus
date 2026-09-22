@@ -57,6 +57,8 @@ from ..mcp.projection import (
 )
 from ..mcp.tools.artifacts import build_service as _build_artifact_service
 from ..mcp.tools.handoff import build_service as _build_handoff_service
+from ..mcp.tools.harness import authorize_request as _harness_authorize
+from ....application.runtime_authorization import require_runtime_agent
 from ..mcp.tools.harness import build_connector as _harness_build_connector
 from ..mcp.tools.harness import (
     build_connector_factories as _build_harness_connector_factories,
@@ -875,6 +877,10 @@ def build_router() -> APIRouter:
     # ------------------------------------------------------------------ #
     @router.get("/harness/kinds")
     async def harness_kinds(request: Request) -> JSONResponse:
+        try:
+            _harness_authorize(request.app.state.deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         return _ok({"harnesses": _harness_capabilities_catalog()})
 
     @router.post("/harness/sessions")
@@ -882,10 +888,17 @@ def build_router() -> APIRouter:
         request: Request, body: HarnessSessionOpenBody
     ) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         factories = _build_harness_connector_factories(deps)
 
         def _open():
+            _harness_authorize(deps, substrate=body.substrate)
+            require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
+                                  agent_id=body.agent_id, role=body.role)
             validate_harness_kind(body.kind)
             connector = _harness_build_connector(
                 factories,
@@ -906,7 +919,6 @@ def build_router() -> APIRouter:
             )
 
         try:
-            _require_operator()
             session = await anyio.to_thread.run_sync(_open)
         except OktoNexusError as exc:
             return _map_error(exc)
@@ -922,10 +934,13 @@ def build_router() -> APIRouter:
         request: Request, session_id: str, body: HarnessSessionCommandBody
     ) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         payload = _harness_normalize_payload(body.payload, required=True)
         try:
-            _require_operator()
             await anyio.to_thread.run_sync(
                 lambda: supervisor.send(session_id, "send_turn", payload)
             )
@@ -938,10 +953,13 @@ def build_router() -> APIRouter:
         request: Request, session_id: str, body: HarnessSessionCommandBody
     ) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         payload = _harness_normalize_payload(body.payload, required=True)
         try:
-            _require_operator()
             await anyio.to_thread.run_sync(
                 lambda: supervisor.send(session_id, "steer", payload)
             )
@@ -954,10 +972,13 @@ def build_router() -> APIRouter:
         request: Request, session_id: str, body: HarnessSessionCommandBody
     ) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         payload = _harness_normalize_payload(body.payload, required=False)
         try:
-            _require_operator()
             await anyio.to_thread.run_sync(
                 lambda: supervisor.send(session_id, "interrupt", payload)
             )
@@ -968,9 +989,12 @@ def build_router() -> APIRouter:
     @router.post("/harness/sessions/{session_id}/close")
     async def harness_close(request: Request, session_id: str) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         try:
-            _require_operator()
             session = await anyio.to_thread.run_sync(
                 lambda: supervisor.close(session_id)
             )
@@ -981,6 +1005,10 @@ def build_router() -> APIRouter:
     @router.get("/harness/sessions/{session_id}")
     async def harness_get(request: Request, session_id: str) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         try:
             result = await anyio.to_thread.run_sync(
@@ -998,6 +1026,10 @@ def build_router() -> APIRouter:
         limit: int = 200,
     ) -> JSONResponse:
         deps = request.app.state.deps
+        try:
+            _harness_authorize(deps)
+        except OktoNexusError as exc:
+            return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
         events = await anyio.to_thread.run_sync(
             lambda: supervisor.replay_events(

@@ -31,6 +31,8 @@ FEATURE_FLAGS = [
     ("feature_memory", "OKTO_NEXUS_FEATURE_MEMORY", "--feature-memory"),
     ("feature_health", "OKTO_NEXUS_FEATURE_HEALTH", "--feature-health"),
     ("feature_replay", "OKTO_NEXUS_FEATURE_REPLAY", "--feature-replay"),
+    ("feature_harness_integrations", "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS", "--feature-harness-integrations"),
+    ("feature_harness_attach", "OKTO_NEXUS_FEATURE_HARNESS_ATTACH", "--feature-harness-attach"),
 ]
 
 FEATURE_FIELDS = [field for field, _, _ in FEATURE_FLAGS]
@@ -117,7 +119,7 @@ def test_setting_specs_register_the_7_flags_in_the_features_group():
         spec = by_key[field]
         assert spec.type == "bool", field
         assert spec.group == "features", field
-        assert spec.requires_restart is (field == "feature_memory"), field
+        assert spec.requires_restart is (field in {"feature_memory", "feature_harness_integrations"}), field
         assert spec.description, field
     # Pre-existing knobs keep the default group: the new field is additive.
     assert by_key["session_stale_ttl_seconds"].group == "general"
@@ -135,7 +137,7 @@ def test_settings_catalogue_lists_features_with_defaults(loopback_client):
         assert item["default"] is False
         assert item["source"] == "default"
         assert item["editable"] is True
-        assert item["requires_restart"] is (item["key"] == "feature_memory")
+        assert item["requires_restart"] is (item["key"] in {"feature_memory", "feature_harness_integrations"})
 
 
 def test_patch_feature_flag_persists_and_applies_live(loopback_client):
@@ -228,9 +230,9 @@ def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     assert stdio_info["features"] == http_info["features"]
     assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
     assert all(value is False for value in stdio_info["features"].values())
-    assert stdio_info["surface_revision"] == 34
-    assert http_info["surface_revision"] == 34
-    assert SURFACE_REVISION == 34
+    assert stdio_info["surface_revision"] == 35
+    assert http_info["surface_revision"] == 35
+    assert SURFACE_REVISION == 35
 
 
 def test_nexus_info_reflects_env_pinned_flag(tmp_path):

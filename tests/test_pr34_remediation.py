@@ -22,18 +22,23 @@ from test_harness_tools import FakeConnector
 
 
 @pytest.fixture
-def runtime(tmp_path):
+def runtime(tmp_path, request):
     root = tmp_path / "project"
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    deps.config.feature_harness_integrations = getattr(request, "param", True)
     peers = []
 
-    def factory(**_kwargs):
-        peer = FakeConnector()
-        peers.append(peer)
-        return peer
+    def factory(kind):
+        def build(**kwargs):
+            from test_harness_tools import _ATTACH_CAPS
+            peer = FakeConnector(kind=kind, capabilities=(
+                _ATTACH_CAPS if kwargs.get("substrate") == "attach" else None))
+            peers.append(peer)
+            return peer
+        return build
 
-    deps.harness_connector_factories = {"pi": factory}
+    deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     _, operator_key = ensure_operator_key(deps, auth)
     with deps.connection_factory.unit_of_work() as uow:
@@ -136,6 +141,7 @@ def test_authenticated_mcp_cannot_control_or_read_foreign_session(runtime, name,
     assert peers[0].sent == []
 
 
+@pytest.mark.parametrize("runtime", [False], indirect=True)
 def test_unconfigured_surface_does_not_publish_harness_tools(runtime):
     _, client, _, _, key, _ = runtime
     result = mcp_call(client, key, "tools/list", {})
@@ -251,3 +257,83 @@ def test_additional_adapter_is_not_rejected_by_domain_product_enum():
                              owning_agent_id="worker", status=STATUS_STARTING,
                              capabilities=peer.capabilities, started_at="2026-09-22T00:00:00.000000Z")
     assert session.harness_kind == "fixture.additional.v1"
+
+
+@pytest.mark.parametrize("kind,substrate", [("pi", None), ("codex", None),
+    ("claude_code", "stream"), ("claude_code", "attach")])
+def test_p01_enabled_authorized_connectors_remain_usable(runtime, kind, substrate):
+    deps, client, root, peers, key, _ = runtime
+    deps.config.feature_harness_attach = True
+    args = {"agent_id": "worker", "kind": kind, "project_root": root}
+    if substrate:
+        args["substrate"] = substrate
+    if substrate == "attach":
+        args["target_pid"] = 12345  # synthetic peer only; never opens a real session
+    opened = tool(client, key, "harness_open", args)
+    assert opened["ok"], opened
+    sid = opened["data"]["session_id"]
+    sent = tool(client, key, "harness_send", {"session_id": sid,
+                "payload": {"text": "test", "content": "test"}})
+    assert sent["ok"], sent
+    assert len(peers[0].sent) == 1
+    assert tool(client, key, "harness_close", {"session_id": sid})["ok"]
+
+
+def test_p01_cached_tool_is_denied_after_disable(runtime):
+    deps, client, root, peers, key, _ = runtime
+    deps.config.feature_harness_integrations = False
+    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi", "project_root": root})
+    assert result["error"]["code"] == "PERMISSION_DENIED"
+    assert peers == []
+
+
+def test_p01_attach_requires_separate_opt_in(runtime):
+    _, client, root, peers, key, _ = runtime
+    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "claude_code",
+        "substrate": "attach", "target_pid": 12345, "project_root": root})
+    assert result["error"]["code"] == "PERMISSION_DENIED"
+    assert peers == []
+
+
+def test_p01_stdio_missing_identity_has_no_operator_authority(runtime):
+    deps, _, _, _, _, _ = runtime
+    from okto_nexus.errors import OktoNexusError
+    with pytest.raises(OktoNexusError, match="PERMISSION_DENIED"):
+        harness.authorize_request(deps)
+
+
+def test_p01_duplicate_executor_is_rejected(runtime):
+    assert open_rest(runtime).status_code == 200
+    second = open_rest(runtime)
+    assert second.status_code == 409, second.text
+    assert sum(peer.session is not None for peer in runtime[3]) == 1
+
+
+@pytest.mark.parametrize("verb", ["send", "steer", "interrupt", "close", "get", "events"])
+def test_p01_rest_foreign_session_matches_mcp_denial(runtime, verb):
+    _, client, _, peers, _, caller = runtime
+    sid = open_rest(runtime).json()["data"]["session_id"]
+    path = f"/api/v1/harness/sessions/{sid}"
+    if verb in {"get", "events"}:
+        response = client.get(path + ("/events" if verb == "events" else ""),
+                              headers={"x-api-key": caller})
+    else:
+        response = client.post(path + "/" + verb, headers={"x-api-key": caller},
+                               json={"payload": {"text": "must not send"}})
+    assert response.status_code == 403, response.text
+    assert response.json()["error"]["code"] == "PERMISSION_DENIED"
+    assert peers[0].sent == []
+
+
+def test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected(runtime):
+    deps, client, root, peers, key, _ = runtime
+    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
+        "project_root": root, "role": "admin"})
+    assert result["error"]["code"] == "VALIDATION_ERROR"
+    assert peers == []
+    result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "pi",
+        "project_root": root, "metadata": '{"connection_note":"fixture"}'})
+    assert result["ok"], result
+    assert result["data"]["metadata"]["connection_note"] == "fixture"
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert deps.repos.agents.get(uow, "worker").metadata == {"keep": "profile"}

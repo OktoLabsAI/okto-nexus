@@ -304,6 +304,16 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
         group="features",
     ),
     SettingSpec(
+        "feature_harness_integrations", "bool",
+        "Opt-in runtime connections. Admission is checked on every request; MCP publication requires restart.",
+        group="features", requires_restart=True,
+    ),
+    SettingSpec(
+        "feature_harness_attach", "bool",
+        "Separate opt-in for the private Claude attach protocol. Requires harness integrations.",
+        group="features",
+    ),
+    SettingSpec(
         "feature_replay",
         "bool",
         "Opt-in: replay/eval export of coordination history (NDJSON + "

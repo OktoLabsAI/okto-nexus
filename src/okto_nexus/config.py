@@ -201,6 +201,8 @@ class NexusConfig:
     feature_verification: bool = False
     feature_dag: bool = False
     feature_memory: bool = False
+    feature_harness_integrations: bool = False
+    feature_harness_attach: bool = False
     feature_health: bool = False
     feature_replay: bool = False
 
@@ -418,6 +420,16 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
     "feature_memory": (
         "OKTO_NEXUS_FEATURE_MEMORY",
         "--feature-memory",
+        False,
+    ),
+    "feature_harness_integrations": (
+        "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
+        "--feature-harness-integrations",
+        False,
+    ),
+    "feature_harness_attach": (
+        "OKTO_NEXUS_FEATURE_HARNESS_ATTACH",
+        "--feature-harness-attach",
         False,
     ),
     "feature_health": (

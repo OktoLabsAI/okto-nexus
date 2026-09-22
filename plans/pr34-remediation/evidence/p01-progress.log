@@ -1,0 +1,170 @@
+..........FF.FFFF.FF                                                     [100%]
+================================== FAILURES ===================================
+______________ test_backend_diagnostics_do_not_echo_credentials _______________
+
+    def test_backend_diagnostics_do_not_echo_credentials():
+        result = harness.describe_backend("codex", None, {"env": {"API_TOKEN": "fixture-secret"}})
+>       assert "fixture-secret" not in json.dumps(result)
+E       assert 'fixture-secret' not in '{"explicit"... as given."}'
+E         
+E         'fixture-secret' is contained here:
+E           _TOKEN": "fixture-secret"}}, "note": "backend override applied exactly as given."}
+E         ?           ++++++++++++++
+
+tests\test_pr34_remediation.py:149: AssertionError
+___________________ test_replay_keeps_event_id_and_sequence ___________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_repla...0D10>], 'nxs_d245a69736c8f5e14a912b31c46e7752ba294ab56e6f8a4c', 'nxs_7b43ee1a474e6f2abc6b10c99c89a7b6ad1c591a48eb02bf')
+
+    def test_replay_keeps_event_id_and_sequence(runtime):
+        deps, _, _, _, _, _ = runtime
+        opened = open_rest(runtime).json()
+        session_id = opened["data"]["session_id"]
+        from okto_nexus.domain.harness import HarnessEvent
+        event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
+                             native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={})
+        with deps.connection_factory.unit_of_work() as uow:
+            deps.repos.harness_events.append(uow, event_id="event-fixture", event=event,
+                                            created_at=deps.clock.now_iso())
+        replay = deps.harness_supervisor.replay_events(session_id)
+        serialized = harness.event_to_dict(replay[0])
+>       assert serialized.get("sequence") == 1
+E       AssertionError: assert None == 1
+E        +  where None = <built-in method get of dict object at 0x0000012931B75000>('sequence')
+E        +    where <built-in method get of dict object at 0x0000012931B75000> = {'harness_kind': 'pi', 'kind': 'turn_completed', 'native_event': 'agent_settled', 'occurred_at': '2026-09-22T15:56:28.537079Z', ...}.get
+
+tests\test_pr34_remediation.py:164: AssertionError
+_____________ test_one_delivery_does_not_execute_on_two_sessions ______________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_one_d...9250>], 'nxs_67e325fd03f66207ba0ad88daa6a0fe3baa6fabc169544cb', 'nxs_a586a5e1f275d72252ff11e8c29da99087257a5d5d35537b')
+
+    def test_one_delivery_does_not_execute_on_two_sessions(runtime):
+        deps, _, root, peers, _, _ = runtime
+        for _ in range(2):
+>           assert open_rest(runtime).status_code == 200
+E           AssertionError: assert 409 == 200
+E            +  where 409 = <Response [409 Conflict]>.status_code
+E            +    where <Response [409 Conflict]> = open_rest((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_one_d...9250>], 'nxs_67e325fd03f66207ba0ad88daa6a0fe3baa6fabc169544cb', 'nxs_a586a5e1f275d72252ff11e8c29da99087257a5d5d35537b'))
+
+tests\test_pr34_remediation.py:179: AssertionError
+_________ test_forward_preserves_sender_subject_and_message_identity __________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_forwa...45F0>], 'nxs_e55bf9462f0884fb7a56f0c75bd2832238c285a1a12b32b4', 'nxs_d8bafbdecbfee78141591102da559ccfe5ed4d7b86ac2a93')
+
+    def test_forward_preserves_sender_subject_and_message_identity(runtime):
+        deps, _, root, peers, _, _ = runtime
+        assert open_rest(runtime).status_code == 200
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        result = build_service(deps).create_message(project_root=root, from_agent_id="caller",
+            subject="correlation-subject", body="body-only", target={"strategy": "direct", "agent_id": "worker"})
+        wire = json.dumps(peers[0].sent[0].payload)
+>       assert "caller" in wire and "correlation-subject" in wire and result["message_id"] in wire
+E       assert ('caller' in '{"text": "body-only", "content": "body-only"}')
+
+tests\test_pr34_remediation.py:194: AssertionError
+___________ test_terminal_storage_failure_is_not_silently_accepted ____________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_termi...0320>], 'nxs_e3035e09e27d32e3476c0133f33f45d1475353a5d52f08d5', 'nxs_6d05f73b3346df5c7e6ff34cd46e08d76f416064eeeaed72')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000012932F54510>
+
+    def test_terminal_storage_failure_is_not_silently_accepted(runtime, monkeypatch):
+        deps, _, _, _, _, _ = runtime
+        session_id = open_rest(runtime).json()["data"]["session_id"]
+        from okto_nexus.domain.harness import HarnessEvent
+        def unavailable(*args, **kwargs):
+            raise OSError("fixture storage unavailable")
+        monkeypatch.setattr(deps.repos.harness_events, "append", unavailable)
+        event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
+                             native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={"text": "final"})
+        # Before a durable journal exists, storage failure must at least fail loudly.
+>       with pytest.raises(Exception):
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'Exception'>
+
+tests\test_pr34_remediation.py:207: Failed
+---------------------------- Captured stderr call -----------------------------
+[okto-nexus] harness supervisor: persisting harness event failed for session hsess_1f4e395a0a7547159801d85950a81d43 (OSError); continuing.
+__________________ test_expired_relay_does_not_mint_new_root __________________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_expir...CE50>], 'nxs_4c4dc33cf213a836cbbe4c0e774282fef260b980b37ea982', 'nxs_d635e4e5b3c390fd184e28793b876a1214b07ec6f4e401c1')
+
+    def test_expired_relay_does_not_mint_new_root(runtime):
+        deps, _, _, _, _, _ = runtime
+        session_id = open_rest(runtime).json()["data"]["session_id"]
+        supervisor = deps.harness_supervisor
+        live = supervisor._live[session_id]
+        live.relay_depth = supervisor._max_relay_depth
+        live.relay_chain_id = "fixture-existing-root"
+        live.relay_chain_started_at = supervisor._monotonic() - supervisor._relay_chain_max_age_s - 1
+>       assert supervisor._resolve_relay_depth("worker") is None
+E       AssertionError: assert (1, 'relaychain_62f9b0afff30487fa6486d5a3ac12bf5', 566661.9226457) is None
+E        +  where (1, 'relaychain_62f9b0afff30487fa6486d5a3ac12bf5', 566661.9226457) = _resolve_relay_depth('worker')
+E        +    where _resolve_relay_depth = <okto_nexus.application.harness_supervisor.HarnessSupervisor object at 0x0000012932939010>._resolve_relay_depth
+
+tests\test_pr34_remediation.py:219: AssertionError
+_____________ test_committed_delivery_survives_lost_notification ______________
+
+runtime = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-696/test_commi...A6D0>], 'nxs_15f848512224c2a475b0e15612477f872c992ea169088ede', 'nxs_52ab2f6ab74a24186906f042bc7b0f104fdfc5ee1b906887')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000012932F54640>
+
+    def test_committed_delivery_survives_lost_notification(runtime, monkeypatch):
+        deps, _, root, _, _, _ = runtime
+        open_rest(runtime)
+        from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
+        messages = build_service(deps)
+        monkeypatch.setattr(messages, "_maybe_notify_inbox_subscribers", lambda **kwargs: None)
+        result = messages.create_message(project_root=root, from_agent_id="caller", subject="recovery",
+            body="lost wake fixture", target={"strategy": "direct", "agent_id": "worker"})
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            # Inspect durable transport state, not the existence of a proposed
+            # Python module. The baseline only has the logical inbox delivery.
+            tables = {row[0] for row in uow.connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+>           assert "delivery_outbox" in tables, f"No durable attempt/intent for committed {result['message_id']}"
+E           AssertionError: No durable attempt/intent for committed msg_b8eb31d4387c41f68aaa678c6ece24c9
+E           assert 'delivery_outbox' in {'agent_comm_binding', 'agent_group_members', 'agent_groups', 'agent_policy_bindings', 'agents', 'approvals', ...}
+
+tests\test_pr34_remediation.py:243: AssertionError
+_______ test_additional_adapter_is_not_rejected_by_domain_product_enum ________
+
+    def test_additional_adapter_is_not_rejected_by_domain_product_enum():
+        from okto_nexus.domain.harness import HarnessSession, STATUS_STARTING
+        peer = FakeConnector(kind="fixture.additional.v1")
+>       session = HarnessSession(session_id="fixture-session", harness_kind="fixture.additional.v1",
+                                 owning_agent_id="worker", status=STATUS_STARTING,
+                                 capabilities=peer.capabilities, started_at="2026-09-22T00:00:00.000000Z")
+
+tests\test_pr34_remediation.py:252: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<string>:11: in __init__
+    ???
+src\okto_nexus\domain\harness.py:283: in __post_init__
+    validate_harness_kind(self.harness_kind)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kind = 'fixture.additional.v1'
+
+    def validate_harness_kind(kind: Any) -> str:
+        """Return ``kind`` if it is one of :data:`HARNESS_KINDS`.
+    
+        Raises ``VALIDATION_ERROR`` (canonical catalogue code) otherwise.
+        """
+        if isinstance(kind, str) and kind in HARNESS_KINDS:
+            return kind
+>       raise OktoNexusError(
+            ErrorCode.VALIDATION_ERROR,
+            "harness kind must be one of {pi, codex, claude_code}.",
+            {"kind": kind, "supported": sorted(HARNESS_KINDS)},
+        )
+E       okto_nexus.errors.OktoNexusError: VALIDATION_ERROR: harness kind must be one of {pi, codex, claude_code}.
+
+src\okto_nexus\domain\harness.py:165: OktoNexusError
+=========================== short test summary info ===========================
+FAILED tests/test_pr34_remediation.py::test_backend_diagnostics_do_not_echo_credentials
+FAILED tests/test_pr34_remediation.py::test_replay_keeps_event_id_and_sequence
+FAILED tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions
+FAILED tests/test_pr34_remediation.py::test_forward_preserves_sender_subject_and_message_identity
+FAILED tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted
+FAILED tests/test_pr34_remediation.py::test_expired_relay_does_not_mint_new_root
+FAILED tests/test_pr34_remediation.py::test_committed_delivery_survives_lost_notification
+FAILED tests/test_pr34_remediation.py::test_additional_adapter_is_not_rejected_by_domain_product_enum
+8 failed, 12 passed in 25.45s

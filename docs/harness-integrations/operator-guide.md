@@ -1,5 +1,15 @@
 # Harness integrations — operator guide
 
+> 0.2.0 remediation in progress: native integration now requires
+> `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true`; private Claude attach also
+> requires `OKTO_NEXUS_FEATURE_HARNESS_ATTACH=true`. Runtime APIs currently
+> require operator authority and an existing active Agent. Opening no longer
+> registers/upserts its profile; role must match and metadata belongs to the
+> runtime. One executor per agent is a temporary containment restriction.
+> The legacy sections below are awaiting the P11 rewrite; their implicit
+> registration and unrestricted MCP examples are superseded. See
+> [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md).
+
 Nexus can hold native, bidirectional, non-polling sessions with four kinds of
 coding-agent harness. This is the how-to for attaching one and using it from
 the outside — MCP tools and the REST mirror only, no source reading required.

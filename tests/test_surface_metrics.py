@@ -61,6 +61,7 @@ def test_cuttable_reduction_helper_matches_baseline_math(tmp_path):
         cost
         for key, cost in APPROVED_GROWTH.items()
         if key not in EXPERIMENTAL_GROWTH_KEYS
+        if not key.startswith("harness_")
     )
     assert (
         pct
@@ -69,7 +70,7 @@ def test_cuttable_reduction_helper_matches_baseline_math(tmp_path):
     assert 0.0 <= pct < 1.0
 
     # With the experimental surface declared present, the full ledger counts.
-    pct_full = cuttable_reduction_pct(m["cuttable"], include_experimental=True)
+    pct_full = cuttable_reduction_pct(m["cuttable"], include_experimental=True, include_harness=True)
     approved_full = sum(APPROVED_GROWTH.values())
     assert pct_full == (
         BASELINE["cuttable"] - (m["cuttable"] - approved_full)

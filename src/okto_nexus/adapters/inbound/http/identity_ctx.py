@@ -15,6 +15,7 @@ from ....domain.models import Agent
 #: The agent authenticated for the CURRENT request (None outside a request
 #: or before authentication).
 current_agent: ContextVar[Agent | None] = ContextVar("okto_nexus_current_agent", default=None)
+trusted_local_operator: ContextVar[bool] = ContextVar("okto_nexus_local_operator", default=False)
 
 
 def get_authenticated_agent() -> Agent | None:

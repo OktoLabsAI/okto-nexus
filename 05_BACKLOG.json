@@ -150,7 +150,7 @@
       "depends_on_phases": [
         "P00"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P01",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -185,42 +185,74 @@
         {
           "task_id": "P01-T01",
           "title": "Remover mutações canônicas de Agent do lifecycle e negar criação implícita.",
-          "status": "NOT_STARTED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_authorization.py",
+            "src/okto_nexus/application/harness_supervisor.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/adapters/inbound/http/routes.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P01_CONTAINMENT.md",
+            "plans/pr34-remediation/evidence/p01-gate.log"
+          ],
+          "notes": "28 focused checks PASS; synthetic peers for four adapters. Native enabled gate awaits approved profiles/lifecycle. P01 is temporary containment, not release completion."
         },
         {
           "task_id": "P01-T02",
           "title": "Aplicar autorização conservadora uniforme aos controles e leituras.",
-          "status": "NOT_STARTED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_authorization.py",
+            "src/okto_nexus/application/harness_supervisor.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/adapters/inbound/http/routes.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P01_CONTAINMENT.md",
+            "plans/pr34-remediation/evidence/p01-gate.log"
+          ],
+          "notes": "28 focused checks PASS; synthetic peers for four adapters. Native enabled gate awaits approved profiles/lifecycle. P01 is temporary containment, not release completion."
         },
         {
           "task_id": "P01-T03",
           "title": "Implementar opt-ins e guardas runtime sem mascarar feature habilitada.",
-          "status": "NOT_STARTED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_authorization.py",
+            "src/okto_nexus/application/harness_supervisor.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/adapters/inbound/http/routes.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P01_CONTAINMENT.md",
+            "plans/pr34-remediation/evidence/p01-gate.log"
+          ],
+          "notes": "28 focused checks PASS; synthetic peers for four adapters. Native enabled gate awaits approved profiles/lifecycle. P01 is temporary containment, not release completion."
         },
         {
           "task_id": "P01-T04",
           "title": "Adicionar proteção temporária de executor único e regressão ON/OFF.",
-          "status": "NOT_STARTED",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_authorization.py",
+            "src/okto_nexus/application/harness_supervisor.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/adapters/inbound/http/routes.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P01_CONTAINMENT.md",
+            "plans/pr34-remediation/evidence/p01-gate.log"
+          ],
+          "notes": "28 focused checks PASS; synthetic peers for four adapters. Native enabled gate awaits approved profiles/lifecycle. P01 is temporary containment, not release completion."
         }
       ]
     },

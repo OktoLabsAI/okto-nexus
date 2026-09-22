@@ -205,6 +205,7 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
         if (
             not is_mcp
+            and not extract_api_key(request)
             and getattr(request.app.state, "local_open", False)
             and request.client is not None
             and request.client.host in _LOOPBACK_CLIENTS
@@ -218,7 +219,12 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                     "Refused a cross-origin or rebound-host request on the "
                     "loopback trust path; authenticate with an api_key.",
                 )
-            return await call_next(request)
+            from .identity_ctx import trusted_local_operator
+            local_token = trusted_local_operator.set(True)
+            try:
+                return await call_next(request)
+            finally:
+                trusted_local_operator.reset(local_token)
 
         if bearer_is_allowed_poll:
             return await call_next(request)
