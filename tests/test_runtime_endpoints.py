@@ -11,9 +11,10 @@ from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
 from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
 from okto_nexus.config import NexusConfig
 from okto_nexus.errors import OktoNexusError
-from test_pr34_remediation import open_rest, tool
+from test_pr34_remediation import open_rest, tool, send_message, wait_sent
+from test_pr34_remediation import runtime as runtime_fixture
 
-pytest_plugins = ["test_pr34_remediation"]
+runtime = runtime_fixture
 
 
 @pytest.mark.parametrize("last_version", [28, 29])
@@ -97,11 +98,9 @@ def test_p03_presence_participates_in_canonical_routing_without_manual_session_i
         assert client.patch("/api/v1/agents/worker", headers=headers,
                             json={"tags": {"team": ["fixture"]}}).status_code == 200
     assert open_rest(runtime).status_code == 200
-    from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
-    result = build_service(deps).create_message(project_root=root, from_agent_id="caller",
-        subject="presence fixture", body="one response", target=target)
+    result = send_message(runtime, subject="presence fixture", body="one response", target=target)
     assert result["delivered_count"] == 1
-    assert len(peers[0].sent) == 1
+    wait_sent(peers)
 
 
 def test_p03_ambiguous_endpoint_selection_does_not_construct_connector(runtime):
@@ -131,6 +130,7 @@ def test_p03_profile_environment_isolated_and_operator_key_never_inherited(tmp_p
     monkeypatch.setenv("OKTO_NEXUS_API_KEY", "nxs_fixture_operator")
     monkeypatch.setenv("OPENAI_API_KEY", "fixture-ambient-model-key")
     monkeypatch.setenv("UNRELATED_ALIAS", "nxs_fixture_operator")
+    monkeypatch.setenv("PREFIX_ALIAS", "Bearer nxs_fixture_operator")
     profile = {"profile_id": "test", "inherit_ambient": False, "config": {}, "secret_refs": {}}
     env = child_environment(profile_environment(profile, tmp_path))
     assert "OPENAI_API_KEY" not in env

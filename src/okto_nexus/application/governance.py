@@ -39,6 +39,9 @@ Application layer: ports + domain + errors only; never imports ``sqlite3`` nor
 from __future__ import annotations
 
 from contextlib import contextmanager
+from dataclasses import asdict
+import hashlib
+import json
 from typing import Any, Iterator, Optional
 
 from ..domain.base import iso_plus, new_id
@@ -249,6 +252,12 @@ class GovernanceService:
             # TOTAL, byte-identical to the no-rule flow (D4/BR6).
             return verdict
         return None
+
+    def authorization_revision(self, uow: UnitOfWork, agent_id: str) -> str:
+        """Stable receipt for an already admitted action; no second quota charge."""
+        encoded = json.dumps([asdict(source) for source in self._effective_sources(uow, agent_id)],
+                             sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(encoded.encode()).hexdigest()
 
     def _effective_sources(
         self, uow: UnitOfWork, agent_id: str

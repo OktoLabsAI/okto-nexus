@@ -127,6 +127,9 @@ class MessageService:
         approvals: ApprovalService | None = None,
         guardrails: GuardrailService | None = None,
         inbox_notifier: InboxDeliveryNotifier | None = None,
+        runtime_planner=None,
+        runtime_context_provider=None,
+        runtime_wake=None,
     ) -> None:
         self._cf = connection_factory
         self._channels = channels
@@ -173,6 +176,9 @@ class MessageService:
         # standing optional-dependency convention, same as governance/
         # approvals/guardrails above).
         self._inbox_notifier = inbox_notifier
+        self._runtime_planner = runtime_planner
+        self._runtime_context_provider = runtime_context_provider
+        self._runtime_wake = runtime_wake
 
     @contextmanager
     def _send_uow(
@@ -247,6 +253,7 @@ class MessageService:
         trace_id: Any = None,
         session_secret: Any = None,
         _approved_execution: bool = False,
+        _runtime_context=None,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -283,6 +290,10 @@ class MessageService:
         """
         workspace_id, root_realpath = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
+        runtime_context = _runtime_context
+        if runtime_context is None and self._runtime_context_provider:
+            runtime_context = self._runtime_context_provider()
+        runtime_operations = []
 
         # Pure, write-free validation first (no row / event on rejection).
         require_message_fields(from_agent_id, subject, body)
@@ -488,7 +499,7 @@ class MessageService:
 
             # Fan out into each recipient's GLOBAL inbox (one delivery per agent).
             for recipient_id in recipients:
-                self._deliveries.create(
+                delivery = self._deliveries.create(
                     uow,
                     delivery_id=new_delivery_id(),
                     message_id=message.message_id,
@@ -496,6 +507,12 @@ class MessageService:
                     status=DELIVERY_UNREAD,
                     created_at=now,
                 )
+                if self._runtime_planner and getattr(self._config, "feature_harness_integrations", False):
+                    operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,
+                        message=message, delivery=delivery, now=now,
+                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                    if operation_id:
+                        runtime_operations.append(operation_id)
 
             # Emit the single message.created event INSIDE this transaction; the
             # event_id is assigned by the Event Log slice within the same commit.
@@ -526,6 +543,8 @@ class MessageService:
             data["event_id"] = event_id
             data["recipients"] = recipients
             data["delivered_count"] = len(recipients)
+            if runtime_operations:
+                data["runtime_operations"] = runtime_operations
             if filtered_by_audience:
                 # Outbound audience scoping (F1): these agents matched the
                 # target but sit outside the sender's comm_scope - the drop is
@@ -542,6 +561,13 @@ class MessageService:
                 # mistyped project_root never creates a phantom silently.
                 data["workspace_created"] = True
 
+        if runtime_operations and self._runtime_wake:
+            # Notifications are hints. The intent already committed with inbox.
+            try:
+                self._runtime_wake()
+            except Exception:
+                pass
+
         # Best-effort semantic index of the NEW message, in its OWN unit of work
         # AFTER the send committed (TR3 / br_0bdedc28): a failure here never
         # aborts the send or the fan-out, and there is no backfill of history.
@@ -556,6 +582,36 @@ class MessageService:
         # here (post-commit) and never inside the write uow.
         self._maybe_notify_inbox_subscribers(recipients=recipients, data=data)
         return data
+
+    # ------------------------------------------------------------------ #
+    # Transport revalidation reuses canonical policy without a second quota.
+    # ------------------------------------------------------------------ #
+    def runtime_policy_revision(self, uow, sender_id, recipient_id):
+        if self._governance is None:
+            return "unbound"
+        return self._governance.authorization_revision(uow, sender_id) + ":" + self._governance.authorization_revision(uow, recipient_id)
+
+    def revalidate_runtime_delivery(self, uow, operation):
+        message = self._messages.get(uow, workspace_id=operation["workspace_id"], message_id=operation["message_id"])
+        if not message:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery source is unavailable.", {})
+        sender = self._agents.get(uow, message.from_agent_id)
+        recipient = self._agents.get(uow, operation["recipient_agent_id"])
+        if not sender or not sender.is_active or not recipient or not reachable(sender, recipient):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery audience changed.", {})
+        perms = permission_set_for(self._agents, uow, message.from_agent_id)
+        target = parse_target(message.target)
+        if message.channel_id:
+            perms.require("messages", "send_channel")
+            if requires_known_recipient(target):
+                perms.require("messages", "send_direct")
+        else:
+            perms.require("messages", "send_direct" if requires_known_recipient(target) else "send_broadcast")
+        if operation["authorization_revision"] != self.runtime_policy_revision(uow, message.from_agent_id, recipient.agent_id):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery policy changed; new admission is required.", {})
+        if self._guardrails and self._guardrails.has_enabled_assignments(uow):
+            self._guardrails.enforce(uow, workspace_id=message.workspace_id, actor_agent_id=message.from_agent_id,
+                                    surface="message_create", fields={"subject": message.subject, "body": message.body})
 
     # ------------------------------------------------------------------ #
     # Semantic-search generation (Frente 3)

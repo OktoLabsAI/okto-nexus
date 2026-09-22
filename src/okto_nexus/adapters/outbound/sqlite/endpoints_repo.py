@@ -59,12 +59,12 @@ class SqliteEndpointRepo:
         if cur.rowcount != 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed or endpoint is unavailable.", {})
 
-    def bind_session(self, uow, *, session_id, endpoint_id, workspace_id, presence_session_id):
+    def bind_session(self, uow, *, session_id, endpoint_id, workspace_id, presence_session_id, open_request_id=None, profile_revision=None):
         try:
             uow.connection.execute(
-                "UPDATE harness_sessions SET endpoint_id=?,workspace_id=?,presence_session_id=?,lifecycle_state='protocol_ready' "
+                "UPDATE harness_sessions SET endpoint_id=?,workspace_id=?,presence_session_id=?,open_request_id=?,runtime_profile_revision=?,lifecycle_state='protocol_ready' "
                 "WHERE session_id=?",
-                (endpoint_id, workspace_id, presence_session_id, session_id))
+                (endpoint_id, workspace_id, presence_session_id, open_request_id, profile_revision, session_id))
         except sqlite3.Error as exc:
             raise db_error_from_exception("binding runtime session", exc) from exc
 
@@ -78,6 +78,10 @@ class SqliteEndpointRepo:
         return [dict(row) for row in uow.connection.execute(
             "SELECT session_id,owning_agent_id,status FROM harness_sessions "
             "WHERE lifecycle_state='legacy_unlinked' ORDER BY session_id")]
+
+    def session_profile_revision(self, uow, session_id):
+        row = uow.connection.execute("SELECT runtime_profile_revision FROM harness_sessions WHERE session_id=?", (session_id,)).fetchone()
+        return row[0] if row else None
 
     @staticmethod
     def _row(row):

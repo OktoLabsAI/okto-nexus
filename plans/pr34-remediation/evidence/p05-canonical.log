@@ -1,0 +1,10 @@
+........................................................................ [ 40%]
+........................................................................ [ 81%]
+................................                                         [100%]
+============================== warnings summary ===============================
+tests/test_governance.py::test_ts9_rest_crud_lifecycle
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+176 passed, 1 warning in 21.74s

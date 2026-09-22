@@ -41,6 +41,13 @@ class RuntimeAccessService:
                     adapter_available = False
             enabled = adapter_available and self.config.feature_harness_integrations and (
                 substrate != "attach" or self.config.feature_harness_attach)
+            if endpoint and action in {"open", "send", "steer"}:
+                enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
+                if endpoint["profile_id"]:
+                    profile = self.endpoints.profile(uow, endpoint["profile_id"])
+                    enabled = enabled and profile is not None and profile["enabled"]
+                    if enabled and session_id:
+                        enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
             if enabled and self._operator(context, actor):
                 allowed = True
             elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"

@@ -61,7 +61,7 @@ from ..mcp.tools.harness import authorized_send as _harness_send
 from ..mcp.tools.harness import authorized_close as _harness_close
 from ..mcp.tools.harness import build_access_service as _harness_access
 from ..mcp.tools.harness import build_endpoint_service as _harness_endpoints
-from ..mcp.tools.harness import prepare_runtime as _harness_prepare
+from ..mcp.tools.harness import open_runtime as _harness_open
 from ..mcp.tools.harness import (
     build_connector_factories as _build_harness_connector_factories,
 )
@@ -70,7 +70,6 @@ from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_ca
 from ..mcp.tools.harness import event_to_dict as _harness_event_to_dict
 from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
 from ..mcp.tools.harness import read_session as _harness_read_session
-from ..mcp.tools.harness import session_to_dict as _harness_session_to_dict
 from ..mcp.tools.messages import build_service as _build_message_service
 from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from .identity_ctx import get_authenticated_agent
@@ -358,6 +357,7 @@ class HarnessSessionOpenBody(BaseModel):
     kind: str = Field(min_length=1)
     project_root: str = Field(min_length=1)
     endpoint_id: str | None = None
+    idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
     substrate: str | None = None
     target_pid: int | None = None
     # H-1 fix (EV-SYS-002): explicit per-session backend override, mirrors
@@ -984,36 +984,11 @@ def build_router() -> APIRouter:
             _harness_authorize(deps, action="access")
         except OktoNexusError as exc:
             return _map_error(exc)
-        supervisor = _build_harness_supervisor(deps)
-        profile_view = {}
-
-        def _open():
-            nonlocal profile_view
-            connector, endpoint, profile_view = _harness_prepare(deps,
-                agent_id=body.agent_id, kind=body.kind, project_root=body.project_root,
-                substrate=body.substrate, endpoint_id=body.endpoint_id, backend=body.backend,
-                target_pid=body.target_pid, role=body.role)
-            return supervisor.open(
-                kind=body.kind,
-                connector=connector,
-                owning_agent_id=body.agent_id,
-                project_root=body.project_root,
-                role=body.role,
-                endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
-                metadata=body.metadata,
-                notify_target=body.notify_target,
-            )
-
         try:
-            session = await anyio.to_thread.run_sync(_open)
+            result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
         except OktoNexusError as exc:
             return _map_error(exc)
-        return _ok(
-            {
-                **_harness_session_to_dict(session),
-                "backend": profile_view,
-            }
-        )
+        return _ok(result)
 
     @router.post("/harness/sessions/{session_id}/send")
     async def harness_send(
@@ -1086,7 +1061,7 @@ def build_router() -> APIRouter:
             )
         except OktoNexusError as exc:
             return _map_error(exc)
-        return _ok(_harness_session_to_dict(session))
+        return _ok(session)
 
     @router.get("/harness/sessions/{session_id}")
     async def harness_get(request: Request, session_id: str) -> JSONResponse:

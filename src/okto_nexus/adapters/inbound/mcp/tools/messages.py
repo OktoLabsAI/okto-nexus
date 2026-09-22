@@ -68,6 +68,11 @@ from okto_nexus.adapters.outbound.inbox_notifier import InMemoryInboxDeliveryNot
 from okto_nexus.application.approvals import ApprovalService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.messages import MessageService
+from okto_nexus.application.runtime_delivery import RuntimeDeliveryPlanner
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
+from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+from okto_nexus.adapters.outbound.runtime_wake import signal_runtime_owner
 from okto_nexus.domain.governance import ACTION_BROADCAST, ACTION_MESSAGE_CREATE
 from okto_nexus.envelope import err, require_json_object_param, tool_envelope
 from okto_nexus.errors import ErrorCode
@@ -117,6 +122,19 @@ _P_TRACE = (
     "max 128 chars). Needs the feature_trace flag ON, else accepted and ignored; "
     "omitted = inherit the reply parent's trace, or generate one."
 )
+
+
+def runtime_message_context():
+    actor = get_authenticated_agent()
+    return RuntimeRequestContext(actor.agent_id, "agent_key", credential_binding=actor.api_key_hash) if actor else None
+
+
+def wake_runtime(deps):
+    dispatcher = getattr(deps, "runtime_dispatcher", None)
+    if dispatcher:
+        dispatcher.wake()
+    else:
+        signal_runtime_owner(deps.config.home_dir)
 
 
 def build_service(deps: Any) -> MessageService:
@@ -229,6 +247,9 @@ def build_service(deps: Any) -> MessageService:
         approvals=approvals,
         guardrails=guardrails,
         inbox_notifier=deps.inbox_delivery_notifier,
+        runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents),
+        runtime_context_provider=runtime_message_context,
+        runtime_wake=lambda: wake_runtime(deps),
     )
 
     # Approved re-execution (BR2): one executor per intercepted action key.

@@ -439,22 +439,25 @@ class HarnessSupervisor:
     # open (on-demand AND boot-declared converge here - D8)
     # ------------------------------------------------------------------ #
     def open(self, **kwargs) -> HarnessSession:
-        """P01 admission fence: one executor per identity until durable selection."""
+        """One live runtime per endpoint; distinct bindings keep one identity."""
         if not self._runtime_enabled():
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
         agent_id = kwargs.get("owning_agent_id")
+        endpoint_id = kwargs.get("endpoint_id")
+        binding_key = endpoint_id or "legacy:" + str(agent_id)
         with self._lock:
-            if agent_id in self._opening_agents or any(
-                live.session.owning_agent_id == agent_id for live in self._live.values()
+            if binding_key in self._opening_agents or any(
+                live.session.endpoint_id == endpoint_id if endpoint_id else live.session.owning_agent_id == agent_id
+                for live in self._live.values()
             ):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                     "An executor is already active or starting for this agent.", {})
-            self._opening_agents.add(agent_id)
+            self._opening_agents.add(binding_key)
         try:
             return self._open(**kwargs)
         finally:
             with self._lock:
-                self._opening_agents.discard(agent_id)
+                self._opening_agents.discard(binding_key)
 
     def _open(
         self,
@@ -468,6 +471,8 @@ class HarnessSupervisor:
         metadata: Mapping[str, Any] | None = None,
         notify_target: Any = None,
         endpoint_id: str | None = None,
+        open_request_id: str | None = None,
+        profile_revision: int | None = None,
         workspace_id: str | None = None,
     ) -> HarnessSession:
         """Validate existing identity, start outside the UoW, persist session.
@@ -532,7 +537,8 @@ class HarnessSupervisor:
                     self._presence_sessions.create(uow, session_id=presence_id, agent_id=owning_agent_id,
                         workspace_id=workspace_id, status="active", started_at=now, session_secret=new_id("secret"))
                     self._endpoint_repo.bind_session(uow, session_id=session.session_id,
-                        endpoint_id=endpoint_id, workspace_id=workspace_id, presence_session_id=presence_id)
+                        endpoint_id=endpoint_id, workspace_id=workspace_id, presence_session_id=presence_id,
+                        open_request_id=open_request_id, profile_revision=profile_revision)
         except Exception as exc:  # noqa: BLE001 - a started connector needs tearing down either way
             self._best_effort_teardown(connector, session)
             if isinstance(exc, OktoNexusError):

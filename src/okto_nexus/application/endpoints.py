@@ -124,6 +124,7 @@ class EndpointService:
                                   endpoint_id=endpoint_id, represented_agent_id=agent_id, workspace_id=workspace_id)
         else:
             self.authorize(context)
+        require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id)
         with self.cf.unit_of_work(write=False) as uow:
             candidates = [self.repo.get(uow, endpoint_id)] if endpoint_id else self.repo.list(
                 uow, agent_id=agent_id, workspace_id=workspace_id)

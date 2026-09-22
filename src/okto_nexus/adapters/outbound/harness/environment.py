@@ -15,7 +15,7 @@ def child_environment(overrides=None):
     sealed = values.pop(_SEALED, None) == "1"
     merged = values if sealed else {**os.environ, **values}
     return {k: v for k, v in merged.items() if "NEXUS" not in k.upper()
-            and not str(v).startswith(("nxs_", "nxsept_"))}
+            and not any(prefix in str(v) for prefix in ("nxs_", "nxsept_"))}
 
 
 def profile_environment(profile, home_dir):
@@ -32,7 +32,7 @@ def profile_environment(profile, home_dir):
     values.update(profile["config"].get("env", {}))
     for name, reference in profile["secret_refs"].items():
         value = os.environ.get(reference[4:])
-        if not value or value.startswith(("nxs_", "nxsept_")):
+        if not value or any(prefix in value for prefix in ("nxs_", "nxsept_")):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime credential reference is unavailable or privileged.", {})
         values[name] = value
     values = child_environment({**values, _SEALED: "1"})

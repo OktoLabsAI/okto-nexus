@@ -1,7 +1,6 @@
 """P04: one production composition, real HTTP/MCP, synthetic external peer."""
 import asyncio
 import json
-import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
@@ -11,9 +10,10 @@ from okto_nexus.domain.base import iso_plus
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.errors import OktoNexusError
 from okto_nexus.adapters.inbound.mcp.tools.harness import build_access_service
-from test_pr34_remediation import open_rest, tool
+from test_pr34_remediation import open_rest, tool, stdio_environment
+from test_pr34_remediation import runtime as runtime_fixture
 
-pytest_plugins = ["test_pr34_remediation"]
+runtime = runtime_fixture
 
 
 def issue(runtime, actions, **extra):
@@ -104,11 +104,9 @@ def test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource(runtim
     async def query():
         from mcp import ClientSession, StdioServerParameters
         from mcp.client.stdio import stdio_client
-        from okto_nexus.adapters.outbound.harness.environment import child_environment
 
         # Only the disposable fixture caller key reaches this Nexus test process.
-        env = child_environment(os.environ)
-        env["OKTO_NEXUS_API_KEY"] = caller
+        env = stdio_environment(runtime)
         params = StdioServerParameters(command=sys.executable,
             args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
                   "--feature-harness-integrations", "true"], env=env)
@@ -152,4 +150,14 @@ def test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized(runtime
         RuntimeControlService(access=build_access_service(deps), supervisor=deps.harness_supervisor).send(
             RuntimeRequestContext("operator", "payload"), session_id=session,
             verb="send_turn", payload={"text": "never sent"})
+    assert peers[0].sent == []
+
+
+def test_p04_operator_cannot_send_using_a_replaced_profile(runtime):
+    deps, client, _, peers, operator, _ = runtime
+    session = open_rest(runtime).json()["data"]["session_id"]
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE runtime_profiles SET revision=revision+1 WHERE profile_id='profile-pi'")
+    result = tool(client, operator, "harness_send", {"session_id": session, "payload": {"text": "old config"}})
+    assert result["error"]["code"] == "PERMISSION_DENIED"
     assert peers[0].sent == []

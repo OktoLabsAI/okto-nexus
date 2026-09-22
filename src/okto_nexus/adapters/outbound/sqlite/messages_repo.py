@@ -439,6 +439,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             rows = uow.connection.execute(
                 f"""
                 UPDATE message_deliveries SET
+                    consumer_kind = 'pull',
                     status = CASE WHEN attempts < ? THEN ? ELSE ? END,
                     attempts = CASE WHEN attempts < ? THEN attempts + 1
                                     ELSE attempts END,
@@ -448,6 +449,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
                 WHERE delivery_id IN (
                     SELECT delivery_id FROM message_deliveries
                     WHERE recipient_agent_id = ?
+                      AND (consumer_kind IS NULL OR consumer_kind = 'pull')
                       AND (status = ? OR {self._EXPIRED})
                     ORDER BY created_at ASC, rowid ASC
                     LIMIT ?
@@ -496,6 +498,7 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             rows = uow.connection.execute(
                 f"UPDATE message_deliveries SET status = ?, read_at = ? "
                 f"WHERE recipient_agent_id = ? AND status IN (?, ?) "
+                f"AND (consumer_kind IS NULL OR consumer_kind = 'pull') "
                 f"AND message_id IN ({placeholders}) RETURNING message_id",
                 (
                     DELIVERY_READ,

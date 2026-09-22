@@ -344,8 +344,9 @@ def ensure_operator_key(
         return OPERATOR_AGENT_ID, plaintext
 
 
-def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
+def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_url: str | None = None) -> FastAPI:
     """Assemble the serve application (REST + SSE + MCP mount + static)."""
+    deps.runtime_owner_api_url = runtime_owner_api_url
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     observability = ObservabilityService(
         SqliteObservabilityQueries(), deps.clock, deps.config
@@ -465,8 +466,14 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None) -> FastAPI:
             metrics_task = asyncio.create_task(_publish_metrics())
         try:
             async with mcp_server.session_manager.run():
+                if deps.config.feature_harness_integrations:
+                    from ..mcp.tools.harness import build_dispatcher
+                    await anyio.to_thread.run_sync(build_dispatcher(deps).start)
                 yield
         finally:
+            dispatcher = getattr(deps, "runtime_dispatcher", None)
+            if dispatcher:
+                await anyio.to_thread.run_sync(dispatcher.close)
             if telemetry is not None:
                 telemetry.record_event(
                     EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}

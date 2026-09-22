@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "dc67cdd",
+  "execution_head": "2fb9f59",
   "notice": "Execution in progress; evidence under plans/pr34-remediation. Native Codex and Claude authorized; Pi native NOT_RUN. Final gate NOT PASSED.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -612,7 +612,7 @@
       "depends_on_phases": [
         "P04"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P05",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -649,62 +649,116 @@
         {
           "task_id": "P05-T01",
           "title": "Criar intents transacionais para todos os produtores, incluindo approval e handoff sintético.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P05-T02",
           "title": "Implementar idempotency key/hash/uniqueness e retorno autorizado de operações existentes.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P05-T03",
           "title": "Implementar resolução de endpoint/lane/contexto e afinidade de continuidade.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P05-T04",
           "title": "Coordenar reserva de consumo entre inbox/pull e push sem misturar leases/contadores.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P05-T05",
           "title": "Definir ACK, unknown, mirror e fallback seguro, com invariantes testados.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P05-T06",
           "title": "Preservar delivered_count e comportamento de destinatários legados.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         }
       ]
     },
@@ -714,7 +768,7 @@
       "depends_on_phases": [
         "P05"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P06",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -750,52 +804,97 @@
         {
           "task_id": "P06-T01",
           "title": "Implementar lifecycle do dispatcher, owner único/epoch e claims CAS.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P06-T02",
           "title": "Remover envio externo do callback e adicionar wakeup/IPC/generation seguros.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P06-T03",
           "title": "Implementar timers, startup drain e reconciliação indexada de sinais perdidos.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P06-T04",
           "title": "Classificar tentativas/ambiguidade e impedir failover/retry automático inseguro.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         },
         {
           "task_id": "P06-T05",
           "title": "Aplicar filas limitadas, quotas, ordenação, controles prioritários e quarentena.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/application/runtime_open.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+          ],
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
         }
       ]
     },

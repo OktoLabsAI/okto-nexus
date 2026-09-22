@@ -149,6 +149,15 @@ from okto_nexus.application.adapter_registry import AdapterRegistry, AdapterDesc
 from okto_nexus.application.endpoints import EndpointService
 from okto_nexus.application.runtime_access import RuntimeAccessService
 from okto_nexus.application.runtime_control import RuntimeControlService, validate_runtime_payload
+from okto_nexus.application.runtime_dispatcher import RuntimeDispatcher
+from okto_nexus.application.runtime_open import RuntimeOpenService
+from okto_nexus.adapters.outbound.sqlite.runtime_requests_repo import SqliteRuntimeRequestRepo
+from okto_nexus.application.runtime_delivery import RuntimeDeliveryPlanner
+from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+from okto_nexus.adapters.outbound.runtime_wake import RuntimeWakeChannel
+from okto_nexus.adapters.outbound.runtime_owner_client import call_runtime_owner
+from urllib.parse import quote
+from okto_nexus.domain.base import new_id
 from okto_nexus.adapters.outbound.sqlite.runtime_grants_repo import SqliteRuntimeGrantRepo
 from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
 from okto_nexus.adapters.outbound.harness.environment import profile_environment
@@ -192,13 +201,29 @@ def authorize_request(deps, *, substrate=None, action="admin", session_id=None, 
 
 def authorized_send(deps, supervisor, session_id, verb, payload):
     context = authorize_request(deps, action="send" if verb == "send_turn" else verb, session_id=session_id)
-    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor).send(
+    if not is_local_runtime_owner(deps):
+        action = "send" if verb == "send_turn" else verb
+        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/{action}", {"payload": payload})
+    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
+                                 owner_guard=lambda: is_local_runtime_owner(deps)).send(
         context, session_id=session_id, verb=verb, payload=payload)
 
 
 def authorized_close(deps, supervisor, session_id):
     context = authorize_request(deps, action="close", session_id=session_id)
-    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor).close(context, session_id=session_id)
+    if not is_local_runtime_owner(deps):
+        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/close", {})
+    session = RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
+                                    owner_guard=lambda: is_local_runtime_owner(deps)).close(context, session_id=session_id)
+    return session_to_dict(session)
+
+
+def is_local_runtime_owner(deps):
+    dispatcher = getattr(deps, "runtime_dispatcher", None)
+    if not dispatcher or dispatcher.epoch is None or dispatcher._stop.is_set():
+        return False
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        return dispatcher.repo.owns(uow, owner_id=dispatcher.owner_id, epoch=dispatcher.epoch, now=deps.clock.now_iso())
 
 
 def runtime_tool_guard(deps):
@@ -254,6 +279,33 @@ def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpo
         kind=kind, substrate=resolve_substrate(kind, substrate), project_root=project_root)
     require_runtime_agent(agents=deps.repos.agents, connection_factory=deps.connection_factory,
                           agent_id=agent_id, role=role)
+    return construct_profile_connector(deps, endpoint=endpoint, profile=profile, kind=kind,
+                                       project_root=project_root, substrate=substrate, target_pid=target_pid)
+
+
+def open_runtime(deps, **arguments):
+    context = authorize_request(deps, action="access", substrate=arguments.get("substrate"))
+    for name in ("metadata", "notify_target", "backend"):
+        arguments[name] = runtime_object(name, arguments.get(name))
+    arguments["substrate"] = resolve_substrate(arguments["kind"], arguments.get("substrate"))
+    if not is_local_runtime_owner(deps):
+        if not arguments.get("idempotency_key"):
+            arguments["idempotency_key"] = new_id("open-key")
+        return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/sessions", arguments)
+    supervisor = build_service(deps)
+    service = RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
+        agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
+        supervisor=supervisor, construct=functools.partial(construct_profile_connector, deps), clock=deps.clock,
+        owner_guard=lambda: is_local_runtime_owner(deps))
+    session, profile, reused, request_id = service.open(context, **arguments)
+    result = {**session_to_dict(session), "backend": profile}
+    if request_id:
+        result.update(request_id=request_id, reused=reused)
+    return result
+
+
+def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, substrate, target_pid=None):
+    """Low-level construction, only after explicit control or durable delivery admission."""
     effective_backend = {}
     if profile is not None:
         effective_backend["env"] = profile_environment(profile, deps.config.home_dir)
@@ -279,6 +331,62 @@ def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpo
     return connector, endpoint, {"profile_id": endpoint["profile_id"],
         "inherit_ambient": bool(profile and profile["inherit_ambient"]),
         "revision": profile["revision"] if profile else None}
+
+
+def build_dispatcher(deps):
+    existing = getattr(deps, "runtime_dispatcher", None)
+    if existing:
+        return existing
+    outbox, endpoints = SqliteRuntimeOutboxRepo(), SqliteEndpointRepo()
+    planner = RuntimeDeliveryPlanner(endpoints=endpoints, outbox=outbox, agents=deps.repos.agents)
+    supervisor = build_service(deps)
+    registry = build_connector_factories(deps)
+    messages = build_message_service(deps)
+
+    def validate(uow, operation):
+        endpoint, _ = planner.revalidate(uow, operation=operation, config=deps.config)
+        messages.revalidate_runtime_delivery(uow, operation)
+        if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach is disabled.", {})
+
+    def dispatch(operation):
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            endpoint, profile = planner.revalidate(uow, operation=operation, config=deps.config)
+            workspace = deps.repos.workspaces.get(uow, operation["workspace_id"])
+        descriptor = registry.get(endpoint["adapter_id"])
+        session_id = operation["runtime_session_id"]
+        if session_id is None:
+            live = [s for s in supervisor.list_live() if s.endpoint_id == endpoint["endpoint_id"]]
+            if len(live) > 1:
+                raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+            if live:
+                session_id = live[0].session_id
+            else:
+                connector, _, _ = construct_profile_connector(deps, endpoint=endpoint, profile=profile,
+                    kind=descriptor.kind, substrate=descriptor.substrate, project_root=workspace.root_realpath)
+                session = supervisor.open(kind=descriptor.kind, connector=connector,
+                    owning_agent_id=endpoint["agent_id"], project_root=workspace.root_realpath,
+                    endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
+                    profile_revision=profile["revision"] if profile else None)
+                session_id = session.session_id
+            with deps.connection_factory.unit_of_work() as uow:
+                if not outbox.bind_runtime(uow, operation_id=operation["operation_id"], session_id=session_id,
+                        epoch=operation["owner_epoch"], attempt_id=operation["attempt_id"]):
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Runtime operation lost ownership.", {})
+        operation = operation | {"runtime_session_id": session_id}
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            validate(uow, operation)
+            current = outbox.get(uow, operation["operation_id"])
+            if (not current or current["status"] != "SENDING" or current["owner_epoch"] != operation["owner_epoch"] or
+                    not outbox.owns(uow, owner_id=operation["owner_id"], epoch=operation["owner_epoch"], now=deps.clock.now_iso())):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Runtime operation lost ownership.", {})
+        supervisor.send(session_id, "send_turn", {"envelope": outbox.decode(operation)})
+
+    dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
+                                   validate=validate, dispatch=dispatch)
+    dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
+    deps.runtime_dispatcher = dispatcher
+    return dispatcher
 
 
 #: Substrate vocabulary for ``kind="claude_code"`` ONLY (see module docstring
@@ -530,7 +638,9 @@ def build_service(deps: Any) -> HarnessSupervisor:
         # service (above) just wired/reused on deps - this is what makes an
         # ordinary target-grammar delivery (direct/capability/role/tag)
         # addressed at a live session's owning_agent_id actually reach it.
-        inbox_notifier=deps.inbox_delivery_notifier,
+        # Production delivery now reserves the canonical inbox through outbox.
+        # Never retain the old per-session fanout alongside that reservation.
+        inbox_notifier=None,
         runtime_enabled=lambda: deps.config.feature_harness_integrations,
         endpoint_repo=SqliteEndpointRepo(),
         presence_sessions=deps.repos.sessions,
@@ -859,33 +969,13 @@ def register(server: Any, deps: Any) -> None:
         role: Annotated[str | None, Field(description=_P_ROLE)] = None,
         metadata: Annotated[Any, Field(description=_P_METADATA)] = None,
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable key for this open request; retries never create another runtime.")] = None,
     ) -> dict[str, Any]:
         """Open a runtime for an existing agent. Requires operator authority and opt-in; never changes the agent profile."""
-        metadata_obj = runtime_object("metadata", metadata)
-        notify_target_obj = runtime_object("notify_target", notify_target)
-        connector, endpoint, profile_view = await anyio.to_thread.run_sync(functools.partial(
-            prepare_runtime, deps, agent_id=agent_id, kind=kind, project_root=project_root,
-            substrate=substrate, endpoint_id=endpoint_id, backend=runtime_object("backend", backend),
-            target_pid=target_pid, role=role))
-        session = await anyio.to_thread.run_sync(
-            functools.partial(
-                supervisor.open,
-                kind=kind,
-                connector=connector,
-                owning_agent_id=agent_id,
-                project_root=project_root,
-                role=role,
-                endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
-                metadata=dict(metadata_obj) if isinstance(metadata_obj, Mapping) else None,
-                notify_target=dict(notify_target_obj)
-                if isinstance(notify_target_obj, Mapping)
-                else None,
-            )
-        )
-        return {
-            **session_to_dict(session),
-            "backend": profile_view,
-        }
+        return await anyio.to_thread.run_sync(functools.partial(
+            open_runtime, deps, agent_id=agent_id, kind=kind, project_root=project_root,
+            substrate=substrate, target_pid=target_pid, backend=backend, endpoint_id=endpoint_id,
+            role=role, metadata=metadata, notify_target=notify_target, idempotency_key=idempotency_key))
 
     @server.tool()
     @async_tool_envelope
@@ -939,7 +1029,7 @@ def register(server: Any, deps: Any) -> None:
         session = await anyio.to_thread.run_sync(
             functools.partial(authorized_close, deps, supervisor, session_id)
         )
-        return session_to_dict(session)
+        return session
 
     @server.tool()
     @tool_envelope

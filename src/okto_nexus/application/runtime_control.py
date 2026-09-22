@@ -18,8 +18,13 @@ def validate_runtime_payload(value, *, required):
 
 
 class RuntimeControlService:
-    def __init__(self, *, access, supervisor):
+    def __init__(self, *, access, supervisor, owner_guard=None):
         self.access, self.supervisor = access, supervisor
+        self.owner_guard = owner_guard
+
+    def _require_owner(self):
+        if not self.owner_guard or not self.owner_guard():
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime effects require the active serve owner.", {})
 
     def send(self, context, *, session_id, verb, payload):
         if verb not in {"send_turn", "steer", "interrupt"}:
@@ -28,11 +33,13 @@ class RuntimeControlService:
         # Authorize before validation so unauthorized callers get opaque errors.
         self.access.authorize(context, action=action, session_id=session_id)
         payload = validate_runtime_payload(payload, required=verb != "interrupt")
+        self._require_owner()
         self.access.authorize(context, action=action, session_id=session_id, consume=True)
         return self.supervisor.send(session_id, verb, payload)
 
     def close(self, context, *, session_id):
         self.access.authorize(context, action="close", session_id=session_id)
+        self._require_owner()
         return self.supervisor.close(session_id)
 
     def replay(self, context, *, session_id, after_sequence=0, limit=200):

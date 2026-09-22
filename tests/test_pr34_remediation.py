@@ -6,8 +6,10 @@ authentication middleware and MCP mount. Only the external peer is synthetic.
 from __future__ import annotations
 
 import json
+import os
 import socket
 import threading
+import time
 from dataclasses import asdict
 
 import httpx
@@ -64,7 +66,7 @@ def runtime(tmp_path, request):
     sock = socket.socket()
     sock.bind(("127.0.0.1", 0))
     port = sock.getsockname()[1]
-    server = Server(uvicorn.Config(build_app(deps), log_level="error"))
+    server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
     thread = threading.Thread(target=server.run, kwargs={"sockets": [sock]}, daemon=True)
     thread.start()
     assert ready.wait(10), "production HTTP app did not start"
@@ -82,6 +84,7 @@ def runtime(tmp_path, request):
                 response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator_key},
                     json={"endpoint_id": "endpoint-" + adapter_id, "agent_id": "worker", "adapter_id": adapter_id,
                           "project_root": str(root), "enabled": True,
+                          "response_policy": "conversation",
                           "profile_id": profile_id if substrate != "attach" else None,
                           "public_config": {"target_pid": 12345} if substrate == "attach" else {}})
                 assert response.status_code == 200, response.text
@@ -121,8 +124,38 @@ def open_rest(runtime, agent="worker"):
                        json={"agent_id": agent, "kind": "pi", "project_root": root})
 
 
+def send_message(runtime, *, subject="fixture", body="fixture", target=None):
+    _, client, root, _, _, caller = runtime
+    result = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
+        "subject": subject, "body": body, "target": target or {"strategy": "direct", "agent_id": "worker"}})
+    assert result["ok"], result
+    return result["data"]
+
+
+def wait_sent(peers, count=1):
+    deadline = time.monotonic() + 5
+    while sum(len(peer.sent) for peer in peers) < count and time.monotonic() < deadline:
+        time.sleep(0.01)
+    assert sum(len(peer.sent) for peer in peers) == count
+
+
+def stdio_environment(runtime):
+    deps, _, _, _, _, caller = runtime
+    allowed = {"PATH", "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT", "TEMP", "TMP"}
+    env = {key: value for key, value in os.environ.items() if key.upper() in allowed}
+    env.update(OKTO_NEXUS_API_KEY=caller, HOME=str(deps.config.home_dir), USERPROFILE=str(deps.config.home_dir))
+    return env
+
+
 def test_profile_is_unchanged_by_open_close(runtime):
-    deps, _, _, _, _, _ = runtime
+    deps, client, _, _, key, _ = runtime
+    headers = {"x-api-key": key}
+    assert client.post("/api/v1/tags", headers=headers, json={"key": "org"}).status_code == 200
+    assert client.post("/api/v1/tags/org/values", headers=headers, json={"value": "fixture"}).status_code == 200
+    response = client.patch("/api/v1/agents/worker", headers=headers, json={
+        "tags": {"org": ["fixture"]}, "comm_scope": {"outbound": {"org": ["fixture"]}},
+        "permissions": {"messages": {"send_direct": False}}})
+    assert response.status_code == 200, response.text
     with deps.connection_factory.unit_of_work(write=False) as uow:
         before = asdict(deps.repos.agents.get(uow, "worker"))
     response = open_rest(runtime)
@@ -202,22 +235,23 @@ def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
 
 
 def test_one_delivery_does_not_execute_on_two_sessions(runtime):
-    deps, _, root, peers, _, _ = runtime
-    for _ in range(2):
-        assert open_rest(runtime).status_code == 200
-    from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
-    messages = build_service(deps)
-    messages.create_message(project_root=root, from_agent_id="caller", subject="conversation",
-                            body="one logical delivery", target={"strategy": "direct", "agent_id": "worker"})
-    assert sum(len(peer.sent) for peer in peers) <= 1
+    _, client, root, peers, key, _ = runtime
+    assert open_rest(runtime).status_code == 200
+    assert client.post("/api/v1/harness/endpoints", headers={"x-api-key": key}, json={
+        "endpoint_id": "second-pi", "agent_id": "worker", "adapter_id": "pi", "project_root": root,
+        "profile_id": "profile-pi", "enabled": True, "response_policy": "conversation", "priority": 1}).status_code == 200
+    assert client.post("/api/v1/harness/sessions", headers={"x-api-key": key}, json={
+        "agent_id": "worker", "kind": "pi", "project_root": root, "endpoint_id": "second-pi"}).status_code == 200
+    send_message(runtime, body="one logical delivery")
+    wait_sent(peers)
+    assert len(peers[1].sent) == 1
 
 
 def test_forward_preserves_sender_subject_and_message_identity(runtime):
-    deps, _, root, peers, _, _ = runtime
+    _, _, _, peers, _, _ = runtime
     assert open_rest(runtime).status_code == 200
-    from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
-    result = build_service(deps).create_message(project_root=root, from_agent_id="caller",
-        subject="correlation-subject", body="body-only", target={"strategy": "direct", "agent_id": "worker"})
+    result = send_message(runtime, subject="correlation-subject", body="body-only")
+    wait_sent(peers)
     wire = json.dumps(peers[0].sent[0].payload)
     assert "caller" in wire and "correlation-subject" in wire and result["message_id"] in wire
 
@@ -257,13 +291,12 @@ def test_open_does_not_fabricate_credential_authentication(runtime):
 
 
 def test_committed_delivery_survives_lost_notification(runtime, monkeypatch):
-    deps, _, root, _, _, _ = runtime
+    deps, _, _, _, _, _ = runtime
     open_rest(runtime)
-    from okto_nexus.adapters.inbound.mcp.tools.messages import build_service
-    messages = build_service(deps)
-    monkeypatch.setattr(messages, "_maybe_notify_inbox_subscribers", lambda **kwargs: None)
-    result = messages.create_message(project_root=root, from_agent_id="caller", subject="recovery",
-        body="lost wake fixture", target={"strategy": "direct", "agent_id": "worker"})
+    from okto_nexus.application.messages import MessageService
+    monkeypatch.setattr(MessageService, "_maybe_notify_inbox_subscribers", lambda self, **kwargs: None)
+    monkeypatch.setattr(deps.runtime_dispatcher, "wake", lambda: None)
+    result = send_message(runtime, subject="recovery", body="lost wake fixture")
     with deps.connection_factory.unit_of_work(write=False) as uow:
         # Inspect durable transport state, not the existence of a proposed
         # Python module. The baseline only has the logical inbox delivery.
