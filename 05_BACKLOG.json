@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "28ca5423f6ce931b0257736f910024e47bb3864f",
+  "execution_head": "43e06ccfc2ec73ad36d64c4246cba9d2c7aaa0a1",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2012,13 +2012,26 @@
           "implementation_refs": [
             "src/okto_nexus/application/endpoints.py",
             "src/okto_nexus/migrations/053_runtime_configuration_audit.sql",
-            "tests/test_runtime_configuration_updates.py"
+            "tests/test_runtime_configuration_updates.py",
+            "frontend/src/components/NativeApprovalInput.tsx",
+            "frontend/src/views/ApprovalsView.tsx",
+            "frontend/src/api.ts",
+            "tests/test_runtime_input_dashboard.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "43e06ccfc2ec73ad36d64c4246cba9d2c7aaa0a1 + native input dashboard worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -c 'import os,pytest; os.environ[\"OKTO_NEXUS_UI_CAMPAIGN\"]=\"1\"; raise SystemExit(pytest.main([\"-q\",\"-rP\",\"tests/test_runtime_input_dashboard.py\"]))'",
+              "result": "PASS",
+              "observed": "6 real isolated Edge browser tests against production HTTP and actual connector protocol fixtures; 48 native input/HITL regressions PASS; TypeScript PASS. No real provider/model run.",
+              "evidence": "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md"
+            }
+          ],
           "evidence": [
-            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
+            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
+            "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md"
           ],
-          "notes": "Operator configuration-change diagnostics now expose revisions/field names without values; runtime dashboard/unknown/approval UX remains pending."
+          "notes": "Configuration diagnostics and native approval/input dashboard implemented. Explicit answers, typed forms, denial, expiry and distinct decision/delivery states tested. Unknown/ambiguous/detached and endpoint UI remain pending."
         },
         {
           "task_id": "P11-T04",
@@ -3806,7 +3819,10 @@
       "stimulus": "Abrir operação UNKNOWN/ambígua/pending approval e processo detached.",
       "expected": "Usuário identifica causa e opções autorizadas sem estado de sucesso enganoso.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md"
+      ],
+      "notes": "Partial browser coverage: native pending approval/input and expiry PASS. Aggregate remains NOT_RUN until UNKNOWN/ambiguous and detached diagnostics are exercised."
     },
     {
       "test_id": "T-MIG-01",

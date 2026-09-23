@@ -131,6 +131,30 @@ prior effects. Retrying the same reconciliation through either surface returns
 the same reconciliation ID. It does not resend an ambiguous delivery or invent
 native completion.
 
+## Native questions and permissions in the dashboard
+
+Open Approvals as the operator and choose Review request. Supported Codex
+blocking questions, flat form elicitation and Claude AskUserQuestion requests
+show explicit answer controls. Nothing is selected from a native default and
+opening the detail does not answer it. Choose/fill the requested values and press
+Send answer. Multiple choices remain distinct values; numeric/boolean fields
+retain their types. For a permitted empty string, explicitly select Send empty
+text. Optional omitted fields are not filled automatically.
+
+Permission requests instead show Approve request after review. Reject declines
+the request without fabricating answer data. These operations use the existing
+operator-only REST approval service, which validates the stored native request,
+correlation, answer, current authority and deadline. Agent credentials cannot
+approve their own requests. No additional MCP decision tool is introduced.
+
+The detail distinguishes the canonical decision from runtime delivery. It shows
+native state/reason/expiry and the recorded response. Expired or no-longer-pending
+requests have no answer control. A recorded approval does not prove the runtime
+received it or that work completed. Secret questions and unsupported remote/URL
+schemas remain outside the supported native contract; the UI does not resolve
+them or relax sandbox/approval policy. The original request remains available
+for operator inspection.
+
 The existing journal/artifact maintenance actions remain available. Outbox
 takeover, capability negotiation and dashboard diagnostics remain
 tracked in P11. Deleting persistence rows is not an operational substitute for

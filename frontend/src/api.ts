@@ -535,6 +535,14 @@ export interface ApprovalDetail extends ApprovalRow {
     kwargs?: Record<string, unknown>;
   } | null;
   executed_result?: unknown;
+  decision_detail?: {
+    operation_id: string;
+    state: string;
+    decision: string | null;
+    reason: string | null;
+    expires_at: string;
+    response: unknown;
+  } | null;
 }
 
 export interface ApprovalDecision {
@@ -1577,13 +1585,14 @@ export const api = {
     approvalId: string,
     decision: "approve" | "reject",
     justification?: string,
+    response?: Record<string, unknown>,
   ) =>
     call<ApprovalDecision>(
       `/api/v1/approvals/${encodeURIComponent(approvalId)}/decision`,
       {
         method: "POST",
         body: JSON.stringify(
-          justification ? { decision, justification } : { decision },
+          { decision, ...(justification ? { justification } : {}), ...(response !== undefined ? { response } : {}) },
         ),
       },
     ),

@@ -26,7 +26,7 @@ Commands/results:
 
 P01 containment tasks implemented, phase IN_PROGRESS pending its full gate; P02 contracts IMPLEMENTED; P03–P08 IN_PROGRESS; P09–P11 IN_PROGRESS; P12 NOT_STARTED. No phase VERIFIED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
-Current resume point (2026-09-23): P11 scoped discovery on parent28ca542, surface41, identity resource8, schema053 unchanged. Shared authenticated REST/MCP/stdio read projection groups authorized endpoints under the canonical Agent, omits private configuration and distinguishes declarations/persisted readiness from native verification. Windows integrated50 PASS, discovery11 PASS plus attach1 PASS; Linux25 PASS plus attach1 PASS; surface/resource/boundary31 PASS. See P11_SCOPED_DISCOVERY.md. Next: effective capability probes, unknown-delivery reconciliation, native input parity, UI and full operator guide; then P12 and build/install. Final gate NOT PASSED.
+Current resume point (2026-09-23): P11 native input dashboard above43e06cc; schema053/surface41/identity8 unchanged. Explicit Codex questions, primitive form and Claude AskUserQuestion controls use canonical operator REST/HITL; no defaults or synthetic success. Isolated Edge browser6 PASS against production API/native protocol peers, backend48 PASS, TypeScript PASS; screenshot reviewed. See P11_NATIVE_INPUT_DASHBOARD.md. Scoped discovery checkpoint43e06cc is pushed. Next: capability probes, unknown-delivery reconciliation, remaining admin parity, endpoint/operation UI and full guide/ADR; then P12 and final build/install. Final gate NOT PASSED.
 
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
@@ -212,3 +212,6 @@ Authenticated handoff checkpoint committed and pushed: e054720. Local Codex 0.15
 
 
 Scoped discovery unit above28ca542: see P11_SCOPED_DISCOVERY.md for exact commands, behavioral RED, fixture corrections, native limits and code mapping. T-API-06 fixture projection PASS; no aggregate phase verification.
+
+
+Native input dashboard unit above43e06cc: P11_NATIVE_INPUT_DASHBOARD.md records exact browser commands and RED, 6 PASS, backend48 PASS, screenshot and native-model NOT_RUN limits. Existing generated static files preserved; temporary builds only. P11-T03 remains IN_PROGRESS and aggregate T-API-08 NOT_RUN.

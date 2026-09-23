@@ -7,7 +7,7 @@
 // table is oldest-first and the detail panel is the ONE surface showing the
 // full request_payload (BR5: the queue itself carries routing metadata only).
 
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import {
   ChevronDown,
   ChevronRight,
@@ -17,6 +17,7 @@ import {
 import { api, type ApprovalDetail, type ApprovalRow } from "../api";
 import { PageContainer } from "../components/PageContainer";
 import { useWorkspaceName } from "../components/WorkspaceNames";
+import { NativeApprovalInput } from "../components/NativeApprovalInput";
 
 const inputCls =
   "rounded-lg border border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/40";
@@ -34,6 +35,7 @@ function ago(iso: string | null): string {
 
 // Compact "who does it address" line from the BR5 metadata (never content).
 function describeTarget(meta: ApprovalRow["payload_meta"]): string {
+  if (meta.kind === "runtime_native_approval") return "Runtime request";
   const target = meta.target as
     | {
         strategy?: string;
@@ -64,7 +66,10 @@ function actionChip(action: string): string {
     : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300";
 }
 
-function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
+function DetailPanel({ detail, busy = false, onApprove }: {
+  detail: ApprovalDetail | null; busy?: boolean;
+  onApprove?: (response?: Record<string, unknown>) => void;
+}) {
   const workspaceName = useWorkspaceName(detail?.workspace_id);
   if (detail === null) {
     return (
@@ -91,9 +96,11 @@ function DetailPanel({ detail }: { detail: ApprovalDetail | null }) {
           </span>
         )}
       </div>
+      {detail.action === "runtime_native_approval" && <NativeApprovalInput key={detail.approval_id}
+        detail={detail} busy={busy} onApprove={onApprove ?? (() => {})} />}
       <div>
         <div className="text-[11px] uppercase tracking-wide text-surface-400 dark:text-surface-500 mb-1">
-          Request payload (executed verbatim on approve)
+          {detail.action === "runtime_native_approval" ? "Original runtime request" : "Request payload (executed verbatim on approve)"}
         </div>
         <pre className="font-mono text-[11px] whitespace-pre-wrap break-all max-h-64 overflow-y-auto bg-white dark:bg-surface-950 rounded-lg border border-surface-200 dark:border-surface-800 p-2">
           {JSON.stringify(detail.request_payload, null, 2)}
@@ -136,6 +143,12 @@ export function ApprovalsView({
   const [busy, setBusy] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [detail, setDetail] = useState<ApprovalDetail | null>(null);
+  const detailRequest = useRef(0);
+  useEffect(() => {
+    detailRequest.current += 1;
+    setDetailOpen(null);
+    setDetail(null);
+  }, [workspace]);
 
   const reload = useCallback(async () => {
     try {
@@ -179,30 +192,39 @@ export function ApprovalsView({
     reload();
   }, [reload, refreshTick]);
 
-  const openDetail = async (approvalId: string) => {
-    if (detailOpen === approvalId) {
-      setDetailOpen(null);
-      setDetail(null);
-      return;
-    }
-    setDetailOpen(approvalId);
+  const openDetail = (approvalId: string) => {
+    detailRequest.current += 1;
+    setDetailOpen(current => current === approvalId ? null : approvalId);
     setDetail(null);
-    try {
-      setDetail(await api.approvalDetail(approvalId));
-    } catch (exc) {
-      setActionError((exc as Error).message);
-      setDetailOpen(null);
-    }
   };
+
+  useEffect(() => {
+    if (!detailOpen) return;
+    const generation = ++detailRequest.current;
+    let active = true;
+    api.approvalDetail(detailOpen).then(loaded => {
+      if (active && generation === detailRequest.current) setDetail(loaded);
+    }).catch(exc => {
+      if (active && generation === detailRequest.current) {
+        setActionError((exc as Error).message);
+        setDetail(null);
+      }
+    });
+    return () => { active = false; };
+  }, [detailOpen, refreshTick]);
 
   const decide = async (
     approvalId: string,
     decision: "approve" | "reject",
     just?: string,
+    response?: Record<string, unknown>,
   ) => {
     setBusy(approvalId);
     try {
-      await api.decideApproval(approvalId, decision, just?.trim() || undefined);
+      await api.decideApproval(approvalId, decision, just?.trim() || undefined, response);
+      detailRequest.current += 1;
+      setDetailOpen(null);
+      setDetail(null);
       setRejecting(null);
       setJustification("");
       setActionError(null);
@@ -240,11 +262,10 @@ export function ApprovalsView({
           Approvals
         </h1>
         <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-          Actions intercepted by{" "}
+          Runtime requests and actions intercepted by{" "}
           <code className="font-mono">require_approval</code> policies wait
-          here until you decide. Approving executes the action exactly as
-          requested, with the same effects as the normal flow; rejecting
-          notifies the requester with your justification.
+          here until you decide. Review native questions to provide an explicit
+          answer. A recorded decision does not prove delivery to the runtime.
         </p>
       </div>
 
@@ -386,10 +407,12 @@ export function ApprovalsView({
                             <button
                               className="text-[11px] px-2 py-1 rounded-lg bg-emerald-600 text-white font-medium mr-1 disabled:opacity-50"
                               disabled={busy === row.approval_id}
-                              onClick={() => decide(row.approval_id, "approve")}
+                              onClick={() => row.action === "runtime_native_approval"
+                                ? (detailOpen !== row.approval_id && openDetail(row.approval_id))
+                                : decide(row.approval_id, "approve")}
                               data-testid={`approve-${row.approval_id}`}
                             >
-                              Approve
+                              {row.action === "runtime_native_approval" ? "Review request" : "Approve"}
                             </button>
                             <button
                               className="text-[11px] px-2 py-1 rounded-lg border border-red-300 dark:border-red-500/40 text-red-600 dark:text-red-400 disabled:opacity-50"
@@ -409,7 +432,9 @@ export function ApprovalsView({
                     {detailOpen === row.approval_id && (
                       <tr>
                         <td colSpan={7} className="py-2">
-                          <DetailPanel detail={detail} />
+                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null}
+                            busy={busy === row.approval_id}
+                            onApprove={response => decide(row.approval_id, "approve", undefined, response)} />
                         </td>
                       </tr>
                     )}
@@ -465,7 +490,7 @@ export function ApprovalsView({
                     {detailOpen === row.approval_id && (
                       <tr>
                         <td colSpan={6} className="py-2">
-                          <DetailPanel detail={detail} />
+                          <DetailPanel detail={detail?.approval_id === row.approval_id ? detail : null} />
                         </td>
                       </tr>
                     )}

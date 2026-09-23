@@ -6,6 +6,11 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- The operator Approvals dashboard accepts explicit native question/form answers
+  for supported Codex and Claude requests. Opening a request submits no defaults.
+  Permission decisions remain distinct from input and native delivery; expired
+  requests expose their state without an answer control.
+
 - Surface 41 adds scoped discovery through `harness_list(view="bindings")`
   and REST `/harness/bindings`. Endpoints and bounded session history group under
   the canonical agent; current grants and policy restrict visibility. Private
