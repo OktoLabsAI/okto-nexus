@@ -11,6 +11,30 @@ export interface Envelope<T> {
   error?: { code: string; message: string; details?: unknown };
 }
 
+export interface RuntimeBindingAgent {
+  agent_id: string;
+  skill_names: string[];
+  endpoints: Array<{
+    endpoint_id: string; adapter_id: string; workspace_id: string;
+    health: string; enabled: boolean; capability_verification: string;
+    sessions_has_more: boolean;
+    sessions: Array<{
+      session_id: string; lifecycle_state: string;
+      current_owner_ready_record: boolean; process_liveness: string;
+    }>;
+  }>;
+}
+
+export interface RuntimeOperationRow {
+  operation_id: string; source_kind: string; endpoint_id: string;
+  agent_id: string; workspace_id: string; runtime_session_id: string | null;
+  state: string; reason: string | null; ack_level: string;
+  attempt_id: string | null; owner_epoch: number | null;
+  runtime_lifecycle: string | null; terminal_event_id: string | null;
+  reconciliation_id: string | null;
+  reconciliation: { action: string; reason: string; created_at: string } | null;
+}
+
 export interface GraphNode {
   agent_id: string;
   role: string | null;
@@ -1075,6 +1099,12 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
 }
 
 export const api = {
+  runtimeBindings: (after?: string) => call<{
+    agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
+  }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),
+  runtimeOperations: (after?: string) => call<{
+    items: RuntimeOperationRow[]; has_more: boolean; next_operation_id: string | null;
+  }>(`/api/v1/harness/outbox?limit=50${after ? `&after_operation_id=${encodeURIComponent(after)}` : ""}`),
   graph: (workspace: string, windowHours = 24) =>
     call<GraphSnapshot>(
       `/api/v1/graph?workspace=${encodeURIComponent(workspace)}&window_hours=${windowHours}`,

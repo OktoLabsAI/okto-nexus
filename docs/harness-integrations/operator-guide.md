@@ -134,8 +134,10 @@ or remote schemas do not bypass controls. See the
 `harness_list(view="bindings")` groups visible endpoints/sessions under the Agent,
 omitting private configuration, paths and secrets. A current owner-ready record is
 persisted evidence, not a liveness probe. Operator outbox inspection exposes attempt
-and recovery metadata without message bodies. Unknown/ambiguous/detached dashboard
-coverage remains incomplete; use the administrative API while that work is pending.
+and recovery metadata without message bodies. The Runtimes dashboard shows uncertain operations, multiple visible ready bindings
+and detached sessions, with explicit limits on what those records establish.
+Recovery mutations remain in the operator API; Review native approvals opens the
+existing canonical approval controls.
 
 ## Recovery and rollout
 

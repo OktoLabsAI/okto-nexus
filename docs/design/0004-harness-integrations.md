@@ -166,7 +166,7 @@ evidence. Fixture success is reported separately from actual provider/model runs
 Use the [operator guide](../harness-integrations/operator-guide.md) and
 [administration reference](../harness-integrations/runtime-administration.md) for
 implemented workflows. Remaining effective probes, managed-work recovery,
-diagnostic UI, backup/restore, advanced native campaigns and full P12 matrix must
+backup/restore, advanced native campaigns and full P12 matrix must
 pass their applicable gates before release. Pi/attach external limits remain
 explicit NOT_RUN, never converted into PASS. No A2A server, external broker,
 cloud runtime or new task orchestrator is introduced.

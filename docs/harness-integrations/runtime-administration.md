@@ -218,7 +218,28 @@ them or relax sandbox/approval policy. The original request remains available
 for operator inspection.
 
 The existing journal/artifact maintenance actions remain available. Managed-work
-claim recovery, capability negotiation and remaining dashboard diagnostics remain
+claim recovery and capability negotiation remain
 tracked in P11. Deleting persistence rows is not an operational substitute for
 those actions. Migration 053 is additive; operational rollback uses deactivation,
 drain and recovery, not reverse SQL or deletion of the audit/history.
+
+## Runtime diagnostics in the dashboard
+
+Open Runtimes to inspect authorized records across all workspaces. Connections are
+grouped under canonical agents with their skills, endpoint health, declared
+capability verification and stored runtime lifecycle. Multiple visible ready
+bindings prompt a selection review; this is not a replacement for server-side
+workspace/priority/selection-group resolution. Detached does not mean the external
+process ended, and persisted readiness is not a liveness probe.
+
+Transport cards distinguish conversation deliveries from runtime commands and show
+state, ACK evidence, reason and expandable attempt/owner/session/reconciliation
+metadata. Unknown outcomes never display automatic retry as recovery. Use the
+operator API procedure above for mutations; Review native approvals opens the
+existing Approvals view. Cards do not expose message bodies or private config.
+
+Refresh fetches current authorization and clears the previous snapshot on failure.
+Pages are bounded to50 endpoints/operations with explicit next/first controls;
+only10 sessions per endpoint are shown, with an indicator for older records.
+When admission is disabled, operator operation inspection remains available even
+if connection discovery is denied. No native status polling is introduced.
