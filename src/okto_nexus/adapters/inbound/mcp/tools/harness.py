@@ -255,6 +255,9 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
     effective_backend = {}
     if profile is not None:
         config = profile["config"]
+        from okto_nexus.application.runtime_requirements import validate_native_requirements
+        validate_native_requirements(config, build_connector_factories(deps).get(endpoint["adapter_id"]),
+                                     hitl_enabled=deps.config.feature_hitl)
         if kind != "codex" and set(config) & {"sandbox", "approval_policy"}:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,
                 "This profile claims controls unsupported by its adapter; review the profile before opening.", {})
@@ -287,7 +290,8 @@ def build_dispatcher(deps):
     if existing:
         return existing
     outbox, endpoints = SqliteRuntimeOutboxRepo(), SqliteEndpointRepo()
-    planner = RuntimeDeliveryPlanner(endpoints=endpoints, outbox=outbox, agents=deps.repos.agents)
+    planner = RuntimeDeliveryPlanner(endpoints=endpoints, outbox=outbox, agents=deps.repos.agents,
+                                    registry=build_connector_factories(deps), config=deps.config)
     supervisor = build_service(deps)
     registry = build_connector_factories(deps)
     messages = build_message_service(deps)

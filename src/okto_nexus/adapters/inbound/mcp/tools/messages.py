@@ -235,6 +235,7 @@ def build_service(deps: Any) -> MessageService:
     embedding_provider = embedding.provider if embedding is not None else None
     guardrails = build_guardrail_service(deps)
 
+    from .harness import build_connector_factories
     service = MessageService(
         connection_factory=deps.connection_factory,
         channels=repos.channels,
@@ -254,7 +255,8 @@ def build_service(deps: Any) -> MessageService:
         approvals=approvals,
         guardrails=guardrails,
         inbox_notifier=deps.inbox_delivery_notifier,
-        runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents),
+        runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents,
+            registry=build_connector_factories(deps), config=deps.config),
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
             agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,

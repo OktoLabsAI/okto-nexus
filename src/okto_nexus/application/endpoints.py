@@ -8,6 +8,7 @@ from ..domain.endpoints import AgentEndpoint
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_authorization import authorize_runtime, require_runtime_agent
+from .runtime_requirements import validate_native_requirements
 
 
 class EndpointService:
@@ -77,7 +78,7 @@ class EndpointService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Attach uses an approved external target, not a process profile.", {})
         if not isinstance(inherit_ambient, bool) or not isinstance(enabled, bool):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Profile switches must be booleans.", {})
-        allowed = {"command", "provider", "model", "sandbox", "approval_policy", "env", "extra_args"}
+        allowed = {"command", "provider", "model", "sandbox", "approval_policy", "env", "extra_args", "required_native_requests"}
         if set(config) - allowed:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported runtime profile configuration.", {})
         if descriptor.kind != "pi" and set(config) & {"provider", "model", "extra_args"}:
@@ -115,6 +116,7 @@ class EndpointService:
                or "NEXUS" in key.upper() for key, ref in secret_refs.items()):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported or privileged secret reference.", {})
         descriptor.config_validator(config)
+        validate_native_requirements(config, descriptor)
         with self.cf.unit_of_work() as uow:
             self.repo.put_profile(uow, profile_id=profile_id, adapter_id=adapter_id, config=config,
                 secret_refs=secret_refs, inherit_ambient=inherit_ambient, enabled=enabled, now=self.clock.now_iso())

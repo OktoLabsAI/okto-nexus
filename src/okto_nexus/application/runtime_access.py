@@ -4,6 +4,7 @@ from ..domain.base import iso_to_epoch, iso_plus, new_id
 from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
+from .runtime_requirements import validate_native_requirements
 
 ACTIONS = frozenset({"open", "send", "steer", "interrupt", "close", "read", "events", "discover", "execute_work"})
 
@@ -49,6 +50,12 @@ class RuntimeAccessService:
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]
+                    if enabled and self.registry:
+                        try:
+                            validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
+                                                         hitl_enabled=self.config.feature_hitl)
+                        except OktoNexusError:
+                            enabled = False
                     if enabled and session_id:
                         enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
             if enabled and endpoint and context.authentication_source == "runtime_boot":

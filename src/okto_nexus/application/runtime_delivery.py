@@ -4,11 +4,13 @@ from ..domain.delivery import DeliveryEnvelope
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
+from .runtime_requirements import validate_native_requirements
 
 
 class RuntimeDeliveryPlanner:
-    def __init__(self, *, endpoints, outbox, agents):
+    def __init__(self, *, endpoints, outbox, agents, registry, config):
         self.endpoints, self.outbox, self.agents = endpoints, outbox, agents
+        self.registry, self.config = registry, config
 
     def enqueue(self, uow, *, context, message, delivery, now, authorization_revision):
         # Legacy cooperative-trust messages still reach the logical inbox, but
@@ -33,6 +35,12 @@ class RuntimeDeliveryPlanner:
             profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
             if endpoint["profile_id"] and (not profile or not profile["enabled"]):
                 continue
+            if profile:
+                try:
+                    validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
+                                                 hitl_enabled=self.config.feature_hitl)
+                except OktoNexusError:
+                    continue
             live = self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
             if len(live) > 1:
                 raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
@@ -76,4 +84,7 @@ class RuntimeDeliveryPlanner:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime profile changed before dispatch.", {})
         if profile and operation["runtime_session_id"] and self.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime must be reopened with the current approved profile.", {})
+        if profile:
+            validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
+                                         hitl_enabled=config.feature_hitl)
         return endpoint, profile
