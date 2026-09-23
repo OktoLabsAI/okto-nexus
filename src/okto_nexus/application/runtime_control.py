@@ -133,6 +133,18 @@ class RuntimeControlService:
     def get_operation(self, context, *, operation_id):
         with self.access.cf.unit_of_work(write=False) as uow:
             row = self.commands.get(uow, operation_id)
+            delivery = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone() if not row else None
+        if delivery:
+            self.access.authorize(context, action="read", endpoint_id=delivery["endpoint_id"])
+            with self.access.cf.unit_of_work(write=False) as uow:
+                result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state FROM runtime_results "
+                    "WHERE operation_id=? ORDER BY captured_at DESC LIMIT 1", (operation_id,)).fetchone()
+                binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
+            return {"operation_id": operation_id, "session_id": delivery["runtime_session_id"], "state": delivery["status"],
+                "durable": True, "ack_level": delivery["ack_level"], "reason": delivery["reason"],
+                "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK"} else "not_observed",
+                "result_durable": delivery["terminal_event_id"] is not None, "result": dict(result) if result else None,
+                "handoff": dict(binding) if binding else None}
         if not row:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime operation is unavailable.", {})
         self.access.authorize(context, action="read", session_id=row["runtime_session_id"])

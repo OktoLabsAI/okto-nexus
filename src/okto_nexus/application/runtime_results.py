@@ -11,10 +11,11 @@ from ..errors import ErrorCode, OktoNexusError
 
 class RuntimeResultService:
     ARTIFACT_QUOTA_BYTES = 64 * 1024 * 1024
-    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None, owner_provider=None):
+    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None, owner_provider=None, work_validator=None):
         self.cf, self.agents, self.endpoints, self.config = connection_factory, agents, endpoints, config
         self.artifacts = artifacts
         self.owner_provider = owner_provider
+        self.work_validator = work_validator
 
     @staticmethod
     def artifact_id(row):
@@ -98,6 +99,11 @@ class RuntimeResultService:
         row = self.row(uow, result_id)
         if not self.config.feature_harness_integrations or not row or row["terminal_event_id"] != row["event_id"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "No authorized captured result.", {})
+        if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?", (row["operation_id"],)).fetchone():
+            if not self.work_validator:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed work publication is unavailable.", {})
+            operation = dict(uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (row["operation_id"],)).fetchone())
+            self.work_validator(uow, operation=operation)
         endpoint = self.endpoints.get(uow, row["endpoint_id"])
         sender = self.agents.get(uow, row["recipient_agent_id"])
         actor = self.agents.get(uow, row["actor_agent_id"])

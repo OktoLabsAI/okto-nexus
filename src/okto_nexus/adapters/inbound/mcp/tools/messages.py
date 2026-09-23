@@ -138,6 +138,11 @@ def wake_runtime(deps):
         signal_runtime_owner(deps.config.home_dir)
 
 
+def validate_runtime_work(deps, uow, *, operation):
+    from .handoff import build_service as build_handoff_service
+    return build_handoff_service(deps).runtime_work.revalidate(uow, operation=operation)
+
+
 def build_service(deps: Any) -> MessageService:
     """Wire the SQLite repos/emitter into ``deps`` and build the service.
 
@@ -253,7 +258,8 @@ def build_service(deps: Any) -> MessageService:
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
             agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,
-            artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None)),
+            artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None),
+            work_validator=lambda uow, **kwargs: validate_runtime_work(deps, uow, **kwargs)),
         runtime_wake=lambda: wake_runtime(deps),
     )
 

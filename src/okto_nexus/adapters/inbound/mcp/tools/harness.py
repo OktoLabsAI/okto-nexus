@@ -291,16 +291,27 @@ def build_dispatcher(deps):
     supervisor = build_service(deps)
     registry = build_connector_factories(deps)
     messages = build_message_service(deps)
+    from .handoff import build_service as build_handoff_service
+    work = build_handoff_service(deps).runtime_work
+
+    def managed(uow, operation):
+        return uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?",
+                                      (operation["operation_id"],)).fetchone() is not None
+
+    def revalidate(uow, operation):
+        return (work.revalidate(uow, operation=operation) if managed(uow, operation)
+                else planner.revalidate(uow, operation=operation, config=deps.config))
 
     def validate(uow, operation):
-        endpoint, _ = planner.revalidate(uow, operation=operation, config=deps.config)
-        messages.revalidate_runtime_delivery(uow, operation)
+        endpoint, _ = revalidate(uow, operation)
+        if not managed(uow, operation):
+            messages.revalidate_runtime_delivery(uow, operation)
         if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach is disabled.", {})
 
     def dispatch(operation):
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            endpoint, profile = planner.revalidate(uow, operation=operation, config=deps.config)
+            endpoint, profile = revalidate(uow, operation)
             workspace = deps.repos.workspaces.get(uow, operation["workspace_id"])
         descriptor = registry.get(endpoint["adapter_id"])
         session_id = operation["runtime_session_id"]
@@ -682,7 +693,7 @@ def build_connector_factories(deps: Any):
             kind=kind, substrate=substrate,
             protocol={"pi": "rpc-jsonl", "codex": "json-rpc-stdio"}.get(kind, substrate),
             factory=factory, config_validator=lambda config: runtime_object("backend", config),
-            capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only,
+            capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only, managed_work=not caps.send_only,
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end),

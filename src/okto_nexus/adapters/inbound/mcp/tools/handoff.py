@@ -250,7 +250,19 @@ def build_service(deps: Any) -> HandoffService:
         approvals=approvals,
         guardrails=guardrails,
         request_context_provider=_request_context,
+        claim_trust_guard=SessionTrustGuard(
+            connection_factory=deps.connection_factory, sessions=repos.sessions,
+            trust_mode=getattr(deps.config, "trust_mode", "open")),
     )
+    # The same canonical service is used by MCP, REST and the dispatcher.
+    # This hook plans transport in the handoff's own UoW; it never calls a peer.
+    from okto_nexus.application.runtime_work import RuntimeWorkService
+    from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+    from .harness import build_access_service
+    from .messages import wake_runtime
+    service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
+        messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock,
+        validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps))
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
     # case with the one-shot interception bypass; every other gate stays live.
@@ -337,19 +349,22 @@ def register(server: Any, deps: Any) -> None:
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
         ] = None,
+        runtime_endpoint_id: Annotated[str | None, Field(description="Optional approved endpoint for one managed execution of this claim.")] = None,
+        execution_grant_id: Annotated[str | None, Field(description="Explicit execute_work grant; required with runtime_endpoint_id.")] = None,
+        idempotency_key: Annotated[str | None, Field(description="Stable client key for managed claim admission and safe lost-response retry.")] = None,
+        claim_epoch: Annotated[int | None, Field(description="Required when dispatching an already-owned claim or rework.", strict=True)] = None,
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff; single winner, others get a structured error. Returns the payload + claimed_by/lease_expires_at. In strict mode pass session_id + session_secret."""
-        trust.require(
-            tool="handoff_claim",
-            agent_id=agent_id,
-            session_id=session_id,
-            session_secret=session_secret,
-        )
         return service.handoff_claim(
             project_root=project_root,
             handoff_id=handoff_id,
             agent_id=agent_id,
             session_id=session_id,
+            session_secret=session_secret,
+            runtime_endpoint_id=runtime_endpoint_id,
+            execution_grant_id=execution_grant_id,
+            idempotency_key=idempotency_key,
+            claim_epoch=claim_epoch,
         )
 
     @server.tool()

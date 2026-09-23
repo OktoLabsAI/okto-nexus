@@ -345,6 +345,16 @@ class VerifyHandoffBody(BaseModel):
     claim_epoch: int | None = Field(default=None, strict=True, ge=1)
 
 
+class ClaimHandoffBody(BaseModel):
+    agent_id: str | None = None
+    session_id: str | None = None
+    session_secret: str | None = None
+    runtime_endpoint_id: str | None = None
+    execution_grant_id: str | None = None
+    idempotency_key: str | None = None
+    claim_epoch: int | None = Field(default=None, strict=True, ge=1)
+
+
 class HarnessSessionOpenBody(BaseModel):
     """Body for ``POST /harness/sessions`` (ADR 0004 Phase 3.5).
 
@@ -3342,6 +3352,30 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         return _ok({"handoff_id": handoff.handoff_id, "status": handoff.status})
+
+    @router.post("/workspaces/{workspace_id}/handoffs/{handoff_id}/claim")
+    async def claim_handoff(request: Request, workspace_id: str, handoff_id: str, body: ClaimHandoffBody) -> JSONResponse:
+        deps = request.app.state.deps
+        actor = get_authenticated_agent()
+        caller = actor.agent_id if actor is not None else OPERATOR_AGENT_ID
+        represented = body.agent_id or caller
+        if represented != caller and body.runtime_endpoint_id is None:
+            return _map_error(OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff actor is not authorized.", {}))
+        service = _build_handoff_service(deps)
+
+        def _claim():
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                ws = deps.repos.workspaces.get(uow, workspace_id)
+            if ws is None or not ws.root_realpath:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "Workspace is not registered.", {})
+            return service.handoff_claim(project_root=ws.root_realpath, handoff_id=handoff_id, agent_id=represented,
+                session_id=body.session_id, session_secret=body.session_secret,
+                runtime_endpoint_id=body.runtime_endpoint_id, execution_grant_id=body.execution_grant_id,
+                idempotency_key=body.idempotency_key, claim_epoch=body.claim_epoch)
+        try:
+            return _ok(await anyio.to_thread.run_sync(_claim))
+        except OktoNexusError as exc:
+            return _map_error(exc)
 
     @router.post("/workspaces/{workspace_id}/handoffs/{handoff_id}/verify")
     async def verify_handoff(

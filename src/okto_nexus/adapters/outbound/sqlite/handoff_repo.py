@@ -414,6 +414,7 @@ class SqliteHandoffRepo(_ClockBacked):
                    SET status = ?, claimed_by = NULL, lease_expires_at = NULL,
                        updated_at = ?
                  WHERE handoff_id = ? AND workspace_id = ? AND status = ?
+                   AND NOT EXISTS (SELECT 1 FROM runtime_handoff_bindings b WHERE b.handoff_id=handoffs.handoff_id)
                 """,
                 (STATUS_OPEN, now, handoff_id, workspace_id, STATUS_CLAIMED),
             )

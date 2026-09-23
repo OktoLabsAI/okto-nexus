@@ -5,7 +5,7 @@ from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 
-ACTIONS = frozenset({"open", "send", "steer", "interrupt", "close", "read", "events", "discover"})
+ACTIONS = frozenset({"open", "send", "steer", "interrupt", "close", "read", "events", "discover", "execute_work"})
 
 
 def denied():
@@ -42,7 +42,7 @@ class RuntimeAccessService:
                     adapter_available = False
             enabled = adapter_available and self.config.feature_harness_integrations and (
                 substrate != "attach" or self.config.feature_harness_attach)
-            if endpoint and action in {"open", "send", "steer"}:
+            if endpoint and action in {"open", "send", "steer", "execute_work"}:
                 enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
                 enabled = enabled and endpoint["health"] != "quarantined"
                 if endpoint["profile_id"]:
@@ -52,7 +52,7 @@ class RuntimeAccessService:
                         enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
             if enabled and endpoint and context.authentication_source == "runtime_boot":
                 allowed = self.endpoints.boot_authorized(uow, context=context, endpoint=endpoint, action=action, now=now)
-            elif enabled and self._operator(context, actor):
+            elif enabled and self._operator(context, actor) and not context.execution_grant_id:
                 allowed = True
             elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"
                   and context.credential_binding and context.credential_binding == actor.api_key_hash):
@@ -82,13 +82,14 @@ class RuntimeAccessService:
                         profile = self.endpoints.profile(uow, endpoint["profile_id"])
                         if not profile or not profile["enabled"] or profile["revision"] != grant["profile_revision"]:
                             continue
-                    permission = ("events", "read") if action in {"read", "events", "discover"} else ("messages", "send_direct")
+                    permission = (("handoffs", "work") if action == "execute_work" else
+                                  ("events", "read") if action in {"read", "events", "discover"} else ("messages", "send_direct"))
                     if not PermissionSet(actor.permissions).allows(*permission):
                         continue
-                    if (check_budget or consume) and action in {"send", "steer"} and grant["used_executions"] >= grant["max_executions"]:
+                    if (check_budget or consume) and action in {"send", "steer", "execute_work"} and grant["used_executions"] >= grant["max_executions"]:
                         continue
                     allowed, selected = True, grant
-                    if consume and action in {"send", "steer"}:
+                    if consume and action in {"send", "steer", "execute_work"}:
                         self.grants.consume(uow, grant_id=grant["grant_id"])
                     break
             self.grants.audit(uow, context=context, action=action, endpoint_id=endpoint_id,

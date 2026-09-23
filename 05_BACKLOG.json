@@ -1617,22 +1617,34 @@
         {
           "task_id": "P09-T01",
           "title": "Integrar handoff/claim/grant/dispatch e oferta competitiva sem payload duplicado.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_work.py",
+            "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql",
+            "tests/test_runtime_handoff_dispatch.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+          ],
+          "notes": " Canonical managed claim/grant/inbox/outbox admission integrated; Windows 360 PASS plus 2 late-publication PASS, Linux 23 PASS. Restricted subprocess bootstrap and complete phase gate pending."
         },
         {
           "task_id": "P09-T02",
           "title": "Coalescer notificação sintética e execução, preservando conversa sem bypass.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_work.py",
+            "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql",
+            "tests/test_runtime_handoff_dispatch.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+          ],
+          "notes": " Canonical managed claim/grant/inbox/outbox admission integrated; Windows 360 PASS plus 2 late-publication PASS, Linux 23 PASS. Restricted subprocess bootstrap and complete phase gate pending."
         },
         {
           "task_id": "P09-T03",
@@ -1654,15 +1666,19 @@
             "src/okto_nexus/application/handoff.py",
             "src/okto_nexus/adapters/outbound/sqlite/handoff_repo.py",
             "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py",
-            "tests/test_runtime_handoff_epochs.py"
+            "tests/test_runtime_handoff_epochs.py",
+            "src/okto_nexus/application/runtime_work.py",
+            "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql",
+            "tests/test_runtime_handoff_dispatch.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P09_CLAIM_EPOCH.md",
             "plans/pr34-remediation/evidence/p09-claim-epoch-gate.log",
-            "plans/pr34-remediation/P09_AUTHENTICATED_HANDOFF.md"
+            "plans/pr34-remediation/P09_AUTHENTICATED_HANDOFF.md",
+            "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
           ],
-          "notes": "Behavioral RED reproduced stale same-agent complete/reject after reclaim. Canonical claim and rework generations now fence complete/reject/verify; surface36 MCP/REST/dashboard updated. 329 PASS Windows. Managed work binding/credentials/native late evidence remain pending. Authenticated MCP impersonation independently reproduced and fixed in shared canonical service. Eight verb boundaries and original creator approval credential revocation tested; Windows 212 PASS and Linux 25 PASS."
+          "notes": "Behavioral RED reproduced stale same-agent complete/reject after reclaim. Canonical claim and rework generations now fence complete/reject/verify; surface36 MCP/REST/dashboard updated. 329 PASS Windows. Managed work binding/credentials/native late evidence remain pending. Authenticated MCP impersonation independently reproduced and fixed in shared canonical service. Eight verb boundaries and original creator approval credential revocation tested; Windows 212 PASS and Linux 25 PASS. Canonical managed claim/grant/inbox/outbox admission integrated; Windows 360 PASS plus 2 late-publication PASS, Linux 23 PASS. Restricted subprocess bootstrap and complete phase gate pending."
         },
         {
           "task_id": "P09-T05",
@@ -3059,7 +3075,10 @@
       "stimulus": "Vários agentes e endpoints tentam executar uma oferta.",
       "expected": "Um claimant e uma execução; demais recebem apenas informação permitida.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+      ],
+      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
     {
       "test_id": "T-WORK-02",
@@ -3085,7 +3104,10 @@
       "stimulus": "Handoff cria mensagem sintética e intent de dispatch.",
       "expected": "Só uma entrada executora; notificação não gera outro turno de trabalho.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+      ],
+      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
     {
       "test_id": "T-WORK-04",
@@ -3111,7 +3133,10 @@
       "stimulus": "Emitir turn_completed sem evidências/complete explícito.",
       "expected": "Turno encerra; handoff não é marcado COMPLETED indevidamente.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+      ],
+      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
     {
       "test_id": "T-WORK-06",
@@ -3124,7 +3149,10 @@
       "stimulus": "Claimant autorizado entrega resultado/evidências pelo caminho canônico.",
       "expected": "Mesmas validações/transições de complete/verify/reject já existentes.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+      ],
+      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
     {
       "test_id": "T-WORK-07",
@@ -3137,7 +3165,10 @@
       "stimulus": "Cancelar/reatribuir com política explícita e receber final tardio.",
       "expected": "Evidência registrada no claim antigo; novo trabalho não é concluído por ela.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+      ],
+      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
     {
       "test_id": "T-WORK-08",

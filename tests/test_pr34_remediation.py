@@ -29,6 +29,8 @@ def runtime(tmp_path, request):
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     deps.config.feature_harness_integrations = getattr(request, "param", True)
+    if getattr(request, "param", None) == "strict":
+        deps.config.trust_mode = "strict"
     peers = []
 
     def factory(kind):
