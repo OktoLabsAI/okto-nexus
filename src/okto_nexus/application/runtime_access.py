@@ -27,6 +27,16 @@ class RuntimeAccessService:
                  and context.credential_binding == actor.api_key_hash)
         return bool(local or keyed)
 
+    def authenticate(self, context, *, uow):
+        """Authenticate a discovery caller without granting resource authority."""
+        actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
+        operator = self._operator(context, actor)
+        if not self.config.feature_harness_integrations or not (operator or (
+                actor and actor.is_active and context.authentication_source == "agent_key"
+                and context.credential_binding and context.credential_binding == actor.api_key_hash)):
+            raise denied()
+        return operator
+
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
                   represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
                   audit=True):
@@ -64,7 +74,7 @@ class RuntimeAccessService:
                 allowed = True
             elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"
                   and context.credential_binding and context.credential_binding == actor.api_key_hash):
-                for grant in self.grants.candidates(uow, actor_id=actor.agent_id):
+                for grant in self.grants.candidates(uow, actor_id=actor.agent_id, endpoint_id=endpoint_id):
                     if context.execution_grant_id and context.execution_grant_id != grant["grant_id"]:
                         continue
                     if endpoint_id and endpoint_id != grant["endpoint_id"]:

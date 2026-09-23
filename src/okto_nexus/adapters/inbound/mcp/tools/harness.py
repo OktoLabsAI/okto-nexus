@@ -84,17 +84,22 @@ def build_access_service(deps):
         registry=build_connector_factories(deps))
 
 
-def authorize_request(deps, *, substrate=None, action="admin", session_id=None, endpoint_id=None,
-                      represented_agent_id=None, workspace_id=None, consume=False, check_budget=True):
-    """Same authenticated admission policy for MCP, REST and local HTTP."""
+def request_context():
+    """Resolve only middleware identity; payload identifiers are never principals."""
     actor = get_authenticated_agent()
     local = trusted_local_operator.get()
-    context = RuntimeRequestContext(
+    return RuntimeRequestContext(
         actor.agent_id if actor else None,
         "http_loopback" if local else "agent_key" if actor else "unauthenticated",
         trusted_local_operator=local,
         credential_binding=actor.api_key_hash if actor else None,
     )
+
+
+def authorize_request(deps, *, substrate=None, action="admin", session_id=None, endpoint_id=None,
+                      represented_agent_id=None, workspace_id=None, consume=False, check_budget=True):
+    """Same authenticated admission policy for MCP, REST and local HTTP."""
+    context = request_context()
     build_access_service(deps).authorize(context, action=action, substrate=substrate,
         session_id=session_id, endpoint_id=endpoint_id, represented_agent_id=represented_agent_id,
         workspace_id=workspace_id, consume=consume, check_budget=check_budget)
@@ -162,6 +167,10 @@ def runtime_tool_guard(deps):
                   "harness_event_list": "events"}.get(fn.__name__, "admin")
         def check(args, kwargs):
             arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
+            if fn.__name__ == "harness_list" and arguments.get("view") == "bindings":
+                # Shared discovery authenticates even an empty result and checks
+                # current authority separately for each visible endpoint.
+                return
             if fn.__name__ == "harness_get" and arguments.get("operation_id"):
                 # The service resolves the stored resource before authorizing
                 # its session; caller-supplied IDs never supply identity.
@@ -199,6 +208,14 @@ def build_endpoint_service(deps):
     return EndpointService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
         workspaces=deps.repos.workspaces, repo=SqliteEndpointRepo(), registry=build_connector_factories(deps),
         config=deps.config, clock=deps.clock, access=build_access_service(deps))
+
+
+def discover_bindings(deps, parameters=None):
+    from okto_nexus.application.runtime_discovery import RuntimeDiscoveryService
+    args = runtime_object("maintenance", parameters) or {}
+    if set(args) - {"agent_id", "after_endpoint_id", "limit"}:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported discovery parameters.", {})
+    return RuntimeDiscoveryService(access=build_access_service(deps)).list(request_context(), **args)
 
 
 def administer_endpoints(deps, view, parameters):
@@ -1010,7 +1027,9 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
                      maintenance: Annotated[Any, Field(description="Object: action list/create/update for profiles, list/create/update/boot/reconcile for endpoints, inspect/cleanup/retry/quota for artifacts. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
-        """Operator views: adapters, endpoints, profiles, journal or artifacts. Endpoint/profile actions reuse REST authorization and revision checks. compact applies only to journal."""
+        """Discover authorized agent runtimes with view=bindings. Operator views: adapters, endpoints, profiles, journal, artifacts. compact requires journal. Details: identity resource."""
+        if view == "bindings" and not compact:
+            return discover_bindings(deps, maintenance)
         if view in {"endpoints", "profiles"} and not compact:
             return administer_endpoints(deps, view, maintenance)
         if view == "artifacts" and not compact:

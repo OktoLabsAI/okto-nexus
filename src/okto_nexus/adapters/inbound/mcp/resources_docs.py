@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="7",
+    version="8",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -520,6 +520,26 @@ only for an explicit admin/ops need (disclosing every project's on-disk layout i
 opt-in defense-in-depth). When an actor is known, workspace_list requires
 ``workspaces.list`` and include_paths additionally requires
 ``workspaces.include_paths``.
+
+# Runtime discovery (surface 41; opt-in)
+`harness_list(view="bindings", maintenance={"agent_id":"worker","limit":50})`
+and GET /api/v1/harness/bindings share one authorized SQLite projection.
+agent_id is an optional filter, never authentication. Ordinary callers need a
+current endpoint-scoped discover grant and canonical events.read/reachability;
+no visible grants yields an empty agents list. Discovery never grants control.
+Revocation, expiry, key/profile changes and feature flags are checked per read.
+
+Results group endpoint bindings under one agent_id with canonical skill_names.
+They omit private config, paths, secrets, metadata and notification audiences.
+declared_capabilities are adapter contract declarations; capability_verification
+and process_liveness are not_probed. current_owner_ready_record describes a
+persisted ready session under the current live owner lease/profile, not a native
+liveness probe or an effective version-negotiation claim.
+
+limit is an integer 1..100 (default50); pass next_endpoint_id back as
+after_endpoint_id while has_more is true. Only visible endpoint IDs become
+cursors. Up to ten latest sessions per endpoint are returned with
+sessions_has_more. A bounded scan may require a narrower agent_id filter.
 
 # Runtime administration (surface 40; opt-in)
 An Agent remains the canonical identity. Approved endpoints and runtime profiles

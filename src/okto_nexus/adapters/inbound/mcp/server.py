@@ -442,7 +442,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: harnesses are NOT wired into ``serve`` yet - on-demand open only.
 #: 39 = shared strict runtime admin inputs; MCP endpoint/profile views and redacted profile discovery.
 #: 40 = revision-fenced profile/endpoint edits, revocation and atomic configuration audit.
-SURFACE_REVISION = 40
+#: 41 = scoped agent runtime binding discovery; declared capabilities and explicit liveness limits.
+SURFACE_REVISION = 41
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

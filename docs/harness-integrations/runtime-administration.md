@@ -1,4 +1,4 @@
-# Runtime administration — surface 40
+# Runtime administration — surface 41
 
 This reference describes the implemented 0.2.0 administrative subset. The release
 and complete P11/P12 gates are still pending; consult the
@@ -11,12 +11,13 @@ agents' connections; they never register or replace the Agent profile. Configuri
 an endpoint does not itself spawn a process.
 
 `harness_list` keeps the same tool name. Its `view` selects `adapters`, `endpoints`,
-`profiles`, `journal` or `artifacts`. `maintenance` is an object (or JSON object
+`profiles`, `bindings`, `journal` or `artifacts`. `maintenance` is an object (or JSON object
 string); its `action` defaults to `list` for endpoint/profile views. Do not pass
 `compact` outside the journal view.
 
 | MCP view/action | REST equivalent | Required parameters in maintenance |
 |---|---|---|
+| bindings | GET /api/v1/harness/bindings | Optional agent_id, limit (1..100, default50), after_endpoint_id |
 | profiles/list | GET /api/v1/harness/profiles | None |
 | profiles/create | POST /api/v1/harness/profiles | profile_id, adapter_id |
 | profiles/update | PATCH /api/v1/harness/profiles/{id} | profile_id, expected_revision and one or more mutable fields |
@@ -31,7 +32,34 @@ input models and application services. Unknown fields and implicit type coercion
 are rejected: send JSON `true`, not the string `"true"`. Revisions must be positive
 integers. Surface 39 introduced strict validation; surface 40 extends edits.
 Clients caching older schemas should refresh `nexus_info`. Reference resource
-`tool-docs/identity` is version 7.
+`tool-docs/identity` is version 8. Surface 41 adds scoped binding discovery.
+
+The `bindings` view is also available to authenticated agents with current
+endpoint-scoped `discover` grants. The operator issues those through
+`POST /api/v1/harness/grants` with actor_agent_id, endpoint_id,
+actions=["discover"] and expires_at (within 24 hours). A grant only restricts
+existing policy: the caller must retain events.read and communication reachability
+to the represented Agent. Revocation, expiry, key rotation, inactive agents and
+changed profile revisions remove visibility. A discovery grant does not allow
+open/send/read-content/control; no grants returns an empty agents array.
+
+For example, call `harness_list` with
+`{"view":"bindings","maintenance":{"agent_id":"worker","limit":20}}`.
+The response groups endpoints under each canonical agent_id and lists its
+canonical skill_names without rewriting the Agent. It omits private metadata,
+paths, environment, secret references, configuration and notification audiences.
+`declared_capabilities` describe the adapter contract; `capability_verification`
+is `not_probed`, so this is not binary-version negotiation. A session's
+`current_owner_ready_record` means its persisted lifecycle/profile and owner lease
+are current. `process_liveness=not_probed` explicitly avoids inferring a live
+native process from a stored row.
+
+While has_more=true, pass next_endpoint_id as after_endpoint_id. Cursors only
+contain visible endpoint IDs. Each endpoint shows at most ten latest sessions
+and sessions_has_more. A scan exceeding 1000 candidate endpoints without finding
+the requested page fails with QUOTA_EXCEEDED; narrow agent_id. Reads neither
+contact the harness nor resolve credentials or modify presence. REST, MCP HTTP
+and authenticated MCP stdio use the same persisted projection.
 
 List responses use `{ok:true,data:{items:[...]}}`. Profile discovery omits command
 paths, environment values and secret reference names. It exposes the profile ID,
@@ -103,8 +131,8 @@ prior effects. Retrying the same reconciliation through either surface returns
 the same reconciliation ID. It does not resend an ambiguous delivery or invent
 native completion.
 
-The existing journal/artifact maintenance actions remain available. Scoped agent
-discovery, outbox takeover, capability negotiation and dashboard diagnostics remain
+The existing journal/artifact maintenance actions remain available. Outbox
+takeover, capability negotiation and dashboard diagnostics remain
 tracked in P11. Deleting persistence rows is not an operational substitute for
 those actions. Migration 053 is additive; operational rollback uses deactivation,
 drain and recovery, not reverse SQL or deletion of the audit/history.

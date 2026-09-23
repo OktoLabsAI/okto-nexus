@@ -11,10 +11,11 @@ class SqliteRuntimeGrantRepo:
             f"INSERT INTO runtime_execution_grants({','.join(columns)}) VALUES({','.join('?' for _ in columns)})",
             tuple(values.values()))
 
-    def candidates(self, uow, *, actor_id):
+    def candidates(self, uow, *, actor_id, endpoint_id=None):
+        clause = " AND endpoint_id=?" if endpoint_id else ""
         return [dict(row) | {"actions": json.loads(row["actions"])} for row in uow.connection.execute(
-            "SELECT * FROM runtime_execution_grants WHERE actor_agent_id=? AND revoked_at IS NULL ORDER BY grant_id",
-            (actor_id,))]
+            "SELECT * FROM runtime_execution_grants WHERE actor_agent_id=? AND revoked_at IS NULL" + clause + " ORDER BY grant_id",
+            (actor_id, endpoint_id) if endpoint_id else (actor_id,))]
 
     def revoke(self, uow, *, grant_id, now):
         uow.connection.execute(

@@ -921,6 +921,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.get("/harness/bindings")
+    async def runtime_bindings(request: Request, agent_id: str | None = None,
+                               after_endpoint_id: str | None = None, limit: int = 50) -> JSONResponse:
+        from ..mcp.tools.harness import discover_bindings
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: discover_bindings(request.app.state.deps,
+                {"agent_id": agent_id, "after_endpoint_id": after_endpoint_id, "limit": limit})))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/profiles")
     async def runtime_profiles(request: Request) -> JSONResponse:
         deps = request.app.state.deps

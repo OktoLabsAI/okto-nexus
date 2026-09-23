@@ -6,6 +6,12 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 41 adds scoped discovery through `harness_list(view="bindings")`
+  and REST `/harness/bindings`. Endpoints and bounded session history group under
+  the canonical agent; current grants and policy restrict visibility. Private
+  configuration is omitted; declared capabilities and stored readiness do not
+  claim native version verification or process liveness.
+
 - Surface 40 adds revision-fenced profile and endpoint editing/deactivation.
   Changes atomically revoke affected grants and boot approvals; old runtimes
   retain history but cannot borrow the new profile's authority. Migration 053
