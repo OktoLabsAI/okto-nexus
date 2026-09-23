@@ -14,6 +14,8 @@ class RuntimeEventJournal(Protocol):
     def check_admission(self): ...
     def append(self, event: HarnessEvent, *, connection_id=None) -> dict: ...
     def read_after(self, ordinal: int, *, limit=16) -> list[dict]: ...
+    def compact(self, projected_ordinal: int) -> dict: ...
+    def diagnostics(self) -> dict: ...
     def close(self): ...
 
 
@@ -70,3 +72,10 @@ class RuntimeEventIngress:
 
     def close(self):
         self.journal.close()
+
+    def compact(self):
+        with self._project_lock:
+            with self.cf.unit_of_work(write=False) as uow:
+                checkpoint = self.repo.checkpoint(uow, store_id=self.journal.store_id)
+            # The DB transaction has ended before touching journal files.
+            return self.journal.compact(checkpoint)

@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "90ec3cc",
+  "execution_head": "0eeb749",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1345,7 +1345,9 @@
             "src/okto_nexus/application/runtime_event_ingress.py",
             "src/okto_nexus/adapters/outbound/harness/event_journal.py",
             "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
-            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql",
+            "src/okto_nexus/application/runtime_maintenance.py",
+            "tests/test_runtime_journal_retention.py"
           ],
           "test_results": [
             {
@@ -1359,9 +1361,10 @@
           "evidence": [
             "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
             "plans/pr34-remediation/evidence/p08-integrated-gate.log",
-            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+            "plans/pr34-remediation/P08_JOURNAL_RETENTION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN."
         },
         {
           "task_id": "P08-T02",
@@ -1462,7 +1465,9 @@
             "src/okto_nexus/application/harness_supervisor.py",
             "src/okto_nexus/migrations/034_runtime_event_origin.sql",
             "src/okto_nexus/adapters/outbound/harness/event_buffers.py",
-            "tests/test_runtime_event_buffers.py"
+            "tests/test_runtime_event_buffers.py",
+            "src/okto_nexus/application/runtime_maintenance.py",
+            "tests/test_runtime_journal_retention.py"
           ],
           "test_results": [
             {
@@ -1494,9 +1499,10 @@
             "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
             "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
-            "plans/pr34-remediation/P07_EVENT_BUFFERS.md"
+            "plans/pr34-remediation/P07_EVENT_BUFFERS.md",
+            "plans/pr34-remediation/P08_JOURNAL_RETENTION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN."
         },
         {
           "task_id": "P08-T05",
@@ -1510,7 +1516,9 @@
             "src/okto_nexus/migrations/033_runtime_event_journal.sql",
             "src/okto_nexus/application/runtime_command_dispatcher.py",
             "src/okto_nexus/migrations/040_runtime_command_intents.sql",
-            "tests/test_runtime_commands.py"
+            "tests/test_runtime_commands.py",
+            "src/okto_nexus/application/runtime_maintenance.py",
+            "tests/test_runtime_journal_retention.py"
           ],
           "test_results": [
             {
@@ -1533,9 +1541,10 @@
             "plans/pr34-remediation/evidence/p08-integrated-gate.log",
             "plans/pr34-remediation/evidence/p08-journal-expanded.log",
             "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
-            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+            "plans/pr34-remediation/P08_JOURNAL_RETENTION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN."
         }
       ]
     },

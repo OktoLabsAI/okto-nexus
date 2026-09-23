@@ -49,6 +49,9 @@ class FileRuntimeEventJournal:
         self.store_id = None
         self._segment_number = 1
         self._tail_repairs = 0
+        self._base = 0
+        self._first_segment = 1
+        self._quota_fault = False
 
     @staticmethod
     def _regular(path):
@@ -111,16 +114,29 @@ class FileRuntimeEventJournal:
                 with os.fdopen(fd, "rb") as stream:
                     self.store_id = str(uuid.UUID(stream.read(128).decode("ascii")))
                 self._index, self._sequences, self._total = [], {}, 0
+                self._base, self._first_segment = 0, 1
+                manifest = self.root / "retention.json"
+                if manifest.exists():
+                    with os.fdopen(self._open(manifest, os.O_RDONLY), "rb") as stream:
+                        saved = json.loads(stream.read(4096))
+                    if (saved.get("version") != 1 or saved.get("store_id") != self.store_id or
+                            type(saved.get("base_ordinal")) is not int or saved["base_ordinal"] < 0 or
+                            type(saved.get("first_segment")) is not int or saved["first_segment"] < 1):
+                        raise OSError("Invalid journal retention manifest")
+                    self._base, self._first_segment = saved["base_ordinal"], saved["first_segment"]
                 paths = sorted(path for path in self.root.iterdir() if _SEGMENT.fullmatch(path.name))
+                paths = [path for path in paths if int(_SEGMENT.fullmatch(path.name)[1]) >= self._first_segment]
+                if self._base and not paths:
+                    raise OSError("Retained journal segment is missing")
                 for index, path in enumerate(paths):
-                    if int(_SEGMENT.fullmatch(path.name)[1]) != index + 1:
+                    if int(_SEGMENT.fullmatch(path.name)[1]) != index + self._first_segment:
                         raise OSError("Journal segment gap")
                     self._recover_segment(path, last=index == len(paths) - 1)
-                self._segment_number = len(paths) or 1
+                self._segment_number = self._first_segment + max(0, len(paths) - 1)
                 for session, sequence in (initial_sequences or {}).items():
                     self._sequences[session] = max(sequence, self._sequences.get(session, 0))
                 self._healthy = True
-                self.check_admission()
+                self._quota_fault = False
             except BaseException:
                 owner.close()
                 self._owner_file = None
@@ -146,7 +162,7 @@ class FileRuntimeEventJournal:
                     self._repair_tail(stream, offset, last)
                     break
                 record = self._decode(body, checksum)
-                if record["ordinal"] != len(self._index) + 1:
+                if record["ordinal"] != self.watermark + 1:
                     raise OSError("Journal ordinal gap")
                 event = record["event"]
                 if event["sequence"] <= self._sequences.get(event["session_id"], 0):
@@ -184,11 +200,12 @@ class FileRuntimeEventJournal:
                 sequence=self._sequences.get(event.session_id, 0) + 1, payload=redact(event.payload),
                 output_text=redact(event.output_text))
             record = {"version": 1, "redaction_version": 1, "store_id": self.store_id,
-                      "ordinal": len(self._index) + 1, "connection_id": connection_id,
+                      "ordinal": self.watermark + 1, "connection_id": connection_id,
                       "event": asdict(captured)}
             body = json.dumps(record, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
             if len(body) > self.max_record or self._total + len(body) + _HEADER.size > self.quota:
                 self._healthy = False
+                self._quota_fault = True
                 raise OSError("Runtime journal record/retention quota exceeded")
             frame = _HEADER.pack(_MAGIC, len(body), zlib.crc32(body)) + body
             path = self.root / f"segment-{self._segment_number:08}.bin"
@@ -208,6 +225,7 @@ class FileRuntimeEventJournal:
                     self._sync_directory()
             except BaseException:
                 self._healthy = False
+                self._quota_fault = False
                 raise
             self._index.append((path, offset))
             self._sequences[event.session_id] = captured.sequence
@@ -220,8 +238,11 @@ class FileRuntimeEventJournal:
                 raise ValueError("Invalid journal cursor or limit")
             if self._owner_file is None:
                 raise OSError("Runtime journal has no owner")
+            if ordinal < self._base:
+                raise OSError("Journal cursor expired; restore the matching database and journal backup")
             records = []
-            for path, offset in self._index[ordinal:ordinal + min(limit, 16)]:
+            index = ordinal - self._base
+            for path, offset in self._index[index:index + min(limit, 16)]:
                 fd = self._open(path, os.O_RDONLY)
                 with os.fdopen(fd, "rb") as stream:
                     stream.seek(offset)
@@ -233,7 +254,71 @@ class FileRuntimeEventJournal:
 
     @property
     def watermark(self):
-        return len(self._index)
+        return self._base + len(self._index)
+
+    def diagnostics(self):
+        with self._lock:
+            return {"store_id": self.store_id, "watermark": self.watermark,
+                "retained_after": self._base, "retained_bytes": self._total,
+                "quota_bytes": self.quota, "healthy": self._healthy,
+                "tail_repairs": self._tail_repairs}
+
+    def compact(self, projected_ordinal):
+        """Remove whole projected segments only; retain the active segment.
+
+        The ingress supplies the committed SQLite checkpoint under its projector
+        lock. The manifest commits BEFORE deletion; restart ignores obsolete
+        segments left by a crash. SQLite events/results remain intact.
+        """
+        with self._lock:
+            if self._owner_file is None or (not self._healthy and not self._quota_fault):
+                raise OSError("Journal compaction requires a validated writer")
+            if not self._base <= projected_ordinal <= self.watermark:
+                raise OSError("Journal checkpoint outside retained range")
+            count = 0
+            active = self.root / f"segment-{self._segment_number:08}.bin"
+            for index, (path, _) in enumerate(self._index):
+                ordinal = self._base + index + 1
+                if path == active or ordinal > projected_ordinal:
+                    break
+                if index + 1 == len(self._index) or self._index[index + 1][0] != path:
+                    count = index + 1
+            if count:
+                first = int(_SEGMENT.fullmatch(self._index[count][0].name)[1])
+                base = self._base + count
+                saved = {"version": 1, "store_id": self.store_id,
+                    "base_ordinal": base, "first_segment": first}
+                temporary = self.root / ("retention-" + uuid.uuid4().hex + ".tmp")
+                try:
+                    with os.fdopen(self._open(temporary, os.O_CREAT | os.O_EXCL | os.O_WRONLY), "wb") as stream:
+                        stream.write(json.dumps(saved, sort_keys=True).encode("ascii"))
+                        stream.flush()
+                        os.fsync(stream.fileno())
+                    destination = self.root / "retention.json"
+                    if destination.exists():
+                        self._regular(destination)
+                    os.replace(temporary, destination)
+                    self._sync_directory()
+                except BaseException:
+                    # A rename may have committed. Reopen before another append
+                    # so the disk manifest, not guessed state, decides retention.
+                    self._healthy, self._quota_fault = False, False
+                    raise
+                self._index = self._index[count:]
+                self._base, self._first_segment = base, first
+            removed = 0
+            for path in self.root.iterdir():
+                match = _SEGMENT.fullmatch(path.name)
+                if match and int(match[1]) < self._first_segment:
+                    self._regular(path)
+                    path.unlink()
+                    removed += 1
+            self._sync_directory()
+            retained_paths = {path for path, _ in self._index}
+            self._total = sum(self._regular(path).st_size for path in retained_paths)
+            if self._quota_fault and self._total < self.quota:
+                self._healthy, self._quota_fault = True, False
+            return self.diagnostics() | {"removed_segments": removed}
 
     def close(self):
         with self._lock:

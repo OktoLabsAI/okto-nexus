@@ -126,6 +126,15 @@ def read_operation(deps, operation_id):
     return service.get_operation(context, operation_id=operation_id)
 
 
+def maintain_journal(deps, *, compact=False):
+    from okto_nexus.application.runtime_maintenance import RuntimeMaintenanceService
+    context = authorize_request(deps)
+    if not is_local_runtime_owner(deps):
+        return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/journal", {"compact": compact})
+    return RuntimeMaintenanceService(access=build_access_service(deps),
+        dispatcher=deps.runtime_dispatcher).journal(context, compact=compact)
+
+
 def is_local_runtime_owner(deps):
     dispatcher = getattr(deps, "runtime_dispatcher", None)
     if not dispatcher or dispatcher.epoch is None or dispatcher._stop.is_set():
@@ -902,8 +911,12 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     @runtime_tool_guard(deps)
-    def harness_list() -> dict[str, Any]:
-        """List available harness kinds/substrates and their DECLARED capabilities (send_only, steer_timing, etc.), read from each connector's own declaration. Check before harness_steer/harness_interrupt."""
+    def harness_list(view: str = "adapters", compact: bool = False) -> dict[str, Any]:
+        """List declared adapter capabilities. Operator view='journal' reports retention; compact=true explicitly removes only projected journal segments, preserving SQLite events/results."""
+        if view == "journal":
+            return maintain_journal(deps, compact=compact)
+        if view != "adapters" or compact:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use adapters or journal view; compact requires journal.", {})
         return {"harnesses": capabilities_catalog(factories)}
 
     @server.tool()
