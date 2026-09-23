@@ -571,6 +571,12 @@ class HandoffService:
                 verify_by=verify_by_text,
                 created_at=now,
             )
+            # An existing handoff must not acquire a freshly changed policy
+            # as its original authorization when managed dispatch is requested.
+            uow.connection.execute(
+                "INSERT INTO handoff_authorization_receipts(handoff_id,creator_policy_revision,hitl_enabled,created_at) VALUES(?,?,?,?)",
+                (handoff_id, self._governance.authorization_revision(uow, from_agent_id) if self._governance else "unbound",
+                 int(bool(getattr(self._config, "feature_hitl", False))), now))
             born_blocked = False
             if depends_list is not None:
                 # Immutable edge set (I5): the rows land in the SAME UoW as
@@ -1824,6 +1830,14 @@ class HandoffService:
         if (handoff.status != STATUS_CLAIMED or not creator or not creator.is_active or
                 not worker or not worker.is_active or not self._claimant_in_creator_audience(uow, handoff, worker.agent_id)):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed handoff authority changed.", {})
+        receipt = uow.connection.execute(
+            "SELECT creator_policy_revision,hitl_enabled FROM handoff_authorization_receipts WHERE handoff_id=?",
+            (handoff.handoff_id,)).fetchone()
+        creator_revision = self._governance.authorization_revision(uow, creator.agent_id) if self._governance else "unbound"
+        if (not receipt or receipt["creator_policy_revision"] != creator_revision or
+                receipt["hitl_enabled"] != int(bool(getattr(self._config, "feature_hitl", False)))):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                "Managed dispatch requires a handoff authorized under current creation policies.", {})
         permission_set_for(self._agents, uow, creator.agent_id).require("handoffs", "create")
         permission_set_for(self._agents, uow, worker.agent_id).require("handoffs", "work")
         if not is_agent_eligible(self._routing_agent(uow, worker.agent_id, handoff.workspace_id),
@@ -1834,7 +1848,7 @@ class HandoffService:
             self._guardrails.enforce(uow, workspace_id=handoff.workspace_id, actor_agent_id=creator.agent_id,
                 surface="handoff_create", fields={"payload": handoff.payload,
                     "acceptance_criteria": _loads_target(contract.get("acceptance_criteria"))})
-        return (self._governance.authorization_revision(uow, creator.agent_id) + ":" +
+        return (creator_revision + ":" +
                 self._governance.authorization_revision(uow, worker.agent_id)) if self._governance else "unbound"
 
     def _resolve_workspace(self, project_root: Any) -> str:

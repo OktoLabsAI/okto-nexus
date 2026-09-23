@@ -3,6 +3,7 @@ from ..domain.base import new_id
 from ..domain.delivery import DeliveryEnvelope
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
+from .runtime_bootstrap import delivery_context
 
 
 class RuntimeDeliveryPlanner:
@@ -51,7 +52,9 @@ class RuntimeDeliveryPlanner:
             message.workspace_id, "conversation", ({"type": "text", "text": message.body or ""},), operation_id,
             message_id=message.message_id, delivery_id=delivery.delivery_id, context_id=message.parent_message_id or message.message_id,
             subject=message.subject, causation_id=message.parent_message_id, response_requested=True,
-            artifact_refs=tuple(message.artifacts or ()))
+            artifact_refs=tuple(message.artifacts or ()),
+            runtime_context=delivery_context(uow, agents=self.agents, endpoint=endpoint,
+                                             profile=profile, intent="conversation"))
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                            session_id=session, now=now, authorization_revision=authorization_revision)
         return operation_id

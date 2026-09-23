@@ -208,6 +208,59 @@ def test_conversation_grant_cannot_authorize_work(runtime):
     assert not peers
 
 
+@pytest.mark.parametrize("rule", ["deny", "require_approval"])
+def test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority(runtime, rule):
+    from test_governance import _attach, _rule
+    deps, _, _, peers, _, caller = runtime
+    deps.config.feature_hitl = True
+    hid, _ = work(runtime)
+    _attach(deps, "caller", governance=[_rule("handoff_create", rule)])
+    grant = issue(runtime, ["execute_work"], endpoint_id="endpoint-codex")
+    reply = claim(runtime, hid, grant, caller)
+    assert not reply["ok"], "Dispatch treated a newly restrictive policy as the original handoff authorization"
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT status FROM handoffs WHERE handoff_id=?", (hid,)).fetchone()[0] == "OPEN"
+        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 0
+    assert not peers
+
+
+def test_canonical_approval_creates_dispatch_receipt_only_after_human_decision(runtime):
+    from test_governance import _attach, _rule
+    deps, client, root, _, operator, caller = runtime
+    deps.config.feature_hitl = True
+    _attach(deps, "caller", governance=[_rule("handoff_create", "require_approval")])
+    pending = tool(client, caller, "handoff_create", {
+        "project_root": root, "from_agent_id": "caller", "visibility": "eligible",
+        "target": {"strategy": "direct", "agent_id": "worker"}, "payload": "approved fixture work"})
+    assert pending["ok"] and pending["data"]["status"] == "pending_approval", pending
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT count(*) FROM handoff_authorization_receipts").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 0
+    approved = client.post(f"/api/v1/approvals/{pending['data']['approval_id']}/decision",
+        headers={"x-api-key": operator}, json={"decision": "approve"})
+    assert approved.status_code == 200, approved.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        hid = uow.connection.execute("SELECT handoff_id FROM handoffs").fetchone()[0]
+        assert uow.connection.execute("SELECT count(*) FROM handoff_authorization_receipts").fetchone()[0] == 1
+    grant = issue(runtime, ["execute_work"], endpoint_id="endpoint-codex")
+    reply = claim(runtime, hid, grant, caller)
+    assert reply["ok"], reply
+
+
+@pytest.mark.parametrize("change", ["legacy_receipt_absent", "enable_hitl"])
+def test_creation_authority_is_not_invented_for_legacy_or_new_hitl(runtime, change):
+    deps, _, _, peers, _, caller = runtime
+    hid, _ = work(runtime)
+    if change == "enable_hitl":
+        deps.config.feature_hitl = True
+    else:
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("DELETE FROM handoff_authorization_receipts WHERE handoff_id=?", (hid,))
+    grant = issue(runtime, ["execute_work"], endpoint_id="endpoint-codex")
+    assert not claim(runtime, hid, grant, caller)["ok"]
+    assert not peers
+
+
 @pytest.mark.parametrize("change", ["revoke", "rework"])
 def test_late_managed_output_is_retained_without_unauthorized_publication(runtime, monkeypatch, change):
     from okto_nexus.application.runtime_results import RuntimeResultService

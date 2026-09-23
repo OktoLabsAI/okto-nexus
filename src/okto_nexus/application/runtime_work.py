@@ -7,6 +7,7 @@ from ..domain.base import new_id
 from ..domain.delivery import DeliveryEnvelope
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
+from .runtime_bootstrap import delivery_context
 
 
 def denied():
@@ -78,7 +79,9 @@ class RuntimeWorkService:
         envelope = DeliveryEnvelope(operation_id, handoff.from_agent_id, handoff.claimed_by, handoff.workspace_id,
             "handoff_execute", ({"type": "text", "text": handoff.payload or ""},), operation_id,
             message_id=message.message_id, delivery_id=delivery.delivery_id, context_id=handoff.handoff_id,
-            subject=message.subject, handoff_id=handoff.handoff_id, claim_epoch=handoff.claim_epoch)
+            subject=message.subject, handoff_id=handoff.handoff_id, claim_epoch=handoff.claim_epoch,
+            runtime_context=delivery_context(uow, agents=self.access.agents, endpoint=endpoint,
+                                             profile=profile, intent="handoff_execute"))
         live = self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
         if len(live) > 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})

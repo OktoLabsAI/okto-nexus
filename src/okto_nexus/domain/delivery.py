@@ -47,6 +47,7 @@ class DeliveryEnvelope:
     claim_epoch: int | None = None
     schema_version: int = 1
     trust: str = "untrusted_content"
+    runtime_context: dict[str, Any] | None = None
 
     def __post_init__(self):
         if self.schema_version != 1 or self.intent not in INTENTS or self.hop_count < 0:
