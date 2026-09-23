@@ -711,8 +711,10 @@ def build_connector_factories(deps: Any):
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),
             input_schema=({"native_approval_contract": 1, "requires_feature_hitl": True,
-                "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"],
-                "decisions": ["accept", "decline"]} if kind == "codex" else
+                "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
+                            "item/tool/requestUserInput", "mcpServer/elicitation/request"],
+                "decisions": ["accept", "decline"], "input_contract": 1,
+                "input_limits": "blocking non-secret questions; correlated form elicitation with flat primitive fields only; no URL or remote schema resolution"} if kind == "codex" else
                 {"native_approval_contract": 1, "requires_feature_hitl": True,
                  "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash"],
                  "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}

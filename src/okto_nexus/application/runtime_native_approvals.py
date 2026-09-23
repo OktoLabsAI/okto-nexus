@@ -7,6 +7,7 @@ import json
 
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_commands import RuntimeCommandNotSent
+from ..domain.native_inputs import response_for
 
 ACTION = "runtime_native_approval"
 
@@ -17,6 +18,31 @@ class RuntimeNativeApprovalService:
         self.validate_delivery, self.validate_command = validate_delivery, validate_command
         approvals.register_executor(ACTION, self.decision_ready, idempotent_decisions=True)
         approvals.register_decision_listener(ACTION, owner.wake)
+        approvals.register_decision_validator(ACTION, self.validate_decision, detail=self.decision_detail)
+
+    def decision_detail(self, uow, approval):
+        row = uow.connection.execute("SELECT operation_id,state,decision,reason,expires_at,response_payload "
+            "FROM runtime_native_approvals WHERE approval_id=?", (approval.approval_id,)).fetchone()
+        if not row:
+            return None
+        result = dict(row)
+        result["response"] = json.loads(result.pop("response_payload")) if row["response_payload"] is not None else None
+        return result
+
+    def validate_decision(self, uow, approval, *, approved, response):
+        row = uow.connection.execute("SELECT * FROM runtime_native_approvals WHERE approval_id=?", (approval.approval_id,)).fetchone()
+        if not row:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Native request is unavailable.", {})
+        try:
+            wire = response_for(json.loads(row["request_payload"]), response, approved=approved)
+            serialized = json.dumps(wire, sort_keys=True, separators=(",", ":"), allow_nan=False) if wire is not None else None
+        except (ValueError, TypeError, OverflowError, RecursionError):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Provide an explicit answer matching the native input contract; secret input is unsupported.", {}) from None
+        if approval.status != "pending":
+            if serialized != row["response_payload"]:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Native decision already contains a different response.", {})
+            return
+        uow.connection.execute("UPDATE runtime_native_approvals SET response_payload=? WHERE event_id=?", (serialized, row["event_id"]))
 
     def decision_ready(self, kwargs):
         # ApprovalService already committed the canonical human decision.
@@ -124,8 +150,11 @@ class RuntimeNativeApprovalService:
             return actual
         outcome = "SENT_UNCONFIRMED"
         try:
+            request = json.loads(row["request_payload"])
+            if row.get("response_payload") is not None:
+                request["operator_response"] = json.loads(row["response_payload"])
             self.supervisor.reply_native_approval(row["runtime_session_id"], connection_id=row["connection_id"],
-                owner_epoch=row["owner_epoch"], request=json.loads(row["request_payload"]), decision=decision, before_write=before_write)
+                owner_epoch=row["owner_epoch"], request=request, decision=decision, before_write=before_write)
         except RuntimeCommandNotSent:
             outcome = "NOT_SENT"
         except Exception:

@@ -307,6 +307,7 @@ class CapabilityBody(BaseModel):
 class DecisionBody(BaseModel):
     decision: str = Field(min_length=1)
     justification: str | None = None
+    response: dict[str, Any] | None = None
 
 
 class SteeringBody(BaseModel):
@@ -3166,6 +3167,7 @@ def build_router() -> APIRouter:
                 decision=body.decision,
                 decided_by=decided_by,
                 justification=body.justification,
+                response=body.response,
             )
 
         try:

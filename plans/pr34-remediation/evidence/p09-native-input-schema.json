@@ -1,0 +1,35 @@
+{
+  "parent_sha": "bd0b5f2",
+  "source": "installed Codex app-server generate-json-schema, no model call",
+  "schemas": {
+    "ToolRequestUserInputParams.json": {
+      "sha256": "fda15b62e7446105b59c8ed85c908abed2a47db70653e57c92c47a2f204fa77a",
+      "required": [
+        "isBlocking",
+        "itemId",
+        "questions",
+        "threadId",
+        "turnId"
+      ]
+    },
+    "ToolRequestUserInputResponse.json": {
+      "sha256": "5073b245f741fa8ce62ec52e4dd1809b7831f9c4284c279a78abc9b171f8e3f2",
+      "required": [
+        "answers"
+      ]
+    },
+    "McpServerElicitationRequestParams.json": {
+      "sha256": "5cbeb6bc702d2efa076da4c1dfb00672c970c1bad747031eb880b9ab907815c0",
+      "required": [
+        "serverName",
+        "threadId"
+      ]
+    },
+    "McpServerElicitationRequestResponse.json": {
+      "sha256": "792a012fdfe53ac211575a6c37ffbd492be848d15cb313d1bb4b534ade1f54ac",
+      "required": [
+        "action"
+      ]
+    }
+  }
+}

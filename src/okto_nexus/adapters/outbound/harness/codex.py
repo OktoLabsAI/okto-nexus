@@ -947,12 +947,19 @@ class CodexAppServerConnector:
         return "progress" if event.turn_id is not None else None
 
     def _on_server_request(self, request_id, method, params):
+        from ....domain.native_inputs import INPUT_METHODS, ELICITATION, validate_request
         if not self.native_approvals_enabled or method not in {
-                "item/commandExecution/requestApproval", "item/fileChange/requestApproval"}:
+                "item/commandExecution/requestApproval", "item/fileChange/requestApproval", *INPUT_METHODS}:
             return False
         if (type(request_id) not in {str, int} or not isinstance(params, dict) or
-                not all(isinstance(params.get(k), str) and params[k] for k in ("threadId", "turnId", "itemId"))):
+                not all(isinstance(params.get(k), str) and params[k] for k in
+                        (("threadId", "turnId") if method == ELICITATION else ("threadId", "turnId", "itemId")))):
             return False
+        if method in INPUT_METHODS:
+            try:
+                validate_request(method, params)
+            except (ValueError, TypeError, OverflowError, RecursionError):
+                return False
         if "availableDecisions" in params and (
                 not isinstance(params["availableDecisions"], list) or
                 "accept" not in params["availableDecisions"] or "decline" not in params["availableDecisions"]):
@@ -992,6 +999,7 @@ class CodexAppServerConnector:
 
     def reply_native_approval(self, session_id, request, decision):
         from ....domain.runtime_commands import RuntimeCommandNotSent
+        from ....domain.native_inputs import INPUT_METHODS, ELICITATION, response_for
         if decision not in {"accept", "decline"}:
             raise RuntimeCommandNotSent("Unsupported native approval decision")
         with self._sessions_lock:
@@ -1002,10 +1010,23 @@ class CodexAppServerConnector:
                     not state or state.ended or state.closing or
                     state.active_turn_id != recorded["request"]["params"]["turnId"]):
                 raise RuntimeCommandNotSent("Native approval request ended or changed")
+            wire = {"decision": decision}
+            if request["method"] in INPUT_METHODS:
+                if decision == "accept":
+                    wire = request.get("operator_response")
+                    if wire is None:
+                        raise RuntimeCommandNotSent("Native input requires an explicit operator response")
+                    try:
+                        wire = response_for(recorded["request"],
+                            {"content": wire.get("content")} if request["method"] == ELICITATION else wire, approved=True)
+                    except (ValueError, TypeError, OverflowError, RecursionError):
+                        raise RuntimeCommandNotSent("Operator response does not match the original native input") from None
+                else:
+                    wire = response_for(recorded["request"], None, approved=False)
             recorded["pending"] = False
         # An RPC id is never readmitted on this connection, even after a write
         # failure. A late reply therefore cannot target another native request.
-        self._transport.reply_result(request["request_id"], {"decision": decision})
+        self._transport.reply_result(request["request_id"], wire)
 
     def _on_notification(self, method: str, params: dict[str, Any]) -> None:
         thread_id = _extract_thread_id(params)

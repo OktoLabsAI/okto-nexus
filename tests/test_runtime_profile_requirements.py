@@ -12,7 +12,7 @@ def test_persisted_profile_requiring_unsupported_input_cannot_spawn(runtime):
     deps, client, root, peers, operator, _ = runtime
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE runtime_profiles SET config=? WHERE adapter_id='codex'",
-            (json.dumps({"required_native_requests": ["item/tool/requestUserInput"]}),))
+            (json.dumps({"required_native_requests": ["item/permissions/requestApproval"]}),))
     response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
         "agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
     assert response.status_code == 403, response.text
@@ -24,7 +24,7 @@ def test_persisted_profile_requiring_unsupported_input_cannot_spawn(runtime):
     ("claude_code.stream", ["control_request:can_use_tool/Write"], 200),
     ("pi", ["item/commandExecution/requestApproval"], 422),
     ("claude_code.stream", ["control_request:can_use_tool/ExitPlanMode"], 422),
-    ("codex", ["item/tool/requestUserInput"], 422),
+    ("codex", ["item/permissions/requestApproval"], 422),
     ("codex", "item/fileChange/requestApproval", 422),
 ])
 def test_profile_requirements_are_validated_against_exact_adapter_contract(runtime, adapter, requirements, expected):

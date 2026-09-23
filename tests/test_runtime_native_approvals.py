@@ -10,7 +10,7 @@ from test_pr34_remediation import runtime as runtime_fixture, send_message
 runtime = runtime_fixture
 
 
-def approval_peer(runtime, *, method="item/commandExecution/requestApproval"):
+def approval_peer(runtime, *, method="item/commandExecution/requestApproval", extra_params=None):
     from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
@@ -30,6 +30,9 @@ def approval_peer(runtime, *, method="item/commandExecution/requestApproval"):
     source = source.replace('            log({"response_to_server_request": msg})',
         '            log({"response_to_server_request": msg})\n            _approval_reply.update(msg)\n            _approval_ready.set()')
     source = source.replace('"item/commandExecution/requestApproval"', repr(method))
+    if extra_params:
+        source = source.replace('"startedAtMs": 0, "command": "echo isolated approval fixture"',
+                                '"startedAtMs": 0, **' + repr(extra_params))
     deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
         command=[sys._base_executable, "-u", "-c", source], cwd=root, env=kwargs["backend"]["env"])
     opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={

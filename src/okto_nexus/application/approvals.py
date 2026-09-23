@@ -135,6 +135,8 @@ class ApprovalService:
         self._executors: dict[str, Executor] = {}
         self._decision_listeners = {}
         self._idempotent_decisions = set()
+        self._decision_validators = {}
+        self._decision_details = {}
 
     # ------------------------------------------------------------------ #
     # Wiring
@@ -153,6 +155,12 @@ class ApprovalService:
 
     def register_decision_listener(self, action, listener):
         self._decision_listeners[action] = listener
+
+    def register_decision_validator(self, action, validator, *, detail=None):
+        # Transactional validation/storage only: no external I/O allowed.
+        self._decision_validators[action] = validator
+        if detail:
+            self._decision_details[action] = detail
 
     def _wake_decision_listener(self, action):
         listener = self._decision_listeners.get(action)
@@ -246,6 +254,7 @@ class ApprovalService:
         decision: Any,
         decided_by: str,
         justification: Any = None,
+        response: Any = None,
     ) -> dict[str, Any]:
         """Decide one pending approval: approve re-executes, reject notifies.
 
@@ -283,6 +292,11 @@ class ApprovalService:
             row = self._approvals.get(uow, aid)
             if row is None:
                 raise self._not_found(aid)
+            validator = self._decision_validators.get(row.action)
+            if validator:
+                validator(uow, row, approved=approving, response=response)
+            elif response is not None:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "This approval action does not accept input data.", {})
             if approving and row.action not in self._executors:
                 # Fail BEFORE the flip: nothing written, the row stays
                 # pending and decidable once the wiring is complete.
@@ -460,9 +474,13 @@ class ApprovalService:
         """Full detail incl. the intact request payload (operator-only)."""
         with self._cf.unit_of_work(write=False) as uow:
             row = self._approvals.get(uow, str(approval_id))
-        if row is None:
-            raise self._not_found(approval_id)
-        return approval_to_detail(row)
+            if row is None:
+                raise self._not_found(approval_id)
+            result = approval_to_detail(row)
+            detail = self._decision_details.get(row.action)
+            if detail:
+                result["decision_detail"] = detail(uow, row)
+        return result
 
     @staticmethod
     def _not_found(approval_id: Any) -> OktoNexusError:
