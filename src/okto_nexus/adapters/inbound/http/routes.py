@@ -430,6 +430,11 @@ class RuntimeBootBody(BaseModel):
     expected_revision: int
 
 
+class RuntimeEndpointUpdateBody(BaseModel):
+    expected_revision: int = Field(strict=True, ge=1)
+    public_config: dict[str, Any]
+
+
 class RuntimeReconcileBody(BaseModel):
     expected_revision: int
     idempotency_key: str
@@ -1015,6 +1020,16 @@ def build_router() -> APIRouter:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Expected optional compact boolean.", {})
             return _ok(await anyio.to_thread.run_sync(lambda: maintain_journal(
                 request.app.state.deps, compact=body.get("compact", False))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.patch("/harness/endpoints/{endpoint_id}")
+    async def runtime_endpoint_update(request: Request, endpoint_id: str, body: RuntimeEndpointUpdateBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_endpoint(
+                context, endpoint_id=endpoint_id, **body.model_dump())))
         except OktoNexusError as exc:
             return _map_error(exc)
 

@@ -395,7 +395,10 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
         "delivered_at, lease_expires_at, read_at, created_at"
     )
 
-    _RETAIN_RUNTIME = "NOT EXISTS (SELECT 1 FROM delivery_outbox o WHERE o.delivery_id=message_deliveries.delivery_id)"
+    _RETAIN_RUNTIME = (
+        "NOT EXISTS (SELECT 1 FROM delivery_outbox o WHERE o.delivery_id=message_deliveries.delivery_id) "
+        "AND NOT EXISTS (SELECT 1 FROM runtime_relay_decisions r WHERE r.delivery_id=message_deliveries.delivery_id)"
+    )
 
     # An in-flight row whose lease elapsed at :now - the read-time projection
     # shows/counts it as 'unread' (redeliverable). Parameters: (delivered, now).

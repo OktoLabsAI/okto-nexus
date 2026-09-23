@@ -29,3 +29,12 @@ harness-to-harness ban.
 ## P09 authenticated handoff boundary (F02/F07, parent c67e7dc)
 
 Confirmed through actual HTTP MCP: creator API key with claimant agent_id could complete claimed work. Fixed shared service actor/binding validation for all handoff verbs; HITL preserves original creator binding. See P09_AUTHENTICATED_HANDOFF.md and test_runtime_handoff_epochs.py. Windows 212 PASS; Linux 25 PASS. Scoped runtime bootstrap/dispatch remains pending.
+
+## P10 additional finding F15 — target discriminator normalization
+
+Confirmed while adding explicit notification routing on parent 6540cd7:
+`message_action_for` compared the raw strategy case-sensitively although canonical
+routing accepts `BROADCAST`. The behavioral test published to two recipients despite
+the originating actor's broadcast deny. Shared governance now uses
+`domain.targets.target_strategy`; lowercase/uppercase negatives both pass. See
+P10_NOTIFICATION_TARGETS.md for RED, correction and final Windows/Linux results.

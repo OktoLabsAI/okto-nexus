@@ -77,8 +77,10 @@ class RuntimeCausalityService:
 
     def admit_result_relay(self, uow, *, message_id, source_result_id, now):
         node = self.node(uow, message_id)
-        if not node or node["source_result_id"] != source_result_id or node["purpose"] != "observation":
+        if not node or node["source_result_id"] != source_result_id or node["purpose"] not in {"observation", "continuation"}:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result has no correlated causal observation.", {})
+        if node["purpose"] == "continuation":
+            return  # One generated message, potentially several logical recipients.
         if node["hop_count"] > node["max_depth"]:
             raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal depth exhausted.", {})
         changed = uow.connection.execute("UPDATE runtime_causal_roots SET generated_messages=generated_messages+1 "

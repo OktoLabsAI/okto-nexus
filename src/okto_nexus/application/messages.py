@@ -424,8 +424,10 @@ class MessageService:
             recipients, warning, excluded_stale, filtered_by_audience = (
                 self._resolve_recipients(uow, workspace_id, from_agent_id, target, now)
             )
-            if _runtime_result_id and recipients != [target_echo["agent_id"]]:
+            if _runtime_result_id and requires_known_recipient(target) and recipients != [target_echo["agent_id"]]:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result recipient is outside the current authorized audience.", {})
+            notification_actor = (self._runtime_results.authorize_notification_audience(uow,
+                result_id=_runtime_result_id, recipients=recipients) if _runtime_result_id else None)
 
             # Quantitative permission gates over the RESOLVED fan-out.
             max_recipients = perms.limit("max_recipients")
@@ -467,6 +469,12 @@ class MessageService:
                     if isinstance(body, str)
                     else 0,
                 )
+                approval_actor = from_agent_id
+                if notification_actor:
+                    origin_verdict = self._governance.enforce(uow, agent_id=notification_actor,
+                        action=message_action_for(target_echo, channel), size_bytes=len(body.encode("utf-8")))
+                    if origin_verdict is not None:
+                        verdict, approval_actor = origin_verdict, notification_actor
                 if (
                     verdict is not None
                     and self._approvals is not None
@@ -481,7 +489,7 @@ class MessageService:
                     response = self._approvals.intercept(
                         uow,
                         workspace_id=workspace_id,
-                        agent_id=from_agent_id,
+                        agent_id=approval_actor,
                         action=message_action_for(target_echo, channel),
                         policy_id=verdict.policy.policy_id,
                         kwargs={
@@ -502,7 +510,8 @@ class MessageService:
                         self._runtime_results.finish(uow, result_id=_runtime_result_id, response=response)
                     return response
             if _runtime_result_id:
-                self._runtime_results.commit_artifact(uow, result_id=_runtime_result_id, prepared=prepared_runtime_artifact)
+                self._runtime_results.commit_artifact(uow, result_id=_runtime_result_id,
+                    prepared=prepared_runtime_artifact, recipients=recipients)
             message = self._messages.create(
                 uow,
                 message_id=message_id,
@@ -545,7 +554,8 @@ class MessageService:
                 elif self._runtime_planner and _runtime_result_id and not _nonexecuting_notification:
                     operation_id = self._runtime_results.enqueue_relay(uow, result_id=_runtime_result_id,
                         planner=self._runtime_planner, message=message, delivery=delivery, now=now,
-                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id,
+                            notification_actor=notification_actor), emitter=self._emitter)
                     if operation_id:
                         runtime_operations.append(operation_id)
 
@@ -624,10 +634,11 @@ class MessageService:
     # ------------------------------------------------------------------ #
     # Transport revalidation reuses canonical policy without a second quota.
     # ------------------------------------------------------------------ #
-    def runtime_policy_revision(self, uow, sender_id, recipient_id):
+    def runtime_policy_revision(self, uow, sender_id, recipient_id, *, notification_actor=None):
         if self._governance is None:
             return "unbound"
-        return self._governance.authorization_revision(uow, sender_id) + ":" + self._governance.authorization_revision(uow, recipient_id)
+        revision = self._governance.authorization_revision(uow, sender_id) + ":" + self._governance.authorization_revision(uow, recipient_id)
+        return revision + ":" + self._governance.authorization_revision(uow, notification_actor) if notification_actor else revision
 
     def revalidate_runtime_delivery(self, uow, operation):
         message = self._messages.get(uow, workspace_id=operation["workspace_id"], message_id=operation["message_id"])
@@ -645,7 +656,10 @@ class MessageService:
                 perms.require("messages", "send_direct")
         else:
             perms.require("messages", "send_direct" if requires_known_recipient(target) else "send_broadcast")
-        if operation["authorization_revision"] != self.runtime_policy_revision(uow, message.from_agent_id, recipient.agent_id):
+        notification_actor = (self._runtime_results.authorize_notification_audience(uow,
+            result_id=operation["source_result_id"], recipients=[recipient.agent_id]) if operation.get("source_result_id") else None)
+        if operation["authorization_revision"] != self.runtime_policy_revision(uow, message.from_agent_id, recipient.agent_id,
+                notification_actor=notification_actor):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Delivery policy changed; new admission is required.", {})
         if self._guardrails and self._guardrails.has_enabled_assignments(uow):
             self._guardrails.enforce(uow, workspace_id=message.workspace_id, actor_agent_id=message.from_agent_id,

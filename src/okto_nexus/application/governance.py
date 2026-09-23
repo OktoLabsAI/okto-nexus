@@ -70,6 +70,7 @@ from ..domain.policy import (
     resolve_effective_sources,
 )
 from ..domain.policy import audience_reachable as policy_audience_reachable
+from ..domain.targets import target_strategy
 from ..errors import ErrorCode, OktoNexusError
 from .ports import (
     AgentPolicyBindingRepo,
@@ -103,10 +104,8 @@ def message_action_for(target: Any, channel_id: Any = None) -> str:
     ``mixed`` is already rejected upstream by the deliverability gate). A
     channel post without a target is a plain ``message_create``.
     """
-    if isinstance(target, dict):
-        strategy = target.get("strategy")
-        return ACTION_BROADCAST if strategy == "broadcast" else ACTION_MESSAGE_CREATE
-    if target is None and channel_id is None:
+    strategy = target_strategy(target)
+    if strategy == "broadcast" or strategy is None and channel_id is None:
         return ACTION_BROADCAST
     return ACTION_MESSAGE_CREATE
 

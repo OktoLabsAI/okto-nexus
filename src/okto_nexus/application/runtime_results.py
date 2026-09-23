@@ -8,6 +8,10 @@ import hashlib
 
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_context import RuntimeRequestContext
+from ..domain.inbox import requires_known_recipient
+from ..domain.tag_selector import reachable
+from ..domain.targets import target_strategy
+from .permissions import permission_set_for
 
 
 class RuntimeResultService:
@@ -29,8 +33,9 @@ class RuntimeResultService:
     def row(uow, result_id):
         row = uow.connection.execute("SELECT r.*,o.recipient_agent_id,o.actor_agent_id,o.credential_binding,"
             "o.endpoint_id,o.endpoint_revision,o.profile_revision,o.workspace_id,o.message_id AS parent_id,"
-            "o.terminal_event_id,m.from_agent_id AS recipient_id,m.channel_id,w.root_realpath "
+            "o.terminal_event_id,m.from_agent_id AS recipient_id,m.channel_id,w.root_realpath,e.public_config AS notification_config "
             "FROM runtime_results r JOIN delivery_outbox o ON o.operation_id=r.operation_id "
+            "JOIN agent_endpoints e ON e.endpoint_id=o.endpoint_id "
             "JOIN messages m ON m.message_id=o.message_id JOIN workspaces w ON w.workspace_id=o.workspace_id "
             "WHERE r.result_id=?", (result_id,)).fetchone()
         return dict(row) if row else None
@@ -47,7 +52,7 @@ class RuntimeResultService:
         return {"project_root": row["root_realpath"], "from_agent_id": row["recipient_agent_id"],
             "subject": "Runtime result", "body": body, "channel_id": row["channel_id"],
             "parent_message_id": row["parent_id"],
-            "target": {"strategy": "direct", "agent_id": row["recipient_id"]},
+            "target": json.loads(row["notification_config"]).get("notify_target", {"strategy": "direct", "agent_id": row["recipient_id"]}),
             "artifacts": [artifact_id] if artifact_id else []}
 
     def prepare(self, result_id, *, approved=False):
@@ -85,12 +90,40 @@ class RuntimeResultService:
             workspace_id=row["workspace_id"], agent_id=row["recipient_agent_id"], content=row["output_text"] or "",
             result_id=result_id, truncated=row["output_truncated"])
 
-    def commit_artifact(self, uow, *, result_id, prepared):
+    def commit_artifact(self, uow, *, result_id, prepared, recipients):
         if prepared is None:
             return
         row = self.row(uow, result_id)
         self.artifacts.commit_runtime_result(uow, prepared=prepared,
-            readers=[row["recipient_id"], row["recipient_agent_id"]])
+            readers=[row["recipient_agent_id"], *recipients])
+
+    def authorize_notification_audience(self, uow, *, result_id, recipients):
+        row = self.row(uow, result_id)
+        target = self.arguments(row)["target"]
+        # A private reply is already authorized by the initiating conversation.
+        # Explicit dissemination elsewhere also needs the initiating actor's
+        # current authority, intersected with the represented sender's gates.
+        if (target_strategy(target) == "direct" and target["agent_id"] == row["recipient_id"]) or row["actor_agent_id"] == row["recipient_agent_id"]:
+            return None
+        actor = self.agents.get(uow, row["actor_agent_id"])
+        perms = permission_set_for(self.agents, uow, actor.agent_id)
+        if row["channel_id"]:
+            perms.require("messages", "send_channel")
+            if requires_known_recipient(target):
+                perms.require("messages", "send_direct")
+        else:
+            perms.require("messages", "send_direct" if requires_known_recipient(target) else "send_broadcast")
+        if row["publication_state"] == "PUBLISHED":
+            captured = json.loads(row["publication_response"])["recipients"]
+            if not set(recipients) <= set(captured):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Notification recipient was not admitted.", {})
+            recipients = captured
+        maximum = perms.limit("max_recipients")
+        if maximum > 0 and len(recipients) > maximum:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Notification exceeds originating actor audience limit.", {})
+        if any(recipient != actor.agent_id and not reachable(actor, self.agents.get(uow, recipient)) for recipient in recipients):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Notification audience exceeds originating actor authority.", {})
+        return actor.agent_id
 
     def validate_relay(self, uow, result_id):
         first, current, seen = None, result_id, set()
@@ -118,11 +151,9 @@ class RuntimeResultService:
         endpoint = self.endpoints.get(uow, row["endpoint_id"])
         if not endpoint["public_config"].get("relay_results") or row["delivery_outcome"] != "success":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result relay is not authorized or source did not succeed.", {})
-        if row["recipient_agent_id"] == row["recipient_id"]:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Automatic result self-loop is prohibited.", {})
         return row
 
-    def enqueue_relay(self, uow, *, result_id, planner, message, delivery, now, authorization_revision):
+    def enqueue_relay(self, uow, *, result_id, planner, message, delivery, now, authorization_revision, emitter):
         row = self.row(uow, result_id)
         endpoint = self.endpoints.get(uow, row["endpoint_id"])
         if not endpoint["public_config"].get("relay_results"):
@@ -132,6 +163,8 @@ class RuntimeResultService:
         uow.connection.execute("SAVEPOINT result_relay")
         try:
             row = self.validate_relay(uow, result_id)
+            if row["recipient_agent_id"] == delivery.recipient_agent_id:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Automatic result self-loop is prohibited.", {})
             context = RuntimeRequestContext(row["actor_agent_id"], "captured_result",
                 represented_agent_id=row["recipient_agent_id"], credential_binding=row["credential_binding"])
             operation = planner.enqueue(uow, context=context, message=message, delivery=delivery, now=now,
@@ -143,7 +176,18 @@ class RuntimeResultService:
             state, reason = ("ENQUEUED", None) if operation else ("NO_ENDPOINT", "No eligible conversation endpoint")
         finally:
             uow.connection.execute("RELEASE result_relay")
-        uow.connection.execute("UPDATE runtime_results SET relay_state=?,relay_reason=? WHERE result_id=?", (state, reason, result_id))
+        uow.connection.execute("INSERT INTO runtime_relay_decisions VALUES(?,?,?,?,?,?)",
+            (result_id, delivery.delivery_id, operation, state, reason, now))
+        if state == "BLOCKED":
+            emitter.emit(uow, workspace_id=message.workspace_id, stream="agent", type="runtime.relay_blocked",
+                actor_agent_id=message.from_agent_id, visibility="eligible",
+                target=json.dumps({"strategy": "direct", "agent_id": message.from_agent_id}),
+                payload={"result_id": result_id, "message_id": message.message_id,
+                         "delivery_id": delivery.delivery_id, "reason": reason})
+        states = {r[0] for r in uow.connection.execute("SELECT state FROM runtime_relay_decisions WHERE result_id=?", (result_id,))}
+        aggregate = "PARTIAL" if "ENQUEUED" in states and len(states) > 1 else "BLOCKED" if "BLOCKED" in states else state
+        uow.connection.execute("UPDATE runtime_results SET relay_state=?,relay_reason=? WHERE result_id=?",
+            (aggregate, "Some recipient relays were not admitted" if aggregate == "PARTIAL" else reason, result_id))
         return operation
 
     def authorize(self, uow, *, result_id, supplied, approved=False):

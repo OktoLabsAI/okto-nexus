@@ -23,6 +23,9 @@ class RuntimeOpenService:
         require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id, role=role)
         if backend:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use an approved runtime profile, not per-call backend options.", {})
+        if notify_target is not None and notify_target != endpoint["public_config"].get("notify_target"):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Configure notify_target on the approved endpoint before opening it.", {})
+        notify_target = endpoint["public_config"].get("notify_target")
         if target_pid is not None and target_pid != endpoint["public_config"].get("target_pid"):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach target does not match the approved endpoint.", {})
         if idempotency_key is not None and (not isinstance(idempotency_key, str) or not 1 <= len(idempotency_key) <= 128):

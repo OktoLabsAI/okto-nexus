@@ -3,9 +3,11 @@ from pathlib import Path
 import hashlib
 import json
 
-from ..domain.base import new_id
+from ..domain.base import new_id, check_inline_size
 from ..domain.endpoints import AgentEndpoint
 from ..domain.ids import resolve_realpath, resolve_workspace_id
+from ..domain.messages import validate_target, parse_target, serialize_target
+from ..domain.inbox import assert_deliverable_message_target
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_authorization import authorize_runtime, require_runtime_agent
 from .runtime_requirements import validate_native_requirements
@@ -21,6 +23,45 @@ class EndpointService:
         if self.access:
             return self.access.authorize(context)
         authorize_runtime(context, config=self.config, agents=self.agents, connection_factory=self.cf)
+
+    @staticmethod
+    def validate_public_config(descriptor, response_policy, public_config):
+        if public_config is not None and not isinstance(public_config, dict):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Public configuration must be an object.", {})
+        public_config = dict(public_config or {})
+        check_inline_size("endpoint public configuration", public_config, 65536)
+        allowed = {"relay_results", "notify_target"} | ({"target_pid"} if descriptor.substrate == "attach" else set())
+        if set(public_config) - allowed:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported public endpoint configuration.", {})
+        if "relay_results" in public_config and type(public_config["relay_results"]) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "relay_results must be a boolean.", {})
+        if public_config.get("relay_results") and (response_policy != "conversation" or not descriptor.capabilities.correlated_results):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Result relay requires conversation policy and correlated results.", {})
+        target = public_config.get("notify_target")
+        if target is None:
+            public_config.pop("notify_target", None)  # Removal restores the private reply target.
+        else:
+            if not isinstance(target, dict):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "notify_target must be an explicit target object or null.", {})
+            validate_target(target)
+            assert_deliverable_message_target(target)
+            public_config["notify_target"] = parse_target(serialize_target(target))
+        if descriptor.substrate == "attach" and (type(public_config.get("target_pid")) is not int or public_config["target_pid"] <= 0):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Attach endpoint requires an explicitly selected process ID.", {})
+        return public_config
+
+    def update_endpoint(self, context, *, endpoint_id, expected_revision, public_config):
+        self.authorize(context)
+        if type(expected_revision) is not int or not isinstance(public_config, dict):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Endpoint update requires a revision and public configuration object.", {})
+        with self.cf.unit_of_work() as uow:
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["revision"] != expected_revision:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
+            config = self.validate_public_config(self.registry.get(endpoint["adapter_id"]), endpoint["response_policy"], public_config)
+            uow.connection.execute("UPDATE agent_endpoints SET public_config=?,revision=revision+1,updated_at=? WHERE endpoint_id=? AND revision=?",
+                (json.dumps(config, sort_keys=True), self.clock.now_iso(), endpoint_id, expected_revision))
+        return {"endpoint_id": endpoint_id, "revision": expected_revision + 1, "public_config": config}
 
     def configure_boot(self, context, *, endpoint_id, enabled, expected_revision):
         self.authorize(context)
@@ -129,18 +170,7 @@ class EndpointService:
         self.authorize(context)
         require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id)
         descriptor = self.registry.get(adapter_id)
-        public_config = dict(public_config or {})
-        allowed_public = {"relay_results"} | ({"target_pid"} if descriptor.substrate == "attach" else set())
-        if set(public_config) - allowed_public:
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported public endpoint configuration.", {})
-        if "relay_results" in public_config and type(public_config["relay_results"]) is not bool:
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "relay_results must be a boolean.", {})
-        if public_config.get("relay_results") and (response_policy != "conversation" or not descriptor.capabilities.correlated_results):
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Result relay requires conversation policy and correlated results.", {})
-        if descriptor.substrate == "attach" and (
-            type(public_config.get("target_pid")) is not int or public_config["target_pid"] <= 0
-        ):
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Attach endpoint requires an explicitly selected process ID.", {})
+        public_config = self.validate_public_config(descriptor, response_policy, public_config)
         if not Path(project_root).is_absolute():
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Workspace root must be absolute.", {})
         root = resolve_realpath(project_root)

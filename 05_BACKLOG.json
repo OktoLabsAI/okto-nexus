@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "cc1c126",
+  "execution_head": "6540cd7",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1784,14 +1784,20 @@
             "src/okto_nexus/application/runtime_results.py",
             "src/okto_nexus/application/runtime_delivery.py",
             "src/okto_nexus/migrations/051_runtime_result_relay.sql",
-            "tests/test_runtime_relay.py"
+            "tests/test_runtime_relay.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/application/governance.py",
+            "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
+            "tests/test_runtime_notify_targets.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
-            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
+          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
         },
         {
           "task_id": "P10-T03",
@@ -1802,30 +1808,42 @@
             "src/okto_nexus/application/runtime_results.py",
             "src/okto_nexus/application/runtime_delivery.py",
             "src/okto_nexus/migrations/051_runtime_result_relay.sql",
-            "tests/test_runtime_relay.py"
+            "tests/test_runtime_relay.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/application/governance.py",
+            "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
+            "tests/test_runtime_notify_targets.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
+          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
         },
         {
           "task_id": "P10-T04",
           "title": "Impedir reexecução por receipts/erros e tornar notify_target explícito/autorizado.",
-          "status": "IN_PROGRESS",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/application/runtime_results.py",
             "src/okto_nexus/application/runtime_delivery.py",
             "src/okto_nexus/migrations/051_runtime_result_relay.sql",
-            "tests/test_runtime_relay.py"
+            "tests/test_runtime_relay.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/application/governance.py",
+            "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
+            "tests/test_runtime_notify_targets.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
+          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
         },
         {
           "task_id": "P10-T05",
@@ -1839,14 +1857,20 @@
             "src/okto_nexus/application/runtime_results.py",
             "src/okto_nexus/application/runtime_delivery.py",
             "src/okto_nexus/migrations/051_runtime_result_relay.sql",
-            "tests/test_runtime_relay.py"
+            "tests/test_runtime_relay.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/application/messages.py",
+            "src/okto_nexus/application/governance.py",
+            "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
+            "tests/test_runtime_notify_targets.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
-            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
+          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
         }
       ]
     },
@@ -3431,7 +3455,8 @@
       "execution_status": "NOT_RUN",
       "evidence": [
         "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
       ],
       "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
@@ -3476,7 +3501,8 @@
       "expected": "Não geram turnos automaticamente nem criam loop no handler de erro.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
       ],
       "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
@@ -3504,8 +3530,11 @@
       ],
       "stimulus": "Configurar notify_target broadcast autorizado e depois removê-lo.",
       "expected": "Broadcast explícito funciona; default não divulga resultado privado a toda audiência.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+      ],
+      "notes": "Production HTTP/MCP with isolated protocol fixture: explicit broadcast reaches present authorized audience; removal restores caller-only reply. Sender/origin denial, artifact audience, fanout limits and Windows/Linux evidence in P10_NOTIFICATION_TARGETS.md. No native-model campaign claimed."
     },
     {
       "test_id": "T-PRES-01",
@@ -3800,7 +3829,8 @@
       "expected": "Não apagar fences/refs necessários nem causar replay como trabalho novo.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
       ],
       "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
     },
