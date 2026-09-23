@@ -78,13 +78,18 @@ class EnvelopeConnector:
             # Native payloads cannot select operation authority. Only locally
             # registered write context can populate these event contract v2 fields.
             event = replace(event, operation_id=None, attempt_id=None,
-                            owner_epoch=None, delivery_phase=None, output_text=None, output_snapshot=False)
+                            owner_epoch=None, delivery_phase=None, output_text=None, output_snapshot=False, native_approval=None)
+            approval_of = getattr(self.native, "native_approval_request", None)
+            approval = approval_of(event) if callable(approval_of) else None
             output_of = getattr(self.native, "delivery_output", None)
             output = output_of(event) if callable(output_of) else None
             if output is not None:
                 event = replace(event, output_text=output[0], output_snapshot=output[1])
             phase_of = getattr(self.native, "delivery_event_phase", None)
             phase = phase_of(event) if callable(phase_of) else None
+            if approval:
+                phase = "progress"
+                event = replace(event, native_approval=approval)
             with self._attempt_lock:
                 active = self._attempts.get(event.session_id)
                 if active and phase:
@@ -108,6 +113,12 @@ class EnvelopeConnector:
     def observe_lifecycle(self, session):
         observe = getattr(self.native, "observe_lifecycle", None)
         return observe(session) if callable(observe) else {"stop_observed": False}
+
+    def reply_native_approval(self, session_id, request, decision):
+        reply = getattr(self.native, "reply_native_approval", None)
+        if not callable(reply):
+            raise RuntimeCommandNotSent("Native approvals are not supported")
+        return reply(session_id, request, decision)
 
     def close(self):
         close = getattr(self.native, "close", None)

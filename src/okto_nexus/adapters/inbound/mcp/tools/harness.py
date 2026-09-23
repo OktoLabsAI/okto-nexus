@@ -363,7 +363,7 @@ def build_dispatcher(deps):
                                   validate=validate, dispatch=dispatch)
     dispatcher.event_ingress = supervisor.event_ingress
     def publish_results():
-        return handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
+        return native_approvals.scan_once() + handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
     dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
@@ -374,6 +374,10 @@ def build_dispatcher(deps):
     control_service = RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
         owner_guard=lambda: is_local_runtime_owner(deps) and not dispatcher._quiescing.is_set(), commands=commands, wake=dispatcher.wake)
     dispatcher.command_dispatcher = RuntimeCommandDispatcher(owner=dispatcher, repo=commands, service=control_service)
+    from okto_nexus.application.runtime_native_approvals import RuntimeNativeApprovalService
+    native_approvals = RuntimeNativeApprovalService(owner=dispatcher, supervisor=supervisor,
+        approvals=deps.approvals, config=deps.config, validate_delivery=validate, validate_command=control_service.validate)
+    dispatcher.native_approvals = native_approvals
     return dispatcher
 
 
@@ -690,6 +694,8 @@ def build_connector_factories(deps: Any):
         def factory(*, project_root, target_pid=None, backend=None, kind=kind, substrate=substrate, **_):
             native = build_connector(native_factories, kind=kind, substrate=substrate,
                                      project_root=project_root, target_pid=target_pid, backend=backend)
+            if hasattr(native, "native_approvals_enabled"):
+                native.native_approvals_enabled = bool(deps.config.feature_hitl)
             return EnvelopeConnector(native, payload_key="content" if kind == "claude_code" else "text")
         registry.register(AdapterDescriptor(
             adapter_id=kind + ("." + substrate if substrate else ""),
@@ -699,7 +705,10 @@ def build_connector_factories(deps: Any):
             capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only, managed_work=not caps.send_only,
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
-                observes_stop=caps.observes_session_end),
+                observes_stop=caps.observes_session_end, approvals=kind == "codex"),
+            input_schema=({"native_approval_contract": 1, "requires_feature_hitl": True,
+                "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"],
+                "decisions": ["accept", "decline"]} if kind == "codex" else {}),
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
         ))

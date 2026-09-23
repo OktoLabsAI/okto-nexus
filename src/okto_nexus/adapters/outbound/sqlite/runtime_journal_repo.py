@@ -1,5 +1,6 @@
 """Atomic event/result/checkpoint projection. No filesystem or native IO."""
 import json
+from ....domain.base import iso_plus
 
 
 class SqliteRuntimeJournalRepo:
@@ -55,6 +56,14 @@ class SqliteRuntimeJournalRepo:
                     status="ERRORED" if event.payload.get("error") else "ENDED",
                     updated_at=now, ended_at=event.occurred_at)
         correlated = self._project_attempt(uow, record=record, event=event, now=now)
+        if correlated and event.native_approval is not None and event.thread_id and event.turn_id:
+            request = event.native_approval
+            uow.connection.execute("INSERT INTO runtime_native_approvals(event_id,operation_id,source_kind,runtime_session_id,"
+                "connection_id,owner_epoch,native_thread_id,native_turn_id,request_key,request_hash,request_payload,created_at,expires_at) "
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(connection_id,request_key) DO NOTHING",
+                (event.event_id, event.operation_id, correlated, event.session_id, record["connection_id"], event.owner_epoch,
+                 event.thread_id, event.turn_id, json.dumps(request["request_id"]), request["request_hash"],
+                 json.dumps(request, ensure_ascii=False, sort_keys=True), now, iso_plus(event.occurred_at, 300)))
         if event.delivery_phase == "terminal" or (event.kind == "turn_completed" and not event.operation_id):
             uow.connection.execute("""INSERT INTO runtime_results
                 (result_id,event_id,runtime_session_id,native_thread_id,native_turn_id,payload,captured_at)

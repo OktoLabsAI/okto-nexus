@@ -50,6 +50,7 @@ from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_proces
 from .environment import child_environment
 
 import json
+import hashlib
 import queue
 import subprocess
 import threading
@@ -247,6 +248,7 @@ class _CodexTransport:
         on_child_exit: Callable[[int | None, str], None],
         on_malformed_line: Callable[[str, str], None],
         on_dispatch_error: Callable[[str, str], None],
+        on_server_request: Callable | None = None,
     ) -> None:
         self._command = list(command)
         self._cwd = cwd
@@ -256,6 +258,7 @@ class _CodexTransport:
         self._on_child_exit = on_child_exit
         self._on_malformed_line = on_malformed_line
         self._on_dispatch_error = on_dispatch_error
+        self._on_server_request = on_server_request
 
         self._proc: subprocess.Popen[str] | None = None
         self._write_lock = threading.Lock()
@@ -410,6 +413,9 @@ class _CodexTransport:
             }
         )
 
+    def reply_result(self, request_id, result):
+        self._write({"jsonrpc": "2.0", "id": request_id, "result": result})
+
     # ------------------------------------------------------------------ #
     # Inbound
     # ------------------------------------------------------------------ #
@@ -500,7 +506,8 @@ class _CodexTransport:
         elif has_method and has_id:
             # Server -> client REQUEST (ServerRequest.json): NOT a
             # notification. Must be answered or the turn can hang.
-            self.reply_method_not_found(msg["id"])
+            if not self._on_server_request or not self._on_server_request(msg["id"], msg["method"], msg.get("params")):
+                self.reply_method_not_found(msg["id"])
         elif has_method:
             # Server -> client notification (no id).
             self._on_notification(msg["method"], msg.get("params") or {})
@@ -616,6 +623,8 @@ class CodexAppServerConnector:
         # response (if any) should be surfaced against.
         self._ff_pending: dict[int, tuple[str, str]] = {}
         self._ff_pending_lock = threading.Lock()
+        self.native_approvals_enabled = False
+        self._approval_requests = {}
 
     # ------------------------------------------------------------------ #
     # HarnessConnector protocol
@@ -895,6 +904,7 @@ class CodexAppServerConnector:
             on_child_exit=self._on_child_exit,
             on_malformed_line=self._on_malformed_line,
             on_dispatch_error=self._on_dispatch_error,
+            on_server_request=self._on_server_request,
         )
         try:
             transport.start()
@@ -936,6 +946,67 @@ class CodexAppServerConnector:
             return "terminal"
         return "progress" if event.turn_id is not None else None
 
+    def _on_server_request(self, request_id, method, params):
+        if not self.native_approvals_enabled or method not in {
+                "item/commandExecution/requestApproval", "item/fileChange/requestApproval"}:
+            return False
+        if (type(request_id) not in {str, int} or not isinstance(params, dict) or
+                not all(isinstance(params.get(k), str) and params[k] for k in ("threadId", "turnId", "itemId"))):
+            return False
+        if "availableDecisions" in params and (
+                not isinstance(params["availableDecisions"], list) or
+                "accept" not in params["availableDecisions"] or "decline" not in params["availableDecisions"]):
+            return False
+        encoded = json.dumps([request_id, method, params], sort_keys=True, separators=(",", ":"))
+        if len(encoded.encode("utf-8")) > 16384:
+            return False
+        key = json.dumps(request_id)
+        digest = hashlib.sha256(encoded.encode()).hexdigest()
+        with self._sessions_lock:
+            state = self._sessions_by_thread.get(params["threadId"])
+            if not state or state.ended or state.closing or state.active_turn_id != params["turnId"]:
+                return False
+            previous = self._approval_requests.get(key)
+            if previous:
+                return previous["pending"] and previous["request"]["request_hash"] == digest
+            if len(self._approval_requests) >= 256 or sum(r["pending"] for r in self._approval_requests.values()) >= 32:
+                return False
+            request = {"schema_version": 1, "request_id": request_id, "method": method,
+                       "request_hash": digest, "params": params}
+            self._approval_requests[key] = {"pending": True, "session_id": state.session_id, "request": request}
+        self._push_event(state.session_id, method, {"native_approval": request},
+                         thread_id=params["threadId"], turn_id=params["turnId"])
+        return True
+
+    def native_approval_request(self, event):
+        request = event.payload.get("native_approval")
+        if not isinstance(request, dict):
+            return None
+        with self._sessions_lock:
+            recorded = self._approval_requests.get(json.dumps(request.get("request_id")))
+            if (recorded and recorded["session_id"] == event.session_id and recorded["request"] == request and
+                    event.native_event == request["method"] and event.thread_id == request["params"]["threadId"] and
+                    event.turn_id == request["params"]["turnId"]):
+                return request
+        return None
+
+    def reply_native_approval(self, session_id, request, decision):
+        from ....domain.runtime_commands import RuntimeCommandNotSent
+        if decision not in {"accept", "decline"}:
+            raise RuntimeCommandNotSent("Unsupported native approval decision")
+        with self._sessions_lock:
+            recorded = self._approval_requests.get(json.dumps(request.get("request_id")))
+            state = self._sessions_by_id.get(session_id)
+            if (not recorded or not recorded["pending"] or recorded["session_id"] != session_id or
+                    recorded["request"]["request_hash"] != request.get("request_hash") or
+                    not state or state.ended or state.closing or
+                    state.active_turn_id != recorded["request"]["params"]["turnId"]):
+                raise RuntimeCommandNotSent("Native approval request ended or changed")
+            recorded["pending"] = False
+        # An RPC id is never readmitted on this connection, even after a write
+        # failure. A late reply therefore cannot target another native request.
+        self._transport.reply_result(request["request_id"], {"decision": decision})
+
     def _on_notification(self, method: str, params: dict[str, Any]) -> None:
         thread_id = _extract_thread_id(params)
         if thread_id is not None:
@@ -956,6 +1027,9 @@ class CodexAppServerConnector:
                     self._emit_for_thread(thread_id, method, params)
                     if state is not None and turn_id is not None and state.active_turn_id == turn_id:
                         state.active_turn_id = None
+                        for request in self._approval_requests.values():
+                            if request["session_id"] == state.session_id and request["request"]["params"]["turnId"] == turn_id:
+                                request["pending"] = False
                         self._turn_changed.notify_all()
             else:
                 self._emit_for_thread(thread_id, method, params)

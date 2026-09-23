@@ -57,12 +57,18 @@ def test_native_explicit_work_result_preserves_verification(tmp_path, kind, nati
     _run_native_campaign(tmp_path, kind, native_auth_config, managed_work=True)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False):
+@pytest.mark.parametrize("kind", ["codex"])
+def test_native_approval_denial_preserves_read_only_sandbox(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, native_approval=True)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "nexus-home")])
     deps.config.feature_harness_integrations = True
+    deps.config.feature_hitl = native_approval
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     _, operator_key = ensure_operator_key(deps, auth)
     with deps.connection_factory.unit_of_work() as uow:
@@ -112,6 +118,61 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             assert operator_key not in json.dumps(native._env)
             assert not any("NEXUS" in name and name != "_NEXUS_PROFILE_ENV_SEALED" for name in native._env)
             runtime = deps, client, str(root), [], operator_key, caller_key
+            if native_approval:
+                from okto_nexus.domain.base import iso_plus
+                marker = root / "approval-denied-fixture.txt"
+                handoff = tool(client, caller_key, "handoff_create", {
+                    "project_root": str(root), "from_agent_id": "caller", "visibility": "eligible",
+                    "target": {"strategy": "direct", "agent_id": "worker"}, "payload": (
+                    "This is a permission-denial integration test in an empty temporary project. "
+                    "Request approval using the shell tool with sandbox_permissions=require_escalated before attempting "
+                    "to write the literal text fixture into approval-denied-fixture.txt in this project. "
+                    "Do not execute an unapproved write or use any other tool to create the file. "
+                    "Do not access network, credentials, personal paths or files outside this project. "
+                    "If the operator declines, do not retry or seek an alternative; reply DENIED and stop.")})
+                assert handoff["ok"], handoff
+                grant = client.post("/api/v1/harness/grants", headers=headers, json={
+                    "actor_agent_id": "caller", "endpoint_id": "native-fixture", "actions": ["execute_work"],
+                    "expires_at": iso_plus(deps.clock.now_iso(), 3600)})
+                assert grant.status_code == 200, grant.text
+                sent = tool(client, caller_key, "handoff_claim", {
+                    "project_root": str(root), "handoff_id": handoff["data"]["handoff_id"], "agent_id": "worker",
+                    "runtime_endpoint_id": "native-fixture", "execution_grant_id": grant.json()["data"]["grant_id"],
+                    "idempotency_key": "native-approval-work"})
+                assert sent["ok"], sent
+                op = sent["data"]["runtime_operation"]["operation_id"]
+                deadline = time.monotonic() + 90
+                pending = None
+                while time.monotonic() < deadline:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        pending = uow.connection.execute("SELECT a.approval_id FROM approvals a JOIN runtime_native_approvals n "
+                            "ON n.approval_id=a.approval_id WHERE n.operation_id=? AND a.status='pending'", (op,)).fetchone()
+                        result = uow.connection.execute("SELECT 1 FROM runtime_results WHERE operation_id=?", (op,)).fetchone()
+                    if pending or result:
+                        break
+                    time.sleep(.1)
+                assert pending, "Native turn did not request a supported canonical approval"
+                assert not marker.exists(), "Native write happened before authorization"
+                rejected = client.post(f"/api/v1/approvals/{pending['approval_id']}/decision", headers=headers,
+                                       json={"decision": "reject", "justification": "Isolated native denial fixture"})
+                assert rejected.status_code == 200, rejected.text
+                deadline = time.monotonic() + 90
+                while time.monotonic() < deadline:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        result = uow.connection.execute("SELECT result_id FROM runtime_results WHERE operation_id=?", (op,)).fetchone()
+                    if result:
+                        break
+                    time.sleep(.1)
+                assert result, "Native turn did not settle after denial"
+                assert not marker.exists()
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    reply = uow.connection.execute("SELECT decision,state FROM runtime_native_approvals WHERE operation_id=?", (op,)).fetchone()
+                    assert reply["decision"] == "decline" and reply["state"] == "SENT_UNCONFIRMED"
+                closed = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
+                from test_runtime_commands import wait_close_result
+                assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"
+                assert native_process.wait(timeout=15) is not None
+                return
             if managed_work:
                 from okto_nexus.domain.base import iso_plus
                 deps.config.feature_verification = True

@@ -133,11 +133,13 @@ class ApprovalService:
         self._config = config
         self._emitter = event_emitter
         self._executors: dict[str, Executor] = {}
+        self._decision_listeners = {}
+        self._idempotent_decisions = set()
 
     # ------------------------------------------------------------------ #
     # Wiring
     # ------------------------------------------------------------------ #
-    def register_executor(self, action: str, executor: Executor) -> None:
+    def register_executor(self, action: str, executor: Executor, *, idempotent_decisions=False) -> None:
         """Register the re-execution callable for one action (wiring layer).
 
         The executor receives the persisted use-case kwargs and MUST run the
@@ -146,6 +148,19 @@ class ApprovalService:
         this module never imports it.
         """
         self._executors[str(action)] = executor
+        if idempotent_decisions:
+            self._idempotent_decisions.add(str(action))
+
+    def register_decision_listener(self, action, listener):
+        self._decision_listeners[action] = listener
+
+    def _wake_decision_listener(self, action):
+        listener = self._decision_listeners.get(action)
+        if listener:
+            try:
+                listener()
+            except Exception:
+                pass  # Durable decision survives a lost post-commit hint.
 
     # ------------------------------------------------------------------ #
     # Interception (called INSIDE the write path's UoW - BR1)
@@ -286,6 +301,11 @@ class ApprovalService:
                 decided_at=now,
             )
             if not flipped:
+                if (row.action in self._idempotent_decisions and row.status == target_status and
+                        row.decided_by == decider and row.justification == just):
+                    return {"approval_id": aid, "status": row.status, "decided_by": row.decided_by,
+                            "decided_at": row.decided_at, "reused": True,
+                            "executed_result": json.loads(row.executed_result) if row.executed_result else None}
                 raise OktoNexusError(
                     ErrorCode.CONFLICT,
                     f"Approval {aid!r} was already decided "
@@ -309,6 +329,7 @@ class ApprovalService:
         kwargs = dict(payload.get("kwargs") or {})
 
         if not approving:
+            self._wake_decision_listener(row.action)
             notified = self._notify_rejection(
                 row, decider=decider, kwargs=kwargs, justification=just
             )
@@ -344,6 +365,7 @@ class ApprovalService:
             self._emit_decision(
                 uow, row, event_type=EVENT_APPROVAL_GRANTED, decided_by=decider
             )
+        self._wake_decision_listener(row.action)
         return {
             "approval_id": aid,
             "status": STATUS_APPROVED,

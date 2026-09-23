@@ -821,6 +821,18 @@ class HarnessSupervisor:
                 self._active_calls -= 1
             self._activity_finished()
 
+    def reply_native_approval(self, session_id, *, connection_id, owner_epoch, request, decision, before_write=None):
+        with self._lock:
+            live = self._live.get(session_id)
+            if (self._shutting_down or not live or live.session.connection_id != connection_id or
+                    live.session.owner_epoch != owner_epoch):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Native approval connection is no longer owned.", {})
+        reply = getattr(live.connector, "reply_native_approval", None)
+        if not callable(reply):
+            raise OktoNexusError(ErrorCode.CONFLICT, "Native approval replies are unsupported.", {})
+        self._bounded_call(lambda: reply(session_id, request, before_write() if before_write else decision), timeout_s=self._forward_timeout_s,
+                           label="native-approval")
+
     def _send(
         self,
         session_id: str,

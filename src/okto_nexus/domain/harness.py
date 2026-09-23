@@ -309,6 +309,7 @@ class HarnessEvent:
     delivery_phase: str | None = None
     output_text: str | None = None
     output_snapshot: bool = False
+    native_approval: dict[str, Any] | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)
