@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "e6983f2a62910a70fcda139ee31753b5be339210",
+  "execution_head": "3142b115bb0dd1dc97275de57c8d0b564ebb8901",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1967,7 +1967,10 @@
             "src/okto_nexus/adapters/inbound/runtime_admin.py",
             "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
             "src/okto_nexus/application/endpoints.py",
-            "tests/test_runtime_admin_surfaces.py"
+            "tests/test_runtime_admin_surfaces.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/migrations/053_runtime_configuration_audit.sql",
+            "tests/test_runtime_configuration_updates.py"
           ],
           "test_results": [
             {
@@ -1976,22 +1979,36 @@
               "result": "PASS",
               "observed": "111 passed, 2 platform skips in 161.79s. Linux scoped selection 48 PASS plus added reconciliation 1 PASS. See evidence for RED and exact commands.",
               "evidence": "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+            },
+            {
+              "sha": "3142b115bb0dd1dc97275de57c8d0b564ebb8901 + configuration update worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_configuration_updates.py tests/test_runtime_admin_surfaces.py tests/test_runtime_endpoints.py tests/test_runtime_boot.py tests/test_runtime_grants.py tests/test_runtime_notify_targets.py",
+              "result": "PASS",
+              "observed": "82 passed in 236.82s; later Windows migration/resources/current configuration 36 PASS plus late-native and send-intent 1 PASS each. Linux selected51 PASS then expanded configuration15 PASS plus send-intent1 PASS. Exact scoped runs in evidence; no native provider claim.",
+              "evidence": "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
             }
           ],
           "evidence": [
-            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
+            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
           ],
-          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
+          "notes": "Profile/endpoint editing and deactivation now share strict services, CAS, grant revocation and boot invalidation. Safe discovery, operation takeover and full administrative parity remain pending."
         },
         {
           "task_id": "P11-T03",
           "title": "Adicionar diagnóstico de unknown/backlog/approval e visão de agente com endpoints.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/migrations/053_runtime_configuration_audit.sql",
+            "tests/test_runtime_configuration_updates.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
+          ],
+          "notes": "Operator configuration-change diagnostics now expose revisions/field names without values; runtime dashboard/unknown/approval UX remains pending."
         },
         {
           "task_id": "P11-T04",
@@ -2002,23 +2019,33 @@
             "src/okto_nexus/adapters/inbound/runtime_admin.py",
             "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
             "src/okto_nexus/application/endpoints.py",
-            "tests/test_runtime_admin_surfaces.py"
+            "tests/test_runtime_admin_surfaces.py",
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/migrations/053_runtime_configuration_audit.sql",
+            "tests/test_runtime_configuration_updates.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
+            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
           ],
-          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
+          "notes": "Surface40, identity resource7, migration053 and operator administration reference updated; measured actual ON growth 7 chars, OFF unchanged. Full guide/ADR rewrite remains pending."
         },
         {
           "task_id": "P11-T05",
           "title": "Ensaiar cutover único, ativação/desativação e rollback com operações em trânsito.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/endpoints.py",
+            "src/okto_nexus/migrations/053_runtime_configuration_audit.sql",
+            "tests/test_runtime_configuration_updates.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md"
+          ],
+          "notes": "Configuration CAS/rollback, grant and boot invalidation, late terminal preservation and pre-write revalidation executed. Full flag cutover/drain/backup/restore gate remains pending."
         }
       ]
     },

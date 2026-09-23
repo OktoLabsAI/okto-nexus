@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="6",
+    version="7",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -521,7 +521,7 @@ opt-in defense-in-depth). When an actor is known, workspace_list requires
 ``workspaces.list`` and include_paths additionally requires
 ``workspaces.include_paths``.
 
-# Runtime administration (surface 39; opt-in)
+# Runtime administration (surface 40; opt-in)
 An Agent remains the canonical identity. Approved endpoints and runtime profiles
 do not register another agent or replace its role, capabilities or permissions.
 With feature_harness_integrations enabled, an authenticated operator can call
@@ -536,13 +536,20 @@ rejected. maintenance accepts an object or a JSON-encoded object:
 
 - profiles/create: profile_id, adapter_id, optional config, secret_refs,
   inherit_ambient=false, enabled=false. Matches POST /api/v1/harness/profiles.
+- profiles/update: profile_id, expected_revision and any of config, secret_refs,
+  inherit_ambient, enabled. Matches PATCH /api/v1/harness/profiles/{id}.
+  Omitted fields are preserved; objects replace their entire previous value.
+  Use enabled=false to retire a profile while preserving history.
 - endpoints/create: endpoint_id, agent_id, adapter_id, absolute project_root,
   profile_id for managed processes; optional enabled=false, priority=0,
   selection_group, response_policy="explicit", consumption="exclusive",
   public_config={}. Matches POST /api/v1/harness/endpoints.
-- endpoints/update: endpoint_id, expected_revision, public_config. Replaces the
-  public configuration and advances the revision, matching PATCH of the endpoint.
-  It does not change identity/profile or reconcile old operations.
+- endpoints/update: endpoint_id, expected_revision and any of public_config,
+  enabled, priority, selection_group, response_policy, consumption, profile_id.
+  Omitted fields are preserved; public_config replaces its entire previous value.
+  Null only clears selection_group or an optional attach profile. Identity,
+  adapter and workspace are immutable. Changing profile requires all prior
+  sessions stopped/detached and no pending start. Matches PATCH of the endpoint.
 - endpoints/boot: endpoint_id, expected_revision, enabled. Matches PUT of the
   endpoint's /boot resource. A dedicated external attach target cannot auto-boot.
 - endpoints/reconcile: endpoint_id, expected_revision, idempotency_key, reason,
@@ -556,6 +563,12 @@ Example (an existing worker and approved profile are prerequisites):
 "enabled":true,"response_policy":"conversation"})`.
 
 GET /api/v1/harness/profiles and /endpoints return the same authorized listings.
+All configuration edits atomically revoke affected delegations and disable prior
+boot approvals. Re-enabling configuration does not resurrect that authority;
+issue new grants and approve boot explicitly. Profile edits require live sessions
+to be closed/reopened before new sends. The operator can still close old sessions.
+Audit stores revision/field names, never values, under configuration_changes in
+GET /api/v1/harness/diagnostics. Deactivation never deletes history or replays work.
 Boot/profile updates do not silently authorize a caller's backend override.
 For artifacts view, maintenance retains inspect/cleanup/retry/quota actions;
 retry names result_id, writes require idempotency_key and reason, and quota also

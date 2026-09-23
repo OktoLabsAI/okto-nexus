@@ -73,7 +73,7 @@ from ..mcp.tools.harness import read_session as _harness_read_session
 from ..mcp.tools.messages import build_service as _build_message_service
 from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
 from ..runtime_admin import (RuntimeProfileBody, RuntimeEndpointBody, RuntimeBootBody,
-    RuntimeEndpointUpdateBody, RuntimeReconcileBody)
+    RuntimeEndpointUpdateBody, RuntimeReconcileBody, RuntimeProfileUpdateBody)
 from .identity_ctx import get_authenticated_agent
 
 
@@ -942,6 +942,16 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.patch("/harness/profiles/{profile_id}")
+    async def runtime_profile_update(request: Request, profile_id: str, body: RuntimeProfileUpdateBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_profile(
+                context, profile_id=profile_id, **body.model_dump(exclude_unset=True))))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.post("/harness/endpoints")
     async def runtime_endpoint_create(request: Request, body: RuntimeEndpointBody) -> JSONResponse:
         deps = request.app.state.deps
@@ -1001,7 +1011,7 @@ def build_router() -> APIRouter:
         try:
             context = _harness_authorize(deps)
             return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).update_endpoint(
-                context, endpoint_id=endpoint_id, **body.model_dump())))
+                context, endpoint_id=endpoint_id, **body.model_dump(exclude_unset=True))))
         except OktoNexusError as exc:
             return _map_error(exc)
 

@@ -38,7 +38,21 @@ class RuntimeBootBody(RuntimeAdminBody):
 
 class RuntimeEndpointUpdateBody(RuntimeAdminBody):
     expected_revision: int = Field(ge=1)
-    public_config: dict[str, Any]
+    public_config: dict[str, Any] | None = None
+    enabled: bool | None = None
+    priority: int | None = None
+    selection_group: str | None = None
+    response_policy: str | None = None
+    consumption: str | None = None
+    profile_id: str | None = None
+
+
+class RuntimeProfileUpdateBody(RuntimeAdminBody):
+    expected_revision: int = Field(ge=1)
+    config: dict[str, Any] | None = None
+    secret_refs: dict[str, str] | None = None
+    inherit_ambient: bool | None = None
+    enabled: bool | None = None
 
 
 class RuntimeReconcileBody(RuntimeAdminBody):

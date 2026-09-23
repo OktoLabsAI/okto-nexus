@@ -6,6 +6,20 @@ from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 class SqliteEndpointRepo:
+    def audit_configuration(self, uow, *, context, kind, resource_id, old_revision, new_revision, fields, now):
+        uow.connection.execute("INSERT INTO runtime_access_audit(request_id,actor_agent_id,action,endpoint_id,decision,created_at,"
+            "resource_kind,resource_id,old_revision,new_revision,changed_fields) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            (context.request_id, context.actor_agent_id, f"config.{kind}.{'create' if old_revision is None else 'update'}",
+             resource_id if kind == "endpoint" else None, "allow", now, kind, resource_id,
+             old_revision, new_revision, json.dumps(sorted(fields))))
+
+    def invalidate_configuration(self, uow, *, endpoint_ids, now):
+        for endpoint_id in endpoint_ids:
+            uow.connection.execute("UPDATE runtime_execution_grants SET revoked_at=?,revision=revision+1 WHERE endpoint_id=? AND revoked_at IS NULL",
+                (now, endpoint_id))
+            uow.connection.execute("UPDATE runtime_boot_bindings SET enabled=0,revision=revision+1,updated_at=? WHERE endpoint_id=? AND enabled=1",
+                (now, endpoint_id))
+
     def boot_binding(self, uow, endpoint_id):
         row = uow.connection.execute("SELECT * FROM runtime_boot_bindings WHERE endpoint_id=?", (endpoint_id,)).fetchone()
         return dict(row) if row else None

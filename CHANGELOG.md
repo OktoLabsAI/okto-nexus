@@ -6,6 +6,11 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 40 adds revision-fenced profile and endpoint editing/deactivation.
+  Changes atomically revoke affected grants and boot approvals; old runtimes
+  retain history but cannot borrow the new profile's authority. Migration 053
+  extends the existing access audit with redacted configuration change metadata.
+
 - Runtime administration surface 39: `harness_list` endpoint/profile views
   reuse REST services, strict request validation and revision fences. Profile
   discovery on REST/MCP redacts launch paths, environment and secret references.
