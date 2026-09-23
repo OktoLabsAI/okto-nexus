@@ -5,22 +5,42 @@ native launch. It is a subreaper before spawning. No periodic ps/PID ancestry
 snapshot is used. stdout/stderr remain the native pipes.
 """
 import os
+import errno
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import threading
+
+from .linux_process_guardian import pidfd_open
 
 
 class OwnedLinuxPopen(subprocess.Popen):
     _slots = threading.BoundedSemaphore(32)
 
     def __init__(self, argv, **kwargs):
-        if sys.platform != "linux" or not hasattr(os, "pidfd_open"):
+        if sys.platform != "linux":
             raise RuntimeError("Linux process ownership requires pidfd support")
         if isinstance(argv, (str, bytes)) or any(kwargs.get(key) for key in ("shell", "preexec_fn", "executable")):
             raise ValueError("Owned Linux processes require argv without shell/preexec overrides")
         if kwargs.get("pass_fds"):
             raise ValueError("Extra inherited descriptors are not supported")
+        # Preserve Popen's pre-spawn configuration failures. Otherwise a missing
+        # native binary looks like a successfully spawned guardian followed by a
+        # protocol EOF. This is only validation; execution can still fail later.
+        argv = list(argv)
+        if not argv:
+            raise ValueError("An executable is required")
+        executable = os.fspath(argv[0])
+        if os.path.dirname(executable):
+            resolved = os.path.join(kwargs.get("cwd") or os.curdir, executable)
+        else:
+            resolved = shutil.which(executable, path=(kwargs.get("env") or {}).get("PATH", os.defpath))
+        if resolved is None or not os.path.exists(resolved):
+            raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), executable)
+        if not os.path.isfile(resolved) or not os.access(resolved, os.X_OK):
+            raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), executable)
+        argv[0] = os.path.abspath(resolved)
         self._ownership_lock = threading.Lock()
         self._cancel_fd = None
         self._proof_fd = None
@@ -31,7 +51,7 @@ class OwnedLinuxPopen(subprocess.Popen):
             raise RuntimeError("Linux owned-process capacity exhausted; unresolved trees retain their slots")
         inherited = []
         try:
-            owner_fd = os.pidfd_open(os.getpid())
+            owner_fd = pidfd_open(os.getpid())
             inherited.append(owner_fd)
             cancel_read, self._cancel_fd = os.pipe()
             os.set_blocking(self._cancel_fd, False)

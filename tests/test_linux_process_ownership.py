@@ -12,9 +12,45 @@ import sys
 import tempfile
 import unittest
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+from okto_nexus.adapters.outbound.harness.linux_process_guardian import pidfd_open, pidfd_send_signal
 
-@unittest.skipUnless(sys.platform == "linux" and hasattr(os, "pidfd_open"), "NOT_RUN: Linux pidfd test")
+
+@unittest.skipUnless(sys.platform == "linux", "NOT_RUN: Linux pidfd test")
 class LinuxOwnershipTests(unittest.TestCase):
+    def test_native_stream_eof_is_independent_of_process_exit(self):
+        import threading
+        from okto_nexus.adapters.outbound.harness.linux_process import OwnedLinuxPopen
+        process = OwnedLinuxPopen([sys.executable, "-u", "-c",
+            "import os,time;print('ready',flush=True);os.close(1);time.sleep(60)"],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env={"PATH": os.defpath})
+        observed = threading.Event()
+        reader = threading.Thread(target=lambda: (process.stdout.read(), observed.set()), daemon=True)
+        try:
+            self.assertEqual(process.stdout.readline().strip(), "ready")
+            reader.start()
+            self.assertTrue(observed.wait(3), "guardian masks the native stream EOF")
+            self.assertIsNone(process.poll())
+            self.assertFalse(process.tree_stopped)
+        finally:
+            process.kill()
+            process.wait(timeout=5)
+            reader.join(3)
+            process.stdout.close()
+            process.stderr.close()
+
+    def test_pidfd_without_python_wrappers_uses_kernel_identity(self):
+        from unittest.mock import patch
+        if os.uname().machine != "x86_64":
+            self.skipTest("Raw pidfd syscall ABI is only qualified on x86-64")
+        with patch.object(os, "pidfd_open", None, create=True), patch.object(signal, "pidfd_send_signal", None, create=True):
+            descriptor = pidfd_open(os.getpid())
+            try:
+                self.assertFalse(os.get_inheritable(descriptor))
+                pidfd_send_signal(descriptor, 0)
+            finally:
+                os.close(descriptor)
+
     def test_capacity_is_held_until_observed_cleanup(self):
         import threading
         from unittest.mock import patch
@@ -69,7 +105,7 @@ class LinuxOwnershipTests(unittest.TestCase):
         try:
             pid, extra = json.loads(process.stdout.readline())
             self.assertEqual(extra, [], "native peer inherited guardian control/proof handles")
-            descriptor = os.pidfd_open(pid)
+            descriptor = pidfd_open(pid)
             process.stdin.write("done\n")
             process.stdin.flush()
             self.assertEqual(process.wait(timeout=5), 0)
@@ -81,7 +117,7 @@ class LinuxOwnershipTests(unittest.TestCase):
         finally:
             if descriptor is not None:
                 try:
-                    signal.pidfd_send_signal(descriptor, signal.SIGKILL)
+                    pidfd_send_signal(descriptor, signal.SIGKILL)
                 except ProcessLookupError:
                     pass
                 os.close(descriptor)
@@ -101,7 +137,7 @@ class LinuxOwnershipTests(unittest.TestCase):
                     "import os,time;print(os.getpid(),flush=True);time.sleep(60)"],
                     stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                     text=True, env={"PATH": os.defpath})
-                descriptor = os.pidfd_open(int(process.stdout.readline().strip()))
+                descriptor = pidfd_open(int(process.stdout.readline().strip()))
                 try:
                     if guardian_crash:
                         # Our direct unreaped child cannot have a recycled PID.
@@ -118,7 +154,7 @@ class LinuxOwnershipTests(unittest.TestCase):
                     self.assertEqual(process.tree_stopped, not guardian_crash)
                 finally:
                     try:
-                        signal.pidfd_send_signal(descriptor, signal.SIGKILL)
+                        pidfd_send_signal(descriptor, signal.SIGKILL)
                     except ProcessLookupError:
                         pass
                     os.close(descriptor)
@@ -161,7 +197,7 @@ class LinuxOwnershipTests(unittest.TestCase):
                 line = process.stdout.readline().strip()
                 self.assertTrue(line, process.stderr.read() if process.poll() is not None else "empty process line")
                 pids = json.loads(line)
-                descriptors = [os.pidfd_open(pid) for pid in pids]
+                descriptors = [pidfd_open(pid) for pid in pids]
                 process.kill()
                 process.wait(timeout=5)
                 for descriptor in descriptors:
@@ -171,7 +207,7 @@ class LinuxOwnershipTests(unittest.TestCase):
             finally:
                 for descriptor in descriptors:
                     try:
-                        signal.pidfd_send_signal(descriptor, signal.SIGKILL)
+                        pidfd_send_signal(descriptor, signal.SIGKILL)
                     except ProcessLookupError:
                         pass
                     os.close(descriptor)

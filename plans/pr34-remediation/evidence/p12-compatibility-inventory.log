@@ -1,0 +1,208 @@
+SHA: 3c0eb84 + Linux portability worktree; inventory only, stop after 20 failures; POSIX legacy serve files NOT_RUN on Windows
+COMMAND: .venv/Scripts/python.exe -m pytest -q --ignore=tests/test_serve_harness_shutdown_reap.py --ignore=tests/test_serve_harness_sigkill_reap.py --maxfail=20 --tb=short -o faulthandler_timeout=90
+........................................................................ [  3%]
+.....................................................sssssssssssssssssss [  6%]
+ssssssssssssssssssssssssssssssssssssss.................................. [ 10%]
+........................................................................ [ 13%]
+........................................................................ [ 17%]
+........................................................................ [ 20%]
+...............................................s........................ [ 24%]
+........................................................................ [ 27%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+..s.ssssss................................s............................. [ 38%]
+.....................................sFFFFFFFF.FFFFFFFFFFFF
+================================== FAILURES ===================================
+________________ test_harness_kinds_lists_catalog_without_auth ________________
+tests\test_harness_routes.py:105: in test_harness_kinds_lists_catalog_without_auth
+    assert r.status_code == 200, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 200
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+________________ test_harness_open_as_operator_registers_agent ________________
+tests\test_harness_routes.py:119: in test_harness_open_as_operator_registers_agent
+    assert r.status_code == 200, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 200
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+___________________ test_harness_open_rejects_unknown_kind ____________________
+tests\test_harness_routes.py:136: in test_harness_open_rejects_unknown_kind
+    assert r.status_code == 422, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 422
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+__________ test_harness_open_claude_code_attach_requires_target_pid ___________
+tests\test_harness_routes.py:151: in test_harness_open_claude_code_attach_requires_target_pid
+    assert r.status_code == 422, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 422
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+____ test_harness_open_default_backend_is_ambient_and_visible_in_response _____
+tests\test_harness_routes.py:163: in test_harness_open_default_backend_is_ambient_and_visible_in_response
+    assert r.status_code == 200, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 200
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+___________ test_harness_open_backend_override_is_honored_over_rest ___________
+tests\test_harness_routes.py:185: in test_harness_open_backend_override_is_honored_over_rest
+    assert r.status_code == 200, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 200
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+___ test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest ____
+tests\test_harness_routes.py:203: in test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest
+    assert r.status_code == 422, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 422
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+_ test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest _
+tests\test_harness_routes.py:221: in test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
+    assert r.status_code == 422, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 422
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+__________________ test_harness_full_lifecycle_through_rest ___________________
+tests\test_harness_routes.py:247: in test_harness_full_lifecycle_through_rest
+    opened = client.post(
+E   KeyError: 'data'
+___________________ test_harness_get_unknown_session_is_404 ___________________
+tests\test_harness_routes.py:303: in test_harness_get_unknown_session_is_404
+    assert r.status_code == 404, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 404
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+______________ test_harness_send_against_unknown_session_is_404 _______________
+tests\test_harness_routes.py:312: in test_harness_send_against_unknown_session_is_404
+    assert r.status_code == 404, r.text
+E   AssertionError: {"ok":false,"error":{"code":"PERMISSION_DENIED","message":"Runtime action is not authorized."}}
+E   assert 403 == 404
+E    +  where 403 = <Response [403 Forbidden]>.status_code
+_____________ test_mcp_and_rest_surfaces_share_one_live_registry ______________
+tests\test_harness_routes.py:345: in test_mcp_and_rest_surfaces_share_one_live_registry
+    mcp_server.tools["harness_open"](
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   KeyError: 'harness_open'
+_____________ test_open_registers_agent_and_marks_session_running _____________
+tests\test_harness_supervisor.py:266: in test_open_registers_agent_and_marks_session_running
+    session = supervisor.open(
+src\okto_nexus\application\harness_supervisor.py:487: in open
+    return self._open(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\harness_supervisor.py:531: in _open
+    require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+src\okto_nexus\application\runtime_authorization.py:33: in require_runtime_agent
+    raise OktoNexusError(ErrorCode.NOT_FOUND,
+E   okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime.
+______________ test_open_rejects_a_connector_that_fails_to_start ______________
+tests\test_harness_supervisor.py:300: in test_open_rejects_a_connector_that_fails_to_start
+    assert excinfo.value.code == ErrorCode.INTERNAL_ERROR
+E   AssertionError: assert 'NOT_FOUND' == <ErrorCode.IN...TERNAL_ERROR'>
+E     
+E     - INTERNAL_ERROR
+E     + NOT_FOUND
+__________ test_open_bounded_by_start_timeout_when_connector_wedges ___________
+tests\test_harness_supervisor.py:319: in test_open_bounded_by_start_timeout_when_connector_wedges
+    assert excinfo.value.code == ErrorCode.INTERNAL_ERROR
+E   AssertionError: assert 'NOT_FOUND' == <ErrorCode.IN...TERNAL_ERROR'>
+E     
+E     - INTERNAL_ERROR
+E     + NOT_FOUND
+______ test_failed_and_wedged_opens_never_affect_an_already_open_session ______
+tests\test_harness_supervisor.py:331: in test_failed_and_wedged_opens_never_affect_an_already_open_session
+    good_session = supervisor.open(
+src\okto_nexus\application\harness_supervisor.py:487: in open
+    return self._open(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\harness_supervisor.py:531: in _open
+    require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+src\okto_nexus\application\runtime_authorization.py:33: in require_runtime_agent
+    raise OktoNexusError(ErrorCode.NOT_FOUND,
+E   okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime.
+_______________ test_open_declared_isolates_boot_time_failures ________________
+tests\test_harness_supervisor.py:395: in test_open_declared_isolates_boot_time_failures
+    assert results[0].session is not None and results[0].error is None
+E   AssertionError: assert (None is not None)
+E    +  where None = HarnessBootResult(spec=HarnessBootSpec(kind='pi', connector=<test_harness_supervisor.FakeConnector object at 0x0000019...='NOT_FOUND', message='Register the agent through the canonical identity API before opening a runtime.', details=None)).session
+________ test_publish_happens_before_the_durable_write_for_every_event ________
+tests\test_harness_supervisor.py:440: in test_publish_happens_before_the_durable_write_for_every_event
+    session = supervisor.open(
+src\okto_nexus\application\harness_supervisor.py:487: in open
+    return self._open(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\harness_supervisor.py:531: in _open
+    require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+src\okto_nexus\application\runtime_authorization.py:33: in require_runtime_agent
+    raise OktoNexusError(ErrorCode.NOT_FOUND,
+E   okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime.
+_________ test_a_broken_subscriber_registry_does_not_stop_persistence _________
+tests\test_harness_supervisor.py:484: in test_a_broken_subscriber_registry_does_not_stop_persistence
+    session = supervisor.open(
+src\okto_nexus\application\harness_supervisor.py:487: in open
+    return self._open(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\harness_supervisor.py:531: in _open
+    require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+src\okto_nexus\application\runtime_authorization.py:33: in require_runtime_agent
+    raise OktoNexusError(ErrorCode.NOT_FOUND,
+E   okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime.
+________________ test_connector_crash_reaps_session_as_errored ________________
+tests\test_harness_supervisor.py:505: in test_connector_crash_reaps_session_as_errored
+    session = supervisor.open(
+src\okto_nexus\application\harness_supervisor.py:487: in open
+    return self._open(**kwargs)
+           ^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\harness_supervisor.py:531: in _open
+    require_runtime_agent(agents=self._agents, connection_factory=self._cf,
+src\okto_nexus\application\runtime_authorization.py:33: in require_runtime_agent
+    raise OktoNexusError(ErrorCode.NOT_FOUND,
+E   okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime.
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_harness_pi_connector.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\_pytest\threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread pi-stdout
+  
+  Traceback (most recent call last):
+    File "C:\Python313\Lib\threading.py", line 1041, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "C:\Python313\Lib\threading.py", line 992, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\src\okto_nexus\adapters\outbound\harness\pi.py", line 422, in _read_stdout
+      self._on_child_exit(returncode, self.stderr_tail())
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "D:\Projetos\Techridy\okto_labs_okto_nexus\tests\test_harness_pi_connector.py", line 812, in exploding_on_child_exit
+      raise RuntimeError("boom - injected failure in the death-report path itself")
+  RuntimeError: boom - injected failure in the death-report path itself
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_harness_routes.py::test_harness_kinds_lists_catalog_without_auth
+FAILED tests/test_harness_routes.py::test_harness_open_as_operator_registers_agent
+FAILED tests/test_harness_routes.py::test_harness_open_rejects_unknown_kind
+FAILED tests/test_harness_routes.py::test_harness_open_claude_code_attach_requires_target_pid
+FAILED tests/test_harness_routes.py::test_harness_open_default_backend_is_ambient_and_visible_in_response
+FAILED tests/test_harness_routes.py::test_harness_open_backend_override_is_honored_over_rest
+FAILED tests/test_harness_routes.py::test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest
+FAILED tests/test_harness_routes.py::test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
+FAILED tests/test_harness_routes.py::test_harness_full_lifecycle_through_rest
+FAILED tests/test_harness_routes.py::test_harness_get_unknown_session_is_404
+FAILED tests/test_harness_routes.py::test_harness_send_against_unknown_session_is_404
+FAILED tests/test_harness_routes.py::test_mcp_and_rest_surfaces_share_one_live_registry
+FAILED tests/test_harness_supervisor.py::test_open_registers_agent_and_marks_session_running
+FAILED tests/test_harness_supervisor.py::test_open_rejects_a_connector_that_fails_to_start
+FAILED tests/test_harness_supervisor.py::test_open_bounded_by_start_timeout_when_connector_wedges
+FAILED tests/test_harness_supervisor.py::test_failed_and_wedged_opens_never_affect_an_already_open_session
+FAILED tests/test_harness_supervisor.py::test_open_declared_isolates_boot_time_failures
+FAILED tests/test_harness_supervisor.py::test_publish_happens_before_the_durable_write_for_every_event
+FAILED tests/test_harness_supervisor.py::test_a_broken_subscriber_registry_does_not_stop_persistence
+FAILED tests/test_harness_supervisor.py::test_connector_crash_reaps_session_as_errored
+!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 20 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+20 failed, 764 passed, 68 skipped, 2 warnings in 177.79s (0:02:57)

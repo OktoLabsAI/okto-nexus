@@ -161,3 +161,14 @@ P07_RESTART_JOURNAL.md: two behavioral REDs, 60 integrated PASS. Native campaign
 NOT_RUN for this unit. Next: stale sessions, owner epoch stamping and stable boot.
 Linux Python 3.13 provisioning began in isolated temporary directories; full Linux
 composition remains NOT_RUN until its tests execute. No final-gate promotion.
+
+Journal restart checkpoint pushed: 3c0eb84. Supported WSL CPython 3.13.12 composition
+now ran: 215 PASS / 12 skipped / 1 known injected Pi warning / 2 subtests PASS,
+including all four fixture connector suites and production delivery/recovery.
+Fixed standalone-Python pidfd wrapper absence, guardian pipe copies masking EOF,
+and structured runtime-open persistence errors. See P07_LINUX_COMPOSITION.md for
+initial failures and exact evidence. Native providers NOT_RUN for this unit.
+Windows compatibility inventory stopped at 20 failures after 764 PASS; legacy
+harness tests need current canonical identities/approved profiles/authorization.
+Final gate still NOT PASSED. Next: adapt legacy regressions, stale session epoch
+reconciliation and stable endpoint boot; P09-P12 remain unfinished.

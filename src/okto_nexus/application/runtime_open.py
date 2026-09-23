@@ -52,8 +52,12 @@ class RuntimeOpenService:
                 with self.cf.unit_of_work() as uow:
                     self.requests.finish(uow, request_id=request_id, status="COMPLETED")
             return session, profile_view, False, request_id
-        except Exception:
+        except Exception as exc:
             if request_id:
                 with self.cf.unit_of_work() as uow:
                     self.requests.finish(uow, request_id=request_id, status="OUTCOME_UNKNOWN" if starting else "FAILED_FINAL")
-            raise
+            if isinstance(exc, OktoNexusError):
+                raise
+            raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
+                "Runtime opening failed; inspect the durable request before retrying.",
+                {"request_id": request_id, "exception_type": type(exc).__name__}) from exc

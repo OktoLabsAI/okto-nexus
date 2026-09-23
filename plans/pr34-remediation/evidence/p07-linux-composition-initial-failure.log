@@ -1,0 +1,1967 @@
+SHA: 3c0eb84
+COMMAND: wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus -- /var/tmp/okto-pr34-linux-pup5o3e_/bin/python -m pytest -q tests/test_linux_process_ownership.py tests/test_runtime_restart.py tests/test_runtime_shutdown.py tests/test_runtime_outbox.py tests/test_runtime_result_correlation.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py tests/test_runtime_event_journal.py tests/test_runtime_protocol_limits.py tests/test_harness_codex_connector.py tests/test_harness_pi_connector.py tests/test_harness_claude_code_connector.py tests/test_runtime_attach_platform.py tests/test_import_boundary.py --tb=short
+ssssssFFFF..............F..FFFFFFFFFF....F.F.FFsss...........FFF.F.FFFFF [ 42%]
+FFFFFFFFFFFFFFFFFF...FFFFFs.FFFFFFFFFFFFFFFFFFFFFFFFF.s.FF.FFFFFFF.FFFFF [ 85%]
+FFF..FFFFFsFssssss......                                                 [100%]
+=================================== FAILURES ===================================
+_ test_restart_recovers_captured_old_attempt_without_reexecuting[False-started] _
+tests/test_runtime_restart.py:32: in test_restart_recovers_captured_old_attempt_without_reexecuting
+    assert response.status_code == 200
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_restart_recovers_captured_old_attempt_without_reexecuting[False-terminal] _
+tests/test_runtime_restart.py:32: in test_restart_recovers_captured_old_attempt_without_reexecuting
+    assert response.status_code == 200
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_restart_recovers_captured_old_attempt_without_reexecuting[True-started] _
+tests/test_runtime_restart.py:32: in test_restart_recovers_captured_old_attempt_without_reexecuting
+    assert response.status_code == 200
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_restart_recovers_captured_old_attempt_without_reexecuting[True-terminal] _
+tests/test_runtime_restart.py:32: in test_restart_recovers_captured_old_attempt_without_reexecuting
+    assert response.status_code == 200
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+__________ test_p06_stdio_producer_wakes_serve_without_owning_runtime __________
+  + Exception Group Traceback (most recent call last):
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 190, in test_p06_stdio_producer_wakes_serve_without_owning_runtime
+  |     operation_id = asyncio.run(asyncio.wait_for(produce(), timeout=30))
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 195, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 180, in produce
+  |     async with stdio_client(params) as (reader, writer):
+  |                ~~~~~~~~~~~~^^^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/stdio/__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/stdio/__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 181, in produce
+    |     async with ClientSession(reader, writer) as client:
+    |                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/shared/session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 182, in produce
+      |     await client.initialize()
+      |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...<16 lines>...
+      |     )
+      |     ^
+      |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/shared/session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------
+----------------------------- Captured stderr call -----------------------------
+/var/tmp/okto-pr34-linux-pup5o3e_/bin/python: Error while finding module specification for 'okto_nexus.adapters.inbound.mcp.server' (ModuleNotFoundError: No module named 'okto_nexus')
+________ test_p05_open_reply_persistence_failure_does_not_repeat_start _________
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_transports/default.py:101: in map_httpcore_exceptions
+    yield
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_transports/default.py:250: in handle_request
+    resp = self._pool.handle_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py:256: in handle_request
+    raise exc from None
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/connection_pool.py:236: in handle_request
+    response = connection.handle_request(
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/connection.py:103: in handle_request
+    return self._connection.handle_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/http11.py:136: in handle_request
+    raise exc
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/http11.py:106: in handle_request
+    ) = self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/http11.py:177: in _receive_response_headers
+    event = self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_sync/http11.py:217: in _receive_event
+    data = self._network_stream.read(
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_backends/sync.py:126: in read
+    with map_exceptions(exc_map):
+         ^^^^^^^^^^^^^^^^^^^^^^^
+/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpcore/_exceptions.py:14: in map_exceptions
+    raise to_exc(exc) from exc
+E   httpcore.ReadError: [Errno 104] Connection reset by peer
+
+The above exception was the direct cause of the following exception:
+tests/test_runtime_outbox.py:240: in test_p05_open_reply_persistence_failure_does_not_repeat_start
+    second = tool(client, operator, "harness_open", arguments)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_pr34_remediation.py:117: in tool
+    result = mcp_call(client, key, "tools/call", {"name": name, "arguments": arguments})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_pr34_remediation.py:103: in mcp_call
+    response = client.post("/mcp/", headers={"x-api-key": key,
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:1144: in post
+    return self.request(
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:825: in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:914: in send
+    response = self._send_handling_auth(
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:942: in _send_handling_auth
+    response = self._send_handling_redirects(
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:979: in _send_handling_redirects
+    response = self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_client.py:1014: in _send_single_request
+    response = transport.handle_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_transports/default.py:249: in handle_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/contextlib.py:162: in __exit__
+    self.gen.throw(value)
+/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/httpx/_transports/default.py:118: in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+E   httpx.ReadError: [Errno 104] Connection reset by peer
+----------------------------- Captured stderr call -----------------------------
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_utils.py", line 85, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         self.scope, self.receive, self.send
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/applications.py", line 1162, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/applications.py", line 90, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 251, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 268, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 660, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 680, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1650, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 2102, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1670, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1218, in handle
+    |     await app(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 143, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 129, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 683, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 337, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in harness_open
+    |     result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    |     result = context.run(func, *args)
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in <lambda>
+    |     result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+    |                                                     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/mcp/tools/harness.py", line 302, in open_runtime
+    |     session, profile, reused, request_id = service.open(context, **arguments)
+    |                                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/application/runtime_open.py", line 53, in open
+    |     self.requests.finish(uow, request_id=request_id, status="COMPLETED")
+    |     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 232, in fail_once
+    |     raise OSError("fixture reply persistence failure")
+    | OSError: fixture reply persistence failure
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/applications.py", line 1162, in __call__
+    await super().__call__(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 251, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 268, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1650, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 2102, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1670, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1218, in handle
+    await app(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 143, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 129, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 683, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 337, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in harness_open
+    result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in <lambda>
+    result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+                                                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/mcp/tools/harness.py", line 302, in open_runtime
+    session, profile, reused, request_id = service.open(context, **arguments)
+                                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/application/runtime_open.py", line 53, in open
+    self.requests.finish(uow, request_id=request_id, status="COMPLETED")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 232, in fail_once
+    raise OSError("fixture reply persistence failure")
+OSError: fixture reply persistence failure
+------------------------------ Captured log call -------------------------------
+ERROR    uvicorn.error:h11_impl.py:420 Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_utils.py", line 85, in create_collapsing_task_group
+  |     async with anyio.create_task_group() as tg:
+  |                ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         self.scope, self.receive, self.send
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/applications.py", line 1162, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/applications.py", line 90, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 251, in dispatch
+    |     return await call_next(request)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 268, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    |     raise app_exc from app_exc.__cause__ or app_exc.__context__
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 660, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 680, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1650, in handle
+    |     await self.original_router.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 2102, in handle
+    |     await included_router._handle_selected(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1670, in _handle_selected
+    |     await original_route.handle(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1218, in handle
+    |     await app(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 143, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 129, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 683, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     ...<3 lines>...
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 337, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in harness_open
+    |     result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    |     return await get_async_backend().run_sync_in_worker_thread(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |         func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |     )
+    |     ^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    |     return await future
+    |            ^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    |     result = context.run(func, *args)
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in <lambda>
+    |     result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+    |                                                     ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/mcp/tools/harness.py", line 302, in open_runtime
+    |     session, profile, reused, request_id = service.open(context, **arguments)
+    |                                            ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/application/runtime_open.py", line 53, in open
+    |     self.requests.finish(uow, request_id=request_id, status="COMPLETED")
+    |     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 232, in fail_once
+    |     raise OSError("fixture reply persistence failure")
+    | OSError: fixture reply persistence failure
+    +------------------------------------
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 415, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 62, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/applications.py", line 1162, in __call__
+    await super().__call__(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/applications.py", line 90, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 251, in dispatch
+    return await call_next(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/app.py", line 268, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1650, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 2102, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1670, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 1218, in handle
+    await app(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 143, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 129, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 683, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/fastapi/routing.py", line 337, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in harness_open
+    result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2592, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 1029, in run
+    result = context.run(func, *args)
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/http/routes.py", line 988, in <lambda>
+    result = await anyio.to_thread.run_sync(lambda: _harness_open(deps, **body.model_dump()))
+                                                    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/inbound/mcp/tools/harness.py", line 302, in open_runtime
+    session, profile, reused, request_id = service.open(context, **arguments)
+                                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/application/runtime_open.py", line 53, in open
+    self.requests.finish(uow, request_id=request_id, status="COMPLETED")
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 232, in fail_once
+    raise OSError("fixture reply persistence failure")
+OSError: fixture reply persistence failure
+__________ test_p06_stdio_open_runs_only_in_the_existing_serve_owner ___________
+  + Exception Group Traceback (most recent call last):
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 273, in test_p06_stdio_open_runs_only_in_the_existing_serve_owner
+  |     session_id = asyncio.run(asyncio.wait_for(request_open(), timeout=30))
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 195, in run
+  |     return runner.run(main)
+  |            ~~~~~~~~~~^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py", line 118, in run
+  |     return self._loop.run_until_complete(task)
+  |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+  |     return future.result()
+  |            ~~~~~~~~~~~~~^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py", line 507, in wait_for
+  |     return await fut
+  |            ^^^^^^^^^
+  |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 264, in request_open
+  |     async with stdio_client(params) as (reader, writer):
+  |                ~~~~~~~~~~~~^^^^^^^^
+  |   File "/mnt/c/Users/jpamb/AppData/Local/Temp/okto-pr34-linux-python/cpython-3.13.12-linux-x86_64-gnu/lib/python3.13/contextlib.py", line 235, in __aexit__
+  |     await self.gen.athrow(value)
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/stdio/__init__.py", line 183, in stdio_client
+  |     anyio.create_task_group() as tg,
+  |     ~~~~~~~~~~~~~~~~~~~~~~~^^
+  |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+  |     raise BaseExceptionGroup(
+  |         "unhandled errors in a TaskGroup", self._exceptions
+  |     ) from None
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Exception Group Traceback (most recent call last):
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/stdio/__init__.py", line 189, in stdio_client
+    |     yield read_stream, write_stream
+    |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 265, in request_open
+    |     async with ClientSession(reader, writer) as session:
+    |                ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/shared/session.py", line 238, in __aexit__
+    |     return await self._task_group.__aexit__(exc_type, exc_val, exc_tb)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 811, in __aexit__
+    |     raise BaseExceptionGroup(
+    |         "unhandled errors in a TaskGroup", self._exceptions
+    |     ) from None
+    | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    +-+---------------- 1 ----------------
+      | Traceback (most recent call last):
+      |   File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_runtime_outbox.py", line 266, in request_open
+      |     await session.initialize()
+      |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/client/session.py", line 183, in initialize
+      |     result = await self.send_request(
+      |              ^^^^^^^^^^^^^^^^^^^^^^^^
+      |     ...<16 lines>...
+      |     )
+      |     ^
+      |   File "/var/tmp/okto-pr34-linux-pup5o3e_/lib/python3.13/site-packages/mcp/shared/session.py", line 306, in send_request
+      |     raise McpError(response_or_error.error)
+      | mcp.shared.exceptions.McpError: Connection closed
+      +------------------------------------
+----------------------------- Captured stderr call -----------------------------
+/var/tmp/okto-pr34-linux-pup5o3e_/bin/python: Error while finding module specification for 'okto_nexus.adapters.inbound.mcp.server' (ModuleNotFoundError: No module named 'okto_nexus')
+_ test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-False] _
+tests/test_runtime_result_correlation.py:31: in test_terminal_is_correlated_to_transport_attempt_and_releases_lane
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-True] _
+tests/test_runtime_result_correlation.py:31: in test_terminal_is_correlated_to_transport_attempt_and_releases_lane
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-False] _
+tests/test_runtime_result_correlation.py:31: in test_terminal_is_correlated_to_transport_attempt_and_releases_lane
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-True] _
+tests/test_runtime_result_correlation.py:31: in test_terminal_is_correlated_to_transport_attempt_and_releases_lane
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+____ test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next ____
+tests/test_runtime_result_correlation.py:105: in test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True] _
+tests/test_runtime_shared_connection.py:38: in test_active_close_observes_interrupt_completion_before_detaching_shared_thread
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_ test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False] _
+tests/test_runtime_shared_connection.py:38: in test_active_close_observes_interrupt_completion_before_detaching_shared_thread
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+______ test_closing_one_codex_session_preserves_other_thread_and_process _______
+tests/test_runtime_shared_connection.py:80: in test_closing_one_codex_session_preserves_other_thread_and_process
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_________ test_shared_connection_cannot_cross_approved_profile_context _________
+tests/test_runtime_shared_connection.py:221: in test_shared_connection_cannot_cross_approved_profile_context
+    assert response.status_code == 200, response.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+__________ test_cancel_registered_child_and_reject_late_registration ___________
+tests/test_runtime_process_ownership.py:46: in test_cancel_registered_child_and_reject_late_registration
+    child = spawn([sys.executable, "-c", "import time; print('ready',flush=True); time.sleep(60)"])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_runtime_process_ownership.py:30: in spawn
+    return spawn_owned_process(argv, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_real_codex_transport_handshake_timeout_kills_owned_fixture ________
+tests/test_runtime_process_ownership.py:97: in test_real_codex_transport_handshake_timeout_kills_owned_fixture
+    with pytest.raises(OktoNexusError, match="cancellation requested"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AssertionError: Regex pattern did not match.
+E     Expected regex: 'cancellation requested'
+E     Actual message: "INTERNAL_ERROR: harness 'codex' failed to start: Linux process ownership requires pidfd support"
+_____________ test_rest_owner_start_timeout_has_no_running_session _____________
+tests/test_runtime_process_ownership.py:118: in test_rest_owner_start_timeout_has_no_running_session
+    assert marker.exists(), response.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert False
+E    +  where False = exists()
+E    +    where exists = PosixPath('/tmp/pytest-of-jpbraga/pytest-0/test_rest_owner_start_timeout_0/production-spawn.pid').exists
+____ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex] _____
+tests/test_runtime_protocol_limits.py:39: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    peer.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi] ______
+tests/test_runtime_protocol_limits.py:44: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    peer.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____ test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude] ____
+tests/test_runtime_protocol_limits.py:55: in test_unterminated_oversized_frame_rejects_and_reaps_owned_peer
+    peer.start(owning_agent_id="fixture")
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___ test_oversized_turn_fault_reaches_production_journal_without_completion ____
+tests/test_runtime_protocol_limits.py:103: in test_oversized_turn_fault_reaches_production_journal_without_completion
+    assert opened.status_code == 200, opened.text
+E   AssertionError: {"ok":false,"error":{"code":"INTERNAL_ERROR","message":"harness 'codex' failed to start: Linux process ownership requires pidfd support"}}
+E   assert 500 == 200
+E    +  where 500 = <Response [500 Internal Server Error]>.status_code
+_______________ test_start_mints_session_and_spawns_process_once _______________
+tests/test_harness_codex_connector.py:312: in test_start_mints_session_and_spawns_process_once
+    session_a = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent_a")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_________ test_send_turn_produces_ordered_events_for_the_right_session _________
+tests/test_harness_codex_connector.py:332: in test_send_turn_produces_ordered_events_for_the_right_session
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______________ test_two_concurrent_sessions_demux_independently _______________
+tests/test_harness_codex_connector.py:354: in test_two_concurrent_sessions_demux_independently
+    session_a = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent_a")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_turn_start_error_response_becomes_error_event ______________
+tests/test_harness_codex_connector.py:394: in test_turn_start_error_response_becomes_error_event
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____ test_fast_native_error_before_write_returns_keeps_request_attribution _____
+tests/test_harness_codex_connector.py:404: in test_fast_native_error_before_write_returns_keeps_request_attribution
+    session = connector.start(owning_agent_id="fixture")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______ test_close_pending_start_waits_for_native_identity_then_interrupts ______
+tests/test_harness_codex_connector.py:430: in test_close_pending_start_waits_for_native_identity_then_interrupts
+    session = connector.start(owning_agent_id="fixture")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________ test_steer_without_active_turn_raises_validation_error ____________
+tests/test_harness_codex_connector.py:475: in test_steer_without_active_turn_raises_validation_error
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_interrupt_without_active_turn_raises_validation_error __________
+tests/test_harness_codex_connector.py:482: in test_interrupt_without_active_turn_raises_validation_error
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______________ test_steer_and_interrupt_use_the_tracked_turn_id _______________
+tests/test_harness_codex_connector.py:489: in test_steer_and_interrupt_use_the_tracked_turn_id
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____ test_interrupt_clears_active_turn_id_so_a_second_interrupt_is_rejected ____
+tests/test_harness_codex_connector.py:530: in test_interrupt_clears_active_turn_id_so_a_second_interrupt_is_rejected
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_end_unsubscribes_without_killing_the_shared_process ___________
+tests/test_harness_codex_connector.py:547: in test_end_unsubscribes_without_killing_the_shared_process
+    session_a = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent_a")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_unknown_server_request_gets_method_not_found_reply ____________
+tests/test_harness_codex_connector.py:568: in test_unknown_server_request_gets_method_not_found_reply
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____________ test_malformed_line_is_surfaced_and_stream_continues _____________
+tests/test_harness_codex_connector.py:582: in test_malformed_line_is_surfaced_and_stream_continues
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_child_death_surfaces_process_exited_and_stops_cleanly __________
+tests/test_harness_codex_connector.py:598: in test_child_death_surfaces_process_exited_and_stops_cleanly
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_early_thread_started_notification_is_buffered_and_replayed ________
+tests/test_harness_codex_connector.py:636: in test_early_thread_started_notification_is_buffered_and_replayed
+    session = conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_empty_method_notification_does_not_wedge_the_reader_thread ________
+tests/test_harness_codex_connector.py:659: in test_empty_method_notification_does_not_wedge_the_reader_thread
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_array_params_notification_does_not_wedge_the_reader_thread ________
+tests/test_harness_codex_connector.py:681: in test_array_params_notification_does_not_wedge_the_reader_thread
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____ test_end_mid_turn_delivers_trailing_events_instead_of_stranding_them _____
+tests/test_harness_codex_connector.py:718: in test_end_mid_turn_delivers_trailing_events_instead_of_stranding_them
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_events_called_twice_after_close_returns_both_times ____________
+tests/test_harness_codex_connector.py:743: in test_events_called_twice_after_close_returns_both_times
+    connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___ test_events_called_twice_after_unexpected_child_exit_returns_both_times ____
+tests/test_harness_codex_connector.py:766: in test_events_called_twice_after_unexpected_child_exit_returns_both_times
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_missing_binary_raises_config_error_not_raw_oserror ____________
+tests/test_harness_codex_connector.py:795: in test_missing_binary_raises_config_error_not_raw_oserror
+    conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+________ test_failed_handshake_does_not_permanently_wedge_the_connector ________
+tests/test_harness_codex_connector.py:834: in test_failed_handshake_does_not_permanently_wedge_the_connector
+    conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+tests/test_harness_codex_connector.py:814: in capture_owned_process
+    process = original_spawn(*args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_________________ test_stdin_write_lock_acquisition_is_bounded _________________
+tests/test_harness_codex_connector.py:857: in test_stdin_write_lock_acquisition_is_bounded
+    connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_two_concurrent_events_consumers_split_the_stream_instead_of_each_getting_the_full_stream _
+tests/test_harness_codex_connector.py:1027: in test_two_concurrent_events_consumers_split_the_stream_instead_of_each_getting_the_full_stream
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________________ test_failed_start_leaves_events_terminable __________________
+tests/test_harness_codex_connector.py:1110: in test_failed_start_leaves_events_terminable
+    conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_events_stays_live_after_a_failed_start_is_followed_by_a_successful_retry _
+tests/test_harness_codex_connector.py:1186: in test_events_stays_live_after_a_failed_start_is_followed_by_a_successful_retry
+    conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")  # spawn #1: hangs, times out, sets _closed_event
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____ test_two_concurrent_events_consumers_are_both_signalled_on_child_death ____
+tests/test_harness_codex_connector.py:1227: in test_two_concurrent_events_consumers_are_both_signalled_on_child_death
+    session = connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____________ test_rejected_initialize_surfaces_as_oktonexuserror ______________
+tests/test_harness_codex_connector.py:1289: in test_rejected_initialize_surfaces_as_oktonexuserror
+    conn.start(owning_agent_id="[REDACTED_FIXTURE_KEY]gent")
+src/okto_nexus/adapters/outbound/harness/codex.py:632: in start
+    self._spawn_and_initialize()
+src/okto_nexus/adapters/outbound/harness/codex.py:900: in _spawn_and_initialize
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/codex.py:273: in start
+    self._proc = spawn_owned_process(
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________ test_start_probes_readiness_and_answers_startup_noise _____________
+tests/test_harness_pi_connector.py:383: in test_start_probes_readiness_and_answers_startup_noise
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________________ test_second_start_on_same_connector_raises __________________
+tests/test_harness_pi_connector.py:407: in test_second_start_on_same_connector_raises
+    connector.start(owning_agent_id="[REDACTED_FIXTURE_KEY]")
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________________ test_send_turn_produces_ordered_events ____________________
+tests/test_harness_pi_connector.py:417: in test_send_turn_produces_ordered_events
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________________ test_send_turn_requires_non_empty_text ____________________
+tests/test_harness_pi_connector.py:449: in test_send_turn_requires_non_empty_text
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_prompt_rejected_by_pi_surfaces_error_event_without_raising ________
+tests/test_harness_pi_connector.py:456: in test_prompt_rejected_by_pi_surfaces_error_event_without_raising
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_steer_is_queued_immediately_and_delivered_at_turn_boundary ________
+tests/test_harness_pi_connector.py:471: in test_steer_is_queued_immediately_and_delivered_at_turn_boundary
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________________ test_steer_requires_non_empty_text ______________________
+tests/test_harness_pi_connector.py:502: in test_steer_requires_non_empty_text
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_interrupt_blocks_further_sends_until_agent_settled ____________
+tests/test_harness_pi_connector.py:529: in test_interrupt_blocks_further_sends_until_agent_settled
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_interrupt_gate_holds_during_real_race_window _______________
+tests/test_harness_pi_connector.py:557: in test_interrupt_gate_holds_during_real_race_window
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_________ test_second_interrupt_while_awaiting_settle_raises_conflict __________
+tests/test_harness_pi_connector.py:612: in test_second_interrupt_while_awaiting_settle_raises_conflict
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_end_terminates_process_and_ends_event_stream _______________
+tests/test_harness_pi_connector.py:647: in test_end_terminates_process_and_ends_event_stream
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_________________ test_events_generator_terminates_after_close _________________
+tests/test_harness_pi_connector.py:667: in test_events_generator_terminates_after_close
+    connector.start(owning_agent_id="nxs_test_agent")
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_________ test_events_fan_out_to_two_independent_concurrent_consumers __________
+tests/test_harness_pi_connector.py:690: in test_events_fan_out_to_two_independent_concurrent_consumers
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________ test_res_a1_events_called_twice_sequentially_both_return ___________
+tests/test_harness_pi_connector.py:733: in test_res_a1_events_called_twice_sequentially_both_return
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_res_b2_reader_thread_exit_signals_shutdown_to_every_concurrent_consumer _
+tests/test_harness_pi_connector.py:772: in test_res_b2_reader_thread_exit_signals_shutdown_to_every_concurrent_consumer
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises _
+tests/test_harness_pi_connector.py:816: in test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_reader_recovers _
+tests/test_harness_pi_connector.py:868: in test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_reader_recovers
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_res_b1_generic_unexpected_exception_during_dispatch_is_surfaced_and_reader_recovers _
+tests/test_harness_pi_connector.py:915: in test_res_b1_generic_unexpected_exception_during_dispatch_is_surfaced_and_reader_recovers
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_res_a3_b3_wait_for_exit_bounded_never_blocks_forever_against_a_live_child _
+tests/test_harness_pi_connector.py:964: in test_res_a3_b3_wait_for_exit_bounded_never_blocks_forever_against_a_live_child
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_child_crash_surfaces_process_exited_and_stops_cleanly __________
+tests/test_harness_pi_connector.py:992: in test_child_crash_surfaces_process_exited_and_stops_cleanly
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_malformed_line_from_child_is_surfaced_and_stream_continues ________
+tests/test_harness_pi_connector.py:1003: in test_malformed_line_from_child_is_surfaced_and_stream_continues
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_unmatched_response_from_child_is_surfaced_not_dropped __________
+tests/test_harness_pi_connector.py:1018: in test_unmatched_response_from_child_is_surfaced_not_dropped
+    session = connector.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_send_against_unknown_session_raises_not_found ______________
+tests/test_harness_pi_connector.py:1033: in test_send_against_unknown_session_raises_not_found
+    connector.start(owning_agent_id="nxs_test_agent")
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________________ test_failed_start_still_terminates_events ___________________
+tests/test_harness_pi_connector.py:1067: in test_failed_start_still_terminates_events
+    conn.start(owning_agent_id="nxs_test_agent")
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_child_death_fails_pending_request_immediately ______________
+tests/test_harness_pi_connector.py:1103: in test_child_death_fails_pending_request_immediately
+    session = conn.start(owning_agent_id="nxs_test_agent")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/pi.py:695: in start
+    transport.start()
+src/okto_nexus/adapters/outbound/harness/pi.py:286: in start
+    self._proc = spawn_owned_process(self._argv, **popen_kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______________ test_start_returns_starting_session_with_minted_id ______________
+tests/test_harness_claude_code_connector.py:352: in test_start_returns_starting_session_with_minted_id
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______________________ test_start_twice_raises_conflict _______________________
+tests/test_harness_claude_code_connector.py:367: in test_start_twice_raises_conflict
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____________________ test_send_wrong_session_id_rejected ______________________
+tests/test_harness_claude_code_connector.py:394: in test_send_wrong_session_id_rejected
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___________________ test_send_turn_requires_content_payload ____________________
+tests/test_harness_claude_code_connector.py:414: in test_send_turn_requires_content_payload
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________ test_single_turn_maps_turn_started_then_turn_completed ____________
+tests/test_harness_claude_code_connector.py:429: in test_single_turn_maps_turn_started_then_turn_completed
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+________________ test_second_turn_reuses_same_nexus_session_id _________________
+tests/test_harness_claude_code_connector.py:460: in test_second_turn_reuses_same_nexus_session_id
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____ test_unparseable_stdout_line_surfaced_not_dropped_and_does_not_hang ______
+tests/test_harness_claude_code_connector.py:477: in test_unparseable_stdout_line_surfaced_not_dropped_and_does_not_hang
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+______ test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader ______
+tests/test_harness_claude_code_connector.py:508: in test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_______ test_child_death_without_result_surfaces_error_then_ends_cleanly _______
+tests/test_harness_claude_code_connector.py:531: in test_child_death_without_result_surfaces_error_then_ends_cleanly
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___ test_unknown_verb_backstop_at_connector_layer_if_domain_gate_is_bypassed ___
+tests/test_harness_claude_code_connector.py:568: in test_unknown_verb_backstop_at_connector_layer_if_domain_gate_is_bypassed
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+________ test_events_called_twice_both_return_after_close_not_just_one _________
+tests/test_harness_claude_code_connector.py:599: in test_events_called_twice_both_return_after_close_not_just_one
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+___ test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream ___
+tests/test_harness_claude_code_connector.py:644: in test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_res_a4_failed_start_leaves_events_terminable_not_hung __________
+tests/test_harness_claude_code_connector.py:709: in test_res_a4_failed_start_leaves_events_terminable_not_hung
+    connector.start(owning_agent_id="agent_test")
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_____ test_finish_never_fabricates_process_exit_when_child_is_still_alive ______
+tests/test_harness_claude_code_connector.py:754: in test_finish_never_fabricates_process_exit_when_child_is_still_alive
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_end_closes_stdin_and_events_iterator_exhausts_cleanly __________
+tests/test_harness_claude_code_connector.py:782: in test_end_closes_stdin_and_events_iterator_exhausts_cleanly
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__________ test_interrupt_in_unsafe_window_is_deferred_not_forwarded ___________
+tests/test_harness_claude_code_connector.py:804: in test_interrupt_in_unsafe_window_is_deferred_not_forwarded
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+__ test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted __
+tests/test_harness_claude_code_connector.py:822: in test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____________ test_interrupt_with_no_turn_in_flight_is_a_safe_no_op _____________
+tests/test_harness_claude_code_connector.py:965: in test_interrupt_with_no_turn_in_flight_is_a_safe_no_op
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one _
+tests/test_harness_claude_code_connector.py:988: in test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+____ test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn _____
+tests/test_harness_claude_code_connector.py:1018: in test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag _
+tests/test_harness_claude_code_connector.py:1081: in test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+_ test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly _
+tests/test_harness_claude_code_connector.py:1129: in test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly
+    session = connector.start(owning_agent_id="agent_test")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+________ test_events_iterator_delivers_promptly_not_on_a_poll_interval _________
+tests/test_harness_claude_code_connector.py:1276: in test_events_iterator_delivers_promptly_not_on_a_poll_interval
+    poll_session = poll_connector.start(owning_agent_id="agent_test")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/claude_code_stream.py:371: in start
+    proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
+src/okto_nexus/adapters/outbound/harness/owned_process.py:25: in spawn_owned_process
+    process = OwnedLinuxPopen(argv, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src/okto_nexus/adapters/outbound/harness/linux_process.py:19: in __init__
+    raise RuntimeError("Linux process ownership requires pidfd support")
+E   RuntimeError: Linux process ownership requires pidfd support
+=========================== short test summary info ============================
+FAILED tests/test_runtime_restart.py::test_restart_recovers_captured_old_attempt_without_reexecuting[False-started]
+FAILED tests/test_runtime_restart.py::test_restart_recovers_captured_old_attempt_without_reexecuting[False-terminal]
+FAILED tests/test_runtime_restart.py::test_restart_recovers_captured_old_attempt_without_reexecuting[True-started]
+FAILED tests/test_runtime_restart.py::test_restart_recovers_captured_old_attempt_without_reexecuting[True-terminal]
+FAILED tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime
+FAILED tests/test_runtime_outbox.py::test_p05_open_reply_persistence_failure_does_not_repeat_start
+FAILED tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner
+FAILED tests/test_runtime_result_correlation.py::test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-False]
+FAILED tests/test_runtime_result_correlation.py::test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-True]
+FAILED tests/test_runtime_result_correlation.py::test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-False]
+FAILED tests/test_runtime_result_correlation.py::test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-True]
+FAILED tests/test_runtime_result_correlation.py::test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next
+FAILED tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True]
+FAILED tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False]
+FAILED tests/test_runtime_shared_connection.py::test_closing_one_codex_session_preserves_other_thread_and_process
+FAILED tests/test_runtime_shared_connection.py::test_shared_connection_cannot_cross_approved_profile_context
+FAILED tests/test_runtime_process_ownership.py::test_cancel_registered_child_and_reject_late_registration
+FAILED tests/test_runtime_process_ownership.py::test_real_codex_transport_handshake_timeout_kills_owned_fixture
+FAILED tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex]
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi]
+FAILED tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude]
+FAILED tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion
+FAILED tests/test_harness_codex_connector.py::test_start_mints_session_and_spawns_process_once
+FAILED tests/test_harness_codex_connector.py::test_send_turn_produces_ordered_events_for_the_right_session
+FAILED tests/test_harness_codex_connector.py::test_two_concurrent_sessions_demux_independently
+FAILED tests/test_harness_codex_connector.py::test_turn_start_error_response_becomes_error_event
+FAILED tests/test_harness_codex_connector.py::test_fast_native_error_before_write_returns_keeps_request_attribution
+FAILED tests/test_harness_codex_connector.py::test_close_pending_start_waits_for_native_identity_then_interrupts
+FAILED tests/test_harness_codex_connector.py::test_steer_without_active_turn_raises_validation_error
+FAILED tests/test_harness_codex_connector.py::test_interrupt_without_active_turn_raises_validation_error
+FAILED tests/test_harness_codex_connector.py::test_steer_and_interrupt_use_the_tracked_turn_id
+FAILED tests/test_harness_codex_connector.py::test_interrupt_clears_active_turn_id_so_a_second_interrupt_is_rejected
+FAILED tests/test_harness_codex_connector.py::test_end_unsubscribes_without_killing_the_shared_process
+FAILED tests/test_harness_codex_connector.py::test_unknown_server_request_gets_method_not_found_reply
+FAILED tests/test_harness_codex_connector.py::test_malformed_line_is_surfaced_and_stream_continues
+FAILED tests/test_harness_codex_connector.py::test_child_death_surfaces_process_exited_and_stops_cleanly
+FAILED tests/test_harness_codex_connector.py::test_early_thread_started_notification_is_buffered_and_replayed
+FAILED tests/test_harness_codex_connector.py::test_empty_method_notification_does_not_wedge_the_reader_thread
+FAILED tests/test_harness_codex_connector.py::test_array_params_notification_does_not_wedge_the_reader_thread
+FAILED tests/test_harness_codex_connector.py::test_end_mid_turn_delivers_trailing_events_instead_of_stranding_them
+FAILED tests/test_harness_codex_connector.py::test_events_called_twice_after_close_returns_both_times
+FAILED tests/test_harness_codex_connector.py::test_events_called_twice_after_unexpected_child_exit_returns_both_times
+FAILED tests/test_harness_codex_connector.py::test_missing_binary_raises_config_error_not_raw_oserror
+FAILED tests/test_harness_codex_connector.py::test_failed_handshake_does_not_permanently_wedge_the_connector
+FAILED tests/test_harness_codex_connector.py::test_stdin_write_lock_acquisition_is_bounded
+FAILED tests/test_harness_codex_connector.py::test_two_concurrent_events_consumers_split_the_stream_instead_of_each_getting_the_full_stream
+FAILED tests/test_harness_codex_connector.py::test_failed_start_leaves_events_terminable
+FAILED tests/test_harness_codex_connector.py::test_events_stays_live_after_a_failed_start_is_followed_by_a_successful_retry
+FAILED tests/test_harness_codex_connector.py::test_two_concurrent_events_consumers_are_both_signalled_on_child_death
+FAILED tests/test_harness_codex_connector.py::test_rejected_initialize_surfaces_as_oktonexuserror
+FAILED tests/test_harness_pi_connector.py::test_start_probes_readiness_and_answers_startup_noise
+FAILED tests/test_harness_pi_connector.py::test_second_start_on_same_connector_raises
+FAILED tests/test_harness_pi_connector.py::test_send_turn_produces_ordered_events
+FAILED tests/test_harness_pi_connector.py::test_send_turn_requires_non_empty_text
+FAILED tests/test_harness_pi_connector.py::test_prompt_rejected_by_pi_surfaces_error_event_without_raising
+FAILED tests/test_harness_pi_connector.py::test_steer_is_queued_immediately_and_delivered_at_turn_boundary
+FAILED tests/test_harness_pi_connector.py::test_steer_requires_non_empty_text
+FAILED tests/test_harness_pi_connector.py::test_interrupt_blocks_further_sends_until_agent_settled
+FAILED tests/test_harness_pi_connector.py::test_interrupt_gate_holds_during_real_race_window
+FAILED tests/test_harness_pi_connector.py::test_second_interrupt_while_awaiting_settle_raises_conflict
+FAILED tests/test_harness_pi_connector.py::test_end_terminates_process_and_ends_event_stream
+FAILED tests/test_harness_pi_connector.py::test_events_generator_terminates_after_close
+FAILED tests/test_harness_pi_connector.py::test_events_fan_out_to_two_independent_concurrent_consumers
+FAILED tests/test_harness_pi_connector.py::test_res_a1_events_called_twice_sequentially_both_return
+FAILED tests/test_harness_pi_connector.py::test_res_b2_reader_thread_exit_signals_shutdown_to_every_concurrent_consumer
+FAILED tests/test_harness_pi_connector.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+FAILED tests/test_harness_pi_connector.py::test_res_b1_deeply_nested_json_line_is_not_a_jsondecodeerror_and_reader_recovers
+FAILED tests/test_harness_pi_connector.py::test_res_b1_generic_unexpected_exception_during_dispatch_is_surfaced_and_reader_recovers
+FAILED tests/test_harness_pi_connector.py::test_res_a3_b3_wait_for_exit_bounded_never_blocks_forever_against_a_live_child
+FAILED tests/test_harness_pi_connector.py::test_child_crash_surfaces_process_exited_and_stops_cleanly
+FAILED tests/test_harness_pi_connector.py::test_malformed_line_from_child_is_surfaced_and_stream_continues
+FAILED tests/test_harness_pi_connector.py::test_unmatched_response_from_child_is_surfaced_not_dropped
+FAILED tests/test_harness_pi_connector.py::test_send_against_unknown_session_raises_not_found
+FAILED tests/test_harness_pi_connector.py::test_failed_start_still_terminates_events
+FAILED tests/test_harness_pi_connector.py::test_child_death_fails_pending_request_immediately
+FAILED tests/test_harness_claude_code_connector.py::test_start_returns_starting_session_with_minted_id
+FAILED tests/test_harness_claude_code_connector.py::test_start_twice_raises_conflict
+FAILED tests/test_harness_claude_code_connector.py::test_send_wrong_session_id_rejected
+FAILED tests/test_harness_claude_code_connector.py::test_send_turn_requires_content_payload
+FAILED tests/test_harness_claude_code_connector.py::test_single_turn_maps_turn_started_then_turn_completed
+FAILED tests/test_harness_claude_code_connector.py::test_second_turn_reuses_same_nexus_session_id
+FAILED tests/test_harness_claude_code_connector.py::test_unparseable_stdout_line_surfaced_not_dropped_and_does_not_hang
+FAILED tests/test_harness_claude_code_connector.py::test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader
+FAILED tests/test_harness_claude_code_connector.py::test_child_death_without_result_surfaces_error_then_ends_cleanly
+FAILED tests/test_harness_claude_code_connector.py::test_unknown_verb_backstop_at_connector_layer_if_domain_gate_is_bypassed
+FAILED tests/test_harness_claude_code_connector.py::test_events_called_twice_both_return_after_close_not_just_one
+FAILED tests/test_harness_claude_code_connector.py::test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream
+FAILED tests/test_harness_claude_code_connector.py::test_res_a4_failed_start_leaves_events_terminable_not_hung
+FAILED tests/test_harness_claude_code_connector.py::test_finish_never_fabricates_process_exit_when_child_is_still_alive
+FAILED tests/test_harness_claude_code_connector.py::test_end_closes_stdin_and_events_iterator_exhausts_cleanly
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_in_unsafe_window_is_deferred_not_forwarded
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_with_no_turn_in_flight_is_a_safe_no_op
+FAILED tests/test_harness_claude_code_connector.py::test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one
+FAILED tests/test_harness_claude_code_connector.py::test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn
+FAILED tests/test_harness_claude_code_connector.py::test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag
+FAILED tests/test_harness_claude_code_connector.py::test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly
+FAILED tests/test_harness_claude_code_connector.py::test_events_iterator_delivers_promptly_not_on_a_poll_interval
+99 failed, 51 passed, 18 skipped in 119.04s (0:01:59)

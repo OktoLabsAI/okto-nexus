@@ -236,6 +236,8 @@ def test_p05_open_reply_persistence_failure_does_not_repeat_start(runtime, monke
     arguments = {"agent_id": "worker", "kind": "pi", "project_root": root, "idempotency_key": "lost-reply"}
     first = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json=arguments)
     assert first.status_code == 500
+    assert "application/json" in first.headers.get("content-type", ""), "open failure lost the canonical error envelope"
+    assert first.json()["error"]["code"] == "INTERNAL_ERROR"
     monkeypatch.setattr(SqliteRuntimeRequestRepo, "finish", original)
     second = tool(client, operator, "harness_open", arguments)
     assert second["ok"] and second["data"]["reused"], second

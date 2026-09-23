@@ -4,12 +4,41 @@ Only direct, unreaped children are signalled. A guardian externally SIGKILLed
 cannot attest cleanup: the parent requires the final proof byte for observed stop.
 """
 import ctypes
+import errno
 import os
 from pathlib import Path
 import selectors
 import signal
 import subprocess
 import sys
+
+
+def _pidfd_syscall(number, *args):
+    # CPython builds targeting old glibc may omit the Python wrappers even on
+    # a kernel supporting pidfds. These numbers are verified for Linux x86-64
+    # (arch/x86/entry/syscalls/syscall_64.tbl); never guess another ABI's table.
+    if sys.platform != "linux" or os.uname().machine != "x86_64" or ctypes.sizeof(ctypes.c_void_p) != 8:
+        raise OSError(errno.ENOSYS, "This ABI requires Python's native pidfd wrappers")
+    libc = ctypes.CDLL(None, use_errno=True)
+    syscall = libc.syscall
+    syscall.restype = ctypes.c_long
+    result = syscall(ctypes.c_long(number), *(ctypes.c_long(arg) for arg in args))
+    if result < 0:
+        code = ctypes.get_errno()
+        raise OSError(code, os.strerror(code))
+    return result
+
+
+def pidfd_open(pid):
+    native = getattr(os, "pidfd_open", None)
+    return native(pid) if native else _pidfd_syscall(434, pid, 0)
+
+
+def pidfd_send_signal(descriptor, sig):
+    native = getattr(signal, "pidfd_send_signal", None)
+    if native:
+        return native(descriptor, sig)
+    return _pidfd_syscall(424, descriptor, sig, 0, 0)
 
 
 def _children():
@@ -55,7 +84,17 @@ def run(owner_fd, cancel_fd, proof_fd, argv):
         os.write(proof_fd, b"D")
         raise
     try:
-        leader_fd = os.pidfd_open(native.pid)
+        # Only the native tree owns its protocol pipes after spawn. Keeping a
+        # guardian copy would mask native EOF/EPIPE until the process exits,
+        # although stream closure and process death are independent facts.
+        null_fd = os.open(os.devnull, os.O_RDWR)
+        try:
+            for descriptor in (0, 1, 2):
+                os.dup2(null_fd, descriptor, inheritable=False)
+        finally:
+            if null_fd > 2:
+                os.close(null_fd)
+        leader_fd = pidfd_open(native.pid)
         monitor.register(leader_fd, selectors.EVENT_READ, "leader")
         done = False
         while not done:

@@ -1,0 +1,39 @@
+SHA: 3c0eb84 + Linux portability worktree
+COMMAND: wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus -- /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q tests/test_linux_process_ownership.py tests/test_runtime_restart.py tests/test_runtime_shutdown.py tests/test_runtime_outbox.py tests/test_runtime_result_correlation.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py tests/test_runtime_event_journal.py tests/test_runtime_protocol_limits.py tests/test_harness_codex_connector.py tests/test_harness_pi_connector.py tests/test_harness_claude_code_connector.py tests/test_runtime_attach_platform.py tests/test_import_boundary.py --tb=short
+................................................sss................... [ 41%]
+.............................s...........................s.............. [ 84%]
+..F..........s.ssssss......                                              [100%]
+=================================== FAILURES ===================================
+_____ test_finish_never_fabricates_process_exit_when_child_is_still_alive ______
+tests/test_harness_claude_code_connector.py:765: in test_finish_never_fabricates_process_exit_when_child_is_still_alive
+    assert not t.is_alive(), "events() did not terminate - _finish's internal backstop appears to have regressed"
+E   AssertionError: events() did not terminate - _finish's internal backstop appears to have regressed
+E   assert not True
+E    +  where True = is_alive()
+E    +    where is_alive = <Thread(Thread-86 (_drain), started daemon 140710913209920)>.is_alive
+=============================== warnings summary ===============================
+tests/test_harness_pi_connector.py::test_res_b2_reader_exit_signals_shutdown_even_if_on_child_exit_itself_raises
+  /var/tmp/okto-pr34-native-python-q84f5fav/venv/lib/python3.13/site-packages/_pytest/threadexception.py:58: PytestUnhandledThreadExceptionWarning: Exception in thread pi-stdout
+  
+  Traceback (most recent call last):
+    File "/var/tmp/okto-pr34-native-python-q84f5fav/python/lib/python3.13/threading.py", line 1044, in _bootstrap_inner
+      self.run()
+      ~~~~~~~~^^
+    File "/var/tmp/okto-pr34-native-python-q84f5fav/python/lib/python3.13/threading.py", line 995, in run
+      self._target(*self._args, **self._kwargs)
+      ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/src/okto_nexus/adapters/outbound/harness/pi.py", line 422, in _read_stdout
+      self._on_child_exit(returncode, self.stderr_tail())
+      ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_harness_pi_connector.py", line 812, in exploding_on_child_exit
+      raise RuntimeError("boom - injected failure in the death-report path itself")
+  RuntimeError: boom - injected failure in the death-report path itself
+  
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+    warnings.warn(pytest.PytestUnhandledThreadExceptionWarning(msg))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_harness_claude_code_connector.py::test_finish_never_fabricates_process_exit_when_child_is_still_alive
+1 failed, 156 passed, 12 skipped, 1 warning, 2 subtests passed in 228.72s (0:03:48)
