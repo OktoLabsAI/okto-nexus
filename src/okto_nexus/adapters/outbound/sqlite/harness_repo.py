@@ -172,7 +172,7 @@ class SqliteHarnessEventRepo:
 
     _COLUMNS = (
         "session_id, harness_kind, kind, native_event, payload, thread_id, "
-        "turn_id, occurred_at, event_id, sequence, origin, operation_id, attempt_id, owner_epoch, delivery_phase"
+        "turn_id, occurred_at, event_id, sequence, origin, operation_id, attempt_id, owner_epoch, delivery_phase, output_text, output_snapshot"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -216,8 +216,8 @@ class SqliteHarnessEventRepo:
                 INSERT INTO harness_events
                     (event_id, session_id, harness_kind, kind, native_event,
                      payload, thread_id, turn_id, occurred_at, sequence, created_at, origin,
-                     operation_id, attempt_id, owner_epoch, delivery_phase)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     operation_id, attempt_id, owner_epoch, delivery_phase, output_text, output_snapshot)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     event_id,
@@ -233,6 +233,7 @@ class SqliteHarnessEventRepo:
                     created_at,
                     event.origin,
                     event.operation_id, event.attempt_id, event.owner_epoch, event.delivery_phase,
+                    event.output_text, int(event.output_snapshot),
                 ),
             )
         except sqlite3.Error as exc:
@@ -274,4 +275,5 @@ class SqliteHarnessEventRepo:
             origin=row["origin"],
             operation_id=row["operation_id"], attempt_id=row["attempt_id"],
             owner_epoch=row["owner_epoch"], delivery_phase=row["delivery_phase"],
+            output_text=row["output_text"], output_snapshot=bool(row["output_snapshot"]),
         )

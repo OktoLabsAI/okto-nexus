@@ -124,3 +124,10 @@ two-turn path only; native pressure/steering/approval campaign still NOT_RUN.
 Two-turn tests now require matching durable operation/attempt/terminal linkage.
 See P08_RESULT_CORRELATION.md and evidence/p08-result-correlation-{codex,claude}.log.
 No Pi/attach native execution; no native approval/load campaign claim.
+
+2026-09-23, 924c3ef plus consumption/materialization worktree: Codex 2 PASS,
+1 deselected, 20.71s; Claude stream 1 PASS, 2 deselected, 12.92s. Same explicit
+isolated configuration and commands. Two-turn cases additionally assert nonempty
+untruncated derived text and canonical consumption of the two push deliveries.
+See P08_CONSUMPTION_MATERIALIZATION.md and its exact evidence logs. No Pi/attach
+native execution and no change to broader native NOT_RUN declarations.

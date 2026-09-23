@@ -191,6 +191,29 @@ class InboxService:
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 
+    def consume_runtime_terminal(self, uow, event):
+        """Internal journal projector path; payload identity is never authority.
+
+        Repository CAS requires a durable, correlated terminal and matching push
+        reservation. Receipt and consumption share the caller's transaction.
+        This confirms runtime processing, not human reading or handoff completion.
+        """
+        if event.delivery_phase != "terminal" or not event.operation_id:
+            return
+        now = self._clock.now_iso()
+        changed = self._deliveries.mark_runtime_processed(uow,
+            operation_id=event.operation_id, terminal_event_id=event.event_id, at=now)
+        acknowledgement = {"ack_source": "native_terminal", "ack_level": "HARNESS_ACCEPTED",
+            "human_read": False, "operation_id": event.operation_id, "terminal_event_id": event.event_id}
+        for row in changed:
+            messages = self._messages.list_by_ids(uow, message_ids=[row["message_id"]])
+            items = [{"message_id": m.message_id, "workspace_id": m.workspace_id,
+                      "from_agent_id": m.from_agent_id} for m in messages]
+            self._emit_receipts(uow, items, type_=MESSAGE_READ_TYPE,
+                recipient=row["recipient_agent_id"], at=now, acknowledgement=acknowledgement)
+            self._deliver_read_receipts(uow, messages, reader=row["recipient_agent_id"],
+                                       at=now, acknowledgement=acknowledgement)
+
     # ------------------------------------------------------------------ #
     # inbox_extend
     # ------------------------------------------------------------------ #
@@ -388,7 +411,7 @@ class InboxService:
     # Internal helpers
     # ------------------------------------------------------------------ #
     def _deliver_read_receipts(
-        self, uow: Any, acked_messages: Any, *, reader: str, at: str
+        self, uow: Any, acked_messages: Any, *, reader: str, at: str, acknowledgement=None
     ) -> None:
         """Land ONE read-receipt notification per original sender (opt-out).
 
@@ -430,6 +453,9 @@ class InboxService:
                 "message_ids": [m.message_id for m in batch],
                 "subjects": [m.subject for m in batch],
             }
+            if acknowledgement:
+                body.update(acknowledgement)
+                subject = f"runtime processing receipt: {count} message(s) processed by {reader}"
             message = self._messages.create(
                 uow,
                 message_id=new_id("msg"),
@@ -469,6 +495,7 @@ class InboxService:
         type_: str,
         recipient: str,
         at: str,
+        acknowledgement=None,
     ) -> None:
         """Emit one sender-visible receipt event per item (same transaction).
 
@@ -495,6 +522,7 @@ class InboxService:
                     "recipient_agent_id": recipient,
                     "from_agent_id": sender,
                     "at": at,
+                    **(acknowledgement or {}),
                 },
                 actor_agent_id=recipient,
                 visibility="eligible",

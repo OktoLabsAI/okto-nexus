@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "30f340c",
+  "execution_head": "924c3ef",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1292,7 +1292,9 @@
             "src/okto_nexus/application/harness_supervisor.py",
             "src/okto_nexus/migrations/034_runtime_event_origin.sql",
             "src/okto_nexus/migrations/035_runtime_attempt_correlation.sql",
-            "tests/test_runtime_result_correlation.py"
+            "tests/test_runtime_result_correlation.py",
+            "src/okto_nexus/migrations/036_runtime_result_output.sql",
+            "src/okto_nexus/application/inbox.py"
           ],
           "test_results": [
             {
@@ -1317,9 +1319,10 @@
             "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
             "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
-            "plans/pr34-remediation/P08_RESULT_CORRELATION.md"
+            "plans/pr34-remediation/P08_RESULT_CORRELATION.md",
+            "plans/pr34-remediation/P08_CONSUMPTION_MATERIALIZATION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending."
         },
         {
           "task_id": "P08-T04",

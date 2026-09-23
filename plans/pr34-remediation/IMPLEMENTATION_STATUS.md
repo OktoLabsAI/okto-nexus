@@ -129,3 +129,11 @@ Codex 2 PASS and Claude stream 1 PASS. Logical consumption, materialized output,
 publication and durable controls remain pending; no final-gate promotion. WSL
 Ubuntu was inspected read-only: Python 3.10.12 with pidfd_open; no POSIX ownership
 implementation/test or native provider use occurred in WSL.
+
+Attempt correlation checkpoint pushed: 924c3ef. Migration 036 adds normalized,
+redacted text fragments and bounded result materialization. Canonical InboxService
+consumes only a correlated terminal's push reservation and emits explicitly labeled
+runtime-processing receipts, atomically with result/checkpoint. See
+P08_CONSUMPTION_MATERIALIZATION.md: behavioral RED; 75 integrated PASS; REAL isolated
+Codex 2 PASS and Claude 1 PASS. Publication, artifacts, durable controls and all
+later gates remain pending; next lifecycle work is POSIX birth ownership.

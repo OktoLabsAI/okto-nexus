@@ -923,6 +923,12 @@ class CodexAppServerConnector:
     # Inbound translation (native codex event -> domain HarnessEvent)
     # ------------------------------------------------------------------ #
     @staticmethod
+    def delivery_output(event):
+        if event.native_event == "item/agentMessage/delta" and isinstance(event.payload.get("delta"), str):
+            return event.payload["delta"], False
+        return None
+
+    @staticmethod
     def delivery_event_phase(event):
         if event.native_event == _METHOD_TURN_STARTED:
             return "started"

@@ -2001,6 +2001,15 @@ class MessageDeliveryRepo(Protocol):
         backs the ``message.read`` receipt events."""
         ...
 
+    def mark_runtime_processed(self, uow: UnitOfWork, *, operation_id: str,
+                               terminal_event_id: str, at: str) -> list[dict]:
+        """Consume matching push reservation only with correlated durable proof.
+
+        Returns recipient/message identities actually transitioned; caller emits
+        canonical receipts in the same transaction. No client-facing bypass.
+        """
+        ...
+
     def extend_leases(
         self,
         uow: UnitOfWork,

@@ -934,6 +934,13 @@ class PiRpcConnector:
     # Inbound translation (native pi line -> domain HarnessEvent)
     # ------------------------------------------------------------------ #
     @staticmethod
+    def delivery_output(event):
+        delta = event.payload.get("assistantMessageEvent")
+        if isinstance(delta, dict) and delta.get("type") == "text_delta" and isinstance(delta.get("delta"), str):
+            return delta["delta"], False
+        return None
+
+    @staticmethod
     def delivery_event_phase(event):
         if event.native_event == "agent_start":
             return "started"

@@ -48,6 +48,19 @@ def test_exclusive_owner_lock(tmp_path):
     two.close()
 
 
+def test_normalized_output_is_redacted_before_durable_capture(tmp_path):
+    from dataclasses import replace
+    journal = FileRuntimeEventJournal(tmp_path)
+    journal.start()
+    secret = "nxs_" + "f" * 32
+    try:
+        record = journal.append(replace(event(), output_text="fixture " + secret))
+        assert record["event"]["output_text"] == "fixture [REDACTED]"
+        assert secret.encode() not in b"".join(path.read_bytes() for path in journal.root.glob("segment-*.bin"))
+    finally:
+        journal.close()
+
+
 def test_incomplete_tail_recovers_but_complete_corruption_fails_closed(tmp_path):
     journal = FileRuntimeEventJournal(tmp_path)
     journal.start()

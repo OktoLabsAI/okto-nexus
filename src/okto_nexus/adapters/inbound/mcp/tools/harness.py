@@ -666,6 +666,8 @@ def build_service(deps: Any) -> HarnessSupervisor:
         repo=SqliteRuntimeJournalRepo(presence=deps.repos.sessions, sessions=repos.harness_sessions),
         events=repos.harness_events, clock=deps.clock,
         publish=supervisor.publish_projected_event)
+    from .inbox import build_service as build_inbox_service
+    supervisor.event_ingress.consume_terminal = build_inbox_service(deps).consume_runtime_terminal
     deps.harness_supervisor = supervisor
     return supervisor
 

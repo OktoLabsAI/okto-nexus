@@ -59,7 +59,11 @@ class EnvelopeConnector:
             # Native payloads cannot select operation authority. Only locally
             # registered write context can populate these event contract v2 fields.
             event = replace(event, operation_id=None, attempt_id=None,
-                            owner_epoch=None, delivery_phase=None)
+                            owner_epoch=None, delivery_phase=None, output_text=None, output_snapshot=False)
+            output_of = getattr(self.native, "delivery_output", None)
+            output = output_of(event) if callable(output_of) else None
+            if output is not None:
+                event = replace(event, output_text=output[0], output_snapshot=output[1])
             phase_of = getattr(self.native, "delivery_event_phase", None)
             phase = phase_of(event) if callable(phase_of) else None
             with self._attempt_lock:

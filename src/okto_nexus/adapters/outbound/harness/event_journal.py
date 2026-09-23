@@ -181,7 +181,8 @@ class FileRuntimeEventJournal:
         with self._lock:
             self.check_admission()
             captured = replace(event, event_id="hevt_" + uuid.uuid4().hex,
-                sequence=self._sequences.get(event.session_id, 0) + 1, payload=redact(event.payload))
+                sequence=self._sequences.get(event.session_id, 0) + 1, payload=redact(event.payload),
+                output_text=redact(event.output_text))
             record = {"version": 1, "redaction_version": 1, "store_id": self.store_id,
                       "ordinal": len(self._index) + 1, "connection_id": connection_id,
                       "event": asdict(captured)}

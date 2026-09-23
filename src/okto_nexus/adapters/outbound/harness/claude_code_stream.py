@@ -923,6 +923,14 @@ class ClaudeCodeStreamConnector:
         self._emit("output_delta", "assistant", {"final": True, "text": text, "raw": obj})
 
     @staticmethod
+    def delivery_output(event):
+        if event.native_event.startswith("result:") and isinstance(event.payload.get("result"), str):
+            return event.payload["result"], True
+        if event.native_event in {"assistant", "stream_event:content_block_delta"} and isinstance(event.payload.get("text"), str):
+            return event.payload["text"], event.native_event == "assistant"
+        return None
+
+    @staticmethod
     def delivery_event_phase(event):
         if event.native_event == "system:init":
             return "started"

@@ -173,6 +173,8 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 assert len(native_sessions) == 1
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute("SELECT count(*) FROM runtime_results").fetchone()[0] == 2
+                assert uow.connection.execute("SELECT count(*) FROM runtime_results WHERE output_text<>'' AND output_truncated=0").fetchone()[0] == 2
+                assert uow.connection.execute("SELECT count(*) FROM message_deliveries WHERE consumer_kind='push' AND status='read'").fetchone()[0] == 2
                 row = uow.connection.execute("SELECT role,metadata FROM agents WHERE agent_id='worker'").fetchone()
                 assert row["role"] == "reviewer" and json.loads(row["metadata"]) == {"fixture": True}
             response = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})

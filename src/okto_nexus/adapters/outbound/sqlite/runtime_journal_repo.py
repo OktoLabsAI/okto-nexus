@@ -60,10 +60,34 @@ class SqliteRuntimeJournalRepo:
             if correlated and event.delivery_phase == "terminal":
                 uow.connection.execute("UPDATE runtime_results SET operation_id=?,attempt_id=? WHERE event_id=?",
                     (event.operation_id, event.attempt_id, event.event_id))
+                self._materialize_output(uow, event)
         uow.connection.execute("""INSERT INTO runtime_journal_checkpoint(singleton,store_id,ordinal,updated_at)
             VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET ordinal=excluded.ordinal,updated_at=excluded.updated_at""",
             (record["store_id"], record["ordinal"], now))
         return True
+
+    @staticmethod
+    def _materialize_output(uow, event):
+        # Bounded derived text, with all redacted source fragments still durable.
+        # Iteration is bounded in memory; no filesystem/provider IO in this UoW.
+        limit, used, count, truncated = 1024 * 1024, 0, 0, False
+        chunks = []
+        rows = uow.connection.execute("SELECT output_text,output_snapshot FROM harness_events "
+            "WHERE operation_id=? AND attempt_id=? AND sequence<=? AND output_text IS NOT NULL ORDER BY sequence",
+            (event.operation_id, event.attempt_id, event.sequence))
+        for row in rows:
+            count += 1
+            if row["output_snapshot"]:
+                chunks, used, truncated = [], 0, False
+            raw = row["output_text"].encode("utf-8")
+            available = limit - used
+            if len(raw) > available:
+                truncated = True
+            piece = raw[:available].decode("utf-8", errors="ignore")
+            chunks.append(piece)
+            used += len(piece.encode("utf-8"))
+        uow.connection.execute("UPDATE runtime_results SET output_text=?,output_truncated=?,output_event_count=? WHERE event_id=?",
+            ("".join(chunks), int(truncated), count, event.event_id))
 
     def _project_attempt(self, uow, *, record, event, now):
         if event.origin != "native" or not event.operation_id or not event.attempt_id:

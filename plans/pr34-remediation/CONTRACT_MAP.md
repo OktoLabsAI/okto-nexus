@@ -68,3 +68,11 @@ Adapters implement delivery_event_phase; application code does not branch on
 protocol event names. Legacy events default to uncorrelated. Envelope/registry
 v1, native transient stream v2, and durable framed journal v1 are separate versions.
 See P08_RESULT_CORRELATION.md for compatibility, guards and unfinished gates.
+
+Migration 036 adds optional normalized output_text/output_snapshot to event data
+and bounded derived output text/truncation/count to runtime_results. The adapter
+delivery_output hook owns native vocabulary. InboxService's internal terminal
+consumption reuses logical inbox state/receipts with explicit native_terminal
+provenance; no public ack bypass or new work queue is introduced. See
+P08_CONSUMPTION_MATERIALIZATION.md. Existing inbox `read` vocabulary does not imply
+human reading or handoff completion for this path.

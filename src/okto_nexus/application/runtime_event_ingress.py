@@ -24,6 +24,7 @@ class RuntimeEventIngress:
         self._project_lock = threading.Lock()
         self.projection_pending = False
         self.wake_dispatch = None
+        self.consume_terminal = None
 
     def start(self):
         with self.cf.unit_of_work(write=False) as uow:
@@ -54,6 +55,8 @@ class RuntimeEventIngress:
                 with self.cf.unit_of_work() as uow:
                     inserted = self.repo.project(uow, record=record, event=event,
                                                 events=self.events, now=self.clock.now_iso())
+                    if inserted and self.consume_terminal:
+                        self.consume_terminal(uow, event)
                 if inserted:
                     if event.delivery_phase == "terminal" and self.wake_dispatch:
                         self.wake_dispatch()

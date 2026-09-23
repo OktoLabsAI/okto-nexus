@@ -1,6 +1,10 @@
 """Actual production inbox/dispatcher/native pipe/journal result correlation."""
 import sys
 import time
+import json
+import threading
+
+import pytest
 
 from test_pr34_remediation import runtime as runtime_fixture, send_message
 from test_runtime_outbox import operation
@@ -8,31 +12,65 @@ from test_runtime_outbox import operation
 runtime = runtime_fixture
 
 
-def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime):
+@pytest.mark.parametrize("rollback_receipt", [False, True])
+@pytest.mark.parametrize("large_output", [False, True])
+def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime, monkeypatch, rollback_receipt, large_output):
     from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, peers, operator_key, _ = runtime
+    source = _FAKE_SERVER_SOURCE
+    if large_output:
+        original = '    write_msg({"method": "item/agentMessage/delta", "params": {"threadId": thread_id, "turnId": turn_id, "itemId": item_id, "delta": text}})'
+        source = source.replace(original, '    for _ in range(12):\n' + original.replace('"delta": text', '"delta": "x" * 100000').replace('    write_msg', '        write_msg'))
+        assert source != _FAKE_SERVER_SOURCE
     deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
-        command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE],
+        command=[sys._base_executable, "-u", "-c", source],
         cwd=root, env=kwargs["backend"]["env"])
     opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator_key},
         json={"agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
     assert opened.status_code == 200, opened.text
+    failed, recovered = threading.Event(), False
+    ingress = deps.harness_supervisor.event_ingress
+    consume = ingress.consume_terminal
+
+    def consume_with_failure(uow, event):
+        consume(uow, event)
+        if event.delivery_phase == "terminal" and not failed.is_set():
+            failed.set()
+            raise OSError("fixture rollback after receipt creation")
+
+    if rollback_receipt:
+        monkeypatch.setattr(ingress, "consume_terminal", consume_with_failure)
     for _ in range(2):
         created = send_message(runtime, body="fixture result")
         operation_id = created["runtime_operations"][0]
         deadline = time.monotonic() + 5
         while time.monotonic() < deadline:
             row = operation(runtime, operation_id)
+            if failed.is_set() and not recovered:
+                assert row["terminal_event_id"] is None
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    assert uow.connection.execute("SELECT status FROM message_deliveries WHERE delivery_id=?",
+                        (row["delivery_id"],)).fetchone()[0] == "unread"
+                ingress.recover()
+                recovered = True
             if row["status"] == "ACCEPTED" and row.get("terminal_event_id"):
                 break
             time.sleep(.02)
         assert row["status"] == "ACCEPTED", "native completion left transport unconfirmed"
         assert row.get("terminal_event_id"), "terminal has no durable attempt correlation"
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            result = uow.connection.execute("SELECT operation_id,attempt_id FROM runtime_results WHERE event_id=?",
+            result = uow.connection.execute("SELECT * FROM runtime_results WHERE event_id=?",
                 (row["terminal_event_id"],)).fetchone()
-            assert dict(result) == {"operation_id": operation_id, "attempt_id": row["attempt_id"]}
+            assert result["operation_id"] == operation_id and result["attempt_id"] == row["attempt_id"]
+            delivery = uow.connection.execute("SELECT status FROM message_deliveries WHERE delivery_id=?",
+                (row["delivery_id"],)).fetchone()
+            assert delivery["status"] == "read", "observed processing never consumes the reserved logical delivery"
+            if large_output:
+                assert len(result["output_text"].encode()) == 1024 * 1024
+                assert result["output_truncated"] and result["output_event_count"] == 12
+            else:
+                assert "fixture result" in dict(result).get("output_text", ""), "durable result omits assembled output"
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE runtime_journal_checkpoint SET ordinal=0")
     ingress = deps.harness_supervisor.event_ingress
@@ -43,6 +81,11 @@ def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime):
     assert not ingress.projection_pending
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM runtime_results WHERE operation_id IS NOT NULL").fetchone()[0] == 2
+        receipts = list(uow.connection.execute("SELECT body FROM messages WHERE subject LIKE 'runtime processing receipt:%'"))
+        assert len(receipts) == 2
+        for receipt in receipts:
+            body = json.loads(receipt["body"])
+            assert body["ack_source"] == "native_terminal" and body["human_read"] is False
 
 
 def test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next(runtime):
