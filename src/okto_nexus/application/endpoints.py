@@ -1,6 +1,9 @@
 """Canonical endpoint/profile use cases. No subprocess or secret I/O in UoWs."""
 from pathlib import Path
+import hashlib
+import json
 
+from ..domain.base import new_id
 from ..domain.endpoints import AgentEndpoint
 from ..domain.ids import resolve_realpath, resolve_workspace_id
 from ..errors import ErrorCode, OktoNexusError
@@ -17,6 +20,53 @@ class EndpointService:
         if self.access:
             return self.access.authorize(context)
         authorize_runtime(context, config=self.config, agents=self.agents, connection_factory=self.cf)
+
+    def configure_boot(self, context, *, endpoint_id, enabled, expected_revision):
+        self.authorize(context)
+        if type(enabled) is not bool or type(expected_revision) is not int:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Boot requires a boolean and endpoint revision.", {})
+        with self.cf.unit_of_work() as uow:
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["revision"] != expected_revision:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint revision changed.", {})
+            if enabled and (not endpoint["enabled"] or endpoint["health"] == "quarantined"):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Enable and reconcile the endpoint before configuring boot.", {})
+            if enabled and self.registry.get(endpoint["adapter_id"]).substrate == "attach":
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "External attach targets require explicit selection in the current session; PID alone cannot authorize boot.", {})
+            profile = self.repo.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+            if enabled and (not profile or not profile["enabled"]):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Boot requires an enabled approved profile.", {})
+            if enabled and uow.connection.execute("SELECT count(*) FROM runtime_boot_bindings WHERE enabled=1 AND endpoint_id<>?", (endpoint_id,)).fetchone()[0] >= 16:
+                raise OktoNexusError(ErrorCode.CONFLICT, "At most 16 endpoints can be configured for boot.", {})
+            self.repo.configure_boot(uow, endpoint=endpoint, profile=profile, context=context, enabled=enabled, now=self.clock.now_iso())
+            binding = self.repo.boot_binding(uow, endpoint_id)
+        return {"endpoint_id": endpoint_id, "boot_enabled": enabled, "revision": binding["revision"]}
+
+    def reconcile(self, context, *, endpoint_id, expected_revision, idempotency_key, reason, acknowledge_uncertain_effects=False):
+        self.authorize(context)
+        if (acknowledge_uncertain_effects is not True or not isinstance(reason, str) or not 1 <= len(reason.strip()) <= 1000
+                or not isinstance(idempotency_key, str) or not 1 <= len(idempotency_key) <= 128):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Reconciliation requires a reason, idempotency key and explicit acknowledgement of uncertain prior effects.", {})
+        digest = hashlib.sha256(json.dumps([endpoint_id, expected_revision, reason], separators=(",", ":")).encode()).hexdigest()
+        actor_id = context.actor_agent_id or "operator"
+        with self.cf.unit_of_work() as uow:
+            prior = uow.connection.execute("SELECT * FROM runtime_endpoint_reconciliations WHERE actor_agent_id=? AND idempotency_key=?",
+                (actor_id, idempotency_key)).fetchone()
+            if prior:
+                if prior["request_hash"] != digest:
+                    raise OktoNexusError(ErrorCode.CONFLICT, "Reconciliation key binds different parameters.", {})
+                return {"reconciliation_id": prior["reconciliation_id"], "endpoint_id": endpoint_id, "replayed": True}
+            endpoint = self.repo.get(uow, endpoint_id)
+            if not endpoint or endpoint["revision"] != expected_revision or endpoint["health"] != "quarantined":
+                raise OktoNexusError(ErrorCode.CONFLICT, "Endpoint changed or does not require reconciliation.", {})
+            if uow.connection.execute("SELECT 1 FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state IN ('protocol_ready','stop_requested')", (endpoint_id,)).fetchone():
+                raise OktoNexusError(ErrorCode.CONFLICT, "Close the current runtime before reconciling the endpoint.", {})
+            rid, now = new_id("reconcile"), self.clock.now_iso()
+            uow.connection.execute("INSERT INTO runtime_endpoint_reconciliations VALUES(?,?,?,?,?,?,?,?,?,?)",
+                (rid, endpoint_id, actor_id, idempotency_key, digest, reason, endpoint["health"], endpoint["health_reason"], endpoint["revision"], now))
+            uow.connection.execute("UPDATE agent_endpoints SET health='unknown',health_reason='operator_reconciled',revision=revision+1,updated_at=? WHERE endpoint_id=?", (now, endpoint_id))
+            # Neither old sessions nor unknown operations are replayed/reclassified.
+        return {"reconciliation_id": rid, "endpoint_id": endpoint_id, "replayed": False}
 
     def create_profile(self, context, *, profile_id, adapter_id, config=None, secret_refs=None,
                        inherit_ambient=False, enabled=False):
@@ -117,7 +167,10 @@ class EndpointService:
         self.authorize(context)
         with self.cf.unit_of_work(write=False) as uow:
             historical = self.repo.legacy_diagnostics(uow)
+            boot = [dict(r) for r in uow.connection.execute("SELECT endpoint_id,enabled,endpoint_revision,profile_revision,revision FROM runtime_boot_bindings ORDER BY endpoint_id LIMIT 100")]
+            uncertain = [dict(r) for r in uow.connection.execute("SELECT request_id,endpoint_id,status,owner_epoch,deadline,effects_started FROM runtime_open_requests WHERE status IN ('RESERVED','OUTCOME_UNKNOWN') ORDER BY created_at LIMIT 100")]
         return {"legacy_sessions": historical, "live": False,
+                "boot_bindings": boot, "uncertain_starts": uncertain,
                 "recovery": "Review legacy bindings and restore damaged agent profiles only from a trusted backup; historical sessions do not prove liveness."}
 
     def resolve(self, context, *, endpoint_id, agent_id, kind, substrate, project_root):

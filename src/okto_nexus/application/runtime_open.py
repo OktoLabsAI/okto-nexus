@@ -1,6 +1,7 @@
 """Canonical authenticated open use case, including crash-safe idempotency."""
 import hashlib
 import json
+import time
 
 from ..domain.base import check_inline_size, new_id
 from ..errors import ErrorCode, OktoNexusError
@@ -15,7 +16,8 @@ class RuntimeOpenService:
         self.owner_identity = owner_identity
 
     def open(self, context, *, agent_id, kind, project_root, substrate=None, endpoint_id=None,
-             target_pid=None, backend=None, role=None, metadata=None, notify_target=None, idempotency_key=None):
+             target_pid=None, backend=None, role=None, metadata=None, notify_target=None, idempotency_key=None, startup_timeout_s=None):
+        startup_deadline = time.monotonic() + startup_timeout_s if startup_timeout_s is not None else None
         endpoint, profile = self.endpoints.resolve(context, endpoint_id=endpoint_id, agent_id=agent_id,
             kind=kind, substrate=substrate, project_root=project_root)
         require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id, role=role)
@@ -37,17 +39,23 @@ class RuntimeOpenService:
                 endpoint=endpoint, profile=profile, owner=self.owner_identity)
             if existing:
                 return self.sessions.get(uow, session_id=existing), profile_view, True, request_id
+            if context.authentication_source == "runtime_boot":
+                uow.connection.execute("UPDATE runtime_open_requests SET boot_revision=(SELECT revision FROM runtime_boot_bindings WHERE endpoint_id=?) WHERE request_id=?",
+                    (endpoint["endpoint_id"], request_id))
         starting = False
         try:
             if not self.owner_guard():
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime effects require the active serve owner.", {})
             connector, _, _ = self.construct(endpoint=endpoint, profile=profile, kind=kind,
                 project_root=project_root, substrate=substrate, target_pid=target_pid)
+            remaining = startup_deadline - time.monotonic() if startup_deadline is not None else None
+            if remaining is not None and remaining <= 0:
+                raise TimeoutError("Runtime startup budget expired before native start")
             starting = True
             session = self.supervisor.open(kind=kind, connector=connector, owning_agent_id=agent_id,
                 project_root=project_root, role=role, endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
                 metadata=metadata, notify_target=notify_target, open_request_id=request_id,
-                profile_revision=profile["revision"] if profile else None)
+                profile_revision=profile["revision"] if profile else None, startup_timeout_s=remaining)
             if request_id:
                 with self.cf.unit_of_work() as uow:
                     self.requests.finish(uow, request_id=request_id, status="COMPLETED")

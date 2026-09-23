@@ -194,17 +194,29 @@ def open_runtime(deps, **arguments):
         if not arguments.get("idempotency_key"):
             arguments["idempotency_key"] = new_id("open-key")
         return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/sessions", arguments)
-    supervisor = build_service(deps)
-    service = RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
-        agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
-        supervisor=supervisor, construct=functools.partial(construct_profile_connector, deps), clock=deps.clock,
-        owner_guard=lambda: is_local_runtime_owner(deps),
-        owner_identity=(deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch))
+    service = build_open_service(deps)
     session, profile, reused, request_id = service.open(context, **arguments)
     result = {**session_to_dict(session), "backend": profile}
     if request_id:
         result.update(request_id=request_id, reused=reused)
     return result
+
+
+def build_open_service(deps):
+    return RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
+        agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
+        supervisor=build_service(deps), construct=functools.partial(construct_profile_connector, deps), clock=deps.clock,
+        owner_guard=lambda: is_local_runtime_owner(deps),
+        owner_identity=(deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch))
+
+
+def run_runtime_boot(deps):
+    from okto_nexus.application.runtime_boot import RuntimeBootService
+    service = RuntimeBootService(connection_factory=deps.connection_factory, endpoints=SqliteEndpointRepo(),
+        registry=build_connector_factories(deps), open_service=build_open_service(deps),
+        owner_id=deps.runtime_dispatcher.owner_id, owner_epoch=deps.runtime_dispatcher.epoch)
+    deps.runtime_boot_status = service.run()
+    return deps.runtime_boot_status
 
 
 def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, substrate, target_pid=None):
@@ -276,12 +288,17 @@ def build_dispatcher(deps):
                         owner=(operation["owner_id"], operation["owner_epoch"]))
                     if existing_session:
                         raise OktoNexusError(ErrorCode.CONFLICT, "Historical runtime requires reconciliation.", {})
-                connector, _, _ = construct_profile_connector(deps, endpoint=endpoint, profile=profile,
-                    kind=descriptor.kind, substrate=descriptor.substrate, project_root=workspace.root_realpath)
-                session = supervisor.open(kind=descriptor.kind, connector=connector,
-                    owning_agent_id=endpoint["agent_id"], project_root=workspace.root_realpath,
-                    endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
-                    profile_revision=profile["revision"] if profile else None, open_request_id=request_id)
+                try:
+                    connector, _, _ = construct_profile_connector(deps, endpoint=endpoint, profile=profile,
+                        kind=descriptor.kind, substrate=descriptor.substrate, project_root=workspace.root_realpath)
+                    session = supervisor.open(kind=descriptor.kind, connector=connector,
+                        owning_agent_id=endpoint["agent_id"], project_root=workspace.root_realpath,
+                        endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
+                        profile_revision=profile["revision"] if profile else None, open_request_id=request_id)
+                except Exception:
+                    with deps.connection_factory.unit_of_work() as uow:
+                        requests.finish(uow, request_id=request_id, status="OUTCOME_UNKNOWN")
+                    raise
                 session_id = session.session_id
                 with deps.connection_factory.unit_of_work() as uow:
                     requests.finish(uow, request_id=request_id, status="COMPLETED")

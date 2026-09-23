@@ -18,6 +18,8 @@ class RuntimeRequestContext:
     credential_binding: str | None = None
     authentication_time: str | None = None
     request_deadline: str | None = None
+    runtime_owner_id: str | None = None
+    runtime_owner_epoch: int | None = None
 
 
 @dataclass(frozen=True, slots=True)

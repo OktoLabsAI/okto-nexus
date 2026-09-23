@@ -49,7 +49,9 @@ class RuntimeAccessService:
                     enabled = enabled and profile is not None and profile["enabled"]
                     if enabled and session_id:
                         enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
-            if enabled and self._operator(context, actor):
+            if enabled and endpoint and context.authentication_source == "runtime_boot":
+                allowed = self.endpoints.boot_authorized(uow, context=context, endpoint=endpoint, action=action, now=now)
+            elif enabled and self._operator(context, actor):
                 allowed = True
             elif (enabled and actor and actor.is_active and context.authentication_source == "agent_key"
                   and context.credential_binding and context.credential_binding == actor.api_key_hash):

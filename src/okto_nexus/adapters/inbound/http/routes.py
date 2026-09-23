@@ -409,6 +409,18 @@ class RuntimeEndpointBody(BaseModel):
     public_config: dict[str, Any] = Field(default_factory=dict)
 
 
+class RuntimeBootBody(BaseModel):
+    enabled: bool
+    expected_revision: int
+
+
+class RuntimeReconcileBody(BaseModel):
+    expected_revision: int
+    idempotency_key: str
+    reason: str
+    acknowledge_uncertain_effects: bool = False
+
+
 def _tag_service(deps) -> TagCatalogService:
     return TagCatalogService(catalog=deps.repos.tag_catalog, agents=deps.repos.agents)
 
@@ -955,6 +967,26 @@ def build_router() -> APIRouter:
             context = _harness_authorize(deps)
             result = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).list(context, agent_id=agent_id))
             return _ok({"items": result})
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.put("/harness/endpoints/{endpoint_id}/boot")
+    async def runtime_boot_configure(request: Request, endpoint_id: str, body: RuntimeBootBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).configure_boot(
+                context, endpoint_id=endpoint_id, **body.model_dump())))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.post("/harness/endpoints/{endpoint_id}/reconcile")
+    async def runtime_endpoint_reconcile(request: Request, endpoint_id: str, body: RuntimeReconcileBody) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            return _ok(await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).reconcile(
+                context, endpoint_id=endpoint_id, **body.model_dump())))
         except OktoNexusError as exc:
             return _map_error(exc)
 

@@ -505,6 +505,7 @@ class HarnessSupervisor:
         open_request_id: str | None = None,
         profile_revision: int | None = None,
         workspace_id: str | None = None,
+        startup_timeout_s: float | None = None,
     ) -> HarnessSession:
         """Validate existing identity, start outside the UoW, persist session.
 
@@ -536,12 +537,12 @@ class HarnessSupervisor:
 
         profile_id = None
         if endpoint_id and self._endpoint_repo:
-            with self._cf.unit_of_work(write=False) as uow:
+            with self._cf.unit_of_work(write=bool(self.event_ingress)) as uow:
                 endpoint = self._endpoint_repo.get(uow, endpoint_id)
                 profile_id = endpoint["profile_id"] if endpoint else None
                 if self.event_ingress:
                     self._endpoint_repo.validate_start(uow, request_id=open_request_id,
-                        endpoint_id=endpoint_id, now=self._clock.now_iso())
+                        endpoint_id=endpoint_id, now=self._clock.now_iso(), mark_effects=True)
         connection_key = getattr(connector, "connection_key", id(connector))
         context = (owning_agent_id, project_root, profile_id, profile_revision, kind)
         with self._lock:
@@ -554,7 +555,7 @@ class HarnessSupervisor:
             except RuntimeError as exc:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Connection cannot admit another runtime session.", {}) from exc
         session, lifecycle = self._bounded_start(connector, owning_agent_id=owning_agent_id, kind=kind,
-            binding_key=endpoint_id or "legacy:" + owning_agent_id, lifecycle=lifecycle)
+            binding_key=endpoint_id or "legacy:" + owning_agent_id, lifecycle=lifecycle, timeout_s=startup_timeout_s)
         session.connection_id = lifecycle.connection_id
         if session.harness_kind != kind:
             self._best_effort_teardown(connector, session, lifecycle=lifecycle)
@@ -703,6 +704,7 @@ class HarnessSupervisor:
         self, connector: HarnessConnector, *, owning_agent_id: str, kind: str,
         binding_key: str | None = None,
         lifecycle: RuntimeLifecycle | None = None,
+        timeout_s: float | None = None,
     ) -> tuple[HarnessSession, RuntimeLifecycle]:
         """Timeout cancels owned resources, never creates replacement threads.
 
@@ -771,7 +773,7 @@ class HarnessSupervisor:
             self._activity_finished()
             lifecycle.cancel()
             raise
-        thread.join(self._start_timeout_s)
+        thread.join(self._start_timeout_s if timeout_s is None else max(0, min(timeout_s, self._start_timeout_s)))
         with completion_lock:
             if not outcome.get("done"):
                 timed_out = True

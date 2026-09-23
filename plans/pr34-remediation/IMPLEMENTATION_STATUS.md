@@ -188,3 +188,12 @@ P07_SESSION_RECOVERY.md: two REDs, 21 PASS core, expanded 100 PASS / known P10
 relay FAIL / fixture teardown ERROR; fixture corrected and 5 focused PASS. Native
 providers NOT_RUN. Next: explicit endpoint reconciliation and stable approved boot.
 Final gate NOT PASSED; P09-P12 still pending.
+
+Session recovery checkpoint pushed: 2f760b0. Migration 039 adds operator-approved
+boot bindings, narrow owner-scoped boot authorization, global native-start budget
+and explicit audited endpoint reconciliation. Failed native starts persist
+quarantine; lost-reply idempotency remains usable. See P07_APPROVED_BOOT.md:
+51 PASS initial integration; final 29 PASS Windows and 15 PASS Linux. Native
+providers NOT_RUN for this unit; native boot and attach dedicated session remain
+external validation. Next: durable prioritized controls/expected-turn fencing;
+publication/artifacts and P09-P12 still pending. Final gate NOT PASSED.

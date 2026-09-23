@@ -6,9 +6,42 @@ from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 class SqliteEndpointRepo:
-    def validate_start(self, uow, *, request_id, endpoint_id, now):
+    def boot_binding(self, uow, endpoint_id):
+        row = uow.connection.execute("SELECT * FROM runtime_boot_bindings WHERE endpoint_id=?", (endpoint_id,)).fetchone()
+        return dict(row) if row else None
+
+    def boot_candidates(self, uow):
+        return [dict(r) for r in uow.connection.execute("SELECT b.*,e.agent_id,e.adapter_id,e.workspace_id,w.root_realpath "
+            "FROM runtime_boot_bindings b JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id "
+            "JOIN workspaces w ON w.workspace_id=e.workspace_id WHERE b.enabled=1 ORDER BY e.priority DESC,b.endpoint_id")]
+
+    def boot_authorized(self, uow, *, context, endpoint, action, now):
+        if action != "open" or context.endpoint_id != endpoint["endpoint_id"] or context.workspace_id != endpoint["workspace_id"]:
+            return False
+        if context.represented_agent_id != endpoint["agent_id"] or context.authentication_source != "runtime_boot":
+            return False
+        return uow.connection.execute("SELECT 1 FROM runtime_boot_bindings b JOIN agents a ON a.agent_id=b.issuer_agent_id "
+            "JOIN runtime_dispatcher_owner o ON o.owner_key='dispatcher' JOIN agent_endpoints e ON e.endpoint_id=b.endpoint_id "
+            "WHERE b.endpoint_id=? AND b.enabled=1 AND b.endpoint_revision=e.revision AND a.is_active=1 "
+            "AND a.agent_id='operator' AND (b.issuer_credential_binding IS NULL OR b.issuer_credential_binding=a.api_key_hash) "
+            "AND (e.profile_id IS NULL OR EXISTS (SELECT 1 FROM runtime_profiles p WHERE p.profile_id=e.profile_id "
+            "AND p.revision=b.profile_revision AND p.enabled=1)) AND o.owner_id=? AND o.epoch=? AND o.lease_expires_at>?",
+            (endpoint["endpoint_id"], context.runtime_owner_id, context.runtime_owner_epoch, now)).fetchone() is not None
+
+    def configure_boot(self, uow, *, endpoint, profile, context, enabled, now):
+        uow.connection.execute("INSERT INTO runtime_boot_bindings(endpoint_id,enabled,endpoint_revision,profile_revision,issuer_agent_id,issuer_credential_binding,updated_at) "
+            "VALUES(?,?,?,?,?,?,?) ON CONFLICT(endpoint_id) DO UPDATE SET enabled=excluded.enabled,endpoint_revision=excluded.endpoint_revision,"
+            "profile_revision=excluded.profile_revision,issuer_agent_id=excluded.issuer_agent_id,issuer_credential_binding=excluded.issuer_credential_binding,"
+            "revision=runtime_boot_bindings.revision+1,updated_at=excluded.updated_at",
+            (endpoint["endpoint_id"], int(enabled), endpoint["revision"], profile["revision"] if profile else None,
+             context.actor_agent_id or "operator", context.credential_binding, now))
+
+    def validate_start(self, uow, *, request_id, endpoint_id, now, mark_effects=False):
         from .runtime_requests_repo import SqliteRuntimeRequestRepo
-        return SqliteRuntimeRequestRepo().validate_start(uow, request_id=request_id, endpoint_id=endpoint_id, now=now)
+        epoch = SqliteRuntimeRequestRepo().validate_start(uow, request_id=request_id, endpoint_id=endpoint_id, now=now)
+        if mark_effects:
+            uow.connection.execute("UPDATE runtime_open_requests SET effects_started=1 WHERE request_id=?", (request_id,))
+        return epoch
 
     def put_profile(self, uow, *, profile_id, adapter_id, config, secret_refs,
                     inherit_ambient, enabled, now):

@@ -466,10 +466,11 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             metrics_task = asyncio.create_task(_publish_metrics())
         try:
             if deps.config.feature_harness_integrations:
-                from ..mcp.tools.harness import build_dispatcher
+                from ..mcp.tools.harness import build_dispatcher, run_runtime_boot
                 acquired = await anyio.to_thread.run_sync(build_dispatcher(deps).start)
                 if not acquired:
                     raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
+                await anyio.to_thread.run_sync(run_runtime_boot, deps)
             async with mcp_server.session_manager.run():
                 yield
         finally:
