@@ -60,3 +60,16 @@ class RuntimeReconcileBody(RuntimeAdminBody):
     idempotency_key: str
     reason: str
     acknowledge_uncertain_effects: bool = False
+
+
+class RuntimeOperationMaintenanceBody(RuntimeAdminBody):
+    action: str = "inspect"
+    operation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    after_operation_id: str | None = Field(default=None, min_length=1, max_length=128)
+    limit: int = Field(default=50, ge=1, le=100)
+    expected_state: str | None = None
+    expected_attempt_id: str | None = Field(default=None, min_length=1, max_length=128)
+    expected_owner_epoch: int | None = Field(default=None, ge=1)
+    idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
+    reason: str | None = Field(default=None, min_length=1, max_length=512)
+    acknowledge_duplicate_risk: bool = False

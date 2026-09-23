@@ -102,6 +102,8 @@ class RuntimeControlService:
         return self.send(context, session_id=session_id, verb="close", payload={}, **kwargs)
 
     def validate(self, uow, operation):
+        if operation.get("reconciliation_id"):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime command was administratively reconciled.", {})
         context = RuntimeRequestContext(**json.loads(operation["context"]))
         if operation["grant_id"]:
             context = replace(context, execution_grant_id=operation["grant_id"])
@@ -142,6 +144,7 @@ class RuntimeControlService:
                 binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
                 outcome = uow.connection.execute("SELECT state,reason,response FROM runtime_work_outcomes WHERE operation_id=?", (operation_id,)).fetchone()
             return {"operation_id": operation_id, "session_id": delivery["runtime_session_id"], "state": delivery["status"],
+                "attempt_id": delivery["attempt_id"], "owner_epoch": delivery["owner_epoch"], "reconciliation_id": delivery["reconciliation_id"],
                 "durable": True, "ack_level": delivery["ack_level"], "reason": delivery["reason"],
                 "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK"} else "not_observed",
                 "result_durable": delivery["terminal_event_id"] is not None, "result": dict(result) if result else None,
@@ -155,6 +158,7 @@ class RuntimeControlService:
             result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state,delivery_outcome,relay_state,relay_reason FROM runtime_results "
                 "WHERE command_operation_id=? ORDER BY captured_at DESC LIMIT 1", (operation_id,)).fetchone()
         return self.commands.response(row) | {"reason": row["reason"], "owner_epoch": row["owner_epoch"],
+            "attempt_id": row["attempt_id"], "reconciliation_id": row["reconciliation_id"],
             "native_turn_id": row["native_turn_id"], "expected_operation_id": row["expected_operation_id"],
             "result_durable": row["terminal_event_id"] is not None,
             "result": dict(result) if result else json.loads(row["result"]) if row["result"] else None}

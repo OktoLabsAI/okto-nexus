@@ -83,6 +83,8 @@ class RuntimeDeliveryPlanner:
         return operation_id
 
     def revalidate(self, uow, *, operation, config):
+        if operation.get("reconciliation_id"):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport attempt was administratively reconciled.", {})
         actor = self.agents.get(uow, operation["actor_agent_id"])
         recipient = self.agents.get(uow, operation["recipient_agent_id"])
         endpoint = self.endpoints.get(uow, operation["endpoint_id"])

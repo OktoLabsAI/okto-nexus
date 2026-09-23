@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="8",
+    version="9",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -540,6 +540,36 @@ limit is an integer 1..100 (default50); pass next_endpoint_id back as
 after_endpoint_id while has_more is true. Only visible endpoint IDs become
 cursors. Up to ten latest sessions per endpoint are returned with
 sessions_has_more. A bounded scan may require a narrower agent_id filter.
+
+# Runtime attempt recovery (surface 42)
+Operator-only `harness_list(view="outbox", maintenance={...})` shares
+GET/POST /api/v1/harness/outbox. action=inspect (default) accepts operation_id,
+after_operation_id and limit1..100(default50), returns items/has_more/next_operation_id.
+It exposes attempt/owner/state/lifecycle and reconciliation metadata, never
+payload or credentials. harness_get(operation_id=...) also reports attempt_id,
+owner_epoch and reconciliation_id.
+
+Mutations require action, operation_id, expected_state, expected_attempt_id,
+expected_owner_epoch, idempotency_key and reason. Null attempt/epoch match only
+a not-yet-claimed operation. Same key/body returns the committed decision;
+different body conflicts. No mutation starts a native request:
+- cancel_pending: only PENDING/CLAIMED before send-intent. Cancels the intent
+  and releases its conversation inbox reservation without a receipt.
+- release_to_inbox: explicitly surrender an uncertain conversation push
+  reservation to the same logical inbox; acknowledge_duplicate_risk=true required.
+- abandon_command: explicitly close administrative tracking of an uncertain
+  command, with the same risk acknowledgement; it creates no inbox delivery.
+
+Uncertain recovery requires no active call, no ready/closing runtime on the
+endpoint and no reserved start. It preserves the original transport state/ACK,
+adds immutable audit, quarantines the endpoint and revokes grants/boot approval.
+Unknown or detached runtime effects may remain; acknowledgement is not proof
+of external cancellation. Explicit endpoint reconciliation/fresh authorization
+is required before reusing it. Late correlated results remain durable but cannot
+consume the released inbox or publish/relay under the abandoned authority.
+Managed handoffs require canonical claim recovery and cannot be released as
+conversation. This maintenance remains operator-authorized with new admission
+OFF; it does not restore disabled sending or fabricate completion.
 
 # Runtime administration (surface 40; opt-in)
 An Agent remains the canonical identity. Approved endpoints and runtime profiles

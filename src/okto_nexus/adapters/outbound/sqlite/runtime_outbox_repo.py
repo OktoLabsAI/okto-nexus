@@ -5,6 +5,10 @@ from ....errors import ErrorCode, OktoNexusError
 
 
 class SqliteRuntimeOutboxRepo:
+    def has_history(self, uow):
+        return uow.connection.execute("SELECT 1 FROM harness_sessions UNION ALL SELECT 1 FROM delivery_outbox "
+            "UNION ALL SELECT 1 FROM runtime_commands UNION ALL SELECT 1 FROM runtime_open_requests LIMIT 1").fetchone() is not None
+
     def live_sessions(self, uow, *, endpoint_id):
         return [dict(row) for row in uow.connection.execute(
             "SELECT session_id FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state='protocol_ready' "
@@ -36,10 +40,10 @@ class SqliteRuntimeOutboxRepo:
     def pending(self, uow, *, limit=32):
         return [dict(row) for row in uow.connection.execute(
             "SELECT pending.* FROM delivery_outbox pending WHERE pending.status='PENDING' AND NOT EXISTS "
-            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND "
+            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND busy.reconciliation_id IS NULL AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
-            "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.endpoint_id AND "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.endpoint_id AND c.reconciliation_id IS NULL AND "
             "(c.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(c.starts_turn=1 AND c.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND c.terminal_event_id IS NULL) OR "
             "(c.status='PENDING' AND (c.verb<>'send_turn' OR (c.created_at,c.operation_id)<(pending.created_at,pending.operation_id))))) "

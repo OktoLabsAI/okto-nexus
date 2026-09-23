@@ -191,6 +191,11 @@ class InboxService:
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 
+    def release_runtime_reservation(self, uow, *, operation_id):
+        """Internal operator reconciliation path; no new delivery or receipt."""
+        if not self._deliveries.release_runtime_reservation(uow, operation_id=operation_id):
+            raise OktoNexusError(ErrorCode.CONFLICT, "The original runtime no longer owns this inbox reservation.", {})
+
     def consume_runtime_terminal(self, uow, event):
         """Internal journal projector path; payload identity is never authority.
 

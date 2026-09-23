@@ -33,7 +33,7 @@ class RuntimeResultService:
     def row(uow, result_id):
         row = uow.connection.execute("SELECT r.*,o.recipient_agent_id,o.actor_agent_id,o.credential_binding,"
             "o.endpoint_id,o.endpoint_revision,o.profile_revision,o.workspace_id,o.message_id AS parent_id,"
-            "o.terminal_event_id,m.from_agent_id AS recipient_id,m.channel_id,w.root_realpath,e.public_config AS notification_config "
+            "o.terminal_event_id,o.reconciliation_id,m.from_agent_id AS recipient_id,m.channel_id,w.root_realpath,e.public_config AS notification_config "
             "FROM runtime_results r JOIN delivery_outbox o ON o.operation_id=r.operation_id "
             "JOIN agent_endpoints e ON e.endpoint_id=o.endpoint_id "
             "JOIN messages m ON m.message_id=o.message_id JOIN workspaces w ON w.workspace_id=o.workspace_id "
@@ -196,7 +196,7 @@ class RuntimeResultService:
                 epoch=owner.epoch, now=owner.clock.now_iso())):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result publication requires the current serve owner.", {})
         row = self.row(uow, result_id)
-        if not self.config.feature_harness_integrations or not row or row["terminal_event_id"] != row["event_id"]:
+        if not self.config.feature_harness_integrations or not row or row["reconciliation_id"] or row["terminal_event_id"] != row["event_id"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "No authorized captured result.", {})
         if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?", (row["operation_id"],)).fetchone():
             if not self.work_validator:

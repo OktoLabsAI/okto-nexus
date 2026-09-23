@@ -167,9 +167,9 @@ def runtime_tool_guard(deps):
                   "harness_event_list": "events"}.get(fn.__name__, "admin")
         def check(args, kwargs):
             arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
-            if fn.__name__ == "harness_list" and arguments.get("view") == "bindings":
-                # Shared discovery authenticates even an empty result and checks
-                # current authority separately for each visible endpoint.
+            if fn.__name__ == "harness_list" and arguments.get("view") in {"bindings", "outbox"}:
+                # Shared services authenticate their own scoped reads/recovery.
+                # Operator outbox recovery survives admission being disabled.
                 return
             if fn.__name__ == "harness_get" and arguments.get("operation_id"):
                 # The service resolves the stored resource before authorizing
@@ -216,6 +216,25 @@ def discover_bindings(deps, parameters=None):
     if set(args) - {"agent_id", "after_endpoint_id", "limit"}:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported discovery parameters.", {})
     return RuntimeDiscoveryService(access=build_access_service(deps)).list(request_context(), **args)
+
+
+def maintain_operations(deps, parameters=None):
+    from pydantic import ValidationError
+    from ...runtime_admin import RuntimeOperationMaintenanceBody
+    from okto_nexus.application.runtime_operation_maintenance import RuntimeOperationMaintenanceService
+    from .inbox import build_service as build_inbox
+    context = request_context()
+    access = build_access_service(deps)
+    access.authorize_maintenance(context)
+    try:
+        args = RuntimeOperationMaintenanceBody.model_validate(runtime_object("maintenance", parameters) or {}).model_dump()
+    except ValidationError:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid operation maintenance fields.", {}) from None
+    owner = getattr(deps, "runtime_dispatcher", None)
+    if owner is None and args["action"] != "inspect":
+        return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/outbox", args)
+    return RuntimeOperationMaintenanceService(access=access, owner=owner,
+        inbox=build_inbox(deps)).run(context, **args)
 
 
 def administer_endpoints(deps, view, parameters):
@@ -1026,10 +1045,12 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
-                     maintenance: Annotated[Any, Field(description="Object: action list/create/update for profiles, list/create/update/boot/reconcile for endpoints, inspect/cleanup/retry/quota for artifacts. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
-        """Discover authorized agent runtimes with view=bindings. Operator views: adapters, endpoints, profiles, journal, artifacts. compact requires journal. Details: identity resource."""
+                     maintenance: Annotated[Any, Field(description="Object for selected view: profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+        """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts. Outbox recovery never replays native calls. compact requires journal."""
         if view == "bindings" and not compact:
             return discover_bindings(deps, maintenance)
+        if view == "outbox" and not compact:
+            return maintain_operations(deps, maintenance)
         if view in {"endpoints", "profiles"} and not compact:
             return administer_endpoints(deps, view, maintenance)
         if view == "artifacts" and not compact:

@@ -1,4 +1,4 @@
-# Runtime administration — surface 41
+# Runtime administration — surface 42
 
 This reference describes the implemented 0.2.0 administrative subset. The release
 and complete P11/P12 gates are still pending; consult the
@@ -11,13 +11,15 @@ agents' connections; they never register or replace the Agent profile. Configuri
 an endpoint does not itself spawn a process.
 
 `harness_list` keeps the same tool name. Its `view` selects `adapters`, `endpoints`,
-`profiles`, `bindings`, `journal` or `artifacts`. `maintenance` is an object (or JSON object
+`profiles`, `bindings`, `outbox`, `journal` or `artifacts`. `maintenance` is an object (or JSON object
 string); its `action` defaults to `list` for endpoint/profile views. Do not pass
 `compact` outside the journal view.
 
 | MCP view/action | REST equivalent | Required parameters in maintenance |
 |---|---|---|
 | bindings | GET /api/v1/harness/bindings | Optional agent_id, limit (1..100, default50), after_endpoint_id |
+| outbox/inspect | GET or POST /api/v1/harness/outbox | Optional operation_id, limit (1..100, default50), after_operation_id |
+| outbox/cancel_pending, release_to_inbox, abandon_command | POST /api/v1/harness/outbox | operation_id, expected_state, expected_attempt_id, expected_owner_epoch, idempotency_key, reason; uncertain actions also require acknowledge_duplicate_risk=true |
 | profiles/list | GET /api/v1/harness/profiles | None |
 | profiles/create | POST /api/v1/harness/profiles | profile_id, adapter_id |
 | profiles/update | PATCH /api/v1/harness/profiles/{id} | profile_id, expected_revision and one or more mutable fields |
@@ -32,7 +34,8 @@ input models and application services. Unknown fields and implicit type coercion
 are rejected: send JSON `true`, not the string `"true"`. Revisions must be positive
 integers. Surface 39 introduced strict validation; surface 40 extends edits.
 Clients caching older schemas should refresh `nexus_info`. Reference resource
-`tool-docs/identity` is version 8. Surface 41 adds scoped binding discovery.
+`tool-docs/identity` is version 9. Surface 41 adds scoped binding discovery;
+surface 42 adds explicit operation recovery.
 
 The `bindings` view is also available to authenticated agents with current
 endpoint-scoped `discover` grants. The operator issues those through
@@ -131,6 +134,65 @@ prior effects. Retrying the same reconciliation through either surface returns
 the same reconciliation ID. It does not resend an ambiguous delivery or invent
 native completion.
 
+## Recovering an uncertain transport attempt
+
+Inspect outbox through either surface. The returned state/attempt_id/owner_epoch
+are the snapshot required for recovery. Inspection includes administrative
+commands and conversation deliveries, not their payloads or credentials. Review
+the operation, native lifecycle and evidence before deciding; process timeout or
+lease expiry is not proof that a write never happened.
+
+Use cancel_pending only before send-intent (PENDING/CLAIMED). It cancels that
+intent and releases its conversation inbox reservation without marking the
+message read. For an uncertain conversation delivery, release_to_inbox explicitly
+returns the same logical delivery to the recipient's canonical pull inbox. It
+does not create a replacement message, retry the native transport or invent ACK.
+For an uncertain administrative command, abandon_command retires its tracking
+without creating an inbox delivery. Both uncertain actions require the explicit
+duplicate-risk acknowledgement. Managed handoffs cannot be treated as conversation;
+their canonical claim recovery remains a separate operation.
+
+```json
+{
+  "view": "outbox",
+  "maintenance": {
+    "action": "release_to_inbox",
+    "operation_id": "op_from_inspection",
+    "expected_state": "OUTCOME_UNKNOWN",
+    "expected_attempt_id": "attempt_from_inspection",
+    "expected_owner_epoch": 1,
+    "idempotency_key": "operator-reviewed-recovery-1",
+    "reason": "Reviewed the uncertain attempt and prior runtime",
+    "acknowledge_duplicate_risk": true
+  }
+}
+```
+
+Copy actual snapshot values; do not use the example identifiers or epoch. A
+changed state/attempt/epoch conflicts. The same key and exact request return the
+committed response after a lost reply; changing the request under that key
+conflicts. Audit, reservation release and source update commit together.
+
+Recovery refuses an in-flight call, ready/closing runtime or reserved start on
+the affected endpoint. Stopped/detached/unknown records still do not prove absence
+of prior external effects: the operator explicitly accepts possible duplication.
+The original uncertain transport state and ACK remain in history beside the
+reconciliation record. Late exact correlated results stay durable but cannot
+consume the released delivery, publish or relay under the surrendered authority.
+
+Uncertain recovery quarantines the endpoint and revokes its grants/boot approvals.
+Review and explicitly reconcile that endpoint before reuse, then issue fresh
+grants/boot approval as needed. This separates the decision about the old delivery
+from authorization to run new work. There is no retry-all operation. Operator
+outbox maintenance remains available when new harness admission is OFF, including
+through an already registered MCP surface; sending remains disabled. A newly
+started MCP server with the flag OFF does not publish harness tools, so use REST
+for that recovery path.
+
+Migration054 only adds audit storage, nullable reconciliation references and
+indexes. Rollback deactivates admission and uses these records; never delete
+outbox rows, reset attempt IDs or reverse the migration to force another send.
+
 ## Native questions and permissions in the dashboard
 
 Open Approvals as the operator and choose Review request. Supported Codex
@@ -155,8 +217,8 @@ schemas remain outside the supported native contract; the UI does not resolve
 them or relax sandbox/approval policy. The original request remains available
 for operator inspection.
 
-The existing journal/artifact maintenance actions remain available. Outbox
-takeover, capability negotiation and dashboard diagnostics remain
+The existing journal/artifact maintenance actions remain available. Managed-work
+claim recovery, capability negotiation and remaining dashboard diagnostics remain
 tracked in P11. Deleting persistence rows is not an operational substitute for
 those actions. Migration 053 is additive; operational rollback uses deactivation,
 drain and recovery, not reverse SQL or deletion of the audit/history.

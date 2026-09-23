@@ -26,6 +26,10 @@ class RuntimeCommandDispatcher:
                 self._threads.append(thread)
                 thread.start()
 
+    def operation_inflight(self, operation_id):
+        with self._lock:
+            return operation_id in self._inflight
+
     def idle(self):
         with self._lock:
             return not self._inflight

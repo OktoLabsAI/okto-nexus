@@ -921,6 +921,24 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.post("/harness/outbox")
+    async def runtime_operation_maintenance(request: Request, body: dict[str, Any]) -> JSONResponse:
+        from ..mcp.tools.harness import maintain_operations
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_operations(request.app.state.deps, body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/outbox")
+    async def runtime_operation_inspection(request: Request, operation_id: str | None = None,
+                                           after_operation_id: str | None = None, limit: int = 50) -> JSONResponse:
+        from ..mcp.tools.harness import maintain_operations
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_operations(request.app.state.deps,
+                {"operation_id": operation_id, "after_operation_id": after_operation_id, "limit": limit})))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/bindings")
     async def runtime_bindings(request: Request, agent_id: str | None = None,
                                after_endpoint_id: str | None = None, limit: int = 50) -> JSONResponse:

@@ -527,13 +527,18 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             raise _db_error("acknowledging inbox deliveries", exc) from exc
         return sorted({row["message_id"] for row in rows})
 
+    def release_runtime_reservation(self, uow, *, operation_id):
+        return uow.connection.execute("UPDATE message_deliveries SET consumer_kind=NULL,consumer_operation_id=NULL,"
+            "status='unread',lease_expires_at=NULL WHERE consumer_kind='push' AND consumer_operation_id=? "
+            "AND status IN ('unread','delivered')", (operation_id,)).rowcount == 1
+
     def mark_runtime_processed(self, uow, *, operation_id, terminal_event_id, at):
         """Consume only the matching push reservation with durable terminal proof."""
         rows = uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "
             "WHERE status IN ('unread','delivered') AND consumer_kind='push' AND consumer_operation_id=? "
             "AND delivery_id IN (SELECT o.delivery_id FROM delivery_outbox o JOIN runtime_results r "
             "ON r.operation_id=o.operation_id AND r.attempt_id=o.attempt_id AND r.event_id=o.terminal_event_id "
-            "WHERE o.operation_id=? AND o.status='ACCEPTED' AND o.terminal_event_id=?) "
+            "WHERE o.operation_id=? AND o.status='ACCEPTED' AND o.reconciliation_id IS NULL AND o.terminal_event_id=?) "
             "RETURNING recipient_agent_id,message_id", (at, operation_id, operation_id, terminal_event_id)).fetchall()
         return [dict(row) for row in rows]
 

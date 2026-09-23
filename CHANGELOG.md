@@ -6,6 +6,12 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 42 and additive migration054 add audited operator operation recovery.
+  Cancel only before send-intent, explicitly release uncertain conversation
+  delivery to its original inbox, or abandon uncertain command tracking. Current
+  attempts are fenced; risk acknowledgement and idempotency are required. Native
+  uncertainty/ACK and late captured results remain honest, without automatic replay.
+
 - The operator Approvals dashboard accepts explicit native question/form answers
   for supported Codex and Claude requests. Opening a request submits no defaults.
   Permission decisions remain distinct from input and native delivery; expired

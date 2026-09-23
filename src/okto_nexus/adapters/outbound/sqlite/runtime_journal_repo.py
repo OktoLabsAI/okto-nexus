@@ -129,6 +129,19 @@ class SqliteRuntimeJournalRepo:
             and record["ordinal"] <= owner["recovery_watermark"])
         recovered_unknown = bool(recovering and operation and operation["status"] == "OUTCOME_UNKNOWN"
                                  and operation["reason"] == "owner_lost")
+        if operation and operation["reconciliation_id"]:
+            # Preserve an exact late terminal without restoring execution,
+            # consumption or publication authority surrendered by the operator.
+            if (event.delivery_phase == "terminal" and operation["terminal_event_id"] is None
+                    and operation["ack_level"] == "HARNESS_ACCEPTED"
+                    and operation["runtime_session_id"] == event.session_id
+                    and operation["attempt_id"] == event.attempt_id and operation["owner_epoch"] == event.owner_epoch
+                    and operation["native_thread_id"] == event.thread_id and operation["native_turn_id"] == event.turn_id
+                    and (owner["epoch"] == event.owner_epoch or recovering)):
+                uow.connection.execute(f"UPDATE {table} SET terminal_event_id=?,updated_at=? WHERE operation_id=?",
+                                       (event.event_id, now, event.operation_id))
+                return table
+            return False
         if (not operation or operation["runtime_session_id"] != event.session_id
                 or operation["attempt_id"] != event.attempt_id
                 or operation["owner_epoch"] != event.owner_epoch

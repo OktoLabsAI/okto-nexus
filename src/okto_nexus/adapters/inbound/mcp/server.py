@@ -443,7 +443,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 39 = shared strict runtime admin inputs; MCP endpoint/profile views and redacted profile discovery.
 #: 40 = revision-fenced profile/endpoint edits, revocation and atomic configuration audit.
 #: 41 = scoped agent runtime binding discovery; declared capabilities and explicit liveness limits.
-SURFACE_REVISION = 41
+#: 42 = explicit operator attempt reconciliation; no automatic native replay.
+SURFACE_REVISION = 42
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

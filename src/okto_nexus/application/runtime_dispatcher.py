@@ -177,6 +177,11 @@ class RuntimeDispatcher:
                 # recovery will revisit only PENDING; SENDING remains fenced.
                 logging.getLogger(__name__).warning("Runtime dispatcher storage/recovery failed; intents remain durable.")
 
+    def operation_inflight(self, operation_id):
+        with self._lock:
+            active = operation_id in self._inflight
+        return active or bool(self.command_dispatcher and self.command_dispatcher.operation_inflight(operation_id))
+
     def scan_once(self):
         with self._lock:
             capacity = self.workers - len(self._inflight)

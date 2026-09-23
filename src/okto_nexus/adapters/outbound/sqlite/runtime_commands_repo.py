@@ -24,14 +24,14 @@ class SqliteRuntimeCommandRepo:
     def enqueue(self, uow, *, context, key, request_hash, session, endpoint, profile_revision, verb, payload,
                 expected_operation_id, expected_turn_id, grant, now, starts_turn):
         pending = uow.connection.execute("SELECT count(*),COALESCE(sum(length(CAST(payload AS BLOB))),0) FROM runtime_commands "
-            "WHERE status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')").fetchone()
+            "WHERE reconciliation_id IS NULL AND status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')").fetchone()
         actor = context.actor_agent_id or "operator"
-        own = uow.connection.execute("SELECT count(*) FROM runtime_commands WHERE actor_agent_id=? "
+        own = uow.connection.execute("SELECT count(*) FROM runtime_commands WHERE actor_agent_id=? AND reconciliation_id IS NULL "
             "AND status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')", (actor,)).fetchone()[0]
         represented = uow.connection.execute("SELECT count(*) FROM runtime_commands c JOIN agent_endpoints e ON e.endpoint_id=c.endpoint_id "
-            "WHERE e.agent_id=? AND c.status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')", (session.owning_agent_id,)).fetchone()[0]
+            "WHERE e.agent_id=? AND c.reconciliation_id IS NULL AND c.status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')", (session.owning_agent_id,)).fetchone()[0]
         workspace = uow.connection.execute("SELECT count(*) FROM runtime_commands c JOIN agent_endpoints e ON e.endpoint_id=c.endpoint_id "
-            "WHERE e.workspace_id=? AND c.status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')", (session.workspace_id,)).fetchone()[0]
+            "WHERE e.workspace_id=? AND c.reconciliation_id IS NULL AND c.status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')", (session.workspace_id,)).fetchone()[0]
         encoded = json.dumps(payload, ensure_ascii=False, sort_keys=True)
         if pending[0] >= 256 or pending[1] + len(encoded.encode()) > 4 * 1024 * 1024 or own >= 32 or represented >= 32 or workspace >= 128:
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime command backlog capacity exhausted.", {})
@@ -51,7 +51,7 @@ class SqliteRuntimeCommandRepo:
         query = "SELECT c.* FROM runtime_commands c WHERE c.status='PENDING' AND c.verb " + selector + " 'send_turn' "
         if control:
             query += "AND c.verb='close' " if close_only else "AND c.verb<>'close' "
-        query += "AND NOT EXISTS (SELECT 1 FROM runtime_commands busy WHERE busy.endpoint_id=c.endpoint_id "
+        query += "AND NOT EXISTS (SELECT 1 FROM runtime_commands busy WHERE busy.endpoint_id=c.endpoint_id AND busy.reconciliation_id IS NULL "
         if control:
             query += "AND busy.verb='close' " if close_only else "AND busy.verb<>'send_turn' "
             query += "AND busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
@@ -59,7 +59,7 @@ class SqliteRuntimeCommandRepo:
             query += "AND busy.operation_id<>c.operation_id AND ((busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
             query += "OR (busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.starts_turn=1 AND busy.terminal_event_id IS NULL) "
             query += "OR (busy.status='PENDING' AND (busy.verb<>'send_turn' OR (busy.created_at,busy.operation_id)<(c.created_at,c.operation_id))))) "
-            query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox d WHERE d.endpoint_id=c.endpoint_id AND "
+            query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox d WHERE d.endpoint_id=c.endpoint_id AND d.reconciliation_id IS NULL AND "
             query += "(d.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR (d.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND d.terminal_event_id IS NULL) "
             query += "OR (d.status='PENDING' AND (d.created_at,d.operation_id)<(c.created_at,c.operation_id)))) "
         return [dict(r) for r in uow.connection.execute(query + "ORDER BY c.created_at,c.operation_id LIMIT ?", (limit,))]
