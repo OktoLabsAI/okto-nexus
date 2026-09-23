@@ -66,8 +66,27 @@ def test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate(tmp_
             "visibility": "eligible",
         }))
         hid, ws = created["handoff_id"], created["workspace_id"]
+        for name, args in (
+            ("handoff_claim", {"handoff_id": hid}),
+            ("handoff_get", {"handoff_id": hid}),
+            ("handoff_list_available", {}),
+            ("handoff_reject", {"handoff_id": hid}),
+            ("handoff_cancel", {"handoff_id": hid}),
+        ):
+            denied = call(author, name, "beta", **args)
+            assert denied.get("error", {}).get("code") == "PERMISSION_DENIED", (name, denied)
+        forged_create = tool(client, author, "handoff_create", {
+            "project_root": root, "from_agent_id": "beta",
+            "target": {"strategy": "direct", "agent_id": "alpha"}, "visibility": "eligible",
+        })
+        assert forged_create["error"]["code"] == "PERMISSION_DENIED"
         claimed = _ok(call(worker, "handoff_claim", "beta", handoff_id=hid))
         assert claimed["claim_epoch"] == 1
+        # A valid generation identifies work, not the caller. The creator's
+        # authenticated connection cannot impersonate the claimant in JSON.
+        spoofed = call(author, "handoff_complete", "beta", handoff_id=hid,
+                       claim_epoch=1, result="forged claimant result")
+        assert spoofed.get("error", {}).get("code") == "PERMISSION_DENIED", spoofed
         _ok(call(worker, "handoff_complete", "beta", handoff_id=hid,
                  claim_epoch=1, result="v1"))
         url = f"/api/v1/workspaces/{ws}/handoffs/{hid}/verify"
@@ -90,7 +109,43 @@ def test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate(tmp_
         self_verify = call(worker, "handoff_verify", "beta", handoff_id=hid,
                            verdict="pass", claim_epoch=2)
         assert self_verify["error"]["code"] == "PERMISSION_DENIED"
+        forged_verify = call(worker, "handoff_verify", "alpha", handoff_id=hid,
+                             verdict="pass", claim_epoch=2)
+        assert forged_verify["error"]["code"] == "PERMISSION_DENIED"
         final = client.post(url, headers={"x-api-key": author},
                             json={"verdict": "pass", "claim_epoch": 2})
         assert final.status_code == 200, final.text
         assert final.json()["data"]["status"] == "COMPLETED"
+
+
+@pytest.mark.parametrize("rotate", [False, True])
+def test_approved_handoff_revalidates_original_creator_binding(tmp_path, rotate):
+    from fastapi.testclient import TestClient
+    from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key
+    from okto_nexus.application.auth import AgentKeyAuthService
+    from test_pr34_remediation import tool
+    from test_hitl import make_env, _require_approval_policy
+
+    deps, _, root = make_env(tmp_path, feature_hitl=True)
+    auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
+    _, operator = ensure_operator_key(deps, auth)
+    with deps.connection_factory.unit_of_work() as uow:
+        creator = auth.issue_key(uow, agent_id="alpha")
+    _require_approval_policy(deps, action="handoff_create")
+    with TestClient(build_app(deps), base_url="http://127.0.0.1:18790") as client:
+        pending = tool(client, creator, "handoff_create", {
+            "project_root": root, "from_agent_id": "alpha", "visibility": "eligible",
+            "target": {"strategy": "direct", "agent_id": "beta"}, "payload": "fixture",
+        })
+        aid = pending["data"]["approval_id"]
+        if rotate:
+            with deps.connection_factory.unit_of_work() as uow:
+                auth.issue_key(uow, agent_id="alpha")
+        reply = client.post(f"/api/v1/approvals/{aid}/decision", headers={"x-api-key": operator},
+                            json={"decision": "approve"})
+        if rotate:
+            assert reply.status_code == 403, reply.text
+        else:
+            assert reply.status_code == 200, reply.text
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute("SELECT count(*) FROM handoffs").fetchone()[0] == (0 if rotate else 1)

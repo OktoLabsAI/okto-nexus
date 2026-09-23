@@ -190,6 +190,7 @@ class HandoffService:
         governance: Optional[GovernanceService] = None,
         approvals: Optional[ApprovalService] = None,
         guardrails: Optional[GuardrailService] = None,
+        request_context_provider: Any = None,
     ) -> None:
         self._cf = connection_factory
         self._handoffs = handoffs
@@ -223,6 +224,7 @@ class HandoffService:
         # Communication guardrails: when wired, payload/criteria are evaluated
         # before governance/HITL and before any handoff row/event/notification.
         self._guardrails = guardrails
+        self._request_context_provider = request_context_provider
         # Blocking seam for the list_available long-poll: an injected Waiter
         # (deterministic in tests), or the store's own change waiter.
         self._waiter = (
@@ -277,6 +279,7 @@ class HandoffService:
         depends_on: Any = None,
         session_id: Any = None,
         _approved_execution: bool = False,
+        _creator_binding: str | None = None,
     ) -> dict[str, Any]:
         """Create an ``OPEN`` handoff and emit ``handoff.created`` atomically.
 
@@ -413,6 +416,11 @@ class HandoffService:
         }
 
         with self._create_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
+            creator_binding = self._require_actor(uow, from_agent_id) if not _approved_execution else _creator_binding
+            if _approved_execution and creator_binding:
+                creator = self._agents.get(uow, from_agent_id) if self._agents else None
+                if not creator or not creator.is_active or creator.api_key_hash != creator_binding:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff creator authorization changed.", {})
             permission_set_for(self._agents, uow, from_agent_id).require(
                 "handoffs", "create"
             )
@@ -520,6 +528,8 @@ class HandoffService:
                         "payload": payload,
                         "trace_id": resolved_trace,
                     }
+                    if creator_binding:
+                        approval_kwargs["_creator_binding"] = creator_binding
                     if criteria_list is not None:
                         # An intercepted verifiable create re-executes with
                         # its verification contract intact (normalised values;
@@ -695,6 +705,7 @@ class HandoffService:
         while True:
             now = self._clock.now_iso()
             with self._cf.unit_of_work() as uow:
+                self._require_actor(uow, agent_id)
                 agent = self._routing_agent(uow, agent_id, workspace_id)
                 available = self._available_handoffs(uow, workspace_id, agent, now)
             page = available[offset : offset + page_limit]
@@ -858,6 +869,7 @@ class HandoffService:
         lease_expires_at = iso_plus(now, lease_ttl)
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
@@ -975,6 +987,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             # Verification routing (I4): the ROW's contract picks the
             # destination. The feature flag gates contract CREATION only - a
@@ -1111,6 +1124,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
@@ -1350,6 +1364,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.status in TERMINAL_STATUSES:
@@ -1479,6 +1494,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require(
                 "handoffs", "cancel"
             )
@@ -1584,6 +1600,7 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
+            self._require_actor(uow, agent_id)
             self._expire_old_leases(uow, workspace_id=workspace_id, now_iso=now)
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
@@ -1719,6 +1736,24 @@ class HandoffService:
                 "Claim generation changed. Use the claim_epoch of the work being completed; do not retry stale work against a newer claim.",
                 {"handoff_id": handoff.handoff_id},
             )
+
+    def _require_actor(self, uow: UnitOfWork, agent_id: Any) -> str | None:
+        """Bind authenticated transport identity before reading or mutating work.
+
+        Unauthenticated cooperative stdio keeps its explicit legacy contract.
+        Neither an operator key nor knowing a claim generation impersonates
+        another agent. Internal approval execution separately revalidates the
+        captured creator binding and all canonical creation policies.
+        """
+        context = self._request_context_provider() if self._request_context_provider else None
+        if context is None:
+            return None
+        actor = self._agents.get(uow, context.actor_agent_id) if self._agents else None
+        if (context.authentication_source != "agent_key" or not actor or not actor.is_active
+                or actor.agent_id != agent_id or not context.credential_binding
+                or actor.api_key_hash != context.credential_binding):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff actor is not authorized.", {})
+        return context.credential_binding
 
     def _resolve_workspace(self, project_root: Any) -> str:
         if not _is_nonempty_str(project_root):

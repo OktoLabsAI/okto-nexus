@@ -25,3 +25,7 @@ now broadcast snapshots rather than destructive shared deque; orphan watchdog
 exists. Their existence does not establish durability, Windows lifecycle, or
 the new acceptance gates. We do not reimplement the superseded blanket
 harness-to-harness ban.
+
+## P09 authenticated handoff boundary (F02/F07, parent c67e7dc)
+
+Confirmed through actual HTTP MCP: creator API key with claimant agent_id could complete claimed work. Fixed shared service actor/binding validation for all handoff verbs; HITL preserves original creator binding. See P09_AUTHENTICATED_HANDOFF.md and test_runtime_handoff_epochs.py. Windows 212 PASS; Linux 25 PASS. Scoped runtime bootstrap/dispatch remains pending.

@@ -62,6 +62,8 @@ from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.handoff import HandoffService
 from okto_nexus.application.identity import SessionTrustGuard
 from okto_nexus.domain.governance import ACTION_HANDOFF_CREATE
+from okto_nexus.domain.runtime_context import RuntimeRequestContext
+from ...http.identity_ctx import get_authenticated_agent
 from okto_nexus.envelope import (
     async_tool_envelope,
     require_json_object_param,
@@ -168,6 +170,11 @@ _P_DEPENDS_ON = (
 )
 
 
+def _request_context():
+    actor = get_authenticated_agent()
+    return RuntimeRequestContext(actor.agent_id, "agent_key", credential_binding=actor.api_key_hash) if actor else None
+
+
 def build_service(deps: Any) -> HandoffService:
     """Wire the SQLite repos into ``deps.repos`` and build the service.
 
@@ -242,6 +249,7 @@ def build_service(deps: Any) -> HandoffService:
         governance=governance,
         approvals=approvals,
         guardrails=guardrails,
+        request_context_provider=_request_context,
     )
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
