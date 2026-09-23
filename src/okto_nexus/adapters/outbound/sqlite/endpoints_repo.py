@@ -62,6 +62,18 @@ class SqliteEndpointRepo:
         result["secret_refs"] = json.loads(result["secret_refs"])
         return result
 
+    def public_profiles(self, uow):
+        # Config paths, commands and secret reference names never enter discovery.
+        items = []
+        for row in uow.connection.execute("SELECT profile_id,adapter_id,enabled,inherit_ambient,revision,config FROM runtime_profiles ORDER BY profile_id"):
+            item = dict(row)
+            config = json.loads(item.pop("config"))
+            item["config"] = {key: config[key] for key in (
+                "provider", "model", "sandbox", "approval_policy", "required_native_requests") if key in config}
+            item["enabled"], item["inherit_ambient"] = bool(item["enabled"]), bool(item["inherit_ambient"])
+            items.append(item)
+        return items
+
     def create(self, uow, *, endpoint, now):
         try:
             uow.connection.execute(

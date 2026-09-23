@@ -6,6 +6,12 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Runtime administration surface 39: `harness_list` endpoint/profile views
+  reuse REST services, strict request validation and revision fences. Profile
+  discovery on REST/MCP redacts launch paths, environment and secret references.
+  Existing endpoint creation, notification updates, boot and reconciliation are
+  available without adding per-adapter tools. Full release gates remain pending.
+
 - Start the PR #34 remediation on `feature/v0.2.0`. Package metadata is
   0.2.0; implementation and acceptance gates are tracked in
   `plans/pr34-remediation/IMPLEMENTATION_STATUS.md`. This is not a release

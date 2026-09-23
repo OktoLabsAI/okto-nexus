@@ -72,6 +72,8 @@ from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
 from ..mcp.tools.harness import read_session as _harness_read_session
 from ..mcp.tools.messages import build_service as _build_message_service
 from ..mcp.tools.poll_tokens import build_service as _build_poll_token_service
+from ..runtime_admin import (RuntimeProfileBody, RuntimeEndpointBody, RuntimeBootBody,
+    RuntimeEndpointUpdateBody, RuntimeReconcileBody)
 from .identity_ctx import get_authenticated_agent
 
 
@@ -394,52 +396,12 @@ class HarnessSessionCommandBody(BaseModel):
     expected_owner_epoch: int | None = None
 
 
-class RuntimeProfileBody(BaseModel):
-    profile_id: str = Field(min_length=1, max_length=128)
-    adapter_id: str
-    config: dict[str, Any] = Field(default_factory=dict)
-    secret_refs: dict[str, str] = Field(default_factory=dict)
-    inherit_ambient: bool = False
-    enabled: bool = False
-
-
 class RuntimeGrantBody(BaseModel):
     actor_agent_id: str
     endpoint_id: str
     actions: list[str]
     expires_at: str
     max_executions: int = 1
-
-
-class RuntimeEndpointBody(BaseModel):
-    endpoint_id: str = Field(min_length=1, max_length=128)
-    agent_id: str
-    adapter_id: str
-    project_root: str
-    profile_id: str | None = None
-    enabled: bool = False
-    priority: int = 0
-    selection_group: str | None = None
-    response_policy: str = "explicit"
-    consumption: str = "exclusive"
-    public_config: dict[str, Any] = Field(default_factory=dict)
-
-
-class RuntimeBootBody(BaseModel):
-    enabled: bool
-    expected_revision: int
-
-
-class RuntimeEndpointUpdateBody(BaseModel):
-    expected_revision: int = Field(strict=True, ge=1)
-    public_config: dict[str, Any]
-
-
-class RuntimeReconcileBody(BaseModel):
-    expected_revision: int
-    idempotency_key: str
-    reason: str
-    acknowledge_uncertain_effects: bool = False
 
 
 def _tag_service(deps) -> TagCatalogService:
@@ -956,6 +918,16 @@ def build_router() -> APIRouter:
         try:
             context = _harness_authorize(deps)
             return _ok(await anyio.to_thread.run_sync(lambda: _harness_access(deps).revoke(context, grant_id=grant_id)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
+    @router.get("/harness/profiles")
+    async def runtime_profiles(request: Request) -> JSONResponse:
+        deps = request.app.state.deps
+        try:
+            context = _harness_authorize(deps)
+            items = await anyio.to_thread.run_sync(lambda: _harness_endpoints(deps).profiles(context))
+            return _ok({"items": items})
         except OktoNexusError as exc:
             return _map_error(exc)
 

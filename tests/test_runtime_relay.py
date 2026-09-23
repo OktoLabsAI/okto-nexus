@@ -1,6 +1,7 @@
 """Explicit relay admission through real HTTP/MCP composition and native frames."""
 import time
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
@@ -83,6 +84,11 @@ def test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result(runtime,
         assert root["admitted_executions"] == 3
         assert uow.connection.execute("SELECT count(*) FROM runtime_handoff_bindings").fetchone()[0] == 0
         assert [r[0] for r in uow.connection.execute("SELECT delivery_outcome FROM harness_events WHERE delivery_phase='terminal' ORDER BY sequence")] == ["success"] * 3
+        receipts = uow.connection.execute("SELECT message_id FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchall()
+        assert len(receipts) == 3
+        for receipt in receipts:
+            assert not uow.connection.execute("SELECT 1 FROM delivery_outbox WHERE message_id=?", (receipt[0],)).fetchone()
+        assert uow.connection.execute("SELECT count(*) FROM events WHERE type='runtime.relay_blocked'").fetchone()[0] == 1
 
 
 @pytest.mark.parametrize("outcome,normalized", [("failed", "failed"), ("interrupted", "interrupted"), ("unknown", None)])
@@ -127,8 +133,10 @@ def test_repeated_publication_does_not_charge_or_dispatch_again(runtime):
     messages = build_service(runtime[0])
     with runtime[0].connection_factory.unit_of_work(write=False) as uow:
         bound = messages._runtime_results.row(uow, rows[0]["result_id"])
-    again = messages.create_message(**messages._runtime_results.arguments(bound), _runtime_result_id=bound["result_id"])
-    assert again["message_id"] == bound["publication_message_id"]
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        replies = list(pool.map(lambda _: messages.create_message(
+            **messages._runtime_results.arguments(bound), _runtime_result_id=bound["result_id"]), range(8)))
+    assert {again["message_id"] for again in replies} == {bound["publication_message_id"]}
     with runtime[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 2
         assert uow.connection.execute("SELECT generated_messages FROM runtime_causal_roots").fetchone()[0] == 1
@@ -159,14 +167,25 @@ def test_source_relay_revocation_before_dispatch_prevents_next_turn(runtime, mon
 
 def test_interleaved_roots_share_sessions_without_sharing_budgets(runtime):
     configure(runtime, depth=1)
-    send_message(runtime, body="independent root one")
-    send_message(runtime, body="independent root two")
+    entries = [send_message(runtime, body="independent root one"),
+               send_message(runtime, body="independent root two")]
     rows = wait_blocked(runtime, count=2)
     assert len(rows) == 4
     with runtime[0].connection_factory.unit_of_work(write=False) as uow:
         roots = uow.connection.execute("SELECT generated_messages,admitted_executions FROM runtime_causal_roots").fetchall()
         assert [tuple(r) for r in roots] == [(1, 2), (1, 2)]
         assert uow.connection.execute("SELECT count(DISTINCT runtime_session_id) FROM delivery_outbox").fetchone()[0] == 2
+        for entry in entries:
+            parent = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
+                (entry["runtime_operations"][0],)).fetchone()
+            child = uow.connection.execute("""SELECT child.*, result.publication_message_id
+                FROM delivery_outbox child JOIN runtime_results result ON result.result_id=child.source_result_id
+                WHERE result.operation_id=?""", (parent["operation_id"],)).fetchone()
+            assert child["root_operation_id"] == parent["root_operation_id"]
+            assert child["message_id"] == child["publication_message_id"]
+            message = uow.connection.execute("SELECT parent_message_id FROM messages WHERE message_id=?",
+                (child["message_id"],)).fetchone()
+            assert message[0] == entry["message_id"]
 
 
 def test_same_agent_on_distinct_endpoints_keeps_operation_parent(runtime):

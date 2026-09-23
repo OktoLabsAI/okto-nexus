@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="5",
+    version="6",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -519,7 +519,49 @@ GLOBAL-ADMIN: enumerate ALL workspaces. By default paths are OMITTED
 only for an explicit admin/ops need (disclosing every project's on-disk layout is
 opt-in defense-in-depth). When an actor is known, workspace_list requires
 ``workspaces.list`` and include_paths additionally requires
-``workspaces.include_paths``.""",
+``workspaces.include_paths``.
+
+# Runtime administration (surface 39; opt-in)
+An Agent remains the canonical identity. Approved endpoints and runtime profiles
+do not register another agent or replace its role, capabilities or permissions.
+With feature_harness_integrations enabled, an authenticated operator can call
+`harness_list(view="endpoints"|"profiles", maintenance={...})`. Ordinary agent
+credentials cannot administer these resources. The default action is `list`;
+endpoint listing optionally accepts `agent_id`. Results are `{items:[...]}`.
+Profiles omit command paths, environment values and secret reference names.
+
+Actions share the REST application services and strict input models. Unknown
+fields, coercible strings in place of booleans, and non-positive revisions are
+rejected. maintenance accepts an object or a JSON-encoded object:
+
+- profiles/create: profile_id, adapter_id, optional config, secret_refs,
+  inherit_ambient=false, enabled=false. Matches POST /api/v1/harness/profiles.
+- endpoints/create: endpoint_id, agent_id, adapter_id, absolute project_root,
+  profile_id for managed processes; optional enabled=false, priority=0,
+  selection_group, response_policy="explicit", consumption="exclusive",
+  public_config={}. Matches POST /api/v1/harness/endpoints.
+- endpoints/update: endpoint_id, expected_revision, public_config. Replaces the
+  public configuration and advances the revision, matching PATCH of the endpoint.
+  It does not change identity/profile or reconcile old operations.
+- endpoints/boot: endpoint_id, expected_revision, enabled. Matches PUT of the
+  endpoint's /boot resource. A dedicated external attach target cannot auto-boot.
+- endpoints/reconcile: endpoint_id, expected_revision, idempotency_key, reason,
+  acknowledge_uncertain_effects=true. Matches POST of /reconcile; only a closed,
+  quarantined binding is eligible. This never resends ambiguous operations.
+
+Example (an existing worker and approved profile are prerequisites):
+`harness_list(view="endpoints", maintenance={"action":"create",
+"endpoint_id":"worker-code","agent_id":"worker","adapter_id":"codex",
+"project_root":"/approved/project","profile_id":"approved-codex",
+"enabled":true,"response_policy":"conversation"})`.
+
+GET /api/v1/harness/profiles and /endpoints return the same authorized listings.
+Boot/profile updates do not silently authorize a caller's backend override.
+For artifacts view, maintenance retains inspect/cleanup/retry/quota actions;
+retry names result_id, writes require idempotency_key and reason, and quota also
+requires quota_bytes. Journal compaction uses view="journal", compact=true.
+Native acceptance, durable result and handoff completion remain separate facts.
+Unknown transport outcomes require reconciliation, not blind retry.""",
 )
 
 add_resource(

@@ -6,8 +6,8 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "6b03ba960ce5a1670f35e41d27ab2d7b6848ffea",
-  "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
+  "execution_head": "e6983f2a62910a70fcda139ee31753b5be339210",
+  "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
     "IN_PROGRESS",
@@ -1754,7 +1754,7 @@
         {
           "task_id": "P10-T01",
           "title": "Persistir roots/parents/budgets e derivar causalidade exclusivamente de contexto confiável.",
-          "status": "IN_PROGRESS",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
@@ -1771,14 +1771,15 @@
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+            "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
           ],
-          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
+          "notes": "All eleven P10 fixture matrix rows now have scoped passing evidence. Native relay/aggregate acceptance remains pending; phase not VERIFIED."
         },
         {
           "task_id": "P10-T02",
           "title": "Aplicar profundidade, deadline e quotas totais com reserva atômica.",
-          "status": "IN_PROGRESS",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
@@ -1801,14 +1802,15 @@
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
             "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
-            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+            "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
           ],
-          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
+          "notes": "All eleven P10 fixture matrix rows now have scoped passing evidence. Native relay/aggregate acceptance remains pending; phase not VERIFIED."
         },
         {
           "task_id": "P10-T03",
           "title": "Preservar colaboração bidirecional limitada e novos roots legitimamente independentes.",
-          "status": "IN_PROGRESS",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/application/runtime_results.py",
@@ -1824,9 +1826,10 @@
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+            "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
           ],
-          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
+          "notes": "All eleven P10 fixture matrix rows now have scoped passing evidence. Native relay/aggregate acceptance remains pending; phase not VERIFIED."
         },
         {
           "task_id": "P10-T04",
@@ -1847,14 +1850,15 @@
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+            "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
           ],
-          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
+          "notes": "All eleven P10 fixture matrix rows now have scoped passing evidence. Native relay/aggregate acceptance remains pending; phase not VERIFIED."
         },
         {
           "task_id": "P10-T05",
           "title": "Testar cadeia lenta, restart, fan-out, mesmas identidades e conversas intercaladas.",
-          "status": "IN_PROGRESS",
+          "status": "IMPLEMENTED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
@@ -1885,9 +1889,10 @@
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
             "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
-            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+            "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
           ],
-          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
+          "notes": "All eleven P10 fixture matrix rows now have scoped passing evidence. Native relay/aggregate acceptance remains pending; phase not VERIFIED."
         }
       ]
     },
@@ -1897,7 +1902,7 @@
       "depends_on_phases": [
         "P10"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P11",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -1939,22 +1944,44 @@
         {
           "task_id": "P11-T01",
           "title": "Adaptar oito tools/rotas como façades opcionais e normalizar payloads legados.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/adapters/inbound/runtime_admin.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/application/endpoints.py",
+            "tests/test_runtime_admin_surfaces.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+          ],
+          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
         },
         {
           "task_id": "P11-T02",
           "title": "Expor catálogo/bindings/operação/replay e gestão administrativa sem duplicação de tools.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "implementation_refs": [
+            "src/okto_nexus/adapters/inbound/runtime_admin.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/application/endpoints.py",
+            "tests/test_runtime_admin_surfaces.py"
+          ],
+          "test_results": [
+            {
+              "sha": "e6983f2a62910a70fcda139ee31753b5be339210 + shared administration worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_admin_surfaces.py tests/test_runtime_endpoints.py tests/test_runtime_boot.py tests/test_harness_routes.py tests/test_harness_tools.py tests/test_runtime_contracts.py tests/test_frente1_resources.py tests/test_import_boundary.py tests/test_surface_metrics.py tests/test_replay_marker.py",
+              "result": "PASS",
+              "observed": "111 passed, 2 platform skips in 161.79s. Linux scoped selection 48 PASS plus added reconciliation 1 PASS. See evidence for RED and exact commands.",
+              "evidence": "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+            }
+          ],
+          "evidence": [
+            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+          ],
+          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
         },
         {
           "task_id": "P11-T03",
@@ -1969,12 +1996,19 @@
         {
           "task_id": "P11-T04",
           "title": "Atualizar ADR/resources/guia/changelog/surface revision e medir impacto de schema.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/adapters/inbound/runtime_admin.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "src/okto_nexus/application/endpoints.py",
+            "tests/test_runtime_admin_surfaces.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md"
+          ],
+          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
         },
         {
           "task_id": "P11-T05",
@@ -3445,11 +3479,12 @@
       ],
       "stimulus": "Mesma sessão participa de dois roots simultâneos/alternados.",
       "expected": "Cada saída herda o pai correto, sem usar o estado da última mensagem da sessão.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN."
     },
     {
       "test_id": "T-RELAY-05",
@@ -3476,13 +3511,14 @@
       ],
       "stimulus": "Muitos filhos tentam reservar último orçamento disponível.",
       "expected": "Reserva atômica respeita limite total; profundidade sozinha não é o único controle.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
         "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN."
     },
     {
       "test_id": "T-RELAY-07",
@@ -3493,11 +3529,12 @@
       ],
       "stimulus": "Repetir a mesma criação de mensagem filha.",
       "expected": "Não consome budget duas vezes nem cria outro filho.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN."
     },
     {
       "test_id": "T-RELAY-08",
@@ -3524,12 +3561,13 @@
       ],
       "stimulus": "Resultado, receipt, erro sintético e bloqueio de relay são publicados.",
       "expected": "Não geram turnos automaticamente nem criam loop no handler de erro.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN."
     },
     {
       "test_id": "T-RELAY-10",

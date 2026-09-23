@@ -440,7 +440,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: under ``/api/v1/harness/...`` (operator-gated for the mutating verbs, like
 #: ``POST /agents``/``POST /sessions/{id}/close``). Boot-time declared
 #: harnesses are NOT wired into ``serve`` yet - on-demand open only.
-SURFACE_REVISION = 38
+#: 39 = shared strict runtime admin inputs; MCP endpoint/profile views and redacted profile discovery.
+SURFACE_REVISION = 39
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

@@ -199,6 +199,11 @@ class EndpointService:
         with self.cf.unit_of_work(write=False) as uow:
             return self.repo.list(uow, agent_id=agent_id)
 
+    def profiles(self, context):
+        self.authorize(context)
+        with self.cf.unit_of_work(write=False) as uow:
+            return self.repo.public_profiles(uow)
+
     def diagnostics(self, context):
         self.authorize(context)
         with self.cf.unit_of_work(write=False) as uow:

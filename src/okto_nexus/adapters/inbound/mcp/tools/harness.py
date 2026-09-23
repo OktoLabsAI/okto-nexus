@@ -201,6 +201,42 @@ def build_endpoint_service(deps):
         config=deps.config, clock=deps.clock, access=build_access_service(deps))
 
 
+def administer_endpoints(deps, view, parameters):
+    from pydantic import ValidationError
+    from ...runtime_admin import (RuntimeProfileBody, RuntimeEndpointBody, RuntimeBootBody,
+        RuntimeEndpointUpdateBody, RuntimeReconcileBody)
+    context = authorize_request(deps)
+    service = build_endpoint_service(deps)
+    args = runtime_object("maintenance", parameters) or {}
+    action = args.pop("action", "list")
+    if action == "list":
+        if set(args) - ({"agent_id"} if view == "endpoints" else set()):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported listing parameters.", {})
+        if "agent_id" in args and not isinstance(args["agent_id"], str):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "agent_id must be a string.", {})
+        return {"items": service.list(context, **args) if view == "endpoints" else service.profiles(context)}
+    actions = {("profiles", "create"): (RuntimeProfileBody, service.create_profile),
+        ("endpoints", "create"): (RuntimeEndpointBody, service.create_endpoint),
+        ("endpoints", "update"): (RuntimeEndpointUpdateBody, service.update_endpoint),
+        ("endpoints", "boot"): (RuntimeBootBody, service.configure_boot),
+        ("endpoints", "reconcile"): (RuntimeReconcileBody, service.reconcile)}
+    if not isinstance(action, str) or (view, action) not in actions:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported runtime administration action.", {})
+    model, execute = actions[(view, action)]
+    resource = {}
+    if view == "endpoints" and action != "create":
+        endpoint_id = args.pop("endpoint_id", None)
+        if not isinstance(endpoint_id, str) or not 1 <= len(endpoint_id) <= 128:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "An endpoint_id is required.", {})
+        resource["endpoint_id"] = endpoint_id
+    try:
+        parsed = model.model_validate(args).model_dump()
+    except ValidationError:
+        # Never return input values from a profile/secret validation error.
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid runtime administration parameters.", {}) from None
+    return execute(context, **resource, **parsed)
+
+
 def prepare_runtime(deps, *, agent_id, kind, project_root, substrate=None, endpoint_id=None,
                     backend=None, target_pid=None, role=None):
     context = authorize_request(deps, substrate=substrate, action="access")
@@ -967,8 +1003,10 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
-                     maintenance: Annotated[Any, Field(description="For artifacts view: action inspect|cleanup|retry|quota; result_id or quota_bytes; idempotency_key and reason for writes.")] = None) -> dict[str, Any]:
-        """Operator views: adapters (default), journal (compact=true reclaims projected segments), artifacts (maintenance inspects/reclaims unpublished files or retries guarded publication)."""
+                     maintenance: Annotated[Any, Field(description="Object: action list/create for profiles, list/create/update/boot/reconcile for endpoints, inspect/cleanup/retry/quota for artifacts. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+        """Operator views: adapters, endpoints, profiles, journal or artifacts. Endpoint/profile actions reuse REST authorization and revision checks. compact applies only to journal."""
+        if view in {"endpoints", "profiles"} and not compact:
+            return administer_endpoints(deps, view, maintenance)
         if view == "artifacts" and not compact:
             return maintain_artifacts(deps, maintenance)
         if maintenance is not None:

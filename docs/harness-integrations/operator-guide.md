@@ -1,5 +1,9 @@
 # Harness integrations — operator guide
 
+Current endpoint/profile administration is documented in
+[Runtime administration — surface 39](runtime-administration.md). That reference
+supersedes the legacy configuration examples below for these operations.
+
 > 0.2.0 remediation in progress: native integration now requires
 > `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true`; private Claude attach also
 > requires `OKTO_NEXUS_FEATURE_HARNESS_ATTACH=true`. Runtime APIs currently

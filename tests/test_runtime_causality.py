@@ -46,10 +46,10 @@ def test_concurrent_children_cannot_exceed_snapshotted_budget(runtime, budget):
     first = send_message(runtime)
     # A later configuration change cannot refill the existing root.
     setattr(deps.config, budget, 100)
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        outcomes = list(pool.map(lambda _: reply(runtime, first["message_id"]), range(2)))
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        outcomes = list(pool.map(lambda _: reply(runtime, first["message_id"]), range(8)))
     assert sum(bool(r["ok"]) for r in outcomes) == 1, outcomes
-    assert [r["error"]["code"] for r in outcomes if not r["ok"]] == ["QUOTA_EXCEEDED"]
+    assert [r["error"]["code"] for r in outcomes if not r["ok"]] == ["QUOTA_EXCEEDED"] * 7
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM runtime_message_causality").fetchone()[0] == 2
         assert uow.connection.execute("SELECT count(*) FROM delivery_outbox").fetchone()[0] == 2
