@@ -1,0 +1,3 @@
+COMMAND: .venv/Scripts/python.exe -m pytest tests/test_runtime_native_campaign.py -q -k codex --tb=short
+..                                                                       [100%]
+2 passed, 1 deselected in 15.46s

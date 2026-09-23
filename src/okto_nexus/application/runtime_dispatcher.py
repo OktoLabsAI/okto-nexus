@@ -16,7 +16,12 @@ class RuntimeDispatcher:
         self.workers = min(max(int(workers), 1), 8)
         self.recovery_seconds, self.send_timeout_seconds = recovery_seconds, send_timeout_seconds
         self.owner_id, self.epoch = new_id("owner"), None
-        self._wake, self._stop = threading.Event(), threading.Event()
+        self._wake_condition = threading.Condition()
+        self._wake_generation = 0
+        self._stop = threading.Event()
+        self._quiescing = threading.Event()
+        self._shutdown_finished = threading.Event()
+        self._shutdown_ready = None
         self._queue = queue.Queue(maxsize=self.workers)
         self._lock = threading.Lock()
         self._inflight = {}
@@ -53,13 +58,28 @@ class RuntimeDispatcher:
         return True
 
     def wake(self):
-        self._wake.set()
+        with self._wake_condition:
+            self._wake_generation += 1
+            self._wake_condition.notify()
+
+    def _wait_for_wake(self, observed, timeout=10):
+        # Read and acknowledge a generation under the same lock as producers.
+        # A wake during scanning stays outstanding for the next iteration;
+        # there is no separate clear that can erase a concurrent commit's wake.
+        with self._wake_condition:
+            self._wake_condition.wait_for(
+                lambda: self._wake_generation != observed or self._stop.is_set(),
+                timeout=timeout,
+            )
+            return self._wake_generation
 
     def _run(self):
         recovered = 0.0
+        observed = 0
         while not self._stop.is_set():
-            signaled = self._wake.wait(10)
-            self._wake.clear()
+            generation = self._wait_for_wake(observed)
+            signaled = generation != observed
+            observed = generation
             if self._stop.is_set():
                 break
             try:
@@ -71,6 +91,18 @@ class RuntimeDispatcher:
                 self._expire_sends()
                 if self.event_ingress:
                     self.event_ingress.recover()
+                if self._shutdown_ready and self._shutdown_ready():
+                    with self._lock:
+                        idle = not self._inflight
+                    if idle:
+                        if self.event_ingress and self.event_ingress.projection_pending:
+                            self.wake()
+                            continue
+                        if self.event_ingress:
+                            self.event_ingress.close()
+                        self.close()
+                        self._shutdown_finished.set()
+                        break
                 if signaled or time.monotonic() - recovered >= self.recovery_seconds:
                     self.scan_once()
                     recovered = time.monotonic()
@@ -82,7 +114,7 @@ class RuntimeDispatcher:
     def scan_once(self):
         with self._lock:
             capacity = self.workers - len(self._inflight)
-        if capacity <= 0 or self._stop.is_set():
+        if capacity <= 0 or self._stop.is_set() or self._quiescing.is_set():
             return
         now = self.clock.now_iso()
         with self.cf.unit_of_work() as uow:
@@ -123,6 +155,8 @@ class RuntimeDispatcher:
         try:
             with self.cf.unit_of_work() as uow:
                 now = self.clock.now_iso()
+                if self._quiescing.is_set():
+                    return
                 if not self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
                     return
                 try:
@@ -146,8 +180,10 @@ class RuntimeDispatcher:
         except Exception:
             try:
                 with self.cf.unit_of_work() as uow:
-                    self.repo.observe(uow, **key, expected="SENDING", status="OUTCOME_UNKNOWN",
-                                      now=self.clock.now_iso(), reason="dispatch_failed_after_send_intent")
+                    now = self.clock.now_iso()
+                    if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
+                        self.repo.observe(uow, **key, expected="SENDING", status="OUTCOME_UNKNOWN",
+                                          now=now, reason="dispatch_failed_after_send_intent")
             except Exception:
                 logging.getLogger(__name__).error("Runtime outcome persistence failed; send-intent requires reconciliation.")
 
@@ -160,6 +196,20 @@ class RuntimeDispatcher:
                 self.repo.observe(uow, operation_id=operation, epoch=self.epoch, attempt_id=attempt,
                     expected="SENDING", status="OUTCOME_UNKNOWN", now=self.clock.now_iso(), reason="timeout_does_not_prove_non_delivery")
 
+    def quiesce(self):
+        """Stop claims and external calls that have not reached send-intent.
+
+        Heartbeats and capture/projection continue until all owned activity has
+        drained. A timed-out shutdown must not donate its lease to a new owner.
+        """
+        self._quiescing.set()
+        self.wake()
+
+    def finish_shutdown_when(self, ready, *, timeout):
+        self._shutdown_ready = ready
+        self.wake()
+        return self._shutdown_finished.wait(timeout)
+
     def close(self):
         self._stop.set()
         self.wake()
@@ -167,7 +217,8 @@ class RuntimeDispatcher:
             return
         if self.wake_channel:
             self.wake_channel.close()
-        self._coordinator.join(5)
+        if self._coordinator is not threading.current_thread():
+            self._coordinator.join(5)
         # Workers remain capacity-bound even if a native call has not returned.
         with self.cf.unit_of_work() as uow:
             self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())

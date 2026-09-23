@@ -131,3 +131,8 @@ isolated configuration and commands. Two-turn cases additionally assert nonempty
 untruncated derived text and canonical consumption of the two push deliveries.
 See P08_CONSUMPTION_MATERIALIZATION.md and its exact evidence logs. No Pi/attach
 native execution and no change to broader native NOT_RUN declarations.
+
+2026-09-23, e482655 plus coordinated shutdown worktree: fresh REAL isolated Codex
+2 PASS / 1 deselected / 15.46s; Claude stream 1 PASS / 2 deselected / 8.21s.
+Same explicit configuration and native cases; no new native shutdown stress claim.
+See P07_COORDINATED_SHUTDOWN.md and evidence/p07-shutdown-native-{codex,claude}.log.

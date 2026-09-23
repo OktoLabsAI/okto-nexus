@@ -465,23 +465,21 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
             metrics_task = asyncio.create_task(_publish_metrics())
         try:
+            if deps.config.feature_harness_integrations:
+                from ..mcp.tools.harness import build_dispatcher
+                acquired = await anyio.to_thread.run_sync(build_dispatcher(deps).start)
+                if not acquired:
+                    raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
             async with mcp_server.session_manager.run():
-                if deps.config.feature_harness_integrations:
-                    from ..mcp.tools.harness import build_dispatcher
-                    await anyio.to_thread.run_sync(build_dispatcher(deps).start)
                 yield
         finally:
             dispatcher = getattr(deps, "runtime_dispatcher", None)
-            if dispatcher:
-                await anyio.to_thread.run_sync(dispatcher.close)
             supervisor = getattr(deps, "harness_supervisor", None)
-            if supervisor and supervisor.event_ingress:
-                for runtime in supervisor.list_live():
-                    with contextlib.suppress(Exception):
-                        await anyio.to_thread.run_sync(supervisor.close, runtime.session_id)
-                with contextlib.suppress(Exception):
-                    await anyio.to_thread.run_sync(supervisor.event_ingress.recover)
-                await anyio.to_thread.run_sync(supervisor.event_ingress.close)
+            if (dispatcher and dispatcher.epoch is not None and supervisor
+                    and not dispatcher._shutdown_finished.is_set()):
+                from ....application.runtime_shutdown import shutdown_runtime
+                deps.runtime_shutdown_status = await anyio.to_thread.run_sync(
+                    shutdown_runtime, dispatcher, supervisor)
             if telemetry is not None:
                 telemetry.record_event(
                     EVENT_LIFECYCLE, {"action": "serve_stop", "status": "ok"}

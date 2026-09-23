@@ -435,6 +435,20 @@ class HarnessSupervisor:
         self.event_ingress = None
         self._connections = {}
         self._closing = {}
+        self._shutting_down = False
+        self._shutdown_threads = []
+        self._active_helpers = 0
+        self._active_calls = 0
+        self._pump_threads = set()
+        self._shutdown_workers_active = 0
+        self._shutdown_wake = None
+        self._activity_condition = threading.Condition(self._lock)
+
+    def _activity_finished(self):
+        with self._activity_condition:
+            self._activity_condition.notify_all()
+        if self._shutdown_wake:
+            self._shutdown_wake()
 
     # ------------------------------------------------------------------ #
     # subscriber registry passthrough (so a caller needs only ONE reference)
@@ -458,6 +472,8 @@ class HarnessSupervisor:
         endpoint_id = kwargs.get("endpoint_id")
         binding_key = endpoint_id or "legacy:" + str(agent_id)
         with self._lock:
+            if self._shutting_down:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Runtime owner is shutting down.", {})
             if len(self._live) + len(self._opening_agents) + len(self._closing) >= self._max_live_runtimes:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Runtime capacity exhausted.", {})
             if binding_key in self._quarantined_bindings or binding_key in self._opening_agents or any(
@@ -472,6 +488,7 @@ class HarnessSupervisor:
         finally:
             with self._lock:
                 self._opening_agents.discard(binding_key)
+            self._activity_finished()
 
     def _open(
         self,
@@ -611,13 +628,14 @@ class HarnessSupervisor:
         # synchronously by send() instead - see the module docstring.
         if not connector.capabilities.send_only:
             thread = threading.Thread(
-                target=self._pump,
+                target=self._pump_tracked,
                 args=(session.session_id,),
                 daemon=True,
                 name=f"harness-pump-{session.session_id}",
             )
             with self._lock:
                 live.pump_thread = thread
+                self._pump_threads.add(thread)
             thread.start()
 
         # SYS-03/UAT-05 follow-up: subscribe THIS session to ordinary
@@ -635,6 +653,11 @@ class HarnessSupervisor:
             )
             with self._lock:
                 live.inbox_subscription = handle
+        with self._lock:
+            shutting_down = self._shutting_down
+        if shutting_down:
+            self.close(session.session_id)
+            raise OktoNexusError(ErrorCode.CONFLICT, "Runtime owner stopped admission during startup.", {})
         return session
 
     def open_declared(
@@ -688,6 +711,8 @@ class HarnessSupervisor:
         outcome: dict[str, Any] = {}
         completion_lock = threading.Lock()
         timed_out = False
+        with self._lock:
+            self._active_helpers += 1
 
         def _run() -> None:
             try:
@@ -726,12 +751,18 @@ class HarnessSupervisor:
                         with self._lock:
                             self._quarantined_bindings.discard(binding_key)
                 self._start_slots.release()
+                with self._lock:
+                    self._active_helpers -= 1
+                self._activity_finished()
 
         thread = threading.Thread(target=_run, daemon=True, name=f"harness-start-{kind}")
         try:
             thread.start()
         except BaseException:
             self._start_slots.release()
+            with self._lock:
+                self._active_helpers -= 1
+            self._activity_finished()
             lifecycle.cancel()
             raise
         thread.join(self._start_timeout_s)
@@ -762,7 +793,22 @@ class HarnessSupervisor:
     # send / steer / interrupt (one verb-dispatch method - HarnessCommand
     # already carries the verb, so there is no reason to fork into three)
     # ------------------------------------------------------------------ #
-    def send(
+    def send(self, session_id, verb, payload=None, *, _relay_depth=None,
+             _relay_chain_id=None, _relay_chain_started_at=None, _transport_attempt=None):
+        with self._lock:
+            if self._shutting_down:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Runtime owner is shutting down.", {})
+            self._active_calls += 1
+        try:
+            return self._send(session_id, verb, payload, _relay_depth=_relay_depth,
+                _relay_chain_id=_relay_chain_id, _relay_chain_started_at=_relay_chain_started_at,
+                _transport_attempt=_transport_attempt)
+        finally:
+            with self._lock:
+                self._active_calls -= 1
+            self._activity_finished()
+
+    def _send(
         self,
         session_id: str,
         verb: str,
@@ -1104,6 +1150,53 @@ class HarnessSupervisor:
     # ------------------------------------------------------------------ #
     # close (explicit, operator/agent-requested end)
     # ------------------------------------------------------------------ #
+    def begin_shutdown(self, *, wake=None):
+        """Close admission once, using at most four persistent teardown workers.
+
+        A caller can stop waiting without abandoning these workers or the native
+        event pumps. The dispatcher retains its lease/journal until drained().
+        """
+        with self._lock:
+            if wake:
+                self._shutdown_wake = wake
+            if self._shutting_down:
+                return
+            self._shutting_down = True
+            pending = iter(tuple(self._live))
+
+            def drain():
+                try:
+                    while True:
+                        with self._lock:
+                            session_id = next(pending, None)
+                        if session_id is None:
+                            return
+                        try:
+                            self.close(session_id)
+                        except Exception:
+                            self._log_best_effort_failure("draining runtime at shutdown", session_id)
+                finally:
+                    with self._lock:
+                        self._shutdown_workers_active -= 1
+                    self._activity_finished()
+
+            self._shutdown_threads = [threading.Thread(target=drain, daemon=True,
+                name=f"nexus-runtime-shutdown-{i}") for i in range(min(4, len(self._live)))]
+            self._shutdown_workers_active = len(self._shutdown_threads)
+            for thread in self._shutdown_threads:
+                thread.start()
+
+    def drained(self):
+        with self._lock:
+            return (self._shutting_down and not self._live and not self._closing
+                    and not self._opening_agents and not self._active_helpers
+                    and not self._active_calls and not self._pump_threads
+                    and not self._shutdown_workers_active)
+
+    def wait_drained(self, timeout):
+        with self._activity_condition:
+            return self._activity_condition.wait_for(self.drained, timeout)
+
     def close(self, session_id: str) -> HarnessSession:
         """Request stop once, drain bounded output and return observed state.
 
@@ -1197,6 +1290,8 @@ class HarnessSupervisor:
         if not self._call_slots.acquire(blocking=False):
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime control capacity exhausted.", {})
         outcome: dict[str, Any] = {}
+        with self._lock:
+            self._active_helpers += 1
 
         def _run() -> None:
             try:
@@ -1205,12 +1300,18 @@ class HarnessSupervisor:
                 outcome["error"] = exc
             finally:
                 self._call_slots.release()
+                with self._lock:
+                    self._active_helpers -= 1
+                self._activity_finished()
 
         thread = threading.Thread(target=_run, daemon=True, name=f"harness-{label}")
         try:
             thread.start()
         except BaseException:
             self._call_slots.release()
+            with self._lock:
+                self._active_helpers -= 1
+            self._activity_finished()
             raise
         thread.join(timeout_s)
         if thread.is_alive():
@@ -1276,6 +1377,14 @@ class HarnessSupervisor:
                 {"session_id": session_id},
             )
         return live
+
+    def _pump_tracked(self, session_id):
+        try:
+            self._pump(session_id)
+        finally:
+            with self._lock:
+                self._pump_threads.discard(threading.current_thread())
+            self._activity_finished()
 
     def _pump(self, session_id: str) -> None:
         """The background thread body for a full-duplex connector: drain

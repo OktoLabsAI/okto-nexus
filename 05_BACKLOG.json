@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "920faee",
+  "execution_head": "e482655",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -813,12 +813,21 @@
             "src/okto_nexus/application/messages.py",
             "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "e482655 + coordinated shutdown worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_shutdown.py tests/test_runtime_wake_generation.py tests/test_runtime_outbox.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py tests/test_runtime_result_correlation.py tests/test_runtime_event_journal.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "55 passed in 60.96s; native scenarios recorded separately in unit document",
+              "evidence": "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
-            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+            "plans/pr34-remediation/evidence/p05-p06-gate.log",
+            "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
         },
         {
           "task_id": "P06-T02",
@@ -832,12 +841,21 @@
             "src/okto_nexus/application/messages.py",
             "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "e482655 + coordinated shutdown worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_shutdown.py tests/test_runtime_wake_generation.py tests/test_runtime_outbox.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py tests/test_runtime_result_correlation.py tests/test_runtime_event_journal.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "55 passed in 60.96s; native scenarios recorded separately in unit document",
+              "evidence": "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
-            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+            "plans/pr34-remediation/evidence/p05-p06-gate.log",
+            "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
         },
         {
           "task_id": "P06-T03",
@@ -1155,15 +1173,23 @@
               "result": "PASS",
               "observed": "1 passed, 2 deselected; real isolated Codex 0.155.1/gpt-6-astra interrupted terminal before stopped; auth copy removed",
               "evidence": "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md"
+            },
+            {
+              "sha": "e482655 + coordinated shutdown worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_shutdown.py tests/test_runtime_wake_generation.py tests/test_runtime_outbox.py tests/test_runtime_shared_connection.py tests/test_runtime_process_ownership.py tests/test_runtime_result_correlation.py tests/test_runtime_event_journal.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "55 passed in 60.96s; native scenarios recorded separately in unit document",
+              "evidence": "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
             "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
-            "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md"
+            "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md",
+            "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
           ],
-          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending."
+          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
         },
         {
           "task_id": "P07-T06",

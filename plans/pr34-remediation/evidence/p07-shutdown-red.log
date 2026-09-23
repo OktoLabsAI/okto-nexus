@@ -1,0 +1,6 @@
+Parent: e482655
+Command: rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_shutdown.py
+Observed before implementation: 1 failed in 2.63s
+Assertion: runtime owner released before session drain
+observations == [1] (one live runtime when release_owner ran)
+This is a concise transcription of the behavioral failure, not a raw full log. Fixture credential repr omitted.

@@ -146,3 +146,10 @@ explicit skipped cases. WSL Python 3.10 component evidence does not qualify full
 Nexus Linux composition (requires >=3.11), which remains NOT_RUN. Managed platforms
 declared Windows/Linux; external guardian kill yields unknown, not observed stop.
 Full shutdown/boot/recovery and later phases remain pending; no final gate passed.
+
+Linux ownership checkpoint pushed: e482655. Coordinated shutdown now retains the
+owner heartbeat and journal through bounded runtime drain, rejects late admission
+and refuses contending serve startup. Wake generations replace Event.clear. See
+P07_COORDINATED_SHUTDOWN.md: behavioral RED; 55 integrated PASS; REAL isolated Codex
+2 PASS and Claude stream 1 PASS. Next: restart journal/session reconciliation and
+stable endpoint boot. P09-P12 and final gate remain unfinished.
