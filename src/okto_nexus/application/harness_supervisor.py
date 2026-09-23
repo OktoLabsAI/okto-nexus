@@ -1076,13 +1076,9 @@ class HarnessSupervisor:
         one paced in milliseconds. The ONE time-based check left is
         :attr:`_relay_chain_max_age_s` against
         :attr:`~_LiveSession.relay_chain_started_at` (when the chain
-        BEGAN, not its last hop): a chain that has sat with zero further
-        hops for that long is treated as finished, so a later, genuinely
-        new conversation from the same source is not permanently poisoned
-        by it - see the class docstring for the residual this leaves (a
-        cascade paced slower than :attr:`_relay_chain_max_age_s` per hop
-        still eventually re-mints a fresh chain and escapes the cap; that
-        is a documented floor, not an oversight).
+        BEGAN, not its last hop): expired chains are rejected, never
+        reset automatically. This legacy callback is not wired to the
+        production dispatcher, whose causal roots are persisted per operation.
 
         A message from an ordinary, non-harness sender (an operator, or a
         harness with no live session / no active chain) resolves to depth
@@ -1098,6 +1094,10 @@ class HarnessSupervisor:
             for live in self._live.values():
                 if live.session.owning_agent_id != from_agent_id:
                     continue
+                # Compatibility callback is not used for production durable
+                # delivery. Even here, expiry cannot mint a fresh relay root.
+                if live.relay_chain_id is not None and (now - live.relay_chain_started_at) > self._relay_chain_max_age_s:
+                    return None
                 chain_alive = (
                     live.relay_depth > 0
                     and live.relay_chain_id is not None

@@ -5,12 +5,14 @@ from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
 from .runtime_requirements import validate_native_requirements
+from .runtime_causality import RuntimeCausalityService
 
 
 class RuntimeDeliveryPlanner:
     def __init__(self, *, endpoints, outbox, agents, registry, config):
         self.endpoints, self.outbox, self.agents = endpoints, outbox, agents
         self.registry, self.config = registry, config
+        self.causality = RuntimeCausalityService(config=config, agents=agents)
 
     def enqueue(self, uow, *, context, message, delivery, now, authorization_revision):
         # Legacy cooperative-trust messages still reach the logical inbox, but
@@ -55,14 +57,16 @@ class RuntimeDeliveryPlanner:
         if len(candidates) > 1 and (len(groups) != 1 or None in groups):
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
         endpoint, profile, session = min(candidates, key=lambda c: c[0]["endpoint_id"])
+        cause = self.causality.reserve_execution(uow, message_id=message.message_id, now=now)
         operation_id = new_id("op")
+        bootstrap = delivery_context(uow, agents=self.agents, endpoint=endpoint, profile=profile, intent="conversation")
+        bootstrap["causality"] = self.causality.context(cause)
         envelope = DeliveryEnvelope(operation_id, message.from_agent_id, delivery.recipient_agent_id,
-            message.workspace_id, "conversation", ({"type": "text", "text": message.body or ""},), operation_id,
+            message.workspace_id, "conversation", ({"type": "text", "text": message.body or ""},), cause["root_operation_id"],
             message_id=message.message_id, delivery_id=delivery.delivery_id, context_id=message.parent_message_id or message.message_id,
-            subject=message.subject, causation_id=message.parent_message_id, response_requested=True,
+            subject=message.subject, causation_id=message.parent_message_id, hop_count=cause["hop_count"], response_requested=True,
             artifact_refs=tuple(message.artifacts or ()),
-            runtime_context=delivery_context(uow, agents=self.agents, endpoint=endpoint,
-                                             profile=profile, intent="conversation"))
+            runtime_context=bootstrap)
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                            session_id=session, now=now, authorization_revision=authorization_revision)
         return operation_id

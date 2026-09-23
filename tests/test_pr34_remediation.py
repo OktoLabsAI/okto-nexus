@@ -347,7 +347,8 @@ def test_p01_enabled_authorized_connectors_remain_usable(runtime, kind, substrat
     sent = tool(client, key, "harness_send", {"session_id": sid,
                 "payload": {"content" if kind == "claude_code" else "text": "test"}})
     assert sent["ok"], sent
-    assert len(peers[0].sent) == 1
+    # The facade confirms durable admission; dispatch completes asynchronously.
+    wait_sent(peers)
     assert tool(client, key, "harness_close", {"session_id": sid})["ok"]
 
 
@@ -423,4 +424,4 @@ def test_p02_additional_adapter_through_production_mcp_and_rest(runtime):
     response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": key},
                            json={"payload": {"text": "fixture command"}})
     assert response.status_code == 200, response.text
-    assert len(peers[0].sent) == 1
+    wait_sent(peers)

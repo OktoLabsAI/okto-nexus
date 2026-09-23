@@ -314,8 +314,13 @@ def build_dispatcher(deps):
         if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach is disabled.", {})
 
+    def validate_dispatch(uow, operation):
+        validate(uow, operation)
+        planner.causality.validate_dispatch(uow, operation=operation, now=deps.clock.now_iso())
+
     def dispatch(operation):
         with deps.connection_factory.unit_of_work(write=False) as uow:
+            validate_dispatch(uow, operation)
             endpoint, profile = revalidate(uow, operation)
             workspace = deps.repos.workspaces.get(uow, operation["workspace_id"])
         descriptor = registry.get(endpoint["adapter_id"])
@@ -355,7 +360,7 @@ def build_dispatcher(deps):
                     raise OktoNexusError(ErrorCode.CONFLICT, "Runtime operation lost ownership.", {})
         operation = operation | {"runtime_session_id": session_id}
         with deps.connection_factory.unit_of_work(write=False) as uow:
-            validate(uow, operation)
+            validate_dispatch(uow, operation)
             current = outbox.get(uow, operation["operation_id"])
             if (not current or current["status"] != "SENDING" or current["owner_epoch"] != operation["owner_epoch"] or
                     not outbox.owns(uow, owner_id=operation["owner_id"], epoch=operation["owner_epoch"], now=deps.clock.now_iso())):
@@ -364,7 +369,7 @@ def build_dispatcher(deps):
             _transport_attempt={key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
-                                  validate=validate, dispatch=dispatch)
+                                  validate=validate_dispatch, dispatch=dispatch)
     dispatcher.event_ingress = supervisor.event_ingress
     def publish_results():
         return native_approvals.scan_once() + handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)

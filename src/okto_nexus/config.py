@@ -203,10 +203,22 @@ class NexusConfig:
     feature_memory: bool = False
     feature_harness_integrations: bool = False
     feature_harness_attach: bool = False
+    max_relay_depth: int = 4
+    max_generated_messages_per_root: int = 32
+    max_executions_per_root: int = 16
+    root_deadline_seconds: int = 1800
+    max_new_roots_per_agent_per_minute: int = 32
+    max_new_roots_per_workspace_per_minute: int = 128
     feature_health: bool = False
     feature_replay: bool = False
 
     def __post_init__(self) -> None:
+        for name, low, high in (("max_relay_depth", 0, 64), ("max_generated_messages_per_root", 1, 4096),
+                ("max_executions_per_root", 1, 1024), ("root_deadline_seconds", 1, 86400),
+                ("max_new_roots_per_agent_per_minute", 1, 4096), ("max_new_roots_per_workspace_per_minute", 1, 16384)):
+            value = getattr(self, name)
+            if type(value) is not int or not low <= value <= high:
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR, f"{name} must be within {low}..{high}.", {})
         self.home_dir = Path(self.home_dir).expanduser()
         if self.db_path is None:
             self.db_path = self.home_dir / "nexus.db"
@@ -226,6 +238,12 @@ _PATH_FIELDS: dict[str, tuple[str, str]] = {
 }
 
 _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
+    "max_relay_depth": ("OKTO_NEXUS_MAX_RELAY_DEPTH", "--max-relay-depth", 4, 0),
+    "max_generated_messages_per_root": ("OKTO_NEXUS_MAX_GENERATED_MESSAGES_PER_ROOT", "--max-generated-messages-per-root", 32, 1),
+    "max_executions_per_root": ("OKTO_NEXUS_MAX_EXECUTIONS_PER_ROOT", "--max-executions-per-root", 16, 1),
+    "root_deadline_seconds": ("OKTO_NEXUS_ROOT_DEADLINE_SECONDS", "--root-deadline-seconds", 1800, 1),
+    "max_new_roots_per_agent_per_minute": ("OKTO_NEXUS_MAX_NEW_ROOTS_PER_AGENT_PER_MINUTE", "--max-new-roots-per-agent-per-minute", 32, 1),
+    "max_new_roots_per_workspace_per_minute": ("OKTO_NEXUS_MAX_NEW_ROOTS_PER_WORKSPACE_PER_MINUTE", "--max-new-roots-per-workspace-per-minute", 128, 1),
     # field: (env var, CLI flag, default, minimum allowed)
     "busy_timeout_ms": ("OKTO_NEXUS_BUSY_TIMEOUT_MS", "--busy-timeout-ms", 5000, 0),
     "poll_interval_ms": ("OKTO_NEXUS_POLL_INTERVAL_MS", "--poll-interval-ms", 200, 1),

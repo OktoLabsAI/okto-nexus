@@ -338,7 +338,7 @@ class RetentionService:
                 "unread/delivered/parked deliveries and active/stale sessions "
                 "are never pruned; all handoffs/tasks/channels/agents/"
                 "workspaces/artifacts are never pruned. Messages ARE pruned by "
-                "pure age (>= 7-day window), taking their deliveries and "
+                "age (>= 7-day window), except runtime evidence and causal fences; taking unprotected deliveries and "
                 "embeddings with them"
             ),
             "vacuum": vacuum_report,

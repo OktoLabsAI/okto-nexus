@@ -521,6 +521,9 @@ class MessageService:
                 created_at=now,
             )
 
+            if self._runtime_planner and getattr(self._config, "feature_harness_integrations", False) and not _nonexecuting_notification:
+                self._runtime_planner.causality.record(uow, message=message, context=runtime_context,
+                    now=now, source_result_id=_runtime_result_id)
             self._agents.touch(uow, agent_id=from_agent_id, at=now)
 
             # Fan out into each recipient's GLOBAL inbox (one delivery per agent).
