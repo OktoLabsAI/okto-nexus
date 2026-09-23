@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "6540cd7",
+  "execution_head": "6b03ba960ce5a1670f35e41d27ab2d7b6848ffea",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1763,14 +1763,17 @@
             "src/okto_nexus/application/runtime_results.py",
             "src/okto_nexus/application/runtime_delivery.py",
             "src/okto_nexus/migrations/051_runtime_result_relay.sql",
-            "tests/test_runtime_relay.py"
+            "tests/test_runtime_relay.py",
+            "tests/runtime_relay_process_fixture.py",
+            "tests/test_runtime_relay_process_restart.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
-            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
           ],
-          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
+          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
         },
         {
           "task_id": "P10-T02",
@@ -1789,15 +1792,18 @@
             "src/okto_nexus/application/messages.py",
             "src/okto_nexus/application/governance.py",
             "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
-            "tests/test_runtime_notify_targets.py"
+            "tests/test_runtime_notify_targets.py",
+            "tests/runtime_relay_process_fixture.py",
+            "tests/test_runtime_relay_process_restart.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
           ],
-          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
+          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
         },
         {
           "task_id": "P10-T03",
@@ -1820,7 +1826,7 @@
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
             "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
+          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
         },
         {
           "task_id": "P10-T04",
@@ -1843,7 +1849,7 @@
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
             "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
           ],
-          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
+          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
         },
         {
           "task_id": "P10-T05",
@@ -1862,15 +1868,26 @@
             "src/okto_nexus/application/messages.py",
             "src/okto_nexus/application/governance.py",
             "src/okto_nexus/migrations/052_runtime_relay_decisions.sql",
-            "tests/test_runtime_notify_targets.py"
+            "tests/test_runtime_notify_targets.py",
+            "tests/runtime_relay_process_fixture.py",
+            "tests/test_runtime_relay_process_restart.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "6b03ba960ce5a1670f35e41d27ab2d7b6848ffea + process/correlation worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_relay.py tests/test_runtime_causality.py tests/test_runtime_notify_targets.py",
+              "result": "PASS",
+              "observed": "55 passed in 211.60s; Linux equivalent 55 passed in 217.13s. Separate process tests 5 PASS each and three-agent addition 1 PASS each. Exact commands and intermediate failures in evidence.",
+              "evidence": "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
             "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
-            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+            "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+            "plans/pr34-remediation/P10_PROCESS_RESTART.md"
           ],
-          "notes": "Explicit notify targets, bounded fanout decisions, private artifact audience and origin/represented authority intersection implemented. Full P10 process restart and aggregate gates remain pending."
+          "notes": "Explicit bounded relay, approved notification targets and whole-process restart cuts implemented. Windows/Linux restart 5 PASS each; aggregate P10 correlation/target matrix and native relay remain pending."
         }
       ]
     },
@@ -3011,8 +3028,11 @@
       ],
       "stimulus": "Crash após fsync e antes do commit de projeção.",
       "expected": "Replay recompõe evento/resultado/intent sem duplicidade.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim."
     },
     {
       "test_id": "T-JRN-03",
@@ -3377,11 +3397,12 @@
       ],
       "stimulus": "A→B e A→B→C com grants/targets válidos.",
       "expected": "Entrega e resposta funcionam dentro do orçamento, sem bloqueio genérico entre harnesses.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence."
     },
     {
       "test_id": "T-RELAY-02",
@@ -3392,11 +3413,12 @@
       ],
       "stimulus": "Hops a cada dez minutos, max depth quatro, deadline trinta minutos.",
       "expected": "Deadline/root não reinicia depth; continuação expirada é bloqueada.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim."
     },
     {
       "test_id": "T-RELAY-03",
@@ -3407,11 +3429,12 @@
       ],
       "stimulus": "Reiniciar Nexus entre hops.",
       "expected": "Root/depth/budget/correlação persistem.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim."
     },
     {
       "test_id": "T-RELAY-04",
@@ -3437,11 +3460,12 @@
       ],
       "stimulus": "Mesmo Agent envia respostas por conexões diferentes.",
       "expected": "Root decorre da operação, não da primeira sessão encontrada em memória.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence."
     },
     {
       "test_id": "T-RELAY-06",
@@ -3484,11 +3508,12 @@
       ],
       "stimulus": "Entrada nova autenticada após root anterior encerrado.",
       "expected": "Novo root permitido sob quotas; não herda bloqueio da sessão anterior.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence."
     },
     {
       "test_id": "T-RELAY-09",
@@ -3515,11 +3540,12 @@
       ],
       "stimulus": "Modelo forja root/depth e feature_trace está desligada.",
       "expected": "Servidor mantém causalidade real e limites independentemente de telemetry.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence."
     },
     {
       "test_id": "T-RELAY-11",

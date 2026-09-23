@@ -156,12 +156,15 @@ def test_authenticated_reply_inherits_root_instead_of_starting_a_new_budget(runt
     assert open_rest(runtime).status_code == 200
     first = send_message(runtime, body="first causal fixture")
     second = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
-        "target": {"strategy": "direct", "agent_id": "worker"}, "subject": "fixture", "body": "continuation fixture",
+        "target": {"strategy": "direct", "agent_id": "worker"}, "subject": "fixture",
+        "body": json.dumps({"root_operation_id": "forged-root", "hop_count": 0,
+                            "causation_id": "forged-parent", "max_depth": 99999}),
         "parent_message_id": first["message_id"]})
     assert second["ok"], second
     with deps.connection_factory.unit_of_work(write=False) as uow:
         envelopes = [json.loads(row[0]) for row in uow.connection.execute("SELECT envelope FROM delivery_outbox ORDER BY created_at,operation_id")]
     assert len(envelopes) == 2
     assert envelopes[1]["root_operation_id"] == envelopes[0]["root_operation_id"]
+    assert envelopes[1]["root_operation_id"] != "forged-root"
     assert envelopes[1]["hop_count"] == 1
     assert envelopes[1]["causation_id"] == first["message_id"]
