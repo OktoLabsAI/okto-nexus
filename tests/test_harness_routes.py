@@ -1,22 +1,7 @@
-"""REST-surface tests for the harness connector lifecycle (ADR 0004, Phase
-3.5 - the ``/api/v1/harness/...`` routes in ``routes.py``).
+"""REST lifecycle regressions over a real socket, production auth and MCP mount.
 
-Integration tests over the REAL application (FastAPI ``TestClient`` + a
-migrated SQLite store), mirroring ``tests/test_http_api.py``'s
-``serve_env``/``_h`` shape. Reuses the SAME ``FakeConnector`` and connector
-factory injection point as ``tests/test_harness_tools.py`` (precedent for
-cross-test-module reuse: ``test_capability_catalog.py`` imports
-``FakeConnectionFactory`` from ``test_shared_md``), so the two files can
-never disagree on what a fake connector actually does.
-
-Every handler in ``routes.py`` calls the SAME ``tools/harness.py``
-composition-root/serialisation functions the MCP tools use
-(``build_service``, ``build_connector``/``build_connector_factories``,
-``session_to_dict``, ``normalize_payload``, ``capabilities_catalog``), so
-this file's job is to prove the REST wiring (body parsing, operator gating,
-error-code -> HTTP-status mapping, one shared ``HarnessSupervisor`` instance)
-rather than re-derive behaviour already covered by
-``tests/test_harness_tools.py``.
+Uses canonical fixture agents and approved profiles. Only external peers are
+synthetic; runtime ownership, journaling and application services are real.
 """
 
 from __future__ import annotations
@@ -25,17 +10,10 @@ import time
 
 import pytest
 
-fastapi = pytest.importorskip("fastapi")
-from fastapi.testclient import TestClient  # noqa: E402
+from test_harness_tools import FakeConnector
+from test_pr34_remediation import runtime as runtime_fixture, tool
 
-from okto_nexus.adapters.inbound.http.app import (  # noqa: E402
-    build_app,
-    ensure_operator_key,
-)
-from okto_nexus.adapters.inbound.mcp.server import bootstrap  # noqa: E402
-from okto_nexus.application.auth import AgentKeyAuthService  # noqa: E402
-
-from test_harness_tools import _ATTACH_CAPS, _STREAM_CAPS, FakeConnector  # noqa: E402
+runtime = runtime_fixture
 
 
 def _h(key: str) -> dict[str, str]:
@@ -43,48 +21,23 @@ def _h(key: str) -> dict[str, str]:
 
 
 @pytest.fixture
-def harness_env(tmp_path):
-    """A booted Deps + REST app + operator key, with fake connector
-    factories wired in (no real pi/codex/claude binary spawned - see
-    ``test_harness_tools.py``'s module docstring for why)."""
-    project_dir = tmp_path / "project"
-    project_dir.mkdir()
-    home = tmp_path / "nexus_home"
-    deps = bootstrap({}, ["--home", str(home)])
-
+def harness_env(runtime):
+    # Use the actual socket/MCP/REST owner fixture, approved profiles and the
+    # existing canonical worker. Only external peers are synthetic.
+    deps, client, root, _peers, operator_key, _caller = runtime
     connectors: dict[str, list[FakeConnector]] = {"pi": [], "codex": [], "claude_code": []}
+    originals = deps.harness_connector_factories.copy()
 
-    def _factory(kind: str):
-        def factory(*, project_root: str, substrate: str | None, target_pid, **_ignored):
-            caps = _STREAM_CAPS
-            if kind == "claude_code" and substrate == "attach":
-                caps = _ATTACH_CAPS
-            conn = FakeConnector(kind=kind, capabilities=caps)
-            connectors[kind].append(conn)
-            return conn
+    def wrap(kind):
+        def build(**kwargs):
+            peer = originals[kind](**kwargs)
+            connectors[kind].append(peer)
+            return peer
+        return build
 
-        return factory
-
-    deps.harness_connector_factories = {
-        "pi": _factory("pi"),
-        "codex": _factory("codex"),
-        "claude_code": _factory("claude_code"),
-    }
-
-    auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
-    issued = ensure_operator_key(deps, auth)
-    assert issued is not None
-    _, operator_key = issued
-    app = build_app(deps)
-    with TestClient(app) as client:
-        # TestClient's fake client is never a real loopback socket connection
-        # (request.client.host is not in _LOOPBACK_CLIENTS), so the
-        # same-machine keyless-trust convenience never applies here - send
-        # the operator key explicitly by default (mirrors
-        # test_guardrails.py's guardrail_rest_client fixture). Individual
-        # tests override with `headers=` to exercise a DIFFERENT identity.
-        client.headers.update({"x-api-key": operator_key})
-        yield deps, client, str(project_dir), connectors, operator_key
+    deps.harness_connector_factories.update({kind: wrap(kind) for kind in originals})
+    client.headers.update({"x-api-key": operator_key})
+    yield deps, client, root, connectors, operator_key
 
 
 def _wait_until(predicate, *, timeout_s: float = 2.0) -> None:
@@ -97,9 +50,9 @@ def _wait_until(predicate, *, timeout_s: float = 2.0) -> None:
 
 
 # --------------------------------------------------------------------------- #
-# GET /harness/kinds - open, no auth required
+# GET /harness/kinds - authenticated runtime catalog
 # --------------------------------------------------------------------------- #
-def test_harness_kinds_lists_catalog_without_auth(harness_env):
+def test_harness_kinds_lists_catalog_for_authorized_operator(harness_env):
     _deps, client, _root, _connectors, _op = harness_env
     r = client.get("/api/v1/harness/kinds")
     assert r.status_code == 200, r.text
@@ -110,31 +63,33 @@ def test_harness_kinds_lists_catalog_without_auth(harness_env):
 # --------------------------------------------------------------------------- #
 # POST /harness/sessions (open) - operator-gated mutation
 # --------------------------------------------------------------------------- #
-def test_harness_open_as_operator_registers_agent(harness_env):
+def test_harness_open_as_operator_preserves_agent(harness_env):
     deps, client, root, connectors, _op = harness_env
     r = client.post(
         "/api/v1/harness/sessions",
-        json={"agent_id": "pi-rest-1", "kind": "pi", "project_root": root},
+        json={"agent_id": "worker", "kind": "pi", "project_root": root},
     )
     assert r.status_code == 200, r.text
     data = r.json()["data"]
     assert data["status"] == "RUNNING"
-    assert data["owning_agent_id"] == "pi-rest-1"
+    assert data["owning_agent_id"] == "worker"
     assert len(connectors["pi"]) == 1
 
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        agent = deps.repos.agents.get(uow, "pi-rest-1")
-    assert agent is not None
+        agent = deps.repos.agents.get(uow, "worker")
+    assert agent is not None and agent.role == "reviewer"
+    assert agent.capabilities == {"review": True} and agent.metadata == {"keep": "profile"}
 
 
 def test_harness_open_rejects_unknown_kind(harness_env):
     _deps, client, root, _connectors, _op = harness_env
     r = client.post(
         "/api/v1/harness/sessions",
-        json={"agent_id": "x", "kind": "not-a-kind", "project_root": root},
+        json={"agent_id": "worker", "kind": "not-a-kind", "project_root": root},
     )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert r.status_code == 404, r.text
+    assert r.json()["error"]["code"] == "NOT_FOUND"
+    assert "endpoint" in r.json()["error"]["message"]
 
 
 def test_harness_open_claude_code_attach_requires_target_pid(harness_env):
@@ -142,51 +97,44 @@ def test_harness_open_claude_code_attach_requires_target_pid(harness_env):
     r = client.post(
         "/api/v1/harness/sessions",
         json={
-            "agent_id": "cc",
+            "agent_id": "worker",
             "kind": "claude_code",
             "project_root": root,
             "substrate": "attach",
         },
     )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert r.status_code == 403, r.text
+    assert r.json()["error"]["code"] == "PERMISSION_DENIED"
 
 
-def test_harness_open_default_backend_is_ambient_and_visible_in_response(harness_env):
-    """H-1 (EV-SYS-002), REST mirror: omitting backend keeps today's
-    ambient-inherit default, but the response must say so explicitly."""
+def test_harness_open_default_profile_is_isolated_and_visible_in_response(harness_env):
+    """Approved profile metadata is explicit and ambient inheritance defaults off."""
     _deps, client, root, _connectors, _op = harness_env
     r = client.post(
         "/api/v1/harness/sessions",
-        json={"agent_id": "pi-rest-backend-0", "kind": "pi", "project_root": root},
+        json={"agent_id": "worker", "kind": "pi", "project_root": root},
     )
     assert r.status_code == 200, r.text
     backend_info = r.json()["data"]["backend"]
-    assert backend_info["explicit"] is False
-    assert backend_info["applied"] == {}
-    assert "ambient" in backend_info["note"]
+    assert backend_info == {"profile_id": "profile-pi", "inherit_ambient": False, "revision": 1}
 
 
-def test_harness_open_backend_override_is_honored_over_rest(harness_env):
-    """H-1 (EV-SYS-002): the operator can say which provider/model this
-    session uses over the REST mirror too - parity with the MCP tool is a
-    hard gate for this surface."""
+def test_harness_open_per_call_backend_override_is_rejected(harness_env):
+    """Backend changes require an approved profile, even for the operator."""
     _deps, client, root, connectors, _op = harness_env
     backend = {"provider": "zai", "model": "glm-5.3"}
     r = client.post(
         "/api/v1/harness/sessions",
         json={
-            "agent_id": "pi-rest-backend-1",
+            "agent_id": "worker",
             "kind": "pi",
             "project_root": root,
             "backend": backend,
         },
     )
-    assert r.status_code == 200, r.text
-    data = r.json()["data"]
-    assert data["backend"]["explicit"] is True
-    assert data["backend"]["applied"] == backend
-    assert len(connectors["pi"]) == 1
+    assert r.status_code == 422, r.text
+    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert not connectors["pi"]
 
 
 def test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest(harness_env):
@@ -194,7 +142,7 @@ def test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest(harne
     r = client.post(
         "/api/v1/harness/sessions",
         json={
-            "agent_id": "codex-rest-backend",
+            "agent_id": "worker",
             "kind": "codex",
             "project_root": root,
             "backend": {"provider": "zai"},
@@ -210,7 +158,7 @@ def test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
     r = client.post(
         "/api/v1/harness/sessions",
         json={
-            "agent_id": "cc-rest-backend",
+            "agent_id": "worker",
             "kind": "claude_code",
             "project_root": root,
             "substrate": "attach",
@@ -218,8 +166,8 @@ def test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
             "backend": {"env": {"X": "1"}},
         },
     )
-    assert r.status_code == 422, r.text
-    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
+    assert r.status_code == 403, r.text
+    assert r.json()["error"]["code"] == "PERMISSION_DENIED"
     assert connectors["claude_code"] == []
 
 
@@ -246,7 +194,7 @@ def test_harness_full_lifecycle_through_rest(harness_env):
     deps, client, root, connectors, _op = harness_env
     opened = client.post(
         "/api/v1/harness/sessions",
-        json={"agent_id": "pi-rest-2", "kind": "pi", "project_root": root},
+        json={"agent_id": "worker", "kind": "pi", "project_root": root},
     ).json()["data"]
     session_id = opened["session_id"]
     conn = connectors["pi"][0]
@@ -286,15 +234,15 @@ def test_harness_full_lifecycle_through_rest(harness_env):
 
     r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
     assert r.status_code == 200, r.text
-    assert r.json()["data"]["status"] == "ENDED"
+    assert r.json()["data"]["lifecycle_state"] == "detached"
     assert conn.close_called is True
 
     after = client.get(f"/api/v1/harness/sessions/{session_id}").json()["data"]
-    assert after["live"] is False and after["status"] == "ENDED"
+    assert after["live"] is False and after["lifecycle_state"] == "detached"
 
     second_close = client.post(f"/api/v1/harness/sessions/{session_id}/close")
-    assert second_close.status_code == 404
-    assert second_close.json()["error"]["code"] == "NOT_FOUND"
+    assert second_close.status_code == 200
+    assert second_close.json()["data"]["lifecycle_state"] == "detached"
 
 
 def test_harness_get_unknown_session_is_404(harness_env):
@@ -323,29 +271,9 @@ def test_mcp_and_rest_surfaces_share_one_live_registry(harness_env, tmp_path):
     independent registries."""
     deps, client, root, connectors, _op = harness_env
 
-    from okto_nexus.adapters.inbound.mcp.tools import harness as harness_tools
-
-    class _Capture:
-        def __init__(self):
-            self.tools = {}
-
-        def tool(self):
-            def deco(fn):
-                self.tools[fn.__name__] = fn
-                return fn
-
-            return deco
-
-    mcp_server = _Capture()
-    harness_tools.register(mcp_server, deps)
-
-    import asyncio
-
-    opened = asyncio.run(
-        mcp_server.tools["harness_open"](
-            agent_id="pi-shared", kind="pi", project_root=root
-        )
-    )
+    opened = tool(client, _op, "harness_open", {
+        "agent_id": "worker", "kind": "pi", "project_root": root,
+        "idempotency_key": "shared-rest-mcp-fixture"})
     assert opened["ok"], opened
     session_id = opened["data"]["session_id"]
 
@@ -357,4 +285,4 @@ def test_mcp_and_rest_surfaces_share_one_live_registry(harness_env, tmp_path):
     # Controllable over REST too.
     r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
     assert r.status_code == 200, r.text
-    assert r.json()["data"]["status"] == "ENDED"
+    assert r.json()["data"]["lifecycle_state"] == "detached"

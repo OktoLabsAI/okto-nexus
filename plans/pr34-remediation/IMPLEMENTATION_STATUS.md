@@ -172,3 +172,10 @@ Windows compatibility inventory stopped at 20 failures after 764 PASS; legacy
 harness tests need current canonical identities/approved profiles/authorization.
 Final gate still NOT PASSED. Next: adapt legacy regressions, stale session epoch
 reconciliation and stable endpoint boot; P09-P12 remain unfinished.
+
+Linux composition checkpoint pushed: 17cb43b. Legacy MCP/REST/supervisor tests
+now use canonical identities/approved profiles and authenticated serve. Found and
+fixed discarded non-Claude substrate plus stale MCP descriptions. See
+P11_LEGACY_SURFACE_COMPATIBILITY.md: 59 PASS / 2 POSIX skips, Ruff PASS. Native
+providers NOT_RUN for this unit. Next: stale session epoch reconciliation and
+stable boot, then durable controls and remaining P08-P12. Final gate NOT PASSED.

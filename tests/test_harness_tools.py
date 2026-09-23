@@ -1,35 +1,21 @@
-"""MCP tool-surface tests for the harness connector lifecycle (ADR 0004,
-Phase 3.5 - ``adapters/inbound/mcp/tools/harness.py``).
+"""Authenticated MCP lifecycle regressions using the actual serve composition.
 
-Drives the REAL registered tool functions through a capture-server (mirrors
-``tests/test_mcp_projection_tools.py``'s ``CaptureServer`` pattern) against a
-FAKE connector injected through ``deps.harness_connector_factories`` (the
-injection point ``tools/harness.py`` itself defines for exactly this
-purpose). Spawning a real ``pi``/``codex``/``claude`` binary is out of scope
-here - the four real connector modules each have their own dedicated test
-suite (``test_harness_*_connector.py``) and ``harness_list`` (tested below)
-reads their DECLARED capabilities straight off the real classes regardless of
-what this file injects, so that guarantee is exercised without spawning
-anything either.
-
-Covers, at minimum: the full lifecycle through the tool surface (open -> send
--> get -> close -> get again, durable fallback); D3 agent registration;
-kind/substrate validation (the domain HARNESS_KINDS/CLAUDE_CODE_SUBSTRATES
-grammar); capability gating (steer rejected on a send_only/steer_timing=None
-substrate, matching cc-socks); D10 event replay ordering + notable-message
-delivery through the real inbox.
+External peers are fixtures; identities, profiles, authorization and durability
+use production services. Native protocol suites qualify each adapter separately.
 """
 
 from __future__ import annotations
 
 import asyncio
+import os
+from contextlib import contextmanager
+from types import SimpleNamespace
 import queue
 import time
 from typing import Any
 
 import pytest
 
-from okto_nexus.adapters.inbound.mcp.server import bootstrap
 from okto_nexus.adapters.inbound.mcp.tools import harness as harness_tools
 from okto_nexus.domain.base import utc_now_iso
 from okto_nexus.domain.harness import (
@@ -143,6 +129,9 @@ class CaptureServer:
 
 
 def _call(server: CaptureServer, name: str, **kwargs: Any) -> dict[str, Any]:
+    if hasattr(server, "client"):
+        from test_pr34_remediation import tool
+        return tool(server.client, server.operator_key, name, kwargs)
     fn = server.tools[name]
     if asyncio.iscoroutinefunction(fn):
         return asyncio.run(fn(**kwargs))
@@ -166,34 +155,21 @@ _ATTACH_CAPS = HarnessCapabilities(
 
 
 @pytest.fixture
-def ctx(tmp_path):
-    # project_root must resolve to a REAL directory (create_message ->
-    # resolve_realpath, strict=True) - the notable-message delivery path
-    # exercises this even though HarnessSupervisor.open() itself does not.
-    project_root = str(tmp_path / "project")
-    (tmp_path / "project").mkdir()
-    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
-    connectors: dict[str, list[FakeConnector]] = {"pi": [], "codex": [], "claude_code": []}
-
-    def _factory(kind: str):
-        def factory(*, project_root: str, substrate: str | None, target_pid, **_ignored):
-            caps = _STREAM_CAPS
-            if kind == "claude_code" and substrate == "attach":
-                caps = _ATTACH_CAPS
-            conn = FakeConnector(kind=kind, capabilities=caps)
-            connectors[kind].append(conn)
-            return conn
-
-        return factory
-
-    deps.harness_connector_factories = {
-        "pi": _factory("pi"),
-        "codex": _factory("codex"),
-        "claude_code": _factory("claude_code"),
-    }
-    server = CaptureServer()
-    harness_tools.register(server, deps)
-    return deps, server, connectors, project_root
+def ctx(tmp_path, request):
+    # Imported at fixture execution to avoid the shared FakeConnector import cycle.
+    from test_pr34_remediation import runtime
+    with contextmanager(runtime.__wrapped__)(tmp_path, request) as env:
+        deps, client, root, _, operator_key, _ = env
+        connectors = {kind: [] for kind in ("pi", "codex", "claude_code")}
+        originals = deps.harness_connector_factories.copy()
+        def wrap(kind):
+            def build(**kwargs):
+                peer = originals[kind](**kwargs)
+                connectors[kind].append(peer)
+                return peer
+            return build
+        deps.harness_connector_factories.update({kind: wrap(kind) for kind in originals})
+        yield deps, SimpleNamespace(client=client, operator_key=operator_key), connectors, root
 
 
 def _wait_until(predicate, *, timeout_s: float = 2.0) -> None:
@@ -232,32 +208,33 @@ def test_harness_list_reports_real_connector_capabilities(ctx):
 # --------------------------------------------------------------------------- #
 # harness_open
 # --------------------------------------------------------------------------- #
-def test_harness_open_registers_agent_and_returns_running_session(ctx):
+def test_harness_open_preserves_agent_and_returns_running_session(ctx):
     deps, server, connectors, project_root = ctx
     result = _call(
-        server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root
+        server, "harness_open", agent_id="worker", kind="pi", project_root=project_root
     )
     assert result["ok"], result
     data = result["data"]
     assert data["status"] == "RUNNING"
     assert data["kind"] == "pi"
-    assert data["owning_agent_id"] == "pi-1"
+    assert data["owning_agent_id"] == "worker"
     assert data["capabilities"]["steer_timing"] == "IMMEDIATE"
     assert len(connectors["pi"]) == 1
 
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        agent = deps.repos.agents.get(uow, "pi-1")
+        agent = deps.repos.agents.get(uow, "worker")
     assert agent is not None
-    assert agent.metadata.get("harness_kind") == "pi"
+    assert agent.metadata == {"keep": "profile"}
+    assert agent.role == "reviewer" and agent.capabilities == {"review": True}
 
 
 def test_harness_open_rejects_unknown_kind(ctx):
     _deps, server, _connectors, project_root = ctx
     result = _call(
-        server, "harness_open", agent_id="x", kind="not-a-kind", project_root=project_root
+        server, "harness_open", agent_id="worker", kind="not-a-kind", project_root=project_root
     )
     assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
+    assert result["error"]["code"] == "NOT_FOUND"
 
 
 def test_harness_open_rejects_substrate_for_non_claude_code_kind(ctx):
@@ -265,7 +242,7 @@ def test_harness_open_rejects_substrate_for_non_claude_code_kind(ctx):
     result = _call(
         server,
         "harness_open",
-        agent_id="x",
+        agent_id="worker",
         kind="pi",
         project_root=project_root,
         substrate="stream",
@@ -274,31 +251,32 @@ def test_harness_open_rejects_substrate_for_non_claude_code_kind(ctx):
     assert result["error"]["code"] == "VALIDATION_ERROR"
 
 
-def test_harness_open_claude_code_attach_requires_target_pid(ctx):
+def test_harness_open_claude_code_attach_requires_separate_opt_in(ctx):
     _deps, server, _connectors, project_root = ctx
     result = _call(
         server,
         "harness_open",
-        agent_id="x",
+        agent_id="worker",
         kind="claude_code",
         project_root=project_root,
         substrate="attach",
     )
     assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "target_pid" in result["error"]["message"]
+    assert result["error"]["code"] == "PERMISSION_DENIED"
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Attach is a POSIX-only substrate; no Windows capability invented.")
 def test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilities(ctx):
+    ctx[0].config.feature_harness_attach = True
     _deps, server, connectors, project_root = ctx
     result = _call(
         server,
         "harness_open",
-        agent_id="cc-attach",
+        agent_id="worker",
         kind="claude_code",
         project_root=project_root,
         substrate="attach",
-        target_pid=4242,
+        target_pid=12345,
     )
     assert result["ok"], result
     assert result["data"]["capabilities"]["send_only"] is True
@@ -311,7 +289,7 @@ def test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilitie
 # --------------------------------------------------------------------------- #
 def test_harness_send_requires_a_payload(ctx):
     deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
     session_id = opened["data"]["session_id"]
 
     result = _call(server, "harness_send", session_id=session_id, payload=None)
@@ -321,7 +299,7 @@ def test_harness_send_requires_a_payload(ctx):
 
 def test_harness_send_steer_interrupt_dispatch_the_right_verb(ctx):
     deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
     session_id = opened["data"]["session_id"]
     conn = connectors["pi"][0]
 
@@ -340,16 +318,18 @@ def test_harness_send_steer_interrupt_dispatch_the_right_verb(ctx):
     assert conn.sent[2].payload == {}
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Attach is a POSIX-only substrate; no Windows capability invented.")
 def test_harness_steer_is_rejected_when_capability_forbids_it(ctx):
+    ctx[0].config.feature_harness_attach = True
     deps, server, connectors, project_root = ctx
     opened = _call(
         server,
         "harness_open",
-        agent_id="cc-attach",
+        agent_id="worker",
         kind="claude_code",
         project_root=project_root,
         substrate="attach",
-        target_pid=99,
+        target_pid=12345,
     )
     session_id = opened["data"]["session_id"]
 
@@ -370,26 +350,24 @@ def test_harness_send_against_unknown_session_is_not_found(ctx):
 # --------------------------------------------------------------------------- #
 def test_harness_close_ends_session_and_get_falls_back_to_durable_row(ctx):
     deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
     session_id = opened["data"]["session_id"]
 
     live = _call(server, "harness_get", session_id=session_id)
     assert live["ok"] and live["data"]["live"] is True and live["data"]["status"] == "RUNNING"
 
     closed = _call(server, "harness_close", session_id=session_id)
-    assert closed["ok"] and closed["data"]["status"] == "ENDED"
+    assert closed["ok"] and closed["data"]["lifecycle_state"] == "detached"
     assert connectors["pi"][0].close_called is True
 
     after = _call(server, "harness_get", session_id=session_id)
     assert after["ok"]
     assert after["data"]["live"] is False
-    assert after["data"]["status"] == "ENDED"
+    assert after["data"]["lifecycle_state"] == "detached"
 
-    # A second close is NOT_FOUND - the session is no longer live and close()
-    # never re-tears-down an already-reaped session.
+    # Closing a detached fixture is idempotent, without claiming observed exit.
     second = _call(server, "harness_close", session_id=session_id)
-    assert not second["ok"]
-    assert second["error"]["code"] == "NOT_FOUND"
+    assert second["ok"]
 
 
 def test_harness_get_unknown_session_is_not_found(ctx):
@@ -404,7 +382,7 @@ def test_harness_get_unknown_session_is_not_found(ctx):
 # --------------------------------------------------------------------------- #
 def test_harness_event_list_replays_in_order_and_respects_after_sequence(ctx):
     deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=project_root)
     session_id = opened["data"]["session_id"]
     conn = connectors["pi"][0]
 
@@ -429,127 +407,57 @@ def test_harness_event_list_replays_in_order_and_respects_after_sequence(ctx):
     assert [e["native_event"] for e in first_seq_result["data"]["events"]] == ["n2", "n3"]
 
 
-def test_harness_turn_completed_event_is_also_delivered_as_a_message(ctx):
-    """D10: a notable event (turn_completed) is ALSO delivered through the
-    existing per-recipient inbox, sender = the session's own registered
-    agent - proves ``build_service``'s MessageService wiring is real, not
-    just accepted and discarded."""
-    deps, server, connectors, project_root = ctx
-    opened = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+def test_harness_terminal_is_durable_without_unauthorized_broadcast(ctx):
+    deps, server, connectors, root = ctx
+    opened = _call(server, "harness_open", agent_id="worker", kind="pi", project_root=root)
     session_id = opened["data"]["session_id"]
-    conn = connectors["pi"][0]
-
-    conn.push_event(kind="turn_completed", native_event="agent_settled")
-
-    def _has_message() -> bool:
-        with deps.connection_factory.unit_of_work(write=False) as uow:
-            rows = uow.connection.execute(
-                "SELECT subject FROM messages WHERE from_agent_id = ?", ("pi-1",)
-            ).fetchall()
-        return len(rows) >= 1
-
-    _wait_until(_has_message)
-
+    connectors["pi"][0].push_event(kind="turn_completed", native_event="agent_settled")
+    _wait_until(lambda: _call(server, "harness_event_list", session_id=session_id)["data"]["count"] >= 1)
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        rows = uow.connection.execute(
-            "SELECT subject, body FROM messages WHERE from_agent_id = ?", ("pi-1",)
-        ).fetchall()
-    assert len(rows) == 1
-    assert session_id in rows[0]["subject"]
-    assert "agent_settled" in rows[0]["body"]
+        row = uow.connection.execute("SELECT * FROM runtime_results WHERE runtime_session_id = ?", (session_id,)).fetchone()
+        assert row["publication_state"] == "PENDING_AUTHORIZATION"
+        assert uow.connection.execute("SELECT count(*) FROM messages WHERE from_agent_id = ?", ("worker",)).fetchone()[0] == 0
 
 
 # --------------------------------------------------------------------------- #
 # H-1: harness_open backend selection (EV-SYS-002 - no silent ambient inherit)
 # --------------------------------------------------------------------------- #
 @pytest.fixture
-def capturing_ctx(tmp_path):
-    """Same shape as ``ctx``, but the fake factories capture the ``backend``
-    kwarg EXPLICITLY (the plain ``ctx`` fixture's factories swallow it via
-    ``**_ignored`` - real, but not proof the value was received)."""
-    project_root = str(tmp_path / "project")
-    (tmp_path / "project").mkdir()
-    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
-    connectors: dict[str, list[FakeConnector]] = {"pi": [], "codex": [], "claude_code": []}
-    received_backend: dict[str, list[Any]] = {"pi": [], "codex": [], "claude_code": []}
-
-    def _factory(kind: str):
-        def factory(*, project_root: str, substrate, target_pid, backend=None, **_ignored):
-            caps = _STREAM_CAPS
-            if kind == "claude_code" and substrate == "attach":
-                caps = _ATTACH_CAPS
-            received_backend[kind].append(backend)
-            conn = FakeConnector(kind=kind, capabilities=caps)
-            connectors[kind].append(conn)
-            return conn
-
-        return factory
-
-    deps.harness_connector_factories = {
-        "pi": _factory("pi"),
-        "codex": _factory("codex"),
-        "claude_code": _factory("claude_code"),
-    }
-    server = CaptureServer()
-    harness_tools.register(server, deps)
-    return deps, server, connectors, received_backend, project_root
+def capturing_ctx(ctx):
+    deps, server, connectors, root = ctx
+    received = {kind: [] for kind in connectors}
+    originals = deps.harness_connector_factories.copy()
+    def wrap(kind):
+        def build(**kwargs):
+            received[kind].append(kwargs.get("backend"))
+            return originals[kind](**kwargs)
+        return build
+    deps.harness_connector_factories.update({kind: wrap(kind) for kind in originals})
+    return deps, server, connectors, received, root
 
 
-def test_harness_open_with_no_backend_inherits_ambient_default_visibly(capturing_ctx):
-    """Baseline (EV-SYS-002's own hazard): omitting backend keeps today's
-    ambient-inherit behaviour (a bare `pi` open silently used the OPERATOR's
-    own ~/.pi/agent/settings.json default provider) - but the response must
-    now say so explicitly rather than leaving it invisible."""
-    _deps, server, _connectors, received_backend, project_root = capturing_ctx
-    result = _call(server, "harness_open", agent_id="pi-1", kind="pi", project_root=project_root)
+@pytest.mark.parametrize("kind", ["pi", "codex"])
+def test_harness_open_uses_approved_isolated_profile(capturing_ctx, kind):
+    deps, server, _, received, root = capturing_ctx
+    result = _call(server, "harness_open", agent_id="worker", kind=kind, project_root=root)
     assert result["ok"], result
-    assert received_backend["pi"] == [{}]
-    backend_info = result["data"]["backend"]
-    assert backend_info["explicit"] is False
-    assert backend_info["applied"] == {}
-    assert "ambient" in backend_info["note"]
-    assert "provider" in backend_info["note"] or "env" in backend_info["note"]
+    assert result["data"]["backend"] == {"profile_id": "profile-" + kind, "inherit_ambient": False, "revision": 1}
+    env = received[kind][0]["env"]
+    assert str(deps.config.home_dir) in env["HOME"]
+    from okto_nexus.adapters.outbound.harness.environment import child_environment
+    assert not any("NEXUS" in key.upper() for key in child_environment(env))
+    assert env["CODEX_HOME" if kind == "codex" else "PI_CODING_AGENT_DIR"].startswith(env["HOME"])
 
 
-def test_harness_open_backend_override_reaches_the_pi_connector_factory(capturing_ctx):
-    """The live hazard, fixed: an operator CAN say which provider/model this
-    session uses, and it actually reaches connector construction (not
-    dropped on the floor, per EV-SYS-002's own finding that the frozen
-    ``PiRpcConnector.__init__`` already accepts ``provider``/``model`` but
-    the factory never passed them)."""
-    _deps, server, _connectors, received_backend, project_root = capturing_ctx
-    backend = {"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]}
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="pi-1",
-        kind="pi",
-        project_root=project_root,
-        backend=backend,
-    )
-    assert result["ok"], result
-    assert received_backend["pi"] == [backend]
-    backend_info = result["data"]["backend"]
-    assert backend_info["explicit"] is True
-    assert backend_info["applied"] == backend
-
-
-def test_harness_open_backend_env_reaches_the_codex_connector_factory(capturing_ctx):
-    """codex's own backend selection is env-driven (CODEX_HOME + config.toml,
-    D5/EV-SYS-002), not a provider/model kwarg - ``env`` is the field that
-    must reach it."""
-    _deps, server, _connectors, received_backend, project_root = capturing_ctx
-    backend = {"env": {"CODEX_HOME": "/tmp/codex_home"}}
-    result = _call(
-        server,
-        "harness_open",
-        agent_id="codex-1",
-        kind="codex",
-        project_root=project_root,
-        backend=backend,
-    )
-    assert result["ok"], result
-    assert received_backend["codex"] == [backend]
+@pytest.mark.parametrize("kind,backend", [
+    ("pi", {"provider": "zai", "model": "glm-5.3", "extra_args": ["--foo"]}),
+    ("codex", {"env": {"CODEX_HOME": "/tmp/unapproved"}}),
+])
+def test_harness_open_rejects_per_call_profile_override(capturing_ctx, kind, backend):
+    _, server, _, received, root = capturing_ctx
+    result = _call(server, "harness_open", agent_id="worker", kind=kind, project_root=root, backend=backend)
+    assert not result["ok"] and result["error"]["code"] == "VALIDATION_ERROR"
+    assert received[kind] == []
 
 
 def test_harness_open_rejects_backend_field_unsupported_for_kind(capturing_ctx):
@@ -560,15 +468,14 @@ def test_harness_open_rejects_backend_field_unsupported_for_kind(capturing_ctx):
     result = _call(
         server,
         "harness_open",
-        agent_id="codex-1",
+        agent_id="worker",
         kind="codex",
         project_root=project_root,
         backend={"provider": "zai"},
     )
     assert not result["ok"]
     assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "provider" in result["error"]["message"]
-    assert "env" in result["error"]["message"]
+    assert "approved runtime profile" in result["error"]["message"]
     assert received_backend["codex"] == []
 
 
@@ -577,16 +484,15 @@ def test_harness_open_rejects_backend_for_claude_code_attach_substrate(capturing
     result = _call(
         server,
         "harness_open",
-        agent_id="cc-attach",
+        agent_id="worker",
         kind="claude_code",
         project_root=project_root,
         substrate="attach",
-        target_pid=4242,
+        target_pid=12345,
         backend={"env": {"X": "1"}},
     )
     assert not result["ok"]
-    assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "attach" in result["error"]["message"]
+    assert result["error"]["code"] == "PERMISSION_DENIED"
     assert received_backend["claude_code"] == []
 
 
@@ -595,7 +501,7 @@ def test_harness_open_rejects_non_object_backend(capturing_ctx):
     result = _call(
         server,
         "harness_open",
-        agent_id="pi-1",
+        agent_id="worker",
         kind="pi",
         project_root=project_root,
         backend=["not", "an", "object"],
@@ -609,71 +515,28 @@ def test_harness_open_rejects_wrong_typed_backend_env(capturing_ctx):
     result = _call(
         server,
         "harness_open",
-        agent_id="codex-1",
+        agent_id="worker",
         kind="codex",
         project_root=project_root,
         backend={"env": "not-an-object"},
     )
     assert not result["ok"]
     assert result["error"]["code"] == "VALIDATION_ERROR"
-    assert "env" in result["error"]["message"]
+    assert "approved runtime profile" in result["error"]["message"]
 
 
 # --------------------------------------------------------------------------- #
 # H-2: shipped tool text must not claim the target grammar reaches a harness
 # --------------------------------------------------------------------------- #
-def test_harness_open_agent_id_description_documents_the_sys03_fix(tmp_path):
-    """Supersedes the pre-fix contract test of the same shape (H-2, surface
-    task, ``test_harness_open_agent_id_description_does_not_promise_target_
-    grammar_routing``): that assertion is now OBSOLETE, not wrong - it
-    correctly locked in the pre-fix docstring contract at the time it was
-    written. See docs/harness-integrations/evidence/EV-SYS-003-FOLLOWUP-
-    target-grammar-fix.md for the fix that made it obsolete.
-
-    EV-SYS-003/EV-UAT-05 originally falsified the claim that
-    message_create's target grammar (direct/capability/role/tag) reaches an
-    open harness session - it reported delivered_count:1 while the
-    connector's own wire trace gained zero bytes. That gap is now CLOSED
-    (HarnessSupervisor subscribes each live session's owning_agent_id to an
-    InboxDeliveryNotifier and forwards arriving messages as send_turn - see
-    application/harness_supervisor.py and the live SYS-03 re-run evidence).
-
-    The SHIPPED tool description must say so accurately: the target grammar
-    DOES now reach a live session (not an unqualified/silent claim - the
-    original defect was leaving an operator to believe this by omission
-    when it was false; the fix is leaving them to believe it correctly now
-    that it is true), qualified as best-effort/hand-off (never guaranteed
-    delivery the way harness_send is), and must still name harness_send/
-    steer/interrupt as the explicit, session_id-addressed alternative for
-    guaranteed delivery or a session that may not be live yet. Asserted
-    against the LIVE FastMCP tool schema - what an operator actually reads -
-    not the module's private string constant.
-    """
-    pytest.importorskip("mcp")
-    from okto_nexus.adapters.inbound.mcp.server import bootstrap as real_bootstrap
-    from okto_nexus.adapters.inbound.mcp.server import create_server
-
-    deps = real_bootstrap({}, ["--home", str(tmp_path / "home")])
-    server = create_server(deps)
-    tools = asyncio.run(server.list_tools())
-    harness_open_tool = next(t for t in tools if t.name == "harness_open")
-    agent_id_desc = harness_open_tool.inputSchema["properties"]["agent_id"]["description"]
-
-    # The pre-fix false-by-omission phrasing must not reappear verbatim.
-    assert "other agents then address it via the normal target" not in agent_id_desc
-    # The truthful, POSITIVE claim: input addressing via the target grammar
-    # now reaches a live session.
-    assert "direct/capability/role/tag" in agent_id_desc
-    idx = agent_id_desc.index("direct/capability/role/tag")
-    window = agent_id_desc[max(0, idx - 200) : idx]
-    assert "can now" in window or "now ADDRESS" in window, (
-        "the fixed behaviour must be stated as a positive, qualified claim "
-        "(what changed and why it is safe), not a bare unqualified promise"
-    )
-    # Hand-off/best-effort semantics are disclosed, not silently assumed.
-    assert "best-effort" in agent_id_desc or "hand-off" in agent_id_desc
-    # The explicit, guaranteed-delivery alternative is still named.
-    assert "harness_send" in agent_id_desc
+def test_harness_open_schema_describes_canonical_identity_and_approved_profile(ctx):
+    from test_pr34_remediation import mcp_call
+    _, server, _, _ = ctx
+    tools = mcp_call(server.client, server.operator_key, "tools/list", {})["tools"]
+    schema = next(t for t in tools if t["name"] == "harness_open")["inputSchema"]["properties"]
+    assert "Existing canonical agent" in schema["agent_id"]["description"]
+    assert "does not create identity" in schema["agent_id"]["description"]
+    assert "approved runtime profile" in schema["backend"]["description"]
+    assert "broadcast" not in schema["notify_target"]["description"]
 
 
 # --------------------------------------------------------------------------- #

@@ -12,8 +12,12 @@ Covers, at minimum (per the Phase 3.5 task):
   never affect another already-open session or the supervisor itself)
 * event fan-out ordering (in-memory publish happens BEFORE, and is never
   gated by, the durable DB write)
-* D3 agent registration; D10 notable-event message delivery; capability
+* existing canonical identities; legacy notable-event delivery; capability
   gating on send/steer.
+
+These standalone compatibility cases intentionally have no production journal.
+Production ordering/authorization/lifecycle evidence lives in test_runtime_* and
+test_pr34_remediation; legacy callback assertions here do not qualify that path.
 """
 
 from __future__ import annotations
@@ -242,6 +246,19 @@ def mkproj(tmp_path, name="proj") -> str:
     return str(p)
 
 
+def register_fixture_agent(supervisor, agent_id):
+    with supervisor._cf.unit_of_work() as uow:
+        agents = SqliteAgentRepo(supervisor._clock)
+        if agents.get(uow, agent_id) is None:
+            agents.upsert(uow, agent_id=agent_id, metadata={"fixture": "canonical identity"})
+
+
+def open_registered(supervisor, **kwargs):
+    """Explicit identity fixture setup; the supervisor must never register it."""
+    register_fixture_agent(supervisor, kwargs["owning_agent_id"])
+    return supervisor.open(**kwargs)
+
+
 def wait_until(predicate, *, timeout_s: float = 5.0, interval_s: float = 0.01) -> bool:
     """Test-only bounded poll (NOT part of the harness path itself - this is
     test synchronisation for a background thread, exactly like the rest of
@@ -257,13 +274,13 @@ def wait_until(predicate, *, timeout_s: float = 5.0, interval_s: float = 0.01) -
 # --------------------------------------------------------------------------- #
 # open() / lifecycle
 # --------------------------------------------------------------------------- #
-def test_open_registers_agent_and_marks_session_running(tmp_path):
+def test_open_preserves_registered_agent_and_marks_session_running(tmp_path):
     factory = make_factory(tmp_path)
     clock = _Clock()
     supervisor = make_supervisor(factory, clock)
     connector = FakeConnector()
 
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-pi-1",
@@ -276,7 +293,7 @@ def test_open_registers_agent_and_marks_session_running(tmp_path):
     with factory.unit_of_work() as uow:
         agent = SqliteAgentRepo(clock).get(uow, "harness-pi-1")
     assert agent is not None
-    assert agent.metadata.get("harness_kind") == "pi"
+    assert agent.metadata == {"fixture": "canonical identity"}
 
     with factory.unit_of_work() as uow:
         row = SqliteHarnessSessionRepo(clock).get(uow, session_id=session.session_id)
@@ -291,7 +308,7 @@ def test_open_rejects_a_connector_that_fails_to_start(tmp_path):
     connector = FakeConnector(start_error=RuntimeError("boom"))
 
     with pytest.raises(OktoNexusError) as excinfo:
-        supervisor.open(
+        open_registered(supervisor,
             kind="pi",
             connector=connector,
             owning_agent_id="harness-broken",
@@ -309,7 +326,7 @@ def test_open_bounded_by_start_timeout_when_connector_wedges(tmp_path):
 
     started = time.monotonic()
     with pytest.raises(OktoNexusError) as excinfo:
-        supervisor.open(
+        open_registered(supervisor,
             kind="pi",
             connector=connector,
             owning_agent_id="harness-wedged",
@@ -328,7 +345,7 @@ def test_failed_and_wedged_opens_never_affect_an_already_open_session(tmp_path):
     supervisor = make_supervisor(factory, clock, start_timeout_s=0.3)
 
     good = FakeConnector()
-    good_session = supervisor.open(
+    good_session = open_registered(supervisor,
         kind="pi",
         connector=good,
         owning_agent_id="harness-good",
@@ -336,14 +353,14 @@ def test_failed_and_wedged_opens_never_affect_an_already_open_session(tmp_path):
     )
 
     with pytest.raises(OktoNexusError):
-        supervisor.open(
+        open_registered(supervisor,
             kind="codex",
             connector=FakeConnector(start_error=RuntimeError("boom")),
             owning_agent_id="harness-broken",
             project_root=mkproj(tmp_path, "proj2"),
         )
     with pytest.raises(OktoNexusError):
-        supervisor.open(
+        open_registered(supervisor,
             kind="codex",
             connector=FakeConnector(wedge_start=True),
             owning_agent_id="harness-wedged",
@@ -389,7 +406,12 @@ def test_open_declared_isolates_boot_time_failures(tmp_path):
         ),
     ]
 
-    results = supervisor.open_declared(specs)  # must never raise
+    for spec in specs:
+        register_fixture_agent(supervisor, spec.owning_agent_id)
+    try:
+        results = supervisor.open_declared(specs)  # must never raise
+    finally:
+        specs[2].connector._never.set()
 
     assert len(results) == 3
     assert results[0].session is not None and results[0].error is None
@@ -437,7 +459,7 @@ def test_publish_happens_before_the_durable_write_for_every_event(tmp_path):
         subscribers=registry,
     )
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-order",
@@ -481,7 +503,7 @@ def test_a_broken_subscriber_registry_does_not_stop_persistence(tmp_path):
         subscribers=_ExplodingRegistry(),
     )
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-explode",
@@ -502,7 +524,7 @@ def test_connector_crash_reaps_session_as_errored(tmp_path):
     clock = _Clock()
     supervisor = make_supervisor(factory, clock)
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-crash",
@@ -522,7 +544,7 @@ def test_connector_natural_end_reaps_session_as_ended(tmp_path):
     clock = _Clock()
     supervisor = make_supervisor(factory, clock)
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-natural-end",
@@ -551,7 +573,7 @@ def test_non_observing_connector_death_is_never_fabricated_as_ended(tmp_path):
         observes_session_end=False,
     )
     connector = FakeConnector(kind="claude_code", capabilities=caps)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="claude_code",
         connector=connector,
         owning_agent_id="harness-attach",
@@ -577,7 +599,7 @@ def test_close_sends_end_and_persists_ended(tmp_path):
     clock = _Clock()
     supervisor = make_supervisor(factory, clock)
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-close",
@@ -605,17 +627,12 @@ def test_close_unknown_session_raises_not_found(tmp_path):
 
 
 def test_close_bounded_by_close_timeout_when_connector_close_wedges(tmp_path):
-    """D8: EVERY supervisor-side wait is bounded, including the ones inside
-    ``close()`` (:meth:`_bounded_call`), not only ``open()``'s. A connector
-    whose own ``close()`` lifecycle helper wedges must still let this
-    supervisor's ``close()`` return promptly - AND the terminal status must
-    still land, proving teardown-before-finish does not make the durable
-    write hostage to a stuck connector."""
+    """A bounded wait reports a failed drain instead of inventing clean exit."""
     factory = make_factory(tmp_path)
     clock = _Clock()
     supervisor = make_supervisor(factory, clock, close_timeout_s=0.3)
     connector = FakeConnector(wedge_close=True)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-close-wedge",
@@ -623,15 +640,18 @@ def test_close_bounded_by_close_timeout_when_connector_close_wedges(tmp_path):
     )
 
     started = time.monotonic()
-    returned = supervisor.close(session.session_id)
+    try:
+        with pytest.raises(RuntimeError, match="drain deadline"):
+            supervisor.close(session.session_id)
+    finally:
+        connector._never_close.set()
     elapsed = time.monotonic() - started
 
     assert elapsed < 2.0
-    assert returned.session_id == session.session_id
     assert supervisor.get(session.session_id) is None
     with factory.unit_of_work() as uow:
         row = SqliteHarnessSessionRepo(clock).get(uow, session_id=session.session_id)
-    assert row.status == STATUS_ENDED
+    assert row.status == STATUS_ERRORED
 
 
 # --------------------------------------------------------------------------- #
@@ -649,7 +669,7 @@ def test_send_rejects_steer_when_unsupported(tmp_path):
         observes_session_end=True,
     )
     connector = FakeConnector(capabilities=caps)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-nosteer",
@@ -674,7 +694,7 @@ def test_send_only_connector_rejects_everything_but_send_turn(tmp_path):
         observes_session_end=False,
     )
     connector = FakeConnector(kind="claude_code", capabilities=caps)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="claude_code",
         connector=connector,
         owning_agent_id="harness-sendonly",
@@ -714,7 +734,7 @@ def test_send_only_connector_drains_its_finite_events_synchronously(tmp_path):
         observes_session_end=False,
     )
     connector = FakeConnector(kind="claude_code", capabilities=caps)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="claude_code",
         connector=connector,
         owning_agent_id="harness-drain",
@@ -794,7 +814,7 @@ def test_send_only_connector_delivers_each_event_exactly_once_across_multiple_se
     messages = make_message_service(factory, clock)
     supervisor = make_supervisor(factory, clock, messages=messages)
     connector = BroadcastSendOnlyConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="claude_code",
         connector=connector,
         owning_agent_id="harness-exactly-once",
@@ -827,7 +847,7 @@ def test_turn_completed_is_delivered_as_a_direct_message(tmp_path):
     supervisor = make_supervisor(factory, clock, messages=messages)
     connector = FakeConnector()
     project = mkproj(tmp_path)
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-notable",
@@ -866,7 +886,7 @@ def test_output_delta_is_not_delivered_as_a_message(tmp_path):
         SqliteAgentRepo(clock).upsert(uow, agent_id="watcher")
     supervisor = make_supervisor(factory, clock, messages=messages)
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-quiet",
@@ -892,7 +912,7 @@ def test_notable_message_delivery_failure_never_breaks_the_pump(tmp_path):
 
     supervisor = make_supervisor(factory, clock, messages=_ExplodingMessages())
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-msgfail",
@@ -910,7 +930,7 @@ def test_no_messages_service_wired_is_a_silent_noop(tmp_path):
     clock = _Clock()
     supervisor = make_supervisor(factory, clock, messages=None)
     connector = FakeConnector()
-    session = supervisor.open(
+    session = open_registered(supervisor,
         kind="pi",
         connector=connector,
         owning_agent_id="harness-nomsg",

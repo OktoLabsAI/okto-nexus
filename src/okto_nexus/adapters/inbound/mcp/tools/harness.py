@@ -1,110 +1,10 @@
-"""MCP inbound tools for the harness-connector lifecycle slice (ADR 0004).
+"""Authenticated runtime tools shared with REST and internal dispatch.
 
-Registers eight tools on the FastMCP server, each returning the canonical
-envelope (success ``{ok:true,data}`` / failure ``{ok:false,error}``) via
-:func:`tool_envelope`/:func:`async_tool_envelope`, so no exception ever
-crosses the adapter boundary:
-
-* ``harness_list``       - catalog of available harness kinds/substrates and
-  their DECLARED capabilities, read straight off each real connector class
-  (never hand-copied into a table - see :func:`capabilities_catalog`).
-* ``harness_open``       - open a session for a kind (spawn or attach),
-  register it as an ordinary agent (D3), and start tracking it.
-* ``harness_send``       - send a turn (``send_turn``) to a live session.
-* ``harness_steer``      - steer a live session, honouring the connector's
-  declared ``steer_timing``.
-* ``harness_interrupt``  - interrupt the in-flight turn.
-* ``harness_close``      - end a session and stop tracking it.
-* ``harness_get``        - one session's state: the LIVE in-memory view if
-  still tracked, else the last durable row (D10 durability, never a fabricated
-  liveness signal).
-* ``harness_event_list`` - durable replay of a session's events (D10).
-
-Naming reconciliation against ``plans/harness-integrations/02-phase35-
-supervisor-spec.md``'s proposed names (explicitly flagged there as guesses):
-every tool keeps the spec's ``harness_<verb>`` shape (matches this repo's
-``<noun>_<verb>`` grammar: ``agent_register``, ``handoff_claim``,
-``poll_token_issue``) EXCEPT two renames to match the REAL grammar the spec
-told implementers to check:
-
-* ``harness_status`` -> ``harness_get``, matching the single-entity-read
-  suffix every other slice uses (``agent_get``, ``handoff_get``,
-  ``memory_get``), not a bespoke name.
-* ``harness_events`` -> ``harness_event_list``, matching the
-  catalog/collection suffix every other slice uses (``agent_list``,
-  ``capability_list``, ``tag_list``) - a bare plural noun is the one proposed
-  name that broke the ``<noun>_<verb>`` grammar outright.
-
-``harness_list`` itself matches ``capability_list``/``tag_list`` precedent: a
-CATALOG read (kinds/substrates this server can open), not an instance
-listing - a live-session listing is deliberately NOT built in this phase (see
-this module's own docstring note below on scope).
-
-Kind -> connector construction (composition-root job; the frozen
-:class:`~okto_nexus.application.ports.HarnessConnector` port and the
-:class:`~okto_nexus.application.harness_supervisor.HarnessSupervisor` both
-take an ALREADY-CONSTRUCTED connector and explicitly refuse to know how to
-build one) lives here, in :func:`build_connector_factories`/
-:func:`build_connector` - REST routes (``routes.py``) import and reuse the
-SAME functions, so the MCP and HTTP surfaces can never drift on how a
-``kind``/``substrate`` maps to a real connector.
-
-``domain.harness.HARNESS_KINDS`` is frozen at THREE members
-(``{pi, codex, claude_code}``) but FOUR connectors exist:
-``ClaudeCodeStreamConnector`` (D7a, primary, full-duplex) and
-``ClaudeCodeAttachConnector`` (D7b, ``cc-socks`` attach, send-only) are BOTH
-``kind="claude_code"``. Since the port is frozen and a new kind cannot be
-added, substrate selection is a parameter on ``harness_open``
-(``substrate: "stream" | "attach"``, default ``"stream"``), never a second
-``kind`` value.
-
-Deliberate scope boundaries (read before extending this module):
-
-* Boot-time declared harnesses (D8's "declared AND on-demand" - see
-  :class:`~okto_nexus.application.harness_supervisor.HarnessBootSpec`/
-  ``open_declared``) are NOT wired into ``serve`` here. That docstring is
-  explicit that connector construction is "the composition root's job...
-  nothing analogous wires connectors here, deliberately" - this phase is the
-  on-demand surface only; a config-driven boot sequence is future work.
-* ``harness_open`` does NOT accept an ``agent_capabilities`` parameter.
-  :meth:`HarnessSupervisor.open` registers the session's agent identity via
-  ``AgentRepo.upsert`` DIRECTLY (the same idempotent primitive
-  ``agent_register`` itself uses) - but unlike ``agent_register``/
-  ``POST /agents`` (which both run capabilities through the central catalog's
-  fail-closed existence gate BEFORE the upsert -
-  ``_ensure_capabilities_registered`` in ``routes.py`` /
-  ``IdentityService``), the supervisor's direct repo call has no such gate.
-  Exposing ``agent_capabilities`` on this surface would silently let a
-  harness-registered agent carry unregistered capability names, bypassing a
-  guarantee every other identity-writing surface enforces. Reported here
-  rather than quietly worked around: fixing it belongs in
-  ``HarnessSupervisor.open`` (out of this task's scope - that module was
-  built by another agent this session and is not modified here), not in the
-  surface layer papering over it. ``role``/``metadata`` (both catalog-free)
-  ARE exposed.
-* A caller must already hold a ``session_id`` (from ``harness_open``'s
-  return, or from ``harness_event_list``) to call ``harness_get``/
-  ``harness_send``/etc. - there is no ``harness_list``-style catalog of
-  currently-live sessions in this phase (the spec's suggested tool set does
-  not include one either). A future phase can add one following the
-  ``agent_list`` precedent without touching this module's other tools.
-
-This module is the slice's composition root: :func:`build_service` wires the
-concrete SQLite harness repos, the in-memory subscriber registry (D1) and a
-shared :class:`~okto_nexus.application.messages.MessageService` (reused,
-never re-wired, via ``tools.messages.build_service`` - D10's notable-event
-inbox delivery) into ONE process-wide
-:class:`~okto_nexus.application.harness_supervisor.HarnessSupervisor`,
-cached on ``deps`` exactly like ``tools/_guardrails.py`` caches its
-``GuardrailService`` (``getattr(deps, "harness_supervisor", None)`` / lazy
-build / stash back on ``deps``) rather than ``Deps``'s OTHER precedent
-(``approvals``: a declared dataclass field, built eagerly in ``bootstrap()``).
-Either precedent is legitimate; the guardrails shape was chosen here because
-nothing else in ``serve``'s fail-closed bootstrap needs the supervisor to
-exist before the first tool/route touches it, so an eager build in
-``bootstrap()`` would be dead weight on every process that never opens a
-harness. It does NOT import the MCP SDK; the live server is passed into
-:func:`register`, matching the ``register(server, deps)`` contract.
+An existing canonical agent owns configured endpoints and approved profiles.
+Runtime opens never create or rewrite that identity. The serve owner supervises
+native resources; the inbox and durable outbox govern logical delivery and
+transport attempts. Event results require separate publication authorization.
+All enabled surfaces use the same authorization and application services.
 """
 
 from __future__ import annotations
@@ -443,33 +343,14 @@ _P_TARGET_PID = (
     "Claude Code session to inject into."
 )
 _P_BACKEND = (
-    "Optional JSON object selecting this session's model backend EXPLICITLY, "
-    "instead of silently inheriting whatever the operator's own ambient CLI "
-    "config happens to resolve to (a real hazard: pi's default provider "
-    "comes from the OPERATOR's own ~/.pi/agent/settings.json on the machine "
-    "running okto-nexus serve - server-spawned children should not inherit "
-    "that silently). Supported fields depend on kind: pi accepts "
-    '{"provider", "model", "extra_args"} (argv overrides, e.g. '
-    '{"provider":"zai","model":"glm-5.3"}); codex and claude_code '
-    '(substrate="stream") accept {"env"} (a JSON object of extra environment '
-    "variables merged over okto-nexus serve's own process environment - this "
-    "is how codex's provider/model/base_url selection actually works, via "
-    "CODEX_HOME pointing at a config.toml, not a CLI flag; the same env "
-    "escape hatch also reaches pi). Rejected for claude_code "
-    'substrate="attach" (nothing is spawned there to configure). Passing a '
-    "field this kind does not support is a VALIDATION_ERROR naming the "
-    "supported set, not a silent no-op. Omitting backend entirely is "
-    "allowed and keeps today's default (inherit the connector's own ambient "
-    "config) - the response's backend.explicit field always says which "
-    "happened, so that choice is never silent."
+    "Deprecated compatibility parameter. Nonempty per-call overrides are rejected; "
+    "configure backend options in an approved runtime profile bound to the endpoint."
 )
 _P_ROLE = "Deprecated compatibility field: must match the existing agent role; never modifies it."
-_P_METADATA = "Free-form JSON object of extra attributes stored on the registered agent (optional)."
+_P_METADATA = "Compatibility metadata; never updates the canonical agent profile."
 _P_NOTIFY_TARGET = (
-    "Routing target (optional; raw JSON object, same grammar as "
-    "message_create/handoff_create) for the D10 notable-event messages "
-    "(turn_completed, error) this session's activity generates. Default when "
-    'omitted: {"strategy":"broadcast"} (this session\'s own workspace).'
+    "Optional result routing intent; it does not authorize publication. "
+    "Captured events remain private until a separately authorized publication."
 )
 _P_SESSION_ID = "The harness session_id returned by harness_open. REQUIRED."
 _P_PAYLOAD_TURN = (
@@ -755,6 +636,8 @@ def resolve_substrate(kind: str, substrate: str | None) -> str | None:
     validator - :func:`build_connector` still owns fail-closed validation.
     """
     if kind != "claude_code":
+        if substrate is not None:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Substrate only applies to claude_code.", {})
         return None
     return substrate or SUBSTRATE_STREAM
 
