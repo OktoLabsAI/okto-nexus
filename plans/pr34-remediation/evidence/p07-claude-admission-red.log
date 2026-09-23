@@ -1,0 +1,10 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+_______ test_pending_turn_limit_precedes_native_send_and_steer_effects ________
+tests\test_runtime_claude_admission.py:38: in test_pending_turn_limit_precedes_native_send_and_steer_effects
+    assert sum(admitted) == 32
+E   assert 40 == 32
+E    +  where 40 = sum([True, True, True, True, True, True, ...])
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_claude_admission.py::test_pending_turn_limit_precedes_native_send_and_steer_effects
+1 failed in 0.27s

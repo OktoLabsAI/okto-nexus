@@ -24,7 +24,7 @@ Commands/results:
 
 ## Pending gates
 
-P01 containment and P02 contracts implemented; P03–P08 in progress; P09–P12 NOT_STARTED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
+P01 containment tasks implemented, phase IN_PROGRESS pending its full gate; P02 contracts IMPLEMENTED; P03–P08 IN_PROGRESS; P09–P12 NOT_STARTED. No phase VERIFIED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
 Current: P03 approved endpoint/profile persistence and canonical presence; see P03_ENDPOINTS.md. Next dependency: scoped runtime grants and lifecycle verification. Remaining seven red regressions belong to later phases. No legacy producer may be switched to a private, unintegrated dispatcher. Update this file and `05_BACKLOG.json` per unit.
 
@@ -112,3 +112,11 @@ starts. Concurrent real-pipe regression RED then corrected; 45 PASS, 1 skipped;
 expanded tests 6 PASS. See P07_CODEX_THREAD_ADMISSION.md. Native campaigns NOT_RUN
 for this subsequent unit. Claude pending admission and remaining P07/P08 gates
 still pending. User supplied RTK.md on this date; shell commands now use rtk.
+
+Thread admission checkpoint pushed: 7e3e774. Claude stream admission now bounds
+pending turns plus steer reservations at 32, rejecting replacement before any
+interrupt when full. See P07_CLAUDE_ADMISSION.md for fixture correction, behavioral
+RED, integrated gate 45 PASS / 7 skipped, and fresh REAL isolated Claude two-turn
+campaign 1 PASS / 2 deselected. POSIX ownership, shutdown/boot/recovery and durable
+control/result correlation remain pending. P01 summary reconciled with backlog:
+tasks implemented, phase still IN_PROGRESS. No final-gate promotion.

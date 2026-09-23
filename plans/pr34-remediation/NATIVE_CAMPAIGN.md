@@ -112,3 +112,9 @@ Codex configuration, `pytest tests/test_runtime_native_campaign.py -q -k codex
 --tb=short`: 2 PASS, 1 deselected in 14.67s. See P07_CODEX_EARLY_EVENTS.md and
 evidence/p07-codex-early-events-native.log. Two-turn and active-close paths only;
 no new Claude/Pi/attach native execution in this unit.
+
+2026-09-23, 7e3e774 plus Claude admission working tree: same explicit isolated
+Claude configuration, `pytest tests/test_runtime_native_campaign.py -q -k
+claude_code --tb=short`: 1 PASS, 2 deselected in 9.36s. See
+P07_CLAUDE_ADMISSION.md and evidence/p07-claude-admission-native.log. Canonical
+two-turn path only; native pressure/steering/approval campaign still NOT_RUN.

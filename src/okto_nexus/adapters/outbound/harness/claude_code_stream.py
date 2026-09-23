@@ -299,6 +299,7 @@ class ClaudeCodeStreamConnector:
 
         self._write_lock = threading.Lock()
         self._state_lock = threading.Lock()
+        self._pending_admissions = 0
         # Guarded by _state_lock. ``_pending_turns`` is a FIFO of one entry
         # per queued-but-not-yet-resulted turn (each entry: was THIS turn
         # interrupted by us). A plain "the current turn" boolean is not
@@ -480,6 +481,7 @@ class ClaudeCodeStreamConnector:
     def _send_turn(self, command: HarnessCommand) -> None:
         content = self._require_content(command)
         with self._state_lock:
+            self._check_turn_capacity()
             becomes_head = not self._pending_turns
             self._turn_in_flight = True
             self._pending_turns.append(False)
@@ -499,6 +501,25 @@ class ClaudeCodeStreamConnector:
         self._write_json({"type": "user", "message": {"role": "user", "content": content}})
 
     def _steer(self, command: HarnessCommand) -> None:
+        # Reserve before interrupting: a refused replacement must not alter the
+        # active turn. Reservations also fence simultaneous send/steer callers.
+        with self._state_lock:
+            self._check_turn_capacity()
+            self._pending_admissions += 1
+        try:
+            self._steer_reserved(command)
+        finally:
+            with self._state_lock:
+                self._pending_admissions -= 1
+
+    def _check_turn_capacity(self) -> None:
+        """Caller holds _state_lock; native results release pending turn slots."""
+        if len(self._pending_turns) + self._pending_admissions >= 32:
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                "Claude pending turn capacity exhausted.",
+                {"reason": "pending_turn_capacity", "limit": 32})
+
+    def _steer_reserved(self, command: HarnessCommand) -> None:
         """Redirect the session, earning ``steer_timing=IMMEDIATE``.
 
         Interrupts the in-flight turn (if any and if it is SAFE to - see the
