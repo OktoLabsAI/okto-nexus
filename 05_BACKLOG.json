@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "2b6b3a9",
+  "execution_head": "bac6f71",
   "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -988,7 +988,9 @@
             "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
             "src/okto_nexus/migrations/034_runtime_event_origin.sql",
             "src/okto_nexus/adapters/outbound/harness/event_buffers.py",
-            "tests/test_runtime_event_buffers.py"
+            "tests/test_runtime_event_buffers.py",
+            "src/okto_nexus/adapters/outbound/harness/codex.py",
+            "tests/test_runtime_codex_early_events.py"
           ],
           "test_results": [
             {
@@ -1018,6 +1020,13 @@
               "result": "PASS",
               "observed": "169 passed, 9 skipped, 1 P10 case deselected, 1 known injected Pi warning. Fresh native Codex 2 passed and Claude stream 1 passed separately; see document for exact scope.",
               "evidence": "plans/pr34-remediation/P07_EVENT_BUFFERS.md"
+            },
+            {
+              "sha": "bac6f71 + bounded early-event working tree",
+              "command": ".venv/Scripts/python.exe -m pytest tests/test_runtime_codex_early_events.py tests/test_runtime_shared_connection.py tests/test_runtime_protocol_limits.py tests/test_runtime_event_buffers.py tests/test_runtime_event_journal.py tests/test_harness_codex_connector.py -q --tb=short",
+              "result": "PASS",
+              "observed": "75 passed, 1 skipped (NOT_RUN); fresh isolated Codex campaign separately 2 passed, 1 deselected in 14.67s",
+              "evidence": "plans/pr34-remediation/P07_CODEX_EARLY_EVENTS.md"
             }
           ],
           "evidence": [
@@ -1026,9 +1035,10 @@
             "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
             "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
-            "plans/pr34-remediation/P07_EVENT_BUFFERS.md"
+            "plans/pr34-remediation/P07_EVENT_BUFFERS.md",
+            "plans/pr34-remediation/P07_CODEX_EARLY_EVENTS.md"
           ],
-          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending."
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Codex early-event cache bounded; replay restores native turn state. Lifetime session bookkeeping and Claude pending turns remain pending."
         },
         {
           "task_id": "P07-T03",

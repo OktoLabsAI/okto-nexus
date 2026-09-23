@@ -98,3 +98,10 @@ campaigns: Codex 2 passed (two turns + active close); Claude stream 1 passed (tw
 turns). Temporary auth copies removed. See P07_EVENT_BUFFERS.md. Remaining native
 early-event/turn bookkeeping, durable control/result correlation, POSIX ownership
 and boot/recovery are explicitly unfinished. Final gate still NOT PASSED.
+
+2026-09-23: bounded-stream checkpoint bac6f71 followed by Codex early-event cache
+limits (128 notifications / 1 MiB), explicit connection failure and ordered replay
+that restores native turn state. See P07_CODEX_EARLY_EVENTS.md: 2 behavioral REDs;
+integrated gate 75 PASS, 1 skipped; fresh REAL isolated Codex campaign 2 PASS,
+1 deselected. Other native bookkeeping, POSIX ownership, boot/recovery and durable
+control/result correlation remain unfinished. No final-gate promotion.

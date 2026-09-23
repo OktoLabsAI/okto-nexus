@@ -106,3 +106,9 @@ paths/configuration above and select `-k codex` / `-k claude_code` respectively.
 See P07_EVENT_BUFFERS.md and `evidence/p07-native-buffer-observations.json`.
 These prove normal enabled operation with bounded history/fanout, not real native
 pressure/fault campaigns. All login copies removed; Pi and attach native NOT_RUN.
+
+2026-09-23, bac6f71 plus early-event limits working tree: same explicit isolated
+Codex configuration, `pytest tests/test_runtime_native_campaign.py -q -k codex
+--tb=short`: 2 PASS, 1 deselected in 14.67s. See P07_CODEX_EARLY_EVENTS.md and
+evidence/p07-codex-early-events-native.log. Two-turn and active-close paths only;
+no new Claude/Pi/attach native execution in this unit.

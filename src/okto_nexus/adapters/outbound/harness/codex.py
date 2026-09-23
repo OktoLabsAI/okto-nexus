@@ -172,6 +172,13 @@ _PROC_WAIT_TIMEOUT_S = 5.0
 #: the same wedge shape as an unbounded ``Queue.get()``.
 _STDIN_WRITE_LOCK_TIMEOUT_S = 10.0
 
+_EARLY_EVENT_LIMIT = 128
+_EARLY_EVENT_BYTES = 1024 * 1024
+
+
+class EarlyEventLimitExceeded(RuntimeError):
+    """Connection attribution is incomplete; retrying may duplicate work."""
+
 
 def _client_info() -> dict[str, str]:
     return {"name": "okto-nexus", "version": "harness-integrations-d6", "title": None}
@@ -419,6 +426,8 @@ class _CodexTransport:
                     continue
                 try:
                     self._dispatch(msg)
+                except EarlyEventLimitExceeded:
+                    raise
                 except Exception as exc:  # noqa: BLE001 - see mismatch note 10
                     # A JSON-RPC-LEGAL but domain-invalid message (e.g. an
                     # empty "method", or "params" shaped as a JSON array
@@ -432,6 +441,9 @@ class _CodexTransport:
                         self._on_dispatch_error(line, repr(exc))
                     except Exception:  # noqa: BLE001 - never let the guard itself wedge the reader
                         pass
+        except EarlyEventLimitExceeded as exc:
+            self._proc.kill()
+            self._on_dispatch_error("", str(exc))
         except FrameLimitExceeded as exc:
             self._proc.kill()
             self._on_malformed_line("", str(exc))
@@ -592,6 +604,9 @@ class CodexAppServerConnector:
         # response registered the mapping - see the "thread/started can
         # race the response" mismatch note. Held briefly, then replayed.
         self._unmapped_thread_events: dict[str, list[tuple[str, dict[str, Any]]]] = {}
+        self._early_event_count = 0
+        self._early_event_bytes = 0
+        self._early_event_failed = False
 
         # Pending fire-and-forget request ids -> the session an ERROR
         # response (if any) should be surfaced against.
@@ -619,11 +634,18 @@ class CodexAppServerConnector:
         session_id = new_harness_session_id()
         state = _ThreadState(session_id=session_id, thread_id=thread_id, owning_agent_id=owning_agent_id)
         with self._sessions_lock:
+            if self._early_event_failed:
+                raise EarlyEventLimitExceeded("early_event_limit_exceeded")
             self._sessions_by_id[session_id] = state
             self._sessions_by_thread[thread_id] = state
             replay = self._unmapped_thread_events.pop(thread_id, [])
-        for method, params in replay:
-            self._emit_for_thread(thread_id, method, params)
+            self._early_event_count -= len(replay)
+            self._early_event_bytes -= sum(self._early_event_size(method, params)
+                                           for method, params in replay)
+            # Replay before newer notifications can overtake registration, and
+            # apply native turn state as well as publishing the buffered event.
+            for method, params in replay:
+                self._on_notification(method, params)
 
         return HarnessSession(
             session_id=session_id,
@@ -925,6 +947,10 @@ class CodexAppServerConnector:
         for session_id in live_session_ids:
             self._push_event(session_id, method, params, thread_id=None, turn_id=None)
 
+    @staticmethod
+    def _early_event_size(method: str, params: dict[str, Any]) -> int:
+        return len(json.dumps([method, params], ensure_ascii=False).encode("utf-8"))
+
     def _emit_for_thread(self, thread_id: str, method: str, params: dict[str, Any]) -> None:
         with self._sessions_lock:
             state = self._sessions_by_thread.get(thread_id)
@@ -937,7 +963,14 @@ class CodexAppServerConnector:
                 # (mismatch note 13) - previously the append was unlocked, so
                 # a registration could land in the gap between the lookup
                 # and the append and strand this event permanently.
+                size = self._early_event_size(method, params)
+                if (self._early_event_failed or self._early_event_count >= _EARLY_EVENT_LIMIT
+                        or self._early_event_bytes + size > _EARLY_EVENT_BYTES):
+                    self._early_event_failed = True
+                    raise EarlyEventLimitExceeded("early_event_limit_exceeded")
                 self._unmapped_thread_events.setdefault(thread_id, []).append((method, params))
+                self._early_event_count += 1
+                self._early_event_bytes += size
                 return
             session_id = state.session_id
         turn_id = None

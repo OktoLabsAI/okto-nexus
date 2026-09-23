@@ -1,0 +1,16 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+__________ test_unknown_thread_flood_has_explicit_bounded_failure[8] __________
+tests\test_runtime_codex_early_events.py:10: in test_unknown_thread_flood_has_explicit_bounded_failure
+    with pytest.raises(RuntimeError, match="early_event_limit_exceeded"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'RuntimeError'>
+________ test_unknown_thread_flood_has_explicit_bounded_failure[32768] ________
+tests\test_runtime_codex_early_events.py:10: in test_unknown_thread_flood_has_explicit_bounded_failure
+    with pytest.raises(RuntimeError, match="early_event_limit_exceeded"):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'RuntimeError'>
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_codex_early_events.py::test_unknown_thread_flood_has_explicit_bounded_failure[8]
+FAILED tests/test_runtime_codex_early_events.py::test_unknown_thread_flood_has_explicit_bounded_failure[32768]
+2 failed in 0.15s
