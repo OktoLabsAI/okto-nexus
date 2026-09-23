@@ -105,3 +105,10 @@ that restores native turn state. See P07_CODEX_EARLY_EVENTS.md: 2 behavioral RED
 integrated gate 75 PASS, 1 skipped; fresh REAL isolated Codex campaign 2 PASS,
 1 deselected. Other native bookkeeping, POSIX ownership, boot/recovery and durable
 control/result correlation remain unfinished. No final-gate promotion.
+
+Early-event checkpoint pushed: 075ea86. Subsequent Codex lifetime thread admission
+caps native start attempts at 64 per connection before effects, including uncertain
+starts. Concurrent real-pipe regression RED then corrected; 45 PASS, 1 skipped;
+expanded tests 6 PASS. See P07_CODEX_THREAD_ADMISSION.md. Native campaigns NOT_RUN
+for this subsequent unit. Claude pending admission and remaining P07/P08 gates
+still pending. User supplied RTK.md on this date; shell commands now use rtk.

@@ -82,3 +82,55 @@ def test_unknown_thread_flood_reaps_process_and_journals_fault(runtime):
     assert failure.payload == {"line": "", "error": "early_event_limit_exceeded"}
     assert failure.event_id and failure.sequence
     assert not any(event.kind == "turn_completed" for event in events)
+
+
+def test_connection_thread_admission_is_bounded_before_native_effects(tmp_path):
+    from concurrent.futures import ThreadPoolExecutor
+    from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+    source = _FAKE_SERVER_SOURCE.replace(
+        'elif method == "thread/start":',
+        'elif method == "thread/start":\n            log({"admitted_thread": True})')
+    script = tmp_path / "peer.py"
+    script.write_text(source)
+    log = tmp_path / "peer.jsonl"
+    peer = CodexAppServerConnector(command=[sys._base_executable, "-u", str(script), str(log)],
+        cwd=str(tmp_path), env={"_NEXUS_PROFILE_ENV_SEALED": "1"})
+
+    def attempt(_):
+        from okto_nexus.errors import OktoNexusError
+        try:
+            return peer.start(owning_agent_id="fixture")
+        except OktoNexusError as exc:
+            assert "capacity" in str(exc)
+            return None
+
+    try:
+        with ThreadPoolExecutor(max_workers=8) as workers:
+            sessions = list(workers.map(attempt, range(80)))
+        assert sum(session is not None for session in sessions) == 64
+        assert len(peer._sessions_by_id) == len(peer._sessions_by_thread) == 64
+        assert log.read_text().count('"admitted_thread": true') == 64
+    finally:
+        peer.close()
+
+
+def test_uncertain_thread_starts_do_not_recycle_connection_capacity(tmp_path):
+    from test_harness_codex_connector import _FAKE_SERVER_SOURCE
+    from okto_nexus.errors import OktoNexusError
+    source = _FAKE_SERVER_SOURCE.replace(
+        'thread_id = next_thread_id()',
+        'thread_id = next_thread_id()\n            if _thread_counter > 1:\n                continue')
+    peer = CodexAppServerConnector(command=[sys._base_executable, "-u", "-c", source],
+        cwd=str(tmp_path), env={"_NEXUS_PROFILE_ENV_SEALED": "1"})
+    try:
+        peer.start(owning_agent_id="fixture")
+        peer._handshake_timeout_s = .02
+        for _ in range(63):
+            with pytest.raises(OktoNexusError, match="did not answer"):
+                peer.start(owning_agent_id="fixture")
+        with pytest.raises(OktoNexusError, match="capacity"):
+            peer.start(owning_agent_id="fixture")
+        assert len(peer._sessions_by_id) == 1
+        assert not peer._transport._pending
+    finally:
+        peer.close()

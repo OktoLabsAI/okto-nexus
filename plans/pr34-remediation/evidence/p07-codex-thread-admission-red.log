@@ -1,0 +1,10 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______ test_connection_thread_admission_is_bounded_before_native_effects ______
+tests\test_runtime_codex_early_events.py:110: in test_connection_thread_admission_is_bounded_before_native_effects
+    assert sum(session is not None for session in sessions) == 64
+E   assert 80 == 64
+E    +  where 80 = sum(<generator object test_connection_thread_admission_is_bounded_before_native_effects.<locals>.<genexpr> at 0x000001D9C826B2A0>)
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_codex_early_events.py::test_connection_thread_admission_is_bounded_before_native_effects
+1 failed, 4 deselected in 1.34s

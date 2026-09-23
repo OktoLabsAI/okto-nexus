@@ -174,6 +174,7 @@ _STDIN_WRITE_LOCK_TIMEOUT_S = 10.0
 
 _EARLY_EVENT_LIMIT = 128
 _EARLY_EVENT_BYTES = 1024 * 1024
+_THREAD_START_LIMIT = 64
 
 
 class EarlyEventLimitExceeded(RuntimeError):
@@ -579,6 +580,9 @@ class CodexAppServerConnector:
 
         self._transport: _CodexTransport | None = None
         self._start_lock = threading.Lock()
+        # Lifetime attempts, including uncertain starts: never recycle a native
+        # allocation on timeout or discard attribution of late ended-thread events.
+        self._thread_start_attempts = 0
 
         # Native stream v2 retains a bounded replay window. Live consumers
         # receive ordered independent queues; durable history belongs to Nexus.
@@ -618,8 +622,15 @@ class CodexAppServerConnector:
     # ------------------------------------------------------------------ #
     def start(self, *, owning_agent_id: str) -> HarnessSession:
         with self._start_lock:
+            if self._thread_start_attempts >= _THREAD_START_LIMIT:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                    "Codex connection thread capacity exhausted; use a fresh connection.",
+                    {"reason": "connection_thread_capacity", "limit": _THREAD_START_LIMIT})
+            if self._early_event_failed:
+                raise EarlyEventLimitExceeded("early_event_limit_exceeded")
             if self._transport is None:
                 self._spawn_and_initialize()
+            self._thread_start_attempts += 1
 
         thread_start_params: dict[str, Any] = {
             "approvalPolicy": "on-request",
