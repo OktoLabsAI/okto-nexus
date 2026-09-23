@@ -309,6 +309,8 @@ def build_dispatcher(deps):
 
     def validate(uow, operation):
         endpoint, _ = revalidate(uow, operation)
+        if operation.get("source_result_id"):
+            messages._runtime_results.validate_relay(uow, operation["source_result_id"])
         if not managed(uow, operation):
             messages.revalidate_runtime_delivery(uow, operation)
         if registry.get(endpoint["adapter_id"]).substrate == "attach" and not deps.config.feature_harness_attach:
@@ -505,6 +507,7 @@ def event_to_dict(event: HarnessEvent) -> dict[str, Any]:
         "attempt_id": event.attempt_id,
         "owner_epoch": event.owner_epoch,
         "delivery_phase": event.delivery_phase,
+        "delivery_outcome": event.delivery_outcome,
     }
 
 
@@ -712,6 +715,7 @@ def build_connector_factories(deps: Any):
             protocol={"pi": "rpc-jsonl", "codex": "json-rpc-stdio"}.get(kind, substrate),
             factory=factory, config_validator=lambda config: runtime_object("backend", config),
             capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only, managed_work=not caps.send_only,
+                correlated_results=not caps.send_only,
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),

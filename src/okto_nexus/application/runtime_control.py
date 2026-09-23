@@ -137,7 +137,7 @@ class RuntimeControlService:
         if delivery:
             self.access.authorize(context, action="read", endpoint_id=delivery["endpoint_id"])
             with self.access.cf.unit_of_work(write=False) as uow:
-                result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state FROM runtime_results "
+                result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state,delivery_outcome,relay_state,relay_reason FROM runtime_results "
                     "WHERE operation_id=? ORDER BY captured_at DESC LIMIT 1", (operation_id,)).fetchone()
                 binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
                 outcome = uow.connection.execute("SELECT state,reason,response FROM runtime_work_outcomes WHERE operation_id=?", (operation_id,)).fetchone()
@@ -152,7 +152,7 @@ class RuntimeControlService:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime operation is unavailable.", {})
         self.access.authorize(context, action="read", session_id=row["runtime_session_id"])
         with self.access.cf.unit_of_work(write=False) as uow:
-            result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state FROM runtime_results "
+            result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state,delivery_outcome,relay_state,relay_reason FROM runtime_results "
                 "WHERE command_operation_id=? ORDER BY captured_at DESC LIMIT 1", (operation_id,)).fetchone()
         return self.commands.response(row) | {"reason": row["reason"], "owner_epoch": row["owner_epoch"],
             "native_turn_id": row["native_turn_id"], "expected_operation_id": row["expected_operation_id"],

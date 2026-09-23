@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "cb59f18",
+  "execution_head": "cc1c126",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1759,13 +1759,18 @@
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
             "src/okto_nexus/migrations/050_runtime_causality.sql",
-            "tests/test_runtime_causality.py"
+            "tests/test_runtime_causality.py",
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/migrations/051_runtime_result_relay.sql",
+            "tests/test_runtime_relay.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
           ],
-          "notes": "Persistent canonical admission implemented; authorized result relay and aggregate P10 gate still pending. Exact scoped runs in evidence."
+          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
         },
         {
           "task_id": "P10-T02",
@@ -1775,33 +1780,52 @@
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
             "src/okto_nexus/migrations/050_runtime_causality.sql",
-            "tests/test_runtime_causality.py"
+            "tests/test_runtime_causality.py",
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/migrations/051_runtime_result_relay.sql",
+            "tests/test_runtime_relay.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
           ],
-          "notes": "Persistent canonical admission implemented; authorized result relay and aggregate P10 gate still pending. Exact scoped runs in evidence."
+          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
         },
         {
           "task_id": "P10-T03",
           "title": "Preservar colaboração bidirecional limitada e novos roots legitimamente independentes.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/migrations/051_runtime_result_relay.sql",
+            "tests/test_runtime_relay.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+          ],
+          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
         },
         {
           "task_id": "P10-T04",
           "title": "Impedir reexecução por receipts/erros e tornar notify_target explícito/autorizado.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/migrations/051_runtime_result_relay.sql",
+            "tests/test_runtime_relay.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+          ],
+          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
         },
         {
           "task_id": "P10-T05",
@@ -1811,13 +1835,18 @@
           "implementation_refs": [
             "src/okto_nexus/application/runtime_causality.py",
             "src/okto_nexus/migrations/050_runtime_causality.sql",
-            "tests/test_runtime_causality.py"
+            "tests/test_runtime_causality.py",
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/application/runtime_delivery.py",
+            "src/okto_nexus/migrations/051_runtime_result_relay.sql",
+            "tests/test_runtime_relay.py"
           ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+            "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+            "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
           ],
-          "notes": "Persistent canonical admission implemented; authorized result relay and aggregate P10 gate still pending. Exact scoped runs in evidence."
+          "notes": "Explicit bounded result relay works in production composition with three protocol peers; notify-target, process restart and aggregate gate still pending."
         }
       ]
     },
@@ -2219,7 +2248,10 @@
       "stimulus": "Chamar controles novos no modo stdio legado sem contexto verificável.",
       "expected": "Não vira operador implicitamente; configuração local confiável habilita só o escopo previsto.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-AUTH-09",
@@ -3322,7 +3354,10 @@
       "stimulus": "A→B e A→B→C com grants/targets válidos.",
       "expected": "Entrega e resposta funcionam dentro do orçamento, sem bloqueio genérico entre harnesses.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-02",
@@ -3364,7 +3399,10 @@
       "stimulus": "Mesma sessão participa de dois roots simultâneos/alternados.",
       "expected": "Cada saída herda o pai correto, sem usar o estado da última mensagem da sessão.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-05",
@@ -3376,7 +3414,10 @@
       "stimulus": "Mesmo Agent envia respostas por conexões diferentes.",
       "expected": "Root decorre da operação, não da primeira sessão encontrada em memória.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-06",
@@ -3389,9 +3430,10 @@
       "expected": "Reserva atômica respeita limite total; profundidade sozinha não é o único controle.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md"
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-07",
@@ -3403,7 +3445,10 @@
       "stimulus": "Repetir a mesma criação de mensagem filha.",
       "expected": "Não consome budget duas vezes nem cria outro filho.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-08",
@@ -3430,7 +3475,10 @@
       "stimulus": "Resultado, receipt, erro sintético e bloqueio de relay são publicados.",
       "expected": "Não geram turnos automaticamente nem criam loop no handler de erro.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md"
+      ],
+      "notes": "Scoped fixture relay evidence implemented and passing; aggregate matrix scenario remains NOT_RUN until remaining stimuli covered."
     },
     {
       "test_id": "T-RELAY-10",

@@ -958,6 +958,13 @@ class ClaudeCodeStreamConnector:
             return "terminal"
         return "progress"
 
+    @staticmethod
+    def delivery_outcome(event):
+        if event.native_event.startswith("result:"):
+            if event.payload.get("interrupted_by_connector"):
+                return "interrupted"
+            return "success" if event.native_event == "result:success" and not event.payload.get("is_error") else "failed"
+
     def _handle_result(self, obj: dict[str, Any]) -> None:
         subtype = obj.get("subtype")
         is_success = subtype == "success"

@@ -14,15 +14,20 @@ class RuntimeDeliveryPlanner:
         self.registry, self.config = registry, config
         self.causality = RuntimeCausalityService(config=config, agents=agents)
 
-    def enqueue(self, uow, *, context, message, delivery, now, authorization_revision):
+    def enqueue(self, uow, *, context, message, delivery, now, authorization_revision, result_source=None):
         # Legacy cooperative-trust messages still reach the logical inbox, but
         # cannot acquire execution authority from a sender ID in the payload.
-        if not context or context.authentication_source != "agent_key" or not context.credential_binding:
+        source_kind = "captured_result" if result_source else "agent_key"
+        if not context or context.authentication_source != source_kind or not context.credential_binding:
             return None
         actor = self.agents.get(uow, context.actor_agent_id)
         if not actor or not actor.is_active or actor.api_key_hash != context.credential_binding:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Authenticated delivery actor is unavailable.", {})
-        if actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
+        if result_source:
+            if (result_source["recipient_agent_id"] != message.from_agent_id or result_source["actor_agent_id"] != actor.agent_id
+                    or result_source["parent_id"] != message.parent_message_id or result_source["workspace_id"] != message.workspace_id):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
+        elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
         candidates = []
         for endpoint in self.endpoints.list(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
@@ -57,6 +62,9 @@ class RuntimeDeliveryPlanner:
         if len(candidates) > 1 and (len(groups) != 1 or None in groups):
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
         endpoint, profile, session = min(candidates, key=lambda c: c[0]["endpoint_id"])
+        if result_source:
+            self.causality.admit_result_relay(uow, message_id=message.message_id,
+                source_result_id=result_source["result_id"], now=now)
         cause = self.causality.reserve_execution(uow, message_id=message.message_id, now=now)
         operation_id = new_id("op")
         bootstrap = delivery_context(uow, agents=self.agents, endpoint=endpoint, profile=profile, intent="conversation")
@@ -69,6 +77,9 @@ class RuntimeDeliveryPlanner:
             runtime_context=bootstrap)
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                            session_id=session, now=now, authorization_revision=authorization_revision)
+        if result_source:
+            uow.connection.execute("UPDATE delivery_outbox SET source_result_id=? WHERE operation_id=?",
+                                  (result_source["result_id"], operation_id))
         return operation_id
 
     def revalidate(self, uow, *, operation, config):

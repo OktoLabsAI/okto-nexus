@@ -75,6 +75,19 @@ class RuntimeCausalityService:
             raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal execution budget or deadline exhausted.", {})
         return node
 
+    def admit_result_relay(self, uow, *, message_id, source_result_id, now):
+        node = self.node(uow, message_id)
+        if not node or node["source_result_id"] != source_result_id or node["purpose"] != "observation":
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result has no correlated causal observation.", {})
+        if node["hop_count"] > node["max_depth"]:
+            raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal depth exhausted.", {})
+        changed = uow.connection.execute("UPDATE runtime_causal_roots SET generated_messages=generated_messages+1 "
+            "WHERE root_operation_id=? AND generated_messages<max_messages AND deadline>?",
+            (node["root_operation_id"], now)).rowcount
+        if not changed:
+            raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Causal message budget or deadline exhausted.", {})
+        uow.connection.execute("UPDATE runtime_message_causality SET purpose='continuation' WHERE message_id=?", (message_id,))
+
     def validate_dispatch(self, uow, *, operation, now):
         node = self.node(uow, operation["message_id"])
         if (not node or node["purpose"] == "observation" or node["root_operation_id"] != operation["root_operation_id"]

@@ -935,6 +935,13 @@ class PiRpcConnector:
             return "terminal"
         return "progress"
 
+    @staticmethod
+    def delivery_outcome(event):
+        if event.native_event == "message_end":
+            message = event.payload.get("message", event.payload)
+            if isinstance(message, dict) and message.get("role") == "assistant":
+                return {"stop": "success", "error": "failed", "aborted": "interrupted"}.get(message.get("stopReason"))
+
     def _on_push_event(self, msg: dict[str, Any]) -> None:
         native_type = msg.get("type")
         if not isinstance(native_type, str) or not native_type:

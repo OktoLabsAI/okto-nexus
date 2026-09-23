@@ -7,6 +7,7 @@ import json
 import hashlib
 
 from ..errors import ErrorCode, OktoNexusError
+from ..domain.runtime_context import RuntimeRequestContext
 
 
 class RuntimeResultService:
@@ -90,6 +91,60 @@ class RuntimeResultService:
         row = self.row(uow, result_id)
         self.artifacts.commit_runtime_result(uow, prepared=prepared,
             readers=[row["recipient_id"], row["recipient_agent_id"]])
+
+    def validate_relay(self, uow, result_id):
+        first, current, seen = None, result_id, set()
+        # Revalidate the bounded authority ancestry, including a managed-work
+        # grant when the first result originated from a canonical handoff.
+        for _ in range(65):
+            if current in seen:
+                break
+            seen.add(current)
+            row = self._validate_relay_source(uow, current)
+            first = first or row
+            source = uow.connection.execute("SELECT source_result_id FROM delivery_outbox WHERE operation_id=?",
+                (row["operation_id"],)).fetchone()
+            if not source or not source[0]:
+                return first
+            current = source[0]
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Relay authority ancestry is invalid.", {})
+
+    def _validate_relay_source(self, uow, result_id):
+        row = self.row(uow, result_id)
+        if not row:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Relay source unavailable.", {})
+        self.authorize(uow, result_id=result_id, supplied=self.arguments(row),
+                       approved=row["publication_state"] == "PENDING_APPROVAL")
+        endpoint = self.endpoints.get(uow, row["endpoint_id"])
+        if not endpoint["public_config"].get("relay_results") or row["delivery_outcome"] != "success":
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result relay is not authorized or source did not succeed.", {})
+        if row["recipient_agent_id"] == row["recipient_id"]:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Automatic result self-loop is prohibited.", {})
+        return row
+
+    def enqueue_relay(self, uow, *, result_id, planner, message, delivery, now, authorization_revision):
+        row = self.row(uow, result_id)
+        endpoint = self.endpoints.get(uow, row["endpoint_id"])
+        if not endpoint["public_config"].get("relay_results"):
+            return None
+        # Publication and private output survive a blocked relay. Roll back only
+        # its admission/budget/transport reservation, within this same transaction.
+        uow.connection.execute("SAVEPOINT result_relay")
+        try:
+            row = self.validate_relay(uow, result_id)
+            context = RuntimeRequestContext(row["actor_agent_id"], "captured_result",
+                represented_agent_id=row["recipient_agent_id"], credential_binding=row["credential_binding"])
+            operation = planner.enqueue(uow, context=context, message=message, delivery=delivery, now=now,
+                authorization_revision=authorization_revision, result_source=row)
+        except OktoNexusError as exc:
+            uow.connection.execute("ROLLBACK TO result_relay")
+            state, reason, operation = "BLOCKED", str(exc.code), None
+        else:
+            state, reason = ("ENQUEUED", None) if operation else ("NO_ENDPOINT", "No eligible conversation endpoint")
+        finally:
+            uow.connection.execute("RELEASE result_relay")
+        uow.connection.execute("UPDATE runtime_results SET relay_state=?,relay_reason=? WHERE result_id=?", (state, reason, result_id))
+        return operation
 
     def authorize(self, uow, *, result_id, supplied, approved=False):
         owner = self.owner_provider() if self.owner_provider else None

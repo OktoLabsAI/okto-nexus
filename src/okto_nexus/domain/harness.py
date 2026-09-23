@@ -310,6 +310,7 @@ class HarnessEvent:
     output_text: str | None = None
     output_snapshot: bool = False
     native_approval: dict[str, Any] | None = None
+    delivery_outcome: str | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)
@@ -324,6 +325,8 @@ class HarnessEvent:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid event origin.", {})
         if self.delivery_phase not in {None, "started", "progress", "terminal"}:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid delivery event phase.", {})
+        if self.delivery_outcome not in {None, "success", "failed", "interrupted"}:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid delivery outcome.", {})
         if not self.native_event:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,

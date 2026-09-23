@@ -78,7 +78,7 @@ class EnvelopeConnector:
             # Native payloads cannot select operation authority. Only locally
             # registered write context can populate these event contract v2 fields.
             event = replace(event, operation_id=None, attempt_id=None,
-                            owner_epoch=None, delivery_phase=None, output_text=None, output_snapshot=False, native_approval=None)
+                            owner_epoch=None, delivery_phase=None, delivery_outcome=None, output_text=None, output_snapshot=False, native_approval=None)
             approval_of = getattr(self.native, "native_approval_request", None)
             approval = approval_of(event) if callable(approval_of) else None
             output_of = getattr(self.native, "delivery_output", None)
@@ -87,6 +87,8 @@ class EnvelopeConnector:
                 event = replace(event, output_text=output[0], output_snapshot=output[1])
             phase_of = getattr(self.native, "delivery_event_phase", None)
             phase = phase_of(event) if callable(phase_of) else None
+            outcome_of = getattr(self.native, "delivery_outcome", None)
+            outcome = outcome_of(event) if callable(outcome_of) else None
             if approval:
                 phase = "progress"
                 event = replace(event, native_approval=approval)
@@ -100,8 +102,12 @@ class EnvelopeConnector:
                     if matched and active["thread_id"] is not None:
                         matched = event.thread_id == active["thread_id"]
                     if matched:
+                        if outcome in {"success", "failed", "interrupted"}:
+                            active["outcome"] = outcome
                         if active["operation_id"]:
-                            event = replace(event, delivery_phase=phase, **{key: active[key]
+                            event = replace(event, delivery_phase=phase,
+                                            delivery_outcome=active.get("outcome") if phase == "terminal" else None,
+                                            **{key: active[key]
                                 for key in ("operation_id", "attempt_id", "owner_epoch")})
                         if phase == "terminal":
                             self._attempts.pop(event.session_id, None)

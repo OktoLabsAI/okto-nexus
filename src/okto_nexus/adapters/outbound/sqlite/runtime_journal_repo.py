@@ -77,6 +77,8 @@ class SqliteRuntimeJournalRepo:
                 uow.connection.execute(f"UPDATE runtime_results SET {column}=?,attempt_id=? WHERE event_id=?",
                     (event.operation_id, event.attempt_id, event.event_id))
                 self._materialize_output(uow, event)
+                uow.connection.execute("UPDATE runtime_results SET delivery_outcome=? WHERE event_id=?",
+                    (event.delivery_outcome, event.event_id))
         uow.connection.execute("""INSERT INTO runtime_journal_checkpoint(singleton,store_id,ordinal,updated_at)
             VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET ordinal=excluded.ordinal,updated_at=excluded.updated_at""",
             (record["store_id"], record["ordinal"], now))

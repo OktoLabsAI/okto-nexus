@@ -130,9 +130,13 @@ class EndpointService:
         require_runtime_agent(agents=self.agents, connection_factory=self.cf, agent_id=agent_id)
         descriptor = self.registry.get(adapter_id)
         public_config = dict(public_config or {})
-        allowed_public = {"target_pid"} if descriptor.substrate == "attach" else set()
+        allowed_public = {"relay_results"} | ({"target_pid"} if descriptor.substrate == "attach" else set())
         if set(public_config) - allowed_public:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported public endpoint configuration.", {})
+        if "relay_results" in public_config and type(public_config["relay_results"]) is not bool:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "relay_results must be a boolean.", {})
+        if public_config.get("relay_results") and (response_policy != "conversation" or not descriptor.capabilities.correlated_results):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Result relay requires conversation policy and correlated results.", {})
         if descriptor.substrate == "attach" and (
             type(public_config.get("target_pid")) is not int or public_config["target_pid"] <= 0
         ):
@@ -148,7 +152,7 @@ class EndpointService:
         endpoint = AgentEndpoint(endpoint_id, agent_id, adapter_id, workspace_id, descriptor.protocol,
             runtime_profile_id=profile_id, enabled=enabled, activation_state="approved" if enabled else "pending_review",
             priority=priority, selection_group=selection_group, response_policy=response_policy,
-            delivery_consumption=consumption, public_config=dict(public_config or {}))
+            delivery_consumption=consumption, public_config=public_config)
         with self.cf.unit_of_work() as uow:
             if profile_id:
                 profile = self.repo.profile(uow, profile_id)

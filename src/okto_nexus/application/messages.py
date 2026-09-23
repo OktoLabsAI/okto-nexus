@@ -542,6 +542,12 @@ class MessageService:
                         authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
                     if operation_id:
                         runtime_operations.append(operation_id)
+                elif self._runtime_planner and _runtime_result_id and not _nonexecuting_notification:
+                    operation_id = self._runtime_results.enqueue_relay(uow, result_id=_runtime_result_id,
+                        planner=self._runtime_planner, message=message, delivery=delivery, now=now,
+                        authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
+                    if operation_id:
+                        runtime_operations.append(operation_id)
 
             # Emit the single message.created event INSIDE this transaction; the
             # event_id is assigned by the Event Log slice within the same commit.

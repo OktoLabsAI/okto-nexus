@@ -946,6 +946,12 @@ class CodexAppServerConnector:
             return "terminal"
         return "progress" if event.turn_id is not None else None
 
+    @staticmethod
+    def delivery_outcome(event):
+        if event.native_event == _METHOD_TURN_COMPLETED:
+            turn = event.payload.get("turn", {})
+            return {"completed": "success", "failed": "failed", "interrupted": "interrupted"}.get(turn.get("status")) if isinstance(turn, dict) else None
+
     def _on_server_request(self, request_id, method, params):
         from ....domain.native_inputs import INPUT_METHODS, ELICITATION, validate_request
         if not self.native_approvals_enabled or method not in {
