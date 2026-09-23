@@ -1,0 +1,129 @@
+{
+  "source": "installed CLI schema/help; no model request",
+  "parent_sha": "e054720",
+  "codex_version": "codex-cli 0.156.1",
+  "claude_version": "2.1.280 (Claude Code)",
+  "schema_command": "codex app-server generate-json-schema --out <temporary-directory>",
+  "schemas": {
+    "ServerRequest.json": {
+      "sha256": "f339be472737a0003efa25fba2e6e6c9237e621cd065b6d6995c51256e9dc1fb",
+      "required": [],
+      "property_names": [],
+      "methods": [
+        "item/commandExecution/requestApproval",
+        "item/fileChange/requestApproval",
+        "item/tool/requestUserInput",
+        "mcpServer/elicitation/request",
+        "item/permissions/requestApproval",
+        "item/tool/call",
+        "account/chatgptAuthTokens/refresh",
+        "attestation/generate",
+        "applyPatchApproval",
+        "execCommandApproval"
+      ]
+    },
+    "CommandExecutionRequestApprovalParams.json": {
+      "sha256": "16a71816c2d66e319c2c4aa83dd636dfdc43c61e72b6d5475e421ce08d8e6558",
+      "required": [
+        "itemId",
+        "startedAtMs",
+        "threadId",
+        "turnId"
+      ],
+      "property_names": [
+        "approvalId",
+        "command",
+        "commandActions",
+        "cwd",
+        "environmentId",
+        "itemId",
+        "kind",
+        "networkApprovalContext",
+        "proposedExecpolicyAmendment",
+        "proposedNetworkPolicyAmendments",
+        "reason",
+        "startedAtMs",
+        "threadId",
+        "turnId"
+      ],
+      "methods": []
+    },
+    "CommandExecutionRequestApprovalResponse.json": {
+      "sha256": "6d0767113e22f311381809b6b236b0dde2b99b01992879c26bf7b1ea0e003cb7",
+      "required": [
+        "decision"
+      ],
+      "property_names": [
+        "decision"
+      ],
+      "methods": []
+    },
+    "FileChangeRequestApprovalParams.json": {
+      "sha256": "13848b26814c286ad6425a20d01c1691c86790e1f9e2529399677a8a22fe0d18",
+      "required": [
+        "itemId",
+        "startedAtMs",
+        "threadId",
+        "turnId"
+      ],
+      "property_names": [
+        "grantRoot",
+        "itemId",
+        "reason",
+        "startedAtMs",
+        "threadId",
+        "turnId"
+      ],
+      "methods": []
+    },
+    "FileChangeRequestApprovalResponse.json": {
+      "sha256": "b95b03ee6be674e25cee2e863cc135a28620e1070addd2f34685aadee27cde08",
+      "required": [
+        "decision"
+      ],
+      "property_names": [
+        "decision"
+      ],
+      "methods": []
+    },
+    "v2/ThreadStartParams.json": {
+      "sha256": "e9c6d3cc18d049bfbc0249add3808fb8e5a27e1a0b5a423767aafbc3859a9428",
+      "required": [],
+      "property_names": [
+        "approvalPolicy",
+        "approvalsReviewer",
+        "baseInstructions",
+        "config",
+        "cwd",
+        "developerInstructions",
+        "ephemeral",
+        "model",
+        "modelProvider",
+        "personality",
+        "sandbox",
+        "serviceName",
+        "serviceTier",
+        "sessionStartSource",
+        "threadSource"
+      ],
+      "methods": []
+    }
+  },
+  "claude_help_relevant_lines": [
+    "--append-system-prompt <prompt>       Append a system prompt to the default",
+    "--append-system-prompt[-file], --add-dir",
+    "(CLAUDE.md dirs), --mcp-config,",
+    "--print and --output-format=stream-json)",
+    "--output-format=stream-json)",
+    "--output-format=stream-json)",
+    "--input-format <format>               Input format (only works with --print):",
+    "--mcp-config <configs...>             Load MCP servers from JSON files or",
+    "--output-format <format>              Output format (only works with --print):",
+    "--permission-mode <mode>              Permission mode to use for the session",
+    "--permission-prompt-tool) or \"none\"",
+    "with --input-format=stream-json and",
+    "--output-format=stream-json)",
+    "--strict-mcp-config                   Only use MCP servers from --mcp-config,",
+    "--append-system-prompt included \u2014 sent,"
+  ]
+}
