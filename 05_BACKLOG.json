@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "0eeb749",
+  "execution_head": "41c3322",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1412,7 +1412,10 @@
             "src/okto_nexus/application/inbox.py",
             "src/okto_nexus/application/runtime_command_dispatcher.py",
             "src/okto_nexus/migrations/040_runtime_command_intents.sql",
-            "tests/test_runtime_commands.py"
+            "tests/test_runtime_commands.py",
+            "src/okto_nexus/application/runtime_results.py",
+            "src/okto_nexus/migrations/041_runtime_result_publication.sql",
+            "tests/test_runtime_result_publication.py"
           ],
           "test_results": [
             {
@@ -1435,6 +1438,13 @@
               "result": "PASS",
               "observed": "60 passed in 95.12s; native campaigns NOT_RUN for this unit",
               "evidence": "plans/pr34-remediation/P07_RESTART_JOURNAL.md"
+            },
+            {
+              "sha": "41c3322 + publication worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_result_publication.py tests/test_hitl.py tests/test_governance.py tests/test_guardrails.py tests/test_runtime_shutdown.py tests/test_runtime_result_correlation.py tests/test_import_boundary.py --tb=short --maxfail=4",
+              "result": "PASS",
+              "observed": "110 passed; Linux publication/correlation 13 passed separately; native providers NOT_RUN for this unit",
+              "evidence": "plans/pr34-remediation/P08_RESULT_PUBLICATION.md"
             }
           ],
           "evidence": [
@@ -1447,9 +1457,10 @@
             "plans/pr34-remediation/P08_RESULT_CORRELATION.md",
             "plans/pr34-remediation/P08_CONSUMPTION_MATERIALIZATION.md",
             "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
-            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+            "plans/pr34-remediation/P08_RESULT_PUBLICATION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Canonical private conversation result publication and approval linkage implemented; old pending results require review. Guardrails, binding changes and commit cuts covered. Artifacts, explicit broadcast configuration, retrospective administration, causal continuation and full gates remain pending."
         },
         {
           "task_id": "P08-T04",

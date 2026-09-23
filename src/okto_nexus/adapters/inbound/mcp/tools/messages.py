@@ -69,6 +69,7 @@ from okto_nexus.application.approvals import ApprovalService
 from okto_nexus.application.governance import GovernanceService
 from okto_nexus.application.messages import MessageService
 from okto_nexus.application.runtime_delivery import RuntimeDeliveryPlanner
+from okto_nexus.application.runtime_results import RuntimeResultService
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
 from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
@@ -249,6 +250,8 @@ def build_service(deps: Any) -> MessageService:
         inbox_notifier=deps.inbox_delivery_notifier,
         runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents),
         runtime_context_provider=runtime_message_context,
+        runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
+            agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config),
         runtime_wake=lambda: wake_runtime(deps),
     )
 

@@ -338,6 +338,7 @@ def build_dispatcher(deps):
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
                                   validate=validate, dispatch=dispatch)
     dispatcher.event_ingress = supervisor.event_ingress
+    dispatcher.publish_results = lambda: messages._runtime_results.scan_once(messages)
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
     deps.runtime_dispatcher = dispatcher

@@ -410,6 +410,7 @@ class ApprovalService:
                     ),
                     "target": {"strategy": "direct", "agent_id": row.agent_id},
                     "trace_id": row.trace_id,
+                    "_nonexecuting_notification": True,
                 }
             )
         except OktoNexusError:

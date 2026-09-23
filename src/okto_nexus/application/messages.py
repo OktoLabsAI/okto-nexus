@@ -129,6 +129,7 @@ class MessageService:
         inbox_notifier: InboxDeliveryNotifier | None = None,
         runtime_planner=None,
         runtime_context_provider=None,
+        runtime_results=None,
         runtime_wake=None,
     ) -> None:
         self._cf = connection_factory
@@ -178,6 +179,7 @@ class MessageService:
         self._inbox_notifier = inbox_notifier
         self._runtime_planner = runtime_planner
         self._runtime_context_provider = runtime_context_provider
+        self._runtime_results = runtime_results
         self._runtime_wake = runtime_wake
 
     @contextmanager
@@ -254,6 +256,8 @@ class MessageService:
         session_secret: Any = None,
         _approved_execution: bool = False,
         _runtime_context=None,
+        _runtime_result_id=None,
+        _nonexecuting_notification=False,
     ) -> dict[str, Any]:
         """Persist a message and emit ``message.created`` atomically.
 
@@ -324,11 +328,20 @@ class MessageService:
         message_id = new_message_id()
 
         with self._send_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
+            if _runtime_result_id:
+                if self._runtime_results is None or artifact_refs or from_session_id or session_secret:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
+                existing = self._runtime_results.authorize(uow, result_id=_runtime_result_id,
+                    approved=_approved_execution, supplied={"project_root": root_realpath,
+                        "from_agent_id": from_agent_id, "subject": subject, "body": body,
+                        "channel_id": channel, "parent_message_id": parent, "target": target_echo})
+                if existing:
+                    return existing
             # Trust gate FIRST (M10): a failed credential check rolls the whole
             # uow back, so a forged sender never persists anything. Skipped on
             # approved re-execution (spec 2948b2a2): authenticity was verified
             # at interception time and the ephemeral session may be long gone.
-            if not _approved_execution:
+            if not _approved_execution and not _runtime_result_id:
                 verify_session_credentials(
                     self._sessions,
                     uow,
@@ -406,6 +419,8 @@ class MessageService:
             recipients, warning, excluded_stale, filtered_by_audience = (
                 self._resolve_recipients(uow, workspace_id, from_agent_id, target, now)
             )
+            if _runtime_result_id and recipients != [target_echo["agent_id"]]:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result recipient is outside the current authorized audience.", {})
 
             # Quantitative permission gates over the RESOLVED fan-out.
             max_recipients = perms.limit("max_recipients")
@@ -458,7 +473,7 @@ class MessageService:
                     # (BR1) and the pending envelope early-returns - no
                     # message row, no deliveries, no message.created. Session
                     # credentials are deliberately NOT persisted.
-                    return self._approvals.intercept(
+                    response = self._approvals.intercept(
                         uow,
                         workspace_id=workspace_id,
                         agent_id=from_agent_id,
@@ -474,9 +489,13 @@ class MessageService:
                             "artifacts": artifact_refs,
                             "parent_message_id": parent,
                             "trace_id": resolved_trace,
+                            **({"_runtime_result_id": _runtime_result_id} if _runtime_result_id else {}),
                         },
                         trace_id=resolved_trace,
                     )
+                    if _runtime_result_id:
+                        self._runtime_results.finish(uow, result_id=_runtime_result_id, response=response)
+                    return response
             message = self._messages.create(
                 uow,
                 message_id=message_id,
@@ -507,7 +526,7 @@ class MessageService:
                     status=DELIVERY_UNREAD,
                     created_at=now,
                 )
-                if self._runtime_planner and getattr(self._config, "feature_harness_integrations", False):
+                if self._runtime_planner and not (_runtime_result_id or _nonexecuting_notification) and getattr(self._config, "feature_harness_integrations", False):
                     operation_id = self._runtime_planner.enqueue(uow, context=runtime_context,
                         message=message, delivery=delivery, now=now,
                         authorization_revision=self.runtime_policy_revision(uow, message.from_agent_id, recipient_id))
@@ -560,6 +579,8 @@ class MessageService:
                 # The upsert materialised a BRAND-NEW workspace: surface it so a
                 # mistyped project_root never creates a phantom silently.
                 data["workspace_created"] = True
+            if _runtime_result_id:
+                self._runtime_results.finish(uow, result_id=_runtime_result_id, response=data)
 
         if runtime_operations and self._runtime_wake:
             # Notifications are hints. The intent already committed with inbox.
@@ -571,9 +592,10 @@ class MessageService:
         # Best-effort semantic index of the NEW message, in its OWN unit of work
         # AFTER the send committed (TR3 / br_0bdedc28): a failure here never
         # aborts the send or the fan-out, and there is no backfill of history.
-        self._maybe_generate_embedding(
-            message_id=message_id, subject=subject, body=body, created_at=now
-        )
+        if not _runtime_result_id:
+            self._maybe_generate_embedding(
+                message_id=message_id, subject=subject, body=body, created_at=now
+            )
         # Best-effort in-process push (ADR 0004 follow-up, SYS-03/UAT-05):
         # AFTER the delivery rows already committed above, announce each one
         # to anything subscribed to that recipient - most notably

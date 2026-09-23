@@ -29,6 +29,7 @@ class RuntimeDispatcher:
         self.wake_channel = None
         self.event_ingress = None
         self.command_dispatcher = None
+        self.publish_results = None
 
     def start(self):
         if self.epoch is not None:
@@ -116,6 +117,9 @@ class RuntimeDispatcher:
                     self.command_dispatcher.expire()
                 if self.event_ingress:
                     self.event_ingress.recover()
+                if self.publish_results and not self._quiescing.is_set():
+                    if self.publish_results():
+                        self.wake()
                 if self._shutdown_ready and self._shutdown_ready():
                     with self._lock:
                         idle = not self._inflight
