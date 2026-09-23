@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "cacf6d3",
+  "execution_head": "5c661fa",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2070,16 +2070,18 @@
             "src/okto_nexus/application/runtime_operation_maintenance.py",
             "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql",
             "tests/test_runtime_operation_reconciliation.py",
-            "docs/harness-integrations/operator-guide.md"
+            "docs/harness-integrations/operator-guide.md",
+            "docs/design/0004-harness-integrations.md"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
             "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
             "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
-            "plans/pr34-remediation/P11_GUIDE_AND_SUITE_INVENTORY.md"
+            "plans/pr34-remediation/P11_GUIDE_AND_SUITE_INVENTORY.md",
+            "plans/pr34-remediation/P11_ADR_AMENDMENT.md"
           ],
-          "notes": "Surface42/identity9/additive054 reference and operator guide rewritten for canonical identity, approved profiles, scoped grants, durable delivery/results and explicit uncertainty. Historical unsafe setup and callback/TTL/broadcast claims removed. ADR rewrite and full gate pending."
+          "notes": "Operator guide and ADR0004 now describe accepted canonical runtime architecture and explicit remaining gates; surface42/identity9/additive054 references current. Historical LAN, bypass, implicit registration and callback/broadcast instructions superseded. Full phase acceptance pending."
         },
         {
           "task_id": "P11-T05",

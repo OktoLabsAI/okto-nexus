@@ -26,7 +26,7 @@ Commands/results:
 
 P01 containment tasks implemented, phase IN_PROGRESS pending its full gate; P02 contracts IMPLEMENTED; P03–P08 IN_PROGRESS; P09–P11 IN_PROGRESS; P12 NOT_STARTED. No phase VERIFIED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
-Current resume point (2026-09-23): target-grammar legacy tests migrated above cacf6d3 to authenticated production composition. All15 old cases mapped to canonical routing, exclusive inbox, durable relay/causality and send-only capability coverage. Windows integrated60 PASS plus added relay1 PASS; Linux47 PASS. See P11_TARGET_GRAMMAR_MIGRATION.md. A fresh full-suite inventory is running; do not claim aggregate PASS until it completes. Managed handoff recovery, effective capability probes, remaining endpoint/operation UI, ADR and P12 remain pending. Final gate NOT PASSED.
+Current resume point (2026-09-23): target-grammar legacy tests migrated above cacf6d3 to authenticated production composition. All15 old cases mapped to canonical routing, exclusive inbox, durable relay/causality and send-only capability coverage. Windows integrated60 PASS plus added relay1 PASS; Linux47 PASS. See P11_TARGET_GRAMMAR_MIGRATION.md. A fresh full-suite inventory is running; do not claim aggregate PASS until it completes. Managed handoff recovery, effective capability probes, remaining endpoint/operation UI and P12 remain pending. Guide and ADR rewrite are implemented; see P11_ADR_AMENDMENT.md. Final gate NOT PASSED.
 
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
@@ -215,3 +215,5 @@ Scoped discovery unit above28ca542: see P11_SCOPED_DISCOVERY.md for exact comman
 
 
 Native input dashboard unit above43e06cc: P11_NATIVE_INPUT_DASHBOARD.md records exact browser commands and RED, 6 PASS, backend48 PASS, screenshot and native-model NOT_RUN limits. Existing generated static files preserved; temporary builds only. P11-T03 remains IN_PROGRESS and aggregate T-API-08 NOT_RUN.
+
+2026-09-23 continuation: target routing checkpoint5c661fa pushed. ADR0004 amended above it; documentation links checked. Full-suite inventory command is still running under tool session13827; poll that live handle before considering another run. Its XML target is evidence/current-suite-inventory.xml, which must be reduced/redacted before committing. No full-suite PASS yet.
