@@ -113,6 +113,7 @@ import functools
 import inspect
 import json
 import os
+import sys
 from typing import Annotated, Any, Mapping
 
 import anyio.to_thread
@@ -539,7 +540,7 @@ def capabilities_catalog(registry=None) -> list[dict[str, Any]]:
         return [{"adapter_id": d.adapter_id, "kind": d.kind, "substrate": d.substrate,
                  "contract_version": d.contract_version, "protocol": d.protocol,
                  "supported_platforms": list(d.supported_platforms),
-                 "platform_compatible": os.name in d.supported_platforms if d.supported_platforms else None,
+                 "platform_compatible": bool({os.name, sys.platform}.intersection(d.supported_platforms)) if d.supported_platforms else None,
                  "capabilities": capabilities_to_dict(d.legacy_capabilities)}
                 for d in registry.descriptors()]
     return _legacy_capabilities_catalog()
@@ -740,7 +741,7 @@ def build_connector_factories(deps: Any):
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end),
             legacy_capabilities=caps,
-            supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else (),
+            supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
         ))
     deps.harness_adapter_registry = registry
     return registry

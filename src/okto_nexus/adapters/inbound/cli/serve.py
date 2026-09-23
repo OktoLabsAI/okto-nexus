@@ -278,37 +278,12 @@ def _watch_ready(
 
 
 def _reap_live_harness_sessions(deps: "object") -> int:
-    """Best-effort child-process reap on serve shutdown (EV-OPS-001).
+    """Fallback session close after ASGI shutdown.
 
-    Covers a clean exit, ``SIGINT`` and ``SIGTERM`` alike: all three drive
-    ``server.run()`` back to a normal return (uvicorn's own signal handlers
-    flip ``should_exit`` and let the ASGI lifespan finish; the ``except
-    KeyboardInterrupt`` branch above only re-raises AFTER that already
-    happened), and this runs right after ``server.run()`` returns either
-    way - see the call site. For each session still in the supervisor's live
-    registry at that point, this calls :meth:`HarnessSupervisor.close`,
-    which sends a best-effort ``end`` and then invokes the connector's own
-    ``close()`` lifecycle helper - for ``PiRpcConnector`` (and the other
-    subprocess-backed connectors) that is a bounded SIGTERM-then-SIGKILL on
-    the child's own process group, i.e. an ACTUAL reap, not merely "the
-    child happened to exit" (the exact distinction EV-OPS-001 calls out).
-
-    Does NOT cover ``kill -9`` on this process or any other unclean exit
-    (segfault, OOM-kill, `launchd`/`systemd` skipping SIGTERM straight to
-    SIGKILL): a process that never runs this code cannot reap anything.
-    That gap is why ``_spawn_harness_orphan_watchdog`` below exists - an
-    INDEPENDENT process, not this one, is the only thing that can reap a
-    session this function never got the chance to. See that function's
-    docstring and ``adapters/inbound/cli/harness_orphan_watchdog.py`` for
-    the full design and its own disclosed residual limits (it is a
-    best-effort backstop, not an absolute guarantee - see that module's
-    "bounded lifetime" section).
-
-    Best-effort per session: one wedged connector's teardown must never
-    block the others from being tried, matching every other best-effort
-    teardown path in ``HarnessSupervisor`` (``close``, ``_best_effort_
-    teardown``). Returns the number of sessions the supervisor reported as
-    live going in, for the caller's own log line.
+    Native creation already establishes Windows Job or Linux guardian ownership.
+    This loop handles observable close; owner SIGKILL cleanup belongs to those
+    birth-owned resources, not a cached PID scanner. Attach is never terminated.
+    A global shutdown budget remains a separate lifecycle gate.
     """
     supervisor = getattr(deps, "harness_supervisor", None)
     if supervisor is None:
@@ -337,66 +312,13 @@ _WATCHDOG_POLL_INTERVAL_ENV = "OKTO_NEXUS_HARNESS_WATCHDOG_POLL_INTERVAL_S"
 _WATCHDOG_MODULE = "okto_nexus.adapters.inbound.cli.harness_orphan_watchdog"
 
 
-def _spawn_harness_orphan_watchdog(env: Mapping[str, str]) -> "object | None":
-    """Best-effort spawn of the independent SIGKILL-orphan reaper (EV-OPS-001
-    LIMITATION 1; see ``harness_orphan_watchdog.py`` for the full design).
+def _spawn_harness_orphan_watchdog(env: Mapping[str, str]) -> object | None:
+    """Compatibility hook: birth-owned adapters no longer launch a PID scanner.
 
-    Spawned as a DETACHED direct child (``start_new_session=True``, no
-    intermediate shell) so it (a) is never touched by a signal aimed at
-    this process alone or at this process's own group, and (b) has this
-    process's pid as its OWN ``os.getppid()`` from the instant it starts -
-    the watchdog's entire "is serve gone yet" detection depends on that
-    parent/child relationship holding exactly, so nothing here may
-    interpose a shell or wrapper between this call and the watchdog
-    process.
-
-    ``stdin``/``stdout``/``stderr`` are ALL redirected to ``DEVNULL``,
-    never inherited: this process's own stdout/stderr may be a pipe a
-    caller is reading to EOF (a test harness's ``process.communicate()``,
-    an operator's shell) - a still-running watchdog holding that pipe's
-    write end open after this process exits would leave that reader
-    hanging well past this process's own exit, an unrelated hang this
-    function must not introduce.
-
-    Best-effort and POSIX-only (mirrors the SIGTERM-handler guard above):
-    a spawn failure (missing ``ps``, a sandboxed environment that refuses
-    ``fork``/``exec``, ...) is logged and swallowed - ``serve`` must still
-    start with or without this backstop, exactly as it already does
-    without the embedding warm-up or the readiness banner. Returns the
-    ``Popen`` handle (for ``_stop_harness_orphan_watchdog`` below) or
-    ``None`` if nothing was spawned.
+    Windows Job objects and Linux per-connection subreapers own native children
+    from creation. Attach never owns the external operator process.
     """
-    if os.name != "posix":
-        return None
-    import subprocess
-
-    argv = [
-        sys.executable,
-        "-m",
-        _WATCHDOG_MODULE,
-        "--serve-pid",
-        str(os.getpid()),
-    ]
-    poll_interval = env.get(_WATCHDOG_POLL_INTERVAL_ENV)
-    if poll_interval:
-        argv += ["--poll-interval-s", str(poll_interval)]
-    try:
-        return subprocess.Popen(
-            argv,
-            stdin=subprocess.DEVNULL,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            start_new_session=True,
-            close_fds=True,
-        )
-    except OSError as exc:  # noqa: BLE001 - best-effort: serve must still start
-        print(
-            f"[okto-nexus] failed to start the harness-orphan watchdog "
-            f"({type(exc).__name__}: {exc}); SIGKILL on this process will "
-            "leave any live harness child unreaped.",
-            file=sys.stderr,
-        )
-        return None
+    return None
 
 
 def _stop_harness_orphan_watchdog(watchdog: "object | None") -> None:
@@ -624,12 +546,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             # to this function, so the SIGTERM path converges on exactly
             # the same `finally`-runs-the-reap outcome as SIGINT/CTRL-C.
             signal.signal(signal.SIGTERM, lambda *_: None)
-        # EV-OPS-001 LIMITATION 1: SIGTERM/SIGINT/clean exit are covered by
-        # the `finally` block below alone - this process still runs code on
-        # those paths. SIGKILL runs no code in this process at all, so the
-        # only way to close that gap is a SEPARATE process that notices
-        # this one is gone. See `_spawn_harness_orphan_watchdog`'s
-        # docstring and `harness_orphan_watchdog.py` for the full design.
+        # Adapters establish ownership at native process birth. The compatibility
+        # hook returns None; never launch the historical cached-PID scanner.
         watchdog = (_spawn_harness_orphan_watchdog(env)
                     if deps.config.feature_harness_integrations else None)
         try:

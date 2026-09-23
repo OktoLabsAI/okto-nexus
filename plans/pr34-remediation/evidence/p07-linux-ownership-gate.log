@@ -1,0 +1,11 @@
+test_capacity_is_held_until_observed_cleanup (__main__.LinuxOwnershipTests) ... ok
+test_normal_leader_exit_reaps_escaped_child_without_touching_bystander (__main__.LinuxOwnershipTests) ... ok
+test_observed_stop_requires_tree_cleanup_proof (__main__.LinuxOwnershipTests) ... ok
+test_owner_sigkill_reaps_escaped_grandchild (__main__.LinuxOwnershipTests) ... ok
+test_partial_descriptor_failure_does_not_leak (__main__.LinuxOwnershipTests) ... ok
+test_terminate_preserves_native_graceful_exit_status (__main__.LinuxOwnershipTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.547s
+
+OK

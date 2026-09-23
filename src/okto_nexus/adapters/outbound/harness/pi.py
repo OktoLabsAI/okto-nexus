@@ -106,7 +106,6 @@ import itertools
 import json
 import os
 import queue
-import signal
 import subprocess
 import threading
 from collections import deque
@@ -554,12 +553,6 @@ class _PiTransport:
     def _terminate_group(self) -> None:
         if self._proc is None:
             return
-        if os.name == "posix":
-            try:
-                os.killpg(os.getpgid(self._proc.pid), signal.SIGTERM)
-                return
-            except (ProcessLookupError, PermissionError, OSError):
-                pass
         try:
             self._proc.terminate()
         except OSError:
@@ -568,12 +561,6 @@ class _PiTransport:
     def _kill_group(self) -> None:
         if self._proc is None:
             return
-        if os.name == "posix":
-            try:
-                os.killpg(os.getpgid(self._proc.pid), signal.SIGKILL)
-                return
-            except (ProcessLookupError, PermissionError, OSError):
-                pass
         try:
             self._proc.kill()
         except OSError:

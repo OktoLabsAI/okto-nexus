@@ -137,3 +137,12 @@ runtime-processing receipts, atomically with result/checkpoint. See
 P08_CONSUMPTION_MATERIALIZATION.md: behavioral RED; 75 integrated PASS; REAL isolated
 Codex 2 PASS and Claude 1 PASS. Publication, artifacts, durable controls and all
 later gates remain pending; next lifecycle work is POSIX birth ownership.
+
+Consumption/materialization checkpoint pushed: 920faee. Linux birth ownership now
+uses a per-connection subreaper with owner pidfd and cleanup proof; serve no longer
+launches its historical PID scanner. See P07_LINUX_OWNERSHIP.md: real orphan RED;
+6 standalone Linux component PASS, Windows regressions/platform gates PASS with
+explicit skipped cases. WSL Python 3.10 component evidence does not qualify full
+Nexus Linux composition (requires >=3.11), which remains NOT_RUN. Managed platforms
+declared Windows/Linux; external guardian kill yields unknown, not observed stop.
+Full shutdown/boot/recovery and later phases remain pending; no final gate passed.

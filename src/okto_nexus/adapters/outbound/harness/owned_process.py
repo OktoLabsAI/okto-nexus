@@ -1,14 +1,15 @@
 """Launch only processes owned by this connector; never used for attach."""
 import os
-import signal
-import subprocess
+import sys
 
 from ....application.runtime_lifecycle import current_lifecycle
+from ....errors import ErrorCode, OktoNexusError
 
 
 def observe_owned_process(process):
     exit_code = process.poll() if process is not None else None
-    return {"stop_observed": exit_code is not None, "exit_code": exit_code}
+    confirmed = getattr(process, "tree_stopped", True)
+    return {"stop_observed": exit_code is not None and confirmed, "exit_code": exit_code}
 
 
 def spawn_owned_process(argv, **kwargs):
@@ -19,20 +20,14 @@ def spawn_owned_process(argv, **kwargs):
         from .windows_process import OwnedWindowsPopen
         process = OwnedWindowsPopen(argv, **kwargs)
         stop = process.kill
+    elif sys.platform == "linux":
+        from .linux_process import OwnedLinuxPopen
+        process = OwnedLinuxPopen(argv, **kwargs)
+        stop = process.kill
     else:
-        # A new group supports explicit teardown. Owner-crash guarantees on
-        # POSIX require the separate guardian work; do not equate it with a Job.
-        kwargs["start_new_session"] = True
-        process = subprocess.Popen(argv, **kwargs)
-
-        def stop():
-            # While the leader is an unreaped child its PID cannot be reused.
-            with process._waitpid_lock:
-                if process.returncode is None:
-                    try:
-                        os.killpg(process.pid, signal.SIGKILL)
-                    except ProcessLookupError:
-                        pass
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "Managed process birth ownership is supported on Windows and Linux only.",
+            {"reason": "platform_unsupported"})
 
     if scope is not None:
         scope.register(stop)

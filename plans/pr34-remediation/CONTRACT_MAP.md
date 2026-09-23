@@ -76,3 +76,9 @@ consumption reuses logical inbox state/receipts with explicit native_terminal
 provenance; no public ack bypass or new work queue is introduced. See
 P08_CONSUMPTION_MATERIALIZATION.md. Existing inbox `read` vocabulary does not imply
 human reading or handoff completion for this path.
+
+Linux managed process ownership: OwnedLinuxPopen/isolated subreaper guardian,
+owner pidfd plus private cancel/proof descriptors. Popen.pid identifies the guardian;
+native protocol IDs remain separate. Observed stop requires guardian cleanup proof.
+Managed adapters advertise Windows/Linux; attach retains POSIX. See
+P07_LINUX_OWNERSHIP.md for exact platform evidence and limitations.

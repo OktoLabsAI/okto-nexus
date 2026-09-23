@@ -1,0 +1,8 @@
+test_observed_stop_requires_tree_cleanup_proof (__main__.LinuxOwnershipTests) ... ok
+test_owner_sigkill_reaps_escaped_grandchild (__main__.LinuxOwnershipTests) ... ok
+test_partial_descriptor_failure_does_not_leak (__main__.LinuxOwnershipTests) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.833s
+
+OK

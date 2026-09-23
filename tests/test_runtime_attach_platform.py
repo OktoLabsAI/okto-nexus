@@ -44,3 +44,16 @@ def test_catalog_preserves_attach_and_reports_platform_contract():
     assert entry["supported_platforms"] == ["posix"]
     assert entry["platform_compatible"] is (os.name == "posix")
     assert entry["capabilities"]["send_only"] is True
+    import sys
+    for managed in (item for item in catalog if item["substrate"] != "attach"):
+        assert managed["supported_platforms"] == ["nt", "linux"]
+        assert managed["platform_compatible"] is (os.name == "nt" or sys.platform == "linux")
+
+
+def test_unsupported_managed_platform_rejects_before_spawn(monkeypatch):
+    from okto_nexus.adapters.outbound.harness import owned_process
+    monkeypatch.setattr(owned_process, "os", SimpleNamespace(name="posix"))
+    monkeypatch.setattr(owned_process, "sys", SimpleNamespace(platform="darwin"))
+    with pytest.raises(OktoNexusError) as error:
+        owned_process.spawn_owned_process(["must-not-launch"])
+    assert error.value.details["reason"] == "platform_unsupported"
