@@ -198,7 +198,8 @@ def open_runtime(deps, **arguments):
     service = RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
         agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
         supervisor=supervisor, construct=functools.partial(construct_profile_connector, deps), clock=deps.clock,
-        owner_guard=lambda: is_local_runtime_owner(deps))
+        owner_guard=lambda: is_local_runtime_owner(deps),
+        owner_identity=(deps.runtime_dispatcher.owner_id, deps.runtime_dispatcher.epoch))
     session, profile, reused, request_id = service.open(context, **arguments)
     result = {**session_to_dict(session), "backend": profile}
     if request_id:
@@ -267,13 +268,23 @@ def build_dispatcher(deps):
             if live:
                 session_id = live[0].session_id
             else:
+                requests = SqliteRuntimeRequestRepo()
+                with deps.connection_factory.unit_of_work() as uow:
+                    request_id, existing_session = requests.reserve(uow, actor_id=operation["actor_agent_id"],
+                        key="delivery:" + operation["operation_id"], request_hash=operation["request_hash"],
+                        now=deps.clock.now_iso(), endpoint=endpoint, profile=profile,
+                        owner=(operation["owner_id"], operation["owner_epoch"]))
+                    if existing_session:
+                        raise OktoNexusError(ErrorCode.CONFLICT, "Historical runtime requires reconciliation.", {})
                 connector, _, _ = construct_profile_connector(deps, endpoint=endpoint, profile=profile,
                     kind=descriptor.kind, substrate=descriptor.substrate, project_root=workspace.root_realpath)
                 session = supervisor.open(kind=descriptor.kind, connector=connector,
                     owning_agent_id=endpoint["agent_id"], project_root=workspace.root_realpath,
                     endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
-                    profile_revision=profile["revision"] if profile else None)
+                    profile_revision=profile["revision"] if profile else None, open_request_id=request_id)
                 session_id = session.session_id
+                with deps.connection_factory.unit_of_work() as uow:
+                    requests.finish(uow, request_id=request_id, status="COMPLETED")
             with deps.connection_factory.unit_of_work() as uow:
                 if not outbox.bind_runtime(uow, operation_id=operation["operation_id"], session_id=session_id,
                         epoch=operation["owner_epoch"], attempt_id=operation["attempt_id"]):
@@ -397,6 +408,7 @@ def session_to_dict(session: HarnessSession) -> dict[str, Any]:
         "presence_session_id": session.presence_session_id,
         "lifecycle_state": session.lifecycle_state,
         "connection_id": session.connection_id,
+        "owner_epoch": session.owner_epoch,
     }
 
 

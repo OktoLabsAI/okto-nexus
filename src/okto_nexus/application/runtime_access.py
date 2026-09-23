@@ -43,6 +43,7 @@ class RuntimeAccessService:
                 substrate != "attach" or self.config.feature_harness_attach)
             if endpoint and action in {"open", "send", "steer"}:
                 enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
+                enabled = enabled and endpoint["health"] != "quarantined"
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]

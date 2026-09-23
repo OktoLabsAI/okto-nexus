@@ -6,6 +6,10 @@ from ....errors import ErrorCode, OktoNexusError, db_error_from_exception
 
 
 class SqliteEndpointRepo:
+    def validate_start(self, uow, *, request_id, endpoint_id, now):
+        from .runtime_requests_repo import SqliteRuntimeRequestRepo
+        return SqliteRuntimeRequestRepo().validate_start(uow, request_id=request_id, endpoint_id=endpoint_id, now=now)
+
     def put_profile(self, uow, *, profile_id, adapter_id, config, secret_refs,
                     inherit_ambient, enabled, now):
         try:

@@ -7,7 +7,8 @@ from ....errors import ErrorCode, OktoNexusError
 class SqliteRuntimeOutboxRepo:
     def live_sessions(self, uow, *, endpoint_id):
         return [dict(row) for row in uow.connection.execute(
-            "SELECT session_id FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state='protocol_ready' ORDER BY started_at,session_id",
+            "SELECT session_id FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state='protocol_ready' "
+            "AND owner_epoch=(SELECT epoch FROM runtime_dispatcher_owner WHERE owner_key='dispatcher') ORDER BY started_at,session_id",
             (endpoint_id,))]
 
     def enqueue(self, uow, *, envelope, context, endpoint, profile, session_id, now, authorization_revision):
@@ -72,6 +73,18 @@ class SqliteRuntimeOutboxRepo:
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
             (now, epoch))
+        # Readiness is scoped to its process owner. Closing canonical presence
+        # means loss of this connection only, never proof of native process exit.
+        stale = "(owner_epoch IS NULL OR owner_epoch<>?) AND lifecycle_state IN ('protocol_ready','stop_requested','tracked','legacy_unlinked') AND status IN ('STARTING','RUNNING','INTERRUPTING','ERRORED')"
+        uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='owner_lost',updated_at=? "
+            "WHERE endpoint_id IN (SELECT endpoint_id FROM harness_sessions WHERE " + stale + ") "
+            "OR endpoint_id IN (SELECT endpoint_id FROM runtime_open_requests WHERE status='RESERVED' "
+            "AND (owner_epoch IS NULL OR owner_epoch<>?))", (now, epoch, epoch))
+        uow.connection.execute("UPDATE sessions SET status='closed',closed_at=? WHERE status<>'closed' "
+            "AND session_id IN (SELECT presence_session_id FROM harness_sessions WHERE " + stale + ")", (now, epoch))
+        uow.connection.execute("UPDATE harness_sessions SET lifecycle_state='unknown',status='ERRORED',updated_at=? WHERE " + stale, (now, epoch))
+        uow.connection.execute("UPDATE runtime_open_requests SET status='OUTCOME_UNKNOWN' WHERE status='RESERVED' "
+            "AND (owner_epoch IS NULL OR owner_epoch<>?)", (epoch,))
 
     def heartbeat_owner(self, uow, *, owner_id, epoch, lease_expires_at, now):
         return uow.connection.execute(

@@ -23,6 +23,8 @@ class RuntimeDeliveryPlanner:
         for endpoint in self.endpoints.list(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
             if not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["consumption"] != "exclusive":
                 continue
+            if endpoint["health"] == "quarantined":
+                continue
             # Explicit operator approval to respond conversationally. This
             # conveys no authority to claim or complete executable handoffs.
             if endpoint["response_policy"] != "conversation":
@@ -62,6 +64,7 @@ class RuntimeDeliveryPlanner:
                 actor.api_key_hash != operation["credential_binding"] or not recipient or not recipient.is_active or
                 not reachable(actor, recipient) or
                 not endpoint or not endpoint["enabled"] or endpoint["revision"] != operation["endpoint_revision"] or
+                endpoint["health"] == "quarantined" or
                 endpoint["agent_id"] != recipient.agent_id or endpoint["workspace_id"] != operation["workspace_id"] or
                 endpoint["response_policy"] != "conversation" or endpoint["consumption"] != "exclusive"):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport authorization changed before dispatch.", {})

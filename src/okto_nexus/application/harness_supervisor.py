@@ -539,6 +539,9 @@ class HarnessSupervisor:
             with self._cf.unit_of_work(write=False) as uow:
                 endpoint = self._endpoint_repo.get(uow, endpoint_id)
                 profile_id = endpoint["profile_id"] if endpoint else None
+                if self.event_ingress:
+                    self._endpoint_repo.validate_start(uow, request_id=open_request_id,
+                        endpoint_id=endpoint_id, now=self._clock.now_iso())
         connection_key = getattr(connector, "connection_key", id(connector))
         context = (owning_agent_id, project_root, profile_id, profile_revision, kind)
         with self._lock:
@@ -576,6 +579,9 @@ class HarnessSupervisor:
         now = self._clock.now_iso()
         try:
             with self._cf.unit_of_work() as uow:
+                if endpoint_id and self.event_ingress:
+                    session.owner_epoch = self._endpoint_repo.validate_start(uow,
+                        request_id=open_request_id, endpoint_id=endpoint_id, now=now)
                 # A runtime is a connection of an existing identity. Never
                 # upsert its role, capabilities, metadata or credentials.
                 if metadata:

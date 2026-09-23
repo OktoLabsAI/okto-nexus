@@ -179,3 +179,12 @@ fixed discarded non-Claude substrate plus stale MCP descriptions. See
 P11_LEGACY_SURFACE_COMPATIBILITY.md: 59 PASS / 2 POSIX skips, Ruff PASS. Native
 providers NOT_RUN for this unit. Next: stale session epoch reconciliation and
 stable boot, then durable controls and remaining P08-P12. Final gate NOT PASSED.
+
+Surface compatibility checkpoint pushed: 6b1358d. Migration 038 makes every
+production open reserve logical STARTING before construction; readiness is fenced
+by owner epoch, deadline and approved revisions. Restart after journal recovery
+invalidates stale readiness/presence and quarantines unfinished bindings. See
+P07_SESSION_RECOVERY.md: two REDs, 21 PASS core, expanded 100 PASS / known P10
+relay FAIL / fixture teardown ERROR; fixture corrected and 5 focused PASS. Native
+providers NOT_RUN. Next: explicit endpoint reconciliation and stable approved boot.
+Final gate NOT PASSED; P09-P12 still pending.

@@ -2,16 +2,17 @@
 import hashlib
 import json
 
-from ..domain.base import check_inline_size
+from ..domain.base import check_inline_size, new_id
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_authorization import require_runtime_agent
 
 
 class RuntimeOpenService:
-    def __init__(self, *, connection_factory, endpoints, agents, sessions, requests, supervisor, construct, clock, owner_guard):
+    def __init__(self, *, connection_factory, endpoints, agents, sessions, requests, supervisor, construct, clock, owner_guard, owner_identity=None):
         self.cf, self.endpoints, self.agents, self.sessions = connection_factory, endpoints, agents, sessions
         self.requests, self.supervisor, self.construct, self.clock = requests, supervisor, construct, clock
         self.owner_guard = owner_guard
+        self.owner_identity = owner_identity
 
     def open(self, context, *, agent_id, kind, project_root, substrate=None, endpoint_id=None,
              target_pid=None, backend=None, role=None, metadata=None, notify_target=None, idempotency_key=None):
@@ -29,14 +30,13 @@ class RuntimeOpenService:
         check_inline_size("runtime open", spec, 65536)
         profile_view = {"profile_id": endpoint["profile_id"], "inherit_ambient": bool(profile and profile["inherit_ambient"]),
                         "revision": profile["revision"] if profile else None}
-        request_id = None
-        if idempotency_key is not None:
-            digest = hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-            with self.cf.unit_of_work() as uow:
-                request_id, existing = self.requests.reserve(uow, actor_id=context.actor_agent_id or "operator",
-                    key=idempotency_key, request_hash=digest, now=self.clock.now_iso())
-                if existing:
-                    return self.sessions.get(uow, session_id=existing), profile_view, True, request_id
+        digest = hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+        with self.cf.unit_of_work() as uow:
+            request_id, existing = self.requests.reserve(uow, actor_id=context.actor_agent_id or "operator",
+                key=idempotency_key or new_id("open-key"), request_hash=digest, now=self.clock.now_iso(),
+                endpoint=endpoint, profile=profile, owner=self.owner_identity)
+            if existing:
+                return self.sessions.get(uow, session_id=existing), profile_view, True, request_id
         starting = False
         try:
             if not self.owner_guard():

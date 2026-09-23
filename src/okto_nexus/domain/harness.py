@@ -267,6 +267,7 @@ class HarnessSession:
     presence_session_id: str | None = None
     lifecycle_state: str = "legacy_unlinked"
     connection_id: str | None = None
+    owner_epoch: int | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)

@@ -217,13 +217,14 @@ def test_replay_keeps_event_id_and_sequence(runtime):
     from okto_nexus.domain.harness import HarnessEvent
     event = HarnessEvent(session_id=session_id, harness_kind="pi", kind="turn_completed",
                          native_event="agent_settled", occurred_at=deps.clock.now_iso(), payload={})
-    with deps.connection_factory.unit_of_work() as uow:
-        deps.repos.harness_events.append(uow, event_id="event-fixture", event=event,
-                                        created_at=deps.clock.now_iso())
+    # Production sequence ownership belongs to ingress. Inserting behind its
+    # back after startup creates a fixture-only sequence collision on close.
+    captured = deps.harness_supervisor._handle_event(session_id, event)
     replay = deps.harness_supervisor.replay_events(session_id)
     serialized = harness.event_to_dict(replay[0])
     assert serialized.get("sequence") == 1
-    assert serialized.get("event_id") == "event-fixture"
+    assert serialized.get("event_id") == captured.event_id
+    assert harness.event_to_dict(deps.harness_supervisor.replay_events(session_id)[0]) == serialized
 
 
 def test_keyed_loopback_rest_does_not_upgrade_caller_to_operator(runtime):
