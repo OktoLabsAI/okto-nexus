@@ -353,6 +353,7 @@ class ClaimHandoffBody(BaseModel):
     execution_grant_id: str | None = None
     idempotency_key: str | None = None
     claim_epoch: int | None = Field(default=None, strict=True, ge=1)
+    completion_mode: str = "authenticated_nexus_call"
 
 
 class HarnessSessionOpenBody(BaseModel):
@@ -3371,7 +3372,7 @@ def build_router() -> APIRouter:
             return service.handoff_claim(project_root=ws.root_realpath, handoff_id=handoff_id, agent_id=represented,
                 session_id=body.session_id, session_secret=body.session_secret,
                 runtime_endpoint_id=body.runtime_endpoint_id, execution_grant_id=body.execution_grant_id,
-                idempotency_key=body.idempotency_key, claim_epoch=body.claim_epoch)
+                idempotency_key=body.idempotency_key, claim_epoch=body.claim_epoch, completion_mode=body.completion_mode)
         try:
             return _ok(await anyio.to_thread.run_sync(_claim))
         except OktoNexusError as exc:

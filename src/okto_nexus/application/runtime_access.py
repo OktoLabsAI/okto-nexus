@@ -27,7 +27,8 @@ class RuntimeAccessService:
         return bool(local or keyed)
 
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
-                  represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True):
+                  represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
+                  audit=True):
         now, allowed, selected = self.clock.now_iso(), False, None
         with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
@@ -92,8 +93,9 @@ class RuntimeAccessService:
                     if consume and action in {"send", "steer", "execute_work"}:
                         self.grants.consume(uow, grant_id=grant["grant_id"])
                     break
-            self.grants.audit(uow, context=context, action=action, endpoint_id=endpoint_id,
-                              session_id=session_id, grant=selected, allowed=allowed, now=now)
+            if audit:
+                self.grants.audit(uow, context=context, action=action, endpoint_id=endpoint_id,
+                                  session_id=session_id, grant=selected, allowed=allowed, now=now)
         if not allowed:
             raise denied()
         return selected

@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "4b4b684",
+  "execution_head": "a9303ec",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1679,16 +1679,21 @@
             "tests/test_runtime_handoff_epochs.py",
             "src/okto_nexus/application/runtime_work.py",
             "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql",
-            "tests/test_runtime_handoff_dispatch.py"
+            "tests/test_runtime_handoff_dispatch.py",
+            "src/okto_nexus/migrations/047_runtime_work_outcomes.sql",
+            "src/okto_nexus/application/runtime_work.py",
+            "tests/test_runtime_work_results.py",
+            "tests/test_runtime_native_campaign.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P09_CLAIM_EPOCH.md",
             "plans/pr34-remediation/evidence/p09-claim-epoch-gate.log",
             "plans/pr34-remediation/P09_AUTHENTICATED_HANDOFF.md",
-            "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+            "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+            "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
           ],
-          "notes": "Behavioral RED reproduced stale same-agent complete/reject after reclaim. Canonical claim and rework generations now fence complete/reject/verify; surface36 MCP/REST/dashboard updated. 329 PASS Windows. Managed work binding/credentials/native late evidence remain pending. Authenticated MCP impersonation independently reproduced and fixed in shared canonical service. Eight verb boundaries and original creator approval credential revocation tested; Windows 212 PASS and Linux 25 PASS. Canonical managed claim/grant/inbox/outbox admission integrated; Windows 360 PASS plus 2 late-publication PASS, Linux 23 PASS. Restricted subprocess bootstrap and complete phase gate pending."
+          "notes": "Behavioral RED reproduced stale same-agent complete/reject after reclaim. Canonical claim and rework generations now fence complete/reject/verify; surface36 MCP/REST/dashboard updated. 329 PASS Windows. Managed work binding/credentials/native late evidence remain pending. Authenticated MCP impersonation independently reproduced and fixed in shared canonical service. Eight verb boundaries and original creator approval credential revocation tested; Windows 212 PASS and Linux 25 PASS. Canonical managed claim/grant/inbox/outbox admission integrated; Windows 360 PASS plus 2 late-publication PASS, Linux 23 PASS. Restricted subprocess bootstrap and complete phase gate pending. Explicit structured_result_v1 mapping now integrated into canonical complete/reject and separate verify, with atomic result receipts and current authority checks. 56 PASS Windows integration; 28 PASS Linux; 323 PASS legacy/surface; REAL Codex and Claude each 1 PASS for isolated work/verification/close. Native approvals and whole P09 gate remain pending."
         },
         {
           "task_id": "P09-T05",
@@ -3147,7 +3152,8 @@
       "expected": "Turno encerra; handoff não é marcado COMPLETED indevidamente.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
       ],
       "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
@@ -3163,7 +3169,8 @@
       "expected": "Mesmas validações/transições de complete/verify/reject já existentes.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
       ],
       "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },
@@ -3179,7 +3186,8 @@
       "expected": "Evidência registrada no claim antigo; novo trabalho não é concluído por ela.",
       "execution_status": "NOT_RUN",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
       ],
       "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
     },

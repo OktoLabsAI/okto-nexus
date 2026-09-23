@@ -865,6 +865,7 @@ class HandoffService:
         execution_grant_id: Any = None,
         idempotency_key: Any = None,
         claim_epoch: Any = None,
+        completion_mode: str = "authenticated_nexus_call",
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff (single winner).
 
@@ -886,7 +887,7 @@ class HandoffService:
         if not managed and self._claim_trust_guard:
             self._claim_trust_guard.require(tool="handoff_claim", agent_id=agent_id,
                                            session_id=session_id, session_secret=session_secret)
-        if not managed and any(value is not None for value in (execution_grant_id, idempotency_key, claim_epoch)):
+        if not managed and (completion_mode != "authenticated_nexus_call" or any(value is not None for value in (execution_grant_id, idempotency_key, claim_epoch))):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Managed claim options require runtime_endpoint_id.", {})
         if managed and not self.runtime_work:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed handoff execution is unavailable.", {})
@@ -901,7 +902,7 @@ class HandoffService:
                 context = authorized[0]
                 digest = self.runtime_work.request_hash(handoff_id=handoff_id, agent_id=agent_id,
                     endpoint_id=runtime_endpoint_id, grant_id=execution_grant_id,
-                    claim_epoch=claim_epoch, idempotency_key=idempotency_key)
+                    claim_epoch=claim_epoch, idempotency_key=idempotency_key, completion_mode=completion_mode)
                 operation = self.runtime_work.existing(uow, context=context, key=idempotency_key, digest=digest)
                 reused = operation is not None
             else:
@@ -967,7 +968,7 @@ class HandoffService:
                 )
             if managed and not reused:
                 operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
-                    key=idempotency_key, digest=digest, now=now)
+                    key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode)
             self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": claimed.handoff_id,
@@ -996,6 +997,7 @@ class HandoffService:
         }
         if operation:
             response["runtime_operation"] = {"operation_id": operation["operation_id"], "state": operation["status"],
+                "completion_mode": operation.get("completion_mode", completion_mode),
                 "durable": True, "external_acceptance": "not_observed" if operation["status"] == "PENDING" else "inspect_operation",
                 "idempotency_key": idempotency_key, "reused": reused}
             # Wake is only a latency hint. The durable intent survives a failed
@@ -1017,6 +1019,7 @@ class HandoffService:
         agent_id: Any,
         result: Any = None,
         claim_epoch: Any = None,
+        _runtime_result_id: str | None = None,
     ) -> dict[str, Any]:
         """Owner-only delivery: ``CLAIMED -> COMPLETED`` or ``-> VERIFYING``.
 
@@ -1044,7 +1047,16 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
-            self._require_actor(uow, agent_id)
+            if _runtime_result_id is not None:
+                if not self.runtime_work:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
+                existing = self.runtime_work.authorize_result(uow, result_id=_runtime_result_id, action="complete",
+                    supplied=dict(project_root=project_root, handoff_id=handoff_id, agent_id=agent_id,
+                                  claim_epoch=claim_epoch, result=result))
+                if existing:
+                    return existing
+            else:
+                self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             # Verification routing (I4): the ROW's contract picks the
             # destination. The feature flag gates contract CREATION only - a
@@ -1131,6 +1143,11 @@ class HandoffService:
                     actor_agent_id=agent_id,
                     now=now,
                 )
+            if _runtime_result_id is not None:
+                receipt = {"handoff_id": updated.handoff_id, "status": updated.status}
+                if notified:
+                    receipt["notified"] = notified
+                self.runtime_work.record_result(uow, result_id=_runtime_result_id, state="APPLIED", response=receipt)
         response: dict[str, Any] = {
             "handoff_id": updated.handoff_id,
             "status": updated.status,
@@ -1398,6 +1415,7 @@ class HandoffService:
         agent_id: Any,
         reason: Any = None,
         claim_epoch: Any = None,
+        _runtime_result_id: str | None = None,
     ) -> dict[str, Any]:
         """Reject a handoff.
 
@@ -1421,7 +1439,16 @@ class HandoffService:
         now = self._clock.now_iso()
 
         with self._cf.unit_of_work() as uow:
-            self._require_actor(uow, agent_id)
+            if _runtime_result_id is not None:
+                if not self.runtime_work:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
+                existing = self.runtime_work.authorize_result(uow, result_id=_runtime_result_id, action="reject",
+                    supplied=dict(project_root=project_root, handoff_id=handoff_id, agent_id=agent_id,
+                                  claim_epoch=claim_epoch, reason=reason))
+                if existing:
+                    return existing
+            else:
+                self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.status in TERMINAL_STATUSES:
@@ -1513,6 +1540,11 @@ class HandoffService:
                 now=now,
             )
             self._fail_dependents(uow, failed=updated, actor_agent_id=agent_id, now=now)
+            if _runtime_result_id is not None:
+                receipt = {"handoff_id": updated.handoff_id, "status": updated.status}
+                if notified:
+                    receipt["notified"] = notified
+                self.runtime_work.record_result(uow, result_id=_runtime_result_id, state="APPLIED", response=receipt)
         response: dict[str, Any] = {
             "handoff_id": updated.handoff_id,
             "status": STATUS_REJECTED,
@@ -1816,6 +1848,32 @@ class HandoffService:
                 or actor.api_key_hash != context.credential_binding):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Handoff actor is not authorized.", {})
         return context.credential_binding
+
+    def process_runtime_results(self) -> int:
+        """Bounded projection of explicit work decisions; never parse free text as completion."""
+        if not self.runtime_work or not self._config.feature_harness_integrations:
+            return 0
+        with self._cf.unit_of_work(write=False) as uow:
+            rows = uow.connection.execute(
+                "SELECT r.result_id FROM runtime_results r JOIN runtime_handoff_bindings b ON b.operation_id=r.operation_id "
+                "WHERE b.completion_mode='structured_result_v1' AND NOT EXISTS "
+                "(SELECT 1 FROM runtime_work_outcomes o WHERE o.result_id=r.result_id) ORDER BY r.captured_at,r.result_id LIMIT 4").fetchall()
+        for row in rows:
+            result_id = row["result_id"]
+            try:
+                with self._cf.unit_of_work(write=False) as uow:
+                    parsed = self.runtime_work.result_decision(uow, result_id)
+                if parsed:
+                    kwargs, action, _ = parsed
+                    handler = self.handoff_complete if action == "complete" else self.handoff_reject
+                    handler(**kwargs, _runtime_result_id=result_id)
+                else:
+                    with self._cf.unit_of_work() as uow:
+                        self.runtime_work.record_result(uow, result_id=result_id, state="IGNORED", reason="No explicit structured work decision")
+            except OktoNexusError as exc:
+                with self._cf.unit_of_work() as uow:
+                    self.runtime_work.record_result(uow, result_id=result_id, state="BLOCKED", reason=str(exc.code))
+        return len(rows)
 
     def validate_managed_claim(self, uow: UnitOfWork, *, handoff=None, handoff_id=None, workspace_id=None) -> str:
         """Current canonical work policy, shared by admission and transport.

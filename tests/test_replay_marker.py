@@ -49,7 +49,7 @@ def test_ts13_surface_revision_unchanged() -> None:
     # (spec 6f961722), to 33 for adapter-backed artifact payloads plus the HTML
     # artifact type, and to 34 for the harness-connector surface (ADR 0004) -
     # still no replay-slice tool touched.
-    assert SURFACE_REVISION == 37
+    assert SURFACE_REVISION == 38
 
 
 def test_ts13_feature_replay_is_a_declared_flag() -> None:
@@ -59,7 +59,7 @@ def test_ts13_feature_replay_is_a_declared_flag() -> None:
 def test_ts13_nexus_info_features_reflect_flag_off() -> None:
     hub = build_hub()  # default: feature_replay OFF
     info = _ok(hub.tools["nexus_info"]())
-    assert info["surface_revision"] == 37
+    assert info["surface_revision"] == 38
     assert "feature_replay" in info["features"]
     assert info["features"]["feature_replay"] is False
     # features are exactly the declared flag fields

@@ -136,3 +136,6 @@ native execution and no change to broader native NOT_RUN declarations.
 2 PASS / 1 deselected / 15.46s; Claude stream 1 PASS / 2 deselected / 8.21s.
 Same explicit configuration and native cases; no new native shutdown stress claim.
 See P07_COORDINATED_SHUTDOWN.md and evidence/p07-shutdown-native-{codex,claude}.log.
+
+
+2026-09-23 structured-work campaign: see P09_STRUCTURED_WORK_RESULTS.md. Fresh REAL Codex 0.156.1 (1 PASS, 11.09s) and Claude Code 2.1.280 (1 PASS, 8.55s) each delivered an explicitly authorized structured result through production serve/claim/grant/native journal/canonical complete to VERIFYING, then separate creator verification and observed close. No native approvals or Pi/attach execution claimed.

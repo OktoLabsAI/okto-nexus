@@ -262,7 +262,8 @@ def build_service(deps: Any) -> HandoffService:
     from .messages import wake_runtime
     service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
         messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock,
-        validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps))
+        validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps),
+        owner_provider=lambda: getattr(deps, "runtime_dispatcher", None))
 
     # Approved re-execution (BR2): the persisted kwargs re-enter the REAL use
     # case with the one-shot interception bypass; every other gate stays live.
@@ -353,6 +354,7 @@ def register(server: Any, deps: Any) -> None:
         execution_grant_id: Annotated[str | None, Field(description="Explicit execute_work grant; required with runtime_endpoint_id.")] = None,
         idempotency_key: Annotated[str | None, Field(description="Stable client key for managed claim admission and safe lost-response retry.")] = None,
         claim_epoch: Annotated[int | None, Field(description="Required when dispatching an already-owned claim or rework.", strict=True)] = None,
+        completion_mode: Annotated[str, Field(description="Managed completion contract: authenticated_nexus_call (default) or explicitly authorize structured_result_v1 on the correlated native result. Neither permits self-verification.")] = "authenticated_nexus_call",
     ) -> dict[str, Any]:
         """Atomically claim an OPEN handoff; single winner, others get a structured error. Returns the payload + claimed_by/lease_expires_at. In strict mode pass session_id + session_secret."""
         return service.handoff_claim(
@@ -365,6 +367,7 @@ def register(server: Any, deps: Any) -> None:
             execution_grant_id=execution_grant_id,
             idempotency_key=idempotency_key,
             claim_epoch=claim_epoch,
+            completion_mode=completion_mode,
         )
 
     @server.tool()

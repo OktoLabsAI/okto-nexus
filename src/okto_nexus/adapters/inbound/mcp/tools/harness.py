@@ -292,7 +292,8 @@ def build_dispatcher(deps):
     registry = build_connector_factories(deps)
     messages = build_message_service(deps)
     from .handoff import build_service as build_handoff_service
-    work = build_handoff_service(deps).runtime_work
+    handoffs = build_handoff_service(deps)
+    work = handoffs.runtime_work
 
     def managed(uow, operation):
         return uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?",
@@ -361,7 +362,9 @@ def build_dispatcher(deps):
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
                                   validate=validate, dispatch=dispatch)
     dispatcher.event_ingress = supervisor.event_ingress
-    dispatcher.publish_results = lambda: messages._runtime_results.scan_once(messages)
+    def publish_results():
+        return handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
+    dispatcher.publish_results = publish_results
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
     deps.runtime_dispatcher = dispatcher

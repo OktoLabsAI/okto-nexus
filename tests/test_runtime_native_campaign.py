@@ -20,7 +20,7 @@ import uvicorn
 from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
 from okto_nexus.application.auth import AgentKeyAuthService
-from test_pr34_remediation import send_message
+from test_pr34_remediation import send_message, tool
 
 
 @pytest.fixture
@@ -52,7 +52,12 @@ def test_native_active_close_observes_interrupt_terminal(tmp_path, kind, native_
     _run_native_campaign(tmp_path, kind, native_auth_config, active_close=True)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False):
+@pytest.mark.parametrize("kind", ["codex", "claude_code"])
+def test_native_explicit_work_result_preserves_verification(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, managed_work=True)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
@@ -107,6 +112,48 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             assert operator_key not in json.dumps(native._env)
             assert not any("NEXUS" in name and name != "_NEXUS_PROFILE_ENV_SEALED" for name in native._env)
             runtime = deps, client, str(root), [], operator_key, caller_key
+            if managed_work:
+                from okto_nexus.domain.base import iso_plus
+                deps.config.feature_verification = True
+                handoff = tool(client, caller_key, "handoff_create", {
+                    "project_root": str(root), "from_agent_id": "caller", "visibility": "eligible",
+                    "target": {"strategy": "direct", "agent_id": "worker"},
+                    "acceptance_criteria": ["Result contains the exact isolated fixture marker"],
+                    "payload": "Connectivity test only. Do not use tools or modify files. Follow the structured_result_v1 completion contract in runtime_context. Return exactly its required_response JSON, replacing only result with the string OKTO_NEXUS_WORK_FIXTURE. No markdown, commentary or other text."})
+                assert handoff["ok"], handoff
+                hid = handoff["data"]["handoff_id"]
+                grant = client.post("/api/v1/harness/grants", headers=headers, json={
+                    "actor_agent_id": "caller", "endpoint_id": "native-fixture", "actions": ["execute_work"],
+                    "expires_at": iso_plus(deps.clock.now_iso(), 3600)})
+                assert grant.status_code == 200, grant.text
+                admitted = tool(client, caller_key, "handoff_claim", {
+                    "project_root": str(root), "handoff_id": hid, "agent_id": "worker",
+                    "runtime_endpoint_id": "native-fixture", "execution_grant_id": grant.json()["data"]["grant_id"],
+                    "idempotency_key": "native-managed-work", "completion_mode": "structured_result_v1"})
+                assert admitted["ok"], admitted
+                op = admitted["data"]["runtime_operation"]["operation_id"]
+                deadline = time.monotonic() + 120
+                outcome = None
+                while time.monotonic() < deadline:
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        outcome = uow.connection.execute("SELECT state,reason FROM runtime_work_outcomes WHERE operation_id=?", (op,)).fetchone()
+                    if outcome:
+                        break
+                    time.sleep(.1)
+                assert outcome and outcome["state"] == "APPLIED", dict(outcome) if outcome else "No explicit native work outcome"
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    row = uow.connection.execute("SELECT status,result FROM handoffs WHERE handoff_id=?", (hid,)).fetchone()
+                    assert row["status"] == "VERIFYING"
+                    assert row["result"] == "OKTO_NEXUS_WORK_FIXTURE"
+                verified = tool(client, caller_key, "handoff_verify", {"project_root": str(root),
+                    "handoff_id": hid, "agent_id": "caller", "claim_epoch": 1, "verdict": "pass"})
+                assert verified["ok"] and verified["data"]["status"] == "COMPLETED", verified
+                closed = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
+                assert closed.status_code == 200, closed.text
+                from test_runtime_commands import wait_close_result
+                assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"
+                assert native_process.wait(timeout=15) is not None
+                return
             if active_close:
                 sent = send_message(runtime, subject="native interrupt fixture",
                     body="Write a 1000-word fictional story about a lighthouse. Do not use tools or modify files.")
