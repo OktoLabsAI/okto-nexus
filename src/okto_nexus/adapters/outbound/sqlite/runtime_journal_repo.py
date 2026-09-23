@@ -97,15 +97,23 @@ class SqliteRuntimeJournalRepo:
             return False
         operation = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
                                            (event.operation_id,)).fetchone()
+        owner = uow.connection.execute("SELECT * FROM runtime_dispatcher_owner "
+                                       "WHERE owner_key='dispatcher'").fetchone()
+        if not owner or owner["lease_expires_at"] <= now:
+            return False
+        recovering = (isinstance(event.owner_epoch, int) and event.owner_epoch < owner["epoch"]
+            and owner["recovery_store_id"] == record["store_id"]
+            and owner["recovery_watermark"] is not None
+            and record["ordinal"] <= owner["recovery_watermark"])
+        recovered_unknown = bool(recovering and operation and operation["status"] == "OUTCOME_UNKNOWN"
+                                 and operation["reason"] == "owner_lost")
         if (not operation or operation["runtime_session_id"] != event.session_id
                 or operation["attempt_id"] != event.attempt_id
                 or operation["owner_epoch"] != event.owner_epoch
-                or operation["status"] not in {"SENDING", "SENT_UNCONFIRMED", "ACCEPTED"}
+                or (operation["status"] not in {"SENDING", "SENT_UNCONFIRMED", "ACCEPTED"} and not recovered_unknown)
                 or operation["terminal_event_id"] is not None):
             return False
-        owner = uow.connection.execute("SELECT epoch,lease_expires_at FROM runtime_dispatcher_owner "
-                                       "WHERE owner_key='dispatcher'").fetchone()
-        if not owner or owner["epoch"] != event.owner_epoch or owner["lease_expires_at"] <= now:
+        if owner["epoch"] != event.owner_epoch and not recovering:
             return False
         if event.delivery_phase == "started":
             if event.turn_id and uow.connection.execute(
@@ -113,13 +121,14 @@ class SqliteRuntimeJournalRepo:
                     (event.session_id, event.turn_id, event.operation_id)).fetchone():
                 return False
             uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',ack_level='HARNESS_ACCEPTED',"
-                "native_thread_id=?,native_turn_id=?,updated_at=? WHERE operation_id=? AND status IN ('SENDING','SENT_UNCONFIRMED')",
+                "native_thread_id=?,native_turn_id=?,updated_at=? WHERE operation_id=? AND status IN ('SENDING','SENT_UNCONFIRMED','OUTCOME_UNKNOWN')",
                 (event.thread_id, event.turn_id, now, event.operation_id))
             return True
-        if (operation["status"] != "ACCEPTED" or operation["native_thread_id"] != event.thread_id
+        accepted = operation["status"] == "ACCEPTED" or (recovered_unknown and operation["ack_level"] == "HARNESS_ACCEPTED")
+        if (not accepted or operation["native_thread_id"] != event.thread_id
                 or operation["native_turn_id"] != event.turn_id):
             return False
         if event.delivery_phase == "terminal":
-            uow.connection.execute("UPDATE delivery_outbox SET terminal_event_id=?,reason='result_durable',updated_at=? "
+            uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',terminal_event_id=?,reason='result_durable',updated_at=? "
                                    "WHERE operation_id=?", (event.event_id, now, event.operation_id))
         return True

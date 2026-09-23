@@ -1,0 +1,5 @@
+Parent fd75ef1
+Command: rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_restart.py --tb=short
+Observed before correction: 2 failed in 5.71s
+Both started/terminal projection cuts: captured terminal lost correlation across owner takeover; terminal_event_id was None.
+Concise transcription of behavioral output; no provider/model invoked.

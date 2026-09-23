@@ -26,11 +26,12 @@ class RuntimeEventIngress:
         self.wake_dispatch = None
         self.consume_terminal = None
 
-    def start(self):
+    def start(self, *, recover=True):
         with self.cf.unit_of_work(write=False) as uow:
             sequences = self.repo.initial_sequences(uow)
         self.journal.start(initial_sequences=sequences)
-        self.recover()
+        if recover:
+            self.recover()
 
     def capture(self, event, *, connection_id=None):
         record = self.journal.append(event, connection_id=connection_id)

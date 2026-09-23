@@ -153,3 +153,11 @@ and refuses contending serve startup. Wake generations replace Event.clear. See
 P07_COORDINATED_SHUTDOWN.md: behavioral RED; 55 integrated PASS; REAL isolated Codex
 2 PASS and Claude stream 1 PASS. Next: restart journal/session reconciliation and
 stable endpoint boot. P09-P12 and final gate remain unfinished.
+
+Coordinated shutdown checkpoint pushed: fd75ef1. Migration 037 freezes the journal
+recovery boundary per new owner, allowing exact old-attempt durable results to
+recover without native replay or accepting late old-owner events. See
+P07_RESTART_JOURNAL.md: two behavioral REDs, 60 integrated PASS. Native campaigns
+NOT_RUN for this unit. Next: stale sessions, owner epoch stamping and stable boot.
+Linux Python 3.13 provisioning began in isolated temporary directories; full Linux
+composition remains NOT_RUN until its tests execute. No final-gate promotion.

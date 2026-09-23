@@ -39,7 +39,26 @@ class RuntimeDispatcher:
             return False
         if self.event_ingress:
             try:
-                self.event_ingress.start()
+                self.event_ingress.start(recover=False)
+                journal = self.event_ingress.journal
+                # Snapshot captured bytes before any new native admission. This
+                # boundary never extends to late events of the previous owner.
+                with self.cf.unit_of_work() as uow:
+                    if not self.repo.set_recovery_boundary(uow, owner_id=self.owner_id,
+                            epoch=self.epoch, store_id=journal.store_id, watermark=journal.watermark,
+                            now=self.clock.now_iso()):
+                        raise RuntimeError("Runtime journal recovery lost ownership")
+                deadline = time.monotonic() + 30
+                while self.event_ingress.recover():
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError("Runtime recovery startup budget exceeded; checkpoint retained")
+                    with self.cf.unit_of_work() as uow:
+                        now = self.clock.now_iso()
+                        if not self.repo.heartbeat_owner(uow, owner_id=self.owner_id, epoch=self.epoch,
+                                lease_expires_at=iso_plus(now, 40), now=now):
+                            raise RuntimeError("Runtime journal recovery lost ownership")
+                with self.cf.unit_of_work() as uow:
+                    self.repo.finish_recovery(uow, epoch=self.epoch, now=self.clock.now_iso())
             except BaseException:
                 self.event_ingress.close()
                 with self.cf.unit_of_work() as uow:

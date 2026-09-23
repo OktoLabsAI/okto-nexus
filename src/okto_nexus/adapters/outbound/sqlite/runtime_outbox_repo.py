@@ -51,13 +51,27 @@ class SqliteRuntimeOutboxRepo:
         epoch = row["epoch"] + 1 if row else 1
         uow.connection.execute(
             "INSERT INTO runtime_dispatcher_owner(owner_key,epoch,owner_id,lease_expires_at) VALUES('dispatcher',?,?,?) "
-            "ON CONFLICT(owner_key) DO UPDATE SET epoch=excluded.epoch,owner_id=excluded.owner_id,lease_expires_at=excluded.lease_expires_at",
+            "ON CONFLICT(owner_key) DO UPDATE SET epoch=excluded.epoch,owner_id=excluded.owner_id,lease_expires_at=excluded.lease_expires_at,"
+            "recovery_store_id=NULL,recovery_watermark=NULL",
             (epoch, owner_id, lease_expires_at))
         # A previous external call might still finish. Never retry SENDING.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,attempt_id=NULL,updated_at=? WHERE status='CLAIMED'", (now,))
         return epoch
+
+    def set_recovery_boundary(self, uow, *, owner_id, epoch, store_id, watermark, now):
+        return uow.connection.execute(
+            "UPDATE runtime_dispatcher_owner SET recovery_store_id=?,recovery_watermark=? "
+            "WHERE owner_key='dispatcher' AND owner_id=? AND epoch=? AND lease_expires_at>? "
+            "AND recovery_watermark IS NULL", (store_id, watermark, owner_id, epoch, now)).rowcount == 1
+
+    def finish_recovery(self, uow, *, epoch, now):
+        # Captured acceptance alone is not a live connection or finished result.
+        # Preserve its native identifiers for explicit reconciliation, not retry.
+        uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
+            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
+            (now, epoch))
 
     def heartbeat_owner(self, uow, *, owner_id, epoch, lease_expires_at, now):
         return uow.connection.execute(
