@@ -43,16 +43,59 @@ class SqliteRuntimeJournalRepo:
                                    (state, now, event.session_id))
             if state != "stop_requested" and session.presence_session_id:
                 self.presence.close(uow, session_id=session.presence_session_id, at=event.occurred_at)
+            if state != "stop_requested":
+                uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='runtime_lost',updated_at=? "
+                    "WHERE runtime_session_id=? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
+                    (now, event.session_id))
             if state == "stopped" and event.payload.get("stop_observed") is True:
                 self.sessions.update_status(uow, session_id=event.session_id,
                     status="ERRORED" if event.payload.get("error") else "ENDED",
                     updated_at=now, ended_at=event.occurred_at)
-        if event.kind == "turn_completed":
+        correlated = self._project_attempt(uow, record=record, event=event, now=now)
+        if event.delivery_phase == "terminal" or (event.kind == "turn_completed" and not event.operation_id):
             uow.connection.execute("""INSERT INTO runtime_results
                 (result_id,event_id,runtime_session_id,native_thread_id,native_turn_id,payload,captured_at)
                 VALUES(?,?,?,?,?,?,?) ON CONFLICT(event_id) DO NOTHING""", ("result_" + event.event_id, event.event_id, event.session_id,
                 event.thread_id, event.turn_id, json.dumps(event.payload, ensure_ascii=False, sort_keys=True), now))
+            if correlated and event.delivery_phase == "terminal":
+                uow.connection.execute("UPDATE runtime_results SET operation_id=?,attempt_id=? WHERE event_id=?",
+                    (event.operation_id, event.attempt_id, event.event_id))
         uow.connection.execute("""INSERT INTO runtime_journal_checkpoint(singleton,store_id,ordinal,updated_at)
             VALUES(1,?,?,?) ON CONFLICT(singleton) DO UPDATE SET ordinal=excluded.ordinal,updated_at=excluded.updated_at""",
             (record["store_id"], record["ordinal"], now))
+        return True
+
+    def _project_attempt(self, uow, *, record, event, now):
+        if event.origin != "native" or not event.operation_id or not event.attempt_id:
+            return False
+        session = self.sessions.get(uow, session_id=event.session_id)
+        if not session or session.connection_id != record["connection_id"]:
+            return False
+        operation = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
+                                           (event.operation_id,)).fetchone()
+        if (not operation or operation["runtime_session_id"] != event.session_id
+                or operation["attempt_id"] != event.attempt_id
+                or operation["owner_epoch"] != event.owner_epoch
+                or operation["status"] not in {"SENDING", "SENT_UNCONFIRMED", "ACCEPTED"}
+                or operation["terminal_event_id"] is not None):
+            return False
+        owner = uow.connection.execute("SELECT epoch,lease_expires_at FROM runtime_dispatcher_owner "
+                                       "WHERE owner_key='dispatcher'").fetchone()
+        if not owner or owner["epoch"] != event.owner_epoch or owner["lease_expires_at"] <= now:
+            return False
+        if event.delivery_phase == "started":
+            if event.turn_id and uow.connection.execute(
+                    "SELECT 1 FROM delivery_outbox WHERE runtime_session_id=? AND native_turn_id=? AND operation_id<>?",
+                    (event.session_id, event.turn_id, event.operation_id)).fetchone():
+                return False
+            uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',ack_level='HARNESS_ACCEPTED',"
+                "native_thread_id=?,native_turn_id=?,updated_at=? WHERE operation_id=? AND status IN ('SENDING','SENT_UNCONFIRMED')",
+                (event.thread_id, event.turn_id, now, event.operation_id))
+            return True
+        if (operation["status"] != "ACCEPTED" or operation["native_thread_id"] != event.thread_id
+                or operation["native_turn_id"] != event.turn_id):
+            return False
+        if event.delivery_phase == "terminal":
+            uow.connection.execute("UPDATE delivery_outbox SET terminal_event_id=?,reason='result_durable',updated_at=? "
+                                   "WHERE operation_id=?", (event.event_id, now, event.operation_id))
         return True

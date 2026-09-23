@@ -120,3 +120,12 @@ RED, integrated gate 45 PASS / 7 skipped, and fresh REAL isolated Claude two-tur
 campaign 1 PASS / 2 deselected. POSIX ownership, shutdown/boot/recovery and durable
 control/result correlation remain pending. P01 summary reconciled with backlog:
 tasks implemented, phase still IN_PROGRESS. No final-gate promotion.
+
+Claude admission checkpoint pushed: 30f340c. P08 attempt correlation unit adds
+migration 035, event correlation v2, matching native start/terminal projection,
+exclusive lane fencing and conservative recovery of accepted/unconfirmed sends.
+See P08_RESULT_CORRELATION.md: behavioral RED; 69 integrated PASS; fresh REAL
+Codex 2 PASS and Claude stream 1 PASS. Logical consumption, materialized output,
+publication and durable controls remain pending; no final-gate promotion. WSL
+Ubuntu was inspected read-only: Python 3.10.12 with pidfd_open; no POSIX ownership
+implementation/test or native provider use occurred in WSL.

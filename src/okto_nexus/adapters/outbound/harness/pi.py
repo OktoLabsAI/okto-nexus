@@ -933,6 +933,14 @@ class PiRpcConnector:
     # ------------------------------------------------------------------ #
     # Inbound translation (native pi line -> domain HarnessEvent)
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def delivery_event_phase(event):
+        if event.native_event == "agent_start":
+            return "started"
+        if event.native_event == _TYPE_AGENT_SETTLED:
+            return "terminal"
+        return "progress"
+
     def _on_push_event(self, msg: dict[str, Any]) -> None:
         native_type = msg.get("type")
         if not isinstance(native_type, str) or not native_type:

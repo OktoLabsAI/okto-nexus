@@ -160,6 +160,12 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 assert terminal.payload.get("is_error") is not True
                 assert terminal.payload.get("turn", {}).get("status") not in {"failed", "interrupted"}
                 assert terminal.payload.get("subtype", "success") == "success"
+                assert terminal.operation_id == result["runtime_operations"][0]
+                assert terminal.attempt_id and terminal.delivery_phase == "terminal"
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    delivered = uow.connection.execute("SELECT status,terminal_event_id FROM delivery_outbox WHERE operation_id=?",
+                        (terminal.operation_id,)).fetchone()
+                    assert delivered["status"] == "ACCEPTED" and delivered["terminal_event_id"] == terminal.event_id
                 assert native_process.poll() is None, "multi-turn process must survive"
             if kind == "codex":
                 assert len(native_threads) == 1

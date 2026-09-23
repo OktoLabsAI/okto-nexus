@@ -771,6 +771,7 @@ class HarnessSupervisor:
         _relay_depth: int | None = None,
         _relay_chain_id: str | None = None,
         _relay_chain_started_at: float | None = None,
+        _transport_attempt: Mapping[str, Any] | None = None,
     ) -> None:
         """Deliver ``verb`` (``send_turn`` / ``steer`` / ``interrupt`` / ``end``)
         to a live session. Capability-gates BEFORE calling the connector
@@ -830,7 +831,8 @@ class HarnessSupervisor:
                 _relay_chain_started_at if _relay_depth is not None else 0.0
             )
         command = HarnessCommand(
-            session_id=session_id, verb=verb, payload=dict(payload or {})
+            session_id=session_id, verb=verb, payload=dict(payload or {}),
+            **dict(_transport_attempt or {}),
         )
         live.connector.send(live.session, command)
         if caps.send_only:

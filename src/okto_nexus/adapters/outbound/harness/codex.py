@@ -922,6 +922,14 @@ class CodexAppServerConnector:
     # ------------------------------------------------------------------ #
     # Inbound translation (native codex event -> domain HarnessEvent)
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def delivery_event_phase(event):
+        if event.native_event == _METHOD_TURN_STARTED:
+            return "started"
+        if event.native_event == _METHOD_TURN_COMPLETED:
+            return "terminal"
+        return "progress" if event.turn_id is not None else None
+
     def _on_notification(self, method: str, params: dict[str, Any]) -> None:
         thread_id = _extract_thread_id(params)
         if thread_id is not None:

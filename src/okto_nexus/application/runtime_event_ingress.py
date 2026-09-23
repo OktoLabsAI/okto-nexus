@@ -23,6 +23,7 @@ class RuntimeEventIngress:
         self.events, self.clock, self.publish = events, clock, publish
         self._project_lock = threading.Lock()
         self.projection_pending = False
+        self.wake_dispatch = None
 
     def start(self):
         with self.cf.unit_of_work(write=False) as uow:
@@ -54,6 +55,8 @@ class RuntimeEventIngress:
                     inserted = self.repo.project(uow, record=record, event=event,
                                                 events=self.events, now=self.clock.now_iso())
                 if inserted:
+                    if event.delivery_phase == "terminal" and self.wake_dispatch:
+                        self.wake_dispatch()
                     try:
                         self.publish(event)
                     except Exception:

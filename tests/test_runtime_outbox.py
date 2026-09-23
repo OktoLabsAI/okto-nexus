@@ -105,15 +105,16 @@ def test_p06_changed_policy_blocks_previously_committed_intent(runtime):
     assert peers[0].sent == []
 
 
-def test_p06_takeover_never_replays_a_send_intent(runtime):
+@pytest.mark.parametrize("previous_status", ["SENDING", "SENT_UNCONFIRMED", "ACCEPTED"])
+def test_p06_takeover_never_replays_a_send_intent(runtime, previous_status):
     deps, _, _, peers, _, _ = runtime
     assert open_rest(runtime).status_code == 200
     old = stop_dispatcher(runtime)
     result = send_message(runtime)
     operation_id = result["runtime_operations"][0]
     with deps.connection_factory.unit_of_work() as uow:
-        uow.connection.execute("UPDATE delivery_outbox SET status='SENDING',owner_epoch=?,attempt_id='old-attempt' WHERE operation_id=?",
-                               (old.epoch, operation_id))
+        uow.connection.execute("UPDATE delivery_outbox SET status=?,owner_epoch=?,attempt_id='old-attempt' WHERE operation_id=?",
+                               (previous_status, old.epoch, operation_id))
     new = restart_dispatcher(runtime, old)
     assert operation(runtime, operation_id)["status"] == "OUTCOME_UNKNOWN"
     new.scan_once()

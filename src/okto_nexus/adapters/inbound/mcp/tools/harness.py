@@ -384,11 +384,13 @@ def build_dispatcher(deps):
             if (not current or current["status"] != "SENDING" or current["owner_epoch"] != operation["owner_epoch"] or
                     not outbox.owns(uow, owner_id=operation["owner_id"], epoch=operation["owner_epoch"], now=deps.clock.now_iso())):
                 raise OktoNexusError(ErrorCode.CONFLICT, "Runtime operation lost ownership.", {})
-        supervisor.send(session_id, "send_turn", {"envelope": outbox.decode(operation)})
+        supervisor.send(session_id, "send_turn", {"envelope": outbox.decode(operation)},
+            _transport_attempt={key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
                                   validate=validate, dispatch=dispatch)
     dispatcher.event_ingress = supervisor.event_ingress
+    dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
     deps.runtime_dispatcher = dispatcher
     return dispatcher

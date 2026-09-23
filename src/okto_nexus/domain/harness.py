@@ -302,6 +302,10 @@ class HarnessEvent:
     event_id: str | None = None
     sequence: int | None = None
     origin: str = "native"
+    operation_id: str | None = None
+    attempt_id: str | None = None
+    owner_epoch: int | None = None
+    delivery_phase: str | None = None
 
     def __post_init__(self) -> None:
         validate_harness_kind(self.harness_kind)
@@ -314,6 +318,8 @@ class HarnessEvent:
             )
         if self.origin not in {"native", "nexus"}:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid event origin.", {})
+        if self.delivery_phase not in {None, "started", "progress", "terminal"}:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid delivery event phase.", {})
         if not self.native_event:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
@@ -339,6 +345,11 @@ class HarnessCommand:
     session_id: str
     verb: str
     payload: dict[str, Any] = field(default_factory=dict)
+
+    # Trusted caller context, never decoded from native input/prompt content.
+    operation_id: str | None = None
+    attempt_id: str | None = None
+    owner_epoch: int | None = None
 
     def __post_init__(self) -> None:
         if self.verb not in COMMAND_VERBS:

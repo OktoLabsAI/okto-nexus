@@ -58,3 +58,13 @@ draining the retained prefix. The supervisor records uncertainty and quarantines
 the affected binding. Historical replay goes through the authenticated canonical
 event repository, never an assumption that a native list contains all events.
 See P07_EVENT_BUFFERS.md for exact limits, validation and remaining boundaries.
+
+## Event correlation v2 (migration 035)
+
+Optional HarnessEvent operation_id/attempt_id/owner_epoch/delivery_phase originate
+in EnvelopeConnector's trusted command registration, not native payload fields.
+HarnessCommand carries the internal attempt context separately from prompt data.
+Adapters implement delivery_event_phase; application code does not branch on
+protocol event names. Legacy events default to uncorrelated. Envelope/registry
+v1, native transient stream v2, and durable framed journal v1 are separate versions.
+See P08_RESULT_CORRELATION.md for compatibility, guards and unfinished gates.

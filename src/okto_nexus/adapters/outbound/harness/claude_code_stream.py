@@ -922,6 +922,14 @@ class ClaudeCodeStreamConnector:
         )
         self._emit("output_delta", "assistant", {"final": True, "text": text, "raw": obj})
 
+    @staticmethod
+    def delivery_event_phase(event):
+        if event.native_event == "system:init":
+            return "started"
+        if event.native_event.startswith("result:"):
+            return "terminal"
+        return "progress"
+
     def _handle_result(self, obj: dict[str, Any]) -> None:
         subtype = obj.get("subtype")
         is_success = subtype == "success"

@@ -118,3 +118,9 @@ Claude configuration, `pytest tests/test_runtime_native_campaign.py -q -k
 claude_code --tb=short`: 1 PASS, 2 deselected in 9.36s. See
 P07_CLAUDE_ADMISSION.md and evidence/p07-claude-admission-native.log. Canonical
 two-turn path only; native pressure/steering/approval campaign still NOT_RUN.
+
+2026-09-23, 30f340c plus attempt correlation working tree: REAL isolated Codex
+2 PASS / 1 deselected / 22.13s and Claude stream 1 PASS / 2 deselected / 11.58s.
+Two-turn tests now require matching durable operation/attempt/terminal linkage.
+See P08_RESULT_CORRELATION.md and evidence/p08-result-correlation-{codex,claude}.log.
+No Pi/attach native execution; no native approval/load campaign claim.

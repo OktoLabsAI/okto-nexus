@@ -36,7 +36,9 @@ class SqliteRuntimeOutboxRepo:
         return [dict(row) for row in uow.connection.execute(
             "SELECT pending.* FROM delivery_outbox pending WHERE pending.status='PENDING' AND NOT EXISTS "
             "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND "
-            "busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) ORDER BY pending.created_at,pending.operation_id LIMIT ?", (limit,))]
+            "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
+            "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
+            "ORDER BY pending.created_at,pending.operation_id LIMIT ?", (limit,))]
 
     def get(self, uow, operation_id):
         row = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()
@@ -52,7 +54,8 @@ class SqliteRuntimeOutboxRepo:
             "ON CONFLICT(owner_key) DO UPDATE SET epoch=excluded.epoch,owner_id=excluded.owner_id,lease_expires_at=excluded.lease_expires_at",
             (epoch, owner_id, lease_expires_at))
         # A previous external call might still finish. Never retry SENDING.
-        uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? WHERE status='SENDING'", (now,))
+        uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
+            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,attempt_id=NULL,updated_at=? WHERE status='CLAIMED'", (now,))
         return epoch
 

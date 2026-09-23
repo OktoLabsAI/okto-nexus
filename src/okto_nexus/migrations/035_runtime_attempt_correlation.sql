@@ -1,0 +1,10 @@
+ALTER TABLE harness_events ADD COLUMN operation_id TEXT;
+ALTER TABLE harness_events ADD COLUMN attempt_id TEXT;
+ALTER TABLE harness_events ADD COLUMN owner_epoch INTEGER;
+ALTER TABLE harness_events ADD COLUMN delivery_phase TEXT;
+ALTER TABLE delivery_outbox ADD COLUMN terminal_event_id TEXT REFERENCES harness_events(event_id) ON DELETE RESTRICT;
+ALTER TABLE delivery_outbox ADD COLUMN native_thread_id TEXT;
+ALTER TABLE delivery_outbox ADD COLUMN native_turn_id TEXT;
+ALTER TABLE runtime_results ADD COLUMN operation_id TEXT REFERENCES delivery_outbox(operation_id) ON DELETE RESTRICT;
+ALTER TABLE runtime_results ADD COLUMN attempt_id TEXT;
+CREATE INDEX idx_harness_event_operation ON harness_events(operation_id,attempt_id,sequence);
