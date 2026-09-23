@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "5c661fa",
+  "execution_head": "605557a",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -347,22 +347,32 @@
         {
           "task_id": "P02-T04",
           "title": "Provar extensão por quinto adapter fake e endpoint que não exige runtime local.",
-          "status": "IMPLEMENTED",
+          "status": "VERIFIED",
           "owner": "Codex",
           "implementation_refs": [
             "src/okto_nexus/domain/endpoints.py",
             "src/okto_nexus/domain/delivery.py",
             "src/okto_nexus/domain/runtime_context.py",
             "src/okto_nexus/application/adapter_registry.py",
-            "src/okto_nexus/adapters/outbound/harness/envelope.py"
+            "src/okto_nexus/adapters/outbound/harness/envelope.py",
+            "tests/test_pr34_remediation.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "605557a + additional adapter composition worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_pr34_remediation.py tests/test_runtime_contracts.py",
+              "result": "PASS",
+              "observed": "48 PASS; Linux additional/registry selection4 PASS. Behavioral catalog RED and fixture correction documented.",
+              "evidence": "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P02_CONTRACTS.md",
             "plans/pr34-remediation/evidence/p02-gate.log",
-            "plans/pr34-remediation/evidence/p02-contracts.log"
+            "plans/pr34-remediation/evidence/p02-contracts.log",
+            "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md"
           ],
-          "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
+          "notes": "Five-adapter production composition verified over authenticated REST/MCP and canonical inbox dispatch. Fifth trusted descriptor requires no local process; Popen trap asserts that boundary. No domain/supervisor product branch added. This task verification does not promote the overall phase or binary capability probes."
         }
       ]
     },
@@ -2584,8 +2594,10 @@
       ],
       "stimulus": "Registrar um quinto adapter fake e um endpoint sem runtime local.",
       "expected": "Funciona pelo registro sem novo branch por produto no domínio/supervisor.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md"
+      ]
     },
     {
       "test_id": "T-TX-01",

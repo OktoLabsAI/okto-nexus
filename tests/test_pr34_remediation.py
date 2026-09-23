@@ -44,9 +44,9 @@ def runtime(tmp_path, request):
 
     deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
     if getattr(request, "param", None) == "additional":
-        from okto_nexus.application.adapter_registry import AdapterDescriptor, AdapterRegistry
+        from okto_nexus.application.adapter_registry import AdapterDescriptor
         from okto_nexus.domain.endpoints import EndpointCapabilities
-        registry = AdapterRegistry()
+        registry = harness.build_connector_factories(deps)
         registry.register(AdapterDescriptor("fixture.additional.v1", "fixture.additional.v1", None,
             "fixture-no-process", factory("fixture.additional.v1"), lambda _: None,
             EndpointCapabilities(conversation=True, events=True), FakeConnector().capabilities))
@@ -74,8 +74,9 @@ def runtime(tmp_path, request):
     assert ready.wait(10), "production HTTP app did not start"
     with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
         if deps.config.feature_harness_integrations:
-            kinds = [("fixture.additional.v1", None)] if getattr(request, "param", None) == "additional" else [
-                ("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
+            kinds = [("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
+            if getattr(request, "param", None) == "additional":
+                kinds.append(("fixture.additional.v1", None))
             for kind, substrate in kinds:
                 adapter_id = kind + ("." + substrate if substrate else "")
                 profile_id = "profile-" + adapter_id
@@ -413,15 +414,41 @@ def test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected(runti
 
 
 @pytest.mark.parametrize("runtime", ["additional"], indirect=True)
-def test_p02_additional_adapter_through_production_mcp_and_rest(runtime):
-    _, client, root, peers, key, _ = runtime
+@pytest.mark.parametrize("delivery", ["administrative", "canonical_inbox"])
+def test_p02_additional_adapter_through_production_mcp_and_rest(runtime, delivery, monkeypatch):
+    deps, client, root, peers, key, _ = runtime
+    import subprocess
+    def forbidden_process(*args, **kwargs):
+        raise AssertionError("Processless adapter must not spawn a local runtime")
+    monkeypatch.setattr(subprocess, "Popen", forbidden_process)
     catalog = tool(client, key, "harness_list", {})
-    assert catalog["data"]["harnesses"][0]["adapter_id"] == "fixture.additional.v1"
+    assert {item["adapter_id"] for item in catalog["data"]["harnesses"]} == {
+        "pi", "codex", "claude_code.stream", "claude_code.attach", "fixture.additional.v1"}
+    rest_catalog = client.get("/api/v1/harness/kinds", headers={"x-api-key": key})
+    assert rest_catalog.status_code == 200
+    assert rest_catalog.json()["data"]["harnesses"] == catalog["data"]["harnesses"]
     opened = tool(client, key, "harness_open", {"agent_id": "worker",
         "kind": "fixture.additional.v1", "project_root": root})
     assert opened["ok"], opened
     sid = opened["data"]["session_id"]
-    response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": key},
-                           json={"payload": {"text": "fixture command"}})
-    assert response.status_code == 200, response.text
+    if delivery == "administrative":
+        response = client.post(f"/api/v1/harness/sessions/{sid}/send", headers={"x-api-key": key},
+                               json={"payload": {"text": "fixture command"}})
+        assert response.status_code == 200, response.text
+    else:
+        from test_runtime_outbox import wait_status
+        result = send_message(runtime)
+        operation = wait_status(runtime, result["runtime_operations"][0], "SENT_UNCONFIRMED")
+        assert operation["endpoint_id"] == "endpoint-fixture.additional.v1"
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            row = uow.connection.execute("SELECT * FROM message_deliveries WHERE message_id=?",
+                                         (result["message_id"],)).fetchone()
+            assert row["consumer_kind"] == "push" and row["status"] == "unread"
     wait_sent(peers)
+    assert opened["data"]["kind"] == "fixture.additional.v1"
+    assert [c.verb for p in peers for c in p.sent] == ["send_turn"]
+    if delivery == "canonical_inbox":
+        envelope = peers[0].sent[0].payload["envelope"]
+        assert envelope["operation_id"] == operation["operation_id"]
+        assert envelope["message_id"] == result["message_id"]
+        assert envelope["sender_agent_id"] == "caller" and envelope["recipient_agent_id"] == "worker"
