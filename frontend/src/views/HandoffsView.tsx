@@ -364,7 +364,7 @@ export function HandoffsView({
   const decide = async (h: GraphHandoff, verdict: "pass" | "fail", text?: string) => {
     setBusy(true);
     try {
-      await api.verifyHandoff(h.handoff_id, h.workspace_id, verdict, text || undefined);
+      await api.verifyHandoff(h.handoff_id, h.workspace_id, verdict, text || undefined, h.claim_epoch);
       setFailFor(null);
       setFeedback("");
       setError(null);

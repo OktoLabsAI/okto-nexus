@@ -351,6 +351,7 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
         result: Annotated[Any, Field(description=_P_RESULT)] = None,
+        claim_epoch: Annotated[int | None, Field(description="Generation returned by claim/get. Required after reclaim or verification rework; never replace an old result's generation with the current one.", strict=True)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
@@ -368,6 +369,7 @@ def register(server: Any, deps: Any) -> None:
             handoff_id=handoff_id,
             agent_id=agent_id,
             result=result,
+            claim_epoch=claim_epoch,
         )
 
     @server.tool()
@@ -378,6 +380,7 @@ def register(server: Any, deps: Any) -> None:
         agent_id: Annotated[str, Field(description=_P_VERIFY_AGENT)],
         verdict: Annotated[str, Field(description=_P_VERDICT)],
         feedback: Annotated[str | None, Field(description=_P_FEEDBACK)] = None,
+        claim_epoch: Annotated[int | None, Field(description="Generation of the delivery being verified; required after reclaim/rework.", strict=True)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
@@ -396,6 +399,7 @@ def register(server: Any, deps: Any) -> None:
             agent_id=agent_id,
             verdict=verdict,
             feedback=feedback,
+            claim_epoch=claim_epoch,
         )
 
     @server.tool()
@@ -405,6 +409,7 @@ def register(server: Any, deps: Any) -> None:
         handoff_id: Annotated[str, Field(description=_P_HANDOFF_ID)],
         agent_id: Annotated[str, Field(description=_P_HANDOFF_AGENT)],
         reason: Annotated[str | None, Field(description=_P_REASON)] = None,
+        claim_epoch: Annotated[int | None, Field(description="Generation of the claimed work being rejected; required after reclaim/rework.", strict=True)] = None,
         session_id: Annotated[str | None, Field(description=_P_SESSION_TRUST)] = None,
         session_secret: Annotated[
             str | None, Field(description=_P_SESSION_SECRET)
@@ -422,6 +427,7 @@ def register(server: Any, deps: Any) -> None:
             handoff_id=handoff_id,
             agent_id=agent_id,
             reason=reason,
+            claim_epoch=claim_epoch,
         )
 
     @server.tool()

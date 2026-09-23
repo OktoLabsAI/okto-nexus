@@ -280,7 +280,7 @@ class SqliteObservabilityQueries:
     ) -> list[dict[str, Any]]:
         sql = (
             "SELECT handoff_id, workspace_id, status, created_at, updated_at, "
-            "from_agent_id, claimed_by, target, payload, visibility, lease_expires_at, "
+            "from_agent_id, claimed_by, claim_epoch, target, payload, visibility, lease_expires_at, "
             "trace_id, acceptance_criteria, verify_by, verification_feedback, "
             "result, rejected_reason "
             "FROM handoffs WHERE 1=1"
@@ -327,6 +327,7 @@ class SqliteObservabilityQueries:
                 "payload": _loads(row["payload"]),
                 "visibility": row["visibility"],
                 "lease_expires_at": row["lease_expires_at"],
+                "claim_epoch": row["claim_epoch"],
                 "trace_id": row["trace_id"],
             }
             # Verification contract (I4/FR6): the three columns surface

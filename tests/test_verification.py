@@ -940,7 +940,7 @@ def test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease(tmp_path):
         )
     )
 
-    def fail(feedback: str) -> dict:
+    def fail(feedback: str, claim_epoch: int = 1) -> dict:
         return _ok(
             tools["handoff_verify"](
                 project_root=root,
@@ -948,6 +948,7 @@ def test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease(tmp_path):
                 agent_id="alpha",
                 verdict="fail",
                 feedback=feedback,
+                claim_epoch=claim_epoch,
             )
         )
 
@@ -960,10 +961,10 @@ def test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease(tmp_path):
 
     _ok(
         tools["handoff_complete"](
-            project_root=root, handoff_id=hid, agent_id="beta", result="v2"
+            project_root=root, handoff_id=hid, agent_id="beta", result="v2", claim_epoch=fail1["claim_epoch"]
         )
     )
-    fail2 = fail("still failing on edge case")
+    fail2 = fail("still failing on edge case", fail1["claim_epoch"])
     assert fail2["status"] == STATUS_CLAIMED and fail2["claimed_by"] == "beta"
     assert fail2["verification_feedback"] == "still failing on edge case"
     assert fail2["lease_expires_at"] > fail1["lease_expires_at"]
@@ -985,12 +986,12 @@ def test_ts6_verify_fail_drives_rework_cycles_with_renewed_lease(tmp_path):
 
     _ok(
         tools["handoff_complete"](
-            project_root=root, handoff_id=hid, agent_id="beta", result="v3"
+            project_root=root, handoff_id=hid, agent_id="beta", result="v3", claim_epoch=fail2["claim_epoch"]
         )
     )
     final = _ok(
         tools["handoff_verify"](
-            project_root=root, handoff_id=hid, agent_id="alpha", verdict="pass"
+            project_root=root, handoff_id=hid, agent_id="alpha", verdict="pass", claim_epoch=fail2["claim_epoch"]
         )
     )
     assert final["status"] == STATUS_COMPLETED and final["verified_by"] == "alpha"
@@ -1320,7 +1321,7 @@ def test_ts11_surface_revision_and_verify_description_budget(tmp_path):
     server = FakeServer()
     register_meta_tools(server, deps)
     info = _ok(server.tools["nexus_info"]())
-    assert info["surface_revision"] == SURFACE_REVISION == 35
+    assert info["surface_revision"] == SURFACE_REVISION == 36
     assert info["features"]["feature_verification"] is True
     # The one-line tool description budget (docstring IS the MCP description).
     doc = tools["handoff_verify"].__doc__

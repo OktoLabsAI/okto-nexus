@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "b7b88aa",
+  "execution_head": "08b5fb1",
   "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1580,7 +1580,7 @@
       "depends_on_phases": [
         "P08"
       ],
-      "status": "NOT_STARTED",
+      "status": "IN_PROGRESS",
       "specification": "01_PLANO_IMPLEMENTACAO.md: P09",
       "gate": "Concluir os critérios da fase e os testes aplicáveis; evidência nativa não executada não é PASS.",
       "test_ids": [
@@ -1647,12 +1647,21 @@
         {
           "task_id": "P09-T04",
           "title": "Integrar conclusão estruturada/autenticada e preservar verify/evidence/claim epoch.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/044_handoff_claim_epoch.sql",
+            "src/okto_nexus/application/handoff.py",
+            "src/okto_nexus/adapters/outbound/sqlite/handoff_repo.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py",
+            "tests/test_runtime_handoff_epochs.py"
+          ],
           "test_results": [],
-          "evidence": [],
-          "notes": ""
+          "evidence": [
+            "plans/pr34-remediation/P09_CLAIM_EPOCH.md",
+            "plans/pr34-remediation/evidence/p09-claim-epoch-gate.log"
+          ],
+          "notes": "Behavioral RED reproduced stale same-agent complete/reject after reclaim. Canonical claim and rework generations now fence complete/reject/verify; surface36 MCP/REST/dashboard updated. 329 PASS Windows. Managed work binding/credentials/native late evidence remain pending."
         },
         {
           "task_id": "P09-T05",

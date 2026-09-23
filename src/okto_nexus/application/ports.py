@@ -2493,6 +2493,7 @@ class HandoffRepo(Protocol):
         updated_at: str | None = None,
         result: str | None = None,
         rejected_reason: str | None = None,
+        claim_epoch: int | None = None,
     ) -> Handoff | None:
         """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
 
@@ -2536,6 +2537,7 @@ class HandoffRepo(Protocol):
         updated_at: str | None = None,
         verification_feedback: str | None = None,
         lease_expires_at: str | None = None,
+        claim_epoch: int | None = None,
     ) -> Handoff | None:
         """Conditionally transition a VERIFYING handoff (verify verdict).
 

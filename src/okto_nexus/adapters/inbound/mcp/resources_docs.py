@@ -362,7 +362,7 @@ into a blocking long-poll until a claimable handoff appears.
 
 # handoff_claim
 Atomically claim an OPEN handoff; single winner, others get a structured error.
-Returns the ``payload`` plus ``claimed_by`` / ``lease_expires_at``. strict mode:
+Returns the ``payload`` plus ``claimed_by`` / ``lease_expires_at`` / ``claim_epoch``. strict mode:
 session_id + session_secret. A BLOCKED dependent is refused with
 DEPENDENCY_NOT_MET (details carry aggregate ``{handoff_id, pending, failed}``
 counts only - dependency ids are never disclosed): wait for its
@@ -376,7 +376,9 @@ Owner-only delivery of a CLAIMED handoff. Without acceptance_criteria:
 (exactly as always). With acceptance_criteria: -> VERIFYING, emit
 handoff.verification_requested (metadata-only: the contract, never the
 result) and notify a statically resolvable verifier; the outcome then belongs
-to handoff_verify. strict mode: session credentials.
+to handoff_verify. Pass the claim_epoch of this execution; it is mandatory
+after reclaim or verification rework. A stale result must not be relabelled
+with the current generation. strict mode: session credentials.
 
 # handoff_verify
 Verifier-only verdict on a VERIFYING handoff. The verifier is resolved from
@@ -389,12 +391,14 @@ rework: ``feedback`` (optional, max 2000 chars, only with 'fail') is persisted
 (each fail overwrites the previous; history lives in the event log), the
 claimant's lease is RENEWED and handoff.verification_failed is emitted +
 delivered to the claimant's inbox. VERIFYING is protected: reject/cancel
-refuse it and lease expiry never touches it. strict mode: session credentials.
+refuse it and lease expiry never touches it. Pass the delivery's claim_epoch;
+fail advances the generation for rework. strict mode: session credentials.
 
 # handoff_reject
 Reject a handoff (owner CLAIMED->REJECTED or direct-target OPEN->REJECTED).
 ``reason`` is persisted + delivered to the creator's inbox. A VERIFYING
 handoff cannot be rejected - only a 'fail' verdict returns it to CLAIMED.
+Pass the claim_epoch of claimed work, mandatory after reclaim/rework.
 
 # handoff_cancel
 Creator-only OPEN -> CANCELLED; retract a handoff nobody should take (e.g. a

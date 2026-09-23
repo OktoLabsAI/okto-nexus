@@ -236,7 +236,7 @@ class SqliteHandoffRepo(_ClockBacked):
     _COLUMNS = (
         "handoff_id, workspace_id, task_id, from_agent_id, target, visibility, "
         "status, claimed_by, lease_expires_at, created_at, updated_at, payload, "
-        "trace_id"
+        "trace_id, claim_epoch"
     )
 
     def create(
@@ -345,7 +345,8 @@ class SqliteHandoffRepo(_ClockBacked):
             cur = uow.connection.execute(
                 """
                 UPDATE handoffs
-                   SET status = ?, claimed_by = ?, lease_expires_at = ?, updated_at = ?
+                   SET status = ?, claimed_by = ?, lease_expires_at = ?, updated_at = ?,
+                       claim_epoch = claim_epoch + 1
                  WHERE handoff_id = ? AND status = ? AND workspace_id = ?
                 """,
                 (
@@ -433,6 +434,7 @@ class SqliteHandoffRepo(_ClockBacked):
         updated_at: str | None = None,
         result: str | None = None,
         rejected_reason: str | None = None,
+        claim_epoch: int | None = None,
     ) -> Handoff | None:
         """Conditionally transition a CLAIMED handoff owned by ``claimed_by``.
 
@@ -456,11 +458,14 @@ class SqliteHandoffRepo(_ClockBacked):
             sets.append("rejected_reason = ?")
             params.append(rejected_reason)
         params.extend([handoff_id, workspace_id, STATUS_CLAIMED, claimed_by])
+        # Legacy omission is valid only for the first claim. A known logical
+        # agent is insufficient to identify a later execution of the same work.
+        params.append(1 if claim_epoch is None else claim_epoch)
         try:
             cur = uow.connection.execute(
                 f"UPDATE handoffs SET {', '.join(sets)} "
                 "WHERE handoff_id = ? AND workspace_id = ? "
-                "AND status = ? AND claimed_by = ?",
+                "AND status = ? AND claimed_by = ? AND claim_epoch = ?",
                 tuple(params),
             )
         except sqlite3.Error as exc:
@@ -479,6 +484,7 @@ class SqliteHandoffRepo(_ClockBacked):
         updated_at: str | None = None,
         verification_feedback: str | None = None,
         lease_expires_at: str | None = None,
+        claim_epoch: int | None = None,
     ) -> Handoff | None:
         """Conditionally transition a VERIFYING handoff (verify verdict).
 
@@ -499,15 +505,17 @@ class SqliteHandoffRepo(_ClockBacked):
         sets = ["status = ?", "updated_at = ?"]
         params: list[Any] = [status, now]
         if status == STATUS_CLAIMED:
+            sets.append("claim_epoch = claim_epoch + 1")
             sets.append("verification_feedback = ?")
             params.append(verification_feedback)
             sets.append("lease_expires_at = ?")
             params.append(lease_expires_at)
         params.extend([handoff_id, workspace_id, STATUS_VERIFYING])
+        params.append(1 if claim_epoch is None else claim_epoch)
         try:
             cur = uow.connection.execute(
                 f"UPDATE handoffs SET {', '.join(sets)} "
-                "WHERE handoff_id = ? AND workspace_id = ? AND status = ?",
+                "WHERE handoff_id = ? AND workspace_id = ? AND status = ? AND claim_epoch = ?",
                 tuple(params),
             )
         except sqlite3.Error as exc:
@@ -778,4 +786,5 @@ class SqliteHandoffRepo(_ClockBacked):
             updated_at=row["updated_at"],
             payload=row["payload"],
             trace_id=row["trace_id"],
+            claim_epoch=row["claim_epoch"],
         )

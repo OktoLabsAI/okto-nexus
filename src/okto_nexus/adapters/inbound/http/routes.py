@@ -342,6 +342,7 @@ class VerifyHandoffBody(BaseModel):
     # to 422 through _map_error.
     verdict: str = Field(min_length=1)
     feedback: str | None = None
+    claim_epoch: int | None = Field(default=None, strict=True, ge=1)
 
 
 class HarnessSessionOpenBody(BaseModel):
@@ -3378,6 +3379,7 @@ def build_router() -> APIRouter:
                 agent_id=caller,
                 verdict=body.verdict,
                 feedback=body.feedback,
+                claim_epoch=body.claim_epoch,
             )
 
         try:

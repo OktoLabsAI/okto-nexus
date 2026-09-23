@@ -235,6 +235,7 @@ class Handoff:
     updated_at: str | None = None
     payload: str | None = None
     trace_id: str | None = None
+    claim_epoch: int = 0
 
 
 @dataclass(slots=True)

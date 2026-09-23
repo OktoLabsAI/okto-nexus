@@ -1,0 +1,13 @@
+rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_handoff_epochs.py tests/test_handoff.py tests/test_verification.py tests/test_handoff_dependencies.py tests/test_import_boundary.py tests/test_comm_presets.py tests/test_feature_flags.py tests/test_health.py tests/test_memory.py tests/test_replay_marker.py --tb=short --maxfail=5
+........................................................................ [ 21%]
+........................................................................ [ 43%]
+........................................................................ [ 65%]
+........................................................................ [ 87%]
+.........................................                                [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+329 passed, 1 warning in 38.53s

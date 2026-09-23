@@ -915,6 +915,7 @@ class HandoffService:
                 "workspace_id": claimed.workspace_id,
                 "status": claimed.status,
                 "claimed_by": claimed.claimed_by,
+                "claim_epoch": claimed.claim_epoch,
                 "lease_expires_at": claimed.lease_expires_at,
             }
             if _is_nonempty_str(session_id):
@@ -931,6 +932,7 @@ class HandoffService:
             "workspace_id": claimed.workspace_id,
             "status": STATUS_CLAIMED,
             "claimed_by": claimed.claimed_by,
+            "claim_epoch": claimed.claim_epoch,
             "lease_expires_at": claimed.lease_expires_at,
             "payload": claimed.payload,
         }
@@ -945,6 +947,7 @@ class HandoffService:
         handoff_id: Any,
         agent_id: Any,
         result: Any = None,
+        claim_epoch: Any = None,
     ) -> dict[str, Any]:
         """Owner-only delivery: ``CLAIMED -> COMPLETED`` or ``-> VERIFYING``.
 
@@ -984,6 +987,9 @@ class HandoffService:
             )
             verifiable = bool(verification and verification.get("acceptance_criteria"))
             destination = STATUS_VERIFYING if verifiable else STATUS_COMPLETED
+            handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+            if handoff.status == STATUS_CLAIMED and handoff.claimed_by == agent_id:
+                self._require_claim_epoch(handoff, claim_epoch)
             updated = self._handoffs.transition_claimed(
                 uow,
                 workspace_id=workspace_id,
@@ -992,6 +998,7 @@ class HandoffService:
                 status=destination,
                 updated_at=now,
                 result=result_text,
+                claim_epoch=claim_epoch,
             )
             if updated is None:
                 self._raise_claimed_transition_error(
@@ -1073,6 +1080,7 @@ class HandoffService:
         agent_id: Any,
         verdict: Any,
         feedback: Any = None,
+        claim_epoch: Any = None,
     ) -> dict[str, Any]:
         """Verifier-only decision on a VERIFYING handoff.
 
@@ -1156,6 +1164,7 @@ class HandoffService:
                         "verify_by": verify_by_descriptor,
                     },
                 )
+            self._require_claim_epoch(handoff, claim_epoch)
             # result/rejected_reason predate the verdict and are immutable
             # here; read once for the event/response.
             outcome = self._handoffs.read_outcome(
@@ -1168,6 +1177,7 @@ class HandoffService:
                     handoff_id=handoff_id,
                     status=STATUS_COMPLETED,
                     updated_at=now,
+                    claim_epoch=claim_epoch,
                 )
                 if updated is None:  # pragma: no cover - unreachable: the read
                     # and the UPDATE share one BEGIN IMMEDIATE transaction, so
@@ -1213,6 +1223,7 @@ class HandoffService:
                     updated_at=now,
                     verification_feedback=feedback_value,
                     lease_expires_at=lease_expires_at,
+                    claim_epoch=claim_epoch,
                 )
                 if updated is None:  # pragma: no cover - unreachable, see the
                     # pass branch; defence in depth.
@@ -1251,6 +1262,7 @@ class HandoffService:
             "target": _loads_target(updated.target),
             "visibility": updated.visibility,
             "claimed_by": updated.claimed_by,
+            "claim_epoch": updated.claim_epoch,
             "lease_expires_at": updated.lease_expires_at,
             "result": outcome.get("result"),
             "rejected_reason": outcome.get("rejected_reason"),
@@ -1314,6 +1326,7 @@ class HandoffService:
         handoff_id: Any,
         agent_id: Any,
         reason: Any = None,
+        claim_epoch: Any = None,
     ) -> dict[str, Any]:
         """Reject a handoff.
 
@@ -1356,6 +1369,7 @@ class HandoffService:
                             "claimed_by": handoff.claimed_by,
                         },
                     )
+                self._require_claim_epoch(handoff, claim_epoch)
                 updated = self._handoffs.transition_claimed(
                     uow,
                     workspace_id=workspace_id,
@@ -1364,6 +1378,7 @@ class HandoffService:
                     status=STATUS_REJECTED,
                     updated_at=now,
                     rejected_reason=reason_text,
+                    claim_epoch=claim_epoch,
                 )
             elif handoff.status == STATUS_OPEN:
                 if not is_direct_target(handoff.target, agent_id):
@@ -1599,6 +1614,7 @@ class HandoffService:
             "target": _loads_target(handoff.target),
             "visibility": handoff.visibility,
             "claimed_by": handoff.claimed_by,
+            "claim_epoch": handoff.claim_epoch,
             "lease_expires_at": handoff.lease_expires_at,
             "result": outcome["result"],
             "rejected_reason": outcome["rejected_reason"],
@@ -1693,6 +1709,17 @@ class HandoffService:
     # ------------------------------------------------------------------ #
     # Helpers
     # ------------------------------------------------------------------ #
+    @staticmethod
+    def _require_claim_epoch(handoff: Any, claim_epoch: Any) -> None:
+        if claim_epoch is not None and (type(claim_epoch) is not int or claim_epoch < 1):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "claim_epoch must be a positive integer.", {})
+        if (1 if claim_epoch is None else claim_epoch) != handoff.claim_epoch:
+            raise OktoNexusError(
+                ErrorCode.INVALID_TRANSITION,
+                "Claim generation changed. Use the claim_epoch of the work being completed; do not retry stale work against a newer claim.",
+                {"handoff_id": handoff.handoff_id},
+            )
+
     def _resolve_workspace(self, project_root: Any) -> str:
         if not _is_nonempty_str(project_root):
             raise OktoNexusError(
@@ -1915,6 +1942,7 @@ class HandoffService:
         body: dict[str, Any] = {
             "kind": EVENT_VERIFICATION_FAILED,
             "handoff_id": handoff.handoff_id,
+            "claim_epoch": handoff.claim_epoch,
             "status": handoff.status,
             "by_agent_id": actor_agent_id,
             "lease_expires_at": handoff.lease_expires_at,

@@ -818,12 +818,12 @@ def test_ts7_verifying_never_satisfies_and_pass_unblocks_as_verifier(tmp_path):
     # claimant that delivered.
     _ok(
         tools["handoff_complete"](
-            project_root=root, handoff_id=dep, agent_id="beta", result="v2"
+            project_root=root, handoff_id=dep, agent_id="beta", result="v2", claim_epoch=2
         )
     )
     _ok(
         tools["handoff_verify"](
-            project_root=root, handoff_id=dep, agent_id="gamma", verdict="pass"
+            project_root=root, handoff_id=dep, agent_id="gamma", verdict="pass", claim_epoch=2
         )
     )
     unblocked = _event_rows(deps, EVENT_UNBLOCKED)
@@ -1264,7 +1264,7 @@ def test_ts11_surface_revision_feature_flag_and_budgets(tmp_path):
     meta = FakeServer()
     register_meta_tools(meta, deps)
     info = _ok(meta.tools["nexus_info"]())
-    assert info["surface_revision"] == SURFACE_REVISION == 35
+    assert info["surface_revision"] == SURFACE_REVISION == 36
     assert info["features"]["feature_dag"] is True
 
     # Zero new tools: I5 rides existing verbs only - no tool name mentions

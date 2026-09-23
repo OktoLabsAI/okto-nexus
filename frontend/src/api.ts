@@ -127,6 +127,7 @@ export interface GraphHandoff {
   created_at: string;
   from_agent_id: string | null;
   claimed_by: string | null;
+  claim_epoch?: number;
   target: RoutingTarget | null;
   payload?: unknown;
   visibility?: string;
@@ -1643,12 +1644,13 @@ export const api = {
     workspace: string,
     verdict: "pass" | "fail",
     feedback?: string,
+    claimEpoch?: number,
   ) =>
     call<{ handoff_id: string; status: string; verified_by?: string }>(
       `/api/v1/workspaces/${encodeURIComponent(workspace)}/handoffs/${encodeURIComponent(handoffId)}/verify`,
       {
         method: "POST",
-        body: JSON.stringify(feedback ? { verdict, feedback } : { verdict }),
+        body: JSON.stringify({ verdict, ...(feedback ? { feedback } : {}), claim_epoch: claimEpoch }),
       },
     ),
   prune: (dryRun: boolean) =>
