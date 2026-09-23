@@ -267,6 +267,28 @@ class LocalArtifactStore:
                 {"storage_path": storage_path, "reason": str(exc)},
             ) from exc
 
+    def discard_unpublished(self, *, workspace_id, agent_id, artifact_id):
+        return self._discard_runtime(workspace_id=workspace_id, agent_id=agent_id, artifact_id=artifact_id, include_final=True)
+
+    def discard_staging(self, *, workspace_id, agent_id, artifact_id):
+        return self._discard_runtime(workspace_id=workspace_id, agent_id=agent_id, artifact_id=artifact_id, include_final=False)
+
+    def _discard_runtime(self, *, workspace_id, agent_id, artifact_id, include_final):
+        parent = self.root / _segment(workspace_id, fallback="workspace") / _segment(agent_id, fallback="anonymous")
+        if not parent.exists():
+            return {"removed_directories": 0, "absent": True}
+        self._create_parent(parent)
+        segment = _segment(artifact_id, fallback="artifact")
+        temporary = re.compile(r"\." + re.escape(segment) + r"\.tmp-[0-9a-f]{32}\Z")
+        selected = [path for path in parent.iterdir() if include_final and path.name == segment or temporary.fullmatch(path.name)]
+        for path in selected:
+            if not path.is_dir() or path.is_symlink() or getattr(path.lstat(), "st_file_attributes", 0) & 0x400:
+                raise OSError("Unpublished artifact cleanup encountered a redirected path")
+            # _remove_temporary checks the resolved absolute containment again.
+            self._remove_temporary(path)
+        self._sync_directory(parent)
+        return {"removed_directories": len(selected), "absent": True}
+
     def _resolve(self, storage_path: str) -> Path:
         candidate = (self.root / storage_path).resolve()
         try:

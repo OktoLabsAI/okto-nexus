@@ -1005,6 +1005,14 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
 
+    @router.post("/harness/artifacts")
+    async def runtime_artifacts(request: Request, body: dict) -> JSONResponse:
+        from okto_nexus.adapters.inbound.mcp.tools.harness import maintain_artifacts
+        try:
+            return _ok(await anyio.to_thread.run_sync(lambda: maintain_artifacts(request.app.state.deps, body)))
+        except OktoNexusError as exc:
+            return _map_error(exc)
+
     @router.get("/harness/diagnostics")
     async def runtime_diagnostics(request: Request) -> JSONResponse:
         deps = request.app.state.deps

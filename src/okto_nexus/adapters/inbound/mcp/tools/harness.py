@@ -135,6 +135,18 @@ def maintain_journal(deps, *, compact=False):
         dispatcher=deps.runtime_dispatcher).journal(context, compact=compact)
 
 
+def maintain_artifacts(deps, parameters=None):
+    from okto_nexus.application.runtime_maintenance import RuntimeMaintenanceService
+    context = authorize_request(deps)
+    parameters = runtime_object("maintenance", parameters if parameters is not None else {})
+    if set(parameters) - {"action", "result_id", "quota_bytes", "idempotency_key", "reason"}:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unknown artifact maintenance parameter.", {})
+    if not is_local_runtime_owner(deps):
+        return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/artifacts", parameters)
+    return RuntimeMaintenanceService(access=build_access_service(deps), dispatcher=deps.runtime_dispatcher,
+        artifact_store=deps.repos.artifact_store).artifacts(context, **parameters)
+
+
 def is_local_runtime_owner(deps):
     dispatcher = getattr(deps, "runtime_dispatcher", None)
     if not dispatcher or dispatcher.epoch is None or dispatcher._stop.is_set():
@@ -912,12 +924,17 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     @runtime_tool_guard(deps)
-    def harness_list(view: str = "adapters", compact: bool = False) -> dict[str, Any]:
-        """List declared adapter capabilities. Operator view='journal' reports retention; compact=true explicitly removes only projected journal segments, preserving SQLite events/results."""
+    def harness_list(view: str = "adapters", compact: bool = False,
+                     maintenance: Annotated[Any, Field(description="For artifacts view: action inspect|cleanup|retry|quota; result_id or quota_bytes; idempotency_key and reason for writes.")] = None) -> dict[str, Any]:
+        """Operator views: adapters (default), journal (compact=true reclaims projected segments), artifacts (maintenance inspects/reclaims unpublished files or retries guarded publication)."""
+        if view == "artifacts" and not compact:
+            return maintain_artifacts(deps, maintenance)
+        if maintenance is not None:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Maintenance requires artifacts view.", {})
         if view == "journal":
             return maintain_journal(deps, compact=compact)
         if view != "adapters" or compact:
-            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use adapters or journal view; compact requires journal.", {})
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Use adapters, journal or artifacts view; compact requires journal.", {})
         return {"harnesses": capabilities_catalog(factories)}
 
     @server.tool()

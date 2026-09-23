@@ -26,7 +26,14 @@ Commands/results:
 
 P01 containment tasks implemented, phase IN_PROGRESS pending its full gate; P02 contracts IMPLEMENTED; P03–P08 IN_PROGRESS; P09–P12 NOT_STARTED. No phase VERIFIED. No completion claims from historical PR counts. User explicitly approved the installed local Codex and subsequently Claude for real tests. Versions observed: codex-cli 0.155.1; Claude Code 2.1.277. Keep native tests in temporary project directories, preserve security controls, never pass the Nexus operator key. Attach requires a dedicated test session; never select a personal session. Pi native tests remain NOT_RUN by user decision.
 
-Current: P03 approved endpoint/profile persistence and canonical presence; see P03_ENDPOINTS.md. Next dependency: scoped runtime grants and lifecycle verification. Remaining seven red regressions belong to later phases. No legacy producer may be switched to a private, unintegrated dispatcher. Update this file and `05_BACKLOG.json` per unit.
+Current resume point (2026-09-23): P08 result/artifact maintenance above parent
+`b7b88aa`, migration 043. Integrated runtime gate: Windows 188 PASS / 3 native
+skips; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md. Next dependency:
+P09 canonical handoff execution/bootstrap/native approvals, then P10 persistent
+causality, P11 administration/UI and P12 full qualification/build/install.
+The expired-relay P00 regression still belongs to pending P10. No final gate
+has passed. Chronological entries below retain their original evidence scope;
+their historical "next" statements are superseded by this resume point.
 
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 

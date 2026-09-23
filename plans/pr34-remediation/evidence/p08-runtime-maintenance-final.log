@@ -1,0 +1,5 @@
+COMMAND: .venv/Scripts/python.exe -m pytest -q tests/test_runtime_*.py --tb=short --maxfail=6 (Python-expanded paths; all native opt-ins disabled)
+........................................................................ [ 37%]
+................................................sss..................... [ 75%]
+...............................................                          [100%]
+188 passed, 3 skipped in 342.33s (0:05:42)

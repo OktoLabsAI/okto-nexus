@@ -67,7 +67,10 @@ def test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding(run
         assert presence.status == "active"
         assert presence.agent_id == "worker"
         assert presence.workspace_id == opened["workspace_id"]
-    assert tool(client, key, "harness_close", {"session_id": opened["session_id"]})["ok"]
+    from test_runtime_commands import wait_close_result
+    closed = tool(client, key, "harness_close", {"session_id": opened["session_id"]})
+    assert closed["ok"], closed
+    wait_close_result(client, key, closed)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert deps.repos.sessions.get(uow, opened["presence_session_id"]).status == "closed"
         assert uow.connection.execute("SELECT lifecycle_state FROM harness_sessions WHERE session_id=?",

@@ -11,14 +11,16 @@ from ..errors import ErrorCode, OktoNexusError
 
 class RuntimeResultService:
     ARTIFACT_QUOTA_BYTES = 64 * 1024 * 1024
-    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None):
+    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None, owner_provider=None):
         self.cf, self.agents, self.endpoints, self.config = connection_factory, agents, endpoints, config
         self.artifacts = artifacts
+        self.owner_provider = owner_provider
 
     @staticmethod
     def artifact_id(row):
         if len((row["output_text"] or "").encode("utf-8")) > 60000 or row["output_truncated"]:
-            return "art_runtime_" + hashlib.sha256(row["result_id"].encode("utf-8")).hexdigest()
+            identity = row["result_id"] + (":" + str(row["artifact_generation"]) if row.get("artifact_generation", 0) else "")
+            return "art_runtime_" + hashlib.sha256(identity.encode("utf-8")).hexdigest()
         return None
 
     @staticmethod
@@ -69,10 +71,14 @@ class RuntimeResultService:
                     "COALESCE(sum(CASE WHEN o.workspace_id=? THEN r.artifact_reserved_bytes ELSE 0 END),0) "
                     "FROM runtime_results r JOIN delivery_outbox o ON o.operation_id=r.operation_id WHERE r.artifact_reserved_bytes>0",
                     (row["recipient_agent_id"], row["workspace_id"])).fetchone()
-                if any(used + size > limit for used, limit in zip(usage,
-                        (self.ARTIFACT_QUOTA_BYTES, self.ARTIFACT_QUOTA_BYTES // 4, self.ARTIFACT_QUOTA_BYTES // 2))):
+                configured = uow.connection.execute("SELECT quota_bytes FROM runtime_artifact_settings WHERE singleton=1").fetchone()
+                quota = configured[0] if configured else self.ARTIFACT_QUOTA_BYTES
+                if any(used + size > limit for used, limit in zip(usage, (quota, quota // 4, quota // 2))):
                     raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Runtime artifact retention quota requires operator maintenance.", {})
                 uow.connection.execute("UPDATE runtime_results SET artifact_reserved_bytes=? WHERE result_id=?", (size, result_id))
+        # Only the validated serve owner enters this path; previous publication
+        # workers retain journal ownership until drained. A recovered staging
+        # directory therefore cannot belong to a concurrent native owner.
         return self.artifacts.prepare_runtime_result(artifact_id=artifact_id,
             workspace_id=row["workspace_id"], agent_id=row["recipient_agent_id"], content=row["output_text"] or "",
             result_id=result_id, truncated=row["output_truncated"])
@@ -85,6 +91,10 @@ class RuntimeResultService:
             readers=[row["recipient_id"], row["recipient_agent_id"]])
 
     def authorize(self, uow, *, result_id, supplied, approved=False):
+        owner = self.owner_provider() if self.owner_provider else None
+        if (not owner or owner._stop.is_set() or not owner.repo.owns(uow, owner_id=owner.owner_id,
+                epoch=owner.epoch, now=owner.clock.now_iso())):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result publication requires the current serve owner.", {})
         row = self.row(uow, result_id)
         if not self.config.feature_harness_integrations or not row or row["terminal_event_id"] != row["event_id"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "No authorized captured result.", {})

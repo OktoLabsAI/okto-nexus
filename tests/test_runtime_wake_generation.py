@@ -4,7 +4,7 @@ import time
 
 from okto_nexus.application.runtime_dispatcher import RuntimeDispatcher
 from test_pr34_remediation import runtime as runtime_fixture, open_rest, send_message
-from test_runtime_outbox import stop_dispatcher, restart_dispatcher, wait_status
+from test_runtime_outbox import wait_status
 
 runtime = runtime_fixture
 
@@ -26,10 +26,9 @@ def test_generation_keeps_wakes_before_wait_and_during_processing():
 def test_wake_during_scan_drains_without_waiting_for_recovery(runtime):
     deps = runtime[0]
     assert open_rest(runtime).status_code == 200
-    old = stop_dispatcher(runtime)
     scanned, release, scanned_again = threading.Event(), threading.Event(), threading.Event()
     # A wake raised during the owner's scan must trigger another scan immediately.
-    new = restart_dispatcher(runtime, old)
+    new = deps.runtime_dispatcher
     new.recovery_seconds = 3600
     original_scan = new.scan_once
     first = True

@@ -1,0 +1,24 @@
+COMMAND: .venv/Scripts/python.exe -m pytest -q tests/test_runtime_*.py --tb=short --maxfail=6 (Python-expanded paths; all native opt-ins disabled)
+........................................................F............... [ 37%]
+................................................sss..................... [ 75%]
+.............................................F                           [100%]
+================================== FAILURES ===================================
+__ test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding ___
+tests\test_runtime_endpoints.py:72: in test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding
+    assert deps.repos.sessions.get(uow, opened["presence_session_id"]).status == "closed"
+E   AssertionError: assert 'active' == 'closed'
+E     
+E     - closed
+E     + active
+__________ test_wake_during_scan_drains_without_waiting_for_recovery __________
+tests\test_runtime_wake_generation.py:51: in test_wake_during_scan_drains_without_waiting_for_recovery
+    result = send_message(runtime)
+             ^^^^^^^^^^^^^^^^^^^^^
+tests\test_pr34_remediation.py:131: in send_message
+    assert result["ok"], result
+E   AssertionError: {'error': {'code': 'CONFLICT', 'message': 'AMBIGUOUS_BINDING'}, 'ok': False}
+E   assert False
+=========================== short test summary info ===========================
+FAILED tests/test_runtime_endpoints.py::test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding
+FAILED tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery
+2 failed, 185 passed, 3 skipped in 318.49s (0:05:18)

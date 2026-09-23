@@ -248,13 +248,14 @@ def test_native_terminal_wake_during_publication_scan_is_not_lost(runtime):
         dispatcher.publish_results = publish
 
 
-def test_runtime_artifact_quota_is_reserved_before_filesystem_effect(runtime, monkeypatch):
+def test_runtime_artifact_quota_is_reserved_before_filesystem_effect(runtime):
     from test_pr34_remediation import send_message
     from test_runtime_result_publication import result
-    from okto_nexus.application.runtime_results import RuntimeResultService
-    deps = runtime[0]
+    deps, client, _, _, operator, _ = runtime
     large_output_session(runtime)
-    monkeypatch.setattr(RuntimeResultService, "ARTIFACT_QUOTA_BYTES", 65536)
+    configured = client.post("/api/v1/harness/artifacts", headers={"x-api-key": operator},
+        json={"action": "quota", "quota_bytes": 262144, "idempotency_key": "small-fixture-quota", "reason": "fixture quota boundary"})
+    assert configured.status_code == 200, configured.text
     source = send_message(runtime, body="fixture retention quota")
     row = result(runtime, source["runtime_operations"][0], "BLOCKED")
     assert row["publication_reason"] == "QUOTA_EXCEEDED"

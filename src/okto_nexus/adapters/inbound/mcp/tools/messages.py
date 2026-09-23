@@ -253,7 +253,7 @@ def build_service(deps: Any) -> MessageService:
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
             agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,
-            artifacts=build_artifact_service(deps)),
+            artifacts=build_artifact_service(deps), owner_provider=lambda: getattr(deps, "runtime_dispatcher", None)),
         runtime_wake=lambda: wake_runtime(deps),
     )
 

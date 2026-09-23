@@ -2770,6 +2770,14 @@ class ArtifactStore(Protocol):
         """Remove the artifact directory used for rollback compensation."""
         ...
 
+    def discard_unpublished(self, *, workspace_id: str, agent_id: str, artifact_id: str) -> dict:
+        """Idempotently remove an authorized, uncatalogued artifact and its staging directories."""
+        ...
+
+    def discard_staging(self, *, workspace_id: str, agent_id: str, artifact_id: str) -> dict:
+        """Remove only abandoned temporary directories under exclusive runtime ownership."""
+        ...
+
 
 # --------------------------------------------------------------------------- #
 # Filesystem port

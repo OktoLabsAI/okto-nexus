@@ -440,6 +440,9 @@ class ArtifactService:
         with self._put_uow(workspace_id=workspace_id, agent_id=agent_id, write=False) as uow:
             self._authorize_artifact(uow, workspace_id=workspace_id, agent_id=agent_id,
                 size_bytes=len(content.encode("utf-8")), guardrail_fields=fields)
+        # The runtime caller validates exclusive serve ownership; its single
+        # publisher and canonical approval CAS serialize preparation per result.
+        self._artifact_store.discard_staging(workspace_id=workspace_id, agent_id=agent_id, artifact_id=artifact_id)
         now = self._clock.now_iso()
         stored = self._artifact_store.put(workspace_id=workspace_id, agent_id=agent_id,
             artifact_id=artifact_id, artifact_type="text", storage_kind=STORED_PATH,
