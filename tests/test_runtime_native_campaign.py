@@ -122,7 +122,8 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 assert started is not None, "no native turn/started observed"
                 response = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
                 assert response.status_code == 200, response.text
-                assert response.json()["data"]["lifecycle_state"] == "stopped"
+                from test_runtime_commands import wait_close_result
+                assert wait_close_result(client, operator_key, response)["lifecycle_state"] == "stopped"
                 events = deps.harness_supervisor.replay_events(session_id)
                 terminals = [item for item in events if item.native_event == "turn/completed"]
                 assert len(terminals) == 1

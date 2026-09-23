@@ -238,6 +238,7 @@ class ClaudeCodeStreamConnector:
     """
 
     event_stream_contract_version = 2
+    steer_starts_new_turn = True
 
     def __init__(
         self,

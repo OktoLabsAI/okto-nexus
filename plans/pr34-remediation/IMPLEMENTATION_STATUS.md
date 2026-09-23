@@ -197,3 +197,5 @@ quarantine; lost-reply idempotency remains usable. See P07_APPROVED_BOOT.md:
 providers NOT_RUN for this unit; native boot and attach dedicated session remain
 external validation. Next: durable prioritized controls/expected-turn fencing;
 publication/artifacts and P09-P12 still pending. Final gate NOT PASSED.
+
+P07/P08 durable administrative command unit (parent 90ec3cc): migration 040, shared transactional admission and grant consumption, bounded priority workers, idempotency and expected-turn fences, command result recovery and authorized operation reads. Contract v2 makes close asynchronous. See P07_DURABLE_COMMANDS.md for evidence and compatibility. Fresh native campaigns: Codex 0.156.1 two cases PASS; Claude 2.1.280 one case PASS. Native steering/HITL, Pi and dedicated attach NOT_RUN. P08 publication/retention, P09-P12 remain pending; final gate NOT PASSED.

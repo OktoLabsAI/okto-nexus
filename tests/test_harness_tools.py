@@ -305,6 +305,7 @@ def test_harness_send_steer_interrupt_dispatch_the_right_verb(ctx):
 
     r = _call(server, "harness_send", session_id=session_id, payload={"text": "hi"})
     assert r["ok"] and r["data"]["verb"] == "send_turn"
+    _wait_until(lambda: len(conn.sent) == 1)
 
     r = _call(server, "harness_steer", session_id=session_id, payload={"text": "no wait"})
     assert r["ok"] and r["data"]["verb"] == "steer"
@@ -312,6 +313,7 @@ def test_harness_send_steer_interrupt_dispatch_the_right_verb(ctx):
     r = _call(server, "harness_interrupt", session_id=session_id)
     assert r["ok"] and r["data"]["verb"] == "interrupt"
 
+    _wait_until(lambda: len(conn.sent) == 3)
     verbs = [c.verb for c in conn.sent]
     assert verbs == ["send_turn", "steer", "interrupt"]
     assert conn.sent[0].payload == {"text": "hi"}
@@ -357,7 +359,9 @@ def test_harness_close_ends_session_and_get_falls_back_to_durable_row(ctx):
     assert live["ok"] and live["data"]["live"] is True and live["data"]["status"] == "RUNNING"
 
     closed = _call(server, "harness_close", session_id=session_id)
-    assert closed["ok"] and closed["data"]["lifecycle_state"] == "detached"
+    from test_runtime_commands import wait_close_result
+    assert closed["ok"]
+    assert wait_close_result(server.client, server.operator_key, closed)["lifecycle_state"] == "detached"
     assert connectors["pi"][0].close_called is True
 
     after = _call(server, "harness_get", session_id=session_id)

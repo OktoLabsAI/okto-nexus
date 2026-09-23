@@ -85,7 +85,7 @@ def build_access_service(deps):
 
 
 def authorize_request(deps, *, substrate=None, action="admin", session_id=None, endpoint_id=None,
-                      represented_agent_id=None, workspace_id=None, consume=False):
+                      represented_agent_id=None, workspace_id=None, consume=False, check_budget=True):
     """Same authenticated admission policy for MCP, REST and local HTTP."""
     actor = get_authenticated_agent()
     local = trusted_local_operator.get()
@@ -97,27 +97,33 @@ def authorize_request(deps, *, substrate=None, action="admin", session_id=None, 
     )
     build_access_service(deps).authorize(context, action=action, substrate=substrate,
         session_id=session_id, endpoint_id=endpoint_id, represented_agent_id=represented_agent_id,
-        workspace_id=workspace_id, consume=consume)
+        workspace_id=workspace_id, consume=consume, check_budget=check_budget)
     return context
 
 
-def authorized_send(deps, supervisor, session_id, verb, payload):
-    context = authorize_request(deps, action="send" if verb == "send_turn" else verb, session_id=session_id)
+def authorized_send(deps, supervisor, session_id, verb, payload, **options):
+    context = authorize_request(deps, action="send" if verb == "send_turn" else verb, session_id=session_id, check_budget=False)
     if not is_local_runtime_owner(deps):
         action = "send" if verb == "send_turn" else verb
-        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/{action}", {"payload": payload})
-    return RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
-                                 owner_guard=lambda: is_local_runtime_owner(deps)).send(
-        context, session_id=session_id, verb=verb, payload=payload)
+        if not options.get("idempotency_key"):
+            options["idempotency_key"] = new_id("command-key")
+        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/{action}", {"payload": payload, **options})
+    return deps.runtime_dispatcher.command_dispatcher.service.send(context,
+        session_id=session_id, verb=verb, payload=payload, **options)
 
 
-def authorized_close(deps, supervisor, session_id):
+def authorized_close(deps, supervisor, session_id, **options):
     context = authorize_request(deps, action="close", session_id=session_id)
     if not is_local_runtime_owner(deps):
-        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/close", {})
-    session = RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
-                                    owner_guard=lambda: is_local_runtime_owner(deps)).close(context, session_id=session_id)
-    return session_to_dict(session)
+        return call_runtime_owner(deps.config.home_dir, f"/api/v1/harness/sessions/{quote(session_id, safe='')}/close", options)
+    return deps.runtime_dispatcher.command_dispatcher.service.close(context, session_id=session_id, **options)
+
+
+def read_operation(deps, operation_id):
+    from okto_nexus.adapters.outbound.sqlite.runtime_commands_repo import SqliteRuntimeCommandRepo
+    context = authorize_request(deps, action="access")
+    service = RuntimeControlService(access=build_access_service(deps), supervisor=None, commands=SqliteRuntimeCommandRepo())
+    return service.get_operation(context, operation_id=operation_id)
 
 
 def is_local_runtime_owner(deps):
@@ -135,8 +141,12 @@ def runtime_tool_guard(deps):
                   "harness_event_list": "events"}.get(fn.__name__, "admin")
         def check(args, kwargs):
             arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
+            if fn.__name__ == "harness_get" and arguments.get("operation_id"):
+                # The service resolves the stored resource before authorizing
+                # its session; caller-supplied IDs never supply identity.
+                return
             authorize_request(deps, action=action, substrate=arguments.get("substrate"),
-                              session_id=arguments.get("session_id"))
+                              session_id=arguments.get("session_id"), check_budget=action not in {"send", "steer"})
         if inspect.iscoroutinefunction(fn):
             @functools.wraps(fn)
             async def guarded(*args, **kwargs):
@@ -322,6 +332,12 @@ def build_dispatcher(deps):
     dispatcher.event_ingress.wake_dispatch = dispatcher.wake
     dispatcher.wake_channel = RuntimeWakeChannel(deps.config.home_dir, getattr(deps, "runtime_owner_api_url", None))
     deps.runtime_dispatcher = dispatcher
+    from okto_nexus.adapters.outbound.sqlite.runtime_commands_repo import SqliteRuntimeCommandRepo
+    from okto_nexus.application.runtime_command_dispatcher import RuntimeCommandDispatcher
+    commands = SqliteRuntimeCommandRepo()
+    control_service = RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
+        owner_guard=lambda: is_local_runtime_owner(deps) and not dispatcher._quiescing.is_set(), commands=commands, wake=dispatcher.wake)
+    dispatcher.command_dispatcher = RuntimeCommandDispatcher(owner=dispatcher, repo=commands, service=control_service)
     return dispatcher
 
 
@@ -380,19 +396,13 @@ _P_NOTIFY_TARGET = (
     "Optional result routing intent; it does not authorize publication. "
     "Captured events remain private until a separately authorized publication."
 )
-_P_SESSION_ID = "The harness session_id returned by harness_open. REQUIRED."
+_P_SESSION_ID = "Runtime session returned by harness_open; harness_get may select operation_id instead."
 _P_PAYLOAD_TURN = (
-    "The turn content, as a raw JSON object (REQUIRED) - shape is "
-    "HARNESS-NATIVE and opaque to Nexus (D2), and is NOT uniform across "
-    'connectors: pi and codex read {"text": "<prompt>"}; both claude_code '
-    'substrates read {"content": "<prompt>"}. Check harness_list\'s kind for '
-    "which one this session's connector expects."
+    'One nonempty text/content string, e.g. {"text":"prompt"}. '
+    "The adapter translates it; arbitrary native options are rejected."
 )
-_P_PAYLOAD_STEER = _P_PAYLOAD_TURN.replace("The turn content", "The steer content")
-_P_PAYLOAD_INTERRUPT = (
-    "Extra JSON object passed through to the connector (optional; most "
-    "connectors ignore it - interrupt is abort, not a reprompt)."
-)
+_P_PAYLOAD_STEER = _P_PAYLOAD_TURN
+_P_PAYLOAD_INTERRUPT = "Omit or use an empty object; interrupt does not accept native options."
 _P_AFTER_SEQUENCE = "Only return events with sequence > this value (optional; default 0 = from the start)."
 _P_EVENTS_LIMIT = "Max events to return, oldest first (optional; default 200)."
 
@@ -442,6 +452,10 @@ def event_to_dict(event: HarnessEvent) -> dict[str, Any]:
         "payload": dict(event.payload),
         "thread_id": event.thread_id,
         "turn_id": event.turn_id,
+        "operation_id": event.operation_id,
+        "attempt_id": event.attempt_id,
+        "owner_epoch": event.owner_epoch,
+        "delivery_phase": event.delivery_phase,
     }
 
 
@@ -920,13 +934,17 @@ def register(server: Any, deps: Any) -> None:
     async def harness_send(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_TURN)],
+        idempotency_key: str | None = None,
+        expected_operation_id: str | None = None,
+        expected_turn_id: str | None = None,
+        expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
-        """Send a turn to a live session (send_turn). Never blocks for a reply - the answer arrives later as harness events (subscribe out-of-band, or poll harness_event_list)."""
+        """Durably queue a turn. Supply idempotency_key for safe request retries. Admission does not confirm native acceptance; results arrive as correlated events."""
         body = normalize_payload(payload, required=True)
-        await anyio.to_thread.run_sync(
-            functools.partial(authorized_send, deps, supervisor, session_id, "send_turn", body)
+        return await anyio.to_thread.run_sync(
+            functools.partial(authorized_send, deps, supervisor, session_id, "send_turn", body, idempotency_key=idempotency_key,
+                expected_operation_id=expected_operation_id, expected_turn_id=expected_turn_id, expected_owner_epoch=expected_owner_epoch)
         )
-        return {"session_id": session_id, "verb": "send_turn"}
 
     @server.tool()
     @async_tool_envelope
@@ -934,13 +952,17 @@ def register(server: Any, deps: Any) -> None:
     async def harness_steer(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_STEER)],
+        idempotency_key: str | None = None,
+        expected_operation_id: str | None = None,
+        expected_turn_id: str | None = None,
+        expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
         """Steer a live session's in-flight turn. Rejected if the connector's steer_timing is null (unsupported - check harness_list). NEXT_TURN_BOUNDARY buffers until the next turn; IMMEDIATE can land mid-turn."""
         body = normalize_payload(payload, required=True)
-        await anyio.to_thread.run_sync(
-            functools.partial(authorized_send, deps, supervisor, session_id, "steer", body)
+        return await anyio.to_thread.run_sync(
+            functools.partial(authorized_send, deps, supervisor, session_id, "steer", body, idempotency_key=idempotency_key,
+                expected_operation_id=expected_operation_id, expected_turn_id=expected_turn_id, expected_owner_epoch=expected_owner_epoch)
         )
-        return {"session_id": session_id, "verb": "steer"}
 
     @server.tool()
     @async_tool_envelope
@@ -948,23 +970,30 @@ def register(server: Any, deps: Any) -> None:
     async def harness_interrupt(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         payload: Annotated[Any, Field(description=_P_PAYLOAD_INTERRUPT)] = None,
+        idempotency_key: str | None = None,
+        expected_operation_id: str | None = None,
+        expected_turn_id: str | None = None,
+        expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
         """Interrupt a live session's in-flight turn (abort). If interrupt_requires_settle_wait is true, a send/steer right after may be refused (CONFLICT) until the aborted turn's settle event lands."""
         body = normalize_payload(payload, required=False)
-        await anyio.to_thread.run_sync(
-            functools.partial(authorized_send, deps, supervisor, session_id, "interrupt", body)
+        return await anyio.to_thread.run_sync(
+            functools.partial(authorized_send, deps, supervisor, session_id, "interrupt", body, idempotency_key=idempotency_key,
+                expected_operation_id=expected_operation_id, expected_turn_id=expected_turn_id, expected_owner_epoch=expected_owner_epoch)
         )
-        return {"session_id": session_id, "verb": "interrupt"}
 
     @server.tool()
     @async_tool_envelope
     @runtime_tool_guard(deps)
     async def harness_close(
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
+        idempotency_key: str | None = None,
+        expected_owner_epoch: int | None = None,
     ) -> dict[str, Any]:
-        """End a live session (best-effort teardown: send(end) then close()) and stop tracking it. Always returns the final session state, even if teardown failed - close() never hangs (D8)."""
+        """Durably request closure. The operation tracks stop/detach/unknown; admission does not claim native termination."""
         session = await anyio.to_thread.run_sync(
-            functools.partial(authorized_close, deps, supervisor, session_id)
+            functools.partial(authorized_close, deps, supervisor, session_id,
+                idempotency_key=idempotency_key, expected_owner_epoch=expected_owner_epoch)
         )
         return session
 
@@ -972,10 +1001,13 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_get(
-        session_id: Annotated[str, Field(description=_P_SESSION_ID)],
+        session_id: Annotated[str | None, Field(description=_P_SESSION_ID)] = None,
+        operation_id: str | None = None,
     ) -> dict[str, Any]:
-        """Read one harness session: the LIVE in-memory view if still tracked (live:true), else the last durable row (live:false - RUNNING there is NOT proof of liveness). NOT_FOUND if never opened."""
-        return read_session(deps, supervisor, session_id)
+        """Read exactly one session_id or operation_id. Operation state separates queueing, native acceptance and durable result; historical session rows do not prove liveness."""
+        if bool(session_id) == bool(operation_id):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Specify exactly one session_id or operation_id.", {})
+        return read_operation(deps, operation_id) if operation_id else read_session(deps, supervisor, session_id)
 
     @server.tool()
     @tool_envelope

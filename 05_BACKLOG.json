@@ -6,8 +6,8 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "2f760b0",
-  "notice": "Execution in progress; final gate NOT PASSED. Codex 0.155.1 and Claude 2.1.277 real isolated two-turn campaigns PASS; broader native scenarios pending. Pi and Claude attach native NOT_RUN.",
+  "execution_head": "90ec3cc",
+  "notice": "Execution in progress; final gate NOT PASSED. Latest isolated native campaigns: Codex 0.156.1 (2 PASS), Claude 2.1.280 (1 PASS); native steering/HITL pending. Pi and Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
     "IN_PROGRESS",
@@ -964,7 +964,11 @@
           "title": "Migrar os quatro adapters para envelope/resultado canônicos com tradução na borda.",
           "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/application/runtime_command_dispatcher.py",
+            "src/okto_nexus/migrations/040_runtime_command_intents.sql",
+            "tests/test_runtime_commands.py"
+          ],
           "test_results": [
             {
               "sha": "93d5fab + P08 working tree",
@@ -991,9 +995,10 @@
           "evidence": [
             "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
             "plans/pr34-remediation/evidence/p07-native-observations.json",
-            "plans/pr34-remediation/P07_ATTACH_PLATFORM.md"
+            "plans/pr34-remediation/P07_ATTACH_PLATFORM.md",
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
           ],
-          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md."
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
         },
         {
           "task_id": "P07-T02",
@@ -1079,7 +1084,10 @@
             "src/okto_nexus/adapters/outbound/harness/owned_process.py",
             "src/okto_nexus/adapters/outbound/harness/windows_process.py",
             "src/okto_nexus/adapters/outbound/harness/codex.py",
-            "tests/test_harness_codex_connector.py"
+            "tests/test_harness_codex_connector.py",
+            "src/okto_nexus/application/runtime_command_dispatcher.py",
+            "src/okto_nexus/migrations/040_runtime_command_intents.sql",
+            "tests/test_runtime_commands.py"
           ],
           "test_results": [
             {
@@ -1107,9 +1115,10 @@
           "evidence": [
             "plans/pr34-remediation/P07_PROCESS_OWNERSHIP.md",
             "plans/pr34-remediation/evidence/p07-process-ownership.log",
-            "plans/pr34-remediation/P07_CODEX_REQUEST_ORDERING.md"
+            "plans/pr34-remediation/P07_CODEX_REQUEST_ORDERING.md",
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
           ],
-          "notes": "Parent 62ef22b: Windows atomic Job ownership, bounded startup/control slots and real fixture kill/REST timeout tests. Partial only: POSIX owner-crash protection, shared connections, late response fences and full lifecycle remain pending. Native request attribution now precedes writes; pending-start admission/close fenced. Codex two-turn and interrupted-close native paths rerun successfully; full matrix remains pending."
+          "notes": "Parent 62ef22b: Windows atomic Job ownership, bounded startup/control slots and real fixture kill/REST timeout tests. Partial only: POSIX owner-crash protection, shared connections, late response fences and full lifecycle remain pending. Native request attribution now precedes writes; pending-start admission/close fenced. Codex two-turn and interrupted-close native paths rerun successfully; full matrix remains pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
         },
         {
           "task_id": "P07-T04",
@@ -1180,7 +1189,10 @@
             "src/okto_nexus/migrations/034_runtime_event_origin.sql",
             "src/okto_nexus/adapters/outbound/harness/codex.py",
             "tests/test_runtime_shared_connection.py",
-            "tests/test_runtime_native_campaign.py"
+            "tests/test_runtime_native_campaign.py",
+            "src/okto_nexus/application/runtime_command_dispatcher.py",
+            "src/okto_nexus/migrations/040_runtime_command_intents.sql",
+            "tests/test_runtime_commands.py"
           ],
           "test_results": [
             {
@@ -1225,9 +1237,10 @@
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
             "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md",
             "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
-            "plans/pr34-remediation/P07_LINUX_COMPOSITION.md"
+            "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
           ],
-          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion."
+          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
         },
         {
           "task_id": "P07-T06",
@@ -1393,7 +1406,10 @@
             "src/okto_nexus/migrations/035_runtime_attempt_correlation.sql",
             "tests/test_runtime_result_correlation.py",
             "src/okto_nexus/migrations/036_runtime_result_output.sql",
-            "src/okto_nexus/application/inbox.py"
+            "src/okto_nexus/application/inbox.py",
+            "src/okto_nexus/application/runtime_command_dispatcher.py",
+            "src/okto_nexus/migrations/040_runtime_command_intents.sql",
+            "tests/test_runtime_commands.py"
           ],
           "test_results": [
             {
@@ -1427,9 +1443,10 @@
             "plans/pr34-remediation/evidence/p07-shared-presence.log",
             "plans/pr34-remediation/P08_RESULT_CORRELATION.md",
             "plans/pr34-remediation/P08_CONSUMPTION_MATERIALIZATION.md",
-            "plans/pr34-remediation/P07_RESTART_JOURNAL.md"
+            "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
         },
         {
           "task_id": "P08-T04",
@@ -1490,7 +1507,10 @@
             "src/okto_nexus/application/runtime_event_ingress.py",
             "src/okto_nexus/adapters/outbound/harness/event_journal.py",
             "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py",
-            "src/okto_nexus/migrations/033_runtime_event_journal.sql"
+            "src/okto_nexus/migrations/033_runtime_event_journal.sql",
+            "src/okto_nexus/application/runtime_command_dispatcher.py",
+            "src/okto_nexus/migrations/040_runtime_command_intents.sql",
+            "tests/test_runtime_commands.py"
           ],
           "test_results": [
             {
@@ -1512,9 +1532,10 @@
             "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
             "plans/pr34-remediation/evidence/p08-integrated-gate.log",
             "plans/pr34-remediation/evidence/p08-journal-expanded.log",
-            "plans/pr34-remediation/P07_RESTART_JOURNAL.md"
+            "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
         }
       ]
     },

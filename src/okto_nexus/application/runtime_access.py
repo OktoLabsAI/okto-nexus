@@ -1,4 +1,5 @@
 """Authenticated runtime delegation. Grants restrict canonical policy."""
+from contextlib import nullcontext
 from ..domain.base import iso_to_epoch, iso_plus, new_id
 from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
@@ -26,9 +27,9 @@ class RuntimeAccessService:
         return bool(local or keyed)
 
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
-                  represented_agent_id=None, workspace_id=None, substrate=None, consume=False):
+                  represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True):
         now, allowed, selected = self.clock.now_iso(), False, None
-        with self.cf.unit_of_work() as uow:
+        with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
             if session_id:
                 endpoint_id = self.grants.runtime_endpoint(uow, session_id)
@@ -84,7 +85,7 @@ class RuntimeAccessService:
                     permission = ("events", "read") if action in {"read", "events", "discover"} else ("messages", "send_direct")
                     if not PermissionSet(actor.permissions).allows(*permission):
                         continue
-                    if action in {"send", "steer"} and grant["used_executions"] >= grant["max_executions"]:
+                    if (check_budget or consume) and action in {"send", "steer"} and grant["used_executions"] >= grant["max_executions"]:
                         continue
                     allowed, selected = True, grant
                     if consume and action in {"send", "steer"}:

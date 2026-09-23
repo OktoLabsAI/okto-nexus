@@ -9,6 +9,8 @@ from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
 from test_pr34_remediation import runtime as runtime_fixture
 
+from test_runtime_commands import wait_close_result
+
 runtime = runtime_fixture
 
 
@@ -48,7 +50,7 @@ def test_active_close_observes_interrupt_completion_before_detaching_shared_thre
     closed = client.post(f"/api/v1/harness/sessions/{sessions[0]}/close", headers=headers, json={})
     assert closed.status_code == 200, closed.text
     expected = "detached" if terminal_current else "outcome_unknown"
-    assert closed.json()["data"]["lifecycle_state"] == expected
+    assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == expected
     events = deps.harness_supervisor.replay_events(sessions[0])
     terminals = [event for event in events if event.native_event == "turn/completed"]
     assert len(terminals) == 1
@@ -83,13 +85,13 @@ def test_closing_one_codex_session_preserves_other_thread_and_process(runtime):
     assert len(peer._sessions_by_thread) == 2
     response = client.post(f"/api/v1/harness/sessions/{sessions[0]}/close", headers=headers, json={})
     assert response.status_code == 200, response.text
-    closed = response.json()["data"]
+    closed = wait_close_result(client, operator_key, response)
     assert closed["lifecycle_state"] == "detached"
     assert closed["status"] != "ENDED", "unsubscribe is not observed native process exit"
     assert process.poll() is None, "closing a session killed another authorized session's process"
     repeated = client.post(f"/api/v1/harness/sessions/{sessions[0]}/close", headers=headers, json={})
     assert repeated.status_code == 200
-    assert repeated.json()["data"]["lifecycle_state"] == "detached"
+    assert wait_close_result(client, operator_key, repeated)["lifecycle_state"] == "detached"
     response = client.post(f"/api/v1/harness/sessions/{sessions[1]}/send", headers=headers,
                            json={"payload": {"text": "second thread still works"}})
     assert response.status_code == 200, response.text
@@ -103,7 +105,7 @@ def test_closing_one_codex_session_preserves_other_thread_and_process(runtime):
     assert all(event.session_id == sessions[1] for event in events)
     response = client.post(f"/api/v1/harness/sessions/{sessions[1]}/close", headers=headers, json={})
     assert response.status_code == 200, response.text
-    assert response.json()["data"]["lifecycle_state"] == "stopped"
+    assert wait_close_result(client, operator_key, response)["lifecycle_state"] == "stopped"
     assert process.wait(timeout=5) is not None
 
 
@@ -121,7 +123,7 @@ def test_close_state_survives_projection_failure_and_repeated_close(runtime, mon
     headers = {"x-api-key": operator_key}
     response = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
     assert response.status_code == 200, response.text
-    assert response.json()["data"]["metadata"]["lifecycle_projection_pending"]
+    assert wait_close_result(client, operator_key, response)["metadata"]["lifecycle_projection_pending"]
     assert session_id in deps.harness_supervisor._closing
     repeated = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
     assert repeated.status_code == 200
@@ -199,10 +201,13 @@ def test_concurrent_close_drains_final_event_once(runtime, monkeypatch):
             peer.end()
             second = pool.submit(request_close).result(timeout=5)
             assert second.status_code == 200
-            assert second.json()["data"]["lifecycle_state"] == "stop_requested"
+            assert second.json()["data"]["operation_id"] == first.result(timeout=1).json()["data"]["operation_id"]
+            assert second.json()["data"]["state"] == "SENDING"
         finally:
             release.set()
-        assert first.result(timeout=10).status_code == 200
+        admitted = first.result(timeout=10)
+        assert admitted.status_code == 200
+        wait_close_result(client, operator_key, admitted)
     assert calls == ["close"]
     events = deps.harness_supervisor.replay_events(session_id)
     assert sum(item.kind == "turn_completed" for item in events) == 1

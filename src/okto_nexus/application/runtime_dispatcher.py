@@ -28,6 +28,7 @@ class RuntimeDispatcher:
         self._threads = []
         self.wake_channel = None
         self.event_ingress = None
+        self.command_dispatcher = None
 
     def start(self):
         if self.epoch is not None:
@@ -67,6 +68,9 @@ class RuntimeDispatcher:
                 raise
         if self.wake_channel:
             self.wake_channel.start(self.wake, self.owner_id)
+        if self.command_dispatcher:
+            self.command_dispatcher.service.owner_identity = (self.owner_id, self.epoch)
+            self.command_dispatcher.start()
         for index in range(self.workers):
             worker = threading.Thread(target=self._worker, daemon=True, name=f"nexus-dispatch-{index}")
             self._threads.append(worker)
@@ -108,12 +112,14 @@ class RuntimeDispatcher:
                         self._stop.set()
                         break
                 self._expire_sends()
+                if self.command_dispatcher:
+                    self.command_dispatcher.expire()
                 if self.event_ingress:
                     self.event_ingress.recover()
                 if self._shutdown_ready and self._shutdown_ready():
                     with self._lock:
                         idle = not self._inflight
-                    if idle:
+                    if idle and (not self.command_dispatcher or self.command_dispatcher.idle()):
                         if self.event_ingress and self.event_ingress.projection_pending:
                             self.wake()
                             continue
@@ -123,6 +129,8 @@ class RuntimeDispatcher:
                         self._shutdown_finished.set()
                         break
                 if signaled or time.monotonic() - recovered >= self.recovery_seconds:
+                    if self.command_dispatcher:
+                        self.command_dispatcher.scan_once()
                     self.scan_once()
                     recovered = time.monotonic()
             except Exception:
@@ -238,6 +246,8 @@ class RuntimeDispatcher:
             self.wake_channel.close()
         if self._coordinator is not threading.current_thread():
             self._coordinator.join(5)
+        if self.command_dispatcher:
+            self.command_dispatcher.join_idle_workers()
         # Workers remain capacity-bound even if a native call has not returned.
         with self.cf.unit_of_work() as uow:
             self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())

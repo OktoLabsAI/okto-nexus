@@ -10,7 +10,7 @@ from okto_nexus.domain.base import iso_plus
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.errors import OktoNexusError
 from okto_nexus.adapters.inbound.mcp.tools.harness import build_access_service
-from test_pr34_remediation import open_rest, tool, stdio_environment
+from test_pr34_remediation import open_rest, tool, stdio_environment, wait_sent
 from test_pr34_remediation import runtime as runtime_fixture
 
 runtime = runtime_fixture
@@ -26,15 +26,17 @@ def issue(runtime, actions, **extra):
 
 
 def test_p04_grant_allows_same_scoped_action_in_rest_and_mcp(runtime):
-    _, client, _, peers, _, caller = runtime
-    session = open_rest(runtime).json()["data"]["session_id"]
-    issue(runtime, ["read", "send"], max_executions=2)
+    from test_runtime_commands import codex_session, wait_operation
+    _, client, _, _, _, caller = runtime
+    session = codex_session(runtime)
+    issue(runtime, ["read", "send"], max_executions=2, endpoint_id="endpoint-codex")
     assert client.get(f"/api/v1/harness/sessions/{session}", headers={"x-api-key": caller}).status_code == 200
     assert tool(client, caller, "harness_get", {"session_id": session})["ok"]
     assert client.post(f"/api/v1/harness/sessions/{session}/send", headers={"x-api-key": caller},
                        json={"payload": {"text": "first fixture"}}).status_code == 200
-    assert tool(client, caller, "harness_send", {"session_id": session, "payload": {"text": "second fixture"}})["ok"]
-    assert len(peers[0].sent) == 2
+    second = tool(client, caller, "harness_send", {"session_id": session, "payload": {"text": "second fixture"}})
+    assert second["ok"]
+    wait_operation(runtime, second["data"]["operation_id"], lambda row: row["result_durable"])
     assert not tool(client, caller, "harness_send", {"session_id": session, "payload": {"text": "budget spent"}})["ok"]
     assert not tool(client, caller, "harness_interrupt", {"session_id": session})["ok"]
     assert client.get("/api/v1/harness/endpoints", headers={"x-api-key": caller}).status_code == 403
@@ -134,7 +136,7 @@ def test_p04_concurrent_grant_budget_has_one_admitted_send(runtime):
 
     with ThreadPoolExecutor(max_workers=2) as pool:
         assert sorted(pool.map(send, [1, 2])) == [200, 403]
-    assert len(peers[0].sent) == 1
+    wait_sent(peers)
 
 
 def test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized(runtime):

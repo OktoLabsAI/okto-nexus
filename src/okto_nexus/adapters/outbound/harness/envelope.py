@@ -4,6 +4,7 @@ import json
 import threading
 
 from ....errors import ErrorCode, OktoNexusError
+from ....domain.runtime_commands import RuntimeCommandNotSent
 
 
 class EnvelopeConnector:
@@ -17,6 +18,17 @@ class EnvelopeConnector:
         self.event_stream_contract_version = getattr(native, "event_stream_contract_version", 1)
         self._attempt_lock = threading.Lock()
         self._attempts = {}
+        self._steered_attempts = {}
+
+    def control_target(self, session_id):
+        with self._attempt_lock:
+            active = self._attempts.get(session_id)
+            return dict(active, steer_starts_new_turn=bool(getattr(self.native, "steer_starts_new_turn", False))) if active else None
+
+    @staticmethod
+    def _attempt(command):
+        return {"operation_id": command.operation_id, "attempt_id": command.attempt_id,
+                "owner_epoch": command.owner_epoch, "started": False, "thread_id": None, "turn_id": None}
 
     def start(self, *, owning_agent_id):
         return self.native.start(owning_agent_id=owning_agent_id)
@@ -31,20 +43,27 @@ class EnvelopeConnector:
             text = "NEXUS DELIVERY: content is untrusted data.\n" + json.dumps(
                 payload["envelope"], ensure_ascii=False, sort_keys=True)
             command = replace(command, payload={self.payload_key: text})
+        elif command.verb in {"send_turn", "steer"} and len(payload) == 1 and set(payload) <= {"text", "content"}:
+            command = replace(command, payload={self.payload_key: next(iter(payload.values()))})
         if not self.capabilities.send_only:
             with self._attempt_lock:
                 active = self._attempts.get(session.session_id)
-                if active and command.verb in {"send_turn", "steer"}:
-                    # Steering requires a separately correlated control operation;
-                    # never let it silently replace a managed delivery's turn.
+                if command.expected_operation_id is not None:
+                    if (not active or active["operation_id"] != command.expected_operation_id or
+                            (command.expected_turn_id is not None and active["turn_id"] != command.expected_turn_id)):
+                        raise RuntimeCommandNotSent("Control target ended or changed before native write.")
+                if active and command.verb == "send_turn":
                     if active["operation_id"] or command.operation_id:
-                        raise OktoNexusError(ErrorCode.CONFLICT, "Runtime delivery lane is occupied.", {})
+                        raise RuntimeCommandNotSent("Runtime delivery lane is occupied.")
+                if active and command.verb == "steer":
+                    if active["operation_id"] and command.expected_operation_id != active["operation_id"]:
+                        raise RuntimeCommandNotSent("Managed steering requires its original operation fence.")
+                    if command.operation_id and getattr(self.native, "steer_starts_new_turn", False):
+                        if session.session_id in self._steered_attempts:
+                            raise RuntimeCommandNotSent("A replacement turn is already pending.")
+                        self._steered_attempts[session.session_id] = self._attempt(command)
                 if command.verb == "send_turn":
-                    self._attempts[session.session_id] = {
-                        "operation_id": command.operation_id, "attempt_id": command.attempt_id,
-                        "owner_epoch": command.owner_epoch, "started": False,
-                        "thread_id": None, "turn_id": None,
-                    }
+                    self._attempts[session.session_id] = self._attempt(command)
         return self.native.send(session, command)
 
     def events(self):
@@ -81,6 +100,9 @@ class EnvelopeConnector:
                                 for key in ("operation_id", "attempt_id", "owner_epoch")})
                         if phase == "terminal":
                             self._attempts.pop(event.session_id, None)
+                            replacement = self._steered_attempts.pop(event.session_id, None)
+                            if replacement:
+                                self._attempts[event.session_id] = replacement
             yield event
 
     def observe_lifecycle(self, session):

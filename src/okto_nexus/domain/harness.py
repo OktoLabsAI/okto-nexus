@@ -353,6 +353,8 @@ class HarnessCommand:
     operation_id: str | None = None
     attempt_id: str | None = None
     owner_epoch: int | None = None
+    expected_operation_id: str | None = None
+    expected_turn_id: str | None = None
 
     def __post_init__(self) -> None:
         if self.verb not in COMMAND_VERBS:

@@ -47,6 +47,9 @@ class SqliteRuntimeJournalRepo:
                 uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='runtime_lost',updated_at=? "
                     "WHERE runtime_session_id=? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
                     (now, event.session_id))
+                uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='runtime_lost',updated_at=? "
+                    "WHERE runtime_session_id=? AND starts_turn=1 AND terminal_event_id IS NULL "
+                    "AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')", (now, event.session_id))
             if state == "stopped" and event.payload.get("stop_observed") is True:
                 self.sessions.update_status(uow, session_id=event.session_id,
                     status="ERRORED" if event.payload.get("error") else "ENDED",
@@ -58,7 +61,8 @@ class SqliteRuntimeJournalRepo:
                 VALUES(?,?,?,?,?,?,?) ON CONFLICT(event_id) DO NOTHING""", ("result_" + event.event_id, event.event_id, event.session_id,
                 event.thread_id, event.turn_id, json.dumps(event.payload, ensure_ascii=False, sort_keys=True), now))
             if correlated and event.delivery_phase == "terminal":
-                uow.connection.execute("UPDATE runtime_results SET operation_id=?,attempt_id=? WHERE event_id=?",
+                column = "command_operation_id" if correlated == "runtime_commands" else "operation_id"
+                uow.connection.execute(f"UPDATE runtime_results SET {column}=?,attempt_id=? WHERE event_id=?",
                     (event.operation_id, event.attempt_id, event.event_id))
                 self._materialize_output(uow, event)
         uow.connection.execute("""INSERT INTO runtime_journal_checkpoint(singleton,store_id,ordinal,updated_at)
@@ -97,6 +101,10 @@ class SqliteRuntimeJournalRepo:
             return False
         operation = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?",
                                            (event.operation_id,)).fetchone()
+        table = "delivery_outbox"
+        if operation is None:
+            table = "runtime_commands"
+            operation = uow.connection.execute("SELECT * FROM runtime_commands WHERE operation_id=?", (event.operation_id,)).fetchone()
         owner = uow.connection.execute("SELECT * FROM runtime_dispatcher_owner "
                                        "WHERE owner_key='dispatcher'").fetchone()
         if not owner or owner["lease_expires_at"] <= now:
@@ -117,18 +125,19 @@ class SqliteRuntimeJournalRepo:
             return False
         if event.delivery_phase == "started":
             if event.turn_id and uow.connection.execute(
-                    "SELECT 1 FROM delivery_outbox WHERE runtime_session_id=? AND native_turn_id=? AND operation_id<>?",
-                    (event.session_id, event.turn_id, event.operation_id)).fetchone():
+                    "SELECT 1 FROM delivery_outbox WHERE runtime_session_id=? AND native_turn_id=? AND operation_id<>? "
+                    "UNION ALL SELECT 1 FROM runtime_commands WHERE runtime_session_id=? AND native_turn_id=? AND operation_id<>?",
+                    (event.session_id, event.turn_id, event.operation_id) * 2).fetchone():
                 return False
-            uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',ack_level='HARNESS_ACCEPTED',"
+            uow.connection.execute(f"UPDATE {table} SET status='ACCEPTED',ack_level='HARNESS_ACCEPTED',"
                 "native_thread_id=?,native_turn_id=?,updated_at=? WHERE operation_id=? AND status IN ('SENDING','SENT_UNCONFIRMED','OUTCOME_UNKNOWN')",
                 (event.thread_id, event.turn_id, now, event.operation_id))
-            return True
+            return table
         accepted = operation["status"] == "ACCEPTED" or (recovered_unknown and operation["ack_level"] == "HARNESS_ACCEPTED")
         if (not accepted or operation["native_thread_id"] != event.thread_id
                 or operation["native_turn_id"] != event.turn_id):
             return False
         if event.delivery_phase == "terminal":
-            uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',terminal_event_id=?,reason='result_durable',updated_at=? "
+            uow.connection.execute(f"UPDATE {table} SET status='ACCEPTED',terminal_event_id=?,reason='result_durable',updated_at=? "
                                    "WHERE operation_id=?", (event.event_id, now, event.operation_id))
-        return True
+        return table

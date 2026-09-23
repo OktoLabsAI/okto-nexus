@@ -689,7 +689,7 @@ class CodexAppServerConnector:
         elif command.verb == "steer":
             self._steer(state, command)
         elif command.verb == "interrupt":
-            self._interrupt(state)
+            self._interrupt(state, command)
         elif command.verb == "end":
             self._end(state)
         else:  # pragma: no cover - HarnessCommand.__post_init__ already closes this set
@@ -793,19 +793,19 @@ class CodexAppServerConnector:
             )
         params = {
             "threadId": state.thread_id,
-            "expectedTurnId": state.active_turn_id,
+            "expectedTurnId": command.expected_turn_id or state.active_turn_id,
             "input": self._text_input(command),
         }
         self._send_request(state, _METHOD_TURN_STEER, params)
 
-    def _interrupt(self, state: _ThreadState) -> None:
+    def _interrupt(self, state: _ThreadState, command: HarnessCommand | None = None) -> None:
         if state.active_turn_id is None:
             raise OktoNexusError(
                 ErrorCode.VALIDATION_ERROR,
                 "cannot interrupt: no active turn on this codex thread.",
                 {"session_id": state.session_id},
             )
-        params = {"threadId": state.thread_id, "turnId": state.active_turn_id}
+        params = {"threadId": state.thread_id, "turnId": (command.expected_turn_id if command else None) or state.active_turn_id}
         self._send_request(state, _METHOD_TURN_INTERRUPT, params)
 
     def _end(self, state: _ThreadState) -> None:

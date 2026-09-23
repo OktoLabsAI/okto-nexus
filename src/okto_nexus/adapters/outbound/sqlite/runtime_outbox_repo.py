@@ -39,6 +39,10 @@ class SqliteRuntimeOutboxRepo:
             "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.endpoint_id AND "
+            "(c.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
+            "(c.starts_turn=1 AND c.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND c.terminal_event_id IS NULL) OR "
+            "(c.status='PENDING' AND (c.verb<>'send_turn' OR (c.created_at,c.operation_id)<(pending.created_at,pending.operation_id))))) "
             "ORDER BY pending.created_at,pending.operation_id LIMIT ?", (limit,))]
 
     def get(self, uow, operation_id):
@@ -59,6 +63,10 @@ class SqliteRuntimeOutboxRepo:
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,attempt_id=NULL,updated_at=? WHERE status='CLAIMED'", (now,))
+        uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
+            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
+        uow.connection.execute("UPDATE runtime_commands SET status='CANCELLED',reason='session_owner_lost_before_send',updated_at=? "
+            "WHERE status IN ('PENDING','CLAIMED') AND expected_owner_epoch<>?", (now, epoch))
         return epoch
 
     def set_recovery_boundary(self, uow, *, owner_id, epoch, store_id, watermark, now):
@@ -73,6 +81,8 @@ class SqliteRuntimeOutboxRepo:
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
             (now, epoch))
+        uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
+            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')", (now, epoch))
         # Readiness is scoped to its process owner. Closing canonical presence
         # means loss of this connection only, never proof of native process exit.
         stale = "(owner_epoch IS NULL OR owner_epoch<>?) AND lifecycle_state IN ('protocol_ready','stop_requested','tracked','legacy_unlinked') AND status IN ('STARTING','RUNNING','INTERRUPTING','ERRORED')"

@@ -13,6 +13,8 @@ import pytest
 from test_harness_tools import FakeConnector
 from test_pr34_remediation import runtime as runtime_fixture, tool
 
+from test_runtime_commands import wait_close_result
+
 runtime = runtime_fixture
 
 
@@ -204,6 +206,7 @@ def test_harness_full_lifecycle_through_rest(harness_env):
     )
     assert r.status_code == 200, r.text
     assert r.json()["data"]["verb"] == "send_turn"
+    _wait_until(lambda: len(conn.sent) == 1)
 
     r = client.post(
         f"/api/v1/harness/sessions/{session_id}/steer",
@@ -216,6 +219,7 @@ def test_harness_full_lifecycle_through_rest(harness_env):
     assert r.status_code == 200, r.text
     assert r.json()["data"]["verb"] == "interrupt"
 
+    _wait_until(lambda: len(conn.sent) == 3)
     assert [c.verb for c in conn.sent] == ["send_turn", "steer", "interrupt"]
 
     conn.push_event(kind="turn_completed", native_event="agent_settled")
@@ -234,7 +238,7 @@ def test_harness_full_lifecycle_through_rest(harness_env):
 
     r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
     assert r.status_code == 200, r.text
-    assert r.json()["data"]["lifecycle_state"] == "detached"
+    assert wait_close_result(client, _op, r)["lifecycle_state"] == "detached"
     assert conn.close_called is True
 
     after = client.get(f"/api/v1/harness/sessions/{session_id}").json()["data"]
@@ -242,7 +246,7 @@ def test_harness_full_lifecycle_through_rest(harness_env):
 
     second_close = client.post(f"/api/v1/harness/sessions/{session_id}/close")
     assert second_close.status_code == 200
-    assert second_close.json()["data"]["lifecycle_state"] == "detached"
+    assert wait_close_result(client, _op, second_close)["lifecycle_state"] == "detached"
 
 
 def test_harness_get_unknown_session_is_404(harness_env):
@@ -285,4 +289,4 @@ def test_mcp_and_rest_surfaces_share_one_live_registry(harness_env, tmp_path):
     # Controllable over REST too.
     r = client.post(f"/api/v1/harness/sessions/{session_id}/close")
     assert r.status_code == 200, r.text
-    assert r.json()["data"]["lifecycle_state"] == "detached"
+    assert wait_close_result(client, _op, r)["lifecycle_state"] == "detached"

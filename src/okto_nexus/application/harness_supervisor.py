@@ -801,6 +801,11 @@ class HarnessSupervisor:
     # send / steer / interrupt (one verb-dispatch method - HarnessCommand
     # already carries the verb, so there is no reason to fork into three)
     # ------------------------------------------------------------------ #
+    def control_target(self, session_id):
+        live = self._require_live(session_id)
+        target = getattr(live.connector, "control_target", None)
+        return target(session_id) if callable(target) else None
+
     def send(self, session_id, verb, payload=None, *, _relay_depth=None,
              _relay_chain_id=None, _relay_chain_started_at=None, _transport_attempt=None):
         with self._lock:
