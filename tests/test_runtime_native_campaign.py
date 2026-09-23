@@ -57,8 +57,8 @@ def test_native_explicit_work_result_preserves_verification(tmp_path, kind, nati
     _run_native_campaign(tmp_path, kind, native_auth_config, managed_work=True)
 
 
-@pytest.mark.parametrize("kind", ["codex"])
-def test_native_approval_denial_preserves_read_only_sandbox(tmp_path, kind, native_auth_config):
+@pytest.mark.parametrize("kind", ["codex", "claude_code"])
+def test_native_approval_denial_preserves_security_controls(tmp_path, kind, native_auth_config):
     _run_native_campaign(tmp_path, kind, native_auth_config, native_approval=True)
 
 
@@ -124,8 +124,9 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 handoff = tool(client, caller_key, "handoff_create", {
                     "project_root": str(root), "from_agent_id": "caller", "visibility": "eligible",
                     "target": {"strategy": "direct", "agent_id": "worker"}, "payload": (
-                    "This is a permission-denial integration test in an empty temporary project. "
-                    "Request approval using the shell tool with sandbox_permissions=require_escalated before attempting "
+                    "This is a permission-denial integration test in an empty temporary project. " +
+                    ("Request approval using the shell tool with sandbox_permissions=require_escalated before attempting "
+                     if kind == "codex" else "Use the Write tool, requesting permission before attempting ") +
                     "to write the literal text fixture into approval-denied-fixture.txt in this project. "
                     "Do not execute an unapproved write or use any other tool to create the file. "
                     "Do not access network, credentials, personal paths or files outside this project. "

@@ -42,7 +42,7 @@ class RuntimeNativeApprovalService:
         source = uow.connection.execute(f"SELECT * FROM {table} WHERE operation_id=?", (row["operation_id"],)).fetchone()
         if (not source or source["terminal_event_id"] or source["owner_epoch"] != self.owner.epoch or
                 row["owner_epoch"] != self.owner.epoch or source["runtime_session_id"] != row["runtime_session_id"] or
-                source["native_thread_id"] != row["native_thread_id"] or source["native_turn_id"] != row["native_turn_id"]):
+                (source["native_thread_id"] or "") != row["native_thread_id"] or (source["native_turn_id"] or "") != row["native_turn_id"]):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Native approval turn is no longer current.", {})
         (self.validate_delivery if table == "delivery_outbox" else self.validate_command)(uow, dict(source))
         session = self.supervisor.get(row["runtime_session_id"])

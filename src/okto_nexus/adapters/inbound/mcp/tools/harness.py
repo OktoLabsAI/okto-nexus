@@ -705,10 +705,14 @@ def build_connector_factories(deps: Any):
             capabilities=EndpointCapabilities(conversation=True, events=not caps.send_only, managed_work=not caps.send_only,
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
-                observes_stop=caps.observes_session_end, approvals=kind == "codex"),
+                observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),
             input_schema=({"native_approval_contract": 1, "requires_feature_hitl": True,
                 "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval"],
-                "decisions": ["accept", "decline"]} if kind == "codex" else {}),
+                "decisions": ["accept", "decline"]} if kind == "codex" else
+                {"native_approval_contract": 1, "requires_feature_hitl": True,
+                 "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash"],
+                 "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}
+                if kind == "claude_code" and substrate == "stream" else {}),
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
         ))

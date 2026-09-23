@@ -140,6 +140,7 @@ from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_proces
 from .environment import child_environment
 
 import json
+import hashlib
 import queue
 import subprocess
 import threading
@@ -159,6 +160,7 @@ from ....domain.harness import (
     new_harness_session_id,
 )
 from ....errors import ErrorCode, OktoNexusError
+from ....domain.runtime_commands import RuntimeCommandNotSent
 
 __all__ = ["ClaudeCodeStreamConnector"]
 
@@ -269,6 +271,10 @@ class ClaudeCodeStreamConnector:
         self._argv: tuple[str, ...] = tuple(argv) if argv is not None else _DEFAULT_ARGV
         self._cwd = cwd
         self._env = dict(env) if env is not None else None
+        self.native_approvals_enabled = False
+        self._approval_requests = {}
+        self._approval_generation = 0
+        self._approval_turn_active = False
 
         self.capabilities = HarnessCapabilities(
             send_only=False,
@@ -367,6 +373,8 @@ class ClaudeCodeStreamConnector:
         self._closed_event.clear()
 
         argv = [self._binary, *self._argv]
+        if self.native_approvals_enabled and self._argv == _DEFAULT_ARGV:
+            argv.extend(["--permission-prompt-tool", "stdio"])
         spawn_env = child_environment(self._env)
         try:
             proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
@@ -871,6 +879,14 @@ class ClaudeCodeStreamConnector:
         elif native_type == "control_response":
             subtype = (obj.get("response") or {}).get("subtype")
             self._emit("tool_activity", f"control_response:{subtype}", obj)
+        elif native_type == "control_request":
+            self._handle_permission_request(obj)
+        elif native_type == "control_cancel_request":
+            with self._state_lock:
+                entry = self._approval_requests.get(obj.get("request_id"))
+                if entry:
+                    entry["pending"] = False
+            self._emit("tool_activity", "control_cancel_request", obj)
         elif native_type == "rate_limit_event":
             self._emit("tool_activity", "rate_limit_event", obj)
         elif native_type == "user":
@@ -888,6 +904,9 @@ class ClaudeCodeStreamConnector:
         if subtype == "init":
             # Re-fires before EVERY turn (verified), not just once at
             # session start - this connector's turn_started signal.
+            with self._state_lock:
+                self._approval_generation += 1
+                self._approval_turn_active = bool(self._pending_turns)
             self._emit("turn_started", "system:init", obj)
         else:
             self._emit("tool_activity", f"system:{subtype}", obj)
@@ -943,6 +962,10 @@ class ClaudeCodeStreamConnector:
         subtype = obj.get("subtype")
         is_success = subtype == "success"
         with self._state_lock:
+            self._approval_turn_active = False
+            for entry in self._approval_requests.values():
+                if entry["request"]["local_generation"] == self._approval_generation:
+                    entry["pending"] = False
             # Pop the OLDEST unresolved turn - the child processes queued
             # turns strictly FIFO (single-threaded reader loop), so this
             # `result` always resolves whichever turn was queued first,
@@ -960,6 +983,64 @@ class ClaudeCodeStreamConnector:
         else:
             # Unprompted, non-success completion: a genuine turn error.
             self._emit("error", f"result:{subtype}", payload)
+
+    def _handle_permission_request(self, obj):
+        request_id, params = obj.get("request_id"), obj.get("request")
+        valid = (self.native_approvals_enabled and isinstance(request_id, str) and bool(request_id)
+                 and isinstance(params, dict) and params.get("subtype") == "can_use_tool"
+                 and isinstance(params.get("tool_name"), str) and params["tool_name"] in {"Write", "Edit", "Bash"}
+                 and isinstance(params.get("tool_use_id"), str) and bool(params["tool_use_id"])
+                 and isinstance(params.get("input"), dict))
+        encoded = json.dumps([request_id, params], sort_keys=True, separators=(",", ":"))
+        valid = valid and len(encoded.encode()) <= 16384
+        request = None
+        with self._state_lock:
+            prior = self._approval_requests.get(request_id) if isinstance(request_id, str) else None
+            digest = hashlib.sha256(encoded.encode()).hexdigest()
+            if prior:
+                # Never reuse a consumed ID, even in a later turn.
+                if prior["pending"] and prior["request"]["request_hash"] == digest:
+                    return
+                valid = False
+            if (valid and self._approval_turn_active and len(self._approval_requests) < 256
+                    and sum(x["pending"] for x in self._approval_requests.values()) < 32):
+                request = {"schema_version": 1, "request_id": request_id,
+                    "method": "control_request:can_use_tool", "request_hash": digest,
+                    "params": params, "local_generation": self._approval_generation}
+                self._approval_requests[request_id] = {"request": request, "pending": True}
+        if request:
+            self._emit("tool_activity", "control_request:can_use_tool", {"native_approval": request})
+        else:
+            self._emit("tool_activity", "unsupported_control_request", obj)
+            if isinstance(request_id, str):
+                self._write_json({"type": "control_response", "response": {"subtype": "error",
+                    "request_id": request_id, "error": "Unsupported or stale native permission request"}})
+
+    def native_approval_request(self, event):
+        request = event.payload.get("native_approval")
+        if not isinstance(request, dict) or event.native_event != "control_request:can_use_tool":
+            return None
+        with self._state_lock:
+            entry = self._approval_requests.get(request.get("request_id"))
+            if entry and entry["request"] == request and self._session and event.session_id == self._session.session_id:
+                return request
+        return None
+
+    def reply_native_approval(self, session_id, request, decision):
+        with self._state_lock:
+            entry = self._approval_requests.get(request.get("request_id"))
+            if (decision not in {"accept", "decline"} or not entry or not entry["pending"]
+                    or entry["request"]["request_hash"] != request.get("request_hash")
+                    or not self._session or self._session.session_id != session_id
+                    or not self._approval_turn_active or self._closed_event.is_set()
+                    or request.get("local_generation") != self._approval_generation):
+                raise RuntimeCommandNotSent("Claude permission request no longer belongs to the active turn")
+            entry["pending"] = False
+            # Use original in-memory input, never the redacted journal projection.
+            answer = ({"behavior": "allow", "updatedInput": entry["request"]["params"]["input"]}
+                      if decision == "accept" else {"behavior": "deny", "message": "Nexus operator declined this request"})
+        self._write_json({"type": "control_response", "response": {"subtype": "success",
+            "request_id": request["request_id"], "response": answer}})
 
     def _emit(self, kind: str, native_event: str, payload: dict[str, Any]) -> None:
         assert self._session is not None
