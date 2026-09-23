@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "b906f0fac15a86d82dbfad1a4a6e0a7f129a57b9",
+  "execution_head": "e9bbd09",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2059,15 +2059,17 @@
             "tests/test_runtime_configuration_updates.py",
             "src/okto_nexus/application/runtime_operation_maintenance.py",
             "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql",
-            "tests/test_runtime_operation_reconciliation.py"
+            "tests/test_runtime_operation_reconciliation.py",
+            "docs/harness-integrations/operator-guide.md"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
             "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
-            "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md"
+            "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
+            "plans/pr34-remediation/P11_GUIDE_AND_SUITE_INVENTORY.md"
           ],
-          "notes": "Surface42, identity9, additive054 and operation recovery guide updated; OFF schema unchanged, ON total -4 chars/cuttable +14. Full guide/ADR rewrite pending."
+          "notes": "Surface42/identity9/additive054 reference and operator guide rewritten for canonical identity, approved profiles, scoped grants, durable delivery/results and explicit uncertainty. Historical unsafe setup and callback/TTL/broadcast claims removed. ADR rewrite and full gate pending."
         },
         {
           "task_id": "P11-T05",

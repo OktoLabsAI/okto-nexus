@@ -1,0 +1,48 @@
+{
+  "sha": "e9bbd09",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --maxfail=10 --junitxml=plans/pr34-remediation/evidence/current-suite-inventory.xml",
+  "result": "FAIL",
+  "observed": "10 failed, 798 passed, 68 skipped, 2 warnings in 244.74s; stopped at maxfail=10, remaining suite NOT_RUN",
+  "failures": [
+    {
+      "test": "tests.test_harness_target_grammar::test_direct_target_reaches_the_connector",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_capability_target_reaches_the_connector",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_role_target_reaches_the_connector",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_tag_target_reaches_the_connector",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_forward_failure_does_not_wedge_the_session",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_send_only_connector_still_rejects_steer_directly",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_forward_to_a_send_only_connector_only_ever_issues_send_turn",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_delivery_row_is_unaffected_by_forward_outcome_either_way",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_harness_to_harness_relay_succeeds_for_a_single_legitimate_hop",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    },
+    {
+      "test": "tests.test_harness_target_grammar::test_runaway_harness_to_harness_cascade_is_stopped_and_observable",
+      "reason": "okto_nexus.errors.OktoNexusError: NOT_FOUND: Register the agent through the canonical identity API before opening a runtime."
+    }
+  ]
+}

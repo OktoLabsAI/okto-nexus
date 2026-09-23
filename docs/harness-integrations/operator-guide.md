@@ -1,411 +1,166 @@
-# Harness integrations — operator guide
+# Harness integrations — operator guide for 0.2.0
 
-Current endpoint/profile administration is documented in
-[Runtime administration — surface 40](runtime-administration.md). That reference
-supersedes the legacy configuration examples below for these operations.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface42.
+The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
+for executed tests and remaining work. Captures under `evidence/` describe older
+builds, not current configuration instructions or permission to reuse their
+accounts, endpoints or sessions.
 
-> 0.2.0 remediation in progress: native integration now requires
-> `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true`; private Claude attach also
-> requires `OKTO_NEXUS_FEATURE_HARNESS_ATTACH=true`. Runtime APIs currently
-> require operator authority and an existing active Agent. Opening no longer
-> registers/upserts its profile; role must match and metadata belongs to the
-> runtime. One executor per agent is a temporary containment restriction.
-> The legacy sections below are awaiting the P11 rewrite; their implicit
-> registration and unrestricted MCP examples are superseded. See
-> [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md).
+## Identity and setup
 
-Nexus can hold native, bidirectional, non-polling sessions with four kinds of
-coding-agent harness. This is the how-to for attaching one and using it from
-the outside — MCP tools and the REST mirror only, no source reading required.
+An Agent is the existing canonical identity, with its skills, role and policies.
+An endpoint configures a connection for that identity in a workspace. A runtime
+session is an instance of the connection. Opening a session neither registers an
+Agent nor replaces its profile. Several endpoints may belong to one Agent; a
+logical delivery has one selected executor, not one execution per endpoint.
 
-For *why* the feature is shaped this way, see
-[`docs/design/0004-harness-integrations.md`](../design/0004-harness-integrations.md)
-(the ADR — decision record, not a how-to). For proof that every claim below
-was actually exercised against a real binary, see
-[`docs/harness-integrations/evidence/EV-INDEX.md`](evidence/EV-INDEX.md), the
-Phase 4 test campaign's own index of every case, its status and its evidence
-file. That index was captured at commit `b661538`; this guide is written
-against the current tree (`3963bd1` plus this run's fixes) and calls out
-below exactly which of its FAILED rows are now fixed and which remain.
+Enable `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true` explicitly on the intended
+store. `serve` owns native runtimes and the durable dispatcher. MCP stdio uses the
+authenticated owner proxy instead of spawning independent copies. Use existing
+Nexus operator authentication for administration. A payload `agent_id` is an
+identifier, never a credential. Ordinary agents require current scoped grants and
+canonical permissions; REST and MCP share application authorization.
 
-## The four harnesses
+For an existing Agent such as `worker`:
 
-| `kind` | `substrate` | What it is | Who owns the process |
-|---|---|---|---|
-| `pi` | (none) | Pi 0.85.1, `pi --mode rpc` | Nexus spawns and owns the child |
-| `codex` | (none) | Codex 0.144.6, `codex app-server` | Nexus spawns and owns the child |
-| `claude_code` | `stream` (default) | Claude Code, `claude -p` stream-json | Nexus spawns and owns the child |
-| `claude_code` | `attach` | Claude Code, `cc-socks` injection | An interactive session the **operator** already has open; Nexus injects into it |
+1. Create an approved runtime profile for the adapter. Profiles default to disabled
+   and `inherit_ambient=false`. Configure executable, provider/model and dedicated
+   tool home for the authorized environment. Use supported secret references;
+   never forward the Nexus operator credential to the subprocess.
+2. Create an enabled endpoint linking Agent, profile, adapter and absolute project
+   path. This configures a connection without spawning it.
+3. Open the endpoint on demand, or explicitly approve its revision for boot.
+   Configuration edits revoke grants and boot approvals; re-enabling a record
+   does not restore them.
+4. Grant only the actions needed by each caller. Preserve sandbox and native
+   approvals; an approved profile is not permission to bypass them.
 
-`stream` and `attach` are two different capability sets under one `kind`, not
-interchangeable — pick the one your use case actually needs. `stream` is the
-primary, general-purpose path: open a session, hold a real conversation,
-close it. `attach` exists only for the one thing `stream` structurally
-cannot do — reach a Claude Code session the operator is already sitting in
-— and pays for that with hard limits (see below).
+Exact shared MCP/REST configuration requests, revisions and grant restrictions
+are documented in [runtime administration](runtime-administration.md).
 
-Check what any (kind, substrate) combination actually supports before
-relying on it:
-
-```
-harness_list
-```
-
-or
-
-```
-GET /api/v1/harness/kinds
-```
-
-Both return the same catalog, read live off each connector's own declared
-`HarnessCapabilities` — never a hand-typed table, so it can't drift from the
-code. Each entry looks like:
+For Codex, configure a dedicated `CODEX_HOME` in the approved profile and use
+`adapter_id="codex"`. After approving that profile and endpoint, a typical
+operator request to `harness_open` or `POST /api/v1/harness/sessions` is:
 
 ```json
 {
-  "kind": "pi",
-  "substrate": null,
-  "capabilities": {
-    "send_only": false,
-    "steer_timing": "NEXT_TURN_BOUNDARY",
-    "interrupt_requires_settle_wait": true,
-    "multiplexes_sessions": false,
-    "observes_session_end": true
-  }
+  "agent_id": "worker",
+  "kind": "codex",
+  "endpoint_id": "worker-code",
+  "project_root": "/approved/project"
 }
 ```
 
-- `send_only` — `true` means there is no ack, no reply channel, nothing to
-  wait on. Only `claude_code`/`attach` sets this.
-- `steer_timing` — `"IMMEDIATE"` (codex), `"NEXT_TURN_BOUNDARY"` (pi — a
-  mid-turn steer is buffered until the *next* turn, not applied instantly),
-  or `null` (steering unsupported at all on this transport).
-- `interrupt_requires_settle_wait` — `true` for pi: its abort does not
-  resolve synchronously, so a `harness_send`/`harness_steer` issued right
-  after an interrupt can come back `CONFLICT` until the aborted turn's own
-  settle event lands. Don't race it; poll `harness_get`/`harness_event_list`
-  or just wait a beat and retry.
-- `multiplexes_sessions` — `true` only for codex (one connector process
-  demuxes many concurrent threads by `threadId`/`turnId`); `false`
-  everywhere else (one process per session).
-- `observes_session_end` — `false` for `attach`: Nexus injected into a
-  session it didn't spawn, so it has no channel to learn when that session
-  ends. That session's `HarnessSession.status` never legally reaches
-  `ENDED` on its own.
+Replace identifiers/path with actual approved configuration. Opening cannot
+arbitrarily override its stored backend or inherit personal provider settings.
+Keep the returned session identifier for explicit controls. Readiness is not
+proof that later work completed.
 
-## Backend safety — read this before your first `pi` or `codex` open
+## Four preserved connectors
 
-**Omitting `backend` on `harness_open` means the spawned child inherits
-whatever model provider is already configured on the machine running
-`okto-nexus serve` — not a choice Nexus made for you.** For `pi` specifically
-that is the *operator's own* `~/.pi/agent/settings.json` `defaultProvider`.
-On the machine this feature was built and tested on, that default resolves
-to a LAN box reserved for an unrelated multi-day benchmark run — a real
-example of a first `kind="pi"` open silently sending live inference
-somewhere the operator never chose, on their own machine, using whatever
-routing that machine's ambient CLI config already happens to point at.
-
-Pass `backend` explicitly on every `harness_open` unless you specifically
-want the ambient default:
-
-```json
-{
-  "agent_id": "my_pi_session",
-  "kind": "pi",
-  "project_root": "/abs/path/to/project",
-  "backend": {"provider": "zai", "model": "glm-5.3"}
-}
-```
-
-The response always states which happened — never silently:
-
-```json
-{
-  "session_id": "hsess_...",
-  "...": "...",
-  "backend": {
-    "explicit": true,
-    "applied": {"provider": "zai", "model": "glm-5.3"},
-    "note": "backend override applied exactly as given."
-  }
-}
-```
-
-Omit `backend` and the `note` field spells out the inherited-default warning
-instead of staying silent — read it before trusting the session.
-
-**Supported `backend` fields are per-kind, not uniform:**
-
-| `kind` | `substrate` | Supported `backend` fields |
+| Kind / substrate | Transport | Distinction |
 |---|---|---|
-| `pi` | — | `provider`, `model`, `extra_args`, `env` (argv overrides passed straight to the child) |
-| `codex` | — | `env` only — codex's real provider/model/base-URL selection is `CODEX_HOME` pointing at a `config.toml`, read from the process environment, not a CLI flag |
-| `claude_code` | `stream` | `env` only |
-| `claude_code` | `attach` | none — rejected entirely; `attach` spawns nothing to configure |
+| `pi` | RPC JSONL | Managed process; steer at a turn boundary; interrupt requires settle |
+| `codex` | app-server JSON-RPC | Managed process; native threads may share a connection; correlated controls |
+| `claude_code` / `stream` | stream-json | Managed process; events and supported native approval/input requests |
+| `claude_code` / `attach` | private cc-socks | External interactive session; send-only, no native acceptance/result channel |
 
-A field a given kind doesn't support is a `VALIDATION_ERROR` naming the
-supported set, never a silent no-op or a silent drop.
+Use `harness_list(view="adapters")` or `GET /api/v1/harness/kinds` for the catalog.
+Declared capabilities are not a probe of the installed binary. Binding discovery
+reports `capability_verification=not_probed`; effective binary/version negotiation
+remains pending. Do not infer native deduplication, resume, ACK or sandbox support.
 
-## Open a session
+Attach additionally requires `OKTO_NEXUS_FEATURE_HARNESS_ATTACH=true`, a supported
+POSIX environment and the operator-selected PID of a dedicated interactive session.
+It does not discover or authorize personal sessions. The private protocol may
+change with Claude releases. A socket write does not prove acceptance, rendering
+or completion. No steer, interrupt or correlated result is invented. Detaching
+Nexus does not terminate the external session.
 
-```
-harness_open(
-  agent_id="my_session",        # REQUIRED — the agent_id this session registers/upserts as
-  kind="pi",                    # REQUIRED — pi | codex | claude_code
-  project_root="/abs/path",     # REQUIRED — defines the workspace scope
-  substrate=None,                # only meaningful for kind="claude_code"
-  target_pid=None,               # only for claude_code/attach — see below
-  backend=None,                  # see backend safety above
-  role=None,
-  metadata=None,
-  notify_target=None,            # see "notable events as messages" below
-)
-```
+Managed process ownership is implemented for Windows and Linux. Closing one Codex
+thread preserves a sibling sharing its process. Shutdown drains owned activity and
+journal capture before releasing ownership. Failure to drain remains pending or
+unknown; a timeout or saved PID does not prove termination.
 
-REST mirror: `POST /api/v1/harness/sessions` with the same fields as a JSON
-body (mutating REST harness routes are operator-only — the same trust model
-as `POST /agents`; see the main [README's HTTP surfaces
-section](../../README.md#http-surfaces-and-authentication)).
+## Conversation, work and controls
 
-`harness_open` is bounded: a connector that wedges on startup raises
-`INTERNAL_ERROR` after a start timeout rather than hanging the call forever.
+Canonical `message_create` routing addresses the Agent. The inbox records logical
+delivery and outbox records transport attempts. Eligible push reserves that same
+inbox item so pull and push do not execute it twice. Ambiguous bindings fail
+explicitly. A message commit means durable Nexus acceptance, not native acceptance.
 
-Returns a `HarnessSession`:
+Conversational input may produce a reply without gaining task execution authority.
+Executable work uses a canonical handoff claim and scoped execution grant, bound
+to endpoint and claim epoch. Native terminal does not automatically complete work:
+completion/rejection requires an authorized canonical call or the configured
+structured-result contract. Verification stays separate. Lease expiry does not
+automatically release an uncertain managed claim.
 
-```json
-{
-  "session_id": "hsess_323656deb61f40ad8649ec88a21225b7",
-  "kind": "pi",
-  "owning_agent_id": "my_session",
-  "status": "RUNNING",
-  "capabilities": {"...": "..."},
-  "started_at": "...",
-  "ended_at": null,
-  "metadata": {},
-  "backend": {"...": "..."}
-}
-```
+The eight optional names remain `harness_list`, `harness_open`, `harness_send`,
+`harness_steer`, `harness_interrupt`, `harness_close`, `harness_get` and
+`harness_event_list`. Administrative sends and controls require current authority.
+Persisted commands return an operation ID. Supply the idempotency key and expected
+operation/turn/owner fields required by the control; stale controls conflict.
+Exact retries retrieve the original decision rather than create another attempt.
 
-Keep the `session_id` — every other harness call needs it.
+Legacy text/content inputs are normalized at the facade; conflicts are rejected.
+Payloads cannot supply identity or unrestricted authority. The adapter translates
+the canonical envelope.
 
-### `claude_code`/`attach`: finding a `target_pid`
+Read one operation with `harness_get(operation_id=...)`, or a session with
+`harness_get(session_id=...)`. Use `harness_event_list` for durable sequenced replay.
+Native delivery/capture are event driven; bounded database recovery and IPC wake
+are separate from native status polling. Await the correlated settle event after
+interrupt where required.
 
-`attach` requires `substrate="attach"` and a `target_pid` (rejected as
-`VALIDATION_ERROR` without one). That pid is **not** something `harness_open`
-discovers for you — it must be the OS process id of an already-running,
-*interactive* Claude Code session on the same machine. `claude -p`
-(non-interactive) sessions have no registry entry and cannot be attached to.
-Claude Code itself writes one registry file per interactive session at
-`~/.claude/sessions/<pid>.json`; finding your target pid means locating that
-file for the session you want to inject into (for example, the pid of the
-`claude` process you already have a terminal open to). This guide does not
-have a friendlier discovery mechanism to offer, because none exists on the
-public surface today — see "known gaps" at the end.
+## Results, approvals and diagnostics
 
-## Send a turn, steer, interrupt
+Native events enter the durable journal before projection. Operation, attempt,
+owner and native turn correlation govern attribution. Queued, transport-written,
+native-accepted, terminal-observed and handoff-completed are different facts.
 
-The payload shape is **harness-native and not uniform across connectors** —
-check `harness_list`'s catalog entry for the kind before sending:
+Results are private correlated replies by default. Additional audiences require
+approved configuration and current authority. Harness relay is an explicit endpoint
+option for supported correlated conversation results, with persistent causal
+depth/count/deadline limits and audience checks. There is no unrestricted broadcast
+or blanket ban on harness communication.
 
-- `pi` and `codex` read `{"text": "<prompt>"}`
-- both `claude_code` substrates (`stream` and `attach`) read
-  `{"content": "<prompt>"}`
+With HITL enabled, supported requests appear in the operator Approvals view. Review
+and submit explicit answers; no native default is silently chosen. Human decisions
+are shown separately from native delivery and work completion. Unsupported secret
+or remote schemas do not bypass controls. See the
+[native input procedure](runtime-administration.md#native-questions-and-permissions-in-the-dashboard).
 
-```
-harness_send(session_id="hsess_...", payload={"text": "hello"})
-```
+`harness_list(view="bindings")` groups visible endpoints/sessions under the Agent,
+omitting private configuration, paths and secrets. A current owner-ready record is
+persisted evidence, not a liveness probe. Operator outbox inspection exposes attempt
+and recovery metadata without message bodies. Unknown/ambiguous/detached dashboard
+coverage remains incomplete; use the administrative API while that work is pending.
 
-`harness_send` never blocks for a reply — the answer arrives later as
-harness events (subscribe out-of-band, or poll `harness_event_list`). REST
-mirror: `POST /api/v1/harness/sessions/{id}/send`.
+## Recovery and rollout
 
-`harness_steer(session_id, payload)` — steers the in-flight turn. Rejected
-with `VALIDATION_ERROR` if the connector's `steer_timing` is `null`
-(`attach` has no steer verb at all — check `harness_list` first). Remember
-pi buffers this to the *next* turn boundary rather than applying it
-mid-turn; codex applies it immediately.
+Do not retry uncertain writes merely because a timeout or lease expired. Inspect
+the operation and runtime, then follow the
+[recovery procedure](runtime-administration.md#recovering-an-uncertain-transport-attempt).
+Pre-send cancellation differs from acknowledged-risk takeover. Conversation takeover
+releases the original inbox item without replaying native transport. Command
+abandonment retains history. Uncertain recovery quarantines the endpoint and revokes
+grants/boot. Late results remain durable but cannot publish or consume the released
+delivery using abandoned authority.
 
-`harness_interrupt(session_id, payload=None)` — aborts the in-flight turn.
-If `interrupt_requires_settle_wait` is `true` (pi), a send/steer issued
-immediately after may come back `CONFLICT` until the aborted turn's settle
-event lands — wait for it rather than retrying in a tight loop.
+Generic conversation recovery refuses managed handoffs. Dedicated managed-claim
+recovery remains pending; do not bypass it by editing claims or outbox rows.
 
-`harness_close(session_id)` — best-effort teardown (`send(end)` then
-`close()`), always returns the final session state even if teardown failed.
-Never hangs.
+Disabling admission stops new harness work while existing capture/recovery remains
+available. A restarted disabled store with runtime history starts a maintenance
+owner without native boot. Fresh disabled MCP surfaces omit harness tools; use
+operator REST for recovery. Migrations are additive. Rollback uses deactivation
+and drain/reconciliation, never destructive reverse SQL. Full backup/restore and
+cutover acceptance remains part of the pending gate.
 
-`harness_get(session_id)` — reads the live in-memory view if still tracked
-(`live: true`), else the last durable row (`live: false` — a row left
-`RUNNING` there is **not** proof the process is actually alive; nothing
-resurrects a dead session's liveness signal after an unclean exit).
-
-`harness_event_list(session_id, after_sequence=0, limit=200)` — durable,
-sequenced replay of everything the session emitted, independent of
-liveness. `native_event` carries the harness's own verbatim event name
-(`"item/agentMessage/delta"`, `"turn.completed"`, ...) for traceability; the
-normalized `kind` (`turn_started` / `output_delta` / `turn_completed` /
-`tool_activity` / `error`) is what to branch logic on.
-
-REST mirrors all of the above 1:1 under `/api/v1/harness/sessions/{id}/...`.
-
-## Addressing a harness through the target grammar
-
-**As of this run, the ordinary routing grammar — `direct` / `capability` /
-`role` / `tag`, resolved by `message_create` exactly as it always has been —
-does reach a live harness session's own turn input**, addressed at the
-`agent_id` you passed to `harness_open`. This closes a gap that the Phase 4
-campaign found and reported as a false claim (`EV-SYS-003`, `EV-UAT-05`,
-`UAT-07`): earlier in this same run, the shipped tool description promised
-this routing worked and it did not — `message_create` reported success while
-the harness's own wire trace gained zero bytes. That gap has now been fixed
-and independently re-verified against a real running hub and a real `pi`
-child (`docs/harness-integrations/evidence/EV-SYS-003-FOLLOWUP-target-grammar-fix.md`);
-`tests/test_harness_target_grammar.py` (11 tests, including one that proves
-the two composition roots — the messages tool module and the harness tool
-module — genuinely share the same in-process notifier in production wiring,
-not just in a test double) is the regression guard.
-
-What this gets you, and its real limits:
-
-- It is a **best-effort hand-off, not guaranteed delivery**. The ordinary
-  inbox delivery row is created exactly as it always was and is **never**
-  mutated by the forward — it stays `unread` whether the forward to the
-  harness succeeds or fails, and remains pullable through the normal
-  `inbox_pull`/`inbox_ack` path regardless. `message_create`'s response
-  still reports its own `delivered_count` based on the inbox write, which
-  happened — it does **not** reflect whether the harness forward itself
-  succeeded.
-- Only reaches **live** sessions. If the session isn't open, there's no
-  subscriber to forward to.
-- Only `send_turn` rides this path — `steer`/`interrupt` are not
-  forwardable this way. Use `harness_steer`/`harness_interrupt` with the
-  explicit `session_id` for those.
-- Bounded at 10 seconds on the calling thread (`message_create`'s own
-  caller — an MCP tool call or HTTP request), the same non-polling
-  `Thread.join(timeout)` shape `harness_open`/`harness_close` already use.
-- **A message sent BY any currently-live harness's own agent is never
-  forwarded into any live harness** — a deliberate cascade guard against two
-  harnesses ping-ponging turns at each other forever (harness A's
-  `turn_completed` becomes a message → forwarded into B as a turn → B's
-  `turn_completed` becomes a message → forwarded into A → ...). If you
-  intentionally want one harness to relay into another, address it with the
-  explicit `session_id` via `harness_send` instead — that path doesn't go
-  through this guard.
-- Guaranteed delivery, an explicit steer/interrupt, or addressing a session
-  that may not be live yet: use `harness_send`/`harness_steer`/
-  `harness_interrupt` with the `session_id` `harness_open` returned instead
-  of relying on the target grammar.
-
-## Notable events also arrive as messages (D10)
-
-Independent of the target-grammar fix above, `turn_completed` and `error`
-events from any open session are *also* delivered as ordinary messages
-through the existing per-recipient inbox, routed by `notify_target` (same
-grammar as `message_create`/`handoff_create`). Default when `notify_target`
-is omitted: `{"strategy": "broadcast"}` scoped to that session's own
-workspace. This has worked since the feature's initial build; it is the
-*output* direction, and is unaffected by the *input*-direction gap described
-above.
-
-## `claude_code`/`attach` (`cc-socks`): what it actually is
-
-This substrate exists for exactly one thing `stream` cannot do: inject into
-an interactive Claude Code session the operator already has open. Its real
-limits, stated plainly because they are easy to assume away:
-
-- **Send-only, no ack, no reply channel at all.** The connection is
-  accepted with no synchronous acknowledgement. A `200`/success response
-  from `harness_open` or `harness_send` means the message was handed to the
-  socket, not that it was received or rendered into the target session.
-- **`steer_timing` is `null` and `observes_session_end` is `false`.** There
-  is no steer verb and no interrupt verb on this transport, and Nexus has no
-  channel to learn when the target session ends — its `HarnessSession`
-  never legally reaches `ENDED` on its own.
-- **The wire protocol is undocumented and private to Claude Code.** It can
-  change shape on any Claude Code release with no deprecation notice — this
-  risk was accepted deliberately (ADR 0004 D7b), which is why `stream` is
-  the primary substrate and `attach` is isolated behind the same connector
-  port rather than being load-bearing for anything else.
-- **Claude Code 2.1.278 gates cross-session inbound behind an operator
-  approval prompt on the receiving end**, a finding from this campaign not
-  in the original design (`EV-INDEX.md`, INT-02/H-CA). A `200` from
-  `harness_send` does not by itself mean your message appeared in the
-  target session's transcript — the receiving session's own operator may
-  need to approve it first.
-- **Content injected this way is a prompt-injection surface**, not just a
-  delivery mechanism: it renders to the receiving model as an ordinary peer
-  chat message. The connector wraps every outbound message in a banner
-  naming Nexus and the sending agent as the source and stating the content
-  is untrusted external data, not a system or user instruction — a
-  best-effort textual convention, not a structural guarantee the receiving
-  model is bound to honour.
-
-### Graceful degradation when `cc-socks` breaks
-
-If the target session's registry file is missing (simulating exactly what a
-Claude Code update that changes or drops the registry would look like from
-the connector's own point of view), `harness_open` fails **fast** — not a
-timeout, not a hang:
-
-```
-POST /api/v1/harness/sessions  {"kind":"claude_code","substrate":"attach","target_pid":...}
--> 404 in ~13ms
-{
-  "ok": false,
-  "error": {
-    "code": "NOT_FOUND",
-    "message": "No Claude Code session registry at ~/.claude/sessions/<pid>.json.
-                 The session may have ended, the pid may be wrong, or this is not
-                 an interactive session (`claude -p` sessions have no registry
-                 entry)."
-  }
-}
-```
-
-The primary path (`claude_code`/`stream`) is completely unaffected — it can
-be opened on the same hub immediately after an `attach` failure. This was
-verified directly (`docs/harness-integrations/evidence/EV-UAT-06-graceful-degradation.md`).
-
-## Known gaps and limitations (as of this guide)
-
-Read these before assuming a capability exists. Sourced from
-`docs/harness-integrations/evidence/EV-INDEX.md`'s Phase 4 campaign findings,
-with this run's own fixes applied on top and stated explicitly:
-
-- **Fixed in this run** (were FAILED in `EV-INDEX.md`; each confirmed fixed
-  by reading the actual code change and its own re-run evidence, not merely
-  by a green suite count — see each connector's own evidence file for the
-  re-run): pi's unbounded `proc.wait()` on the reader thread's exception
-  path (RES-A3/B1/B3 — was a real hang risk on a malformed-but-syntactically
-  -valid deeply nested JSON payload); the `claude_code`/`stream` connector's
-  single-shared-queue fan-out split and its failed-`start()` termination gap
-  (RES-A2/A4); codex's equivalent queue-split and termination-gap defects
-  (RES-A2/A4, re-run 3× isolated, same PASS every time); codex's fake-server
-  post-interrupt ordering divergence (RES-C2, fake now emits the real
-  `turn/completed(interrupted)` ordering); codex's missing live-binary steer
-  capture (INT-05, closed by `EV-CX-001-raw_capture_steer.jsonl` — a genuine
-  mid-stream `turn/steer`, 0.1ms after the first content delta, accepted and
-  honoured with no abort/interrupt cycle, confirming `STEER_TIMING_IMMEDIATE`
-  live; that capture explicitly does **not** distinguish "the steer
-  preempted the original stream" from "the model happened to stop there
-  anyway" — a control run without the steer would be needed for that,
-  disclosed as an open question in the evidence file itself, not asserted);
-  and the target-grammar input-direction gap (SYS-03/UAT-05), covered above.
-- **Still open, not touched by this run:** `claude_code`/`attach`'s
-  `RES-A2` — two concurrent `events()` consumers on this connector
-  **partition** a stream rather than each receiving the full broadcast
-  (a deque split, not a duplication). It is not reachable through today's
-  supervisor, which always drains a `send_only` connector's events
-  synchronously through one caller, but it is a real, unguarded violation
-  of the connector port's own contract if a second consumer is ever added.
-- **`claude_code`/`attach` cannot discover its own `target_pid`.** As noted
-  above, an operator has to already know which interactive session's pid
-  they want and locate its registry file themselves; nothing on the public
-  surface enumerates candidate pids.
-
-Full case-by-case detail, including every PASSED/FAILED/NOT-APPLICABLE/UNRUN
-row with its evidence file, lives in
-[`docs/harness-integrations/evidence/EV-INDEX.md`](evidence/EV-INDEX.md).
-That file is the Phase 4 snapshot (commit `b661538`); the "fixed in this
-run" list above is this guide's own reconciliation against the current tree,
-not a rewrite of that index.
+Current real-binary evidence is indexed in
+[the remediation native campaign](../../plans/pr34-remediation/NATIVE_CAMPAIGN.md)
+and subsequent milestones. Selected isolated Codex and Claude stream scenarios have
+run; this does not qualify every advanced scenario/version. Pi native and dedicated
+Claude attach native remain `NOT_RUN`. Fixtures and historical PR counts are not
+current real-provider results. Follow status/backlog for release requirements.
