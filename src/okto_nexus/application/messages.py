@@ -326,15 +326,20 @@ class MessageService:
         channel = channel_id if _is_nonempty_str(channel_id) else None
         parent = parent_message_id if _is_nonempty_str(parent_message_id) else None
         message_id = new_message_id()
+        prepared_runtime_artifact = None
+        if _runtime_result_id:
+            if self._runtime_results is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime result publication is not configured.", {})
+            prepared_runtime_artifact = self._runtime_results.prepare(_runtime_result_id, approved=_approved_execution)
 
         with self._send_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
             if _runtime_result_id:
-                if self._runtime_results is None or artifact_refs or from_session_id or session_secret:
+                if self._runtime_results is None or from_session_id or session_secret:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
                 existing = self._runtime_results.authorize(uow, result_id=_runtime_result_id,
                     approved=_approved_execution, supplied={"project_root": root_realpath,
                         "from_agent_id": from_agent_id, "subject": subject, "body": body,
-                        "channel_id": channel, "parent_message_id": parent, "target": target_echo})
+                        "channel_id": channel, "parent_message_id": parent, "target": target_echo, "artifacts": artifact_refs})
                 if existing:
                     return existing
             # Trust gate FIRST (M10): a failed credential check rolls the whole
@@ -496,6 +501,8 @@ class MessageService:
                     if _runtime_result_id:
                         self._runtime_results.finish(uow, result_id=_runtime_result_id, response=response)
                     return response
+            if _runtime_result_id:
+                self._runtime_results.commit_artifact(uow, result_id=_runtime_result_id, prepared=prepared_runtime_artifact)
             message = self._messages.create(
                 uow,
                 message_id=message_id,

@@ -71,6 +71,36 @@ class LocalArtifactStore:
     def __init__(self, root: str | Path) -> None:
         self.root = Path(root).expanduser().resolve()
 
+    @staticmethod
+    def _sync_directory(path):
+        if os.name == "posix":
+            fd = os.open(path, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0))
+            try:
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+
+    def _create_parent(self, parent):
+        missing = []
+        current = parent
+        while not current.exists():
+            missing.append(current)
+            current = current.parent
+        for path in reversed(missing):
+            path.mkdir(mode=0o700, exist_ok=True)
+            self._sync_directory(path.parent)
+        for path in (parent, *parent.parents):
+            if path.is_symlink() or getattr(path.lstat(), "st_file_attributes", 0) & 0x400:
+                raise OSError("Artifact directories cannot redirect through links or reparse points")
+            if path == self.root:
+                break
+
+    def _remove_temporary(self, path):
+        resolved = path.resolve()
+        if not resolved.is_relative_to(self.root) or resolved == self.root or path.is_symlink():
+            raise OSError("Refusing artifact cleanup outside its owned temporary directory")
+        shutil.rmtree(resolved)
+
     def put(
         self,
         *,
@@ -101,25 +131,24 @@ class LocalArtifactStore:
             existing = self.describe(relative_payload)
             return existing
 
-        parent.mkdir(parents=True, exist_ok=True)
+        self._create_parent(parent)
         temp_dir = parent / f".{artifact_segment}.tmp-{uuid4().hex}"
         try:
-            temp_dir.mkdir()
+            temp_dir.mkdir(mode=0o700)
             temp_payload = temp_dir / filename
-            if content is not None:
-                data = (
-                    content if isinstance(content, bytes) else content.encode("utf-8")
-                )
-                temp_payload.write_bytes(data)
-            else:
-                source = Path(source_path or "")
-                if not source.is_file():
-                    raise OktoNexusError(
-                        ErrorCode.VALIDATION_ERROR,
-                        "artifact path must reference an existing file.",
-                        {"path": source_path},
-                    )
-                shutil.copyfile(source, temp_payload)
+            fd = os.open(temp_payload, os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, "O_BINARY", 0), 0o600)
+            with os.fdopen(fd, "wb") as stream:
+                if content is not None:
+                    stream.write(content if isinstance(content, bytes) else content.encode("utf-8"))
+                else:
+                    source = Path(source_path or "")
+                    if not source.is_file():
+                        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                            "artifact path must reference an existing file.", {"path": source_path})
+                    with source.open("rb") as source_stream:
+                        shutil.copyfileobj(source_stream, stream)
+                stream.flush()
+                os.fsync(stream.fileno())
 
             size_bytes = temp_payload.stat().st_size
             media_type = (
@@ -143,18 +172,21 @@ class LocalArtifactStore:
                 "created_at": created_at,
                 "storage_path": relative_payload,
             }
-            (temp_dir / _MANIFEST).write_text(
-                json.dumps(manifest, ensure_ascii=False, indent=2),
-                encoding="utf-8",
-            )
+            fd = os.open(temp_dir / _MANIFEST, os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, "O_BINARY", 0), 0o600)
+            with os.fdopen(fd, "wb") as stream:
+                stream.write(json.dumps(manifest, ensure_ascii=False, indent=2).encode("utf-8"))
+                stream.flush()
+                os.fsync(stream.fileno())
+            self._sync_directory(temp_dir)
             os.replace(temp_dir, final_dir)
+            self._sync_directory(parent)
         except OktoNexusError:
             if temp_dir.exists():
-                shutil.rmtree(temp_dir)
+                self._remove_temporary(temp_dir)
             raise
         except (OSError, TypeError, ValueError) as exc:
             if temp_dir.exists():
-                shutil.rmtree(temp_dir)
+                self._remove_temporary(temp_dir)
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,
                 "Failed to persist artifact payload.",
@@ -217,6 +249,9 @@ class LocalArtifactStore:
     def delete(self, storage_path: str) -> None:
         payload = self._resolve(storage_path)
         artifact_dir = payload.parent
+        if not artifact_dir.is_relative_to(self.root) or artifact_dir == self.root:
+            raise OktoNexusError(ErrorCode.PATH_OUTSIDE_WORKSPACE,
+                "Refusing to remove the artifact storage root or its parents.", {})
         if not (artifact_dir / _MANIFEST).is_file():
             raise OktoNexusError(
                 ErrorCode.INTERNAL_ERROR,

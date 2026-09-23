@@ -1,5 +1,6 @@
 """Results enter the canonical message policy path, never native fan-out."""
 import time
+import threading
 
 import pytest
 
@@ -62,16 +63,17 @@ def test_publication_and_canonical_message_commit_together(runtime, monkeypatch)
     deps = runtime[0]
     codex_session(runtime)
     finish = RuntimeResultService.finish
+    failed = threading.Event()
     def fail(uow, **kwargs):
         finish(uow, **kwargs)
+        failed.set()
         raise OSError("fixture result/message commit cut")
     with monkeypatch.context() as patch:
         patch.setattr(RuntimeResultService, "finish", staticmethod(fail))
         source = send_message(runtime, body="durable publication retry")
         result(runtime, source["runtime_operations"][0], "PENDING_AUTHORIZATION")
         # Explicitly exercise the failure barrier rather than a scheduling delay.
-        with pytest.raises(OSError, match="commit cut"):
-            deps.runtime_dispatcher.publish_results()
+        assert failed.wait(5)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject='Runtime result'").fetchone()[0] == 0
     deps.runtime_dispatcher.wake()

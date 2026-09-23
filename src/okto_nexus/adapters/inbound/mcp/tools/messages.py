@@ -156,6 +156,7 @@ def build_service(deps: Any) -> MessageService:
     every ``create_message`` fan-out, regardless of which composition path
     built the ``MessageService`` that ran it.
     """
+    from .artifacts import build_service as build_artifact_service
     repos = deps.repos
 
     if getattr(deps, "inbox_delivery_notifier", None) is None:
@@ -251,7 +252,8 @@ def build_service(deps: Any) -> MessageService:
         runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents),
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
-            agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config),
+            agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,
+            artifacts=build_artifact_service(deps)),
         runtime_wake=lambda: wake_runtime(deps),
     )
 

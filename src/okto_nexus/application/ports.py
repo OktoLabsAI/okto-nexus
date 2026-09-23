@@ -2669,6 +2669,7 @@ class ArtifactRepo(Protocol):
         storage_kind: str | None = None,
         filename: str | None = None,
         media_type: str | None = None,
+        reader_agent_ids: list[str] | None = None,
     ) -> Artifact:
         """Create an artifact, returning the stored row."""
         ...

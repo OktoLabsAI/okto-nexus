@@ -30,6 +30,10 @@ class RuntimeDispatcher:
         self.event_ingress = None
         self.command_dispatcher = None
         self.publish_results = None
+        self._publication_queue = queue.Queue(maxsize=1)
+        self._publication_active = False
+        self._publication_rescan = False
+        self._publication_thread = None
 
     def start(self):
         if self.epoch is not None:
@@ -72,6 +76,9 @@ class RuntimeDispatcher:
         if self.command_dispatcher:
             self.command_dispatcher.service.owner_identity = (self.owner_id, self.epoch)
             self.command_dispatcher.start()
+        if self.publish_results:
+            self._publication_thread = threading.Thread(target=self._publish_worker, daemon=True, name="nexus-result-publication")
+            self._publication_thread.start()
         for index in range(self.workers):
             worker = threading.Thread(target=self._worker, daemon=True, name=f"nexus-dispatch-{index}")
             self._threads.append(worker)
@@ -85,6 +92,36 @@ class RuntimeDispatcher:
         with self._wake_condition:
             self._wake_generation += 1
             self._wake_condition.notify()
+
+    def _schedule_publication(self):
+        with self._lock:
+            if not self.publish_results or self._quiescing.is_set():
+                return
+            if self._publication_active:
+                self._publication_rescan = True
+                return
+            self._publication_active = True
+            self._publication_queue.put_nowait(True)
+
+    def _publish_worker(self):
+        while not self._stop.is_set():
+            try:
+                self._publication_queue.get(timeout=1)
+            except queue.Empty:
+                continue
+            processed = 0
+            try:
+                if self.publish_results and not self._quiescing.is_set():
+                    processed = self.publish_results()
+            except Exception:
+                logging.getLogger(__name__).warning("Captured result publication remains pending after storage failure.")
+            finally:
+                with self._lock:
+                    self._publication_active = False
+                    rescan, self._publication_rescan = self._publication_rescan, False
+                self._publication_queue.task_done()
+                if processed or rescan or self._quiescing.is_set():
+                    self.wake()
 
     def _wait_for_wake(self, observed, timeout=10):
         # Read and acknowledge a generation under the same lock as producers.
@@ -117,12 +154,10 @@ class RuntimeDispatcher:
                     self.command_dispatcher.expire()
                 if self.event_ingress:
                     self.event_ingress.recover()
-                if self.publish_results and not self._quiescing.is_set():
-                    if self.publish_results():
-                        self.wake()
+                self._schedule_publication()
                 if self._shutdown_ready and self._shutdown_ready():
                     with self._lock:
-                        idle = not self._inflight
+                        idle = not self._inflight and not self._publication_active
                     if idle and (not self.command_dispatcher or self.command_dispatcher.idle()):
                         if self.event_ingress and self.event_ingress.projection_pending:
                             self.wake()
@@ -252,6 +287,8 @@ class RuntimeDispatcher:
             self._coordinator.join(5)
         if self.command_dispatcher:
             self.command_dispatcher.join_idle_workers()
+        if self._publication_thread and not self._publication_active and self._publication_thread is not threading.current_thread():
+            self._publication_thread.join(1.5)
         # Workers remain capacity-bound even if a native call has not returned.
         with self.cf.unit_of_work() as uow:
             self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())

@@ -28,6 +28,7 @@ for compatibility with stores created before migration 028.
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 from contextlib import contextmanager
 from datetime import date, datetime, time, timezone
@@ -213,6 +214,7 @@ class ArtifactService:
         *,
         workspace_id: str,
         agent_id: Any,
+        write: bool = True,
     ):
         """The write UoW for artifact_put: guardrail/governance audited.
 
@@ -221,7 +223,7 @@ class ArtifactService:
         artifact row or artifact.created event can persist.
         """
         try:
-            with self._cf.unit_of_work() as uow:
+            with self._cf.unit_of_work(write=write) as uow:
                 yield uow
         except OktoNexusError as exc:
             if self._guardrails is not None:
@@ -420,6 +422,51 @@ class ArtifactService:
             guardrail_fields=guardrail_fields,
         )
 
+    def _authorize_artifact(self, uow, *, workspace_id, agent_id, size_bytes, guardrail_fields):
+        permission_set_for(self._agents, uow, agent_id).require("artifacts", "put")
+        if self._guardrails is not None and self._guardrails.has_enabled_assignments(uow):
+            self._guardrails.enforce(uow, workspace_id=workspace_id, actor_agent_id=agent_id,
+                surface="artifact_put", fields=guardrail_fields)
+        if self._governance is not None:
+            self._governance.enforce(uow, agent_id=agent_id, action=ACTION_ARTIFACT_PUT, size_bytes=size_bytes)
+            return self._governance.outbound_snapshot_for(uow, agent_id=agent_id) or None
+        return None
+
+    def prepare_runtime_result(self, *, artifact_id, workspace_id, agent_id, content, result_id, truncated):
+        """Prepare private bytes before the caller's canonical publication UoW."""
+        digest = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        fields = {"artifact_type": "text", "name": "runtime-result.txt", "content": content,
+            "metadata": {"result_id": result_id, "truncated": bool(truncated), "content_sha256": digest}}
+        with self._put_uow(workspace_id=workspace_id, agent_id=agent_id, write=False) as uow:
+            self._authorize_artifact(uow, workspace_id=workspace_id, agent_id=agent_id,
+                size_bytes=len(content.encode("utf-8")), guardrail_fields=fields)
+        now = self._clock.now_iso()
+        stored = self._artifact_store.put(workspace_id=workspace_id, agent_id=agent_id,
+            artifact_id=artifact_id, artifact_type="text", storage_kind=STORED_PATH,
+            name=fields["name"], content=content, source_path=None, metadata=fields["metadata"], created_at=now)
+        if stored.metadata != fields["metadata"] or hashlib.sha256(self._artifact_store.read_bytes(stored.storage_path)).hexdigest() != digest:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Stored result artifact does not match captured output.", {})
+        return {"artifact_id": artifact_id, "workspace_id": workspace_id, "agent_id": agent_id,
+            "stored": stored, "fields": fields, "created_at": now}
+
+    def commit_runtime_result(self, uow, *, prepared, readers):
+        """Reuse artifact gates/catalog/event atomically with message publication."""
+        descriptor = prepared["stored"]
+        audience = self._authorize_artifact(uow, workspace_id=prepared["workspace_id"],
+            agent_id=prepared["agent_id"], size_bytes=descriptor.size_bytes, guardrail_fields=prepared["fields"])
+        existing = self._artifacts.get(uow, workspace_id=prepared["workspace_id"], artifact_id=prepared["artifact_id"])
+        if existing:
+            if existing.created_by != prepared["agent_id"] or existing.reader_agent_ids != sorted(set(readers)):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Result artifact identity is already bound.", {})
+            return existing
+        artifact = self._artifacts.create(uow, artifact_id=prepared["artifact_id"],
+            workspace_id=prepared["workspace_id"], artifact_type="text", name=prepared["fields"]["name"],
+            size_bytes=descriptor.size_bytes, created_by=prepared["agent_id"], created_at=prepared["created_at"],
+            audience=audience, reader_agent_ids=sorted(set(readers)), storage_path=descriptor.storage_path,
+            storage_kind=descriptor.storage_kind, filename=descriptor.filename, media_type=descriptor.media_type)
+        self._emit_created(uow, artifact=artifact, stored=STORED_PATH)
+        return artifact
+
     def _persist_artifact(
         self,
         *,
@@ -444,13 +491,18 @@ class ArtifactService:
         stored_payload: StoredArtifactPayload | None = None
         artifact: Artifact | None = None
         try:
+            # Preflight before external storage, then revalidate under the final
+            # catalog transaction so concurrent permission/quota changes win.
+            with self._put_uow(workspace_id=workspace_id, agent_id=agent_id, write=False) as uow:
+                self._authorize_artifact(uow, workspace_id=workspace_id, agent_id=agent_id,
+                    size_bytes=size_bytes, guardrail_fields=guardrail_fields)
+            stored_payload = self._artifact_store.put(
+                workspace_id=workspace_id,
+                agent_id=str(agent_id) if isinstance(agent_id, str) and agent_id.strip() else None,
+                artifact_id=artifact_id, artifact_type=artifact_type, storage_kind=stored,
+                name=name, content=stored_content, source_path=stored_path,
+                metadata=metadata_value, created_at=now)
             with self._put_uow(workspace_id=workspace_id, agent_id=agent_id) as uow:
-                # Permission gate (migration 011): ``agent_id`` is the OPTIONAL
-                # caller identity - the HTTP transport passes the authenticated
-                # agent; cooperative stdio has none (default-allow).
-                permission_set_for(self._agents, uow, agent_id).require(
-                    "artifacts", "put"
-                )
                 # Ensure the workspace row exists before the catalog FK is needed.
                 self._workspaces.upsert(
                     uow,
@@ -458,49 +510,8 @@ class ArtifactService:
                     root_realpath=root_realpath,
                     last_seen_at=now,
                 )
-                if (
-                    self._guardrails is not None
-                    and self._guardrails.has_enabled_assignments(uow)
-                ):
-                    self._guardrails.enforce(
-                        uow,
-                        workspace_id=workspace_id,
-                        actor_agent_id=agent_id,
-                        surface="artifact_put",
-                        fields=guardrail_fields,
-                    )
-                # Governance runs before filesystem persistence.  The database
-                # keeps the minimal authorship fields used by quotas, never the
-                # artifact payload itself.
-                audience_snapshot: list[Any] | None = None
-                if self._governance is not None:
-                    self._governance.enforce(
-                        uow,
-                        agent_id=agent_id,
-                        action=ACTION_ARTIFACT_PUT,
-                        size_bytes=size_bytes,
-                    )
-                    audience_snapshot = (
-                        self._governance.outbound_snapshot_for(uow, agent_id=agent_id)
-                        or None
-                    )
-
-                stored_payload = self._artifact_store.put(
-                    workspace_id=workspace_id,
-                    agent_id=(
-                        str(agent_id)
-                        if isinstance(agent_id, str) and agent_id.strip()
-                        else None
-                    ),
-                    artifact_id=artifact_id,
-                    artifact_type=artifact_type,
-                    storage_kind=stored,
-                    name=name,
-                    content=stored_content,
-                    source_path=stored_path,
-                    metadata=metadata_value,
-                    created_at=now,
-                )
+                audience_snapshot = self._authorize_artifact(uow, workspace_id=workspace_id,
+                    agent_id=agent_id, size_bytes=stored_payload.size_bytes, guardrail_fields=guardrail_fields)
                 artifact = self._artifacts.create(
                     uow,
                     artifact_id=artifact_id,
@@ -585,7 +596,10 @@ class ArtifactService:
             reader_tags = (
                 self._reader_tags(uow, agent_id) if artifact is not None else None
             )
-        if artifact is None or not snapshot_permits(artifact.audience, reader_tags):
+        private_operator = bool(artifact and artifact.reader_agent_ids is not None and agent_id == "operator")
+        if artifact is None or (not private_operator and (
+                not snapshot_permits(artifact.audience, reader_tags) or
+                artifact.reader_agent_ids is not None and agent_id not in artifact.reader_agent_ids)):
             raise OktoNexusError(
                 ErrorCode.NOT_FOUND,
                 "artifact_id not found in the resolved workspace.",
@@ -958,6 +972,10 @@ class ArtifactService:
         # historic public, target-less event. target is always a ROUTING RULE,
         # never a bare entity id (the id already rides in the payload).
         visibility, target = self._audience_event_scope(artifact.audience)
+        if artifact.reader_agent_ids is not None:
+            visibility = ARTIFACT_SCOPED_VISIBILITY
+            target = {"strategy": "mixed", "rules": [
+                {"strategy": "direct", "agent_id": agent_id} for agent_id in artifact.reader_agent_ids]}
         return self._emitter.emit(
             uow,
             workspace_id=artifact.workspace_id,

@@ -4,13 +4,22 @@ Only a correlated, durable inbox operation can supply this internal principal.
 Native payload fields never select sender, audience, workspace or approval.
 """
 import json
+import hashlib
 
 from ..errors import ErrorCode, OktoNexusError
 
 
 class RuntimeResultService:
-    def __init__(self, *, connection_factory, agents, endpoints, config):
+    ARTIFACT_QUOTA_BYTES = 64 * 1024 * 1024
+    def __init__(self, *, connection_factory, agents, endpoints, config, artifacts=None):
         self.cf, self.agents, self.endpoints, self.config = connection_factory, agents, endpoints, config
+        self.artifacts = artifacts
+
+    @staticmethod
+    def artifact_id(row):
+        if len((row["output_text"] or "").encode("utf-8")) > 60000 or row["output_truncated"]:
+            return "art_runtime_" + hashlib.sha256(row["result_id"].encode("utf-8")).hexdigest()
+        return None
 
     @staticmethod
     def row(uow, result_id):
@@ -27,11 +36,53 @@ class RuntimeResultService:
         body = row["output_text"] or "The runtime returned no textual output."
         raw = body.encode("utf-8")
         if len(raw) > 60000:
-            body = raw[:60000].decode("utf-8", errors="ignore") + "\n[Preview truncated; full captured result requires authorized runtime access.]"
+            body = raw[:60000].decode("utf-8", errors="ignore") + "\n[Preview truncated; captured output is attached as a private artifact.]"
+        artifact_id = RuntimeResultService.artifact_id(row)
+        if row["output_truncated"]:
+            body += "\n[Captured output exceeded the materialization limit; the artifact is also truncated.]"
         return {"project_root": row["root_realpath"], "from_agent_id": row["recipient_agent_id"],
             "subject": "Runtime result", "body": body, "channel_id": row["channel_id"],
             "parent_message_id": row["parent_id"],
-            "target": {"strategy": "direct", "agent_id": row["recipient_id"]}}
+            "target": {"strategy": "direct", "agent_id": row["recipient_id"]},
+            "artifacts": [artifact_id] if artifact_id else []}
+
+    def prepare(self, result_id, *, approved=False):
+        with self.cf.unit_of_work(write=False) as uow:
+            row = self.row(uow, result_id)
+            if not row:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "No authorized captured result.", {})
+            existing = self.authorize(uow, result_id=result_id, supplied=self.arguments(row), approved=approved)
+        artifact_id = self.artifact_id(row)
+        if existing or not artifact_id:
+            return None
+        if self.artifacts is None:
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Runtime artifact storage is not configured.", {})
+        with self.cf.unit_of_work() as uow:
+            existing = self.authorize(uow, result_id=result_id, supplied=self.arguments(row), approved=approved)
+            if existing:
+                return None
+            current = self.row(uow, result_id)
+            if not current["artifact_reserved_bytes"]:
+                size = len((row["output_text"] or "").encode("utf-8"))
+                usage = uow.connection.execute("SELECT COALESCE(sum(r.artifact_reserved_bytes),0),"
+                    "COALESCE(sum(CASE WHEN o.recipient_agent_id=? THEN r.artifact_reserved_bytes ELSE 0 END),0),"
+                    "COALESCE(sum(CASE WHEN o.workspace_id=? THEN r.artifact_reserved_bytes ELSE 0 END),0) "
+                    "FROM runtime_results r JOIN delivery_outbox o ON o.operation_id=r.operation_id WHERE r.artifact_reserved_bytes>0",
+                    (row["recipient_agent_id"], row["workspace_id"])).fetchone()
+                if any(used + size > limit for used, limit in zip(usage,
+                        (self.ARTIFACT_QUOTA_BYTES, self.ARTIFACT_QUOTA_BYTES // 4, self.ARTIFACT_QUOTA_BYTES // 2))):
+                    raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Runtime artifact retention quota requires operator maintenance.", {})
+                uow.connection.execute("UPDATE runtime_results SET artifact_reserved_bytes=? WHERE result_id=?", (size, result_id))
+        return self.artifacts.prepare_runtime_result(artifact_id=artifact_id,
+            workspace_id=row["workspace_id"], agent_id=row["recipient_agent_id"], content=row["output_text"] or "",
+            result_id=result_id, truncated=row["output_truncated"])
+
+    def commit_artifact(self, uow, *, result_id, prepared):
+        if prepared is None:
+            return
+        row = self.row(uow, result_id)
+        self.artifacts.commit_runtime_result(uow, prepared=prepared,
+            readers=[row["recipient_id"], row["recipient_agent_id"]])
 
     def authorize(self, uow, *, result_id, supplied, approved=False):
         row = self.row(uow, result_id)
@@ -66,9 +117,11 @@ class RuntimeResultService:
     def finish(uow, *, result_id, response):
         pending = response.get("status") == "pending_approval"
         uow.connection.execute("UPDATE runtime_results SET publication_state=?,publication_message_id=?,"
-            "publication_approval_id=COALESCE(?,publication_approval_id),publication_response=? WHERE result_id=?",
+            "publication_approval_id=COALESCE(?,publication_approval_id),publication_response=?,"
+            "output_artifact_id=COALESCE(?,output_artifact_id) WHERE result_id=?",
             ("PENDING_APPROVAL" if pending else "PUBLISHED", response.get("message_id"),
-             response.get("approval_id"), json.dumps(response, ensure_ascii=False, sort_keys=True), result_id))
+             response.get("approval_id"), json.dumps(response, ensure_ascii=False, sort_keys=True),
+             next(iter(response.get("artifacts") or []), None), result_id))
 
     def scan_once(self, messages):
         if not self.config.feature_harness_integrations:
