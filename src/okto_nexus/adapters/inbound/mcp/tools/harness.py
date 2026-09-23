@@ -716,7 +716,7 @@ def build_connector_factories(deps: Any):
                 "decisions": ["accept", "decline"], "input_contract": 1,
                 "input_limits": "blocking non-secret questions; correlated form elicitation with flat primitive fields only; no URL or remote schema resolution"} if kind == "codex" else
                 {"native_approval_contract": 1, "requires_feature_hitl": True,
-                 "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash"],
+                 "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash", "AskUserQuestion"],
                  "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}
                 if kind == "claude_code" and substrate == "stream" else {}),
             legacy_capabilities=caps,

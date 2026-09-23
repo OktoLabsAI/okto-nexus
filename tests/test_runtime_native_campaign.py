@@ -62,13 +62,18 @@ def test_native_approval_denial_preserves_security_controls(tmp_path, kind, nati
     _run_native_campaign(tmp_path, kind, native_auth_config, native_approval=True)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False):
+@pytest.mark.parametrize("kind", ["claude_code"])
+def test_native_question_roundtrip_uses_operator_input(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, native_input=True)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "nexus-home")])
     deps.config.feature_harness_integrations = True
-    deps.config.feature_hitl = native_approval
+    deps.config.feature_hitl = native_approval or native_input
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     _, operator_key = ensure_operator_key(deps, auth)
     with deps.connection_factory.unit_of_work() as uow:
@@ -118,12 +123,16 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             assert operator_key not in json.dumps(native._env)
             assert not any("NEXUS" in name and name != "_NEXUS_PROFILE_ENV_SEALED" for name in native._env)
             runtime = deps, client, str(root), [], operator_key, caller_key
-            if native_approval:
+            if native_approval or native_input:
                 from okto_nexus.domain.base import iso_plus
                 marker = root / "approval-denied-fixture.txt"
                 handoff = tool(client, caller_key, "handoff_create", {
                     "project_root": str(root), "from_agent_id": "caller", "visibility": "eligible",
                     "target": {"strategy": "direct", "agent_id": "worker"}, "payload": (
+                    "Use AskUserQuestion to ask one question: Choose fixture color. Offer exactly blue and green as labels, "
+                    "with multiSelect false. Wait for the operator answer. Then reply with that selected color and stop. "
+                    "Use no other tools, read or write no files, do not access network or credentials."
+                    if native_input else
                     "This is a permission-denial integration test in an empty temporary project. " +
                     ("Request approval using the shell tool with sandbox_permissions=require_escalated before attempting "
                      if kind == "codex" else "Use the Write tool, requesting permission before attempting ") +
@@ -154,8 +163,17 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                     time.sleep(.1)
                 assert pending, "Native turn did not request a supported canonical approval"
                 assert not marker.exists(), "Native write happened before authorization"
+                decision_payload = {"decision": "reject", "justification": "Isolated native denial fixture"}
+                if native_input:
+                    detail = client.get(f"/api/v1/approvals/{pending['approval_id']}", headers=headers)
+                    assert detail.status_code == 200, detail.text
+                    request = detail.json()["data"]["request_payload"]["kwargs"]["payload"]
+                    assert request["params"]["tool_name"] == "AskUserQuestion"
+                    questions = request["params"]["input"]["questions"]
+                    assert len(questions) == 1 and any(o["label"] == "blue" for o in questions[0]["options"])
+                    decision_payload = {"decision": "approve", "response": {"answers": {questions[0]["question"]: "blue"}}}
                 rejected = client.post(f"/api/v1/approvals/{pending['approval_id']}/decision", headers=headers,
-                                       json={"decision": "reject", "justification": "Isolated native denial fixture"})
+                                       json=decision_payload)
                 assert rejected.status_code == 200, rejected.text
                 deadline = time.monotonic() + 90
                 while time.monotonic() < deadline:
@@ -168,7 +186,10 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 assert not marker.exists()
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     reply = uow.connection.execute("SELECT decision,state FROM runtime_native_approvals WHERE operation_id=?", (op,)).fetchone()
-                    assert reply["decision"] == "decline" and reply["state"] == "SENT_UNCONFIRMED"
+                    assert reply["decision"] == ("accept" if native_input else "decline") and reply["state"] == "SENT_UNCONFIRMED"
+                    if native_input:
+                        output = uow.connection.execute("SELECT output_text FROM runtime_results WHERE operation_id=?", (op,)).fetchone()[0]
+                        assert "blue" in output.lower()
                 closed = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
                 from test_runtime_commands import wait_close_result
                 assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"

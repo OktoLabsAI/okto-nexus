@@ -119,3 +119,28 @@ def test_claude_permission_does_not_implicitly_change_policy_or_answer_questions
     assert wire["response"]["subtype"] == "error"
     with runtime[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM approvals").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("answer,multi,decision", [("blue", False, "approve"),
+    (["blue", "green"], True, "approve"), ("custom fixture answer", False, "approve"), (None, False, "reject")])
+def test_claude_question_requires_explicit_answer_then_returns_original_questions(runtime, answer, multi, decision):
+    _, client, _, _, operator, _ = runtime
+    questions = [{"question": "Choose fixture color", "header": "Color", "multiSelect": multi,
+                  "options": [{"label": "blue", "description": "Fixture blue"}, {"label": "green", "description": "Fixture green"}]}]
+    source = PEER.replace('"tool_name":"Write"', '"tool_name":"AskUserQuestion"').replace(
+        '"input":{"file_path":"fixture.txt","content":"fixture"}', '"input":' + repr({"questions": questions}))
+    claude_peer(runtime, source)
+    sent = send_message(runtime, body="Isolated question fixture")
+    request = pending(runtime)
+    url = f"/api/v1/approvals/{request['approval_id']}/decision"
+    assert client.post(url, headers={"x-api-key": operator}, json={"decision": "approve"}).status_code == 422
+    response = client.post(url, headers={"x-api-key": operator}, json={"decision": decision,
+        **({"response": {"answers": {"Choose fixture color": answer}}} if decision == "approve" else {})})
+    assert response.status_code == 200, response.text
+    wire = json.loads(wait_result(runtime, sent["runtime_operations"][0])["output_text"])
+    if decision == "approve":
+        assert wire["response"]["response"] == {"behavior": "allow", "updatedInput": {
+            "questions": questions, "answers": {"Choose fixture color": answer}}}
+    else:
+        assert wire["response"]["response"]["behavior"] == "deny"
+        assert "updatedInput" not in wire["response"]["response"]

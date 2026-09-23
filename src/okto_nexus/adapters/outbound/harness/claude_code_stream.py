@@ -985,14 +985,20 @@ class ClaudeCodeStreamConnector:
             self._emit("error", f"result:{subtype}", payload)
 
     def _handle_permission_request(self, obj):
+        from ....domain.native_inputs import CLAUDE_INPUT, validate_request
         request_id, params = obj.get("request_id"), obj.get("request")
         valid = (self.native_approvals_enabled and isinstance(request_id, str) and bool(request_id)
                  and isinstance(params, dict) and params.get("subtype") == "can_use_tool"
-                 and isinstance(params.get("tool_name"), str) and params["tool_name"] in {"Write", "Edit", "Bash"}
+                 and isinstance(params.get("tool_name"), str) and params["tool_name"] in {"Write", "Edit", "Bash", "AskUserQuestion"}
                  and isinstance(params.get("tool_use_id"), str) and bool(params["tool_use_id"])
                  and isinstance(params.get("input"), dict))
         encoded = json.dumps([request_id, params], sort_keys=True, separators=(",", ":"))
         valid = valid and len(encoded.encode()) <= 16384
+        if valid and params["tool_name"] == "AskUserQuestion":
+            try:
+                validate_request(CLAUDE_INPUT, params)
+            except (ValueError, TypeError, OverflowError, RecursionError):
+                valid = False
         request = None
         with self._state_lock:
             prior = self._approval_requests.get(request_id) if isinstance(request_id, str) else None
@@ -1027,6 +1033,7 @@ class ClaudeCodeStreamConnector:
         return None
 
     def reply_native_approval(self, session_id, request, decision):
+        from ....domain.native_inputs import response_for
         with self._state_lock:
             entry = self._approval_requests.get(request.get("request_id"))
             if (decision not in {"accept", "decline"} or not entry or not entry["pending"]
@@ -1035,9 +1042,16 @@ class ClaudeCodeStreamConnector:
                     or not self._approval_turn_active or self._closed_event.is_set()
                     or request.get("local_generation") != self._approval_generation):
                 raise RuntimeCommandNotSent("Claude permission request no longer belongs to the active turn")
-            entry["pending"] = False
             # Use original in-memory input, never the redacted journal projection.
-            answer = ({"behavior": "allow", "updatedInput": entry["request"]["params"]["input"]}
+            original_input = entry["request"]["params"]["input"]
+            if decision == "accept" and entry["request"]["params"]["tool_name"] == "AskUserQuestion":
+                try:
+                    answer_data = response_for(entry["request"], request.get("operator_response"), approved=True)
+                except (ValueError, TypeError, OverflowError, RecursionError):
+                    raise RuntimeCommandNotSent("Claude question requires a matching explicit operator answer") from None
+                original_input = {**original_input, **answer_data}
+            entry["pending"] = False
+            answer = ({"behavior": "allow", "updatedInput": original_input}
                       if decision == "accept" else {"behavior": "deny", "message": "Nexus operator declined this request"})
         self._write_json({"type": "control_response", "response": {"subtype": "success",
             "request_id": request["request_id"], "response": answer}})

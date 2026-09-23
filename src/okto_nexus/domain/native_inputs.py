@@ -4,6 +4,7 @@ import math
 
 USER_INPUT = "item/tool/requestUserInput"
 ELICITATION = "mcpServer/elicitation/request"
+CLAUDE_INPUT = "claude/AskUserQuestion"
 INPUT_METHODS = {USER_INPUT, ELICITATION}
 
 
@@ -13,7 +14,22 @@ def _require(condition):
 
 
 def validate_request(method, params):
-    if method == USER_INPUT:
+    if method == CLAUDE_INPUT:
+        data = params.get("input")
+        _require(isinstance(data, dict))
+        questions = data.get("questions")
+        _require(isinstance(questions, list) and 1 <= len(questions) <= 4)
+        texts = set()
+        for q in questions:
+            _require(isinstance(q, dict) and isinstance(q.get("question"), str) and 1 <= len(q["question"]) <= 4096)
+            _require(q["question"] not in texts and q.get("isSecret", False) is False)
+            texts.add(q["question"])
+            _require(isinstance(q.get("header"), str) and len(q["header"]) <= 12 and type(q.get("multiSelect", False)) is bool)
+            options = q.get("options")
+            _require(isinstance(options, list) and 2 <= len(options) <= 4)
+            _require(all(isinstance(o, dict) and isinstance(o.get("label"), str) and isinstance(o.get("description"), str) for o in options))
+            _require(len({o["label"] for o in options}) == len(options))
+    elif method == USER_INPUT:
         questions = params.get("questions")
         _require(params.get("isBlocking") is True and isinstance(questions, list) and 1 <= len(questions) <= 16)
         ids = set()
@@ -73,15 +89,32 @@ def _value(value, prop):
 
 def response_for(request, response, *, approved):
     method, params = request["method"], request["params"]
-    if method not in INPUT_METHODS:
+    if method == "control_request:can_use_tool" and params.get("tool_name") == "AskUserQuestion":
+        method = CLAUDE_INPUT
+    if method not in INPUT_METHODS and method != CLAUDE_INPUT:
         _require(response is None)
         return None
     validate_request(method, params)
     if not approved:
         _require(response is None)
+        if method == CLAUDE_INPUT:
+            return None  # Native tool denial, not fabricated answer data.
         return {"answers": {}} if method == USER_INPUT else {"action": "decline"}
     _require(isinstance(response, dict))
     _require(len(json.dumps(response, allow_nan=False).encode()) <= 16384)
+    if method == CLAUDE_INPUT:
+        answers = response.get("answers")
+        questions = params["input"]["questions"]
+        _require(set(response) == {"answers"} and isinstance(answers, dict) and set(answers) == {q["question"] for q in questions})
+        for q in questions:
+            value = answers[q["question"]]
+            if isinstance(value, list):
+                _require(q.get("multiSelect", False) is True and 1 <= len(value) <= 4)
+                _require(all(isinstance(v, str) and 1 <= len(v) <= 4096 for v in value))
+                _require(len(set(value)) == len(value))
+            else:
+                _require(isinstance(value, str) and 1 <= len(value) <= 4096)
+        return response
     if method == USER_INPUT:
         answers = response.get("answers")
         _require(set(response) == {"answers"} and isinstance(answers, dict))
