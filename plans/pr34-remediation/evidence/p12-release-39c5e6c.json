@@ -1,0 +1,78 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "release_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y",
+  "source_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\source",
+  "protected_worktree_assets_excluded": true,
+  "build_checks": [
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.EXE",
+        "lock",
+        "--check"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\source",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\build-0.log"
+    },
+    {
+      "command_argv": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\source\\frontend",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\build-1.log"
+    },
+    {
+      "command_argv": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\frontend-dist"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\source\\frontend",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\build-2.log"
+    },
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.EXE",
+        "build",
+        "--out-dir",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\dist"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\source",
+      "exit_code": 0
+    },
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\twine.EXE",
+        "check",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\dist\\okto_nexus-0.2.0.tar.gz"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "6b67746ec8828cde7e6b92e674f98defdae61bafed788b75ba9bf9dbd835f214",
+      "bytes": 2939556
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\dist\\okto_nexus-0.2.0.tar.gz",
+      "sha256": "29700876762936f4e8f39201a250467c996d6e35247425472a40f698e89f416c",
+      "bytes": 3425289
+    }
+  ],
+  "wheel_contents": {
+    "migrations": 64,
+    "external_work_module": true,
+    "fresh_dashboard_byte_match": true
+  }
+}

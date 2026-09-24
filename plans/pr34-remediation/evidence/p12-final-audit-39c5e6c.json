@@ -1,0 +1,1828 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "status": "AUDIT_IN_PROGRESS",
+  "full_suite_gate": "PENDING",
+  "findings": [
+    {
+      "finding": "F01",
+      "behavior": "Canonical identity is preserved by runtime lifecycle",
+      "code": "src/okto_nexus/application/runtime_open.py",
+      "symbol": "RuntimeOpenService.open",
+      "source_file_sha256": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_IDENTITY_FAILURE_ACCEPTANCE.md"
+      ],
+      "matrix_ids": [
+        "T-ID-01",
+        "T-ID-02",
+        "T-ID-03",
+        "T-ID-04",
+        "T-ID-05",
+        "T-ID-06"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F02",
+      "behavior": "Authenticated actor and current grant authorize shared runtime surfaces",
+      "code": "src/okto_nexus/application/runtime_access.py",
+      "symbol": "RuntimeAccessService.authorize",
+      "source_file_sha256": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+      "evidence": [
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_OPERATION_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "matrix_ids": [
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F03",
+      "behavior": "One inbox executor; context-only observation is a separate nonexecuting capability",
+      "code": "src/okto_nexus/application/runtime_delivery.py",
+      "symbol": "RuntimeDeliveryPlanner.enqueue",
+      "source_file_sha256": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+      "evidence": [
+        "plans/pr34-remediation/P12_PULL_PUSH_RACE.md",
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md"
+      ],
+      "matrix_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-CONS-01",
+        "T-CONS-02",
+        "T-CONS-03",
+        "T-CONS-04",
+        "T-CONS-05",
+        "T-CONS-06",
+        "T-CONS-07",
+        "T-CONS-08",
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F04",
+      "behavior": "Transactional outbox plus indexed owner drain survives lost wakeups",
+      "code": "src/okto_nexus/application/runtime_dispatcher.py",
+      "symbol": "RuntimeDispatcher",
+      "source_file_sha256": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMMIT_CRASH.md",
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_OWNER_FENCING.md",
+        "plans/pr34-remediation/P12_PRODUCER_ACCEPTANCE.md"
+      ],
+      "matrix_ids": [
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-CONS-01",
+        "T-CONS-02",
+        "T-CONS-03",
+        "T-CONS-04",
+        "T-CONS-05",
+        "T-CONS-06",
+        "T-CONS-07",
+        "T-CONS-08",
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F05",
+      "behavior": "Durable event ingress and fenced admission preserve observed versus projected facts",
+      "code": "src/okto_nexus/application/runtime_event_ingress.py",
+      "symbol": "RuntimeEventIngress",
+      "source_file_sha256": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_ADMISSION.md",
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md"
+      ],
+      "matrix_ids": [
+        "T-JRN-01",
+        "T-JRN-02",
+        "T-JRN-03",
+        "T-JRN-04",
+        "T-JRN-05",
+        "T-JRN-06",
+        "T-JRN-07",
+        "T-JRN-08",
+        "T-JRN-09",
+        "T-JRN-10",
+        "T-JRN-11",
+        "T-JRN-12",
+        "T-JRN-13"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F06",
+      "behavior": "Canonical versioned envelope retains message and sender correlation",
+      "code": "src/okto_nexus/domain/delivery.py",
+      "symbol": "module",
+      "source_file_sha256": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+      "evidence": [
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md",
+        "plans/pr34-remediation/P12_FRAGMENTED_PIPES.md",
+        "plans/pr34-remediation/P12_OPERATION_EVENTS.md"
+      ],
+      "matrix_ids": [
+        "T-LIFE-01",
+        "T-LIFE-02",
+        "T-LIFE-03",
+        "T-LIFE-04",
+        "T-LIFE-05",
+        "T-LIFE-06",
+        "T-LIFE-07",
+        "T-LIFE-08",
+        "T-LIFE-09",
+        "T-LIFE-10",
+        "T-LIFE-11",
+        "T-LIFE-12",
+        "T-JRN-01",
+        "T-JRN-02",
+        "T-JRN-03",
+        "T-JRN-04",
+        "T-JRN-05",
+        "T-JRN-06",
+        "T-JRN-07",
+        "T-JRN-08",
+        "T-JRN-09",
+        "T-JRN-10",
+        "T-JRN-11",
+        "T-JRN-12",
+        "T-JRN-13",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F07",
+      "behavior": "Canonical claim/grant/epoch owns executable work; conversation is not a claim",
+      "code": "src/okto_nexus/application/runtime_work.py",
+      "symbol": "RuntimeWorkService",
+      "source_file_sha256": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_APPROVAL_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "matrix_ids": [
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-TX-01",
+        "T-TX-02",
+        "T-TX-03",
+        "T-TX-04",
+        "T-TX-05",
+        "T-TX-06",
+        "T-TX-07",
+        "T-TX-08",
+        "T-WORK-01",
+        "T-WORK-02",
+        "T-WORK-03",
+        "T-WORK-04",
+        "T-WORK-05",
+        "T-WORK-06",
+        "T-WORK-07",
+        "T-WORK-08",
+        "T-WORK-09",
+        "T-WORK-10",
+        "T-WORK-11",
+        "T-WORK-12"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F08",
+      "behavior": "Persistent causal roots, deadlines and atomic budgets survive restart",
+      "code": "src/okto_nexus/application/runtime_causality.py",
+      "symbol": "RuntimeCausalityService",
+      "source_file_sha256": "fbbdf1d7d1ae6ecd5bdc1e1b2ef654764c92f63acf993fcac0fd0b7b726b290b",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "matrix_ids": [
+        "T-RELAY-01",
+        "T-RELAY-02",
+        "T-RELAY-03",
+        "T-RELAY-04",
+        "T-RELAY-05",
+        "T-RELAY-06",
+        "T-RELAY-07",
+        "T-RELAY-08",
+        "T-RELAY-09",
+        "T-RELAY-10",
+        "T-RELAY-11"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F09",
+      "behavior": "Trusted adapter registry and verified capabilities permit a fifth adapter",
+      "code": "src/okto_nexus/application/adapter_registry.py",
+      "symbol": "AdapterRegistry",
+      "source_file_sha256": "82374b71a94ac1b32877befaf9ccc6fc45f285a0afd02e9645d641de27a73d06",
+      "evidence": [
+        "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md",
+        "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md",
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md"
+      ],
+      "matrix_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F10",
+      "behavior": "Explicit feature gating and shared declared boot/owner composition",
+      "code": "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+      "symbol": "register",
+      "source_file_sha256": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/P12_COMPOSITION_A6A18B4.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "matrix_ids": [
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08",
+        "T-MIG-01",
+        "T-MIG-02",
+        "T-MIG-03",
+        "T-MIG-04",
+        "T-MIG-05",
+        "T-MIG-06",
+        "T-MIG-07",
+        "T-MIG-08",
+        "T-MIG-09"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F11",
+      "behavior": "Bounded lifecycle, exact process birth identity, observed stop and no ambiguous replay",
+      "code": "src/okto_nexus/application/runtime_lifecycle.py",
+      "symbol": "RuntimeLifecycle",
+      "source_file_sha256": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+      "evidence": [
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/P12_SIGNAL_DRAIN.md",
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md"
+      ],
+      "matrix_ids": [
+        "T-DISP-01",
+        "T-DISP-02",
+        "T-DISP-03",
+        "T-DISP-04",
+        "T-DISP-05",
+        "T-DISP-06",
+        "T-DISP-07",
+        "T-DISP-08",
+        "T-DISP-09",
+        "T-DISP-10",
+        "T-DISP-11",
+        "T-LIFE-01",
+        "T-LIFE-02",
+        "T-LIFE-03",
+        "T-LIFE-04",
+        "T-LIFE-05",
+        "T-LIFE-06",
+        "T-LIFE-07",
+        "T-LIFE-08",
+        "T-LIFE-09",
+        "T-LIFE-10",
+        "T-LIFE-11",
+        "T-LIFE-12",
+        "T-E2E-01",
+        "T-E2E-02",
+        "T-E2E-03",
+        "T-E2E-04",
+        "T-E2E-05",
+        "T-E2E-06",
+        "T-E2E-07"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F12",
+      "behavior": "Canonical workspace/session presence is per binding",
+      "code": "src/okto_nexus/application/runtime_open.py",
+      "symbol": "RuntimeOpenService.open",
+      "source_file_sha256": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/P12_AUDIENCE_PRIVACY.md"
+      ],
+      "matrix_ids": [
+        "T-ENDP-01",
+        "T-ENDP-02",
+        "T-ENDP-03",
+        "T-ENDP-04",
+        "T-ENDP-05",
+        "T-ENDP-06",
+        "T-ENDP-07",
+        "T-ENDP-08",
+        "T-PRES-01",
+        "T-PRES-02",
+        "T-PRES-03",
+        "T-PRES-04"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F13",
+      "behavior": "Approved profiles, explicit environment and streaming secret redaction",
+      "code": "src/okto_nexus/application/endpoints.py",
+      "symbol": "EndpointService.validate_profile",
+      "source_file_sha256": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+      "evidence": [
+        "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md",
+        "plans/pr34-remediation/P12_PAYLOAD_BOUNDARIES.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_IO_BOUNDARIES.md"
+      ],
+      "matrix_ids": [
+        "T-AUTH-01",
+        "T-AUTH-02",
+        "T-AUTH-03",
+        "T-AUTH-04",
+        "T-AUTH-05",
+        "T-AUTH-06",
+        "T-AUTH-07",
+        "T-AUTH-08",
+        "T-AUTH-09",
+        "T-AUTH-10",
+        "T-AUTH-11",
+        "T-AUTH-12",
+        "T-WORK-01",
+        "T-WORK-02",
+        "T-WORK-03",
+        "T-WORK-04",
+        "T-WORK-05",
+        "T-WORK-06",
+        "T-WORK-07",
+        "T-WORK-08",
+        "T-WORK-09",
+        "T-WORK-10",
+        "T-WORK-11",
+        "T-WORK-12"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F14",
+      "behavior": "Replay retains durable identity and cursor; operation facts are separate",
+      "code": "src/okto_nexus/application/runtime_control.py",
+      "symbol": "RuntimeControlService.replay",
+      "source_file_sha256": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+      "evidence": [
+        "plans/pr34-remediation/P12_REPLAY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_OPERATION_EVENTS.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "matrix_ids": [
+        "T-JRN-01",
+        "T-JRN-02",
+        "T-JRN-03",
+        "T-JRN-04",
+        "T-JRN-05",
+        "T-JRN-06",
+        "T-JRN-07",
+        "T-JRN-08",
+        "T-JRN-09",
+        "T-JRN-10",
+        "T-JRN-11",
+        "T-JRN-12",
+        "T-JRN-13",
+        "T-API-01",
+        "T-API-02",
+        "T-API-03",
+        "T-API-04",
+        "T-API-05",
+        "T-API-06",
+        "T-API-07",
+        "T-API-08",
+        "T-MIG-01",
+        "T-MIG-02",
+        "T-MIG-03",
+        "T-MIG-04",
+        "T-MIG-05",
+        "T-MIG-06",
+        "T-MIG-07",
+        "T-MIG-08",
+        "T-MIG-09"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    },
+    {
+      "finding": "F15",
+      "behavior": "Target discriminator normalization precedes authorization",
+      "code": "src/okto_nexus/application/governance.py",
+      "symbol": "message_action_for",
+      "source_file_sha256": "81445d5a48413a14d54d94b8e7f8794a0fad4e936787fd9382bb26b7635d36c6",
+      "evidence": [
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "matrix_ids": [
+        "T-RELAY-01",
+        "T-RELAY-02",
+        "T-RELAY-03",
+        "T-RELAY-04",
+        "T-RELAY-05",
+        "T-RELAY-06",
+        "T-RELAY-07",
+        "T-RELAY-08",
+        "T-RELAY-09",
+        "T-RELAY-10",
+        "T-RELAY-11"
+      ],
+      "status": "IMPLEMENTED; current full regression pending"
+    }
+  ],
+  "requirements": [
+    {
+      "test_id": "T-ID-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ID-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ID-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ID-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged. Limitations: Synthetic external peer; this is facade/identity normalization, not native protocol qualification.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ID-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_FAILURE_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-failure.json"
+      ],
+      "notes": "Scoped final selection 48 PASS on each platform; parent plus hashed test edits, not an immutable full-suite qualification.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ID-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_FAILURE_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-failure.json"
+      ],
+      "notes": "Scoped final selection 48 PASS on each platform; parent plus hashed test edits, not an immutable full-suite qualification.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+      ],
+      "notes": "Exact mapped nodes/parameters matched in both manifests:21 PASS Windows61.71s/21 PASS Linux75.62s. Anonymous actual stdio; valid EPT and read-only grant; parity/opaque audited denials and positive limited authenticated scope. Synthetic peers, no native model or aggregate gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+      ],
+      "notes": "Exact mapped nodes/parameters matched in both manifests:21 PASS Windows61.71s/21 PASS Linux75.62s. Anonymous actual stdio; valid EPT and read-only grant; parity/opaque audited denials and positive limited authenticated scope. Synthetic peers, no native model or aggregate gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources. Limitations: Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes. Limitations: Synthetic peers; authorization and durable dispatch are the production composition.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+      ],
+      "notes": "Exact mapped nodes/parameters matched in both manifests:21 PASS Windows61.71s/21 PASS Linux75.62s. Anonymous actual stdio; valid EPT and read-only grant; parity/opaque audited denials and positive limited authenticated scope. Synthetic peers, no native model or aggregate gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/evidence/p12-backend-secret-audit.json",
+        "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md",
+        "plans/pr34-remediation/evidence/p03-backend-secret-correction.json"
+      ],
+      "notes": "Historical e388227 behavioral FAIL retained. Corrected connection-scoped known backend values before journal/result/replay/approval/error exposure; single/split/character fragments, two turns, logs, constructor/start, escaping, boundedness and trusted policy labels verified with synthetic peers in production composition. Final regression56 PASS Windows and56 PASS Linux; no provider calls.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PAYLOAD_BOUNDARIES.md",
+        "plans/pr34-remediation/evidence/p12-payload-boundaries.json"
+      ],
+      "notes": "Five native-option categories rejected before spawn/write over both surfaces. Three genuine REST500 regressions corrected; expanded37 PASS each platform.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+      ],
+      "notes": "Exact mapped nodes/parameters matched in both manifests:21 PASS Windows61.71s/21 PASS Linux75.62s. Anonymous actual stdio; valid EPT and read-only grant; parity/opaque audited denials and positive limited authenticated scope. Synthetic peers, no native model or aggregate gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-AUTH-12",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OPERATION_AUTHORIZATION.md",
+        "plans/pr34-remediation/evidence/p12-operation-authorization.json"
+      ],
+      "notes": "Command key/result read cross-actor denials and revoked cached replies; 30 PASS each platform, parent plus test hash.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint. Limitations: Production selection/dispatch with synthetic native peers.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds. Limitations: Production open selection with synthetic native peers.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
+      ],
+      "notes": "Production REST/MCP and owned protocol fixture prove A pre-write refusal to approved B, same operation/envelope/hash/inbox, one B write, consistent selection/history, ready/on-demand targets, independent approved profiles and versioned extension opt-in. Revocation, scope, uncertainty, continuation and endpoint-scoped handoff grants deny transfer. Final selection21 PASS on each platform; no provider/model fallback campaign claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-ENDP-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md"
+      ],
+      "notes": "",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-commit-crash.json"
+      ],
+      "notes": "Real disposable owner exit after canonical commit before wake; restart same operation, one wire send. Expanded6 PASS each platform.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
+      ],
+      "notes": "Nine exact-stimulus cases per platform; parent SHA plus new-test hash. Concurrent cross-surface send dedupe/one grant charge/one effect; changed content, authorized target and owner context conflict while original immutable fields and charge remain unchanged. Synthetic peers, no provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
+      ],
+      "notes": "Nine exact-stimulus cases per platform; parent SHA plus new-test hash. Concurrent cross-surface send dedupe/one grant charge/one effect; changed content, authorized target and owner context conflict while original immutable fields and charge remain unchanged. Synthetic peers, no provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_APPROVAL_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-approval-acceptance-index.json"
+      ],
+      "notes": "Concurrent repeated operator approval admits exactly one canonical message/transport/native turn and durable result; no executable intent while pending. Actual protocol subprocess fixture,1 PASS per platform; provider not called.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PRODUCER_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-producers-index.json"
+      ],
+      "notes": "MCP, REST steering, synthetic handoff, approval executor, result publication and independent stdio writer use canonical transactional admission; actual post-write rollback cuts plus positive controls.10 PASS/platform, exact joins in unit doc.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IO_BOUNDARIES.md",
+        "plans/pr34-remediation/evidence/p12-io-boundaries.json"
+      ],
+      "notes": "Required IO categories observed outside writer UoWs; explicit deterministic model/loopback fixture, positive path and embedding assertions. Final4 PASS each platform; arbitrary future adapters not implied.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-TX-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup. Limitations: Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PULL_PUSH_RACE.md",
+        "plans/pr34-remediation/evidence/p12-pull-push-index.json"
+      ],
+      "notes": "Barrier before/after push reservation: actual canonical pull competes at SQLite BEGIN IMMEDIATE, sees no payload, one push executor wins. Actual MCP send plus independently wired InboxService;2 PASS per platform. Preparatory HTTP-loop barrier failures retained.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
+      ],
+      "notes": "Proven pre-write rejection released by authorized REST/MCP to the original authenticated pull inbox, no native turn write or duplicate delivery. Windows final 56 PASS; Linux integration 40 PASS/1 stale migration pin FAIL, corrected pin/reference gate16 PASS. See evidence for exact scopes and intermediate failures; automatic endpoint fallback remains pending.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Operator recovery requires current attempt/epoch/state, reason and duplicate-risk acknowledgement. REST/MCP/stdio decisions agree. One audit decision releases the same logical inbox without rewriting unknown transport facts; pending native calls/live runtimes prevent takeover. A late terminal stays historical and cannot consume or publish after release. Limitations: Synthetic peers and disposable stores. Explicit takeover acknowledges possible duplicate external work; no exactly-once or native replay claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md",
+        "plans/pr34-remediation/evidence/p12-mirror-observation-index.json"
+      ],
+      "notes": "13 final context-observer cases/platform plus16 unsafe built-in mirror cases/platform. Optional verified context v1, one executor reservation, subordinate durable attempts, current auth/read ACL, bounded timeout, atomic rollback and explicit close/reopen without replay. Four native adapters do not claim context_without_execution. Separate generation hashes preserve REDs and regression scope.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-CONS-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer. Limitations: Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable. Limitations: External harness peers are synthetic; the Nexus producer is a separate real process.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OWNER_FENCING.md",
+        "plans/pr34-remediation/evidence/p12-owner-fencing-index.json"
+      ],
+      "notes": "Actual competing server processes, actual SENDING crash after native acceptance/before capture, expired lease recovery without replay; stale epoch CAS/prewrite fencing and slow-call timeout regression.9 distinct PASS nodes/platform; fixture preparation import failures retained.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OWNER_FENCING.md",
+        "plans/pr34-remediation/evidence/p12-owner-fencing-index.json"
+      ],
+      "notes": "Actual competing server processes, actual SENDING crash after native acceptance/before capture, expired lease recovery without replay; stale epoch CAS/prewrite fencing and slow-call timeout regression.9 distinct PASS nodes/platform; fixture preparation import failures retained.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Urgent interrupt proceeds while normal write is blocked and binds expected operation. Stale native turn is rejected, queued steer is rejected after its turn ends, and later delivery/administrative turns cannot overtake a retry-wait lane. Limitations: Controlled event barriers and synthetic peers; does not claim preemption of arbitrary OS-blocked native code.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-dispatch-fairness-red.json",
+        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses. Limitations: Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity. Limitations: Disposable store and synthetic peers; not a throughput or sustained flood measurement.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-DISP-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md"
+      ],
+      "notes": "Typed local lane-busy pre-write proof, injected clock/jitter, exact deadlines, bounded attempts, autonomous timer wake and owner-replacement persistence. Final Windows/Linux37 PASS each plus lost-proof commit case1 PASS each. Equivalent-endpoint fallback remains separately pending.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Restart production lifespan with stable boot specs; repeated boot reuses session/request, identity preserved. Failed connector isolated, remaining endpoint ready; uncertain failed start stays quarantined on restart. Limitations: Disposable production bootstrap and synthetic peers; native processes qualified separately.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/evidence/p12-birth-identity-index.json"
+      ],
+      "notes": "4 PASS each platform: real owner death before/after lifecycle registration reaps exact child/grandchild/guardian; simulated stale numeric PID cannot redirect owned terminate/kill to unrelated echo process. Shared production birth primitive, no actual kernel PID allocator reuse or provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SIGNAL_DRAIN.md",
+        "plans/pr34-remediation/evidence/p12-signal-drain-index.json"
+      ],
+      "notes": "Captured unprojected delta during active native turn drains exactly once before journal closes; checkpoint equals final watermark, owned peer/descendant/guardian witnesses stop, exit bounded; unfinished work stays OUTCOME_UNKNOWN without fabricated native terminal/result. Linux10 PASS includes real SIGTERM; Windows7 PASS3 POSIX SKIP (not relabeled signal PASS). Exact source hashes, preparation failures and20s stop bound recorded.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/evidence/p12-crash-pressure-summary.json"
+      ],
+      "notes": "Six measured plus two warmup actual-owner kills on each platform under verified same-CPU contention; exact handles/pidfds and RSS/descriptors recorded. Startup/load-recovery not implied.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/evidence/p12-birth-identity-index.json"
+      ],
+      "notes": "4 PASS each platform: real owner death before/after lifecycle registration reaps exact child/grandchild/guardian; simulated stale numeric PID cannot redirect owned terminate/kill to unrelated echo process. Shared production birth primitive, no actual kernel PID allocator reuse or provider claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/evidence/p12-settle-detach-index.json"
+      ],
+      "notes": "Scoped protocol fixture acceptance: deterministic actual Pi settle barrier Windows/Linux; POSIX attach external process/listener survives Nexus detach. Windows attach SKIP, native Pi and dedicated Claude attach remain NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Concurrent closes overlap final native event and EOF; same durable close operation, one connector close, one captured final, closing entry released. Projection failure/repeated close recovery is separately exercised. Limitations: Controlled peer EOF, no native model. Error and EOF use the shared cleanup path.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Production factories reuse exact native connection for two endpoints, one detach preserves process and sibling durable result, last close observes stop. Active-close terminal correlation and stale-terminal uncertainty tested. Limitations: Owned Codex protocol peer. Real Codex multiplex also passed separately at752cd72, not counted in this full-suite manifest.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/evidence/p12-settle-detach-index.json"
+      ],
+      "notes": "Scoped protocol fixture acceptance: deterministic actual Pi settle barrier Windows/Linux; POSIX attach external process/listener survives Nexus detach. Windows attach SKIP, native Pi and dedicated Claude attach remain NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_FRAGMENTED_PIPES.md",
+        "plans/pr34-remediation/evidence/p12-fragmented-pipes-index.json"
+      ],
+      "notes": "Real fragmented-byte UTF-8 with128KiB legal frame whitespace and concurrent2MiB newline-free stderr on Pi/Codex/Claude synthetic pipes; two exact logical terminals/results and bounded retained tails. Existing invalid/oversized frame and overflow regressions pass.24 distinct nodes/platform; exact hashes, failures, commands and limits recorded. Native providers remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Malformed/unsupported Pi readiness fails with protocol_incompatible diagnostic and quarantines binding while Codex can still open; invalid Codex native thread identity never becomes ready or receives turn/start. Limitations: Synthetic incompatible protocol peers; native binary version qualification is separately controlled.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release. Limitations: Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-projection-commit-index.json"
+      ],
+      "notes": "Stable Nexus journal event_uid replay after process restart. Fresh native frames are not deduplicated by content or invented native references. SQLite projection/checkpoint are atomic; rewind is test-only fault injection on a stopped disposable store.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record. Limitations: Deterministic file fault injection rather than power-loss hardware testing.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable. Limitations: Deterministic file fault injection.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "tests/test_runtime_event_journal.py::test_reopen_preserves_distinct_equal_text_and_stable_cursors"
+      ],
+      "notes": "Parent 93d5fab + P08 unit: five equal-text events retain five distinct UIDs and sequential cursors after reopen. No native replay-dedup claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-projection-commit-index.json"
+      ],
+      "notes": "Stable Nexus journal event_uid replay after process restart. Fresh native frames are not deduplicated by content or invented native references. SQLite projection/checkpoint are atomic; rewind is test-only fault injection on a stopped disposable store.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release. Limitations: Owned Codex-shaped Python protocol peer, not a real model.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_ADMISSION.md",
+        "plans/pr34-remediation/evidence/p12-capture-admission-index.json"
+      ],
+      "notes": "Known journal quota/fsync failure rejects new REST/MCP/independent stdio intent, no false durable result, bounded buffers and redacted ERROR alert. Actual SQLite page exhaustion rolls back canonical admission.9 final new +103 regression PASS/platform; no physical host disk filled.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/P12_REPLAY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-replay-acceptance.json"
+      ],
+      "notes": "Public REST/MCP pagination with concurrent append/ACL and retained cursor; internal file cursor expiry explicit.26 PASS each platform after genuine invalid-cursor REST500 fix.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-12",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference. Limitations: Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-JRN-13",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn. Limitations: Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Three distinct authenticated candidates and the existing multiple-endpoint pool yield one claimant/executor. Losers cannot read payload, execution binding or winning runtime; winner has explicit positive scoped access. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Every eligible authenticated candidate sees the OPEN offer without executable payload; only the winning claimant receives it after claim. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Handoff offer creates no executable outbox fan-out. Claim creates exactly one binding/native delivery; repeated claim reuses operation and charges the grant once. Native turn end leaves canonical work claimed until explicit completion. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Actual connector receives authoritative identity/role/skills/workspace/profile and delivery intent without secret refs or key hashes; identity remains intact. Versioned explicitly admitted result contract performs completion and rejects forged authority. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Correlated terminal/result and structured-looking text without explicit structured completion admission both leave the handoff CLAIMED. Only canonical authorized complete transitions it. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Authorized evidence completes/rejects through core, verification-required work stays VERIFYING, claimant cannot self-verify or impersonate creator, stale generation is fenced and authorized reviewer completes the current generation via REST. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Operator explicit risk-acknowledged recovery reopens uncertain old work; new claim increments epoch. Late old terminal is durably retained under its old operation while structured completion is BLOCKED and new work remains CLAIMED. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Real native RPC ack is held apart from terminal by a bounded peer gate; persisted interrupt request stays unconfirmed, work stays CLAIMED without result. Only actual interrupted terminal creates durable evidence, never automatic work completion. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Codex shell/file and Claude Write requests pass through canonical durable HITL, caller cannot decide, both operator allow/deny map to exact native replies; Claude cannot update permissions or turn unsupported policy requests into authorization. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Duplicate decision reuses canonical result, conflicting decision is denied, uncertain write is never repeated. Late/cancelled/ended requests become NOT_SENT and consumed native request ID cannot be reused by next turn. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Unsupported native inputs and sandbox/approval launch contracts are rejected. Disabled work capability cannot admit/charge a managed claim, while qualified compatible Codex/Claude conversations complete after rejection. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-WORK-12",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md",
+        "plans/pr34-remediation/evidence/p12-attach-work-integration-index.json"
+      ],
+      "notes": "",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Actual isolated HTTP owners and protocol peers; Windows 5 PASS, Linux 5 PASS. Application-clock simulation and crash cuts detailed in evidence; no real-model or physical power-loss claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "notes": "Executed real HTTP/MCP composition with protocol fixtures; exact correlation, eight-way admission/retry and non-executing receipts/errors. Windows/Linux 39 PASS each; native model relay remains separate NOT_RUN.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-10",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "notes": "Authenticated production HTTP/MCP with isolated native protocol fixtures. Explicit three-agent chain, distinct endpoints, independent entry after deadline and forged content with trace disabled; scope and exact commands in evidence.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-RELAY-11",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+      ],
+      "notes": "Production HTTP/MCP with isolated protocol fixture: explicit broadcast reaches present authorized audience; removal restores caller-only reply. Sender/origin denial, artifact audience, fanout limits and Windows/Linux evidence in P10_NOTIFICATION_TARGETS.md. No native-model campaign claimed.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-PRES-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-PRES-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json"
+      ],
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-PRES-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "After restoring the persisted RUNNING/active crash state and replacing the owner through production bootstrap, historical runtime becomes unknown and quarantined; its presence closes while an independent canonical session remains active. Native end is not fabricated and no runtime is relaunched. Limitations: Deterministic persisted crash cut, not OS process killing; exact owner death is qualified by separate crash campaigns.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-PRES-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_PRIVACY.md",
+        "plans/pr34-remediation/evidence/p12-audience-privacy-index.json"
+      ],
+      "notes": "Both inbound/outbound exclusion enforced at actual authenticated message admission and reverse result publication after policy change; private policy absent from peer envelope/output and denied response.2 PASS per platform, synthetic protocol subprocess.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json"
+      ],
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md",
+        "plans/pr34-remediation/evidence/p12-canonical-payload-index.json"
+      ],
+      "notes": "Canonical v1 conversational input, authenticated server-filled envelope, explicit JSON-string normalization, legacy aliases/conflicts and persisted v2 hash compatibility.17 final contract cases/platform; synthetic adapters and owned protocol fixture, no native attach qualification.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OPERATION_EVENTS.md",
+        "plans/pr34-remediation/evidence/p12-operation-events-index.json"
+      ],
+      "notes": "Queued and unconfirmed command states plus actual pushed native acceptance/terminal and authenticated replay with exact operation/attempt. Native outbound methods only turn/start and turn/interrupt;2 PASS/platform, synthetic protocol child.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P11_SCOPED_DISCOVERY.md"
+      ],
+      "notes": "Canonical skill names and authorized endpoints with partial declared capabilities; no private config. Binary-effective negotiation explicitly not_probed and pending separately.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-API-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md",
+        "plans/pr34-remediation/P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md"
+      ],
+      "notes": "Windows browser scenarios UNKNOWN, AMBIGUOUS_BINDING, detached external session and pending native input/approval were executed as documented in P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md and P11_NATIVE_INPUT_DASHBOARD.md. Historical evidence; current full suite disables browser opt-in. No native-provider or Linux-browser qualification implied.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-01",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-02",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Main source58ca69b still lacks per-Agent field absence diagnostics (RED2 FAIL). Isolated correction and explicit trusted-source fixture restoration now43 PASS Windows/43 PASS Linux; NOT yet integrated while full regression70522 remains frozen. No full requirement PASS until integration. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-07",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-disable-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Behavior RED on source58ca69b in isolated acceptance worktree: current-owner OUTCOME_UNKNOWN rejected captured native acceptance/terminal correlation (56925:2 PASS/1 FAIL). Narrow projector correction qualified Windows32259:56 PASS238.46s/Linux90306:56 PASS248.55s. Main integration pending; aggregate gate remains FAIL until correction integrated. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-08",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md"
+      ],
+      "notes": "Disposable production composition: 11 PASS Windows / 11 PASS Linux. Explicit offline operator quiescence required; no real user store or native provider test in this unit.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-MIG-09",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+        "plans/pr34-remediation/evidence/p12-retention-deactivation.json"
+      ],
+      "notes": "Fresh-key REST admission for inactive target reproduced1 FAIL2 deselected5.72s; current shared authorization correction qualified44 PASS Windows140.13s/44 PASS Linux157.19s. Final additive read/close assertions3 PASS Windows13.14s/3 PASS Linux16.42s. Prune/deactivation preserves pending/unknown exclusion and old command dedupe; no provider or final gate claim.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-01",
+      "scoped_status": "NOT_RUN",
+      "evidence": [],
+      "notes": "",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-02",
+      "scoped_status": "NOT_RUN",
+      "evidence": [],
+      "notes": "",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-03",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-codex.json",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-claude.json"
+      ],
+      "notes": "Source752cd72: real Codex0.156.1 7 PASS/1639 frames; Claude2.1.281 6 PASS/239 frames. Zero native status queries or unclassified outbound frames, no recorder overflow. Limited to approved local installations and isolated profiles; Pi/attach native NOT_RUN. Not a performance benchmark.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-04",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md",
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-windows-final.json",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-linux-final.json"
+      ],
+      "notes": "Parent af53f829175a0582036c874a321ce5cbd872f009 plus recorded campaign/helper/scenario hashes. Each platform:2 warmups+4 measured same-store recovery cycles under measured same-CPU contention, exact process stops and bounded campaign RSS/descriptors/threads. All historical failed trials retained. Synthetic peers only; not native-provider endurance or performance comparison. Regression8 PASS each platform.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-05",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md",
+        "plans/pr34-remediation/evidence/p12-benchmark-windows.json",
+        "plans/pr34-remediation/evidence/p12-benchmark-linux.json"
+      ],
+      "notes": "Immutable d7d87d0 versus536b993 on each platform, identical synthetic peer/interpreter/dependencies/SQLite FULL+WAL, credentials required,5 warmups+40 measured turns in each of3 rounds per revision.120 samples/revision/platform; nearest-rank percentiles, full samples and observed auth/runtime policy/fsync cost published. Current latency is higher; guarantees differ and no causal decomposition, provider/SLA/capacity claim is made. All rounds terminal PASS and owned peers stopped.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-06",
+      "scoped_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMPOSITION_A6A18B4.md",
+        "plans/pr34-remediation/evidence/p12-composition-a6a18b4-index.json"
+      ],
+      "notes": "Selected actual serve CLI, HTTP owner/stdio multiprocess, auth/flags, journal recovery and canonical presence paths at a6a18b4:Windows20 PASS1 POSIX SKIP/Linux21 PASS. Not final full-suite/native qualification; pending mirror/external attach excluded.",
+      "current_full_suite_status": "PENDING"
+    },
+    {
+      "test_id": "T-E2E-07",
+      "scoped_status": "NOT_RUN",
+      "evidence": [],
+      "notes": "",
+      "current_full_suite_status": "PENDING"
+    }
+  ]
+}

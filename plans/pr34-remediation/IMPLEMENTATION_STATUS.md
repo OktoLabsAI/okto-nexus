@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `49ebd0e`; the external work integration is the milestone containing this status update on `feature/v0.2.0`; no merge/reset/force push.
+- All implementation milestones committed/pushed through `39c5e6c` (authenticated external attach work) on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema064, surface58, identity25. No personal database is a fixture.
@@ -66,7 +66,13 @@ External attach work configuration implemented after48a8ea2: EndpointService now
 
 External attach integration supersedes that preparatory RED: T-WORK-12 scoped PASS. See P12_ATTACH_WORK_INTEGRATION.md and its generation-specific manifests. Final operational gate Windows81 PASS1 POSIX SKIP/Linux82 PASS; writer/attach/migration gate Windows47 PASS1 POSIX SKIP/Linux48 PASS; broader pre-writer-fix regression384 PASS each platform, with exact hashes and overlaps retained. The older-writer bypass was reproduced and fixed with an additive capability fence. Retention FK failure and reopened-offer rejection refusal were also reproduced and corrected before publication. Completed final JUnit files were recovered; prior process exit codes were unavailable at resume. Required isolated live MCP smoke and static checks PASS; all handles terminal. No new installed-provider run.
 
-Next: final original-matrix/finding audit and immutable committed-source full Windows/Linux suites with persistent XML, then release/package/build/reinstall0.2.0. The126 scoped PASS rows require a final evidence/finding join; three original rows remain NOT_RUN. The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external channel is fixture-qualified; installed native attach is not.
+Current run: Windows full suite at39c5e6c, tool handle51046, launch/status .git/pr34-evidence/full-39c5e6c-windows-launch.json, persistent output/XML in its recorded run_dir. One failure observed at tests/test_harness_claude_code_connector.py::test_events_iterator_delivers_promptly_not_on_a_poll_interval; await terminal traceback before diagnosis. Production/tests stay frozen. Linux full suite not started yet. Collect-only handle38805 completed0 with2755 nodes. No installed provider run during this regression.
+
+Release preparation at39c5e6c: clean git archive, uv lock --check, npm ci, temporary TypeScript/Vite build, uv build, Twine wheel/sdist validation PASS. Wheel contains64 migrations, new external-work module, and byte-matched fresh dashboard. Record/artifact paths and hashes: .git/pr34-evidence/release-39c5e6c.json. Build handles88791/41684 terminal0. Global installation remains0.1.10; do not install as a passed release before resolving full-regression results.
+
+Finding/evidence audit started in P12_FINAL_AUDIT.md and evidence/p12-final-audit-39c5e6c.json:15 findings and129 original matrix rows, all referenced paths checked. Full Ruff initially failed7 on obsolete diagnostic p11_writer_mode_probe.py; archived byte-identically as .py.txt (historical command explicitly labeled), then full Ruff PASS. No runtime/test changes during the suite.
+
+Next: finish immutable full regression, diagnose failures, complete evidence/finding/phase reconciliation and approved native final qualification, then local reinstall0.2.0. The126 scoped PASS rows require a final evidence/finding join; three original rows remain NOT_RUN. The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external channel is fixture-qualified; installed native attach is not.
 
 ## Recent completed milestones
 

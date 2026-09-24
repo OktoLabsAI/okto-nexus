@@ -84,3 +84,5 @@ a replacement merely because observing it times out. Its wrapper writes redacted
 `evidence/p12-suite-feeb14d.json`; raw XML remains in a unique temporary directory.
 Production code/tests remain unchanged while that run proceeds. P12 final gate is
 NOT PASSED regardless of that suite's eventual result while the above gaps remain.
+
+Archive note2026-09-24: the original diagnostic artifact is preserved byte-for-byte as evidence/p11_writer_mode_probe.py.txt (SHA256 2844bffcddc261f5054acaea8f5d794c288a557844f9aeed079db4af8e033f9f). It contains a leading plus and is not a supported runnable utility. The command above is historical, not a current operation instruction. Current writer/cutover acceptance uses tests/test_runtime_writer_contract.py and P12_MIGRATION_ROLLOUT_INTEGRATION.md. No historical test result is reclassified by this archival correction.
