@@ -1,0 +1,317 @@
+{
+  "source_sha": "e3326adcea286a297ae7a86c82d1633052dee3ac",
+  "platform": "windows",
+  "counts": {
+    "PASS": 48
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "48",
+      "time": "48.387",
+      "timestamp": "2026-09-24T05:49:44.304866-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "See command_document for exact invocation",
+  "limitations": "Parent SHA plus changed test hashes; synthetic peers only. Not a full suite, benchmark or native campaign.",
+  "records": [
+    {
+      "class": "tests.test_runtime_identity_failure_acceptance",
+      "test": "test_canonical_catalogue_gates_rest_and_mcp_and_runtime_open_cannot_change_it",
+      "status": "PASS",
+      "seconds": 4.069
+    },
+    {
+      "class": "tests.test_runtime_identity_failure_acceptance",
+      "test": "test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process[rest-session_validation]",
+      "status": "PASS",
+      "seconds": 3.042
+    },
+    {
+      "class": "tests.test_runtime_identity_failure_acceptance",
+      "test": "test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process[rest-persistence]",
+      "status": "PASS",
+      "seconds": 2.886
+    },
+    {
+      "class": "tests.test_runtime_identity_failure_acceptance",
+      "test": "test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process[mcp-session_validation]",
+      "status": "PASS",
+      "seconds": 3.098
+    },
+    {
+      "class": "tests.test_runtime_identity_failure_acceptance",
+      "test": "test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process[mcp-persistence]",
+      "status": "PASS",
+      "seconds": 3.351
+    },
+    {
+      "class": "tests.test_runtime_process_ownership",
+      "test": "test_rest_owner_start_timeout_has_no_running_session",
+      "status": "PASS",
+      "seconds": 4.188
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_revoked_binding_during_constructor_does_not_start_peer",
+      "status": "PASS",
+      "seconds": 3.092
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_open_without_client_key_reserves_before_constructor",
+      "status": "PASS",
+      "seconds": 3.308
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_unfinished_start_is_quarantined_without_replay",
+      "status": "PASS",
+      "seconds": 3.486
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_restart_expires_only_old_runtime_presence_and_quarantines_binding",
+      "status": "PASS",
+      "seconds": 4.169
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_adapter_satisfies_protocol[fake]",
+      "status": "PASS",
+      "seconds": 0.247
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_adapter_satisfies_protocol[sqlite]",
+      "status": "PASS",
+      "seconds": 0.24
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_register_and_snapshot[fake]",
+      "status": "PASS",
+      "seconds": 0.266
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_register_and_snapshot[sqlite]",
+      "status": "PASS",
+      "seconds": 0.285
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_duplicate_and_blank_names_are_validation_errors[fake]",
+      "status": "PASS",
+      "seconds": 0.266
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_duplicate_and_blank_names_are_validation_errors[sqlite]",
+      "status": "PASS",
+      "seconds": 0.292
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_delete_unknown_name_is_not_found[fake]",
+      "status": "PASS",
+      "seconds": 0.269
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_delete_unknown_name_is_not_found[sqlite]",
+      "status": "PASS",
+      "seconds": 0.277
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_deleting_unowned_name_succeeds[fake]",
+      "status": "PASS",
+      "seconds": 0.259
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_contract_deleting_unowned_name_succeeds[sqlite]",
+      "status": "PASS",
+      "seconds": 0.273
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_delete_owned_name_raises_capability_in_use[fake]",
+      "status": "PASS",
+      "seconds": 0.238
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_delete_owned_name_raises_capability_in_use[sqlite]",
+      "status": "PASS",
+      "seconds": 0.281
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_inactive_owners_still_block_deletion[fake]",
+      "status": "PASS",
+      "seconds": 0.249
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_inactive_owners_still_block_deletion[sqlite]",
+      "status": "PASS",
+      "seconds": 0.26
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_falsey_flag_is_not_ownership[fake]",
+      "status": "PASS",
+      "seconds": 0.234
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_falsey_flag_is_not_ownership[sqlite]",
+      "status": "PASS",
+      "seconds": 0.296
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_ensure_registered_passes_for_registered_names[fake]",
+      "status": "PASS",
+      "seconds": 0.239
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_ensure_registered_passes_for_registered_names[sqlite]",
+      "status": "PASS",
+      "seconds": 0.288
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_ensure_registered_lists_every_unknown_name_sorted[fake]",
+      "status": "PASS",
+      "seconds": 0.245
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_ensure_registered_lists_every_unknown_name_sorted[sqlite]",
+      "status": "PASS",
+      "seconds": 0.283
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_seed_absorbs_announced_names_and_is_idempotent[fake]",
+      "status": "PASS",
+      "seconds": 0.243
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_seed_absorbs_announced_names_and_is_idempotent[sqlite]",
+      "status": "PASS",
+      "seconds": 0.262
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_seed_never_overwrites_operator_descriptions[fake]",
+      "status": "PASS",
+      "seconds": 0.236
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_seed_never_overwrites_operator_descriptions[sqlite]",
+      "status": "PASS",
+      "seconds": 0.263
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_bootstrap_seeds_a_store_that_predates_the_catalog",
+      "status": "PASS",
+      "seconds": 0.291
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_agent_register_fails_closed_and_persists_nothing",
+      "status": "PASS",
+      "seconds": 0.329
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_agent_register_without_capabilities_never_hits_the_gate",
+      "status": "PASS",
+      "seconds": 0.304
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_message_capability_target_fails_closed",
+      "status": "PASS",
+      "seconds": 0.32
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_message_mixed_subrule_capability_fails_closed",
+      "status": "PASS",
+      "seconds": 0.375
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_message_registered_capability_target_delivers",
+      "status": "PASS",
+      "seconds": 0.468
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_handoff_fallback_capability_fails_closed",
+      "status": "PASS",
+      "seconds": 0.338
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_historic_targets_never_block_deletion",
+      "status": "PASS",
+      "seconds": 0.38
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_iter_target_capabilities_covers_every_shape",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_rest_capabilities_crud_roundtrip",
+      "status": "PASS",
+      "seconds": 1.133
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_rest_delete_owned_returns_409_with_the_normative_envelope",
+      "status": "PASS",
+      "seconds": 0.957
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_rest_agent_writes_fail_closed_with_422",
+      "status": "PASS",
+      "seconds": 0.955
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_capability_list_merges_catalog_and_owners",
+      "status": "PASS",
+      "seconds": 0.326
+    },
+    {
+      "class": "tests.test_capability_catalog",
+      "test": "test_surface_revision_16_and_docs_teach_the_fail_closed_rule",
+      "status": "PASS",
+      "seconds": 0.002
+    }
+  ],
+  "source_state": "parent SHA plus changed test files",
+  "dirty_files_sha256": {
+    "tests/test_runtime_identity_failure_acceptance.py": "53e80238417290e531f36e59897025234de5a1a532bcdb00f4cca6c95a2f4370",
+    "tests/test_runtime_process_ownership.py": "2e215bf71377b10f44cbd767fd64a1f8f51b45a67726b65a8d5de0c5c5be9d8e"
+  },
+  "command_document": "plans\\pr34-remediation\\P12_IDENTITY_FAILURE_ACCEPTANCE.md"
+}

@@ -1,0 +1,30 @@
+{
+  "parent_sha": "e3326adcea286a297ae7a86c82d1633052dee3ac",
+  "source_state": "Tests only; production unchanged",
+  "dirty_files_sha256": {
+    "tests/test_runtime_identity_failure_acceptance.py": "53e80238417290e531f36e59897025234de5a1a532bcdb00f4cca6c95a2f4370",
+    "tests/test_runtime_process_ownership.py": "2e215bf71377b10f44cbd767fd64a1f8f51b45a67726b65a8d5de0c5c5be9d8e"
+  },
+  "requirement_nodes": {
+    "T-ID-05": [
+      "tests/test_runtime_identity_failure_acceptance.py::test_canonical_catalogue_gates_rest_and_mcp_and_runtime_open_cannot_change_it"
+    ],
+    "T-ID-06": [
+      "tests/test_runtime_identity_failure_acceptance.py::test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process",
+      "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session"
+    ]
+  },
+  "windows": {
+    "passed": 48,
+    "seconds": 48.41,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 48,
+    "seconds": 69.93,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_IDENTITY_FAILURE_ACCEPTANCE.md",
+  "limitations": "Scoped acceptance; no native or final gate promotion"
+}
