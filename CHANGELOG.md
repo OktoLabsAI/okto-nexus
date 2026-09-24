@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 43 and additive migration055 provide explicit operator recovery of managed
+  handoffs, preserving attempt facts and fencing stale claim completion without replay.
 - Surface 42 and additive migration054 add audited operator operation recovery.
   Cancel only before send-intent, explicitly release uncertain conversation
   delivery to its original inbox, or abandon uncertain command tracking. Current

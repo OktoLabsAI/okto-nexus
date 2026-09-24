@@ -223,6 +223,7 @@ def maintain_operations(deps, parameters=None):
     from ...runtime_admin import RuntimeOperationMaintenanceBody
     from okto_nexus.application.runtime_operation_maintenance import RuntimeOperationMaintenanceService
     from .inbox import build_service as build_inbox
+    from .handoff import build_service as build_handoffs
     context = request_context()
     access = build_access_service(deps)
     access.authorize_maintenance(context)
@@ -234,7 +235,7 @@ def maintain_operations(deps, parameters=None):
     if owner is None and args["action"] != "inspect":
         return call_runtime_owner(deps.config.home_dir, "/api/v1/harness/outbox", args)
     return RuntimeOperationMaintenanceService(access=access, owner=owner,
-        inbox=build_inbox(deps)).run(context, **args)
+        inbox=build_inbox(deps), handoffs=build_handoffs(deps)).run(context, **args)
 
 
 def administer_endpoints(deps, view, parameters):
@@ -1045,7 +1046,7 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
-                     maintenance: Annotated[Any, Field(description="Object for selected view: profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+                     maintenance: Annotated[Any, Field(description="Object for selected view: profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
         """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts. Outbox recovery never replays native calls. compact requires journal."""
         if view == "bindings" and not compact:
             return discover_bindings(deps, maintenance)

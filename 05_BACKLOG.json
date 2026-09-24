@@ -1995,7 +1995,9 @@
             "tests/test_runtime_discovery.py",
             "src/okto_nexus/application/runtime_operation_maintenance.py",
             "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql",
-            "tests/test_runtime_operation_reconciliation.py"
+            "tests/test_runtime_operation_reconciliation.py",
+            "src/okto_nexus/migrations/055_runtime_handoff_recovery.sql",
+            "tests/test_runtime_handoff_recovery.py"
           ],
           "test_results": [
             {
@@ -2025,15 +2027,23 @@
               "result": "PASS",
               "observed": "81 passed, 1 existing deprecation warning in 116.65s. Includes disabled-admission restart and authenticated stdio owner recovery. Earlier scoped results and REDs documented separately; no native provider run.",
               "evidence": "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md"
+            },
+            {
+              "sha": "fe6c5c101c151aa9ee705a8ff53da266c1bf086a + managed handoff recovery worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_handoff_recovery.py",
+              "result": "PASS",
+              "observed": "Windows13 PASS, Linux13 PASS, added authenticated stdio1 PASS; dashboard7 PASS. Exact scope and intermediate failures in evidence.",
+              "evidence": "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
             "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
             "plans/pr34-remediation/P11_SCOPED_DISCOVERY.md",
-            "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md"
+            "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
+            "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md"
           ],
-          "notes": "Shared CAS, scoped discovery and explicit conversation/command recovery implemented. Exact snapshot, operator authorization, idempotency, quarantine and no native replay. Managed handoff recovery, effective capability negotiation and remaining admin parity pending."
+          "notes": "Shared conversation/command and canonical managed handoff recovery implemented. Exact snapshot/claim generation, operator authorization, idempotency, quarantine and no native replay. Effective capability negotiation and remaining admin parity/cutover gates pending."
         },
         {
           "task_id": "P11-T03",
@@ -2100,9 +2110,10 @@
             "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
             "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
             "plans/pr34-remediation/P11_GUIDE_AND_SUITE_INVENTORY.md",
-            "plans/pr34-remediation/P11_ADR_AMENDMENT.md"
+            "plans/pr34-remediation/P11_ADR_AMENDMENT.md",
+            "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md"
           ],
-          "notes": "Operator guide and ADR0004 now describe accepted canonical runtime architecture and explicit remaining gates; surface42/identity9/additive054 references current. Historical LAN, bypass, implicit registration and callback/broadcast instructions superseded. Full phase acceptance pending."
+          "notes": "Guide, ADR, changelog and resource describe surface43/identity10/additive055 recovery. ON schema +16 chars; OFF unchanged. Full phase acceptance pending."
         },
         {
           "task_id": "P11-T05",

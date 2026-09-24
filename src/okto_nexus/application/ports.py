@@ -2434,6 +2434,12 @@ class TaskRepo(Protocol):
 class HandoffRepo(Protocol):
     """Persistence for :class:`Handoff` rows, including atomic claim semantics."""
 
+    def reopen_managed_claim(self, uow: UnitOfWork, *, workspace_id: str,
+                             handoff_id: str, claimed_by: str, claim_epoch: int,
+                             updated_at: str) -> Handoff:
+        """Reopen the exact claim after explicit authorized runtime recovery."""
+        ...
+
     def create(
         self,
         uow: UnitOfWork,

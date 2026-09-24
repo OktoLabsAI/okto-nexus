@@ -154,18 +154,20 @@ Operator recovery uses exact snapshots, idempotency, reason and explicit risk
 acknowledgement. Conversation takeover releases the original inbox item without
 native replay; command abandonment retains history. Recovery quarantines endpoints
 and revokes grants/boot. Late results remain durable but cannot use abandoned
-authority. Dedicated managed-claim recovery is still pending.
+authority. Explicit managed-claim recovery reopens the same CLAIMED handoff,
+fences its abandoned attempt and requires a fresh claim without replaying work.
+VERIFYING and terminal canonical states cannot be reopened this way.
 
 ## Consequences and acceptance
 
-SQLite migrations are additive (current schema054), with no destructive reverse
+SQLite migrations are additive (current schema055), with no destructive reverse
 migration used as rollback. Production composition, authorization parity, lost
 replies, restart, journal/ownership and transaction boundaries require integration
 evidence. Fixture success is reported separately from actual provider/model runs.
 
 Use the [operator guide](../harness-integrations/operator-guide.md) and
 [administration reference](../harness-integrations/runtime-administration.md) for
-implemented workflows. Remaining effective probes, managed-work recovery,
+implemented workflows. Remaining effective probes,
 backup/restore, advanced native campaigns and full P12 matrix must
 pass their applicable gates before release. Pi/attach external limits remain
 explicit NOT_RUN, never converted into PASS. No A2A server, external broker,

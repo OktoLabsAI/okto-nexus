@@ -32,6 +32,7 @@ export interface RuntimeOperationRow {
   attempt_id: string | null; owner_epoch: number | null;
   runtime_lifecycle: string | null; terminal_event_id: string | null;
   reconciliation_id: string | null;
+  handoff?: { handoff_id: string; claim_epoch: number } | null;
   reconciliation: { action: string; reason: string; created_at: string } | null;
 }
 

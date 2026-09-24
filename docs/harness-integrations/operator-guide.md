@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface42.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface43.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -150,8 +150,11 @@ abandonment retains history. Uncertain recovery quarantines the endpoint and rev
 grants/boot. Late results remain durable but cannot publish or consume the released
 delivery using abandoned authority.
 
-Generic conversation recovery refuses managed handoffs. Dedicated managed-claim
-recovery remains pending; do not bypass it by editing claims or outbox rows.
+Generic conversation recovery refuses managed handoffs. Use explicit operator
+`recover_handoff` with the exact handoff ID and claim epoch after closing or
+reconciling the runtime. It reopens the same handoff without sending work; a new
+claim is required. The old work envelope stays reserved, and late old-epoch
+results cannot complete a new claim. See the administration reference.
 
 Disabling admission stops new harness work while existing capture/recovery remains
 available. A restarted disabled store with runtime history starts a maintenance

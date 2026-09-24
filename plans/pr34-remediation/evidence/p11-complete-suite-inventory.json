@@ -1,0 +1,33 @@
+{
+  "sha_scope": "routing migration worktree later committed5c661fa; subsequent source/fixture/docs edits overlapped the long run, so this is an inventory, not a final immutable-SHA gate",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --maxfail=10 --junitxml=plans/pr34-remediation/evidence/current-suite-inventory.xml",
+  "result": "FAIL",
+  "observed": "6 failed,2240 passed,92 skipped,2 warnings in1424.36s; reached end of collection",
+  "failures": [
+    {
+      "test": "tests.test_serve_harness_shutdown_reap::test_sigterm_with_live_session_reaps_the_harness_child",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    },
+    {
+      "test": "tests.test_serve_harness_shutdown_reap::test_sigint_with_live_session_reaps_the_harness_child",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    },
+    {
+      "test": "tests.test_serve_harness_shutdown_reap::test_clean_shutdown_after_explicit_close_leaves_no_orphan",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    },
+    {
+      "test": "tests.test_serve_harness_sigkill_reap::test_sigkill_with_live_session_is_reaped_and_watchdog_self_terminates",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    },
+    {
+      "test": "tests.test_serve_harness_sigkill_reap::test_clean_shutdown_stops_the_watchdog_promptly",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    },
+    {
+      "test": "tests.test_serve_harness_sigkill_reap::test_sigterm_shutdown_stops_the_watchdog_promptly",
+      "reason": "AttributeError: module 'os' has no attribute 'killpg'. Did you mean: 'kill'?"
+    }
+  ],
+  "cleanup": "Six fixture serve processes survived broken legacy Windows cleanup. Only PIDs from this run owned temp-home locks were queried; cwd, exact command and process creation vs lock creation all verified before terminating those six handles and waiting for completion. No global PID scan or personal process touched. psutil7.2.2 installed in local test venv for this scoped cleanup."
+}

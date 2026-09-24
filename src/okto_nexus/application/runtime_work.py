@@ -119,6 +119,8 @@ class RuntimeWorkService:
         return dict(operation_id=operation_id, claim_epoch=handoff.claim_epoch, status="PENDING", grant_id=grant["grant_id"])
 
     def revalidate(self, uow, *, operation):
+        if operation.get("reconciliation_id"):
+            raise denied()
         binding = uow.connection.execute("SELECT * FROM runtime_handoff_bindings WHERE operation_id=?",
                                          (operation["operation_id"],)).fetchone()
         if not binding:
@@ -221,7 +223,10 @@ class RuntimeWorkService:
         # Even a terminal native turn is not complete/reject/verify. Keep the
         # canonical claimant until an explicit canonical transition; a lease
         # expiration must not hand uncertain or accepted work to another agent.
-        return uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE handoff_id=? LIMIT 1",
+        return uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings b "
+                                      "JOIN handoffs h ON h.handoff_id=b.handoff_id AND h.claim_epoch=b.claim_epoch "
+                                      "JOIN delivery_outbox o ON o.operation_id=b.operation_id "
+                                      "WHERE b.handoff_id=? AND o.reconciliation_id IS NULL LIMIT 1",
                                       (handoff_id,)).fetchone() is not None
 
     @staticmethod

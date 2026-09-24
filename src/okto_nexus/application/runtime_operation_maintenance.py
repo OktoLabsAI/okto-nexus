@@ -11,18 +11,21 @@ def conflict(message):
 
 
 class RuntimeOperationMaintenanceService:
-    def __init__(self, *, access, owner, inbox):
+    def __init__(self, *, access, owner, inbox, handoffs=None):
         self.access, self.owner, self.inbox = access, owner, inbox
+        self.handoffs = handoffs
 
     def run(self, context, *, action="inspect", operation_id=None, after_operation_id=None, limit=50,
             expected_state=None, expected_attempt_id=None, expected_owner_epoch=None,
-            idempotency_key=None, reason=None, acknowledge_duplicate_risk=False):
+            idempotency_key=None, reason=None, acknowledge_duplicate_risk=False,
+            expected_handoff_id=None, expected_claim_epoch=None):
         self.access.authorize_maintenance(context)
         if action == "inspect":
-            if any(value is not None for value in (expected_state, expected_attempt_id, expected_owner_epoch, idempotency_key, reason)) or acknowledge_duplicate_risk:
+            if any(value is not None for value in (expected_state, expected_attempt_id, expected_owner_epoch, idempotency_key, reason, expected_handoff_id, expected_claim_epoch)) or acknowledge_duplicate_risk:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Inspection does not accept mutation fields.", {})
             return self._inspect(context, operation_id=operation_id, after_operation_id=after_operation_id, limit=limit)
-        if (not isinstance(action, str) or action not in {"cancel_pending", "release_to_inbox", "abandon_command"} or after_operation_id is not None or limit != 50
+        recover_work = action == "recover_handoff"
+        if (not isinstance(action, str) or action not in {"cancel_pending", "release_to_inbox", "abandon_command", "recover_handoff"} or after_operation_id is not None or limit != 50
                 or not isinstance(operation_id, str) or not 1 <= len(operation_id) <= 128 or not isinstance(expected_state, str)
                 or not isinstance(idempotency_key, str) or not 1 <= len(idempotency_key) <= 128
                 or not isinstance(reason, str) or not 1 <= len(reason) <= 512 or not reason.strip()
@@ -30,6 +33,12 @@ class RuntimeOperationMaintenanceService:
                 or (expected_owner_epoch is not None and (type(expected_owner_epoch) is not int or expected_owner_epoch < 1))
                 or (expected_attempt_id is not None and not isinstance(expected_attempt_id, str))):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Recovery requires an exact attempt snapshot, idempotency key and audit reason.", {})
+        if recover_work:
+            if (not isinstance(expected_handoff_id, str) or not 1 <= len(expected_handoff_id) <= 128
+                    or type(expected_claim_epoch) is not int or expected_claim_epoch < 1):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Work recovery requires the exact handoff and claim generation.", {})
+        elif expected_handoff_id is not None or expected_claim_epoch is not None:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Claim fields require recover_handoff.", {})
         owner = self.owner
         if not owner or owner._stop.is_set() or owner._quiescing.is_set():
             raise conflict("Recovery requires the active serve owner.")
@@ -38,7 +47,8 @@ class RuntimeOperationMaintenanceService:
         if action != "cancel_pending" and owner.operation_inflight(operation_id):
             raise conflict("An external call is still in flight; its timeout does not release ownership.")
         digest = hashlib.sha256(json.dumps([action, operation_id, expected_state, expected_attempt_id,
-            expected_owner_epoch, reason, acknowledge_duplicate_risk], separators=(",", ":")).encode()).hexdigest()
+            expected_owner_epoch, reason, acknowledge_duplicate_risk] +
+            ([expected_handoff_id, expected_claim_epoch] if recover_work else []), separators=(",", ":")).encode()).hexdigest()
         actor, now = context.actor_agent_id or "operator", self.access.clock.now_iso()
         with self.access.cf.unit_of_work() as uow:
             self.access.authorize_maintenance(context, uow=uow)
@@ -56,17 +66,25 @@ class RuntimeOperationMaintenanceService:
                 table = "runtime_commands"
                 row = uow.connection.execute("SELECT * FROM runtime_commands WHERE operation_id=?", (operation_id,)).fetchone()
             if (not row or row["reconciliation_id"] or row["status"] != expected_state or
-                    row["attempt_id"] != expected_attempt_id or row["owner_epoch"] != expected_owner_epoch or row["terminal_event_id"]):
+                    row["attempt_id"] != expected_attempt_id or row["owner_epoch"] != expected_owner_epoch
+                    or (row["terminal_event_id"] and not recover_work)):
                 raise conflict("Operation changed, completed, or was already reconciled; refresh its snapshot.")
-            if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone():
+            binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
+            if binding and not recover_work:
                 raise conflict("Managed work requires canonical handoff recovery; its claim cannot be released as conversation.")
+            if recover_work and (not self.handoffs or table != "delivery_outbox" or not binding
+                    or binding["handoff_id"] != expected_handoff_id or binding["claim_epoch"] != expected_claim_epoch):
+                raise conflict("Operation does not bind the expected canonical claim.")
             pending = action == "cancel_pending"
             if pending:
                 if row["status"] not in {"PENDING", "CLAIMED"} or acknowledge_duplicate_risk:
                     raise conflict("Only an attempt before send-intent can be cancelled without uncertain effects.")
             else:
-                if (not acknowledge_duplicate_risk or row["status"] not in {"OUTCOME_UNKNOWN", "SENT_UNCONFIRMED", "ACCEPTED"}
-                        or (action == "release_to_inbox") != (table == "delivery_outbox")):
+                eligible = {"OUTCOME_UNKNOWN", "SENT_UNCONFIRMED", "ACCEPTED"}
+                if recover_work:
+                    eligible |= {"REJECTED", "CANCELLED", "FAILED_FINAL"}
+                if (not acknowledge_duplicate_risk or row["status"] not in eligible
+                        or (not recover_work and (action == "release_to_inbox") != (table == "delivery_outbox"))):
                     raise conflict("Uncertain recovery requires explicit duplicate-risk acknowledgement and the correct source action.")
                 if uow.connection.execute("SELECT 1 FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state NOT IN "
                         "('stopped','detached','unknown','outcome_unknown','legacy_unlinked') LIMIT 1", (row["endpoint_id"],)).fetchone():
@@ -78,15 +96,22 @@ class RuntimeOperationMaintenanceService:
             response = {"reconciliation_id": rid, "operation_id": operation_id, "action": action,
                 "transport_state": "CANCELLED" if pending else row["status"], "previous_transport_state": row["status"],
                 "ack_level": row["ack_level"], "native_replayed": False, "result_invented": False,
-                "duplicate_risk_acknowledged": not pending, "inbox_released": table == "delivery_outbox",
+                "duplicate_risk_acknowledged": not pending, "inbox_released": table == "delivery_outbox" and not recover_work,
                 "endpoint_quarantined": not pending}
+            if recover_work:
+                response["handoff"] = self.handoffs.recover_runtime_claim(uow, context=context, operation=row,
+                    handoff_id=expected_handoff_id, claim_epoch=expected_claim_epoch, reason=reason, reconciliation_id=rid)
             uow.connection.execute("INSERT INTO runtime_operation_reconciliations(reconciliation_id,operation_id,source_kind,actor_agent_id,"
                 "idempotency_key,request_hash,action,previous_state,attempt_id,owner_epoch,endpoint_id,duplicate_risk_acknowledged,reason,response,created_at) "
-                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (rid, operation_id, table, actor, idempotency_key, digest, action, row["status"],
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (rid, operation_id, table, actor, idempotency_key, digest,
+                "abandon_command" if recover_work else action, row["status"],
                 row["attempt_id"], row["owner_epoch"], row["endpoint_id"], int(not pending), reason, json.dumps(response, sort_keys=True), now))
+            if recover_work:
+                uow.connection.execute("UPDATE runtime_operation_reconciliations SET canonical_action='reopen_handoff',handoff_id=?,claim_epoch=? WHERE reconciliation_id=?",
+                                       (expected_handoff_id, expected_claim_epoch, rid))
             uow.connection.execute(f"UPDATE {table} SET reconciliation_id=?,updated_at=?" +
                 (",status='CANCELLED',reason='operator_cancelled_before_send'" if pending else "") + " WHERE operation_id=?", (rid, now, operation_id))
-            if table == "delivery_outbox":
+            if table == "delivery_outbox" and not recover_work:
                 self.inbox.release_runtime_reservation(uow, operation_id=operation_id)
             if not pending:
                 uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='operator_takeover',updated_at=? WHERE endpoint_id=?",
@@ -118,9 +143,12 @@ class RuntimeOperationMaintenanceService:
             items = []
             for row in rows[:limit]:
                 item = dict(row)
-                audit = uow.connection.execute("SELECT reconciliation_id,action,previous_state,duplicate_risk_acknowledged,reason,created_at "
+                audit = uow.connection.execute("SELECT reconciliation_id,action,canonical_action,handoff_id,claim_epoch,previous_state,duplicate_risk_acknowledged,reason,created_at "
                     "FROM runtime_operation_reconciliations WHERE reconciliation_id=?", (row["reconciliation_id"],)).fetchone()
                 item["reconciliation"] = dict(audit) if audit else None
+                binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?",
+                                                 (row["operation_id"],)).fetchone()
+                item["handoff"] = dict(binding) if binding else None
                 items.append(item)
         return {"items": items, "has_more": len(rows) > limit,
                 "next_operation_id": items[-1]["operation_id"] if len(rows) > limit else None}

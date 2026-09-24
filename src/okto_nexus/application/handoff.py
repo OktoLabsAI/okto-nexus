@@ -88,6 +88,7 @@ from ..domain.handoff import (
     EVENT_CREATED,
     EVENT_DEPENDENCY_FAILED,
     EVENT_EXPIRED,
+    EVENT_RECOVERED,
     EVENT_REJECTED,
     EVENT_UNBLOCKED,
     EVENT_VERIFICATION_FAILED,
@@ -1771,6 +1772,31 @@ class HandoffService:
                 uow, workspace_id=workspace_id, now_iso=now
             )
         return {"workspace_id": workspace_id, "expired": expired}
+
+    def recover_runtime_claim(self, uow, *, context, operation, handoff_id, claim_epoch, reason, reconciliation_id):
+        """Operator recovery inside the transport decision's existing writer UoW.
+
+        The caller fences the native attempt and current owner. This service
+        owns the canonical claim transition and its visibility-scoped event.
+        """
+        if not self.runtime_work:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Runtime work recovery is unavailable.", {})
+        self.runtime_work.access.authorize_maintenance(context, uow=uow)
+        handoff = self._load_in_workspace(uow, operation["workspace_id"], handoff_id)
+        if (handoff.status != STATUS_CLAIMED or handoff.claimed_by != operation["recipient_agent_id"]
+                or handoff.claim_epoch != claim_epoch):
+            raise OktoNexusError(ErrorCode.CONFLICT, "Canonical claim changed; refresh before recovery.", {})
+        binding = self.runtime_work.binding(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+        if not binding or binding["operation_id"] != operation["operation_id"]:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Attempt does not own this claim generation.", {})
+        updated = self._handoffs.reopen_managed_claim(uow, workspace_id=handoff.workspace_id,
+            handoff_id=handoff_id, claimed_by=handoff.claimed_by, claim_epoch=claim_epoch, updated_at=self._clock.now_iso())
+        self._emit(uow, handoff=updated, event_type=EVENT_RECOVERED, actor_agent_id=context.actor_agent_id,
+            payload={"handoff_id": handoff_id, "workspace_id": handoff.workspace_id, "status": STATUS_OPEN,
+                "previous_claimed_by": handoff.claimed_by, "claim_epoch": claim_epoch,
+                "operation_id": operation["operation_id"], "reconciliation_id": reconciliation_id, "reason": reason})
+        return {"handoff_id": handoff_id, "status": STATUS_OPEN, "previous_claim_epoch": claim_epoch,
+                "automatic_execution": False}
 
     def _expire_old_leases(
         self, uow: UnitOfWork, *, workspace_id: str, now_iso: str

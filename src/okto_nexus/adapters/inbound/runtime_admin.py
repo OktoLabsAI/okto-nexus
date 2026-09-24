@@ -70,6 +70,8 @@ class RuntimeOperationMaintenanceBody(RuntimeAdminBody):
     expected_state: str | None = None
     expected_attempt_id: str | None = Field(default=None, min_length=1, max_length=128)
     expected_owner_epoch: int | None = Field(default=None, ge=1)
+    expected_handoff_id: str | None = Field(default=None, min_length=1, max_length=128)
+    expected_claim_epoch: int | None = Field(default=None, ge=1)
     idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
     reason: str | None = Field(default=None, min_length=1, max_length=512)
     acknowledge_duplicate_risk: bool = False

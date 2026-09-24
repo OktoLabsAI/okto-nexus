@@ -93,7 +93,7 @@ export function RuntimesView({ onApprovals }: { onApprovals: () => void }) {
       {!busy && !operationError && !operations.length && <p>No operations on this page.</p>}
       {operations.map(row => <article key={row.operation_id} className={card} data-testid={`runtime-operation-${row.operation_id}`}>
         <h3 className="font-semibold break-all">{row.operation_id}</h3>
-        <p className="text-sm text-surface-500">{row.source_kind === "delivery_outbox" ? "Conversation delivery" : "Runtime command"}</p>
+        <p className="text-sm text-surface-500">{row.handoff ? "Managed handoff execution" : row.source_kind === "delivery_outbox" ? "Conversation delivery" : "Runtime command"}</p>
         <p>{row.agent_id} · {row.endpoint_id} · <strong>{row.state}</strong></p>
         <p>Evidence: {row.ack_level} · Runtime: {row.runtime_lifecycle || "Not linked"}</p>
         <p>Reason: {row.reason || "No reason recorded"}</p>
@@ -104,9 +104,11 @@ export function RuntimesView({ onApprovals }: { onApprovals: () => void }) {
             <dt>Owner epoch</dt><dd>{row.owner_epoch ?? "Not assigned"}</dd>
             <dt>Workspace</dt><dd>{row.workspace_id}</dd>
             <dt>Session</dt><dd>{row.runtime_session_id || "Not linked"}</dd>
+            {row.handoff && <><dt>Handoff</dt><dd>{row.handoff.handoff_id}</dd><dt>Claim epoch</dt><dd>{row.handoff.claim_epoch}</dd></>}
             <dt>Reconciliation</dt><dd>{row.reconciliation ? `${row.reconciliation.action}: ${row.reconciliation.reason}` : "None recorded"}</dd>
           </dl>
           <p className="text-sm mt-2">Recovery uses the operator outbox API with this exact snapshot, an idempotency key and a reason. Uncertain takeover requires explicit duplicate-risk acknowledgement. Managed handoff claims cannot be released as conversation.</p>
+          {row.handoff && <p className="text-sm mt-2">Use recover_handoff with the handoff and claim epoch to request canonical recovery. Reopening requires a new explicit claim; it does not restart native execution.</p>}
         </details>
       </article>)}
       <div className="flex gap-2">

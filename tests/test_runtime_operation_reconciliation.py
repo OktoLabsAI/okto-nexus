@@ -303,7 +303,7 @@ def test_reconciliation_migration_is_additive_and_repeatable(tmp_path):
     MigrationRunner(factory, migrations_dir=old).apply()
     with factory.unit_of_work() as uow:
         uow.connection.execute("INSERT INTO runtime_access_audit(request_id,action,decision,created_at) VALUES('previous','read','deny','2026-09-23T00:00:00Z')")
-    assert MigrationRunner(factory).apply() == [54]
+    assert MigrationRunner(factory).apply() == [54, 55]
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT decision FROM runtime_access_audit WHERE request_id='previous'").fetchone()[0] == "deny"

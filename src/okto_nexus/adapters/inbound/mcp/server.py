@@ -444,7 +444,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 40 = revision-fenced profile/endpoint edits, revocation and atomic configuration audit.
 #: 41 = scoped agent runtime binding discovery; declared capabilities and explicit liveness limits.
 #: 42 = explicit operator attempt reconciliation; no automatic native replay.
-SURFACE_REVISION = 42
+#: 43 = explicit canonical handoff recovery with claim/attempt fencing.
+SURFACE_REVISION = 43
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="9",
+    version="10",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -541,7 +541,7 @@ after_endpoint_id while has_more is true. Only visible endpoint IDs become
 cursors. Up to ten latest sessions per endpoint are returned with
 sessions_has_more. A bounded scan may require a narrower agent_id filter.
 
-# Runtime attempt recovery (surface 42)
+# Runtime attempt and canonical claim recovery (surface 43)
 Operator-only `harness_list(view="outbox", maintenance={...})` shares
 GET/POST /api/v1/harness/outbox. action=inspect (default) accepts operation_id,
 after_operation_id and limit1..100(default50), returns items/has_more/next_operation_id.
@@ -559,6 +559,12 @@ different body conflicts. No mutation starts a native request:
   reservation to the same logical inbox; acknowledge_duplicate_risk=true required.
 - abandon_command: explicitly close administrative tracking of an uncertain
   command, with the same risk acknowledgement; it creates no inbox delivery.
+- recover_handoff: requires expected_handoff_id, expected_claim_epoch and explicit
+  duplicate-risk acknowledgement. Reopens the exact CLAIMED handoff through its
+  canonical service; does not release the work payload as conversation. Audit
+  records transport abandonment and canonical_action=reopen_handoff together.
+  Completed/rejected/cancelled/VERIFYING handoffs cannot be reopened. A later
+  explicit claim advances the epoch; old completion/structured results stay fenced.
 
 Uncertain recovery requires no active call, no ready/closing runtime on the
 endpoint and no reserved start. It preserves the original transport state/ACK,

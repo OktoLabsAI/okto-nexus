@@ -102,3 +102,16 @@ def test_native_approval_navigation_uses_existing_canonical_view(runtime, dashbo
     open_view(dashboard)
     dashboard.get_by_role("button", name="Review native approvals", exact=True).click()
     expect(dashboard.get_by_test_id("detail-" + request["approval_id"])).to_be_visible()
+
+
+def test_managed_work_diagnostic_does_not_label_work_as_conversation(runtime, dashboard):
+    from playwright.sync_api import expect
+    from test_runtime_handoff_recovery import uncertain_work
+    hid, _, _, row = uncertain_work(runtime)
+    open_view(dashboard)
+    card = dashboard.get_by_test_id("runtime-operation-" + row["operation_id"])
+    expect(card).to_contain_text("Managed handoff execution")
+    card.get_by_text("Attempt and recovery details", exact=True).click()
+    expect(card).to_contain_text(hid)
+    expect(card).to_contain_text("Claim epoch")
+    expect(card).to_contain_text("Use recover_handoff")

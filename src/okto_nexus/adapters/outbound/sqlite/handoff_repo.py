@@ -414,7 +414,10 @@ class SqliteHandoffRepo(_ClockBacked):
                    SET status = ?, claimed_by = NULL, lease_expires_at = NULL,
                        updated_at = ?
                  WHERE handoff_id = ? AND workspace_id = ? AND status = ?
-                   AND NOT EXISTS (SELECT 1 FROM runtime_handoff_bindings b WHERE b.handoff_id=handoffs.handoff_id)
+                   AND NOT EXISTS (SELECT 1 FROM runtime_handoff_bindings b
+                       JOIN delivery_outbox o ON o.operation_id=b.operation_id
+                       WHERE b.handoff_id=handoffs.handoff_id AND b.claim_epoch=handoffs.claim_epoch
+                       AND o.reconciliation_id IS NULL)
                 """,
                 (STATUS_OPEN, now, handoff_id, workspace_id, STATUS_CLAIMED),
             )
@@ -422,6 +425,15 @@ class SqliteHandoffRepo(_ClockBacked):
             raise _db_error("reopening expired handoff", exc) from exc
         if cur.rowcount == 0:
             return None
+        return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
+
+    def reopen_managed_claim(self, uow, *, workspace_id, handoff_id, claimed_by, claim_epoch, updated_at):
+        """Explicit canonical recovery, never the lease-expiry path."""
+        cur = uow.connection.execute("UPDATE handoffs SET status=?,claimed_by=NULL,lease_expires_at=NULL,updated_at=? "
+            "WHERE handoff_id=? AND workspace_id=? AND status=? AND claimed_by=? AND claim_epoch=?",
+            (STATUS_OPEN, updated_at, handoff_id, workspace_id, STATUS_CLAIMED, claimed_by, claim_epoch))
+        if cur.rowcount != 1:
+            raise OktoNexusError(ErrorCode.CONFLICT, "Canonical claim changed before recovery.", {})
         return self.get(uow, workspace_id=workspace_id, handoff_id=handoff_id)
 
     def transition_claimed(

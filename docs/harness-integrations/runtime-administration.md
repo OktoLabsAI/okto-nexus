@@ -1,4 +1,4 @@
-# Runtime administration — surface 42
+# Runtime administration — surface 43
 
 This reference describes the implemented 0.2.0 administrative subset. The release
 and complete P11/P12 gates are still pending; consult the
@@ -218,7 +218,7 @@ them or relax sandbox/approval policy. The original request remains available
 for operator inspection.
 
 The existing journal/artifact maintenance actions remain available. Managed-work
-claim recovery and capability negotiation remain
+capability negotiation remains
 tracked in P11. Deleting persistence rows is not an operational substitute for
 those actions. Migration 053 is additive; operational rollback uses deactivation,
 drain and recovery, not reverse SQL or deletion of the audit/history.
@@ -243,3 +243,25 @@ Pages are bounded to50 endpoints/operations with explicit next/first controls;
 only10 sessions per endpoint are shown, with an indicator for older records.
 When admission is disabled, operator operation inspection remains available even
 if connection discovery is denied. No native status polling is introduced.
+
+## Recovering managed handoffs
+
+Surface43 adds `recover_handoff` to the same outbox maintenance endpoint and
+`harness_list` maintenance facade. Supply the existing exact transport snapshot,
+idempotency key, reason, `acknowledge_duplicate_risk=true`, plus
+`expected_handoff_id` and `expected_claim_epoch` from operation inspection.
+Only the current operator may act, including with admission disabled. Close or
+reconcile the endpoint first; active calls, starts and ready sessions block recovery.
+
+Recovery atomically changes the matching CLAIMED handoff to OPEN and emits
+`handoff.recovered`. It preserves transport state/ACK, quarantines the endpoint,
+revokes grants/boot, and fences late old results. It does not release the old work
+envelope as a conversational inbox item, create a new delivery or start a process.
+VERIFYING, COMPLETED, REJECTED and CANCELLED handoffs are refused. An explicit
+new claim increments the epoch; reusing old completion authority is rejected.
+Recovery acknowledges possible prior external effects; it does not undo them.
+
+Migration055 extends the existing audit additively: transport `action=abandon_command`
+plus `canonical_action=reopen_handoff`, handoff ID and claim epoch. The API action
+remains `recover_handoff`. This mapping preserves migration054 enum and existing
+idempotency hashes; no replacement audit table or independent work queue exists.
