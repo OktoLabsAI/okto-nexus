@@ -1,0 +1,244 @@
+{
+  "source_sha": "475d5e5b03b816084b7aa54cec829a80b6a9d7f0",
+  "platform": "windows",
+  "counts": {
+    "PASS": 36
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "36",
+      "time": "138.406",
+      "timestamp": "2026-09-24T05:31:33.555260-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaign tests selected; only synthetic fixtures.",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Parent SHA plus new acceptance file hash recorded in binding unit evidence; not an immutable full suite. Actual HTTP/MCP and synthetic peers only; overlapping platform timings are not benchmarks.",
+  "records": [
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+      "status": "PASS",
+      "seconds": 5.778
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+      "status": "PASS",
+      "seconds": 4.946
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+      "status": "PASS",
+      "seconds": 4.667
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_approved_fallback_sends_once_to_b_with_the_same_logical_delivery[True]",
+      "status": "PASS",
+      "seconds": 3.992
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_approved_fallback_sends_once_to_b_with_the_same_logical_delivery[False]",
+      "status": "PASS",
+      "seconds": 3.912
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_never_crosses_approval_or_logical_scope[group]",
+      "status": "PASS",
+      "seconds": 3.451
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_never_crosses_approval_or_logical_scope[disabled]",
+      "status": "PASS",
+      "seconds": 3.924
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_never_crosses_approval_or_logical_scope[profile]",
+      "status": "PASS",
+      "seconds": 4.071
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_never_crosses_approval_or_logical_scope[workspace]",
+      "status": "PASS",
+      "seconds": 3.544
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_never_crosses_approval_or_logical_scope[agent]",
+      "status": "PASS",
+      "seconds": 3.418
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_revalidates_both_admission_and_target_before_write[source_endpoint]",
+      "status": "PASS",
+      "seconds": 3.936
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_revalidates_both_admission_and_target_before_write[source_profile]",
+      "status": "PASS",
+      "seconds": 4.096
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_revalidates_both_admission_and_target_before_write[target_endpoint]",
+      "status": "PASS",
+      "seconds": 4.123
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_revalidates_both_admission_and_target_before_write[target_profile]",
+      "status": "PASS",
+      "seconds": 3.847
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_fallback_revalidates_both_admission_and_target_before_write[actor]",
+      "status": "PASS",
+      "seconds": 3.852
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_error_text_after_native_write_cannot_enable_endpoint_fallback",
+      "status": "PASS",
+      "seconds": 3.705
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_conversation_continuation_keeps_its_original_binding",
+      "status": "PASS",
+      "seconds": 3.416
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_managed_work_does_not_borrow_an_endpoint_scoped_grant_for_fallback",
+      "status": "PASS",
+      "seconds": 4.021
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_unqualified_on_demand_native_contract_falls_back_before_any_turn_write",
+      "status": "PASS",
+      "seconds": 4.093
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_registered_processless_adapter_requires_versioned_fallback_binding[True-additional]",
+      "status": "PASS",
+      "seconds": 3.981
+    },
+    {
+      "class": "tests.test_runtime_endpoint_fallback",
+      "test": "test_registered_processless_adapter_requires_versioned_fallback_binding[False-additional]",
+      "status": "PASS",
+      "seconds": 4.418
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_extension_without_trusted_probe_cannot_execute[additional_unverified]",
+      "status": "PASS",
+      "seconds": 3.072
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_rejects_invalid_capability_restrictions[disabled0]",
+      "status": "PASS",
+      "seconds": 1.896
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_rejects_invalid_capability_restrictions[disabled1]",
+      "status": "PASS",
+      "seconds": 1.931
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_rejects_invalid_capability_restrictions[disabled2]",
+      "status": "PASS",
+      "seconds": 2.331
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_rejects_invalid_capability_restrictions[conversation]",
+      "status": "PASS",
+      "seconds": 1.88
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_unknown_codex_contract_cannot_admit_a_direct_turn[99.0.0]",
+      "status": "PASS",
+      "seconds": 3.951
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_unknown_codex_contract_cannot_admit_a_direct_turn[None]",
+      "status": "PASS",
+      "seconds": 3.816
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_qualified_codex_remains_multiturn_and_discovery_matches_mcp",
+      "status": "PASS",
+      "seconds": 4.505
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_can_only_remove_qualified_capabilities[conversation]",
+      "status": "PASS",
+      "seconds": 4.004
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_can_only_remove_qualified_capabilities[managed_work]",
+      "status": "PASS",
+      "seconds": 4.033
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_can_only_remove_qualified_capabilities[events]",
+      "status": "PASS",
+      "seconds": 3.959
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_can_only_remove_qualified_capabilities[multiplexing]",
+      "status": "PASS",
+      "seconds": 4.194
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_profile_can_only_remove_qualified_capabilities[approvals]",
+      "status": "PASS",
+      "seconds": 4.046
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_unknown_on_demand_contract_is_rejected_without_native_write_or_uncertain_receipt",
+      "status": "PASS",
+      "seconds": 4.267
+    },
+    {
+      "class": "tests.test_runtime_effective_capabilities",
+      "test": "test_unknown_contract_cannot_share_an_explicitly_reused_native_connection",
+      "status": "PASS",
+      "seconds": 3.839
+    }
+  ],
+  "source_state": "parent SHA plus new acceptance test file",
+  "dirty_files_sha256": {
+    "tests/test_runtime_binding_acceptance.py": "460fa2bb1d2bd74865d701d10b1e667657148441bab3fd250b30f17b5f223062"
+  },
+  "command_document": "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+}

@@ -1,0 +1,39 @@
+{
+  "parent_sha": "475d5e5b03b816084b7aa54cec829a80b6a9d7f0",
+  "source_state": "new acceptance test only; production unchanged",
+  "file_sha256": "460fa2bb1d2bd74865d701d10b1e667657148441bab3fd250b30f17b5f223062",
+  "requirement_nodes": {
+    "T-ENDP-02": [
+      "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context"
+    ],
+    "T-ENDP-03": [
+      "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt"
+    ],
+    "T-ENDP-06": [
+      "tests/test_runtime_endpoint_fallback.py::test_error_text_after_native_write_cannot_enable_endpoint_fallback"
+    ],
+    "T-ENDP-07": [
+      "tests/test_runtime_effective_capabilities.py::test_unknown_codex_contract_cannot_admit_a_direct_turn",
+      "tests/test_runtime_effective_capabilities.py::test_profile_can_only_remove_qualified_capabilities",
+      "tests/test_runtime_effective_capabilities.py::test_unknown_on_demand_contract_is_rejected_without_native_write_or_uncertain_receipt",
+      "tests/test_runtime_effective_capabilities.py::test_unknown_contract_cannot_share_an_explicitly_reused_native_connection"
+    ]
+  },
+  "windows": {
+    "passed": 36,
+    "seconds": 138.42,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 36,
+    "seconds": 140.5,
+    "exit_code": 0
+  },
+  "manifests": [
+    "p12-binding-windows.json",
+    "p12-binding-linux.json"
+  ],
+  "ruff": "PASS",
+  "commands": "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
+  "limitations": "Synthetic peers and real socket HTTP/MCP app. Native Pi NOT_RUN; no model/provider campaign. Not a full matrix or performance gate."
+}

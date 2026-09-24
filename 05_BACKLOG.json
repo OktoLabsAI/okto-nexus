@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "7897abab75b78100af9e9eb82df1a4410e2c3fcc",
+  "execution_head": "475d5e5b03b816084b7aa54cec829a80b6a9d7f0",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2527,6 +2527,13 @@
               "result": "PASS",
               "observed": "Terminal exit0:2487 PASS44 SKIP2 subtests PASS2 warnings2846.46s Linux. Recorded temporary XML absent after completion; no per-node manifest or matrix join. External migration acceptance REDs remain separate.",
               "evidence": "plans/pr34-remediation/evidence/p12-suite-58ca69b-linux-terminal.json"
+            },
+            {
+              "sha": "475d5e5b03b816084b7aa54cec829a80b6a9d7f0 + new test hash in p12-binding-acceptance.json",
+              "command": "Exact persistent-JUnit Windows/Linux selection in P12_BINDING_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "36 PASS Windows138.42s/36 PASS Linux140.50s; per-node manifests available.",
+              "evidence": "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
             }
           ],
           "evidence": [
@@ -2534,7 +2541,8 @@
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
             "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
             "plans/pr34-remediation/P12_SUITE_E388227.md",
-            "plans/pr34-remediation/P12_SUITE_58CA69B.md"
+            "plans/pr34-remediation/P12_SUITE_58CA69B.md",
+            "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -2985,8 +2993,11 @@
       ],
       "stimulus": "Mesmo Agent possui runtimes em projetos diferentes.",
       "expected": "A execução usa o workspace/contexto autorizado da solicitação.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed."
     },
     {
       "test_id": "T-ENDP-03",
@@ -3000,8 +3011,11 @@
       ],
       "stimulus": "Enviar conversa e depois steer/interrupt enquanto muda a prioridade dos endpoints.",
       "expected": "Controle continua vinculado à sessão/turno original, ou falha claramente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed."
     },
     {
       "test_id": "T-ENDP-04",
@@ -3051,8 +3065,11 @@
       ],
       "stimulus": "A pode ter aceitado; B está disponível.",
       "expected": "B não executa automaticamente; operação permanece reconciliável/unknown.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed."
     },
     {
       "test_id": "T-ENDP-07",
@@ -3066,8 +3083,11 @@
       ],
       "stimulus": "Descriptor anuncia operação que a versão/configuração real não suporta.",
       "expected": "Operação indisponível com motivo; não é enviada na esperança de funcionar.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "notes": "Exact mapped node/parameter results checked in both sanitized manifests: expanded36 PASS Windows138.42s/36 PASS Linux140.50s. New workspace/priority acceptance and existing unsafe-fallback/effective-capability tests. Synthetic peers; native/provider/full gate not claimed."
     },
     {
       "test_id": "T-ENDP-08",
