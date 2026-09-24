@@ -1,0 +1,26 @@
+{
+  "base_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "scope": "Detached worktree only; NOT yet integrated into main source running full Linux regression",
+  "files_sha256": {
+    "src/okto_nexus/application/endpoints.py": "cbd431e39989a29a435344d0a7ab1d5730f0a6a2d1ff70a5d28d5d9872d7c022",
+    "src/okto_nexus/adapters/outbound/sqlite/endpoints_repo.py": "9466779d37bb3c3352ec35621e14dad3db17b880886541d8a2be9df697174aab",
+    "tests/test_runtime_legacy_profile_review.py": "71f32abf45ca1d0f27464c783f8791c34abd3487b91d94167a2db930757c2dcd"
+  },
+  "behavioral_red": {
+    "failed": 2,
+    "seconds": 11.7,
+    "exit_code": 1
+  },
+  "windows_expanded": {
+    "passed": 38,
+    "seconds": 85.46,
+    "exit_code": 0
+  },
+  "linux_focused": {
+    "passed": 8,
+    "seconds": 27.98,
+    "exit_code": 0
+  },
+  "commands": "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+  "limitations": "Disposable production socket app, no personal store/provider. Full T-MIG-03 not promoted; integration and trusted-source restoration evidence pending."
+}

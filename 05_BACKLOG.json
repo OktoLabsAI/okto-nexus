@@ -505,10 +505,20 @@
             "src/okto_nexus/application/endpoints.py",
             "src/okto_nexus/application/harness_supervisor.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "58ca69b + isolated worktree paths hashed in evidence",
+              "command": "Exact Windows/Linux commands in P03_LEGACY_PROFILE_REVIEW.md",
+              "result": "PASS",
+              "observed": "RED2 FAIL11.70s before correction; isolated corrected38 PASS Windows85.46s /8 PASS Linux27.98s. NOT integrated; full requirement not promoted.",
+              "evidence": "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P03_ENDPOINTS.md",
-            "plans/pr34-remediation/evidence/p03-gate.log"
+            "plans/pr34-remediation/evidence/p03-gate.log",
+            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+            "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
           ],
           "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
@@ -4323,8 +4333,12 @@
       ],
       "stimulus": "Store apresenta capabilities/metadata apagados anteriormente.",
       "expected": "Não inventar conteúdo; emitir diagnóstico e restaurar só com fonte confiável.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "FAIL",
+      "evidence": [
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+      ],
+      "notes": "Main source58ca69b lacks per-Agent missing-field diagnostics:2 behavior FAIL. Narrow correction qualifies in isolated worktree, but is NOT yet integrated because main full Linux70522 is frozen. Trusted-source restoration procedure evidence also pending; no full requirement PASS."
     },
     {
       "test_id": "T-MIG-04",
