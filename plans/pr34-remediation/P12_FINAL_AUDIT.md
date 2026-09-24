@@ -54,3 +54,31 @@ current Windows regression. The five-file correction will change some recorded
 hashes at integration and must be reflected in the final join. No requirement,
 phase or task is promoted by this catalogue. Current Windows full result and
 Linux running status are recorded in P12_FULL_REGRESSION_39C5E6C.md.
+
+## Current-source join preparation at336357a
+
+The current implementation isff905c4. Final Codex7/Claude stream6 native cases
+passed at that source; the corrected package is built and validated. Full Windows
+and Linux runs remain active. Earlier pending descriptions above are historical.
+
+The final assertion-route audit found three omissions in the older catalogue:
+T-LIFE-03 still referenced only pre-joint-stimulus signal tests, T-LIFE-11 lacked
+the real fragmented/full-pipe case, and T-MIG-04 lacked the nonempty interrupted
+backfill case. These tests already exist and passed their recorded scoped gates;
+no production/test change was needed. Their actual assertions were read again.
+The current [release catalogue](evidence/p12-release-node-catalogue.json) retains
+the old partial mappings and adds the missing joint stimuli, with94 exact Git
+blob hashes atff905c4. It also explicitly links the integrated receipt correction.
+
+`join_release_evidence.py` keeps original source identities, requires an explicit
+reviewed equivalence basis and manifest hashes, rejects nonterminal/failed
+campaigns, and retains platform skips while matching every observed parameter.
+A failing platform cannot be hidden by another passing platform. Native calls
+require passing setup/call/teardown. The generated join is explicitly execution
+evidence only; it cannot itself promote behavioral acceptance or backlog status.
+Ten integrity cases passed on Windows and Linux. The complete final release join
+will be generated only after both full regression processes terminate.
+
+The previous accumulated status was archived verbatim in
+IMPLEMENTATION_HISTORY_TO_336357A.md; IMPLEMENTATION_STATUS.md now contains only
+the current resume instructions and links to history. No run was restarted.
