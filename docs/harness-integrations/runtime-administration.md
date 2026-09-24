@@ -1,4 +1,4 @@
-# Runtime administration — surface 44
+# Runtime administration — surface 45
 
 This reference describes the implemented 0.2.0 administrative subset. The release
 and complete P11/P12 gates are still pending; consult the
@@ -270,3 +270,11 @@ Session compatibility_report (migration056) is a server-owned, redacted observat
 independent of caller metadata. Codex initialize may supply native_version; unknown
 formats remain null and capabilities_verified=false. This does not elevate grants
 or claim compatibility of untested protocol features.
+
+Surface45 checks required_native_requests again after native startup, inside the
+bounded startup worker and before presence/session publication. A rejected open
+ends only its logical session and cancels its owned startup scope. Version contract
+matching currently covers Codex0.156.1; other adapters require equivalent evidence
+before an explicit native requirement can pass. Canonical approval decision decline
+may translate to native cancel when decline is absent from availableDecisions. The
+audit retains the canonical decision and original native choices; it is not an ACK.

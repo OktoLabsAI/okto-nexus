@@ -5,6 +5,8 @@ import threading
 
 from ....errors import ErrorCode, OktoNexusError
 from ....domain.runtime_commands import RuntimeCommandNotSent
+from ....domain.harness import HarnessCommand
+from ....application.runtime_requirements import validate_effective_native_requirements
 
 
 class EnvelopeConnector:
@@ -19,6 +21,7 @@ class EnvelopeConnector:
         self._attempt_lock = threading.Lock()
         self._attempts = {}
         self._steered_attempts = {}
+        self.required_native_requests = ()
 
     def control_target(self, session_id):
         with self._attempt_lock:
@@ -30,8 +33,25 @@ class EnvelopeConnector:
         return {"operation_id": command.operation_id, "attempt_id": command.attempt_id,
                 "owner_epoch": command.owner_epoch, "started": False, "thread_id": None, "turn_id": None}
 
+    def configure_native_requirements(self, requirements):
+        self.required_native_requests = tuple(requirements)
+
     def start(self, *, owning_agent_id):
-        return self.native.start(owning_agent_id=owning_agent_id)
+        session = self.native.start(owning_agent_id=owning_agent_id)
+        try:
+            validate_effective_native_requirements(self.required_native_requests, session.compatibility_report)
+        except BaseException:
+            # This runs inside the bounded startup/lifecycle worker, before
+            # canonical readiness. End only this logical session if shared.
+            try:
+                if self.capabilities.multiplexes_sessions:
+                    self.native.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
+                else:
+                    self.native.close()
+            except Exception:
+                pass  # The birth-owned lifecycle still cancels this failed scope.
+            raise
+        return session
 
     def send(self, session, command):
         payload = command.payload

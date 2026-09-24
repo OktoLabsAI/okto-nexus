@@ -105,7 +105,9 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             response = client.post("/api/v1/harness/profiles", headers=headers, json={
                 "profile_id": "native-fixture", "adapter_id": adapter, "enabled": True,
                 "inherit_ambient": False, "config": {"command": command,
-                    "env": {environment_key: str(config_dir)}}})
+                    "env": {environment_key: str(config_dir)},
+                    "required_native_requests": ["item/commandExecution/requestApproval"]
+                        if kind == "codex" and native_approval else []}})
             assert response.status_code == 200, response.text
             response = client.post("/api/v1/harness/endpoints", headers=headers, json={
                 "endpoint_id": "native-fixture", "agent_id": "worker", "adapter_id": adapter,
@@ -122,6 +124,20 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 assert compatibility["native_version"] and compatibility["observation"] == "initialize_version"
                 assert compatibility["capabilities_verified"] is False
             native = deps.harness_supervisor._live[session_id].connector.native
+            request_observations = []
+            if kind == "codex" and native_approval:
+                native_request = native._transport._on_server_request
+                def observe_request(request_id, method, params):
+                    accepted = native_request(request_id, method, params)
+                    request_observations.append({"method": method, "accepted_by_bridge": accepted,
+                        "param_keys": sorted(params) if isinstance(params, dict) else [],
+                        "identity_types": {key: type(params.get(key)).__name__ for key in ("threadId", "turnId", "itemId")}
+                            if isinstance(params, dict) else {},
+                        "available_decisions": [value if isinstance(value, str) and value in {"accept", "acceptForSession", "decline", "cancel"} else "extended"
+                            for value in params["availableDecisions"]] if isinstance(params, dict) and isinstance(params.get("availableDecisions"), list) else None})
+                    (tmp_path / "native-request-observations.json").write_text(json.dumps(request_observations), encoding="utf-8")
+                    return accepted
+                native._transport._on_server_request = observe_request
             native_process = native._transport._proc if kind == "codex" else native._proc
             assert native_process is not None and native_process.poll() is None
             assert operator_key not in json.dumps(native._env)
@@ -165,7 +181,7 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                     if pending or result:
                         break
                     time.sleep(.1)
-                assert pending, "Native turn did not request a supported canonical approval"
+                assert pending, f"Native turn did not request a supported canonical approval: {request_observations}"
                 assert not marker.exists(), "Native write happened before authorization"
                 decision_payload = {"decision": "reject", "justification": "Isolated native denial fixture"}
                 if native_input:

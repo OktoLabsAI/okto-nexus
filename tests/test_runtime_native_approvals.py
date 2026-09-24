@@ -10,6 +10,27 @@ from test_pr34_remediation import runtime as runtime_fixture, send_message
 runtime = runtime_fixture
 
 
+@pytest.mark.parametrize("decision,wire", [("approve", "accept"), ("reject", "cancel"), ("revoked", "cancel")])
+def test_cancel_only_native_denial_does_not_grant_policy_amendment(runtime, decision, wire):
+    from test_runtime_handoff_dispatch import wait_result
+    deps, client, _, _, operator, _ = runtime
+    approval_peer(runtime, extra_params={"availableDecisions": ["accept",
+        {"acceptWithExecpolicyAmendment": {"execpolicy_amendment": ["fixture-only"]}}, "cancel"]})
+    sent = send_message(runtime, body="TRIGGER_SERVER_REQUEST")
+    request = pending(runtime)
+    if decision == "revoked":
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE agents SET permissions=? WHERE agent_id='caller'",
+                ('{"messages":{"send_direct":false}}',))
+        decision = "approve"
+    decided = client.post(f"/api/v1/approvals/{request['approval_id']}/decision",
+        headers={"x-api-key": operator}, json={"decision": decision})
+    assert decided.status_code == 200, decided.text
+    result = wait_result(runtime, sent["runtime_operations"][0])
+    assert f'"decision": "{wire}"' in result["output_text"]
+    assert "acceptWithExecpolicyAmendment" not in result["output_text"]
+
+
 def approval_peer(runtime, *, method="item/commandExecution/requestApproval", extra_params=None):
     from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE

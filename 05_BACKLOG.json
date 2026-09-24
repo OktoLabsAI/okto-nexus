@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "217e025",
+  "execution_head": "0e305d3",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1266,7 +1266,9 @@
             "tests/test_runtime_protocol_compatibility.py",
             "src/okto_nexus/migrations/056_runtime_compatibility_observations.sql",
             "src/okto_nexus/adapters/outbound/harness/compatibility.py",
-            "tests/test_runtime_compatibility_observations.py"
+            "tests/test_runtime_compatibility_observations.py",
+            "tests/test_runtime_effective_requirements.py",
+            "src/okto_nexus/application/runtime_requirements.py"
           ],
           "test_results": [
             {
@@ -1317,6 +1319,13 @@
               "result": "PASS",
               "observed": "128 PASS/1 SKIP; Linux16 PASS; actual Codex0.156.1 two-turn1 PASS verifies redacted report. Observation is not effective-capability verification; gate remains pending.",
               "evidence": "plans/pr34-remediation/P07_COMPATIBILITY_OBSERVATIONS.md"
+            },
+            {
+              "sha": "0e305d3 + effective native requirements worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_effective_requirements.py tests/test_runtime_profile_requirements.py tests/test_runtime_compatibility_observations.py tests/test_runtime_native_approvals.py tests/test_runtime_native_inputs.py tests/test_runtime_contracts.py tests/test_import_boundary.py tests/test_runtime_boot.py tests/test_frente1_resources.py tests/test_feature_flags.py",
+              "result": "PASS",
+              "observed": "125 PASS in214.64s; Linux29 PASS; late revoked authority1 PASS; extension3 PASS. Actual Codex required-contract approval denial1 PASS after two documented native failures exposed cancel-only choices. Full capability gate remains pending.",
+              "evidence": "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md"
             }
           ],
           "evidence": [
@@ -1327,7 +1336,8 @@
             "plans/pr34-remediation/P07_SESSION_RECOVERY.md",
             "plans/pr34-remediation/P07_APPROVED_BOOT.md",
             "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md",
-            "plans/pr34-remediation/P07_COMPATIBILITY_OBSERVATIONS.md"
+            "plans/pr34-remediation/P07_COMPATIBILITY_OBSERVATIONS.md",
+            "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md"
           ],
           "notes": "Durable STARTING reservations, owner/profile fences, old-session reconciliation and bounded approved boot implemented in production composition. Boot authority is narrow and issuer/revision-bound; uncertain starts remain quarantined. Native boot, wider crash/load/version matrix and durable turn controls remain pending. See current evidence for Windows/Linux scope; phase gate not promoted."
         }
@@ -1743,16 +1753,27 @@
             "tests/test_runtime_profile_requirements.py",
             "src/okto_nexus/domain/native_inputs.py",
             "src/okto_nexus/migrations/049_runtime_native_input_responses.sql",
-            "tests/test_runtime_native_inputs.py"
+            "tests/test_runtime_native_inputs.py",
+            "tests/test_runtime_effective_requirements.py",
+            "src/okto_nexus/application/runtime_requirements.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "0e305d3 + effective native requirements worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_effective_requirements.py tests/test_runtime_profile_requirements.py tests/test_runtime_compatibility_observations.py tests/test_runtime_native_approvals.py tests/test_runtime_native_inputs.py tests/test_runtime_contracts.py tests/test_import_boundary.py tests/test_runtime_boot.py tests/test_frente1_resources.py tests/test_feature_flags.py",
+              "result": "PASS",
+              "observed": "125 PASS in214.64s; Linux29 PASS; late revoked authority1 PASS; extension3 PASS. Actual Codex required-contract approval denial1 PASS after two documented native failures exposed cancel-only choices. Full capability gate remains pending.",
+              "evidence": "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P09_NATIVE_PROTOCOL_SURVEY.md",
             "plans/pr34-remediation/P09_NATIVE_APPROVALS.md",
             "plans/pr34-remediation/P09_CLAUDE_APPROVALS.md",
             "plans/pr34-remediation/P09_PROFILE_REQUIREMENTS.md",
             "plans/pr34-remediation/P09_NATIVE_INPUTS.md",
-            "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md"
+            "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md",
+            "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md"
           ],
           "notes": "Binary Codex command/file-change approvals integrated through canonical HITL, journal and exact owner/turn fences. Windows 115 PASS/2 SKIP; Linux 49 PASS/1 SKIP; REAL isolated Codex denial 1 PASS. Native inputs, Claude approval bridge and complete phase gate pending. Claude Write/Edit/Bash one-shot permission bridge implemented; exact operation plus local generation, no invented native turn ID. REAL Claude 2.1.280 Write denial PASS; expanded Windows/Linux each 50 PASS/7 SKIP. Inputs/elicitation and profile eligibility remain pending. Explicit required_native_requests validated against the exact implemented adapter contract and live HITL flag across open, conversation planning, managed claim and construction. New suite 8 PASS on each Windows/Linux; legacy/surface 71 PASS. Native input integration remains pending. Codex non-secret blocking questions and bounded flat MCP forms now require explicit operator response, stored atomically with canonical decision; no implied answers. Expanded Windows/Linux 16 PASS each; integrated Windows 60 PASS/Linux 40 PASS. Native input campaign NOT_RUN, Claude AskUserQuestion next. Claude AskUserQuestion explicit single/multi/free-text input implemented; REAL isolated Claude roundtrip 1 PASS. Integrated Windows 69 PASS/Linux 41 PASS. Remaining aggregate/native capability probes belong to full phase/P12 acceptance."
         }

@@ -1,0 +1,49 @@
+{
+  "parent_sha": "0e305d3ba8c26572cbccde326f8e3de5e364b436",
+  "scope": "effective required native contracts and cancel-only denial worktree",
+  "native": "Codex 0.156.1",
+  "result": "PASS",
+  "observed": "1 passed,7 deselected in17.43s",
+  "request_observations": [
+    {
+      "method": "item/commandExecution/requestApproval",
+      "accepted_by_bridge": true,
+      "param_keys": [
+        "availableDecisions",
+        "command",
+        "commandActions",
+        "cwd",
+        "environmentId",
+        "itemId",
+        "kind",
+        "proposedExecpolicyAmendment",
+        "reason",
+        "startedAtMs",
+        "threadId",
+        "turnId"
+      ],
+      "identity_types": {
+        "threadId": "str",
+        "turnId": "str",
+        "itemId": "str"
+      },
+      "available_decisions": [
+        "accept",
+        "extended",
+        "cancel"
+      ]
+    }
+  ],
+  "write_marker_exists": false,
+  "temporary_auth_exists": false,
+  "prior_native_failures": [
+    {
+      "observed": "1 failed,7 deselected in17.54s",
+      "reason": "No canonical approval; bridge rejected availableDecisions without decline"
+    },
+    {
+      "observed": "1 failed,7 deselected in16.79s",
+      "reason": "Instrumented real request offered accept,policy amendment,cancel; bridge returned unsupported before fix"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface44.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface45.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -181,3 +181,13 @@ or prerelease version formats remain unobserved; private home paths, full user-a
 and other handshake fields are discarded. capabilities_verified remains false:
 this observation is not effective-capability negotiation or permission. REST, MCP
 session reads and authorized bindings expose the same stored report.
+
+Profiles with required_native_requests now require both adapter declaration and
+a matching server-owned runtime contract before readiness. The current exact
+Codex0.156.1 request contract covers the four documented approval/input methods.
+Unknown versions or adapters without equivalent evidence cannot satisfy explicit
+requirements; they return native_requirements_unverified and quarantine that open.
+An observed version alone does not grant permissions or verify all capabilities.
+For native command approvals, a human rejection maps to decline when available,
+or cancel when the native request offers only cancel. Approve maps only to accept;
+policy-amendment and session-wide alternatives are never inferred.

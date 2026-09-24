@@ -359,6 +359,12 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach target does not match the approved endpoint.", {})
     connector = build_connector(build_connector_factories(deps), kind=kind, project_root=project_root,
                                 substrate=substrate, target_pid=configured_pid, backend=effective_backend)
+    required = profile["config"].get("required_native_requests", ()) if profile else ()
+    if required:
+        configure_requirements = getattr(connector, "configure_native_requirements", None)
+        if not callable(configure_requirements):
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Adapter cannot verify required native contracts.", {})
+        configure_requirements(required)
     return connector, endpoint, {"profile_id": endpoint["profile_id"],
         "inherit_ambient": bool(profile and profile["inherit_ambient"]),
         "revision": profile["revision"] if profile else None}

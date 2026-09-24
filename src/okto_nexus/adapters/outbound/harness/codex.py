@@ -976,7 +976,8 @@ class CodexAppServerConnector:
                 return False
         if "availableDecisions" in params and (
                 not isinstance(params["availableDecisions"], list) or
-                "accept" not in params["availableDecisions"] or "decline" not in params["availableDecisions"]):
+                "accept" not in params["availableDecisions"] or not any(
+                    value in params["availableDecisions"] for value in ("decline", "cancel"))):
             return False
         encoded = json.dumps([request_id, method, params], sort_keys=True, separators=(",", ":"))
         if len(encoded.encode("utf-8")) > 16384:
@@ -1024,7 +1025,11 @@ class CodexAppServerConnector:
                     not state or state.ended or state.closing or
                     state.active_turn_id != recorded["request"]["params"]["turnId"]):
                 raise RuntimeCommandNotSent("Native approval request ended or changed")
-            wire = {"decision": decision}
+            native_decision = decision
+            choices = recorded["request"]["params"].get("availableDecisions")
+            if decision == "decline" and isinstance(choices, list) and "decline" not in choices and "cancel" in choices:
+                native_decision = "cancel"  # Explicit rejection, never an execpolicy amendment.
+            wire = {"decision": native_decision}
             if request["method"] in INPUT_METHODS:
                 if decision == "accept":
                     wire = request.get("operator_response")

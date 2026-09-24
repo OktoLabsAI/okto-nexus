@@ -35,11 +35,13 @@ def test_profile_requirements_are_validated_against_exact_adapter_contract(runti
     assert response.status_code == expected, response.text
 
 
-def test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim(runtime):
+def test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim(runtime, tmp_path):
     from test_pr34_remediation import send_message
     from test_runtime_handoff_dispatch import work, claim
     from test_runtime_grants import issue
     deps, client, root, peers, operator, caller = runtime
+    from test_runtime_effective_requirements import install_versioned_codex
+    native_peers = install_versioned_codex(runtime, tmp_path, "0.156.1")
     deps.config.feature_hitl = True
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE runtime_profiles SET config=? WHERE adapter_id='codex'",
@@ -63,7 +65,7 @@ def test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim(runt
         assert uow.connection.execute("SELECT status FROM handoffs WHERE handoff_id=?", (hid,)).fetchone()[0] == "OPEN"
         assert uow.connection.execute("SELECT used_executions FROM runtime_execution_grants WHERE grant_id=?",
             (grant["grant_id"],)).fetchone()[0] == 0
-    assert len(peers) == 1
+    assert len(native_peers) == 1
     deps.config.feature_hitl = True
     allowed = claim(runtime, hid, grant, caller)
     assert allowed["ok"], allowed

@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="11",
+    version="12",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -535,6 +535,12 @@ Session compatibility_report is server-owned and separate from caller metadata.
 It may include a bounded native_version observed during initialize; this is not
 capability verification. Unknown versions remain null, capabilities_verified=false.
 No native home path, full user-agent or arbitrary handshake fields are exposed.
+compatible_native_requests lists the exact tested-version protocol contract; it
+is not a grant or proof of every capability. Profile required_native_requests
+must also match this server-owned runtime report before readiness or any turn.
+Unverified requirements fail with native_requirements_unverified. Native command
+approval rejection uses decline, or cancel when the peer offers cancel only;
+accept never selects session-wide or policy-amendment grants.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native
