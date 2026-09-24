@@ -8914,6 +8914,7 @@
     ],
     "evidence": "plans\\pr34-remediation\\evidence\\default-native-connections.json",
     "tests": "260 distinct passing cases and 2 skips across broad run plus corrected-file rerun; not a single all-green broad run or a full-suite claim.",
-    "next_dependency": "Apply updated build to active local installation; existing explicit false settings remain honored."
+    "next_dependency": "Start serve with existing approved configuration; explicit stored false remains honored.",
+    "local_rollout": "INSTALLED_VERIFIED_NOT_STARTED"
   }
 }

@@ -13,9 +13,12 @@ full-suite run. Live stdio51 tools, lock, build/Twine and isolated packaged
 HTTP/MCP smoke PASS. Ruff retains862 baseline diagnostics; native providers
 NOT_RUN. Updated wheel is in .git/pr34-evidence/default-native/dist-final.
 
-Local rollout remains NOT_APPLIED: the running installed server and personal
-store were not changed. Update/restart to apply the build; explicit stored false
-is not automatically cleared. Protected local static files remain unchanged.
+Local rollout: INSTALLED_VERIFIED_NOT_STARTED. Updated0.2.0 wheel installed after
+user stopped serve. All274 package files match;69 dependency versions preserved.
+Actual installed HTTP/MCP/dashboard and enabled-default smoke PASS in disposable
+store, without PYTHONPATH override. Personal store was not opened/migrated. Serve
+remains stopped for the user to start; explicit stored false remains respected.
+Protected local static files remain unchanged.
 
 The earlier follow-up below retains its original source/result boundaries.
 

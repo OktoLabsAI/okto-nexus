@@ -86,6 +86,31 @@
     "log": ".git\\pr34-evidence\\default-native\\pytest.log",
     "reason": "Before config model and resolver defaults were aligned; corrected stale default expectations and test lifecycle/configuration fixtures. Results retained, not converted to PASS."
   },
-  "local_rollout": "NOT_APPLIED: active installed serve and personal store preserved",
+  "local_rollout": {
+    "status": "INSTALLED_VERIFIED_NOT_STARTED",
+    "at_utc": "2026-09-24T20:26:05.202469+00:00",
+    "command": [
+      "uv",
+      "tool",
+      "install",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\default-native\\dist-final\\okto_nexus-0.2.0-py3-none-any.whl[serve]",
+      "--force",
+      "--reinstall-package",
+      "okto-nexus",
+      "--python",
+      "C:/Python313/python.exe",
+      "--constraints",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\default-native\\install-constraints.txt"
+    ],
+    "verification": {
+      "package_files_match": 274,
+      "non_nexus_dependencies_preserved": 69,
+      "smoke_exit_code": 0
+    },
+    "smoke": "PASS: actual installed Python, no PYTHONPATH override, disposable store; HTTP/MCP/dashboard and enabled defaults",
+    "smoke_log_sha256": "e92595082eb7418df056eec39600a07aecea10ea68e67159b4164f31eaf5fd4b",
+    "personal_store": "Not opened or migrated during reinstall/test",
+    "serve": "Not started; user may start with existing approved configuration"
+  },
   "test_correction_sha": "21822970b8d2c4b207ff4783bf02c2c8818cc850"
 }
