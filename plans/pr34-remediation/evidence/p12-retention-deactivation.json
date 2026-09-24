@@ -1,0 +1,36 @@
+{
+  "parent_sha": "7897abab75b78100af9e9eb82df1a4410e2c3fcc",
+  "branch": "feature/v0.2.0",
+  "source_state": "two-file working change",
+  "requirements": [
+    "T-MIG-09"
+  ],
+  "sha256": {
+    "src/okto_nexus/application/runtime_access.py": "077380006eeb403a758303b7d8d9af25f4a49f11e7c8e85a0f43a2d09d2e48cf",
+    "tests/test_runtime_retention_identity.py": "9df8525b3446868041acb56b064005676edd395e4460deaaeb60d687023c2dae"
+  },
+  "expanded_test_sha256": "dcc2f5a4cd79f1dedf2daa46cf66cdbe8c522c0ed6e54e7e7faadf6bcedc651c",
+  "expanded_windows": {
+    "passed": 44,
+    "seconds": 140.13,
+    "exit_code": 0
+  },
+  "expanded_linux": {
+    "passed": 44,
+    "seconds": 157.19,
+    "exit_code": 0
+  },
+  "final_windows": {
+    "passed": 3,
+    "seconds": 13.14,
+    "exit_code": 0
+  },
+  "final_linux": {
+    "passed": 3,
+    "seconds": 16.42,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+  "limitations": "Final file adds read and close assertions after expanded gates; production source unchanged. Synthetic peer and actual authenticated HTTP/MCP app. No model/provider or real personal store. Overlapping platform runs are not performance measurements."
+}

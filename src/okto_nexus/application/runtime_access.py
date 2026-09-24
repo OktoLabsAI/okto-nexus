@@ -63,6 +63,11 @@ class RuntimeAccessService:
             enabled = adapter_available and self.config.feature_harness_integrations and (
                 substrate != "attach" or self.config.feature_harness_attach)
             if endpoint and action in {"open", "send", "steer", "execute_work"}:
+                # Deactivation revokes execution for the represented identity,
+                # including operator/boot paths and cached idempotent requests.
+                # Read, interrupt and close remain available for recovery.
+                represented = self.agents.get(uow, endpoint["agent_id"])
+                enabled = enabled and represented is not None and represented.is_active
                 enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
                 enabled = enabled and endpoint["health"] != "quarantined"
                 if endpoint["profile_id"]:

@@ -461,6 +461,14 @@ restoration neither opens a runtime nor replays unread work.
 
 ## Disabling admission with captured results pending
 
+Deactivating a canonical Agent (`is_active=false`) also blocks new open, send,
+steer and managed-work actions through its existing endpoints, including
+operator requests and repeated command keys. Operator read, interrupt and close
+remain available for recovery. Reactivation does not erase command deduplication
+or turn an uncertain attempt into a safe new send. Administrative retention
+keeps referenced messages, delivery reservations, attempts and causal records;
+it can still prune unrelated expired history.
+
 Disabling `feature_harness_integrations` blocks new native sends and publication,
 while owner maintenance continues projecting captured journal facts. A result
 may remain `PENDING_AUTHORIZATION` until a later explicitly authorized rollout;

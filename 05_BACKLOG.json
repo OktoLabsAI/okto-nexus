@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6",
+  "execution_head": "7897abab75b78100af9e9eb82df1a4410e2c3fcc",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -652,11 +652,20 @@
             "src/okto_nexus/application/runtime_control.py",
             "src/okto_nexus/migrations/031_runtime_execution_grants.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "7897aba + hashes in evidence/p12-retention-deactivation.json",
+              "command": "Exact Windows/Linux commands in P12_RETENTION_DEACTIVATION.md",
+              "result": "PASS",
+              "observed": "44 PASS each platform; final additive maintenance assertions3 PASS each platform; Ruff PASS.",
+              "evidence": "plans/pr34-remediation/evidence/p12-retention-deactivation.json"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P04_AUTHORIZATION.md",
             "plans/pr34-remediation/evidence/p04-progress.log",
-            "plans/pr34-remediation/evidence/p04-boundaries.log"
+            "plans/pr34-remediation/evidence/p04-boundaries.log",
+            "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md"
           ],
           "notes": "Parent dc67cdd; scoped grants verified through REST, MCP HTTP, authenticated stdio and internal service. Remaining enqueue/dispatch, handoff/claim and publication gates depend on P05-P09; admin parity on P11."
         },
@@ -2615,6 +2624,13 @@
               "result": "PASS",
               "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
               "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+            },
+            {
+              "sha": "7897aba + hashes in evidence/p12-retention-deactivation.json",
+              "command": "Exact Windows/Linux commands in P12_RETENTION_DEACTIVATION.md",
+              "result": "PASS",
+              "observed": "44 PASS each platform; final additive maintenance assertions3 PASS each platform; Ruff PASS.",
+              "evidence": "plans/pr34-remediation/evidence/p12-retention-deactivation.json"
             }
           ],
           "evidence": [
@@ -2623,7 +2639,8 @@
             "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
             "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
-            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+            "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md"
           ],
           "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending. Subsequent combined offline backup/restore now tested on Windows/Linux; live-owner exclusion, references/checkpoints, identity, private result artifact and uncertain delivery fences preserved. Full aggregate phase gate remains pending."
         },
@@ -4540,12 +4557,14 @@
       ],
       "stimulus": "Prunar histórico/desativar Agent com dedupe e operações pendentes.",
       "expected": "Não apagar fences/refs necessários nem causar replay como trabalho novo.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
-        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md"
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+        "plans/pr34-remediation/evidence/p12-retention-deactivation.json"
       ],
-      "notes": "Partial scoped causal/retention evidence only; aggregate scenario remains NOT_RUN."
+      "notes": "Fresh-key REST admission for inactive target reproduced1 FAIL2 deselected5.72s; current shared authorization correction qualified44 PASS Windows140.13s/44 PASS Linux157.19s. Final additive read/close assertions3 PASS Windows13.14s/3 PASS Linux16.42s. Prune/deactivation preserves pending/unknown exclusion and old command dedupe; no provider or final gate claim."
     },
     {
       "test_id": "T-E2E-01",

@@ -32,6 +32,8 @@ Seven reviewed paths from detached migration worktree are integrated in this mil
 
 Fresh native campaigns at752cd72 remain Codex7 PASS and Claude6 PASS with zero native status queries; Pi/dedicated attach native NOT_RUN. These were not repeated. Schema061/surface56/identity24 unchanged; installed Nexus remains0.1.10. Protected generated assets and .nexus-policy-guardrail-test preserved. Final gate NOT PASSED.
 
+Retention/deactivation milestone above pushed7897aba: T-MIG-09 scoped PASS after genuine inactive-target admission RED. RuntimeAccessService now checks canonical target activity before operator/boot/delegation and cached execution replies. Existing prune fences already preserved pending/unknown operations and dedupe. Expanded44 PASS Windows140.13s/44 PASS Linux157.19s; final additive read/close checks3 PASS Windows13.14s/3 PASS Linux16.42s. Ruff PASS. See P12_RETENTION_DEACTIVATION.md and hashed JSON. No live test processes. Next: remaining exact original matrix coverage, crash/load/leak and comparable performance, final persistent-JUnit regressions, build/reinstall0.2.0. No phase/final gate promotion.
+
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
 P03: migration 030, profiles/endpoints, canonical runtime presence and isolated child environments implemented. 19 tests PASS (evidence/p03-gate.log). Seven later-phase regressions remain outstanding. Native Codex/Claude/Pi/attach NOT_RUN so far. All phase statuses use backlog vocabulary; IMPLEMENTED does not imply VERIFIED.
