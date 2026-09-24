@@ -1,0 +1,23 @@
+{
+  "parent_sha": "3779e95e561e5ebb8e5906a96fe197190d6399af",
+  "requirement": "T-LIFE-03",
+  "status": "PASS",
+  "test_sha256": "4f2d9edd3212bea80ba716065248c249045ae8085cac0afc73bbb39c9a67233b",
+  "mandatory_both_platforms": [
+    "tests.test_runtime_signal_drain::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+    "tests.test_runtime_shutdown::test_lifespan_does_not_release_owner_before_runtime_drain",
+    "tests.test_runtime_shutdown::test_shutdown_deadline_retains_owner_and_journal_for_late_activity"
+  ],
+  "linux_sigterm_node": "tests.test_runtime_signal_drain::test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]",
+  "windows_sigterm": "NOT_RUN (POSIX signal unavailable; separately tested graceful path PASS)",
+  "evidence": [
+    "plans/pr34-remediation/evidence/p12-signal-drain-final-windows.json",
+    "plans/pr34-remediation/evidence/p12-signal-drain-final-linux.json"
+  ],
+  "observed": "Captured unprojected delta during active native turn drains exactly once before journal closes; checkpoint equals final watermark, owned peer/descendant/guardian witnesses stop, exit bounded; unfinished work stays OUTCOME_UNKNOWN without fabricated native terminal/result.",
+  "limitations": [
+    "Synthetic Pi peer; no installed provider call.",
+    "Only OS-supported POSIX signal paths qualified; Windows SKIPs preserved.",
+    "Production code unchanged; no final phase/release gate promotion."
+  ]
+}

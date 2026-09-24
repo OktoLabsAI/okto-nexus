@@ -1,0 +1,85 @@
+{
+  "source_sha": "3779e95e561e5ebb8e5906a96fe197190d6399af",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1,
+    "SKIP": 3,
+    "PASS": 6
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "3",
+      "tests": "10",
+      "time": "30.282",
+      "timestamp": "2026-09-24T07:44:52.888628-03:00"
+    }
+  ],
+  "native_flags": "Synthetic owned Pi protocol peer; installed Pi NOT_RUN. POSIX tests skipped on Windows remain unexecuted.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_signal_drain.py tests/test_runtime_shutdown.py tests/test_serve_harness_shutdown_reap.py -q --junitxml=.git/pr34-evidence/signal-drain-windows.xml",
+  "limitations": "Owned synthetic Pi peer; installed Pi NOT_RUN. POSIX-only Windows skips are not signal PASS. Preparation failures described in P12_SIGNAL_DRAIN.md.",
+  "records": [
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+      "status": "FAIL",
+      "seconds": 4.067
+    },
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_does_not_release_owner_before_runtime_drain",
+      "status": "PASS",
+      "seconds": 3.998
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_shutdown_deadline_retains_owner_and_journal_for_late_activity",
+      "status": "PASS",
+      "seconds": 3.344
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_open_finishing_after_shutdown_cannot_leave_a_live_session",
+      "status": "PASS",
+      "seconds": 3.411
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_refuses_startup_when_another_owner_holds_store",
+      "status": "PASS",
+      "seconds": 1.034
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_sigterm_with_live_session_reaps_the_harness_child",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_sigint_with_live_session_reaps_the_harness_child",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_clean_shutdown_after_explicit_close_leaves_no_orphan",
+      "status": "PASS",
+      "seconds": 7.203
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_clean_shutdown_with_live_session_reaps_child_and_grandchild",
+      "status": "PASS",
+      "seconds": 5.43
+    }
+  ]
+}

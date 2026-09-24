@@ -3606,8 +3606,12 @@
       ],
       "stimulus": "Encerrar serve com turnos e journal pendentes.",
       "expected": "Shutdown limitado, eventos capturados drenados, processos próprios encerrados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SIGNAL_DRAIN.md",
+        "plans/pr34-remediation/evidence/p12-signal-drain-index.json"
+      ],
+      "notes": "Captured unprojected delta during active native turn drains exactly once before journal closes; checkpoint equals final watermark, owned peer/descendant/guardian witnesses stop, exit bounded; unfinished work stays OUTCOME_UNKNOWN without fabricated native terminal/result. Linux10 PASS includes real SIGTERM; Windows7 PASS3 POSIX SKIP (not relabeled signal PASS). Exact source hashes, preparation failures and20s stop bound recorded."
     },
     {
       "test_id": "T-LIFE-04",

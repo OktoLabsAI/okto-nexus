@@ -1,0 +1,36 @@
+{
+  "source_sha": "3779e95e561e5ebb8e5906a96fe197190d6399af",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1,
+    "SKIP": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "1",
+      "tests": "2",
+      "time": "8.328",
+      "timestamp": "2026-09-24T07:43:33.218299-03:00"
+    }
+  ],
+  "native_flags": "Synthetic owned Pi protocol peer; installed Pi NOT_RUN. POSIX tests skipped on Windows remain unexecuted.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_signal_drain.py -q --junitxml=.git/pr34-evidence/signal-drain-initial-windows.xml",
+  "limitations": "Owned synthetic Pi peer; installed Pi NOT_RUN. POSIX-only Windows skips are not signal PASS. Preparation failures described in P12_SIGNAL_DRAIN.md.",
+  "records": [
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+      "status": "FAIL",
+      "seconds": 6.595
+    },
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]",
+      "status": "SKIP",
+      "seconds": 0.001
+    }
+  ]
+}

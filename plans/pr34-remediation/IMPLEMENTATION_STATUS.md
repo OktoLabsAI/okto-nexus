@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `395d070` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `3779e95` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface56, identity24. No personal database is a fixture.
@@ -18,9 +18,11 @@ Comparable benchmark milestone d1e300c is committed/pushed. Current synthetic la
 
 WORK acceptance milestone395d070 is committed/pushed: WORK01–11 scoped PASS,114 distinct fixture nodes per platform; WORK12 remains NOT_RUN.
 
-Fragmented-pipe unit complete locally: new real-pipe Unicode fragmentation and concurrent stdout/stderr pressure passes for Pi/Codex/Claude stream. Final19-node Windows/Linux buffer selection plus5-node protocol-limit selection yields24 distinct PASS nodes/platform. Preparation failures were fixture mistakes and are retained. T-LIFE-11 now scoped PASS; production unchanged. See P12_FRAGMENTED_PIPES.md and its hash/node index. No running test/campaign handles remain.
+Fragmented-pipe milestone3779e95 is committed/pushed: T-LIFE-11 scoped PASS,24 fixture nodes/platform, no production change.
 
-Next exact stimulus: T-LIFE-03 real serve SIGTERM with an active turn and captured unprojected journal, bounded shutdown/drain and exact owned-process witnesses (Windows uses its explicit graceful counterpart; do not call it POSIX SIGTERM). Existing runtime_serve_shutdown_fixture.py and test_runtime_shutdown.py provide components but do not yet prove this joint scenario. Then remaining matrix joins, final immutable-source suites, finding index and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization.
+Signal-drain unit complete locally: new actual serve active native turn + fsynced/unprojected delta scenario. Linux65323 terminal10 PASS69.88s includes actual SIGTERM; Windows3515 terminal7 PASS3 POSIX SKIP30.15s includes graceful counterpart. Final checkpoint equals closed journal watermark; captured delta survives once, exact owned process witnesses stop and unfinished turn stays OUTCOME_UNKNOWN. T-LIFE-03 scoped PASS; Windows POSIX tests remain unexecuted. Preparation expectations/marker-race corrections are retained in P12_SIGNAL_DRAIN.md. Production unchanged; no running handles.
+
+Next: finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
 
 ## Recent completed milestones
 
@@ -53,4 +55,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 82, "NOT_RUN": 47}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 83, "NOT_RUN": 46}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
