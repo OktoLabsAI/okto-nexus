@@ -1,0 +1,47 @@
+{
+  "source_sha": "d7c0ab2474f40b23910296152867b5f951cc402a",
+  "file_sha256": {
+    "tests/test_runtime_binding_acceptance.py": "aa52df4848ffde51253c1e93c2984828e02b6d75c7f61555450149ecab49c096",
+    "tests/test_runtime_disabled_acceptance.py": "ca250d93bc489dfaf53b1fd250e2e312c0b307350146ff60729fa904e8ff2711"
+  },
+  "runs": {
+    "windows": {
+      "manifest": "p12-binding-disabled-windows.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "linux": {
+      "manifest": "p12-binding-disabled-linux.json",
+      "counts": {
+        "PASS": 4
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-PRES-02",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context"
+        ],
+        "linux": [
+          "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context"
+        ]
+      }
+    },
+    {
+      "test_id": "T-API-01",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]"
+        ],
+        "linux": [
+          "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]"
+        ]
+      }
+    }
+  ]
+}

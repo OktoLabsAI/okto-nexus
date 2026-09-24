@@ -1,0 +1,51 @@
+{
+  "source_sha": "d7c0ab2474f40b23910296152867b5f951cc402a",
+  "platform": "linux",
+  "counts": {
+    "PASS": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "4",
+      "time": "34.646",
+      "timestamp": "2026-09-24T09:14:03.843173-03:00"
+    }
+  ],
+  "native_flags": "No installed providers. Actual Nexus stdio subprocess plus production HTTP/MCP fixtures.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_binding_acceptance.py tests/test_runtime_disabled_acceptance.py -q --junitxml=.git/pr34-evidence/binding-disabled-linux.xml",
+  "limitations": "Fresh disabled store baseline and per-binding presence; native connector qualification and disabled recovery of preexisting history remain separate gates.",
+  "records": [
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+      "status": "PASS",
+      "seconds": 6.842
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+      "status": "PASS",
+      "seconds": 5.282
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+      "status": "PASS",
+      "seconds": 5.853
+    },
+    {
+      "class": "tests.test_runtime_disabled_acceptance",
+      "test": "test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]",
+      "status": "PASS",
+      "seconds": 7.636
+    }
+  ],
+  "file_sha256": {
+    "tests/test_runtime_binding_acceptance.py": "aa52df4848ffde51253c1e93c2984828e02b6d75c7f61555450149ecab49c096",
+    "tests/test_runtime_disabled_acceptance.py": "ca250d93bc489dfaf53b1fd250e2e312c0b307350146ff60729fa904e8ff2711"
+  }
+}

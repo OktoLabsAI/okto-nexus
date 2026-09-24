@@ -4483,8 +4483,12 @@
       ],
       "stimulus": "Dois runtimes do mesmo Agent, fechar apenas um.",
       "expected": "Presença restante mantém agente elegível apenas nos workspaces realmente ativos.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json"
+      ],
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime."
     },
     {
       "test_id": "T-PRES-03",
@@ -4529,8 +4533,12 @@
       ],
       "stimulus": "Inicializar MCP stdio/HTTP e REST sem integração habilitada.",
       "expected": "Baseline legada preservada e sem novas tools/processos implícitos.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json"
+      ],
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime."
     },
     {
       "test_id": "T-API-02",
