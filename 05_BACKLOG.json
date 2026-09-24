@@ -3304,8 +3304,12 @@
       ],
       "stimulus": "Policy exige HITL antes de enviar.",
       "expected": "Nenhuma intent executável antes da decisão; aprovação repetida gera uma única execução.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_APPROVAL_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-approval-acceptance-index.json"
+      ],
+      "notes": "Concurrent repeated operator approval admits exactly one canonical message/transport/native turn and durable result; no executable intent while pending. Actual protocol subprocess fixture,1 PASS per platform; provider not called."
     },
     {
       "test_id": "T-TX-06",
