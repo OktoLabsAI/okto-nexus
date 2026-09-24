@@ -140,3 +140,20 @@ await integration: application/inbox.py plus receipt/attempt-history/Claude test
 Isolated live MCP smoke and changed-file Ruff PASS. Main full suites51046/29628
 are still live, so do not transfer these files yet. All details and sanitized
 manifests are indexed by P12_RECEIPT_GROUPING_REGRESSION.md.
+
+## Current acceptance correction
+
+T-API-01 is now FAIL for main39c5e6c: the feature-OFF grouped inbox ACK regression
+violates legacy behavior despite earlier scoped passing evidence. Current backlog
+counts125 PASS,1 FAIL,3 NOT_RUN. The detached receipt correction is qualified on
+both platforms but cannot restore the main acceptance status before integration.
+The explicit migration-list mismatch is test metadata; the event-latency bound
+has an independent controlled-startup counterexample. Original full traces remain
+pending. Do not report either full suite as PASS from progress dots.
+
+Additional isolated browser campaign15582 completed exit0:15 PASS378.73s with a fresh Edge profile,
+chromium_sandbox=True, fixture-only loopback network, synthetic native peers and
+temporary Vite build. Its private command/status record is dashboard-command.json
+under the receipt-regression worktree parent. No provider or personal session.
+
+Current dashboard result and reviewed screenshots: P12_CURRENT_DASHBOARD.md. Full main suites51046/29628 remain live; all isolated correction/browser handles are terminal. T-API-01 remains FAIL until the four-path candidate is integrated and requalified.

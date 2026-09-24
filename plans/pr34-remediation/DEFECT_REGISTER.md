@@ -89,3 +89,14 @@ hashes and the integrated external work gate: P12_ATTACH_WORK_INTEGRATION.md.
 ### External work development-generation retention/recovery corrections
 
 Before publishing the external work integration, real tests reproduced retention FK failure for a referenced closed session and an invalid permission refusal when rejecting an explicitly recovered OPEN offer. IdentityRepo count/prune now retain referenced audit sessions while deleting unrelated expired sessions. HandoffService scopes the external-return guard to the current CLAIMED handoff. Both REDs and final Windows81 PASS1 SKIP/Linux82 PASS operational evidence are retained in P12_ATTACH_WORK_INTEGRATION.md and its manifests. These are unpublished working-generation defects, not findings against the earlier PR or parent49ebd0e.
+
+## Current39c5e6c regression — grouped ordinary read receipts
+
+The external-work integration changed InboxService.ack to invoke the grouped
+notification builder per message, producing2 receipt messages for an ordinary
+2-message ACK where the baseline requires1. The existing canonical receipt test
+fails behaviorally with feature OFF; T-API-01 is FAIL until integration is corrected.
+A detached worktree correction groups ordinary ACKs while keeping external work
+provenance separate. Main suites remain frozen; isolated98 PASS1 SKIP Windows/
+99 PASS Linux and live MCP smoke are not yet integrated qualification. See
+P12_RECEIPT_GROUPING_REGRESSION.md. This regression is not attributed to the original PR.

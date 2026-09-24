@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "bf5636c05a3d50eb0e7bda8fdeb21d7b474de767",
+  "execution_head": "4255df304dc2c5463315136d796bec9e45891de1",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -4579,12 +4579,13 @@
       ],
       "stimulus": "Inicializar MCP stdio/HTTP e REST sem integração habilitada.",
       "expected": "Baseline legada preservada e sem novas tools/processos implícitos.",
-      "execution_status": "PASS",
+      "execution_status": "FAIL",
       "evidence": [
         "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
-        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json"
+        "plans/pr34-remediation/evidence/p12-binding-disabled-index.json",
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
       ],
-      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime."
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime. Current39c5e6c regression supersedes the prior scoped PASS: feature-OFF grouped inbox ACK emits2 notifications instead of1 (existing canonical receipt test, independently reproduced). Corrected only in detached worktree so far;98 PASS1 SKIP Windows/99 PASS Linux. Do not restore PASS before main integration and relevant final regression."
     },
     {
       "test_id": "T-API-02",
@@ -4707,9 +4708,11 @@
       "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md",
-        "plans/pr34-remediation/P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md"
+        "plans/pr34-remediation/P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md",
+        "plans/pr34-remediation/P12_CURRENT_DASHBOARD.md",
+        "plans/pr34-remediation/evidence/p12-regression-dashboard.json"
       ],
-      "notes": "Windows browser scenarios UNKNOWN, AMBIGUOUS_BINDING, detached external session and pending native input/approval were executed as documented in P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md and P11_NATIVE_INPUT_DASHBOARD.md. Historical evidence; current full suite disables browser opt-in. No native-provider or Linux-browser qualification implied."
+      "notes": "Windows browser scenarios UNKNOWN, AMBIGUOUS_BINDING, detached external session and pending native input/approval were executed as documented in P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md and P11_NATIVE_INPUT_DASHBOARD.md. Historical evidence; current full suite disables browser opt-in. No native-provider or Linux-browser qualification implied. Current detached correction candidate:15 real sandboxed Edge/production API fixture cases PASS; exact hashes and visual checks recorded. No native provider, Linux browser or final main integration claim."
     },
     {
       "test_id": "T-MIG-01",

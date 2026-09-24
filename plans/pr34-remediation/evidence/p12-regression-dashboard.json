@@ -1,0 +1,171 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Windows",
+  "counts": {
+    "PASS": 15
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "15",
+      "time": "378.705",
+      "timestamp": "2026-09-24T13:19:05.953962-03:00"
+    }
+  ],
+  "native_flags": "UI opt-in1; native campaign empty; Codex/Claude live0; synthetic protocol peers only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Actual sandboxed browser and production HTTP/MCP on disposable stores; static assets built into temporary output. Detached corrected source, not yet integrated. Concurrent full Windows/Linux suites mean duration is not a performance benchmark. Installed providers not exercised.",
+  "records": [
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_submits_explicit_native_answer",
+      "status": "PASS",
+      "seconds": 41.514
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_form_preserves_types_and_never_selects_native_defaults",
+      "status": "PASS",
+      "seconds": 9.356
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_claude_question_keeps_original_input_and_explicit_answer",
+      "status": "PASS",
+      "seconds": 7.221
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_rejects_question_without_fabricating_answer",
+      "status": "PASS",
+      "seconds": 8.048
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_native_permission_remains_explicit_and_separate_from_input",
+      "status": "PASS",
+      "seconds": 7.021
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_expired_request_shows_delivery_state_without_answer_control",
+      "status": "PASS",
+      "seconds": 8.149
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_session_capabilities_show_qualified_profile_restrictions[99.0.0-disabled0-Unavailable]",
+      "status": "PASS",
+      "seconds": 163.854
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_session_capabilities_show_qualified_profile_restrictions[0.156.1-disabled1-Available]",
+      "status": "PASS",
+      "seconds": 27.277
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_unknown_operation_shows_cause_without_success_or_retry",
+      "status": "PASS",
+      "seconds": 52.89
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_detached_external_runtime_is_not_presented_as_terminated",
+      "status": "PASS",
+      "seconds": 7.398
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_multiple_bindings_explain_selection_instead_of_choosing_an_executor",
+      "status": "PASS",
+      "seconds": 7.36
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_authority_change_clears_previously_visible_operator_metadata",
+      "status": "PASS",
+      "seconds": 7.395
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_disabled_admission_still_shows_operator_recovery_records",
+      "status": "PASS",
+      "seconds": 7.787
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_native_approval_navigation_uses_existing_canonical_view",
+      "status": "PASS",
+      "seconds": 11.354
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_managed_work_diagnostic_does_not_label_work_as_conversation",
+      "status": "PASS",
+      "seconds": 10.447
+    }
+  ],
+  "base_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "setup_argv": [
+    "C:\\Program Files\\nodejs\\npm.CMD",
+    "ci",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_runtime_input_dashboard.py",
+    "tests/test_runtime_diagnostics_dashboard.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\dashboard-la3tj701\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\dashboard.xml"
+  ],
+  "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\source",
+  "environment_overrides": {
+    "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\dashboard-la3tj701",
+    "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\dashboard-la3tj701",
+    "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\dashboard-la3tj701",
+    "OKTO_NEXUS_UI_CAMPAIGN": "1",
+    "OKTO_NEXUS_NATIVE_CAMPAIGN": "",
+    "OKTO_NEXUS_CLAUDE_LIVE": "0",
+    "OKTO_NEXUS_CODEX_LIVE": "0",
+    "npm_config_cache": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-39c5e6c-c4zh666y\\npm-cache"
+  },
+  "source_file_sha256": {
+    "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+    "tests/test_runtime_attach_work_channel.py": "49c85aaafd2e3f15703461920cd420ada66f16fc9f27f125c7f39e903d5c2ce6",
+    "tests/test_runtime_attempt_history.py": "9962e88e278d082c9a1dcca842ca4baeba459b891fde83378868796035c1bebd",
+    "tests/test_harness_claude_code_connector.py": "9ead7bfc675d89be5b8b46bd8082f070b878d0108f9d74ce4fa86d1e09db0c59"
+  },
+  "status": "TERMINAL",
+  "exit_code": 0,
+  "environment_observation": {
+    "browser": "153.0.4234.48",
+    "python": "3.13.1",
+    "os": "Windows-11-10.0.26200-SP0",
+    "architecture": "AMD64",
+    "playwright": "1.63.0",
+    "httpx": "0.28.1",
+    "observation": "Fresh sandboxed headless Edge version probe immediately after the dashboard campaign; no pages or personal profile opened"
+  },
+  "screenshots": [
+    {
+      "path": "plans/pr34-remediation/evidence/p12-regression-dashboard-input.png",
+      "sha256": "d27fcc947e871f9008edf284584a8a759c7d3c16cc7dd304a274864d2993a6e6",
+      "visual_review": "PASS; fixture-only image; controls/state distinction and layout inspected"
+    },
+    {
+      "path": "plans/pr34-remediation/evidence/p12-regression-dashboard-diagnostics.png",
+      "sha256": "2c682d826c8262980a26e83afddb56ccc29b126e7f5fe48ab5cdc90a70951ba6",
+      "visual_review": "PASS; fixture-only image; controls/state distinction and layout inspected"
+    }
+  ]
+}
