@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `3b7eb2c` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `d178ddf` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface57, identity25. No personal database is a fixture.
@@ -54,6 +54,8 @@ Audience/privacy: T-PRES-04 scoped PASS,2 cases/platform, terminal. Authenticate
 
 Producer acceptance: T-TX-06 scoped PASS,10 cases/platform, terminal. All listed producers have actual transaction/rollback assertions, including new REST steering coverage. See P12_PRODUCER_ACCEPTANCE.md. Production unchanged, no running tests.
 
+Operation event states: T-API-05 scoped PASS,2 cases/platform, terminal. Pending/unconfirmed distinguish acceptance and durable terminal; actual push/replay correlation and outbound method observer prove no native status polling. See P12_OPERATION_EVENTS.md. Production unchanged, no running tests.
+
 Next: finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
 
 ## Recent completed milestones
@@ -87,4 +89,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 121, "NOT_RUN": 8}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 122, "NOT_RUN": 7}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.

@@ -1,0 +1,35 @@
+{
+  "source_sha": "d178ddf3fe2f933bb83c4b59fda6346ee53de749",
+  "platform": "windows",
+  "counts": {
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "10.499",
+      "timestamp": "2026-09-24T10:08:40.831643-03:00"
+    }
+  ],
+  "native_flags": "Synthetic processless peer and owned Codex protocol child, temporary store; no provider.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_operation_events.py -q --junitxml=.git/pr34-evidence/operation-events-windows.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_operation_events",
+      "test": "test_queued_and_unconfirmed_operation_are_distinct_without_invented_result",
+      "status": "PASS",
+      "seconds": 4.412
+    },
+    {
+      "class": "tests.test_runtime_operation_events",
+      "test": "test_accepted_and_final_operation_follow_push_and_public_replay",
+      "status": "PASS",
+      "seconds": 4.858
+    }
+  ]
+}

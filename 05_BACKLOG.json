@@ -4645,8 +4645,12 @@
       ],
       "stimulus": "Comando aceito retorna operation_id; observar execução por evento/replay.",
       "expected": "Queued, accepted, unconfirmed e final são distinguíveis sem exigir status polling nominal.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OPERATION_EVENTS.md",
+        "plans/pr34-remediation/evidence/p12-operation-events-index.json"
+      ],
+      "notes": "Queued and unconfirmed command states plus actual pushed native acceptance/terminal and authenticated replay with exact operation/attempt. Native outbound methods only turn/start and turn/interrupt;2 PASS/platform, synthetic protocol child."
     },
     {
       "test_id": "T-API-06",
