@@ -38,6 +38,9 @@ See [default-change evidence](evidence/default-native-connections.json).
 
 ## Operator workflow and contract v1 (surface 59 / schema 065)
 
+The additive surface60 [self-service and UI guide](SELF_CONNECTIONS.md) now adds
+Configure endpoint, agent self discovery/connect and executable command copying.
+
 1. In Agents, use the Connection methods button on the existing agent card.
    MCP defaults to allowed. A native adapter without an approved endpoint is
    initially unavailable; existing approved endpoint configuration preserves

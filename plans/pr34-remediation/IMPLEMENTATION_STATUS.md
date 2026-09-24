@@ -1,3 +1,28 @@
+# Latest follow-up — self connections and endpoint setup
+
+Implementationad4b2b3 on feature/v0.2.0, surface60 / identity docs27 / schema65.
+See [SELF_CONNECTIONS.md](SELF_CONNECTIONS.md) and
+[evidence/self-connections.json](evidence/self-connections.json).
+
+- Authenticated agents can inspect their own methods and request authorized
+  openings through MCP HTTP, MCP stdio (same-identity serve proxy) and REST.
+- Agents now includes Configure endpoint, explicit profile/endpoint approval,
+  one-hour discover/open grants and copyable PowerShell/Bash/JSON commands.
+- Expiry and setup selectors use the established Agents field styling; light
+  and dark visuals inspected. Commands open runtimes on the Nexus server,
+  not a bridge into the caller's existing local conversation.
+- Integrated164 PASS; final UI2 PASS; final self-service6 PASS (additional adapter,
+  real authenticated stdio/HTTP, idempotency, revocation and identity fencing).
+  Build/Twine/live MCP/lock PASS; unchanged862 Ruff diagnostics. Native providers
+  and full-suite rerun NOT_RUN for this follow-up; no historical counts reused.
+- New package is .git/pr34-evidence/self-connections/dist. Local rollout is
+  NOT_APPLIED; the previously installed build remains the default-enabled build.
+  Personal store and active installation were not modified in this follow-up.
+- Pre-existing static local edits and .nexus-policy-guardrail-test stay preserved.
+  The committed index and content-addressed asset contain the updated dashboard.
+
+Earlier deliveries below retain their original evidence and installation state.
+
 # Latest follow-up — native connections enabled by default
 
 Runtime source372b47c sets feature_harness_integrations and feature_harness_attach

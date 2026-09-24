@@ -1,7 +1,7 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface58.
-The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
+This guide describes the implemented remediation on `feature/v0.2.0`, including
+surface60 connection self-service. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
 accounts, endpoints or sessions.
@@ -22,6 +22,10 @@ authenticated owner proxy instead of spawning independent copies. Use existing
 Nexus operator authentication for administration. A payload `agent_id` is an
 identifier, never a credential. Ordinary agents require current scoped grants and
 canonical permissions; REST and MCP share application authorization.
+
+The dashboard supports **Agents → Connections → Configure endpoint** and copying
+a scoped connection command. See the [self-service guide](../../plans/pr34-remediation/SELF_CONNECTIONS.md)
+for setup, MCP opening authorization and remote-operation boundaries.
 
 For an existing Agent such as `worker`:
 

@@ -8916,5 +8916,37 @@
     "tests": "260 distinct passing cases and 2 skips across broad run plus corrected-file rerun; not a single all-green broad run or a full-suite claim.",
     "next_dependency": "Start serve with existing approved configuration; explicit stored false remains honored.",
     "local_rollout": "INSTALLED_VERIFIED_NOT_STARTED"
+  },
+  "self_connections_followup": {
+    "status": "VERIFIED_IN_TARGETED_SCOPE",
+    "source_sha": "ad4b2b3a82d3e8b3bd4d5107b39db32c427785ec",
+    "branch": "feature/v0.2.0",
+    "specification": "plans/pr34-remediation/SELF_CONNECTIONS.md",
+    "evidence": "plans\\pr34-remediation\\evidence\\self-connections.json",
+    "tasks": [
+      {
+        "id": "SC01",
+        "description": "Authenticated own-method discovery and opening over MCP HTTP/stdio and REST",
+        "status": "VERIFIED"
+      },
+      {
+        "id": "SC02",
+        "description": "Configure/approve endpoint and isolated profile in Agents; explicit MCP opening grant",
+        "status": "VERIFIED"
+      },
+      {
+        "id": "SC03",
+        "description": "Copy PowerShell/Bash/JSON connection command; consistent expiry selector styling",
+        "status": "VERIFIED"
+      },
+      {
+        "id": "SC04",
+        "description": "Pre-native and ready-persistence authorization revalidation; same-identity owner proxy",
+        "status": "VERIFIED"
+      }
+    ],
+    "tests": "164 integrated PASS; final UI2 PASS and self discovery/opening6 PASS, including extension and revocation race; no counts reused as a full-suite result.",
+    "local_rollout": "NOT_APPLIED",
+    "next_dependency": "Apply the new build after stopping the active installation. Actual providers/remote bridge are outside this fixture qualification."
   }
 }
