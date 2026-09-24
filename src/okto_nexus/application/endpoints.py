@@ -30,7 +30,7 @@ class EndpointService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Public configuration must be an object.", {})
         public_config = dict(public_config or {})
         check_inline_size("endpoint public configuration", public_config, 65536)
-        allowed = {"relay_results", "notify_target"} | ({"target_pid"} if descriptor.substrate == "attach" else set())
+        allowed = {"relay_results", "notify_target"} | ({"target_pid", "nexus_work_session_id"} if descriptor.substrate == "attach" else set())
         if set(public_config) - allowed:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported public endpoint configuration.", {})
         if "relay_results" in public_config and type(public_config["relay_results"]) is not bool:
@@ -48,7 +48,33 @@ class EndpointService:
             public_config["notify_target"] = parse_target(serialize_target(target))
         if descriptor.substrate == "attach" and (type(public_config.get("target_pid")) is not int or public_config["target_pid"] <= 0):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Attach endpoint requires an explicitly selected process ID.", {})
+        work_session = public_config.get("nexus_work_session_id")
+        if work_session is None:
+            public_config.pop("nexus_work_session_id", None)
+        elif not isinstance(work_session, str) or not 1 <= len(work_session) <= 128 or work_session != work_session.strip():
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "nexus_work_session_id must be a session identifier or null.", {})
         return public_config
+
+    @staticmethod
+    def validate_work_session_reference(uow, *, public_config, agent_id, workspace_id):
+        """Approve a reference, never authentication or a native capability.
+
+        Recheck inside the configuration writer transaction. A harness-owned
+        presence record cannot stand in for a separately authenticated Nexus
+        client. The secret remains in the canonical sessions repository only.
+        Actual work must additionally prove possession and bind the claim.
+        """
+        session_id = public_config.get("nexus_work_session_id")
+        if session_id is None:
+            return
+        valid = uow.connection.execute(
+            "SELECT 1 FROM sessions s WHERE s.session_id=? AND s.agent_id=? AND s.workspace_id=? "
+            "AND s.status='active' AND s.closed_at IS NULL AND s.session_secret IS NOT NULL "
+            "AND length(s.session_secret)>0 AND NOT EXISTS "
+            "(SELECT 1 FROM harness_sessions h WHERE h.presence_session_id=s.session_id)",
+            (session_id, agent_id, workspace_id)).fetchone()
+        if not valid:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "External Nexus work session is not available for this endpoint.", {})
 
     def update_endpoint(self, context, *, endpoint_id, expected_revision, **changes):
         self.authorize(context)
@@ -69,6 +95,9 @@ class EndpointService:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid endpoint configuration field.", {})
             descriptor = self.registry.get(endpoint["adapter_id"])
             config = self.validate_public_config(descriptor, updated["response_policy"], updated["public_config"])
+            if "public_config" in changes or changes.get("enabled") is True:
+                self.validate_work_session_reference(uow, public_config=config,
+                    agent_id=endpoint["agent_id"], workspace_id=endpoint["workspace_id"])
             AgentEndpoint(endpoint_id, endpoint["agent_id"], endpoint["adapter_id"], endpoint["workspace_id"], endpoint["protocol"],
                 response_policy=updated["response_policy"], delivery_consumption=updated["consumption"])
             if updated["consumption"] == "mirror_only" and not descriptor.capabilities.context_without_execution:
@@ -252,6 +281,8 @@ class EndpointService:
             priority=priority, selection_group=selection_group, response_policy=response_policy,
             delivery_consumption=consumption, public_config=public_config)
         with self.cf.unit_of_work() as uow:
+            self.validate_work_session_reference(uow, public_config=public_config,
+                agent_id=agent_id, workspace_id=workspace_id)
             if profile_id:
                 profile = self.repo.profile(uow, profile_id)
                 if profile is None or profile["adapter_id"] != adapter_id or not profile["enabled"]:

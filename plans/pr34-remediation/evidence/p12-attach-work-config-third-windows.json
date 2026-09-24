@@ -1,0 +1,207 @@
+{
+  "source_sha": "48a8ea2124f0efc08b78a116891253fd0f011a79",
+  "platform": "windows",
+  "counts": {
+    "PASS": 30
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "30",
+      "time": "84.285",
+      "timestamp": "2026-09-24T11:36:33.576104-03:00"
+    }
+  ],
+  "native_flags": "No native provider invoked; temporary HTTP/MCP store and synthetic peers only",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_attach_work_configuration.py -x -q --tb=short --junitxml=.git/pr34-evidence/attach-work-config-third-windows.xml",
+  "limitations": "Preparatory configuration only. No managed attach execution, ACK or complete implemented by this milestone. No counts summed across generations.",
+  "records": [
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_approves_reference_without_native_capability_or_secret[create-rest]",
+      "status": "PASS",
+      "seconds": 4.534
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_approves_reference_without_native_capability_or_secret[create-mcp]",
+      "status": "PASS",
+      "seconds": 3.082
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_approves_reference_without_native_capability_or_secret[update-rest]",
+      "status": "PASS",
+      "seconds": 3.24
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_approves_reference_without_native_capability_or_secret[update-mcp]",
+      "status": "PASS",
+      "seconds": 2.843
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[unknown-create-rest]",
+      "status": "PASS",
+      "seconds": 2.883
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[unknown-create-mcp]",
+      "status": "PASS",
+      "seconds": 1.93
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[unknown-update-rest]",
+      "status": "PASS",
+      "seconds": 2.793
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[unknown-update-mcp]",
+      "status": "PASS",
+      "seconds": 3.348
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_agent-create-rest]",
+      "status": "PASS",
+      "seconds": 2.839
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_agent-create-mcp]",
+      "status": "PASS",
+      "seconds": 3.024
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_agent-update-rest]",
+      "status": "PASS",
+      "seconds": 2.751
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_agent-update-mcp]",
+      "status": "PASS",
+      "seconds": 2.886
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_workspace-create-rest]",
+      "status": "PASS",
+      "seconds": 2.899
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_workspace-create-mcp]",
+      "status": "PASS",
+      "seconds": 2.299
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_workspace-update-rest]",
+      "status": "PASS",
+      "seconds": 1.92
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[foreign_workspace-update-mcp]",
+      "status": "PASS",
+      "seconds": 1.956
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[closed-create-rest]",
+      "status": "PASS",
+      "seconds": 1.95
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[closed-create-mcp]",
+      "status": "PASS",
+      "seconds": 1.905
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[closed-update-rest]",
+      "status": "PASS",
+      "seconds": 2.068
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[closed-update-mcp]",
+      "status": "PASS",
+      "seconds": 1.874
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[missing_secret-create-rest]",
+      "status": "PASS",
+      "seconds": 1.924
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[missing_secret-create-mcp]",
+      "status": "PASS",
+      "seconds": 2.88
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[missing_secret-update-rest]",
+      "status": "PASS",
+      "seconds": 2.859
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[missing_secret-update-mcp]",
+      "status": "PASS",
+      "seconds": 2.815
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[harness_presence-create-rest]",
+      "status": "PASS",
+      "seconds": 2.981
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[harness_presence-create-mcp]",
+      "status": "PASS",
+      "seconds": 2.734
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[harness_presence-update-rest]",
+      "status": "PASS",
+      "seconds": 2.761
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_rejects_unusable_session_references_atomically[harness_presence-update-mcp]",
+      "status": "PASS",
+      "seconds": 2.696
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_recovery_can_disable_or_remove_closed_reference[rest]",
+      "status": "PASS",
+      "seconds": 2.961
+    },
+    {
+      "class": "tests.test_runtime_attach_work_configuration",
+      "test": "test_external_channel_recovery_can_disable_or_remove_closed_reference[mcp]",
+      "status": "PASS",
+      "seconds": 3.181
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+    "tests/test_runtime_attach_work_configuration.py": "6af0e79baf04f43b9b4822b78944e9384748a84636443f45d965c22e02d22537"
+  }
+}

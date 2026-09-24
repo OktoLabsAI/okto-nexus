@@ -118,3 +118,13 @@ endpoint's read authorization. Read-only authorization suppresses audit writes i
 the enclosing operation access remains audited. Stored attempt durability is distinct from acceptance
 and result durability. The fifth processless adapter proves this extension; native built-in descriptors
 continue to advertise no context_without_execution capability.
+
+## External attach work reference (preparatory contract)
+
+Existing attach public_config now accepts nexus_work_session_id. EndpointService validates an active,
+same-agent/workspace canonical session with a secret and no harness-owned presence binding at create,
+reference update or explicit enable. Null removes the reference; disable remains available after closure.
+This is operator approval of a reference, not possession proof or a native capability. RuntimeWorkService
+still rejects attach work until authenticated claim/ACK/complete is integrated. Schema063/surface57/identity25
+remain unchanged in this preparatory milestone. See P12_ATTACH_WORK_CHANNEL.md for the failing acceptance
+reproducer and required next dependency; do not advertise a working managed attach channel yet.

@@ -4310,8 +4310,12 @@
       ],
       "stimulus": "Executar attach sem ACK e depois com canal Nexus autenticado externo.",
       "expected": "Sem canal, não anunciar managed work confiável; com canal, claim/ack/complete são validados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "FAIL",
+      "evidence": [
+        "plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md",
+        "plans/pr34-remediation/evidence/p12-attach-work-config-index.json"
+      ],
+      "execution_note": "Configuration approval qualified separately. Positive managed claim with a fresh post-configuration grant fails with PERMISSION_DENIED; authenticated claim/ACK/complete implementation remains pending. Native dedicated attach NOT_RUN."
     },
     {
       "test_id": "T-RELAY-01",

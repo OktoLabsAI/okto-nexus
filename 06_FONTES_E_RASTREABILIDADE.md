@@ -119,3 +119,12 @@ capacidade atribuída aos protocolos Pi, Codex ou Claude. O quinto adaptador de 
 pela composição HTTP/MCP real; os quatro conectores nativos continuam sem essa capacidade comprovada.
 A ausência da rota positiva foi reproduzida em a6a18b4 e registrada no milestone b263de9.
 Código, decisões de persistência e execuções por geração: plans/pr34-remediation/P12_MIRROR_OBSERVATION.md.
+
+### Decisão em implementação: canal Nexus externo do attach
+
+O requisito T-WORK-12 e o contrato de consumo exigem claim/ack/complete autenticados externamente
+para trabalho gerenciado no attach. A referência nexus_work_session_id reutiliza a sessão canônica
+existente; não é uma credencial nem ACK nativo. Sua aprovação administrativa foi implementada e
+qualificada separadamente. O teste positivo de admissão continua FAIL, e o fluxo completo ainda é
+pendente. Esta é uma decisão nova de implementação, não capacidade atribuída ao protocolo cc-socks.
+Estado, reprodução e dependências: plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md.

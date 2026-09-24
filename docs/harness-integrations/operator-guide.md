@@ -341,3 +341,21 @@ Closing an observer cancels its still-PENDING context attempts on the next owner
 attempt stays OUTCOME_UNKNOWN and is never transferred to a new session. After explicit reopening, only
 newly admitted deliveries may reach the new observer; closed-session pending contexts are not replayed.
 Inspect observations under their original executor operation ID, not as independent executable operations.
+
+
+### External attach work channel: configuration groundwork
+
+The optional attach public_config.nexus_work_session_id references an active canonical Nexus session
+for the same agent and workspace. It contains no secret. Operator create/update checks the reference;
+a harness-owned presence session is not an external client session. Endpoint edits revoke existing
+grants, so any subsequent authorized work must use a grant issued for the new configuration.
+
+This reference is currently preparatory: the authenticated claim/ACK/complete path is still under
+implementation and managed attach work remains rejected. Do not interpret successful configuration
+as verified native execution, ACK, events or result capture. Follow
+plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md for the acceptance gate.
+
+If the referenced session closes, disabling the endpoint still works. Remove the reference with
+nexus_work_session_id=null (preserving the approved target_pid) before reconfiguration; enabling with
+a closed reference is rejected. These operations neither resend uncertain work nor terminate the
+external attach process.

@@ -1,0 +1,357 @@
+{
+  "source_sha": "48a8ea2124f0efc08b78a116891253fd0f011a79",
+  "platform": "linux",
+  "counts": {
+    "PASS": 54
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "54",
+      "time": "153.359",
+      "timestamp": "2026-09-24T11:40:55.467700-03:00"
+    }
+  ],
+  "native_flags": "No provider invoked; endpoint/profile/canonical handoff regression and import boundary",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_configuration_updates.py tests/test_runtime_endpoints.py tests/test_runtime_handoff_dispatch.py tests/test_import_boundary.py -q --tb=short --junitxml=.git/pr34-evidence/attach-work-config-regression-linux.xml",
+  "limitations": "Preparatory configuration only. No managed attach execution, ACK or complete implemented by this milestone. No counts summed across generations.",
+  "records": [
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_profile_disable_fences_send_preserves_session_and_allows_operator_close",
+      "status": "PASS",
+      "seconds": 4.171
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_endpoint_disable_and_reenable_require_cas_and_never_restore_old_grant",
+      "status": "PASS",
+      "seconds": 3.079
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_profile_updates_are_atomic_and_do_not_erase_omitted_fields",
+      "status": "PASS",
+      "seconds": 2.868
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_profile_rebinding_refuses_live_session_and_revokes_equal_revision_grant",
+      "status": "PASS",
+      "seconds": 3.126
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_mutation_disables_boot_and_does_not_restore_grants_after_reenable[profile]",
+      "status": "PASS",
+      "seconds": 3.366
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_mutation_disables_boot_and_does_not_restore_grants_after_reenable[endpoint]",
+      "status": "PASS",
+      "seconds": 3.196
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body0]",
+      "status": "PASS",
+      "seconds": 2.859
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body1]",
+      "status": "PASS",
+      "seconds": 2.931
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body2]",
+      "status": "PASS",
+      "seconds": 2.041
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body3]",
+      "status": "PASS",
+      "seconds": 2.151
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body4]",
+      "status": "PASS",
+      "seconds": 2.216
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_invalid_profile_update_cannot_alter_revision[body5]",
+      "status": "PASS",
+      "seconds": 2.259
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_configuration_commit_failure_rolls_back_grant_boot_and_revision",
+      "status": "PASS",
+      "seconds": 3.023
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_configuration_audit_upgrade_preserves_old_access_rows",
+      "status": "PASS",
+      "seconds": 1.464
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_profile_disable_preserves_late_native_terminal_without_publishing",
+      "status": "PASS",
+      "seconds": 5.243
+    },
+    {
+      "class": "tests.test_runtime_configuration_updates",
+      "test": "test_profile_change_after_send_intent_fences_native_write",
+      "status": "PASS",
+      "seconds": 3.257
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_additive_upgrade_preserves_agent_and_legacy_history[28]",
+      "status": "PASS",
+      "seconds": 0.991
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_additive_upgrade_preserves_agent_and_legacy_history[29]",
+      "status": "PASS",
+      "seconds": 1.119
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_presence_uses_canonical_session_and_close_only_owns_its_binding",
+      "status": "PASS",
+      "seconds": 3.575
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_diagnostics_are_operator_only_and_do_not_infer_liveness",
+      "status": "PASS",
+      "seconds": 2.134
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_presence_participates_in_canonical_routing_without_manual_session_insert[target0]",
+      "status": "PASS",
+      "seconds": 3.007
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_presence_participates_in_canonical_routing_without_manual_session_insert[target1]",
+      "status": "PASS",
+      "seconds": 3.184
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_presence_participates_in_canonical_routing_without_manual_session_insert[target2]",
+      "status": "PASS",
+      "seconds": 3.118
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_presence_participates_in_canonical_routing_without_manual_session_insert[target3]",
+      "status": "PASS",
+      "seconds": 3.273
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_ambiguous_endpoint_selection_does_not_construct_connector",
+      "status": "PASS",
+      "seconds": 3.132
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_runtime_cannot_override_approved_environment",
+      "status": "PASS",
+      "seconds": 2.81
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_environment_isolated_and_operator_key_never_inherited",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_rejects_unsafe_defaults_and_plain_secrets[config0]",
+      "status": "PASS",
+      "seconds": 2.072
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_rejects_unsafe_defaults_and_plain_secrets[config1]",
+      "status": "PASS",
+      "seconds": 2.077
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_rejects_unsafe_defaults_and_plain_secrets[config2]",
+      "status": "PASS",
+      "seconds": 1.997
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_rejects_unsafe_defaults_and_plain_secrets[config3]",
+      "status": "PASS",
+      "seconds": 3.078
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_p03_profile_rejects_unsafe_defaults_and_plain_secrets[config4]",
+      "status": "PASS",
+      "seconds": 2.346
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_profile_cannot_claim_unimplemented_sandbox_controls[pi]",
+      "status": "PASS",
+      "seconds": 2.037
+    },
+    {
+      "class": "tests.test_runtime_endpoints",
+      "test": "test_profile_cannot_claim_unimplemented_sandbox_controls[claude_code.stream]",
+      "status": "PASS",
+      "seconds": 2.037
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+      "status": "PASS",
+      "seconds": 3.82
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_cannot_silently_fall_back_to_unmanaged_claim",
+      "status": "PASS",
+      "seconds": 2.763
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+      "status": "PASS",
+      "seconds": 4.316
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+      "status": "PASS",
+      "seconds": 3.605
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[False]",
+      "status": "PASS",
+      "seconds": 2.838
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[True]",
+      "status": "PASS",
+      "seconds": 2.891
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_delegated_managed_claim_has_same_rest_and_mcp_admission",
+      "status": "PASS",
+      "seconds": 3.457
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_revocation_between_admission_and_write_prevents_native_effect",
+      "status": "PASS",
+      "seconds": 3.037
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_strict_claim_credentials_have_rest_mcp_parity[strict]",
+      "status": "PASS",
+      "seconds": 3.053
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_conversation_grant_cannot_authorize_work",
+      "status": "PASS",
+      "seconds": 3.077
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[deny]",
+      "status": "PASS",
+      "seconds": 3.025
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[require_approval]",
+      "status": "PASS",
+      "seconds": 2.898
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_canonical_approval_creates_dispatch_receipt_only_after_human_decision",
+      "status": "PASS",
+      "seconds": 3.058
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[legacy_receipt_absent]",
+      "status": "PASS",
+      "seconds": 3.282
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[enable_hitl]",
+      "status": "PASS",
+      "seconds": 2.156
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[revoke]",
+      "status": "PASS",
+      "seconds": 3.857
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[rework]",
+      "status": "PASS",
+      "seconds": 3.834
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_inner_layers_have_files",
+      "status": "PASS",
+      "seconds": 0.038
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_domain_and_application_do_not_import_infrastructure",
+      "status": "PASS",
+      "seconds": 0.794
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_replay_core_modules_are_in_scope_and_clean",
+      "status": "PASS",
+      "seconds": 0.053
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+    "tests/test_runtime_configuration_updates.py": "4b7214b27cebe76891d83f5a442305802235d84fd3a46d4af71eba281dc21776",
+    "tests/test_runtime_endpoints.py": "c1b735cac3c526a16c4274f788f6aff8666adb9de8e4a1dd3822d947ac093773",
+    "tests/test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6",
+    "tests/test_import_boundary.py": "39e739ea7246c0defd1edbf37ff5a2f1f52c448ce5bd15aeb6be75e1e7e8f1c3"
+  },
+  "handle": 57654,
+  "exit_code": 0,
+  "pytest_elapsed_seconds": 153.38
+}

@@ -1,0 +1,32 @@
+{
+  "source_sha": "48a8ea2124f0efc08b78a116891253fd0f011a79",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "4.322",
+      "timestamp": "2026-09-24T11:24:11.752765-03:00"
+    }
+  ],
+  "native_flags": "No native provider invoked; temporary HTTP/MCP store and synthetic peers only",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_attach_work_channel.py -q --tb=short --junitxml=.git/pr34-evidence/attach-work-channel-red-windows.xml",
+  "limitations": "Preparatory configuration only. No managed attach execution, ACK or complete implemented by this milestone. No counts summed across generations.",
+  "records": [
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel",
+      "status": "FAIL",
+      "seconds": 3.011
+    }
+  ],
+  "source_file_sha256": {
+    "tests/test_runtime_attach_work_channel.py": "af1bc8d7f58423254eae0931b1ee311f596085381b413bb37a01222967e43a13"
+  }
+}

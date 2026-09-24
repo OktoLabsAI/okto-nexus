@@ -1,0 +1,101 @@
+{
+  "source_sha": "48a8ea2124f0efc08b78a116891253fd0f011a79",
+  "requirements": [
+    {
+      "test_id": "T-WORK-12",
+      "status": "FAIL",
+      "scope": "External work admission is still missing; positive configuration qualification does not pass the claim/ACK/complete gate."
+    }
+  ],
+  "runs": {
+    "channel-red-windows": {
+      "manifest": "p12-attach-work-channel-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "config-initial-windows": {
+      "manifest": "p12-attach-work-config-initial-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "config-second-windows": {
+      "manifest": "p12-attach-work-config-second-windows.json",
+      "counts": {
+        "PASS": 4,
+        "FAIL": 1
+      }
+    },
+    "config-third-windows": {
+      "manifest": "p12-attach-work-config-third-windows.json",
+      "counts": {
+        "PASS": 30
+      }
+    },
+    "config-third-linux": {
+      "manifest": "p12-attach-work-config-third-linux.json",
+      "counts": {
+        "PASS": 30
+      }
+    },
+    "channel-after-config-windows": {
+      "manifest": "p12-attach-work-channel-after-config-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "channel-admission-red-windows": {
+      "manifest": "p12-attach-work-channel-admission-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "config-regression-windows": {
+      "manifest": "p12-attach-work-config-regression-windows.json",
+      "counts": {
+        "PASS": 54
+      },
+      "handle": 40860,
+      "exit_code": 0
+    },
+    "config-regression-linux": {
+      "manifest": "p12-attach-work-config-regression-linux.json",
+      "counts": {
+        "PASS": 54
+      },
+      "handle": 57654,
+      "exit_code": 0
+    }
+  },
+  "native_connectors": "NOT_RUN; fixture peers only",
+  "live_mcp_smoke": {
+    "command": "rtk proxy .venv/Scripts/python.exe scripts/live_client.py",
+    "result": "LIVE E2E RESULT: PASS",
+    "exit_code": 0,
+    "handle": "56a292"
+  },
+  "limitations": "Preparatory configuration only. No managed attach execution, ACK or complete implemented by this milestone. No counts summed across generations.",
+  "configuration_gate": {
+    "windows": {
+      "handle": 56785,
+      "exit_code": 0,
+      "counts": {
+        "PASS": 30
+      },
+      "seconds": 84.3
+    },
+    "linux": {
+      "handle": 80069,
+      "exit_code": 0,
+      "counts": {
+        "PASS": 30
+      },
+      "seconds": 100.83
+    }
+  },
+  "static_checks": {
+    "ruff": "PASS",
+    "git diff --check": "PASS"
+  }
+}
