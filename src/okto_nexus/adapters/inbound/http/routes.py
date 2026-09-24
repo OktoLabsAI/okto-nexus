@@ -386,10 +386,10 @@ class HarnessSessionOpenBody(BaseModel):
 
 
 class HarnessSessionCommandBody(BaseModel):
-    """Version 2 durable runtime command; identity is always authenticated."""
+    """Version 3 durable runtime command; identity is always authenticated."""
 
     model_config = {"extra": "forbid"}
-    payload: dict[str, Any] | None = None
+    payload: Any = None
     idempotency_key: str | None = None
     expected_operation_id: str | None = None
     expected_turn_id: str | None = None

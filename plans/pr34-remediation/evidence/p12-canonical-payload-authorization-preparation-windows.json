@@ -1,0 +1,45 @@
+{
+  "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+  "platform": "windows",
+  "counts": {
+    "PASS": 3
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "12.066",
+      "timestamp": "2026-09-24T08:45:17.099349-03:00"
+    }
+  ],
+  "native_flags": "No installed provider campaign; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization --maxfail=1 -q --junitxml=.git/pr34-evidence/canonical-auth-red-windows.xml",
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively.",
+  "records": [
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[send]",
+      "status": "PASS",
+      "seconds": 4.242
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[steer]",
+      "status": "PASS",
+      "seconds": 3.032
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[interrupt]",
+      "status": "PASS",
+      "seconds": 3.434
+    }
+  ],
+  "source_detail": {
+    "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+    "limitation": "Transient test hash not recorded."
+  }
+}

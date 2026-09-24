@@ -565,8 +565,8 @@ _P_NOTIFY_TARGET = (
 )
 _P_SESSION_ID = "Runtime session returned by harness_open; harness_get may select operation_id instead."
 _P_PAYLOAD_TURN = (
-    'One nonempty text/content string, e.g. {"text":"prompt"}. '
-    "The adapter translates it; arbitrary native options are rejected."
+    'Use {"text":"prompt"} or {"schema_version":1,"content":[{"type":"text","text":"prompt"}]}. '
+    "Identity and authority are server-owned; native options are rejected."
 )
 _P_PAYLOAD_STEER = _P_PAYLOAD_TURN
 _P_PAYLOAD_INTERRUPT = "Omit or use an empty object; interrupt does not accept native options."

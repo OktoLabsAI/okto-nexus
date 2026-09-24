@@ -1,0 +1,125 @@
+{
+  "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+  "platform": "windows",
+  "counts": {
+    "PASS": 13,
+    "FAIL": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "15",
+      "time": "57.464",
+      "timestamp": "2026-09-24T08:50:30.883324-03:00"
+    }
+  ],
+  "native_flags": "No installed provider campaign; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_canonical_payload.py -q --junitxml=.git/pr34-evidence/canonical-payload-initial-windows.xml",
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively.",
+  "records": [
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+      "status": "PASS",
+      "seconds": 4.118
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[pi-rest]",
+      "status": "PASS",
+      "seconds": 4.004
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[codex-mcp]",
+      "status": "PASS",
+      "seconds": 3.528
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[codex-rest]",
+      "status": "PASS",
+      "seconds": 5.544
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-mcp]",
+      "status": "PASS",
+      "seconds": 4.512
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-rest]",
+      "status": "PASS",
+      "seconds": 4.818
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-mcp]",
+      "status": "PASS",
+      "seconds": 3.351
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-rest]",
+      "status": "PASS",
+      "seconds": 3.454
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_payload_rejects_authority_conflicts_and_json_strings[mcp]",
+      "status": "FAIL",
+      "seconds": 2.635
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_payload_rejects_authority_conflicts_and_json_strings[rest]",
+      "status": "FAIL",
+      "seconds": 3.002
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_legacy_content_aliases_normalize_without_repeating_effect[mcp]",
+      "status": "PASS",
+      "seconds": 3.352
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_legacy_content_aliases_normalize_without_repeating_effect[rest]",
+      "status": "PASS",
+      "seconds": 4.308
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[send]",
+      "status": "PASS",
+      "seconds": 3.027
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[steer]",
+      "status": "PASS",
+      "seconds": 3.127
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[interrupt]",
+      "status": "PASS",
+      "seconds": 2.892
+    }
+  ],
+  "source_detail": {
+    "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+    "file_sha256": {
+      "src/okto_nexus/application/runtime_control.py": "fdb87b46a795030fbf721f183c962515e0781ac85ede1f5d757bf97c4570528c",
+      "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "f3206e367e9fca2575af50dc58d1d165ffb78aa971dab9fe8ef0130856c3b680",
+      "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "cd6cceb7cb7b5ee1fcc1a43f321e42a6a766a22f189b9b3a040f9214d77e8ff4",
+      "src/okto_nexus/adapters/inbound/mcp/server.py": "f95a603ff180c875f376a3ff18c687e67eda76176cc6e54fd282330731f14d87",
+      "src/okto_nexus/adapters/inbound/mcp/resources_docs.py": "52a45a6835e5c561d62102fa8c5812ee86e79a585bfacfe0519b2aefaa2c9153",
+      "tests/test_runtime_canonical_payload.py": "3734d8a569c6f7e95976dd674c3148647c4901cb013a9d29547737aca545aa2b"
+    }
+  }
+}

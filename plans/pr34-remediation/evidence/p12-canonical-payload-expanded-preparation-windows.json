@@ -1,0 +1,254 @@
+{
+  "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+  "platform": "windows",
+  "counts": {
+    "PASS": 33,
+    "FAIL": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "35",
+      "time": "146.737",
+      "timestamp": "2026-09-24T08:54:30.148086-03:00"
+    }
+  ],
+  "native_flags": "No installed provider campaign; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_canonical_payload.py tests/test_runtime_payload_boundaries.py tests/test_runtime_request_acceptance.py tests/test_runtime_operation_authorization.py -q --junitxml=.git/pr34-evidence/canonical-payload-final-windows.xml",
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively.",
+  "records": [
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+      "status": "PASS",
+      "seconds": 5.115
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[pi-rest]",
+      "status": "PASS",
+      "seconds": 3.694
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[codex-mcp]",
+      "status": "PASS",
+      "seconds": 4.214
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[codex-rest]",
+      "status": "PASS",
+      "seconds": 4.697
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-mcp]",
+      "status": "PASS",
+      "seconds": 4.353
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-rest]",
+      "status": "PASS",
+      "seconds": 4.384
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-mcp]",
+      "status": "PASS",
+      "seconds": 4.146
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-rest]",
+      "status": "PASS",
+      "seconds": 3.478
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_payload_rejects_authority_conflicts_and_invalid_json[mcp]",
+      "status": "PASS",
+      "seconds": 4.391
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_payload_rejects_authority_conflicts_and_invalid_json[rest]",
+      "status": "PASS",
+      "seconds": 4.108
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_legacy_content_aliases_normalize_without_repeating_effect[mcp]",
+      "status": "PASS",
+      "seconds": 4.014
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_legacy_content_aliases_normalize_without_repeating_effect[rest]",
+      "status": "PASS",
+      "seconds": 4.204
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[send]",
+      "status": "PASS",
+      "seconds": 4.019
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[steer]",
+      "status": "PASS",
+      "seconds": 4.08
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_payload_validation_does_not_precede_session_authorization[interrupt]",
+      "status": "PASS",
+      "seconds": 3.308
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_command_uses_granted_actor_and_real_adapter_results[mcp]",
+      "status": "FAIL",
+      "seconds": 3.779
+    },
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_command_uses_granted_actor_and_real_adapter_results[rest]",
+      "status": "FAIL",
+      "seconds": 4.291
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 4.385
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[send]",
+      "status": "PASS",
+      "seconds": 5.296
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[steer]",
+      "status": "PASS",
+      "seconds": 4.612
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[interrupt]",
+      "status": "PASS",
+      "seconds": 4.512
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+      "status": "PASS",
+      "seconds": 4.22
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+      "status": "PASS",
+      "seconds": 4.395
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]",
+      "status": "PASS",
+      "seconds": 3.787
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-rest]",
+      "status": "PASS",
+      "seconds": 3.426
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-mcp]",
+      "status": "PASS",
+      "seconds": 3.304
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-rest]",
+      "status": "PASS",
+      "seconds": 3.25
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-mcp]",
+      "status": "PASS",
+      "seconds": 4.376
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-rest]",
+      "status": "PASS",
+      "seconds": 3.141
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-mcp]",
+      "status": "PASS",
+      "seconds": 3.497
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+      "status": "PASS",
+      "seconds": 5.392
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[send]",
+      "status": "PASS",
+      "seconds": 4.04
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[steer]",
+      "status": "PASS",
+      "seconds": 4.483
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[interrupt]",
+      "status": "PASS",
+      "seconds": 3.957
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[close]",
+      "status": "PASS",
+      "seconds": 4.085
+    }
+  ],
+  "source_detail": {
+    "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+    "file_sha256": {
+      "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e",
+      "src/okto_nexus/adapters/inbound/mcp/resources_docs.py": "8489476c8e0aaba6739f9326c83b9d4e7d4ed8744e83d89c540bc2bb27e27299",
+      "src/okto_nexus/adapters/inbound/mcp/server.py": "f95a603ff180c875f376a3ff18c687e67eda76176cc6e54fd282330731f14d87",
+      "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "f3206e367e9fca2575af50dc58d1d165ffb78aa971dab9fe8ef0130856c3b680",
+      "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "cd6cceb7cb7b5ee1fcc1a43f321e42a6a766a22f189b9b3a040f9214d77e8ff4",
+      "src/okto_nexus/application/runtime_control.py": "7c40e89069b1d59b0f3733274170f09215f309c0597817b0cfcd8322185893c6",
+      "tests/test_comm_presets.py": "bbc6dda5eab94390a646d940c35aa5ebbd16aeace7e0105bf5400bdac1637e61",
+      "tests/test_feature_flags.py": "f072b23b5f613f34ffc21a23e10de96bde7de3c5c5bb263324130962effd69a1",
+      "tests/test_frente1_resources.py": "7710ee1dc06574fe0588e8d14a2b7339d24868d88f65c9f78bf09311d489532c",
+      "tests/test_handoff_dependencies.py": "b88698402a1e3b1feb9725a8306d491622ad2f1c6b210b1933a64cf4f1f33f83",
+      "tests/test_health.py": "cd7c3314e2c13f93a6cf368c4a8fddb118b5addce98bec591725e31899f16522",
+      "tests/test_memory.py": "8043c223cb23c97fd9714d8927160a990ceb5e7e075ae6b4cd7e57c3991eea2e",
+      "tests/test_replay_marker.py": "b465926b48664c2fdb08e858b944bf2a017d0d2bd0cf328d6e20b5379b4c9744",
+      "tests/test_verification.py": "ae07ed6fc940895f006065ae318b859599cbf34a60a52188560d420d2bc15453",
+      "tests/test_runtime_canonical_payload.py": "301712fb4fccdedd4ed2b9a283e028fad5320a6ae672e13b6cc2a3eaef23cbd8"
+    }
+  }
+}

@@ -451,7 +451,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 54 = durable delivery attempt observation history in operator detail inspection.
 #: 55 = bounded proven-safe retry deadlines and explicit retry-wait cancellation.
 #: 56 = approved equivalent-endpoint fallback with persisted admission/target binding.
-SURFACE_REVISION = 56
+SURFACE_REVISION = 57
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

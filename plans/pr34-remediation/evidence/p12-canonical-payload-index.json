@@ -1,0 +1,134 @@
+{
+  "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+  "final_file_sha256": {
+    "docs/harness-integrations/operator-guide.md": "d0935be244ddea3def3871da358accd38b3d844f21507167561dbcdeeac822c7",
+    "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e",
+    "src/okto_nexus/adapters/inbound/mcp/resources_docs.py": "8489476c8e0aaba6739f9326c83b9d4e7d4ed8744e83d89c540bc2bb27e27299",
+    "src/okto_nexus/adapters/inbound/mcp/server.py": "f95a603ff180c875f376a3ff18c687e67eda76176cc6e54fd282330731f14d87",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "f3206e367e9fca2575af50dc58d1d165ffb78aa971dab9fe8ef0130856c3b680",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "cd6cceb7cb7b5ee1fcc1a43f321e42a6a766a22f189b9b3a040f9214d77e8ff4",
+    "src/okto_nexus/application/runtime_control.py": "7c40e89069b1d59b0f3733274170f09215f309c0597817b0cfcd8322185893c6",
+    "tests/test_comm_presets.py": "bbc6dda5eab94390a646d940c35aa5ebbd16aeace7e0105bf5400bdac1637e61",
+    "tests/test_feature_flags.py": "f072b23b5f613f34ffc21a23e10de96bde7de3c5c5bb263324130962effd69a1",
+    "tests/test_frente1_resources.py": "7710ee1dc06574fe0588e8d14a2b7339d24868d88f65c9f78bf09311d489532c",
+    "tests/test_handoff_dependencies.py": "b88698402a1e3b1feb9725a8306d491622ad2f1c6b210b1933a64cf4f1f33f83",
+    "tests/test_health.py": "cd7c3314e2c13f93a6cf368c4a8fddb118b5addce98bec591725e31899f16522",
+    "tests/test_memory.py": "8043c223cb23c97fd9714d8927160a990ceb5e7e075ae6b4cd7e57c3991eea2e",
+    "tests/test_replay_marker.py": "b465926b48664c2fdb08e858b944bf2a017d0d2bd0cf328d6e20b5379b4c9744",
+    "tests/test_verification.py": "ae07ed6fc940895f006065ae318b859599cbf34a60a52188560d420d2bc15453",
+    "tests/test_runtime_canonical_payload.py": "b0a77e3193403215393d9971c1cc81f5000ad76ad4a8a113d1371cc5bc69b8cb"
+  },
+  "runs": {
+    "red-windows": {
+      "manifest": "p12-canonical-payload-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "authorization-preparation-windows": {
+      "manifest": "p12-canonical-payload-authorization-preparation-windows.json",
+      "counts": {
+        "PASS": 3
+      }
+    },
+    "initial-windows": {
+      "manifest": "p12-canonical-payload-initial-windows.json",
+      "counts": {
+        "PASS": 13,
+        "FAIL": 2
+      }
+    },
+    "expanded-preparation-windows": {
+      "manifest": "p12-canonical-payload-expanded-preparation-windows.json",
+      "counts": {
+        "PASS": 33,
+        "FAIL": 2
+      }
+    },
+    "metadata-windows": {
+      "manifest": "p12-canonical-payload-metadata-windows.json",
+      "counts": {
+        "PASS": 31
+      }
+    },
+    "confirmed-windows": {
+      "manifest": "p12-canonical-payload-confirmed-windows.json",
+      "counts": {
+        "PASS": 17
+      }
+    },
+    "initial-linux": {
+      "manifest": "p12-canonical-payload-initial-linux.json",
+      "counts": {
+        "PASS": 13,
+        "FAIL": 2
+      }
+    },
+    "expanded-preparation-linux": {
+      "manifest": "p12-canonical-payload-expanded-preparation-linux.json",
+      "counts": {
+        "PASS": 33,
+        "FAIL": 2
+      }
+    },
+    "metadata-linux": {
+      "manifest": "p12-canonical-payload-metadata-linux.json",
+      "counts": {
+        "PASS": 31
+      }
+    },
+    "confirmed-linux": {
+      "manifest": "p12-canonical-payload-confirmed-linux.json",
+      "counts": {
+        "PASS": 17
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-API-04",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[rest]",
+          "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[rest]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[send]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[steer]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[interrupt]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[rest]"
+        ],
+        "linux": [
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-rest]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[rest]",
+          "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[rest]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[send]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[steer]",
+          "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[interrupt]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[mcp]",
+          "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[rest]"
+        ]
+      }
+    }
+  ],
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively."
+}

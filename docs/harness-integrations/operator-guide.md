@@ -112,9 +112,25 @@ Persisted commands return an operation ID. Supply the idempotency key and expect
 operation/turn/owner fields required by the control; stale controls conflict.
 Exact retries retrieve the original decision rather than create another attempt.
 
-Legacy text/content inputs are normalized at the facade; conflicts are rejected.
-Payloads cannot supply identity or unrestricted authority. The adapter translates
-the canonical envelope.
+Conversational command contract v3 accepts canonical data, for example:
+
+```json
+{"schema_version":1,"content":[{"type":"text","text":"Review this proposal"}],"subject":"Proposal","response_requested":true}
+```
+
+Only conversational text blocks, optional subject, `intent="conversation"` and
+boolean `response_requested` are input fields. The server fills sender, recipient,
+workspace, operation/root IDs and untrusted-content provenance from the authenticated
+command and approved session. The adapter translates this complete canonical
+envelope; a steering command uses server intent `runtime_control`. Payload identity,
+trust, handoff/claim IDs, arbitrary native options and artifact references are
+rejected. Use canonical artifact/message/handoff APIs for those workflows.
+
+Legacy nonempty text/content strings normalize to text; both keys are accepted only
+when equal. Legacy native prompt rendering and persisted v2 idempotent retries stay
+compatible. JSON-string objects are parsed consistently with the MCP convention;
+invalid JSON and non-object values are rejected explicitly. The complete payload
+remains bounded to64 KiB. None of these formats grants task execution authority.
 
 Read one operation with `harness_get(operation_id=...)`, or a session with
 `harness_get(session_id=...)`. Use `harness_event_list` for durable sequenced replay.

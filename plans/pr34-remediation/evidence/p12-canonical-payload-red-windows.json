@@ -1,0 +1,33 @@
+{
+  "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.578",
+      "timestamp": "2026-09-24T08:40:45.223407-03:00"
+    }
+  ],
+  "native_flags": "No installed provider campaign; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_canonical_payload.py --maxfail=1 -q --junitxml=.git/pr34-evidence/canonical-payload-red-windows.xml",
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively.",
+  "records": [
+    {
+      "class": "tests.test_runtime_canonical_payload",
+      "test": "test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+      "status": "FAIL",
+      "seconds": 4.621
+    }
+  ],
+  "source_detail": {
+    "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+    "test_file_sha256": "1ed8c46b98d72f868eecf845b9eabe2f15e5bcbc69aeb8dbdd7c4dcaea11fe00"
+  }
+}

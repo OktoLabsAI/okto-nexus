@@ -1,0 +1,229 @@
+{
+  "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+  "platform": "windows",
+  "counts": {
+    "PASS": 31
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "31",
+      "time": "17.297",
+      "timestamp": "2026-09-24T08:55:10.283927-03:00"
+    }
+  ],
+  "native_flags": "No installed provider campaign; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_comm_presets.py::test_no_comm_preset_mcp_tool_and_surface_revision_is_33 tests/test_feature_flags.py::test_nexus_info_features_identical_on_stdio_and_http tests/test_handoff_dependencies.py::test_ts11_surface_revision_feature_flag_and_budgets tests/test_health.py::test_ts8_surface_revision_ledger_and_budgets tests/test_memory.py::test_ts11_surface_revision_ledger_budgets_and_tool_set tests/test_verification.py::test_ts11_surface_revision_and_verify_description_budget tests/test_replay_marker.py tests/test_surface_metrics.py tests/test_frente1_resources.py tests/test_import_boundary.py -q --junitxml=.git/pr34-evidence/canonical-metadata-windows.xml",
+  "limitations": "Owned protocol fixtures, not installed provider qualification. All original failures retained; final source hashes are not applied retroactively.",
+  "records": [
+    {
+      "class": "tests.test_comm_presets",
+      "test": "test_no_comm_preset_mcp_tool_and_surface_revision_is_33",
+      "status": "PASS",
+      "seconds": 0.39
+    },
+    {
+      "class": "tests.test_feature_flags",
+      "test": "test_nexus_info_features_identical_on_stdio_and_http",
+      "status": "PASS",
+      "seconds": 0.693
+    },
+    {
+      "class": "tests.test_handoff_dependencies",
+      "test": "test_ts11_surface_revision_feature_flag_and_budgets",
+      "status": "PASS",
+      "seconds": 0.363
+    },
+    {
+      "class": "tests.test_health",
+      "test": "test_ts8_surface_revision_ledger_and_budgets",
+      "status": "PASS",
+      "seconds": 0.383
+    },
+    {
+      "class": "tests.test_memory",
+      "test": "test_ts11_surface_revision_ledger_budgets_and_tool_set",
+      "status": "PASS",
+      "seconds": 0.807
+    },
+    {
+      "class": "tests.test_verification",
+      "test": "test_ts11_surface_revision_and_verify_description_budget",
+      "status": "PASS",
+      "seconds": 0.39
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts11_replay_marker_is_registered",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts11_this_test_is_collected_under_replay_marker",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts13_surface_revision_unchanged",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts13_feature_replay_is_a_declared_flag",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts13_nexus_info_features_reflect_flag_off",
+      "status": "PASS",
+      "seconds": 0.319
+    },
+    {
+      "class": "tests.test_replay_marker",
+      "test": "test_ts13_nexus_info_features_reflect_flag_on",
+      "status": "PASS",
+      "seconds": 0.317
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_baseline_is_internally_consistent",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_revision_32_coordination_guidance_growth_is_audited",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_measure_resident_surface_reports_components",
+      "status": "PASS",
+      "seconds": 0.523
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_cuttable_reduction_helper_matches_baseline_math",
+      "status": "PASS",
+      "seconds": 0.545
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_list_resources_advertises_exactly_the_twelve_reference_uris",
+      "status": "PASS",
+      "seconds": 0.659
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_each_reference_resource_reads_nonempty_with_version_frontmatter",
+      "status": "PASS",
+      "seconds": 0.654
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_changed_guidance_resources_publish_new_cache_versions",
+      "status": "PASS",
+      "seconds": 0.683
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_resident_instructions_match_the_intent_based_coordination_contract",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_preflight_makes_profile_defaults_overridable_only_for_current_task",
+      "status": "PASS",
+      "seconds": 0.592
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_communication_resource_routes_all_executable_work_through_handoffs",
+      "status": "PASS",
+      "seconds": 0.684
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_communication_resource_keeps_broadcast_and_direct_informational",
+      "status": "PASS",
+      "seconds": 0.76
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_communication_resource_disambiguates_the_two_broadcast_operations",
+      "status": "PASS",
+      "seconds": 0.634
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_nexus_info_returns_success_envelope_with_dict_data",
+      "status": "PASS",
+      "seconds": 0.707
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_message_get_shim_returns_migrated_not_unknown_tool",
+      "status": "PASS",
+      "seconds": 0.771
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_representative_success_tool_returns_canonical_envelope",
+      "status": "PASS",
+      "seconds": 0.679
+    },
+    {
+      "class": "tests.test_frente1_resources",
+      "test": "test_other_migration_shims_also_return_canonical_migrated",
+      "status": "PASS",
+      "seconds": 0.575
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_inner_layers_have_files",
+      "status": "PASS",
+      "seconds": 0.004
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_domain_and_application_do_not_import_infrastructure",
+      "status": "PASS",
+      "seconds": 0.805
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_replay_core_modules_are_in_scope_and_clean",
+      "status": "PASS",
+      "seconds": 0.024
+    }
+  ],
+  "source_detail": {
+    "source_sha": "1445470b0a5eb75a26dd611df1d12612135865b5",
+    "file_sha256": {
+      "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e",
+      "src/okto_nexus/adapters/inbound/mcp/resources_docs.py": "8489476c8e0aaba6739f9326c83b9d4e7d4ed8744e83d89c540bc2bb27e27299",
+      "src/okto_nexus/adapters/inbound/mcp/server.py": "f95a603ff180c875f376a3ff18c687e67eda76176cc6e54fd282330731f14d87",
+      "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "f3206e367e9fca2575af50dc58d1d165ffb78aa971dab9fe8ef0130856c3b680",
+      "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "cd6cceb7cb7b5ee1fcc1a43f321e42a6a766a22f189b9b3a040f9214d77e8ff4",
+      "src/okto_nexus/application/runtime_control.py": "7c40e89069b1d59b0f3733274170f09215f309c0597817b0cfcd8322185893c6",
+      "tests/test_comm_presets.py": "bbc6dda5eab94390a646d940c35aa5ebbd16aeace7e0105bf5400bdac1637e61",
+      "tests/test_feature_flags.py": "f072b23b5f613f34ffc21a23e10de96bde7de3c5c5bb263324130962effd69a1",
+      "tests/test_frente1_resources.py": "7710ee1dc06574fe0588e8d14a2b7339d24868d88f65c9f78bf09311d489532c",
+      "tests/test_handoff_dependencies.py": "b88698402a1e3b1feb9725a8306d491622ad2f1c6b210b1933a64cf4f1f33f83",
+      "tests/test_health.py": "cd7c3314e2c13f93a6cf368c4a8fddb118b5addce98bec591725e31899f16522",
+      "tests/test_memory.py": "8043c223cb23c97fd9714d8927160a990ceb5e7e075ae6b4cd7e57c3991eea2e",
+      "tests/test_replay_marker.py": "b465926b48664c2fdb08e858b944bf2a017d0d2bd0cf328d6e20b5379b4c9744",
+      "tests/test_verification.py": "ae07ed6fc940895f006065ae318b859599cbf34a60a52188560d420d2bc15453",
+      "tests/test_runtime_canonical_payload.py": "301712fb4fccdedd4ed2b9a283e028fad5320a6ae672e13b6cc2a3eaef23cbd8"
+    }
+  }
+}

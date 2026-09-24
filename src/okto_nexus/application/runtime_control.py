@@ -5,21 +5,52 @@ from contextlib import contextmanager
 import json
 
 from ..domain.base import check_inline_size, new_id
+from ..domain.delivery import DeliveryEnvelope
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_requirements import validate_declared_command, validate_effective_control, validate_effective_capability
 
 
 def validate_runtime_payload(value, *, required):
+    if isinstance(value, str):
+        check_inline_size("runtime payload", value, 65536)
+        try:
+            value = json.loads(value)
+        except (ValueError, RecursionError) as exc:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid runtime payload JSON object.", {}) from exc
     if value is None and not required:
         return {}
-    if (not isinstance(value, Mapping) or set(value) - {"text", "content"}
-            or (required and len(value) != 1) or (not required and value)
-            or any(not isinstance(v, str) or not v for v in value.values())):
+    if not isinstance(value, Mapping) or (not required and value):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                            "Use one text/content string for a conversational turn; native options are not accepted.", {})
+                            "Use a conversational payload object; native options are not accepted.", {})
     check_inline_size("runtime payload", value, 65536)
-    return dict(value)
+    if not required:
+        return {}
+    if "schema_version" in value or isinstance(value.get("content"), list):
+        # This is the input projection of DeliveryEnvelope v1. The server owns
+        # identity, correlation, trust and execution authority; callers only
+        # submit conversational data. Artifacts/work use their canonical APIs.
+        content = value.get("content")
+        if (set(value) - {"schema_version", "content", "subject", "intent", "response_requested"}
+                or type(value.get("schema_version")) is not int or value["schema_version"] != 1
+                or not isinstance(content, list) or not content
+                or any(not isinstance(item, dict) or set(item) != {"type", "text"}
+                    or item["type"] != "text" or not isinstance(item["text"], str) or not item["text"]
+                    for item in content)
+                or value.get("intent", "conversation") != "conversation"
+                or value.get("subject") is not None and not isinstance(value["subject"], str)
+                or type(value.get("response_requested", False)) is not bool):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                "Canonical v1 accepts conversational text blocks, subject and response_requested only; identity and authority are server-owned.", {})
+        return {"schema_version": 1, "content": [dict(item) for item in content],
+            "subject": value.get("subject"), "intent": "conversation",
+            "response_requested": value.get("response_requested", False)}
+    if (not value or set(value) - {"text", "content"}
+            or any(not isinstance(item, str) or not item for item in value.values())
+            or len(value) == 2 and value["text"] != value["content"]):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                            "Use matching nonempty text/content strings or canonical v1 content blocks.", {})
+    return {"text": next(iter(value.values()))}
 
 
 class RuntimeControlService:
@@ -70,7 +101,13 @@ class RuntimeControlService:
             self.access.authorize(context, action=action, session_id=session_id, uow=uow, check_budget=False)
             existing = self.commands.existing(uow, actor_id=actor_id, key=key)
             if existing:
-                if existing["request_hash"] != digest:
+                compatible_digests = {digest}
+                if set(payload) == {"text"}:
+                    # v2 persisted the legacy alias spelling in its digest.
+                    # Preserve those immutable rows/replies across the upgrade.
+                    compatible_digests.add(self.commands.digest(session_id, verb,
+                        {"content": payload["text"]}, expected_operation_id, expected_turn_id, expected_owner_epoch))
+                if existing["request_hash"] not in compatible_digests:
                     raise OktoNexusError(ErrorCode.CONFLICT, "Command key already binds different parameters.", {})
                 return self.commands.response(existing)
             session = self.supervisor.get(session_id)
@@ -136,7 +173,17 @@ class RuntimeControlService:
             session = self.supervisor.close(session_id)
             return {"session_id": session_id, "status": session.status, "lifecycle_state": session.lifecycle_state,
                 "metadata": dict(session.metadata)}
-        self.supervisor.send(session_id, operation["verb"], json.loads(operation["payload"]),
+        payload = json.loads(operation["payload"])
+        if payload.get("schema_version") == 1:
+            session = self.supervisor.get(session_id)
+            envelope = DeliveryEnvelope(operation_id=operation["operation_id"],
+                sender_agent_id=operation["actor_agent_id"], recipient_agent_id=session.owning_agent_id,
+                workspace_id=session.workspace_id, root_operation_id=operation["operation_id"],
+                intent="conversation" if operation["verb"] == "send_turn" else "runtime_control",
+                content=tuple(payload["content"]), subject=payload["subject"],
+                response_requested=payload["response_requested"])
+            payload = {"envelope": envelope.to_dict()}
+        self.supervisor.send(session_id, operation["verb"], payload,
             _transport_attempt={"operation_id": operation["operation_id"], "attempt_id": operation["attempt_id"],
                 "owner_epoch": operation["owner_epoch"], "expected_operation_id": operation["expected_operation_id"],
                 "expected_turn_id": operation["expected_turn_id"]})

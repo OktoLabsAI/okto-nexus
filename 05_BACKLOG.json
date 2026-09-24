@@ -4567,8 +4567,12 @@
       ],
       "stimulus": "text/content/canônico, JSON-string e conflitos.",
       "expected": "Normalização explícita; dados não são ignorados nem interpretados como autoridade.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md",
+        "plans/pr34-remediation/evidence/p12-canonical-payload-index.json"
+      ],
+      "notes": "Canonical v1 conversational input, authenticated server-filled envelope, explicit JSON-string normalization, legacy aliases/conflicts and persisted v2 hash compatibility.17 final contract cases/platform; synthetic adapters and owned protocol fixture, no native attach qualification."
     },
     {
       "test_id": "T-API-05",

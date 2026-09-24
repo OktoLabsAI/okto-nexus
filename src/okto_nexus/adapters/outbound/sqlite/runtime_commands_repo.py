@@ -101,4 +101,4 @@ class SqliteRuntimeCommandRepo:
     def response(row):
         return {"operation_id": row["operation_id"], "session_id": row["runtime_session_id"], "verb": row["verb"],
             "state": row["status"], "durable": True, "external_acceptance": "harness_accepted" if row["ack_level"] == "HARNESS_ACCEPTED" else "not_observed",
-            "idempotency_key": row["idempotency_key"], "runtime_contract_version": 2}
+            "idempotency_key": row["idempotency_key"], "runtime_contract_version": 3}

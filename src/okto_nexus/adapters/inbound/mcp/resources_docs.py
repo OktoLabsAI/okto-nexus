@@ -420,8 +420,19 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="24",
+    version="25",
     body="""\
+Runtime conversational command contract v3: harness_send/harness_steer accept
+canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
+optional subject, intent="conversation" and boolean response_requested. The server
+fills identity, operation/root IDs, workspace and untrusted-content provenance;
+these fields cannot be supplied by the caller. Native options, artifact references
+and executable handoffs use their separately authorized canonical APIs. JSON-string
+objects are parsed; invalid JSON is rejected. Legacy text/content strings normalize to text;
+both may be present only when equal. Existing v2 alias-key retries remain valid.
+The adapter emits the complete canonical envelope for v1 input; legacy prompts
+retain their native text representation. Steer uses server intent runtime_control.
+
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
 (discovery); everything else is workspace-scoped.

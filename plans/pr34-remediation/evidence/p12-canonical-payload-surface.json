@@ -1,0 +1,76 @@
+{
+  "baseline_sha": "1445470",
+  "current_parent": "1445470b0a5eb75a26dd611df1d12612135865b5",
+  "baseline": {
+    "surface_revision": 56,
+    "measurements": {
+      "False": {
+        "instructions": 5232,
+        "docstrings": 6549,
+        "params": 16534,
+        "cuttable": 28315,
+        "total": 40448,
+        "cuttable_tokens": 7078,
+        "total_tokens": 10112,
+        "tool_count": 43,
+        "harness_tools": []
+      },
+      "True": {
+        "instructions": 5232,
+        "docstrings": 7872,
+        "params": 19097,
+        "cuttable": 32201,
+        "total": 47730,
+        "cuttable_tokens": 8050,
+        "total_tokens": 11932,
+        "tool_count": 51,
+        "harness_tools": [
+          "harness_close",
+          "harness_event_list",
+          "harness_get",
+          "harness_interrupt",
+          "harness_list",
+          "harness_open",
+          "harness_send",
+          "harness_steer"
+        ]
+      }
+    }
+  },
+  "worktree": {
+    "surface_revision": 57,
+    "measurements": {
+      "False": {
+        "instructions": 5232,
+        "docstrings": 6549,
+        "params": 16534,
+        "cuttable": 28315,
+        "total": 40448,
+        "cuttable_tokens": 7078,
+        "total_tokens": 10112,
+        "tool_count": 43,
+        "harness_tools": []
+      },
+      "True": {
+        "instructions": 5232,
+        "docstrings": 7872,
+        "params": 19171,
+        "cuttable": 32275,
+        "total": 47828,
+        "cuttable_tokens": 8068,
+        "total_tokens": 11957,
+        "tool_count": 51,
+        "harness_tools": [
+          "harness_close",
+          "harness_event_list",
+          "harness_get",
+          "harness_interrupt",
+          "harness_list",
+          "harness_open",
+          "harness_send",
+          "harness_steer"
+        ]
+      }
+    }
+  }
+}
