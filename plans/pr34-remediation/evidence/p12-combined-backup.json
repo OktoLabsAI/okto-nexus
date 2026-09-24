@@ -1,0 +1,33 @@
+{
+  "date": "2026-09-24",
+  "implementation_parent": "c27223b914b4916c576f5e8fe7e5dab922bd1bb8",
+  "source_sha256": {
+    "plans/pr34-remediation/offline_runtime_backup.py": "6b903e35c0a7260ca43d0900086dd25ccd7476fe3fcc33a83d33a6ed1785c0ad",
+    "tests/test_runtime_backup_restore.py": "7372374218c4f6d639ee8d541c2b099d2d0e01bc6b8feb6e93096dadf9feb65b",
+    "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d"
+  },
+  "scope": "combined offline snapshot and restored production HTTP application; disposable Python protocol peers only",
+  "results": [
+    {
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_backup_restore.py",
+      "status": "PASS",
+      "passed": 11,
+      "warnings": 1,
+      "seconds": 37.37
+    },
+    {
+      "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus -- /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q --tb=short tests/test_runtime_backup_restore.py",
+      "status": "PASS",
+      "passed": 11,
+      "warnings": 1,
+      "seconds": 39.07
+    }
+  ],
+  "native_providers_this_unit": "NOT_RUN",
+  "final_gate": "NOT_PASSED",
+  "limitations": [
+    "Explicit operator quiescence is required in addition to writer-lock and lease exclusion.",
+    "No real user store restored.",
+    "Hashes detect corruption, not a malicious backup author."
+  ]
+}

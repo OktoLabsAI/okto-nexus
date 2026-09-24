@@ -1,5 +1,7 @@
 # P03/P11/P12 — outstanding cutover and backup audit
 
+Current update (2026-09-24): writer defect corrected in c27223b (P03_WRITER_CONTRACT.md); combined backup/restore evidence now in P12_COMBINED_BACKUP_RESTORE.md. Historical suite session15489 is terminal:2296 PASS/4 FAIL/117 SKIP; see P12_SUITE_FEEB14D.md. The audit below is preserved as historical evidence, not the current resume instruction.
+
 Inspected implementation/test SHA `feeb14d`, while its full Windows suite runs.
 This document records findings, not a completed gate or a proposed replacement
 for the remediation requirements. No production source was edited during the run.

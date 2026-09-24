@@ -79,11 +79,12 @@ class FileRuntimeEventJournal:
             finally:
                 os.close(fd)
 
-    def start(self, *, initial_sequences=None):
+    def start(self, *, initial_sequences=None, repair_tail=True):
         with self._lock:
             if self._owner_file is not None:
                 self.check_admission()
                 return
+            self._allow_tail_repair = repair_tail
             # Refuse path redirection at every existing component.
             for path in (self.root, *self.root.parents):
                 if path.exists() and (path.is_symlink() or getattr(path.lstat(), "st_file_attributes", 0) & 0x400):
@@ -172,6 +173,8 @@ class FileRuntimeEventJournal:
             self._total += stream.seek(0, os.SEEK_END)
 
     def _repair_tail(self, stream, offset, last):
+        if not self._allow_tail_repair:
+            raise OSError("Incomplete journal tail; strict snapshot validation forbids repair")
         if not last:
             raise OSError("Truncated interior journal segment")
         stream.truncate(offset)

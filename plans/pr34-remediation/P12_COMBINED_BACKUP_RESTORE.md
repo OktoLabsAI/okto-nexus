@@ -1,0 +1,37 @@
+# Combined offline backup and restore
+
+Implementation parent: `c27223b`, branch `feature/v0.2.0`. Procedure: `offline_runtime_backup.py`; tests: `tests/test_runtime_backup_restore.py`. This is an operator-run offline procedure in the repository, not a new unauthenticated REST/MCP administrative surface. No real user store was copied, migrated or restored. Final release gate remains NOT PASSED.
+
+## Consistency and recovery contract
+
+Stop admissions, drain/reconcile, and stop all serve/stdio writers, artifact maintenance and managed native owners before backup. Detach external attach sessions without killing their process. A lease expiry alone does not prove that external effects stopped. The required `--all-writers-and-native-owners-stopped` argument records the operator's explicit acknowledgement; it does not perform or certify process shutdown. The tool additionally refuses an occupied journal writer lock or a live database owner lease.
+
+The procedure holds the journal writer lock and a SQLite writer exclusion transaction while using SQLite's backup API through an independent read connection and copying journal/artifact files. It does not copy a live WAL database file by itself. No process, network, model or secret resolver is called in that transaction. The operator's quiescence is also required for filesystem maintenance outside database transactions. No processes are enumerated or killed.
+
+The manifest includes schema ledger, canonical agent-row checksum, entity counts, journal identity/watermarks, and every copied file's size/SHA-256. Validation checks SQLite integrity/FKs, all catalog artifact references and payload sizes/manifests, journal frames/CRC/sequence, database/journal identity and checkpoint retention bounds. Hashes detect corruption/mixing, not malicious forgery by someone with backup write access. Backups contain private store data and must inherit the source's access restrictions. The standalone operator-key file and arbitrary home configuration files are not copied; database authentication hashes and private artifact/profile data are included.
+
+Strict journal validation now uses `FileRuntimeEventJournal.start(repair_tail=False)` and rejects incomplete tails without truncation. Ordinary live recovery retains its existing default tail repair behavior. Backup data is fsynced before publishing the manifest; completed backup/restore trees are flushed before success. POSIX directories are fsynced; Windows retains the existing platform limitation on directory fsync.
+
+Only new destination directories are accepted. No overwrite, reverse migration or automatic launch/replay is performed. Failure may leave a partial destination for inspection; do not use it as a recovery source unless validation passes. Preserve the original store, validate in a new directory and review uncertain effects before changing service configuration. Restoring filesystem/database state cannot undo effects already produced by a harness.
+
+## Commands
+
+Use the matching checked-out Nexus version and its Python environment. Explicitly identify the real configured home and database; the default database is `SOURCE_HOME/nexus.db`, and `--db-path` supports a configured external database. The output restore database is always `RESTORED_HOME/nexus.db`; do not retain an old external DB override when starting the restored service.
+
+```powershell
+rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py backup SOURCE_HOME NEW_BACKUP_DIR --db-path SOURCE_DATABASE --all-writers-and-native-owners-stopped
+rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py validate NEW_BACKUP_DIR
+rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py restore NEW_BACKUP_DIR NEW_RESTORED_HOME --all-writers-and-native-owners-stopped
+```
+
+Replace these placeholders with reviewed absolute paths. Run the restored service first with an explicit `--feature-harness-integrations false`, preventing stored/environment defaults from enabling admission. Review outbox, writer contract, endpoint quarantine and journal diagnostics with authorized credentials. Pending/unknown records and executor reservations must survive. Re-enable only after verifying the original owners cannot produce further effects and resolving any uncertainty through the existing explicit reconciliation workflow. Never lower the writer contract or delete dedupe history to make an older binary open the store.
+
+## Evidence and limits
+
+Final checks (2026-09-24): the Windows four-file selection before HTTP restore composition was **35 PASS**, 73.48 s. Adding restored HTTP startup/authentication exposed a test ordering error: Windows **34 PASS / 1 FAIL**, 73.28 s; Linux backup selection **10 PASS / 1 FAIL**, 44.29 s. The test compared whole agent rows after authentication legitimately touched `last_seen_at`. Moving the unchanged exact-row checksum assertion before the first authenticated request fixed it. Final `rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_backup_restore.py`: **11 PASS**, 37.37 s, one known Starlette warning. Final Linux equivalent with the WSL interpreter below: **11 PASS**, 39.07 s, one warning. These final selections include database override, no-overwrite, unexpired-lease refusal and restored production HTTP composition. No production code changed after the broader journal selection. Ruff and git diff --check PASS. See `evidence/p12-combined-backup.json` for source hashes and machine-readable final results.
+
+The initial Windows selection was **1 FAIL / 4 PASS**, 17.73 s: the report helper compared sqlite3.Row objects with tuples and mislabeled a healthy database as corrupt. Normalizing row representation fixed this; the next selection was **5 PASS**, 19.99 s. Extended Windows journal/restart selection: **32 PASS**, 69.25 s. Subsequent backup selection: **9 PASS**, 30.67 s. Linux journal/restart selection at that scope: **33 PASS**, 69.34 s. Exact common command: `rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_backup_restore.py tests/test_runtime_event_journal.py tests/test_runtime_journal_retention.py tests/test_runtime_restart.py`; Linux uses `rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus -- /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q --tb=short` with the same four files. Later checks are recorded in the execution status before commit.
+
+Fixtures execute the Python Codex protocol peer through the production server to produce a 70 KB private result artifact, then require coordinated shutdown to report drained. Restored canonical identity, events/results and payload bytes survive. Missing artifacts, changed database/journal bytes, coherent file hashes with broken references/checkpoints, and incomplete journal tails are refused. Another case restores a SENT_UNCONFIRMED/OUTCOME_UNKNOWN delivery with admission OFF and verifies the original attempt and push reservation remain; no native prompt is replayed.
+
+No native Codex/Claude provider call was necessary or performed for this storage unit. Earlier native qualifications remain scoped to their recorded SHAs. Pi and dedicated attach native remain NOT_RUN. Remaining final gates include broader capability qualification, complete matrix/stress/performance evidence, immutable-SHA full regression and build/reinstall 0.2.0.
