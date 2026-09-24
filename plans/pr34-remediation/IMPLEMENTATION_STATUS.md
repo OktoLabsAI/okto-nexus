@@ -176,3 +176,24 @@ Surface58 metadata measurement completed exit0 at5d1d178: OFF43 tools/40264 char
 Windows full51046 now terminal exit1:2630 PASS/5 FAIL/121 SKIP,3805.65s. Exact terminal failures match grouped receipt, two stale migration ranges and Claude first-event0.2139898s>0.2s; see P12_FULL_REGRESSION_39C5E6C.md and sanitized full-node manifest. Linux29628 still live, so five candidate paths remain isolated. No source edits or reinstall yet.
 
 Final coverage catalogue at8072207 now includes all129 IDs:122 explicit test-node routes plus7 separate campaign/report routes. Every named function exists;93 test-file hashes recorded, with old review scopes preserved. See p12-final-node-catalogue.json and17-row supplement. This is not an execution/acceptance promotion; final immutable-source join still pending. Linux29628 remains live.
+
+Final corrected Windows regression started as handle49697 in the detached
+five-path candidate. Private authoritative launcher:
+.git/pr34-evidence/final-candidate-windows-launch.json. It records base39c5e6c,
+full dirty-diff SHA256, hashes of tracked src/tests/scripts/frontend/config/lock,
+exact argv/env and private persistent output/XML. The candidate stays frozen.
+Unlike earlier planned sequencing, this run starts before main integration to
+avoid idle time while old-source Linux29628 finishes. This uses the specification's
+explicit dirty-source evidence contract, not a claim that an uncommitted tree is a
+committed SHA. Before accepting it for the final release, compare tested bytes to
+the eventual integrated commit and retain the original base/diff identity. Do not
+rerun the whole Windows suite solely to change the recorded SHA when tested bytes
+are demonstrably identical; any relevant source change requires requalification.
+
+Main still has no production/test changes from39c5e6c; transfer five paths only
+after Linux29628 is terminal. For the final Linux run, a fresh local shared clone
+with no checkout is prepared on WSL's native filesystem at
+/var/tmp/okto-pr34-final-source-jzx6swb0/source. Its private metadata is
+.git/pr34-evidence/final-linux-source.json. Checkout/fetch the corrected commit
+there, verify tracked source and import origin, and use fresh fixtures plus
+persistent XML on D. No tests, provider or install ran in that prepared clone yet.
