@@ -1,0 +1,96 @@
+{
+  "source_sha": "43388c8f7298946c4a711850c25545925b58f01c",
+  "source_dirty_diff_sha256": "16cc63014b1435b474417190982e1c314f707b55443ddde14cc16e353568ceca",
+  "campaign_sha256": "e1299c7c1a4371a9c4ac1d398f49314d093874f87b9d8232cd93d3986473fab7",
+  "status": "PASS",
+  "warmup_cycles": 2,
+  "measured_cycles": 12,
+  "turns_per_cycle": 2,
+  "baseline": {
+    "threads": 13,
+    "handles_or_fds": 13,
+    "python_bytes": 17422227
+  },
+  "limits": {
+    "threads": 17,
+    "handles_or_fds": 29,
+    "python_bytes": 21616531
+  },
+  "samples": [
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17445558
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17462165
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17483077
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17497378
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17511603
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17514006
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17531350
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17549173
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17564219
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17573589
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17581836
+    },
+    {
+      "threads": 13,
+      "handles_or_fds": 13,
+      "python_bytes": 17591624
+    }
+  ],
+  "fixture_request_methods": [
+    "initialize",
+    "thread/start",
+    "thread/unsubscribe",
+    "turn/start"
+  ],
+  "median_cycle_seconds": 1.827840050500015,
+  "max_cycle_seconds": 2.0867188940000005,
+  "process_stop_observed_each_cycle": true,
+  "limitations": [
+    "Python protocol peer, no provider/native model",
+    "Python allocations, not RSS",
+    "steady cycles, not crash-pressure or comparative performance",
+    "host may concurrently execute other test suites"
+  ]
+}
