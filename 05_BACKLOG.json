@@ -2460,10 +2460,19 @@
           "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "752cd72cc28c1b623f52b796fb139d375357f89b",
+              "command": "Exact explicit executable/auth-path commands in P12_NATIVE_FRAMES.md",
+              "result": "PASS",
+              "observed": "Codex7 PASS132.09s; Claude6 PASS66.07s. Temporary login copies removed. Pi/attach NOT_RUN.",
+              "evidence": "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
-            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+            "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
           ],
           "notes": ""
         },
@@ -2475,10 +2484,19 @@
           "implementation_refs": [
             "plans/pr34-remediation/native_frame_campaign.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "752cd72cc28c1b623f52b796fb139d375357f89b",
+              "command": "Exact explicit executable/auth-path commands in P12_NATIVE_FRAMES.md",
+              "result": "PASS",
+              "observed": "Codex7 PASS132.09s; Claude6 PASS66.07s. Temporary login copies removed. Pi/attach NOT_RUN.",
+              "evidence": "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
-            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+            "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
           ],
           "notes": ""
         },
@@ -4420,8 +4438,13 @@
       ],
       "stimulus": "Capturar frames do começo ao fim do turno.",
       "expected": "Zero consultas de status; steer/interrupt/approval legítimos classificados à parte.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-codex.json",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-claude.json"
+      ],
+      "notes": "Source752cd72: real Codex0.156.1 7 PASS/1639 frames; Claude2.1.281 6 PASS/239 frames. Zero native status queries or unclassified outbound frames, no recorder overflow. Limited to approved local installations and isolated profiles; Pi/attach native NOT_RUN. Not a performance benchmark."
     },
     {
       "test_id": "T-E2E-04",

@@ -96,21 +96,15 @@ Ruff PASS for the three implementation files and the new test module.
 Installed versions read without model calls: Codex0.156.1, Claude2.1.281.
 Fresh real-model frame campaigns remain NOT_RUN for this unit until executed.
 
-An additional existing production overflow test exposed a regression in the first
-redaction wrapper: the process was reaped and uncertainty retained, but its
-specific NativeEventOverflow diagnostic became a generic exception type.
-`pytest -q --tb=short tests/test_runtime_event_buffers.py -k production_overflow`:
-1 FAIL/15 deselected21.95s. The wrapper now preserves the trusted local bounded-
-buffer/replay/framing error types as well as no-write proofs. A focused assertion
-was added. Broader Windows execution59530 completed:146 PASS362.40s, covering event buffers, protocol limits, managed work, publication, boot, endpoints, all four production fixture connectors and import boundaries. Command:
+An existing production overflow test exposed a regression in the first redaction wrapper: process cleanup and uncertainty survived, but NativeEventOverflow became a generic error. RED:1 FAIL/15 deselected21.95s. The wrapper now preserves trusted local bounded-buffer, replay and framing fault types. Broader Windows selection59530:146 PASS362.40s.
 
-`	ext
+```text
 rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_secret_redaction.py tests/test_runtime_event_buffers.py tests/test_runtime_protocol_limits.py tests/test_runtime_work_results.py tests/test_runtime_handoff_dispatch.py tests/test_runtime_result_publication.py tests/test_runtime_boot.py tests/test_runtime_endpoints.py tests/test_pr34_remediation.py tests/test_import_boundary.py
-`
+```
 
-A final server-policy namespace test then reproduced another behavioral RED (1 FAIL/16 deselected1.02s). Native-supplied _nexus_redaction and compatibility ackend_secret_redaction are now removed before any trusted server policy is attached. No native payload can claim that protection.
+The final namespace test reproduced1 FAIL/16 deselected1.02s. Native _nexus_redaction and compatibility backend_secret_redaction labels are removed before server policy is attached.
 
-The previous final selection handle78014 became unavailable across continuation; its final outcome was not recovered and is NOT_RUN in this record. Fresh final selections24004 (Windows) and60494 (Linux) are running on the unchanged final four source/test paths. Their results must be recorded before qualification. Evidence tooling:16 PASS0.21s; Ruff PASS.
+The final outcome of handle78014 could not be recovered across continuation and is not counted. Fresh final selection24004 completed on Windows:56 PASS121.13s;60494 completed on Linux:56 PASS125.26s. Exact commands and final source hashes are in evidence/p03-backend-secret-correction.json. Evidence tooling:16 PASS0.21s; Ruff PASS.
 
 ## Limits and next dependency
 
@@ -121,7 +115,7 @@ less detailed for a credential-bearing connection. Text still held before a
 terminal is transient; a crash before capture does not fabricate a durable
 result or native replay. Existing owner recovery reports uncertainty.
 
-Finish Linux selection, commit/push this unit only on feature/v0.2.0, execute the
+Correction committed/pushed as752cd72 on feature/v0.2.0. Execute the
 approved installed Codex/Claude frame campaigns at that SHA, and continue the
 remaining original matrix and P12 operational/performance gates. Pi/dedicated
 attach native remain NOT_RUN; installed Nexus0.1.10 still awaits final0.2.0 build.
