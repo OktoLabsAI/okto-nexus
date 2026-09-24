@@ -47,11 +47,22 @@ def test_load_worker_survives_snapshot_reader(tmp_path):
             while not snapshot.exists():
                 assert process.poll() is None and time.monotonic() < deadline
                 time.sleep(.02)
-            before = json.loads(snapshot.read_text())
+            def read_snapshot():
+                # Windows can briefly deny opening during atomic replacement.
+                # Keep the original deadline and fail if the worker exits;
+                # malformed content and other I/O errors remain test failures.
+                while True:
+                    try:
+                        return json.loads(snapshot.read_text())
+                    except PermissionError:
+                        assert process.poll() is None and time.monotonic() < deadline
+                        time.sleep(.02)
+
+            before = read_snapshot()
             with snapshot.open("rb"):
                 time.sleep(.7)
                 assert process.poll() is None, (tmp_path / "stderr").read_text()
-            while json.loads(snapshot.read_text())["iterations"] <= before["iterations"]:
+            while read_snapshot()["iterations"] <= before["iterations"]:
                 assert process.poll() is None and time.monotonic() < deadline
                 time.sleep(.02)
         finally:
