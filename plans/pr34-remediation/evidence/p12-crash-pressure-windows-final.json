@@ -1,0 +1,302 @@
+{
+  "status": "PASS",
+  "source_sha": "bf5636c05a3d50eb0e7bda8fdeb21d7b474de767",
+  "campaign_sha256": "fb7d49749193ea8e8d0f0587137d7031d1477524ede7c3e5a84280724ddd7998",
+  "fixture_sha256": "2ca981ceeab7090aedd442e8061c3ed79a3dc65f737aa40a83fa9b3511c579fe",
+  "platform": "win32",
+  "load_workers": 2,
+  "warmup_cycles": 2,
+  "measured_cycles": 6,
+  "samples": [
+    {
+      "cycle": 2,
+      "load_cpu_seconds": 1.203125,
+      "load_wall_seconds": 1.2356301000108942,
+      "load_cpu_fraction": 0.9736935026019456,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 4760000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.08529889999772422,
+      "owner_before_kill": {
+        "rss_bytes": 87306240,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 75931648,
+        "handles_or_fds": 166,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 3,
+      "load_cpu_seconds": 1.171875,
+      "load_wall_seconds": 1.2472870999918086,
+      "load_cpu_fraction": 0.9395391005067687,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 3780000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.08340779998979997,
+      "owner_before_kill": {
+        "rss_bytes": 87449600,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 76324864,
+        "handles_or_fds": 166,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 4,
+      "load_cpu_seconds": 1.140625,
+      "load_wall_seconds": 1.244331499998225,
+      "load_cpu_fraction": 0.9166568555096669,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 3820000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.08205259998794645,
+      "owner_before_kill": {
+        "rss_bytes": 87453696,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 76152832,
+        "handles_or_fds": 166,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 5,
+      "load_cpu_seconds": 1.109375,
+      "load_wall_seconds": 1.235958400007803,
+      "load_cpu_fraction": 0.8975827988975973,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 3360000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.09388570000010077,
+      "owner_before_kill": {
+        "rss_bytes": 87248896,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 76021760,
+        "handles_or_fds": 166,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 6,
+      "load_cpu_seconds": 1.125,
+      "load_wall_seconds": 1.2406122999964282,
+      "load_cpu_fraction": 0.9068102903729384,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 4620000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.07604400000127498,
+      "owner_before_kill": {
+        "rss_bytes": 87588864,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 76574720,
+        "handles_or_fds": 167,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 7,
+      "load_cpu_seconds": 1.234375,
+      "load_wall_seconds": 1.2375825999915833,
+      "load_cpu_fraction": 0.9974081730046906,
+      "load_affinity": 0,
+      "owner_affinity_verified": true,
+      "load_iterations_delta": 4740000,
+      "exact_tree_reaps": 2,
+      "reap_seconds": 0.10321300000941847,
+      "owner_before_kill": {
+        "rss_bytes": 86720512,
+        "handles_or_fds": 196,
+        "affinity": [
+          0
+        ],
+        "python_threads": null
+      },
+      "campaign_after_reap": {
+        "rss_bytes": 76861440,
+        "handles_or_fds": 167,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic Pi protocol peer; no provider/model",
+    "Single allowed CPU pinned only inside owned fixture processes",
+    "Load starts after protocol readiness; not a startup-under-pressure claim",
+    "Bounded contention; not host-wide exhaustion or comparative latency benchmark",
+    "RSS and descriptor limits apply to the campaign process; each serve/peer tree has exact death witnesses"
+  ],
+  "baseline": {
+    "rss_bytes": 74801152,
+    "handles_or_fds": 166,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "python_threads": 1
+  },
+  "limits": {
+    "rss_bytes": 91578368,
+    "handles_or_fds": 174,
+    "python_threads": 3
+  },
+  "load_workers_reaped": true,
+  "source_state": "parent SHA plus new campaign; protected generated frontend edits not exercised",
+  "command_document": "plans\\pr34-remediation\\P12_CRASH_PRESSURE.md"
+}

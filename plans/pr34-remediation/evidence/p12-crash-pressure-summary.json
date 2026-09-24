@@ -1,0 +1,35 @@
+{
+  "parent_sha": "bf5636c05a3d50eb0e7bda8fdeb21d7b474de767",
+  "campaign_sha256": "fb7d49749193ea8e8d0f0587137d7031d1477524ede7c3e5a84280724ddd7998",
+  "requirement": "T-LIFE-04",
+  "platforms": {
+    "windows": {
+      "status": "PASS",
+      "warmup_cycles": 2,
+      "measured_cycles": 6,
+      "min_cpu_fraction": 0.8975827988975973,
+      "max_reap_seconds": 0.10321300000941847,
+      "observed_peer_tree_stops": 12,
+      "owners_terminated": 6,
+      "max_rss_growth_bytes": 2060288,
+      "max_descriptor_growth": 1,
+      "max_thread_growth": 0,
+      "exit_code": 0
+    },
+    "linux": {
+      "status": "PASS",
+      "warmup_cycles": 2,
+      "measured_cycles": 6,
+      "min_cpu_fraction": 0.9911926805651599,
+      "max_reap_seconds": 0.014393493999996565,
+      "observed_peer_tree_stops": 18,
+      "owners_terminated": 6,
+      "max_rss_growth_bytes": 221184,
+      "max_descriptor_growth": 0,
+      "max_thread_growth": 0,
+      "exit_code": 0
+    }
+  },
+  "commands": "plans\\pr34-remediation\\P12_CRASH_PRESSURE.md",
+  "limitations": "Bounded measured kill-under-load with fresh stores. E2E04 recovery-under-load and final release still open."
+}

@@ -1,0 +1,23 @@
+{
+  "status": "FAIL",
+  "source_sha": "bf5636c05a3d50eb0e7bda8fdeb21d7b474de767",
+  "campaign_sha256": "b8acc037a1792bc3117cfb80c6de352e52f9ebd08b07b3b0440206928934ec30",
+  "fixture_sha256": "2ca981ceeab7090aedd442e8061c3ed79a3dc65f737aa40a83fa9b3511c579fe",
+  "platform": "win32",
+  "load_workers": 2,
+  "warmup_cycles": 2,
+  "measured_cycles": 3,
+  "samples": [],
+  "limitations": [
+    "Synthetic Pi protocol peer; no provider/model",
+    "Single allowed CPU pinned only inside owned fixture processes",
+    "Load starts after protocol readiness; not a startup-under-pressure claim",
+    "Bounded contention; not host-wide exhaustion or comparative latency benchmark",
+    "RSS and descriptor limits apply to the campaign process; each serve/peer tree has exact death witnesses"
+  ],
+  "failure": {
+    "type": "AssertionError",
+    "message": "([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], [{'affinity': 0, 'cpu_seconds': 0.90625, 'wall_seconds': 4.433766900008777, 'iterations': 2920000}, {'affinity': 0, 'cpu_seconds': 0.890625, 'wall_seconds': 4.408100999993621, 'iterations': 3080000}])"
+  },
+  "load_workers_reaped": true
+}
