@@ -1,0 +1,35 @@
+{
+  "parent_sha": "fe2801e9afa333cf2405ca46a9e1b7e45fe0cfde",
+  "dirty_files_sha256": {
+    "tests/test_runtime_read_audience.py": "e59b52f96b7f9cc2456e4917a2b3dc9bfaeb140de8b57a5d04416d3fbba0a775",
+    "tests/test_runtime_revocation_during_turn.py": "b43c27e3b7987041e51ab7ed44106ae4df028560c635491a1317c34946831fe5",
+    "tests/test_runtime_work_results.py": "0c92c249d8aa4060c412e1c2004f15de2bac1e498f0953e4c5ca71a9f68978e1"
+  },
+  "requirement_nodes": {
+    "T-AUTH-03": [
+      "tests/test_runtime_read_audience.py::test_private_session_replay_results_and_endpoint_listing_have_no_foreign_audience",
+      "tests/test_runtime_discovery.py::test_discovery_groups_authorized_endpoints_under_one_agent_and_redacts_config",
+      "tests/test_runtime_discovery.py::test_discovery_grant_never_grants_control_and_revocation_removes_projection"
+    ],
+    "T-AUTH-06": [
+      "tests/test_runtime_revocation_during_turn.py::test_revoke_accepted_turn_before_terminal_keeps_evidence_and_blocks_completion"
+    ],
+    "T-AUTH-07": [
+      "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority",
+      "tests/test_runtime_payload_boundaries.py::test_control_payload_cannot_replace_identity_correlation_or_native_profile"
+    ]
+  },
+  "windows": {
+    "passed": 36,
+    "seconds": 140.34,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 36,
+    "seconds": 168.22,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_AUDIENCE_NATIVE_AUTHORITY.md",
+  "limitations": "Scoped original AUTH03/06/07; full matrix, load, benchmark and release remain open."
+}

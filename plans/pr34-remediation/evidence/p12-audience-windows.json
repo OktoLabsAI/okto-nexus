@@ -1,0 +1,246 @@
+{
+  "source_sha": "fe2801e9afa333cf2405ca46a9e1b7e45fe0cfde",
+  "platform": "windows",
+  "counts": {
+    "PASS": 36
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "36",
+      "time": "140.308",
+      "timestamp": "2026-09-24T06:10:57.493680-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "See command_document for exact invocation",
+  "limitations": "Parent plus changed test hashes; synthetic native peers. No production changes/full suite/native provider campaign.",
+  "records": [
+    {
+      "class": "tests.test_runtime_read_audience",
+      "test": "test_private_session_replay_results_and_endpoint_listing_have_no_foreign_audience",
+      "status": "PASS",
+      "seconds": 4.12
+    },
+    {
+      "class": "tests.test_runtime_revocation_during_turn",
+      "test": "test_revoke_accepted_turn_before_terminal_keeps_evidence_and_blocks_completion",
+      "status": "PASS",
+      "seconds": 3.732
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_explicitly_authorized_structured_result_completes_canonical_handoff",
+      "status": "PASS",
+      "seconds": 3.842
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_reject_uses_canonical_rejection",
+      "status": "PASS",
+      "seconds": 4.063
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_completion_cannot_self_verify",
+      "status": "PASS",
+      "seconds": 4.037
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 4.062
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 5.241
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+      "status": "PASS",
+      "seconds": 8.976
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+      "status": "PASS",
+      "seconds": 4.13
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+      "status": "PASS",
+      "seconds": 3.972
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 4.16
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"actor_agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 4.162
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"from_agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 4.142
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"execution_grant_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.973
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"root_operation_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.778
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_looking_output_without_admission_does_not_complete",
+      "status": "PASS",
+      "seconds": 3.834
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_revoked_grant_blocks_structured_completion_and_retains_evidence",
+      "status": "PASS",
+      "seconds": 4.036
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_completion_and_its_receipt_rollback_and_retry_together",
+      "status": "PASS",
+      "seconds": 4.011
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_managed_revalidation_does_not_write_to_a_read_snapshot",
+      "status": "PASS",
+      "seconds": 4.078
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_rest_structured_contract_is_idempotent_with_mcp_and_cannot_be_changed",
+      "status": "PASS",
+      "seconds": 3.755
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 2.979
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[send]",
+      "status": "PASS",
+      "seconds": 2.866
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[steer]",
+      "status": "PASS",
+      "seconds": 3.194
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[interrupt]",
+      "status": "PASS",
+      "seconds": 3.048
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_groups_authorized_endpoints_under_one_agent_and_redacts_config",
+      "status": "PASS",
+      "seconds": 4.299
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_grant_never_grants_control_and_revocation_removes_projection",
+      "status": "PASS",
+      "seconds": 3.056
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_rechecks_policy_and_cached_flag_and_marks_closed_session",
+      "status": "PASS",
+      "seconds": 3.408
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_paginates_visible_endpoints_without_private_cursor",
+      "status": "PASS",
+      "seconds": 3.094
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_revalidates_current_authority[expire]",
+      "status": "PASS",
+      "seconds": 3.236
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_revalidates_current_authority[scope]",
+      "status": "PASS",
+      "seconds": 2.171
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_revalidates_current_authority[credential]",
+      "status": "PASS",
+      "seconds": 3.111
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_revalidates_current_authority[profile]",
+      "status": "PASS",
+      "seconds": 3.049
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_revalidates_current_authority[inactive]",
+      "status": "PASS",
+      "seconds": 3.119
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_internal_payload_identity_cannot_authenticate",
+      "status": "PASS",
+      "seconds": 1.905
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_authenticated_stdio_shares_persisted_http_projection",
+      "status": "PASS",
+      "seconds": 5.048
+    },
+    {
+      "class": "tests.test_runtime_discovery",
+      "test": "test_discovery_preserves_partial_attach_capabilities_without_opening_peer",
+      "status": "PASS",
+      "seconds": 5.443
+    }
+  ],
+  "source_state": "parent SHA plus three changed acceptance test files",
+  "dirty_files_sha256": {
+    "tests/test_runtime_read_audience.py": "e59b52f96b7f9cc2456e4917a2b3dc9bfaeb140de8b57a5d04416d3fbba0a775",
+    "tests/test_runtime_revocation_during_turn.py": "b43c27e3b7987041e51ab7ed44106ae4df028560c635491a1317c34946831fe5",
+    "tests/test_runtime_work_results.py": "0c92c249d8aa4060c412e1c2004f15de2bac1e498f0953e4c5ca71a9f68978e1"
+  },
+  "command_document": "plans\\pr34-remediation\\P12_AUDIENCE_NATIVE_AUTHORITY.md"
+}

@@ -99,6 +99,10 @@ def test_structured_completion_cannot_self_verify(runtime):
     'decision["claim_epoch"] = True',
     'decision["action"] = "verify"',
     'decision["agent_id"] = "operator"',
+    'decision["actor_agent_id"] = "operator"',
+    'decision["from_agent_id"] = "operator"',
+    'decision["execution_grant_id"] = "forged"',
+    'decision["root_operation_id"] = "forged"',
 ])
 def test_structured_result_cannot_replace_its_authority(runtime, mutation):
     native_work_peer(runtime, mutation=mutation)

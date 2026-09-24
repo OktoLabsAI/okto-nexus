@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "04446f738675e768245a371fb39fb027949d041e",
+  "execution_head": "fe2801e9afa333cf2405ca46a9e1b7e45fe0cfde",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2841,8 +2841,12 @@
       ],
       "stimulus": "Tentar replay, get, endpoint listing e resultados fora da audiência.",
       "expected": "Nenhum payload, path, backend privado ou existência indevida é exposto.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes."
     },
     {
       "test_id": "T-AUTH-04",
@@ -2889,8 +2893,12 @@
       ],
       "stimulus": "Revogar grant durante turno e receber resultado final.",
       "expected": "Evidência histórica é preservada; novos comandos/transições/publicações respeitam autoridade atual.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes."
     },
     {
       "test_id": "T-AUTH-07",
@@ -2903,8 +2911,12 @@
       ],
       "stimulus": "Forjar actor/from_agent/grant/root no corpo ou num native event.",
       "expected": "Identidade autoritativa vem do contexto e correlação confiáveis, não desses campos.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/evidence/p12-audience-authority.json"
+      ],
+      "notes": "Exact audience, post-acceptance pre-terminal revocation, and forged payload/native identity/grant/root stimuli; 36 PASS each platform, parent plus test hashes."
     },
     {
       "test_id": "T-AUTH-08",
