@@ -60,3 +60,63 @@ Ruff and diff checks PASS. Content hashes are recorded in evidence/p03-legacy-pr
 Next: finish the narrow correction and transfer only reviewed paths after the
 main Linux suite is terminal. Continue migration history/backfill/cutover/rollback
 stimuli and the remaining original plan; final gate NOT PASSED.
+
+## Additional exact migration stimuli
+
+The isolated worktree now also changes test_runtime_endpoints.py and
+test_runtime_attempt_history.py; five reviewed paths must eventually be
+integrated, not only the initial three.
+
+- T-MIG-01/02: upgrade fixtures at schema28/29 now include both RUNNING and
+  INTERRUPTING historical sessions, one with workspace/root hints and one with
+  no hints, and four historical events with non-contiguous sequence3/7. All old
+  columns, IDs, native event labels, timestamps and contents survive unchanged.
+  Workspace hints alone do not establish approved profile/authentication, so
+  bindings stay legacy_unlinked with no invented endpoint/current cwd/operation
+  or attempt. No outbox intent is created. Repeated migration is empty and FK
+  checks plus independent backup integrity checks pass.
+- T-MIG-03: a fixture operator explicitly selects a disposable pre-damage export.
+  Diagnostics does not discover/read that file. Unprivileged restore is denied;
+  operator restore with an unregistered skill fails the canonical catalogue
+  gate, then succeeds only after explicitly registering the reviewed skill.
+  Canonical role/capabilities/metadata match the chosen source; old sessions
+  remain historical, no peer is started and the diagnostic stays read-only.
+- T-MIG-04: schema58 has a nonempty accepted/unconfirmed transport attempt.
+  Migration59 executes its actual INSERT SELECT backfill; fault injection then
+  observes one populated history record and raises before the trigger/commit.
+  The failed migration rolls back its table and ledger entry, preserving the
+  complete original outbox row and constraints. Re-running the actual runner
+  applies59/60/61 once and records exactly one migration_snapshot, not a guessed
+  series of external transitions. This is a transaction fault cut, not SIGKILL.
+
+Focused Windows commands and results in the isolated worktree:
+
+```text
+rtk proxy D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_legacy_profile_review.py tests/test_runtime_attempt_history.py -k "legacy or upgrade"
+rtk proxy D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_endpoints.py -k additive_upgrade
+```
+
+11 PASS/2 deselected33.06s;2 PASS/16 deselected1.82s respectively. These close
+coverage gaps in already working migration/core behavior; no additional
+production correction or migration file alteration was necessary.
+
+Expanded final selections completed:54424 (Windows)43 PASS105.82s and98581 (Linux)43 PASS125.74s, with:
+test_runtime_legacy_profile_review.py, test_runtime_endpoints.py,
+test_runtime_admin_surfaces.py, test_runtime_attempt_history.py and
+test_import_boundary.py. Ruff PASS for all five changed paths. Do not transfer
+them into the main checkout while full Linux70522 is still running.
+
+## Recovery procedure to publish with integration
+
+Use operator diagnostics to identify current absence, without treating it as
+proof of damage. Keep a consistent backup and record the chosen recovery source
+and its provenance outside the runtime payload. Compare the exact Agent ID and
+fields against a reviewed pre-damage backup/export; never copy harness session
+metadata or infer skills from a runtime name. If no trusted source exists, keep
+the diagnostic and missing fields unchanged. Restore only the explicitly
+reviewed fields through the existing operator Agent administration, respecting
+the capability catalogue and existing permissions/scope. Inspect the canonical
+profile afterward; do not enable endpoints, replay unread work or mark old
+sessions ended as a side effect. No new bulk/automatic restore API is added.
+
+Final exact commands and hashes for all five isolated paths are recorded in evidence/p03-legacy-profile-review-worktree.json. Trusted-source fixture restoration is now verified, superseding its earlier pending note. Integration/main-checkout validation still pending; no milestone code commit outside feature/v0.2.0.

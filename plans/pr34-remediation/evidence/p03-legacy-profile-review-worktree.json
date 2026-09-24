@@ -4,23 +4,41 @@
   "files_sha256": {
     "src/okto_nexus/application/endpoints.py": "cbd431e39989a29a435344d0a7ab1d5730f0a6a2d1ff70a5d28d5d9872d7c022",
     "src/okto_nexus/adapters/outbound/sqlite/endpoints_repo.py": "9466779d37bb3c3352ec35621e14dad3db17b880886541d8a2be9df697174aab",
-    "tests/test_runtime_legacy_profile_review.py": "71f32abf45ca1d0f27464c783f8791c34abd3487b91d94167a2db930757c2dcd"
+    "tests/test_runtime_legacy_profile_review.py": "56222a3baf208fd44e6fc0ba1cd0b00354e2d6e955571029332b92e0b9d06670",
+    "tests/test_runtime_endpoints.py": "c1b735cac3c526a16c4274f788f6aff8666adb9de8e4a1dd3822d947ac093773",
+    "tests/test_runtime_attempt_history.py": "bd531cca7b509b5b87a0d5d9ea933275d2950f94bde8d26887bec57fc40ba92d"
   },
   "behavioral_red": {
     "failed": 2,
     "seconds": 11.7,
     "exit_code": 1
   },
-  "windows_expanded": {
-    "passed": 38,
-    "seconds": 85.46,
-    "exit_code": 0
-  },
-  "linux_focused": {
-    "passed": 8,
-    "seconds": 27.98,
-    "exit_code": 0
-  },
   "commands": "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
-  "limitations": "Disposable production socket app, no personal store/provider. Full T-MIG-03 not promoted; integration and trusted-source restoration evidence pending."
+  "limitations": "Disposable production socket app and real migration runner, synthetic trusted export. Backfill uses a transaction fault cut, not process kill. NOT integrated while main full Linux regression remains live; no personal store/provider.",
+  "earlier_selection": {
+    "windows": {
+      "passed": 38,
+      "seconds": 85.46,
+      "exit_code": 0
+    },
+    "linux": {
+      "passed": 8,
+      "seconds": 27.98,
+      "exit_code": 0
+    },
+    "note": "Before trusted-source restoration and expanded migration history/backfill cases; do not sum with final selections."
+  },
+  "final_windows": {
+    "passed": 43,
+    "seconds": 105.82,
+    "exit_code": 0,
+    "command": "rtk proxy D:/Projetos/Techridy/okto_labs_okto_nexus/.venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_legacy_profile_review.py tests/test_runtime_endpoints.py tests/test_runtime_admin_surfaces.py tests/test_runtime_attempt_history.py tests/test_import_boundary.py",
+    "cwd": "D:\\Projetos\\Techridy\\okto_nexus_migration_acceptance_worktree"
+  },
+  "final_linux": {
+    "passed": 43,
+    "seconds": 125.74,
+    "exit_code": 0,
+    "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_nexus_migration_acceptance_worktree /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q --tb=short tests/test_runtime_legacy_profile_review.py tests/test_runtime_endpoints.py tests/test_runtime_admin_surfaces.py tests/test_runtime_attempt_history.py tests/test_import_boundary.py"
+  }
 }
