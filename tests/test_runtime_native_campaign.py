@@ -76,7 +76,13 @@ def test_native_contract_qualification(tmp_path, kind, flow, native_auth_config)
         native_approval=flow == "denial", native_input=flow == "question", require_native_contract=False)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False, require_native_contract=True):
+@pytest.mark.parametrize("kind", ["codex", "claude_code"])
+@pytest.mark.parametrize("verb", ["steer", "interrupt"])
+def test_native_active_control_preserves_session(tmp_path, kind, verb, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, native_control=verb)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False, require_native_contract=True, native_control=None):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
@@ -265,6 +271,79 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 closed = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
                 assert closed.status_code == 200, closed.text
                 from test_runtime_commands import wait_close_result
+                assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"
+                assert native_process.wait(timeout=15) is not None
+                return
+            if native_control:
+                observations = {"notifications": {}, "item_types": [], "responses": [], "requests": []}
+                if kind == "codex":
+                    on_notification = native._transport._on_notification
+                    on_response = native._transport._on_unmatched_response
+                    on_request = native._transport._on_server_request
+                    def observe_notification(method, params):
+                        observations["notifications"][method] = observations["notifications"].get(method, 0) + 1
+                        if method in {"item/started", "item/completed"}:
+                            observations["item_types"].append({"method": method, "type": params.get("item", {}).get("type")})
+                        return on_notification(method, params)
+                    def observe_response(request_id, response, error):
+                        pending = native._ff_pending.get(request_id)
+                        observations["responses"].append({"method": pending[1] if pending else None,
+                            "error_code": error.get("code") if isinstance(error, dict) else None})
+                        return on_response(request_id, response, error)
+                    def observe_control_request(request_id, method, params):
+                        accepted = on_request(request_id, method, params)
+                        observations["requests"].append({"method": method, "accepted": accepted})
+                        return accepted
+                    native._transport._on_notification = observe_notification
+                    native._transport._on_unmatched_response = observe_response
+                    native._transport._on_server_request = observe_control_request
+                # Explicit operator command; this campaign measures transport
+                # control, not a model's interpretation of untrusted inbox data.
+                sent = tool(client, operator_key, "harness_send", {"session_id": session_id,
+                    "payload": {"text": "Write a 1000-word fictional story about a lighthouse. Do not use tools or modify files."},
+                    "idempotency_key": "native-control-original"})
+                assert sent["ok"], sent
+                original = sent["data"]["operation_id"]
+                deadline = time.monotonic() + 45
+                generation = None
+                while time.monotonic() < deadline:
+                    events = deps.harness_supervisor.replay_events(session_id)
+                    generation = next((event for event in events if event.native_event in {
+                        "item/agentMessage/delta", "stream_event:content_block_start"}), None)
+                    if generation:
+                        break
+                    time.sleep(.01)
+                assert generation is not None, "No native generation observed before control"
+                controlled = tool(client, operator_key, "harness_" + native_control,
+                    {"session_id": session_id, "expected_operation_id": original,
+                     "idempotency_key": "native-control",
+                     **({"payload": {"text": "Stop the story. Reply only OKTO_CONTROL_APPLIED. Do not use tools."}}
+                        if native_control == "steer" else {})})
+                assert controlled["ok"], controlled
+                target = controlled["data"]["operation_id"] if kind == "claude_code" and native_control == "steer" else original
+                deadline = time.monotonic() + 120
+                while time.monotonic() < deadline:
+                    result = client.get(f"/api/v1/harness/operations/{target}", headers=headers)
+                    assert result.status_code == 200, result.text
+                    result = result.json()["data"]
+                    if result["result_durable"]:
+                        break
+                    time.sleep(.05)
+                (tmp_path / "native-control-diagnostics.json").write_text(json.dumps({
+                    "native_version": compatibility["native_version"], "kind": kind, "verb": native_control,
+                    "result_durable": result["result_durable"], "observations": observations}), encoding="utf-8")
+                assert result["result_durable"], result
+                if native_control == "steer":
+                    assert "OKTO_CONTROL_APPLIED" in result["result"]["output_text"]
+                assert result["result"]["delivery_outcome"] == ("success" if native_control == "steer" else "interrupted")
+                assert native_process.poll() is None, "Control killed the shared session process"
+                (tmp_path / "native-control-observation.json").write_text(json.dumps({
+                    "native_version": compatibility["native_version"], "kind": kind,
+                    "verb": native_control, "result_durable": True,
+                    "delivery_outcome": result["result"].get("delivery_outcome"),
+                    "process_survived": True}), encoding="utf-8")
+                from test_runtime_commands import wait_close_result
+                closed = client.post(f"/api/v1/harness/sessions/{session_id}/close", headers=headers, json={})
                 assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"
                 assert native_process.wait(timeout=15) is not None
                 return

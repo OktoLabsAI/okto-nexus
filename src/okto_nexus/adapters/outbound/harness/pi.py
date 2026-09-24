@@ -101,6 +101,7 @@ from .framing import FrameLimitExceeded, protocol_lines, stderr_chunks
 from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
 from .environment import child_environment
+from .compatibility import pi_version_observation
 
 import itertools
 import json
@@ -595,6 +596,7 @@ class PiRpcConnector:
         env: Mapping[str, str] | None = None,
         handshake_timeout_s: float = 30.0,
         command_timeout_s: float = 30.0,
+        version_command: Sequence[str] | None = None,
     ) -> None:
         self.capabilities = HarnessCapabilities(
             send_only=False,
@@ -604,6 +606,8 @@ class PiRpcConnector:
             observes_session_end=True,
         )
         self._command = list(command)
+        # Trusted constructor fixture injection, not an exposed profile option.
+        self._version_command = list(version_command) if version_command is not None else self._command[:1] + ["--version"]
         self._provider = provider
         self._model = model
         self._extra_args = list(extra_args)
@@ -692,6 +696,8 @@ class PiRpcConnector:
                 # before any OktoNexusError-only except could ever catch it,
                 # which is precisely the kind of second, untested exit path
                 # this audit is meant to find.
+                compatibility = pi_version_observation(self._version_command,
+                    cwd=self._cwd, env=child_environment(self._env))
                 transport.start()
                 # Readiness requires a successful response in the documented
                 # object shape; a rejected command only proves pipe connectivity.
@@ -729,6 +735,7 @@ class PiRpcConnector:
             capabilities=self.capabilities,
             started_at=utc_now_iso(),
             metadata={"pi_session_id": session_id},
+            compatibility_report=compatibility,
         )
 
     def send(self, session: HarnessSession, command: HarnessCommand) -> None:

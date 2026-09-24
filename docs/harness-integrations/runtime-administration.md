@@ -286,3 +286,10 @@ Exact integer peerProtocol=1 is mandatory at open and rechecked before each send
 absence is no longer treated as compatible. Existing protocol1 injection remains
 available on supported POSIX systems. This check adds no acknowledgment, result,
 approval, managed-work or process-ownership capability to the external session.
+
+Surface48 adds server-owned compatible_controls/control_contract_basis to native
+observations and enforces them for steer/interrupt before enqueue and dispatch,
+including the supervisor's internal send path. An unknown version cannot borrow
+the adapter's declared steering behavior. Pi observes its executable version with
+the same bounded owned probe used by Claude. This is a narrow control contract;
+the aggregate effective-capability gate is still incomplete.

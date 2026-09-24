@@ -24,6 +24,7 @@ class RuntimeEventIngress:
         self.journal, self.cf, self.repo = journal, connection_factory, repo
         self.events, self.clock, self.publish = events, clock, publish
         self._project_lock = threading.Lock()
+        self._pending_lock = threading.Lock()
         self.projection_pending = False
         self.wake_dispatch = None
         self.consume_terminal = None
@@ -35,8 +36,15 @@ class RuntimeEventIngress:
         if recover:
             self.recover()
 
-    def capture(self, event, *, connection_id=None):
+    def capture(self, event, *, connection_id=None, defer_projection=False):
         record = self.journal.append(event, connection_id=connection_id)
+        if defer_projection and self.wake_dispatch:
+            # Capture must not wait on SQLite projection. The existing bounded
+            # owner coordinator drains the durable journal, not a second queue.
+            with self._pending_lock:
+                self.projection_pending = True
+            self.wake_dispatch()
+            return HarnessEvent(**record["event"])
         try:
             self.recover()
         except Exception:
@@ -53,21 +61,29 @@ class RuntimeEventIngress:
             if checkpoint > self.journal.watermark:
                 raise OSError("Journal data behind a committed checkpoint is missing")
             records = self.journal.read_after(checkpoint)
-            for record in records:
-                event = HarnessEvent(**record["event"])
+            published = []
+            if records:
+                # One bounded batch commits atomically; journal I/O and public
+                # callbacks remain outside the SQLite writer transaction.
                 with self.cf.unit_of_work() as uow:
-                    inserted = self.repo.project(uow, record=record, event=event,
-                                                events=self.events, now=self.clock.now_iso())
-                    if inserted and self.consume_terminal:
-                        self.consume_terminal(uow, event)
-                if inserted:
-                    if event.delivery_phase == "terminal" and self.wake_dispatch:
-                        self.wake_dispatch()
-                    try:
-                        self.publish(event)
-                    except Exception:
-                        logging.getLogger(__name__).warning("Runtime event publication failed; durable replay remains available.")
-            self.projection_pending = bool(records and len(records) == 16)
+                    for record in records:
+                        event = HarnessEvent(**record["event"])
+                        inserted = self.repo.project(uow, record=record, event=event,
+                                                    events=self.events, now=self.clock.now_iso())
+                        if inserted:
+                            if self.consume_terminal:
+                                self.consume_terminal(uow, event)
+                            published.append(event)
+            for event in published:
+                if event.delivery_phase == "terminal" and self.wake_dispatch:
+                    self.wake_dispatch()
+                try:
+                    self.publish(event)
+                except Exception:
+                    logging.getLogger(__name__).warning("Runtime event publication failed; durable replay remains available.")
+            with self._pending_lock:
+                projected = records[-1]["ordinal"] if records else checkpoint
+                self.projection_pending = self.journal.watermark > projected
             return len(records)
 
     def close(self):

@@ -27,8 +27,41 @@ CLAUDE_NATIVE_REQUEST_CONTRACTS = {
     "2.1.281": ("control_request:can_use_tool/Write", "control_request:can_use_tool/AskUserQuestion"),
 }
 
+# Current installed versions qualified by the isolated control campaign. Pi's
+# protocol contract is covered by the existing 0.85.1 wire fixtures/reference;
+# no new native Pi campaign is claimed.
+CONTROL_VERSIONS = {"codex": {"0.156.1"}, "claude_code": {"2.1.281"}, "pi": {"0.85.1"}}
+
+
+def control_observation(kind, version):
+    verified = version in CONTROL_VERSIONS[kind]
+    return {"compatible_controls": ["steer", "interrupt"] if verified else [],
+            "control_contract_basis": "tested_version_contract" if verified else "unverified"}
+
 
 def claude_version_observation(command, *, cwd, env, timeout=3.0):
+    output = _version_output(command, cwd=cwd, env=env, timeout=timeout)
+    match = re.fullmatch(rb"(\d{1,4}\.\d{1,4}\.\d{1,4}) \(Claude Code\)\r?\n?", output) if len(output) <= 1024 else None
+    version = match.group(1).decode("ascii") if match else None
+    return {"schema_version": 1, "native_version": version,
+        "observation": "executable_version" if version else "version_not_observed",
+        "capabilities_verified": False,
+        "compatible_native_requests": list(CLAUDE_NATIVE_REQUEST_CONTRACTS.get(version, ())),
+        "native_request_basis": "tested_version_contract" if version in CLAUDE_NATIVE_REQUEST_CONTRACTS else "unverified",
+        **control_observation("claude_code", version)}
+
+
+def pi_version_observation(command, *, cwd, env):
+    output = _version_output(command, cwd=cwd, env=env)
+    match = re.fullmatch(rb"(\d{1,4}\.\d{1,4}\.\d{1,4})\r?\n?", output) if len(output) <= 1024 else None
+    version = match.group(1).decode("ascii") if match else None
+    return {"schema_version": 1, "native_version": version,
+        "observation": "executable_version" if version else "version_not_observed",
+        "capabilities_verified": False, "compatible_native_requests": [],
+        "native_request_basis": "unverified", **control_observation("pi", version)}
+
+
+def _version_output(command, *, cwd, env, timeout=3.0):
     """Bounded read-only probe under the same birth ownership as the runtime.
 
     Wait before reading: the OS pipe bounds output, including a flooding peer.
@@ -42,20 +75,13 @@ def claude_version_observation(command, *, cwd, env, timeout=3.0):
             code = proc.wait(timeout=timeout)
         except subprocess.TimeoutExpired as exc:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,
-                "Claude version probe exceeded its deadline.",
+                "Native version probe exceeded its deadline.",
                 {"reason": "version_probe_timeout"}) from exc
         if not observe_owned_process(proc)["stop_observed"]:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR,
-                "Claude version probe tree stop is unconfirmed.",
+                "Native version probe tree stop is unconfirmed.",
                 {"reason": "version_probe_stop_unknown"})
-        output = proc.stdout.read(1025) if code == 0 else b""
-        match = re.fullmatch(rb"(\d{1,4}\.\d{1,4}\.\d{1,4}) \(Claude Code\)\r?\n?", output) if len(output) <= 1024 else None
-        version = match.group(1).decode("ascii") if match else None
-        return {"schema_version": 1, "native_version": version,
-            "observation": "executable_version" if version else "version_not_observed",
-            "capabilities_verified": False,
-            "compatible_native_requests": list(CLAUDE_NATIVE_REQUEST_CONTRACTS.get(version, ())),
-            "native_request_basis": "tested_version_contract" if version in CLAUDE_NATIVE_REQUEST_CONTRACTS else "unverified"}
+        return proc.stdout.read(1025) if code == 0 else b""
     finally:
         try:
             if not observe_owned_process(proc)["stop_observed"]:
@@ -74,4 +100,5 @@ def codex_initialize_observation(result):
             "observation": "initialize_version" if match else "version_not_observed",
             "capabilities_verified": False,
             "compatible_native_requests": list(CODEX_NATIVE_REQUEST_CONTRACTS.get(version, ())),
-            "native_request_basis": "tested_version_contract" if version in CODEX_NATIVE_REQUEST_CONTRACTS else "unverified"}
+            "native_request_basis": "tested_version_contract" if version in CODEX_NATIVE_REQUEST_CONTRACTS else "unverified",
+            **control_observation("codex", version)}

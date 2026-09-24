@@ -1,0 +1,41 @@
+{
+  "parent_sha": "82f7c77",
+  "scope": "native control qualification worktree",
+  "observations": [
+    {
+      "native_version": "0.156.1",
+      "kind": "codex",
+      "verb": "steer",
+      "result_durable": true,
+      "delivery_outcome": "success",
+      "process_survived": true
+    },
+    {
+      "native_version": "0.156.1",
+      "kind": "codex",
+      "verb": "interrupt",
+      "result_durable": true,
+      "delivery_outcome": "interrupted",
+      "process_survived": true
+    },
+    {
+      "native_version": "2.1.281",
+      "kind": "claude_code",
+      "verb": "steer",
+      "result_durable": true,
+      "delivery_outcome": "success",
+      "process_survived": true
+    },
+    {
+      "native_version": "2.1.281",
+      "kind": "claude_code",
+      "verb": "interrupt",
+      "result_durable": true,
+      "delivery_outcome": "interrupted",
+      "process_survived": true
+    }
+  ],
+  "codex": "2 passed,12 deselected in33.54s",
+  "claude": "2 passed,12 deselected in22.55s",
+  "prior_fixture_error": "2 failed,12 deselected in12.25s; incorrect runtime_operations element shape, fixed before fresh isolated runs"
+}

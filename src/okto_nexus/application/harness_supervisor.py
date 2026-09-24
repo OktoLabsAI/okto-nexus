@@ -895,6 +895,8 @@ class HarnessSupervisor:
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)
+        from .runtime_requirements import validate_effective_control
+        validate_effective_control(live.session.compatibility_report, verb)
         with self._lock:
             live.relay_depth = _relay_depth if _relay_depth is not None else 0
             live.relay_chain_id = _relay_chain_id if _relay_depth is not None else None
@@ -1428,14 +1430,16 @@ class HarnessSupervisor:
             events = scoped(session_id) if callable(scoped) else live.connector.events()
             for event in events:
                 if event.session_id == session_id:
-                    self._handle_event(session_id, event, connection_id=live.session.connection_id)
+                    self._handle_event(session_id, event, connection_id=live.session.connection_id,
+                                       defer_projection=True)
         except BaseException as exc:  # noqa: BLE001 - the pump is this session's only watchdog
             live.pump_error = exc
             self._reap(session_id, error=exc)
             return
         self._reap(session_id, error=None)
 
-    def _handle_event(self, session_id: str, event: HarnessEvent, *, connection_id=None) -> None:
+    def _handle_event(self, session_id: str, event: HarnessEvent, *, connection_id=None,
+                      defer_projection=False) -> None:
         """Capture a native event with stable connection provenance.
 
         Production capture fsyncs before projection/publication. The remaining
@@ -1446,7 +1450,8 @@ class HarnessSupervisor:
             with self._lock:
                 live = self._live.get(session_id)
             connection_id = connection_id or (live.session.connection_id if live else None)
-            return self.event_ingress.capture(event, connection_id=connection_id)
+            return self.event_ingress.capture(event, connection_id=connection_id,
+                                              defer_projection=defer_projection)
         presence_id = self._presence_by_runtime.get(session_id)
         if presence_id and self._presence_sessions:
             try:

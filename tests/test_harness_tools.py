@@ -67,6 +67,8 @@ class FakeConnector:
             status=STATUS_STARTING,
             capabilities=self.capabilities,
             started_at=utc_now_iso(),
+            compatibility_report={"control_contract_basis": "tested_protocol_contract",
+                "compatible_controls": [] if self.capabilities.send_only else ["steer", "interrupt"]},
         )
         return self.session
 

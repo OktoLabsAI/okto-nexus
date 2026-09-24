@@ -1,0 +1,79 @@
+{
+  "parent_sha": "82f7c77",
+  "scope": "control compatibility and deferred projection worktree",
+  "pytest_exit": 0,
+  "reports": [
+    {
+      "native_version": "0.156.1",
+      "kind": "codex",
+      "verb": "steer",
+      "result_durable": true,
+      "observations": {
+        "notifications": {
+          "thread/status/changed": 2,
+          "turn/started": 1,
+          "mcpServer/startupStatus/updated": 4,
+          "item/started": 5,
+          "item/completed": 5,
+          "item/agentMessage/delta": 1269,
+          "thread/tokenUsage/updated": 2,
+          "account/rateLimits/updated": 2,
+          "turn/completed": 1
+        },
+        "item_types": [
+          {
+            "method": "item/started",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/completed",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/started",
+            "type": "reasoning"
+          },
+          {
+            "method": "item/completed",
+            "type": "reasoning"
+          },
+          {
+            "method": "item/started",
+            "type": "agentMessage"
+          },
+          {
+            "method": "item/completed",
+            "type": "agentMessage"
+          },
+          {
+            "method": "item/started",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/completed",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/started",
+            "type": "agentMessage"
+          },
+          {
+            "method": "item/completed",
+            "type": "agentMessage"
+          }
+        ],
+        "responses": [
+          {
+            "method": "turn/start",
+            "error_code": null
+          },
+          {
+            "method": "turn/steer",
+            "error_code": null
+          }
+        ],
+        "requests": []
+      }
+    }
+  ]
+}

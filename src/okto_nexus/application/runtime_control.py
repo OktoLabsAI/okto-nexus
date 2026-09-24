@@ -7,6 +7,7 @@ import json
 from ..domain.base import check_inline_size, new_id
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
+from .runtime_requirements import validate_effective_control
 
 
 def validate_runtime_payload(value, *, required):
@@ -77,6 +78,7 @@ class RuntimeControlService:
                 raise OktoNexusError(ErrorCode.NOT_FOUND, "No current owned runtime for this command.", {})
             if verb != "close":
                 self.supervisor._require_verb_allowed(session.capabilities, verb)
+                validate_effective_control(session.compatibility_report, verb)
             if expected_owner_epoch is not None and expected_owner_epoch != session.owner_epoch:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Command targets a different owner epoch.", {})
             target = self.supervisor.control_target(session_id) if verb in {"steer", "interrupt"} else None
@@ -118,6 +120,7 @@ class RuntimeControlService:
         session = self.supervisor.get(operation["runtime_session_id"])
         if not session or session.owner_epoch != operation["expected_owner_epoch"]:
             raise OktoNexusError(ErrorCode.CONFLICT, "Command session is no longer owned.", {})
+        validate_effective_control(session.compatibility_report, operation["verb"])
 
     def execute(self, operation):
         self._require_owner()

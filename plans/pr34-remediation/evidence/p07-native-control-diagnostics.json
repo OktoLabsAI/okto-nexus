@@ -1,0 +1,65 @@
+{
+  "parent_sha": "82f7c77",
+  "scope": "control compatibility worktree diagnostic",
+  "pytest_exit": 1,
+  "reports": [
+    {
+      "native_version": "0.156.1",
+      "kind": "codex",
+      "verb": "steer",
+      "result_durable": false,
+      "observations": {
+        "notifications": {
+          "account/updated": 1,
+          "thread/status/changed": 1,
+          "turn/started": 1,
+          "mcpServer/startupStatus/updated": 4,
+          "item/started": 3,
+          "item/completed": 2,
+          "item/agentMessage/delta": 1067
+        },
+        "item_types": [
+          {
+            "method": "item/started",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/completed",
+            "type": "userMessage"
+          },
+          {
+            "method": "item/started",
+            "type": "reasoning"
+          },
+          {
+            "method": "item/completed",
+            "type": "reasoning"
+          },
+          {
+            "method": "item/started",
+            "type": "agentMessage"
+          }
+        ],
+        "responses": [
+          {
+            "method": "turn/start",
+            "error_code": null
+          },
+          {
+            "method": "turn/steer",
+            "error_code": null
+          }
+        ],
+        "requests": []
+      }
+    }
+  ],
+  "nexus_lifecycle_observation": {
+    "source": "read-only disposable campaign SQLite inspection",
+    "failure_type": "NativeEventOverflow",
+    "stop_observed": true,
+    "lifecycle_state": "outcome_unknown",
+    "harness_event_count": 1081,
+    "output_text_character_sum": 5037
+  }
+}

@@ -172,6 +172,36 @@ def test_journal_io_outside_write_uow_and_full_sync(runtime, monkeypatch):
         assert uow.connection.execute("PRAGMA synchronous").fetchone()[0] >= 2
 
 
+def test_projection_batch_rolls_back_before_publication(runtime, monkeypatch):
+    deps, _, _, _, _, _ = runtime
+    session_id = open_rest(runtime).json()["data"]["session_id"]
+    ingress = deps.harness_supervisor.event_ingress
+    original = ingress.repo.project
+    published = []
+
+    def fail_second(uow, **kwargs):
+        original(uow, **kwargs)
+        if kwargs["record"]["ordinal"] == 2:
+            raise OSError("fixture second record failure")
+        return True
+
+    monkeypatch.setattr(ingress.repo, "project", fail_second)
+    monkeypatch.setattr(ingress, "publish", published.append)
+    with ingress._project_lock:
+        for text in ("first", "second"):
+            ingress.journal.append(event(session_id, text=text))
+    with pytest.raises(OSError, match="second record"):
+        ingress.recover()
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        for table in ("harness_events", "runtime_results", "runtime_journal_checkpoint"):
+            assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == 0
+    assert not published
+    monkeypatch.setattr(ingress.repo, "project", original)
+    ingress.recover()
+    assert [item.payload["text"] for item in published] == ["first", "second"]
+    assert ingress.recover() == 0
+
+
 def test_hardlink_replacement_is_refused(tmp_path):
     journal = FileRuntimeEventJournal(tmp_path)
     journal.start()

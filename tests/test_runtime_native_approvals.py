@@ -31,12 +31,16 @@ def test_cancel_only_native_denial_does_not_grant_policy_amendment(runtime, deci
     assert "acceptWithExecpolicyAmendment" not in result["output_text"]
 
 
-def approval_peer(runtime, *, method="item/commandExecution/requestApproval", extra_params=None):
+def approval_peer(runtime, *, method="item/commandExecution/requestApproval", extra_params=None,
+                  control_contract=False):
     from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
     deps.config.feature_hitl = True
     source = _FAKE_SERVER_SOURCE.replace("_thread_counter = 0", "_approval_ready = threading.Event()\n_approval_reply = {}\n_thread_counter = 0")
+    if control_contract:
+        source = source.replace('"result": {}',
+            '"result": {"userAgent": "okto-nexus/0.156.1"}', 1)
     begin = source.index('    if "TRIGGER_SERVER_REQUEST" in text:')
     end = source.index('    if "TRIGGER_MALFORMED" in text:', begin)
     source = source[:begin] + '''
@@ -102,7 +106,7 @@ def test_late_approval_does_not_reach_another_turn(runtime):
     from test_runtime_handoff_dispatch import wait_result
     from test_runtime_commands import wait_operation
     deps, client, _, _, operator, _ = runtime
-    sid = approval_peer(runtime)
+    sid = approval_peer(runtime, control_contract=True)
     sent = send_message(runtime, body="TRIGGER_SERVER_REQUEST")
     request = pending(runtime)
     interrupted = tool(client, operator, "harness_interrupt", {"session_id": sid,

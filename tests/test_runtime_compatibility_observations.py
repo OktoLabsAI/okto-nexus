@@ -36,7 +36,9 @@ def test_native_version_is_separate_from_metadata_and_not_a_capability_claim(run
         "observation": "initialize_version" if version else "version_not_observed", "capabilities_verified": False,
         "compatible_native_requests": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
             "item/tool/requestUserInput", "mcpServer/elicitation/request"] if version == "0.156.1" else [],
-        "native_request_basis": "tested_version_contract" if version == "0.156.1" else "unverified"}
+        "native_request_basis": "tested_version_contract" if version == "0.156.1" else "unverified",
+        "compatible_controls": ["steer", "interrupt"] if version == "0.156.1" else [],
+        "control_contract_basis": "tested_version_contract" if version == "0.156.1" else "unverified"}
     assert "fixture-private" not in json.dumps(session)
     with deps.connection_factory.unit_of_work(write=False) as uow:
         stored = deps.repos.harness_sessions.get(uow, session_id=session["session_id"])

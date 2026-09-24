@@ -2,6 +2,17 @@
 from ..errors import ErrorCode, OktoNexusError
 
 
+def validate_effective_control(report, verb):
+    """Pure server-owned evidence check, additional to permission/turn fences."""
+    if verb in {"steer", "interrupt"} and (
+        report.get("control_contract_basis") not in {"tested_version_contract", "tested_protocol_contract"}
+        or verb not in report.get("compatible_controls", [])
+    ):
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "native_control_unverified: the session has no verified contract for this control.",
+            {"reason": "native_control_unverified", "verb": verb})
+
+
 def validate_effective_native_requirements(required, report):
     """Server-owned adapter evidence is additional to profile/descriptor checks."""
     if required and (report.get("native_request_basis") != "tested_version_contract" or

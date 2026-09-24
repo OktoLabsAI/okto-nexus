@@ -97,6 +97,8 @@ def test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next(runti
         '    if "TRIGGER_HOLD" in text:\n'
         '        write_msg({"method":"turn/completed", "params":{"threadId":thread_id, "turn":{"id":"stale", "status":"completed"}}})\n'
         '    if "TRIGGER_HOLD" in text:')
+    source = source.replace('"result": {}',
+        '"result": {"userAgent": "okto-nexus/0.156.1"}', 1)
     deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
         command=[sys._base_executable, "-u", "-c", source], cwd=root, env=kwargs["backend"]["env"])
     headers = {"x-api-key": operator_key}

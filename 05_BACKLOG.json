@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "0e305d3",
+  "execution_head": "82f7c7774b183a380aec3f5089d18592775c759e + effective controls/capture isolation worktree",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1355,9 +1355,10 @@
             "plans/pr34-remediation/P07_COMPATIBILITY_OBSERVATIONS.md",
             "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md",
             "plans/pr34-remediation/P07_CLAUDE_VERSION_CONTRACT.md",
-            "plans/pr34-remediation/P07_ATTACH_PROTOCOL_CONTRACT.md"
+            "plans/pr34-remediation/P07_ATTACH_PROTOCOL_CONTRACT.md",
+            "plans/pr34-remediation/P07_EFFECTIVE_CONTROL_CONTRACTS.md"
           ],
-          "notes": "Durable STARTING reservations, owner/profile fences, old-session reconciliation and bounded approved boot implemented in production composition. Boot authority is narrow and issuer/revision-bound; uncertain starts remain quarantined. Native boot, wider crash/load/version matrix and durable turn controls remain pending. See current evidence for Windows/Linux scope; phase gate not promoted."
+          "notes": "Durable STARTING reservations, owner/profile fences, old-session reconciliation and bounded approved boot implemented in production composition. Boot authority is narrow and issuer/revision-bound; uncertain starts remain quarantined. Native boot, wider crash/load/version matrix and durable turn controls remain pending. See current evidence for Windows/Linux scope; phase gate not promoted. Effective controls and capture isolation milestone above82f7c77: Windows38/Linux38 selected PASS; native Codex2/Claude2 controls PASS. See linked evidence for exact commands, failures and scope. Final gate still pending."
         }
       ]
     },
@@ -1447,9 +1448,10 @@
           "evidence": [
             "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
             "plans/pr34-remediation/evidence/p08-integrated-gate.log",
-            "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+            "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Effective controls and capture isolation milestone above82f7c77: Windows38/Linux38 selected PASS; native Codex2/Claude2 controls PASS. See linked evidence for exact commands, failures and scope. Final gate still pending."
         },
         {
           "task_id": "P08-T03",
@@ -1522,9 +1524,10 @@
             "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
             "plans/pr34-remediation/P08_RESULT_PUBLICATION.md",
             "plans/pr34-remediation/P08_RESULT_ARTIFACTS.md",
-            "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md"
+            "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
+            "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Canonical private conversation result publication and approval linkage implemented; old pending results require review. Guardrails, binding changes and commit cuts covered. Artifacts, explicit broadcast configuration, retrospective administration, causal continuation and full gates remain pending. Private runtime artifacts now reuse the canonical artifact catalog with additive reader ACL, fsync-before-reference and same-UoW publication. Storage leaves SQLite writer transactions. Fixed bounded publication-worker lost wake. Windows 128 PASS, Linux 24 PASS; native provider tests NOT_RUN. Explicit orphan/reservation recovery and remaining retention/full gates pending. Operator artifact cleanup/quota/retry now durable and idempotent; staging recovery and authorization revalidation integrated. Windows runtime selection 188 PASS/3 skipped; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md; no final gate promotion."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Canonical private conversation result publication and approval linkage implemented; old pending results require review. Guardrails, binding changes and commit cuts covered. Artifacts, explicit broadcast configuration, retrospective administration, causal continuation and full gates remain pending. Private runtime artifacts now reuse the canonical artifact catalog with additive reader ACL, fsync-before-reference and same-UoW publication. Storage leaves SQLite writer transactions. Fixed bounded publication-worker lost wake. Windows 128 PASS, Linux 24 PASS; native provider tests NOT_RUN. Explicit orphan/reservation recovery and remaining retention/full gates pending. Operator artifact cleanup/quota/retry now durable and idempotent; staging recovery and authorization revalidation integrated. Windows runtime selection 188 PASS/3 skipped; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md; no final gate promotion. Effective controls and capture isolation milestone above82f7c77: Windows38/Linux38 selected PASS; native Codex2/Claude2 controls PASS. See linked evidence for exact commands, failures and scope. Final gate still pending."
         },
         {
           "task_id": "P08-T04",
@@ -1581,9 +1584,10 @@
             "plans/pr34-remediation/P07_EVENT_BUFFERS.md",
             "plans/pr34-remediation/P08_JOURNAL_RETENTION.md",
             "plans/pr34-remediation/P08_RESULT_ARTIFACTS.md",
-            "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md"
+            "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
+            "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md"
           ],
-          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN. Private runtime artifacts now reuse the canonical artifact catalog with additive reader ACL, fsync-before-reference and same-UoW publication. Storage leaves SQLite writer transactions. Fixed bounded publication-worker lost wake. Windows 128 PASS, Linux 24 PASS; native provider tests NOT_RUN. Explicit orphan/reservation recovery and remaining retention/full gates pending. Operator artifact cleanup/quota/retry now durable and idempotent; staging recovery and authorization revalidation integrated. Windows runtime selection 188 PASS/3 skipped; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md; no final gate promotion."
+          "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN. Private runtime artifacts now reuse the canonical artifact catalog with additive reader ACL, fsync-before-reference and same-UoW publication. Storage leaves SQLite writer transactions. Fixed bounded publication-worker lost wake. Windows 128 PASS, Linux 24 PASS; native provider tests NOT_RUN. Explicit orphan/reservation recovery and remaining retention/full gates pending. Operator artifact cleanup/quota/retry now durable and idempotent; staging recovery and authorization revalidation integrated. Windows runtime selection 188 PASS/3 skipped; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md; no final gate promotion. Effective controls and capture isolation milestone above82f7c77: Windows38/Linux38 selected PASS; native Codex2/Claude2 controls PASS. See linked evidence for exact commands, failures and scope. Final gate still pending."
         },
         {
           "task_id": "P08-T05",

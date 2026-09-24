@@ -154,6 +154,8 @@ class RuntimeDispatcher:
                     self.command_dispatcher.expire()
                 if self.event_ingress:
                     self.event_ingress.recover()
+                    if self.event_ingress.projection_pending:
+                        self.wake()
                 self._schedule_publication()
                 if self._shutdown_ready and self._shutdown_ready():
                     with self._lock:

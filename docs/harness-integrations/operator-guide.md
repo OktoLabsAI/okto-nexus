@@ -210,3 +210,20 @@ bounded version when present, and `ack_level=NONE`. These are local precondition
 not native acceptance: no token is sent by the probe, writes stay unconfirmed,
 close detaches, and managed work/interrupt/steer remain unsupported. No native
 Claude attach session has been qualified in this remediation campaign.
+
+Steering and interruption require `compatible_controls` from the server-owned
+session report and a tested `control_contract_basis`. Declaration alone is not
+enough. The shared admission service, dispatcher revalidation and supervisor send
+all enforce this; missing/unknown reports return `native_control_unverified`.
+This check is additional to grants, current profile, active operation and turn
+fencing, and never authorizes an otherwise denied control. Conversation and
+cleanup retain their separate contracts.
+
+Current control version contracts are Codex0.156.1, Claude2.1.281 and Pi0.85.1.
+Pi uses the same bounded owned executable-version probe as Claude, with its own
+strict version format. Pi protocol fixtures/reference qualify the contract;
+native Pi remains NOT_RUN. Codex and Claude controls have isolated local native
+observations; consult the milestone evidence for failures and precise scope.
+No version match establishes native deduplication, replay or general capability
+verification. Trusted processless extensions can report a tested protocol contract
+without inventing a native executable version.

@@ -6,6 +6,11 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Native event capture no longer waits on SQLite projection; bounded journal
+  batches preserve durable output during streaming bursts and commit atomically.
+- Surface 48 requires server-owned control compatibility at admission and dispatch;
+  missing/unknown evidence cannot enable steering or interruption by declaration.
+  Pi now observes its executable version through a bounded owned probe.
 - Surface 47 requires exact integer cc-socks peerProtocol=1 at attach open and
   before send, and persists its redacted observation without inventing an ACK.
 - Surface 46 observes Claude stream's approved executable version in a bounded,

@@ -82,7 +82,8 @@ def codex_session(runtime):
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
     deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
-        command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE], cwd=root, env=kwargs["backend"]["env"])
+        command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE.replace('"result": {}',
+            '\"result\": {\"userAgent\": \"okto-nexus/0.156.1 fixture\"}', 1)], cwd=root, env=kwargs["backend"]["env"])
     response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator},
         json={"agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
     assert response.status_code == 200, response.text
@@ -197,6 +198,7 @@ def test_claude_replacement_steer_has_separate_correlated_result(runtime):
     deps, client, root, _, operator, _ = runtime
     deps.harness_connector_factories["claude_code"] = lambda **kwargs: ClaudeCodeStreamConnector(
         binary=sys._base_executable, argv=["-u", "-c", _FAKE_CLAUDE_SCRIPT], cwd=root,
+        version_argv=["-c", "print('2.1.281 (Claude Code)')"],
         env=kwargs["backend"]["env"] | {"FAKE_CC_SCENARIO": "slow_start"})
     response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
         "agent_id": "worker", "kind": "claude_code", "substrate": "stream", "endpoint_id": "endpoint-claude_code.stream", "project_root": root})
