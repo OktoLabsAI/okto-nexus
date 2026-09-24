@@ -1,0 +1,29 @@
+{
+  "parent_sha": "8ec25f54e076083d11557649c3e61a39fa78f1e5",
+  "dirty_files_sha256": {
+    "src/okto_nexus/adapters/inbound/http/routes.py": "1e9985f9d7e7c76db617ee3f7c076ce9465c9f12d857b9bb3fdb51e7b6a7b015",
+    "tests/test_runtime_replay_acceptance.py": "9f97037bc08a2bb916ce3c6fe6203c8036ab72fcbdfc969533341e8a4b84f932"
+  },
+  "requirement_nodes": {
+    "T-JRN-11": [
+      "tests/test_runtime_replay_acceptance.py::test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl",
+      "tests/test_runtime_replay_acceptance.py::test_invalid_replay_cursor_or_limit_has_same_validation_contract",
+      "tests/test_runtime_journal_retention.py::test_compaction_keeps_unprojected_records_and_original_ordinals",
+      "tests/test_runtime_journal_retention.py::test_retention_surfaces_preserve_database_results_and_reject_foreign_actor"
+    ]
+  },
+  "windows": {
+    "passed": 26,
+    "seconds": 47.9,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 26,
+    "seconds": 54.25,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "live_mcp_smoke": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_REPLAY_ACCEPTANCE.md",
+  "limitations": "Public projected cursor retained; expired file recovery cursor tested separately. No final gate promotion."
+}

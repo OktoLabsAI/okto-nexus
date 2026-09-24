@@ -1193,11 +1193,14 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
-        events = await anyio.to_thread.run_sync(
-            lambda: supervisor.replay_events(
-                session_id, after_sequence=after_sequence, limit=limit
+        try:
+            events = await anyio.to_thread.run_sync(
+                lambda: supervisor.replay_events(
+                    session_id, after_sequence=after_sequence, limit=limit
+                )
             )
-        )
+        except OktoNexusError as exc:
+            return _map_error(exc)
         return _ok(
             {
                 "events": [_harness_event_to_dict(e) for e in events],

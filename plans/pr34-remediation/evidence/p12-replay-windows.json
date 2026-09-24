@@ -1,0 +1,185 @@
+{
+  "source_sha": "8ec25f54e076083d11557649c3e61a39fa78f1e5",
+  "platform": "windows",
+  "counts": {
+    "PASS": 26
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "26",
+      "time": "47.895",
+      "timestamp": "2026-09-24T06:15:23.721717-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "See command_document for exact invocation",
+  "limitations": "Parent plus changed source/test hashes. Scoped replay acceptance, not full-suite/native/load qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl[rest]",
+      "status": "PASS",
+      "seconds": 4.536
+    },
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl[mcp]",
+      "status": "PASS",
+      "seconds": 3.345
+    },
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_invalid_replay_cursor_or_limit_has_same_validation_contract[arguments0]",
+      "status": "PASS",
+      "seconds": 3.123
+    },
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_invalid_replay_cursor_or_limit_has_same_validation_contract[arguments1]",
+      "status": "PASS",
+      "seconds": 3.171
+    },
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_invalid_replay_cursor_or_limit_has_same_validation_contract[arguments2]",
+      "status": "PASS",
+      "seconds": 3.492
+    },
+    {
+      "class": "tests.test_runtime_replay_acceptance",
+      "test": "test_invalid_replay_cursor_or_limit_has_same_validation_contract[arguments3]",
+      "status": "PASS",
+      "seconds": 3.405
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_reopen_preserves_distinct_equal_text_and_stable_cursors",
+      "status": "PASS",
+      "seconds": 0.107
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_exclusive_owner_lock",
+      "status": "PASS",
+      "seconds": 0.043
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_normalized_output_is_redacted_before_durable_capture",
+      "status": "PASS",
+      "seconds": 0.035
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+      "status": "PASS",
+      "seconds": 0.067
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_quota_and_fsync_failure_stop_admission",
+      "status": "PASS",
+      "seconds": 0.039
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_credentials_redacted_before_bytes_are_written",
+      "status": "PASS",
+      "seconds": 0.036
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_rollback_and_restart_recover_exactly_once",
+      "status": "PASS",
+      "seconds": 3.22
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_journal_io_outside_write_uow_and_full_sync",
+      "status": "PASS",
+      "seconds": 3.376
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_batch_rolls_back_before_publication",
+      "status": "PASS",
+      "seconds": 3.087
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_hardlink_replacement_is_refused",
+      "status": "PASS",
+      "seconds": 0.043
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_after_checkpoint_loss_does_not_duplicate_result",
+      "status": "PASS",
+      "seconds": 3.117
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_cursors_cover_append_and_reject_unbounded_limits",
+      "status": "PASS",
+      "seconds": 3.223
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_compaction_keeps_unprojected_records_and_original_ordinals",
+      "status": "PASS",
+      "seconds": 0.096
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_quota_can_recover_without_discarding_sqlite_projection",
+      "status": "PASS",
+      "seconds": 0.05
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_partial_segment_and_invalid_checkpoint_never_drop_events",
+      "status": "PASS",
+      "seconds": 0.06
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_compaction_cannot_clear_unknown_write_failure",
+      "status": "PASS",
+      "seconds": 0.035
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_crash_during_retention_keeps_a_valid_recovery_boundary[before_manifest]",
+      "status": "PASS",
+      "seconds": 0.095
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_crash_during_retention_keeps_a_valid_recovery_boundary[after_manifest]",
+      "status": "PASS",
+      "seconds": 0.07
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_retention_surfaces_preserve_database_results_and_reject_foreign_actor",
+      "status": "PASS",
+      "seconds": 3.45
+    },
+    {
+      "class": "tests.test_runtime_read_audience",
+      "test": "test_private_session_replay_results_and_endpoint_listing_have_no_foreign_audience",
+      "status": "PASS",
+      "seconds": 5.196
+    }
+  ],
+  "source_state": "parent plus replay error mapping fix and new tests",
+  "dirty_files_sha256": {
+    "src/okto_nexus/adapters/inbound/http/routes.py": "1e9985f9d7e7c76db617ee3f7c076ce9465c9f12d857b9bb3fdb51e7b6a7b015",
+    "tests/test_runtime_replay_acceptance.py": "9f97037bc08a2bb916ce3c6fe6203c8036ab72fcbdfc969533341e8a4b84f932"
+  },
+  "command_document": "plans\\pr34-remediation\\P12_REPLAY_ACCEPTANCE.md"
+}
