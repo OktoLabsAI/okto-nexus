@@ -1,0 +1,85 @@
+{
+  "baseline_sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+  "current_parent": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+  "baseline": {
+    "surface_revision": 34,
+    "measurements": {
+      "False": {
+        "instructions": 5232,
+        "docstrings": 8031,
+        "params": 20426,
+        "cuttable": 33689,
+        "total": 45744,
+        "cuttable_tokens": 8422,
+        "total_tokens": 11436,
+        "tool_count": 51,
+        "harness_tools": [
+          "harness_close",
+          "harness_event_list",
+          "harness_get",
+          "harness_interrupt",
+          "harness_list",
+          "harness_open",
+          "harness_send",
+          "harness_steer"
+        ]
+      },
+      "True": {
+        "instructions": 5232,
+        "docstrings": 8031,
+        "params": 20426,
+        "cuttable": 33689,
+        "total": 45744,
+        "cuttable_tokens": 8422,
+        "total_tokens": 11436,
+        "tool_count": 51,
+        "harness_tools": [
+          "harness_close",
+          "harness_event_list",
+          "harness_get",
+          "harness_interrupt",
+          "harness_list",
+          "harness_open",
+          "harness_send",
+          "harness_steer"
+        ]
+      }
+    }
+  },
+  "worktree": {
+    "surface_revision": 56,
+    "measurements": {
+      "False": {
+        "instructions": 5232,
+        "docstrings": 6549,
+        "params": 16534,
+        "cuttable": 28315,
+        "total": 40448,
+        "cuttable_tokens": 7078,
+        "total_tokens": 10112,
+        "tool_count": 43,
+        "harness_tools": []
+      },
+      "True": {
+        "instructions": 5232,
+        "docstrings": 7872,
+        "params": 19097,
+        "cuttable": 32201,
+        "total": 47730,
+        "cuttable_tokens": 8050,
+        "total_tokens": 11932,
+        "tool_count": 51,
+        "harness_tools": [
+          "harness_close",
+          "harness_event_list",
+          "harness_get",
+          "harness_interrupt",
+          "harness_list",
+          "harness_open",
+          "harness_send",
+          "harness_steer"
+        ]
+      }
+    }
+  }
+}

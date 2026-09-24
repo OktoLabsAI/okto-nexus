@@ -1,0 +1,677 @@
+{
+  "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+  "platform": "linux",
+  "counts": {
+    "PASS": 109
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "109",
+      "time": "515.971",
+      "timestamp": "2026-09-24T08:38:38.236806-03:00"
+    }
+  ],
+  "native_flags": "Synthetic peers only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_pr34_remediation.py tests/test_runtime_operation_authorization.py tests/test_runtime_admin_surfaces.py tests/test_harness_routes.py tests/test_harness_tools.py tests/test_runtime_commands.py tests/test_runtime_payload_boundaries.py tests/test_surface_metrics.py -q --junitxml=.git/pr34-evidence/api-review-linux.xml",
+  "limitations": "Selected fixture gate; no installed provider qualification.",
+  "records": [
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_profile_is_unchanged_by_open_close",
+      "status": "PASS",
+      "seconds": 4.125
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_unknown_agent_is_rejected_before_factory",
+      "status": "PASS",
+      "seconds": 2.977
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_open_another_agent",
+      "status": "PASS",
+      "seconds": 3.2
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_send-args0]",
+      "status": "PASS",
+      "seconds": 3.238
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_steer-args1]",
+      "status": "PASS",
+      "seconds": 3.1
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_interrupt-args2]",
+      "status": "PASS",
+      "seconds": 3.188
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_close-args3]",
+      "status": "PASS",
+      "seconds": 3.128
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_get-args4]",
+      "status": "PASS",
+      "seconds": 4.081
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_event_list-args5]",
+      "status": "PASS",
+      "seconds": 3.074
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_unconfigured_surface_does_not_publish_harness_tools[False]",
+      "status": "PASS",
+      "seconds": 1.373
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_backend_diagnostics_do_not_echo_credentials",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_replay_keeps_event_id_and_sequence",
+      "status": "PASS",
+      "seconds": 3.333
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_keyed_loopback_rest_does_not_upgrade_caller_to_operator",
+      "status": "PASS",
+      "seconds": 3.188
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_one_delivery_does_not_execute_on_two_sessions",
+      "status": "PASS",
+      "seconds": 3.327
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_forward_preserves_sender_subject_and_message_identity",
+      "status": "PASS",
+      "seconds": 3.46
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_terminal_storage_failure_is_not_silently_accepted",
+      "status": "PASS",
+      "seconds": 3.507
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_expired_relay_does_not_mint_new_root",
+      "status": "PASS",
+      "seconds": 2.125
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_open_does_not_fabricate_credential_authentication",
+      "status": "PASS",
+      "seconds": 3.497
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_committed_delivery_survives_lost_notification",
+      "status": "PASS",
+      "seconds": 3.177
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_additional_adapter_is_not_rejected_by_domain_product_enum",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_enabled_authorized_connectors_remain_usable[pi-None]",
+      "status": "PASS",
+      "seconds": 3.369
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_enabled_authorized_connectors_remain_usable[codex-None]",
+      "status": "PASS",
+      "seconds": 4.168
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_enabled_authorized_connectors_remain_usable[claude_code-stream]",
+      "status": "PASS",
+      "seconds": 3.322
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_enabled_authorized_connectors_remain_usable[claude_code-attach]",
+      "status": "PASS",
+      "seconds": 3.488
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_cached_tool_is_denied_after_disable",
+      "status": "PASS",
+      "seconds": 3.546
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_attach_requires_separate_opt_in",
+      "status": "PASS",
+      "seconds": 2.277
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_stdio_missing_identity_has_no_operator_authority",
+      "status": "PASS",
+      "seconds": 2.321
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_duplicate_executor_is_rejected",
+      "status": "PASS",
+      "seconds": 3.03
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[send]",
+      "status": "PASS",
+      "seconds": 3.015
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[steer]",
+      "status": "PASS",
+      "seconds": 3.289
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[interrupt]",
+      "status": "PASS",
+      "seconds": 3.044
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[close]",
+      "status": "PASS",
+      "seconds": 3.181
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[get]",
+      "status": "PASS",
+      "seconds": 3.181
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_rest_foreign_session_matches_mcp_denial[events]",
+      "status": "PASS",
+      "seconds": 3.137
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected",
+      "status": "PASS",
+      "seconds": 3.435
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p02_additional_adapter_through_production_mcp_and_rest[administrative-additional]",
+      "status": "PASS",
+      "seconds": 4.311
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "test": "test_p02_additional_adapter_through_production_mcp_and_rest[canonical_inbox-additional]",
+      "status": "PASS",
+      "seconds": 4.168
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+      "status": "PASS",
+      "seconds": 5.005
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[send]",
+      "status": "PASS",
+      "seconds": 4.42
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[steer]",
+      "status": "PASS",
+      "seconds": 4.492
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[interrupt]",
+      "status": "PASS",
+      "seconds": 4.709
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[close]",
+      "status": "PASS",
+      "seconds": 4.434
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_mcp_endpoint_administration_matches_rest_and_keeps_cas",
+      "status": "PASS",
+      "seconds": 3.545
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_admin_profiles_are_redacted_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 5.03
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_admin_payload_validation_and_authority_are_shared",
+      "status": "PASS",
+      "seconds": 3.121
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_profile_validation_never_coerces_authority_or_configuration[change0]",
+      "status": "PASS",
+      "seconds": 3.064
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_profile_validation_never_coerces_authority_or_configuration[change1]",
+      "status": "PASS",
+      "seconds": 3.578
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_profile_validation_never_coerces_authority_or_configuration[change2]",
+      "status": "PASS",
+      "seconds": 3.486
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_profile_validation_never_coerces_authority_or_configuration[change3]",
+      "status": "PASS",
+      "seconds": 3.467
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_profile_validation_never_coerces_authority_or_configuration[change4]",
+      "status": "PASS",
+      "seconds": 5.177
+    },
+    {
+      "class": "tests.test_runtime_admin_surfaces",
+      "test": "test_reconciliation_retry_across_mcp_and_rest_does_not_spawn",
+      "status": "PASS",
+      "seconds": 3.451
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_kinds_lists_catalog_for_authorized_operator",
+      "status": "PASS",
+      "seconds": 3.469
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_as_operator_preserves_agent",
+      "status": "PASS",
+      "seconds": 2.34
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_rejects_unknown_kind",
+      "status": "PASS",
+      "seconds": 2.283
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_claude_code_attach_requires_target_pid",
+      "status": "PASS",
+      "seconds": 3.294
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_default_profile_is_isolated_and_visible_in_response",
+      "status": "PASS",
+      "seconds": 3.793
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_per_call_backend_override_is_rejected",
+      "status": "PASS",
+      "seconds": 3.235
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_rejects_backend_field_unsupported_for_kind_over_rest",
+      "status": "PASS",
+      "seconds": 3.586
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest",
+      "status": "PASS",
+      "seconds": 3.158
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_open_as_non_operator_is_forbidden",
+      "status": "PASS",
+      "seconds": 3.272
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_full_lifecycle_through_rest",
+      "status": "PASS",
+      "seconds": 4.459
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_get_unknown_session_is_404",
+      "status": "PASS",
+      "seconds": 3.295
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_harness_send_against_unknown_session_is_404",
+      "status": "PASS",
+      "seconds": 4.115
+    },
+    {
+      "class": "tests.test_harness_routes",
+      "test": "test_mcp_and_rest_surfaces_share_one_live_registry",
+      "status": "PASS",
+      "seconds": 8.069
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_list_reports_real_connector_capabilities",
+      "status": "PASS",
+      "seconds": 6.545
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_preserves_agent_and_returns_running_session",
+      "status": "PASS",
+      "seconds": 10.024
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_unknown_kind",
+      "status": "PASS",
+      "seconds": 9.571
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_substrate_for_non_claude_code_kind",
+      "status": "PASS",
+      "seconds": 9.087
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_claude_code_attach_requires_separate_opt_in",
+      "status": "PASS",
+      "seconds": 10.104
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilities",
+      "status": "PASS",
+      "seconds": 8.103
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_send_requires_a_payload",
+      "status": "PASS",
+      "seconds": 11.281
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_send_steer_interrupt_dispatch_the_right_verb",
+      "status": "PASS",
+      "seconds": 13.052
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_steer_is_rejected_when_capability_forbids_it",
+      "status": "PASS",
+      "seconds": 13.756
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_send_against_unknown_session_is_not_found",
+      "status": "PASS",
+      "seconds": 9.638
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_close_ends_session_and_get_falls_back_to_durable_row",
+      "status": "PASS",
+      "seconds": 11.1
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_get_unknown_session_is_not_found",
+      "status": "PASS",
+      "seconds": 6.449
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_event_list_replays_in_order_and_respects_after_sequence",
+      "status": "PASS",
+      "seconds": 10.728
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_terminal_is_durable_without_unauthorized_broadcast",
+      "status": "PASS",
+      "seconds": 5.722
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_uses_approved_isolated_profile[pi]",
+      "status": "PASS",
+      "seconds": 5.885
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_uses_approved_isolated_profile[codex]",
+      "status": "PASS",
+      "seconds": 6.908
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_per_call_profile_override[pi-backend0]",
+      "status": "PASS",
+      "seconds": 4.035
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_per_call_profile_override[codex-backend1]",
+      "status": "PASS",
+      "seconds": 3.0
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_backend_field_unsupported_for_kind",
+      "status": "PASS",
+      "seconds": 2.337
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_backend_for_claude_code_attach_substrate",
+      "status": "PASS",
+      "seconds": 2.331
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_non_object_backend",
+      "status": "PASS",
+      "seconds": 2.333
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_rejects_wrong_typed_backend_env",
+      "status": "PASS",
+      "seconds": 3.208
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_schema_describes_canonical_identity_and_approved_profile",
+      "status": "PASS",
+      "seconds": 3.449
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_default_connector_factories_pass_backend_into_the_real_pi_connector",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_default_connector_factories_pass_backend_env_into_the_real_codex_connector",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_default_connector_factories_pass_backend_env_into_the_real_claude_code_stream_connector",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_admission_does_not_wait_for_native_write",
+      "status": "PASS",
+      "seconds": 3.19
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_repeating_command_key_does_not_repeat_native_effect",
+      "status": "PASS",
+      "seconds": 4.871
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_two_admin_turns_capture_results_and_close_is_durable",
+      "status": "PASS",
+      "seconds": 4.907
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+      "status": "PASS",
+      "seconds": 3.868
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_stale_native_turn_control_is_rejected_without_effect",
+      "status": "PASS",
+      "seconds": 4.845
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_revocation_after_admission_prevents_native_write",
+      "status": "PASS",
+      "seconds": 3.655
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_queued_for_finished_turn_does_not_hit_next_turn",
+      "status": "PASS",
+      "seconds": 4.128
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_claude_replacement_steer_has_separate_correlated_result",
+      "status": "PASS",
+      "seconds": 7.709
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_idempotent_retry_does_not_charge_spent_grant_again",
+      "status": "PASS",
+      "seconds": 3.34
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_enqueue_failure_rolls_back_intent_and_grant_charge",
+      "status": "PASS",
+      "seconds": 3.799
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_command_result_recovers_after_owner_restart_without_reexecution",
+      "status": "PASS",
+      "seconds": 6.249
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 4.649
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[send]",
+      "status": "PASS",
+      "seconds": 5.833
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[steer]",
+      "status": "PASS",
+      "seconds": 17.758
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[interrupt]",
+      "status": "PASS",
+      "seconds": 26.179
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_baseline_is_internally_consistent",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_revision_32_coordination_guidance_growth_is_audited",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_measure_resident_surface_reports_components",
+      "status": "PASS",
+      "seconds": 4.655
+    },
+    {
+      "class": "tests.test_surface_metrics",
+      "test": "test_cuttable_reduction_helper_matches_baseline_math",
+      "status": "PASS",
+      "seconds": 3.093
+    }
+  ]
+}

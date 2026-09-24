@@ -3810,12 +3810,12 @@
       ],
       "stimulus": "Dois ou mais turnos no mesmo stream-json.",
       "expected": "Identidade nativa estável conforme protocolo e respostas correlacionadas.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
-        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
       ],
-      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun."
     },
     {
       "test_id": "T-LIFE-11",
@@ -4531,8 +4531,12 @@
       ],
       "stimulus": "Exercitar os oito nomes e as rotas equivalentes com autorização.",
       "expected": "Façades reusam casos de uso; recursos preservados e respostas honestas.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun."
     },
     {
       "test_id": "T-API-03",
@@ -4545,8 +4549,12 @@
       ],
       "stimulus": "Desabilitar feature/permissão depois de um cliente guardar o schema.",
       "expected": "Handler runtime ainda nega efeitos não autorizados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun."
     },
     {
       "test_id": "T-API-04",
@@ -4604,8 +4612,12 @@
       ],
       "stimulus": "Comparar schema/descrições com flags OFF/ON.",
       "expected": "Crescimento real medido; nenhuma isenção fictícia ou duplicação de tool por adapter.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_API_REVIEW.md",
+        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+      ],
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun."
     },
     {
       "test_id": "T-API-08",

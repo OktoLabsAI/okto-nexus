@@ -1,0 +1,97 @@
+{
+  "source_sha": "e28adb6b708ee33b8d12d74b23cd9cbfd42c394a",
+  "runs": {
+    "windows": {
+      "manifest": "p12-api-review-windows.json",
+      "counts": {
+        "PASS": 107,
+        "SKIP": 2
+      }
+    },
+    "linux": {
+      "manifest": "p12-api-review-linux.json",
+      "counts": {
+        "PASS": 109
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-API-02",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_harness_routes.py::test_harness_full_lifecycle_through_rest",
+          "tests/test_harness_routes.py::test_mcp_and_rest_surfaces_share_one_live_registry",
+          "tests/test_harness_routes.py::test_harness_kinds_lists_catalog_for_authorized_operator",
+          "tests/test_harness_tools.py::test_harness_list_reports_real_connector_capabilities",
+          "tests/test_harness_tools.py::test_harness_open_preserves_agent_and_returns_running_session",
+          "tests/test_harness_tools.py::test_harness_send_steer_interrupt_dispatch_the_right_verb",
+          "tests/test_harness_tools.py::test_harness_close_ends_session_and_get_falls_back_to_durable_row",
+          "tests/test_harness_tools.py::test_harness_event_list_replays_in_order_and_respects_after_sequence"
+        ],
+        "linux": [
+          "tests/test_harness_routes.py::test_harness_full_lifecycle_through_rest",
+          "tests/test_harness_routes.py::test_mcp_and_rest_surfaces_share_one_live_registry",
+          "tests/test_harness_routes.py::test_harness_kinds_lists_catalog_for_authorized_operator",
+          "tests/test_harness_tools.py::test_harness_list_reports_real_connector_capabilities",
+          "tests/test_harness_tools.py::test_harness_open_preserves_agent_and_returns_running_session",
+          "tests/test_harness_tools.py::test_harness_send_steer_interrupt_dispatch_the_right_verb",
+          "tests/test_harness_tools.py::test_harness_close_ends_session_and_get_falls_back_to_durable_row",
+          "tests/test_harness_tools.py::test_harness_event_list_replays_in_order_and_respects_after_sequence"
+        ]
+      }
+    },
+    {
+      "test_id": "T-API-03",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_pr34_remediation.py::test_p01_cached_tool_is_denied_after_disable",
+          "tests/test_runtime_admin_surfaces.py::test_admin_payload_validation_and_authority_are_shared",
+          "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply"
+        ],
+        "linux": [
+          "tests/test_pr34_remediation.py::test_p01_cached_tool_is_denied_after_disable",
+          "tests/test_runtime_admin_surfaces.py::test_admin_payload_validation_and_authority_are_shared",
+          "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply"
+        ]
+      }
+    },
+    {
+      "test_id": "T-API-07",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_surface_metrics.py::test_measure_resident_surface_reports_components",
+          "tests/test_surface_metrics.py::test_cuttable_reduction_helper_matches_baseline_math"
+        ],
+        "linux": [
+          "tests/test_surface_metrics.py::test_measure_resident_surface_reports_components",
+          "tests/test_surface_metrics.py::test_cuttable_reduction_helper_matches_baseline_math"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-10",
+      "status": "PASS",
+      "native_source_sha": "752cd72cc28c1b623f52b796fb139d375357f89b",
+      "node": "tests/test_runtime_native_campaign.py::test_native_two_turns_via_canonical_inbox_and_journal[claude_code]"
+    }
+  ],
+  "surface_measurement": "p12-surface-e28adb6.json",
+  "native_life10": {
+    "source_sha": "752cd72cc28c1b623f52b796fb139d375357f89b",
+    "manifest": "p12-frames-752cd72-claude.json",
+    "node": "tests/test_runtime_native_campaign.py::test_native_two_turns_via_canonical_inbox_and_journal[claude_code]",
+    "assertions": [
+      "two canonical inbox turns",
+      "same live native process",
+      "one observed native session_id across both turns",
+      "terminal operation and attempt correlation",
+      "two nonempty durable results",
+      "two consumed push deliveries",
+      "owned cleanup"
+    ]
+  }
+}
