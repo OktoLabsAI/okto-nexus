@@ -1,4 +1,4 @@
-# Agent connection management — execution in progress
+# Agent connection management — implementation and qualification
 
 Baseline: c692722301ddfe9b8d07abd04c36416c5ce2d233, feature/v0.2.0.
 New user scope after the completed PR34 remediation. Prior qualification is
@@ -21,7 +21,9 @@ Claude attach keeps its existing explicitly approved external target semantics.
 
 Tasks: policy/key persistence; shared authorization; REST/MCP bootstrap;
 Agents UI and global setting; focused security/integration tests; full relevant
-regression; documentation/evidence/commit. All new tests currently NOT_RUN.
+regression; documentation/evidence/commit. Final affected acceptance at 12d352c: 85 PASS. Full regression: 2653 PASS /
+1 FAIL / 122 SKIP; the fixture failure was corrected at 3ca5c55 and independently
+verified by 20 PASS across 10 runs. This is not a full-suite PASS.
 Unrelated static bundle edits and .nexus-policy-guardrail-test remain protected.
 
 ## Operator workflow and contract v1 (surface 59 / schema 065)
@@ -51,7 +53,8 @@ Global setting: Settings → Connection key TTL seconds, default 86400.
 Environment/CLI equivalents: OKTO_NEXUS_CONNECTION_KEY_TTL_SECONDS and
 --connection-key-ttl-seconds. Zero is explicit unlimited; per-agent null means
 inherit. The setting applies to these scoped connection credentials, not to
-legacy canonical nxs_ agent API keys. Expiration does not terminate an already
+legacy canonical nxs_ agent API keys. Boolean, fractional, string and null global
+values are rejected; unlimited requires explicit integer zero. Expiration does not terminate an already
 opened runtime or grant it additional execution authority.
 
 REST:
@@ -64,7 +67,10 @@ MCP: harness_list(view="connections", maintenance={...}) uses the same service,
 with action list/configure/issue/revoke. Configure requires expected_revision,
 methods and key_ttl_seconds. An authenticated self-bootstrap credential is capped
 by its original grant's expiration and remains dependent on revocation, canonical
-key binding, policy and endpoint/profile revisions.
+key binding, current canonical permissions, policy and endpoint/profile revisions.
+Permissions are revalidated before native start, including after reservation.
+When native integration is enabled after starting serve without a runtime owner,
+opening returns 409 with a restart instruction instead of attempting a launch.
 
 Secrets are SHA-256 hashes at rest and appear only in the issuance response
 (Cache-Control: no-store) and transient UI state. Ordinary listings, audits and
@@ -101,3 +107,76 @@ available. Consequently those pre-existing local files remain dirty after the
 milestone commit. They are not part of the implementation's source changes.
 A clean checkout of the milestone contains the new dashboard entry point.
 The snapshot hashes remain private in .git/pr34-evidence/agent-connections.
+
+## Evidence collected (source boundaries retained)
+
+- Baseline reproduction on clean c692722 archive: expected failure because the
+  connection-key request returns HTTP 404; no missing-import failure.
+- Final affected acceptance at 12d352c: 85 PASS, including all four synthetic connectors, a fifth
+  registered adapter, actual HTTP/MCP, authenticated stdio, concurrency, grants,
+  revocation/expiry, migration preservation and isolated Edge UI. It also includes
+  settings, PR34 authorization, grants and writer-contract regressions.
+- Full Windows suite: 2653 PASS / 1 FAIL / 122 SKIP, 2915.84 seconds. It began
+  at 0646a56 while later cbecfbe/12d352c changes landed; it is not an immutable
+  full-suite run at final HEAD. Final affected acceptance independently qualifies
+  the changed production paths at 12d352c.
+- The single failure was PermissionError in a pressure-test snapshot reader
+  during Windows atomic replacement. Test-only correction 3ca5c55 retries that
+  transient read under the existing deadline and checks worker liveness. Ten
+  independent actual-process runs passed (20 tests). No full-suite rerun or
+  global PASS is claimed. Runtime/package source remains 12d352c.
+- Intermediate suite: 2635 PASS / 11 FAIL / 121 SKIP. Failures were stale
+  surface/migration expectations collected before updates; retained as failed
+  intermediate evidence.
+- Live MCP client: PASS; frontend TypeScript/Vite build: PASS; wheel/sdist and
+  Twine checks: PASS; final 12d352c wheel HTTP/MCP/dashboard smoke with the
+  installed production dependency set: PASS. No installed files were changed.
+- Full Ruff: 862 diagnostics on baseline and current tree; new files PASS.
+  This is unchanged baseline debt, not a clean full-tree lint result.
+- Generated Vite shader text retains a third-party trailing space in the bundle;
+  handwritten source passes diff whitespace checks. Generated JS was not hand-edited.
+- Native providers: NOT_RUN in this follow-up. No earlier native counts reused.
+- The [UI screenshot](evidence/agent-connections-ui.png) contains only disposable
+  fixture identities, after credential revocation and removal from the UI.
+
+Commands, hashes, test names and final statuses are recorded in
+[evidence/agent-connections.json](evidence/agent-connections.json). Private raw
+logs and XML remain under .git/pr34-evidence/agent-connections.
+
+## Applying the build to the running local installation
+
+An installed serve process was observed running during this follow-up. Its
+installation and personal store were not changed. The new wheel was tested with
+both development dependencies and the installed tool's dependency set, using a
+separate import directory, disposable store and real HTTP/MCP surfaces. No native
+process was launched by these packaging smokes.
+
+For rollout, stop the current serve owner through the existing shutdown
+procedure, preserve/backup the store, reinstall the built 0.2.0 wheel with the
+existing Python/serve extra and pinned dependency versions, then start the owner
+with its approved configuration. Run the installed smoke helper only against
+its own disposable store. Do not use a still-running old process with files
+replaced underneath it. No reverse migration or automatic uncertain replay.
+
+## Regression evidence and source mapping
+
+The clean baseline c692722 returns 404 for the new key request. Additional
+behavioral reproductions recorded a missing-owner 500 at 0646a56, and at cbecfbe
+both an opening after permission revocation and false silently becoming unlimited
+expiry. The final tests reproduce each boundary and verify its correction;
+these are behavior failures, not missing imports or private mock contracts.
+
+- AgentConnectionService and connection_policy implement identity-bound issuance,
+  expiry, policy revisions and grant-dependent validation; migration 065 persists
+  these records without replacing agent identity or creating a second inbox.
+- RuntimeAccessService, RuntimeOpenService and SqliteRuntimeRequestRepo apply
+  admission checks through reservation and before the external start effect.
+- REST connections routes and MCP harness_list share those use cases.
+- AgentConnectionsPanel exposes policy, endpoint selection, one-time display of
+  the credential, request copying and revocation.
+- test_agent_connections.py and test_agent_connections_dashboard.py verify the
+  composed surfaces; check_agent_connections_install.py verifies packaged assets
+  and actual HTTP/MCP using a disposable store and no native launch.
+
+Full symbols, reproduction commits, commands and result boundaries are in the
+evidence JSON. Native provider execution remains NOT_RUN for this follow-up.

@@ -1,6 +1,31 @@
 # Current follow-up — agent connection management
 
-New authorized scope is IN_PROGRESS on feature/v0.2.0. See [AGENT_CONNECTIONS.md](AGENT_CONNECTIONS.md). Baseline c692722. Focused API/MCP/browser campaign: 13 PASS; full regression still running. No new native provider campaign. Prior delivery below is historical, not qualification of this follow-up.
+IMPLEMENTED_AND_SCOPED_VERIFIED on feature/v0.2.0. Runtime and packaged dashboard
+source: 12d352c; test-only Windows snapshot correction: 3ca5c55. Both committed
+and pushed. Baseline c692722. See [AGENT_CONNECTIONS.md](AGENT_CONNECTIONS.md)
+and [evidence](evidence/agent-connections.json).
+
+- Default key expiry 24 hours; global/per-agent expiry, allowed connection
+  methods, scoped native-opening keys, shared REST/MCP authorization and Agents UI.
+- Final affected HTTP/MCP/browser/settings/authorization suite: 85 PASS at12d352c.
+- Full Windows: 2653 PASS / 1 FAIL / 122 SKIP. The sole fixture failure was a
+  transient Windows snapshot read denial; fixed at3ca5c55, 20 PASS across10
+  independent reruns. Full execution began at0646a56 while later changes landed;
+  no immutable final-HEAD full-suite PASS is claimed. All test runs finished.
+- Live stdio, TypeScript/Vite, final wheel/sdist/Twine and final wheel with
+  installed production dependencies: PASS. Full Ruff retains862 baseline
+  diagnostics; new modules/helper pass. Native providers NOT_RUN this follow-up.
+- New wheel: .git/pr34-evidence/agent-connections/dist-12d352c. Local rollout
+  NOT_APPLIED: pre-existing installed serve (observed PID16312) and personal store
+  preserved. Follow the documented shutdown/backup/update/restart procedure.
+- Three pre-existing static working-tree files remain byte-identical and dirty;
+  .nexus-policy-guardrail-test remains unrelated. Clean checkout/package contains
+  the new dashboard. No personal provider configuration used or merge performed.
+- No remaining implementation task in this follow-up. Local rollout and fresh
+  real-provider qualification are explicit remaining operational steps. Original
+  native Pi/attach exclusions below are not converted into PASS.
+
+Prior delivery below is historical, not qualification of this follow-up.
 
 # PR34 remediation — completed authorized delivery
 

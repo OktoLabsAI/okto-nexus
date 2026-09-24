@@ -8849,7 +8849,7 @@
     }
   ],
   "agent_connections_followup": {
-    "status": "IN_PROGRESS",
+    "status": "IMPLEMENTED_AND_SCOPED_VERIFIED",
     "baseline_sha": "c692722301ddfe9b8d07abd04c36416c5ce2d233",
     "branch": "feature/v0.2.0",
     "specification": "plans/pr34-remediation/AGENT_CONNECTIONS.md",
@@ -8858,28 +8858,46 @@
       {
         "id": "AC01",
         "description": "Per-agent method policy, expiry overrides and additive migration 065",
-        "status": "IMPLEMENTED"
+        "status": "VERIFIED",
+        "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+        "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
+        "next_dependency": "None within implementation scope; local rollout and fresh native-provider qualification remain separate."
       },
       {
         "id": "AC02",
         "description": "Scoped connection key and shared runtime admission, MCP bootstrap and request template",
-        "status": "IMPLEMENTED"
+        "status": "VERIFIED",
+        "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+        "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
+        "next_dependency": "None within implementation scope; local rollout and fresh native-provider qualification remain separate."
       },
       {
         "id": "AC03",
         "description": "Agents UI and global setting",
-        "status": "IMPLEMENTED"
+        "status": "VERIFIED",
+        "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+        "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
+        "next_dependency": "None within implementation scope; local rollout and fresh native-provider qualification remain separate."
       },
       {
         "id": "AC04",
         "description": "Security, concurrency, browser and regression evidence",
-        "status": "IN_PROGRESS"
+        "status": "VERIFIED",
+        "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+        "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
+        "next_dependency": "None within implementation scope; local rollout and fresh native-provider qualification remain separate."
       }
     ],
     "tests": {
-      "focused_http_mcp_browser": "13 PASS at intermediate working tree",
-      "full_regression": "RUNNING",
-      "native_providers": "NOT_RUN in this follow-up"
-    }
+      "focused_http_mcp_browser": "85 PASS: affected suite including HTTP/MCP/browser/settings/authorization/grants/writer",
+      "full_regression": "2653 PASS / 1 FAIL / 122 SKIP; Windows fixture failure fixed at 3ca5c55139857b2035004756ff3b10149cd11654 and 20 PASS across 10 independent reruns",
+      "native_providers": "NOT_RUN in this follow-up",
+      "package": "PASS: final wheel with installed production dependency set in isolated store"
+    },
+    "execution_head": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+    "local_rollout": "NOT_APPLIED: pre-existing serve and personal store preserved",
+    "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
+    "qualification_limit": "Full suite is not globally PASS. Its sole failure was corrected and verified in isolated repeated actual-process tests; no third full run claimed. Real native providers NOT_RUN; active installation NOT_APPLIED.",
+    "test_fixture_head": "3ca5c55139857b2035004756ff3b10149cd11654"
   }
 }

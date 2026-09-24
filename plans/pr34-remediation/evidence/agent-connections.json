@@ -1,0 +1,598 @@
+{
+  "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+  "baseline_sha": "c692722301ddfe9b8d07abd04c36416c5ce2d233",
+  "branch": "feature/v0.2.0",
+  "status": "IMPLEMENTED_AND_SCOPED_VERIFIED",
+  "schema": 65,
+  "surface_revision": 59,
+  "default_key_ttl_seconds": 86400,
+  "qualification": {
+    "acceptance": {
+      "status": "PASS",
+      "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+      "passed": 85,
+      "duration_seconds": "175.645",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_agent_connections.py tests/test_agent_connections_dashboard.py tests/test_settings_api.py tests/test_pr34_remediation.py tests/test_runtime_grants.py tests/test_runtime_writer_contract.py -q --tb=short --junitxml=.git/pr34-evidence/agent-connections/acceptance-12d352c.xml",
+      "environment": {
+        "OKTO_NEXUS_UI_CAMPAIGN": "1",
+        "PYTHONUTF8": "1",
+        "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections",
+        "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections"
+      },
+      "log": ".git\\pr34-evidence\\agent-connections\\acceptance-12d352c.log",
+      "log_sha256": "e5d7faefd85c7ee21cdbd46bd35be4d270697924d97553e325b9da9890cb2901"
+    },
+    "full_windows": {
+      "status": "FAIL",
+      "log": ".git/pr34-evidence/agent-connections/pytest-final.log",
+      "source_sha": "0646a568bd3718a126257203c5ca1f9f942b0110",
+      "passed": 2653,
+      "failed": 1,
+      "skipped": 122,
+      "duration_seconds": 2915.84,
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short --junitxml=.git/pr34-evidence/agent-connections/pytest-final.xml",
+      "failure": "tests/test_runtime_pressure_fixture.py::test_load_worker_survives_snapshot_reader: PermissionError opening snapshot during Windows atomic replacement",
+      "correction_sha": "3ca5c55139857b2035004756ff3b10149cd11654",
+      "source_boundary": "Workspace run started at 0646a56; cbecfbe and 12d352c changes landed during the run. Not an immutable full-suite qualification of final HEAD. Final affected suite at 12d352c independently covers changed production paths.",
+      "log_sha256": "f4108f077253cd6b1aedcaae08797a94829404171de1c99ff7278f0689a5d06d"
+    },
+    "live_mcp": {
+      "status": "PASS",
+      "command": "rtk proxy .venv/Scripts/python.exe scripts/live_client.py",
+      "log_sha256": "e29f762746f623b1b7113f05f38a9ef6160dba4c1997868de6785920283d4f50",
+      "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+      "log": ".git\\pr34-evidence\\agent-connections\\live-mcp-12d352c.log"
+    },
+    "build": {
+      "status": "PASS",
+      "command": "rtk proxy npm run build -- --outDir ../.git/pr34-evidence/agent-connections/dashboard",
+      "package_command": "rtk proxy uv build --out-dir .git/pr34-evidence/agent-connections/dist-12d352c (executed in clean Git archive of source_sha; absolute output directory)",
+      "twine": "PASS",
+      "wheel_sha256": "cd204be6cd0eda440500412497c42105d32d8d28e1d0007f73d70214e08e4a59",
+      "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+      "twine_command": "rtk proxy uvx twine check .git/pr34-evidence/agent-connections/dist-12d352c/*",
+      "wheel": ".git\\pr34-evidence\\agent-connections\\dist-12d352c\\okto_nexus-0.2.0-py3-none-any.whl"
+    },
+    "lint": {
+      "status": "BASELINE_DEBT",
+      "historical_head_diagnostics": 862,
+      "current_diagnostics": 862,
+      "new_files": "PASS",
+      "command": "rtk proxy uvx ruff check .",
+      "changed_existing_fixture": "Existing I001 import-order diagnostic retained in tests/test_runtime_pressure_fixture.py; helper file passes."
+    },
+    "native_providers": {
+      "status": "NOT_RUN",
+      "reason": "New qualification uses synthetic connectors and isolated HTTP/MCP/browser; historical native runs are not counted again."
+    },
+    "wheel_smoke": {
+      "status": "PASS",
+      "command": "Installed-wheel import path + .venv/Scripts/python.exe plans/pr34-remediation/check_agent_connections_install.py",
+      "native_processes_started": 0,
+      "log": ".git/pr34-evidence/agent-connections/wheel-smoke.log",
+      "source_sha": "0646a568bd3718a126257203c5ca1f9f942b0110",
+      "note": "Earlier dev-dependency smoke; final wheel production dependencies qualified separately."
+    },
+    "production_dependency_set": {
+      "status": "PASS",
+      "source_sha": "12d352c8b1588a426508509ddfd1ddc098836cdc",
+      "native_processes_started": 0,
+      "log": ".git/pr34-evidence/agent-connections/production-smoke-12d352c.log",
+      "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/uv/tools/okto-nexus/Scripts/python.exe plans/pr34-remediation/check_agent_connections_install.py",
+      "environment": {
+        "PYTHONPATH": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections\\wheel-import-12d352c",
+        "PYTHONUTF8": "1",
+        "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections",
+        "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections"
+      },
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\agent-connections",
+      "note": "Helper path supplied absolute; unpacked final wheel on isolated import path. Installed files and personal store unchanged.",
+      "log_sha256": "7c32ac5e5c36ddbeaff2fe65a6bfa6de4b3c9f4531915cf94a245ecb6478c7b4"
+    },
+    "intermediate_full_windows": {
+      "status": "FAIL",
+      "passed": 2635,
+      "failed": 11,
+      "skipped": 121,
+      "duration_seconds": 2826.14,
+      "reason": "Eight stale surface-version assertions and three migration-list assertions collected before their updates. Retained as intermediate failed evidence.",
+      "log": ".git/pr34-evidence/agent-connections/pytest-full.log"
+    },
+    "pressure_fixture_correction": {
+      "status": "PASS",
+      "source_sha": "3ca5c55139857b2035004756ff3b10149cd11654",
+      "independent_runs": 10,
+      "passed_total": 20,
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_pressure_fixture.py -q --tb=short (10 independent sequential invocations)",
+      "log": ".git/pr34-evidence/agent-connections/pressure-fixture-repeated.log",
+      "behavior": "Only transient PermissionError reads retried under existing 10-second deadline; process exit, malformed JSON and other I/O failures remain failures. Test-only change; packaged production source stays 12d352c.",
+      "log_sha256": "966ca231234e3147c8263174e0d2b012ebe808b89282b625714da8f6bd086419"
+    }
+  },
+  "test_cases": [
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_connection_key_opens_only_bound_identity_and_reuses",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_expiry_overrides_revocation_and_method_reenable",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_policy_admin_only_and_mcp_disabled",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_all_managed_adapters_and_profile_invalidation[endpoint-pi]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_all_managed_adapters_and_profile_invalidation[endpoint-codex]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_all_managed_adapters_and_profile_invalidation[endpoint-claude_code.stream]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_mcp_bootstrap_parity_and_disable_blocks_operator_open",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_concurrent_redemption_one_process_and_global_unlimited",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_disabled_feature_and_attach_opt_in",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_agent_bootstrap_retains_grant_expiry_and_revocation",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_disable_stops_new_dispatch_and_preserves_inbox",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_stale_policy_update_rejected_without_mutation",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_old_runtime_writer_cannot_ignore_connection_policy",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_global_ttl_shared_with_an_independent_stdio_composition",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_registered_extension_uses_the_same_connection_contract[additional]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_upgrade_from_64_preserves_identity_and_is_idempotent",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_disabling_mcp_fences_an_already_authenticated_stdio_connection",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_enabling_feature_requires_owner_restart_with_a_prescriptive_error[False]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_self_bootstrap_rechecks_permissions_at_the_native_start_boundary",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections",
+      "name": "test_global_expiry_does_not_coerce_fraction_or_boolean_to_unlimited",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_agent_connections_dashboard",
+      "name": "test_agent_connection_policy_issue_copy_and_revoke",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_settings_catalogue_lists_every_spec_with_description",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_patch_persists_and_applies_to_live_config",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_meta_harness_receipt_display_defaults_inline_and_persists",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_patch_rejects_out_of_range_unknown_and_bad_enum",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_cli_pinned_setting_is_read_only",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_settings_api",
+      "name": "test_settings_reset_restores_defaults",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_profile_is_unchanged_by_open_close",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_unknown_agent_is_rejected_before_factory",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_open_another_agent",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_send-args0]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_steer-args1]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_interrupt-args2]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_close-args3]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_get-args4]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_event_list-args5]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_unconfigured_surface_does_not_publish_harness_tools[False]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_backend_diagnostics_do_not_echo_credentials",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_replay_keeps_event_id_and_sequence",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_keyed_loopback_rest_does_not_upgrade_caller_to_operator",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_one_delivery_does_not_execute_on_two_sessions",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_forward_preserves_sender_subject_and_message_identity",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_terminal_storage_failure_is_not_silently_accepted",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_expired_relay_does_not_mint_new_root",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_open_does_not_fabricate_credential_authentication",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_committed_delivery_survives_lost_notification",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_additional_adapter_is_not_rejected_by_domain_product_enum",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_enabled_authorized_connectors_remain_usable[pi-None]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_enabled_authorized_connectors_remain_usable[codex-None]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_enabled_authorized_connectors_remain_usable[claude_code-stream]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_enabled_authorized_connectors_remain_usable[claude_code-attach]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_cached_tool_is_denied_after_disable",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_attach_requires_separate_opt_in",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_stdio_missing_identity_has_no_operator_authority",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_duplicate_executor_is_rejected",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[send]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[steer]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[interrupt]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[close]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[get]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_rest_foreign_session_matches_mcp_denial[events]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p02_additional_adapter_through_production_mcp_and_rest[administrative-additional]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_pr34_remediation",
+      "name": "test_p02_additional_adapter_through_production_mcp_and_rest[canonical_inbox-additional]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_grant_open_requires_explicit_scoped_binding",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[revoke]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[expire]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[permissions]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[scope]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[credential]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authority_is_revalidated_before_send[profile]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_internal_missing_authentication_cannot_impersonate_operator",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_native_options_and_payload_identity_are_rejected",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_concurrent_grant_budget_has_one_admitted_send",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "name": "test_p04_operator_cannot_send_using_a_replaced_profile",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_preexisting_legacy_connection_is_fenced_only_after_activation",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_operator_disable_changes_writer_mode_atomically_and_retains_fences[stored_runtime]",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_compatible_stdio_still_enqueues_the_canonical_delivery",
+      "status": "PASS"
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "name": "test_writer_contract_diagnostics_are_operator_only",
+      "status": "PASS"
+    }
+  ],
+  "local_rollout": {
+    "status": "NOT_APPLIED",
+    "reason": "Existing installed serve process is active (observed PID 16312). New wheel verified independently; active installation, process and personal store not modified.",
+    "wheel": ".git\\pr34-evidence\\agent-connections\\dist-12d352c\\okto_nexus-0.2.0-py3-none-any.whl",
+    "same_installed_dependency_set": true
+  },
+  "regression_reproductions": [
+    {
+      "baseline": "c692722",
+      "wrong_behavior": "Connection-key request returns404",
+      "evidence": "baseline-reproduction.log",
+      "fix": "5240f88"
+    },
+    {
+      "baseline": "0646a56",
+      "wrong_behavior": "Enable feature after starting without owner: opening returns500 AttributeError",
+      "evidence": "owner-restart-before.log",
+      "fix": "cbecfbe",
+      "expected": "409 restart required, no native effects"
+    },
+    {
+      "baseline": "cbecfbe",
+      "wrong_behavior": "Revocation of messages.send_direct after reservation does not deny native start",
+      "evidence": "permission-race-before.log",
+      "fix": "12d352c",
+      "expected": "Denied before process start"
+    },
+    {
+      "baseline": "cbecfbe",
+      "wrong_behavior": "Global expiry false coerces to zero/unlimited",
+      "evidence": "strict-expiry-before.log",
+      "fix": "12d352c",
+      "expected": "422 for bool/fraction/string/null/out-of-range"
+    }
+  ],
+  "implementation_map": {
+    "policy_and_credentials": [
+      "src/okto_nexus/application/agent_connections.py:AgentConnectionService",
+      "src/okto_nexus/application/connection_policy.py:valid_connection_key",
+      "src/okto_nexus/migrations/065_agent_connections.sql"
+    ],
+    "admission": [
+      "src/okto_nexus/application/runtime_access.py",
+      "src/okto_nexus/application/runtime_open.py",
+      "src/okto_nexus/adapters/outbound/sqlite/runtime_requests_repo.py"
+    ],
+    "surfaces": [
+      "src/okto_nexus/adapters/inbound/http/connections.py",
+      "src/okto_nexus/adapters/inbound/mcp/server.py"
+    ],
+    "qualification": [
+      "tests/test_agent_connections.py",
+      "tests/test_agent_connections_dashboard.py",
+      "plans/pr34-remediation/check_agent_connections_install.py"
+    ]
+  },
+  "protected_local_static": "PASS: three pre-existing files remain byte-identical",
+  "test_fixture_sha": "3ca5c55139857b2035004756ff3b10149cd11654",
+  "qualification_limit": "Full suite is not globally PASS. Its sole failure was corrected and verified in isolated repeated actual-process tests; no third full run claimed. Real native providers NOT_RUN; active installation NOT_APPLIED."
+}
