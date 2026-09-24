@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "de1dfa426cb6d16768ed65f789fda315b3eb1811",
+  "execution_head": "23f83ccd89ccf010ffb48c14a5d2b77d3d7ed346",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -736,14 +736,24 @@
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/application/runtime_open.py",
             "src/okto_nexus/application/messages.py",
-            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
+            "src/okto_nexus/migrations/061_runtime_fallback_binding.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "23f83ccd89ccf010ffb48c14a5d2b77d3d7ed346 + fallback worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_endpoint_fallback.py tests/test_pr34_remediation.py -k \"fallback or additional_adapter\"",
+              "result": "PASS",
+              "observed": "Final Windows21 passed/34 deselected/76.01s; Linux21 passed/34 deselected/79.96s. Prior broad selections110 PASS each, migration/reference41 PASS each; counts overlap.",
+              "evidence": "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
-            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+            "plans/pr34-remediation/evidence/p05-p06-gate.log",
+            "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Approved equivalent-endpoint fallback implemented for proven-unsent new conversations, with original/target approval revalidation and versioned extension contract. Continuations, controls and managed grants remain bound; generic uncertain errors never transfer. See P05_SAFE_ENDPOINT_FALLBACK.md; no phase promotion."
         },
         {
           "task_id": "P05-T04",
@@ -775,15 +785,25 @@
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/application/runtime_open.py",
             "src/okto_nexus/application/messages.py",
-            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
+            "src/okto_nexus/migrations/061_runtime_fallback_binding.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "23f83ccd89ccf010ffb48c14a5d2b77d3d7ed346 + fallback worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_endpoint_fallback.py tests/test_pr34_remediation.py -k \"fallback or additional_adapter\"",
+              "result": "PASS",
+              "observed": "Final Windows21 passed/34 deselected/76.01s; Linux21 passed/34 deselected/79.96s. Prior broad selections110 PASS each, migration/reference41 PASS each; counts overlap.",
+              "evidence": "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
-            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
+            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
+            "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending. Approved equivalent-endpoint fallback implemented for proven-unsent new conversations, with original/target approval revalidation and versioned extension contract. Continuations, controls and managed grants remain bound; generic uncertain errors never transfer. See P05_SAFE_ENDPOINT_FALLBACK.md; no phase promotion."
         },
         {
           "task_id": "P05-T06",
@@ -960,7 +980,8 @@
             "src/okto_nexus/application/messages.py",
             "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
             "src/okto_nexus/migrations/059_runtime_delivery_attempt_history.sql",
-            "src/okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql"
+            "src/okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql",
+            "src/okto_nexus/migrations/061_runtime_fallback_binding.sql"
           ],
           "test_results": [
             {
@@ -976,6 +997,13 @@
               "result": "PASS",
               "observed": "Windows37 passed72.82s/Linux37 passed87.03s, plus lost-proof Windows1 passed4.15s/Linux1 passed7.02s. Broad development selections and exact commands recorded separately.",
               "evidence": "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md"
+            },
+            {
+              "sha": "23f83ccd89ccf010ffb48c14a5d2b77d3d7ed346 + fallback worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_endpoint_fallback.py tests/test_pr34_remediation.py -k \"fallback or additional_adapter\"",
+              "result": "PASS",
+              "observed": "Final Windows21 passed/34 deselected/76.01s; Linux21 passed/34 deselected/79.96s. Prior broad selections110 PASS each, migration/reference41 PASS each; counts overlap.",
+              "evidence": "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
             }
           ],
           "evidence": [
@@ -984,9 +1012,10 @@
             "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
             "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
             "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md",
-            "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md"
+            "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md",
+            "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending. Schema059 now preserves immutable transport attempt observations and honest current-state upgrade snapshots, surface54 detail inspection. Backoff and equivalent-endpoint fallback remain pending; no aggregate phase promotion. Typed transient pre-write retry now uses durable deadline, bounded backoff/jitter and same-operation authority; schema060/surface55. Equivalent-endpoint fallback remains pending."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending. Schema059 now preserves immutable transport attempt observations and honest current-state upgrade snapshots, surface54 detail inspection. Backoff and equivalent-endpoint fallback remain pending; no aggregate phase promotion. Typed transient pre-write retry now uses durable deadline, bounded backoff/jitter and same-operation authority; schema060/surface55. Equivalent-endpoint fallback remains pending. Approved equivalent-endpoint fallback implemented for proven-unsent new conversations, with original/target approval revalidation and versioned extension contract. Continuations, controls and managed grants remain bound; generic uncertain errors never transfer. See P05_SAFE_ENDPOINT_FALLBACK.md; no phase promotion."
         },
         {
           "task_id": "P06-T05",
@@ -2794,8 +2823,11 @@
       ],
       "stimulus": "Endpoint A falha antes de qualquer envio e B é fallback aprovado.",
       "expected": "Uma tentativa em B, mesma operação lógica, seleção/auditoria consistentes.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md"
+      ],
+      "notes": "Production REST/MCP and owned protocol fixture prove A pre-write refusal to approved B, same operation/envelope/hash/inbox, one B write, consistent selection/history, ready/on-demand targets, independent approved profiles and versioned extension opt-in. Revocation, scope, uncertainty, continuation and endpoint-scoped handoff grants deny transfer. Final selection21 PASS on each platform; no provider/model fallback campaign claimed."
     },
     {
       "test_id": "T-ENDP-06",

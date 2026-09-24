@@ -18,6 +18,7 @@ class RuntimeDispatcher:
         self.workers = min(max(int(workers), 1), 8)
         self.recovery_seconds, self.send_timeout_seconds = recovery_seconds, send_timeout_seconds
         self.retry_jitter = retry_jitter or random.random
+        self.select_fallback = None
         self.owner_id, self.epoch = new_id("owner"), None
         self._wake_condition = threading.Condition()
         self._wake_generation = 0
@@ -222,7 +223,7 @@ class RuntimeDispatcher:
                 attempt = new_id("attempt")
                 if self.repo.claim(uow, operation_id=operation["operation_id"], epoch=self.epoch,
                                    attempt_id=attempt, lease_expires_at=iso_plus(now, 40), now=now):
-                    accepted.append((operation, attempt))
+                    accepted.append((self.repo.get(uow, operation["operation_id"]), attempt))
                     selected_endpoints.add(operation["endpoint_id"])
         for operation, attempt in accepted:
             with self._lock:
@@ -274,16 +275,22 @@ class RuntimeDispatcher:
             try:
                 # Transient proof is a trusted type from the final adapter
                 # fence, never an exception message or caller-supplied flag.
-                jitter = self.retry_jitter() if isinstance(exc, RuntimeLaneBusyBeforeWrite) else 0
+                jitter = self.retry_jitter()
                 if not isinstance(jitter, (int, float)) or not 0 <= jitter <= 1:
                     raise ValueError("Retry jitter must be within [0,1]")
                 with self.cf.unit_of_work() as uow:
                     now = self.clock.now_iso()
                     if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
-                        if isinstance(exc, RuntimeLaneBusyBeforeWrite):
-                            current = self.repo.get(uow, operation["operation_id"])
+                        current = self.repo.get(uow, operation["operation_id"])
+                        fallback = None
+                        if self.select_fallback and current and current["status"] == "SENDING":
+                            try:
+                                fallback = self.select_fallback(uow, current)
+                            except OktoNexusError:
+                                pass  # Revocation cannot acquire a new endpoint.
+                        if isinstance(exc, RuntimeLaneBusyBeforeWrite) or fallback:
                             delay = min(30, 2 ** min(current["attempt_count"] - 1, 5)) * (1 + .25 * jitter)
-                            self.repo.retry_not_sent(uow, **key, now=now, next_attempt_at=iso_plus(now, delay))
+                            self.repo.retry_not_sent(uow, **key, now=now, next_attempt_at=iso_plus(now, delay), fallback=fallback)
                         else:
                             self.repo.observe(uow, **key, expected="SENDING", status="REJECTED", now=now,
                                 reason="native_write_not_started", ack_level="NONE")

@@ -60,16 +60,17 @@ class SqliteRuntimeOutboxRepo:
         query = (
             "SELECT pending.*,ROW_NUMBER() OVER(PARTITION BY pending.recipient_agent_id "
             "ORDER BY pending.created_at,pending.operation_id) AS agent_rank "
-            "FROM delivery_outbox pending WHERE (pending.status='PENDING' OR "
+            "FROM (SELECT *,COALESCE(json_extract(next_binding,'$.endpoint_id'),endpoint_id) AS dispatch_endpoint_id "
+            "FROM delivery_outbox) pending WHERE (pending.status='PENDING' OR "
             "(pending.status='RETRY_WAIT' AND pending.next_attempt_at<=?)) AND pending.reconciliation_id IS NULL AND NOT EXISTS "
-            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND busy.reconciliation_id IS NULL AND "
+            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.dispatch_endpoint_id AND busy.reconciliation_id IS NULL AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
-            "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.endpoint_id AND c.reconciliation_id IS NULL AND "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.dispatch_endpoint_id AND c.reconciliation_id IS NULL AND "
             "(c.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(c.starts_turn=1 AND c.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND c.terminal_event_id IS NULL) OR "
             "(c.status='PENDING' AND (c.verb<>'send_turn' OR (c.created_at,c.operation_id)<(pending.created_at,pending.operation_id))))) "
-            "AND NOT EXISTS (SELECT 1 FROM delivery_outbox earlier WHERE earlier.endpoint_id=pending.endpoint_id "
+            "AND NOT EXISTS (SELECT 1 FROM delivery_outbox earlier WHERE COALESCE(json_extract(earlier.next_binding,'$.endpoint_id'),earlier.endpoint_id)=pending.dispatch_endpoint_id "
             "AND earlier.status IN ('PENDING','RETRY_WAIT') AND earlier.reconciliation_id IS NULL "
             "AND (earlier.created_at,earlier.operation_id)<(pending.created_at,pending.operation_id)) "
             "AND NOT EXISTS (SELECT 1 FROM delivery_outbox active WHERE active.recipient_agent_id=pending.recipient_agent_id "
@@ -89,15 +90,24 @@ class SqliteRuntimeOutboxRepo:
         return uow.connection.execute("SELECT min(next_attempt_at) FROM delivery_outbox "
             "WHERE status='RETRY_WAIT' AND reconciliation_id IS NULL AND next_attempt_at>?", (after,)).fetchone()[0]
 
-    def retry_not_sent(self, uow, *, operation_id, epoch, attempt_id, now, next_attempt_at, max_attempts=3):
+    def attempted_endpoints(self, uow, *, operation_id):
+        return {row[0] for row in uow.connection.execute("SELECT DISTINCT endpoint_id FROM runtime_delivery_attempt_events "
+            "WHERE operation_id=? AND state='SENDING'", (operation_id,))}
+
+    def retry_not_sent(self, uow, *, operation_id, epoch, attempt_id, now, next_attempt_at, max_attempts=3, fallback=None):
+        basis = "APPROVED_ENDPOINT_BEFORE_WRITE" if fallback else "LANE_BUSY_BEFORE_WRITE"
         return uow.connection.execute(
             "UPDATE delivery_outbox SET status=CASE WHEN attempt_count<? THEN 'RETRY_WAIT' ELSE 'REJECTED' END,"
-            "next_attempt_at=CASE WHEN attempt_count<? THEN ? ELSE NULL END,retry_basis='LANE_BUSY_BEFORE_WRITE',"
+            "next_attempt_at=CASE WHEN attempt_count<? THEN ? ELSE NULL END,retry_basis=?,next_binding=?,"
+            "admission_binding=COALESCE(admission_binding,?),"
             "reason='native_write_not_started',ack_level='NONE',updated_at=? "
             "WHERE operation_id=? AND owner_epoch=? AND attempt_id=? AND status='SENDING' "
             "AND ack_level='NONE' AND terminal_event_id IS NULL AND native_thread_id IS NULL AND native_turn_id IS NULL "
             "AND reconciliation_id IS NULL",
-            (max_attempts, max_attempts, next_attempt_at, now, operation_id, epoch, attempt_id)).rowcount == 1
+            (max_attempts, max_attempts, next_attempt_at, basis,
+             json.dumps(fallback, sort_keys=True) if fallback else None,
+             json.dumps(fallback["admission"], sort_keys=True) if fallback else None,
+             now, operation_id, epoch, attempt_id)).rowcount == 1
 
     def get(self, uow, operation_id):
         row = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()
@@ -176,7 +186,11 @@ class SqliteRuntimeOutboxRepo:
     def claim(self, uow, *, operation_id, epoch, attempt_id, lease_expires_at, now):
         changed = uow.connection.execute(
             "UPDATE delivery_outbox SET status='CLAIMED',attempt_count=attempt_count+1,owner_epoch=?,attempt_id=?,lease_expires_at=?,updated_at=?,"
-            "next_attempt_at=NULL,retry_basis=NULL,reason=NULL "
+            "endpoint_id=COALESCE(json_extract(next_binding,'$.endpoint_id'),endpoint_id),"
+            "endpoint_revision=COALESCE(json_extract(next_binding,'$.endpoint_revision'),endpoint_revision),"
+            "profile_revision=CASE WHEN next_binding IS NULL THEN profile_revision ELSE json_extract(next_binding,'$.profile_revision') END,"
+            "runtime_session_id=CASE WHEN next_binding IS NULL THEN runtime_session_id ELSE json_extract(next_binding,'$.runtime_session_id') END,"
+            "next_attempt_at=NULL,retry_basis=NULL,reason=NULL,next_binding=NULL "
             "WHERE operation_id=? AND reconciliation_id IS NULL AND (status='PENDING' OR (status='RETRY_WAIT' AND next_attempt_at<=?))",
             (epoch, attempt_id, lease_expires_at, now, operation_id, now))
         return changed.rowcount == 1

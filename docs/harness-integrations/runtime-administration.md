@@ -196,9 +196,39 @@ handoff binding (if present) and envelope hash, with a new attempt ID. Current
 authorization and profile/binding revisions are revalidated. Permanent capability
 rejection remains REJECTED; uncertain transport remains fenced. After3 pre-write
 refusals, the delivery is REJECTED with its non-delivery proof preserved for
-explicit authorized inbox recovery. Endpoint fallback is not implemented by this
-retry policy. Managed work still requires canonical claim recovery, never an inbox
+explicit authorized inbox recovery. Managed work still requires canonical claim recovery, never an inbox
 release or borrowed endpoint grant. No personal database is migrated by tests.
+
+Surface56/schema061 adds safe fallback for new conversations. To permit it, the
+operator explicitly assigns a nonempty `selection_group` to interchangeable,
+enabled and approved endpoints of the same agent/workspace. Approve each target's
+runtime profile separately, including its native security controls. This declares
+those approved configurations valid alternatives; do not group unrelated contexts.
+Ready alternatives are preferred, then priority, then stable endpoint ID. Disabled,
+quarantined, incompatible or feature-disabled candidates are excluded. An eligible
+target may be opened on demand under the normal owned-start lifecycle.
+Targets also need the trusted adapter descriptor's `input_schema.transport_binding_contract=1`.
+All four built-in envelope adapters implement it. An extension must explicitly
+support the versioned binding; endpoint metadata cannot opt an adapter into this
+contract. A legacy extension still supports its ordinary advertised deliveries.
+
+Only typed pre-write rejection can select an alternative. The next binding and its
+revisions are committed with RETRY_WAIT, and become the current binding only at
+the next fenced claim. Original endpoint/profile approval, target approval and
+current actor authority are all checked before effects. The original message,
+envelope hash, causal admission and inbox reservation remain unchanged. Native
+framing labels current transport endpoint/profile separately from the original
+admission snapshot; neither creates authority. Inspection exposes `admission_binding`
+and `next_binding`, and immutable history records the selection and revisions.
+
+Continuation/relay contexts, controls and managed handoff grants keep their original
+binding. They cannot borrow another endpoint's authority. Unknown writes, acceptance
+and lost replies never enable fallback. Generic startup exceptions remain ambiguous
+unless the adapter supplies explicit non-delivery proof; an error string is not proof.
+The existing bounded retry budget applies. Endpoints already attempted are excluded
+from alternative selection; a transient refusal may still retry its same endpoint
+when no approved alternative is eligible. No endpoint fan-out or duplicate inbox is
+created. Rollout is additive and uses the existing owner stop/upgrade/start procedure.
 
 ```json
 {

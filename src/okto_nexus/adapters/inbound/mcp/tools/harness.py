@@ -436,7 +436,9 @@ def build_dispatcher(deps):
                 requests = SqliteRuntimeRequestRepo()
                 with deps.connection_factory.unit_of_work() as uow:
                     request_id, existing_session = requests.reserve(uow, actor_id=operation["actor_agent_id"],
-                        key="delivery:" + operation["operation_id"], request_hash=operation["request_hash"],
+                        key="delivery:" + operation["operation_id"] +
+                            ((":" + endpoint["endpoint_id"]) if operation.get("admission_binding") else ""),
+                        request_hash=operation["request_hash"],
                         now=deps.clock.now_iso(), endpoint=endpoint, profile=profile,
                         owner=(operation["owner_id"], operation["owner_epoch"]))
                     if existing_session:
@@ -466,11 +468,23 @@ def build_dispatcher(deps):
             if (not current or current["status"] != "SENDING" or current["owner_epoch"] != operation["owner_epoch"] or
                     not outbox.owns(uow, owner_id=operation["owner_id"], epoch=operation["owner_epoch"], now=deps.clock.now_iso())):
                 raise OktoNexusError(ErrorCode.CONFLICT, "Runtime operation lost ownership.", {})
-        supervisor.send(session_id, "send_turn", {"envelope": outbox.decode(operation)},
+        payload = {"envelope": outbox.decode(operation)}
+        if operation.get("admission_binding"):
+            payload["transport_binding"] = {"schema_version": 1, "operation_id": operation["operation_id"],
+                "attempt_id": operation["attempt_id"], "endpoint_id": endpoint["endpoint_id"],
+                "workspace_id": operation["workspace_id"], "canonical_envelope_hash": operation["request_hash"],
+                "execution_profile": {"profile_id": profile["profile_id"], "revision": profile["revision"]} if profile else None}
+        supervisor.send(session_id, "send_turn", payload,
             _transport_attempt={key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
                                   validate=validate_dispatch, dispatch=dispatch)
+    def select_fallback(uow, operation):
+        if managed(uow, operation):
+            return None  # Endpoint-scoped work grants cannot be borrowed.
+        validate_dispatch(uow, operation)
+        return planner.fallback(uow, operation=operation)
+    dispatcher.select_fallback = select_fallback
     dispatcher.event_ingress = supervisor.event_ingress
     def publish_results():
         return native_approvals.scan_once() + handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
@@ -820,7 +834,7 @@ def build_connector_factories(deps: Any):
                 multiplexing=caps.multiplexes_sessions, steer_timing=caps.steer_timing,
                 interrupt=not caps.send_only, interrupt_requires_settle=caps.interrupt_requires_settle_wait,
                 observes_stop=caps.observes_session_end, approvals=kind == "codex" or (kind == "claude_code" and substrate == "stream")),
-            input_schema=({"native_approval_contract": 1, "requires_feature_hitl": True,
+            input_schema={"transport_binding_contract": 1, **({"native_approval_contract": 1, "requires_feature_hitl": True,
                 "methods": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
                             "item/tool/requestUserInput", "mcpServer/elicitation/request"],
                 "decisions": ["accept", "decline"], "input_contract": 1,
@@ -828,7 +842,7 @@ def build_connector_factories(deps: Any):
                 {"native_approval_contract": 1, "requires_feature_hitl": True,
                  "methods": ["control_request:can_use_tool"], "tools": ["Write", "Edit", "Bash", "AskUserQuestion"],
                  "decisions": ["accept", "decline"], "correlation": "operation_and_local_generation"}
-                if kind == "claude_code" and substrate == "stream" else {}),
+                if kind == "claude_code" and substrate == "stream" else {})},
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
             native_versions_tested=tuple(sorted(CONVERSATION_VERSIONS.get(kind, ()))) if substrate != "attach" and kind != "pi" else (),

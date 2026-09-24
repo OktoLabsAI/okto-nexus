@@ -164,7 +164,7 @@ def test_changed_guidance_resources_publish_new_cache_versions(surface):
         "okto-nexus://reference/communication": "3",
         "okto-nexus://reference/tool-docs/messages": "4",
         "okto-nexus://reference/tool-docs/handoff": "4",
-        "okto-nexus://reference/tool-docs/identity": "23",
+        "okto-nexus://reference/tool-docs/identity": "24",
     }
 
     info = _call(server, "nexus_info")

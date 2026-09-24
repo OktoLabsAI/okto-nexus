@@ -57,6 +57,7 @@ def runtime(tmp_path, request):
         registry.register(AdapterDescriptor("fixture.additional.v1", "fixture.additional.v1", None,
             "fixture-no-process", factory("fixture.additional.v1"), lambda _: None,
             EndpointCapabilities(conversation=request.param != "additional_readonly", events=True), FakeConnector().capabilities,
+            input_schema={"transport_binding_contract": 1},
             compatibility_probe=(None if request.param == "additional_unverified" else
                 lambda report: EndpointCapabilities(conversation=True, events=True))))
         deps.harness_adapter_registry = registry

@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface56/schema061 selects approved equivalent endpoints only after proven
+  non-delivery, preserving logical identity, admission context and work authority.
 - Surface55/schema060 retries transient local lane refusals only before native
   write, with durable deadlines, bounded backoff/jitter and unchanged delivery identity.
 - Surface54/schema059 preserves immutable delivery attempt observations across

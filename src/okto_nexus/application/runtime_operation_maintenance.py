@@ -83,7 +83,7 @@ class RuntimeOperationMaintenanceService:
                 and row["ack_level"] == "NONE" and row["attempt_id"] is not None
                 and row["native_thread_id"] is None and row["native_turn_id"] is None)
             not_sent = action == "release_to_inbox" and row["status"] == "REJECTED" and no_write_proof
-            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] == "LANE_BUSY_BEFORE_WRITE"
+            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] in {"LANE_BUSY_BEFORE_WRITE", "APPROVED_ENDPOINT_BEFORE_WRITE"}
             if pending:
                 if (row["status"] not in {"PENDING", "CLAIMED"} and not safe_wait) or acknowledge_duplicate_risk:
                     raise conflict("Cancellation requires an attempt before send-intent or a proven-safe retry wait.")
@@ -140,7 +140,8 @@ class RuntimeOperationMaintenanceService:
             queries.append(f"SELECT o.operation_id,'{table}' AS source_kind,o.endpoint_id,e.agent_id,e.workspace_id,"
                 "o.runtime_session_id,o.status AS state,o.reason,o.ack_level,o.attempt_id,o.owner_epoch,o.terminal_event_id,"
                 "o.reconciliation_id,o.created_at,o.updated_at,s.lifecycle_state AS runtime_lifecycle," +
-                ("o.next_attempt_at,o.retry_basis " if table == "delivery_outbox" else "NULL AS next_attempt_at,NULL AS retry_basis ") +
+                ("o.next_attempt_at,o.retry_basis,o.admission_binding,o.next_binding " if table == "delivery_outbox" else
+                 "NULL AS next_attempt_at,NULL AS retry_basis,NULL AS admission_binding,NULL AS next_binding ") +
                 f"FROM {table} o JOIN agent_endpoints e ON e.endpoint_id=o.endpoint_id "
                 "LEFT JOIN harness_sessions s ON s.session_id=o.runtime_session_id")
         query = "SELECT * FROM (" + " UNION ALL ".join(queries) + ") WHERE operation_id>?"
@@ -155,6 +156,8 @@ class RuntimeOperationMaintenanceService:
             items = []
             for row in rows[:limit]:
                 item = dict(row)
+                for field in ("admission_binding", "next_binding"):
+                    item[field] = json.loads(item[field]) if item[field] else None
                 audit = uow.connection.execute("SELECT reconciliation_id,action,canonical_action,handoff_id,claim_epoch,previous_state,duplicate_risk_acknowledged,reason,created_at "
                     "FROM runtime_operation_reconciliations WHERE reconciliation_id=?", (row["reconciliation_id"],)).fetchone()
                 item["reconciliation"] = dict(audit) if audit else None
@@ -166,10 +169,14 @@ class RuntimeOperationMaintenanceService:
                     # new delivery authority is reconstructed from observations.
                     history = uow.connection.execute(
                         "SELECT sequence,attempt_id,owner_epoch,endpoint_id,runtime_session_id,state,"
-                        "ack_level,reason,native_thread_id,native_turn_id,terminal_event_id,occurred_at,provenance,next_attempt_at,retry_basis "
+                        "ack_level,reason,native_thread_id,native_turn_id,terminal_event_id,occurred_at,provenance,next_attempt_at,retry_basis,"
+                        "admission_binding,next_binding,endpoint_revision,profile_revision "
                         "FROM runtime_delivery_attempt_events WHERE operation_id=? ORDER BY sequence DESC LIMIT 65",
                         (operation_id,)).fetchall()
                     item["attempt_history"] = [dict(event) for event in reversed(history[:64])]
+                    for event in item["attempt_history"]:
+                        for field in ("admission_binding", "next_binding"):
+                            event[field] = json.loads(event[field]) if event[field] else None
                     item["attempt_history_truncated"] = len(history) > 64
                 items.append(item)
         return {"items": items, "has_more": len(rows) > limit,

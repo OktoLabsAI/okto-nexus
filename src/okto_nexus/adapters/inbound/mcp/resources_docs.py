@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="23",
+    version="24",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -628,6 +628,15 @@ retry: at most3 total attempts, exponential1s/2s delays plus0..25% jitter. Owner
 restart preserves the deadline; each attempt revalidates authority and keeps the
 same logical delivery/hash. Permanent rejection, ambiguous I/O and controls are
 not automatically retried. Exhausted non-delivery may be explicitly released.
+Surface56/schema061: operator-approved selection_group permits fallback of a new
+conversation after typed pre-write proof, at the persisted retry deadline. Both
+original and target endpoint/profile approvals are revalidated. A continuation,
+captured-result relay, control, managed handoff or uncertain send cannot transfer
+this way. Inspection/history expose admission_binding and next_binding with
+selection revisions. The envelope/hash and inbox remain unchanged; the adapter
+labels the current attempt binding separately from the original admission snapshot.
+Fallback targets require the trusted descriptor's transport_binding_contract=1;
+caller endpoint/profile metadata cannot advertise this adapter support.
 
 Mutations require action, operation_id, expected_state, expected_attempt_id,
 expected_owner_epoch, idempotency_key and reason. Null attempt/epoch match only

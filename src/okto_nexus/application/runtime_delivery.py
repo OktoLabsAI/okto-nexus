@@ -1,4 +1,5 @@
 """Pure transactional selection/planning; never calls transports or secrets."""
+import json
 from ..domain.base import new_id
 from ..domain.delivery import DeliveryEnvelope
 from ..domain.tag_selector import reachable
@@ -14,24 +15,11 @@ class RuntimeDeliveryPlanner:
         self.registry, self.config = registry, config
         self.causality = RuntimeCausalityService(config=config, agents=agents)
 
-    def enqueue(self, uow, *, context, message, delivery, now, authorization_revision, result_source=None):
-        # Legacy cooperative-trust messages still reach the logical inbox, but
-        # cannot acquire execution authority from a sender ID in the payload.
-        source_kind = "captured_result" if result_source else "agent_key"
-        if not context or context.authentication_source != source_kind or not context.credential_binding:
-            return None
-        actor = self.agents.get(uow, context.actor_agent_id)
-        if not actor or not actor.is_active or actor.api_key_hash != context.credential_binding:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Authenticated delivery actor is unavailable.", {})
-        if result_source:
-            if (result_source["recipient_agent_id"] != message.from_agent_id or result_source["actor_agent_id"] != actor.agent_id
-                    or result_source["parent_id"] != message.parent_message_id or result_source["workspace_id"] != message.workspace_id):
-                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
-        elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
+    def candidates(self, uow, *, agent_id, workspace_id):
         candidates = []
-        for endpoint in self.endpoints.list(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
-            if not self.registry.get(endpoint["adapter_id"]).capabilities.conversation:
+        for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
+            descriptor = self.registry.get(endpoint["adapter_id"])
+            if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
                 continue
             if not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["consumption"] != "exclusive":
                 continue
@@ -61,6 +49,24 @@ class RuntimeDeliveryPlanner:
             if len(live) > 1:
                 raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
             candidates.append((endpoint, profile, live[0]["session_id"] if live else None))
+        return candidates
+
+    def enqueue(self, uow, *, context, message, delivery, now, authorization_revision, result_source=None):
+        # Legacy cooperative-trust messages still reach the logical inbox, but
+        # cannot acquire execution authority from a sender ID in the payload.
+        source_kind = "captured_result" if result_source else "agent_key"
+        if not context or context.authentication_source != source_kind or not context.credential_binding:
+            return None
+        actor = self.agents.get(uow, context.actor_agent_id)
+        if not actor or not actor.is_active or actor.api_key_hash != context.credential_binding:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Authenticated delivery actor is unavailable.", {})
+        if result_source:
+            if (result_source["recipient_agent_id"] != message.from_agent_id or result_source["actor_agent_id"] != actor.agent_id
+                    or result_source["parent_id"] != message.parent_message_id or result_source["workspace_id"] != message.workspace_id):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Captured result source does not match this delivery.", {})
+        elif actor.agent_id != message.from_agent_id and actor.agent_id != "operator":
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
+        candidates = self.candidates(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id)
         if not candidates:
             return None
         ready = [c for c in candidates if c[2]]
@@ -94,13 +100,26 @@ class RuntimeDeliveryPlanner:
     def revalidate(self, uow, *, operation, config):
         if operation.get("reconciliation_id"):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport attempt was administratively reconciled.", {})
+        if operation.get("admission_binding"):
+            admission = json.loads(operation["admission_binding"])
+            original = self.endpoints.get(uow, admission["endpoint_id"])
+            if (not original or original["revision"] != admission["revision"]
+                    or not original["enabled"] or original["activation_state"] != "approved"
+                    or original["selection_group"] != admission["selection_group"]):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Original fallback approval changed.", {})
+            original_profile = self.endpoints.profile(uow, admission["profile_id"]) if admission["profile_id"] else None
+            if admission["profile_id"] and (not original_profile or not original_profile["enabled"]
+                    or original_profile["revision"] != admission["profile_revision"]):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Original fallback profile approval changed.", {})
         actor = self.agents.get(uow, operation["actor_agent_id"])
         recipient = self.agents.get(uow, operation["recipient_agent_id"])
         endpoint = self.endpoints.get(uow, operation["endpoint_id"])
+        if operation.get("admission_binding") and endpoint and endpoint["selection_group"] != admission["selection_group"]:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Fallback equivalence approval changed.", {})
         if (not config.feature_harness_integrations or not actor or not actor.is_active or
                 actor.api_key_hash != operation["credential_binding"] or not recipient or not recipient.is_active or
                 not reachable(actor, recipient) or
-                not endpoint or not endpoint["enabled"] or endpoint["revision"] != operation["endpoint_revision"] or
+                not endpoint or not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["revision"] != operation["endpoint_revision"] or
                 endpoint["health"] == "quarantined" or
                 endpoint["agent_id"] != recipient.agent_id or endpoint["workspace_id"] != operation["workspace_id"] or
                 endpoint["response_policy"] != "conversation" or endpoint["consumption"] != "exclusive"):
@@ -119,3 +138,37 @@ class RuntimeDeliveryPlanner:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR, "adapter_capability_unsupported: conversation is unavailable.",
                 {"reason": "adapter_capability_unsupported", "capability": "conversation"})
         return endpoint, profile
+
+    def fallback(self, uow, *, operation):
+        """Select only a new conversational operation's approved alternative.
+
+        The caller has typed pre-write proof. This never transfers a handoff,
+        relay/continuation, control or possibly accepted operation.
+        """
+        envelope = self.outbox.decode(operation)
+        if (envelope.get("intent") != "conversation" or envelope.get("causation_id")
+                or envelope.get("handoff_id") or operation.get("source_result_id")
+                or operation["attempt_count"] >= 3):
+            return None
+        source, source_profile = self.revalidate(uow, operation=operation, config=self.config)
+        if not source["selection_group"]:
+            return None
+        admission = (json.loads(operation["admission_binding"]) if operation.get("admission_binding") else
+            {"endpoint_id": source["endpoint_id"], "revision": source["revision"], "selection_group": source["selection_group"],
+             "profile_id": source["profile_id"], "profile_revision": source_profile["revision"] if source_profile else None})
+        tried = self.outbox.attempted_endpoints(uow, operation_id=operation["operation_id"])
+        candidates = [candidate for candidate in self.candidates(uow,
+            agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"])
+            if candidate[0]["selection_group"] == admission["selection_group"]
+            and self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1
+            and candidate[0]["endpoint_id"] not in tried]
+        if not candidates:
+            return None
+        ready = [candidate for candidate in candidates if candidate[2]]
+        candidates = ready or candidates
+        priority = max(candidate[0]["priority"] for candidate in candidates)
+        endpoint, profile, session = min((candidate for candidate in candidates if candidate[0]["priority"] == priority),
+            key=lambda candidate: candidate[0]["endpoint_id"])
+        return {"endpoint_id": endpoint["endpoint_id"], "endpoint_revision": endpoint["revision"],
+            "profile_revision": profile["revision"] if profile else None, "runtime_session_id": session,
+            "admission": admission}
