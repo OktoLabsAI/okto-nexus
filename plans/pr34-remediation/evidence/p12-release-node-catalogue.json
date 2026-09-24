@@ -1806,7 +1806,6 @@
               "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-stale_claim]",
               "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-foreign_actor]",
               "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-creator_policy]",
-              "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
               "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
               "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
               "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
@@ -1858,7 +1857,8 @@
             ]
           },
           "rationale": "Scoped T-WORK-12: same-identity authenticated claim/ACK/complete/reject, real POSIX socket fixture, authority negatives, explicit completion facts and older-writer fence. Dedicated installed native attach is still NOT_RUN.",
-          "limitations": "Retains prior platform-specific fixture assertions; real dedicated attach NOT_RUN. Must join final integrated results separately."
+          "limitations": "Retains prior platform-specific fixture assertions; real dedicated attach NOT_RUN. Must join final integrated results separately.",
+          "platform_scope_review": "The inherited Windows route mistakenly included a POSIX-only socket case. Windows final manifest retains its actual SKIP. This required socket stimulus is mapped only to Linux, where it executes; dedicated installed native attach remains NOT_RUN. No observed result is reclassified."
         }
       ]
     },

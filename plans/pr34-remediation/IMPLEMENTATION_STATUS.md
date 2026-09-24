@@ -7,15 +7,15 @@ Final gate: **IN PROGRESS**. No merge performed.
 
 ## Active runs — resume these, do not start duplicates
 
-- Windows full regression: tool handle `49697`, frozen detached candidate based
+- Windows full regression: tool handle `49697` TERMINAL exit0,2637 PASS/121 SKIP; frozen detached candidate based
   on `39c5e6c` plus five corrections. Authoritative private launcher:
   `.git/pr34-evidence/final-candidate-windows-launch.json`.
 - Linux full regression: tool handle `19457`, clean `ff905c4` checkout on WSL
   native filesystem. Launcher:
   `.git/pr34-evidence/full-ff905c4-linux-nativefs-launch.json`.
 
-Both logs/XML persist under the recorded private run directories. Neither run
-has been declared PASS. Keep their source frozen until terminal. Their overlapping
+Both logs/XML persist under the recorded private run directories. Windows is PASS;
+Linux remains live and its source stays frozen until terminal. Their overlapping
 elapsed times are not performance measurements.
 
 The Windows candidate and integrated commit have normalized-source equivalence:
@@ -56,7 +56,7 @@ Do not replace the original base/diff identity with a fabricated committed SHA.
 3. Finish finding→code→evidence, task/phase statuses, operational readiness report.
 4. Recheck installed-tool process census/storage and reinstall the corrected
    wheel locally, preserving Python/serve extras and compatible dependency pins.
-   Global install remains0.1.10 until this step; never open/migrate the personal
+   Global install is now0.2.0 and installed MCP/feature-ON HTTP smokes PASS; never open/migrate the personal
    database merely to validate installation. Run isolated installed-package smoke.
 5. Commit/push remaining milestones only to `feature/v0.2.0`, verify remote state,
    and report qualified scope plus external limitations. No automatic merge.
@@ -85,3 +85,8 @@ deleted to resolve the earlier C-drive capacity incident.
 Every published unit retains its exact source identity, commands, observed
 results, preparation failures, limits and next dependency. Historical counts are
 not summed into current execution results.
+
+Local installation completed after Windows terminal PASS. Only Nexus changed;69
+other dependencies preserved;267 installed package files exactly match the corrected
+wheel. Installed real MCP and feature-enabled HTTP synthetic-peer smokes PASS.
+See P12_LOCAL_INSTALLATION.md. Smoke handle4585 terminal0. Linux19457 remains live.

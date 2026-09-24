@@ -1,0 +1,524 @@
+{
+  "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "status": "PASS",
+  "before_version": "0.1.10",
+  "installed_version": "0.2.0",
+  "python_base": "C:\\Python313\\python.exe",
+  "dependency_count": 70,
+  "non_nexus_dependency_versions_unchanged": true,
+  "dependencies": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5"
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.1"
+    },
+    {
+      "name": "click",
+      "version": "8.5.0"
+    },
+    {
+      "name": "cloudpickle",
+      "version": "3.1.2"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.1"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.141.1"
+    },
+    {
+      "name": "filelock",
+      "version": "3.32.7"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.7.0"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.6.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "httpx-sse",
+      "version": "0.4.3"
+    },
+    {
+      "name": "huggingface_hub",
+      "version": "1.31.0"
+    },
+    {
+      "name": "idna",
+      "version": "3.19"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6"
+    },
+    {
+      "name": "joblib",
+      "version": "1.6.0"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "markdown-it-py",
+      "version": "4.2.0"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.3"
+    },
+    {
+      "name": "mcp",
+      "version": "1.30.0"
+    },
+    {
+      "name": "mdurl",
+      "version": "0.1.2"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0"
+    },
+    {
+      "name": "narwhals",
+      "version": "2.26.0"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.3"
+    },
+    {
+      "name": "okto-nexus",
+      "version": "0.2.0"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.15.0"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0"
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.14.0"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.3"
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.32"
+    },
+    {
+      "name": "pywin32",
+      "version": "312"
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "regex",
+      "version": "2026.9.10"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2"
+    },
+    {
+      "name": "rich",
+      "version": "15.0.0"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3"
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.9.1"
+    },
+    {
+      "name": "scipy",
+      "version": "1.18.1"
+    },
+    {
+      "name": "sentence-transformers",
+      "version": "6.0.1"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0"
+    },
+    {
+      "name": "shellingham",
+      "version": "1.5.4"
+    },
+    {
+      "name": "sse-starlette",
+      "version": "3.4.11"
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.7.0"
+    },
+    {
+      "name": "tiktoken",
+      "version": "0.14.0"
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.23.2"
+    },
+    {
+      "name": "torch",
+      "version": "2.14.0"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1"
+    },
+    {
+      "name": "transformers",
+      "version": "5.17.0"
+    },
+    {
+      "name": "typer",
+      "version": "0.27.2"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.53.0"
+    }
+  ],
+  "wheel_sha256": "f99a9f733fd7cabfa5b09dd6f5379f8c5d21e849c5cf1ff1fdb1303a6237e4b5",
+  "verified_wheel_package_files": 267,
+  "installed_package": "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Lib\\site-packages\\okto_nexus",
+  "installation": [
+    {
+      "argv": [
+        "uv",
+        "tool",
+        "install",
+        "--force",
+        "--reinstall-package",
+        "okto-nexus",
+        "--python",
+        "C:\\Python313\\python.exe",
+        "--constraints",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\constraints.txt",
+        "--no-python-downloads",
+        "--no-config",
+        "--offline",
+        "okto-nexus[serve] @ file:///D:/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/release-ff905c4-tex7sj12/dist/okto_nexus-0.2.0-py3-none-any.whl"
+      ],
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\install.log"
+    },
+    {
+      "argv": [
+        "uv",
+        "pip",
+        "check",
+        "--python",
+        "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Scripts\\python.exe"
+      ],
+      "exit_code": 0,
+      "output": "Checked 70 packages in 6ms\nAll installed packages are compatible\n"
+    }
+  ],
+  "preflight": {
+    "active_installed_processes": [],
+    "free_bytes": {
+      "C": 307591053312,
+      "D": 554953441280
+    }
+  },
+  "smoke": {
+    "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+    "installed_version": "0.2.0",
+    "status": "PASS",
+    "run_dir": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir",
+    "commands": [
+      {
+        "label": "mcp",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Scripts\\python.exe",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\scripts\\live_client.py"
+        ],
+        "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\smoke-home",
+        "exit_code": 0,
+        "result": "LIVE E2E RESULT: PASS"
+      },
+      {
+        "label": "http_enabled",
+        "argv": [
+          "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Scripts\\python.exe",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\pr34-remediation\\runtime_comparison_benchmark.py",
+          "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_harness_codex_connector.py",
+          "ff905c433e1a92ae35993b2189919f75ad07dd51",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\http-enabled.json",
+          "--samples",
+          "5",
+          "--installed"
+        ],
+        "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\smoke-home",
+        "exit_code": 0,
+        "result": "PASS",
+        "report": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\installed-ff905c4-kywyq6ir\\http-enabled.json"
+      }
+    ],
+    "environment_keys": [
+      "HOME",
+      "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
+      "PATH",
+      "PYTHONIOENCODING",
+      "PYTHONNOUSERSITE",
+      "SYSTEMROOT",
+      "TEMP",
+      "TMP",
+      "TMPDIR",
+      "USERPROFILE",
+      "WINDIR"
+    ],
+    "personal_database_opened": false
+  },
+  "http_enabled_fixture": {
+    "status": "PASS",
+    "sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_count": 16,
+    "modern": true,
+    "dependencies": {
+      "httpx": "0.28.1",
+      "uvicorn": "0.53.0",
+      "fastapi": "0.141.1",
+      "mcp": "1.30.0"
+    },
+    "benchmark_sha256": "462826f36989512bedc8b855569a3a1a68e76ed1c23bf25be114ad363da107b1",
+    "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+    "warmup": 5,
+    "samples": [
+      {
+        "index": 5,
+        "admission_ms": 110.5175,
+        "persisted_terminal_ms": 236.4663,
+        "components": {
+          "fsync": {
+            "count": 5,
+            "total_ms": 1.3997
+          },
+          "authentication": {
+            "count": 1,
+            "total_ms": 0.367
+          },
+          "runtime_policy": {
+            "count": 6,
+            "total_ms": 53.4965
+          }
+        }
+      },
+      {
+        "index": 6,
+        "admission_ms": 111.9836,
+        "persisted_terminal_ms": 272.0585,
+        "components": {
+          "fsync": {
+            "count": 5,
+            "total_ms": 1.5187
+          },
+          "authentication": {
+            "count": 1,
+            "total_ms": 0.2098
+          },
+          "runtime_policy": {
+            "count": 6,
+            "total_ms": 46.2166
+          }
+        }
+      },
+      {
+        "index": 7,
+        "admission_ms": 105.1263,
+        "persisted_terminal_ms": 277.5914,
+        "components": {
+          "fsync": {
+            "count": 5,
+            "total_ms": 1.7673999999999999
+          },
+          "authentication": {
+            "count": 1,
+            "total_ms": 0.3305
+          },
+          "runtime_policy": {
+            "count": 6,
+            "total_ms": 82.2006
+          }
+        }
+      },
+      {
+        "index": 8,
+        "admission_ms": 144.8918,
+        "persisted_terminal_ms": 342.8182,
+        "components": {
+          "fsync": {
+            "count": 5,
+            "total_ms": 1.7689
+          },
+          "authentication": {
+            "count": 1,
+            "total_ms": 0.2295
+          },
+          "runtime_policy": {
+            "count": 6,
+            "total_ms": 75.26700000000001
+          }
+        }
+      },
+      {
+        "index": 9,
+        "admission_ms": 75.9087,
+        "persisted_terminal_ms": 213.2906,
+        "components": {
+          "fsync": {
+            "count": 5,
+            "total_ms": 1.3531
+          },
+          "authentication": {
+            "count": 1,
+            "total_ms": 0.1959
+          },
+          "runtime_policy": {
+            "count": 6,
+            "total_ms": 30.9467
+          }
+        }
+      }
+    ],
+    "limitations": [
+      "Synthetic local Codex peer; no provider latency or native qualification",
+      "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+      "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+      "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+      "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+    ],
+    "installed_package": {
+      "version": "0.2.0",
+      "import_origin": "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Lib\\site-packages\\okto_nexus",
+      "source_path_injected": false
+    },
+    "local_open": false,
+    "invalid_credential_status": 401,
+    "sqlite_settings": {
+      "synchronous": 2,
+      "journal_mode": "wal"
+    },
+    "owned_peers_stopped": 1
+  },
+  "installer_sha256": "f3fe50b032696518faba3831852d33c7ed129ab4277f699516963c0cfdf9aaf2",
+  "limitations": [
+    "No personal store opened or migrated; fresh homes only.",
+    "HTTP feature-enabled test uses actual installed composition with a synthetic Codex protocol process, not an installed model call.",
+    "Installed Codex/Claude native qualification is separately recorded at the same implementation SHA. Pi/dedicated attach remain NOT_RUN.",
+    "HTTP elapsed values are smoke observations under concurrent Linux regression, not a performance comparison."
+  ]
+}

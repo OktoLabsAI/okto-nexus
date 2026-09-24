@@ -25,11 +25,14 @@ def main():
     parser.add_argument("sha")
     parser.add_argument("output", type=Path)
     parser.add_argument("--samples", type=int, default=40)
+    parser.add_argument("--installed", action="store_true",
+                        help="Validate the interpreter's installed package under repo; do not add source paths")
     parser.add_argument("--operational-metrics", action="store_true",
                         help="Instrument an isolated current-source workload; not a comparative benchmark")
     args = parser.parse_args()
     assert 5 <= args.samples <= 100
-    sys.path.insert(0, str(args.repo.resolve() / "src"))
+    if not args.installed:
+        sys.path.insert(0, str(args.repo.resolve() / "src"))
     import httpx
     import uvicorn
     from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key
@@ -58,7 +61,8 @@ def main():
 
     instrument(os, "fsync", "fsync")
     instrument(AgentKeyAuthService, "resolve", "authentication")
-    modern = (args.repo / "src/okto_nexus/application/runtime_access.py").exists()
+    package_root = Path(inspect.getfile(bootstrap)).resolve().parents[3]
+    modern = (package_root / "application/runtime_access.py").exists()
     probe = None
     if args.operational_metrics:
         if not modern:
@@ -79,6 +83,10 @@ def main():
             "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
             "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
             "Nested/concurrent timing categories are observations, not additive causal overhead estimates"]}
+    if args.installed:
+        result["installed_package"] = {"version": importlib.metadata.version("okto-nexus"),
+                                       "import_origin": str(package_root),
+                                       "source_path_injected": False}
     try:
         with tempfile.TemporaryDirectory(prefix="okto-benchmark-") as directory:
             root = Path(directory)
