@@ -313,6 +313,21 @@ def open_runtime(deps, **arguments):
     return result
 
 
+def connect_own_endpoint(deps, *, endpoint_id, idempotency_key):
+    from okto_nexus.application.agent_connections import AgentConnectionService
+    context = request_context()
+    arguments = AgentConnectionService(build_access_service(deps)).prepare_self_open(
+        context, endpoint_id=endpoint_id, idempotency_key=idempotency_key)
+    if not is_local_runtime_owner(deps):
+        from okto_nexus.domain.keys import hash_api_key
+        configured_key = os.environ.get("OKTO_NEXUS_API_KEY")
+        if not configured_key or hash_api_key(configured_key) != context.credential_binding:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                "Connect through the active serve owner or a stdio client configured with your own agent key.", {})
+    # Reuse the normal owner/proxy and durable open path; no second executor.
+    return open_runtime(deps, **arguments)
+
+
 def build_open_service(deps):
     return RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
         agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
@@ -1099,8 +1114,8 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
-                     maintenance: Annotated[Any, Field(description="Object for selected view (connections: action list/configure/issue/revoke; agent_id; issue requires endpoint_id): profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
-        """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts, diagnostics. Outbox recovery never replays native calls. compact requires journal."""
+                     maintenance: Annotated[Any, Field(description="Object for selected view (connections: action available (your methods), connect (your endpoint_id + unique idempotency_key), list/configure/issue/revoke; admin agent_id; issue requires endpoint_id): profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+        """Discover your connection methods with view=connections, maintenance={action:available}; use returned connect calls to open authorized endpoints. Discover delegated runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts, diagnostics. Outbox recovery never replays native calls. compact requires journal."""
         if view == "diagnostics" and not compact and maintenance is None:
             return build_endpoint_service(deps).diagnostics(authorize_request(deps))
         if view == "connections" and not compact:
@@ -1108,7 +1123,8 @@ def register(server: Any, deps: Any) -> None:
             args = runtime_object("maintenance", maintenance) or {}
             action = args.pop("action", "list")
             service = AgentConnectionService(build_access_service(deps))
-            methods = {"list": service.view, "configure": service.configure, "issue": service.issue, "revoke": service.revoke}
+            methods = {"list": service.view, "configure": service.configure, "issue": service.issue, "revoke": service.revoke, "available": service.available,
+                       "connect": lambda context, endpoint_id, idempotency_key: connect_own_endpoint(deps, endpoint_id=endpoint_id, idempotency_key=idempotency_key)}
             if action not in methods:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unknown connection action.", {})
             try:
@@ -1148,7 +1164,7 @@ def register(server: Any, deps: Any) -> None:
         notify_target: Annotated[Any, Field(description=_P_NOTIFY_TARGET)] = None,
         idempotency_key: Annotated[str | None, Field(description="Stable key for this open request; retries never create another runtime.")] = None,
     ) -> dict[str, Any]:
-        """Open a runtime for an existing agent. Requires operator authority and opt-in; never changes the agent profile."""
+        """Open an approved runtime for an existing agent using operator authority or a current scoped grant; never changes the agent profile."""
         return await anyio.to_thread.run_sync(functools.partial(
             open_runtime, deps, agent_id=agent_id, kind=kind, project_root=project_root,
             substrate=substrate, target_pid=target_pid, backend=backend, endpoint_id=endpoint_id,

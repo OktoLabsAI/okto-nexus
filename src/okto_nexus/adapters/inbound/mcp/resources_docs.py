@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="26",
+    version="27",
     body="""\
 Runtime conversational command contract v3: harness_send/harness_steer accept
 canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
@@ -621,7 +621,24 @@ cursors. Up to ten latest sessions per endpoint are returned with
 sessions_has_more. A bounded scan may require a narrower agent_id filter.
 
 # Runtime attempt and canonical claim recovery (surface 43)
-Connection management (surface revision 59):
+Connection self-service (surface revision 60, identity docs v27):
+`harness_list(view="connections", maintenance={"action":"available"})` returns
+only the authenticated agent's connection methods and own endpoints. No payload
+agent_id is accepted. enabled is configuration; available means the current
+configuration, platform, owner lease and open authorization allow requesting an
+opening, not that the binary/provider has been probed. unavailable_reasons explain
+missing prerequisites. No process paths, profile config, secret refs or keys are
+returned. Obtain an operator-approved endpoint and a current open grant first.
+Use a returned call:
+`harness_list(view="connections", maintenance={"action":"connect","endpoint_id":"own-endpoint","idempotency_key":"unique-opening-id"})`.
+This revalidates identity/policy/grants and uses the existing durable open service
+and serve owner, over HTTP MCP or authenticated stdio proxy. Reuse the same
+idempotency key for the same opening; never blindly create a new key after an
+uncertain outcome. Opening does not authorize a task or adopt your current chat.
+REST equivalents: GET /api/v1/connections/available and POST /api/v1/connections/connect
+with endpoint_id and idempotency_key, authenticated using the agent's own API key.
+
+Connection credential management (surface revision 59):
 `harness_list(view="connections", maintenance={"action":"issue","agent_id":"worker","endpoint_id":"approved-endpoint"})`
 returns a one-time-visible scoped connection credential and a POST request template
 for `/api/v1/connections/open`. An operator can issue it for an existing agent;

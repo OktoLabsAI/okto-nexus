@@ -506,6 +506,7 @@ class HarnessSupervisor:
         profile_revision: int | None = None,
         workspace_id: str | None = None,
         startup_timeout_s: float | None = None,
+        start_authorizer=None,
     ) -> HarnessSession:
         """Validate existing identity, start outside the UoW, persist session.
 
@@ -540,6 +541,8 @@ class HarnessSupervisor:
             with self._cf.unit_of_work(write=bool(self.event_ingress)) as uow:
                 endpoint = self._endpoint_repo.get(uow, endpoint_id)
                 profile_id = endpoint["profile_id"] if endpoint else None
+                if start_authorizer:
+                    start_authorizer(uow)
                 if self.event_ingress:
                     self._endpoint_repo.validate_start(uow, request_id=open_request_id,
                         endpoint_id=endpoint_id, now=self._clock.now_iso(), mark_effects=True)
@@ -597,6 +600,8 @@ class HarnessSupervisor:
         now = self._clock.now_iso()
         try:
             with self._cf.unit_of_work() as uow:
+                if start_authorizer:
+                    start_authorizer(uow)
                 if endpoint_id and self.event_ingress:
                     session.owner_epoch = self._endpoint_repo.validate_start(uow,
                         request_id=open_request_id, endpoint_id=endpoint_id, now=now)

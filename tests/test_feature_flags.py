@@ -235,9 +235,9 @@ def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
     assert stdio_info["features"] == http_info["features"]
     assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
     assert stdio_info["features"] == {field: field in DEFAULT_ON for field in FEATURE_FIELDS}
-    assert stdio_info["surface_revision"] == 59
-    assert http_info["surface_revision"] == 59
-    assert SURFACE_REVISION == 59
+    assert stdio_info["surface_revision"] == 60
+    assert http_info["surface_revision"] == 60
+    assert SURFACE_REVISION == 60
 
 
 def test_nexus_info_reflects_env_pinned_flag(tmp_path):

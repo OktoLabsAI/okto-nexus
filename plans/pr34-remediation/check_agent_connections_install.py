@@ -70,7 +70,7 @@ def main():
                 html = client.get('/').text
                 script = re.search(r'src="([^"]+\.js)"', html).group(1)
                 bundle = client.get(script).text
-                assert 'Connection methods' in bundle and 'Copy request' in bundle
+                assert 'Connection methods' in bundle and 'Copy connection command' in bundle and 'Configure endpoint' in bundle
                 assert not deps.harness_supervisor.list_live() if deps.harness_supervisor else True
                 print(json.dumps({'status': 'PASS', 'http_mcp_policy_and_credentials': True,
                     'packaged_dashboard': True, 'native_processes_started': 0}))

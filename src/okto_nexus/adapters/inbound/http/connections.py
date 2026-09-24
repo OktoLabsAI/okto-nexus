@@ -17,6 +17,11 @@ class KeyBody(RuntimeAdminBody):
     endpoint_id: str
 
 
+class ConnectBody(RuntimeAdminBody):
+    endpoint_id: str
+    idempotency_key: str
+
+
 class OpenBody(RuntimeAdminBody):
     pass
 
@@ -41,6 +46,15 @@ def build_router():
             return _ok(await anyio.to_thread.run_sync(fn))
         except OktoNexusError as exc:
             return _map_error(exc)
+
+    @router.get('/connections/available')
+    async def available(request: Request):
+        return await execute(lambda: service(request.app.state.deps).available(request_context()))
+
+    @router.post('/connections/connect')
+    async def connect(request: Request, body: ConnectBody):
+        from ..mcp.tools.harness import connect_own_endpoint
+        return await execute(lambda: connect_own_endpoint(request.app.state.deps, **body.model_dump()))
 
     @router.get('/agents/{agent_id}/connections')
     async def view(request: Request, agent_id: str):

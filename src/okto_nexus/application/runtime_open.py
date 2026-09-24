@@ -67,7 +67,10 @@ class RuntimeOpenService:
             session = self.supervisor.open(kind=kind, connector=connector, owning_agent_id=agent_id,
                 project_root=project_root, role=role, endpoint_id=endpoint["endpoint_id"], workspace_id=endpoint["workspace_id"],
                 metadata=metadata, notify_target=notify_target, open_request_id=request_id,
-                profile_revision=profile["revision"] if profile else None, startup_timeout_s=remaining)
+                profile_revision=profile["revision"] if profile else None, startup_timeout_s=remaining,
+                start_authorizer=(lambda uow: self.endpoints.access.authorize(context, action="open",
+                    endpoint_id=endpoint["endpoint_id"], represented_agent_id=agent_id, uow=uow, audit=False))
+                    if self.endpoints.access else None)
             if request_id:
                 with self.cf.unit_of_work() as uow:
                     self.requests.finish(uow, request_id=request_id, status="COMPLETED")

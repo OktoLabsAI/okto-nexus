@@ -1101,13 +1101,17 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
 }
 
 export interface AgentConnections {
-  agent_id: string; revision: number; key_ttl_seconds: number | null; effective_key_ttl_seconds: number;
-  methods: Array<{ method: string; protocol: string; enabled: boolean }>;
+  agent_id: string; has_agent_key: boolean; revision: number; key_ttl_seconds: number | null; effective_key_ttl_seconds: number;
+  methods: Array<{ method: string; protocol: string; enabled: boolean; substrate?: string | null; platform_compatible?: boolean }>;
   endpoints: Array<{endpoint_id: string; adapter_id: string; enabled: boolean; activation_state: string; can_issue: boolean}>;
   keys: Array<{key_id: string; endpoint_id: string; expires_at: string | null; revoked_at: string | null}>;
 }
 
 export const api = {
+  runtimeProfiles: () => call<{items: Array<{profile_id: string; adapter_id: string; enabled: boolean}>}>("/api/v1/harness/profiles"),
+  createRuntimeProfile: (body: {profile_id: string; adapter_id: string; config: Record<string, unknown>; enabled: boolean; inherit_ambient: boolean}) => call("/api/v1/harness/profiles", {method: "POST", body: JSON.stringify(body)}),
+  createRuntimeEndpoint: (body: {endpoint_id: string; agent_id: string; adapter_id: string; project_root: string; profile_id: string | null; enabled: boolean; public_config: Record<string, unknown>}) => call("/api/v1/harness/endpoints", {method: "POST", body: JSON.stringify(body)}),
+  authorizeConnectionOpening: (agent_id: string, endpoint_id: string) => call("/api/v1/harness/grants", {method: "POST", body: JSON.stringify({actor_agent_id: agent_id, endpoint_id, actions: ["discover", "open"], expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString().replace("Z", "000Z")})}),
   agentConnections: (id: string) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`),
   saveAgentConnections: (id: string, body: {expected_revision: number; methods: Record<string, boolean>; key_ttl_seconds: number | null}) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`, {method: "PUT", body: JSON.stringify(body)}),
   issueConnectionKey: (id: string, endpoint_id: string) => call<{expires_at: string | null; request: {method: string; path: string; headers: Record<string, string>; body: object}}>(`/api/v1/agents/${encodeURIComponent(id)}/connection-keys`, {method: "POST", body: JSON.stringify({endpoint_id})}),
