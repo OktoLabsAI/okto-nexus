@@ -1,0 +1,366 @@
+{
+  "status": "PASS",
+  "sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "cpu_count": 16,
+  "modern": true,
+  "dependencies": {
+    "httpx": "0.28.1",
+    "uvicorn": "0.49.0",
+    "fastapi": "0.136.3",
+    "mcp": "1.28.0"
+  },
+  "benchmark_sha256": "f47e12da90649fb82d24e16a952763ab250f6f826741eafdef9e67bd917f2bf7",
+  "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+  "warmup": 5,
+  "samples": [
+    {
+      "index": 5,
+      "admission_ms": 221.9102,
+      "persisted_terminal_ms": 460.086,
+      "components": {
+        "fsync": {
+          "count": 5,
+          "total_ms": 1.8539
+        },
+        "authentication": {
+          "count": 2,
+          "total_ms": 1.3135
+        },
+        "runtime_policy": {
+          "count": 10,
+          "total_ms": 194.3802
+        }
+      }
+    },
+    {
+      "index": 6,
+      "admission_ms": 140.8861,
+      "persisted_terminal_ms": 411.194,
+      "components": {
+        "fsync": {
+          "count": 5,
+          "total_ms": 2.169
+        },
+        "authentication": {
+          "count": 2,
+          "total_ms": 2.7486
+        },
+        "runtime_policy": {
+          "count": 10,
+          "total_ms": 166.6003
+        }
+      }
+    },
+    {
+      "index": 7,
+      "admission_ms": 137.3297,
+      "persisted_terminal_ms": 490.8632,
+      "components": {
+        "fsync": {
+          "count": 5,
+          "total_ms": 2.3345000000000002
+        },
+        "authentication": {
+          "count": 2,
+          "total_ms": 1.5697999999999999
+        },
+        "runtime_policy": {
+          "count": 10,
+          "total_ms": 120.9334
+        }
+      }
+    },
+    {
+      "index": 8,
+      "admission_ms": 160.2053,
+      "persisted_terminal_ms": 391.5893,
+      "components": {
+        "fsync": {
+          "count": 5,
+          "total_ms": 2.0836
+        },
+        "authentication": {
+          "count": 2,
+          "total_ms": 1.2575
+        },
+        "runtime_policy": {
+          "count": 10,
+          "total_ms": 146.7959
+        }
+      }
+    },
+    {
+      "index": 9,
+      "admission_ms": 174.8819,
+      "persisted_terminal_ms": 602.4754,
+      "components": {
+        "fsync": {
+          "count": 5,
+          "total_ms": 4.0102
+        },
+        "authentication": {
+          "count": 2,
+          "total_ms": 1.6292
+        },
+        "runtime_policy": {
+          "count": 10,
+          "total_ms": 222.0901
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Synthetic local Codex peer; no provider latency or native qualification",
+    "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+    "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+    "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+    "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+  ],
+  "local_open": false,
+  "invalid_credential_status": 401,
+  "sqlite_settings": {
+    "synchronous": 2,
+    "journal_mode": "wal"
+  },
+  "owned_peers_stopped": 1,
+  "operational_metrics": {
+    "samples": [
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 67.6731,
+        "commit_to_dispatch_ms_bounds": [
+          137.1212,
+          138.7006
+        ],
+        "dispatch_to_first_event_ms": 45.3197,
+        "accepted_to_terminal_ms": 8.2323,
+        "terminal_to_durable_ms": 1.4175,
+        "terminal_to_projected_ms": 66.367
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 184.4227,
+        "commit_to_dispatch_ms_bounds": [
+          118.4368,
+          119.0621
+        ],
+        "dispatch_to_first_event_ms": 22.7824,
+        "accepted_to_terminal_ms": 9.4245,
+        "terminal_to_durable_ms": 1.3812,
+        "terminal_to_projected_ms": 103.4591
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 194.8592,
+        "commit_to_dispatch_ms_bounds": [
+          160.7798,
+          161.7337
+        ],
+        "dispatch_to_first_event_ms": 12.281,
+        "accepted_to_terminal_ms": 7.7983,
+        "terminal_to_durable_ms": 1.5147,
+        "terminal_to_projected_ms": 128.7717
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 159.0492,
+        "commit_to_dispatch_ms_bounds": [
+          213.4715,
+          214.1224
+        ],
+        "dispatch_to_first_event_ms": 41.9484,
+        "accepted_to_terminal_ms": 7.385,
+        "terminal_to_durable_ms": 1.4436,
+        "terminal_to_projected_ms": 39.5688
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 196.4879,
+        "commit_to_dispatch_ms_bounds": [
+          189.3739,
+          190.4286
+        ],
+        "dispatch_to_first_event_ms": 20.0983,
+        "accepted_to_terminal_ms": 8.0612,
+        "terminal_to_durable_ms": 1.4132,
+        "terminal_to_projected_ms": 65.8215
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 221.9102,
+        "commit_to_dispatch_ms_bounds": [
+          125.1255,
+          126.173
+        ],
+        "dispatch_to_first_event_ms": 35.7119,
+        "accepted_to_terminal_ms": 6.8578,
+        "terminal_to_durable_ms": 1.1233,
+        "terminal_to_projected_ms": 62.1251
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 140.8861,
+        "commit_to_dispatch_ms_bounds": [
+          109.3967,
+          109.9062
+        ],
+        "dispatch_to_first_event_ms": 19.0124,
+        "accepted_to_terminal_ms": 8.4264,
+        "terminal_to_durable_ms": 1.6631,
+        "terminal_to_projected_ms": 59.5569
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 137.3297,
+        "commit_to_dispatch_ms_bounds": [
+          220.8606,
+          221.4633
+        ],
+        "dispatch_to_first_event_ms": 46.2962,
+        "accepted_to_terminal_ms": 8.9418,
+        "terminal_to_durable_ms": 1.5911,
+        "terminal_to_projected_ms": 78.2023
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 160.2053,
+        "commit_to_dispatch_ms_bounds": [
+          93.358,
+          94.1253
+        ],
+        "dispatch_to_first_event_ms": 23.3281,
+        "accepted_to_terminal_ms": 8.1504,
+        "terminal_to_durable_ms": 1.4673,
+        "terminal_to_projected_ms": 105.6508
+      },
+      {
+        "dispatch_calls": 1,
+        "admission_ms": 174.8819,
+        "commit_to_dispatch_ms_bounds": [
+          127.8339,
+          129.2359
+        ],
+        "dispatch_to_first_event_ms": 76.548,
+        "accepted_to_terminal_ms": 12.0358,
+        "terminal_to_durable_ms": 1.3036,
+        "terminal_to_projected_ms": 191.4735
+      }
+    ],
+    "missing_observations": {},
+    "overflow": false,
+    "snapshots": [
+      {
+        "phase": "before_turns",
+        "states": {
+          "delivery_outbox": {},
+          "runtime_commands": {}
+        },
+        "queued_or_dispatching_lanes": 0,
+        "maximum_queued_or_dispatching_per_lane": 0,
+        "journal_bytes": 0,
+        "journal_watermark": 0,
+        "projected_watermark": 0,
+        "journal_lag_records": 0,
+        "runtime_authorization_denials": 0,
+        "safe_retry_observations": 0,
+        "budgets": {
+          "roots": 0,
+          "generated_messages": 0,
+          "admitted_executions": 0
+        },
+        "uncorrelated_native_events": 0,
+        "live_bindings": 1,
+        "owned_native_processes_alive": 1,
+        "owner_resources": {
+          "rss_bytes": 98697216,
+          "threads": 24,
+          "handles": 245,
+          "source": "psutil-current-process"
+        }
+      },
+      {
+        "phase": "after_turns",
+        "states": {
+          "delivery_outbox": {},
+          "runtime_commands": {
+            "ACCEPTED": 10
+          }
+        },
+        "queued_or_dispatching_lanes": 0,
+        "maximum_queued_or_dispatching_per_lane": 0,
+        "journal_bytes": 71755,
+        "journal_watermark": 50,
+        "projected_watermark": 50,
+        "journal_lag_records": 0,
+        "runtime_authorization_denials": 0,
+        "safe_retry_observations": 0,
+        "budgets": {
+          "roots": 0,
+          "generated_messages": 0,
+          "admitted_executions": 0
+        },
+        "uncorrelated_native_events": 0,
+        "live_bindings": 1,
+        "owned_native_processes_alive": 1,
+        "owner_resources": {
+          "rss_bytes": 101134336,
+          "threads": 24,
+          "handles": 249,
+          "source": "psutil-current-process"
+        }
+      },
+      {
+        "phase": "after_shutdown",
+        "states": {
+          "delivery_outbox": {},
+          "runtime_commands": {
+            "ACCEPTED": 10
+          }
+        },
+        "queued_or_dispatching_lanes": 0,
+        "maximum_queued_or_dispatching_per_lane": 0,
+        "journal_bytes": 73233,
+        "journal_watermark": 52,
+        "projected_watermark": 52,
+        "journal_lag_records": 0,
+        "runtime_authorization_denials": 0,
+        "safe_retry_observations": 0,
+        "budgets": {
+          "roots": 0,
+          "generated_messages": 0,
+          "admitted_executions": 0
+        },
+        "uncorrelated_native_events": 0,
+        "live_bindings": 0,
+        "owned_native_processes_alive": 0,
+        "owner_resources": {
+          "rss_bytes": 99512320,
+          "threads": 8,
+          "handles": 203,
+          "source": "psutil-current-process"
+        }
+      }
+    ],
+    "suppressed_duplicate_http_requests": 10,
+    "shutdown_ms": 1820.3627,
+    "scope": "Isolated explicit command workload; snapshot zeros are observations, not coverage of fault/retry/relay workloads. No IDs/payloads/paths exported as metric labels. First event is observed at journal ingress, not the OS read boundary; accepted is native started evidence. Commit timestamp is bounded by COMMIT call/return. Timing includes probe overhead; not a comparable performance benchmark."
+  },
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\pr34-remediation\\runtime_comparison_benchmark.py",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_harness_codex_connector.py",
+    "ff905c433e1a92ae35993b2189919f75ad07dd51",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\operational-ff905c4-windows-gen1_2nl\\result.json",
+    "--samples",
+    "5",
+    "--operational-metrics"
+  ],
+  "exit_code": 0,
+  "instrument_sha256": {
+    "plans/pr34-remediation/runtime_metric_probe.py": "f9e227fc51c030d5b0350875489b729bd3629925f7645915e9aaceaa8b235708",
+    "plans/pr34-remediation/runtime_comparison_benchmark.py": "f47e12da90649fb82d24e16a952763ab250f6f826741eafdef9e67bd917f2bf7"
+  }
+}

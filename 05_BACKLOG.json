@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "5d1d17874c2d62f94b8e329fafbdc3880c4af4e5",
+  "execution_head": "ff905c433e1a92ae35993b2189919f75ad07dd51",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2918,7 +2918,8 @@
             "plans/pr34-remediation/P11_ADR_AMENDMENT.md",
             "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md",
             "plans/pr34-remediation/P12_FINAL_AUDIT.md",
-            "plans/pr34-remediation/P12_CURRENT_SURFACE.md"
+            "plans/pr34-remediation/P12_CURRENT_SURFACE.md",
+            "plans/pr34-remediation/P12_CORRECTED_RELEASE.md"
           ],
           "notes": "Guide, ADR, changelog and resource describe surface43/identity10/additive055 recovery. ON schema +16 chars; OFF unchanged. Full phase acceptance pending.",
           "current_review": {
@@ -3201,7 +3202,8 @@
             "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
             "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md",
             "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
-            "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md"
+            "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md",
+            "plans/pr34-remediation/P12_OPERATIONAL_METRICS.md"
           ],
           "notes": "",
           "current_review": {
@@ -3306,7 +3308,8 @@
           "evidence": [
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
             "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
-            "plans/pr34-remediation/P12_FINAL_AUDIT.md"
+            "plans/pr34-remediation/P12_FINAL_AUDIT.md",
+            "plans/pr34-remediation/P12_CORRECTED_RELEASE.md"
           ],
           "notes": "",
           "current_review": {
@@ -4420,9 +4423,11 @@
       "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_API_REVIEW.md",
-        "plans/pr34-remediation/evidence/p12-api-review-index.json"
+        "plans/pr34-remediation/evidence/p12-api-review-index.json",
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+        "plans/pr34-remediation/evidence/p12-native-ff905c4-index.json"
       ],
-      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun."
+      "notes": "Exact assertion/manifest join; see source and native scope in review. Windows attach skips not promoted; native LIFE10 uses approved existing752cd72 campaign, not a rerun. Final corrected implementationff905c4 has new native evidence: Codex7 PASS, Claude6 PASS with complete classified frame traces. Earlier native totals remain historical; Pi/dedicated attach still NOT_RUN."
     },
     {
       "test_id": "T-LIFE-11",
@@ -5484,9 +5489,10 @@
       "evidence": [
         "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
         "plans/pr34-remediation/evidence/p12-frames-752cd72-codex.json",
-        "plans/pr34-remediation/evidence/p12-frames-752cd72-claude.json"
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-claude.json",
+        "plans/pr34-remediation/evidence/p12-native-ff905c4-index.json"
       ],
-      "notes": "Source752cd72: real Codex0.156.1 7 PASS/1639 frames; Claude2.1.281 6 PASS/239 frames. Zero native status queries or unclassified outbound frames, no recorder overflow. Limited to approved local installations and isolated profiles; Pi/attach native NOT_RUN. Not a performance benchmark."
+      "notes": "Source752cd72: real Codex0.156.1 7 PASS/1639 frames; Claude2.1.281 6 PASS/239 frames. Zero native status queries or unclassified outbound frames, no recorder overflow. Limited to approved local installations and isolated profiles; Pi/attach native NOT_RUN. Not a performance benchmark. Final corrected implementationff905c4 has new native evidence: Codex7 PASS, Claude6 PASS with complete classified frame traces. Earlier native totals remain historical; Pi/dedicated attach still NOT_RUN."
     },
     {
       "test_id": "T-E2E-04",

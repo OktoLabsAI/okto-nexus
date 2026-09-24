@@ -207,3 +207,22 @@ prepared WSL-native clone. Three new/modified plan-only metric-probe files are
 work in progress: Windows initial observation succeeded, Linux preparation lacked
 psutil and has a procfs-only correction pending rerun. No production metric API
 change. Keep these separate from the five-path receipt integration commit.
+
+Corrected implementationff905c4 is committed/pushed. Active full handles:
+Windows49697 (frozen five-file candidate) and Linux19457 (clean ff905c4 checkout
+on WSL native filesystem). Candidate-to-commit audit:543 files,12 exact bytes,
+531 CRLF-only UTF8 text differences, no other differences/mutations. See
+P12_CORRECTED_RELEASE.md; never claim all543 raw byte matches.
+
+Native final Codex92267 and Claude83258 both terminal exit0:7 PASS137.304s/1631
+frames and6 PASS67.109s/256 frames, respectively. Fresh credential copies removed;
+no outbound native status queries/unclassified frames/overflow. Exact index:
+p12-native-ff905c4-index.json. No repeat needed unless relevant source changes.
+
+Release build68463 terminated1 only because temporary USERPROFILE hid installed
+Twine; an explicit existing PYTHONUSERBASE rerun completed actual checks exit0.
+Corrected wheel/sdist,64 migrations and fresh dashboard verified; installation
+still pending. Operational metric Windows31489/Linux51113 terminal0,10 fixture
+turn observations each, no missing/overflow or owned process remaining. Earlier
+Linux probe failed for absent psutil; procfs correction introduced no dependencies
+or production changes. Integrity tests3 PASS/platform. New probe is plan-only.

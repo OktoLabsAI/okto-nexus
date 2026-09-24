@@ -25,6 +25,8 @@ def main():
     parser.add_argument("sha")
     parser.add_argument("output", type=Path)
     parser.add_argument("--samples", type=int, default=40)
+    parser.add_argument("--operational-metrics", action="store_true",
+                        help="Instrument an isolated current-source workload; not a comparative benchmark")
     args = parser.parse_args()
     assert 5 <= args.samples <= 100
     sys.path.insert(0, str(args.repo.resolve() / "src"))
@@ -57,6 +59,13 @@ def main():
     instrument(os, "fsync", "fsync")
     instrument(AgentKeyAuthService, "resolve", "authentication")
     modern = (args.repo / "src/okto_nexus/application/runtime_access.py").exists()
+    probe = None
+    if args.operational_metrics:
+        if not modern:
+            raise ValueError("Operational probe requires current runtime contracts")
+        from runtime_metric_probe import OperationalProbe
+        probe = OperationalProbe()
+        probe.install()
     if modern:
         from okto_nexus.application.runtime_access import RuntimeAccessService
         instrument(RuntimeAccessService, "authorize", "runtime_policy")
@@ -130,6 +139,8 @@ def main():
                     assert denied.status_code in {401, 403}, denied.text
                     result["invalid_credential_status"] = denied.status_code
                     cursor = 0
+                    if probe:
+                        probe.snapshot(deps, peers, "before_turns")
                     with deps.connection_factory.unit_of_work(write=False) as uow:
                         result["sqlite_settings"] = {name: uow.connection.execute("PRAGMA " + name).fetchone()[0]
                             for name in ("synchronous", "journal_mode")}
@@ -137,9 +148,18 @@ def main():
                         offsets = {k: len(v) for k, v in measurements.items()}
                         start = time.perf_counter_ns()
                         response = client.post(f"/api/v1/harness/sessions/{sid}/send",
-                            json={"payload": {"text": f"benchmark-{index:03d}:" + "x" * 1024}})
+                            json={"payload": {"text": f"benchmark-{index:03d}:" + "x" * 1024},
+                                  **({"idempotency_key": f"metric-fixture-{index}"} if probe else {})})
                         admitted = time.perf_counter_ns()
                         assert response.status_code == 200, response.text
+                        if probe:
+                            operation_id = response.json()["data"]["operation_id"]
+                            probe.mark(operation_id, request_start=start, admitted=admitted)
+                            repeated = client.post(f"/api/v1/harness/sessions/{sid}/send", json={
+                                "payload": {"text": f"benchmark-{index:03d}:" + "x" * 1024},
+                                "idempotency_key": f"metric-fixture-{index}"})
+                            assert repeated.status_code == 200 and repeated.json()["data"]["operation_id"] == operation_id
+                            probe.duplicate_http_requests += 1
                         deadline = time.monotonic() + 10
                         while True:
                             with closing(sqlite3.connect(home / "nexus.db")) as connection:
@@ -163,7 +183,10 @@ def main():
                     assert all(s["components"]["authentication"]["count"] > 0 for s in result["samples"])
                     if modern:
                         assert all(s["components"]["fsync"]["count"] > 0 and s["components"]["runtime_policy"]["count"] > 0 for s in result["samples"])
+                    if probe:
+                        probe.snapshot(deps, peers, "after_turns")
             finally:
+                shutdown_start = time.perf_counter_ns()
                 supervisor = getattr(deps, "harness_supervisor", None)
                 if supervisor:
                     for session in supervisor.list_live():
@@ -176,12 +199,26 @@ def main():
                     peer.close()
                     assert peer._transport._proc.poll() is not None
                 result["owned_peers_stopped"] = len(peers)
+                if probe:
+                    probe.shutdown_ms = (time.perf_counter_ns() - shutdown_start) / 1e6
+                    probe.snapshot(deps, peers, "after_shutdown")
+                    report = probe.report()
+                    result["operational_metrics"] = report
+                    assert not report["overflow"] and not report["missing_observations"], report
+                    assert len(report["samples"]) == args.samples + 5
+                    assert all(sample["dispatch_calls"] == 1 for sample in report["samples"])
+                    assert all(all(value >= 0 for value in sample["commit_to_dispatch_ms_bounds"])
+                        and all(value >= 0 for name, value in sample.items() if name.endswith("_ms"))
+                        for sample in report["samples"])
         result["status"] = "PASS"
     except BaseException as exc:
         result["status"] = "FAIL"
         result["failure"] = {"type": type(exc).__name__, "message": str(exc)[:1500]}
         raise
     finally:
+        if probe:
+            result["operational_metrics"] = probe.report()
+            probe.restore()
         for owner, name, original in reversed(restorations):
             setattr(owner, name, original)
         args.output.write_text(json.dumps(result, indent=2)+"\n", encoding="utf-8")

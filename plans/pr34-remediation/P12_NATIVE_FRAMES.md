@@ -57,3 +57,36 @@ and dedicated Claude attach remain NOT_RUN under the user's approved scope;
 T-E2E-01 (three simultaneous native harnesses) and T-E2E-02 are not promoted.
 Full matrix, crash/load sampling, comparable performance, rollout qualification,
 final regression and final build/install0.2.0 remain separate dependencies.
+
+## Final corrected-source campaign atff905c4
+
+The authorized installed campaigns were repeated after receipt/test integration
+atff905c433e1a92ae35993b2189919f75ad07dd51. Both processes are terminal exit0:
+
+| Connector | Installed version | Passed call cases | Elapsed | Frames |
+|---|---|---:|---:|---:|
+| Codex/app-server |0.156.1 |7 |137.304s |1631 |
+| Claude Code/stream-json |2.1.281 |6 |67.109s |256 |
+
+The [new index](evidence/p12-native-ff905c4-index.json) and its two sanitized frame
+manifests retain current SHA, versions, test setup/call/teardown results,
+correlation aliases, categories and original JUnit checksums. These totals are
+new observations, not the earlier752cd72 counts. Both traces have zero outbound
+status queries, zero unclassified outbound frames and no recording overflow.
+
+The same source-controlled native_frame_campaign.py commands above were used
+with fresh outputs under .git/pr34-evidence and TEMP/TMP/TMPDIR redirected there.
+Only the previously approved installed binary and login-file paths were passed;
+no ambient provider selection, personal settings/hooks/session reuse or operator
+key in a native child. Sandbox/approval controls were not disabled. All copied
+auth.json/.credentials.json files were absent after successful teardown. Owned
+process cleanup assertions passed. Separate provider campaigns do not qualify
+three-provider simultaneous T-E2E-01.
+
+Observed Codex model/provider: gpt-6-astra/openai. Claude model remained absent
+from the captured recognized protocol fields and is not inferred. Cases include
+native two-turn continuity, explicit canonical work/verification, approval denial
+and active controls; Codex additionally qualifies active close/multiplex, Claude
+qualifies its explicit question roundtrip. Do not generalize these cases to every
+request type listed by compatibility metadata. Pi native and dedicated native
+Claude attach remain NOT_RUN under the user's stated test scope.

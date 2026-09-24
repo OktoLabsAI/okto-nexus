@@ -1,0 +1,62 @@
+{
+  "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "preparations": [
+    {
+      "launcher": "operational-metrics-windows-launch.json",
+      "exit_code": 0,
+      "status": "PASS",
+      "instrument_sha256": {
+        "plans/pr34-remediation/runtime_metric_probe.py": "ba9861cb5750c9c3b0085d2d1d5deb524bc3dfbb80ba465d74d958e948bdcb87",
+        "plans/pr34-remediation/runtime_comparison_benchmark.py": "0ed66e8593240af02504c2308c7478b87ef04fe0ab7a64f17dd9ec35b791d7f4"
+      },
+      "observed_samples": 10,
+      "owned_peers_stopped": 1,
+      "reason": "Earlier bounded-probe generation; final generation is recorded separately."
+    },
+    {
+      "launcher": "operational-metrics-final-windows-launch.json",
+      "exit_code": 0,
+      "status": "PASS",
+      "instrument_sha256": {
+        "plans/pr34-remediation/runtime_metric_probe.py": "cfdb64dc6cee641a5ce25704c4edc79b623157e09e6bf978cef57fb857540a4c",
+        "plans/pr34-remediation/runtime_comparison_benchmark.py": "f47e12da90649fb82d24e16a952763ab250f6f826741eafdef9e67bd917f2bf7"
+      },
+      "observed_samples": 10,
+      "owned_peers_stopped": 1,
+      "reason": "Earlier bounded-probe generation; final generation is recorded separately."
+    },
+    {
+      "launcher": "operational-metrics-final-linux-launch.json",
+      "exit_code": 1,
+      "status": "FAIL",
+      "instrument_sha256": {
+        "plans/pr34-remediation/runtime_metric_probe.py": "cfdb64dc6cee641a5ce25704c4edc79b623157e09e6bf978cef57fb857540a4c",
+        "plans/pr34-remediation/runtime_comparison_benchmark.py": "f47e12da90649fb82d24e16a952763ab250f6f826741eafdef9e67bd917f2bf7"
+      },
+      "observed_samples": 0,
+      "owned_peers_stopped": 1,
+      "reason": "Linux probe preparation lacked psutil; no production failure. Existing /proc resource measurement used afterward."
+    }
+  ],
+  "final_manifests": [
+    "p12-operational-metrics-windows.json",
+    "p12-operational-metrics-linux.json"
+  ],
+  "integrity_tests": {
+    "windows": {
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q plans/pr34-remediation/test_metric_probe.py",
+      "passed": 3,
+      "seconds": 0.15,
+      "exit_code": 0
+    },
+    "linux": {
+      "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q plans/pr34-remediation/test_metric_probe.py",
+      "passed": 3,
+      "seconds": 2.26,
+      "exit_code": 0
+    }
+  },
+  "ruff": "PASS",
+  "production_changes": false,
+  "limitations": "Instrumented fixture timings include concurrent-suite/probe overhead. Not a new performance comparison; scope and warmups explicit in unit document."
+}

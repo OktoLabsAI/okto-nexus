@@ -1,0 +1,104 @@
+{
+  "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "release_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12",
+  "source_root": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source",
+  "protected_worktree_assets_excluded": true,
+  "status": "PASS",
+  "build_checks": [
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.EXE",
+        "lock",
+        "--check"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-0.log",
+      "seconds": 0.885676383972168
+    },
+    {
+      "command_argv": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "ci",
+        "--no-audit",
+        "--no-fund"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source\\frontend",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-1.log",
+      "seconds": 31.9162757396698
+    },
+    {
+      "command_argv": [
+        "C:\\Program Files\\nodejs\\npm.CMD",
+        "run",
+        "build",
+        "--",
+        "--outDir",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\frontend-dist"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source\\frontend",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-2.log",
+      "seconds": 38.25038003921509
+    },
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\uv.EXE",
+        "build",
+        "--out-dir",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-3.log",
+      "seconds": 28.89614963531494
+    },
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\twine.EXE",
+        "check",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0.tar.gz"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source",
+      "exit_code": 1,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-4.log",
+      "seconds": 0.21865320205688477
+    },
+    {
+      "command_argv": [
+        "C:\\Users\\jpamb\\AppData\\Roaming\\Python\\Python313\\Scripts\\twine.EXE",
+        "check",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0.tar.gz"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\source",
+      "exit_code": 0,
+      "log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\build-5.log",
+      "environment_correction": {
+        "PYTHONUSERBASE": "C:\\Users\\jpamb\\AppData\\Roaming\\Python"
+      },
+      "reason": "Fresh USERPROFILE hid the existing user-site Twine installation; no artifact validation occurred in the first launcher."
+    }
+  ],
+  "wheel_contents": {
+    "migrations": 64,
+    "corrected_inbox_byte_match": true,
+    "external_work_module": true,
+    "fresh_dashboard_byte_match": true
+  },
+  "artifacts": [
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "f99a9f733fd7cabfa5b09dd6f5379f8c5d21e849c5cf1ff1fdb1303a6237e4b5",
+      "bytes": 2939688
+    },
+    {
+      "path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\release-ff905c4-tex7sj12\\dist\\okto_nexus-0.2.0.tar.gz",
+      "sha256": "114e7434a27361af95c44b30135c0965560b7a21f4ea0e054324bfb37272b8ee",
+      "bytes": 3425150
+    }
+  ],
+  "preparation_failure_preserved": "First Twine launcher could not import installed Twine with the temporary USERPROFILE; explicit existing Python user-base restored validator imports. No dependencies/security controls changed."
+}

@@ -1,0 +1,48 @@
+{
+  "codex": {
+    "manifest": "p12-native-ff905c4-codex.json",
+    "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+    "exit_code": 0,
+    "call_counts": {
+      "passed": 7
+    },
+    "seconds": 137.304,
+    "frames": 1631,
+    "outbound_categories": {
+      "initialize": 7,
+      "session_start": 8,
+      "turn_start": 10,
+      "session_detach": 8,
+      "interrupt": 2,
+      "control_reply": 1,
+      "steer": 1
+    },
+    "overflow": false,
+    "native_versions": [
+      "0.156.1"
+    ],
+    "copied_login_files_remaining": false,
+    "junit_sha256": "0a6c5861a93e32e8f32b3b1921400c12271f83fe0097e307ccbe03fc6f6cf73a"
+  },
+  "claude_code": {
+    "manifest": "p12-native-ff905c4-claude_code.json",
+    "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+    "exit_code": 0,
+    "call_counts": {
+      "passed": 6
+    },
+    "seconds": 67.109,
+    "frames": 256,
+    "outbound_categories": {
+      "turn_start": 8,
+      "control_reply": 2,
+      "interrupt": 2
+    },
+    "overflow": false,
+    "native_versions": [
+      "2.1.281"
+    ],
+    "copied_login_files_remaining": false,
+    "junit_sha256": "58ddef2b08be057f744bbc9031a8d08a6b4cb80059d18cda21a6c5523876e8a4"
+  }
+}
