@@ -160,7 +160,7 @@ VERIFYING and terminal canonical states cannot be reopened this way.
 
 ## Consequences and acceptance
 
-SQLite migrations are additive (current schema055), with no destructive reverse
+SQLite migrations are additive (current schema056), with no destructive reverse
 migration used as rollback. Production composition, authorization parity, lost
 replies, restart, journal/ownership and transaction boundaries require integration
 evidence. Fixture success is reported separately from actual provider/model runs.

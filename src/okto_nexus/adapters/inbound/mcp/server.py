@@ -445,7 +445,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 41 = scoped agent runtime binding discovery; declared capabilities and explicit liveness limits.
 #: 42 = explicit operator attempt reconciliation; no automatic native replay.
 #: 43 = explicit canonical handoff recovery with claim/attempt fencing.
-SURFACE_REVISION = 43
+# Native compatibility observations are separate from caller metadata.
+SURFACE_REVISION = 44
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

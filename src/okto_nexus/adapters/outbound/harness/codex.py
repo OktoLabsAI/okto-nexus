@@ -680,6 +680,7 @@ class CodexAppServerConnector:
             capabilities=self.capabilities,
             started_at=utc_now_iso(),
             metadata={"thread_id": thread_id},
+            compatibility_report=dict(self._compatibility_report),
         )
 
     def send(self, session: HarnessSession, command: HarnessCommand) -> None:
@@ -913,7 +914,7 @@ class CodexAppServerConnector:
         )
         try:
             transport.start()
-            transport.request(
+            initialize_result = transport.request(
                 _METHOD_INITIALIZE, {"clientInfo": _client_info()}, timeout_s=self._handshake_timeout_s
             )
         except BaseException:
@@ -931,6 +932,8 @@ class CodexAppServerConnector:
         # or `events()` on the now-healthy connector would see a stale
         # "closed" flag from the earlier failure and return immediately on
         # its very first idle poll.
+        from .compatibility import codex_initialize_observation
+        self._compatibility_report = codex_initialize_observation(initialize_result)
         self._closed_event.clear()
         self._transport = transport
 

@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface43.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface44.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -174,3 +174,10 @@ Protocol readiness rejects Pi get_state responses unless success is true and dat
 is an object. Codex thread/start must return a bounded nonempty string thread ID.
 Failure reports protocol_incompatible and quarantines that failed open; it does
 not prove compatibility of other capabilities or prohibit healthy adapters.
+
+Codex session compatibility_report records only a recognized native version from
+initialize. Migration056 stores this independently from caller metadata. Unknown
+or prerelease version formats remain unobserved; private home paths, full user-agent
+and other handshake fields are discarded. capabilities_verified remains false:
+this observation is not effective-capability negotiation or permission. REST, MCP
+session reads and authorized bindings expose the same stored report.

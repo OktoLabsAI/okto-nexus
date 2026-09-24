@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="10",
+    version="11",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -531,6 +531,10 @@ Revocation, expiry, key/profile changes and feature flags are checked per read.
 
 Results group endpoint bindings under one agent_id with canonical skill_names.
 They omit private config, paths, secrets, metadata and notification audiences.
+Session compatibility_report is server-owned and separate from caller metadata.
+It may include a bounded native_version observed during initialize; this is not
+capability verification. Unknown versions remain null, capabilities_verified=false.
+No native home path, full user-agent or arbitrary handshake fields are exposed.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native

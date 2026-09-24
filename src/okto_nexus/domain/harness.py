@@ -262,6 +262,7 @@ class HarnessSession:
     started_at: str
     ended_at: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
+    compatibility_report: dict[str, Any] = field(default_factory=dict)
     endpoint_id: str | None = None
     workspace_id: str | None = None
     presence_session_id: str | None = None

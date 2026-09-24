@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 44 and migration056 persist redacted native compatibility observations
+  separately from caller metadata; an observed version does not verify capabilities.
 - Surface 43 and additive migration055 provide explicit operator recovery of managed
   handoffs, preserving attempt facts and fencing stale claim completion without replay.
 - Surface 42 and additive migration054 add audited operator operation recovery.

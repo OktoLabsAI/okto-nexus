@@ -4,6 +4,7 @@ All facts come from one SQLite read snapshot. No peer calls, secret resolution,
 or process-liveness inference; descriptor capabilities are declarations only.
 """
 from dataclasses import asdict
+import json
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -68,11 +69,12 @@ class RuntimeDiscoveryService:
                 "profile_id", "revision", "health", "response_policy", "consumption")}
         item.update(enabled=bool(endpoint["enabled"]), profile_revision=profile["revision"] if profile else None,
                     declared_capabilities=asdict(descriptor.capabilities), capability_verification="not_probed")
-        rows = uow.connection.execute("SELECT session_id,status,lifecycle_state,owner_epoch,runtime_profile_revision,started_at,ended_at "
+        rows = uow.connection.execute("SELECT session_id,status,lifecycle_state,owner_epoch,runtime_profile_revision,started_at,ended_at,compatibility_report "
             "FROM harness_sessions WHERE endpoint_id=? ORDER BY started_at DESC,session_id DESC LIMIT 11", (endpoint["endpoint_id"],)).fetchall()
         sessions = []
         for row in rows[:10]:
             session = dict(row)
+            session["compatibility_report"] = json.loads(row["compatibility_report"])
             session["current_owner_ready_record"] = bool(
                 row["lifecycle_state"] == "protocol_ready" and owner and owner["epoch"] == row["owner_epoch"]
                 and owner["lease_expires_at"] > now and endpoint["enabled"] and endpoint["activation_state"] == "approved"

@@ -560,6 +560,7 @@ def session_to_dict(session: HarnessSession) -> dict[str, Any]:
         "started_at": session.started_at,
         "ended_at": session.ended_at,
         "metadata": dict(session.metadata),
+        "compatibility_report": dict(session.compatibility_report),
         "endpoint_id": session.endpoint_id,
         "workspace_id": session.workspace_id,
         "presence_session_id": session.presence_session_id,

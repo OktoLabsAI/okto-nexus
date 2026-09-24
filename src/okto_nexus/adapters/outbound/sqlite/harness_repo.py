@@ -58,7 +58,7 @@ class SqliteHarnessSessionRepo:
 
     _COLUMNS = (
         "session_id, kind, owning_agent_id, status, capabilities, metadata, "
-        "started_at, ended_at, created_at, updated_at, endpoint_id, workspace_id, presence_session_id, lifecycle_state, connection_id, owner_epoch"
+        "started_at, ended_at, created_at, updated_at, endpoint_id, workspace_id, presence_session_id, lifecycle_state, connection_id, owner_epoch, compatibility_report"
     )
 
     def __init__(self, clock: Optional[Clock] = None) -> None:
@@ -78,8 +78,8 @@ class SqliteHarnessSessionRepo:
                 """
                 INSERT INTO harness_sessions
                     (session_id, kind, owning_agent_id, status, capabilities,
-                     metadata, started_at, ended_at, created_at, updated_at, connection_id, owner_epoch)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     metadata, started_at, ended_at, created_at, updated_at, connection_id, owner_epoch, compatibility_report)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     session.session_id,
@@ -94,6 +94,7 @@ class SqliteHarnessSessionRepo:
                     created_at,
                     session.connection_id,
                     session.owner_epoch,
+                    _dumps(session.compatibility_report),
                 ),
             )
         except sqlite3.Error as exc:
@@ -162,6 +163,7 @@ class SqliteHarnessSessionRepo:
             started_at=row["started_at"],
             ended_at=row["ended_at"],
             metadata=_loads(row["metadata"], {}),
+            compatibility_report=_loads(row["compatibility_report"], {}),
             endpoint_id=row["endpoint_id"], workspace_id=row["workspace_id"],
             presence_session_id=row["presence_session_id"], lifecycle_state=row["lifecycle_state"],
             connection_id=row["connection_id"],

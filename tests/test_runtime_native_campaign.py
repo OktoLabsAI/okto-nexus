@@ -117,6 +117,10 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 "endpoint_id": "native-fixture", "idempotency_key": "campaign-open"})
             assert response.status_code == 200, response.text
             session_id = response.json()["data"]["session_id"]
+            if kind == "codex":
+                compatibility = response.json()["data"]["compatibility_report"]
+                assert compatibility["native_version"] and compatibility["observation"] == "initialize_version"
+                assert compatibility["capabilities_verified"] is False
             native = deps.harness_supervisor._live[session_id].connector.native
             native_process = native._transport._proc if kind == "codex" else native._proc
             assert native_process is not None and native_process.poll() is None

@@ -1,4 +1,4 @@
-# Runtime administration — surface 43
+# Runtime administration — surface 44
 
 This reference describes the implemented 0.2.0 administrative subset. The release
 and complete P11/P12 gates are still pending; consult the
@@ -265,3 +265,8 @@ Migration055 extends the existing audit additively: transport `action=abandon_co
 plus `canonical_action=reopen_handoff`, handoff ID and claim epoch. The API action
 remains `recover_handoff`. This mapping preserves migration054 enum and existing
 idempotency hashes; no replacement audit table or independent work queue exists.
+
+Session compatibility_report (migration056) is a server-owned, redacted observation
+independent of caller metadata. Codex initialize may supply native_version; unknown
+formats remain null and capabilities_verified=false. This does not elevate grants
+or claim compatibility of untested protocol features.
