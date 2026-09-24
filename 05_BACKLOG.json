@@ -3579,8 +3579,12 @@
       ],
       "stimulus": "Iniciar serves concorrentes e simular perda/retomada de owner epoch.",
       "expected": "Um proprietário válido; owner antigo não comita resultados nem despacha nova execução.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OWNER_FENCING.md",
+        "plans/pr34-remediation/evidence/p12-owner-fencing-index.json"
+      ],
+      "notes": "Actual competing server processes, actual SENDING crash after native acceptance/before capture, expired lease recovery without replay; stale epoch CAS/prewrite fencing and slow-call timeout regression.9 distinct PASS nodes/platform; fixture preparation import failures retained."
     },
     {
       "test_id": "T-DISP-06",
@@ -3592,8 +3596,12 @@
       ],
       "stimulus": "Crash após send-intent; tornar o processo antigo lento e expirar lease.",
       "expected": "Estado ambíguo, não retry cego; fencing não é confundido com cancelamento externo.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_OWNER_FENCING.md",
+        "plans/pr34-remediation/evidence/p12-owner-fencing-index.json"
+      ],
+      "notes": "Actual competing server processes, actual SENDING crash after native acceptance/before capture, expired lease recovery without replay; stale epoch CAS/prewrite fencing and slow-call timeout regression.9 distinct PASS nodes/platform; fixture preparation import failures retained."
     },
     {
       "test_id": "T-DISP-07",

@@ -57,6 +57,35 @@ def main():
         command=[sys._base_executable, "-u", str(peer_script), str(home / f"native-{os.getpid()}-{next(counter)}.jsonl")],
         cwd=str(root), env=kwargs["backend"]["env"])}
 
+    if cut == "sending_accepted":
+        from okto_nexus.adapters.outbound.harness.event_journal import FileRuntimeEventJournal
+
+        send = CodexAppServerConnector.send
+        append = FileRuntimeEventJournal.append
+
+        def hold_transport_return(self, session, command):
+            result = send(self, session, command)
+            if command.verb == "send_turn":
+                # The real wire write happens; keep the dispatcher at SENDING
+                # until the actual native acceptance kills this owner below.
+                threading.Event().wait(20)
+                raise OSError("fixture expected native acceptance before deadline")
+            return result
+
+        def exit_before_acceptance_capture(self, event, **kwargs):
+            if event.delivery_phase == "started" and event.operation_id:
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    row = uow.connection.execute("SELECT operation_id,attempt_id,status,owner_epoch,lease_expires_at "
+                        "FROM delivery_outbox WHERE operation_id=?", (event.operation_id,)).fetchone()
+                    assert row and row["status"] == "SENDING", dict(row) if row else None
+                    marker = dict(row)
+                (home / "sending-accepted.json").write_text(json.dumps(marker), encoding="utf-8")
+                os._exit(79)
+            return append(self, event, **kwargs)
+
+        CodexAppServerConnector.send = hold_transport_return
+        FileRuntimeEventJournal.append = exit_before_acceptance_capture
+
     if cut in {"before_output_capture", "before_terminal_capture"}:
         from okto_nexus.adapters.outbound.harness.event_journal import FileRuntimeEventJournal
 
@@ -150,6 +179,8 @@ def main():
     class Server(uvicorn.Server):
         async def startup(self, sockets=None):
             await super().startup(sockets)
+            if self.should_exit:
+                return  # Failed lifespan must never advertise fixture readiness.
             temporary = ready_path.with_suffix(".tmp")
             temporary.write_text(json.dumps({"url": url, "operator": operator, "caller": caller,
                 "owner_pid": os.getpid()}), encoding="utf-8")

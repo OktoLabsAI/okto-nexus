@@ -1,0 +1,58 @@
+{
+  "source_sha": "20732dd8b7280dc31cc18140521ccf26a986ca4c",
+  "platform": "linux",
+  "counts": {
+    "PASS": 5
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "5",
+      "time": "28.300",
+      "timestamp": "2026-09-24T09:55:20.609706-03:00"
+    }
+  ],
+  "native_flags": "Synthetic owned protocol subprocess/temporary stores only, no provider calls.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent tests/test_runtime_attempt_history.py::test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running -q --junitxml=.git/pr34-evidence/owner-fencing-regression-linux.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENDING]",
+      "status": "PASS",
+      "seconds": 5.346
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+      "status": "PASS",
+      "seconds": 3.966
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+      "status": "PASS",
+      "seconds": 3.556
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection",
+      "status": "PASS",
+      "seconds": 3.934
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_timeout_never_allows_takeover_while_original_call_is_running",
+      "status": "PASS",
+      "seconds": 3.571
+    }
+  ],
+  "file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+    "tests/test_runtime_owner_contention.py": "2a6cc00bba15ee1c071ac3982021ae87b21f935621e191833bf4bfc55ae6b317",
+    "tests/test_runtime_sending_expiry.py": "46c716388b06140229e10ef482ec8da2c8abcdf183173af8478618aa6657838a"
+  }
+}

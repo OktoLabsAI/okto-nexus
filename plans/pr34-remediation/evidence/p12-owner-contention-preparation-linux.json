@@ -1,0 +1,33 @@
+{
+  "source_sha": "20732dd8b7280dc31cc18140521ccf26a986ca4c",
+  "platform": "Linux",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "22.160",
+      "timestamp": "2026-09-24T09:49:51.596205-03:00"
+    }
+  ],
+  "native_flags": "No native provider. Preparation error: base interpreter lacks server dependencies.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_owner_contention.py -q --junitxml=.git/pr34-evidence/owner-contention-linux.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_owner_contention",
+      "test": "test_second_server_process_cannot_take_live_owner_or_dispatch",
+      "status": "FAIL",
+      "seconds": 10.593
+    }
+  ],
+  "file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "1bd0f6c92eea215451546bc94b5251f7620aa765568f176a2e5f83b4073bedcb",
+    "tests/test_runtime_owner_contention.py": "3568ccc6e6c37bafc77435dc9f00672321144def2db079eb6c6e52e3af12feb6"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "source_sha": "20732dd8b7280dc31cc18140521ccf26a986ca4c",
+  "platform": "linux",
+  "counts": {
+    "PASS": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "4",
+      "time": "87.547",
+      "timestamp": "2026-09-24T09:53:14.353627-03:00"
+    }
+  ],
+  "native_flags": "Synthetic owned protocol subprocess/temporary stores only, no provider calls.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_owner_contention.py tests/test_runtime_sending_expiry.py tests/test_runtime_projection_commit_crash.py -q --junitxml=.git/pr34-evidence/owner-fencing-final-linux.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_owner_contention",
+      "test": "test_second_server_process_cannot_take_live_owner_or_dispatch",
+      "status": "PASS",
+      "seconds": 21.24
+    },
+    {
+      "class": "tests.test_runtime_sending_expiry",
+      "test": "test_owner_crash_after_wire_acceptance_with_sending_lease_never_replays",
+      "status": "PASS",
+      "seconds": 18.881
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[False]",
+      "status": "PASS",
+      "seconds": 17.45
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[True]",
+      "status": "PASS",
+      "seconds": 17.566
+    }
+  ],
+  "file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+    "tests/test_runtime_owner_contention.py": "2a6cc00bba15ee1c071ac3982021ae87b21f935621e191833bf4bfc55ae6b317",
+    "tests/test_runtime_sending_expiry.py": "46c716388b06140229e10ef482ec8da2c8abcdf183173af8478618aa6657838a"
+  }
+}

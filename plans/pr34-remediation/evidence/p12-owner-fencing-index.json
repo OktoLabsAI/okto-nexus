@@ -1,0 +1,92 @@
+{
+  "source_sha": "20732dd8b7280dc31cc18140521ccf26a986ca4c",
+  "file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+    "tests/test_runtime_owner_contention.py": "2a6cc00bba15ee1c071ac3982021ae87b21f935621e191833bf4bfc55ae6b317",
+    "tests/test_runtime_sending_expiry.py": "46c716388b06140229e10ef482ec8da2c8abcdf183173af8478618aa6657838a"
+  },
+  "preparation_hashes": {
+    "tests/runtime_relay_process_fixture.py": "1bd0f6c92eea215451546bc94b5251f7620aa765568f176a2e5f83b4073bedcb",
+    "tests/test_runtime_owner_contention.py": "3568ccc6e6c37bafc77435dc9f00672321144def2db079eb6c6e52e3af12feb6"
+  },
+  "runs": {
+    "final-windows": {
+      "manifest": "p12-owner-fencing-final-windows.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "regression-windows": {
+      "manifest": "p12-owner-fencing-regression-windows.json",
+      "counts": {
+        "PASS": 5
+      }
+    },
+    "preparation-windows": {
+      "manifest": "p12-owner-contention-preparation-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-owner-fencing-final-linux.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "regression-linux": {
+      "manifest": "p12-owner-fencing-regression-linux.json",
+      "counts": {
+        "PASS": 5
+      }
+    },
+    "preparation-linux": {
+      "manifest": "p12-owner-contention-preparation-linux.json",
+      "counts": {
+        "FAIL": 1
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-DISP-05",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+          "tests/test_runtime_attempt_history.py::test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection"
+        ],
+        "linux": [
+          "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+          "tests/test_runtime_attempt_history.py::test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection"
+        ]
+      }
+    },
+    {
+      "test_id": "T-DISP-06",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_sending_expiry.py::test_owner_crash_after_wire_acceptance_with_sending_lease_never_replays",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+          "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running"
+        ],
+        "linux": [
+          "tests/test_runtime_sending_expiry.py::test_owner_crash_after_wire_acceptance_with_sending_lease_never_replays",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+          "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+          "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running"
+        ]
+      }
+    }
+  ]
+}
