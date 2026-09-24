@@ -1,0 +1,77 @@
+{
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "platform": "windows",
+  "counts": {
+    "PASS": 8
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "8",
+      "time": "65.934",
+      "timestamp": "2026-09-24T06:57:41.469430-03:00"
+    }
+  ],
+  "native_flags": "No installed providers selected; synthetic subprocess fixtures only.",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Fixture lifecycle regression; no installed native providers selected. Source has documented uncommitted fixture changes.",
+  "records": [
+    {
+      "class": "tests.test_runtime_pressure_fixture",
+      "test": "test_rows_closes_sqlite_without_relying_on_gc",
+      "status": "PASS",
+      "seconds": 0.061
+    },
+    {
+      "class": "tests.test_runtime_pressure_fixture",
+      "test": "test_load_worker_survives_snapshot_reader",
+      "status": "PASS",
+      "seconds": 0.889
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-600]",
+      "status": "PASS",
+      "seconds": 8.525
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-1800]",
+      "status": "PASS",
+      "seconds": 11.431
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[committed_child-74-600]",
+      "status": "PASS",
+      "seconds": 10.19
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[accepted_child-75-600]",
+      "status": "PASS",
+      "seconds": 8.749
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_slow_canonical_chain_keeps_deadline_across_four_server_processes",
+      "status": "PASS",
+      "seconds": 16.33
+    },
+    {
+      "class": "tests.test_runtime_commit_crash",
+      "test": "test_committed_message_survives_owner_death_before_wake_without_duplicate_effect",
+      "status": "PASS",
+      "seconds": 8.749
+    }
+  ],
+  "changed_file_sha256": {
+    "tests/test_runtime_pressure_fixture.py": "c0dc6502c9aac6f54bf88afcf6429bd8905627b07fdac2666dd70932b6e2735f",
+    "tests/test_runtime_relay_process_restart.py": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a",
+    "plans/pr34-remediation/runtime_crash_pressure_campaign.py": "c49a9b24bc11512c45aa6030b0f143ab1ec67de6f1bda0dd5b9cb2d9bd849ffa",
+    "plans/pr34-remediation/runtime_recovery_pressure_campaign.py": "bd826d8cff4a4057987b04995eec3d817ef339b5229006cf33bea996eff61b75"
+  }
+}

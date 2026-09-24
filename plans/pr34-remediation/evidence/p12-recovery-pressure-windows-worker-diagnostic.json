@@ -1,0 +1,55 @@
+{
+  "status": "FAIL",
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "campaign_sha256": "bd826d8cff4a4057987b04995eec3d817ef339b5229006cf33bea996eff61b75",
+  "helper_sha256": "fb7d49749193ea8e8d0f0587137d7031d1477524ede7c3e5a84280724ddd7998",
+  "scenario_sha256": "61471648318a15dc96c9041d4ab4919e95a0432abecddde2cb85182225da5cf8",
+  "platform": "win32",
+  "readiness_timeout_seconds": 60,
+  "load_safety_deadline_seconds": 900,
+  "warmup_cycles": 2,
+  "measured_cycles": 4,
+  "samples": [],
+  "limitations": [
+    "Owned synthetic Codex protocol peer; no provider/model",
+    "Two bounded workers pinned with each owner to one allowed CPU",
+    "Each cycle crashes and recovers the same store; fresh store between cycles",
+    "Application clock offset600s exercises expired-owner recovery; host clock unchanged",
+    "Python dependencies load before CPU pin; application main/bootstrap, traffic, crash, recovery and teardown run pinned under load",
+    "Not a comparative throughput/latency benchmark; not proof about arbitrary hosts or native providers",
+    "TemporaryDirectory cleanup also raised WinError32 after this captured assertion; separate real fixture regressions reproduce unclosed SQLite handle and snapshot reader sharing conflict."
+  ],
+  "baseline": {
+    "rss_bytes": 74805248,
+    "handles_or_fds": 168,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "python_threads": 1
+  },
+  "failure_type": "AssertionError",
+  "load_workers_reaped": true,
+  "load_worker_exit_codes": [
+    0,
+    1
+  ],
+  "load_worker_errors": [
+    "",
+    "Traceback (most recent call last):\n  File \"<user-home>\\AppData\\Local\\Temp\\okto-recovery-pressure-2o_a3ho8\\load.py\", line 31, in <module>\n    temporary.replace(root/(name+'.json')); last=now\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python313\\Lib\\pathlib\\_local.py\", line 780, in replace\n    os.replace(self, target)\n    ~~~~~~~~~~^^^^^^^^^^^^^^\nPermissionError: [WinError 5] Acesso negado: '<user-home>\\\\AppData\\\\Local\\\\Temp\\\\okto-recovery-pressure-2o_a3ho8\\\\load-1.tmp' -> '<user-home>\\\\AppData\\\\Local\\\\Temp\\\\okto-recovery-pressure-2o_a3ho8\\\\load-1.json'\n"
+  ]
+}

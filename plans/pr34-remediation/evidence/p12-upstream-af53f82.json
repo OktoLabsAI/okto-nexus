@@ -1,0 +1,17 @@
+{
+  "observed_on": "2026-09-24",
+  "commands": [
+    "rtk proxy gh pr view 34 --repo OktoLabsAI/okto-nexus --json headRefOid,baseRefOid,headRefName,state,updatedAt,url",
+    "rtk proxy gh pr list --repo OktoLabsAI/okto-nexus --head feature/v0.2.0 --state all --json number,title,state,headRefOid,url"
+  ],
+  "pr34": {
+    "headRefOid": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+    "baseRefOid": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
+    "headRefName": "feature/harness-integrations",
+    "state": "OPEN",
+    "updatedAt": "2026-09-20T23:07:55Z",
+    "url": "https://github.com/OktoLabsAI/okto-nexus/pull/34"
+  },
+  "v020_prs": [],
+  "writes_performed": false
+}

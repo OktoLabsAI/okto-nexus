@@ -37,7 +37,7 @@ LOAD = PIN + r"""
 import json,sys,time
 from pathlib import Path
 root=Path(sys.argv[1]); name=sys.argv[2]
-began=time.monotonic(); deadline=began+300; last=0; iterations=0; value=1
+began=time.monotonic(); deadline=began+300; last=0; iterations=0; value=1; retries=0
 while time.monotonic()<deadline and not (root/'stop').exists():
     if not (root/'active').exists():
         time.sleep(.01)
@@ -46,9 +46,19 @@ while time.monotonic()<deadline and not (root/'stop').exists():
     iterations+=20000 if (root/'active').exists() else 0
     now=time.monotonic()
     if now-last>.2:
-        data={'affinity':affinity,'cpu_seconds':time.process_time(),'wall_seconds':now-began,'iterations':iterations}
+        data={'affinity':affinity,'cpu_seconds':time.process_time(),'wall_seconds':now-began,'iterations':iterations,'publication_retries':retries}
         temporary=root/(name+'.tmp'); temporary.write_text(json.dumps(data))
-        temporary.replace(root/(name+'.json')); last=now
+        publish_deadline=min(deadline,time.monotonic()+2)
+        while True:
+            try:
+                temporary.replace(root/(name+'.json'))
+                break
+            except PermissionError:
+                retries+=1
+                if time.monotonic()>=publish_deadline:
+                    raise
+                time.sleep(.01)
+        last=now
 """
 
 

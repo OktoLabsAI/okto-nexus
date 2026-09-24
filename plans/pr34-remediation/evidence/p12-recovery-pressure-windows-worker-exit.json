@@ -1,0 +1,46 @@
+{
+  "status": "FAIL",
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "campaign_sha256": "8cfbc569dee5392fc369879110b58125be4702487c390eb5cae6a3eb6a99d273",
+  "helper_sha256": "fb7d49749193ea8e8d0f0587137d7031d1477524ede7c3e5a84280724ddd7998",
+  "scenario_sha256": "61471648318a15dc96c9041d4ab4919e95a0432abecddde2cb85182225da5cf8",
+  "platform": "win32",
+  "readiness_timeout_seconds": 60,
+  "load_safety_deadline_seconds": 900,
+  "warmup_cycles": 2,
+  "measured_cycles": 4,
+  "samples": [],
+  "limitations": [
+    "Owned synthetic Codex protocol peer; no provider/model",
+    "Two bounded workers pinned with each owner to one allowed CPU",
+    "Each cycle crashes and recovers the same store; fresh store between cycles",
+    "Application clock offset600s exercises expired-owner recovery; host clock unchanged",
+    "Python dependencies load before CPU pin; application main/bootstrap, traffic, crash, recovery and teardown run pinned under load",
+    "Not a comparative throughput/latency benchmark; not proof about arbitrary hosts or native providers"
+  ],
+  "baseline": {
+    "rss_bytes": 73023488,
+    "handles_or_fds": 166,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "python_threads": 1
+  },
+  "failure_type": "AssertionError",
+  "load_workers_reaped": true
+}

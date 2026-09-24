@@ -1,0 +1,279 @@
+{
+  "status": "PASS",
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "campaign_sha256": "bd826d8cff4a4057987b04995eec3d817ef339b5229006cf33bea996eff61b75",
+  "helper_sha256": "c49a9b24bc11512c45aa6030b0f143ab1ec67de6f1bda0dd5b9cb2d9bd849ffa",
+  "scenario_sha256": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a",
+  "platform": "linux",
+  "readiness_timeout_seconds": 60,
+  "load_safety_deadline_seconds": 900,
+  "warmup_cycles": 2,
+  "measured_cycles": 4,
+  "samples": [
+    {
+      "cycle": 2,
+      "cut": "journal_terminal",
+      "seconds": 15.685559546999997,
+      "owners_started_and_stopped": 2,
+      "owner_resources": [
+        {
+          "rss_bytes": 89837568,
+          "handles_or_fds": 10,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        },
+        {
+          "rss_bytes": 90304512,
+          "handles_or_fds": 15,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        }
+      ],
+      "cpu_load_fraction": 0.8255422166158711,
+      "load_cpu_seconds": 12.9609336,
+      "load_wall_seconds": 15.699904062000002,
+      "load_iterations_delta": 62700000,
+      "recovered_peer_stops": 1,
+      "same_operation_recovered": true,
+      "ambiguous_native_write_replayed": false,
+      "wire_effects_match_operations": true,
+      "campaign_after_cleanup": {
+        "rss_bytes": 70078464,
+        "handles_or_fds": 7,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 3,
+      "cut": "accepted_child",
+      "seconds": 16.613114649000003,
+      "owners_started_and_stopped": 2,
+      "owner_resources": [
+        {
+          "rss_bytes": 89993216,
+          "handles_or_fds": 10,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        },
+        {
+          "rss_bytes": 90120192,
+          "handles_or_fds": 10,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        }
+      ],
+      "cpu_load_fraction": 0.8226123094181962,
+      "load_cpu_seconds": 13.616249199999999,
+      "load_wall_seconds": 16.552450095999994,
+      "load_iterations_delta": 58340000,
+      "recovered_peer_stops": 0,
+      "same_operation_recovered": true,
+      "ambiguous_native_write_replayed": false,
+      "wire_effects_match_operations": true,
+      "campaign_after_cleanup": {
+        "rss_bytes": 70098944,
+        "handles_or_fds": 7,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 4,
+      "cut": "journal_terminal",
+      "seconds": 14.378479579,
+      "owners_started_and_stopped": 2,
+      "owner_resources": [
+        {
+          "rss_bytes": 89653248,
+          "handles_or_fds": 13,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        },
+        {
+          "rss_bytes": 89227264,
+          "handles_or_fds": 13,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        }
+      ],
+      "cpu_load_fraction": 0.8130122283180293,
+      "load_cpu_seconds": 11.648995799999998,
+      "load_wall_seconds": 14.328192608000002,
+      "load_iterations_delta": 59820000,
+      "recovered_peer_stops": 1,
+      "same_operation_recovered": true,
+      "ambiguous_native_write_replayed": false,
+      "wire_effects_match_operations": true,
+      "campaign_after_cleanup": {
+        "rss_bytes": 70111232,
+        "handles_or_fds": 7,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    },
+    {
+      "cycle": 5,
+      "cut": "accepted_child",
+      "seconds": 15.643417899,
+      "owners_started_and_stopped": 2,
+      "owner_resources": [
+        {
+          "rss_bytes": 87740416,
+          "handles_or_fds": 13,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        },
+        {
+          "rss_bytes": 90013696,
+          "handles_or_fds": 10,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        }
+      ],
+      "cpu_load_fraction": 0.8198626106369005,
+      "load_cpu_seconds": 12.862493200000003,
+      "load_wall_seconds": 15.688595910000004,
+      "load_iterations_delta": 62040000,
+      "recovered_peer_stops": 0,
+      "same_operation_recovered": true,
+      "ambiguous_native_write_replayed": false,
+      "wire_effects_match_operations": true,
+      "campaign_after_cleanup": {
+        "rss_bytes": 70119424,
+        "handles_or_fds": 7,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    }
+  ],
+  "limitations": [
+    "Owned synthetic Codex protocol peer; no provider/model",
+    "Two bounded workers pinned with each owner to one allowed CPU",
+    "Each cycle crashes and recovers the same store; fresh store between cycles",
+    "Application clock offset600s exercises expired-owner recovery; host clock unchanged",
+    "Python dependencies load before CPU pin; application main/bootstrap, traffic, crash, recovery and teardown run pinned under load",
+    "Not a comparative throughput/latency benchmark; not proof about arbitrary hosts or native providers"
+  ],
+  "baseline": {
+    "rss_bytes": 70000640,
+    "handles_or_fds": 7,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "python_threads": 1
+  },
+  "limits": {
+    "rss_bytes": 86777856,
+    "handles_or_fds": 15,
+    "python_threads": 3
+  },
+  "load_workers_reaped": true,
+  "load_worker_exit_codes": [
+    0,
+    0
+  ],
+  "load_worker_errors": [
+    "",
+    ""
+  ]
+}

@@ -1,5 +1,6 @@
 """Crash actual HTTP owners and recover durable relay without model/provider I/O."""
 import ctypes
+from contextlib import closing
 from ctypes import wintypes
 import json
 import os
@@ -17,7 +18,7 @@ from test_pr34_remediation import tool
 
 
 class Owner:
-    def __init__(self, home, root, cut, offset):
+    def __init__(self, home, root, cut, offset, *, ready_timeout=20):
         self.home = home
         home.mkdir(exist_ok=True)
         ready = home / f"ready-{cut}-{offset}.json"
@@ -33,7 +34,7 @@ class Owner:
             creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
         self.client = None
         try:
-            deadline = time.monotonic() + 20
+            deadline = time.monotonic() + ready_timeout
             while not ready.exists() and time.monotonic() < deadline:
                 assert self.process.poll() is None, self.log_path.read_text(encoding="utf-8")
                 time.sleep(.02)
@@ -45,7 +46,7 @@ class Owner:
             raise
 
     def rows(self, sql, args=()):
-        with sqlite3.connect(self.home / "nexus.db", timeout=10) as connection:
+        with closing(sqlite3.connect(self.home / "nexus.db", timeout=10)) as connection:
             connection.row_factory = sqlite3.Row
             return [dict(row) for row in connection.execute(sql, args)]
 
@@ -129,7 +130,7 @@ def test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_c
                 "from_agent_id": "caller", "target": {"strategy": "direct", "agent_id": "worker"},
                 "subject": "fixture", "body": "cross-process-root"})
             assert sent["ok"], sent
-        except httpx.RemoteProtocolError:
+        except (httpx.RemoteProtocolError, httpx.ReadError):
             pass  # Lost admission response is not permission to resend.
         assert first.process.wait(timeout=15) == exit_code, first.log_path.read_text(encoding="utf-8")
         for witness in witnesses:

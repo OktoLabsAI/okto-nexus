@@ -1,0 +1,101 @@
+{
+  "status": "FAIL",
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "campaign_sha256": "963cae555b558a2a0c745ba7319c8c15291774d61bd8d442eb3d3bbdbec1d196",
+  "helper_sha256": "fb7d49749193ea8e8d0f0587137d7031d1477524ede7c3e5a84280724ddd7998",
+  "scenario_sha256": "61471648318a15dc96c9041d4ab4919e95a0432abecddde2cb85182225da5cf8",
+  "platform": "win32",
+  "readiness_timeout_seconds": 60,
+  "load_safety_deadline_seconds": 900,
+  "warmup_cycles": 2,
+  "measured_cycles": 4,
+  "samples": [
+    {
+      "cycle": 2,
+      "cut": "journal_terminal",
+      "seconds": 111.0092658999929,
+      "owners_started_and_stopped": 2,
+      "owner_resources": [
+        {
+          "rss_bytes": 96845824,
+          "handles_or_fds": 229,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        },
+        {
+          "rss_bytes": 98164736,
+          "handles_or_fds": 239,
+          "affinity": [
+            0
+          ],
+          "python_threads": null
+        }
+      ],
+      "cpu_load_fraction": 0.8889179259934499,
+      "load_cpu_seconds": 98.796875,
+      "load_wall_seconds": 111.14285370000289,
+      "load_iterations_delta": 338780000,
+      "same_operation_recovered": true,
+      "ambiguous_native_write_replayed": false,
+      "wire_effects_match_operations": true,
+      "campaign_after_cleanup": {
+        "rss_bytes": 75259904,
+        "handles_or_fds": 164,
+        "affinity": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15
+        ],
+        "python_threads": 1
+      }
+    }
+  ],
+  "limitations": [
+    "Owned synthetic Codex protocol peer; no provider/model",
+    "Two bounded workers pinned with each owner to one allowed CPU",
+    "Each cycle crashes and recovers the same store; fresh store between cycles",
+    "Application clock offset600s exercises expired-owner recovery; host clock unchanged",
+    "Not a comparative throughput/latency benchmark; not proof about arbitrary hosts or native providers"
+  ],
+  "baseline": {
+    "rss_bytes": 73248768,
+    "handles_or_fds": 164,
+    "affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "python_threads": 1
+  },
+  "owner_failure_log_tail": "rozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\.venv\\Lib\\site-packages\\mcp\\server\\elicitation.py\", line 11 in <module>\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap_external>\", line 1026 in exec_module\n  File \"<frozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\.venv\\Lib\\site-packages\\mcp\\server\\fastmcp\\server.py\", line 42 in <module>\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap_external>\", line 1026 in exec_module\n  File \"<frozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\.venv\\Lib\\site-packages\\mcp\\server\\fastmcp\\__init__.py\", line 7 in <module>\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap_external>\", line 1026 in exec_module\n  File \"<frozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\.venv\\Lib\\site-packages\\mcp\\server\\__init__.py\", line 1 in <module>\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap_external>\", line 1026 in exec_module\n  File \"<frozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap>\", line 1310 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\.venv\\Lib\\site-packages\\mcp\\__init__.py\", line 4 in <module>\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap_external>\", line 1026 in exec_module\n  File \"<frozen importlib._bootstrap>\", line 935 in _load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1331 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap>\", line 1310 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 488 in _call_with_frames_removed\n  File \"<frozen importlib._bootstrap>\", line 1310 in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1360 in _find_and_load\n  File \"<workspace>\\src\\okto_nexus\\adapters\\inbound\\mcp\\server.py\", line 810 in _load_fastmcp\n  File \"<workspace>\\src\\okto_nexus\\adapters\\inbound\\http\\app.py\", line 315 in create_http_mcp_server\n  File \"<workspace>\\src\\okto_nexus\\adapters\\inbound\\http\\app.py\", line 414 in build_app\n  File \"<workspace>\\tests\\runtime_relay_process_fixture.py\", line 108 in main\n  File \"<workspace>\\tests\\runtime_relay_process_fixture.py\", line 121 in <module>\n  File \"<frozen runpy>\", line 88 in _run_code\n  File \"<frozen runpy>\", line 98 in _run_module_code\n  File \"<frozen runpy>\", line 287 in run_path\n  File \"<string>\", line 19 in <module>\nTimeout (0:00:15)!\nThread 0x00000ff4 (most recent call first):\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_typing_extra.py\", line 157 in is_finalvar\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 1143 in match_type\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 1043 in _generate_schema_inner\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 2231 in inner_handler\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_schema_generation_shared.py\", line 83 in __call__\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 2425 in new_handler\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_schema_generation_shared.py\", line 83 in __call__\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 2252 in _apply_annotations\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 2202 in _annotated_schema\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 1022 in _generate_schema_inner\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\_internal\\_generate_schema.py\", line 744 in generate_schema\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\type_adapter.py\", line 306 in _init_core_attrs\n  File \"<workspace>\\.venv\\Lib\\site-packages\\pydantic\\type_adapter.py\", line 244 in __init__\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\_compat\\v2.py\", line 163 in __post_init__\n  File \"<string>\", line 7 in __init__\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\utils.py\", line 73 in create_model_field\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\dependencies\\utils.py\", line 541 in analyze_param\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\dependencies\\utils.py\", line 311 in get_dependant\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 949 in __init__\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 1386 in add_api_route\n  File \"<workspace>\\.venv\\Lib\\site-packages\\fastapi\\routing.py\", line 1450 in decorator\n  File \"<workspace>\\src\\okto_nexus\\adapters\\inbound\\http\\routes.py\", line 2232 in build_router\n  File \"<workspace>\\src\\okto_nexus\\adapters\\inbound\\http\\app.py\", line 586 in build_app\n  File \"<workspace>\\tests\\runtime_relay_process_fixture.py\", line 108 in main\n  File \"<workspace>\\tests\\runtime_relay_process_fixture.py\", line 121 in <module>\n  File \"<frozen runpy>\", line 88 in _run_code\n  File \"<frozen runpy>\", line 98 in _run_module_code\n  File \"<frozen runpy>\", line 287 in run_path\n  File \"<string>\", line 19 in <module>\n[09/24/26 06:47:14] INFO     StreamableHTTP      streamable_http_manager.py:131\n                             session manager                                   \n                             started                                           \n[09/24/26 06:47:16] INFO     StreamableHTTP      streamable_http_manager.py:135\n                             session manager                                   \n                             shutting down                                     \n",
+  "failure_type": "AssertionError",
+  "load_workers_reaped": true
+}

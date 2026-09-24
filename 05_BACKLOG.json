@@ -4696,8 +4696,14 @@
       ],
       "stimulus": "Executar ciclos start/stop/crash/recovery sob carga.",
       "expected": "Threads/processos/FDs/memória dentro dos limites; sample size e falhas documentados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md",
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-windows-final.json",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-linux-final.json"
+      ],
+      "notes": "Parent af53f829175a0582036c874a321ce5cbd872f009 plus recorded campaign/helper/scenario hashes. Each platform:2 warmups+4 measured same-store recovery cycles under measured same-CPU contention, exact process stops and bounded campaign RSS/descriptors/threads. All historical failed trials retained. Synthetic peers only; not native-provider endurance or performance comparison. Regression8 PASS each platform."
     },
     {
       "test_id": "T-E2E-05",

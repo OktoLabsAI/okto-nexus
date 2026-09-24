@@ -1,0 +1,35 @@
+{
+  "source_sha": "af53f829175a0582036c874a321ce5cbd872f009",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "2",
+      "time": "2.158",
+      "timestamp": "2026-09-24T06:57:15.186959-03:00"
+    }
+  ],
+  "native_flags": "No installed native provider selected; standalone fixture regressions.",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Two real fixture resource failures before correction; no product behavior or native provider qualified.",
+  "records": [
+    {
+      "class": "tests.test_runtime_pressure_fixture",
+      "test": "test_rows_closes_sqlite_without_relying_on_gc",
+      "status": "FAIL",
+      "seconds": 0.053
+    },
+    {
+      "class": "tests.test_runtime_pressure_fixture",
+      "test": "test_load_worker_survives_snapshot_reader",
+      "status": "FAIL",
+      "seconds": 0.844
+    }
+  ]
+}
