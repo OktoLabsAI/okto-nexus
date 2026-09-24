@@ -2550,6 +2550,13 @@
               "result": "PASS",
               "observed": "47/46/25 PASS per platform,114 distinct nodes; one existing Starlette deprecation warning in each generation selection. WORK01-11 mapped; WORK12 not qualified.",
               "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+            },
+            {
+              "sha": "f12c169a81b2af56ca351194f136d6e96f113fa5",
+              "command": "Four exact commands in P12_COVERAGE_REVIEW_F12C169.md",
+              "result": "PASS",
+              "observed": "91 distinct PASS per platform (54 consumption +37 lifecycle). One existing Starlette deprecation per consumption run. Seven original requirements joined; three reviewed partial rows remain NOT_RUN.",
+              "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
             }
           ],
           "evidence": [
@@ -2560,7 +2567,8 @@
             "plans/pr34-remediation/P12_SUITE_58CA69B.md",
             "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
-            "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md"
+            "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+            "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -3365,8 +3373,12 @@
       ],
       "stimulus": "Operador autorizado decide repetir operação desconhecida com razão e risco.",
       "expected": "Auditoria/correlação de risco; sem fingir garantia exactly-once.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Operator recovery requires current attempt/epoch/state, reason and duplicate-risk acknowledgement. REST/MCP/stdio decisions agree. One audit decision releases the same logical inbox without rewriting unknown transport facts; pending native calls/live runtimes prevent takeover. A late terminal stays historical and cannot consume or publish after release. Limitations: Synthetic peers and disposable stores. Explicit takeover acknowledges possible duplicate external work; no exactly-once or native replay claim."
     },
     {
       "test_id": "T-CONS-06",
@@ -3517,8 +3529,12 @@
       ],
       "stimulus": "Fila de send_turn com steer/interrupt urgente e expected_turn.",
       "expected": "Turnos ordenados; controle correto não espera atrás de toda a fila nem afeta turno futuro.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Urgent interrupt proceeds while normal write is blocked and binds expected operation. Stale native turn is rejected, queued steer is rejected after its turn ends, and later delivery/administrative turns cannot overtake a retry-wait lane. Limitations: Controlled event barriers and synthetic peers; does not claim preemption of arbitrary OS-blocked native code."
     },
     {
       "test_id": "T-DISP-09",
@@ -3580,8 +3596,12 @@
       ],
       "stimulus": "Reiniciar serve com specs estáveis e falha em um conector.",
       "expected": "Sem identidades/filhos duplicados; falha isolada e outros endpoints disponíveis.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Restart production lifespan with stable boot specs; repeated boot reuses session/request, identity preserved. Failed connector isolated, remaining endpoint ready; uncertain failed start stays quarantined on restart. Limitations: Disposable production bootstrap and synthetic peers; native processes qualified separately."
     },
     {
       "test_id": "T-LIFE-02",
@@ -3666,8 +3686,12 @@
       ],
       "stimulus": "Close e EOF/erro da pump ocorrem simultaneamente; chamar close novamente.",
       "expected": "Teardown/estado idempotentes; finais capturados e nenhuma subscription pendurada.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Concurrent closes overlap final native event and EOF; same durable close operation, one connector close, one captured final, closing entry released. Projection failure/repeated close recovery is separately exercised. Limitations: Controlled peer EOF, no native model. Error and EOF use the shared cleanup path."
     },
     {
       "test_id": "T-LIFE-08",
@@ -3679,8 +3703,12 @@
       ],
       "stimulus": "Duas sessões Codex usam o mesmo processo e uma encerra.",
       "expected": "Um leitor demultiplexa sem perda; fechar uma sessão não mata a outra.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "Production factories reuse exact native connection for two endpoints, one detach preserves process and sibling durable result, last close observes stop. Active-close terminal correlation and stale-terminal uncertainty tested. Limitations: Owned Codex protocol peer. Real Codex multiplex also passed separately at752cd72, not counted in this full-suite manifest."
     },
     {
       "test_id": "T-LIFE-09",
@@ -3739,11 +3767,12 @@
       ],
       "stimulus": "Binário/schema incompatível com o descriptor.",
       "expected": "Capacidade/binding degradado com diagnóstico; outros conectores permanecem operacionais.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md"
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
       ],
-      "notes": "Partial Pi/Codex handshake-shape drift proof passes on Windows/Linux. Full binary/version/effective capability gate remains NOT_RUN; do not promote from this subset."
+      "notes": "Malformed/unsupported Pi readiness fails with protocol_incompatible diagnostic and quarantines binding while Codex can still open; invalid Codex native thread identity never becomes ready or receives turn/start. Limitations: Synthetic incompatible protocol peers; native binary version qualification is separately controlled."
     },
     {
       "test_id": "T-JRN-01",
@@ -4371,8 +4400,12 @@
       ],
       "stimulus": "Processo some mas linha histórica continua RUNNING.",
       "expected": "Não sustentar presença/liveness com o registro antigo.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+      ],
+      "notes": "After restoring the persisted RUNNING/active crash state and replacing the owner through production bootstrap, historical runtime becomes unknown and quarantined; its presence closes while an independent canonical session remains active. Native end is not fabricated and no runtime is relaunched. Limitations: Deterministic persisted crash cut, not OS process killing; exact owner death is qualified by separate crash campaigns."
     },
     {
       "test_id": "T-PRES-04",

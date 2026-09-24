@@ -1,0 +1,161 @@
+{
+  "source_sha": "f12c169a81b2af56ca351194f136d6e96f113fa5",
+  "review": "p12-coverage-review-f12c169.json",
+  "platforms": {
+    "windows": {
+      "counts": {
+        "PASS": 91
+      },
+      "manifests": [
+        "p12-consumption-review-windows.json",
+        "p12-lifecycle-review-windows.json"
+      ]
+    },
+    "linux": {
+      "counts": {
+        "PASS": 91
+      },
+      "manifests": [
+        "p12-consumption-review-linux.json",
+        "p12-lifecycle-review-linux.json"
+      ]
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-LIFE-01",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
+          "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+          "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate"
+        ],
+        "linux": [
+          "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
+          "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+          "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close",
+          "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once"
+        ],
+        "linux": [
+          "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close",
+          "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling[production]",
+          "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False]",
+          "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True]"
+        ],
+        "linux": [
+          "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling[production]",
+          "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False]",
+          "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[42]",
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[None]",
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply0]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply1]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply2]"
+        ],
+        "linux": [
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[42]",
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[None]",
+          "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply0]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply1]",
+          "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply2]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-CONS-05",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_operation_reconciliation.py::test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+          "tests/test_runtime_operation_reconciliation.py::test_authenticated_stdio_recovery_uses_active_serve_owner",
+          "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+          "tests/test_runtime_operation_reconciliation.py::test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+          "tests/test_runtime_operation_reconciliation.py::test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+          "tests/test_runtime_operation_reconciliation.py::test_recovery_has_operator_parity_and_survives_admission_flag_off",
+          "tests/test_runtime_operation_reconciliation.py::test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+          "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change0]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change1]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change2]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change3]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change4]"
+        ],
+        "linux": [
+          "tests/test_runtime_operation_reconciliation.py::test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+          "tests/test_runtime_operation_reconciliation.py::test_authenticated_stdio_recovery_uses_active_serve_owner",
+          "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+          "tests/test_runtime_operation_reconciliation.py::test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+          "tests/test_runtime_operation_reconciliation.py::test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+          "tests/test_runtime_operation_reconciliation.py::test_recovery_has_operator_parity_and_survives_admission_flag_off",
+          "tests/test_runtime_operation_reconciliation.py::test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+          "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change0]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change1]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change2]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change3]",
+          "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change4]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-DISP-08",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_commands.py::test_control_queued_for_finished_turn_does_not_hit_next_turn",
+          "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+          "tests/test_runtime_commands.py::test_stale_native_turn_control_is_rejected_without_effect",
+          "tests/test_runtime_safe_retry.py::test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane"
+        ],
+        "linux": [
+          "tests/test_runtime_commands.py::test_control_queued_for_finished_turn_does_not_hit_next_turn",
+          "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+          "tests/test_runtime_commands.py::test_stale_native_turn_control_is_rejected_without_effect",
+          "tests/test_runtime_safe_retry.py::test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane"
+        ]
+      }
+    },
+    {
+      "test_id": "T-PRES-03",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_session_recovery.py::test_restart_expires_only_old_runtime_presence_and_quarantines_binding"
+        ],
+        "linux": [
+          "tests/test_runtime_session_recovery.py::test_restart_expires_only_old_runtime_presence_and_quarantines_binding"
+        ]
+      }
+    }
+  ],
+  "limitations": "Selected synthetic-fixture gate only; final full/native gates remain pending."
+}

@@ -1,0 +1,347 @@
+{
+  "source_sha": "f12c169a81b2af56ca351194f136d6e96f113fa5",
+  "platform": "linux",
+  "counts": {
+    "PASS": 54
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "54",
+      "time": "226.351",
+      "timestamp": "2026-09-24T07:55:22.151809-03:00"
+    }
+  ],
+  "native_flags": "No native campaign selected; synthetic peers only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_outbox.py tests/test_runtime_commands.py tests/test_runtime_safe_retry.py tests/test_runtime_operation_reconciliation.py -q --junitxml=.git/pr34-evidence/consumption-review-linux.xml",
+  "limitations": "Selected fixture gate; not native qualification, full suite or performance benchmark. Production and tests unchanged at source SHA.",
+  "records": [
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_message_delivery_outbox_rollback_together",
+      "status": "PASS",
+      "seconds": 4.164
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery",
+      "status": "PASS",
+      "seconds": 2.571
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_reserved_push_delivery_cannot_also_be_claimed_or_acked_by_pull",
+      "status": "PASS",
+      "seconds": 2.343
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_changed_policy_blocks_previously_committed_intent",
+      "status": "PASS",
+      "seconds": 2.584
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENDING]",
+      "status": "PASS",
+      "seconds": 2.942
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+      "status": "PASS",
+      "seconds": 2.582
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+      "status": "PASS",
+      "seconds": 2.445
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_native_send_is_outside_sqlite_write_transaction",
+      "status": "PASS",
+      "seconds": 3.357
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_unverified_internal_sender_only_gets_logical_inbox",
+      "status": "PASS",
+      "seconds": 2.135
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+      "status": "PASS",
+      "seconds": 7.474
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_open_idempotency_reuses_one_session_across_surfaces",
+      "status": "PASS",
+      "seconds": 3.178
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_concurrent_open_key_never_starts_twice",
+      "status": "PASS",
+      "seconds": 2.079
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_open_reply_persistence_failure_does_not_repeat_start",
+      "status": "PASS",
+      "seconds": 3.031
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+      "status": "PASS",
+      "seconds": 7.193
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_admission_does_not_wait_for_native_write",
+      "status": "PASS",
+      "seconds": 3.274
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_repeating_command_key_does_not_repeat_native_effect",
+      "status": "PASS",
+      "seconds": 3.272
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_two_admin_turns_capture_results_and_close_is_durable",
+      "status": "PASS",
+      "seconds": 5.651
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+      "status": "PASS",
+      "seconds": 3.636
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_stale_native_turn_control_is_rejected_without_effect",
+      "status": "PASS",
+      "seconds": 4.832
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_revocation_after_admission_prevents_native_write",
+      "status": "PASS",
+      "seconds": 4.451
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_queued_for_finished_turn_does_not_hit_next_turn",
+      "status": "PASS",
+      "seconds": 4.09
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_claude_replacement_steer_has_separate_correlated_result",
+      "status": "PASS",
+      "seconds": 7.537
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_idempotent_retry_does_not_charge_spent_grant_again",
+      "status": "PASS",
+      "seconds": 3.553
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_enqueue_failure_rolls_back_intent_and_grant_charge",
+      "status": "PASS",
+      "seconds": 3.654
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_command_result_recovers_after_owner_restart_without_reexecution",
+      "status": "PASS",
+      "seconds": 6.294
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_busy_before_native_write_waits_for_deadline_and_preserves_logical_operation",
+      "status": "PASS",
+      "seconds": 3.544
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_safe_retry_exhaustion_is_bounded_and_can_be_released_to_pull",
+      "status": "PASS",
+      "seconds": 4.644
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_can_be_cancelled_without_sending_at_its_deadline",
+      "status": "PASS",
+      "seconds": 3.742
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane",
+      "status": "PASS",
+      "seconds": 5.107
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_revalidates_actor_authority_before_any_new_native_call",
+      "status": "PASS",
+      "seconds": 3.407
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_persisted_deadline_wakes_retry_without_an_external_signal",
+      "status": "PASS",
+      "seconds": 4.359
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_new_dispatch_owner_preserves_retry_deadline_without_early_replay",
+      "status": "PASS",
+      "seconds": 3.417
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[ack_level-TRANSPORT_WRITE]",
+      "status": "PASS",
+      "seconds": 4.181
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[retry_basis-None]",
+      "status": "PASS",
+      "seconds": 3.979
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[reason-unknown]",
+      "status": "PASS",
+      "seconds": 3.455
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_lost_non_delivery_proof_commit_never_enables_replay",
+      "status": "PASS",
+      "seconds": 3.344
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+      "status": "PASS",
+      "seconds": 3.932
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change0]",
+      "status": "PASS",
+      "seconds": 3.571
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change1]",
+      "status": "PASS",
+      "seconds": 4.28
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change2]",
+      "status": "PASS",
+      "seconds": 4.085
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change3]",
+      "status": "PASS",
+      "seconds": 3.525
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change4]",
+      "status": "PASS",
+      "seconds": 3.603
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_recovery_has_operator_parity_and_survives_admission_flag_off",
+      "status": "PASS",
+      "seconds": 4.225
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+      "status": "PASS",
+      "seconds": 3.647
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+      "status": "PASS",
+      "seconds": 3.505
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_pending_cancel_is_safe_before_send_intent",
+      "status": "PASS",
+      "seconds": 3.635
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_timeout_never_allows_takeover_while_original_call_is_running",
+      "status": "PASS",
+      "seconds": 3.718
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+      "status": "PASS",
+      "seconds": 3.318
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_managed_handoff_cannot_be_released_as_conversation",
+      "status": "PASS",
+      "seconds": 3.865
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_abandoned_command_keeps_history_and_requires_explicit_endpoint_reconciliation",
+      "status": "PASS",
+      "seconds": 4.908
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+      "status": "PASS",
+      "seconds": 4.522
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_authenticated_stdio_recovery_uses_active_serve_owner",
+      "status": "PASS",
+      "seconds": 9.077
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_reconciliation_migration_is_additive_and_repeatable",
+      "status": "PASS",
+      "seconds": 1.258
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_restart_with_admission_disabled_can_recover_existing_operations",
+      "status": "PASS",
+      "seconds": 5.887
+    }
+  ]
+}

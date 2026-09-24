@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "source_sha": "f12c169a81b2af56ca351194f136d6e96f113fa5",
+  "method": "Manual body review, no production/test modifications. Coverage is not execution; join only completed per-node manifests. Older coverage entries reread against current source.",
+  "requirements": [
+    {
+      "test_id": "T-LIFE-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate",
+        "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+        "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay"
+      ],
+      "rationale": "Restart production lifespan with stable boot specs; repeated boot reuses session/request, identity preserved. Failed connector isolated, remaining endpoint ready; uncertain failed start stays quarantined on restart.",
+      "limitations": "Disposable production bootstrap and synthetic peers; native processes qualified separately."
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once",
+        "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close"
+      ],
+      "rationale": "Concurrent closes overlap final native event and EOF; same durable close operation, one connector close, one captured final, closing entry released. Projection failure/repeated close recovery is separately exercised.",
+      "limitations": "Controlled peer EOF, no native model. Error and EOF use the shared cleanup path."
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling",
+        "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread"
+      ],
+      "rationale": "Production factories reuse exact native connection for two endpoints, one detach preserves process and sibling durable result, last close observes stop. Active-close terminal correlation and stale-terminal uncertainty tested.",
+      "limitations": "Owned Codex protocol peer. Real Codex multiplex also passed separately at752cd72, not counted in this full-suite manifest."
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter",
+        "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready"
+      ],
+      "rationale": "Malformed/unsupported Pi readiness fails with protocol_incompatible diagnostic and quarantines binding while Codex can still open; invalid Codex native thread identity never becomes ready or receives turn/start.",
+      "limitations": "Synthetic incompatible protocol peers; native binary version qualification is separately controlled."
+    },
+    {
+      "test_id": "T-CONS-05",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_operation_reconciliation.py::test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+        "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot",
+        "tests/test_runtime_operation_reconciliation.py::test_recovery_has_operator_parity_and_survives_admission_flag_off",
+        "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+        "tests/test_runtime_operation_reconciliation.py::test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+        "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+        "tests/test_runtime_operation_reconciliation.py::test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+        "tests/test_runtime_operation_reconciliation.py::test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+        "tests/test_runtime_operation_reconciliation.py::test_authenticated_stdio_recovery_uses_active_serve_owner"
+      ],
+      "rationale": "Operator recovery requires current attempt/epoch/state, reason and duplicate-risk acknowledgement. REST/MCP/stdio decisions agree. One audit decision releases the same logical inbox without rewriting unknown transport facts; pending native calls/live runtimes prevent takeover. A late terminal stays historical and cannot consume or publish after release.",
+      "limitations": "Synthetic peers and disposable stores. Explicit takeover acknowledges possible duplicate external work; no exactly-once or native replay claim."
+    },
+    {
+      "test_id": "T-DISP-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+        "tests/test_runtime_commands.py::test_stale_native_turn_control_is_rejected_without_effect",
+        "tests/test_runtime_commands.py::test_control_queued_for_finished_turn_does_not_hit_next_turn",
+        "tests/test_runtime_safe_retry.py::test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane"
+      ],
+      "rationale": "Urgent interrupt proceeds while normal write is blocked and binds expected operation. Stale native turn is rejected, queued steer is rejected after its turn ends, and later delivery/administrative turns cannot overtake a retry-wait lane.",
+      "limitations": "Controlled event barriers and synthetic peers; does not claim preemption of arbitrary OS-blocked native code."
+    },
+    {
+      "test_id": "T-PRES-03",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_session_recovery.py::test_restart_expires_only_old_runtime_presence_and_quarantines_binding"
+      ],
+      "rationale": "After restoring the persisted RUNNING/active crash state and replacing the owner through production bootstrap, historical runtime becomes unknown and quarantined; its presence closes while an independent canonical session remains active. Native end is not fabricated and no runtime is relaunched.",
+      "limitations": "Deterministic persisted crash cut, not OS process killing; exact owner death is qualified by separate crash campaigns."
+    },
+    {
+      "test_id": "T-TX-03",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p05_concurrent_open_key_never_starts_twice",
+        "tests/test_runtime_commands.py::test_repeating_command_key_does_not_repeat_native_effect",
+        "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails"
+      ],
+      "rationale": "Concurrent open and operator reconciliation plus serial command deduplication are asserted.",
+      "limitations": "Still need concurrent send admission to tie one operation, grant charge and native effect together."
+    },
+    {
+      "test_id": "T-TX-04",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces",
+        "tests/test_runtime_commands.py::test_idempotent_retry_does_not_charge_spent_grant_again"
+      ],
+      "rationale": "Changed open metadata and command content conflict; one grant charge/command remains.",
+      "limitations": "Changed target/context and unchanged original operation payload need explicit assertions."
+    },
+    {
+      "test_id": "T-CONS-06",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_safe_retry.py::test_safe_retry_exhaustion_is_bounded_and_can_be_released_to_pull"
+      ],
+      "rationale": "Safe pre-write lane-busy attempts have bounded retries then explicit inbox release.",
+      "limitations": "Lane-busy is not socket failure; test does not assert unchanged inbox lease/attempt counter across transport retries."
+    }
+  ]
+}

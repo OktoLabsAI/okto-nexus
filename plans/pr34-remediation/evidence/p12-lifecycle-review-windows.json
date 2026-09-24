@@ -1,0 +1,245 @@
+{
+  "source_sha": "f12c169a81b2af56ca351194f136d6e96f113fa5",
+  "platform": "windows",
+  "counts": {
+    "PASS": 37
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "37",
+      "time": "154.408",
+      "timestamp": "2026-09-24T07:57:00.657183-03:00"
+    }
+  ],
+  "native_flags": "No native campaign selected; synthetic peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_boot.py tests/test_runtime_shared_connection.py tests/test_runtime_production_multiplex.py tests/test_runtime_protocol_compatibility.py tests/test_runtime_session_recovery.py -q --junitxml=.git/pr34-evidence/lifecycle-review-windows.xml",
+  "limitations": "Selected fixture gate; not native qualification, full suite or performance benchmark. Production and tests unchanged at source SHA.",
+  "records": [
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate",
+      "status": "PASS",
+      "seconds": 6.198
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_one_failed_boot_does_not_prevent_other_endpoint",
+      "status": "PASS",
+      "seconds": 3.914
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_boot_revalidates_approval_before_any_native_effect[revoked]",
+      "status": "PASS",
+      "seconds": 4.904
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_boot_revalidates_approval_before_any_native_effect[profile_revision]",
+      "status": "PASS",
+      "seconds": 5.186
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_boot_revalidates_approval_before_any_native_effect[issuer_rotated]",
+      "status": "PASS",
+      "seconds": 5.841
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_boot_revalidates_approval_before_any_native_effect[quarantined]",
+      "status": "PASS",
+      "seconds": 3.88
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_boot_authority_cannot_be_used_for_control_or_other_binding",
+      "status": "PASS",
+      "seconds": 3.032
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_endpoint_reconciliation_requires_explicit_risk_and_is_idempotent",
+      "status": "PASS",
+      "seconds": 3.48
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_attach_pid_is_not_stable_boot_identity",
+      "status": "PASS",
+      "seconds": 3.335
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
+      "status": "PASS",
+      "seconds": 5.07
+    },
+    {
+      "class": "tests.test_runtime_boot",
+      "test": "test_global_boot_budget_defers_remaining_bindings_and_retains_stuck_slot",
+      "status": "PASS",
+      "seconds": 3.191
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True]",
+      "status": "PASS",
+      "seconds": 5.614
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False]",
+      "status": "PASS",
+      "seconds": 6.611
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_closing_one_codex_session_preserves_other_thread_and_process",
+      "status": "PASS",
+      "seconds": 6.25
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_close_state_survives_projection_failure_and_repeated_close",
+      "status": "PASS",
+      "seconds": 3.363
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_native_payload_cannot_forge_lifecycle_transition",
+      "status": "PASS",
+      "seconds": 3.106
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_connection_leases_protect_live_and_starting_siblings",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_concurrent_close_drains_final_event_once",
+      "status": "PASS",
+      "seconds": 3.695
+    },
+    {
+      "class": "tests.test_runtime_shared_connection",
+      "test": "test_shared_connection_cannot_cross_approved_profile_context",
+      "status": "PASS",
+      "seconds": 4.159
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[agent-production]",
+      "status": "PASS",
+      "seconds": 4.258
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[workspace-production]",
+      "status": "PASS",
+      "seconds": 4.151
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[profile-production]",
+      "status": "PASS",
+      "seconds": 5.082
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[revision-production]",
+      "status": "PASS",
+      "seconds": 4.122
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[secret-production]",
+      "status": "PASS",
+      "seconds": 4.182
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_connection_reuse_never_crosses_effective_context[hitl-production]",
+      "status": "PASS",
+      "seconds": 4.208
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_concurrent_production_opens_share_a_live_connection[production]",
+      "status": "PASS",
+      "seconds": 5.578
+    },
+    {
+      "class": "tests.test_runtime_production_multiplex",
+      "test": "test_production_factory_reuses_compatible_connection_and_preserves_sibling[production]",
+      "status": "PASS",
+      "seconds": 6.054
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply0]",
+      "status": "PASS",
+      "seconds": 3.077
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply1]",
+      "status": "PASS",
+      "seconds": 3.574
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply2]",
+      "status": "PASS",
+      "seconds": 3.101
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_codex_incompatible_thread_identity_never_becomes_ready[]",
+      "status": "PASS",
+      "seconds": 2.979
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_codex_incompatible_thread_identity_never_becomes_ready[42]",
+      "status": "PASS",
+      "seconds": 4.006
+    },
+    {
+      "class": "tests.test_runtime_protocol_compatibility",
+      "test": "test_codex_incompatible_thread_identity_never_becomes_ready[None]",
+      "status": "PASS",
+      "seconds": 3.04
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_revoked_binding_during_constructor_does_not_start_peer",
+      "status": "PASS",
+      "seconds": 3.035
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_open_without_client_key_reserves_before_constructor",
+      "status": "PASS",
+      "seconds": 3.288
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_unfinished_start_is_quarantined_without_replay",
+      "status": "PASS",
+      "seconds": 3.465
+    },
+    {
+      "class": "tests.test_runtime_session_recovery",
+      "test": "test_restart_expires_only_old_runtime_presence_and_quarantines_binding",
+      "status": "PASS",
+      "seconds": 4.36
+    }
+  ]
+}
