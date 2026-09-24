@@ -1,0 +1,16 @@
+{
+  "source_sha": "43388c8",
+  "requirement": "T-DISP-09",
+  "command": "rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/audit_dispatch_fairness.py <evidence.json>",
+  "composition": "authenticated real HTTP; approved synthetic Pi peers; dispatcher quiesced before enqueue",
+  "pending": 3,
+  "worker_capacity": 2,
+  "selected_recipients": [
+    "worker",
+    "worker"
+  ],
+  "unique_selected_lanes": 1,
+  "expected": "two distinct eligible lanes, including healthy",
+  "status": "FAIL",
+  "limitation": "selection-stage reproduction; not a wall-clock scheduler-pressure benchmark"
+}

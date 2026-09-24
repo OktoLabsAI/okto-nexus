@@ -2326,33 +2326,38 @@
         {
           "task_id": "P12-T01",
           "title": "Rodar regressão completa e matriz adversarial pela composição real.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P12_SUITE_FEEB14D.md"
+            "plans/pr34-remediation/P12_SUITE_FEEB14D.md",
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md."
         },
         {
           "task_id": "P12-T02",
           "title": "Executar testes nativos dos quatro conectores com backends/sessões aprovados.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
-          "evidence": [],
+          "evidence": [
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+          ],
           "notes": ""
         },
         {
           "task_id": "P12-T03",
           "title": "Rodar crash/stress/leak e benchmarks comparáveis, classificando polling e controles.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
-          "evidence": [],
+          "evidence": [
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+          ],
           "notes": ""
         },
         {
@@ -2379,18 +2384,21 @@
           "evidence": [
             "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
             "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
-            "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md"
+            "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
           ],
           "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending. Subsequent combined offline backup/restore now tested on Windows/Linux; live-owner exclusion, references/checkpoints, identity, private result artifact and uncertain delivery fences preserved. Full aggregate phase gate remains pending."
         },
         {
           "task_id": "P12-T05",
           "title": "Gerar evidence index por SHA, mapa F01–F14 e parecer de prontidão sem merge automático.",
-          "status": "NOT_STARTED",
+          "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
           "test_results": [],
-          "evidence": [],
+          "evidence": [
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+          ],
           "notes": ""
         }
       ]
@@ -3112,8 +3120,10 @@
       ],
       "stimulus": "Um endpoint lento e outro saudável sob backlog.",
       "expected": "Endpoint saudável continua processando; quotas por agente impedem multiplicar limite com endpoints.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "FAIL",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-dispatch-fairness-red.json"
+      ]
     },
     {
       "test_id": "T-DISP-10",
