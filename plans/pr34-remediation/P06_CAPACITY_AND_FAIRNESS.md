@@ -77,7 +77,20 @@ repassed unchanged but its original cause remains unproven. No timeout was incre
 
 PR34 refreshed again2026-09-24: stillOPEN/head d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397,
 base27b06fe48b9f95b35c94f50827fea83d178f4e12. Installed binaries observed read-only:
-Codex0.156.1, Claude2.1.281. No new model campaign claimed for this unit yet.
+Codex0.156.1, Claude2.1.281.
+
+Fresh isolated native campaigns on committed d76b78cb547127c90fee1948909196b9fc7af9f3:
+Codex **4 PASS,11 deselected,45.05s**; Claude **4 PASS,11 deselected,37.70s**.
+Both used `rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short
+--basetemp=<fresh temporary directory> tests/test_runtime_native_campaign.py -k <selector>`
+through an environment-scoping Python wrapper. Codex selector:
+`codex and (two_turns or explicit_work or approval_denial or multiplex)`;
+Claude selector:
+`claude_code and (two_turns or explicit_work or approval_denial or question_roundtrip)`.
+Only the explicitly approved installed executables and disposable login copies
+were used; personal configuration and Nexus operator credentials were not supplied
+to children. Server-owned reports: `evidence/p06-capacity-native.json`.
+These eight scenarios do not qualify unexecuted native scenarios or the final gate.
 
 Next: final store-guard gates, milestone commit/push, proven-safe retry/backoff/
 equivalent-endpoint fallback, remaining matrix/crash/performance audit and final

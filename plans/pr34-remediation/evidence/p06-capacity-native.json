@@ -1,0 +1,376 @@
+{
+  "source_sha": "d76b78cb547127c90fee1948909196b9fc7af9f3",
+  "source_state": "committed implementation; only pre-existing protected dashboard assets differ",
+  "codex": {
+    "version": "0.156.1",
+    "result": "4 PASS, 11 deselected, 45.05s",
+    "selector": "codex and (two_turns or explicit_work or approval_denial or multiplex)",
+    "records": [
+      {
+        "test_directory": "test_native_approval_denial_pr0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "0.156.1",
+            "observation": "initialize_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "item/commandExecution/requestApproval",
+              "item/fileChange/requestApproval",
+              "item/tool/requestUserInput",
+              "mcpServer/elicitation/request"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": true,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": true
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_explicit_work_resu0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "0.156.1",
+            "observation": "initialize_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "item/commandExecution/requestApproval",
+              "item/fileChange/requestApproval",
+              "item/tool/requestUserInput",
+              "mcpServer/elicitation/request"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": true,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_multiplex_uses_pro0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "0.156.1",
+            "observation": "initialize_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "item/commandExecution/requestApproval",
+              "item/fileChange/requestApproval",
+              "item/tool/requestUserInput",
+              "mcpServer/elicitation/request"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": true,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          },
+          {
+            "schema_version": 1,
+            "native_version": "0.156.1",
+            "observation": "initialize_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "item/commandExecution/requestApproval",
+              "item/fileChange/requestApproval",
+              "item/tool/requestUserInput",
+              "mcpServer/elicitation/request"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": true,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_two_turns_via_cano0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "0.156.1",
+            "observation": "initialize_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "item/commandExecution/requestApproval",
+              "item/fileChange/requestApproval",
+              "item/tool/requestUserInput",
+              "mcpServer/elicitation/request"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": true,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      }
+    ]
+  },
+  "claude": {
+    "version": "2.1.281",
+    "result": "4 PASS, 11 deselected, 37.70s",
+    "selector": "claude_code and (two_turns or explicit_work or approval_denial or question_roundtrip)",
+    "records": [
+      {
+        "test_directory": "test_native_approval_denial_pr0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "2.1.281",
+            "observation": "executable_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "control_request:can_use_tool/Write",
+              "control_request:can_use_tool/AskUserQuestion"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": false,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": true
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_explicit_work_resu0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "2.1.281",
+            "observation": "executable_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "control_request:can_use_tool/Write",
+              "control_request:can_use_tool/AskUserQuestion"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": false,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_question_roundtrip0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "2.1.281",
+            "observation": "executable_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "control_request:can_use_tool/Write",
+              "control_request:can_use_tool/AskUserQuestion"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": false,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": true
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      },
+      {
+        "test_directory": "test_native_two_turns_via_cano0",
+        "reports": [
+          {
+            "schema_version": 1,
+            "native_version": "2.1.281",
+            "observation": "executable_version",
+            "capabilities_verified": false,
+            "compatible_native_requests": [
+              "control_request:can_use_tool/Write",
+              "control_request:can_use_tool/AskUserQuestion"
+            ],
+            "native_request_basis": "tested_version_contract",
+            "compatible_controls": [
+              "steer",
+              "interrupt"
+            ],
+            "control_contract_basis": "tested_version_contract",
+            "effective_capability_contract": 1,
+            "effective_capabilities": {
+              "conversation": true,
+              "managed_work": true,
+              "context_without_execution": false,
+              "events": true,
+              "observes_acceptance": false,
+              "correlated_results": true,
+              "native_deduplication": false,
+              "native_replay": false,
+              "multiplexing": false,
+              "steer_timing": "IMMEDIATE",
+              "interrupt": true,
+              "interrupt_requires_settle": false,
+              "observes_stop": true,
+              "approvals": false
+            },
+            "effective_capability_basis": "trusted_adapter_probe_and_profile"
+          }
+        ]
+      }
+    ]
+  },
+  "pi_native": "NOT_RUN: user decision",
+  "attach_native": "NOT_RUN: no dedicated session configured"
+}

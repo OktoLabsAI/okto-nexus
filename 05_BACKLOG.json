@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "P06 capacity/fairness above49fbfb40e08f2730cabc57ef4a5624a9b8f70b57",
+  "execution_head": "d76b78cb547127c90fee1948909196b9fc7af9f3",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -862,13 +862,21 @@
               "result": "PASS",
               "observed": "55 passed in 60.96s; native scenarios recorded separately in unit document",
               "evidence": "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
+            },
+            {
+              "sha": "d76b78cb547127c90fee1948909196b9fc7af9f3",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short --basetemp=<isolated temp> tests/test_runtime_native_campaign.py -k <per-connector selector; see evidence document>",
+              "result": "PASS",
+              "observed": "Codex 4 passed/11 deselected/45.05s; Claude 4 passed/11 deselected/37.70s",
+              "evidence": "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
             "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
-            "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md"
+            "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+            "plans/pr34-remediation/evidence/p06-capacity-native.json"
           ],
           "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
         },
