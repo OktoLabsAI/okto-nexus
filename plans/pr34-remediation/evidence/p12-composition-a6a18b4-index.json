@@ -1,0 +1,71 @@
+{
+  "source_sha": "a6a18b4dfeaa0f8272ebf3ecb6b410c8af5a0946",
+  "runs": {
+    "windows": {
+      "manifest": "p12-composition-a6a18b4-windows.json",
+      "counts": {
+        "PASS": 20,
+        "SKIP": 1
+      }
+    },
+    "linux": {
+      "manifest": "p12-composition-a6a18b4-linux.json",
+      "counts": {
+        "PASS": 21
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-E2E-06",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-600]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-1800]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[committed_child-74-600]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[accepted_child-75-600]",
+          "tests/test_runtime_relay_process_restart.py::test_slow_canonical_chain_keeps_deadline_across_four_server_processes",
+          "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]",
+          "tests/test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+          "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+          "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+          "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+          "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+          "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+          "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+          "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch"
+        ],
+        "linux": [
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-600]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-1800]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[committed_child-74-600]",
+          "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[accepted_child-75-600]",
+          "tests/test_runtime_relay_process_restart.py::test_slow_canonical_chain_keeps_deadline_across_four_server_processes",
+          "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]",
+          "tests/test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+          "tests/test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]",
+          "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+          "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+          "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+          "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+          "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+          "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+          "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch"
+        ]
+      }
+    }
+  ]
+}

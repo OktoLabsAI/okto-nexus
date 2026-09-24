@@ -3485,9 +3485,11 @@
       "execution_status": "NOT_RUN",
       "evidence": [
         "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
-        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md",
+        "plans/pr34-remediation/evidence/p12-mirror-observation-red-windows.json"
       ],
-      "notes": "PARTIAL:16 unsafe mirror create/update REST/MCP cases pass for four adapters, which lack context_without_execution. Positive safe observer transport not qualified; aggregate remains NOT_RUN."
+      "notes": "PARTIAL:16 unsafe mirror create/update REST/MCP cases pass for four adapters, which lack context_without_execution. Positive safe observer transport not qualified; aggregate remains NOT_RUN. Positive processless context observer gap reproduced at a6a18b4:1 behavioral FAIL, production implementation pending."
     },
     {
       "test_id": "T-CONS-08",
@@ -4958,8 +4960,12 @@
       ],
       "stimulus": "Repetir caminhos críticos por servidor real e múltiplos processos.",
       "expected": "Wiring de auth/flags/dispatch/journal/presença realmente usado, não só services montados em fixtures.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMPOSITION_A6A18B4.md",
+        "plans/pr34-remediation/evidence/p12-composition-a6a18b4-index.json"
+      ],
+      "notes": "Selected actual serve CLI, HTTP owner/stdio multiprocess, auth/flags, journal recovery and canonical presence paths at a6a18b4:Windows20 PASS1 POSIX SKIP/Linux21 PASS. Not final full-suite/native qualification; pending mirror/external attach excluded."
     },
     {
       "test_id": "T-E2E-07",

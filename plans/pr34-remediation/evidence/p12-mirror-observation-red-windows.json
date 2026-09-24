@@ -1,0 +1,32 @@
+{
+  "source_sha": "a6a18b4dfeaa0f8272ebf3ecb6b410c8af5a0946",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "33.954",
+      "timestamp": "2026-09-24T10:40:00.779737-03:00"
+    }
+  ],
+  "native_flags": "No provider; registered context-only fixture adapter through actual HTTP/MCP composition.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_mirror_observation.py -q --tb=short --junitxml=.git/pr34-evidence/mirror-observation-red-windows.xml",
+  "limitations": "Behavioral RED: approved observer receives no context. Optional observe_context v1 proposed by test, not implemented or accepted as a completed contract.",
+  "records": [
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_context_observer_receives_delivery_without_another_executor",
+      "status": "FAIL",
+      "seconds": 25.688
+    }
+  ],
+  "file_sha256": {
+    "tests/test_runtime_mirror_observation.py": "0f123560146cd284a8cfb11f3f0a3db0986e84259a070ddb9f56564b6f8f112b"
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "source_sha": "a6a18b4dfeaa0f8272ebf3ecb6b410c8af5a0946",
+  "platform": "windows",
+  "counts": {
+    "PASS": 20,
+    "SKIP": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "1",
+      "tests": "21",
+      "time": "188.685",
+      "timestamp": "2026-09-24T10:36:01.723010-03:00"
+    }
+  ],
+  "native_flags": "No native provider; isolated actual server/stdio processes and synthetic native protocol processes.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_relay_process_restart.py tests/test_runtime_disabled_acceptance.py tests/test_runtime_signal_drain.py tests/test_runtime_binding_acceptance.py tests/test_runtime_capture_admission.py tests/test_runtime_owner_contention.py -q --tb=short --junitxml=.git/pr34-evidence/composition-a6a18b4-windows.xml",
+  "limitations": "Selected composition gate, not final full suite. Windows POSIX signal case SKIP.",
+  "records": [
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-600]",
+      "status": "PASS",
+      "seconds": 10.225
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-1800]",
+      "status": "PASS",
+      "seconds": 13.924
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[committed_child-74-600]",
+      "status": "PASS",
+      "seconds": 11.501
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[accepted_child-75-600]",
+      "status": "PASS",
+      "seconds": 12.612
+    },
+    {
+      "class": "tests.test_runtime_relay_process_restart",
+      "test": "test_slow_canonical_chain_keeps_deadline_across_four_server_processes",
+      "status": "PASS",
+      "seconds": 25.125
+    },
+    {
+      "class": "tests.test_runtime_disabled_acceptance",
+      "test": "test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]",
+      "status": "PASS",
+      "seconds": 5.401
+    },
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+      "status": "PASS",
+      "seconds": 6.313
+    },
+    {
+      "class": "tests.test_runtime_signal_drain",
+      "test": "test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+      "status": "PASS",
+      "seconds": 5.34
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+      "status": "PASS",
+      "seconds": 5.169
+    },
+    {
+      "class": "tests.test_runtime_binding_acceptance",
+      "test": "test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+      "status": "PASS",
+      "seconds": 5.608
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+      "status": "PASS",
+      "seconds": 3.216
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+      "status": "PASS",
+      "seconds": 3.23
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+      "status": "PASS",
+      "seconds": 3.015
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+      "status": "PASS",
+      "seconds": 3.301
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+      "status": "PASS",
+      "seconds": 17.226
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+      "status": "PASS",
+      "seconds": 13.674
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_quota_compaction_resumes_admission_without_losing_projected_events",
+      "status": "PASS",
+      "seconds": 6.254
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+      "status": "PASS",
+      "seconds": 4.485
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+      "status": "PASS",
+      "seconds": 5.26
+    },
+    {
+      "class": "tests.test_runtime_owner_contention",
+      "test": "test_second_server_process_cannot_take_live_owner_or_dispatch",
+      "status": "PASS",
+      "seconds": 26.134
+    }
+  ]
+}
