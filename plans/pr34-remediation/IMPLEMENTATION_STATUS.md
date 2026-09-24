@@ -172,3 +172,5 @@ corrected source/build qualification; old39c5e6c artifacts must not be used as t
 final corrected build.
 
 Surface58 metadata measurement completed exit0 at5d1d178: OFF43 tools/40264 characters, ON51/47644; see P12_CURRENT_SURFACE.md. Later scoped evidence linked to59 non-baseline tasks without promoting statuses. PR34 HEAD/base rechecked unchanged. Both full-suite handles51046/29628 remain live; candidate five-file Ruff PASS. No main production/test changes.
+
+Windows full51046 now terminal exit1:2630 PASS/5 FAIL/121 SKIP,3805.65s. Exact terminal failures match grouped receipt, two stale migration ranges and Claude first-event0.2139898s>0.2s; see P12_FULL_REGRESSION_39C5E6C.md and sanitized full-node manifest. Linux29628 still live, so five candidate paths remain isolated. No source edits or reinstall yet.

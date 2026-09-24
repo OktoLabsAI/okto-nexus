@@ -3125,9 +3125,11 @@
             "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_FINAL_AUDIT.md",
-            "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
+            "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md",
+            "plans/pr34-remediation/P12_FULL_REGRESSION_39C5E6C.md",
+            "plans/pr34-remediation/evidence/p12-full-39c5e6c-windows.json"
           ],
-          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run.",
+          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run. Current pre-correction Windows full39c5e6c is terminal exit1:2630 PASS/5 FAIL/121 SKIP. Known receipt regression and test expectations have an isolated qualified correction; Linux29628 remains live. Historical completed green suites do not supersede these current failures.",
           "current_review": {
             "snapshot_sha": "5d1d17874c2d62f94b8e329fafbdc3880c4af4e5",
             "evidence": [
