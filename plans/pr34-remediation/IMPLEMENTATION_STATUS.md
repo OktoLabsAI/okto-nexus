@@ -42,6 +42,8 @@ Identity/start-failure acceptance above e3326ad: T-ID-05/06 scoped PASS. New cat
 
 Operation authorization above28d1078: T-AUTH-12 scoped PASS, five new acceptance cases plus existing commands/grants:30 PASS Windows112.47s/Linux121.96s; Ruff PASS. Positive authorized key recovery, opaque foreign operation reads and four revoked cached-control replies verified; no production change. P12_OPERATION_AUTHORIZATION.md and sanitized manifests record parent/new-test hash. Next: actual owner crash after canonical commit before wake (new fixture/test under development), remaining matrix/crash/load/performance and release gates.
 
+Post-commit owner crash above6c710ea: T-TX-02 exact process stimulus now scoped PASS, superseding the earlier partial owner-replacement review. Windows6 PASS71.30s/Linux6 PASS122.99s including prior relay process cuts; Ruff PASS. Parent plus crash-fixture/test hashes and sanitized per-node manifests in P12_COMMIT_CRASH.md. No production change. Next: payload authority/native option coverage (new tests being verified), remaining matrix/load/performance and release gates.
+
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
 P03: migration 030, profiles/endpoints, canonical runtime presence and isolated child environments implemented. 19 tests PASS (evidence/p03-gate.log). Seven later-phase regressions remain outstanding. Native Codex/Claude/Pi/attach NOT_RUN so far. All phase statuses use backlog vocabulary; IMPLEMENTED does not imply VERIFIED.

@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "28d107829c89557b0fac2ee2ebf8f2a76494f7c8",
+  "execution_head": "6c710ea1e300f0acad26e42a94f33ff233e1cba4",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -3161,8 +3161,12 @@
       ],
       "stimulus": "Matar processo depois do commit e antes de wake.",
       "expected": "Entrega/intent persistem; restart ou reconciliação retoma sem duplicar.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-commit-crash.json"
+      ],
+      "notes": "Real disposable owner exit after canonical commit before wake; restart same operation, one wire send. Expanded6 PASS each platform."
     },
     {
       "test_id": "T-TX-03",

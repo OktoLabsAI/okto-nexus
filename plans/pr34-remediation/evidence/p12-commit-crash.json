@@ -1,0 +1,25 @@
+{
+  "parent_sha": "6c710ea1e300f0acad26e42a94f33ff233e1cba4",
+  "dirty_files_sha256": {
+    "tests/test_runtime_commit_crash.py": "acc8a7a2ff1c79fcca010f992f0e4b8147c73de72826fd75cba14a5c7e486a9c",
+    "tests/runtime_relay_process_fixture.py": "3ec121aa9e1527bde7b3315f2a493c5b76209e42805e97c755b6766e84ec1bc6"
+  },
+  "requirement_nodes": {
+    "T-TX-02": [
+      "tests/test_runtime_commit_crash.py::test_committed_message_survives_owner_death_before_wake_without_duplicate_effect"
+    ]
+  },
+  "windows": {
+    "passed": 6,
+    "seconds": 71.3,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 6,
+    "seconds": 122.99,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_COMMIT_CRASH.md",
+  "limitations": "Exact T-TX-02 crash cut. No scheduler pressure, leak/RSS benchmark or full-suite qualification."
+}

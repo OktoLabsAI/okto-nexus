@@ -71,11 +71,28 @@ def main():
     SqliteRuntimeJournalRepo.project = project_at_cut
     pending = SqliteRuntimeOutboxRepo.pending
     def pending_at_cut(self, uow, **kwargs):
+        if cut == "message_commit":
+            return []  # Hold dispatch until the post-commit cut, without changing admission.
         rows = pending(self, uow, **kwargs)
         if cut == "committed_child" and any(row["source_result_id"] for row in rows):
             os._exit(74)  # Another transaction can see the committed child.
         return rows
     SqliteRuntimeOutboxRepo.pending = pending_at_cut
+    if cut == "message_commit":
+        from okto_nexus.adapters.inbound.mcp.tools import messages
+
+        def exit_before_wake(current_deps):
+            # A new transaction must observe all committed canonical rows before
+            # killing the entire owner. The actual wake implementation never runs.
+            with current_deps.connection_factory.unit_of_work(write=False) as uow:
+                committed = {table: uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
+                    for table in ("messages", "message_deliveries", "delivery_outbox")}
+            assert committed == {"messages": 1, "message_deliveries": 1, "delivery_outbox": 1}, committed
+            (home / "commit-before-wake.json").write_text(json.dumps(committed), encoding="utf-8")
+            os._exit(76)
+
+        messages.wake_runtime = exit_before_wake
+
 
     sock = socket.socket()
     sock.bind(("127.0.0.1", 0))
