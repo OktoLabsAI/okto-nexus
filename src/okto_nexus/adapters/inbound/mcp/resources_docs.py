@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="21",
+    version="22",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -616,6 +616,12 @@ after_operation_id and limit1..100(default50), returns items/has_more/next_opera
 It exposes attempt/owner/state/lifecycle and reconciliation metadata, never
 payload or credentials. harness_get(operation_id=...) also reports attempt_id,
 owner_epoch and reconciliation_id.
+Surface54: inspect with an exact delivery operation_id also returns its latest
+64 attempt_history observations in sequence order and attempt_history_truncated.
+Each includes attempt/epoch/binding/state/ACK/native references and provenance.
+Migration059 snapshots only the known current attempt; it does not reconstruct
+lost earlier history. The full append-only history stays in the local store.
+List inspection and administrative commands do not include delivery history.
 
 Mutations require action, operation_id, expected_state, expected_attempt_id,
 expected_owner_epoch, idempotency_key and reason. Null attempt/epoch match only

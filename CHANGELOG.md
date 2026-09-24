@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface54/schema059 preserves immutable delivery attempt observations across
+  owner changes, with bounded operator detail inspection and honest upgrade snapshots.
 - Allow audited operator release of a proven pre-write conversation rejection
   to its original pull inbox, preserving attempt evidence and handoff authority.
 - Surface53/schema058 bounds unresolved inbox transport backlog transactionally

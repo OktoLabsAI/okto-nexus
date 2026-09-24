@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "eb608078a30c5d34b9c4a374fabe6847632d17c1",
+  "execution_head": "fd9ea1692d40a763b7ae03ce8832d06d0c74405a",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -855,7 +855,8 @@
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/application/runtime_open.py",
             "src/okto_nexus/application/messages.py",
-            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
+            "src/okto_nexus/migrations/059_runtime_delivery_attempt_history.sql"
           ],
           "test_results": [
             {
@@ -871,6 +872,13 @@
               "result": "PASS",
               "observed": "Codex 4 passed/11 deselected/45.05s; Claude 4 passed/11 deselected/37.70s",
               "evidence": "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md"
+            },
+            {
+              "sha": "fd9ea1692d40a763b7ae03ce8832d06d0c74405a + history worktree",
+              "command": "rtk proxy <platform Python> -m pytest -q --tb=short tests/test_runtime_attempt_history.py tests/test_runtime_outbox.py tests/test_runtime_operation_reconciliation.py tests/test_runtime_not_sent_recovery.py tests/test_runtime_writer_contract.py tests/test_runtime_backup_restore.py tests/test_migrations.py tests/test_frente1_resources.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "Windows84 passed196.20s; Linux84 passed221.90s; one Starlette warning each",
+              "evidence": "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md"
             }
           ],
           "evidence": [
@@ -878,9 +886,10 @@
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
             "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
             "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
-            "plans/pr34-remediation/evidence/p06-capacity-native.json"
+            "plans/pr34-remediation/evidence/p06-capacity-native.json",
+            "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending. Schema059 now preserves immutable transport attempt observations and honest current-state upgrade snapshots, surface54 detail inspection. Backoff and equivalent-endpoint fallback remain pending; no aggregate phase promotion."
         },
         {
           "task_id": "P06-T02",
@@ -939,16 +948,26 @@
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/application/runtime_open.py",
             "src/okto_nexus/application/messages.py",
-            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
+            "src/okto_nexus/migrations/059_runtime_delivery_attempt_history.sql"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "fd9ea1692d40a763b7ae03ce8832d06d0c74405a + history worktree",
+              "command": "rtk proxy <platform Python> -m pytest -q --tb=short tests/test_runtime_attempt_history.py tests/test_runtime_outbox.py tests/test_runtime_operation_reconciliation.py tests/test_runtime_not_sent_recovery.py tests/test_runtime_writer_contract.py tests/test_runtime_backup_restore.py tests/test_migrations.py tests/test_frente1_resources.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "Windows84 passed196.20s; Linux84 passed221.90s; one Starlette warning each",
+              "evidence": "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
             "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
-            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
+            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
+            "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending. Schema059 now preserves immutable transport attempt observations and honest current-state upgrade snapshots, surface54 detail inspection. Backoff and equivalent-endpoint fallback remain pending; no aggregate phase promotion."
         },
         {
           "task_id": "P06-T05",

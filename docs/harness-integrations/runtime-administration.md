@@ -164,6 +164,21 @@ new native call, receipt or endpoint quarantine is produced. An in-flight call
 still blocks release. Any generic rejection or uncertain send uses the stricter
 recovery rules above; a handoff must use canonical claim recovery.
 
+Surface54/schema059: inspect a specific delivery `operation_id` through either
+operator surface to receive `attempt_history` (latest64 observations, ordered by
+sequence) and `attempt_history_truncated`. This includes owner, endpoint/session,
+state, ACK, native references, reason and provenance, never message payload or
+credentials. List pages remain compact. These are transport observations, not
+additional work items. Administrative command history is not synthesized here.
+
+The additive migration snapshots the current known attempt with provenance
+`migration_snapshot`; it cannot reconstruct attempts overwritten by older versions.
+Subsequent committed transitions are recorded atomically as `observed_transition`,
+including a claim returned to PENDING on owner change. Full history remains in
+the database; detail truncation does not delete it. Existing backup/restore includes
+the table. Do not delete or rewrite its records to force a retry; operational
+rollback remains admission-off/drain/recovery, not reverse SQL.
+
 ```json
 {
   "view": "outbox",

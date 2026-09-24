@@ -159,6 +159,16 @@ class RuntimeOperationMaintenanceService:
                 binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?",
                                                  (row["operation_id"],)).fetchone()
                 item["handoff"] = dict(binding) if binding else None
+                if operation_id and row["source_kind"] == "delivery_outbox":
+                    # Detail-only, bounded history. No payload, credential or
+                    # new delivery authority is reconstructed from observations.
+                    history = uow.connection.execute(
+                        "SELECT sequence,attempt_id,owner_epoch,endpoint_id,runtime_session_id,state,"
+                        "ack_level,reason,native_thread_id,native_turn_id,terminal_event_id,occurred_at,provenance "
+                        "FROM runtime_delivery_attempt_events WHERE operation_id=? ORDER BY sequence DESC LIMIT 65",
+                        (operation_id,)).fetchall()
+                    item["attempt_history"] = [dict(event) for event in reversed(history[:64])]
+                    item["attempt_history_truncated"] = len(history) > 64
                 items.append(item)
         return {"items": items, "has_more": len(rows) > limit,
                 "next_operation_id": items[-1]["operation_id"] if len(rows) > limit else None}
