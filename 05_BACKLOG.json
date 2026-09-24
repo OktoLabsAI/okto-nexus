@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "feeb14d complete-suite implementation/test snapshot; fixture corrections above bdb1ca6",
+  "execution_head": "Writer contract integration above f2222fbd99a1c10797690f6ffad2970f0d71c530; see P03_WRITER_CONTRACT.md",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -495,15 +495,18 @@
           "implementation_refs": [
             "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql",
             "src/okto_nexus/application/endpoints.py",
-            "src/okto_nexus/application/harness_supervisor.py"
+            "src/okto_nexus/application/harness_supervisor.py",
+            "src/okto_nexus/migrations/057_runtime_writer_contract.sql",
+            "tests/test_runtime_writer_contract.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P03_ENDPOINTS.md",
             "plans/pr34-remediation/evidence/p03-gate.log",
-            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md"
+            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+            "plans/pr34-remediation/P03_WRITER_CONTRACT.md"
           ],
-          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies. Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS."
+          "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies. Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending."
         }
       ]
     },
@@ -2212,15 +2215,18 @@
             "tests/test_runtime_configuration_updates.py",
             "src/okto_nexus/application/runtime_operation_maintenance.py",
             "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql",
-            "tests/test_runtime_operation_reconciliation.py"
+            "tests/test_runtime_operation_reconciliation.py",
+            "src/okto_nexus/migrations/057_runtime_writer_contract.sql",
+            "tests/test_runtime_writer_contract.py"
           ],
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
             "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
-            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md"
+            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+            "plans/pr34-remediation/P03_WRITER_CONTRACT.md"
           ],
-          "notes": "Explicit uncertain-operation recovery and disabled-admission restart tested through production composition; no automatic replay or native startup. Full cutover/drain/backup/restore gate remains pending. Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS."
+          "notes": "Explicit uncertain-operation recovery and disabled-admission restart tested through production composition; no automatic replay or native startup. Full cutover/drain/backup/restore gate remains pending. Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending."
         }
       ]
     },
@@ -2314,12 +2320,16 @@
           "title": "Validar backup/restore/upgrade/rollback e integridade do cadastro/histórico.",
           "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "src/okto_nexus/migrations/057_runtime_writer_contract.sql",
+            "tests/test_runtime_writer_contract.py"
+          ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md"
+            "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+            "plans/pr34-remediation/P03_WRITER_CONTRACT.md"
           ],
-          "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS."
+          "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending."
         },
         {
           "task_id": "P12-T05",

@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface50/schema057 fences incompatible writers and mismatched message producers
+  at SQLite admission, including connections opened before runtime activation.
 - Surface49 connects compatible Codex sessions through one live production
   connection while preserving per-session events, ownership and isolated profiles.
 - Native event capture no longer waits on SQLite projection; bounded journal

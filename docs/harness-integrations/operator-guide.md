@@ -241,3 +241,10 @@ the process stays alive for its siblings. Closing the last session observes owne
 process termination. This does not fan out an inbox delivery to multiple endpoints
 or authorize additional work. Simultaneous first opens may create separate owned
 connections; reuse selects a ready live connection, never a speculative startup.
+# Store writer compatibility (schema 057)
+
+Upgrade every writer sharing the Nexus home before enabling runtime integrations. The first runtime owner claim activates a persistent version-1 writer contract. Older connections cannot mutate protected identity, delivery, handoff or runtime records, even if they connected before activation. Do not remove its triggers or lower the required version to roll back an application package.
+
+Keep each producer's `feature_harness_integrations` setting aligned with the serve owner. A mismatch rejects message admission with `CONFIG_ERROR` and reason `runtime_writer_mode_mismatch`, before creating a delivery. `runtime_writer_incompatible` requires a compatible client upgrade. Correct the configuration/version and review the rejected request before resubmitting; these errors do not authorize replay of an uncertain native operation.
+
+An authorized owner settings change switches admission mode atomically; disabling retains the compatibility fence and durable history. Inspect `writer_contract.required_contract` and `writer_contract.admission_enabled` through operator-only `GET /api/v1/harness/diagnostics` or MCP `harness_list(view="diagnostics")`. These compatibility declarations do not replace Nexus authentication. A database-only copy is not yet a validated combined runtime backup; preserve journal and artifacts and follow the recovery evidence limitations.

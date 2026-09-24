@@ -71,8 +71,8 @@ def _default_migrations_dir() -> Path:
 def _split_statements(script: str) -> list[str]:
     """Split a migration script into individual statements.
 
-    Line-based: blank lines and full-line ``--`` comments are dropped; a
-    statement boundary is a line whose stripped content ends with ``;``.
+    Blank lines and full-line comments are dropped. SQLite's parser recognizes
+    complete statements, including a trigger body containing inner semicolons.
     """
     statements: list[str] = []
     buffer: list[str] = []
@@ -81,7 +81,7 @@ def _split_statements(script: str) -> list[str]:
         if not stripped or stripped.startswith("--"):
             continue
         buffer.append(line)
-        if stripped.endswith(";"):
+        if sqlite3.complete_statement("\n".join(buffer)):
             statements.append("\n".join(buffer).strip())
             buffer = []
     if buffer:

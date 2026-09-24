@@ -47,15 +47,18 @@ class SqliteUnitOfWork:
     opens a deferred read snapshot.
     """
 
-    def __init__(self, connection: sqlite3.Connection, write: bool = True) -> None:
+    def __init__(self, connection: sqlite3.Connection, write: bool = True, before_write=None) -> None:
         self.connection = connection
         self._write = write
         self._active = False
+        self._before_write = before_write
 
     def __enter__(self) -> "SqliteUnitOfWork":
         statement = "BEGIN IMMEDIATE" if self._write else "BEGIN"
         try:
             self.connection.execute(statement)
+            if self._write and self._before_write:
+                self._before_write(self.connection)
         except sqlite3.Error as exc:
             # __exit__ never runs when __enter__ raises: close the connection
             # here. Lock/busy contention surfaces as a retryable DB_ERROR.
@@ -94,6 +97,8 @@ class ConnectionFactory:
 
     def __init__(self, config: NexusConfig) -> None:
         self._config = config
+        self._runtime_owner = None
+        self._runtime_clock = None
         # Cached probe connection for ``data_version`` (lazily opened). Guarded
         # by a lock because FastMCP may run tool calls on multiple threads.
         self._probe_conn: sqlite3.Connection | None = None
@@ -125,6 +130,11 @@ class ConnectionFactory:
             conn.execute(f"PRAGMA busy_timeout={int(self._config.busy_timeout_ms)}")
             self._enable_wal(conn)
             conn.execute("PRAGMA foreign_keys=ON")
+            conn.create_function("nexus_runtime_writer_v1", 0, lambda: 1)
+            conn.create_function("nexus_runtime_owner_id", 0,
+                lambda: self._runtime_owner[0] if self._runtime_owner else None)
+            conn.create_function("nexus_runtime_owner_epoch", 0,
+                lambda: self._runtime_owner[1] if self._runtime_owner else None)
             if self._config.feature_harness_integrations and conn.execute("PRAGMA synchronous").fetchone()[0] < 2:
                 conn.close()
                 raise OktoNexusError(ErrorCode.CONFIG_ERROR,
@@ -248,7 +258,25 @@ class ConnectionFactory:
         ``write=False`` ONLY for scopes that never write (deferred snapshot
         read that does not queue behind writers).
         """
-        return SqliteUnitOfWork(self.get_connection(), write=write)
+        return SqliteUnitOfWork(self.get_connection(), write=write, before_write=self._sync_runtime_writer_mode)
+
+    def configure_runtime_owner(self, owner_id, epoch, *, clock=None):
+        self._runtime_owner = (owner_id, epoch) if owner_id is not None else None
+        self._runtime_clock = clock
+
+    def _sync_runtime_writer_mode(self, conn):
+        # Register admission mode after acquiring the writer lock. A settings
+        # transaction may have changed the config while BEGIN was waiting.
+        if self._config.feature_harness_integrations:
+            conn.create_function("nexus_runtime_admission_on", 0, lambda: 1)
+        if self._runtime_owner is not None and self._runtime_clock is not None:
+            # Same write transaction as admission; no filesystem or peer call.
+            conn.execute("UPDATE runtime_writer_contract SET admission_enabled="
+                "EXISTS(SELECT 1 FROM pragma_function_list WHERE name='nexus_runtime_admission_on' AND builtin=0 AND narg=0) "
+                "WHERE singleton=1 AND owner_id=? AND owner_epoch=? AND EXISTS("
+                "SELECT 1 FROM runtime_dispatcher_owner o WHERE o.owner_id=runtime_writer_contract.owner_id "
+                "AND o.epoch=runtime_writer_contract.owner_epoch AND o.lease_expires_at>?)",
+                (*self._runtime_owner, self._runtime_clock.now_iso()))
 
     def vacuum(self) -> None:
         """Run ``VACUUM`` to rebuild the database and return freed pages.

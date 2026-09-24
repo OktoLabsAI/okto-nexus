@@ -482,6 +482,6 @@ def test_no_comm_preset_mcp_tool_and_surface_revision_is_33(tmp_path):
     from okto_nexus.adapters.inbound.mcp.server import SURFACE_REVISION
 
     deps, tools, _root = make_env(tmp_path)
-    assert SURFACE_REVISION == 49
+    assert SURFACE_REVISION == 50
     # communication presets add NO MCP tool (operator surface is REST only)
     assert not any("comm_preset" in name or "communication" in name for name in tools)

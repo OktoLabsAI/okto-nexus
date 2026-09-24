@@ -43,6 +43,7 @@ class RuntimeDispatcher:
             self.epoch = self.repo.acquire_owner(uow, owner_id=self.owner_id, now=now, lease_expires_at=iso_plus(now, 40))
         if self.epoch is None:
             return False
+        self.cf.configure_runtime_owner(self.owner_id, self.epoch, clock=self.clock)
         if self.event_ingress:
             try:
                 self.event_ingress.start(recover=False)
@@ -70,6 +71,7 @@ class RuntimeDispatcher:
                 with self.cf.unit_of_work() as uow:
                     self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())
                 self.epoch = None
+                self.cf.configure_runtime_owner(None, None)
                 raise
         if self.wake_channel:
             self.wake_channel.start(self.wake, self.owner_id)
@@ -299,3 +301,4 @@ class RuntimeDispatcher:
         # Workers remain capacity-bound even if a native call has not returned.
         with self.cf.unit_of_work() as uow:
             self.repo.release_owner(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso())
+        self.cf.configure_runtime_owner(None, None)

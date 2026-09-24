@@ -203,6 +203,12 @@ def db_error_from_exception(
     everything else stays ``retryable=False``. ``details["reason"]`` always
     carries the driver's message.
     """
+    if str(exc) in {"runtime_writer_incompatible", "runtime_writer_mode_mismatch"}:
+        message = ("Update this client to the store's runtime writer contract."
+                   if str(exc) == "runtime_writer_incompatible" else
+                   "Align this client's runtime integration setting with the active serve owner.")
+        return OktoNexusError(ErrorCode.CONFIG_ERROR, message,
+            {"reason": str(exc)}, retryable=False)
     retryable = is_retryable_db_exception(exc)
     merged: dict[str, Any] = {"reason": str(exc)}
     if details:

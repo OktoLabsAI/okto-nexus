@@ -1063,7 +1063,9 @@ def register(server: Any, deps: Any) -> None:
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
                      maintenance: Annotated[Any, Field(description="Object for selected view: profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
-        """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts. Outbox recovery never replays native calls. compact requires journal."""
+        """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts, diagnostics. Outbox recovery never replays native calls. compact requires journal."""
+        if view == "diagnostics" and not compact and maintenance is None:
+            return build_endpoint_service(deps).diagnostics(authorize_request(deps))
         if view == "bindings" and not compact:
             return discover_bindings(deps, maintenance)
         if view == "outbox" and not compact:

@@ -1,0 +1,23 @@
+{
+  "parent_sha": "bdb1ca6",
+  "worktree": "writer contract schema057",
+  "pytest_exit": 0,
+  "compatibility_reports": [
+    {
+      "schema_version": 1,
+      "native_version": "2.1.281",
+      "observation": "executable_version",
+      "capabilities_verified": false,
+      "compatible_native_requests": [
+        "control_request:can_use_tool/Write",
+        "control_request:can_use_tool/AskUserQuestion"
+      ],
+      "native_request_basis": "tested_version_contract",
+      "compatible_controls": [
+        "steer",
+        "interrupt"
+      ],
+      "control_contract_basis": "tested_version_contract"
+    }
+  ]
+}

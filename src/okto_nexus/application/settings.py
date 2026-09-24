@@ -477,6 +477,8 @@ class SettingsService:
                 (key, json.dumps(value), now),
             )
             setattr(self._config, key, value)
+            if key == "feature_harness_integrations":
+                self._sync_runtime_writer_mode(uow, value)
         return validated
 
     def reset(self, uow: UnitOfWork, keys: list[str] | None = None) -> list[str]:
@@ -492,8 +494,20 @@ class SettingsService:
             uow.connection.execute("DELETE FROM settings WHERE key = ?", (key,))
             if key not in self._pinned:
                 setattr(self._config, key, getattr(defaults, key))
+                if key == "feature_harness_integrations":
+                    self._sync_runtime_writer_mode(uow, defaults.feature_harness_integrations)
             cleared.append(key)
         return cleared
+
+    def _sync_runtime_writer_mode(self, uow, enabled):
+        # Only the current owner can change the live admission mode. A cached
+        # client configuration cannot silently downgrade the store contract.
+        uow.connection.execute("UPDATE runtime_writer_contract SET admission_enabled=? "
+            "WHERE singleton=1 AND owner_id=nexus_runtime_owner_id() "
+            "AND owner_epoch=nexus_runtime_owner_epoch() AND EXISTS("
+            "SELECT 1 FROM runtime_dispatcher_owner o WHERE o.owner_id=runtime_writer_contract.owner_id "
+            "AND o.epoch=runtime_writer_contract.owner_epoch AND o.lease_expires_at>?)",
+            (int(enabled), self._clock.now_iso()))
 
 
 def detect_pinned_fields(resolved: NexusConfig) -> frozenset[str]:

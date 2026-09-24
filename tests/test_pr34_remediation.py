@@ -29,6 +29,11 @@ def runtime(tmp_path, request):
     root.mkdir()
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     deps.config.feature_harness_integrations = getattr(request, "param", True)
+    if getattr(request, "param", None) == "stored_runtime":
+        deps.config.feature_harness_integrations = False
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("INSERT INTO settings(key,value,updated_at) VALUES(?,?,?)",
+                ("feature_harness_integrations", "true", deps.clock.now_iso()))
     if getattr(request, "param", None) == "strict":
         deps.config.trust_mode = "strict"
     peers = []

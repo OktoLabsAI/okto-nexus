@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="16",
+    version="17",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -563,6 +563,14 @@ only for the same agent/workspace/adapter/profile revision and resolved backend
 environment, with matching HITL mode. Each opening still creates an independent
 logical session; closing a sibling detaches it without stopping the others.
 The final close observes owned process shutdown. No cross-agent sharing occurs.
+Surface50/schema057 records a store-wide writer contract when the runtime owner
+starts. Incompatible legacy connections cannot mutate protected identity, session,
+inbox or handoff rows. Message producers must match the owner's integration mode:
+runtime_writer_mode_mismatch is CONFIG_ERROR, not a retryable transport failure.
+Align the client flag with the owner; never retry a different native operation.
+Disabling admission retains the writer-version fence and pending operation facts;
+compatible OFF clients can still create ordinary canonical deliveries. These
+internal SQLite compatibility markers are not authentication or execution grants.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native
