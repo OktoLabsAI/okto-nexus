@@ -1,0 +1,80 @@
+{
+  "source_sha": "f49c82bc10853a358af46f9f5dd7b7f648d6420b",
+  "platform": "linux",
+  "counts": {
+    "PASS": 9
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "9",
+      "time": "35.024",
+      "timestamp": "2026-09-24T08:03:15.712171-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; disposable fixture peers only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_request_acceptance.py -q --junitxml=.git/pr34-evidence/request-acceptance-initial-linux.xml",
+  "limitations": "Parent SHA plus new test hash; production unchanged. Controlled concurrent HTTP requests, synthetic peer; no native provider qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+      "status": "PASS",
+      "seconds": 4.309
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+      "status": "PASS",
+      "seconds": 3.026
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]",
+      "status": "PASS",
+      "seconds": 2.88
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-rest]",
+      "status": "PASS",
+      "seconds": 2.92
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-mcp]",
+      "status": "PASS",
+      "seconds": 3.62
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-rest]",
+      "status": "PASS",
+      "seconds": 3.092
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-mcp]",
+      "status": "PASS",
+      "seconds": 2.967
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-rest]",
+      "status": "PASS",
+      "seconds": 3.193
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-mcp]",
+      "status": "PASS",
+      "seconds": 3.245
+    }
+  ],
+  "test_file_sha256": {
+    "tests/test_runtime_request_acceptance.py": "41bbefd989c2091b393f9e3c531f56bf25d28845f79b51b941e0334a64c09482"
+  }
+}

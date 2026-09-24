@@ -1,0 +1,61 @@
+{
+  "source_sha": "f49c82bc10853a358af46f9f5dd7b7f648d6420b",
+  "test_file_sha256": {
+    "tests/test_runtime_request_acceptance.py": "41bbefd989c2091b393f9e3c531f56bf25d28845f79b51b941e0334a64c09482"
+  },
+  "production_changes": false,
+  "platforms": {
+    "windows": {
+      "manifest": "p12-request-acceptance-windows.json",
+      "counts": {
+        "PASS": 9
+      }
+    },
+    "linux": {
+      "manifest": "p12-request-acceptance-linux.json",
+      "counts": {
+        "PASS": 9
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-TX-03",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]"
+        ],
+        "linux": [
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+          "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-TX-04",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-mcp]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-mcp]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-mcp]"
+        ],
+        "linux": [
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-mcp]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-mcp]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-rest]",
+          "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-mcp]"
+        ]
+      }
+    }
+  ]
+}

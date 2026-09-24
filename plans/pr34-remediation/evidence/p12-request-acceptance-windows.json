@@ -1,0 +1,80 @@
+{
+  "source_sha": "f49c82bc10853a358af46f9f5dd7b7f648d6420b",
+  "platform": "windows",
+  "counts": {
+    "PASS": 9
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "9",
+      "time": "31.580",
+      "timestamp": "2026-09-24T08:02:49.892929-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; disposable fixture peers only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_request_acceptance.py -q --junitxml=.git/pr34-evidence/request-acceptance-initial-windows.xml",
+  "limitations": "Parent SHA plus new test hash; production unchanged. Controlled concurrent HTTP requests, synthetic peer; no native provider qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+      "status": "PASS",
+      "seconds": 3.654
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+      "status": "PASS",
+      "seconds": 3.219
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]",
+      "status": "PASS",
+      "seconds": 3.084
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-rest]",
+      "status": "PASS",
+      "seconds": 2.947
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[content-mcp]",
+      "status": "PASS",
+      "seconds": 3.147
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-rest]",
+      "status": "PASS",
+      "seconds": 3.323
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[target-mcp]",
+      "status": "PASS",
+      "seconds": 3.932
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-rest]",
+      "status": "PASS",
+      "seconds": 3.848
+    },
+    {
+      "class": "tests.test_runtime_request_acceptance",
+      "test": "test_changed_request_cannot_replace_original_command[owner_context-mcp]",
+      "status": "PASS",
+      "seconds": 3.493
+    }
+  ],
+  "test_file_sha256": {
+    "tests/test_runtime_request_acceptance.py": "41bbefd989c2091b393f9e3c531f56bf25d28845f79b51b941e0334a64c09482"
+  }
+}

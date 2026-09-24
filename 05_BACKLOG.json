@@ -2513,7 +2513,8 @@
           "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [
-            "tests/test_runtime_work_acceptance.py"
+            "tests/test_runtime_work_acceptance.py",
+            "tests/test_runtime_request_acceptance.py"
           ],
           "test_results": [
             {
@@ -2557,6 +2558,13 @@
               "result": "PASS",
               "observed": "91 distinct PASS per platform (54 consumption +37 lifecycle). One existing Starlette deprecation per consumption run. Seven original requirements joined; three reviewed partial rows remain NOT_RUN.",
               "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json"
+            },
+            {
+              "sha": "f49c82bc10853a358af46f9f5dd7b7f648d6420b + test hash in index",
+              "command": "Exact Windows/Linux commands in P12_REQUEST_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "9 PASS Windows31.59s;9 PASS Linux35.05s; Ruff PASS.",
+              "evidence": "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
             }
           ],
           "evidence": [
@@ -2568,7 +2576,8 @@
             "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
             "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
-            "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md"
+            "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+            "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -3223,8 +3232,12 @@
       ],
       "stimulus": "Repetir a mesma chave e payload com concorrência.",
       "expected": "Uma única operação lógica e um único conjunto de efeitos canônicos.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
+      ],
+      "notes": "Nine exact-stimulus cases per platform; parent SHA plus new-test hash. Concurrent cross-surface send dedupe/one grant charge/one effect; changed content, authorized target and owner context conflict while original immutable fields and charge remain unchanged. Synthetic peers, no provider claim."
     },
     {
       "test_id": "T-TX-04",
@@ -3237,8 +3250,12 @@
       ],
       "stimulus": "Reutilizar idempotency key alterando conteúdo/target/contexto.",
       "expected": "Conflito; operação original não muda.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
+      ],
+      "notes": "Nine exact-stimulus cases per platform; parent SHA plus new-test hash. Concurrent cross-surface send dedupe/one grant charge/one effect; changed content, authorized target and owner context conflict while original immutable fields and charge remain unchanged. Synthetic peers, no provider claim."
     },
     {
       "test_id": "T-TX-05",
