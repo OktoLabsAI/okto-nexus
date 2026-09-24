@@ -1,0 +1,168 @@
+{
+  "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+  "runs": {
+    "red-windows": {
+      "manifest": "p12-mirror-observation-red-windows.json",
+      "source_sha": "a6a18b4dfeaa0f8272ebf3ecb6b410c8af5a0946",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "initial-green-windows": {
+      "manifest": "p12-mirror-observation-initial-green-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 1
+      }
+    },
+    "expanded-windows": {
+      "manifest": "p12-mirror-observation-expanded-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 7
+      }
+    },
+    "expanded-linux": {
+      "manifest": "p12-mirror-observation-expanded-linux.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "FAIL": 1,
+        "PASS": 6
+      }
+    },
+    "readonly-windows": {
+      "manifest": "p12-mirror-observation-readonly-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 7
+      }
+    },
+    "readonly-linux": {
+      "manifest": "p12-mirror-observation-readonly-linux.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 7
+      }
+    },
+    "final-windows": {
+      "manifest": "p12-mirror-observation-final-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 12
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-mirror-observation-final-linux.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 12
+      }
+    },
+    "regression-windows": {
+      "manifest": "p12-mirror-observation-regression-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 78,
+        "SKIP": 1
+      }
+    },
+    "regression-linux": {
+      "manifest": "p12-mirror-observation-regression-linux.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 79
+      }
+    },
+    "close-red-windows": {
+      "manifest": "p12-mirror-observation-close-red-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "close-green-windows": {
+      "manifest": "p12-mirror-observation-close-green-windows.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 13
+      }
+    },
+    "close-green-linux": {
+      "manifest": "p12-mirror-observation-close-green-linux.json",
+      "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+      "counts": {
+        "PASS": 13
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-CONS-07",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_mirror_observation.py::test_context_observer_receives_delivery_without_another_executor",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[endpoint]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[profile]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[credential]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[flag]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[effective]",
+          "tests/test_runtime_mirror_observation.py::test_observation_failure_after_acceptance_is_unknown_and_never_replayed",
+          "tests/test_runtime_mirror_observation.py::test_observation_metadata_requires_its_own_endpoint_read_authority",
+          "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[probe]",
+          "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[method]",
+          "tests/test_runtime_mirror_observation.py::test_observation_insert_failure_rolls_back_the_canonical_delivery",
+          "tests/test_runtime_mirror_observation.py::test_timed_out_observation_keeps_its_single_worker_until_return",
+          "tests/test_runtime_mirror_observation.py::test_close_cancels_pending_context_without_replaying_unknown_into_new_session",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.attach]"
+        ],
+        "linux": [
+          "tests/test_runtime_mirror_observation.py::test_context_observer_receives_delivery_without_another_executor",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[endpoint]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[profile]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[credential]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[flag]",
+          "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[effective]",
+          "tests/test_runtime_mirror_observation.py::test_observation_failure_after_acceptance_is_unknown_and_never_replayed",
+          "tests/test_runtime_mirror_observation.py::test_observation_metadata_requires_its_own_endpoint_read_authority",
+          "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[probe]",
+          "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[method]",
+          "tests/test_runtime_mirror_observation.py::test_observation_insert_failure_rolls_back_the_canonical_delivery",
+          "tests/test_runtime_mirror_observation.py::test_timed_out_observation_keeps_its_single_worker_until_return",
+          "tests/test_runtime_mirror_observation.py::test_close_cancels_pending_context_without_replaying_unknown_into_new_session",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.attach]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-pi]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-codex]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.stream]",
+          "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.attach]"
+        ]
+      }
+    }
+  ]
+}

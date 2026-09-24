@@ -39,6 +39,9 @@ class QualifiedConnector:
         if not isinstance(observed, EndpointCapabilities):
             raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Adapter compatibility probe returned an invalid contract.", {})
         effective = observed.restrict(self.descriptor.capabilities)
+        if (self.descriptor.input_schema.get("context_observation_contract") != 1
+                or not callable(getattr(self.connector, "observe_context", None))):
+            effective = replace(effective, context_without_execution=False)
         restrictions = {name: None if name == "steer_timing" else False for name in self.disabled}
         if not self.hitl_enabled:
             restrictions["approvals"] = False
@@ -64,3 +67,10 @@ class QualifiedConnector:
             except OktoNexusError as exc:
                 raise RuntimeCommandNotSent(str(exc)) from exc
         return self.redactor.call(self.connector.send, session, command)
+
+    def observe_context(self, session, envelope):
+        validate_effective_capability(session.compatibility_report, "context_without_execution")
+        observe = getattr(self.connector, "observe_context", None)
+        if self.descriptor.input_schema.get("context_observation_contract") != 1 or not callable(observe):
+            raise RuntimeCommandNotSent("Adapter has no verified context observation contract.")
+        return self.redactor.call(observe, session, envelope)

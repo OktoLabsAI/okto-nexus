@@ -203,6 +203,7 @@ class RuntimeControlService:
             return {"operation_id": operation_id, "session_id": delivery["runtime_session_id"], "state": delivery["status"],
                 "attempt_id": delivery["attempt_id"], "owner_epoch": delivery["owner_epoch"], "reconciliation_id": delivery["reconciliation_id"],
                 "durable": True, "ack_level": delivery["ack_level"], "reason": delivery["reason"],
+                "context_observations": self._context_observations(context, operation_id),
                 "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK"} else "not_observed",
                 "result_durable": delivery["terminal_event_id"] is not None, "result": dict(result) if result else None,
                 "handoff": dict(binding) if binding else None,
@@ -219,6 +220,21 @@ class RuntimeControlService:
             "native_turn_id": row["native_turn_id"], "expected_operation_id": row["expected_operation_id"],
             "result_durable": row["terminal_event_id"] is not None,
             "result": dict(result) if result else json.loads(row["result"]) if row["result"] else None}
+
+    def _context_observations(self, context, source_operation_id):
+        with self.access.cf.unit_of_work(write=False) as uow:
+            rows = uow.connection.execute("SELECT operation_id,endpoint_id,runtime_session_id,status,reason,"
+                "owner_epoch,attempt_id FROM runtime_context_observations WHERE source_operation_id=? "
+                "ORDER BY created_at,operation_id", (source_operation_id,)).fetchall()
+            visible = []
+            for row in rows:
+                try:
+                    self.access.authorize(context, action="read", endpoint_id=row["endpoint_id"], uow=uow, audit=False)
+                except OktoNexusError:
+                    continue
+                visible.append(dict(row, durable=True, external_acceptance="not_observed",
+                    execution_authority=False, result_durable=False))
+            return visible
 
     def replay(self, context, *, session_id, after_sequence=0, limit=200):
         self.access.authorize(context, action="events", session_id=session_id)

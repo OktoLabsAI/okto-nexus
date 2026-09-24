@@ -4,10 +4,10 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `a6a18b4` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `b263de9` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
-- Current schema062, surface57, identity25. No personal database is a fixture.
+- Current schema063, surface57, identity25. No personal database is a fixture.
 - PR34 was reread through GitHub during this continuation: OPEN, head `d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397`, base `27b06fe48b9f95b35c94f50827fea83d178f4e12`, branch `feature/harness-integrations`, unchanged from review. No PR currently targets head branch `feature/v0.2.0` according to the read-only query. No PR message/merge was performed.
 
 ## Exact resume point
@@ -60,9 +60,9 @@ Capture admission: T-JRN-09 scoped PASS. Actual admission defect reproduced with
 
 Composition acceptance T-E2E-06: Windows27096 terminal20 PASS1 POSIX SKIP188.71s/Linux35283 terminal21 PASS451.02s at a6a18b4, no tested source changes during runs. See P12_COMPOSITION_A6A18B4.md. No running handles.
 
-Positive mirror gap reproduced: tests/test_runtime_mirror_observation.py fails on missing context observation after successful approved endpoint creation/open and one canonical executor send. Windows46168 terminal1 FAIL33.96s; no production correction yet. See P12_MIRROR_OBSERVATION.md. This intentionally red reproducer must be implemented before a final full-suite green claim; it is not a completed positive acceptance test.
+Mirror observation implemented: T-CONS-07 scoped PASS. Additive schema063 and optional context v1 reuse the owner/bounded worker while retaining one inbox executor. Final13 cases/platform plus16 unsafe native mirror cases/platform; regression Windows78 PASS1 POSIX SKIP/Linux79 PASS, with separate pre-close-adjustment hashes. Actual REDs for missing observation, public-read failure and closed-session pending state retained. Required isolated MCP smoke PASS after the final production adjustment; all handles terminal. See P12_MIRROR_OBSERVATION.md.
 
-Next: implement and qualify the context observation route and authenticated external attach work. Then finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
+Next: implement and qualify authenticated external attach work (T-WORK-12). Then finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
 
 ## Recent completed milestones
 
@@ -95,4 +95,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 124, "NOT_RUN": 5}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 125, "NOT_RUN": 4}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.

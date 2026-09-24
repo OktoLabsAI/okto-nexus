@@ -1,0 +1,117 @@
+{
+  "source_sha": "b263de92223cf839a1e14efac481c5b071e15f75",
+  "platform": "linux",
+  "counts": {
+    "PASS": 13
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "13",
+      "time": "268.785",
+      "timestamp": "2026-09-24T11:11:29.326474-03:00"
+    }
+  ],
+  "native_flags": "No native provider; actual HTTP/MCP with registered context-only fixture adapter.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_mirror_observation.py -q --tb=short --junitxml=.git/pr34-evidence/mirror-observation-close-green-linux.xml",
+  "limitations": "Scoped observer qualification. Closed-session pending cancellation never replays an uncertain prior context. No native observer capability claimed.",
+  "records": [
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_context_observer_receives_delivery_without_another_executor",
+      "status": "PASS",
+      "seconds": 35.338
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_revalidates_authority_before_transport[endpoint]",
+      "status": "PASS",
+      "seconds": 31.412
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_revalidates_authority_before_transport[profile]",
+      "status": "PASS",
+      "seconds": 18.826
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_revalidates_authority_before_transport[credential]",
+      "status": "PASS",
+      "seconds": 10.547
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_revalidates_authority_before_transport[flag]",
+      "status": "PASS",
+      "seconds": 13.281
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_revalidates_authority_before_transport[effective]",
+      "status": "PASS",
+      "seconds": 13.612
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_failure_after_acceptance_is_unknown_and_never_replayed",
+      "status": "PASS",
+      "seconds": 10.228
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_metadata_requires_its_own_endpoint_read_authority",
+      "status": "PASS",
+      "seconds": 23.782
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_unverified_observer_does_not_receive_context_or_execution[probe]",
+      "status": "PASS",
+      "seconds": 18.373
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_unverified_observer_does_not_receive_context_or_execution[method]",
+      "status": "PASS",
+      "seconds": 21.975
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_observation_insert_failure_rolls_back_the_canonical_delivery",
+      "status": "PASS",
+      "seconds": 19.427
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_timed_out_observation_keeps_its_single_worker_until_return",
+      "status": "PASS",
+      "seconds": 22.9
+    },
+    {
+      "class": "tests.test_runtime_mirror_observation",
+      "test": "test_close_cancels_pending_context_without_replaying_unknown_into_new_session",
+      "status": "PASS",
+      "seconds": 18.594
+    }
+  ],
+  "file_sha256": {
+    "src/okto_nexus/application/runtime_observations.py": "375fbae8a7b54db39bbd15504dd2ec8f29c64b632a03c6cc324a95965a6b793b",
+    "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+    "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+    "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+    "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_observations_repo.py": "3d18883e2bfcbea601c95d6bbc3d5d88551789b4312b0d9b4a41095068c52b4f",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "d210cdf3a48f83441cd8dd3c24b724438b57f7920a582d85fb9a183bab52290f",
+    "src/okto_nexus/adapters/outbound/harness/qualified.py": "c015e3941966e1aa36841eb10e4c0f35071c780007410d7e9a37d96771fcfec2",
+    "src/okto_nexus/adapters/inbound/mcp/tools/messages.py": "0ddedcff8ca3283d39f1b8046068dd2cd58d7d0f457246c839c3a4acf7f95ee0",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "40744347a84e2bf0b40fc18bd8a9af3d488a21399a9a23ea81eb6e15e5ee5552",
+    "src/okto_nexus/migrations/063_runtime_context_observations.sql": "4f1500f96b4cffd2a2db19e237adc6374011cf2b7a6c7d35d985b79657a4cca9",
+    "tests/test_runtime_mirror_observation.py": "340640a67eaecbca93392363442ede14bb04f2b81713acaaa9e1e20cefef2a49",
+    "src/okto_nexus/application/runtime_control.py": "68a1d6c9ffaf6626f91476a4b5091c3fe2a87c86268584c26ce6d49fe9f08729",
+    "src/okto_nexus/application/ports.py": "fb2ec376d25fdd6a0386e660b8463baa84aec0956da4dffc136280a457e7db8c"
+  }
+}

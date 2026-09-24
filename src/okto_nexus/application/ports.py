@@ -1629,6 +1629,20 @@ class EventEmitter(Protocol):
 # Harness connectors (Phase 2 of the harness-integrations feature; ADR 0004)
 # --------------------------------------------------------------------------- #
 @runtime_checkable
+class ContextObservationConnector(Protocol):
+    """Optional v1 extension, advertised by descriptor and verified at start.
+
+    Accept only an information envelope with response_requested=False. Store or
+    display its untrusted context without starting inference, invoking tools,
+    acknowledging inbox consumption or returning a work result. A return means
+    transport invocation returned, never native acceptance. No implicit retry.
+    Implementations must not delegate this method to send/send_turn.
+    """
+
+    def observe_context(self, session: HarnessSession, envelope: Mapping[str, Any]) -> None: ...
+
+
+@runtime_checkable
 class HarnessConnector(Protocol):
     """One per-harness transport, uniform across Pi / Codex / Claude Code (D2).
 

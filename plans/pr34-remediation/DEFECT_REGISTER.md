@@ -61,3 +61,16 @@ Schema062 extends the existing runtime_writer_contract with an owner-fenced
 capture availability bit and database admission guards; updated repositories
 share the same transactional check, including independent stdio writers.
 See P12_CAPTURE_ADMISSION.md for scoped results, failures and recovery limits.
+
+
+## F03/F09 — positive nonexecuting observer route
+
+At a6a18b4 an approved, ready context-only fixture endpoint received no observation while the same
+canonical delivery reached its exclusive executor. The committed b263de9 reproducer failed on absent
+context, not imports or missing configuration. Optional context observation v1 is a new implementation
+decision satisfying the specified mirror-only invariant, not an invented native capability. The four
+built-in adapters still lack verified context-without-execution and remain ineligible for mirror-only.
+See P12_MIRROR_OBSERVATION.md and its generation-specific evidence. Implementation preserves one inbox
+reservation and uses subordinate transport attempts with no ACK, result or work authority. During this
+unit, a public-read OperationalError and a closed-session pending observation were also retained and
+corrected; their failed runs are not counted as acceptance passes.

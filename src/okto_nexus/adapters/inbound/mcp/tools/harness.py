@@ -391,8 +391,11 @@ def build_dispatcher(deps):
     if existing:
         return existing
     outbox, endpoints = SqliteRuntimeOutboxRepo(), SqliteEndpointRepo()
+    from okto_nexus.adapters.outbound.sqlite.runtime_observations_repo import SqliteRuntimeObservationRepo
+    observations = SqliteRuntimeObservationRepo(clock=deps.clock)
     planner = RuntimeDeliveryPlanner(endpoints=endpoints, outbox=outbox, agents=deps.repos.agents,
-                                    registry=build_connector_factories(deps), config=deps.config)
+                                    registry=build_connector_factories(deps), config=deps.config,
+                                    observations=observations)
     supervisor = build_service(deps)
     registry = build_connector_factories(deps)
     messages = build_message_service(deps)
@@ -502,6 +505,11 @@ def build_dispatcher(deps):
     control_service = RuntimeControlService(access=build_access_service(deps), supervisor=supervisor,
         owner_guard=lambda: is_local_runtime_owner(deps) and not dispatcher._quiescing.is_set(), commands=commands, wake=dispatcher.wake)
     dispatcher.command_dispatcher = RuntimeCommandDispatcher(owner=dispatcher, repo=commands, service=control_service)
+    from okto_nexus.application.runtime_observations import RuntimeObservationService
+    observation_service = RuntimeObservationService(owner=dispatcher, planner=planner,
+        messages=messages, supervisor=supervisor)
+    dispatcher.context_dispatcher = RuntimeCommandDispatcher(owner=dispatcher, repo=observations,
+        service=observation_service, capacities={"observation": 1})
     from okto_nexus.application.runtime_native_approvals import RuntimeNativeApprovalService
     native_approvals = RuntimeNativeApprovalService(owner=dispatcher, supervisor=supervisor,
         approvals=deps.approvals, config=deps.config, validate_delivery=validate, validate_command=control_service.validate)

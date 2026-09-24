@@ -1,5 +1,6 @@
 """Pure transactional selection/planning; never calls transports or secrets."""
 import json
+from dataclasses import replace
 from ..domain.base import new_id
 from ..domain.delivery import DeliveryEnvelope
 from ..domain.tag_selector import reachable
@@ -10,10 +11,38 @@ from .runtime_causality import RuntimeCausalityService
 
 
 class RuntimeDeliveryPlanner:
-    def __init__(self, *, endpoints, outbox, agents, registry, config):
+    def __init__(self, *, endpoints, outbox, agents, registry, config, observations=None):
         self.endpoints, self.outbox, self.agents = endpoints, outbox, agents
         self.registry, self.config = registry, config
+        self.observations = observations
         self.causality = RuntimeCausalityService(config=config, agents=agents)
+
+    def observer_candidates(self, uow, *, agent_id, workspace_id):
+        candidates = []
+        if not self.config.feature_harness_integrations:
+            return candidates
+        for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
+            descriptor = self.registry.get(endpoint["adapter_id"])
+            if (not endpoint["enabled"] or endpoint["activation_state"] != "approved"
+                    or endpoint["health"] == "quarantined" or endpoint["consumption"] != "mirror_only"
+                    or endpoint["response_policy"] != "none"
+                    or not descriptor.capabilities.context_without_execution
+                    or descriptor.input_schema.get("context_observation_contract") != 1
+                    or descriptor.substrate == "attach" and not self.config.feature_harness_attach):
+                continue
+            profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+            if endpoint["profile_id"] and (not profile or not profile["enabled"]
+                    or "context_without_execution" in profile["config"].get("disabled_capabilities", ())):
+                continue
+            live = [row for row in self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
+                if row["compatibility_report"].get("effective_capability_contract") == 1
+                and row["compatibility_report"].get("effective_capabilities", {}).get("context_without_execution") is True
+                and (not profile or self.endpoints.session_profile_revision(uow, row["session_id"]) == profile["revision"])]
+            if len(live) > 1:
+                raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+            if live:
+                candidates.append((endpoint, profile, live[0]))
+        return candidates
 
     def candidates(self, uow, *, agent_id, workspace_id):
         candidates = []
@@ -95,6 +124,13 @@ class RuntimeDeliveryPlanner:
         if result_source:
             uow.connection.execute("UPDATE delivery_outbox SET source_result_id=? WHERE operation_id=?",
                                   (result_source["result_id"], operation_id))
+        if self.observations:
+            for observer, observer_profile, observer_session in self.observer_candidates(uow,
+                    agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
+                context_envelope = replace(envelope, operation_id=new_id("obs"), intent="information",
+                    response_requested=False, runtime_context=None)
+                self.observations.enqueue(uow, source_operation_id=operation_id, envelope=context_envelope,
+                    endpoint=observer, profile=observer_profile, session=observer_session, now=now)
         return operation_id
 
     def revalidate(self, uow, *, operation, config):

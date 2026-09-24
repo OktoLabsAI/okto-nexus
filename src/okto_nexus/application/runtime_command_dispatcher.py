@@ -10,11 +10,11 @@ from ..errors import OktoNexusError
 
 
 class RuntimeCommandDispatcher:
-    def __init__(self, *, owner, repo, service):
+    def __init__(self, *, owner, repo, service, capacities=None):
         self.owner, self.repo, self.service = owner, repo, service
         self._lock = threading.Lock()
         self._inflight = {}
-        self._capacities = {"close": 1, "control": 2, "turn": 2}
+        self._capacities = capacities or {"close": 1, "control": 2, "turn": 2}
         self._queues = {lane: queue.Queue(size) for lane, size in self._capacities.items()}
         self._threads = []
 

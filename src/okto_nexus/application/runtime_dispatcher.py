@@ -33,6 +33,7 @@ class RuntimeDispatcher:
         self.wake_channel = None
         self.event_ingress = None
         self.command_dispatcher = None
+        self.context_dispatcher = None
         self.publish_results = None
         self._publication_queue = queue.Queue(maxsize=1)
         self._publication_active = False
@@ -92,6 +93,8 @@ class RuntimeDispatcher:
                             raise RuntimeError("Runtime journal recovery lost ownership")
                 with self.cf.unit_of_work() as uow:
                     self.repo.finish_recovery(uow, epoch=self.epoch, now=self.clock.now_iso())
+                    if self.context_dispatcher:
+                        self.context_dispatcher.repo.recover(uow, epoch=self.epoch, now=self.clock.now_iso())
                 self.event_ingress.enable_admission()
             except BaseException:
                 self.event_ingress.close()
@@ -102,9 +105,9 @@ class RuntimeDispatcher:
                 raise
         if self.wake_channel:
             self.wake_channel.start(self.wake, self.owner_id)
-        if self.command_dispatcher:
-            self.command_dispatcher.service.owner_identity = (self.owner_id, self.epoch)
-            self.command_dispatcher.start()
+        for runner in self.auxiliary_dispatchers():
+            runner.service.owner_identity = (self.owner_id, self.epoch)
+            runner.start()
         if self.publish_results:
             self._publication_thread = threading.Thread(target=self._publish_worker, daemon=True, name="nexus-result-publication")
             self._publication_thread.start()
@@ -121,6 +124,9 @@ class RuntimeDispatcher:
         with self._wake_condition:
             self._wake_generation += 1
             self._wake_condition.notify()
+
+    def auxiliary_dispatchers(self):
+        return tuple(runner for runner in (self.command_dispatcher, self.context_dispatcher) if runner)
 
     def _schedule_publication(self):
         with self._lock:
@@ -188,8 +194,8 @@ class RuntimeDispatcher:
                         self._stop.set()
                         break
                 self._expire_sends()
-                if self.command_dispatcher:
-                    self.command_dispatcher.expire()
+                for runner in self.auxiliary_dispatchers():
+                    runner.expire()
                 if self.event_ingress:
                     self.event_ingress.recover()
                     if self.event_ingress.projection_pending:
@@ -198,7 +204,7 @@ class RuntimeDispatcher:
                 if self._shutdown_ready and self._shutdown_ready():
                     with self._lock:
                         idle = not self._inflight and not self._publication_active
-                    if idle and (not self.command_dispatcher or self.command_dispatcher.idle()):
+                    if idle and all(runner.idle() for runner in self.auxiliary_dispatchers()):
                         if self.event_ingress and self.event_ingress.projection_pending:
                             self.wake()
                             continue
@@ -208,8 +214,8 @@ class RuntimeDispatcher:
                         self._shutdown_finished.set()
                         break
                 if signaled or (retry_deadline is not None and retry_deadline <= now) or time.monotonic() - recovered >= self.recovery_seconds:
-                    if self.command_dispatcher:
-                        self.command_dispatcher.scan_once()
+                    for runner in self.auxiliary_dispatchers():
+                        runner.scan_once()
                     self.scan_once()
                     recovered = time.monotonic()
                 with self.cf.unit_of_work(write=False) as uow:
@@ -226,7 +232,7 @@ class RuntimeDispatcher:
     def operation_inflight(self, operation_id):
         with self._lock:
             active = operation_id in self._inflight
-        return active or bool(self.command_dispatcher and self.command_dispatcher.operation_inflight(operation_id))
+        return active or any(runner.operation_inflight(operation_id) for runner in self.auxiliary_dispatchers())
 
     def normal_inflight_agents(self, uow):
         # Native acceptance/result projection can race ahead of the transport
@@ -372,8 +378,8 @@ class RuntimeDispatcher:
             self.wake_channel.close()
         if self._coordinator is not threading.current_thread():
             self._coordinator.join(5)
-        if self.command_dispatcher:
-            self.command_dispatcher.join_idle_workers()
+        for runner in self.auxiliary_dispatchers():
+            runner.join_idle_workers()
         if self._publication_thread and not self._publication_active and self._publication_thread is not threading.current_thread():
             self._publication_thread.join(1.5)
         # Workers remain capacity-bound even if a native call has not returned.

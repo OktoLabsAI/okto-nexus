@@ -108,3 +108,14 @@ São escolhas propostas neste pacote: a nomenclatura completa de estados; a rese
 Essas escolhas podem ser ajustadas pelo Codex à arquitetura real quando houver equivalente melhor, mediante decisão registrada e testes. Não podem ser substituídas por uma implementação que perca as garantias que motivaram a escolha.
 
 A ausência de ACK/dedupe/replay no peer não é corrigida com um novo campo local. Onde não houver garantia de protocolo, manter estado incerto ou operação limitada e explicar a fronteira da garantia. Isso preserva a capacidade disponível sem dar ao usuário uma promessa falsa.
+
+
+### Decisão de implementação: observação de contexto v1
+
+A rota opcional ContextObservationConnector.observe_context, marcada por
+input_schema.context_observation_contract=1, é uma decisão nova para cumprir T-CONS-07/F03/F09.
+Sua base é o requisito de observação sem outro executor em 02_CONTRATOS_E_ESTADOS.md, não uma
+capacidade atribuída aos protocolos Pi, Codex ou Claude. O quinto adaptador de teste comprova a rota
+pela composição HTTP/MCP real; os quatro conectores nativos continuam sem essa capacidade comprovada.
+A ausência da rota positiva foi reproduzida em a6a18b4 e registrada no milestone b263de9.
+Código, decisões de persistência e execuções por geração: plans/pr34-remediation/P12_MIRROR_OBSERVATION.md.

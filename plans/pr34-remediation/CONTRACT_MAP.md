@@ -96,3 +96,25 @@ open intents in the same canonical transaction across all writers. Existing
 idempotent replies and stop controls remain separately authorized. Native dispatch
 retains a final journal check. No adapter capability, native ACK or result
 semantics change; tool surface57/identity25 remain, with additive schema062.
+
+
+## Optional context observation contract v1 (schema063)
+
+ContextObservationConnector.observe_context is a separate optional port; the existing HarnessConnector
+and four native send/control contracts remain unchanged. Descriptor input_schema.context_observation_contract=1,
+trusted capability probing, method existence and approved profile restrictions must all agree.
+RuntimeDeliveryPlanner selects only ready same-agent/workspace mirror_only/response_policy=none bindings.
+It derives information envelopes without execution bootstrap and persists them with the original intent.
+
+runtime_context_observations is subordinate outbox transport state with a foreign key to delivery_outbox;
+it creates no new logical delivery, consumer reservation, task, claim or executable budget. An additive
+table preserves the existing unique executor-per-delivery constraint and closed administrative command
+vocabulary. RuntimeCommandDispatcher is reused with one bounded observation slot under RuntimeDispatcher's
+existing owner/wake/shutdown. Timeout cannot free that slot before the call returns. No new orchestrator,
+external broker, SDK or native acknowledgement was introduced.
+
+The public additive context_observations projection on harness_get is filtered through each observer
+endpoint's read authorization. Read-only authorization suppresses audit writes in that read snapshot;
+the enclosing operation access remains audited. Stored attempt durability is distinct from acceptance
+and result durability. The fifth processless adapter proves this extension; native built-in descriptors
+continue to advertise no context_without_execution capability.

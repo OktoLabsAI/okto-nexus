@@ -838,6 +838,29 @@ class HarnessSupervisor:
                 self._active_calls -= 1
             self._activity_finished()
 
+    def observe_context(self, session_id, envelope):
+        """Optional context contract v1: never translate observation into send_turn."""
+        from .runtime_requirements import validate_effective_capability
+        with self._lock:
+            if self._shutting_down or not self._runtime_enabled():
+                raise OktoNexusError(ErrorCode.CONFLICT, "Runtime owner is not accepting observations.", {})
+            live = self._live.get(session_id)
+            if not live:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Observation session is no longer owned.", {})
+            self._active_calls += 1
+        try:
+            if self.event_ingress:
+                self.event_ingress.check_admission()
+            validate_effective_capability(live.session.compatibility_report, "context_without_execution")
+            observe = getattr(live.connector, "observe_context", None)
+            if not callable(observe):
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Adapter cannot observe context without execution.", {})
+            observe(live.session, envelope)
+        finally:
+            with self._lock:
+                self._active_calls -= 1
+            self._activity_finished()
+
     def reply_native_approval(self, session_id, *, connection_id, owner_epoch, request, decision, before_write=None):
         with self._lock:
             live = self._live.get(session_id)

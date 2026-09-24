@@ -3482,14 +3482,12 @@
       ],
       "stimulus": "Configurar observador e executor para a mesma entrega.",
       "expected": "Observador não inicia outro send_turn executor; configuração insegura é rejeitada.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
-        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
         "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md",
-        "plans/pr34-remediation/evidence/p12-mirror-observation-red-windows.json"
+        "plans/pr34-remediation/evidence/p12-mirror-observation-index.json"
       ],
-      "notes": "PARTIAL:16 unsafe mirror create/update REST/MCP cases pass for four adapters, which lack context_without_execution. Positive safe observer transport not qualified; aggregate remains NOT_RUN. Positive processless context observer gap reproduced at a6a18b4:1 behavioral FAIL, production implementation pending."
+      "notes": "13 final context-observer cases/platform plus16 unsafe built-in mirror cases/platform. Optional verified context v1, one executor reservation, subordinate durable attempts, current auth/read ACL, bounded timeout, atomic rollback and explicit close/reopen without replay. Four native adapters do not claim context_without_execution. Separate generation hashes preserve REDs and regression scope."
     },
     {
       "test_id": "T-CONS-08",

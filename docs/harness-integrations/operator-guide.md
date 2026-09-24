@@ -309,3 +309,35 @@ operations to clear the condition. A new healthy owner revalidates the journal
 before restoring admission. SQLite capacity failures reject writes and never
 acknowledge a new durable intent; restore storage before reviewing/resubmitting a
 definitively rejected request.
+
+
+## Nonexecuting context observations (optional adapter contract v1)
+
+A trusted local adapter may implement ContextObservationConnector.observe_context(session, envelope)
+and advertise input_schema.context_observation_contract=1. Its descriptor and trusted compatibility
+probe must both verify context_without_execution; a missing method or probe keeps the effective
+capability false. None of the four built-in native adapters currently demonstrates this capability.
+A client cannot enable it by putting a capability claim in an endpoint payload.
+
+Configure the observer endpoint for the same canonical agent and workspace with consumption=mirror_only,
+response_policy=none, an approved enabled profile and a ready session. When a canonical conversational
+delivery selects its exclusive executor, Nexus records subordinate context transport attempts in the
+same transaction. The original inbox delivery and its executor reservation remain unique. Observations
+use an information envelope with response_requested=false and no execution bootstrap or handoff grant;
+the adapter must store/display context without inference, tools, inbox ACK or work completion.
+
+Schema063 keeps these attempts in runtime_context_observations, linked to the original delivery_outbox
+operation. This table is transport state, not another inbox or work queue. One bounded observation worker
+uses the existing owner, wake generation and shutdown coordination. Per-agent/workspace/store count and
+byte limits reject admission atomically. No process, socket or model is invoked in the writer transaction.
+Only ready, currently verified observer bindings are selected; opening/booting the observer is explicit.
+
+harness_get(operation_id=...) adds context_observations only for observer endpoints the caller may read.
+An observation's durable=true describes its persisted attempt; SENT_UNCONFIRMED is not a native ACK,
+result_durable remains false and execution_authority remains false. An uncertain write is never replayed
+on timeout or restart. This route does not upgrade cc-socks or any other native connector's capabilities.
+
+Closing an observer cancels its still-PENDING context attempts on the next owner scan. An already uncertain
+attempt stays OUTCOME_UNKNOWN and is never transferred to a new session. After explicit reopening, only
+newly admitted deliveries may reach the new observer; closed-session pending contexts are not replayed.
+Inspect observations under their original executor operation ID, not as independent executable operations.
