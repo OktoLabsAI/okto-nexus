@@ -1,0 +1,91 @@
+{
+  "status": "VERIFIED_IN_TARGETED_SCOPE",
+  "source_sha": "372b47ca58e920ac32942de724d518a235b4ce41",
+  "baseline_sha": "ea4b33d",
+  "branch": "feature/v0.2.0",
+  "defaults": {
+    "feature_harness_integrations": true,
+    "feature_harness_attach": true
+  },
+  "preserved": "CLI > env > stored > default; per-agent policy, profile/endpoint and boot approvals, canonical authorization and platform constraints unchanged. Explicit false is not reset.",
+  "files": [
+    "src/okto_nexus/config.py:NexusConfig,_BOOL_FIELDS",
+    "src/okto_nexus/application/settings.py:SETTING_SPECS",
+    "tests/test_feature_flags.py",
+    "tests/test_agent_connections.py",
+    "tests/test_pr34_remediation.py"
+  ],
+  "qualification": {
+    "targeted": {
+      "status": "FAIL_THEN_TEST_FIXES_VERIFIED",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_config.py tests/test_feature_flags.py tests/test_agent_connections.py tests/test_pr34_remediation.py tests/test_runtime_disabled_acceptance.py tests/test_runtime_writer_contract.py tests/test_runtime_boot.py tests/test_runtime_rollout.py tests/test_settings_api.py tests/test_harness_tools.py tests/test_harness_target_grammar.py tests/test_http_api.py tests/test_http_parity.py tests/test_mcp_settings_compat.py tests/test_runtime_bootstrap.py tests/test_frente1_resources.py -q --tb=short --junitxml=.git/pr34-evidence/default-native/pytest-final.xml",
+      "log": ".git\\pr34-evidence\\default-native\\pytest-final.log",
+      "passed": 256,
+      "failed": 4,
+      "skipped": 2,
+      "duration_seconds": 341.18,
+      "reason": "Two settings tests attempted simultaneous owners; one attach test assumed default OFF; backend rejection expected disabled flag rather than payload validation. Test-only corrections qualified separately.",
+      "log_sha256": "68f1b85498353872d6ed54e68549a0616c38cb37ca056c60ba26576e44c5ca0d"
+    },
+    "live_mcp": {
+      "status": "PASS",
+      "tools_count": 51,
+      "command": "rtk proxy .venv/Scripts/python.exe scripts/live_client.py",
+      "log": ".git\\pr34-evidence\\default-native\\live-mcp-final.log",
+      "log_sha256": "7788a04dcbc834a29c5286856ba2393df1de37b0ed6b90ea93cc5fdf72c37b53"
+    },
+    "lock": {
+      "status": "PASS",
+      "command": "rtk proxy uv lock --check"
+    },
+    "lint": {
+      "status": "BASELINE_DEBT",
+      "diagnostics": 862,
+      "command": "rtk proxy uvx ruff check . --output-format json",
+      "log": ".git\\pr34-evidence\\default-native\\ruff-final.json",
+      "log_sha256": "2574fb3c30636bfa94afe81eafa2ac78e84f0bfa820a5bddedac12163ea535a8"
+    },
+    "build": {
+      "status": "PASS",
+      "command": "rtk proxy uv build --out-dir <absolute .git/pr34-evidence/default-native/dist-final>",
+      "cwd": ".git\\pr34-evidence\\default-native\\release",
+      "source": "Clean archive of ea4b33d plus the two changed production files; packaged bytes verified against source_sha.",
+      "wheel": ".git\\pr34-evidence\\default-native\\dist-final\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "7a7ce1463f55eccf55953137f3f8086215188882e84a2a1f67a9da6a8fda6cf6",
+      "twine": "PASS",
+      "twine_command": "rtk proxy uvx twine check .git/pr34-evidence/default-native/dist-final/*"
+    },
+    "package_smoke": {
+      "status": "PASS",
+      "command": "rtk proxy C:/Users/jpamb/AppData/Roaming/uv/tools/okto-nexus/Scripts/python.exe .git/pr34-evidence/default-native/package_check.py",
+      "environment": "PYTHONPATH points to isolated extracted final wheel; disposable home/store; installed dependencies, no installation mutation",
+      "log": ".git\\pr34-evidence\\default-native\\wheel-smoke.log",
+      "native_processes_started": 0,
+      "log_sha256": "67659c3d155ce1370f09d8a403e1721dd254c4c3d3cfa3bf77018d7696c721f1"
+    },
+    "full_suite": "NOT_RUN for this default-only change; targeted config/HTTP/MCP/native admission/boot/writer/rollout regressions selected",
+    "native_providers": "NOT_RUN",
+    "test_corrections": {
+      "status": "PASS",
+      "source_sha": "21822970b8d2c4b207ff4783bf02c2c8818cc850",
+      "passed": 30,
+      "skipped": 2,
+      "duration_seconds": "58.898",
+      "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_settings_api.py tests/test_harness_tools.py -q --tb=short --junitxml=.git/pr34-evidence/default-native/fixture-corrections-final.xml",
+      "log": ".git\\pr34-evidence\\default-native\\fixture-corrections-final.log",
+      "skip_reason": "Actual attach capabilities are POSIX-only; Windows tests do not invent support.",
+      "log_sha256": "7e5bcc910c5b988525a1e1fd9e391e4968a7587dbcf5e476e4086a82268c2a7d"
+    },
+    "aggregate_scope": "260 distinct passing cases and 2 skips across broad run plus corrected-file rerun; not a single all-green broad run or a full-suite claim."
+  },
+  "intermediate_run": {
+    "status": "FAIL",
+    "passed": 195,
+    "failed": 20,
+    "skipped": 2,
+    "log": ".git\\pr34-evidence\\default-native\\pytest.log",
+    "reason": "Before config model and resolver defaults were aligned; corrected stale default expectations and test lifecycle/configuration fixtures. Results retained, not converted to PASS."
+  },
+  "local_rollout": "NOT_APPLIED: active installed serve and personal store preserved",
+  "test_correction_sha": "21822970b8d2c4b207ff4783bf02c2c8818cc850"
+}

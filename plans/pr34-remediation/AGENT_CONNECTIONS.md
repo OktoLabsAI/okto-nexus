@@ -26,6 +26,16 @@ regression; documentation/evidence/commit. Final affected acceptance at 12d352c:
 verified by 20 PASS across 10 runs. This is not a full-suite PASS.
 Unrelated static bundle edits and .nexus-policy-guardrail-test remain protected.
 
+## Native connection defaults (subsequent user request)
+
+Both `feature_harness_integrations` and `feature_harness_attach` now default to
+true, in the config model and CLI/environment resolver. Stored settings and
+explicit environment/CLI false overrides retain their precedence. This does not
+change per-agent method policy, endpoint/profile approvals, boot approvals,
+platform support or grant/handoff authorization. An existing process must be
+updated/restarted to pick up the new build/defaults; a stored false is not reset.
+See [default-change evidence](evidence/default-native-connections.json).
+
 ## Operator workflow and contract v1 (surface 59 / schema 065)
 
 1. In Agents, use the Connection methods button on the existing agent card.

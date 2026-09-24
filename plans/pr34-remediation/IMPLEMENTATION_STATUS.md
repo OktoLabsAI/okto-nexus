@@ -1,3 +1,24 @@
+# Latest follow-up — native connections enabled by default
+
+Runtime source372b47c sets feature_harness_integrations and feature_harness_attach
+true in both NexusConfig and the CLI/environment resolver. Explicit false in
+stored settings, environment or CLI remains authoritative. No approval or
+per-agent permission was removed. Test-only lifecycle/expectation corrections
+are recorded in [evidence/default-native-connections.json](evidence/default-native-connections.json).
+
+Qualification: broad selected regression256 PASS /4 FAIL /2 SKIP; the four stale
+test fixtures/expectations were corrected and affected files rerun:30 PASS /2
+SKIP. The combined scope covers260 distinct PASS /2 SKIP; not a single green
+full-suite run. Live stdio51 tools, lock, build/Twine and isolated packaged
+HTTP/MCP smoke PASS. Ruff retains862 baseline diagnostics; native providers
+NOT_RUN. Updated wheel is in .git/pr34-evidence/default-native/dist-final.
+
+Local rollout remains NOT_APPLIED: the running installed server and personal
+store were not changed. Update/restart to apply the build; explicit stored false
+is not automatically cleared. Protected local static files remain unchanged.
+
+The earlier follow-up below retains its original source/result boundaries.
+
 # Current follow-up — agent connection management
 
 IMPLEMENTED_AND_SCOPED_VERIFIED on feature/v0.2.0. Runtime and packaged dashboard

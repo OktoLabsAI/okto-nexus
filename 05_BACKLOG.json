@@ -8899,5 +8899,21 @@
     "evidence": "plans/pr34-remediation/evidence/agent-connections.json",
     "qualification_limit": "Full suite is not globally PASS. Its sole failure was corrected and verified in isolated repeated actual-process tests; no third full run claimed. Real native providers NOT_RUN; active installation NOT_APPLIED.",
     "test_fixture_head": "3ca5c55139857b2035004756ff3b10149cd11654"
+  },
+  "native_defaults_followup": {
+    "status": "VERIFIED_IN_TARGETED_SCOPE",
+    "request": "Enable native integrations and attach by default",
+    "source_sha": "372b47ca58e920ac32942de724d518a235b4ce41",
+    "test_correction_sha": "21822970b8d2c4b207ff4783bf02c2c8818cc850",
+    "files": [
+      "src/okto_nexus/config.py:NexusConfig,_BOOL_FIELDS",
+      "src/okto_nexus/application/settings.py:SETTING_SPECS",
+      "tests/test_feature_flags.py",
+      "tests/test_agent_connections.py",
+      "tests/test_pr34_remediation.py"
+    ],
+    "evidence": "plans\\pr34-remediation\\evidence\\default-native-connections.json",
+    "tests": "260 distinct passing cases and 2 skips across broad run plus corrected-file rerun; not a single all-green broad run or a full-suite claim.",
+    "next_dependency": "Apply updated build to active local installation; existing explicit false settings remain honored."
   }
 }
