@@ -1,0 +1,50 @@
+{
+  "source_sha": "3e875789b3d36843d13b7c2918cef314e20009b8",
+  "file_sha256": {
+    "tests\\test_runtime_capture_admission.py": "68d16e385a3c50e76a9ae14ef542b25a5c62cf7f1b02bd757490054006803281"
+  },
+  "platform": "windows",
+  "counts": {
+    "FAIL": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "4",
+      "skipped": "0",
+      "tests": "4",
+      "time": "14.451",
+      "timestamp": "2026-09-24T10:13:03.001467-03:00"
+    }
+  ],
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_capture_admission.py -q --tb=short --junitxml=.git/pr34-evidence/capture-admission-clean-red-windows.xml",
+  "native_flags": "No native provider; isolated fixtures and synthetic processes only.",
+  "limitations": "Initial RED includes cleanup errors; clean RED preserves behavioral failures without cleanup errors. Partial selection, not final full suite.",
+  "records": [
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+      "status": "FAIL",
+      "seconds": 3.618
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+      "status": "FAIL",
+      "seconds": 3.058
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+      "status": "FAIL",
+      "seconds": 3.02
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+      "status": "FAIL",
+      "seconds": 3.193
+    }
+  ]
+}

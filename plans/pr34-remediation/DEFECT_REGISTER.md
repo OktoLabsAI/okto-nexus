@@ -49,3 +49,15 @@ routing accepts `BROADCAST`. The behavioral test published to two recipients des
 the originating actor's broadcast deny. Shared governance now uses
 `domain.targets.target_strategy`; lowercase/uppercase negatives both pass. See
 P10_NOTIFICATION_TARGETS.md for RED, correction and final Windows/Linux results.
+
+
+## F05/F04 additional admission gap at 3e87578
+
+Known journal quota/fsync failure stopped native dispatch but did not stop new
+executable admission: authenticated REST send returned PENDING/durable=true and
+MCP message creation committed a transport intent after the capture failure.
+Four clean behavioral RED cases reproduced this at 3e87578 (not import failures).
+Schema062 extends the existing runtime_writer_contract with an owner-fenced
+capture availability bit and database admission guards; updated repositories
+share the same transactional check, including independent stdio writers.
+See P12_CAPTURE_ADMISSION.md for scoped results, failures and recovery limits.

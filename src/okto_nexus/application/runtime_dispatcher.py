@@ -38,6 +38,28 @@ class RuntimeDispatcher:
         self._publication_active = False
         self._publication_rescan = False
         self._publication_thread = None
+        self._capture_health_pending = None
+        self._capture_health_lock = threading.Lock()
+
+    def capture_health_changed(self, available):
+        with self._capture_health_lock:
+            self._capture_health_pending = available
+            self._persist_capture_health()
+
+    def _persist_capture_health(self):
+        # Caller owns the health lock, including retries: an old retry value
+        # must not replace a newer fault observed by the capture thread.
+        if self._capture_health_pending is None:
+            return
+        try:
+            with self.cf.unit_of_work() as uow:
+                self.repo.set_capture_available(uow, owner_id=self.owner_id, epoch=self.epoch,
+                    available=self._capture_health_pending, now=self.clock.now_iso())
+            self._capture_health_pending = None
+        except Exception:
+            # A full/unavailable SQLite store cannot acknowledge new durable
+            # work either. Keep the health update pending for bounded recovery.
+            logging.getLogger(__name__).error("Runtime capture admission fence could not persist; recovery pending.")
 
     def start(self):
         if self.epoch is not None:
@@ -70,6 +92,7 @@ class RuntimeDispatcher:
                             raise RuntimeError("Runtime journal recovery lost ownership")
                 with self.cf.unit_of_work() as uow:
                     self.repo.finish_recovery(uow, epoch=self.epoch, now=self.clock.now_iso())
+                self.event_ingress.enable_admission()
             except BaseException:
                 self.event_ingress.close()
                 with self.cf.unit_of_work() as uow:
@@ -157,6 +180,8 @@ class RuntimeDispatcher:
             if self._stop.is_set():
                 break
             try:
+                with self._capture_health_lock:
+                    self._persist_capture_health()
                 now = self.clock.now_iso()
                 with self.cf.unit_of_work() as uow:
                     if not self.repo.heartbeat_owner(uow, owner_id=self.owner_id, epoch=self.epoch, lease_expires_at=iso_plus(now, 40), now=now):
@@ -270,7 +295,7 @@ class RuntimeDispatcher:
             with self._lock:
                 self._inflight[operation["operation_id"]] = (attempt, time.monotonic())
             if self.event_ingress:
-                self.event_ingress.journal.check_admission()
+                self.event_ingress.check_admission()
             # Secret resolution, process startup and transport are ALL outside
             # the write transaction. Crash from here is ambiguous, not retryable.
             self.dispatch(operation | {"owner_id": self.owner_id, "owner_epoch": self.epoch, "attempt_id": attempt})

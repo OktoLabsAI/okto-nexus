@@ -1,0 +1,128 @@
+{
+  "source_sha": "3e875789b3d36843d13b7c2918cef314e20009b8",
+  "runs": {
+    "initial-windows": {
+      "manifest": "p12-capture-admission-initial-windows.json",
+      "counts": {
+        "FAIL": 4,
+        "ERROR": 4
+      }
+    },
+    "red-windows": {
+      "manifest": "p12-capture-admission-red-windows.json",
+      "counts": {
+        "FAIL": 4
+      }
+    },
+    "initial-green-windows": {
+      "manifest": "p12-capture-admission-initial-green-windows.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "initial-green-linux": {
+      "manifest": "p12-capture-admission-initial-green-linux.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "expanded-windows": {
+      "manifest": "p12-capture-admission-expanded-windows.json",
+      "counts": {
+        "PASS": 9
+      }
+    },
+    "expanded-linux": {
+      "manifest": "p12-capture-admission-expanded-linux.json",
+      "counts": {
+        "PASS": 9
+      }
+    },
+    "regression-windows": {
+      "manifest": "p12-capture-admission-regression-windows.json",
+      "counts": {
+        "PASS": 103
+      }
+    },
+    "regression-linux": {
+      "manifest": "p12-capture-admission-regression-linux.json",
+      "counts": {
+        "PASS": 103
+      }
+    },
+    "final-windows": {
+      "manifest": "p12-capture-admission-final-windows.json",
+      "counts": {
+        "PASS": 9
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-capture-admission-final-linux.json",
+      "counts": {
+        "PASS": 9
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-JRN-09",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+          "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+          "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+          "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[codex]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[pi]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[claude]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[attach]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-codex]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-pi]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-claude]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-codex]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-pi]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-claude]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[codex]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[pi]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[claude]",
+          "tests/test_runtime_event_buffers.py::test_expired_codex_thread_history_does_not_block_new_thread_subscription",
+          "tests/test_runtime_event_buffers.py::test_retained_terminal_drains_before_explicit_overflow",
+          "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown"
+        ],
+        "linux": [
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+          "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+          "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+          "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+          "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[codex]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[pi]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[claude]",
+          "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[attach]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-codex]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-pi]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-claude]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-codex]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-pi]",
+          "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-claude]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[codex]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[pi]",
+          "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[claude]",
+          "tests/test_runtime_event_buffers.py::test_expired_codex_thread_history_does_not_block_new_thread_subscription",
+          "tests/test_runtime_event_buffers.py::test_retained_terminal_drains_before_explicit_overflow",
+          "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown"
+        ]
+      }
+    }
+  ]
+}

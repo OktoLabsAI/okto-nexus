@@ -1,6 +1,7 @@
 """Persistent open idempotency; unresolved starts never auto-spawn again."""
 from ....domain.base import iso_plus, new_id
 from ....errors import ErrorCode, OktoNexusError
+from .runtime_outbox_repo import require_capture_available
 
 
 class SqliteRuntimeRequestRepo:
@@ -14,6 +15,7 @@ class SqliteRuntimeRequestRepo:
             if session:
                 return row["request_id"], session[0]
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime request is pending or requires reconciliation; it will not be replayed.", {})
+        require_capture_available(uow)
         request_id = new_id("open")
         if endpoint is not None:
             current = uow.connection.execute("SELECT * FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
@@ -33,6 +35,7 @@ class SqliteRuntimeRequestRepo:
         return request_id, None
 
     def validate_start(self, uow, *, request_id, endpoint_id, now):
+        require_capture_available(uow)
         row = uow.connection.execute("SELECT r.* FROM runtime_open_requests r JOIN runtime_dispatcher_owner o "
             "ON o.owner_id=r.owner_id AND o.epoch=r.owner_epoch JOIN agent_endpoints e ON e.endpoint_id=r.endpoint_id "
             "WHERE r.request_id=? AND r.endpoint_id=? AND r.status='RESERVED' AND r.deadline>? "

@@ -25,9 +25,32 @@ class RuntimeEventIngress:
         self.events, self.clock, self.publish = events, clock, publish
         self._project_lock = threading.Lock()
         self._pending_lock = threading.Lock()
+        self._capture_lock = threading.RLock()
         self.projection_pending = False
         self.wake_dispatch = None
         self.consume_terminal = None
+        self.capture_health_changed = None
+
+    def check_admission(self):
+        with self._capture_lock:
+            try:
+                self.journal.check_admission()
+            except OSError:
+                self._report_capture_health(False)
+                raise
+
+    def enable_admission(self):
+        # Serialize validation and the owner health update with capture faults.
+        # Otherwise a stale successful quota check could clear a newer fault.
+        with self._capture_lock:
+            self.check_admission()
+            self._report_capture_health(True)
+
+    def _report_capture_health(self, available):
+        if not available:
+            logging.getLogger(__name__).error("Runtime journal capture unavailable; new executions paused.")
+        if self.capture_health_changed:
+            self.capture_health_changed(available)
 
     def start(self, *, recover=True):
         with self.cf.unit_of_work(write=False) as uow:
@@ -37,7 +60,14 @@ class RuntimeEventIngress:
             self.recover()
 
     def capture(self, event, *, connection_id=None, defer_projection=False):
-        record = self.journal.append(event, connection_id=connection_id)
+        with self._capture_lock:
+            try:
+                record = self.journal.append(event, connection_id=connection_id)
+            except OSError:
+                # append has released its file lock. Record a store-wide admission
+                # fence outside journal IO and outside any existing writer UoW.
+                self._report_capture_health(False)
+                raise
         if defer_projection and self.wake_dispatch:
             # Capture must not wait on SQLite projection. The existing bounded
             # owner coordinator drains the durable journal, not a second queue.
@@ -94,4 +124,7 @@ class RuntimeEventIngress:
             with self.cf.unit_of_work(write=False) as uow:
                 checkpoint = self.repo.checkpoint(uow, store_id=self.journal.store_id)
             # The DB transaction has ended before touching journal files.
-            return self.journal.compact(checkpoint)
+            with self._capture_lock:
+                result = self.journal.compact(checkpoint)
+                self.enable_admission()
+                return result

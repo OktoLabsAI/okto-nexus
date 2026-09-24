@@ -1,0 +1,652 @@
+{
+  "source_sha": "3e875789b3d36843d13b7c2918cef314e20009b8",
+  "file_sha256": {
+    "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+    "src/okto_nexus/application/runtime_dispatcher.py": "0ac044c68100a21ad2e0d5753c94d41f93d5ec5b7205b46d4dbbd9cea0ecc9ec",
+    "src/okto_nexus/application/harness_supervisor.py": "aef7a58f9d62bae3e37f0268545ee5797b8b78236fdf1354c1988560d9026f5a",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0728316a35ff0d3d7604d8bdaf024ec5fbe6c990814660260f2251bb70d3f799",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "3baad62e29f02516d3696a9ccec16f0fbcea9acad8df46856f5ab20713c9b77e",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "043684fb55d2ad6cf8fc8edb4af51f109cc945194271c0337aa616b72d79bbe2",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_requests_repo.py": "6fd7d11f057896c581664f43937a17f7ce06d61d5b3282fb39871ee095cebe7c",
+    "src/okto_nexus/migrations/062_runtime_capture_admission.sql": "cfa31edf592ad617513bdfaae953a676abc2337dd995558207fc3ef0a5369d5f",
+    "tests/test_runtime_capture_admission.py": "0adf4139373db1ed19b796985a752d14dacee04bfd8844d37d578f37877e1083"
+  },
+  "platform": "windows",
+  "counts": {
+    "PASS": 103
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "103",
+      "time": "273.209",
+      "timestamp": "2026-09-24T10:20:53.800445-03:00"
+    }
+  ],
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_event_journal.py tests/test_runtime_journal_retention.py tests/test_runtime_shutdown.py tests/test_runtime_commands.py tests/test_runtime_outbox.py tests/test_runtime_writer_contract.py tests/test_runtime_backup_restore.py tests/test_runtime_event_buffers.py tests/test_runtime_artifact_durability.py tests/test_migrations.py tests/test_import_boundary.py -q --tb=short --junitxml=.git/pr34-evidence/capture-admission-regression-windows.xml",
+  "native_flags": "No native provider; isolated fixtures and synthetic processes only.",
+  "limitations": "Initial RED includes cleanup errors; clean RED preserves behavioral failures without cleanup errors. Partial selection, not final full suite.",
+  "records": [
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_reopen_preserves_distinct_equal_text_and_stable_cursors",
+      "status": "PASS",
+      "seconds": 0.117
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_exclusive_owner_lock",
+      "status": "PASS",
+      "seconds": 0.054
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_normalized_output_is_redacted_before_durable_capture",
+      "status": "PASS",
+      "seconds": 0.038
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+      "status": "PASS",
+      "seconds": 0.088
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_quota_and_fsync_failure_stop_admission",
+      "status": "PASS",
+      "seconds": 0.054
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_credentials_redacted_before_bytes_are_written",
+      "status": "PASS",
+      "seconds": 0.05
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_rollback_and_restart_recover_exactly_once",
+      "status": "PASS",
+      "seconds": 5.35
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_journal_io_outside_write_uow_and_full_sync",
+      "status": "PASS",
+      "seconds": 4.366
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_batch_rolls_back_before_publication",
+      "status": "PASS",
+      "seconds": 3.712
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_hardlink_replacement_is_refused",
+      "status": "PASS",
+      "seconds": 0.053
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_after_checkpoint_loss_does_not_duplicate_result",
+      "status": "PASS",
+      "seconds": 3.779
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_cursors_cover_append_and_reject_unbounded_limits",
+      "status": "PASS",
+      "seconds": 3.507
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_compaction_keeps_unprojected_records_and_original_ordinals",
+      "status": "PASS",
+      "seconds": 0.109
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_quota_can_recover_without_discarding_sqlite_projection",
+      "status": "PASS",
+      "seconds": 0.059
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_partial_segment_and_invalid_checkpoint_never_drop_events",
+      "status": "PASS",
+      "seconds": 0.06
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_compaction_cannot_clear_unknown_write_failure",
+      "status": "PASS",
+      "seconds": 0.039
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_crash_during_retention_keeps_a_valid_recovery_boundary[before_manifest]",
+      "status": "PASS",
+      "seconds": 0.107
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_crash_during_retention_keeps_a_valid_recovery_boundary[after_manifest]",
+      "status": "PASS",
+      "seconds": 0.09
+    },
+    {
+      "class": "tests.test_runtime_journal_retention",
+      "test": "test_retention_surfaces_preserve_database_results_and_reject_foreign_actor",
+      "status": "PASS",
+      "seconds": 4.27
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_does_not_release_owner_before_runtime_drain",
+      "status": "PASS",
+      "seconds": 3.454
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_shutdown_deadline_retains_owner_and_journal_for_late_activity",
+      "status": "PASS",
+      "seconds": 3.253
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_open_finishing_after_shutdown_cannot_leave_a_live_session",
+      "status": "PASS",
+      "seconds": 3.329
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_refuses_startup_when_another_owner_holds_store",
+      "status": "PASS",
+      "seconds": 0.852
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_admission_does_not_wait_for_native_write",
+      "status": "PASS",
+      "seconds": 3.194
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_repeating_command_key_does_not_repeat_native_effect",
+      "status": "PASS",
+      "seconds": 3.611
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_two_admin_turns_capture_results_and_close_is_durable",
+      "status": "PASS",
+      "seconds": 5.744
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+      "status": "PASS",
+      "seconds": 3.634
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_stale_native_turn_control_is_rejected_without_effect",
+      "status": "PASS",
+      "seconds": 5.322
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_revocation_after_admission_prevents_native_write",
+      "status": "PASS",
+      "seconds": 3.444
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_control_queued_for_finished_turn_does_not_hit_next_turn",
+      "status": "PASS",
+      "seconds": 4.375
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_claude_replacement_steer_has_separate_correlated_result",
+      "status": "PASS",
+      "seconds": 8.282
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_idempotent_retry_does_not_charge_spent_grant_again",
+      "status": "PASS",
+      "seconds": 3.277
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_enqueue_failure_rolls_back_intent_and_grant_charge",
+      "status": "PASS",
+      "seconds": 3.071
+    },
+    {
+      "class": "tests.test_runtime_commands",
+      "test": "test_command_result_recovers_after_owner_restart_without_reexecution",
+      "status": "PASS",
+      "seconds": 5.685
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_message_delivery_outbox_rollback_together",
+      "status": "PASS",
+      "seconds": 3.143
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery",
+      "status": "PASS",
+      "seconds": 3.183
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_reserved_push_delivery_cannot_also_be_claimed_or_acked_by_pull",
+      "status": "PASS",
+      "seconds": 2.835
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_changed_policy_blocks_previously_committed_intent",
+      "status": "PASS",
+      "seconds": 2.452
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENDING]",
+      "status": "PASS",
+      "seconds": 3.379
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+      "status": "PASS",
+      "seconds": 2.377
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+      "status": "PASS",
+      "seconds": 2.467
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_native_send_is_outside_sqlite_write_transaction",
+      "status": "PASS",
+      "seconds": 3.025
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_unverified_internal_sender_only_gets_logical_inbox",
+      "status": "PASS",
+      "seconds": 3.145
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+      "status": "PASS",
+      "seconds": 5.26
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_open_idempotency_reuses_one_session_across_surfaces",
+      "status": "PASS",
+      "seconds": 3.192
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_concurrent_open_key_never_starts_twice",
+      "status": "PASS",
+      "seconds": 2.913
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p05_open_reply_persistence_failure_does_not_repeat_start",
+      "status": "PASS",
+      "seconds": 2.912
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+      "status": "PASS",
+      "seconds": 6.019
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+      "status": "PASS",
+      "seconds": 1.05
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+      "status": "PASS",
+      "seconds": 0.357
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_preexisting_legacy_connection_is_fenced_only_after_activation",
+      "status": "PASS",
+      "seconds": 0.322
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+      "status": "PASS",
+      "seconds": 5.204
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_operator_disable_changes_writer_mode_atomically_and_retains_fences[stored_runtime]",
+      "status": "PASS",
+      "seconds": 7.066
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_compatible_stdio_still_enqueues_the_canonical_delivery",
+      "status": "PASS",
+      "seconds": 4.87
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_writer_contract_diagnostics_are_operator_only",
+      "status": "PASS",
+      "seconds": 2.906
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay",
+      "status": "PASS",
+      "seconds": 6.441
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_restore_refuses_incomplete_or_corrupted_combined_snapshot[artifact]",
+      "status": "PASS",
+      "seconds": 4.857
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_restore_refuses_incomplete_or_corrupted_combined_snapshot[journal]",
+      "status": "PASS",
+      "seconds": 4.515
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_restore_refuses_incomplete_or_corrupted_combined_snapshot[database]",
+      "status": "PASS",
+      "seconds": 4.668
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_backup_refuses_active_owner_and_requires_explicit_quiescence",
+      "status": "PASS",
+      "seconds": 3.492
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[missing_reference]",
+      "status": "PASS",
+      "seconds": 7.047
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[partial_tail]",
+      "status": "PASS",
+      "seconds": 7.742
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes[checkpoint_ahead]",
+      "status": "PASS",
+      "seconds": 5.186
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_restore_preserves_uncertain_delivery_fence_with_admission_initially_off",
+      "status": "PASS",
+      "seconds": 5.612
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_offline_backup_still_refuses_an_unexpired_owner_lease",
+      "status": "PASS",
+      "seconds": 2.721
+    },
+    {
+      "class": "tests.test_runtime_backup_restore",
+      "test": "test_explicit_database_override_and_no_overwrite",
+      "status": "PASS",
+      "seconds": 5.023
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[codex]",
+      "status": "PASS",
+      "seconds": 0.162
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[pi]",
+      "status": "PASS",
+      "seconds": 0.161
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[claude]",
+      "status": "PASS",
+      "seconds": 0.153
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[attach]",
+      "status": "PASS",
+      "seconds": 0.128
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-codex]",
+      "status": "PASS",
+      "seconds": 0.162
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-pi]",
+      "status": "PASS",
+      "seconds": 0.192
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-claude]",
+      "status": "PASS",
+      "seconds": 0.169
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-codex]",
+      "status": "PASS",
+      "seconds": 0.746
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-pi]",
+      "status": "PASS",
+      "seconds": 0.773
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-claude]",
+      "status": "PASS",
+      "seconds": 0.804
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[codex]",
+      "status": "PASS",
+      "seconds": 0.008
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[pi]",
+      "status": "PASS",
+      "seconds": 0.008
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[claude]",
+      "status": "PASS",
+      "seconds": 0.007
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_expired_codex_thread_history_does_not_block_new_thread_subscription",
+      "status": "PASS",
+      "seconds": 0.17
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_retained_terminal_drains_before_explicit_overflow",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_production_overflow_reaps_owned_process_and_journals_unknown",
+      "status": "PASS",
+      "seconds": 6.113
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_artifact_storage_does_not_hold_sqlite_writer",
+      "status": "PASS",
+      "seconds": 3.907
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_permission_change_during_storage_prevents_catalog_commit",
+      "status": "PASS",
+      "seconds": 3.516
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_payload_and_manifest_fsync_precede_catalog_reference",
+      "status": "PASS",
+      "seconds": 3.301
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_uncertain_artifact_fsync_never_creates_catalog_reference",
+      "status": "PASS",
+      "seconds": 3.288
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_large_runtime_result_uses_private_canonical_artifact",
+      "status": "PASS",
+      "seconds": 5.192
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+      "status": "PASS",
+      "seconds": 4.647
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_blocked_artifact_worker_keeps_heartbeat_and_holds_shutdown_ownership",
+      "status": "PASS",
+      "seconds": 4.716
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_native_terminal_wake_during_publication_scan_is_not_lost",
+      "status": "PASS",
+      "seconds": 4.308
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_runtime_artifact_quota_is_reserved_before_filesystem_effect",
+      "status": "PASS",
+      "seconds": 4.373
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_large_result_artifact_remains_uncatalogued_until_canonical_approval[approve]",
+      "status": "PASS",
+      "seconds": 4.197
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_large_result_artifact_remains_uncatalogued_until_canonical_approval[reject]",
+      "status": "PASS",
+      "seconds": 4.413
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_unknown_ledger_version_fails_closed_before_applying_anything",
+      "status": "PASS",
+      "seconds": 0.056
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_failed_migration_rolls_back_only_itself",
+      "status": "PASS",
+      "seconds": 0.075
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_concurrent_bootstrap_applies_each_migration_exactly_once",
+      "status": "PASS",
+      "seconds": 0.418
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_bootstrap_retries_while_another_process_holds_the_lock",
+      "status": "PASS",
+      "seconds": 0.754
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_lock_retry_exhausted_raises_actionable_migration_error",
+      "status": "PASS",
+      "seconds": 0.043
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts2_migration_022_backfills_comm_scope_into_inline_binding",
+      "status": "PASS",
+      "seconds": 0.26
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts3_migration_022_converts_governance_policies_to_detached_globals",
+      "status": "PASS",
+      "seconds": 0.144
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_inner_layers_have_files",
+      "status": "PASS",
+      "seconds": 0.005
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_domain_and_application_do_not_import_infrastructure",
+      "status": "PASS",
+      "seconds": 0.931
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_replay_core_modules_are_in_scope_and_clean",
+      "status": "PASS",
+      "seconds": 0.016
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "source_sha": "3e875789b3d36843d13b7c2918cef314e20009b8",
+  "file_sha256": {
+    "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+    "src/okto_nexus/application/runtime_dispatcher.py": "0ac044c68100a21ad2e0d5753c94d41f93d5ec5b7205b46d4dbbd9cea0ecc9ec",
+    "src/okto_nexus/application/harness_supervisor.py": "aef7a58f9d62bae3e37f0268545ee5797b8b78236fdf1354c1988560d9026f5a",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0728316a35ff0d3d7604d8bdaf024ec5fbe6c990814660260f2251bb70d3f799",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "3baad62e29f02516d3696a9ccec16f0fbcea9acad8df46856f5ab20713c9b77e",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "043684fb55d2ad6cf8fc8edb4af51f109cc945194271c0337aa616b72d79bbe2",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_requests_repo.py": "6fd7d11f057896c581664f43937a17f7ce06d61d5b3282fb39871ee095cebe7c",
+    "src/okto_nexus/migrations/062_runtime_capture_admission.sql": "cfa31edf592ad617513bdfaae953a676abc2337dd995558207fc3ef0a5369d5f",
+    "tests/test_runtime_capture_admission.py": "0adf4139373db1ed19b796985a752d14dacee04bfd8844d37d578f37877e1083"
+  },
+  "platform": "windows",
+  "counts": {
+    "PASS": 9
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "9",
+      "time": "42.339",
+      "timestamp": "2026-09-24T10:19:31.512401-03:00"
+    }
+  ],
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_capture_admission.py -q --tb=short --junitxml=.git/pr34-evidence/capture-admission-expanded-windows.xml",
+  "native_flags": "No native provider; isolated fixtures and synthetic processes only.",
+  "limitations": "Initial RED includes cleanup errors; clean RED preserves behavioral failures without cleanup errors. Partial selection, not final full suite.",
+  "records": [
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+      "status": "PASS",
+      "seconds": 4.214
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+      "status": "PASS",
+      "seconds": 3.222
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+      "status": "PASS",
+      "seconds": 3.442
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+      "status": "PASS",
+      "seconds": 3.534
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+      "status": "PASS",
+      "seconds": 8.001
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+      "status": "PASS",
+      "seconds": 6.546
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_quota_compaction_resumes_admission_without_losing_projected_events",
+      "status": "PASS",
+      "seconds": 3.947
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+      "status": "PASS",
+      "seconds": 4.401
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+      "status": "PASS",
+      "seconds": 3.719
+    }
+  ]
+}

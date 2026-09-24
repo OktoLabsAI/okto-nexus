@@ -1,0 +1,75 @@
+{
+  "source_sha": "3e875789b3d36843d13b7c2918cef314e20009b8",
+  "file_sha256": {
+    "tests\\test_runtime_capture_admission.py": "a56bab7fa7cb8acc8da4fddebf36b92aa040b94668bfd4298588ebc0d8e830cd"
+  },
+  "platform": "windows",
+  "counts": {
+    "FAIL": 4,
+    "ERROR": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "4",
+      "failures": "4",
+      "skipped": "0",
+      "tests": "4",
+      "time": "11.404",
+      "timestamp": "2026-09-24T10:11:34.978787-03:00"
+    }
+  ],
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_capture_admission.py -q --junitxml=.git/pr34-evidence/capture-admission-red-windows.xml",
+  "native_flags": "No native provider; isolated fixtures and synthetic processes only.",
+  "limitations": "Initial RED includes cleanup errors; clean RED preserves behavioral failures without cleanup errors. Partial selection, not final full suite.",
+  "records": [
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+      "status": "FAIL",
+      "seconds": 2.933
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+      "status": "ERROR",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+      "status": "FAIL",
+      "seconds": 2.043
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+      "status": "ERROR",
+      "seconds": 0.003
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+      "status": "FAIL",
+      "seconds": 2.058
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+      "status": "ERROR",
+      "seconds": 0.003
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+      "status": "FAIL",
+      "seconds": 2.066
+    },
+    {
+      "class": "tests.test_runtime_capture_admission",
+      "test": "test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+      "status": "ERROR",
+      "seconds": 0.003
+    }
+  ]
+}

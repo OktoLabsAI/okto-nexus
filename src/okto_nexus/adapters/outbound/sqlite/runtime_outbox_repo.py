@@ -5,6 +5,14 @@ import sqlite3
 from ....errors import ErrorCode, OktoNexusError
 
 
+def require_capture_available(uow):
+    """Transactional health fence shared by independent canonical writers."""
+    row = uow.connection.execute("SELECT capture_available FROM runtime_writer_contract WHERE singleton=1").fetchone()
+    if not row or not row[0]:
+        raise OktoNexusError(ErrorCode.CONFLICT,
+            "Runtime capture is unavailable; new executions are paused.", {"reason": "runtime_capture_unavailable"})
+
+
 class SqliteRuntimeOutboxRepo:
     def has_history(self, uow):
         return uow.connection.execute("SELECT 1 FROM harness_sessions UNION ALL SELECT 1 FROM delivery_outbox "
@@ -23,6 +31,7 @@ class SqliteRuntimeOutboxRepo:
             if existing[0] != envelope.request_hash():
                 raise OktoNexusError(ErrorCode.CONFLICT, "Operation identity already binds different content.", {})
             return
+        require_capture_available(uow)
         encoded = envelope.canonical_json()
         claimed = uow.connection.execute(
             "UPDATE message_deliveries SET consumer_kind='push',consumer_operation_id=? "
@@ -140,6 +149,12 @@ class SqliteRuntimeOutboxRepo:
         uow.connection.execute("UPDATE runtime_commands SET status='CANCELLED',reason='session_owner_lost_before_send',updated_at=? "
             "WHERE status IN ('PENDING','CLAIMED') AND expected_owner_epoch<>?", (now, epoch))
         return epoch
+
+    def set_capture_available(self, uow, *, owner_id, epoch, available, now):
+        if not self.owns(uow, owner_id=owner_id, epoch=epoch, now=now):
+            return False
+        return uow.connection.execute("UPDATE runtime_writer_contract SET capture_available=? "
+            "WHERE singleton=1 AND owner_id=? AND owner_epoch=?", (int(available), owner_id, epoch)).rowcount == 1
 
     def set_recovery_boundary(self, uow, *, owner_id, epoch, store_id, watermark, now):
         return uow.connection.execute(

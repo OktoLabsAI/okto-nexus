@@ -4038,11 +4038,12 @@
       ],
       "stimulus": "Esgotar quota/disco de journal e storage.",
       "expected": "Nova admissão bloqueada; resultados não são chamados de duráveis; buffers finitos e alerta.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P07_EVENT_BUFFERS.md"
+        "plans/pr34-remediation/P12_CAPTURE_ADMISSION.md",
+        "plans/pr34-remediation/evidence/p12-capture-admission-index.json"
       ],
-      "notes": " Native history/fanout byte/count bounds and production overflow executed; full aggregate remains uncertified."
+      "notes": "Known journal quota/fsync failure rejects new REST/MCP/independent stdio intent, no false durable result, bounded buffers and redacted ERROR alert. Actual SQLite page exhaustion rolls back canonical admission.9 final new +103 regression PASS/platform; no physical host disk filled."
     },
     {
       "test_id": "T-JRN-10",

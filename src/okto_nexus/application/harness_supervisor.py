@@ -465,7 +465,7 @@ class HarnessSupervisor:
     def open(self, **kwargs) -> HarnessSession:
         """One live runtime per endpoint; distinct bindings keep one identity."""
         if self.event_ingress:
-            self.event_ingress.journal.check_admission()
+            self.event_ingress.check_admission()
         if not self._runtime_enabled():
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
         agent_id = kwargs.get("owning_agent_id")
@@ -908,7 +908,7 @@ class HarnessSupervisor:
         if not self._runtime_enabled():
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Harness integrations are disabled.", {})
         if self.event_ingress and verb in {"send_turn", "steer"}:
-            self.event_ingress.journal.check_admission()
+            self.event_ingress.check_admission()
         live = self._require_live(session_id)
         caps = live.connector.capabilities
         self._require_verb_allowed(caps, verb)

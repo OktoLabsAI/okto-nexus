@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface56.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface57.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -280,3 +280,32 @@ An authorized owner settings change switches admission mode atomically; disablin
 A database-only copy does not preserve the runtime journal or external artifacts. Use the repository's [tested offline procedure](../../plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md) after stopping all writers, artifact maintenance and managed native owners. The procedure requires explicit acknowledgement of quiescence, checks owner exclusion, uses SQLite's backup API, validates file hashes/references and journal checkpoints, and refuses overwrite. It never starts a native process or replays a prompt.
 
 Restore into a new home and start with an explicit `--feature-harness-integrations false` while reviewing uncertain operations and preserved executor reservations. Retain the original store and dedupe history. The snapshot contains private store data and must receive the same access restrictions. The procedure lives at `plans/pr34-remediation/offline_runtime_backup.py`; it is not a remotely callable admin endpoint.
+
+
+## Capture capacity admission fence (schema 062)
+
+A known journal quota or write/fsync failure pauses new executable delivery,
+send/steer and open admission in the shared store. Updated REST/MCP callers
+receive `CONFLICT` with reason `runtime_capture_unavailable`; independent stdio
+writers see the same fence. Database triggers also reject inserts by already-open
+older writers. A rejected transaction preserves no new message, reservation,
+grant charge or executable intent. Existing authorized idempotent replies remain
+readable; stop controls retain their separate authorization.
+
+The active owner records capture availability through its owner/epoch fence. A
+stale owner cannot reopen admission. The health update performs SQLite work only
+after journal IO has ended. If SQLite cannot persist the update, an error is logged
+and the owner retains a bounded recovery retry; native dispatch still checks
+capture availability immediately before calling the adapter. No availability
+report promises that a concurrent future disk write will succeed.
+
+For quota exhaustion, use operator journal diagnostics and compact only records
+already projected into SQLite. Successful compaction revalidates capture and
+restores admission without deleting projected results. An uncertain write/fsync
+failure cannot be cleared by compaction: quiesce the owner, repair storage and
+restart with the matching journal/database so integrity and checkpoint recovery
+run. Do not lower writer requirements, remove triggers or replay uncertain
+operations to clear the condition. A new healthy owner revalidates the journal
+before restoring admission. SQLite capacity failures reject writes and never
+acknowledge a new durable intent; restore storage before reviewing/resubmitting a
+definitively rejected request.

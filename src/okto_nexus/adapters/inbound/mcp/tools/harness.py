@@ -489,6 +489,7 @@ def build_dispatcher(deps):
         return planner.fallback(uow, operation=operation)
     dispatcher.select_fallback = select_fallback
     dispatcher.event_ingress = supervisor.event_ingress
+    dispatcher.event_ingress.capture_health_changed = dispatcher.capture_health_changed
     def publish_results():
         return native_approvals.scan_once() + handoffs.process_runtime_results() + messages._runtime_results.scan_once(messages)
     dispatcher.publish_results = publish_results

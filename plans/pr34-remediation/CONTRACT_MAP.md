@@ -82,3 +82,17 @@ owner pidfd plus private cancel/proof descriptors. Popen.pid identifies the guar
 native protocol IDs remain separate. Observed stop requires guardian cleanup proof.
 Managed adapters advertise Windows/Linux; attach retains POSIX. See
 P07_LINUX_OWNERSHIP.md for exact platform evidence and limitations.
+
+
+## Capture admission mapping (schema062)
+
+The logical capture-health admission fence reuses runtime_writer_contract via
+capture_available, rather than a new work queue/health authority. Only the current
+runtime owner/epoch updates the bit. RuntimeEventIngress serializes capture faults
+with validated compaction/startup recovery and records health outside journal IO;
+RuntimeDispatcher retries failed health persistence with its bounded coordinator.
+SQLite repositories and insert triggers arbitrate new delivery, send/steer and
+open intents in the same canonical transaction across all writers. Existing
+idempotent replies and stop controls remain separately authorized. Native dispatch
+retains a final journal check. No adapter capability, native ACK or result
+semantics change; tool surface57/identity25 remain, with additive schema062.

@@ -5,6 +5,7 @@ from dataclasses import asdict
 
 from ....domain.base import new_id
 from ....errors import ErrorCode, OktoNexusError
+from .runtime_outbox_repo import require_capture_available
 
 
 class SqliteRuntimeCommandRepo:
@@ -23,6 +24,8 @@ class SqliteRuntimeCommandRepo:
 
     def enqueue(self, uow, *, context, key, request_hash, session, endpoint, profile_revision, verb, payload,
                 expected_operation_id, expected_turn_id, grant, now, starts_turn):
+        if verb in {"send_turn", "steer"}:
+            require_capture_available(uow)
         pending = uow.connection.execute("SELECT count(*),COALESCE(sum(length(CAST(payload AS BLOB))),0) FROM runtime_commands "
             "WHERE reconciliation_id IS NULL AND status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN')").fetchone()
         actor = context.actor_agent_id or "operator"
