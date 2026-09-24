@@ -2569,8 +2569,12 @@
       ],
       "stimulus": "Abrir, fechar e reabrir conexão com capabilities, metadata, role, tags, permissions e comm_scope existentes.",
       "expected": "Todos os campos canônicos permanecem idênticos; apenas dados de conexão/presença mudam.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls."
     },
     {
       "test_id": "T-ID-02",
@@ -2583,8 +2587,12 @@
       ],
       "stimulus": "Abrir harness para agent_id não cadastrado por MCP e REST.",
       "expected": "Erro prescritivo antes de spawn; nenhum Agent é criado implicitamente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls."
     },
     {
       "test_id": "T-ID-03",
@@ -2597,8 +2605,12 @@
       ],
       "stimulus": "Duas aberturas autorizadas para o mesmo agente, incluindo a mesma idempotency key.",
       "expected": "Pedidos distintos criam bindings válidos; pedido repetido não duplica processo/sessão nem altera perfil.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-identity-acceptance.json"
+      ],
+      "notes": "Exact acceptance stimuli verified in production REST/MCP composition:6 PASS Windows and6 PASS Linux. Source test hash, commands and scope in linked evidence. No provider calls."
     },
     {
       "test_id": "T-ID-04",

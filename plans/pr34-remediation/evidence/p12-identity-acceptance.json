@@ -1,0 +1,24 @@
+{
+  "parent_sha": "748987e2ef111d4e7d727aa43396cb07c5a38c3a",
+  "source_state": "parent plus new acceptance test module",
+  "test_file": "tests/test_runtime_identity_acceptance.py",
+  "test_file_sha256": "969ec07aa0893a0da357e1b0ee742b628977c63352631157eea6e35422bd5db0",
+  "status": "PASS",
+  "requirements": [
+    "T-ID-01",
+    "T-ID-02",
+    "T-ID-03"
+  ],
+  "windows": {
+    "passed": 6,
+    "seconds": 18.13,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 6,
+    "seconds": 23.53,
+    "exit_code": 0
+  },
+  "exact_commands": "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+  "limitations": "Production authenticated HTTP/MCP composition with synthetic external peers; no provider calls."
+}
