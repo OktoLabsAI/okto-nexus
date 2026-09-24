@@ -44,13 +44,19 @@ class SqliteRuntimeCommandRepo:
              profile_revision, verb, encoded, session.owner_epoch, expected_operation_id, expected_turn_id, now, now, int(starts_turn)))
         return self.get(uow, operation_id)
 
-    def pending(self, uow, *, control, limit, close_only=False):
+    def pending(self, uow, *, control, limit, close_only=False, blocked_agents=()):
         # A control may overtake normal prompts, but never another in-flight
         # control for its binding. Normal turns share the inbox outbox lane.
         selector = "<>" if control else "="
         query = "SELECT c.* FROM runtime_commands c WHERE c.status='PENDING' AND c.verb " + selector + " 'send_turn' "
         if control:
             query += "AND c.verb='close' " if close_only else "AND c.verb<>'close' "
+            # Truncate only after selecting the oldest eligible command per
+            # endpoint/lane. Duplicate rows must not consume another lane's slot.
+            query += "AND NOT EXISTS (SELECT 1 FROM runtime_commands earlier WHERE earlier.endpoint_id=c.endpoint_id "
+            query += "AND earlier.status='PENDING' AND "
+            query += "earlier.verb='close' " if close_only else "earlier.verb NOT IN ('close','send_turn') "
+            query += "AND (earlier.created_at,earlier.operation_id)<(c.created_at,c.operation_id)) "
         query += "AND NOT EXISTS (SELECT 1 FROM runtime_commands busy WHERE busy.endpoint_id=c.endpoint_id AND busy.reconciliation_id IS NULL "
         if control:
             query += "AND busy.verb='close' " if close_only else "AND busy.verb<>'send_turn' "
@@ -62,7 +68,25 @@ class SqliteRuntimeCommandRepo:
             query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox d WHERE d.endpoint_id=c.endpoint_id AND d.reconciliation_id IS NULL AND "
             query += "(d.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR (d.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND d.terminal_event_id IS NULL) "
             query += "OR (d.status='PENDING' AND (d.created_at,d.operation_id)<(c.created_at,c.operation_id)))) "
-        return [dict(r) for r in uow.connection.execute(query + "ORDER BY c.created_at,c.operation_id LIMIT ?", (limit,))]
+        if not control:
+            # One unresolved normal native write per represented agent across
+            # both transport surfaces. Accepted inference does not hold a write
+            # worker; uncertain writes keep their fence until reconciliation.
+            query += "AND NOT EXISTS (SELECT 1 FROM runtime_commands active JOIN agent_endpoints ae ON ae.endpoint_id=active.endpoint_id "
+            query += "JOIN agent_endpoints ce ON ce.endpoint_id=c.endpoint_id WHERE ae.agent_id=ce.agent_id AND active.verb='send_turn' "
+            query += "AND active.reconciliation_id IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
+            query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox active JOIN agent_endpoints ce ON ce.endpoint_id=c.endpoint_id "
+            query += "WHERE active.recipient_agent_id=ce.agent_id AND active.reconciliation_id IS NULL "
+            query += "AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
+            if blocked_agents:
+                query += "AND NOT EXISTS (SELECT 1 FROM agent_endpoints ce WHERE ce.endpoint_id=c.endpoint_id "
+                query += "AND ce.agent_id IN (" + ",".join("?" for _ in blocked_agents) + ")) "
+            query = "WITH eligible AS (" + query + "), ranked AS (SELECT c.operation_id,ROW_NUMBER() OVER(" + (
+                "PARTITION BY e.agent_id ORDER BY c.created_at,c.operation_id) AS agent_rank "
+                "FROM eligible c JOIN agent_endpoints e USING(endpoint_id)) "
+                "SELECT c.* FROM eligible c JOIN ranked r USING(operation_id) WHERE r.agent_rank=1 ")
+        return [dict(r) for r in uow.connection.execute(query + "ORDER BY c.created_at,c.operation_id LIMIT ?",
+            (*blocked_agents, limit) if not control else (limit,))]
 
     def claim(self, uow, *, operation_id, epoch, attempt_id, now):
         return uow.connection.execute("UPDATE runtime_commands SET status='CLAIMED',owner_epoch=?,attempt_id=?,updated_at=? "

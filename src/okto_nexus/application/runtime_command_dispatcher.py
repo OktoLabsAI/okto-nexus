@@ -30,6 +30,10 @@ class RuntimeCommandDispatcher:
         with self._lock:
             return operation_id in self._inflight
 
+    def normal_operations_inflight(self):
+        with self._lock:
+            return tuple(operation for operation, (_, _, lane) in self._inflight.items() if lane == "turn")
+
     def idle(self):
         with self._lock:
             return not self._inflight
@@ -55,7 +59,9 @@ class RuntimeCommandDispatcher:
                 if not self.owner.repo.owns(uow, owner_id=self.owner.owner_id, epoch=self.owner.epoch, now=now):
                     return
                 endpoints = set()
-                for command in self.repo.pending(uow, control=control != "turn", close_only=control == "close", limit=capacity):
+                blocked = self.owner.normal_inflight_agents(uow) if control == "turn" else ()
+                for command in self.repo.pending(uow, control=control != "turn", close_only=control == "close",
+                        limit=capacity, blocked_agents=blocked):
                     if command["endpoint_id"] in endpoints:
                         continue
                     attempt = new_id("attempt")

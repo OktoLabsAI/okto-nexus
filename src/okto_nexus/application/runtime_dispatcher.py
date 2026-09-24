@@ -187,6 +187,15 @@ class RuntimeDispatcher:
             active = operation_id in self._inflight
         return active or bool(self.command_dispatcher and self.command_dispatcher.operation_inflight(operation_id))
 
+    def normal_inflight_agents(self, uow):
+        # Native acceptance/result projection can race ahead of the transport
+        # stack returning. Its physical worker remains occupied until finally.
+        with self._lock:
+            operations = tuple(self._inflight)
+        if self.command_dispatcher:
+            operations += self.command_dispatcher.normal_operations_inflight()
+        return self.repo.agents_for_operations(uow, operations)
+
     def scan_once(self):
         with self._lock:
             capacity = self.workers - len(self._inflight)
@@ -196,7 +205,7 @@ class RuntimeDispatcher:
         with self.cf.unit_of_work() as uow:
             if not self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
                 return
-            pending = self.repo.pending(uow, limit=capacity)
+            pending = self.repo.pending(uow, limit=capacity, blocked_agents=self.normal_inflight_agents(uow))
             accepted = []
             selected_endpoints = set()
             for operation in pending:

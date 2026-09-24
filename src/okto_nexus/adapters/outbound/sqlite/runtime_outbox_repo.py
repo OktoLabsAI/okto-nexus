@@ -1,5 +1,6 @@
 """Transport intents refer to existing inbox deliveries, never independent work."""
 import json
+import sqlite3
 
 from ....errors import ErrorCode, OktoNexusError
 
@@ -22,24 +23,44 @@ class SqliteRuntimeOutboxRepo:
             if existing[0] != envelope.request_hash():
                 raise OktoNexusError(ErrorCode.CONFLICT, "Operation identity already binds different content.", {})
             return
+        encoded = envelope.canonical_json()
         claimed = uow.connection.execute(
             "UPDATE message_deliveries SET consumer_kind='push',consumer_operation_id=? "
             "WHERE delivery_id=? AND status='unread' AND consumer_kind IS NULL",
             (envelope.operation_id, envelope.delivery_id))
         if claimed.rowcount != 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "Logical delivery already has an executor.", {})
-        uow.connection.execute(
-            "INSERT INTO delivery_outbox(operation_id,delivery_id,message_id,workspace_id,actor_agent_id,credential_binding,"
-            "recipient_agent_id,endpoint_id,endpoint_revision,profile_revision,runtime_session_id,envelope,request_hash,"
-            "root_operation_id,created_at,updated_at,authorization_revision) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            (envelope.operation_id, envelope.delivery_id, envelope.message_id, envelope.workspace_id,
-             context.actor_agent_id, context.credential_binding, envelope.recipient_agent_id, endpoint["endpoint_id"],
-             endpoint["revision"], profile["revision"] if profile else None, session_id, envelope.canonical_json(),
-             envelope.request_hash(), envelope.root_operation_id, now, now, authorization_revision))
+        try:
+            uow.connection.execute(
+                "INSERT INTO delivery_outbox(operation_id,delivery_id,message_id,workspace_id,actor_agent_id,credential_binding,"
+                "recipient_agent_id,endpoint_id,endpoint_revision,profile_revision,runtime_session_id,envelope,request_hash,"
+                "root_operation_id,created_at,updated_at,authorization_revision) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (envelope.operation_id, envelope.delivery_id, envelope.message_id, envelope.workspace_id,
+                 context.actor_agent_id, context.credential_binding, envelope.recipient_agent_id, endpoint["endpoint_id"],
+                 endpoint["revision"], profile["revision"] if profile else None, session_id, encoded,
+                 envelope.request_hash(), envelope.root_operation_id, now, now, authorization_revision))
+        except sqlite3.IntegrityError as exc:
+            if str(exc) == "runtime_delivery_backpressure":
+                raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED,
+                    "Runtime delivery backlog capacity exhausted; no new delivery was accepted.",
+                    {"reason": "runtime_delivery_backpressure"}) from exc
+            raise
 
-    def pending(self, uow, *, limit=32):
-        return [dict(row) for row in uow.connection.execute(
-            "SELECT pending.* FROM delivery_outbox pending WHERE pending.status='PENDING' AND NOT EXISTS "
+    def agents_for_operations(self, uow, operation_ids):
+        if not operation_ids:
+            return ()
+        placeholders = ",".join("?" for _ in operation_ids)
+        rows = uow.connection.execute(
+            "SELECT recipient_agent_id FROM delivery_outbox WHERE operation_id IN (" + placeholders + ") "
+            "UNION SELECT e.agent_id FROM runtime_commands c JOIN agent_endpoints e USING(endpoint_id) "
+            "WHERE c.operation_id IN (" + placeholders + ")", (*operation_ids, *operation_ids))
+        return tuple(row[0] for row in rows)
+
+    def pending(self, uow, *, limit=32, blocked_agents=()):
+        query = (
+            "SELECT pending.*,ROW_NUMBER() OVER(PARTITION BY pending.recipient_agent_id "
+            "ORDER BY pending.created_at,pending.operation_id) AS agent_rank "
+            "FROM delivery_outbox pending WHERE pending.status='PENDING' AND NOT EXISTS "
             "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.endpoint_id AND busy.reconciliation_id IS NULL AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
@@ -47,7 +68,18 @@ class SqliteRuntimeOutboxRepo:
             "(c.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(c.starts_turn=1 AND c.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND c.terminal_event_id IS NULL) OR "
             "(c.status='PENDING' AND (c.verb<>'send_turn' OR (c.created_at,c.operation_id)<(pending.created_at,pending.operation_id))))) "
-            "ORDER BY pending.created_at,pending.operation_id LIMIT ?", (limit,))]
+            "AND NOT EXISTS (SELECT 1 FROM delivery_outbox earlier WHERE earlier.endpoint_id=pending.endpoint_id "
+            "AND earlier.status='PENDING' AND (earlier.created_at,earlier.operation_id)<(pending.created_at,pending.operation_id)) "
+            "AND NOT EXISTS (SELECT 1 FROM delivery_outbox active WHERE active.recipient_agent_id=pending.recipient_agent_id "
+            "AND active.reconciliation_id IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
+            "AND NOT EXISTS (SELECT 1 FROM runtime_commands active JOIN agent_endpoints endpoint USING(endpoint_id) "
+            "WHERE endpoint.agent_id=pending.recipient_agent_id AND active.verb='send_turn' "
+            "AND active.reconciliation_id IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN'))")
+        if blocked_agents:
+            query += " AND pending.recipient_agent_id NOT IN (" + ",".join("?" for _ in blocked_agents) + ")"
+        return [dict(row) for row in uow.connection.execute("WITH eligible AS (" + query + ") "
+            "SELECT o.* FROM delivery_outbox o JOIN eligible e USING(operation_id) WHERE e.agent_rank=1 "
+            "ORDER BY o.created_at,o.operation_id LIMIT ?", (*blocked_agents, limit))]
 
     def get(self, uow, operation_id):
         row = uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()

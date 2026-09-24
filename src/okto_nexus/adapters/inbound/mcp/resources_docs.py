@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="19",
+    version="20",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -571,6 +571,17 @@ An on-demand open may discover an unsupported version after durable admission;
 the attempt becomes REJECTED/native_write_not_started with ACK NONE before any
 turn is written. Its logical delivery remains reserved pending explicit recovery.
 Cleanup remains available. No deduplication, replay or agent ACK is invented.
+Surface53 bounds unresolved logical push reservations to256 globally,32 per actor,
+32 per recipient,128 per workspace and4MiB canonical envelope bytes. Admission
+returns QUOTA_EXCEEDED/runtime_delivery_backpressure before partial message or
+managed claim/grant commit. Existing deliveries stay durable; explicit safe
+recovery can release capacity. Informational delivery without execution is separate.
+Normal dispatch reserves one in-flight transport call per represented agent across
+inbox and command workers. More endpoints do not multiply that budget. Native
+acceptance or a durable terminal does not release a worker whose call has not
+returned. Accepted inference can remain concurrent after transport returns.
+Controls retain independent priority lanes; unknown writes retain their fence
+until reconciliation. Selection considers eligible lanes before batch truncation.
 Surface49 reuses live multiplexing connections through the production factory
 only for the same agent/workspace/adapter/profile revision and resolved backend
 environment, with matching HITL mode. Each opening still creates an independent

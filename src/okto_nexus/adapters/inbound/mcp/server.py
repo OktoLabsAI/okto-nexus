@@ -447,7 +447,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 43 = explicit canonical handoff recovery with claim/attempt fencing.
 # Native compatibility observations are separate from caller metadata.
 #: 52 = per-session qualified capabilities intersect descriptor and approved profile.
-SURFACE_REVISION = 52
+#: 53 = bounded logical transport backlog and per-agent normal worker capacity.
+SURFACE_REVISION = 53
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

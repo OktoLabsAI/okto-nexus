@@ -11,6 +11,7 @@ import socket
 import threading
 import time
 from dataclasses import asdict
+from pathlib import Path
 
 import httpx
 import pytest
@@ -79,35 +80,37 @@ def runtime(tmp_path, request):
     server = Server(uvicorn.Config(build_app(deps, runtime_owner_api_url=f"http://127.0.0.1:{port}"), log_level="error"))
     thread = threading.Thread(target=server.run, kwargs={"sockets": [sock]}, daemon=True)
     thread.start()
-    assert ready.wait(10), "production HTTP app did not start"
-    with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
-        if deps.config.feature_harness_integrations:
-            kinds = [("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
-            if getattr(request, "param", None) in {"additional", "additional_readonly", "additional_unverified"}:
-                kinds.append(("fixture.additional.v1", None))
-            for kind, substrate in kinds:
-                adapter_id = kind + ("." + substrate if substrate else "")
-                profile_id = "profile-" + adapter_id
-                if substrate != "attach":
-                    response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator_key},
-                        json={"profile_id": profile_id, "adapter_id": adapter_id, "enabled": True})
+    try:
+        assert ready.wait(10), "production HTTP app did not start"
+        with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
+            if deps.config.feature_harness_integrations:
+                kinds = [("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
+                if getattr(request, "param", None) in {"additional", "additional_readonly", "additional_unverified"}:
+                    kinds.append(("fixture.additional.v1", None))
+                for kind, substrate in kinds:
+                    adapter_id = kind + ("." + substrate if substrate else "")
+                    profile_id = "profile-" + adapter_id
+                    if substrate != "attach":
+                        response = client.post("/api/v1/harness/profiles", headers={"x-api-key": operator_key},
+                            json={"profile_id": profile_id, "adapter_id": adapter_id, "enabled": True})
+                        assert response.status_code == 200, response.text
+                    response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator_key},
+                        json={"endpoint_id": "endpoint-" + adapter_id, "agent_id": "worker", "adapter_id": adapter_id,
+                              "project_root": str(root), "enabled": True,
+                              "response_policy": "conversation",
+                              "profile_id": profile_id if substrate != "attach" else None,
+                              "public_config": {"target_pid": 12345} if substrate == "attach" else {}})
                     assert response.status_code == 200, response.text
-                response = client.post("/api/v1/harness/endpoints", headers={"x-api-key": operator_key},
-                    json={"endpoint_id": "endpoint-" + adapter_id, "agent_id": "worker", "adapter_id": adapter_id,
-                          "project_root": str(root), "enabled": True,
-                          "response_policy": "conversation",
-                          "profile_id": profile_id if substrate != "attach" else None,
-                          "public_config": {"target_pid": 12345} if substrate == "attach" else {}})
-                assert response.status_code == 200, response.text
-        yield deps, client, str(root), peers, operator_key, caller_key
-    supervisor = getattr(deps, "harness_supervisor", None)
-    if supervisor:
-        for session in supervisor.list_live():
-            supervisor.close(session.session_id)
-    server.should_exit = True
-    thread.join(10)
-    sock.close()
-    assert not thread.is_alive()
+            yield deps, client, str(root), peers, operator_key, caller_key
+    finally:
+        supervisor = getattr(deps, "harness_supervisor", None)
+        if supervisor:
+            for session in supervisor.list_live():
+                supervisor.close(session.session_id)
+        server.should_exit = True
+        thread.join(10)
+        sock.close()
+        assert not thread.is_alive()
 
 
 def mcp_call(client, key, method, params):
@@ -155,6 +158,9 @@ def stdio_environment(runtime):
     allowed = {"PATH", "SYSTEMROOT", "WINDIR", "COMSPEC", "PATHEXT", "TEMP", "TMP"}
     env = {key: value for key, value in os.environ.items() if key.upper() in allowed}
     env.update(OKTO_NEXUS_API_KEY=caller, HOME=str(deps.config.home_dir), USERPROFILE=str(deps.config.home_dir))
+    # Child Nexus writers must use this checkout, not another editable install
+    # associated with the shared interpreter. Native harness env stays sealed.
+    env["PYTHONPATH"] = str(Path(__file__).resolve().parents[1] / "src")
     return env
 
 

@@ -327,3 +327,38 @@ stale or non-current-owner records expose no effective execution capability. The
 stored compatibility_report remains historical evidence, not live authorization.
 No native status polling is used to render this view. An installed extension with
 no trusted compatibility probe fails closed for execution; no remote loader exists.
+
+## Transport capacity and scheduling (surface53/schema058)
+
+Unread logical push reservations are limited to256 total,32 per authenticated
+actor,32 per recipient agent,128 per workspace and4MiB of stored canonical envelope
+bytes. The limit includes accepted/unconfirmed and unknown attempts until their
+result is captured or their reservation is explicitly reconciled. Endpoints do
+not each receive a separate agent quota. These are transport limits; handoff claims
+and causal-root budgets retain their own meaning.
+
+If admission exceeds capacity, the current API returns QUOTA_EXCEEDED with reason
+runtime_delivery_backpressure. The new message/delivery or managed claim/grant
+transaction rolls back together. Do not treat it as accepted work or retry a
+different native operation. Existing messages, attempts and results are retained;
+ordinary logical delivery that does not request a transport executor still works.
+Inspect backlog, finish work, or use authorized cancellation/reconciliation to
+release capacity. Time passing does not make an unknown write safe to repeat.
+
+Migration058 adds a partial reservation index and an INSERT guard on the existing
+outbox. The guard also bounds an already-open writer using the prior enqueue SQL;
+it does not depend on every producer immediately loading new Python code. An older
+producer may report a generic database/internal error for this refusal; upgrade
+writers for the prescribed QUOTA_EXCEEDED diagnostic. No rows are pruned on upgrade.
+If an existing store exceeds a new limit, inspect/reconcile it until admission is
+available; never delete reservations or reverse the migration to regain capacity.
+
+Each represented agent may occupy one normal transport-write worker across both
+inbox and direct-command dispatchers. Native acceptance or even a durable result
+does not release that capacity while the original call is still running. Accepted
+inference can remain concurrent across approved sessions after each transport call
+returns. Controls/close have separate priority workers, preserving expected-turn
+and authorization fences. Unreconciled unknown writes retain their normal-agent
+fence; explicit recovery must first prove the original call is no longer in flight.
+Selection takes the oldest eligible item per lane and agent before truncating a
+batch, so repeated rows from one endpoint cannot consume other eligible slots.
