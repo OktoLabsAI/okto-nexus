@@ -170,3 +170,5 @@ Nexus or open a personal database. C free space now roughly135GB, D567GB; the ca
 of that external free-space change is not asserted. Reinstall still waits for the
 corrected source/build qualification; old39c5e6c artifacts must not be used as the
 final corrected build.
+
+Surface58 metadata measurement completed exit0 at5d1d178: OFF43 tools/40264 characters, ON51/47644; see P12_CURRENT_SURFACE.md. Later scoped evidence linked to59 non-baseline tasks without promoting statuses. PR34 HEAD/base rechecked unchanged. Both full-suite handles51046/29628 remain live; candidate five-file Ruff PASS. No main production/test changes.
