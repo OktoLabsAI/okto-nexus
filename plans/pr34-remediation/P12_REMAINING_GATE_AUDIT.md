@@ -1,5 +1,23 @@
 # Remaining gate audit at 43388c8
 
+## Current update at e388227 (2026-09-24)
+
+The remainder of this file is a historical audit. The 43388c8 full suites finished
+with failures, recorded in P12_SUITE_43388C8.md; they are no longer running.
+Capacity/fairness and store-wide outbox bounds were implemented ind76b78c;
+proven-not-sent release infd9ea16; immutable attempt history inde1dfa4; bounded
+deadline retry in23f83cc; approved equivalent endpoint fallback ine388227.
+Do not implement those historical gaps again. Their milestone documents preserve
+scoped Windows/Linux evidence and limits.
+
+Current source/test freeze is e388227 with Windows exec58066 running. See
+P12_MATRIX_AND_FRAME_EVIDENCE.md for exact command, resume handle and the new
+assertion-to-requirement mapping. Extended crash/pressure/leak/performance,
+remaining matrix and operational edges, native frame evidence and final build/
+install remain pending. No final gate passed.
+
+## Historical audit follows
+
 2026-09-24. This is an execution audit, not a replacement plan. All original
 P00–P12 requirements remain in scope. Final gate NOT PASSED.
 

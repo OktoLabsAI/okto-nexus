@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "23f83ccd89ccf010ffb48c14a5d2b77d3d7ed346",
+  "execution_head": "e388227f98c1230e8104df12b602e5943b4baf52",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -2423,9 +2423,10 @@
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P12_SUITE_FEEB14D.md",
-            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
           ],
-          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md."
+          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained."
         },
         {
           "task_id": "P12-T02",
@@ -2435,7 +2436,8 @@
           "implementation_refs": [],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
           ],
           "notes": ""
         },
@@ -2444,10 +2446,13 @@
           "title": "Rodar crash/stress/leak e benchmarks comparáveis, classificando polling e controles.",
           "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "plans/pr34-remediation/native_frame_campaign.py"
+          ],
           "test_results": [],
           "evidence": [
-            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
           ],
           "notes": ""
         },
@@ -2485,10 +2490,23 @@
           "title": "Gerar evidence index por SHA, mapa F01–F14 e parecer de prontidão sem merge automático.",
           "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
-          "test_results": [],
+          "implementation_refs": [
+            "plans/pr34-remediation/build_matrix_evidence.py",
+            "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+            "plans/pr34-remediation/test_evidence_tools.py"
+          ],
+          "test_results": [
+            {
+              "sha": "e388227 + evidence tooling worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q plans/pr34-remediation/test_evidence_tools.py",
+              "result": "PASS",
+              "observed": "13 PASS in 0.10s; evidence integrity only, no native/provider calls.",
+              "evidence": "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
+            }
+          ],
           "evidence": [
-            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
           ],
           "notes": ""
         }
@@ -2706,8 +2724,12 @@
       ],
       "stimulus": "Fornecer secrets em env/refs e inspecionar respostas, logs, journal e erros.",
       "expected": "Secrets não aparecem; perfil efetivo redigido continua diagnosticável.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "FAIL",
+      "evidence": [
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/evidence/p12-backend-secret-audit.json"
+      ],
+      "notes": "Behavioral FAIL at e388227: approved secret_refs value echoed by owned Python protocol peer appears in journal, durable result and replay. Only synthetic credential used. Known-value redaction and streaming/error paths require correction; prior pattern-redaction checks did not cover this."
     },
     {
       "test_id": "T-AUTH-10",
@@ -4158,7 +4180,7 @@
         "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md",
         "plans/pr34-remediation/P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md"
       ],
-      "notes": "Partial browser coverage: native pending approval/input and expiry PASS. Aggregate remains NOT_RUN until UNKNOWN/ambiguous and detached diagnostics are exercised."
+      "notes": "Windows browser scenarios UNKNOWN, AMBIGUOUS_BINDING, detached external session and pending native input/approval were executed as documented in P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md and P11_NATIVE_INPUT_DASHBOARD.md. Historical evidence; current full suite disables browser opt-in. No native-provider or Linux-browser qualification implied."
     },
     {
       "test_id": "T-MIG-01",
