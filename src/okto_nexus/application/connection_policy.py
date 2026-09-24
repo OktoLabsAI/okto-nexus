@@ -1,4 +1,6 @@
 """Connection admission policy, independent of an agent's advertised skills."""
+from ..domain.permissions import PermissionSet
+from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 
 
@@ -21,7 +23,7 @@ def require_method(uow, agent_id, method):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Connection method is disabled for this agent.", {})
 
 
-def valid_connection_key(uow, key_hash, now, endpoint_id=None):
+def valid_connection_key(uow, key_hash, now, endpoint_id=None, *, agents):
     row = uow.connection.execute(
         "SELECT k.* FROM agent_connection_keys k JOIN agents a ON a.agent_id=k.agent_id "
         "JOIN agent_endpoints e ON e.endpoint_id=k.endpoint_id "
@@ -36,5 +38,9 @@ def valid_connection_key(uow, key_hash, now, endpoint_id=None):
         "AND (e.profile_id IS NULL OR EXISTS (SELECT 1 FROM runtime_profiles p WHERE p.profile_id=e.profile_id "
         "AND p.enabled=1 AND p.revision=k.profile_revision))", (key_hash, now, now)).fetchone()
     if row and (endpoint_id is None or endpoint_id == row['endpoint_id']):
+        if row['source_grant_id']:
+            actor = agents.get(uow, row['agent_id'])
+            if not actor or not PermissionSet(actor.permissions).allows('messages', 'send_direct') or not reachable(actor, actor):
+                return None
         return dict(row)
     return None

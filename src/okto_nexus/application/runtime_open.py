@@ -41,7 +41,7 @@ class RuntimeOpenService:
             require_method(uow, agent_id, endpoint["adapter_id"])
             connection_key = None
             if context.authentication_source == "connection_key":
-                connection_key = valid_connection_key(uow, context.credential_binding, self.clock.now_iso(), endpoint["endpoint_id"])
+                connection_key = valid_connection_key(uow, context.credential_binding, self.clock.now_iso(), endpoint["endpoint_id"], agents=self.agents)
                 if not connection_key:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Connection credential is no longer valid.", {})
             request_id, existing = self.requests.reserve(uow, actor_id=context.actor_agent_id or "operator",

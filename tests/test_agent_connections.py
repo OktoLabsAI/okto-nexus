@@ -295,3 +295,41 @@ def test_enabling_feature_requires_owner_restart_with_a_prescriptive_error(runti
     assert response.status_code == 409, response.text
     assert 'Restart serve' in response.json()['error']['message']
     assert not peers
+
+
+def test_self_bootstrap_rechecks_permissions_at_the_native_start_boundary(runtime, monkeypatch):
+    from okto_nexus.adapters.inbound.mcp.tools import harness
+    from okto_nexus.application.auth import AgentKeyAuthService
+    from okto_nexus.domain.base import iso_plus
+
+    deps, client, _, peers, operator, _ = runtime
+    with deps.connection_factory.unit_of_work() as uow:
+        key = AgentKeyAuthService(deps.repos.agents, deps.clock).issue_key(uow, agent_id='worker')
+    response = client.post('/api/v1/harness/grants', headers={'x-api-key': operator}, json={
+        'actor_agent_id': 'worker', 'endpoint_id': 'endpoint-pi', 'actions': ['open'],
+        'expires_at': iso_plus(deps.clock.now_iso(), 600)})
+    assert response.status_code == 200
+    issued = issue(client, key)
+    construct = harness.construct_profile_connector
+
+    def change_permission_after_reservation(*args, **kwargs):
+        # A separate committed operator change after admission/reservation,
+        # before the real supervisor validates and starts the external peer.
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute('UPDATE agents SET permissions=? WHERE agent_id=?',
+                ('{"messages":{"send_direct":false}}', 'worker'))
+        return construct(*args, **kwargs)
+
+    monkeypatch.setattr(harness, 'construct_profile_connector', change_permission_after_reservation)
+    response = client.post('/api/v1/connections/open', headers=issued['request']['headers'], json={})
+    assert response.status_code in {403, 409}, response.text
+    assert all(peer.session is None for peer in peers)
+
+
+def test_global_expiry_does_not_coerce_fraction_or_boolean_to_unlimited(runtime):
+    _, client, _, _, operator, _ = runtime
+    headers = {'x-api-key': operator}
+    for invalid in (False, True, 0.5, '0', None, -1, 315360001):
+        response = client.patch('/api/v1/settings', headers=headers, json={'connection_key_ttl_seconds': invalid})
+        assert response.status_code == 422, (invalid, response.text)
+    assert client.get('/api/v1/agents/worker/connections', headers=headers).json()['data']['effective_key_ttl_seconds'] == 86400

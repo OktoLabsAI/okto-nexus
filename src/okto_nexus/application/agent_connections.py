@@ -122,7 +122,7 @@ class AgentConnectionService:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid connection credential.", {})
         digest = hashlib.sha256(raw.encode()).hexdigest()
         with self.cf.unit_of_work(write=False) as uow:
-            row = valid_connection_key(uow, digest, self.clock.now_iso())
+            row = valid_connection_key(uow, digest, self.clock.now_iso(), agents=self.access.agents)
             if not row:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid connection credential.", {})
             endpoint = self.repo.get(uow, row['endpoint_id'])

@@ -89,7 +89,7 @@ class RuntimeAccessService:
                     if enabled and session_id:
                         enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
             if enabled and context.authentication_source == "connection_key":
-                key = valid_connection_key(uow, context.credential_binding, now, endpoint_id)
+                key = valid_connection_key(uow, context.credential_binding, now, endpoint_id, agents=self.agents)
                 allowed = bool(key and key["agent_id"] == context.actor_agent_id and action in {"access", "open"}
                     and (not represented_agent_id or represented_agent_id == key["agent_id"]))
                 if allowed and key["source_grant_id"]:

@@ -328,6 +328,11 @@ _SPEC_BY_KEY: dict[str, SettingSpec] = {spec.key: spec for spec in SETTING_SPECS
 
 def _coerce(spec: SettingSpec, raw: Any) -> Any:
     """Validate ``raw`` against the spec; raise CONFIG_ERROR otherwise."""
+    if spec.key == "connection_key_ttl_seconds" and type(raw) is not int:
+        # Unlike an ordinary numeric tuning knob, truncating 0.5 or coercing
+        # false to zero would silently grant an unlimited credential lifetime.
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "Connection key lifetime must be integer seconds; use 0 explicitly for unlimited.", {})
     if spec.type == "bool":
         if isinstance(raw, bool):
             return raw

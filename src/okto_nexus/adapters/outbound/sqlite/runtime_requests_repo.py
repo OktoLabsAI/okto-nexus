@@ -56,7 +56,8 @@ class SqliteRuntimeRequestRepo:
             require_method(uow, endpoint["agent_id"], endpoint["adapter_id"])
             if row["connection_key_id"]:
                 key = uow.connection.execute("SELECT key_hash FROM agent_connection_keys WHERE key_id=?", (row["connection_key_id"],)).fetchone()
-                if not key or not valid_connection_key(uow, key[0], now, endpoint_id):
+                from .identity_repo import SqliteAgentRepo
+                if not key or not valid_connection_key(uow, key[0], now, endpoint_id, agents=SqliteAgentRepo()):
                     row = None
         if not row:
             raise OktoNexusError(ErrorCode.CONFLICT, "Runtime opening lost its owner, deadline or approved binding.", {})
