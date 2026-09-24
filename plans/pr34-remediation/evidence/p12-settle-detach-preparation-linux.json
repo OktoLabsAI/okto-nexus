@@ -1,0 +1,104 @@
+{
+  "source_sha": "4915878a0a66d9cf384ff719455e61175a5d9bfa",
+  "platform": "linux",
+  "counts": {
+    "ERROR": 1,
+    "PASS": 10,
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "1",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "12",
+      "time": "39.803",
+      "timestamp": "2026-09-24T09:21:58.567656-03:00"
+    }
+  ],
+  "native_flags": "Synthetic Pi RPC process and POSIX Unix-socket attach fixture only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_pi_settle_acceptance.py tests/test_runtime_attach_compatibility.py tests/test_harness_pi_connector.py::test_steer_is_queued_immediately_and_delivered_at_turn_boundary tests/test_harness_pi_connector.py::test_interrupt_blocks_further_sends_until_agent_settled -q --junitxml=.git/pr34-evidence/settle-detach-linux.xml",
+  "limitations": "Windows attach remains POSIX SKIP. Native Pi/dedicated Claude attach remain NOT_RUN; no missing ACK or native termination invented.",
+  "records": [
+    {
+      "class": "tests.test_runtime_pi_settle_acceptance",
+      "test": "test_abort_cannot_reprompt_steer_or_abort_again_before_observed_settle",
+      "status": "ERROR",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[None]",
+      "status": "PASS",
+      "seconds": 0.319
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[True]",
+      "status": "PASS",
+      "seconds": 0.252
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[1.0]",
+      "status": "PASS",
+      "seconds": 0.267
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[1]",
+      "status": "PASS",
+      "seconds": 0.268
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[2]",
+      "status": "PASS",
+      "seconds": 0.205
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[1]",
+      "status": "FAIL",
+      "seconds": 12.375
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[None]",
+      "status": "PASS",
+      "seconds": 3.96
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_protocol_drift_after_open_prevents_any_send",
+      "status": "PASS",
+      "seconds": 0.208
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_missing_protocol_field_is_not_a_compatible_default",
+      "status": "PASS",
+      "seconds": 0.204
+    },
+    {
+      "class": "tests.test_harness_pi_connector",
+      "test": "test_steer_is_queued_immediately_and_delivered_at_turn_boundary",
+      "status": "PASS",
+      "seconds": 0.501
+    },
+    {
+      "class": "tests.test_harness_pi_connector",
+      "test": "test_interrupt_blocks_further_sends_until_agent_settled",
+      "status": "PASS",
+      "seconds": 0.59
+    }
+  ],
+  "source_detail": {
+    "source_sha": "4915878a0a66d9cf384ff719455e61175a5d9bfa",
+    "file_sha256": {
+      "tests/test_runtime_pi_settle_acceptance.py": "6d4dff3a7c59bda29748b6f16d68edd9429489919c30a9b668ad275b14d2a944",
+      "tests/test_runtime_attach_compatibility.py": "f9516ce8b97e9a33d99a4a3d54afdf24d831d3770e5fc59e1e71641fc5448cf1"
+    }
+  }
+}

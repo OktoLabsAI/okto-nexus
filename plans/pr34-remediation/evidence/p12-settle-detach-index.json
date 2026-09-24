@@ -1,0 +1,62 @@
+{
+  "source_sha": "4915878a0a66d9cf384ff719455e61175a5d9bfa",
+  "file_sha256": {
+    "tests/test_runtime_pi_settle_acceptance.py": "cbf22690a0d90149f0a44bc78b80959291dc5eae9594aff33d7844b3ebb72a46",
+    "tests/test_runtime_attach_compatibility.py": "9e836fc59de2cc631c69837006cfcbafb70d6f90d7c92629aeff631b90cc06e1"
+  },
+  "runs": {
+    "preparation-windows": {
+      "manifest": "p12-settle-detach-preparation-windows.json",
+      "counts": {
+        "ERROR": 1,
+        "SKIP": 9,
+        "PASS": 2
+      }
+    },
+    "preparation-linux": {
+      "manifest": "p12-settle-detach-preparation-linux.json",
+      "counts": {
+        "ERROR": 1,
+        "PASS": 10,
+        "FAIL": 1
+      }
+    },
+    "final-windows": {
+      "manifest": "p12-settle-detach-final-windows.json",
+      "counts": {
+        "PASS": 3,
+        "SKIP": 9
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-settle-detach-final-linux.json",
+      "counts": {
+        "PASS": 12
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-LIFE-09",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_pi_settle_acceptance.py::test_abort_cannot_reprompt_steer_or_abort_again_before_observed_settle"
+        ],
+        "linux": [
+          "tests/test_runtime_pi_settle_acceptance.py::test_abort_cannot_reprompt_steer_or_abort_again_before_observed_settle"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-06",
+      "status": "PASS",
+      "nodes": {
+        "linux": [
+          "tests/test_runtime_attach_compatibility.py::test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[1]"
+        ]
+      },
+      "windows": "NOT_RUN: POSIX-only attach fixture; skips not passes."
+    }
+  ]
+}

@@ -77,6 +77,18 @@ def test_attach_contract_and_ackless_delivery_through_authenticated_surfaces(run
     assert closed["ok"], closed
     assert wait_close_result(client, operator, closed)["lifecycle_state"] == "detached"
     assert len(fake_server.connections) == 2
+    # The external fixture process and its listener must remain usable after
+    # Nexus detaches. This is not an observed native termination or an ACK.
+    os.kill(pid, 0)
+    sibling = ClaudeCodeAttachConnector(pid, sessions_dir=tmp_path)
+    # Attach opens/closes each socket per call and owns no persistent process
+    # or socket; it deliberately has no native close/termination operation.
+    external = sibling.start(owning_agent_id="fixture-after-detach")
+    sibling.send(external, HarnessCommand(session_id=external.session_id, verb="send_turn",
+        payload={"content": "external peer still usable"}))
+    fake_server.wait_for_connections(4)
+    assert fake_server.connections[2] == []
+    assert "external peer still usable" in fake_server.connections[3][1]["message"]["content"]
 
 
 def test_attach_protocol_drift_after_open_prevents_any_send(tmp_path, fake_server):

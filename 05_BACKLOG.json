@@ -3758,8 +3758,12 @@
       ],
       "stimulus": "Close/kill do serve com sessão externa dedicada anexada.",
       "expected": "Nexus desanexa; não mata o processo externo nem inventa ENDED do peer.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/evidence/p12-settle-detach-index.json"
+      ],
+      "notes": "Scoped protocol fixture acceptance: deterministic actual Pi settle barrier Windows/Linux; POSIX attach external process/listener survives Nexus detach. Windows attach SKIP, native Pi and dedicated Claude attach remain NOT_RUN."
     },
     {
       "test_id": "T-LIFE-07",
@@ -3805,8 +3809,12 @@
       ],
       "stimulus": "Abort e novo prompt/steer em sequência com eventos atrasados.",
       "expected": "Novo comando não corre contra teardown do turno anterior; timing real respeitado.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/evidence/p12-settle-detach-index.json"
+      ],
+      "notes": "Scoped protocol fixture acceptance: deterministic actual Pi settle barrier Windows/Linux; POSIX attach external process/listener survives Nexus detach. Windows attach SKIP, native Pi and dedicated Claude attach remain NOT_RUN."
     },
     {
       "test_id": "T-LIFE-10",
