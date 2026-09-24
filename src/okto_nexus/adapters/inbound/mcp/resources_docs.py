@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="20",
+    version="21",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -625,6 +625,10 @@ different body conflicts. No mutation starts a native request:
   and releases its conversation inbox reservation without a receipt.
 - release_to_inbox: explicitly surrender an uncertain conversation push
   reservation to the same logical inbox; acknowledge_duplicate_risk=true required.
+  A server-proven REJECTED/native_write_not_started attempt with ACK NONE and no
+  observed native thread/turn may instead be released with that flag false.
+  Its transport rejection is preserved; no runtime stop or quarantine is needed.
+  Generic rejection or ACK NONE alone never establishes this pre-write proof.
 - abandon_command: explicitly close administrative tracking of an uncertain
   command, with the same risk acknowledgement; it creates no inbox delivery.
 - recover_handoff: requires expected_handoff_id, expected_claim_epoch and explicit

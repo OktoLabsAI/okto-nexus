@@ -76,9 +76,19 @@ class RuntimeOperationMaintenanceService:
                     or binding["handoff_id"] != expected_handoff_id or binding["claim_epoch"] != expected_claim_epoch):
                 raise conflict("Operation does not bind the expected canonical claim.")
             pending = action == "cancel_pending"
+            # Only the owner's typed pre-write failure supplies this proof.
+            # A generic rejection, exception message or NONE acknowledgement
+            # alone is not evidence that an external call never wrote bytes.
+            not_sent = (action == "release_to_inbox" and table == "delivery_outbox"
+                and row["status"] == "REJECTED" and row["reason"] == "native_write_not_started"
+                and row["ack_level"] == "NONE" and row["attempt_id"] is not None
+                and row["native_thread_id"] is None and row["native_turn_id"] is None)
             if pending:
                 if row["status"] not in {"PENDING", "CLAIMED"} or acknowledge_duplicate_risk:
                     raise conflict("Only an attempt before send-intent can be cancelled without uncertain effects.")
+            elif not_sent:
+                if acknowledge_duplicate_risk:
+                    raise conflict("A proven pre-write rejection requires no duplicate-risk acknowledgement.")
             else:
                 eligible = {"OUTCOME_UNKNOWN", "SENT_UNCONFIRMED", "ACCEPTED"}
                 if recover_work:
@@ -96,8 +106,8 @@ class RuntimeOperationMaintenanceService:
             response = {"reconciliation_id": rid, "operation_id": operation_id, "action": action,
                 "transport_state": "CANCELLED" if pending else row["status"], "previous_transport_state": row["status"],
                 "ack_level": row["ack_level"], "native_replayed": False, "result_invented": False,
-                "duplicate_risk_acknowledged": not pending, "inbox_released": table == "delivery_outbox" and not recover_work,
-                "endpoint_quarantined": not pending}
+                "duplicate_risk_acknowledged": not pending and not not_sent, "inbox_released": table == "delivery_outbox" and not recover_work,
+                "endpoint_quarantined": not pending and not not_sent}
             if recover_work:
                 response["handoff"] = self.handoffs.recover_runtime_claim(uow, context=context, operation=row,
                     handoff_id=expected_handoff_id, claim_epoch=expected_claim_epoch, reason=reason, reconciliation_id=rid)
@@ -105,7 +115,7 @@ class RuntimeOperationMaintenanceService:
                 "idempotency_key,request_hash,action,previous_state,attempt_id,owner_epoch,endpoint_id,duplicate_risk_acknowledged,reason,response,created_at) "
                 "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", (rid, operation_id, table, actor, idempotency_key, digest,
                 "abandon_command" if recover_work else action, row["status"],
-                row["attempt_id"], row["owner_epoch"], row["endpoint_id"], int(not pending), reason, json.dumps(response, sort_keys=True), now))
+                row["attempt_id"], row["owner_epoch"], row["endpoint_id"], int(not pending and not not_sent), reason, json.dumps(response, sort_keys=True), now))
             if recover_work:
                 uow.connection.execute("UPDATE runtime_operation_reconciliations SET canonical_action='reopen_handoff',handoff_id=?,claim_epoch=? WHERE reconciliation_id=?",
                                        (expected_handoff_id, expected_claim_epoch, rid))
@@ -113,7 +123,7 @@ class RuntimeOperationMaintenanceService:
                 (",status='CANCELLED',reason='operator_cancelled_before_send'" if pending else "") + " WHERE operation_id=?", (rid, now, operation_id))
             if table == "delivery_outbox" and not recover_work:
                 self.inbox.release_runtime_reservation(uow, operation_id=operation_id)
-            if not pending:
+            if not pending and not not_sent:
                 uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='operator_takeover',updated_at=? WHERE endpoint_id=?",
                                        (now, row["endpoint_id"]))
                 self.access.endpoints.invalidate_configuration(uow, endpoint_ids=[row["endpoint_id"]], now=now)

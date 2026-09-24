@@ -153,6 +153,17 @@ without creating an inbox delivery. Both uncertain actions require the explicit
 duplicate-risk acknowledgement. Managed handoffs cannot be treated as conversation;
 their canonical claim recovery remains a separate operation.
 
+For a conversation rejected before any native turn write, use the same
+`release_to_inbox` action with `acknowledge_duplicate_risk: false`. The owner
+must have persisted `REJECTED`, reason `native_write_not_started`, ACK `NONE`,
+an attempt ID and no observed native thread/turn. The service checks this proof;
+a caller cannot assert it by supplying a reason or a status. The exact snapshot,
+operator authorization and idempotency key are still required. The original
+rejection/attempt remain in history, the same delivery becomes pullable, and no
+new native call, receipt or endpoint quarantine is produced. An in-flight call
+still blocks release. Any generic rejection or uncertain send uses the stricter
+recovery rules above; a handoff must use canonical claim recovery.
+
 ```json
 {
   "view": "outbox",

@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "d76b78cb547127c90fee1948909196b9fc7af9f3",
+  "execution_head": "eb608078a30c5d34b9c4a374fabe6847632d17c1",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -760,9 +760,10 @@
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
-            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+            "plans/pr34-remediation/evidence/p05-p06-gate.log",
+            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending."
         },
         {
           "task_id": "P05-T05",
@@ -779,9 +780,10 @@
           "test_results": [],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
-            "plans/pr34-remediation/evidence/p05-p06-gate.log"
+            "plans/pr34-remediation/evidence/p05-p06-gate.log",
+            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending."
         },
         {
           "task_id": "P05-T06",
@@ -943,9 +945,10 @@
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
-            "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md"
+            "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+            "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
           ],
-          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns."
+          "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Proven pre-write conversation release now implemented and tested through production REST/MCP; see P05_NOT_SENT_INBOX_RECOVERY.md. Automatic retry/backoff and equivalent-endpoint fallback remain pending."
         },
         {
           "task_id": "P06-T05",
@@ -2944,8 +2947,11 @@
       ],
       "stimulus": "Forçar NOT_SENT após reservar consumo.",
       "expected": "Reserva liberável e fallback MCP utilizável; mensagem não desaparece.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md"
+      ],
+      "notes": "Proven pre-write rejection released by authorized REST/MCP to the original authenticated pull inbox, no native turn write or duplicate delivery. Windows final 56 PASS; Linux integration 40 PASS/1 stale migration pin FAIL, corrected pin/reference gate16 PASS. See evidence for exact scopes and intermediate failures; automatic endpoint fallback remains pending."
     },
     {
       "test_id": "T-CONS-04",
