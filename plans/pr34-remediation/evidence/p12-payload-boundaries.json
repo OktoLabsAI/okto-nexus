@@ -1,0 +1,28 @@
+{
+  "parent_sha": "04446f738675e768245a371fb39fb027949d041e",
+  "dirty_files_sha256": {
+    "src/okto_nexus/adapters/inbound/http/routes.py": "dba791651d33df06eed27bf6bcaea352ca5fca4e625aa2e0a3fdeaaaaaa17452",
+    "tests/test_runtime_payload_boundaries.py": "862587bd55bc3cde996ced220e200dfeebb3ad3636e726b4501c83c04070a97d"
+  },
+  "requirement_nodes": {
+    "T-AUTH-10": [
+      "tests/test_runtime_payload_boundaries.py::test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "tests/test_runtime_payload_boundaries.py::test_control_payload_cannot_replace_identity_correlation_or_native_profile"
+    ]
+  },
+  "windows": {
+    "passed": 37,
+    "seconds": 130.9,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 37,
+    "seconds": 150.04,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "live_mcp_smoke": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_PAYLOAD_BOUNDARIES.md",
+  "red": "p12-payload-red-windows.json",
+  "limitations": "T-AUTH-07 native grant/root stimuli remain open. No full suite or native/performance qualification."
+}

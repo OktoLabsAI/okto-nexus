@@ -1,0 +1,251 @@
+{
+  "source_sha": "04446f738675e768245a371fb39fb027949d041e",
+  "platform": "windows",
+  "counts": {
+    "PASS": 37
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "37",
+      "time": "130.897",
+      "timestamp": "2026-09-24T06:04:13.439323-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "See command_document for exact invocation",
+  "limitations": "Parent SHA plus changed source/test hashes; synthetic peers only. Not a full suite or native campaign.",
+  "records": [
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 3.354
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[send]",
+      "status": "PASS",
+      "seconds": 3.032
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[steer]",
+      "status": "PASS",
+      "seconds": 2.793
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[interrupt]",
+      "status": "PASS",
+      "seconds": 2.969
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+      "status": "PASS",
+      "seconds": 5.396
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_grant_open_requires_explicit_scoped_binding",
+      "status": "PASS",
+      "seconds": 3.154
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[revoke]",
+      "status": "PASS",
+      "seconds": 3.251
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[expire]",
+      "status": "PASS",
+      "seconds": 3.022
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[permissions]",
+      "status": "PASS",
+      "seconds": 2.921
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[scope]",
+      "status": "PASS",
+      "seconds": 2.951
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[credential]",
+      "status": "PASS",
+      "seconds": 2.881
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[profile]",
+      "status": "PASS",
+      "seconds": 3.047
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_internal_missing_authentication_cannot_impersonate_operator",
+      "status": "PASS",
+      "seconds": 2.322
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_native_options_and_payload_identity_are_rejected",
+      "status": "PASS",
+      "seconds": 2.982
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource",
+      "status": "PASS",
+      "seconds": 5.087
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_concurrent_grant_budget_has_one_admitted_send",
+      "status": "PASS",
+      "seconds": 3.048
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+      "status": "PASS",
+      "seconds": 2.955
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_operator_cannot_send_using_a_replaced_profile",
+      "status": "PASS",
+      "seconds": 2.992
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_explicitly_authorized_structured_result_completes_canonical_handoff",
+      "status": "PASS",
+      "seconds": 4.025
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_reject_uses_canonical_rejection",
+      "status": "PASS",
+      "seconds": 3.79
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_completion_cannot_self_verify",
+      "status": "PASS",
+      "seconds": 3.796
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.856
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.869
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+      "status": "PASS",
+      "seconds": 3.968
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+      "status": "PASS",
+      "seconds": 4.148
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+      "status": "PASS",
+      "seconds": 3.978
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 3.885
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_looking_output_without_admission_does_not_complete",
+      "status": "PASS",
+      "seconds": 4.015
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_revoked_grant_blocks_structured_completion_and_retains_evidence",
+      "status": "PASS",
+      "seconds": 3.895
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_completion_and_its_receipt_rollback_and_retry_together",
+      "status": "PASS",
+      "seconds": 3.789
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_managed_revalidation_does_not_write_to_a_read_snapshot",
+      "status": "PASS",
+      "seconds": 3.997
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_rest_structured_contract_is_idempotent_with_mcp_and_cannot_be_changed",
+      "status": "PASS",
+      "seconds": 3.793
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+      "status": "PASS",
+      "seconds": 3.886
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[send]",
+      "status": "PASS",
+      "seconds": 2.814
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[steer]",
+      "status": "PASS",
+      "seconds": 3.166
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[interrupt]",
+      "status": "PASS",
+      "seconds": 3.603
+    },
+    {
+      "class": "tests.test_runtime_operation_authorization",
+      "test": "test_revoked_actor_cannot_recover_cached_control_reply[close]",
+      "status": "PASS",
+      "seconds": 3.045
+    }
+  ],
+  "source_state": "parent SHA plus REST exception mapping fix and new tests",
+  "dirty_files_sha256": {
+    "src/okto_nexus/adapters/inbound/http/routes.py": "dba791651d33df06eed27bf6bcaea352ca5fca4e625aa2e0a3fdeaaaaaa17452",
+    "tests/test_runtime_payload_boundaries.py": "862587bd55bc3cde996ced220e200dfeebb3ad3636e726b4501c83c04070a97d"
+  },
+  "command_document": "plans\\pr34-remediation\\P12_PAYLOAD_BOUNDARIES.md"
+}

@@ -1,0 +1,54 @@
+{
+  "source_sha": "04446f738675e768245a371fb39fb027949d041e",
+  "platform": "windows",
+  "counts": {
+    "PASS": 1,
+    "FAIL": 3
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "3",
+      "skipped": "0",
+      "tests": "4",
+      "time": "13.350",
+      "timestamp": "2026-09-24T06:03:22.164621-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "See command_document for exact RED invocation",
+  "limitations": "Pre-fix source plus new tests; genuine HTTP500 versus422 contract mismatch on send/steer/interrupt. No native providers.",
+  "records": [
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces",
+      "status": "PASS",
+      "seconds": 3.382
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[send]",
+      "status": "FAIL",
+      "seconds": 3.072
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[steer]",
+      "status": "FAIL",
+      "seconds": 2.943
+    },
+    {
+      "class": "tests.test_runtime_payload_boundaries",
+      "test": "test_control_payload_cannot_replace_identity_correlation_or_native_profile[interrupt]",
+      "status": "FAIL",
+      "seconds": 2.946
+    }
+  ],
+  "source_state": "Pre-fix parent source plus new acceptance test",
+  "dirty_files_sha256": {
+    "src/okto_nexus/adapters/inbound/http/routes.py": "50854469dab6878ab93ac687ba2d33e234a69a25e689161f3a8bec85f851e388",
+    "tests/test_runtime_payload_boundaries.py": "862587bd55bc3cde996ced220e200dfeebb3ad3636e726b4501c83c04070a97d"
+  },
+  "command_document": "plans/pr34-remediation/P12_PAYLOAD_BOUNDARIES.md"
+}

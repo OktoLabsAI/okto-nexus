@@ -1093,8 +1093,8 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
-        payload = _harness_normalize_payload(body.payload, required=True)
         try:
+            payload = _harness_normalize_payload(body.payload, required=True)
             result = await anyio.to_thread.run_sync(
                 lambda: _harness_send(deps, supervisor, session_id, "send_turn", payload, **body.model_dump(exclude={"payload"}))
             )
@@ -1112,8 +1112,8 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
-        payload = _harness_normalize_payload(body.payload, required=True)
         try:
+            payload = _harness_normalize_payload(body.payload, required=True)
             result = await anyio.to_thread.run_sync(
                 lambda: _harness_send(deps, supervisor, session_id, "steer", payload, **body.model_dump(exclude={"payload"}))
             )
@@ -1131,8 +1131,8 @@ def build_router() -> APIRouter:
         except OktoNexusError as exc:
             return _map_error(exc)
         supervisor = _build_harness_supervisor(deps)
-        payload = _harness_normalize_payload(body.payload, required=False)
         try:
+            payload = _harness_normalize_payload(body.payload, required=False)
             result = await anyio.to_thread.run_sync(
                 lambda: _harness_send(deps, supervisor, session_id, "interrupt", payload, **body.model_dump(exclude={"payload"}))
             )
