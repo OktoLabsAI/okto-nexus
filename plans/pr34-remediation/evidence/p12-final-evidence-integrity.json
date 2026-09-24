@@ -1,0 +1,350 @@
+{
+  "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6",
+  "source_state": "Plan/report working generation; runtime/test implementation unchanged fromff905c4. Final milestone records these files.",
+  "file_sha256": {
+    "plans/pr34-remediation/test_evidence_tools.py": "77b73e0567778095b892d209dfb41c71a183e60483a68f7e35f2a1a4dbc3805e",
+    "plans/pr34-remediation/test_release_evidence_join.py": "18256062d0c8b4dac565441acbd581031443eaab7ad295ef7963a34ab3169bbf",
+    "plans/pr34-remediation/test_metric_probe.py": "e91bc770ced17207434d87cc32cab373707f380983c5743596e9e779c5614385",
+    "plans/pr34-remediation/join_release_evidence.py": "afc73a83f9dd0f38a873ec73647c6c1657536a9b70e0076a175671275af97a42",
+    "plans/pr34-remediation/build_release_report.py": "f0b65d225e545f530b009f21d7b6f9d0475474292721c9f08e8ca85707ddc5d0",
+    "plans/pr34-remediation/runtime_metric_probe.py": "f9e227fc51c030d5b0350875489b729bd3629925f7645915e9aaceaa8b235708",
+    "plans/pr34-remediation/native_frame_campaign.py": "e766fc912b19bd70e814ed7a5f3a9b78f0ea3a67147ec091277d20b52a43ab6f"
+  },
+  "platforms": {
+    "windows": {
+      "argv": [
+        "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "plans/pr34-remediation/test_evidence_tools.py",
+        "plans/pr34-remediation/test_release_evidence_join.py",
+        "plans/pr34-remediation/test_metric_probe.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\final-evidence-integrity-jhvwtxs8\\windows.xml",
+        "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\final-evidence-integrity-jhvwtxs8\\pytest"
+      ],
+      "exit_code": 0,
+      "counts": {
+        "PASS": 29
+      },
+      "records": [
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[PASS-PASS]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[SKIP-NOT_RUN]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[ERROR-FAIL]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[FAIL-FAIL]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[unknown-NOT_RUN]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_rejects_mixed_sha_and_requires_all_parameterized_results",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_partial_or_missing_coverage_is_not_pass",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_behavioral_audit_failure_overrides_a_green_selected_suite",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_frames_never_persist_body_or_arbitrary_protocol_labels",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_frame_boundaries_preserve_io_and_correlate_reply_without_raw_ids",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_status_queries_and_unclassified_outbound_frames_fail_qualification[thread/read]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_status_queries_and_unclassified_outbound_frames_fail_qualification[unknown/method]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_recording_overflow_cannot_be_reported_as_complete_trace",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_unexecuted_native_cases_remain_not_run",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_failed_native_write_retains_uncertainty_and_exception",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_protocol_model_observations_are_explicit_and_do_not_include_arbitrary_labels",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_missing_parameter_cannot_be_hidden_by_other_passing_parameters",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_cross_platform_pass_retains_skip_and_does_not_hide_a_failure",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[release_sha-other]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[qualification_basis-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[exit_code-None]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[exit_code-1]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[evidence_sha256-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[original_source_identity-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_platform_specific_route_and_missing_node_are_not_filled_by_other_platform",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_native_call_alone_is_not_pass_and_failed_cleanup_is_failure",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_missing_capture_cannot_become_a_complete_sample_or_expose_correlation",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_failed_sqlite_commit_never_records_durable_enqueue",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_dispatch_during_commit_return_interval_keeps_a_bound_not_false_precision",
+          "status": "PASS"
+        }
+      ]
+    },
+    "linux": {
+      "argv": [
+        "wsl",
+        "-d",
+        "Ubuntu",
+        "--cd",
+        "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus",
+        "/var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python",
+        "-m",
+        "pytest",
+        "plans/pr34-remediation/test_evidence_tools.py",
+        "plans/pr34-remediation/test_release_evidence_join.py",
+        "plans/pr34-remediation/test_metric_probe.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/final-evidence-integrity-jhvwtxs8/linux.xml"
+      ],
+      "exit_code": 0,
+      "counts": {
+        "PASS": 29
+      },
+      "records": [
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[PASS-PASS]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[SKIP-NOT_RUN]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[ERROR-FAIL]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[FAIL-FAIL]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_uses_observed_status_without_promoting_skips[unknown-NOT_RUN]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_matrix_rejects_mixed_sha_and_requires_all_parameterized_results",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_partial_or_missing_coverage_is_not_pass",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_behavioral_audit_failure_overrides_a_green_selected_suite",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_frames_never_persist_body_or_arbitrary_protocol_labels",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_frame_boundaries_preserve_io_and_correlate_reply_without_raw_ids",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_status_queries_and_unclassified_outbound_frames_fail_qualification[thread/read]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_status_queries_and_unclassified_outbound_frames_fail_qualification[unknown/method]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_recording_overflow_cannot_be_reported_as_complete_trace",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_unexecuted_native_cases_remain_not_run",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_failed_native_write_retains_uncertainty_and_exception",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_evidence_tools",
+          "test": "test_protocol_model_observations_are_explicit_and_do_not_include_arbitrary_labels",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_missing_parameter_cannot_be_hidden_by_other_passing_parameters",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_cross_platform_pass_retains_skip_and_does_not_hide_a_failure",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[release_sha-other]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[qualification_basis-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[exit_code-None]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[exit_code-1]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[evidence_sha256-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_unqualified_evidence_is_rejected[original_source_identity-]",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_platform_specific_route_and_missing_node_are_not_filled_by_other_platform",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_release_evidence_join",
+          "test": "test_native_call_alone_is_not_pass_and_failed_cleanup_is_failure",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_missing_capture_cannot_become_a_complete_sample_or_expose_correlation",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_failed_sqlite_commit_never_records_durable_enqueue",
+          "status": "PASS"
+        },
+        {
+          "class": "plans.pr34-remediation.test_metric_probe",
+          "test": "test_dispatch_during_commit_return_interval_keeps_a_bound_not_false_precision",
+          "status": "PASS"
+        }
+      ]
+    }
+  },
+  "status": "PASS"
+}

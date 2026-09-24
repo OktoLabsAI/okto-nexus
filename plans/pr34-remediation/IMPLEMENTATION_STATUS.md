@@ -1,92 +1,62 @@
-# PR34 remediation — current execution state
+# PR34 remediation — completed authorized delivery
 
-Branch: `feature/v0.2.0`; version: `0.2.0`.
-Implementation source: `ff905c433e1a92ae35993b2189919f75ad07dd51`.
-Last published milestone: `336357a` (plan instrumentation and evidence only).
-Final gate: **IN PROGRESS**. No merge performed.
+Branch: `feature/v0.2.0`; installed version: **0.2.0**.
+Runtime/test implementation: `ff905c433e1a92ae35993b2189919f75ad07dd51`.
+No validation run remains active. No merge/tag/publication performed.
 
-## Active runs — resume these, do not start duplicates
+The [final report](P12_FINAL_AUDIT.md) and its
+[generated evidence](evidence/p12-release-report.json) cover all129 original
+requirements and15 findings: **127 scoped PASS /2 NOT_RUN**.
 
-- Windows full regression: tool handle `49697` TERMINAL exit0,2637 PASS/121 SKIP; frozen detached candidate based
-  on `39c5e6c` plus five corrections. Authoritative private launcher:
-  `.git/pr34-evidence/final-candidate-windows-launch.json`.
-- Linux full regression: tool handle `19457`, clean `ff905c4` checkout on WSL
-  native filesystem. Launcher:
-  `.git/pr34-evidence/full-ff905c4-linux-nativefs-launch.json`.
+## Completed
 
-Both logs/XML persist under the recorded private run directories. Windows is PASS;
-Linux remains live and its source stays frozen until terminal. Their overlapping
-elapsed times are not performance measurements.
+- Integrated implementation,35 additive migrations030–064, four preserved
+  adapters, canonical identity/inbox/handoff and shared authorization.
+- Full Windows2637 PASS/121 SKIP (49697 exit0); full Linux2714 PASS/44 SKIP plus2
+  passing subtests (19457 exit0). Original Windows base/diff plus explicit CRLF
+  equivalence retained;543 source files unchanged after run. Linux checkout clean.
+- Real approved Codex7 PASS and Claude stream6 PASS atff905c4; separate dashboard
+  15 PASS. No native status queries, unclassified outbound trace or overflow.
+- Final sequential comparative benchmark Windows30445/Linux17569 both exit0,
+  six rounds and120 measured turns per revision/platform. Higher synthetic latency
+  is published, not hidden. Existing load campaigns retain original SHA/scope.
+- Corrected package built and locally installed.267 package files match wheel;
+  Python/serve extra and69 non-Nexus dependency versions preserved. Installed
+  actual MCP and feature-ON HTTP synthetic-peer smokes PASS. No personal DB opened.
+- Generated122 node-based execution joins plus7 explicit campaign/report routes,
+  original partial classifications and per-platform skips retained. All63 task
+  reviews and13 phase statuses reconciled in the backlog.
 
-The Windows candidate and integrated commit have normalized-source equivalence:
-543 files, 12 exact byte matches, 531 CRLF-only UTF-8 differences, zero other
-changes or candidate mutations. See [source qualification](P12_CORRECTED_RELEASE.md).
-Do not replace the original base/diff identity with a fabricated committed SHA.
+## Only remaining qualification — deliberately NOT_RUN
 
-## Completed qualification
+- T-E2E-01: three installed providers concurrently; Pi native was excluded by user.
+- T-E2E-02: native Claude attach requires a dedicated approved interactive session.
 
-- Five corrections integrated and pushed at `ff905c4`: grouped ordinary read
-  receipts restored alongside operation-specific external ACK proof; migration
-  expectations updated through64; Claude event notification tested directly
-  instead of conflating process startup with a tight latency threshold.
-- Integrated focused regression7 PASS and isolated real MCP smoke PASS. Prior
-  failing full suites and all correction evidence remain in
-  [receipt regression](P12_RECEIPT_GROUPING_REGRESSION.md).
-- Approved installed Codex7 PASS and Claude stream6 PASS on `ff905c4`, terminal
-  exit0; no outbound native status queries, trace overflow or unclassified frames.
-  Fresh copied credentials removed. [Native evidence](P12_NATIVE_FRAMES.md).
-- Corrected candidate dashboard15 PASS with sandboxed isolated Edge; Linux browser
-  NOT_RUN. [Dashboard evidence](P12_CURRENT_DASHBOARD.md).
-- Corrected wheel/sdist built from clean archive, fresh frontend,64 migrations,
-  lock and actual Twine checks PASS. First Twine import preparation failure retained.
-  Artifacts and hashes: `evidence/p12-release-ff905c4.json`.
-- Operational metric probes passed Windows/Linux with10 observed fixture turns
-  each and no owned processes remaining. Three integrity tests/platform passed.
-  [Metrics and limits](P12_OPERATIONAL_METRICS.md).
-- All129 requirements have reviewed verification routes; catalogue alone is not
-  an execution or acceptance promotion. Backlog currently126 scoped PASS/3 NOT_RUN.
+P07-T02, P07-T06 and P12-T02 remain IMPLEMENTED pending that external native
+qualification. Other60 tasks VERIFIED in recorded scope. P07/P12 phase status
+remains IMPLEMENTED; the unrestricted four-native gate is **NOT PASSED**.
+The authorized implementation/local-test delivery is complete; fixtures do not
+turn those native exceptions into PASS or NOT_APPLICABLE.
 
-## Pending work in dependency order
+A future campaign must obtain explicit environment/session configuration and use
+fresh isolated fixtures. Do not repeat approved real sends, migrations, full
+suites or installation merely because an old historical paragraph says pending.
+There is no pending code task within the authorized scope.
 
-1. Observe both full suites terminal; reduce persistent XML and investigate any
-   failures. Preserve original run/source identity and skips.
-2. Join current full/native/browser results with the129 reviewed routes; refresh
-   changed test hashes, retain scoped crash/load evidence and final comparison.
-   New plan-only `join_release_evidence.py` and integrity tests are being qualified.
-3. Finish finding→code→evidence, task/phase statuses, operational readiness report.
-4. Recheck installed-tool process census/storage and reinstall the corrected
-   wheel locally, preserving Python/serve extras and compatible dependency pins.
-   Global install is now0.2.0 and installed MCP/feature-ON HTTP smokes PASS; never open/migrate the personal
-   database merely to validate installation. Run isolated installed-package smoke.
-5. Commit/push remaining milestones only to `feature/v0.2.0`, verify remote state,
-   and report qualified scope plus external limitations. No automatic merge.
+## Protected local work and artifacts
 
-Pi native remains NOT_RUN by user decision. Dedicated Claude attach native remains
-NOT_RUN without an approved dedicated session. These also limit three-native
-concurrency and dedicated-attach gates; fixtures do not qualify those protocols.
-No unnecessary repeat of completed real-provider campaigns.
+Preserve the three pre-existing modified generated HTTP static assets and
+`.nexus-policy-guardrail-test/`; none is staged or overwritten. Builds used clean
+Git archives and temporary frontend output. Raw XML/logs are private because they
+may contain fixture credentials. Corrected wheel/sdist paths/hashes are recorded
+in `evidence/p12-release-ff905c4.json`; local install in
+`evidence/p12-installed-release-ff905c4.json`.
 
-## Protected local work
+Authoritative sources: original specs01–06, [backlog](../../05_BACKLOG.json),
+[final audit](P12_FINAL_AUDIT.md), [operator evidence index](../../docs/harness-integrations/evidence-index.md).
+Historical status is archived in IMPLEMENTATION_HISTORY_TO_336357A.md and
+IMPLEMENTATION_HISTORY_TO_AF53F82.md. Their pending labels/handles are superseded.
 
-Do not stage or overwrite the three pre-existing modified generated HTTP static
-assets or `.nexus-policy-guardrail-test/`. Release builds use clean Git archives
-and temporary frontend output. Windows fixtures use private temporary directories
-on D; do not commit raw logs/XML with fixture credentials. No personal files were
-deleted to resolve the earlier C-drive capacity incident.
-
-## Authoritative records and history
-
-- [Backlog](../../05_BACKLOG.json), original specs01–06 at repository root.
-- [Final audit in progress](P12_FINAL_AUDIT.md).
-- [History through336357a](IMPLEMENTATION_HISTORY_TO_336357A.md) preserves the
-  previous status verbatim. Old pending labels/handles there are historical.
-- [Earlier history](IMPLEMENTATION_HISTORY_TO_AF53F82.md).
-
-Every published unit retains its exact source identity, commands, observed
-results, preparation failures, limits and next dependency. Historical counts are
-not summed into current execution results.
-
-Local installation completed after Windows terminal PASS. Only Nexus changed;69
-other dependencies preserved;267 installed package files exactly match the corrected
-wheel. Installed real MCP and feature-enabled HTTP synthetic-peer smokes PASS.
-See P12_LOCAL_INSTALLATION.md. Smoke handle4585 terminal0. Linux19457 remains live.
+Final report/operational documentation belong to the final milestone on this
+branch; use `git log -1` for its commit identity. All authorized changes are
+committed/pushed at delivery; the protected unrelated files remain local. No merge.

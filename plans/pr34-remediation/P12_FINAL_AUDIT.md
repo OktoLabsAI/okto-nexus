@@ -1,8 +1,92 @@
-# Final finding and release audit at39c5e6c
+# Final scoped delivery — Nexus0.2.0 / PR34 remediation
 
-IN PROGRESS. This is a source/evidence index, not a passed final gate. Current immutable-source Windows regression is running; Linux full regression and local installation remain pending. Historical scoped results are preserved with their original SHA/generation.
+The implementation and the user-authorized campaign are complete on
+`feature/v0.2.0`. Local Nexus0.2.0 is installed and verified. The generated
+[release report](evidence/p12-release-report.json) records **127 scoped PASS and
+2 NOT_RUN** across all129 original requirements. All15 findings have code and
+evidence links below. No merge, tag, publication or personal database migration
+was performed.
 
-| Finding | Current implementation | Scoped evidence |
+**The unrestricted four-native-connector gate is NOT PASSED.** Pi native was
+explicitly excluded by the user, and no dedicated Claude attach session was
+approved. T-E2E-01 (three native providers concurrently) and T-E2E-02 (dedicated
+native attach) remain NOT_RUN. Separate Codex/Claude campaigns do not satisfy the
+three-provider stimulus. Fixture support is never labeled native qualification.
+
+## Implementation and source identity
+
+Runtime/test source is `ff905c433e1a92ae35993b2189919f75ad07dd51`. Later milestones
+change only plan instruments, evidence and documentation. The final benchmark
+uses7560970 with an explicitly empty src/tests/scripts/frontend/config/lock diff
+fromff905c4. PR34 remains OPEN atd7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397,
+base27b06fe48b9f95b35c94f50827fea83d178f4e12; no later PR source was overwritten.
+
+The integrated model retains one canonical agent identity with authorized
+endpoints and runtime bindings. Shared REST/MCP/internal use cases enforce actor,
+workspace, grants and epochs. Inbox remains the logical delivery; transactional
+transport attempts, durable journal/projection and canonical claims preserve
+single execution, explicit uncertainty and handoff verification. All four native
+adapters remain. An additional processless/context fixture proves registry
+extension without adding a full A2A server or external orchestrator.
+
+Schema064 is shipped:35 additive remediation migrations030–064 after the
+preserved029 baseline. Upgrade, interrupted populated backfill, writer fencing,
+retention, offline combined backup/restore and safe disable/cutover are qualified
+in the linked migration evidence. Recovery never blindly replays an uncertain
+operation. Operational rollback retains schema/deduplication and reconciles;
+older writers are not assumed compatible.
+
+## Final validation
+
+| Campaign | Actual result and scope |
+|---|---|
+| Full Windows |2637 PASS,121 SKIP, exit0; Python3.13.1;2897.91s |
+| Full Linux |2714 PASS,44 SKIP, exit0; Python3.13.12;2725.21s;2 passing subtests |
+| Installed Codex0.156.1 |7 PASS, real approved local profile;1631 classified frames; observed gpt-6-astra/openai |
+| Installed Claude stream2.1.281 |6 PASS, real approved local profile;256 classified frames; model not observed |
+| Dashboard |15 PASS, isolated sandboxed Edge153.0.4234.48; Linux browser NOT_RUN |
+| Package/local installation |Lock, temporary frontend build, wheel/sdist and Twine PASS;267 installed package files byte-match corrected wheel;69 other dependencies preserved |
+| Installed integration |Actual installed MCP smoke and feature-ON authenticated HTTP/durable-result synthetic-peer smoke PASS |
+| Final performance |Sequential Windows/Linux original/current comparison;120 measured turns/revision/platform, no dropped samples; measured higher latency published |
+
+These rows overlap and are not added into a new total. Native/UI opt-ins were
+OFF in default full suites; their skips remain skips and have separate evidence.
+Both full suites retain a Starlette/httpx deprecation and a deliberate Pi
+fault-injection thread warning. Earlier failing full suites, reproduction REDs,
+preparation failures and storage failures remain historical evidence.
+
+Windows ran a frozen five-file candidate based on39c5e6c. Its original base/diff
+is retained:543 tracked files matchff905c4 with12 exact byte matches and531
+explicit CRLF-only UTF-8 differences. No other difference; post-terminal rehash
+found zero mutations. This is not a fabricated committed source identity or an
+all-file raw-byte claim. Linux ran a clean exactff905c4 checkout and remained
+clean after exit. See [source qualification](P12_CORRECTED_RELEASE.md),
+[Windows manifest](evidence/p12-full-corrected-windows.json),
+[Linux manifest](evidence/p12-full-corrected-linux.json).
+
+[Native evidence](P12_NATIVE_FRAMES.md) records zero outbound native status queries,
+no unclassified outbound frames/overflow and observed owned cleanup. Compatible
+protocol request types are broader than the actual tested cases. Codex uses the
+approved read-only/on-request profile; Claude retains default permission controls,
+which is not an OS-sandbox claim. Fresh copied credentials were removed.
+
+[Installed release](P12_LOCAL_INSTALLATION.md) used the explicit corrected wheel,
+existing Python/serve extra and offline pinned dependency resolution. Fresh test
+homes and allowlisted environments excluded personal stores and provider defaults.
+[Final performance](P12_FINAL_PERFORMANCE.md) publishes higher synthetic latency
+without weakening policy/fsync or claiming a universal SLO. The separate
+[operational probe](P12_OPERATIONAL_METRICS.md) records durability/dispatch/event
+boundaries and bounded aggregate resource/state observations.
+
+The prior measured kill/recovery-under-load campaigns retain their original
+bf5636c/af53f82 source identities and limits in P12_CRASH_PRESSURE.md and
+P12_RECOVERY_PRESSURE.md. They were not rerun or relabeled asff905c4 load cycles;
+the final full suites reexecute the shared crash/recovery scenarios. Historical
+cycle counts are not added to current full-suite or benchmark totals.
+
+## Findings to implementation and evidence
+
+| Finding | Code | Behavioral evidence |
 |---|---|---|
 | F01 — Canonical identity is preserved by runtime lifecycle | [RuntimeOpenService.open](../../src/okto_nexus/application/runtime_open.py) | [P12_IDENTITY_ACCEPTANCE](P12_IDENTITY_ACCEPTANCE.md), [P12_IDENTITY_FAILURE_ACCEPTANCE](P12_IDENTITY_FAILURE_ACCEPTANCE.md) |
 | F02 — Authenticated actor and current grant authorize shared runtime surfaces | [RuntimeAccessService.authorize](../../src/okto_nexus/application/runtime_access.py) | [P12_MONITOR_AUTHORIZATION](P12_MONITOR_AUTHORIZATION.md), [P12_OPERATION_AUTHORIZATION](P12_OPERATION_AUTHORIZATION.md), [P12_AUDIENCE_NATIVE_AUTHORITY](P12_AUDIENCE_NATIVE_AUTHORITY.md), [P12_ATTACH_WORK_INTEGRATION](P12_ATTACH_WORK_INTEGRATION.md) |
@@ -20,65 +104,60 @@ IN PROGRESS. This is a source/evidence index, not a passed final gate. Current i
 | F14 — Replay retains durable identity and cursor; operation facts are separate | [RuntimeControlService.replay](../../src/okto_nexus/application/runtime_control.py) | [P12_REPLAY_ACCEPTANCE](P12_REPLAY_ACCEPTANCE.md), [P12_OPERATION_EVENTS](P12_OPERATION_EVENTS.md), [P12_ATTACH_WORK_INTEGRATION](P12_ATTACH_WORK_INTEGRATION.md) |
 | F15 — Target discriminator normalization precedes authorization | [message_action_for](../../src/okto_nexus/application/governance.py) | [P10_NOTIFICATION_TARGETS](P10_NOTIFICATION_TARGETS.md), [P10_MATRIX_COMPLETION](P10_MATRIX_COMPLETION.md) |
 
-The machine-readable [audit index](evidence/p12-final-audit-39c5e6c.json) retains all129 original IDs and their direct evidence references; every referenced repository path was checked. Finding-to-group mappings express coverage scope and do not turn every group member into a new current-source PASS. The final per-node full-suite manifests must be joined separately.
+The finding-group associations are coverage scope, not independent native claims.
+Every original requirement has a route in the
+[release catalogue](evidence/p12-release-node-catalogue.json),94 exact Git-blob
+test hashes and retained historical partial classifications. The
+[execution join](evidence/p12-release-execution-join.json) records every matching
+parameter/platform observation for122 node-based routes; all pass within their
+recorded scope. Seven campaign/report routes are separately assessed. The final
+report joins these with the prior behavioral acceptance review, rather than
+promoting requirements just because a function exists or a component test passes.
 
-Native Codex/Claude results remain scoped to752cd72 and installed versions documented in P12_NATIVE_FRAMES.md. Pi native is NOT_RUN by user decision; dedicated native attach is NOT_RUN without an approved session. T-E2E-01 cannot be claimed from separate two-provider campaigns. T-E2E-07 remains pending until this report is finalized.
+Three stale catalogue omissions were corrected without changing product code:
+the actual active-turn/pending-journal shutdown case, real fragmented/full pipes,
+and populated interrupted migration backfill. The inherited Windows route for a
+POSIX-only attach socket was moved to its actual Linux scope; the Windows SKIP
+remains in the full manifest. Ten join-integrity tests pass on both platforms. The final combined evidence-tool,
+join and metric-probe selection also passed29 tests on each platform; exact
+commands/hashes are in evidence/p12-final-evidence-integrity.json.
 
-Read-only GitHub recheck on2026-09-24: PR34 OPEN, head d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397, base27b06fe48b9f95b35c94f50827fea83d178f4e12. No post-review source changes, PR comment or merge.
+## Report reproduction and preparation outcomes
 
-Release preparation uses a git archive of39c5e6c under a fresh D directory. npm ci, TypeScript/Vite build to a private output directory and uv lock --check passed. The three pre-existing modified generated assets and private guardrail directory are excluded from packaging. Vite reports a chunk over500kB; that warning is retained, not treated as a failed compilation. Packaging and installation results will be recorded separately.
+```text
+rtk proxy python -X utf8 plans/pr34-remediation/join_release_evidence.py plans/pr34-remediation/evidence/p12-release-join-recipe.json plans/pr34-remediation/evidence/p12-release-execution-join.json
+rtk proxy python -X utf8 plans/pr34-remediation/build_release_report.py plans/pr34-remediation/evidence/p12-release-execution-join.json plans/pr34-remediation/evidence/p12-release-separate-assessments.json plans/pr34-remediation/evidence/p12-release-report.json
+```
 
-Full-repository Ruff found7 errors in the historical diagnostic p11_writer_mode_probe.py (a leading plus and import placement). Changed production/test files passed Ruff. Preserve the historical reproduction before repairing its runnable copy; do not silently claim the full lint gate passed.
+Both final commands exit0. Report generation first rejected an optional missing
+historical notes field and then a test-node reference treated as a file path.
+The reader was corrected to preserve optional notes and validate the file portion
+of an already joined test node. These were plan-only report preparation failures,
+not hidden product-test failures. Final generation verifies129 unique IDs, source
+and evidence hashes, terminal suites, original candidate provenance, native and
+installed source identity, reference paths and all15 finding code blobs. The
+report is read back and its derived counts checked.
 
-The obsolete diagnostic has now been archived as .py.txt with byte-identical SHA256 2844bffcddc261f5054acaea8f5d794c288a557844f9aeed079db4af8e033f9f. Its old command remains explicitly historical. No production/test file was changed during the running suite.
+## Readiness and remaining external qualification
 
-## Complete requirement catalogue, awaiting final execution join
+[Backlog](../../05_BACKLOG.json) now distinguishes implementation from missing
+external qualification.60 tasks are VERIFIED in the recorded scope; P07-T02,
+P07-T06 and P12-T02 remain IMPLEMENTED only because Pi/dedicated attach native
+qualification is unavailable. P07/P12 retain IMPLEMENTED phase status; other
+phases are VERIFIED. No remaining code work is inferred from those native limits.
+Individual tasks retain their implementation references, hashes, historical
+commands/results and final review in
+[evidence/p12-release-task-review.json](evidence/p12-release-task-review.json).
 
-At8072207, all129 original IDs now have an explicit verification route in
-[evidence/p12-final-node-catalogue.json](evidence/p12-final-node-catalogue.json).
-122 rows have explicit test-node mappings; seven require separately recorded
-native/stress/performance/report evidence. This classification is not a count of
-passed requirements. Native/UI opt-in nodes inside the122 also need their own
-campaign results; default-suite skips do not qualify them.
+Ready for local testing and review in the authorized scope. The unrestricted
+four-native gate remains open; a future approved campaign must create fresh
+isolated Pi/backend and dedicated attach sessions, then run the missing cases.
+Do not reuse old LAN endpoints, interactive sessions, credentials, stores or real
+sends automatically. No automatic merge is authorized or performed.
 
-105 node mappings come from existing explicit scoped review catalogues. The
-[17-row supplement](evidence/p12-final-coverage-supplement.json) joins previously
-scattered mappings after source-assertion review, retaining exact platform scope
-for external-work sockets and browser tests. All listed functions exist in the
-current source;93 source-file hashes are recorded. Existence/hash checking is an
-integrity check, not behavioral proof. Historical partial coverage classifications
-are retained and must not become complete merely because a node passed.
-
-T-API-01 explicitly includes the failed ordinary grouped-receipt node from the
-current Windows regression. The five-file correction will change some recorded
-hashes at integration and must be reflected in the final join. No requirement,
-phase or task is promoted by this catalogue. Current Windows full result and
-Linux running status are recorded in P12_FULL_REGRESSION_39C5E6C.md.
-
-## Current-source join preparation at336357a
-
-The current implementation isff905c4. Final Codex7/Claude stream6 native cases
-passed at that source; the corrected package is built and validated. Full Windows
-and Linux runs remain active. Earlier pending descriptions above are historical.
-
-The final assertion-route audit found three omissions in the older catalogue:
-T-LIFE-03 still referenced only pre-joint-stimulus signal tests, T-LIFE-11 lacked
-the real fragmented/full-pipe case, and T-MIG-04 lacked the nonempty interrupted
-backfill case. These tests already exist and passed their recorded scoped gates;
-no production/test change was needed. Their actual assertions were read again.
-The current [release catalogue](evidence/p12-release-node-catalogue.json) retains
-the old partial mappings and adds the missing joint stimuli, with94 exact Git
-blob hashes atff905c4. It also explicitly links the integrated receipt correction.
-
-`join_release_evidence.py` keeps original source identities, requires an explicit
-reviewed equivalence basis and manifest hashes, rejects nonterminal/failed
-campaigns, and retains platform skips while matching every observed parameter.
-A failing platform cannot be hidden by another passing platform. Native calls
-require passing setup/call/teardown. The generated join is explicitly execution
-evidence only; it cannot itself promote behavioral acceptance or backlog status.
-Ten integrity cases passed on Windows and Linux. The complete final release join
-will be generated only after both full regression processes terminate.
-
-The previous accumulated status was archived verbatim in
-IMPLEMENTATION_HISTORY_TO_336357A.md; IMPLEMENTATION_STATUS.md now contains only
-the current resume instructions and links to history. No run was restarted.
+The three pre-existing modified generated static assets and private
+`.nexus-policy-guardrail-test/` remain untouched and uncommitted. Raw logs/XML and
+release artifacts stay in task-private directories; committed manifests exclude
+captured credentials/payloads. The
+[earlier audit](P12_FINAL_AUDIT_HISTORY_TO_7560970.md) preserves superseded pending
+states; [current status](IMPLEMENTATION_STATUS.md) is the resume entry point.

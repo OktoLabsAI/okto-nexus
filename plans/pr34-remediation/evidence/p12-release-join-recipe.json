@@ -1,0 +1,79 @@
+{
+  "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "catalogue": "plans/pr34-remediation/evidence/p12-release-node-catalogue.json",
+  "catalogue_sha256": "d13974ab9bb487e2e572c87650262c9cacc5fe7ed3ebff8e8f09239502c0f39a",
+  "sources": [
+    {
+      "evidence": "plans/pr34-remediation/evidence/p12-full-corrected-windows.json",
+      "evidence_sha256": "fc9f0452a28c69f79c817a308abf804489beeac5b196bbc915938bf31ab3fd98",
+      "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "original_source_identity": {
+        "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+        "source_state": "Detached base plus exactly five previously qualified corrections; immutable for this entire run. Must compare byte hashes to eventual integrated commit.",
+        "dirty_diff_sha256": "217d7ef6e03c6cac0c44414345ac7f87d60cc37d7c892fb6923dc20c6a7fdaed"
+      },
+      "platform": "windows",
+      "format": "junit",
+      "exit_code": 0,
+      "qualification_basis": "Frozen candidate base39c5e6c plus five corrections. Audited CRLF-normalized source equivalence toff905c4; original base/diff retained in p12-candidate-commit-equivalence.json."
+    },
+    {
+      "evidence": "plans/pr34-remediation/evidence/p12-full-corrected-linux.json",
+      "evidence_sha256": "5966b6ce67ec4c5fcef871974a79e660e5879fa5b3d2a7ec80785169c9182c51",
+      "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "original_source_identity": {
+        "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+        "source_checkout": "/var/tmp/okto-pr34-final-source-jzx6swb0/source",
+        "import_origin": "/var/tmp/okto-pr34-final-source-jzx6swb0/source/src/okto_nexus/__init__.py",
+        "source_status": "clean detached checkout; LF text per git blobs"
+      },
+      "platform": "linux",
+      "format": "junit",
+      "exit_code": 0,
+      "qualification_basis": "Clean detachedff905c4 source checkout; import origin verified."
+    },
+    {
+      "evidence": "plans/pr34-remediation/evidence/p12-regression-dashboard.json",
+      "evidence_sha256": "a9477e41f819c9836489bbf6dda421c58370802c831d337a80cf48061f69f264",
+      "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "original_source_identity": {
+        "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+        "base_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+        "source_file_sha256": {
+          "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+          "tests/test_runtime_attach_work_channel.py": "49c85aaafd2e3f15703461920cd420ada66f16fc9f27f125c7f39e903d5c2ce6",
+          "tests/test_runtime_attempt_history.py": "9962e88e278d082c9a1dcca842ca4baeba459b891fde83378868796035c1bebd",
+          "tests/test_harness_claude_code_connector.py": "9ead7bfc675d89be5b8b46bd8082f070b878d0108f9d74ce4fa86d1e09db0c59"
+        }
+      },
+      "platform": "windows",
+      "format": "junit",
+      "exit_code": 0,
+      "qualification_basis": "Dashboard executed detached base39c5e6c plus four corrected paths. All runtime/frontend source matches integratedff905c4 under explicit CRLF normalization. The later fifth change only updates an unimported reconciliation-test migration list; it does not change UI/runtime. Original four-path hashes and source identity retained."
+    },
+    {
+      "evidence": "plans/pr34-remediation/evidence/p12-native-ff905c4-codex.json",
+      "evidence_sha256": "cef031ad6c15f5b7f2fc9b54f9b024948175495513267d969d8959d6694a2bb9",
+      "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "original_source_identity": {
+        "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51"
+      },
+      "platform": "windows",
+      "format": "native",
+      "exit_code": 0,
+      "qualification_basis": "Exact implementationff905c4; real installed approved Codex campaign."
+    },
+    {
+      "evidence": "plans/pr34-remediation/evidence/p12-native-ff905c4-claude_code.json",
+      "evidence_sha256": "d7dcd152614c98b1ead5573a37c95de482fdac9c049b1d14462a8570c5146d3d",
+      "release_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "original_source_identity": {
+        "source_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51"
+      },
+      "platform": "windows",
+      "format": "native",
+      "exit_code": 0,
+      "qualification_basis": "Exact implementationff905c4; real installed approved Claude stream campaign."
+    }
+  ]
+}

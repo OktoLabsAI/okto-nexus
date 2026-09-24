@@ -6,6 +6,12 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Complete the PR #34 remediation implementation and approved local Codex/Claude
+  qualification, with additive schema064 and verified local0.2.0 installation.
+  The final report is `plans/pr34-remediation/P12_FINAL_AUDIT.md`; Pi native and
+  dedicated Claude attach remain explicitly unqualified (`NOT_RUN`). No merge
+  or package publication is implied by the local installation.
+
 - Surface58/schema064 integrates approved external Nexus sessions with attach
   handoff claim, authenticated ACK and canonical complete/reject. Native attach
   remains unconfirmed injection: no fabricated native ACK, result or managed-work

@@ -1,0 +1,1870 @@
+{
+  "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "task_reviews": [
+    {
+      "task_id": "P00-T01",
+      "title": "Capturar HEAD/base/instru\u00e7\u00f5es, preservar worktree e inventariar schema/configura\u00e7\u00e3o.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {},
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/BASELINE.md",
+        "plans/pr34-remediation/DEFECT_REGISTER.md",
+        "plans/pr34-remediation/CONTRACT_MAP.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P00-T02",
+      "title": "Mapear casos de uso, autentica\u00e7\u00e3o, inbox/handoff, notifica\u00e7\u00f5es e composition roots.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {},
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/BASELINE.md",
+        "plans/pr34-remediation/DEFECT_REGISTER.md",
+        "plans/pr34-remediation/CONTRACT_MAP.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P00-T03",
+      "title": "Reproduzir achados atuais com testes de comportamento e registrar achados j\u00e1 corrigidos.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {},
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/BASELINE.md",
+        "plans/pr34-remediation/DEFECT_REGISTER.md",
+        "plans/pr34-remediation/CONTRACT_MAP.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P00-T04",
+      "title": "Capturar contratos, baseline de testes e capability matrix com vers\u00f5es/ambientes dispon\u00edveis.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {},
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/BASELINE.md",
+        "plans/pr34-remediation/DEFECT_REGISTER.md",
+        "plans/pr34-remediation/CONTRACT_MAP.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P01-T01",
+      "title": "Remover muta\u00e7\u00f5es can\u00f4nicas de Agent do lifecycle e negar cria\u00e7\u00e3o impl\u00edcita.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_authorization.py": "7d57b97df84275b5f6db20f9e8271c5047c46c0d27248391053aee49270a2925",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P01_CONTAINMENT.md",
+        "plans/pr34-remediation/evidence/p01-gate.log",
+        "plans/pr34-remediation/P12_IDENTITY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_IDENTITY_FAILURE_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P01-T02",
+      "title": "Aplicar autoriza\u00e7\u00e3o conservadora uniforme aos controles e leituras.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_authorization.py": "7d57b97df84275b5f6db20f9e8271c5047c46c0d27248391053aee49270a2925",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P01_CONTAINMENT.md",
+        "plans/pr34-remediation/evidence/p01-gate.log",
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_OPERATION_AUTHORIZATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P01-T03",
+      "title": "Implementar opt-ins e guardas runtime sem mascarar feature habilitada.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_authorization.py": "7d57b97df84275b5f6db20f9e8271c5047c46c0d27248391053aee49270a2925",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P01_CONTAINMENT.md",
+        "plans/pr34-remediation/evidence/p01-gate.log",
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
+        "plans/pr34-remediation/P12_API_REVIEW.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P01-T04",
+      "title": "Adicionar prote\u00e7\u00e3o tempor\u00e1ria de executor \u00fanico e regress\u00e3o ON/OFF.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_authorization.py": "7d57b97df84275b5f6db20f9e8271c5047c46c0d27248391053aee49270a2925",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/adapters/inbound/http/routes.py": "d598239ebae272b5572447d6065993aab85216d85826743ac60c24cb60d1062e"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P01_CONTAINMENT.md",
+        "plans/pr34-remediation/evidence/p01-gate.log",
+        "plans/pr34-remediation/P12_PULL_PUSH_RACE.md",
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P02-T01",
+      "title": "Definir AgentEndpoint, RequestContext, ExecutionGrant e separar capacidades/permiss\u00f5es.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/domain/endpoints.py": "bb8f768dae5a850edad859e08ce670cde8ba4c85bc318d8370cc07141e888b6d",
+        "src/okto_nexus/domain/delivery.py": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+        "src/okto_nexus/domain/runtime_context.py": "5e85aaceee9e7a7e4feb0abb6098c15312be999e32affa7d82764ff4ebc7bad7",
+        "src/okto_nexus/application/adapter_registry.py": "82374b71a94ac1b32877befaf9ccc6fc45f285a0afd02e9645d641de27a73d06",
+        "src/okto_nexus/adapters/outbound/harness/envelope.py": "096729db06d3a4eb80d4a4a876ca871a5ea59498e99622666df0770ac628fbc8"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P02_CONTRACTS.md",
+        "plans/pr34-remediation/evidence/p02-gate.log",
+        "plans/pr34-remediation/evidence/p02-contracts.log",
+        "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P02-T02",
+      "title": "Definir envelope, dispatch outcome, causalidade, consumo e correla\u00e7\u00e3o versionados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/domain/endpoints.py": "bb8f768dae5a850edad859e08ce670cde8ba4c85bc318d8370cc07141e888b6d",
+        "src/okto_nexus/domain/delivery.py": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+        "src/okto_nexus/domain/runtime_context.py": "5e85aaceee9e7a7e4feb0abb6098c15312be999e32affa7d82764ff4ebc7bad7",
+        "src/okto_nexus/application/adapter_registry.py": "82374b71a94ac1b32877befaf9ccc6fc45f285a0afd02e9645d641de27a73d06",
+        "src/okto_nexus/adapters/outbound/harness/envelope.py": "096729db06d3a4eb80d4a4a876ca871a5ea59498e99622666df0770ac628fbc8"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P02_CONTRACTS.md",
+        "plans/pr34-remediation/evidence/p02-gate.log",
+        "plans/pr34-remediation/evidence/p02-contracts.log",
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P02-T03",
+      "title": "Implementar AdapterRegistry e valida\u00e7\u00e3o por descriptor sem produtos no dom\u00ednio.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/domain/endpoints.py": "bb8f768dae5a850edad859e08ce670cde8ba4c85bc318d8370cc07141e888b6d",
+        "src/okto_nexus/domain/delivery.py": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+        "src/okto_nexus/domain/runtime_context.py": "5e85aaceee9e7a7e4feb0abb6098c15312be999e32affa7d82764ff4ebc7bad7",
+        "src/okto_nexus/application/adapter_registry.py": "82374b71a94ac1b32877befaf9ccc6fc45f285a0afd02e9645d641de27a73d06",
+        "src/okto_nexus/adapters/outbound/harness/envelope.py": "096729db06d3a4eb80d4a4a876ca871a5ea59498e99622666df0770ac628fbc8",
+        "src/okto_nexus/application/runtime_requirements.py": "c5e25ad0c2640023d5d79d496dc48d89348f359957504f8797b6d5c21babd2b9",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+        "tests/test_runtime_capability_admission.py": "f041c69aa594b4bee5f0541292f6f744b6b31aec17e5cabb7514a59b94784732"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P02_CONTRACTS.md",
+        "plans/pr34-remediation/evidence/p02-gate.log",
+        "plans/pr34-remediation/evidence/p02-contracts.log",
+        "plans/pr34-remediation/P02_CAPABILITY_ADMISSION.md",
+        "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md",
+        "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P02-T04",
+      "title": "Provar extens\u00e3o por quinto adapter fake e endpoint que n\u00e3o exige runtime local.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/domain/endpoints.py": "bb8f768dae5a850edad859e08ce670cde8ba4c85bc318d8370cc07141e888b6d",
+        "src/okto_nexus/domain/delivery.py": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+        "src/okto_nexus/domain/runtime_context.py": "5e85aaceee9e7a7e4feb0abb6098c15312be999e32affa7d82764ff4ebc7bad7",
+        "src/okto_nexus/application/adapter_registry.py": "82374b71a94ac1b32877befaf9ccc6fc45f285a0afd02e9645d641de27a73d06",
+        "src/okto_nexus/adapters/outbound/harness/envelope.py": "096729db06d3a4eb80d4a4a876ca871a5ea59498e99622666df0770ac628fbc8",
+        "tests/test_pr34_remediation.py": "b0849bfa7635f65e3a190bf3000698579be7cc361f8bcee53338ddc0f45bb389"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P02_CONTRACTS.md",
+        "plans/pr34-remediation/evidence/p02-gate.log",
+        "plans/pr34-remediation/evidence/p02-contracts.log",
+        "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md",
+        "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md",
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P03-T01",
+      "title": "Criar migra\u00e7\u00f5es aditivas, constraints e \u00edndices, reaproveitando sess\u00f5es/eventos.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql": "d83dca9634c67082caa2cba4ee6a348ed6efed5ef3e14291274257dda525d790",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P03_ENDPOINTS.md",
+        "plans/pr34-remediation/evidence/p03-gate.log",
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P03-T02",
+      "title": "Implementar perfis aprovados, secret refs, config redigida e heran\u00e7a ambiente expl\u00edcita.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql": "d83dca9634c67082caa2cba4ee6a348ed6efed5ef3e14291274257dda525d790",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P03_ENDPOINTS.md",
+        "plans/pr34-remediation/evidence/p03-gate.log",
+        "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md",
+        "plans/pr34-remediation/P12_PAYLOAD_BOUNDARIES.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P03-T03",
+      "title": "Vincular runtimes \u00e0 presen\u00e7a/workspace can\u00f4nicos sem fechar outros bindings.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql": "d83dca9634c67082caa2cba4ee6a348ed6efed5ef3e14291274257dda525d790",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P03_ENDPOINTS.md",
+        "plans/pr34-remediation/evidence/p03-gate.log",
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P03-T04",
+      "title": "Migrar hist\u00f3rico conservadoramente e diagnosticar perfis antigos danificados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql": "d83dca9634c67082caa2cba4ee6a348ed6efed5ef3e14291274257dda525d790",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P03_ENDPOINTS.md",
+        "plans/pr34-remediation/evidence/p03-gate.log",
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P03-T05",
+      "title": "Validar upgrade, backup e writer compatibility com a integra\u00e7\u00e3o ativa.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/030_agent_runtime_endpoints.sql": "d83dca9634c67082caa2cba4ee6a348ed6efed5ef3e14291274257dda525d790",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/migrations/057_runtime_writer_contract.sql": "fe77152b3a009346014c25766aa34cbe36f879aa49c1fb952f8e1cc5d05a8f76",
+        "tests/test_runtime_writer_contract.py": "412ff7e508f87b9e796e0a1cdfa2a3511a126ec24bdbfdc0a0a6c576c98e0571",
+        "plans/pr34-remediation/offline_runtime_backup.py": "6b903e35c0a7260ca43d0900086dd25ccd7476fe3fcc33a83d33a6ed1785c0ad",
+        "tests/test_runtime_backup_restore.py": "7372374218c4f6d639ee8d541c2b099d2d0e01bc6b8feb6e93096dadf9feb65b",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P03_ENDPOINTS.md",
+        "plans/pr34-remediation/evidence/p03-gate.log",
+        "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+        "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
+        "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P04-T01",
+      "title": "Centralizar a\u00e7\u00f5es e RequestContext nos casos de uso de todas as superf\u00edcies.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+        "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+        "src/okto_nexus/migrations/031_runtime_execution_grants.sql": "9892b7bf1df9d493c69b3f5827bf7bfb7e1c6e7ef6c0e5d70bc39957a7998e24"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P04_AUTHORIZATION.md",
+        "plans/pr34-remediation/evidence/p04-progress.log",
+        "plans/pr34-remediation/evidence/p04-boundaries.log",
+        "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+        "plans/pr34-remediation/P12_OPERATION_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_API_REVIEW.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P04-T02",
+      "title": "Implementar/reaproveitar grants limitados e revalida\u00e7\u00e3o no enqueue/dispatch.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+        "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+        "src/okto_nexus/migrations/031_runtime_execution_grants.sql": "9892b7bf1df9d493c69b3f5827bf7bfb7e1c6e7ef6c0e5d70bc39957a7998e24"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P04_AUTHORIZATION.md",
+        "plans/pr34-remediation/evidence/p04-progress.log",
+        "plans/pr34-remediation/evidence/p04-boundaries.log",
+        "plans/pr34-remediation/P12_AUDIENCE_NATIVE_AUTHORITY.md",
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P04-T03",
+      "title": "Proteger replay/discovery/artifacts e configurar acesso restrito do runtime ao Nexus.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+        "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+        "src/okto_nexus/migrations/031_runtime_execution_grants.sql": "9892b7bf1df9d493c69b3f5827bf7bfb7e1c6e7ef6c0e5d70bc39957a7998e24"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P04_AUTHORIZATION.md",
+        "plans/pr34-remediation/evidence/p04-progress.log",
+        "plans/pr34-remediation/evidence/p04-boundaries.log",
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_REPLAY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P04-T04",
+      "title": "Bloquear native passthrough/secret/env/cwd indevidos e comprovar testes negativos/positivos.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+        "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+        "src/okto_nexus/migrations/031_runtime_execution_grants.sql": "9892b7bf1df9d493c69b3f5827bf7bfb7e1c6e7ef6c0e5d70bc39957a7998e24"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P04_AUTHORIZATION.md",
+        "plans/pr34-remediation/evidence/p04-progress.log",
+        "plans/pr34-remediation/evidence/p04-boundaries.log",
+        "plans/pr34-remediation/P12_PAYLOAD_BOUNDARIES.md",
+        "plans/pr34-remediation/P12_IO_BOUNDARIES.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T01",
+      "title": "Criar intents transacionais para todos os produtores, incluindo approval e handoff sint\u00e9tico.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P12_PRODUCER_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_APPROVAL_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T02",
+      "title": "Implementar idempotency key/hash/uniqueness e retorno autorizado de opera\u00e7\u00f5es existentes.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T03",
+      "title": "Implementar resolu\u00e7\u00e3o de endpoint/lane/contexto e afinidade de continuidade.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/061_runtime_fallback_binding.sql": "490e21e31e971e05122988c4f913993230a08532ecd9ebac5ae74894909f58cc"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md",
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T04",
+      "title": "Coordenar reserva de consumo entre inbox/pull e push sem misturar leases/contadores.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
+        "plans/pr34-remediation/P12_PULL_PUSH_RACE.md",
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T05",
+      "title": "Definir ACK, unknown, mirror e fallback seguro, com invariantes testados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/061_runtime_fallback_binding.sql": "490e21e31e971e05122988c4f913993230a08532ecd9ebac5ae74894909f58cc"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
+        "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md",
+        "plans/pr34-remediation/P12_MIRROR_OBSERVATION.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P05-T06",
+      "title": "Preservar delivered_count e comportamento de destinat\u00e1rios legados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P06-T01",
+      "title": "Implementar lifecycle do dispatcher, owner \u00fanico/epoch e claims CAS.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/059_runtime_delivery_attempt_history.sql": "1cbb88d1773964102dfce7d353d824b5315ffa2e46098f47ac1d45f5b9912e27"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
+        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+        "plans/pr34-remediation/evidence/p06-capacity-native.json",
+        "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md",
+        "plans/pr34-remediation/P12_OWNER_FENCING.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P06-T02",
+      "title": "Remover envio externo do callback e adicionar wakeup/IPC/generation seguros.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/config.py": "86abfdf9fdf29bbaaebce7df40252c5de58b5873284ef0baf30ab481bd8e591f",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "tests/test_runtime_delivery_acceptance.py": "21ba052fadbae1bf5a17dd5497f1ce87b9d12c71c2086d5e4f1cf973d07a50bf"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_COMMIT_CRASH.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P06-T03",
+      "title": "Implementar timers, startup drain e reconcilia\u00e7\u00e3o indexada de sinais perdidos.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql": "07280d2080ba72c354ecff8b433bab3a5ced9990db2616edab30e3a1bfcac01b"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md",
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P06-T04",
+      "title": "Classificar tentativas/ambiguidade e impedir failover/retry autom\u00e1tico inseguro.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/059_runtime_delivery_attempt_history.sql": "1cbb88d1773964102dfce7d353d824b5315ffa2e46098f47ac1d45f5b9912e27",
+        "src/okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql": "07280d2080ba72c354ecff8b433bab3a5ced9990db2616edab30e3a1bfcac01b",
+        "src/okto_nexus/migrations/061_runtime_fallback_binding.sql": "490e21e31e971e05122988c4f913993230a08532ecd9ebac5ae74894909f58cc"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+        "plans/pr34-remediation/P05_NOT_SENT_INBOX_RECOVERY.md",
+        "plans/pr34-remediation/P06_DURABLE_ATTEMPT_HISTORY.md",
+        "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md",
+        "plans/pr34-remediation/P05_SAFE_ENDPOINT_FALLBACK.md",
+        "plans/pr34-remediation/P12_OWNER_FENCING.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P06-T05",
+      "title": "Aplicar filas limitadas, quotas, ordena\u00e7\u00e3o, controles priorit\u00e1rios e quarentena.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/application/runtime_open.py": "1dc4258aab9be4dea77b71932253d2029e67b6f1b85aca1d70f10d6314cf75ff",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql": "624f47693c61bd8d370105270a83c62a3a0f74ec380a09b842c8980213e74464",
+        "src/okto_nexus/migrations/060_runtime_safe_retry_deadlines.sql": "07280d2080ba72c354ecff8b433bab3a5ced9990db2616edab30e3a1bfcac01b"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
+        "plans/pr34-remediation/evidence/p05-p06-gate.log",
+        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+        "plans/pr34-remediation/P06_SAFE_RETRY_DEADLINES.md",
+        "plans/pr34-remediation/P06_SCHEDULER_LANE_SELECTION.md",
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T01",
+      "title": "Migrar os quatro adapters para envelope/resultado can\u00f4nicos com tradu\u00e7\u00e3o na borda.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+        "src/okto_nexus/migrations/040_runtime_command_intents.sql": "0e136c6dc7694caa48ea3278d70af653e5c7e6642f26d550b8fb7c6e069bd565",
+        "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/evidence/p07-native-observations.json",
+        "plans/pr34-remediation/P07_ATTACH_PLATFORM.md",
+        "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md",
+        "plans/pr34-remediation/P12_FRAGMENTED_PIPES.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T02",
+      "title": "Preservar multi-turn, Pi settle, Codex multiplexa\u00e7\u00e3o e caracter\u00edsticas reais de Claude.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/034_runtime_event_origin.sql": "f75f9aac1ff8943db8aa6d1c108ba11087ee6546fc34ee2b35e04d757a64f13a",
+        "src/okto_nexus/adapters/outbound/harness/event_buffers.py": "5be20637356c75591acbab6b72182091fdc82624a5d2a197e7419349f1135970",
+        "tests/test_runtime_event_buffers.py": "0fb1149ccc82a7387c5e9ed1f27e452d777f8f44243aefaa3349008e55751cd2",
+        "src/okto_nexus/adapters/outbound/harness/codex.py": "1b454623159e1b6af87e82650ee3021bee4d387de9dc9a40b4f993ae57cfe7e8",
+        "tests/test_runtime_codex_early_events.py": "2754669a2a4fba45fe5bb13e3cbc8ab91d1a611cc58ba4048e56ae068bc4dd38"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/evidence/p07-native-observations.json",
+        "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
+        "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
+        "plans/pr34-remediation/evidence/p07-shared-presence.log",
+        "plans/pr34-remediation/P07_EVENT_BUFFERS.md",
+        "plans/pr34-remediation/P07_CODEX_EARLY_EVENTS.md",
+        "plans/pr34-remediation/P07_CODEX_THREAD_ADMISSION.md",
+        "plans/pr34-remediation/P07_CLAUDE_ADMISSION.md",
+        "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+        "plans/pr34-remediation/P07_PRODUCTION_MULTIPLEX.md",
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+      ],
+      "proposed_status_after_final_gates": "IMPLEMENTED",
+      "limitation": "Multi-turn/settle/multiplex fixture qualification plus real Codex/Claude stream; native Pi and dedicated attach remain NOT_RUN.",
+      "next_dependency": "Approved missing native environment only; do not repeat real sends automatically.",
+      "status": "IMPLEMENTED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T03",
+      "title": "Implementar deadlines, expected-turn/fences e tratamento de respostas tardias.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/outbound/harness/owned_process.py": "d3b407561bf73f9401aba61da8b5dedf4b1b7b5f978bb3d860aea5be0bf71e99",
+        "src/okto_nexus/adapters/outbound/harness/windows_process.py": "df657162b31f6f3fa91816a469d608d8d9b4eeba1f81653f4e435d0b8134477a",
+        "src/okto_nexus/adapters/outbound/harness/codex.py": "1b454623159e1b6af87e82650ee3021bee4d387de9dc9a40b4f993ae57cfe7e8",
+        "tests/test_harness_codex_connector.py": "fdf5d5ecb88b92c8fbdb1c0695146250136da91e346913078a94107bd71c3472",
+        "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+        "src/okto_nexus/migrations/040_runtime_command_intents.sql": "0e136c6dc7694caa48ea3278d70af653e5c7e6642f26d550b8fb7c6e069bd565",
+        "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P07_PROCESS_OWNERSHIP.md",
+        "plans/pr34-remediation/evidence/p07-process-ownership.log",
+        "plans/pr34-remediation/P07_CODEX_REQUEST_ORDERING.md",
+        "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T04",
+      "title": "Refor\u00e7ar abertura idempotente, spawn/ownership desde nascimento e reaping por identidade.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/outbound/harness/owned_process.py": "d3b407561bf73f9401aba61da8b5dedf4b1b7b5f978bb3d860aea5be0bf71e99",
+        "src/okto_nexus/adapters/outbound/harness/windows_process.py": "df657162b31f6f3fa91816a469d608d8d9b4eeba1f81653f4e435d0b8134477a",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/034_runtime_event_origin.sql": "f75f9aac1ff8943db8aa6d1c108ba11087ee6546fc34ee2b35e04d757a64f13a",
+        "src/okto_nexus/adapters/outbound/harness/linux_process.py": "2a849c809f47399521dbf3555de8894ac8efd5198370c927d1d54bf0c3368ef5",
+        "src/okto_nexus/adapters/outbound/harness/linux_process_guardian.py": "b67a6986cd9968837438f8bdc29e3ca6a79481587fe5330cf51cb3f12fcce553",
+        "tests/test_linux_process_ownership.py": "d67baafab5d7e1242ea32d850d5d11d3c976d79f483ae674d8b2d00f353acaae",
+        "src/okto_nexus/migrations/038_runtime_start_reservations.sql": "d5eebcd57c357c22ea9088ce06cdcd3c784a1bd76c9e4b861b09c5821fecb45a",
+        "src/okto_nexus/migrations/039_runtime_boot_and_reconciliation.sql": "c92b1d2f4b3672bd9c7e0ac8f2c787d65a599e587798998b26d2da40d3c5dea0",
+        "src/okto_nexus/application/runtime_boot.py": "0597518907f1a72879010d8b2e81d06e268dd7bbd2143eb4376f0e22ba9ad2e9",
+        "tests/test_runtime_session_recovery.py": "f227fca7bae3731a9fd65894d909cf000008b4b6a7172262525dd8b94a3c5c15",
+        "tests/test_runtime_boot.py": "2c6da357e6d34d168e652553ee5e5446288c21580f5f4ce20333011a8e871c81"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P07_PROCESS_OWNERSHIP.md",
+        "plans/pr34-remediation/evidence/p07-process-ownership.log",
+        "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
+        "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
+        "plans/pr34-remediation/evidence/p07-shared-presence.log",
+        "plans/pr34-remediation/P07_LINUX_OWNERSHIP.md",
+        "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+        "plans/pr34-remediation/P07_SESSION_RECOVERY.md",
+        "plans/pr34-remediation/P07_APPROVED_BOOT.md",
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/P12_IDENTITY_FAILURE_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T05",
+      "title": "Implementar close/detach observ\u00e1veis e drenar eventos sem subscription races.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/034_runtime_event_origin.sql": "f75f9aac1ff8943db8aa6d1c108ba11087ee6546fc34ee2b35e04d757a64f13a",
+        "src/okto_nexus/adapters/outbound/harness/codex.py": "1b454623159e1b6af87e82650ee3021bee4d387de9dc9a40b4f993ae57cfe7e8",
+        "tests/test_runtime_shared_connection.py": "a5aff85f76da0260afef99ae0c5a09a4ceea8b6c1102ea46f3fc7bc75f684812",
+        "tests/test_runtime_native_campaign.py": "6aae0357a5e21d754f706c6fb515bb756c234480a6be74ea5c69be17e458a5b9",
+        "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+        "src/okto_nexus/migrations/040_runtime_command_intents.sql": "0e136c6dc7694caa48ea3278d70af653e5c7e6642f26d550b8fb7c6e069bd565",
+        "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
+        "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
+        "plans/pr34-remediation/evidence/p07-shared-presence.log",
+        "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md",
+        "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
+        "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+        "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+        "plans/pr34-remediation/P07_PRODUCTION_MULTIPLEX.md",
+        "plans/pr34-remediation/P12_SIGNAL_DRAIN.md",
+        "plans/pr34-remediation/P12_SETTLE_AND_DETACH.md",
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P07-T06",
+      "title": "Integrar boot/recovery pela mesma composi\u00e7\u00e3o e validar vers\u00f5es/plataformas.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/038_runtime_start_reservations.sql": "d5eebcd57c357c22ea9088ce06cdcd3c784a1bd76c9e4b861b09c5821fecb45a",
+        "src/okto_nexus/migrations/039_runtime_boot_and_reconciliation.sql": "c92b1d2f4b3672bd9c7e0ac8f2c787d65a599e587798998b26d2da40d3c5dea0",
+        "src/okto_nexus/application/runtime_boot.py": "0597518907f1a72879010d8b2e81d06e268dd7bbd2143eb4376f0e22ba9ad2e9",
+        "tests/test_runtime_session_recovery.py": "f227fca7bae3731a9fd65894d909cf000008b4b6a7172262525dd8b94a3c5c15",
+        "tests/test_runtime_boot.py": "2c6da357e6d34d168e652553ee5e5446288c21580f5f4ce20333011a8e871c81",
+        "tests/test_runtime_protocol_compatibility.py": "165312328cbd5acf37d4981dee122342d171bb39e3cb92de5c3007d2628553f7",
+        "src/okto_nexus/migrations/056_runtime_compatibility_observations.sql": "cc7b7752d8f0b0563eb9352900c7880a3a37078ca924452b40bb2f6e9d5489f6",
+        "src/okto_nexus/adapters/outbound/harness/compatibility.py": "60297af85b907e0fc8d62f9d7b62d647f4b439104ddd2a424ac3bb4ca74c6901",
+        "tests/test_runtime_compatibility_observations.py": "7640bf2746ab69d5141d1b19e0363e1ce558749554bb3f77a8af5163b305ed52",
+        "tests/test_runtime_effective_requirements.py": "ecf6b39940fc9d1d8bb84d07852be30198b27b1642eb4919eebba8734112bed7",
+        "src/okto_nexus/application/runtime_requirements.py": "c5e25ad0c2640023d5d79d496dc48d89348f359957504f8797b6d5c21babd2b9",
+        "tests/test_runtime_claude_compatibility.py": "461b06bc0fee283ef3c47b53e39f333043387164eb9d7d574a16e7381ce78a1f",
+        "tests/test_runtime_attach_compatibility.py": "9e836fc59de2cc631c69837006cfcbafb70d6f90d7c92629aeff631b90cc06e1"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/evidence/p07-native-observations.json",
+        "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
+        "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+        "plans/pr34-remediation/P07_SESSION_RECOVERY.md",
+        "plans/pr34-remediation/P07_APPROVED_BOOT.md",
+        "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md",
+        "plans/pr34-remediation/P07_COMPATIBILITY_OBSERVATIONS.md",
+        "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md",
+        "plans/pr34-remediation/P07_CLAUDE_VERSION_CONTRACT.md",
+        "plans/pr34-remediation/P07_ATTACH_PROTOCOL_CONTRACT.md",
+        "plans/pr34-remediation/P07_EFFECTIVE_CONTROL_CONTRACTS.md",
+        "plans/pr34-remediation/P12_COMPOSITION_A6A18B4.md"
+      ],
+      "proposed_status_after_final_gates": "IMPLEMENTED",
+      "limitation": "Shared boot/recovery composition and compatibility policy are fixture-qualified; real Pi/dedicated attach version/platform qualification remains NOT_RUN.",
+      "next_dependency": "Approved missing native environment only; do not repeat real sends automatically.",
+      "status": "IMPLEMENTED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P08-T01",
+      "title": "Implementar port/journal append-only com IDs/sequence, checksums e limites.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/033_runtime_event_journal.sql": "edf5e6066464341de4982f2a84cf432bc14435acb95ea1da45bab18a2ff514fc",
+        "src/okto_nexus/application/runtime_maintenance.py": "e7ea1c966651e0b3228698fffaffc5325c62abb47d0920efe19cec25a48fe838",
+        "tests/test_runtime_journal_retention.py": "e509d176f07787ae89f679b6e1e0bfba35332447f88fd6425eb6b80cc66ecd18"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "plans/pr34-remediation/P08_JOURNAL_RETENTION.md",
+        "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P08-T02",
+      "title": "Implementar flush/group commit, fsync terminal e durable watermark.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/033_runtime_event_journal.sql": "edf5e6066464341de4982f2a84cf432bc14435acb95ea1da45bab18a2ff514fc"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md",
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P08-T03",
+      "title": "Implementar projector idempotente com resultados, artifacts, notifica\u00e7\u00f5es e checkpoint.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/033_runtime_event_journal.sql": "edf5e6066464341de4982f2a84cf432bc14435acb95ea1da45bab18a2ff514fc",
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/migrations/034_runtime_event_origin.sql": "f75f9aac1ff8943db8aa6d1c108ba11087ee6546fc34ee2b35e04d757a64f13a",
+        "src/okto_nexus/migrations/035_runtime_attempt_correlation.sql": "4800272406cbfa0aff1aff85432ebbc1bb6e088d577ad71b4c09df3f01acca93",
+        "tests/test_runtime_result_correlation.py": "a563f6e155a4367117a55ffbab0cc10f717cf3075a4b67db46afc27aeafef3ac",
+        "src/okto_nexus/migrations/036_runtime_result_output.sql": "183df2b2746efce87d125a21d9f58ba466fbdeb12c41033a1933e4406aa8fcd0",
+        "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+        "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+        "src/okto_nexus/migrations/040_runtime_command_intents.sql": "0e136c6dc7694caa48ea3278d70af653e5c7e6642f26d550b8fb7c6e069bd565",
+        "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4",
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/migrations/041_runtime_result_publication.sql": "9b3c6771a2727857715225f71159356db12e053cbfd1f31d13ec29ff7842b6f3",
+        "tests/test_runtime_result_publication.py": "45392b96d63a01fc8bd80505ec7101cf3b99aa62eae09cdcbc7d97e3b08d582b",
+        "src/okto_nexus/migrations/042_runtime_result_artifacts.sql": "31a4ae0ab744740ac8f5d2e5d8896faf92413d5f6dc75f521e03eb6d87c6a0e0",
+        "tests/test_runtime_artifact_durability.py": "10fe6540d98fbe8fab6a6f770d148a5172e23f9987203f8aa2ac880077e0d79c",
+        "src/okto_nexus/migrations/043_runtime_result_maintenance.sql": "9141db531007e20f0bb3729a1e42446ee445edf92bafb87cbe726edb1f097d84",
+        "tests/test_runtime_result_maintenance.py": "e5e5b451ddae09b3de9c9c77dbfbf4773f8306bdf7f9f828ca433bcde52514a1"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
+        "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
+        "plans/pr34-remediation/evidence/p07-shared-presence.log",
+        "plans/pr34-remediation/P08_RESULT_CORRELATION.md",
+        "plans/pr34-remediation/P08_CONSUMPTION_MATERIALIZATION.md",
+        "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
+        "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+        "plans/pr34-remediation/P08_RESULT_PUBLICATION.md",
+        "plans/pr34-remediation/P08_RESULT_ARTIFACTS.md",
+        "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
+        "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P08-T04",
+      "title": "Tratar DB indispon\u00edvel, corrup\u00e7\u00e3o, espa\u00e7o insuficiente e lacunas n\u00e3o recuper\u00e1veis.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/033_runtime_event_journal.sql": "edf5e6066464341de4982f2a84cf432bc14435acb95ea1da45bab18a2ff514fc",
+        "src/okto_nexus/application/runtime_lifecycle.py": "f5c78017c719851caa4f235e47ca3a53b72f673313eb2f6dc84f663c6c500a2c",
+        "src/okto_nexus/application/harness_supervisor.py": "5265c1d648119ad6b57af5aee0a5f522b5174ea3839ad7f7c7289c35596a5f4d",
+        "src/okto_nexus/migrations/034_runtime_event_origin.sql": "f75f9aac1ff8943db8aa6d1c108ba11087ee6546fc34ee2b35e04d757a64f13a",
+        "src/okto_nexus/adapters/outbound/harness/event_buffers.py": "5be20637356c75591acbab6b72182091fdc82624a5d2a197e7419349f1135970",
+        "tests/test_runtime_event_buffers.py": "0fb1149ccc82a7387c5e9ed1f27e452d777f8f44243aefaa3349008e55751cd2",
+        "src/okto_nexus/application/runtime_maintenance.py": "e7ea1c966651e0b3228698fffaffc5325c62abb47d0920efe19cec25a48fe838",
+        "tests/test_runtime_journal_retention.py": "e509d176f07787ae89f679b6e1e0bfba35332447f88fd6425eb6b80cc66ecd18",
+        "src/okto_nexus/migrations/042_runtime_result_artifacts.sql": "31a4ae0ab744740ac8f5d2e5d8896faf92413d5f6dc75f521e03eb6d87c6a0e0",
+        "tests/test_runtime_artifact_durability.py": "10fe6540d98fbe8fab6a6f770d148a5172e23f9987203f8aa2ac880077e0d79c",
+        "src/okto_nexus/migrations/043_runtime_result_maintenance.sql": "9141db531007e20f0bb3729a1e42446ee445edf92bafb87cbe726edb1f097d84",
+        "tests/test_runtime_result_maintenance.py": "e5e5b451ddae09b3de9c9c77dbfbf4773f8306bdf7f9f828ca433bcde52514a1"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "plans/pr34-remediation/P07_SHARED_LIFECYCLE.md",
+        "plans/pr34-remediation/evidence/p07-shared-lifecycle-gate.log",
+        "plans/pr34-remediation/evidence/p07-shared-presence.log",
+        "plans/pr34-remediation/P07_EVENT_BUFFERS.md",
+        "plans/pr34-remediation/P08_JOURNAL_RETENTION.md",
+        "plans/pr34-remediation/P08_RESULT_ARTIFACTS.md",
+        "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
+        "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md",
+        "plans/pr34-remediation/P12_CAPTURE_ADMISSION.md",
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P08-T05",
+      "title": "Corrigir replay/cursor/sequence/ACL e validar todos os cortes de crash.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_event_ingress.py": "f851b526bb78de419ea38bc16e94034b0362f0e68c7c1dedea393b1d447c8cad",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d",
+        "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+        "src/okto_nexus/migrations/033_runtime_event_journal.sql": "edf5e6066464341de4982f2a84cf432bc14435acb95ea1da45bab18a2ff514fc",
+        "src/okto_nexus/application/runtime_command_dispatcher.py": "b99a2a3c8f519293fbf3dc350e603fa5306d172b2a384e539ac131322eaa2a3a",
+        "src/okto_nexus/migrations/040_runtime_command_intents.sql": "0e136c6dc7694caa48ea3278d70af653e5c7e6642f26d550b8fb7c6e069bd565",
+        "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4",
+        "src/okto_nexus/application/runtime_maintenance.py": "e7ea1c966651e0b3228698fffaffc5325c62abb47d0920efe19cec25a48fe838",
+        "tests/test_runtime_journal_retention.py": "e509d176f07787ae89f679b6e1e0bfba35332447f88fd6425eb6b80cc66ecd18",
+        "src/okto_nexus/migrations/043_runtime_result_maintenance.sql": "9141db531007e20f0bb3729a1e42446ee445edf92bafb87cbe726edb1f097d84",
+        "tests/test_runtime_result_maintenance.py": "e5e5b451ddae09b3de9c9c77dbfbf4773f8306bdf7f9f828ca433bcde52514a1"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
+        "plans/pr34-remediation/evidence/p08-integrated-gate.log",
+        "plans/pr34-remediation/evidence/p08-journal-expanded.log",
+        "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
+        "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+        "plans/pr34-remediation/P08_JOURNAL_RETENTION.md",
+        "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
+        "plans/pr34-remediation/P12_REPLAY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P09-T01",
+      "title": "Integrar handoff/claim/grant/dispatch e oferta competitiva sem payload duplicado.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+        "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql": "08ebc77915d21cb78854a9dfb254383d9c185db9ca54d3289cb767fa7def7850",
+        "tests/test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6",
+        "src/okto_nexus/migrations/046_handoff_authorization_receipts.sql": "aa0a4b2fe2a2bb6a25f3425aa67cf31ed4f9bc724a4e811a86e41afbecccc139"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P09_BOOTSTRAP_CREATION_AUTHORITY.md",
+        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P09-T02",
+      "title": "Coalescer notifica\u00e7\u00e3o sint\u00e9tica e execu\u00e7\u00e3o, preservando conversa sem bypass.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+        "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql": "08ebc77915d21cb78854a9dfb254383d9c185db9ca54d3289cb767fa7def7850",
+        "tests/test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_PRODUCER_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P09-T03",
+      "title": "Inicializar identidade/perfil/contexto do runtime pelo core autorizado.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_bootstrap.py": "9a45e1445d6d47d3f41d50369e5763c73221ed636794240737cc6c8f959d4fc9",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+        "src/okto_nexus/domain/delivery.py": "b7dec524ab817924a70e63fb6a0b237f3e88ee5ab6d438826bedda1d16dfe273",
+        "tests/test_runtime_bootstrap.py": "e235e876136afd49c2abafe9ab8739d8badbec46ed0ab52e9272e52891629ead"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P09_BOOTSTRAP_CREATION_AUTHORITY.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P09-T04",
+      "title": "Integrar conclus\u00e3o estruturada/autenticada e preservar verify/evidence/claim epoch.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/044_handoff_claim_epoch.sql": "6b08450b277dbb7c48d4b383e71cecaa2305f898c1eb06f33e693028926a5c11",
+        "src/okto_nexus/application/handoff.py": "bfb4764b801dc9d0fdc28eb3deaca1f251b8cb80df04535e62e3e676661925e0",
+        "src/okto_nexus/adapters/outbound/sqlite/handoff_repo.py": "db71a67c2f021fc57b343eedd260ddd096d64e2ca84c1a2caddfbdc1e4b67b6f",
+        "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "3282e1349803584cfb6b0155d9612aa7307cbb165a1380715bd23a78ac35879f",
+        "tests/test_runtime_handoff_epochs.py": "fe9cc23c9d584e769ac5c36dd4bd35883d38599b5d5b46fced5343cb93e267fc",
+        "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+        "src/okto_nexus/migrations/045_runtime_handoff_bindings.sql": "08ebc77915d21cb78854a9dfb254383d9c185db9ca54d3289cb767fa7def7850",
+        "tests/test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6",
+        "src/okto_nexus/migrations/047_runtime_work_outcomes.sql": "d6abf9b3af29614efe2c246aa7767f2a36ca79e22fc387b76171c8b604ca42d2",
+        "tests/test_runtime_work_results.py": "0c92c249d8aa4060c412e1c2004f15de2bac1e498f0953e4c5ca71a9f68978e1",
+        "tests/test_runtime_native_campaign.py": "6aae0357a5e21d754f706c6fb515bb756c234480a6be74ea5c69be17e458a5b9"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P09_CLAIM_EPOCH.md",
+        "plans/pr34-remediation/evidence/p09-claim-epoch-gate.log",
+        "plans/pr34-remediation/P09_AUTHENTICATED_HANDOFF.md",
+        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
+        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P09-T05",
+      "title": "Mapear approvals/input nativos e tratar interrupt/cancel/late result sem falsa conclus\u00e3o.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_native_approvals.py": "698e231515bdfda9498c765a856aa353f11be31cf68ea79f771b87bc19f853f9",
+        "src/okto_nexus/migrations/048_runtime_native_approvals.sql": "be1d20c13627b57828ee361e41954137cf4421c786d1f290ab98115628b39181",
+        "src/okto_nexus/adapters/outbound/harness/codex.py": "1b454623159e1b6af87e82650ee3021bee4d387de9dc9a40b4f993ae57cfe7e8",
+        "tests/test_runtime_native_approvals.py": "e11c19e0218d159cefbda5705125d7db3050dc6ead0280ce78948889fa96e350",
+        "tests/test_runtime_native_campaign.py": "6aae0357a5e21d754f706c6fb515bb756c234480a6be74ea5c69be17e458a5b9",
+        "src/okto_nexus/adapters/outbound/harness/claude_code_stream.py": "8337c0a510d77825ccb12c19501b9bd6baa5114f6c1c93b22bc71558d548325f",
+        "tests/test_runtime_claude_approvals.py": "f47727473ef92a1558e336667c0e14fc1909fbc12633e486b945273b716b06d2",
+        "src/okto_nexus/application/runtime_requirements.py": "c5e25ad0c2640023d5d79d496dc48d89348f359957504f8797b6d5c21babd2b9",
+        "tests/test_runtime_profile_requirements.py": "ad6f9622e9666b20acf9dbc565aedc8590c14baf4de8adb5366b8b82220fa9bc",
+        "src/okto_nexus/domain/native_inputs.py": "7bd2d340034b21663b384bfae2dbe8e06df766ab358995d98fba36a1793d9244",
+        "src/okto_nexus/migrations/049_runtime_native_input_responses.sql": "571ca2de4d82644b630988e07b5e99dfd466fa40e19d81c4fd783d4c0a7a0c16",
+        "tests/test_runtime_native_inputs.py": "95925a82c9b1169902441c08670a77e23e4c61543c32a926c9c09be4703d50af",
+        "tests/test_runtime_effective_requirements.py": "ecf6b39940fc9d1d8bb84d07852be30198b27b1642eb4919eebba8734112bed7",
+        "tests/test_runtime_claude_compatibility.py": "461b06bc0fee283ef3c47b53e39f333043387164eb9d7d574a16e7381ce78a1f"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P09_NATIVE_PROTOCOL_SURVEY.md",
+        "plans/pr34-remediation/P09_NATIVE_APPROVALS.md",
+        "plans/pr34-remediation/P09_CLAUDE_APPROVALS.md",
+        "plans/pr34-remediation/P09_PROFILE_REQUIREMENTS.md",
+        "plans/pr34-remediation/P09_NATIVE_INPUTS.md",
+        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md",
+        "plans/pr34-remediation/P07_EFFECTIVE_NATIVE_REQUIREMENTS.md",
+        "plans/pr34-remediation/P07_CLAUDE_VERSION_CONTRACT.md",
+        "plans/pr34-remediation/P12_APPROVAL_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P10-T01",
+      "title": "Persistir roots/parents/budgets e derivar causalidade exclusivamente de contexto confi\u00e1vel.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_causality.py": "fbbdf1d7d1ae6ecd5bdc1e1b2ef654764c92f63acf993fcac0fd0b7b726b290b",
+        "src/okto_nexus/migrations/050_runtime_causality.sql": "c4ca6213deb755a0316b992d780f18a416dabe4471c86b40c5e919c34322c4fc",
+        "tests/test_runtime_causality.py": "8ad3d37578197fe6770581d5d049ada7e704a0d5e7dbd592748c301ae3abcfdf",
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/migrations/051_runtime_result_relay.sql": "7b55056dd089ab7b3503de5b7224f7fd3f3e69dab7c236ccaa64d7818c2856ab",
+        "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+        "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+        "tests/test_runtime_relay_process_restart.py": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P10-T02",
+      "title": "Aplicar profundidade, deadline e quotas totais com reserva at\u00f4mica.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_causality.py": "fbbdf1d7d1ae6ecd5bdc1e1b2ef654764c92f63acf993fcac0fd0b7b726b290b",
+        "src/okto_nexus/migrations/050_runtime_causality.sql": "c4ca6213deb755a0316b992d780f18a416dabe4471c86b40c5e919c34322c4fc",
+        "tests/test_runtime_causality.py": "8ad3d37578197fe6770581d5d049ada7e704a0d5e7dbd592748c301ae3abcfdf",
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/migrations/051_runtime_result_relay.sql": "7b55056dd089ab7b3503de5b7224f7fd3f3e69dab7c236ccaa64d7818c2856ab",
+        "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/application/governance.py": "81445d5a48413a14d54d94b8e7f8794a0fad4e936787fd9382bb26b7635d36c6",
+        "src/okto_nexus/migrations/052_runtime_relay_decisions.sql": "971aea74e6fefd4153f40c7e28d665aed6ec21ec1b33703a5c9e03d056556dd8",
+        "tests/test_runtime_notify_targets.py": "8081dfb974f030de83ddd45a75ba35045f17c9ead041f0f9899c32ee7cdc37aa",
+        "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+        "tests/test_runtime_relay_process_restart.py": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P10-T03",
+      "title": "Preservar colabora\u00e7\u00e3o bidirecional limitada e novos roots legitimamente independentes.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/migrations/051_runtime_result_relay.sql": "7b55056dd089ab7b3503de5b7224f7fd3f3e69dab7c236ccaa64d7818c2856ab",
+        "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/application/governance.py": "81445d5a48413a14d54d94b8e7f8794a0fad4e936787fd9382bb26b7635d36c6",
+        "src/okto_nexus/migrations/052_runtime_relay_decisions.sql": "971aea74e6fefd4153f40c7e28d665aed6ec21ec1b33703a5c9e03d056556dd8",
+        "tests/test_runtime_notify_targets.py": "8081dfb974f030de83ddd45a75ba35045f17c9ead041f0f9899c32ee7cdc37aa"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P10-T04",
+      "title": "Impedir reexecu\u00e7\u00e3o por receipts/erros e tornar notify_target expl\u00edcito/autorizado.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/migrations/051_runtime_result_relay.sql": "7b55056dd089ab7b3503de5b7224f7fd3f3e69dab7c236ccaa64d7818c2856ab",
+        "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/application/governance.py": "81445d5a48413a14d54d94b8e7f8794a0fad4e936787fd9382bb26b7635d36c6",
+        "src/okto_nexus/migrations/052_runtime_relay_decisions.sql": "971aea74e6fefd4153f40c7e28d665aed6ec21ec1b33703a5c9e03d056556dd8",
+        "tests/test_runtime_notify_targets.py": "8081dfb974f030de83ddd45a75ba35045f17c9ead041f0f9899c32ee7cdc37aa"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md",
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P10-T05",
+      "title": "Testar cadeia lenta, restart, fan-out, mesmas identidades e conversas intercaladas.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/runtime_causality.py": "fbbdf1d7d1ae6ecd5bdc1e1b2ef654764c92f63acf993fcac0fd0b7b726b290b",
+        "src/okto_nexus/migrations/050_runtime_causality.sql": "c4ca6213deb755a0316b992d780f18a416dabe4471c86b40c5e919c34322c4fc",
+        "tests/test_runtime_causality.py": "8ad3d37578197fe6770581d5d049ada7e704a0d5e7dbd592748c301ae3abcfdf",
+        "src/okto_nexus/application/runtime_results.py": "d60695a047cd383af577fd9d15617b22d914a134e9479bf06e4a188cf9b48152",
+        "src/okto_nexus/application/runtime_delivery.py": "f66f442abcd31f31b0a4263f82e0995ce6d0ab956bb618bc57569c56fb667d68",
+        "src/okto_nexus/migrations/051_runtime_result_relay.sql": "7b55056dd089ab7b3503de5b7224f7fd3f3e69dab7c236ccaa64d7818c2856ab",
+        "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/application/messages.py": "7d9e08274e636b2bc86b6467fc85a18db223ae923336a93166f32e0bed712691",
+        "src/okto_nexus/application/governance.py": "81445d5a48413a14d54d94b8e7f8794a0fad4e936787fd9382bb26b7635d36c6",
+        "src/okto_nexus/migrations/052_runtime_relay_decisions.sql": "971aea74e6fefd4153f40c7e28d665aed6ec21ec1b33703a5c9e03d056556dd8",
+        "tests/test_runtime_notify_targets.py": "8081dfb974f030de83ddd45a75ba35045f17c9ead041f0f9899c32ee7cdc37aa",
+        "tests/runtime_relay_process_fixture.py": "396b81700b8cbff9bc00526d6e8576b1cffdc190d947e58d7d94d75dd534d55f",
+        "tests/test_runtime_relay_process_restart.py": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P10_CAUSAL_ADMISSION.md",
+        "plans/pr34-remediation/P10_AUTHORIZED_RESULT_RELAY.md",
+        "plans/pr34-remediation/P10_NOTIFICATION_TARGETS.md",
+        "plans/pr34-remediation/P10_PROCESS_RESTART.md",
+        "plans/pr34-remediation/P10_MATRIX_COMPLETION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P11-T01",
+      "title": "Adaptar oito tools/rotas como fa\u00e7ades opcionais e normalizar payloads legados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/adapters/inbound/runtime_admin.py": "7668adecfdcfbc94b5d3495ad1d331ba0a132165f5f092c536baef0a4fcccd49",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "tests/test_runtime_admin_surfaces.py": "3aa0791d3e91d0f0ce2dd56aa824ab535ff665a71d2090133bce7e5cc585cc27",
+        "tests/test_harness_target_grammar.py": "f977db7652fcf924405662e750fe5aea42c4a924a9b8385a9c3bd5218aa85cf9",
+        "tests/runtime_serve_shutdown_fixture.py": "2ca981ceeab7090aedd442e8061c3ed79a3dc65f737aa40a83fa9b3511c579fe",
+        "tests/test_serve_harness_shutdown_reap.py": "10e82faaba08fe9933bae93fbfce5e14bcbd75f8459b8adef67e7a8c5fc95914",
+        "tests/test_serve_harness_sigkill_reap.py": "b3d1c6cd1a92b4de345b81331687e69f1972f66c2ce482bb473326de38b2dccd"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
+        "plans/pr34-remediation/P11_TARGET_GRAMMAR_MIGRATION.md",
+        "plans/pr34-remediation/P11_SHUTDOWN_FIXTURE_MIGRATION.md",
+        "plans/pr34-remediation/P12_CANONICAL_PAYLOAD.md",
+        "plans/pr34-remediation/P12_API_REVIEW.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P11-T02",
+      "title": "Expor cat\u00e1logo/bindings/opera\u00e7\u00e3o/replay e gest\u00e3o administrativa sem duplica\u00e7\u00e3o de tools.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/adapters/inbound/runtime_admin.py": "7668adecfdcfbc94b5d3495ad1d331ba0a132165f5f092c536baef0a4fcccd49",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "tests/test_runtime_admin_surfaces.py": "3aa0791d3e91d0f0ce2dd56aa824ab535ff665a71d2090133bce7e5cc585cc27",
+        "src/okto_nexus/migrations/053_runtime_configuration_audit.sql": "5f3f6deb45356d9110f4e61d05d51a52147c516cb762c08d3159a3e1d7127f64",
+        "tests/test_runtime_configuration_updates.py": "4b7214b27cebe76891d83f5a442305802235d84fd3a46d4af71eba281dc21776",
+        "src/okto_nexus/application/runtime_discovery.py": "8e040d9c45c871ceaddfa2724ca793620aba74fe088c4c1010c5da5ffe67b9c3",
+        "tests/test_runtime_discovery.py": "691bc37cabc99cb1de7cf88dfbdc84f7c87afd93689c09316edc753ae1a904a2",
+        "src/okto_nexus/application/runtime_operation_maintenance.py": "a234ea3f7afcc23f133c8c594eca4567454130b9ea07a4ef65ae6c185034c5d5",
+        "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql": "674d2452db336a46f4ba4fe9f7860b51cccc6883f6234603aa520c2d49b43886",
+        "tests/test_runtime_operation_reconciliation.py": "8cf8ba71280702a4559157c8f91925466fb9591aa495990f23d55274f7057fae",
+        "src/okto_nexus/migrations/055_runtime_handoff_recovery.sql": "520e78bbf28f2a491ffd4114e57226ad6c1d8787f84c3fff99b622c5483e713b",
+        "tests/test_runtime_handoff_recovery.py": "397c2dd19fff5b4a43d2407ed2109b2811b573690903da9cf03556035c693912"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
+        "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
+        "plans/pr34-remediation/P11_SCOPED_DISCOVERY.md",
+        "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
+        "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md",
+        "plans/pr34-remediation/P12_OPERATION_EVENTS.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P11-T03",
+      "title": "Adicionar diagn\u00f3stico de unknown/backlog/approval e vis\u00e3o de agente com endpoints.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/migrations/053_runtime_configuration_audit.sql": "5f3f6deb45356d9110f4e61d05d51a52147c516cb762c08d3159a3e1d7127f64",
+        "tests/test_runtime_configuration_updates.py": "4b7214b27cebe76891d83f5a442305802235d84fd3a46d4af71eba281dc21776",
+        "frontend/src/components/NativeApprovalInput.tsx": "ce0a91c06c6bf117f1d45a867c77fade3a9cb94eb2dd5ba5ddb72f7cf9c0abc2",
+        "frontend/src/views/ApprovalsView.tsx": "bee472587a34a6a5adf2e661feb3466725c9a15030cdf77e82ac525bc0e344b9",
+        "frontend/src/api.ts": "c10f388036dea745f6eb0f47b6837aa72d461a0f47e006e3fc8cd48fe78f6e48",
+        "tests/test_runtime_input_dashboard.py": "0b6dc997203f3ea43086f2017ea10a5b204c44b469a494222b03e168786ede54",
+        "frontend/src/views/RuntimesView.tsx": "cbb5b3574e5878aca0359ac48eef4e898c67edae568e88718950727ef26926d7",
+        "frontend/src/App.tsx": "0e82be5b4ab3799c9648ca969ceeedb47084788e59f5e9b2ed53d531ce3a8ae6",
+        "tests/test_runtime_diagnostics_dashboard.py": "d1de7b00a6a150125a690afa2ecd76482206b13503918267f0a802024e182f46"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
+        "plans/pr34-remediation/P11_NATIVE_INPUT_DASHBOARD.md",
+        "plans/pr34-remediation/P11_RUNTIME_DIAGNOSTICS_DASHBOARD.md",
+        "plans/pr34-remediation/P12_CURRENT_DASHBOARD.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P11-T04",
+      "title": "Atualizar ADR/resources/guia/changelog/surface revision e medir impacto de schema.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/adapters/inbound/runtime_admin.py": "7668adecfdcfbc94b5d3495ad1d331ba0a132165f5f092c536baef0a4fcccd49",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "tests/test_runtime_admin_surfaces.py": "3aa0791d3e91d0f0ce2dd56aa824ab535ff665a71d2090133bce7e5cc585cc27",
+        "src/okto_nexus/migrations/053_runtime_configuration_audit.sql": "5f3f6deb45356d9110f4e61d05d51a52147c516cb762c08d3159a3e1d7127f64",
+        "tests/test_runtime_configuration_updates.py": "4b7214b27cebe76891d83f5a442305802235d84fd3a46d4af71eba281dc21776",
+        "src/okto_nexus/application/runtime_operation_maintenance.py": "a234ea3f7afcc23f133c8c594eca4567454130b9ea07a4ef65ae6c185034c5d5",
+        "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql": "674d2452db336a46f4ba4fe9f7860b51cccc6883f6234603aa520c2d49b43886",
+        "tests/test_runtime_operation_reconciliation.py": "8cf8ba71280702a4559157c8f91925466fb9591aa495990f23d55274f7057fae",
+        "docs/harness-integrations/operator-guide.md": "7617a2c4e2d3013ed1b197ed11b4c2f471c293d8a59980f739539c6d7e110a71",
+        "docs/design/0004-harness-integrations.md": "472ff4051ff4d301b8679c582f2d8c9ddd16b695e431c5b29e8ae0644b14c17f"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
+        "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
+        "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
+        "plans/pr34-remediation/P11_GUIDE_AND_SUITE_INVENTORY.md",
+        "plans/pr34-remediation/P11_ADR_AMENDMENT.md",
+        "plans/pr34-remediation/P11_MANAGED_HANDOFF_RECOVERY.md",
+        "plans/pr34-remediation/P12_FINAL_AUDIT.md",
+        "plans/pr34-remediation/P12_CURRENT_SURFACE.md",
+        "plans/pr34-remediation/P12_CORRECTED_RELEASE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P11-T05",
+      "title": "Ensaiar cutover \u00fanico, ativa\u00e7\u00e3o/desativa\u00e7\u00e3o e rollback com opera\u00e7\u00f5es em tr\u00e2nsito.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/application/endpoints.py": "5c41e77a771228409ae89fac4f55ad4f5eb05eaf033d5aa6f5e5c2beaed98978",
+        "src/okto_nexus/migrations/053_runtime_configuration_audit.sql": "5f3f6deb45356d9110f4e61d05d51a52147c516cb762c08d3159a3e1d7127f64",
+        "tests/test_runtime_configuration_updates.py": "4b7214b27cebe76891d83f5a442305802235d84fd3a46d4af71eba281dc21776",
+        "src/okto_nexus/application/runtime_operation_maintenance.py": "a234ea3f7afcc23f133c8c594eca4567454130b9ea07a4ef65ae6c185034c5d5",
+        "src/okto_nexus/migrations/054_runtime_operation_reconciliation.sql": "674d2452db336a46f4ba4fe9f7860b51cccc6883f6234603aa520c2d49b43886",
+        "tests/test_runtime_operation_reconciliation.py": "8cf8ba71280702a4559157c8f91925466fb9591aa495990f23d55274f7057fae",
+        "src/okto_nexus/migrations/057_runtime_writer_contract.sql": "fe77152b3a009346014c25766aa34cbe36f879aa49c1fb952f8e1cc5d05a8f76",
+        "tests/test_runtime_writer_contract.py": "412ff7e508f87b9e796e0a1cdfa2a3511a126ec24bdbfdc0a0a6c576c98e0571",
+        "plans/pr34-remediation/offline_runtime_backup.py": "6b903e35c0a7260ca43d0900086dd25ccd7476fe3fcc33a83d33a6ed1785c0ad",
+        "tests/test_runtime_backup_restore.py": "7372374218c4f6d639ee8d541c2b099d2d0e01bc6b8feb6e93096dadf9feb65b",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_CONFIGURATION_UPDATES.md",
+        "plans/pr34-remediation/P11_OPERATION_RECONCILIATION.md",
+        "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+        "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
+        "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
+        "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P12-T01",
+      "title": "Rodar regress\u00e3o completa e matriz adversarial pela composi\u00e7\u00e3o real.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "tests/test_runtime_work_acceptance.py": "d398c66216e9e29c7dd9c94b7a9b5e99e7359a3e9dcf9e2bd167f87b2f00877b",
+        "tests/test_runtime_request_acceptance.py": "41bbefd989c2091b393f9e3c531f56bf25d28845f79b51b941e0334a64c09482",
+        "src/okto_nexus/config.py": "86abfdf9fdf29bbaaebce7df40252c5de58b5873284ef0baf30ab481bd8e591f",
+        "src/okto_nexus/application/runtime_dispatcher.py": "45e6bcb9a5d90d5ad9ce65f35012014bb8597e667632d680a6ad8333b6484402",
+        "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+        "tests/test_runtime_delivery_acceptance.py": "21ba052fadbae1bf5a17dd5497f1ce87b9d12c71c2086d5e4f1cf973d07a50bf",
+        "tests/test_runtime_consumption_acceptance.py": "0308335cbf60a7a54b8a7e1b5a821572cfd12ac69f216b6e7ea412418c522939"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P12_SUITE_FEEB14D.md",
+        "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/P12_SUITE_E388227.md",
+        "plans/pr34-remediation/P12_SUITE_58CA69B.md",
+        "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
+        "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/P12_FINAL_AUDIT.md",
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md",
+        "plans/pr34-remediation/P12_FULL_REGRESSION_39C5E6C.md",
+        "plans/pr34-remediation/evidence/p12-full-39c5e6c-windows.json",
+        "plans/pr34-remediation/evidence/p12-full-e44d230-linux.json"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P12-T02",
+      "title": "Executar testes nativos dos quatro conectores com backends/sess\u00f5es aprovados.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {},
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+      ],
+      "proposed_status_after_final_gates": "IMPLEMENTED",
+      "limitation": "Approved real Codex and Claude stream campaigns PASS; four-connector native campaign remains incomplete because Pi/dedicated attach are NOT_RUN by approved scope.",
+      "next_dependency": "Approved missing native environment only; do not repeat real sends automatically.",
+      "status": "IMPLEMENTED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P12-T03",
+      "title": "Rodar crash/stress/leak e benchmarks compar\u00e1veis, classificando polling e controles.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "plans/pr34-remediation/native_frame_campaign.py": "e766fc912b19bd70e814ed7a5f3a9b78f0ea3a67147ec091277d20b52a43ab6f",
+        "plans/pr34-remediation/runtime_comparison_benchmark.py": "462826f36989512bedc8b855569a3a1a68e76ed1c23bf25be114ad363da107b1",
+        "plans/pr34-remediation/run_comparison_benchmark.py": "06a06407ce8d2b445800be6830d6c00856b0c5d1032814580c4aae7f8fcd4af7"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+        "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md",
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md",
+        "plans/pr34-remediation/P12_OPERATIONAL_METRICS.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P12-T04",
+      "title": "Validar backup/restore/upgrade/rollback e integridade do cadastro/hist\u00f3rico.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "src/okto_nexus/migrations/057_runtime_writer_contract.sql": "fe77152b3a009346014c25766aa34cbe36f879aa49c1fb952f8e1cc5d05a8f76",
+        "tests/test_runtime_writer_contract.py": "412ff7e508f87b9e796e0a1cdfa2a3511a126ec24bdbfdc0a0a6c576c98e0571",
+        "plans/pr34-remediation/offline_runtime_backup.py": "6b903e35c0a7260ca43d0900086dd25ccd7476fe3fcc33a83d33a6ed1785c0ad",
+        "tests/test_runtime_backup_restore.py": "7372374218c4f6d639ee8d541c2b099d2d0e01bc6b8feb6e93096dadf9feb65b",
+        "src/okto_nexus/adapters/outbound/harness/event_journal.py": "f3ecfb5e4ad9a90286fd3537e0f25b0b1212c9c30224d2474e7d4251ee4f853d"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
+        "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
+        "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
+        "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+        "plans/pr34-remediation/P12_RETENTION_DEACTIVATION.md",
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    },
+    {
+      "task_id": "P12-T05",
+      "title": "Gerar evidence index por SHA, mapa F01\u2013F14 e parecer de prontid\u00e3o sem merge autom\u00e1tico.",
+      "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+      "reviewed_files": {
+        "plans/pr34-remediation/build_matrix_evidence.py": "ff2ae81342d59d2f66b6f563a60f41904db3ac079c45f38c9f34a84335bca6e2",
+        "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json": "39d8327f6fe599ccc4a5c992417af4ad06ec6111da523b4e9c247ec70cf23e50",
+        "plans/pr34-remediation/test_evidence_tools.py": "77b73e0567778095b892d209dfb41c71a183e60483a68f7e35f2a1a4dbc3805e"
+      },
+      "hash_basis": "Current working file bytes, including CRLF on Windows. Existing unrelated assets are not among these references.",
+      "evidence": [
+        "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+        "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+        "plans/pr34-remediation/P12_FINAL_AUDIT.md",
+        "plans/pr34-remediation/P12_CORRECTED_RELEASE.md"
+      ],
+      "proposed_status_after_final_gates": "VERIFIED",
+      "limitation": "Evidence remains scoped to its actual source/platform/protocol; current full regression and source joins qualify the integrated implementation. Baseline tasks verify capturing/reproducing the original defects, not a passing original release.",
+      "next_dependency": "None within the authorized implementation/qualification scope.",
+      "status": "VERIFIED",
+      "final_report": "plans/pr34-remediation/evidence/p12-release-report.json",
+      "final_execution_join": "plans/pr34-remediation/evidence/p12-release-execution-join.json",
+      "documentation_base_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6"
+    }
+  ],
+  "status": "FINAL_SCOPED_REVIEW",
+  "limitations": "Runtime/test implementation remainsff905c4. Final document/helper revisions are based on7560970 and recorded in the final milestone commit. File hashes are reviewed working bytes; individual implementation unit SHAs/commands remain in linked evidence."
+}

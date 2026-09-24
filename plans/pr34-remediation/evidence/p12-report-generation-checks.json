@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "generator": "plans/pr34-remediation/build_release_report.py",
+  "generator_sha256": "f0b65d225e545f530b009f21d7b6f9d0475474292721c9f08e8ca85707ddc5d0",
+  "preparation_failures": [
+    {
+      "exit_code": 1,
+      "reason": "Optional historical notes field was assumed mandatory; corrected with an empty preserved default."
+    },
+    {
+      "exit_code": 1,
+      "reason": "Existing test-node reference was treated as a literal file path; now validates its file portion, with function/parameter execution already verified by the join."
+    }
+  ],
+  "scope": "Plan-only report preparation, not product-test failures. Final actual generation passed129 identity/source/result/reference checks."
+}

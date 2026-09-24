@@ -1,0 +1,36 @@
+{
+  "implementation_sha": "ff905c433e1a92ae35993b2189919f75ad07dd51",
+  "benchmark_current_sha": "7560970705e7230f6e713b44a1c7c67e87d6d2c6",
+  "original_sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+  "core_source_diff": "",
+  "core_source_paths": [
+    "src",
+    "tests",
+    "scripts",
+    "frontend",
+    "pyproject.toml",
+    "uv.lock"
+  ],
+  "status": "PASS",
+  "platforms": [
+    {
+      "platform": "windows",
+      "evidence": "plans/pr34-remediation/evidence/p12-final-benchmark-windows.json",
+      "sha256": "477b3d550c79a905f7e77fff0e43192ec5350bcb2ad675e5f671286194331a4d",
+      "status": "PASS",
+      "exit_code": 0,
+      "measured_per_revision": 120,
+      "warmup_per_revision": 15
+    },
+    {
+      "platform": "linux",
+      "evidence": "plans/pr34-remediation/evidence/p12-final-benchmark-linux.json",
+      "sha256": "edf5a5cdec2569970ae67b89b05939e6ae6be3ddc6bb7e422d232bcad9d87913",
+      "status": "PASS",
+      "exit_code": 0,
+      "measured_per_revision": 120,
+      "warmup_per_revision": 15
+    }
+  ],
+  "scope": "Sequential same-host comparisons after both full suites, native/UI and installed smokes terminated. Plan/document-only difference between implementation and benchmark current commit. No shared platform measurements or universal SLO."
+}

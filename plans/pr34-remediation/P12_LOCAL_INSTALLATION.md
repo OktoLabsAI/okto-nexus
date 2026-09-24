@@ -2,7 +2,7 @@
 
 Implementationff905c433e1a92ae35993b2189919f75ad07dd51. The corrected Windows
 full suite terminated exit0 before installation:2637 PASS/121 SKIP. Linux full
-regression remains a separate gate in progress.
+regression subsequently terminated exit0:2714 PASS/44 SKIP; see P12_FINAL_AUDIT.md.
 
 The uv-managed global installation was upgraded from0.1.10 to0.2.0 using the
 explicit corrected wheel, SHA256
