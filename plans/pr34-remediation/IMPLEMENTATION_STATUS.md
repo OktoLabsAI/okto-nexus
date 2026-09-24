@@ -1,3 +1,7 @@
+# Current follow-up — agent connection management
+
+New authorized scope is IN_PROGRESS on feature/v0.2.0. See [AGENT_CONNECTIONS.md](AGENT_CONNECTIONS.md). Baseline c692722. Focused API/MCP/browser campaign: 13 PASS; full regression still running. No new native provider campaign. Prior delivery below is historical, not qualification of this follow-up.
+
 # PR34 remediation — completed authorized delivery
 
 Branch: `feature/v0.2.0`; installed version: **0.2.0**.

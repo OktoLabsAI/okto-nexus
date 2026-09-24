@@ -37,11 +37,20 @@ class RuntimeOpenService:
                         "revision": profile["revision"] if profile else None}
         digest = hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
         with self.cf.unit_of_work() as uow:
+            from .connection_policy import require_method, valid_connection_key
+            require_method(uow, agent_id, endpoint["adapter_id"])
+            connection_key = None
+            if context.authentication_source == "connection_key":
+                connection_key = valid_connection_key(uow, context.credential_binding, self.clock.now_iso(), endpoint["endpoint_id"])
+                if not connection_key:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Connection credential is no longer valid.", {})
             request_id, existing = self.requests.reserve(uow, actor_id=context.actor_agent_id or "operator",
                 key=idempotency_key or new_id("open-key"), request_hash=digest, now=self.clock.now_iso(),
                 endpoint=endpoint, profile=profile, owner=self.owner_identity)
             if existing:
                 return self.sessions.get(uow, session_id=existing), profile_view, True, request_id
+            if connection_key:
+                uow.connection.execute("UPDATE runtime_open_requests SET connection_key_id=? WHERE request_id=?", (connection_key["key_id"], request_id))
             if context.authentication_source == "runtime_boot":
                 uow.connection.execute("UPDATE runtime_open_requests SET boot_revision=(SELECT revision FROM runtime_boot_bindings WHERE endpoint_id=?) WHERE request_id=?",
                     (endpoint["endpoint_id"], request_id))

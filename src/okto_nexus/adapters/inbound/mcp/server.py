@@ -453,7 +453,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 56 = approved equivalent-endpoint fallback with persisted admission/target binding.
 #: 57 = canonical conversational command payload contract3.
 #: 58 = authenticated external attach work v1 and separate Nexus acknowledgement/completion facts.
-SURFACE_REVISION = 58
+SURFACE_REVISION = 59
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -580,6 +580,7 @@ def bootstrap(
     """
     env = env if env is not None else os.environ
     config = load_config(env, argv)
+    config._connection_key_ttl_pinned = config.connection_key_ttl_seconds != 86400
     factory = ConnectionFactory(config)  # ensures home_dir exists
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
     clock = SystemClock()
@@ -708,6 +709,8 @@ def register_tools(server: Any, deps: Deps) -> list[str]:
         if deps.telemetry is not None
         else server
     )
+    from .connection_gate import ConnectionGateServer
+    registration_server = ConnectionGateServer(registration_server, deps)
     for module_info in pkgutil.iter_modules(_tools_pkg.__path__, prefix):
         flag = _EXPERIMENTAL_TOOL_MODULE_FLAGS.get(module_info.name)
         if flag is not None and not bool(getattr(deps.config, flag, False)):

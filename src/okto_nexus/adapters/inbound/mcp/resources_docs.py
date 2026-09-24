@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="25",
+    version="26",
     body="""\
 Runtime conversational command contract v3: harness_send/harness_steer accept
 canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
@@ -621,6 +621,23 @@ cursors. Up to ten latest sessions per endpoint are returned with
 sessions_has_more. A bounded scan may require a narrower agent_id filter.
 
 # Runtime attempt and canonical claim recovery (surface 43)
+Connection management (surface revision 59):
+`harness_list(view="connections", maintenance={"action":"issue","agent_id":"worker","endpoint_id":"approved-endpoint"})`
+returns a one-time-visible scoped connection credential and a POST request template
+for `/api/v1/connections/open`. An operator can issue it for an existing agent;
+an agent needs an existing open grant for its own endpoint. The derived credential
+cannot outlive or bypass that grant. Never paste another agent/operator API key.
+The credential authenticates only this opening route and cannot select identity,
+workspace, executable or profile in the payload. Repeating its empty-body request
+uses the same durable opening; uncertain starts are not replayed. Managed Pi RPC,
+Codex app-server and Claude stream do not adopt the caller's current conversation.
+An operator can also use connections actions list/configure/revoke. Configuration
+requires agent_id, expected_revision, methods (method-to-boolean map), and
+key_ttl_seconds: null inherits the global default (24h), 0 means unlimited, a
+positive integer is an override. Existing keys retain their issued expiration.
+Disabling a method revokes its opening credentials and blocks new dispatches;
+read/interrupt/close remain available for recovery. Keys do not authorize work.
+
 Operator-only `harness_list(view="outbox", maintenance={...})` shares
 GET/POST /api/v1/harness/outbox. action=inspect (default) accepts operation_id,
 after_operation_id and limit1..100(default50), returns items/has_more/next_operation_id.

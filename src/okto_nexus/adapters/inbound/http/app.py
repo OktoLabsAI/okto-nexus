@@ -184,6 +184,12 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         ):
             return await call_next(request)
 
+        # Bootstrap credentials are accepted only by this narrow handler,
+        # including on loopback; never inherit the local operator identity.
+        if path == "/api/v1/connections/open":
+            if request.query_params.get("api_key") or request.headers.get("x-api-key"):
+                return err(401, "AUTH_FAILED", "Use only the connection bearer credential.")
+            return await call_next(request)
         is_mcp = request.url.path.startswith("/mcp")
         bearer = extract_bearer(request)
         bearer_is_poll_token = bool(bearer and bearer.startswith(POLL_TOKEN_PREFIX))
@@ -246,6 +252,11 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                 401, "AUTH_FAILED", "Authentication failed: unknown or inactive api_key"
             )
 
+        if is_mcp:
+            from ....application.connection_policy import method_enabled
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                if not method_enabled(uow, agent.agent_id, "mcp"):
+                    return err(403, "PERMISSION_DENIED", "MCP is disabled for this agent.")
         token = current_agent.set(agent)
         try:
             return await call_next(request)
@@ -583,6 +594,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 }
             )
 
+    from .connections import build_router as connection_router
+    app.include_router(connection_router(), prefix="/api/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)

@@ -6,6 +6,7 @@ from ..domain.delivery import DeliveryEnvelope
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
+from .connection_policy import method_enabled, require_method
 from .runtime_requirements import validate_native_requirements
 from .runtime_causality import RuntimeCausalityService
 
@@ -22,6 +23,8 @@ class RuntimeDeliveryPlanner:
         if not self.config.feature_harness_integrations:
             return candidates
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
+            if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
+                continue
             descriptor = self.registry.get(endpoint["adapter_id"])
             if (not endpoint["enabled"] or endpoint["activation_state"] != "approved"
                     or endpoint["health"] == "quarantined" or endpoint["consumption"] != "mirror_only"
@@ -47,6 +50,8 @@ class RuntimeDeliveryPlanner:
     def candidates(self, uow, *, agent_id, workspace_id):
         candidates = []
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
+            if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
+                continue
             descriptor = self.registry.get(endpoint["adapter_id"])
             if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
                 continue
@@ -160,6 +165,7 @@ class RuntimeDeliveryPlanner:
                 endpoint["agent_id"] != recipient.agent_id or endpoint["workspace_id"] != operation["workspace_id"] or
                 endpoint["response_policy"] != "conversation" or endpoint["consumption"] != "exclusive"):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Transport authorization changed before dispatch.", {})
+        require_method(uow, endpoint["agent_id"], endpoint["adapter_id"])
         profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
         if endpoint["profile_id"] and (not profile or not profile["enabled"] or profile["revision"] != operation["profile_revision"]):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime profile changed before dispatch.", {})

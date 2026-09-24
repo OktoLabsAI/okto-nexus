@@ -8847,5 +8847,39 @@
       },
       "prior_notes": "All129 verification routes catalogued with explicit test nodes or separate experiment/report evidence. Current full Windows failure retained; final integrated-source execution join, native qualification and release report still pending. Catalogue alone is not a passed report gate."
     }
-  ]
+  ],
+  "agent_connections_followup": {
+    "status": "IN_PROGRESS",
+    "baseline_sha": "c692722301ddfe9b8d07abd04c36416c5ce2d233",
+    "branch": "feature/v0.2.0",
+    "specification": "plans/pr34-remediation/AGENT_CONNECTIONS.md",
+    "operator_default_ttl_seconds": 86400,
+    "tasks": [
+      {
+        "id": "AC01",
+        "description": "Per-agent method policy, expiry overrides and additive migration 065",
+        "status": "IMPLEMENTED"
+      },
+      {
+        "id": "AC02",
+        "description": "Scoped connection key and shared runtime admission, MCP bootstrap and request template",
+        "status": "IMPLEMENTED"
+      },
+      {
+        "id": "AC03",
+        "description": "Agents UI and global setting",
+        "status": "IMPLEMENTED"
+      },
+      {
+        "id": "AC04",
+        "description": "Security, concurrency, browser and regression evidence",
+        "status": "IN_PROGRESS"
+      }
+    ],
+    "tests": {
+      "focused_http_mcp_browser": "13 PASS at intermediate working tree",
+      "full_regression": "RUNNING",
+      "native_providers": "NOT_RUN in this follow-up"
+    }
+  }
 }

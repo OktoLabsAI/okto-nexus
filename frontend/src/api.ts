@@ -1100,7 +1100,18 @@ async function uploadArtifact(workspace: string, file: File): Promise<ArtifactIt
   return envelope.data as ArtifactItem;
 }
 
+export interface AgentConnections {
+  agent_id: string; revision: number; key_ttl_seconds: number | null; effective_key_ttl_seconds: number;
+  methods: Array<{ method: string; protocol: string; enabled: boolean }>;
+  endpoints: Array<{endpoint_id: string; adapter_id: string; enabled: boolean; activation_state: string; can_issue: boolean}>;
+  keys: Array<{key_id: string; endpoint_id: string; expires_at: string | null; revoked_at: string | null}>;
+}
+
 export const api = {
+  agentConnections: (id: string) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`),
+  saveAgentConnections: (id: string, body: {expected_revision: number; methods: Record<string, boolean>; key_ttl_seconds: number | null}) => call<AgentConnections>(`/api/v1/agents/${encodeURIComponent(id)}/connections`, {method: "PUT", body: JSON.stringify(body)}),
+  issueConnectionKey: (id: string, endpoint_id: string) => call<{expires_at: string | null; request: {method: string; path: string; headers: Record<string, string>; body: object}}>(`/api/v1/agents/${encodeURIComponent(id)}/connection-keys`, {method: "POST", body: JSON.stringify({endpoint_id})}),
+  revokeConnectionKey: (id: string, key: string) => call(`/api/v1/agents/${encodeURIComponent(id)}/connection-keys/${encodeURIComponent(key)}`, {method: "DELETE"}),
   runtimeBindings: (after?: string) => call<{
     agents: RuntimeBindingAgent[]; has_more: boolean; next_endpoint_id: string | null;
   }>(`/api/v1/harness/bindings?limit=50${after ? `&after_endpoint_id=${encodeURIComponent(after)}` : ""}`),

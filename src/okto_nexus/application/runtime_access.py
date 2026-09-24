@@ -1,9 +1,11 @@
 """Authenticated runtime delegation. Grants restrict canonical policy."""
 from contextlib import nullcontext
+from dataclasses import replace
 from ..domain.base import iso_to_epoch, iso_plus, new_id
 from ..domain.permissions import PermissionSet
 from ..domain.tag_selector import reachable
 from ..errors import ErrorCode, OktoNexusError
+from .connection_policy import method_enabled, valid_connection_key
 from .runtime_requirements import validate_native_requirements
 
 ACTIONS = frozenset({"open", "send", "steer", "interrupt", "close", "read", "events", "discover", "execute_work"})
@@ -68,6 +70,7 @@ class RuntimeAccessService:
                 # Read, interrupt and close remain available for recovery.
                 represented = self.agents.get(uow, endpoint["agent_id"])
                 enabled = enabled and represented is not None and represented.is_active
+                enabled = enabled and method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"])
                 enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
                 # A proved response through Nexus does not need a live native
                 # connection. All credential/grant/policy/revision gates stay
@@ -85,7 +88,19 @@ class RuntimeAccessService:
                             enabled = False
                     if enabled and session_id:
                         enabled = self.endpoints.session_profile_revision(uow, session_id) == profile["revision"]
-            if enabled and endpoint and context.authentication_source == "runtime_boot":
+            if enabled and context.authentication_source == "connection_key":
+                key = valid_connection_key(uow, context.credential_binding, now, endpoint_id)
+                allowed = bool(key and key["agent_id"] == context.actor_agent_id and action in {"access", "open"}
+                    and (not represented_agent_id or represented_agent_id == key["agent_id"]))
+                if allowed and key["source_grant_id"]:
+                    try:
+                        self.authorize(replace(context, authentication_source="agent_key",
+                            credential_binding=actor.api_key_hash if actor else None,
+                            execution_grant_id=key["source_grant_id"]), action="open",
+                            endpoint_id=key["endpoint_id"], represented_agent_id=key["agent_id"], uow=uow, audit=False)
+                    except OktoNexusError:
+                        allowed = False
+            elif enabled and endpoint and context.authentication_source == "runtime_boot":
                 allowed = self.endpoints.boot_authorized(uow, context=context, endpoint=endpoint, action=action, now=now)
             elif enabled and self._operator(context, actor) and not context.execution_grant_id:
                 allowed = True

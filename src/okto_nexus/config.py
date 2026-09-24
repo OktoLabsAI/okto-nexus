@@ -157,6 +157,7 @@ class NexusConfig:
     max_inline_bytes: int = DEFAULT_MAX_INLINE_BYTES
     inbox_lease_ttl_seconds: int = DEFAULT_INBOX_LEASE_TTL_SECONDS
     session_stale_ttl_seconds: int = DEFAULT_SESSION_STALE_TTL_SECONDS
+    connection_key_ttl_seconds: int = 86400
     presence_ttl_seconds: int = DEFAULT_PRESENCE_TTL_SECONDS
     session_reap_seconds: int = DEFAULT_SESSION_REAP_SECONDS
     max_shared_md_events: int = DEFAULT_MAX_SHARED_MD_EVENTS
@@ -290,6 +291,7 @@ _INT_FIELDS: dict[str, tuple[str, str, int, int]] = {
         DEFAULT_SESSION_STALE_TTL_SECONDS,
         1,
     ),
+    "connection_key_ttl_seconds": ("OKTO_NEXUS_CONNECTION_KEY_TTL_SECONDS", "--connection-key-ttl-seconds", 86400, 0),
     "presence_ttl_seconds": (
         "OKTO_NEXUS_PRESENCE_TTL_SECONDS",
         "--presence-ttl-seconds",

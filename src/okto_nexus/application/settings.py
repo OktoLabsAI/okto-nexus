@@ -45,6 +45,7 @@ class SettingSpec:
 #: stay CLI/env-only on purpose: repointing storage mid-flight cannot be
 #: applied safely to a running process.
 SETTING_SPECS: tuple[SettingSpec, ...] = (
+    SettingSpec("connection_key_ttl_seconds", "int", "New connection key lifetime in seconds; 86400 = 24 hours, 0 = unlimited. Agents may override this default. Existing keys keep their issued expiry.", minimum=0, maximum=315360000),
     SettingSpec(
         "session_stale_ttl_seconds",
         "int",

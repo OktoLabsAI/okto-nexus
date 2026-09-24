@@ -131,6 +131,7 @@ class ConnectionFactory:
             self._enable_wal(conn)
             conn.execute("PRAGMA foreign_keys=ON")
             conn.create_function("nexus_runtime_writer_v1", 0, lambda: 1)
+            conn.create_function("nexus_connection_policy_v1", 0, lambda: 1)
             # Additive capability for proof-aware external work mutations.
             # Already-open writer-v1 connections do not acquire this marker.
             conn.create_function("nexus_runtime_external_work_v1", 0, lambda: 1)

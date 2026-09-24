@@ -168,7 +168,7 @@ def runtime_tool_guard(deps):
                   "harness_event_list": "events"}.get(fn.__name__, "admin")
         def check(args, kwargs):
             arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
-            if fn.__name__ == "harness_list" and arguments.get("view") in {"bindings", "outbox"}:
+            if fn.__name__ == "harness_list" and arguments.get("view") in {"bindings", "outbox", "connections"}:
                 # Shared services authenticate their own scoped reads/recovery.
                 # Operator outbox recovery survives admission being disabled.
                 return
@@ -1099,10 +1099,23 @@ def register(server: Any, deps: Any) -> None:
     @tool_envelope
     @runtime_tool_guard(deps)
     def harness_list(view: str = "adapters", compact: bool = False,
-                     maintenance: Annotated[Any, Field(description="Object for selected view: profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
+                     maintenance: Annotated[Any, Field(description="Object for selected view (connections: action list/configure/issue/revoke; agent_id; issue requires endpoint_id): profile/endpoint admin; outbox inspect/cancel_pending/release_to_inbox/abandon_command/recover_handoff; artifact maintenance. Fields: okto-nexus://reference/tool-docs/identity.")] = None) -> dict[str, Any]:
         """Discover authorized runtimes with view=bindings. Operator views: adapters, endpoints, profiles, outbox, journal, artifacts, diagnostics. Outbox recovery never replays native calls. compact requires journal."""
         if view == "diagnostics" and not compact and maintenance is None:
             return build_endpoint_service(deps).diagnostics(authorize_request(deps))
+        if view == "connections" and not compact:
+            from okto_nexus.application.agent_connections import AgentConnectionService
+            args = runtime_object("maintenance", maintenance) or {}
+            action = args.pop("action", "list")
+            service = AgentConnectionService(build_access_service(deps))
+            methods = {"list": service.view, "configure": service.configure, "issue": service.issue, "revoke": service.revoke}
+            if action not in methods:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unknown connection action.", {})
+            try:
+                inspect.signature(methods[action]).bind(request_context(), **args)
+            except TypeError:
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid connection parameters.", {}) from None
+            return methods[action](request_context(), **args)
         if view == "bindings" and not compact:
             return discover_bindings(deps, maintenance)
         if view == "outbox" and not compact:
