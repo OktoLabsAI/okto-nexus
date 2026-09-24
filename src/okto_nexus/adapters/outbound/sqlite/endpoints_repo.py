@@ -142,6 +142,42 @@ class SqliteEndpointRepo:
             "SELECT session_id,owning_agent_id,status FROM harness_sessions "
             "WHERE lifecycle_state='legacy_unlinked' ORDER BY session_id")]
 
+    def legacy_profile_review(self, uow):
+        # Existing absence is observable; prior damage is not provable from a
+        # missing field alone. Do not return profile contents or guess repairs.
+        rows = uow.connection.execute(
+            "SELECT a.agent_id,a.capabilities,a.metadata FROM agents a WHERE EXISTS "
+            "(SELECT 1 FROM harness_sessions h WHERE h.owning_agent_id=a.agent_id "
+            "AND h.lifecycle_state='legacy_unlinked') ORDER BY a.agent_id LIMIT 101").fetchall()
+
+        def field_state(raw):
+            if raw is None:
+                return "missing"
+            if not isinstance(raw, str):
+                return "invalid"
+            if not raw.strip():
+                return "empty"
+            try:
+                value = json.loads(raw)
+            except (ValueError, TypeError):
+                return "invalid"
+            if value is None:
+                return "missing"
+            if not isinstance(value, (dict, list)):
+                return "invalid"
+            return "present" if value else "empty"
+
+        agents = []
+        for row in rows[:100]:
+            fields = {name: field_state(row[name]) for name in ("capabilities", "metadata")}
+            agents.append({"agent_id": row["agent_id"], **fields,
+                           "review_required": any(state != "present" for state in fields.values())})
+        return {"schema_version": 1, "agents": agents, "truncated": len(rows) > 100,
+                "damage_confirmed": False, "restoration_performed": False,
+                "recovery": "Review current field absence against a trusted backup or audited source. "
+                    "Empty fields may be intentional; do not infer skills or restore from harness metadata. "
+                    "If truncated, inventory remaining legacy agents in an offline copy of the store."}
+
     def session_profile_revision(self, uow, session_id):
         row = uow.connection.execute("SELECT runtime_profile_revision FROM harness_sessions WHERE session_id=?", (session_id,)).fetchone()
         return row[0] if row else None

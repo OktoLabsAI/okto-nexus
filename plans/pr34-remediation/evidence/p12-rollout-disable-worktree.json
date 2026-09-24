@@ -1,0 +1,34 @@
+{
+  "base_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "scope": "isolated migration worktree; not integrated",
+  "requirements": [
+    "T-MIG-05",
+    "T-MIG-06",
+    "T-MIG-07"
+  ],
+  "sha256": {
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "6c94e2272b1b5d6fa8a86c942dc152395231f1a420c116522391e8301cba426e",
+    "tests/test_runtime_rollout.py": "1e23e8f607095c3237af421d5183e0db4b5911101b0c140d77a26fd0571d4fc0"
+  },
+  "red": {
+    "session": 56925,
+    "passed": 2,
+    "failed": 1,
+    "seconds": 23.24,
+    "reason": "Captured current-owner acceptance and terminal lose correlation after transport records OUTCOME_UNKNOWN"
+  },
+  "windows": {
+    "session": 32259,
+    "passed": 56,
+    "seconds": 238.46,
+    "exit_code": 0
+  },
+  "linux": {
+    "session": 90306,
+    "passed": 56,
+    "seconds": 248.55,
+    "exit_code": 0
+  },
+  "commands": "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+  "limitations": "Owned synthetic native pipe peer, no provider or OS kill. Expanded runs overlapped each other and immutable full Linux suite; timings are not performance benchmarks."
+}

@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "execution_head": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -452,12 +452,20 @@
               "result": "PASS",
               "observed": "43 PASS Windows105.82s /43 PASS Linux125.74s. Trusted fixture restoration, nonempty backfill rollback/retry and complete original historical row preservation. Pending main integration; not full phase verification.",
               "evidence": "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+            },
+            {
+              "sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6 + integrated hashes in evidence/p12-migration-rollout-integrated.json",
+              "command": "Exact integrated Windows/Linux commands in P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+              "result": "PASS",
+              "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
+              "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P03_ENDPOINTS.md",
             "plans/pr34-remediation/evidence/p03-gate.log",
-            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
           ],
           "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
@@ -528,6 +536,13 @@
               "result": "PASS",
               "observed": "43 PASS Windows105.82s /43 PASS Linux125.74s. Trusted fixture restoration, nonempty backfill rollback/retry and complete original historical row preservation. Pending main integration; not full phase verification.",
               "evidence": "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+            },
+            {
+              "sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6 + integrated hashes in evidence/p12-migration-rollout-integrated.json",
+              "command": "Exact integrated Windows/Linux commands in P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+              "result": "PASS",
+              "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
+              "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
             }
           ],
           "evidence": [
@@ -535,7 +550,8 @@
             "plans/pr34-remediation/evidence/p03-gate.log",
             "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
             "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json",
-            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
           ],
           "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
@@ -568,6 +584,13 @@
               "result": "PASS",
               "observed": "43 PASS Windows105.82s /43 PASS Linux125.74s. Trusted fixture restoration, nonempty backfill rollback/retry and complete original historical row preservation. Pending main integration; not full phase verification.",
               "evidence": "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+            },
+            {
+              "sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6 + integrated hashes in evidence/p12-migration-rollout-integrated.json",
+              "command": "Exact integrated Windows/Linux commands in P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+              "result": "PASS",
+              "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
+              "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
             }
           ],
           "evidence": [
@@ -576,7 +599,8 @@
             "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
             "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
             "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
-            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+            "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
           ],
           "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies. Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending. Subsequent combined offline backup/restore now tested on Windows/Linux; live-owner exclusion, references/checkpoints, identity, private result artifact and uncertain delivery fences preserved. Full aggregate phase gate remains pending."
         }
@@ -1686,6 +1710,13 @@
               "result": "PASS",
               "observed": "110 passed; Linux publication/correlation 13 passed separately; native providers NOT_RUN for this unit",
               "evidence": "plans/pr34-remediation/P08_RESULT_PUBLICATION.md"
+            },
+            {
+              "sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6 + integrated hashes in evidence/p12-migration-rollout-integrated.json",
+              "command": "Exact integrated Windows/Linux commands in P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+              "result": "PASS",
+              "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
+              "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
             }
           ],
           "evidence": [
@@ -1702,7 +1733,8 @@
             "plans/pr34-remediation/P08_RESULT_PUBLICATION.md",
             "plans/pr34-remediation/P08_RESULT_ARTIFACTS.md",
             "plans/pr34-remediation/P08_RESULT_MAINTENANCE.md",
-            "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md"
+            "plans/pr34-remediation/P08_CAPTURE_PROJECTION_ISOLATION.md",
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
           ],
           "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Attempt correlation now implemented with 69 integrated checks and fresh native Codex/Claude terminal linkage. Materialization, consumption and publication remain pending; no phase promotion. Text materialization and canonical consumption implemented, 75 integrated checks plus fresh native Codex/Claude passed. Authorized publication/artifacts remain pending. Journal old-attempt recovery now uses a frozen pre-admission boundary (migration 037); two behavioral REDs corrected, 60 integrated PASS. Stale session epochs/quarantine/boot and full crash matrix remain pending. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Canonical private conversation result publication and approval linkage implemented; old pending results require review. Guardrails, binding changes and commit cuts covered. Artifacts, explicit broadcast configuration, retrospective administration, causal continuation and full gates remain pending. Private runtime artifacts now reuse the canonical artifact catalog with additive reader ACL, fsync-before-reference and same-UoW publication. Storage leaves SQLite writer transactions. Fixed bounded publication-worker lost wake. Windows 128 PASS, Linux 24 PASS; native provider tests NOT_RUN. Explicit orphan/reservation recovery and remaining retention/full gates pending. Operator artifact cleanup/quota/retry now durable and idempotent; staging recovery and authorization revalidation integrated. Windows runtime selection 188 PASS/3 skipped; Linux selected 28 PASS. See P08_RESULT_MAINTENANCE.md; no final gate promotion. Effective controls and capture isolation milestone above82f7c77: Windows38/Linux38 selected PASS; native Codex2/Claude2 controls PASS. See linked evidence for exact commands, failures and scope. Final gate still pending."
         },
@@ -2479,13 +2511,21 @@
               "result": "PASS",
               "observed": "2389 PASS119 SKIP2 warnings1951.48s Windows; independent backend-secret audit FAIL is not covered by this green suite.",
               "evidence": "plans/pr34-remediation/P12_SUITE_E388227.md"
+            },
+            {
+              "sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+              "command": "Exact wrapper in P12_SUITE_58CA69B.md",
+              "result": "PASS",
+              "observed": "Terminal exit0:2487 PASS44 SKIP2 subtests PASS2 warnings2846.46s Linux. Recorded temporary XML absent after completion; no per-node manifest or matrix join. External migration acceptance REDs remain separate.",
+              "evidence": "plans/pr34-remediation/evidence/p12-suite-58ca69b-linux-terminal.json"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P12_SUITE_FEEB14D.md",
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
             "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
-            "plans/pr34-remediation/P12_SUITE_E388227.md"
+            "plans/pr34-remediation/P12_SUITE_E388227.md",
+            "plans/pr34-remediation/P12_SUITE_58CA69B.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -2561,6 +2601,20 @@
               "result": "PASS",
               "observed": "Windows1 PASS7.90s/Linux1 PASS11.60s. No duplicate native write or old unread replay; main integration pending.",
               "evidence": "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
+            },
+            {
+              "sha": "58ca69b + isolated hashes in evidence/p12-rollout-disable-worktree.json",
+              "command": "Exact expanded Windows/Linux commands in P12_ROLLOUT_BACKLOG.md",
+              "result": "PASS",
+              "observed": "56 PASS Windows238.46s/56 PASS Linux248.55s; genuine delayed-native-fact correlation correction, pending main integration.",
+              "evidence": "plans/pr34-remediation/evidence/p12-rollout-disable-worktree.json"
+            },
+            {
+              "sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6 + integrated hashes in evidence/p12-migration-rollout-integrated.json",
+              "command": "Exact integrated Windows/Linux commands in P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+              "result": "PASS",
+              "observed": "87 PASS Windows312.55s /87 PASS Linux328.66s; Ruff, evidence tools16 PASS and isolated live stdio MCP PASS.",
+              "evidence": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
             }
           ],
           "evidence": [
@@ -2568,7 +2622,8 @@
             "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
             "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
-            "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md"
+            "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+            "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
           ],
           "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending. Subsequent combined offline backup/restore now tested on Windows/Linux; live-owner exclusion, references/checkpoints, identity, private result artifact and uncertain delivery fences preserved. Full aggregate phase gate remains pending."
         },
@@ -4338,11 +4393,12 @@
       ],
       "stimulus": "Migrar store com dados legados.",
       "expected": "Dados intactos, nenhum dispatch ou endpoint executor implicitamente criado.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted."
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-02",
@@ -4355,11 +4411,12 @@
       ],
       "stimulus": "Migrar eventos/sessões com e sem dados suficientes de workspace.",
       "expected": "Histórico preservado; desconhecidos ficam pending-review/legacy-unlinked.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted."
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-03",
@@ -4372,12 +4429,13 @@
       ],
       "stimulus": "Store apresenta capabilities/metadata apagados anteriormente.",
       "expected": "Não inventar conteúdo; emitir diagnóstico e restaurar só com fonte confiável.",
-      "execution_status": "FAIL",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
-        "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json"
+        "plans/pr34-remediation/evidence/p03-legacy-profile-review-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Main source58ca69b still lacks per-Agent field absence diagnostics (RED2 FAIL). Isolated correction and explicit trusted-source fixture restoration now43 PASS Windows/43 PASS Linux; NOT yet integrated while full regression70522 remains frozen. No full requirement PASS until integration."
+      "notes": "Main source58ca69b still lacks per-Agent field absence diagnostics (RED2 FAIL). Isolated correction and explicit trusted-source fixture restoration now43 PASS Windows/43 PASS Linux; NOT yet integrated while full regression70522 remains frozen. No full requirement PASS until integration. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-04",
@@ -4390,11 +4448,12 @@
       ],
       "stimulus": "Interromper backfill e executar novamente.",
       "expected": "Sem duplicar bindings/events ou perder dados; constraints consistentes.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md"
+        "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted."
+      "notes": "Isolated worktree expanded selection43 PASS Windows/43 PASS Linux covers the exact historical migration/recovery stimulus. Pending main integration while source58ca69b full regression70522 runs; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-05",
@@ -4407,12 +4466,13 @@
       ],
       "stimulus": "Ativar integração com backlog antigo.",
       "expected": "Não disparar automaticamente trabalhos anteriores; replay exige seleção/ação explícita.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
-        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted."
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-06",
@@ -4425,12 +4485,13 @@
       ],
       "stimulus": "Transição callback antigo→dispatcher novo.",
       "expected": "Nunca dois envios reais para a mesma entrega.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
-        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
       ],
-      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted."
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-07",
@@ -4443,8 +4504,13 @@
       ],
       "stimulus": "Desabilitar feature com intents SENDING/accepted e journal pendente.",
       "expected": "Drenagem/reconciliação seguras; unknown não libera executor concorrente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-disable-worktree.json",
+        "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md"
+      ],
+      "notes": "Behavior RED on source58ca69b in isolated acceptance worktree: current-owner OUTCOME_UNKNOWN rejected captured native acceptance/terminal correlation (56925:2 PASS/1 FAIL). Narrow projector correction qualified Windows32259:56 PASS238.46s/Linux90306:56 PASS248.55s. Main integration pending; aggregate gate remains FAIL until correction integrated. Superseded for integrated source: seven-path hashed integration qualified87 PASS Windows312.55s/87 PASS Linux328.66s. Exact requirement stimuli in integration document; historical REDs retained. No native provider or aggregate final gate claim."
     },
     {
       "test_id": "T-MIG-08",

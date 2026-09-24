@@ -120,3 +120,9 @@ profile afterward; do not enable endpoints, replay unread work or mark old
 sessions ended as a side effect. No new bulk/automatic restore API is added.
 
 Final exact commands and hashes for all five isolated paths are recorded in evidence/p03-legacy-profile-review-worktree.json. Trusted-source fixture restoration is now verified, superseding its earlier pending note. Integration/main-checkout validation still pending; no milestone code commit outside feature/v0.2.0.
+
+Subsequent integration: full Linux70522 has terminated, and the reviewed changes
+have been copied into feature/v0.2.0 together with the rollout/projector unit.
+The detached checkout is now historical; do not copy from it over subsequent
+main work. See P12_MIGRATION_ROLLOUT_INTEGRATION.md for final integrated validation
+and hashes; its latest outcome supersedes the earlier pending transfer notes.

@@ -1,0 +1,20 @@
+{
+  "source_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "platform": "linux",
+  "evidence_kind": "terminal_summary_only",
+  "execution_handle": 70522,
+  "exit_code": 0,
+  "passed": 2487,
+  "skipped": 44,
+  "subtests_passed": 2,
+  "warnings": 2,
+  "seconds": 2846.46,
+  "warning_details": [
+    "Starlette/httpx TestClient deprecation",
+    "Pi fixture intentionally raises in death-report callback"
+  ],
+  "junit_status": "UNAVAILABLE",
+  "expected_xml": "/tmp/okto-suite-58ca69b-linux-0arop3xj/results.xml",
+  "limitations": "Original temporary directory and XML absent when inspected after terminal completion. Cause unproven. No per-node execution manifest or matrix join can be generated from counts. Native/browser flags OFF; narrow isolated test runs overlapped. External T-MIG-03/07 behavior failures remain valid. Timings are not performance benchmarks.",
+  "command_document": "plans/pr34-remediation/P12_SUITE_58CA69B.md"
+}

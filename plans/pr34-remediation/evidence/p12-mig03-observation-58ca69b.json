@@ -1,0 +1,7 @@
+{
+  "source_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "test_id": "T-MIG-03",
+  "status": "FAIL",
+  "evidence": "plans/pr34-remediation/P03_LEGACY_PROFILE_REVIEW.md",
+  "observed": "Two added acceptance tests fail against unchanged production source: diagnostics lack per-Agent absent profile-field review. Narrow correction qualified separately in isolated worktree, not in this immutable full suite."
+}

@@ -32,19 +32,46 @@ def test_p03_additive_upgrade_preserves_agent_and_legacy_history(tmp_path, last_
             ("legacy", "reviewer", '{"review":true}', '{"keep":"original"}', "2026-01-01T00:00:00.000000Z"))
         before = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='legacy'").fetchone())
         if last_version == 29:
-            uow.connection.execute("INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,started_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?)",
-                ("legacy-session", "pi", "legacy", "RUNNING", "{}", "old", "old", "old"))
+            from okto_nexus.domain.ids import resolve_workspace_id
+            project = tmp_path / "historical-project"
+            project.mkdir()
+            workspace = resolve_workspace_id(str(project))
+            uow.connection.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,?)",
+                (workspace, str(project), "old"))
+            for sid, status, metadata in (("legacy-linked-hint", "RUNNING",
+                    json.dumps({"workspace_id": workspace, "project_root": str(project)})),
+                    ("legacy-unknown", "INTERRUPTING", None)):
+                uow.connection.execute("INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,"
+                    "metadata,started_at,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?)",
+                    (sid, "pi", "legacy", status, "{}", metadata, "old", "old", "old"))
+                for sequence in (3, 7):
+                    uow.connection.execute("INSERT INTO harness_events(event_id,session_id,harness_kind,kind,native_event,"
+                        "payload,thread_id,turn_id,occurred_at,sequence,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                        (f"{sid}-{sequence}", sid, "pi", "output_delta", "message_update",
+                         json.dumps({"text": "historical preserved"}), "old-thread", "old-turn", "old", sequence, "old"))
+            old_sessions = [dict(row) for row in uow.connection.execute("SELECT * FROM harness_sessions ORDER BY session_id")]
+            old_events = [dict(row) for row in uow.connection.execute("SELECT * FROM harness_events ORDER BY event_id")]
     assert 30 in MigrationRunner(factory).apply()
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         after = dict(uow.connection.execute("SELECT * FROM agents WHERE agent_id='legacy'").fetchone())
         assert after == before
         assert not uow.connection.execute("SELECT * FROM agent_endpoints").fetchall()
+        assert not uow.connection.execute("SELECT * FROM delivery_outbox").fetchall()
         if last_version == 29:
-            row = uow.connection.execute("SELECT * FROM harness_sessions").fetchone()
-            assert row["status"] == "RUNNING"  # historical status retained, no false end timestamp
-            assert row["lifecycle_state"] == "legacy_unlinked"
-            assert row["endpoint_id"] is None
+            sessions = [dict(row) for row in uow.connection.execute("SELECT * FROM harness_sessions ORDER BY session_id")]
+            events = [dict(row) for row in uow.connection.execute("SELECT * FROM harness_events ORDER BY event_id")]
+            assert len(sessions) == 2 and len(events) == 4
+            for row, old in zip(sessions, old_sessions, strict=True):
+                assert all(row[key] == value for key, value in old.items())
+                # Even a workspace hint does not prove approved profile or
+                # authenticated ownership; do not infer those or current cwd.
+                assert row["lifecycle_state"] == "legacy_unlinked"
+                assert row["endpoint_id"] is None and row["workspace_id"] is None
+                assert row["ended_at"] is None
+            for row, old in zip(events, old_events, strict=True):
+                assert all(row[key] == value for key, value in old.items())
+                assert row["operation_id"] is None and row["attempt_id"] is None
         assert not uow.connection.execute("PRAGMA foreign_key_check").fetchall()
     with pytest.raises(OktoNexusError, match="newer|ahead|unknown"):
         MigrationRunner(factory, historical).apply()

@@ -74,7 +74,8 @@ def test_attempt_observations_are_atomic_immutable_and_do_not_record_heartbeats(
         assert deps.runtime_dispatcher.repo.get(uow, operation_id)["status"] == "SENT_UNCONFIRMED"
 
 
-def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(tmp_path):
+@pytest.mark.parametrize("interrupt_backfill", [False, True])
+def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(tmp_path, monkeypatch, interrupt_backfill):
     import shutil
     from okto_nexus.adapters.outbound.sqlite import migrations
     from test_migrations import make_factory
@@ -102,6 +103,38 @@ def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(tmp_path)
             "VALUES('op','delivery','msg','ws','worker','fixture','worker','endpoint',1,'{}','fixture','fixture','root',"
             "'2026-09-24T00:00:00Z','2026-09-24T00:00:00Z','SENT_UNCONFIRMED','known-attempt',1,'TRANSPORT_WRITE')")
         before = dict(c.execute("SELECT * FROM delivery_outbox WHERE operation_id='op'").fetchone())
+    if interrupt_backfill:
+        from okto_nexus.errors import OktoNexusError
+        connect = factory.get_connection
+        observed = []
+
+        class InterruptedBackfill:
+            def __init__(self, connection):
+                self.connection = connection
+
+            def __getattr__(self, name):
+                return getattr(self.connection, name)
+
+            def execute(self, statement, *args):
+                if statement.startswith("CREATE TRIGGER runtime_delivery_attempt_observed"):
+                    # The real INSERT SELECT has already populated nonempty
+                    # history in this transaction. Cut before migration commit.
+                    observed.append(self.connection.execute(
+                        "SELECT count(*) FROM runtime_delivery_attempt_events").fetchone()[0])
+                    raise sqlite3.OperationalError("fixture cut after populated backfill")
+                return self.connection.execute(statement, *args)
+
+        with monkeypatch.context() as patch:
+            patch.setattr(factory, "get_connection", lambda: InterruptedBackfill(connect()))
+            with pytest.raises(OktoNexusError, match="migration"):
+                migrations.MigrationRunner(factory).apply()
+        assert observed == [1]
+        with factory.unit_of_work(write=False) as uow:
+            c = uow.connection
+            assert c.execute("SELECT max(version) FROM schema_migrations").fetchone()[0] == 58
+            assert not c.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_delivery_attempt_events'").fetchone()
+            assert dict(c.execute("SELECT * FROM delivery_outbox WHERE operation_id='op'").fetchone()) == before
+            assert not c.execute("PRAGMA foreign_key_check").fetchall()
     assert migrations.MigrationRunner(factory).apply() == [59, 60, 61]
     assert migrations.MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:

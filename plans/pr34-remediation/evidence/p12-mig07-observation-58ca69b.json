@@ -1,0 +1,7 @@
+{
+  "source_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "test_id": "T-MIG-07",
+  "status": "FAIL",
+  "evidence": "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+  "observed": "Added active-disable acceptance test56925 fails against unchanged journal projector: current-owner OUTCOME_UNKNOWN rejects captured acceptance/terminal correlation. Narrow correction qualified separately in isolated worktree, not in this immutable full suite."
+}

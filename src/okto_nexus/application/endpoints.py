@@ -278,6 +278,7 @@ class EndpointService:
         self.authorize(context)
         with self.cf.unit_of_work(write=False) as uow:
             historical = self.repo.legacy_diagnostics(uow)
+            profile_review = self.repo.legacy_profile_review(uow)
             writer = dict(uow.connection.execute("SELECT required_contract,admission_enabled "
                 "FROM runtime_writer_contract WHERE singleton=1").fetchone())
             boot = [dict(r) for r in uow.connection.execute("SELECT endpoint_id,enabled,endpoint_revision,profile_revision,revision FROM runtime_boot_bindings ORDER BY endpoint_id LIMIT 100")]
@@ -286,6 +287,7 @@ class EndpointService:
                 "SELECT audit_id,actor_agent_id,resource_kind,resource_id,old_revision,new_revision,changed_fields,created_at "
                 "FROM runtime_access_audit WHERE resource_kind IS NOT NULL ORDER BY audit_id DESC LIMIT 100")]
         return {"legacy_sessions": historical, "live": False,
+                "legacy_profile_review": profile_review,
                 "writer_contract": writer,
                 "boot_bindings": boot, "uncertain_starts": uncertain,
                 "configuration_changes": configuration,

@@ -425,6 +425,111 @@
       ],
       "rationale": "Malformed/unsupported Pi readiness fails with protocol_incompatible diagnostic and quarantines binding while Codex can still open; invalid Codex native thread identity never becomes ready or receives turn/start.",
       "limitations": "Synthetic incompatible protocol peers; native binary version qualification is separately controlled."
+    },
+    {
+      "test_id": "T-RELAY-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay.py::test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result",
+        "tests/test_runtime_relay.py::test_explicit_three_agent_chain_preserves_initiator_and_budget"
+      ],
+      "rationale": "Approved bidirectional and three-agent routes execute under one causal root and originating actor with exact budgets and no managed handoff.",
+      "limitations": "Owned protocol peers, not simultaneous real providers."
+    },
+    {
+      "test_id": "T-RELAY-02",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay_process_restart.py::test_slow_canonical_chain_keeps_deadline_across_four_server_processes"
+      ],
+      "rationale": "Four actual HTTP owner processes at injected clock offsets 0/600/1200/1800 preserve root/deadline/depth four; continuation at thirty minutes is denied.",
+      "limitations": "Application clock offsets simulate ten-minute hops; no real thirty-minute wait or native model."
+    },
+    {
+      "test_id": "T-RELAY-03",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child"
+      ],
+      "rationale": "Actual owner exits at journal-terminal, committed-child and accepted-child cuts; restarted production app preserves root/hop/budgets and never replays ambiguous native work. Exact owned process handles witness cleanup.",
+      "limitations": "Abrupt os._exit at deterministic cuts, not repeated SIGKILL under measured scheduler pressure."
+    },
+    {
+      "test_id": "T-RELAY-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay.py::test_interleaved_roots_share_sessions_without_sharing_budgets"
+      ],
+      "rationale": "Two entries share the same pair of sessions; each result child references its exact parent message and root with independent budget counts.",
+      "limitations": "Owned protocol peers; test covers alternating/overlapping roots, not arbitrary cross-product scheduling."
+    },
+    {
+      "test_id": "T-RELAY-05",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay.py::test_same_agent_on_distinct_endpoints_keeps_operation_parent"
+      ],
+      "rationale": "Two selected endpoints of one Agent produce separate roots; each child is joined through its source result to the correct initiating operation and recipient.",
+      "limitations": "Sequential endpoint selection with owned protocol peers."
+    },
+    {
+      "test_id": "T-RELAY-06",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_causality.py::test_concurrent_children_cannot_exceed_snapshotted_budget"
+      ],
+      "rationale": "Eight concurrent authenticated child creations compete for the last snapshotted message/execution budget; exactly one succeeds and seven receive QUOTA_EXCEEDED, despite later config increase.",
+      "limitations": "Bounded eight-worker fixture contention, not sustained load benchmark."
+    },
+    {
+      "test_id": "T-RELAY-07",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay.py::test_repeated_publication_does_not_charge_or_dispatch_again"
+      ],
+      "rationale": "Eight concurrent canonical result publications return the same message; persisted outbox and generated-message counts do not grow.",
+      "limitations": "Internal canonical publication retry, not native transport replay."
+    },
+    {
+      "test_id": "T-RELAY-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_causality.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry",
+        "tests/test_runtime_causality.py::test_new_root_quota_is_independent_of_endpoint_count"
+      ],
+      "rationale": "Expired root denies continuation while a fresh authenticated entry creates a new root; agent/workspace root quotas independently reject excess admission.",
+      "limitations": "Disposable canonical composition; expiry forced in fixture storage."
+    },
+    {
+      "test_id": "T-RELAY-09",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_relay.py::test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result",
+        "tests/test_runtime_relay.py::test_failed_interrupted_and_unknown_results_do_not_relay",
+        "tests/test_runtime_relay.py::test_result_relay_obeys_canonical_human_approval"
+      ],
+      "rationale": "Receipts have no transport intents; failed/interrupted/unknown results create no further turn; depth block produces one audit event; rejected human approval leaves one original intent.",
+      "limitations": "Synthetic native outcomes and actual canonical approval paths."
+    },
+    {
+      "test_id": "T-RELAY-10",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_causality.py::test_authenticated_reply_inherits_root_instead_of_starting_a_new_budget"
+      ],
+      "rationale": "With optional tracing OFF, forged root/depth/parent/budget fields in payload do not replace server-derived parent/root/hop in the admitted envelope.",
+      "limitations": "Authenticated synthetic content, no claim that models cannot generate arbitrary text."
+    },
+    {
+      "test_id": "T-RELAY-11",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_notify_targets.py::test_explicit_broadcast_delivers_only_to_present_audience_and_removal_restores_private_reply",
+        "tests/test_runtime_notify_targets.py::test_broadcast_does_not_override_sender_permission",
+        "tests/test_runtime_notify_targets.py::test_result_artifact_readers_match_explicit_audience"
+      ],
+      "rationale": "Explicit broadcast reaches only present eligible recipients; removing target restores private reply. Sender denial blocks disclosure and artifact readers match approved audience.",
+      "limitations": "Owned Codex-shaped peer and synthetic observer endpoints; no real external recipients."
     }
   ]
 }

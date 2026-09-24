@@ -439,3 +439,40 @@ and authorization fences. Unreconciled unknown writes retain their normal-agent
 fence; explicit recovery must first prove the original call is no longer in flight.
 Selection takes the oldest eligible item per lane and agent before truncating a
 batch, so repeated rows from one endpoint cannot consume other eligible slots.
+
+## Reviewing historical profiles
+
+Operator `GET /api/v1/harness/diagnostics` and MCP `harness_list` with
+`view=diagnostics` include `legacy_profile_review` schema version1. For up to100
+agents with legacy-unlinked sessions it classifies capabilities/metadata as
+present, missing, empty or invalid, without exposing their contents. A truncated
+response requires a remaining-agent inventory from an offline store copy.
+Absence is not proof of past corruption: intentional empty fields also require
+human review. Diagnostics does not restore data or read a backup automatically.
+
+Keep a consistent backup and compare the exact Agent ID and fields against a
+trusted pre-damage backup/export. If no trusted source exists, preserve the
+missing fields and diagnostic. Restore only reviewed fields through existing
+operator Agent administration; register reviewed capabilities in the canonical
+catalogue first. Never infer skills from runtime names or copy session metadata
+as a replacement profile. Verify the canonical profile afterward. Historical
+sessions remain legacy-unlinked, with no invented endpoint or end timestamp;
+restoration neither opens a runtime nor replays unread work.
+
+## Disabling admission with captured results pending
+
+Disabling `feature_harness_integrations` blocks new native sends and publication,
+while owner maintenance continues projecting captured journal facts. A result
+may remain `PENDING_AUTHORIZATION` until a later explicitly authorized rollout;
+this does not indicate publication or handoff completion. Inspect its durable
+result and publication fields independently.
+
+If a transport call times out or raises after writing, its operation can be
+`OUTCOME_UNKNOWN` before captured native acceptance is projected. Exact matching
+session/connection/attempt/current-owner observations can subsequently establish
+acceptance and a durable result. This is reconciliation of observed facts, not
+a second send. Previous-owner events retain the frozen recovery boundary;
+explicit operator reconciliation continues to fence surrendered authority.
+Neither disabling the feature nor lease expiry frees an uncertain delivery for
+another executor. Use the existing authorized reconciliation procedure when
+there is no conclusive native evidence.

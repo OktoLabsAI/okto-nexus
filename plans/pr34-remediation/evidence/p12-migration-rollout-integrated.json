@@ -1,0 +1,34 @@
+{
+  "parent_sha": "44a1f78f9c51b27650ef99c7bb313c46f2bc75b6",
+  "branch": "feature/v0.2.0",
+  "source_state": "integrated seven-path worktree",
+  "sha256": {
+    "src/okto_nexus/application/endpoints.py": "cbd431e39989a29a435344d0a7ab1d5730f0a6a2d1ff70a5d28d5d9872d7c022",
+    "src/okto_nexus/adapters/outbound/sqlite/endpoints_repo.py": "9466779d37bb3c3352ec35621e14dad3db17b880886541d8a2be9df697174aab",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "6c94e2272b1b5d6fa8a86c942dc152395231f1a420c116522391e8301cba426e",
+    "tests/test_runtime_legacy_profile_review.py": "56222a3baf208fd44e6fc0ba1cd0b00354e2d6e955571029332b92e0b9d06670",
+    "tests/test_runtime_endpoints.py": "c1b735cac3c526a16c4274f788f6aff8666adb9de8e4a1dd3822d947ac093773",
+    "tests/test_runtime_attempt_history.py": "bd531cca7b509b5b87a0d5d9ea933275d2950f94bde8d26887bec57fc40ba92d",
+    "tests/test_runtime_rollout.py": "1e23e8f607095c3237af421d5183e0db4b5911101b0c140d77a26fd0571d4fc0"
+  },
+  "windows": {
+    "session": 44537,
+    "passed": 87,
+    "seconds": 312.55,
+    "exit_code": 0
+  },
+  "linux": {
+    "session": 81306,
+    "passed": 87,
+    "seconds": 328.66,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "live_stdio_mcp": "PASS; isolated environment; no native provider",
+  "evidence_tools": {
+    "passed": 16,
+    "seconds": 0.17
+  },
+  "commands": "plans/pr34-remediation/P12_MIGRATION_ROLLOUT_INTEGRATION.md",
+  "limitations": "Owned fixtures; no real provider campaign in this unit. Platform selections overlapped; durations are not benchmarks. Full58ca69b source differs and cannot qualify these changes."
+}

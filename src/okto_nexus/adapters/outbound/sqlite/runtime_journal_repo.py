@@ -129,6 +129,12 @@ class SqliteRuntimeJournalRepo:
             and record["ordinal"] <= owner["recovery_watermark"])
         recovered_unknown = bool(recovering and operation and operation["status"] == "OUTCOME_UNKNOWN"
                                  and operation["reason"] == "owner_lost")
+        # A transport timeout/error can precede projection of acceptance that
+        # is already in the journal. Exact current-owner observations may
+        # resolve that uncertainty; they never authorize a new transport call.
+        # Older owners remain restricted to the frozen recovery watermark.
+        current_unknown = bool(operation and operation["status"] == "OUTCOME_UNKNOWN"
+                               and owner["epoch"] == event.owner_epoch)
         if operation and operation["reconciliation_id"]:
             # Preserve an exact late terminal without restoring execution,
             # consumption or publication authority surrendered by the operator.
@@ -145,7 +151,8 @@ class SqliteRuntimeJournalRepo:
         if (not operation or operation["runtime_session_id"] != event.session_id
                 or operation["attempt_id"] != event.attempt_id
                 or operation["owner_epoch"] != event.owner_epoch
-                or (operation["status"] not in {"SENDING", "SENT_UNCONFIRMED", "ACCEPTED"} and not recovered_unknown)
+                or (operation["status"] not in {"SENDING", "SENT_UNCONFIRMED", "ACCEPTED"}
+                    and not (recovered_unknown or current_unknown))
                 or operation["terminal_event_id"] is not None):
             return False
         if owner["epoch"] != event.owner_epoch and not recovering:
@@ -160,7 +167,8 @@ class SqliteRuntimeJournalRepo:
                 "native_thread_id=?,native_turn_id=?,updated_at=? WHERE operation_id=? AND status IN ('SENDING','SENT_UNCONFIRMED','OUTCOME_UNKNOWN')",
                 (event.thread_id, event.turn_id, now, event.operation_id))
             return table
-        accepted = operation["status"] == "ACCEPTED" or (recovered_unknown and operation["ack_level"] == "HARNESS_ACCEPTED")
+        accepted = operation["status"] == "ACCEPTED" or (
+            (recovered_unknown or current_unknown) and operation["ack_level"] == "HARNESS_ACCEPTED")
         if (not accepted or operation["native_thread_id"] != event.thread_id
                 or operation["native_turn_id"] != event.turn_id):
             return False
