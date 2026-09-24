@@ -6,6 +6,18 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface58/schema064 integrates approved external Nexus sessions with attach
+  handoff claim, authenticated ACK and canonical complete/reject. Native attach
+  remains unconfirmed injection: no fabricated native ACK, result or managed-work
+  capability. Old writers are fenced; referenced session audit history is retained.
+- Schema063 adds optional nonexecuting context observation for explicitly capable
+  adapters while keeping one executor per inbox delivery. The four native adapters
+  do not advertise this additional capability; a fifth fixture adapter proves it.
+- Schema062 stops new executable admission when the owner cannot preserve captured
+  results, including independent stdio writers, while retaining recovery state.
+- Surface57 normalizes canonical conversational payloads and preserves legacy
+  text/content at the boundary with explicit conflict rejection.
+
 - Redact resolved backend credentials before native diagnostics, journal, result
   and approval projection, including split streaming values; preserve native
   correlation and typed pre-write retry proofs.

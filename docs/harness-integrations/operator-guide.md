@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface57.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface58.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -385,3 +385,5 @@ and writer-compatibility tests. The installed Claude application's dedicated att
 NOT_RUN. Exact evidence and limitations: plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md.
 
 Canonical sessions referenced by external work remain as audit identities after closure; retention continues deleting unrelated expired sessions. Closure still revokes return authority. After explicit operator recovery reopens an offer, its recipient can reject that OPEN offer through the canonical flow without the old external-session proof. This does not replay or complete the old transport operation.
+
+For store upgrades, writer cutover, offline backup and operational rollback, follow [migration and recovery](migration-and-recovery.md). The [current evidence index](evidence-index.md) separates remediation results from historical PR captures.

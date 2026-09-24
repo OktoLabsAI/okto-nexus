@@ -173,3 +173,31 @@ backup/restore, advanced native campaigns and full P12 matrix must
 pass their applicable gates before release. Pi/attach external limits remain
 explicit NOT_RUN, never converted into PASS. No A2A server, external broker,
 cloud runtime or new task orchestrator is introduced.
+
+## 0.2.0 remediation contracts (surface58 / schema064)
+
+The original protocol decisions above remain historical context. The current
+application contract uses one canonical Agent identity, persistent endpoints,
+approved execution profiles and separate runtime bindings. Authenticated REST,
+MCP HTTP, stdio owner proxy and internal commands share authorization and current
+grants; payload identity never authenticates a caller.
+
+The canonical inbox owns logical delivery. A transactional outbox records bounded,
+owner-fenced transport attempts, with explicit unknown/unconfirmed states and no
+ambiguous replay. Event ingress is journaled before idempotent projection; native
+turn completion is separate from canonical handoff completion and verification.
+
+Optional context observation v1 is nonexecuting and requires a trusted descriptor
+plus verified capability. No built-in native adapter is assigned that capability.
+Attach external work v1 instead uses a separately authenticated, operator-approved
+canonical Nexus session for claim/ACK/complete. Its native socket capabilities
+remain unchanged. Migration064 fences older writers and preserves referenced
+session history. These are new integration decisions, not capabilities inferred
+from the peer protocols.
+
+See the [contract map](../../plans/pr34-remediation/CONTRACT_MAP.md),
+[finding/evidence audit](../../plans/pr34-remediation/P12_FINAL_AUDIT.md), and
+[operator guide](../harness-integrations/operator-guide.md). Native qualification
+is version/configuration-specific; Pi and dedicated attach remain NOT_RUN in the
+current authorized campaign. No A2A server, remote broker or new task orchestrator
+is introduced by this remediation.

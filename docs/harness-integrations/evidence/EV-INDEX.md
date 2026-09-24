@@ -1,5 +1,7 @@
 # EV-INDEX — refreshed at `caae163`
 
+Historical PR evidence only. For the0.2.0 remediation use the [current evidence index](../evidence-index.md). The captures and totals below are not rerun results, current setup instructions, or authorization to reuse the recorded accounts, LAN endpoints or interactive sessions.
+
 Captured: 2026-09-20 (refreshed; superseding the prior version of this file captured at `1cc8522`,
 preserved in git history). Commit under review: `caae163` (`feature/harness-integrations`, PR #34).
 This is a **stale-index refresh**, not a new audit pass: it updates the `1cc8522` snapshot below
