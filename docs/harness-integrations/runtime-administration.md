@@ -143,7 +143,8 @@ commands and conversation deliveries, not their payloads or credentials. Review
 the operation, native lifecycle and evidence before deciding; process timeout or
 lease expiry is not proof that a write never happened.
 
-Use cancel_pending only before send-intent (PENDING/CLAIMED). It cancels that
+Use cancel_pending before send-intent (PENDING/CLAIMED), or during a proven-safe
+RETRY_WAIT. It cancels that
 intent and releases its conversation inbox reservation without marking the
 message read. For an uncertain conversation delivery, release_to_inbox explicitly
 returns the same logical delivery to the recipient's canonical pull inbox. It
@@ -178,6 +179,26 @@ including a claim returned to PENDING on owner change. Full history remains in
 the database; detail truncation does not delete it. Existing backup/restore includes
 the table. Do not delete or rewrite its records to force a retry; operational
 rollback remains admission-off/drain/recovery, not reverse SQL.
+
+Surface55/schema060: a transient local adapter lane refusal before native write
+can enter `RETRY_WAIT`. Only that typed server-side proof enables automatic retry;
+an error string, generic rejection, timeout, write acknowledgement or missing
+reply cannot. Delivery inspection/history exposes `next_attempt_at` and
+`retry_basis=LANE_BUSY_BEFORE_WRITE`. There are at most3 attempts total, with1s
+then2s exponential delays plus0..25% jitter. Deadlines survive owner replacement.
+The coordinator waits for deadlines or wakes, with the existing bounded recovery
+scan for a due but occupied lane. No harness status polling or extra threads are
+introduced. Other agents can proceed; later normal operations on the same lane
+remain ordered. Controls retain their own priority and are not automatically retried.
+
+Each retry uses the same operation, message, inbox reservation, causal admission,
+handoff binding (if present) and envelope hash, with a new attempt ID. Current
+authorization and profile/binding revisions are revalidated. Permanent capability
+rejection remains REJECTED; uncertain transport remains fenced. After3 pre-write
+refusals, the delivery is REJECTED with its non-delivery proof preserved for
+explicit authorized inbox recovery. Endpoint fallback is not implemented by this
+retry policy. Managed work still requires canonical claim recovery, never an inbox
+release or borrowed endpoint grant. No personal database is migrated by tests.
 
 ```json
 {

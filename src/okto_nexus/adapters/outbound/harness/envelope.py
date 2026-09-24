@@ -4,7 +4,7 @@ import json
 import threading
 
 from ....errors import ErrorCode, OktoNexusError
-from ....domain.runtime_commands import RuntimeCommandNotSent
+from ....domain.runtime_commands import RuntimeCommandNotSent, RuntimeLaneBusyBeforeWrite
 from ....domain.harness import HarnessCommand
 from ....application.runtime_requirements import validate_effective_native_requirements
 
@@ -79,7 +79,7 @@ class EnvelopeConnector:
                         raise RuntimeCommandNotSent("Control target ended or changed before native write.")
                 if active and command.verb == "send_turn":
                     if active["operation_id"] or command.operation_id:
-                        raise RuntimeCommandNotSent("Runtime delivery lane is occupied.")
+                        raise RuntimeLaneBusyBeforeWrite("Runtime delivery lane is occupied.")
                 if active and command.verb == "steer":
                     if active["operation_id"] and command.expected_operation_id != active["operation_id"]:
                         raise RuntimeCommandNotSent("Managed steering requires its original operation fence.")

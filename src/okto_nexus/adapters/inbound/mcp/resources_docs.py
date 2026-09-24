@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="22",
+    version="23",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -622,12 +622,18 @@ Each includes attempt/epoch/binding/state/ACK/native references and provenance.
 Migration059 snapshots only the known current attempt; it does not reconstruct
 lost earlier history. The full append-only history stays in the local store.
 List inspection and administrative commands do not include delivery history.
+Surface55/schema060 adds next_attempt_at/retry_basis to delivery inspection and
+history. Only a typed local lane-busy refusal before native write schedules a
+retry: at most3 total attempts, exponential1s/2s delays plus0..25% jitter. Owner
+restart preserves the deadline; each attempt revalidates authority and keeps the
+same logical delivery/hash. Permanent rejection, ambiguous I/O and controls are
+not automatically retried. Exhausted non-delivery may be explicitly released.
 
 Mutations require action, operation_id, expected_state, expected_attempt_id,
 expected_owner_epoch, idempotency_key and reason. Null attempt/epoch match only
 a not-yet-claimed operation. Same key/body returns the committed decision;
 different body conflicts. No mutation starts a native request:
-- cancel_pending: only PENDING/CLAIMED before send-intent. Cancels the intent
+- cancel_pending: PENDING/CLAIMED or proven-safe RETRY_WAIT. Cancels the intent
   and releases its conversation inbox reservation without a receipt.
 - release_to_inbox: explicitly surrender an uncertain conversation push
   reservation to the same logical inbox; acknowledge_duplicate_risk=true required.

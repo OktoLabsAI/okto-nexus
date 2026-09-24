@@ -3,19 +3,21 @@ import queue
 import logging
 import threading
 import time
+import random
 
-from ..domain.base import iso_plus, new_id
+from ..domain.base import iso_plus, iso_to_epoch, new_id
 from ..errors import OktoNexusError
-from ..domain.runtime_commands import RuntimeCommandNotSent
+from ..domain.runtime_commands import RuntimeCommandNotSent, RuntimeLaneBusyBeforeWrite
 
 
 class RuntimeDispatcher:
     def __init__(self, *, connection_factory, repo, clock, validate, dispatch,
-                 workers=2, recovery_seconds=30, send_timeout_seconds=45):
+                 workers=2, recovery_seconds=30, send_timeout_seconds=45, retry_jitter=None):
         self.cf, self.repo, self.clock = connection_factory, repo, clock
         self.validate, self.dispatch = validate, dispatch
         self.workers = min(max(int(workers), 1), 8)
         self.recovery_seconds, self.send_timeout_seconds = recovery_seconds, send_timeout_seconds
+        self.retry_jitter = retry_jitter or random.random
         self.owner_id, self.epoch = new_id("owner"), None
         self._wake_condition = threading.Condition()
         self._wake_generation = 0
@@ -140,8 +142,11 @@ class RuntimeDispatcher:
     def _run(self):
         recovered = 0.0
         observed = 0
+        retry_deadline = None
         while not self._stop.is_set():
-            generation = self._wait_for_wake(observed)
+            timeout = 10 if retry_deadline is None else min(10, max(0,
+                iso_to_epoch(retry_deadline) - iso_to_epoch(self.clock.now_iso())))
+            generation = self._wait_for_wake(observed, timeout=timeout)
             signaled = generation != observed
             observed = generation
             if self._stop.is_set():
@@ -172,12 +177,15 @@ class RuntimeDispatcher:
                         self.close()
                         self._shutdown_finished.set()
                         break
-                if signaled or time.monotonic() - recovered >= self.recovery_seconds:
+                if signaled or (retry_deadline is not None and retry_deadline <= now) or time.monotonic() - recovered >= self.recovery_seconds:
                     if self.command_dispatcher:
                         self.command_dispatcher.scan_once()
                     self.scan_once()
                     recovered = time.monotonic()
+                with self.cf.unit_of_work(write=False) as uow:
+                    retry_deadline = self.repo.next_retry_deadline(uow, after=now)
             except Exception:
+                retry_deadline = None
                 # No speculative replay on transient storage failure. Indexed
                 # recovery will revisit only PENDING; SENDING remains fenced.
                 logging.getLogger(__name__).warning("Runtime dispatcher storage/recovery failed; intents remain durable.")
@@ -205,7 +213,7 @@ class RuntimeDispatcher:
         with self.cf.unit_of_work() as uow:
             if not self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
                 return
-            pending = self.repo.pending(uow, limit=capacity, blocked_agents=self.normal_inflight_agents(uow))
+            pending = self.repo.pending(uow, limit=capacity, blocked_agents=self.normal_inflight_agents(uow), now=now)
             accepted = []
             selected_endpoints = set()
             for operation in pending:
@@ -262,12 +270,27 @@ class RuntimeDispatcher:
                 if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso()):
                     self.repo.observe(uow, **key, expected="SENDING", status="SENT_UNCONFIRMED",
                                       ack_level="TRANSPORT_WRITE", now=self.clock.now_iso())
-        except RuntimeCommandNotSent:
-            with self.cf.unit_of_work() as uow:
-                now = self.clock.now_iso()
-                if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
-                    self.repo.observe(uow, **key, expected="SENDING", status="REJECTED", now=now,
-                        reason="native_write_not_started", ack_level="NONE")
+        except RuntimeCommandNotSent as exc:
+            try:
+                # Transient proof is a trusted type from the final adapter
+                # fence, never an exception message or caller-supplied flag.
+                jitter = self.retry_jitter() if isinstance(exc, RuntimeLaneBusyBeforeWrite) else 0
+                if not isinstance(jitter, (int, float)) or not 0 <= jitter <= 1:
+                    raise ValueError("Retry jitter must be within [0,1]")
+                with self.cf.unit_of_work() as uow:
+                    now = self.clock.now_iso()
+                    if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
+                        if isinstance(exc, RuntimeLaneBusyBeforeWrite):
+                            current = self.repo.get(uow, operation["operation_id"])
+                            delay = min(30, 2 ** min(current["attempt_count"] - 1, 5)) * (1 + .25 * jitter)
+                            self.repo.retry_not_sent(uow, **key, now=now, next_attempt_at=iso_plus(now, delay))
+                        else:
+                            self.repo.observe(uow, **key, expected="SENDING", status="REJECTED", now=now,
+                                reason="native_write_not_started", ack_level="NONE")
+            except Exception:
+                # A lost proof commit remains fenced as SENDING. Do not lose a
+                # worker or infer that a retry was durably scheduled.
+                logging.getLogger(__name__).error("Runtime non-delivery proof was not persisted; reconciliation required.")
         except Exception:
             try:
                 with self.cf.unit_of_work() as uow:

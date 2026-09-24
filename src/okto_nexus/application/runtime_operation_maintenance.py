@@ -79,13 +79,14 @@ class RuntimeOperationMaintenanceService:
             # Only the owner's typed pre-write failure supplies this proof.
             # A generic rejection, exception message or NONE acknowledgement
             # alone is not evidence that an external call never wrote bytes.
-            not_sent = (action == "release_to_inbox" and table == "delivery_outbox"
-                and row["status"] == "REJECTED" and row["reason"] == "native_write_not_started"
+            no_write_proof = (table == "delivery_outbox" and row["reason"] == "native_write_not_started"
                 and row["ack_level"] == "NONE" and row["attempt_id"] is not None
                 and row["native_thread_id"] is None and row["native_turn_id"] is None)
+            not_sent = action == "release_to_inbox" and row["status"] == "REJECTED" and no_write_proof
+            safe_wait = row["status"] == "RETRY_WAIT" and no_write_proof and row["retry_basis"] == "LANE_BUSY_BEFORE_WRITE"
             if pending:
-                if row["status"] not in {"PENDING", "CLAIMED"} or acknowledge_duplicate_risk:
-                    raise conflict("Only an attempt before send-intent can be cancelled without uncertain effects.")
+                if (row["status"] not in {"PENDING", "CLAIMED"} and not safe_wait) or acknowledge_duplicate_risk:
+                    raise conflict("Cancellation requires an attempt before send-intent or a proven-safe retry wait.")
             elif not_sent:
                 if acknowledge_duplicate_risk:
                     raise conflict("A proven pre-write rejection requires no duplicate-risk acknowledgement.")
@@ -138,7 +139,8 @@ class RuntimeOperationMaintenanceService:
         for table in ("delivery_outbox", "runtime_commands"):
             queries.append(f"SELECT o.operation_id,'{table}' AS source_kind,o.endpoint_id,e.agent_id,e.workspace_id,"
                 "o.runtime_session_id,o.status AS state,o.reason,o.ack_level,o.attempt_id,o.owner_epoch,o.terminal_event_id,"
-                "o.reconciliation_id,o.created_at,o.updated_at,s.lifecycle_state AS runtime_lifecycle "
+                "o.reconciliation_id,o.created_at,o.updated_at,s.lifecycle_state AS runtime_lifecycle," +
+                ("o.next_attempt_at,o.retry_basis " if table == "delivery_outbox" else "NULL AS next_attempt_at,NULL AS retry_basis ") +
                 f"FROM {table} o JOIN agent_endpoints e ON e.endpoint_id=o.endpoint_id "
                 "LEFT JOIN harness_sessions s ON s.session_id=o.runtime_session_id")
         query = "SELECT * FROM (" + " UNION ALL ".join(queries) + ") WHERE operation_id>?"
@@ -164,7 +166,7 @@ class RuntimeOperationMaintenanceService:
                     # new delivery authority is reconstructed from observations.
                     history = uow.connection.execute(
                         "SELECT sequence,attempt_id,owner_epoch,endpoint_id,runtime_session_id,state,"
-                        "ack_level,reason,native_thread_id,native_turn_id,terminal_event_id,occurred_at,provenance "
+                        "ack_level,reason,native_thread_id,native_turn_id,terminal_event_id,occurred_at,provenance,next_attempt_at,retry_basis "
                         "FROM runtime_delivery_attempt_events WHERE operation_id=? ORDER BY sequence DESC LIMIT 65",
                         (operation_id,)).fetchall()
                     item["attempt_history"] = [dict(event) for event in reversed(history[:64])]

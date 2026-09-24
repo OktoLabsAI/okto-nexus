@@ -74,42 +74,42 @@ def test_attempt_observations_are_atomic_immutable_and_do_not_record_heartbeats(
         assert deps.runtime_dispatcher.repo.get(uow, operation_id)["status"] == "SENT_UNCONFIRMED"
 
 
-@pytest.fixture
-def runtime58(tmp_path, request, monkeypatch):
+def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(tmp_path):
     import shutil
     from okto_nexus.adapters.outbound.sqlite import migrations
-    original = migrations._default_migrations_dir
+    from test_migrations import make_factory
     old = tmp_path / "schema58"
     old.mkdir()
-    for path in original().glob("*.sql"):
+    for path in migrations._default_migrations_dir().glob("*.sql"):
         if int(path.name.split("_", 1)[0]) <= 58:
             shutil.copy(path, old)
-    # Reuse the actual HTTP/MCP fixture, with only its initial packaged schema
-    # restricted to the predecessor. No reverse migration or personal database.
-    with monkeypatch.context() as patch:
-        patch.setattr(migrations, "_default_migrations_dir", lambda: old)
-        fixture = runtime_fixture.__wrapped__(tmp_path, request)
-        instance = next(fixture)
-    try:
-        yield instance
-    finally:
-        with pytest.raises(StopIteration):
-            next(fixture)
-
-
-def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(runtime58):
-    from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
-    deps = runtime58[0]
-    assert open_rest(runtime58).status_code == 200
-    operation_id = send_message(runtime58)["runtime_operations"][0]
-    before = wait_status(runtime58, operation_id, "SENT_UNCONFIRMED")
-    assert MigrationRunner(deps.connection_factory).apply() == [59]
-    assert MigrationRunner(deps.connection_factory).apply() == []
-    with deps.connection_factory.unit_of_work(write=False) as uow:
-        events = uow.connection.execute("SELECT * FROM runtime_delivery_attempt_events WHERE operation_id=?",
-            (operation_id,)).fetchall()
+    factory = make_factory(tmp_path)
+    migrations.MigrationRunner(factory, migrations_dir=old).apply()
+    # Persisted predecessor fixture only: current dispatcher code deliberately
+    # requires its new schema and must not be run against an unmigrated store.
+    with factory.unit_of_work() as uow:
+        c = uow.connection
+        c.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES('ws','2026-09-24T00:00:00Z')")
+        c.execute("INSERT INTO agents(agent_id,created_at) VALUES('worker','2026-09-24T00:00:00Z')")
+        c.execute("INSERT INTO messages(message_id,workspace_id,from_agent_id,created_at) VALUES('msg','ws','worker','2026-09-24T00:00:00Z')")
+        c.execute("INSERT INTO message_deliveries(delivery_id,message_id,recipient_agent_id,status,created_at) "
+            "VALUES('delivery','msg','worker','unread','2026-09-24T00:00:00Z')")
+        c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,created_at,updated_at) "
+            "VALUES('endpoint','worker','ws','fixture','fixture','2026-09-24T00:00:00Z','2026-09-24T00:00:00Z')")
+        c.execute("INSERT INTO delivery_outbox(operation_id,delivery_id,message_id,workspace_id,actor_agent_id,credential_binding,"
+            "recipient_agent_id,endpoint_id,endpoint_revision,envelope,request_hash,authorization_revision,root_operation_id,"
+            "created_at,updated_at,status,attempt_id,attempt_count,ack_level) "
+            "VALUES('op','delivery','msg','ws','worker','fixture','worker','endpoint',1,'{}','fixture','fixture','root',"
+            "'2026-09-24T00:00:00Z','2026-09-24T00:00:00Z','SENT_UNCONFIRMED','known-attempt',1,'TRANSPORT_WRITE')")
+        before = dict(c.execute("SELECT * FROM delivery_outbox WHERE operation_id='op'").fetchone())
+    assert migrations.MigrationRunner(factory).apply() == [59, 60]
+    assert migrations.MigrationRunner(factory).apply() == []
+    with factory.unit_of_work(write=False) as uow:
+        events = uow.connection.execute("SELECT * FROM runtime_delivery_attempt_events WHERE operation_id='op'").fetchall()
         assert len(events) == 1
         assert events[0]["provenance"] == "migration_snapshot"
         assert events[0]["attempt_id"] == before["attempt_id"]
         assert events[0]["state"] == before["status"]
-        assert deps.runtime_dispatcher.repo.get(uow, operation_id) == before
+        after = dict(uow.connection.execute("SELECT * FROM delivery_outbox WHERE operation_id='op'").fetchone())
+        assert all(after[key] == value for key, value in before.items())
+        assert after["next_attempt_at"] is None and after["retry_basis"] is None

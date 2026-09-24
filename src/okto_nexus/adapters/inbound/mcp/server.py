@@ -449,7 +449,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 52 = per-session qualified capabilities intersect descriptor and approved profile.
 #: 53 = bounded logical transport backlog and per-agent normal worker capacity.
 #: 54 = durable delivery attempt observation history in operator detail inspection.
-SURFACE_REVISION = 54
+#: 55 = bounded proven-safe retry deadlines and explicit retry-wait cancellation.
+SURFACE_REVISION = 55
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

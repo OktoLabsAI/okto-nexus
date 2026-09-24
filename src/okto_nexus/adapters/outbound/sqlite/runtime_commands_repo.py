@@ -67,7 +67,7 @@ class SqliteRuntimeCommandRepo:
             query += "OR (busy.status='PENDING' AND (busy.verb<>'send_turn' OR (busy.created_at,busy.operation_id)<(c.created_at,c.operation_id))))) "
             query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox d WHERE d.endpoint_id=c.endpoint_id AND d.reconciliation_id IS NULL AND "
             query += "(d.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR (d.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND d.terminal_event_id IS NULL) "
-            query += "OR (d.status='PENDING' AND (d.created_at,d.operation_id)<(c.created_at,c.operation_id)))) "
+            query += "OR (d.status IN ('PENDING','RETRY_WAIT') AND (d.created_at,d.operation_id)<(c.created_at,c.operation_id)))) "
         if not control:
             # One unresolved normal native write per represented agent across
             # both transport surfaces. Accepted inference does not hold a write

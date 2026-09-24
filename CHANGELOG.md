@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface55/schema060 retries transient local lane refusals only before native
+  write, with durable deadlines, bounded backoff/jitter and unchanged delivery identity.
 - Surface54/schema059 preserves immutable delivery attempt observations across
   owner changes, with bounded operator detail inspection and honest upgrade snapshots.
 - Allow audited operator release of a proven pre-write conversation rejection
