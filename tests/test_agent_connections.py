@@ -278,3 +278,20 @@ def test_disabling_mcp_fences_an_already_authenticated_stdio_connection(runtime)
             assert (second.structuredContent or json.loads(second.content[0].text))['error']['code'] == 'PERMISSION_DENIED'
 
     asyncio.run(asyncio.wait_for(query(), timeout=30))
+
+
+@pytest.mark.parametrize('runtime', [False], indirect=True)
+def test_enabling_feature_requires_owner_restart_with_a_prescriptive_error(runtime):
+    deps, client, root, peers, operator, _ = runtime
+    deps.config.feature_harness_integrations = True
+    headers = {'x-api-key': operator}
+    assert client.post('/api/v1/harness/profiles', headers=headers, json={
+        'profile_id': 'profile-pi', 'adapter_id': 'pi', 'enabled': True}).status_code == 200
+    assert client.post('/api/v1/harness/endpoints', headers=headers, json={
+        'endpoint_id': 'endpoint-pi', 'agent_id': 'worker', 'adapter_id': 'pi',
+        'project_root': root, 'profile_id': 'profile-pi', 'enabled': True}).status_code == 200
+    issued = issue(client, operator)
+    response = client.post('/api/v1/connections/open', headers=issued['request']['headers'], json={})
+    assert response.status_code == 409, response.text
+    assert 'Restart serve' in response.json()['error']['message']
+    assert not peers

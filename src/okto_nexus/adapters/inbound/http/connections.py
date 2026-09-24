@@ -3,7 +3,7 @@ import anyio
 from fastapi import APIRouter, Request
 
 from ....application.agent_connections import AgentConnectionService
-from ....errors import OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 from ..runtime_admin import RuntimeAdminBody
 
 
@@ -27,7 +27,11 @@ def service(deps):
 
 
 def build_router():
-    from ..mcp.tools.harness import build_open_service, request_context
+    from ..mcp.tools.harness import (
+        build_open_service,
+        is_local_runtime_owner,
+        request_context,
+    )
     from .app import extract_bearer
     from .routes import _map_error, _ok
     router = APIRouter()
@@ -63,6 +67,9 @@ def build_router():
             connections = service(deps)
             context, arguments = connections.resolve(extract_bearer(request))
             connections.access.authorize(context, action="open", endpoint_id=arguments["endpoint_id"])
+            if not is_local_runtime_owner(deps):
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                    "Restart serve with harness integrations enabled before opening this connection.", {})
             # Always use the serve owner; no transport can promote this limited
             # principal into the operator used by the normal HTTP surface.
             session, _, reused, request_id = build_open_service(deps).open(context, **arguments)
