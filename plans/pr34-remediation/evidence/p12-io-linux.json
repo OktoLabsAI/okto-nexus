@@ -1,0 +1,52 @@
+{
+  "source_sha": "e18cf69482461ffb407d770f72d1b2871ce824f8",
+  "platform": "linux",
+  "counts": {
+    "PASS": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "4",
+      "time": "19.768",
+      "timestamp": "2026-09-24T06:22:57.298680-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers and explicit fixture model only.",
+  "command": "See command_document for exact final invocation",
+  "limitations": "Parent plus new test hash; owned synthetic peer and deterministic loopback-only model fixture. Scoped IO boundary checks, not full suite/native provider/load qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_io_boundaries",
+      "test": "test_owned_spawn_secret_transport_and_fixture_model_network_are_outside_write_uow",
+      "status": "PASS",
+      "seconds": 4.977
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_native_send_is_outside_sqlite_write_transaction",
+      "status": "PASS",
+      "seconds": 3.091
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_journal_io_outside_write_uow_and_full_sync",
+      "status": "PASS",
+      "seconds": 3.022
+    },
+    {
+      "class": "tests.test_runtime_artifact_durability",
+      "test": "test_artifact_storage_does_not_hold_sqlite_writer",
+      "status": "PASS",
+      "seconds": 2.129
+    }
+  ],
+  "source_state": "parent plus new acceptance test",
+  "dirty_files_sha256": {
+    "tests/test_runtime_io_boundaries.py": "ee44213f5c951bcae5204198948c11171af4bb23096c9d90bfb64c1e0114ea47"
+  },
+  "command_document": "plans\\pr34-remediation\\P12_IO_BOUNDARIES.md"
+}

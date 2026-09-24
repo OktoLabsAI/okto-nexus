@@ -1,0 +1,27 @@
+{
+  "parent_sha": "e18cf69482461ffb407d770f72d1b2871ce824f8",
+  "dirty_files_sha256": {
+    "tests/test_runtime_io_boundaries.py": "ee44213f5c951bcae5204198948c11171af4bb23096c9d90bfb64c1e0114ea47"
+  },
+  "requirement_nodes": {
+    "T-TX-07": [
+      "tests/test_runtime_io_boundaries.py::test_owned_spawn_secret_transport_and_fixture_model_network_are_outside_write_uow",
+      "tests/test_runtime_outbox.py::test_p06_native_send_is_outside_sqlite_write_transaction",
+      "tests/test_runtime_event_journal.py::test_journal_io_outside_write_uow_and_full_sync",
+      "tests/test_runtime_artifact_durability.py::test_artifact_storage_does_not_hold_sqlite_writer"
+    ]
+  },
+  "windows": {
+    "passed": 4,
+    "seconds": 15.33,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 4,
+    "seconds": 19.78,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_IO_BOUNDARIES.md",
+  "limitations": "Thread-local UoW instrumentation, actual owned spawn/pipe/secret resolution, fixture model with real loopback TCP and persisted embedding. Existing journal/artifact tests complement this. No remote provider or arbitrary future extension claim."
+}
