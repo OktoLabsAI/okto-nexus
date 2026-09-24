@@ -1,0 +1,13 @@
+{
+  "sha": "feeb14d",
+  "probe": "authenticated feature-OFF stdio writer against active feature-ON owner",
+  "request_ok": true,
+  "deliveries": [
+    {
+      "status": "unread",
+      "consumer_kind": null
+    }
+  ],
+  "outbox_count": 0,
+  "fake_peer_send_count": 0
+}
