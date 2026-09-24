@@ -2554,13 +2554,21 @@
               "result": "PASS",
               "observed": "11 PASS Windows and 11 PASS Linux; production restored HTTP composition, no uncertain replay.",
               "evidence": "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md"
+            },
+            {
+              "sha": "58ca69b + isolated test hash in evidence",
+              "command": "Exact Windows/Linux commands in P12_ROLLOUT_BACKLOG.md",
+              "result": "PASS",
+              "observed": "Windows1 PASS7.90s/Linux1 PASS11.60s. No duplicate native write or old unread replay; main integration pending.",
+              "evidence": "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P11_CUTOVER_AUDIT.md",
             "plans/pr34-remediation/P03_WRITER_CONTRACT.md",
             "plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md",
-            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md"
+            "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
+            "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md"
           ],
           "notes": " Audit on feeb14d reproduced feature-OFF stdio committing an unreserved delivery against an active ON owner. Writer enforcement and combined DB/journal/artifact restore remain incomplete. See P11_CUTOVER_AUDIT.md; not an acceptance PASS. Subsequent writer-contract correction integrated; actual ON/OFF stdio admission, old-connection fencing, migration rollback, and diagnostic parity passed. Combined backup/restore remains pending. Subsequent combined offline backup/restore now tested on Windows/Linux; live-owner exclusion, references/checkpoints, identity, private result artifact and uncertain delivery fences preserved. Full aggregate phase gate remains pending."
         },
@@ -4400,7 +4408,11 @@
       "stimulus": "Ativar integração com backlog antigo.",
       "expected": "Não disparar automaticamente trabalhos anteriores; replay exige seleção/ação explícita.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
+      ],
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted."
     },
     {
       "test_id": "T-MIG-06",
@@ -4414,7 +4426,11 @@
       "stimulus": "Transição callback antigo→dispatcher novo.",
       "expected": "Nunca dois envios reais para a mesma entrega.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P12_ROLLOUT_BACKLOG.md",
+        "plans/pr34-remediation/evidence/p12-rollout-backlog-worktree.json"
+      ],
+      "notes": "Exact combined activation/cutover acceptance passed in isolated worktree on Windows and Linux,1 case each. Actual owned peer stdin observes one native turn after repeated legacy notifications; old unread rows unchanged. Pending main integration; aggregate status not promoted."
     },
     {
       "test_id": "T-MIG-07",
