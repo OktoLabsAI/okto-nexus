@@ -1,0 +1,49 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Windows",
+  "counts": {
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "1.361",
+      "timestamp": "2026-09-24T13:13:47.623822-03:00"
+    }
+  ],
+  "native_flags": "No native provider; selected isolated fixtures only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached correction worktree; main full suites remain frozen and running.",
+  "records": [
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.0]",
+      "status": "PASS",
+      "seconds": 0.296
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.4]",
+      "status": "PASS",
+      "seconds": 0.708
+    }
+  ],
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_harness_claude_code_connector.py::test_events_iterator_delivers_promptly_not_on_a_poll_interval",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\event-wait-green-h2vt6ggq\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\event-wait-green.xml"
+  ],
+  "exit_code": 0,
+  "source_file_sha256": {
+    "tests/test_harness_claude_code_connector.py": "9ead7bfc675d89be5b8b46bd8082f070b878d0108f9d74ce4fa86d1e09db0c59"
+  }
+}

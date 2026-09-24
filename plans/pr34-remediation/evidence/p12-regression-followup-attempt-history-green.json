@@ -1,0 +1,104 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Windows",
+  "counts": {
+    "PASS": 11
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "11",
+      "time": "11.064",
+      "timestamp": "2026-09-24T13:08:30.547062-03:00"
+    }
+  ],
+  "native_flags": "No native provider; selected isolated fixtures only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached correction worktree; main full suites remain frozen and running.",
+  "records": [
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection",
+      "status": "PASS",
+      "seconds": 4.119
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_attempt_observations_are_atomic_immutable_and_do_not_record_heartbeats",
+      "status": "PASS",
+      "seconds": 3.023
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[False]",
+      "status": "PASS",
+      "seconds": 0.745
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[True]",
+      "status": "PASS",
+      "seconds": 0.556
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_unknown_ledger_version_fails_closed_before_applying_anything",
+      "status": "PASS",
+      "seconds": 0.028
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_failed_migration_rolls_back_only_itself",
+      "status": "PASS",
+      "seconds": 0.043
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_concurrent_bootstrap_applies_each_migration_exactly_once",
+      "status": "PASS",
+      "seconds": 0.259
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_bootstrap_retries_while_another_process_holds_the_lock",
+      "status": "PASS",
+      "seconds": 0.631
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_lock_retry_exhausted_raises_actionable_migration_error",
+      "status": "PASS",
+      "seconds": 0.032
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts2_migration_022_backfills_comm_scope_into_inline_binding",
+      "status": "PASS",
+      "seconds": 0.122
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts3_migration_022_converts_governance_policies_to_detached_globals",
+      "status": "PASS",
+      "seconds": 0.116
+    }
+  ],
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_runtime_attempt_history.py",
+    "tests/test_migrations.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\attempt-history-green-dm5t5e8r\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\attempt-history-green.xml"
+  ],
+  "exit_code": 0,
+  "source_file_sha256": {
+    "tests/test_runtime_attempt_history.py": "9962e88e278d082c9a1dcca842ca4baeba459b891fde83378868796035c1bebd"
+  }
+}

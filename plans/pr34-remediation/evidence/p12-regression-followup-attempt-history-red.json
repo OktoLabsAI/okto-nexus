@@ -1,0 +1,47 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Windows",
+  "counts": {
+    "FAIL": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "2",
+      "time": "3.318",
+      "timestamp": "2026-09-24T13:07:53.246298-03:00"
+    }
+  ],
+  "native_flags": "No native provider; selected isolated fixtures only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached correction worktree; main full suites remain frozen and running.",
+  "records": [
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[False]",
+      "status": "FAIL",
+      "seconds": 0.895
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[True]",
+      "status": "FAIL",
+      "seconds": 0.502
+    }
+  ],
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_runtime_attempt_history.py::test_upgrade_records_only_known_current_snapshot_and_is_repeatable",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\attempt-history-red-6e612u10\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\attempt-history-red.xml"
+  ],
+  "exit_code": 1,
+  "source": "unchanged test at39c5e6c; isolated receipt worktree"
+}

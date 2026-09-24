@@ -118,7 +118,7 @@ Full Windows handle51046 and Linux29628 remain live. Windows has observed failur
 in the Claude event-latency test and grouped read-receipt test; no terminal totals
 or traceback yet. Receipt regression independently reproduced1 FAIL (2 receipts
 instead of1), corrected only in a detached disposable worktree to preserve the
-running source freeze. Expanded isolated Windows selection handle54951 completed0:98 PASS1 POSIX SKIP142.52s. Linux equivalent handle29305 is live. Private
+running source freeze. Expanded isolated Windows selection handle54951 completed0:98 PASS1 POSIX SKIP142.52s. Linux equivalent handle29305 completed0:99 PASS186.89s. Private
 record .git/pr34-evidence/receipt-regression-worktree.json contains exact paths,
 commands and generation hashes; P12_RECEIPT_GROUPING_REGRESSION.md records scope.
 Do not integrate its two changed files until both full suites terminate.
@@ -128,3 +128,15 @@ current/historical evidence index split, migration/recovery guide, ADR and chang
 updates. No production/test changes from39c5e6c in the main working tree. Local
 0.2.0 package artifacts still represent39c5e6c and must be rebuilt after integrating
 any production correction. Installed Nexus remains0.1.10.
+
+Isolated follow-up: explicit migration expectation59..64 corrected (2 RED failures;
+11 PASS each platform afterward), with rollback/data preservation unchanged.
+Claude latency assertion independently disproven by real fixture startup delay;
+replacement uses subscribed consumers, actual condition notification and a held
+polling-clock negative control (2 initial PASS). Full Claude fixture module
+Windows20768/Linux7925 completed exit0:29 PASS7 native SKIP each platform
+(60.50s/63.34s) in the detached worktree. Four changed files now
+await integration: application/inbox.py plus receipt/attempt-history/Claude tests.
+Isolated live MCP smoke and changed-file Ruff PASS. Main full suites51046/29628
+are still live, so do not transfer these files yet. All details and sanitized
+manifests are indexed by P12_RECEIPT_GROUPING_REGRESSION.md.

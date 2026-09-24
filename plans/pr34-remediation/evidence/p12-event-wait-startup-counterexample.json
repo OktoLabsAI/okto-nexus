@@ -1,0 +1,20 @@
+{
+  "base_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "fault": "Actual owned Python fixture delays startup by0.4s before its unchanged wire script; no runtime source change",
+  "outcome": "FAIL",
+  "assertion": "first event took 0.583s to arrive - the control above proves a poll-based events() would exceed 0.2s here, so this looks like polling, not a genuine blocking wait",
+  "cleanup": [
+    {
+      "owned_process_stopped": true
+    },
+    {
+      "owned_process_stopped": false
+    }
+  ],
+  "post_parent_exit_census": {
+    "command_scope": "python.exe with -u -c and unique controlled fixture prefix; census process excluded",
+    "exit_code": 0,
+    "rows": []
+  },
+  "initial_census_limitation": "First broad prefix census included its own Python command; excluded explicitly in final census."
+}

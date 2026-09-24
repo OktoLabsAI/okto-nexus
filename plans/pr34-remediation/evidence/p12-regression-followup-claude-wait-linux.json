@@ -1,0 +1,259 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "linux",
+  "counts": {
+    "PASS": 29,
+    "SKIP": 7
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "7",
+      "tests": "36",
+      "time": "63.328",
+      "timestamp": "2026-09-24T13:14:28.819564-03:00"
+    }
+  ],
+  "native_flags": "Explicit native campaign empty and Claude/Codex live flags0;7 native cases SKIP, not PASS",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached worktree; production/test source still not integrated into main; native skips remain unqualified.",
+  "records": [
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_capabilities_match_adr_0004_d7a_mapping",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_start_returns_starting_session_with_minted_id",
+      "status": "PASS",
+      "seconds": 1.283
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_start_twice_raises_conflict",
+      "status": "PASS",
+      "seconds": 1.118
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_send_before_start_raises_conflict",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_send_wrong_session_id_rejected",
+      "status": "PASS",
+      "seconds": 1.12
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_send_turn_requires_content_payload",
+      "status": "PASS",
+      "seconds": 1.118
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_single_turn_maps_turn_started_then_turn_completed",
+      "status": "PASS",
+      "seconds": 1.319
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_second_turn_reuses_same_nexus_session_id",
+      "status": "PASS",
+      "seconds": 1.288
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_unparseable_stdout_line_surfaced_not_dropped_and_does_not_hang",
+      "status": "PASS",
+      "seconds": 1.234
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_shape_drifted_stdout_line_is_surfaced_not_fatal_to_the_reader",
+      "status": "PASS",
+      "seconds": 1.234
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_child_death_without_result_surfaces_error_then_ends_cleanly",
+      "status": "PASS",
+      "seconds": 1.249
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_unknown_verb_rejected_at_domain_layer_before_reaching_connector",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_unknown_verb_backstop_at_connector_layer_if_domain_gate_is_bypassed",
+      "status": "PASS",
+      "seconds": 1.118
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_called_twice_both_return_after_close_not_just_one",
+      "status": "PASS",
+      "seconds": 2.118
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_res_a2_two_concurrent_events_consumers_each_receive_the_full_stream",
+      "status": "PASS",
+      "seconds": 3.742
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_res_a4_failed_start_leaves_events_terminable_not_hung",
+      "status": "PASS",
+      "seconds": 1.002
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_finish_never_fabricates_process_exit_when_child_is_still_alive",
+      "status": "PASS",
+      "seconds": 11.339
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_end_closes_stdin_and_events_iterator_exhausts_cleanly",
+      "status": "PASS",
+      "seconds": 1.119
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_interrupt_in_unsafe_window_is_deferred_not_forwarded",
+      "status": "PASS",
+      "seconds": 1.233
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_interrupt_after_generation_started_is_forwarded_and_marks_interrupted",
+      "status": "PASS",
+      "seconds": 1.744
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_request_interrupt_marks_the_head_pending_turn_not_the_tail",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_write_lock_contention_raises_instead_of_blocking_forever",
+      "status": "PASS",
+      "seconds": 10.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_interrupt_with_no_turn_in_flight_is_a_safe_no_op",
+      "status": "PASS",
+      "seconds": 1.241
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_steer_after_generation_started_interrupts_current_turn_then_runs_new_one",
+      "status": "PASS",
+      "seconds": 4.25
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_steer_in_unsafe_window_is_deferred_and_degrades_to_a_queued_turn",
+      "status": "PASS",
+      "seconds": 1.23
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_ordinary_send_turn_while_generating_does_not_desync_the_generating_flag",
+      "status": "PASS",
+      "seconds": 4.243
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_interrupt_with_a_second_turn_already_queued_behind_resolves_fifo_correctly",
+      "status": "PASS",
+      "seconds": 4.246
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_with_a_second_turn_already_queued_behind",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.0]",
+      "status": "PASS",
+      "seconds": 0.426
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.4]",
+      "status": "PASS",
+      "seconds": 0.801
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_single_trivial_turn",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_two_turns_share_session_and_process_survives",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_steer_interrupts_in_flight_turn_and_runs_new_one_immediately",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_after_generation_start_survives_and_reprompts_immediately",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_end_verb_drains_and_exits_cleanly",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_targets_head_turn_with_two_outstanding",
+      "status": "SKIP",
+      "seconds": 0.0
+    }
+  ],
+  "source_file_sha256": {
+    "tests/test_harness_claude_code_connector.py": "9ead7bfc675d89be5b8b46bd8082f070b878d0108f9d74ce4fa86d1e09db0c59"
+  },
+  "exit_code": 0,
+  "handle": 7925,
+  "command_argv": [
+    "/var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_harness_claude_code_connector.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/receipt-regression-06mfxlx6/claude-wait-linux.xml"
+  ],
+  "environment_overrides": {
+    "OKTO_NEXUS_CLAUDE_LIVE": "0",
+    "OKTO_NEXUS_CODEX_LIVE": "0",
+    "OKTO_NEXUS_NATIVE_CAMPAIGN": ""
+  }
+}

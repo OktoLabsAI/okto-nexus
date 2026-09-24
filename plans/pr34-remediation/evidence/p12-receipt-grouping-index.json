@@ -21,11 +21,75 @@
         "PASS": 98,
         "SKIP": 1
       }
+    },
+    "green-linux": {
+      "manifest": "p12-receipt-grouping-green-linux.json",
+      "counts": {
+        "PASS": 99
+      }
+    },
+    "attempt-history-red": {
+      "manifest": "p12-regression-followup-attempt-history-red.json",
+      "counts": {
+        "FAIL": 2
+      }
+    },
+    "attempt-history-green": {
+      "manifest": "p12-regression-followup-attempt-history-green.json",
+      "counts": {
+        "PASS": 11
+      }
+    },
+    "attempt-history-green-linux": {
+      "manifest": "p12-regression-followup-attempt-history-green-linux.json",
+      "counts": {
+        "PASS": 11
+      }
+    },
+    "event-wait-green": {
+      "manifest": "p12-regression-followup-event-wait-green.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "claude-wait-windows": {
+      "manifest": "p12-regression-followup-claude-wait-windows.json",
+      "counts": {
+        "PASS": 29,
+        "SKIP": 7
+      }
+    },
+    "claude-wait-linux": {
+      "manifest": "p12-regression-followup-claude-wait-linux.json",
+      "counts": {
+        "PASS": 29,
+        "SKIP": 7
+      }
     }
   },
-  "linux": "RUNNING handle29305",
+  "linux": "TERMINAL exit0",
   "changed_paths": [
     "src/okto_nexus/application/inbox.py",
-    "tests/test_runtime_attach_work_channel.py"
-  ]
+    "tests/test_runtime_attach_work_channel.py",
+    "tests/test_runtime_attempt_history.py",
+    "tests/test_harness_claude_code_connector.py"
+  ],
+  "live_mcp_smoke": {
+    "command_argv": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "scripts/live_client.py"
+    ],
+    "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\source",
+    "environment_overrides": {
+      "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\live-mcp-1n_uksd2",
+      "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\live-mcp-1n_uksd2",
+      "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\live-mcp-1n_uksd2"
+    },
+    "exit_code": 0,
+    "observed": [
+      "LIVE E2E RESULT: PASS"
+    ],
+    "provider_calls": "none"
+  },
+  "claude_event_wait_regression": "TERMINAL Windows29 PASS7 SKIP60.50s/Linux29 PASS7 SKIP63.34s; exit0 both"
 }

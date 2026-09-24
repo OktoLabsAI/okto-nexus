@@ -1,0 +1,636 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Linux",
+  "counts": {
+    "PASS": 99
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "99",
+      "time": "186.834",
+      "timestamp": "2026-09-24T13:05:27.054390-03:00"
+    }
+  ],
+  "native_flags": "No native provider; isolated fixtures only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached worktree; not integrated. Source hashes match Windows receipt correction; unrelated attempt-history test metadata changed while this selection ran and was not selected.",
+  "records": [
+    {
+      "class": "tests.test_receipts",
+      "test": "test_pull_emits_sender_only_delivered_receipt",
+      "status": "PASS",
+      "seconds": 0.974
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_ack_emits_read_receipt_once_and_idempotently",
+      "status": "PASS",
+      "seconds": 0.841
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_sender_can_await_read_receipt_with_event_wait",
+      "status": "PASS",
+      "seconds": 1.232
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_message_status_and_receipts_agree",
+      "status": "PASS",
+      "seconds": 1.438
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_event_cursor_anchors_a_monitor_at_now",
+      "status": "PASS",
+      "seconds": 1.106
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_ack_lands_grouped_receipt_in_sender_inbox",
+      "status": "PASS",
+      "seconds": 0.927
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_receipts_never_generate_receipts",
+      "status": "PASS",
+      "seconds": 1.025
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_self_send_produces_no_receipt",
+      "status": "PASS",
+      "seconds": 1.002
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_opt_out_setting_disables_inbox_receipts",
+      "status": "PASS",
+      "seconds": 0.985
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+      "status": "PASS",
+      "seconds": 7.304
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+      "status": "PASS",
+      "seconds": 5.505
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+      "status": "PASS",
+      "seconds": 4.795
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+      "status": "PASS",
+      "seconds": 4.739
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-session_closed]",
+      "status": "PASS",
+      "seconds": 4.011
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-secret_rotated]",
+      "status": "PASS",
+      "seconds": 3.8
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-key_rotated]",
+      "status": "PASS",
+      "seconds": 4.482
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-grant_revoked]",
+      "status": "PASS",
+      "seconds": 4.179
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-wrong_session]",
+      "status": "PASS",
+      "seconds": 4.176
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-stale_claim]",
+      "status": "PASS",
+      "seconds": 4.622
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-foreign_actor]",
+      "status": "PASS",
+      "seconds": 4.247
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-creator_policy]",
+      "status": "PASS",
+      "seconds": 5.049
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-session_closed]",
+      "status": "PASS",
+      "seconds": 4.477
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-secret_rotated]",
+      "status": "PASS",
+      "seconds": 4.803
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-key_rotated]",
+      "status": "PASS",
+      "seconds": 4.283
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-grant_revoked]",
+      "status": "PASS",
+      "seconds": 4.524
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-wrong_session]",
+      "status": "PASS",
+      "seconds": 4.276
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-stale_claim]",
+      "status": "PASS",
+      "seconds": 4.142
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-foreign_actor]",
+      "status": "PASS",
+      "seconds": 3.821
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-creator_policy]",
+      "status": "PASS",
+      "seconds": 4.051
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_over_real_attach_socket_and_authenticated_nexus",
+      "status": "PASS",
+      "seconds": 4.455
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_can_return_after_native_detach_and_quarantine",
+      "status": "PASS",
+      "seconds": 4.396
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_completion_releases_lane_for_a_new_canonical_delivery",
+      "status": "PASS",
+      "seconds": 4.668
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+      "status": "PASS",
+      "seconds": 3.252
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+      "status": "PASS",
+      "seconds": 3.287
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+      "status": "PASS",
+      "seconds": 3.277
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+      "status": "PASS",
+      "seconds": 3.438
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+      "status": "PASS",
+      "seconds": 4.771
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+      "status": "PASS",
+      "seconds": 3.566
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+      "status": "PASS",
+      "seconds": 3.798
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]",
+      "status": "PASS",
+      "seconds": 3.618
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+      "status": "PASS",
+      "seconds": 4.093
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_delivery_status_vocabulary",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_new_delivery_id_prefixed_and_unique",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_message_delivery_model_defaults",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_none_for_absent_target",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_normalizes",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_rejects_missing_and_unknown",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_hits_named_agent_only",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_unknown_agent_is_empty",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_capability_string_and_list_any_of",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_accepts_plain_dict_candidate",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_role_exact_case_sensitive",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_broadcast_hits_all_candidates",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_mixed_is_union",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_with_fallback_at_send_is_direct_only_when_delayed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_malformed_target_raises",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_validates_target_even_with_empty_candidates",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_requires_workspace_audience",
+      "status": "PASS",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_rejects_direct_with_fallback",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_rejects_broadcast_nested_in_mixed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_allows_safe_targets",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_requires_known_recipient_only_for_directed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_005_creates_message_deliveries",
+      "status": "PASS",
+      "seconds": 0.544
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_005_enforces_one_delivery_per_message_recipient",
+      "status": "PASS",
+      "seconds": 0.636
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_006_adds_attempts_defaulting_to_zero",
+      "status": "PASS",
+      "seconds": 0.636
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_006_recorded_and_history_index_present",
+      "status": "PASS",
+      "seconds": 0.632
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_returns_unread_and_marks_in_flight",
+      "status": "PASS",
+      "seconds": 0.728
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_ack_moves_to_history",
+      "status": "PASS",
+      "seconds": 0.671
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_is_non_destructive",
+      "status": "PASS",
+      "seconds": 0.673
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_lease_expiry_redelivers_unacked",
+      "status": "PASS",
+      "seconds": 0.673
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_count_history_write_nothing_even_with_expired_leases",
+      "status": "PASS",
+      "seconds": 0.667
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_reads_use_readonly_uow_and_mutations_use_write_uow",
+      "status": "PASS",
+      "seconds": 0.773
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_reclaims_own_expired_and_never_touches_other_recipients",
+      "status": "PASS",
+      "seconds": 0.684
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_concurrent_pull_delivers_exactly_once",
+      "status": "PASS",
+      "seconds": 0.642
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_lease_seconds_sets_and_clamps_the_lease",
+      "status": "PASS",
+      "seconds": 0.611
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_lease_seconds_default_and_validation",
+      "status": "PASS",
+      "seconds": 0.629
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_poison_delivery_parks_after_max_attempts_and_frees_the_head",
+      "status": "PASS",
+      "seconds": 0.644
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_include_parked_must_be_boolean",
+      "status": "PASS",
+      "seconds": 0.541
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_is_envelope_only_pull_and_history_return_full_body",
+      "status": "PASS",
+      "seconds": 0.59
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_short_body_previews_whole_body",
+      "status": "PASS",
+      "seconds": 0.629
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_include_bodies_opts_into_full_body_and_validates",
+      "status": "PASS",
+      "seconds": 0.649
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_renews_lease_and_prevents_redelivery",
+      "status": "PASS",
+      "seconds": 0.704
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_seconds_clamped",
+      "status": "PASS",
+      "seconds": 0.621
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_fails_precisely_per_lane_and_extends_nothing",
+      "status": "PASS",
+      "seconds": 0.73
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_keyset_pages_do_not_duplicate_under_interleaved_acks",
+      "status": "PASS",
+      "seconds": 0.859
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_pagination_walks_all_pages",
+      "status": "PASS",
+      "seconds": 0.818
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_rejects_foreign_cursor",
+      "status": "PASS",
+      "seconds": 0.707
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_message_status_reflects_the_delivery_cycle",
+      "status": "PASS",
+      "seconds": 0.767
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_message_status_unknown_message_is_not_found",
+      "status": "PASS",
+      "seconds": 0.64
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_inbox_is_global_across_workspaces",
+      "status": "PASS",
+      "seconds": 0.674
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_requires_agent_id",
+      "status": "PASS",
+      "seconds": 0.764
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_clamps_limit",
+      "status": "PASS",
+      "seconds": 0.818
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_ack_of_foreign_or_unknown_message_is_zero",
+      "status": "PASS",
+      "seconds": 0.802
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_surfaces_both_unread_and_in_flight",
+      "status": "PASS",
+      "seconds": 0.655
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_count_reports_expired_lease_as_unread",
+      "status": "PASS",
+      "seconds": 0.667
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_build_service_lease_ttl_comes_from_config",
+      "status": "PASS",
+      "seconds": 0.702
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_build_service_reuses_existing_repos",
+      "status": "PASS",
+      "seconds": 0.658
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_register_exposes_queue_tools_and_envelopes_errors",
+      "status": "PASS",
+      "seconds": 0.652
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_inbox_peek_tool_is_envelope_only_with_include_bodies_opt_in",
+      "status": "PASS",
+      "seconds": 0.63
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+    "tests/test_runtime_attach_work_channel.py": "49c85aaafd2e3f15703461920cd420ada66f16fc9f27f125c7f39e903d5c2ce6"
+  },
+  "command_argv": [
+    "/var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_receipts.py",
+    "tests/test_runtime_attach_work_channel.py",
+    "tests/test_inbox.py",
+    "tests/test_inbox_service.py",
+    "-q",
+    "--tb=short",
+    "--junitxml=/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/receipt-regression-06mfxlx6/green-linux.xml"
+  ],
+  "cwd": "/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/receipt-regression-06mfxlx6/source",
+  "exit_code": 0,
+  "handle": 29305
+}
