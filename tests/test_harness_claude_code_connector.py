@@ -1201,26 +1201,11 @@ def test_real_claude_interrupt_with_a_second_turn_already_queued_behind():
 # No-polling proof: a blocking Queue.get() wakes immediately on publish,
 # never on a fixed interval (D1: no SleepPollWaiter anywhere in this path).
 # --------------------------------------------------------------------------- #
-#: How long the real connector's events() may take to deliver the first
-#: event after send_turn. Tight enough that ANY meaningfully poll-based
-#: implementation fails it (see the in-test control below, which proves
-#: this - not just asserts a number and hopes), loose enough to absorb
-#: local-subprocess IPC jitter for a genuinely blocking implementation.
-_PROMPT_DELIVERY_BOUND_S = 0.2
-
-
 class _SleepPollEventsConnector(ClaudeCodeStreamConnector):
-    """A connector that reimplements ``events()`` as a DELIBERATE sleep-poll
-    loop - exactly the anti-pattern D1 forbids and this module's own
-    ``events()`` must never be. Exists ONLY as a control in
-    ``test_events_iterator_delivers_promptly_not_on_a_poll_interval``, to
-    prove ``_PROMPT_DELIVERY_BOUND_S`` actually discriminates a poll-based
-    implementation from a genuinely blocking one - the exact honesty gap a
-    prior version of this test had (it used a 1.0s bound that a
-    sub-second, e.g. 900ms, poll interval would also have satisfied).
-    """
+    """Negative control: publication alone cannot advance its polling clock."""
 
-    _POLL_PERIOD_S = 0.3
+    def _wait_before_poll(self):
+        time.sleep(0.3)
 
     def events(self):  # type: ignore[override]
         my_queue: queue.Queue = queue.Queue()
@@ -1228,10 +1213,9 @@ class _SleepPollEventsConnector(ClaudeCodeStreamConnector):
             backlog = list(self._event_history)
             self._subscribers.append(my_queue)
         try:
-            for item in backlog:
-                yield item
+            yield from backlog
             while True:
-                time.sleep(self._POLL_PERIOD_S)
+                self._wait_before_poll()
                 drained_any = False
                 while True:
                     try:
@@ -1244,71 +1228,108 @@ class _SleepPollEventsConnector(ClaudeCodeStreamConnector):
                     return
         finally:
             with self._history_lock:
-                try:
-                    self._subscribers.remove(my_queue)
-                except ValueError:
-                    pass
+                self._subscribers.remove(my_queue)
 
 
-def test_events_iterator_delivers_promptly_not_on_a_poll_interval():
-    """``system/init`` (this connector's ``turn_started`` signal) does NOT
-    fire at bare process start - verified empirically against the real
-    ``claude`` 2.1.278 binary (2026-09-20 stream-json probe): it is a
-    PER-TURN event, only emitted once a turn's content has actually been
-    written to stdin. The fake script mirrors this (nothing is emitted
-    until its ``for raw in sys.stdin`` loop has a line to read), so
-    ``next(it)`` is only ever called AFTER ``send_turn`` below - calling it
-    before would block forever on both the fake and the real binary.
+@pytest.mark.parametrize("startup_delay", [0.0, 0.4])
+def test_events_iterator_delivers_promptly_not_on_a_poll_interval(monkeypatch, startup_delay):
+    """Observe publication waking the real condition, independent of startup cost.
 
-    Test-honesty fix (journal wf_de1d2ad9-17f, line 17, minor): the
-    previous version of this test asserted ``t_first < 1.0`` - loose enough
-    that a hypothetical sub-second sleep-poll implementation (e.g. a 900ms
-    interval) would ALSO have satisfied it, so passing proved nothing about
-    polling specifically. This version first runs the identical measurement
-    through :class:`_SleepPollEventsConnector`, a deliberately poll-based
-    ``events()``, and requires THAT to exceed the bound below - proving the
-    bound discriminates - before asserting the real connector stays under
-    it.
+    Both consumers subscribe before either owned fixture receives a turn. The
+    negative control's polling clock stays blocked after its event is published;
+    the unchanged production iterator must deliver without advancing that clock.
+    Wait bounds are deadlock guards, not claimed process-startup latency limits.
     """
-    poll_connector = _SleepPollEventsConnector(
-        binary=sys.executable, argv=("-u", "-c", _FAKE_CLAUDE_SCRIPT), env={"FAKE_CC_SCENARIO": "slow_start"}
-    )
-    poll_session = poll_connector.start(owning_agent_id="agent_test")
-    poll_it = poll_connector.events()
-    t0 = time.monotonic()
-    poll_connector.send(poll_session, HarnessCommand(session_id=poll_session.session_id, verb="send_turn", payload={"content": "hi"}))
-    poll_first = next(poll_it)
-    poll_latency = time.monotonic() - t0
-    assert poll_first.kind == "turn_started"
-    assert poll_latency > _PROMPT_DELIVERY_BOUND_S, (
-        f"control (deliberately poll-based events()) delivered the first "
-        f"event in {poll_latency:.3f}s, under the {_PROMPT_DELIVERY_BOUND_S}s "
-        "bound - the bound below would not actually catch a poll-based "
-        "implementation; widen _SleepPollEventsConnector._POLL_PERIOD_S"
-    )
-    poll_connector.send(poll_session, HarnessCommand(session_id=poll_session.session_id, verb="end"))
-    for _ in poll_it:
-        pass
+    from okto_nexus.adapters.outbound.harness import claude_code_stream as module
 
-    connector = _connector("slow_start")  # 0.5s gap before the first real event
-    session = connector.start(owning_agent_id="agent_test")
+    native_waiting, poll_waiting = threading.Event(), threading.Event()
+    poll_release, poll_published = threading.Event(), threading.Event()
+    wake_results = []
+    subscribe = module.subscribe
 
-    it = connector.events()
-    t0 = time.monotonic()
-    connector.send(session, HarnessCommand(session_id=session.session_id, verb="send_turn", payload={"content": "hi"}))
-    # first event after send_turn is turn_started (system:init)
-    first = next(it)
-    t_first = time.monotonic() - t0
-    assert first.kind == "turn_started"
-    assert t_first < _PROMPT_DELIVERY_BOUND_S, (
-        f"first event took {t_first:.3f}s to arrive - the control above "
-        f"proves a poll-based events() would exceed {_PROMPT_DELIVERY_BOUND_S}s "
-        "here, so this looks like polling, not a genuine blocking wait"
-    )
+    def observed_subscribe(*args, **kwargs):
+        subscriber, backlog = subscribe(*args, **kwargs)
+        original_wait = subscriber._changed.wait
 
-    connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
-    for _ in it:
-        pass
+        def observed_wait(timeout=None):
+            native_waiting.set()
+            notified = original_wait(timeout)
+            wake_results.append(notified)
+            return notified
+
+        subscriber._changed.wait = observed_wait
+        return subscriber, backlog
+
+    monkeypatch.setattr(module, "subscribe", observed_subscribe)
+    script = f"import time; time.sleep({startup_delay})\n" + _FAKE_CLAUDE_SCRIPT
+    control = _SleepPollEventsConnector(binary=sys.executable, argv=("-u", "-c", script))
+    native = ClaudeCodeStreamConnector(binary=sys.executable, argv=("-u", "-c", script))
+
+    def wait_before_poll():
+        poll_waiting.set()
+        assert poll_release.wait(15), "poll clock was never released"
+
+    monkeypatch.setattr(control, "_wait_before_poll", wait_before_poll)
+    emit = control._emit
+
+    def observed_emit(kind, native_event, payload):
+        emit(kind, native_event, payload)
+        if kind == "turn_started":
+            poll_published.set()
+
+    monkeypatch.setattr(control, "_emit", observed_emit)
+    done = {name: threading.Event() for name in ("control", "native")}
+    results, errors, owned, threads, iterators = {}, [], [], [], []
+
+    def receive(name, iterator):
+        try:
+            results[name] = next(iterator)
+        except BaseException as exc:
+            errors.append(exc)
+        finally:
+            done[name].set()
+
+    try:
+        for name, connector in (("control", control), ("native", native)):
+            session = connector.start(owning_agent_id="agent_test")
+            owned.append((connector, session, connector._proc))
+            iterator = connector.events()
+            iterators.append(iterator)
+            thread = threading.Thread(target=receive, args=(name, iterator), daemon=True)
+            threads.append(thread)
+            thread.start()
+        assert poll_waiting.wait(10) and native_waiting.wait(10)
+        for connector, session, _ in owned:
+            connector.send(session, HarnessCommand(session_id=session.session_id,
+                verb="send_turn", payload={"content": "hi"}))
+        assert poll_published.wait(10), "control peer never published its real event"
+        assert done["native"].wait(10), "publication did not wake the production iterator"
+        assert not done["control"].is_set(), "poll control advanced without its clock"
+        assert not errors, errors
+        assert results["native"].kind == "turn_started"
+        assert any(wake_results), "real condition was never notified by publication"
+        poll_release.set()
+        assert done["control"].wait(10)
+        assert not errors, errors
+        assert results["control"].kind == "turn_started"
+    finally:
+        poll_release.set()
+        for connector, session, process in owned:
+            try:
+                connector.send(session, HarnessCommand(session_id=session.session_id, verb="end"))
+            finally:
+                if process is not None:
+                    try:
+                        process.wait(timeout=10)
+                    except Exception:
+                        process.kill()
+                        process.wait(timeout=10)
+                        raise
+        for thread in threads:
+            thread.join(10)
+            assert not thread.is_alive(), "fixture consumer did not terminate"
+        for iterator in iterators:
+            iterator.close()
 
 
 # --------------------------------------------------------------------------- #

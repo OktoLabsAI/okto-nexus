@@ -197,3 +197,13 @@ with no checkout is prepared on WSL's native filesystem at
 .git/pr34-evidence/final-linux-source.json. Checkout/fetch the corrected commit
 there, verify tracked source and import origin, and use fresh fixtures plus
 persistent XML on D. No tests, provider or install ran in that prepared clone yet.
+
+Main five-file correction integrated after Linux29628 terminated exit1
+(2708 PASS/4 FAIL/44 SKIP). Seven integrated assertions PASS9.40s,14974 exit0;
+required isolated real MCP smoke PASS exit0. See P12_RECEIPT_GROUPING_REGRESSION.md.
+T-API-01 scoped PASS restored; final gate not passed. Candidate Windows49697 is
+still running and must remain frozen; final Linux starts at corrected commit in
+prepared WSL-native clone. Three new/modified plan-only metric-probe files are
+work in progress: Windows initial observation succeeded, Linux preparation lacked
+psutil and has a procfs-only correction pending rerun. No production metric API
+change. Keep these separate from the five-path receipt integration commit.

@@ -73,3 +73,26 @@ prior audit-row preservation, recovery columns, empty reconciliation history and
 foreign-key checks remain unchanged. Corrected case:1 PASS Windows2.51s and1 PASS
 Linux9.27s (1718 exit0). No runtime or SQL change. The candidate now contains five
 changed files, all awaiting main integration after full suites51046/29628 finish.
+
+## Main integration after terminal full regressions
+
+Both old-source suites are now terminal (Windows51046 exit1 and Linux29628
+exit1); exact totals/traces are in P12_FULL_REGRESSION_39C5E6C.md. Main's five
+target paths matched39c5e6c before copying. Each transferred file matched its
+hash from the still-running corrected Windows candidate49697.
+
+Integrated parentafbb44a plus five exact paths: seven targeted assertions PASS
+in9.40s, handle14974 exit0. Selection includes the original grouped receipt,
+mixed ordinary/external provenance, both mechanistic event-wait parameters,
+both attempt-history parameters and reconciliation migration. Required real
+stdio smoke completed exit0 with LIVE E2E RESULT: PASS in a fresh D home with
+provider/ambient configuration excluded. Changed-file Ruff and diff check PASS.
+Commands/source hashes/results: evidence/p12-receipt-integrated-windows.json.
+
+T-API-01 returns to scoped PASS after integrated compatibility correction;
+full corrected regression, native qualification and release gates stay pending.
+Candidate Windows49697 remains frozen and running. Its base/diff identity must
+be retained and its tracked test/runtime bytes compared with the new commit.
+Final Linux will execute the corrected commit in a clean native-filesystem clone.
+No new migration, public surface revision, adapter capability or authorization
+exception was introduced by this correction.

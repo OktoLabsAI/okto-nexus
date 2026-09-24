@@ -1,0 +1,106 @@
+{
+  "source_sha": "afbb44aa044a4dcb4ba118142e16ea8b8e7e64ec",
+  "platform": "windows",
+  "counts": {
+    "PASS": 7
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "7",
+      "time": "9.390",
+      "timestamp": "2026-09-24T14:14:53.988904-03:00"
+    }
+  ],
+  "native_flags": "explicit campaign empty; legacy live flags and UI campaign zero",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_receipts",
+      "test": "test_ack_lands_grouped_receipt_in_sender_inbox",
+      "status": "PASS",
+      "seconds": 0.236
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+      "status": "PASS",
+      "seconds": 5.183
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.0]",
+      "status": "PASS",
+      "seconds": 0.269
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_events_iterator_delivers_promptly_not_on_a_poll_interval[0.4]",
+      "status": "PASS",
+      "seconds": 0.69
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[False]",
+      "status": "PASS",
+      "seconds": 0.69
+    },
+    {
+      "class": "tests.test_runtime_attempt_history",
+      "test": "test_upgrade_records_only_known_current_snapshot_and_is_repeatable[True]",
+      "status": "PASS",
+      "seconds": 0.385
+    },
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_reconciliation_migration_is_additive_and_repeatable",
+      "status": "PASS",
+      "seconds": 0.345
+    }
+  ],
+  "source_state": "Parent plus exactly five transferred candidate paths; byte hashes below. This selected gate is not the full regression.",
+  "source_file_sha256": {
+    "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+    "tests/test_harness_claude_code_connector.py": "9ead7bfc675d89be5b8b46bd8082f070b878d0108f9d74ce4fa86d1e09db0c59",
+    "tests/test_runtime_attach_work_channel.py": "49c85aaafd2e3f15703461920cd420ada66f16fc9f27f125c7f39e903d5c2ce6",
+    "tests/test_runtime_attempt_history.py": "9962e88e278d082c9a1dcca842ca4baeba459b891fde83378868796035c1bebd",
+    "tests/test_runtime_operation_reconciliation.py": "8cf8ba71280702a4559157c8f91925466fb9591aa495990f23d55274f7057fae"
+  },
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_receipts.py::test_ack_lands_grouped_receipt_in_sender_inbox",
+    "tests/test_runtime_attach_work_channel.py::test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+    "tests/test_harness_claude_code_connector.py::test_events_iterator_delivers_promptly_not_on_a_poll_interval",
+    "tests/test_runtime_attempt_history.py::test_upgrade_records_only_known_current_snapshot_and_is_repeatable",
+    "tests/test_runtime_operation_reconciliation.py::test_reconciliation_migration_is_additive_and_repeatable",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-nb439pln\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-nb439pln\\results.xml"
+  ],
+  "environment_overrides": {
+    "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-nb439pln",
+    "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-nb439pln",
+    "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-nb439pln",
+    "OKTO_NEXUS_NATIVE_CAMPAIGN": "",
+    "OKTO_NEXUS_CODEX_LIVE": "0",
+    "OKTO_NEXUS_CLAUDE_LIVE": "0",
+    "OKTO_NEXUS_UI_CAMPAIGN": "0"
+  },
+  "exit_code": 0,
+  "live_mcp_smoke": {
+    "argv": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "scripts/live_client.py"
+    ],
+    "run_dir": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-integrated-live-elsfqffa",
+    "status": "TERMINAL",
+    "exit_code": 0,
+    "observed_pass": true
+  }
+}

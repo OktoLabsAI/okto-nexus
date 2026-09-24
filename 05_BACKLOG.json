@@ -3127,7 +3127,8 @@
             "plans/pr34-remediation/P12_FINAL_AUDIT.md",
             "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md",
             "plans/pr34-remediation/P12_FULL_REGRESSION_39C5E6C.md",
-            "plans/pr34-remediation/evidence/p12-full-39c5e6c-windows.json"
+            "plans/pr34-remediation/evidence/p12-full-39c5e6c-windows.json",
+            "plans/pr34-remediation/evidence/p12-full-e44d230-linux.json"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run. Current pre-correction Windows full39c5e6c is terminal exit1:2630 PASS/5 FAIL/121 SKIP. Known receipt regression and test expectations have an isolated qualified correction; Linux29628 remains live. Historical completed green suites do not supersede these current failures.",
           "current_review": {
@@ -5141,13 +5142,14 @@
       ],
       "stimulus": "Inicializar MCP stdio/HTTP e REST sem integração habilitada.",
       "expected": "Baseline legada preservada e sem novas tools/processos implícitos.",
-      "execution_status": "FAIL",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_BINDING_AND_DISABLED.md",
         "plans/pr34-remediation/evidence/p12-binding-disabled-index.json",
-        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md"
+        "plans/pr34-remediation/P12_RECEIPT_GROUPING_REGRESSION.md",
+        "plans/pr34-remediation/evidence/p12-receipt-integrated-windows.json"
       ],
-      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime. Current39c5e6c regression supersedes the prior scoped PASS: feature-OFF grouped inbox ACK emits2 notifications instead of1 (existing canonical receipt test, independently reproduced). Corrected only in detached worktree so far;98 PASS1 SKIP Windows/99 PASS Linux. Do not restore PASS before main integration and relevant final regression."
+      "notes": "4 fixture PASS per platform: binding-local observed heartbeat/close and workspace broadcast eligibility; actual authenticated stdio/HTTP baseline43 tools/resources with feature OFF, REST denial and no implicit native runtime. Current39c5e6c regression supersedes the prior scoped PASS: feature-OFF grouped inbox ACK emits2 notifications instead of1 (existing canonical receipt test, independently reproduced). Corrected only in detached worktree so far;98 PASS1 SKIP Windows/99 PASS Linux. Do not restore PASS before main integration and relevant final regression. Integrated correction after both old-source suites terminated: exact candidate bytes transferred, original ordinary grouping and mixed external provenance assertions PASS on main. Seven focused assertions and required real stdio smoke PASS. Scoped compatibility restored; final full gate remains pending."
     },
     {
       "test_id": "T-API-02",

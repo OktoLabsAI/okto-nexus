@@ -192,9 +192,15 @@ class InboxService:
                     for item in read_items:
                         self._emit_receipts(uow, [item], type_=MESSAGE_READ_TYPE,
                             recipient=aid, at=now, acknowledgement=external.get(item["message_id"]))
+                # Preserve one grouped receipt per sender/workspace for ordinary
+                # inbox ACKs. External work carries operation-specific evidence
+                # and must not attribute that evidence to unrelated messages.
+                ordinary = [message for message in acked_messages if message.message_id not in external]
+                self._deliver_read_receipts(uow, ordinary, reader=aid, at=now)
                 for message in acked_messages:
-                    self._deliver_read_receipts(uow, [message], reader=aid, at=now,
-                        acknowledgement=external.get(message.message_id))
+                    if message.message_id in external:
+                        self._deliver_read_receipts(uow, [message], reader=aid, at=now,
+                            acknowledgement=external[message.message_id])
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 

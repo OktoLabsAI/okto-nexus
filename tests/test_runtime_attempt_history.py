@@ -135,7 +135,7 @@ def test_upgrade_records_only_known_current_snapshot_and_is_repeatable(tmp_path,
             assert not c.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_delivery_attempt_events'").fetchone()
             assert dict(c.execute("SELECT * FROM delivery_outbox WHERE operation_id='op'").fetchone()) == before
             assert not c.execute("PRAGMA foreign_key_check").fetchall()
-    assert migrations.MigrationRunner(factory).apply() == [59, 60, 61]
+    assert migrations.MigrationRunner(factory).apply() == [59, 60, 61, 62, 63, 64]
     assert migrations.MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         events = uow.connection.execute("SELECT * FROM runtime_delivery_attempt_events WHERE operation_id='op'").fetchall()

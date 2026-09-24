@@ -237,3 +237,59 @@ def test_external_completion_releases_lane_for_a_new_canonical_delivery(runtime)
 @pytest.mark.parametrize("fault", ["missing_proof", "wrong_secret", "structured_completion", "foreign_actor"])
 def test_configured_attach_requires_authenticated_self_claim_proof(runtime, surface, fault):
     admitted(runtime, surface=surface, claim_fault=fault)
+
+
+def test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance(runtime):
+    deps, client, root, peers, _, caller_key = runtime
+    # Existing unread deliveries must stay ordinary pull deliveries when an
+    # endpoint is subsequently activated; no historical dispatch is requested.
+    deps.config.feature_harness_integrations = False
+    ordinary_ids = []
+    try:
+        for subject in ("ordinary first", "ordinary second"):
+            sent = tool(client, caller_key, "message_create", {
+                "project_root": root, "from_agent_id": "caller", "subject": subject,
+                "body": "ordinary fixture delivery", "target": {"strategy": "direct", "agent_id": "worker"}})
+            assert sent["ok"], sent
+            ordinary_ids.append(sent["data"]["message_id"])
+    finally:
+        deps.config.feature_harness_integrations = True
+    handoff, worker_key, proof, _, accepted, operation = admitted(runtime)
+    pulled = tool(client, worker_key, "inbox_pull", {"agent_id": "worker", **proof})
+    assert pulled["ok"], pulled
+    pulled_ids = {m["message_id"] for m in pulled["data"]["messages"]}
+    assert set(ordinary_ids) <= pulled_ids
+    assert operation["message_id"] not in pulled_ids
+    args = {"agent_id": "worker", "message_ids": ordinary_ids + [operation["message_id"]], **proof}
+    ack = tool(client, worker_key, "inbox_ack", args)
+    assert ack["ok"] and ack["data"]["acknowledged"] == 3, ack
+
+    def receipts():
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            rows = uow.connection.execute("SELECT body FROM messages WHERE from_agent_id='worker'").fetchall()
+        bodies = []
+        for row in rows:
+            try:
+                body = json.loads(row[0])
+            except ValueError:
+                continue
+            if isinstance(body, dict) and body.get("kind") == "message.read_receipt":
+                bodies.append(body)
+        return bodies
+
+    bodies = receipts()
+    assert len(bodies) == 2, bodies
+    grouped = next(body for body in bodies if set(body["message_ids"]) == set(ordinary_ids))
+    assert "ack_source" not in grouped and "operation_id" not in grouped
+    external = next(body for body in bodies if body["message_ids"] == [operation["message_id"]])
+    assert external["ack_source"] == "authenticated_nexus_call"
+    assert external["ack_level"] == "AGENT_ACK" and external["human_read"] is False
+    assert external["operation_id"] == operation["operation_id"]
+    repeated = tool(client, worker_key, "inbox_ack", args)
+    assert repeated["ok"] and repeated["data"]["acknowledged"] == 0, repeated
+    assert receipts() == bodies
+    completed = tool(client, worker_key, "handoff_complete", {"project_root": root,
+        "handoff_id": handoff, "agent_id": "worker", "claim_epoch": accepted["data"]["claim_epoch"],
+        "result": "fixture complete", **proof})
+    assert completed["ok"], completed
+    assert sum(len(peer.sent) for peer in peers) == 1

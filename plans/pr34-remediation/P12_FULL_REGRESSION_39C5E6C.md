@@ -26,3 +26,14 @@ handle29628 remains running. Await its terminal result before integration. Both
 platforms used distinct fixture stores; their durations overlap and are not
 performance measurements. Installed providers and UI were explicitly disabled;
 SKIP is not PASS. No native campaign or final release result follows from this run.
+
+## Linux terminal result
+
+Handle29628 completed exit1:2708 PASS/4 FAIL/44 SKIP,2 warnings and2 passed
+subtests,4735.30s. The four failures are the grouped receipt assertion and the
+three stale migration-list assertions already reproduced in isolation. The old
+Claude timing test passed on Linux. This does not negate its Windows failure.
+[Linux per-node manifest](evidence/p12-full-e44d230-linux.json) records the real
+launch SHAe44d230 and implementation equivalence to39c5e6c. Both old-source runs
+are now terminal, so main integration may proceed. Full corrected Windows49697
+is running separately against the frozen five-path candidate.
