@@ -1,0 +1,60 @@
+{
+  "source_sha": "a7353b0fc1857d66d4589d2b82a0047760917fc8",
+  "changed_file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "3d2ce6f44c2e4a369d91eecaea5ca515b58c8d74c1b2917346229b2c4f49b2c7",
+    "tests/test_runtime_projection_commit_crash.py": "e16643f2685928bf6ac4eb35419f9c3d425ca50268073609af64b98e970eb144"
+  },
+  "runs": {
+    "initial-windows": {
+      "manifest": "p12-projection-commit-initial-windows.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "initial-linux": {
+      "manifest": "p12-projection-commit-initial-linux.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "regression-windows": {
+      "manifest": "p12-projection-commit-regression-windows.json",
+      "counts": {
+        "PASS": 6
+      }
+    },
+    "regression-linux": {
+      "manifest": "p12-projection-commit-regression-linux.json",
+      "counts": {
+        "PASS": 6
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-JRN-03",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+        ],
+        "linux": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-JRN-07",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+        ],
+        "linux": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+        ]
+      }
+    }
+  ],
+  "limitations": "Stable Nexus journal event_uid replay after process restart. Fresh native frames are not deduplicated by content or invented native references. SQLite projection/checkpoint are atomic; rewind is test-only fault injection on a stopped disposable store."
+}

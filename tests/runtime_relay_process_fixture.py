@@ -69,6 +69,35 @@ def main():
                 os._exit(75)  # Peer emitted acceptance; no terminal is available.
         return project(self, uow, **kwargs)
     SqliteRuntimeJournalRepo.project = project_at_cut
+    if cut == "projection_commit":
+        from okto_nexus.application.runtime_event_ingress import RuntimeEventIngress
+        from okto_nexus.application.runtime_results import RuntimeResultService
+
+        # Keep result publication pending until the owner has been killed.
+        # Projection, canonical consumption and its receipt remain unmodified.
+        RuntimeResultService.scan_once = lambda *args, **kwargs: 0
+        recover = RuntimeEventIngress.recover
+
+        def exit_after_projection_commit(self):
+            count = recover(self)
+            with self.cf.unit_of_work(write=False) as uow:
+                result = uow.connection.execute("SELECT r.event_id,r.operation_id,o.delivery_id "
+                    "FROM runtime_results r JOIN delivery_outbox o USING(operation_id) "
+                    "WHERE o.terminal_event_id=r.event_id").fetchone()
+                if result is None:
+                    return count
+                marker = dict(result)
+                marker["checkpoint"] = self.repo.checkpoint(uow, store_id=self.journal.store_id)
+                marker["receipt_count"] = uow.connection.execute("SELECT count(*) FROM messages "
+                    "WHERE subject LIKE 'runtime processing receipt:%'").fetchone()[0]
+                marker["delivery_status"] = uow.connection.execute("SELECT status FROM message_deliveries "
+                    "WHERE delivery_id=?", (result["delivery_id"],)).fetchone()[0]
+            # This independent read transaction observes the already committed
+            # event/result/consumption/checkpoint. File I/O is outside its UoW.
+            (home / "projection-committed.json").write_text(json.dumps(marker), encoding="utf-8")
+            os._exit(77)
+
+        RuntimeEventIngress.recover = exit_after_projection_commit
     pending = SqliteRuntimeOutboxRepo.pending
     def pending_at_cut(self, uow, **kwargs):
         if cut == "message_commit":

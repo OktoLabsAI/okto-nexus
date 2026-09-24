@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `96a52e0` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `a7353b0` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface56, identity24. No personal database is a fixture.
@@ -29,6 +29,8 @@ Request acceptance unit: new barrier-controlled REST/MCP concurrent send and imm
 Delivery acceptance: TX01/DISP01/DISP02 scoped PASS; actual lost-wake deadline defect reproduced (1 FAIL), fixed earliest recovery wait and startup config interval, with bounded store-error retry delay. Final78 PASS each platform, Ruff/diff and isolated live MCP smoke PASS. See P12_DELIVERY_ACCEPTANCE.md; parent c976374 plus source/test hashes. No running tests.
 
 Consumption acceptance unit complete: CONS02/04/06 and PRES01 scoped PASS; final49 PASS Windows201.95s/Linux191.18s, exact socket refusal before-write proof and unchanged inbox accounting. Unsafe mirror16-case boundary verified but positive observer stays NOT_RUN. Preparation timeout correction retained; source unchanged. See P12_CONSUMPTION_ACCEPTANCE.md. Both handles terminal; no running tests.
+
+Projection commit crash unit: T-JRN-03/07 scoped PASS,8 distinct fixture nodes per platform, all four handles terminal. Real owner death after visible atomic projection/checkpoint commit and stronger test-only rewind preserve original result/attempt, receipt and publication exactly once. No native reconnect deduplication claim. See P12_PROJECTION_COMMIT_CRASH.md. No running tests.
 
 Next: finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
 
@@ -63,4 +65,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 99, "NOT_RUN": 30}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 101, "NOT_RUN": 28}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.

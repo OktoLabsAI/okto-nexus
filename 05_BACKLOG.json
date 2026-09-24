@@ -3895,12 +3895,12 @@
       ],
       "stimulus": "Commit de projeção ocorre antes de atualizar checkpoint externo.",
       "expected": "Replay vê event_uid já aplicado; nenhum receipt/resultado duplicado.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
-        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-projection-commit-index.json"
       ],
-      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
+      "notes": "Stable Nexus journal event_uid replay after process restart. Fresh native frames are not deduplicated by content or invented native references. SQLite projection/checkpoint are atomic; rewind is test-only fault injection on a stopped disposable store."
     },
     {
       "test_id": "T-JRN-04",
@@ -3961,8 +3961,12 @@
       ],
       "stimulus": "Repetir o mesmo evento/native ref após reconnect/replay.",
       "expected": "Uma projeção canônica, com vínculo correto à tentativa original.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PROJECTION_COMMIT_CRASH.md",
+        "plans/pr34-remediation/evidence/p12-projection-commit-index.json"
+      ],
+      "notes": "Stable Nexus journal event_uid replay after process restart. Fresh native frames are not deduplicated by content or invented native references. SQLite projection/checkpoint are atomic; rewind is test-only fault injection on a stopped disposable store."
     },
     {
       "test_id": "T-JRN-08",

@@ -1,0 +1,39 @@
+{
+  "source_sha": "a7353b0fc1857d66d4589d2b82a0047760917fc8",
+  "platform": "windows",
+  "counts": {
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "17.196",
+      "timestamp": "2026-09-24T08:29:06.014627-03:00"
+    }
+  ],
+  "native_flags": "No installed provider executed; owned Python protocol fixture.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_projection_commit_crash.py -q --junitxml=.git/pr34-evidence/projection-commit-initial-windows.xml",
+  "limitations": "Selected synthetic connector process tests; no installed provider qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[False]",
+      "status": "PASS",
+      "seconds": 8.31
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[True]",
+      "status": "PASS",
+      "seconds": 7.858
+    }
+  ],
+  "changed_file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "3d2ce6f44c2e4a369d91eecaea5ca515b58c8d74c1b2917346229b2c4f49b2c7",
+    "tests/test_runtime_projection_commit_crash.py": "e16643f2685928bf6ac4eb35419f9c3d425ca50268073609af64b98e970eb144"
+  }
+}
