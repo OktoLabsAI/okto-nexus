@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "b002317",
+  "execution_head": "39ac366",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1961,7 +1961,10 @@
             "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
             "src/okto_nexus/application/endpoints.py",
             "tests/test_runtime_admin_surfaces.py",
-            "tests/test_harness_target_grammar.py"
+            "tests/test_harness_target_grammar.py",
+            "tests/runtime_serve_shutdown_fixture.py",
+            "tests/test_serve_harness_shutdown_reap.py",
+            "tests/test_serve_harness_sigkill_reap.py"
           ],
           "test_results": [
             {
@@ -1970,13 +1973,21 @@
               "result": "PASS",
               "observed": "60 PASS plus added send-only relay1 PASS; Linux47 PASS. Fifteen legacy cases explicitly mapped to current canonical composition coverage.",
               "evidence": "plans/pr34-remediation/P11_TARGET_GRAMMAR_MIGRATION.md"
+            },
+            {
+              "sha": "39ac366 + shutdown fixture migration worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_serve_harness_shutdown_reap.py tests/test_serve_harness_sigkill_reap.py -x",
+              "result": "PASS",
+              "observed": "Windows7 PASS/2 POSIX SKIP; Linux9 PASS. Expanded Windows lifecycle/restart24 PASS/10 platform SKIP. Six full-suite inventory failures migrated to actual authenticated serve composition and exact process-instance witnesses. Expanded Linux31 PASS/3 SKIP,2 subtests PASS in118.95s.",
+              "evidence": "plans/pr34-remediation/P11_SHUTDOWN_FIXTURE_MIGRATION.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P11_RUNTIME_ADMINISTRATION.md",
-            "plans/pr34-remediation/P11_TARGET_GRAMMAR_MIGRATION.md"
+            "plans/pr34-remediation/P11_TARGET_GRAMMAR_MIGRATION.md",
+            "plans/pr34-remediation/P11_SHUTDOWN_FIXTURE_MIGRATION.md"
           ],
-          "notes": "Existing administration exposed through shared strict REST/MCP models and services; redacted profile list, surface39 and actual schema metrics. Full CRUD/diagnostics/cutover and phase gate remain pending."
+          "notes": "Legacy routing and shutdown fixtures now use canonical production composition. Explicit profile/auth, real Pi RPC fixture and birth ownership checked on Windows/Linux. Full immutable-SHA regression and remaining phase gates pending."
         },
         {
           "task_id": "P11-T02",
