@@ -4,7 +4,9 @@ This reference describes the implemented 0.2.0 administrative subset. The releas
 and complete P11/P12 gates are still pending; consult the
 [execution status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md).
 
-Enable `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true` explicitly. Authenticate as
+Native integrations and attach default to enabled; explicit stored/env/CLI
+`false` overrides remain honored. Endpoint/profile approval and per-agent method
+permissions are still required. Authenticate as
 the operator using the existing Nexus authentication mechanism. An agent ID in
 the body cannot supply operator authority. These operations configure existing
 agents' connections; they never register or replace the Agent profile. Configuring

@@ -36,27 +36,28 @@ FEATURE_FLAGS = [
 ]
 
 FEATURE_FIELDS = [field for field, _, _ in FEATURE_FLAGS]
+DEFAULT_ON = {"feature_harness_integrations", "feature_harness_attach"}
 
 
 # --------------------------------------------------------------------------- #
 # C1 - config core (TS5 + defaults half of TS1)
 # --------------------------------------------------------------------------- #
-def test_all_feature_flags_default_false():
-    """Opt-in contract (BR1): with no override anywhere, every flag is OFF."""
+def test_feature_flags_defaults():
+    """Native connections default ON; other feature flags retain their defaults."""
     config = load_config({})
     for field in FEATURE_FIELDS:
-        assert getattr(config, field) is False, field
-        assert getattr(NexusConfig(), field) is False, field
+        assert getattr(config, field) is (field in DEFAULT_ON), field
+        assert getattr(NexusConfig(), field) is (field in DEFAULT_ON), field
 
 
 @pytest.mark.parametrize("field,env_var,flag", FEATURE_FLAGS)
 def test_feature_flag_env_true(field, env_var, flag):
     config = load_config({env_var: "true"})
     assert getattr(config, field) is True
-    # Only the targeted flag flips; the other seven stay at their default.
+    # Only the targeted flag changes; the others stay at their default.
     for other in FEATURE_FIELDS:
         if other != field:
-            assert getattr(config, other) is False, other
+            assert getattr(config, other) is (other in DEFAULT_ON), other
 
 
 @pytest.mark.parametrize("spelling", ["true", "1", "yes", "on", " TRUE "])
@@ -73,6 +74,7 @@ def test_feature_flag_false_spellings(spelling):
 
 @pytest.mark.parametrize("field,env_var,flag", FEATURE_FLAGS)
 def test_feature_flag_cli_overrides_env(field, env_var, flag):
+    assert getattr(load_config({env_var: "false"}), field) is False
     config = load_config({env_var: "true"}, [flag, "false"])
     assert getattr(config, field) is False  # CLI > env precedence
 
@@ -126,36 +128,39 @@ def test_setting_specs_register_the_7_flags_in_the_features_group():
 
 
 def test_settings_catalogue_lists_features_with_defaults(loopback_client):
-    """TS1 (REST half): clean environment -> 7 items, all off, editable."""
+    """TS1 (REST half): clean environment exposes editable declared defaults."""
     _, client = loopback_client
     items = client.get("/api/v1/settings").json()["data"]["items"]
     features = [i for i in items if i["group"] == "features"]
     assert {i["key"] for i in features} == set(FEATURE_FIELDS)
     for item in features:
         assert item["type"] == "bool"
-        assert item["value"] is False
-        assert item["default"] is False
+        assert item["value"] is (item["key"] in DEFAULT_ON)
+        assert item["default"] is (item["key"] in DEFAULT_ON)
         assert item["source"] == "default"
         assert item["editable"] is True
         assert item["requires_restart"] is (item["key"] in {"feature_memory", "feature_harness_integrations"})
 
 
-def test_patch_feature_flag_persists_and_applies_live(loopback_client):
+@pytest.mark.parametrize("field,value", [("feature_trace", True),
+    ("feature_harness_integrations", False), ("feature_harness_attach", False)])
+def test_patch_feature_flag_persists_and_applies_live(tmp_path, field, value):
     """TS2 (REST half): PATCH -> 200, live config mutated, stored survives
     a fresh bootstrap over the same home."""
-    deps, client = loopback_client
-    response = client.patch("/api/v1/settings", json={"feature_trace": True})
-    assert response.status_code == 200
-    assert deps.config.feature_trace is True  # applied without restart
-    items = client.get("/api/v1/settings").json()["data"]["items"]
-    stored = next(i for i in items if i["key"] == "feature_trace")
-    assert stored["value"] is True
-    assert stored["source"] == "stored"
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    with TestClient(build_app(deps), client=("127.0.0.1", 50100)) as client:
+        response = client.patch("/api/v1/settings", json={field: value})
+        assert response.status_code == 200
+        assert getattr(deps.config, field) is value  # applied without restart
+        items = client.get("/api/v1/settings").json()["data"]["items"]
+        stored = next(i for i in items if i["key"] == field)
+        assert stored["value"] is value
+        assert stored["source"] == "stored"
     # Persisted: a fresh bootstrap over the same home picks it up.
     deps2 = bootstrap({}, ["--home", str(deps.config.home_dir)])
     app2 = build_app(deps2)
     with TestClient(app2, client=("127.0.0.1", 50101)):
-        assert deps2.config.feature_trace is True
+        assert getattr(deps2.config, field) is value
 
 
 def test_env_pinned_feature_flag_is_read_only(tmp_path):
@@ -229,7 +234,7 @@ def test_nexus_info_features_identical_on_stdio_and_http(tmp_path):
 
     assert stdio_info["features"] == http_info["features"]
     assert set(stdio_info["features"]) == set(FEATURE_FIELDS)
-    assert all(value is False for value in stdio_info["features"].values())
+    assert stdio_info["features"] == {field: field in DEFAULT_ON for field in FEATURE_FIELDS}
     assert stdio_info["surface_revision"] == 59
     assert http_info["surface_revision"] == 59
     assert SURFACE_REVISION == 59
@@ -243,7 +248,7 @@ def test_nexus_info_reflects_env_pinned_flag(tmp_path):
     info = envelope["data"] if "data" in envelope else envelope
     assert info["features"]["feature_health"] is True
     others = {k: v for k, v in info["features"].items() if k != "feature_health"}
-    assert all(value is False for value in others.values())
+    assert all(value is (field in DEFAULT_ON) for field, value in others.items())
 
 
 def test_nexus_info_reflects_patch_without_restart(loopback_client):

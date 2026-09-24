@@ -306,12 +306,12 @@ SETTING_SPECS: tuple[SettingSpec, ...] = (
     ),
     SettingSpec(
         "feature_harness_integrations", "bool",
-        "Opt-in runtime connections. Admission is checked on every request; MCP publication requires restart.",
+        "Runtime connections, enabled by default. Admission is checked on every request; MCP publication requires restart.",
         group="features", requires_restart=True,
     ),
     SettingSpec(
         "feature_harness_attach", "bool",
-        "Separate opt-in for the private Claude attach protocol. Requires harness integrations.",
+        "Private Claude attach protocol, enabled by default. Requires harness integrations and an approved endpoint.",
         group="features",
     ),
     SettingSpec(

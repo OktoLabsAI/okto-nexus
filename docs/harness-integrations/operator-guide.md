@@ -14,8 +14,10 @@ session is an instance of the connection. Opening a session neither registers an
 Agent nor replaces its profile. Several endpoints may belong to one Agent; a
 logical delivery has one selected executor, not one execution per endpoint.
 
-Enable `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=true` explicitly on the intended
-store. `serve` owns native runtimes and the durable dispatcher. MCP stdio uses the
+Native integrations and attach are enabled by default. Explicit stored,
+environment or CLI `false` settings remain effective; defaults do not overwrite
+operator choices. Use `OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS=false` or
+`OKTO_NEXUS_FEATURE_HARNESS_ATTACH=false` to disable them. `serve` owns native runtimes and the durable dispatcher. MCP stdio uses the
 authenticated owner proxy instead of spawning independent copies. Use existing
 Nexus operator authentication for administration. A payload `agent_id` is an
 identifier, never a credential. Ordinary agents require current scoped grants and
@@ -79,7 +81,7 @@ Declared capabilities are not a probe of the installed binary. Binding discovery
 reports `capability_verification=not_probed`; effective binary/version negotiation
 remains pending. Do not infer native deduplication, resume, ACK or sandbox support.
 
-Attach additionally requires `OKTO_NEXUS_FEATURE_HARNESS_ATTACH=true`, a supported
+Attach additionally requires its global flag to remain enabled, a supported
 POSIX environment and the operator-selected PID of a dedicated interactive session.
 It does not discover or authorize personal sessions. The private protocol may
 change with Claude releases. A socket write does not prove acceptance, rendering

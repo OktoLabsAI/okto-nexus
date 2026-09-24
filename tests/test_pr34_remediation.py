@@ -31,7 +31,9 @@ def runtime(tmp_path, request):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     deps.config.feature_harness_integrations = getattr(request, "param", True)
     if getattr(request, "param", None) == "stored_runtime":
-        deps.config.feature_harness_integrations = False
+        # Preserve the declared default so this is a stored setting, not an
+        # in-memory explicit override that would pin the opposite value.
+        deps.config.feature_harness_integrations = True
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute("INSERT INTO settings(key,value,updated_at) VALUES(?,?,?)",
                 ("feature_harness_integrations", "true", deps.clock.now_iso()))
@@ -376,8 +378,9 @@ def test_p01_cached_tool_is_denied_after_disable(runtime):
     assert peers == []
 
 
-def test_p01_attach_requires_separate_opt_in(runtime):
-    _, client, root, peers, key, _ = runtime
+def test_p01_attach_respects_explicit_disable(runtime):
+    deps, client, root, peers, key, _ = runtime
+    deps.config.feature_harness_attach = False
     result = tool(client, key, "harness_open", {"agent_id": "worker", "kind": "claude_code",
         "substrate": "attach", "target_pid": 12345, "project_root": root})
     assert result["error"]["code"] == "PERMISSION_DENIED"

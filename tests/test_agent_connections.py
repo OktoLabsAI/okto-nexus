@@ -113,12 +113,13 @@ def test_concurrent_redemption_one_process_and_global_unlimited(runtime):
     assert len(peers) == 1
 
 
-def test_disabled_feature_and_attach_opt_in(runtime):
+def test_disabled_feature_and_attach_override(runtime):
     deps, client, _, peers, operator, _ = runtime
     issued = issue(client, operator)
     deps.config.feature_harness_integrations = False
     assert client.post('/api/v1/connections/open', headers=issued['request']['headers'], json={}).status_code == 403
     deps.config.feature_harness_integrations = True
+    deps.config.feature_harness_attach = False
     response = client.post('/api/v1/agents/worker/connection-keys', headers={'x-api-key': operator}, json={'endpoint_id': 'endpoint-claude_code.attach'})
     assert response.status_code == 403
     deps.config.feature_harness_attach = True

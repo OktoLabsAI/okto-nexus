@@ -192,7 +192,7 @@ class NexusConfig:
     # surface) - the dashboard gating is controlled ONLY by this knob.
     expose_workspace_path: bool = False
     # ----------------------------------------------------------------- #
-    # Meta-harness feature flags (R-I0). All opt-in (default OFF). Most flags
+    # Meta-harness feature flags (R-I0). Native connections default ON. Most flags
     # gate behaviour inside consuming use-cases; feature_memory is the explicit
     # experimental exception that also controls MCP tool registration at
     # bootstrap.
@@ -202,8 +202,8 @@ class NexusConfig:
     feature_verification: bool = False
     feature_dag: bool = False
     feature_memory: bool = False
-    feature_harness_integrations: bool = False
-    feature_harness_attach: bool = False
+    feature_harness_integrations: bool = True
+    feature_harness_attach: bool = True
     # Startup-only indexed recovery of lost runtime commit notifications.
     # This is internal store polling, never native peer status polling.
     runtime_recovery_interval_seconds: int = 30
@@ -424,7 +424,7 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
         "--expose-workspace-path",
         False,
     ),
-    # Meta-harness feature flags (R-I0): all default False (opt-in).
+    # Meta-harness feature flags (R-I0); keep defaults aligned with NexusConfig.
     "feature_trace": (
         "OKTO_NEXUS_FEATURE_TRACE",
         "--feature-trace",
@@ -453,12 +453,12 @@ _BOOL_FIELDS: dict[str, tuple[str, str, bool]] = {
     "feature_harness_integrations": (
         "OKTO_NEXUS_FEATURE_HARNESS_INTEGRATIONS",
         "--feature-harness-integrations",
-        False,
+        True,
     ),
     "feature_harness_attach": (
         "OKTO_NEXUS_FEATURE_HARNESS_ATTACH",
         "--feature-harness-attach",
-        False,
+        True,
     ),
     "feature_health": (
         "OKTO_NEXUS_FEATURE_HEALTH",
