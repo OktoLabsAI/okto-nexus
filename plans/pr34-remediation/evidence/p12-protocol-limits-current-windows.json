@@ -1,0 +1,56 @@
+{
+  "source_sha": "395d0707ebe283c236a9979e2d62a46d4621a5bc",
+  "platform": "windows",
+  "counts": {
+    "PASS": 5
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "5",
+      "time": "6.226",
+      "timestamp": "2026-09-24T07:38:46.804482-03:00"
+    }
+  ],
+  "native_flags": "No installed provider selected; synthetic owned protocol subprocesses and isolated stores.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_protocol_limits.py -q --junitxml=.git/pr34-evidence/protocol-limits-current-windows.xml",
+  "limitations": "Isolated synthetic peers; preparation failures classified in P12_FRAGMENTED_PIPES.md. No installed Pi/Codex/Claude provider run.",
+  "records": [
+    {
+      "class": "tests.test_runtime_protocol_limits",
+      "test": "test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex]",
+      "status": "PASS",
+      "seconds": 0.115
+    },
+    {
+      "class": "tests.test_runtime_protocol_limits",
+      "test": "test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi]",
+      "status": "PASS",
+      "seconds": 0.101
+    },
+    {
+      "class": "tests.test_runtime_protocol_limits",
+      "test": "test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude]",
+      "status": "PASS",
+      "seconds": 0.135
+    },
+    {
+      "class": "tests.test_runtime_protocol_limits",
+      "test": "test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+      "status": "PASS",
+      "seconds": 0.015
+    },
+    {
+      "class": "tests.test_runtime_protocol_limits",
+      "test": "test_oversized_turn_fault_reaches_production_journal_without_completion",
+      "status": "PASS",
+      "seconds": 4.921
+    }
+  ],
+  "test_file_sha256": {
+    "tests/test_runtime_protocol_limits.py": "d4aa3bdb7eec88039768577d9517ef1477a43fd1f4e4c67530e7fac09ef0253a"
+  }
+}

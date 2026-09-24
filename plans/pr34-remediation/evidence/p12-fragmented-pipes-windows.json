@@ -1,0 +1,42 @@
+{
+  "source_sha": "395d0707ebe283c236a9979e2d62a46d4621a5bc",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1,
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "3",
+      "time": "16.335",
+      "timestamp": "2026-09-24T07:36:15.801033-03:00"
+    }
+  ],
+  "native_flags": "Synthetic fixture preparation; failures are not product REDs.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_fragmented_pipes.py -q --junitxml=.git/pr34-evidence/fragmented-pipes-windows.xml",
+  "limitations": "Isolated synthetic peers; preparation failures classified in P12_FRAGMENTED_PIPES.md. No installed Pi/Codex/Claude provider run.",
+  "records": [
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[pi]",
+      "status": "FAIL",
+      "seconds": 4.952
+    },
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[codex]",
+      "status": "PASS",
+      "seconds": 4.837
+    },
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[claude_code.stream]",
+      "status": "PASS",
+      "seconds": 5.184
+    }
+  ]
+}

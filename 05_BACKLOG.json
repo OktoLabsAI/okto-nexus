@@ -3718,12 +3718,12 @@
       ],
       "stimulus": "NDJSON fragmentado, UTF-8, stdout/stderr cheios, frame muito grande ou inválido.",
       "expected": "Parser limitado; erro atribuível; nenhum deadlock ou overflow ilimitado.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P07_PROTOCOL_LIMITS.md",
-        "plans/pr34-remediation/P07_EVENT_BUFFERS.md"
+        "plans/pr34-remediation/P12_FRAGMENTED_PIPES.md",
+        "plans/pr34-remediation/evidence/p12-fragmented-pipes-index.json"
       ],
-      "notes": "Partial executed framing and actual REST fault/journal evidence; native event history/subscriber memory bounds and full pressure matrix remain pending. Aggregate not certified. Native history/fanout byte/count bounds and production overflow executed; full aggregate remains uncertified."
+      "notes": "Real fragmented-byte UTF-8 with128KiB legal frame whitespace and concurrent2MiB newline-free stderr on Pi/Codex/Claude synthetic pipes; two exact logical terminals/results and bounded retained tails. Existing invalid/oversized frame and overflow regressions pass.24 distinct nodes/platform; exact hashes, failures, commands and limits recorded. Native providers remain separate."
     },
     {
       "test_id": "T-LIFE-12",

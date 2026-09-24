@@ -1,0 +1,53 @@
+{
+  "parent_sha": "395d0707ebe283c236a9979e2d62a46d4621a5bc",
+  "new_test_sha256": "21fa3053b5edc58acc8886c4f2cd509693389c6ec135b1232ee8296bfa49c4cc",
+  "requirement": "T-LIFE-11",
+  "status": "PASS",
+  "unique_nodes_per_platform": {
+    "windows": 24,
+    "linux": 24
+  },
+  "required_bases": [
+    "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns",
+    "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer",
+    "tests/test_runtime_protocol_limits.py::test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+    "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+    "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown"
+  ],
+  "mapped_pass_nodes": {
+    "windows": [
+      "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[claude_code.stream]",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[codex]",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[pi]",
+      "tests/test_runtime_protocol_limits.py::test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+      "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude]",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex]",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi]"
+    ],
+    "linux": [
+      "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[claude_code.stream]",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[codex]",
+      "tests/test_runtime_fragmented_pipes.py::test_fragmented_utf8_and_full_pipes_preserve_two_turns[pi]",
+      "tests/test_runtime_protocol_limits.py::test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+      "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[claude]",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[codex]",
+      "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer[pi]"
+    ]
+  },
+  "manifests": [
+    "plans/pr34-remediation/evidence/p12-fragmented-pipes-final-windows.json",
+    "plans/pr34-remediation/evidence/p12-protocol-limits-current-windows.json",
+    "plans/pr34-remediation/evidence/p12-fragmented-pipes-final-linux.json",
+    "plans/pr34-remediation/evidence/p12-protocol-limits-current-linux.json"
+  ],
+  "limitations": [
+    "Synthetic three managed protocol peers; native providers not executed.",
+    "Oversized writes and concurrent drains measured; exact OS pipe occupancy not instrumented.",
+    "Attach event-history bounds covered separately; no invented attach stdout protocol.",
+    "No T-LIFE-03 or final phase gate promotion."
+  ]
+}

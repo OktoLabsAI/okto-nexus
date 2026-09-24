@@ -1,0 +1,141 @@
+{
+  "source_sha": "395d0707ebe283c236a9979e2d62a46d4621a5bc",
+  "platform": "windows",
+  "counts": {
+    "PASS": 19
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "19",
+      "time": "26.240",
+      "timestamp": "2026-09-24T07:37:09.548213-03:00"
+    }
+  ],
+  "native_flags": "No installed provider selected; synthetic owned protocol subprocesses and isolated stores.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_fragmented_pipes.py tests/test_runtime_event_buffers.py -q --junitxml=.git/pr34-evidence/fragmented-pipes-final-windows.xml",
+  "limitations": "Isolated synthetic peers; preparation failures classified in P12_FRAGMENTED_PIPES.md. No installed Pi/Codex/Claude provider run.",
+  "records": [
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[pi]",
+      "status": "PASS",
+      "seconds": 6.619
+    },
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[codex]",
+      "status": "PASS",
+      "seconds": 5.136
+    },
+    {
+      "class": "tests.test_runtime_fragmented_pipes",
+      "test": "test_fragmented_utf8_and_full_pipes_preserve_two_turns[claude_code.stream]",
+      "status": "PASS",
+      "seconds": 5.848
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[codex]",
+      "status": "PASS",
+      "seconds": 0.105
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[pi]",
+      "status": "PASS",
+      "seconds": 0.109
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[claude]",
+      "status": "PASS",
+      "seconds": 0.096
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_native_history_has_byte_bound_and_explicit_expired_replay[attach]",
+      "status": "PASS",
+      "seconds": 0.116
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-codex]",
+      "status": "PASS",
+      "seconds": 0.138
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-pi]",
+      "status": "PASS",
+      "seconds": 0.149
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[4096-claude]",
+      "status": "PASS",
+      "seconds": 0.149
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-codex]",
+      "status": "PASS",
+      "seconds": 0.547
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-pi]",
+      "status": "PASS",
+      "seconds": 0.5
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_slow_subscriber_is_bounded_and_reports_a_gap[32768-claude]",
+      "status": "PASS",
+      "seconds": 0.524
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[codex]",
+      "status": "PASS",
+      "seconds": 0.004
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[pi]",
+      "status": "PASS",
+      "seconds": 0.005
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_subscriber_admission_is_bounded_and_releases_capacity[claude]",
+      "status": "PASS",
+      "seconds": 0.004
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_expired_codex_thread_history_does_not_block_new_thread_subscription",
+      "status": "PASS",
+      "seconds": 0.11
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_retained_terminal_drains_before_explicit_overflow",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_event_buffers",
+      "test": "test_production_overflow_reaps_owned_process_and_journals_unknown",
+      "status": "PASS",
+      "seconds": 4.643
+    }
+  ],
+  "test_file_sha256": {
+    "tests/test_runtime_fragmented_pipes.py": "21fa3053b5edc58acc8886c4f2cd509693389c6ec135b1232ee8296bfa49c4cc",
+    "tests/test_runtime_event_buffers.py": "0fb1149ccc82a7387c5e9ed1f27e452d777f8f44243aefaa3349008e55751cd2"
+  }
+}

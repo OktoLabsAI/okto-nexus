@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `d1e300c` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `395d070` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface56, identity24. No personal database is a fixture.
@@ -16,9 +16,11 @@ Recovery-pressure milestone536b993 is committed/pushed; T-E2E-04 scoped PASS. No
 
 Comparable benchmark milestone d1e300c is committed/pushed. Current synthetic latency is higher; measured overhead/guarantee differences remain in P12_COMPARABLE_PERFORMANCE.md.
 
-WORK acceptance unit is complete locally: three selections47/46/25 PASS per platform,114 distinct nodes. New six-case test file covers losing-claim privacy, real-pipe delayed interrupt and unsupported work/sandbox profiles with conversation preserved. Every WORK01–11 mapping resolves to PASS on both platforms in P12_WORK_ACCEPTANCE.md and its index. WORK12 remains NOT_RUN for the complete attach/external authenticated channel stimulus. Production code is unchanged. No test/campaign processes remain running.
+WORK acceptance milestone395d070 is committed/pushed: WORK01–11 scoped PASS,114 distinct fixture nodes per platform; WORK12 remains NOT_RUN.
 
-Next: lifecycle active-turn SIGTERM and fragmented UTF-8/pipe-pressure acceptance; finish original matrix mapping and remaining gates, then final committed-source suites, finding index, build/reinstall0.2.0. Keep native Pi/attach NOT_RUN under existing authorization. Do not repeat completed provider sends or migrations.
+Fragmented-pipe unit complete locally: new real-pipe Unicode fragmentation and concurrent stdout/stderr pressure passes for Pi/Codex/Claude stream. Final19-node Windows/Linux buffer selection plus5-node protocol-limit selection yields24 distinct PASS nodes/platform. Preparation failures were fixture mistakes and are retained. T-LIFE-11 now scoped PASS; production unchanged. See P12_FRAGMENTED_PIPES.md and its hash/node index. No running test/campaign handles remain.
+
+Next exact stimulus: T-LIFE-03 real serve SIGTERM with an active turn and captured unprojected journal, bounded shutdown/drain and exact owned-process witnesses (Windows uses its explicit graceful counterpart; do not call it POSIX SIGTERM). Existing runtime_serve_shutdown_fixture.py and test_runtime_shutdown.py provide components but do not yet prove this joint scenario. Then remaining matrix joins, final immutable-source suites, finding index and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization.
 
 ## Recent completed milestones
 
@@ -51,4 +53,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 81, "NOT_RUN": 48}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 82, "NOT_RUN": 47}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
