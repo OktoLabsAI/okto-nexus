@@ -1,0 +1,302 @@
+{
+  "python": "3.13.1",
+  "base_executable": "C:\\Python313\\python.exe",
+  "package_version": "0.1.10",
+  "dependencies": [
+    {
+      "name": "annotated-doc",
+      "version": "0.0.5"
+    },
+    {
+      "name": "annotated-types",
+      "version": "0.8.0"
+    },
+    {
+      "name": "anyio",
+      "version": "4.15.1"
+    },
+    {
+      "name": "attrs",
+      "version": "26.1.0"
+    },
+    {
+      "name": "certifi",
+      "version": "2026.7.22"
+    },
+    {
+      "name": "cffi",
+      "version": "2.1.1"
+    },
+    {
+      "name": "charset-normalizer",
+      "version": "3.5.1"
+    },
+    {
+      "name": "click",
+      "version": "8.5.0"
+    },
+    {
+      "name": "cloudpickle",
+      "version": "3.1.2"
+    },
+    {
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "name": "cryptography",
+      "version": "50.0.1"
+    },
+    {
+      "name": "fastapi",
+      "version": "0.141.1"
+    },
+    {
+      "name": "filelock",
+      "version": "3.32.7"
+    },
+    {
+      "name": "fsspec",
+      "version": "2026.7.0"
+    },
+    {
+      "name": "h11",
+      "version": "0.16.0"
+    },
+    {
+      "name": "hf-xet",
+      "version": "1.6.0"
+    },
+    {
+      "name": "httpcore",
+      "version": "1.0.9"
+    },
+    {
+      "name": "httpx",
+      "version": "0.28.1"
+    },
+    {
+      "name": "httpx-sse",
+      "version": "0.4.3"
+    },
+    {
+      "name": "huggingface_hub",
+      "version": "1.31.0"
+    },
+    {
+      "name": "idna",
+      "version": "3.19"
+    },
+    {
+      "name": "Jinja2",
+      "version": "3.1.6"
+    },
+    {
+      "name": "joblib",
+      "version": "1.6.0"
+    },
+    {
+      "name": "jsonschema",
+      "version": "4.26.0"
+    },
+    {
+      "name": "jsonschema-specifications",
+      "version": "2025.9.1"
+    },
+    {
+      "name": "markdown-it-py",
+      "version": "4.2.0"
+    },
+    {
+      "name": "MarkupSafe",
+      "version": "3.0.3"
+    },
+    {
+      "name": "mcp",
+      "version": "1.30.0"
+    },
+    {
+      "name": "mdurl",
+      "version": "0.1.2"
+    },
+    {
+      "name": "mpmath",
+      "version": "1.3.0"
+    },
+    {
+      "name": "narwhals",
+      "version": "2.26.0"
+    },
+    {
+      "name": "networkx",
+      "version": "3.6.1"
+    },
+    {
+      "name": "numpy",
+      "version": "2.5.3"
+    },
+    {
+      "name": "okto-nexus",
+      "version": "0.1.10"
+    },
+    {
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "name": "pycparser",
+      "version": "3.0"
+    },
+    {
+      "name": "pydantic",
+      "version": "2.13.5"
+    },
+    {
+      "name": "pydantic-settings",
+      "version": "2.15.0"
+    },
+    {
+      "name": "pydantic_core",
+      "version": "2.46.5"
+    },
+    {
+      "name": "Pygments",
+      "version": "2.21.0"
+    },
+    {
+      "name": "PyJWT",
+      "version": "2.14.0"
+    },
+    {
+      "name": "python-dotenv",
+      "version": "1.2.3"
+    },
+    {
+      "name": "python-multipart",
+      "version": "0.0.32"
+    },
+    {
+      "name": "pywin32",
+      "version": "312"
+    },
+    {
+      "name": "PyYAML",
+      "version": "6.0.3"
+    },
+    {
+      "name": "referencing",
+      "version": "0.37.0"
+    },
+    {
+      "name": "regex",
+      "version": "2026.9.10"
+    },
+    {
+      "name": "requests",
+      "version": "2.34.2"
+    },
+    {
+      "name": "rich",
+      "version": "15.0.0"
+    },
+    {
+      "name": "rpds-py",
+      "version": "2026.6.3"
+    },
+    {
+      "name": "safetensors",
+      "version": "0.8.0"
+    },
+    {
+      "name": "scikit-learn",
+      "version": "1.9.1"
+    },
+    {
+      "name": "scipy",
+      "version": "1.18.1"
+    },
+    {
+      "name": "sentence-transformers",
+      "version": "6.0.1"
+    },
+    {
+      "name": "setuptools",
+      "version": "84.0.0"
+    },
+    {
+      "name": "shellingham",
+      "version": "1.5.4"
+    },
+    {
+      "name": "sse-starlette",
+      "version": "3.4.11"
+    },
+    {
+      "name": "starlette",
+      "version": "1.6.0"
+    },
+    {
+      "name": "sympy",
+      "version": "1.14.0"
+    },
+    {
+      "name": "threadpoolctl",
+      "version": "3.7.0"
+    },
+    {
+      "name": "tiktoken",
+      "version": "0.14.0"
+    },
+    {
+      "name": "tokenizers",
+      "version": "0.23.2"
+    },
+    {
+      "name": "torch",
+      "version": "2.14.0"
+    },
+    {
+      "name": "tqdm",
+      "version": "4.70.1"
+    },
+    {
+      "name": "transformers",
+      "version": "5.17.0"
+    },
+    {
+      "name": "typer",
+      "version": "0.27.2"
+    },
+    {
+      "name": "typing-inspection",
+      "version": "0.4.4"
+    },
+    {
+      "name": "typing_extensions",
+      "version": "4.16.0"
+    },
+    {
+      "name": "urllib3",
+      "version": "2.8.0"
+    },
+    {
+      "name": "uvicorn",
+      "version": "0.53.0"
+    }
+  ],
+  "tool_python": "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Scripts\\python.exe",
+  "c_free_bytes": 135393304576,
+  "d_free_bytes": 567451652096,
+  "observation": "Package metadata only; no Nexus bootstrap or personal database opened",
+  "dependency_check": {
+    "command_argv": [
+      "uv",
+      "pip",
+      "check",
+      "--python",
+      "C:\\Users\\jpamb\\AppData\\Roaming\\uv\\tools\\okto-nexus\\Scripts\\python.exe"
+    ],
+    "exit_code": 0,
+    "output": "Checked 70 packages in 56ms\nAll installed packages are compatible\n"
+  }
+}

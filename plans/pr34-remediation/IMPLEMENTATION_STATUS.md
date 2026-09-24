@@ -157,3 +157,16 @@ temporary Vite build. Its private command/status record is dashboard-command.jso
 under the receipt-regression worktree parent. No provider or personal session.
 
 Current dashboard result and reviewed screenshots: P12_CURRENT_DASHBOARD.md. Full main suites51046/29628 remain live; all isolated correction/browser handles are terminal. T-API-01 remains FAIL until the four-path candidate is integrated and requalified.
+
+Additional full-suite finding: operation reconciliation upgrade also pinned its
+expected list through61. Independently reproduced1 FAIL, corrected expected list
+through64,1 PASS each platform; no production/SQL change. Candidate now has five
+paths (the previous four plus test_runtime_operation_reconciliation.py). Main full
+suites remain live; four/five-path historical descriptions retain their run scope.
+
+Local installation preflight: uv-managed Nexus0.1.10 uses Python3.13.1; all70
+installed packages pass uv pip check. Metadata-only inspection did not bootstrap
+Nexus or open a personal database. C free space now roughly135GB, D567GB; the cause
+of that external free-space change is not asserted. Reinstall still waits for the
+corrected source/build qualification; old39c5e6c artifacts must not be used as the
+final corrected build.

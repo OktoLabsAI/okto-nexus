@@ -65,6 +65,24 @@
         "PASS": 29,
         "SKIP": 7
       }
+    },
+    "reconciliation-red": {
+      "manifest": "p12-regression-followup-reconciliation-red.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "reconciliation-green-windows": {
+      "manifest": "p12-regression-followup-reconciliation-green-windows.json",
+      "counts": {
+        "PASS": 1
+      }
+    },
+    "reconciliation-green-linux": {
+      "manifest": "p12-regression-followup-reconciliation-green-linux.json",
+      "counts": {
+        "PASS": 1
+      }
     }
   },
   "linux": "TERMINAL exit0",
@@ -72,7 +90,8 @@
     "src/okto_nexus/application/inbox.py",
     "tests/test_runtime_attach_work_channel.py",
     "tests/test_runtime_attempt_history.py",
-    "tests/test_harness_claude_code_connector.py"
+    "tests/test_harness_claude_code_connector.py",
+    "tests/test_runtime_operation_reconciliation.py"
   ],
   "live_mcp_smoke": {
     "command_argv": [

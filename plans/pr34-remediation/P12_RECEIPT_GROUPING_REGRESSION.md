@@ -62,3 +62,14 @@ Windows20768 exit0,29 PASS7 native SKIP60.50s; Linux7925 exit0,29 PASS7 native
 SKIP63.34s. The four changed files pass Ruff. Required isolated live
 MCP smoke after the receipt production correction passed exit0. Main integration,
 full-suite terminal analysis and final-source regression remain required.
+
+
+## Second pinned migration-list correction
+
+The main Windows full suite subsequently failed the reconciliation upgrade test,
+which also expected the migration ledger to stop at61. Isolated unchanged-test
+reproduction:1 FAIL3.23s. Explicit expected list now ends at64; repeat application,
+prior audit-row preservation, recovery columns, empty reconciliation history and
+foreign-key checks remain unchanged. Corrected case:1 PASS Windows2.51s and1 PASS
+Linux9.27s (1718 exit0). No runtime or SQL change. The candidate now contains five
+changed files, all awaiting main integration after full suites51046/29628 finish.

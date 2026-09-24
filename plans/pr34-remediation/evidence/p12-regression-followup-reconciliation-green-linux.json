@@ -1,0 +1,42 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Linux",
+  "counts": {
+    "PASS": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "1",
+      "time": "9.256",
+      "timestamp": "2026-09-24T13:33:14.592166-03:00"
+    }
+  ],
+  "native_flags": "No installed provider; isolated migration fixture only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached correction; main source not changed while full suites run. Only explicit expected migration list changed.",
+  "records": [
+    {
+      "class": "tests.test_runtime_operation_reconciliation",
+      "test": "test_reconciliation_migration_is_additive_and_repeatable",
+      "status": "PASS",
+      "seconds": 1.552
+    }
+  ],
+  "command_argv": [
+    "/var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python",
+    "-m",
+    "pytest",
+    "tests/test_runtime_operation_reconciliation.py::test_reconciliation_migration_is_additive_and_repeatable",
+    "-q",
+    "--tb=short",
+    "--junitxml=/mnt/d/Projetos/Techridy/okto_labs_okto_nexus/.git/pr34-evidence/receipt-regression-06mfxlx6/reconciliation-green-linux.xml"
+  ],
+  "exit_code": 0,
+  "source_file_sha256": {
+    "tests/test_runtime_operation_reconciliation.py": "8cf8ba71280702a4559157c8f91925466fb9591aa495990f23d55274f7057fae"
+  }
+}
