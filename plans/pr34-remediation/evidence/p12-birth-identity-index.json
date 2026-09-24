@@ -1,0 +1,51 @@
+{
+  "source_sha": "ff565eaa001eff1654300ac457d1b7be76124a7f",
+  "file_sha256": {
+    "tests/runtime_birth_window_fixture.py": "bdabca0f52868f13efacbfb9097945bc19c6b3d46f5cef106c1966dc951fa876",
+    "tests/test_runtime_birth_identity.py": "ac29d209e862871ea98ea187bd1ee4d98887703f0dcb68b35e98ea4229d98776"
+  },
+  "runs": {
+    "windows": {
+      "manifest": "p12-birth-identity-windows.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "linux": {
+      "manifest": "p12-birth-identity-linux.json",
+      "counts": {
+        "PASS": 4
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-LIFE-02",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[before_registration]",
+          "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[after_registration]"
+        ],
+        "linux": [
+          "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[before_registration]",
+          "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[after_registration]"
+        ]
+      }
+    },
+    {
+      "test_id": "T-LIFE-05",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[terminate]",
+          "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[kill]"
+        ],
+        "linux": [
+          "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[terminate]",
+          "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[kill]"
+        ]
+      }
+    }
+  ]
+}

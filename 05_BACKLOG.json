@@ -3698,8 +3698,12 @@
       ],
       "stimulus": "Matar owner entre nascimento do filho, registro e handshake.",
       "expected": "Mecanismo de birth/ownership reconcilia filho sem depender só de snapshot periódico.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/evidence/p12-birth-identity-index.json"
+      ],
+      "notes": "4 PASS each platform: real owner death before/after lifecycle registration reaps exact child/grandchild/guardian; simulated stale numeric PID cannot redirect owned terminate/kill to unrelated echo process. Shared production birth primitive, no actual kernel PID allocator reuse or provider claim."
     },
     {
       "test_id": "T-LIFE-03",
@@ -3745,8 +3749,12 @@
       ],
       "stimulus": "Simular reutilização de PID e validar identidade do processo.",
       "expected": "Processo não pertencente ao Nexus não é encerrado.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_BIRTH_AND_PROCESS_IDENTITY.md",
+        "plans/pr34-remediation/evidence/p12-birth-identity-index.json"
+      ],
+      "notes": "4 PASS each platform: real owner death before/after lifecycle registration reaps exact child/grandchild/guardian; simulated stale numeric PID cannot redirect owned terminate/kill to unrelated echo process. Shared production birth primitive, no actual kernel PID allocator reuse or provider claim."
     },
     {
       "test_id": "T-LIFE-06",
