@@ -21,6 +21,7 @@ export interface RuntimeBindingAgent {
     sessions: Array<{
       session_id: string; lifecycle_state: string;
       current_owner_ready_record: boolean; process_liveness: string;
+      effective_capabilities?: Record<string, boolean | string | null>;
     }>;
   }>;
 }

@@ -32,7 +32,8 @@ def claude_peer(runtime, source=PEER):
     deps, client, root, _, operator, _ = runtime
     deps.config.feature_hitl = True
     deps.harness_connector_factories["claude_code"] = lambda **kwargs: ClaudeCodeStreamConnector(
-        binary=sys._base_executable, argv=["-u", "-c", source], cwd=root, env=kwargs["backend"]["env"])
+        binary=sys._base_executable, argv=["-u", "-c", source], cwd=root, env=kwargs["backend"]["env"],
+        version_argv=["-c", "print('2.1.281 (Claude Code)')"])
     opened = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
         "agent_id": "worker", "kind": "claude_code", "endpoint_id": "endpoint-claude_code.stream", "project_root": root})
     assert opened.status_code == 200, opened.text

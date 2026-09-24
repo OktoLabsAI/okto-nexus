@@ -168,7 +168,7 @@ def main():
             continue
 
         if method == "initialize":
-            write_msg({"jsonrpc": "2.0", "id": req_id, "result": {}})
+            write_msg({"jsonrpc": "2.0", "id": req_id, "result": {"userAgent": "okto-nexus/0.156.1"}})
         elif method == "thread/start":
             thread_id = next_thread_id()
             if params.get("_early_notify"):

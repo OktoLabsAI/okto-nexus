@@ -6,6 +6,9 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface52 exposes and enforces per-session capabilities qualified by trusted
+  protocol probes and restricted by approved profiles, including connection reuse.
+  Unknown contracts cannot inherit execution from advertised adapter capabilities.
 - Surface51 enforces registered adapter conversation/control restrictions at
   admission and revalidation; unsupported transport leaves logical inbox delivery intact.
 - Add a tested repository procedure for combined offline SQLite/journal/artifact

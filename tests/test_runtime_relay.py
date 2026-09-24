@@ -29,7 +29,8 @@ def configure(runtime, *, depth=2, outcome="completed", kind="codex"):
         from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
         from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT
         deps.harness_connector_factories[kind] = lambda **kwargs: ClaudeCodeStreamConnector(
-            binary=sys._base_executable, argv=["-u", "-c", _FAKE_CLAUDE_SCRIPT], cwd=root, env=kwargs["backend"]["env"])
+            binary=sys._base_executable, argv=["-u", "-c", _FAKE_CLAUDE_SCRIPT], cwd=root, env=kwargs["backend"]["env"],
+            version_argv=["-c", "print('2.1.281 (Claude Code)')"])
     elif kind == "pi":
         from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
         from test_harness_pi_connector import _FAKE_SERVER_SOURCE
@@ -38,6 +39,7 @@ def configure(runtime, *, depth=2, outcome="completed", kind="codex"):
         sequence = itertools.count()
         deps.harness_connector_factories[kind] = lambda **kwargs: PiRpcConnector(
             command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE, str(Path(root) / f"pi-{next(sequence)}.jsonl")],
+            version_command=[sys._base_executable, "-c", "print('0.85.1')"],
             cwd=root, env=kwargs["backend"]["env"])
     for agent in ("worker", "caller"):
         response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={

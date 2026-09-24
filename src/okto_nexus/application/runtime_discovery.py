@@ -5,6 +5,7 @@ or process-liveness inference; descriptor capabilities are declarations only.
 """
 from dataclasses import asdict
 import json
+from ..domain.endpoints import EndpointCapabilities
 
 from ..errors import ErrorCode, OktoNexusError
 
@@ -81,6 +82,10 @@ class RuntimeDiscoveryService:
                 and endpoint["health"] != "quarantined" and (not endpoint["profile_id"] or (
                     profile and profile["enabled"] and profile["revision"] == row["runtime_profile_revision"])))
             session["process_liveness"] = "not_probed"
+            session["effective_capabilities"] = (
+                session["compatibility_report"].get("effective_capabilities", asdict(EndpointCapabilities()))
+                if session["current_owner_ready_record"] and session["compatibility_report"].get("effective_capability_contract") == 1
+                else asdict(EndpointCapabilities()))
             sessions.append(session)
         item.update(sessions=sessions, sessions_has_more=len(rows) > 10)
         return item

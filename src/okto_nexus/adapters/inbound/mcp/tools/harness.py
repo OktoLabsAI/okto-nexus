@@ -374,6 +374,11 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
                     project_root, profile["profile_id"], profile["revision"],
                     effective_backend, list(required), bool(deps.config.feature_hitl)]
         configure_reuse(hashlib.sha256(json.dumps(material, sort_keys=True).encode()).digest())
+    from okto_nexus.adapters.outbound.harness.qualified import QualifiedConnector
+    descriptor = build_connector_factories(deps).get(endpoint["adapter_id"])
+    connector = QualifiedConnector(connector, descriptor=descriptor,
+        disabled=profile["config"].get("disabled_capabilities", ()) if profile else (),
+        hitl_enabled=bool(deps.config.feature_hitl))
     return connector, endpoint, {"profile_id": endpoint["profile_id"],
         "inherit_ambient": bool(profile and profile["inherit_ambient"]),
         "revision": profile["revision"] if profile else None}
@@ -789,6 +794,7 @@ def _default_connector_factories() -> dict[str, Any]:
 
 def build_connector_factories(deps: Any):
     """Trusted registry in production; explicit legacy injection stays compatible."""
+    from okto_nexus.adapters.outbound.harness.compatibility import qualified_capabilities, CONVERSATION_VERSIONS
     registry = getattr(deps, "harness_adapter_registry", None)
     if registry is not None:
         return registry
@@ -825,6 +831,8 @@ def build_connector_factories(deps: Any):
                 if kind == "claude_code" and substrate == "stream" else {}),
             legacy_capabilities=caps,
             supported_platforms=("posix",) if substrate == SUBSTRATE_ATTACH else ("nt", "linux"),
+            native_versions_tested=tuple(sorted(CONVERSATION_VERSIONS.get(kind, ()))) if substrate != "attach" and kind != "pi" else (),
+            compatibility_probe=lambda report, kind=kind, substrate=substrate: qualified_capabilities(kind, substrate, report),
         ))
     deps.harness_adapter_registry = registry
     return registry

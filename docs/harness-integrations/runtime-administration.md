@@ -52,7 +52,8 @@ The response groups endpoints under each canonical agent_id and lists its
 canonical skill_names without rewriting the Agent. It omits private metadata,
 paths, environment, secret references, configuration and notification audiences.
 `declared_capabilities` describe the adapter contract; `capability_verification`
-is `not_probed`, so this is not binary-version negotiation. A session's
+is `not_probed`: an endpoint declaration alone does not qualify its binary.
+Surface52 separately exposes per-session `effective_capabilities`. A session's
 `current_owner_ready_record` means its persisted lifecycle/profile and owner lease
 are current. `process_liveness=not_probed` explicitly avoids inferring a live
 native process from a stored row.
@@ -218,8 +219,7 @@ them or relax sandbox/approval policy. The original request remains available
 for operator inspection.
 
 The existing journal/artifact maintenance actions remain available. Managed-work
-capability negotiation remains
-tracked in P11. Deleting persistence rows is not an operational substitute for
+qualification follows the per-session contract below. Deleting persistence rows is not an operational substitute for
 those actions. Migration 053 is additive; operational rollback uses deactivation,
 drain and recovery, not reverse SQL or deletion of the audit/history.
 
@@ -292,4 +292,38 @@ observations and enforces them for steer/interrupt before enqueue and dispatch,
 including the supervisor's internal send path. An unknown version cannot borrow
 the adapter's declared steering behavior. Pi observes its executable version with
 the same bounded owned probe used by Claude. This is a narrow control contract;
-the aggregate effective-capability gate is still incomplete.
+Surface52 extends this to the effective capability contract below.
+
+## Qualified session capabilities (surface52)
+
+The installed trusted adapter probe reads server-owned observations outside SQLite
+write transactions. Effective capabilities intersect that probe with the registered
+descriptor and the approved profile. A profile may only remove capabilities using
+`config.disabled_capabilities`, a unique list of capability field names. For example,
+`["managed_work", "multiplexing"]` retains conversation but disallows managed work
+and shared connections. `interrupt_requires_settle` is a safety constraint and cannot
+be disabled. Required native requests conflict with disabled approvals.
+
+Current conversation contracts are Codex0.156.1, Claude stream2.1.280/2.1.281 and
+Pi0.85.1. Pi is fixture-qualified only; its native campaign remains NOT_RUN.
+Attach requires exact integer peerProtocol1 and retains unconfirmed injection only.
+Neither attach nor any spawned connector gains native deduplication, native replay
+or an agent ACK from this contract. Unknown versions remain inspectable and closable,
+but cannot execute turns or borrow advertised controls or multiplexing. Qualify an
+updated binary with protocol tests and an isolated campaign before adding its exact
+version; editing caller metadata cannot grant compatibility.
+
+Managed work additionally requires events and correlated results; approvals require
+HITL enabled. Every action still checks current identity, grant, policy, scope and
+profile revisions. These capability checks do not replace native sandbox/approvals.
+Direct admission, dispatch and native send enforce the intersection. A newly opened
+on-demand runtime can prove incompatible after an intent was committed: the attempt
+becomes REJECTED with native_write_not_started and ACK NONE before turn bytes are
+written. The logical delivery remains reserved until explicit operator recovery;
+there is no silent fallback to another executor.
+
+Runtimes shows session capabilities separately from adapter declarations. Closed,
+stale or non-current-owner records expose no effective execution capability. Their
+stored compatibility_report remains historical evidence, not live authorization.
+No native status polling is used to render this view. An installed extension with
+no trusted compatibility probe fails closed for execution; no remote loader exists.

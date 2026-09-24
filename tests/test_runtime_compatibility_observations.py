@@ -21,7 +21,7 @@ def test_native_version_is_separate_from_metadata_and_not_a_capability_claim(run
     deps, client, root, _, operator, _ = runtime
     response = {"userAgent": user_agent, "codexHome": "fixture-private-path-never-return",
                 "futureSecretField": "fixture-private-token-never-return"}
-    source = _FAKE_SERVER_SOURCE.replace('"result": {}', '"result": ' + repr(response), 1)
+    source = _FAKE_SERVER_SOURCE.replace('"result": {"userAgent": "okto-nexus/0.156.1"}', '"result": ' + repr(response), 1)
     script = tmp_path / "version_peer.py"
     script.write_text(source, encoding="utf-8")
     deps.harness_connector_factories["codex"] = lambda **options: CodexAppServerConnector(
@@ -32,7 +32,12 @@ def test_native_version_is_separate_from_metadata_and_not_a_capability_claim(run
     assert opened.status_code == 200, opened.text
     session = opened.json()["data"]
     report = session.get("compatibility_report", {})
-    assert report == {"schema_version": 1, "native_version": version,
+    qualification = {name: report[name] for name in ("effective_capabilities", "effective_capability_contract", "effective_capability_basis")}
+    assert qualification["effective_capability_contract"] == 1
+    assert qualification["effective_capability_basis"] == "trusted_adapter_probe_and_profile"
+    assert qualification["effective_capabilities"]["conversation"] is (version == "0.156.1")
+    assert not qualification["effective_capabilities"]["native_deduplication"]
+    assert {name: value for name, value in report.items() if name not in qualification} == {"schema_version": 1, "native_version": version,
         "observation": "initialize_version" if version else "version_not_observed", "capabilities_verified": False,
         "compatible_native_requests": ["item/commandExecution/requestApproval", "item/fileChange/requestApproval",
             "item/tool/requestUserInput", "mcpServer/elicitation/request"] if version == "0.156.1" else [],

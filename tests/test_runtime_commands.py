@@ -83,7 +83,7 @@ def codex_session(runtime, *, outcome="completed"):
     deps, client, root, _, operator, _ = runtime
     source = _FAKE_SERVER_SOURCE.replace('"status": "completed"', '"status": "' + outcome + '"')
     deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
-        command=[sys._base_executable, "-u", "-c", source.replace('"result": {}',
+        command=[sys._base_executable, "-u", "-c", source.replace('"result": {"userAgent": "okto-nexus/0.156.1"}',
             '\"result\": {\"userAgent\": \"okto-nexus/0.156.1 fixture\"}', 1)], cwd=root, env=kwargs["backend"]["env"])
     response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator},
         json={"agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})

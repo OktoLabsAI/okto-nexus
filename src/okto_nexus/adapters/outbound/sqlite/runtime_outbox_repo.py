@@ -10,8 +10,8 @@ class SqliteRuntimeOutboxRepo:
             "UNION ALL SELECT 1 FROM runtime_commands UNION ALL SELECT 1 FROM runtime_open_requests LIMIT 1").fetchone() is not None
 
     def live_sessions(self, uow, *, endpoint_id):
-        return [dict(row) for row in uow.connection.execute(
-            "SELECT session_id FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state='protocol_ready' "
+        return [dict(row, compatibility_report=json.loads(row["compatibility_report"])) for row in uow.connection.execute(
+            "SELECT session_id,compatibility_report FROM harness_sessions WHERE endpoint_id=? AND lifecycle_state='protocol_ready' "
             "AND owner_epoch=(SELECT epoch FROM runtime_dispatcher_owner WHERE owner_key='dispatcher') ORDER BY started_at,session_id",
             (endpoint_id,))]
 

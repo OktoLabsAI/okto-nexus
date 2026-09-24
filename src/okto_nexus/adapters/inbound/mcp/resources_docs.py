@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="18",
+    version="19",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -557,7 +557,20 @@ Unknown versions or missing reports return native_control_unverified before a
 new control intent. Current version contracts: Codex0.156.1, Claude2.1.281,
 Pi0.85.1. Pi is observed with a bounded owned --version probe; its contract has
 protocol-fixture coverage, not a native provider campaign in this remediation.
-These fields verify only controls; capabilities_verified remains false overall.
+Surface52 adds effective_capability_contract=1 and effective_capabilities to the
+server-owned report. A trusted installed adapter probe intersects its observed
+contract with descriptor capabilities and approved profile disabled_capabilities.
+Missing probes or unknown versions cannot enable conversation or managed work.
+Managed work also requires events and correlated results. HITL must be enabled
+for approvals. These capabilities never replace authorization or native sandbox.
+The bindings projection exposes effective capabilities only for current-owner
+ready records; the stored report remains historical evidence after close.
+capabilities_verified remains false: no general native guarantee is inferred.
+Direct admission, dispatch and the native-send boundary enforce this contract.
+An on-demand open may discover an unsupported version after durable admission;
+the attempt becomes REJECTED/native_write_not_started with ACK NONE before any
+turn is written. Its logical delivery remains reserved pending explicit recovery.
+Cleanup remains available. No deduplication, replay or agent ACK is invented.
 Surface49 reuses live multiplexing connections through the production factory
 only for the same agent/workspace/adapter/profile revision and resolved backend
 environment, with matching HITL mode. Each opening still creates an independent

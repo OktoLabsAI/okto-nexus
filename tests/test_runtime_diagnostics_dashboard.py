@@ -20,6 +20,22 @@ def open_view(page):
     page.get_by_role("button", name="Runtimes", exact=True).click()
 
 
+@pytest.mark.parametrize("version,disabled,expected", [("99.0.0", (), "Unavailable"), ("0.156.1", ("managed_work",), "Available")])
+def test_session_capabilities_show_qualified_profile_restrictions(runtime, dashboard, version, disabled, expected):
+    from playwright.sync_api import expect
+    from test_runtime_effective_capabilities import open_codex
+    session = open_codex(runtime, version=version, disabled=disabled)
+    open_view(dashboard)
+    card = dashboard.get_by_test_id("runtime-session-" + session["session_id"])
+    capabilities = card.get_by_role("list", name="Session capabilities")
+    expect(capabilities).to_contain_text("Conversation: " + expected)
+    expect(capabilities).to_contain_text("Managed work: Unavailable")
+    expect(capabilities).to_contain_text("Approvals: Unavailable")
+    expect(card).to_contain_text("Each action still requires authorization")
+    dashboard.set_viewport_size({"width": 1440, "height": 1800})
+    dashboard.screenshot(path=str(Path(runtime[2]).parent / "effective-capabilities.png"), full_page=True)
+
+
 def test_unknown_operation_shows_cause_without_success_or_retry(runtime, dashboard):
     from playwright.sync_api import expect
     _, row = uncertain_delivery(runtime)

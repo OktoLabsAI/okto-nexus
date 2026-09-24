@@ -8,6 +8,7 @@ import json
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_commands import RuntimeCommandNotSent
 from ..domain.native_inputs import response_for
+from .runtime_requirements import validate_effective_capability
 
 ACTION = "runtime_native_approval"
 
@@ -74,6 +75,7 @@ class RuntimeNativeApprovalService:
         session = self.supervisor.get(row["runtime_session_id"])
         if not session or session.connection_id != row["connection_id"] or session.owner_epoch != self.owner.epoch:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Native approval connection is no longer current.", {})
+        validate_effective_capability(session.compatibility_report, "approvals")
         return source, session
 
     def scan_once(self):

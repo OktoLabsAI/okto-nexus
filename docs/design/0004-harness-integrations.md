@@ -47,8 +47,9 @@ connection may multiplex sessions. These are distinct records and lifetimes.
 
 The four adapters remain available within their demonstrated limits. An extension
 must use registry contracts rather than add product switches to the domain.
-Full effective binary capability negotiation and additional end-to-end extension
-acceptance remain tracked gates; a descriptor is not proof of an installed binary.
+Surface52 intersects trusted probe observations with descriptor capabilities and
+approved profile restrictions. An extension without a probe cannot execute merely
+because its descriptor advertises conversation. No descriptor grants permission.
 
 ### D3 — Existing identity and authenticated authority precede runtime creation
 
@@ -127,8 +128,8 @@ Fresh feature-off MCP omits harness tools; operator REST supports recovery.
 Schema revisions and reference resources are versioned, with actual OFF/ON
 surface measurements. Safe discovery groups endpoints under canonical identity
 without exposing private paths, metadata, environment or secret references.
-Current discovery labels capabilities not_probed and distinguishes persisted
-readiness from process liveness.
+Endpoint declarations remain not_probed; each current-owner ready session exposes
+its qualified effective capabilities. Persisted readiness is not process liveness.
 
 ### D10 — Inbox, journal, results and handoffs retain separate responsibilities
 

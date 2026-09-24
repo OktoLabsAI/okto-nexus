@@ -7,7 +7,7 @@ import json
 from ..domain.base import check_inline_size, new_id
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
-from .runtime_requirements import validate_declared_command, validate_effective_control
+from .runtime_requirements import validate_declared_command, validate_effective_control, validate_effective_capability
 
 
 def validate_runtime_payload(value, *, required):
@@ -79,6 +79,8 @@ class RuntimeControlService:
             if verb != "close":
                 self.supervisor._require_verb_allowed(session.capabilities, verb)
                 validate_effective_control(session.compatibility_report, verb)
+                validate_effective_capability(session.compatibility_report,
+                    {"send_turn": "conversation", "steer": "steer_timing", "interrupt": "interrupt"}[verb])
             if expected_owner_epoch is not None and expected_owner_epoch != session.owner_epoch:
                 raise OktoNexusError(ErrorCode.CONFLICT, "Command targets a different owner epoch.", {})
             target = self.supervisor.control_target(session_id) if verb in {"steer", "interrupt"} else None
@@ -123,6 +125,9 @@ class RuntimeControlService:
         if not session or session.owner_epoch != operation["expected_owner_epoch"]:
             raise OktoNexusError(ErrorCode.CONFLICT, "Command session is no longer owned.", {})
         validate_effective_control(session.compatibility_report, operation["verb"])
+        if operation["verb"] != "close":
+            validate_effective_capability(session.compatibility_report,
+                {"send_turn": "conversation", "steer": "steer_timing", "interrupt": "interrupt"}[operation["verb"]])
 
     def execute(self, operation):
         self._require_owner()

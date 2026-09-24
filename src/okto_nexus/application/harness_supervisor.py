@@ -550,6 +550,7 @@ class HarnessSupervisor:
                 for live in self._live.values():
                     if (live.session.lifecycle_state == "protocol_ready" and
                             live.connector.capabilities.multiplexes_sessions and
+                            live.session.compatibility_report.get("effective_capabilities", {}).get("multiplexing") is True and
                             getattr(live.connector, "connection_reuse_key", None) == reuse_key and
                             live.lifecycle and live.lifecycle.connection.context == context):
                         connector = live.connector
@@ -557,6 +558,11 @@ class HarnessSupervisor:
             # Selection and acquiring the sibling's lifecycle scope share the
             # close lock: the final close cannot race between these two steps.
             connection_key = getattr(connector, "connection_key", id(connector))
+            if any(getattr(live.connector, "connection_key", id(live.connector)) == connection_key
+                   and live.session.compatibility_report.get("effective_capability_contract") == 1
+                   and live.session.compatibility_report.get("effective_capabilities", {}).get("multiplexing") is not True
+                   for live in self._live.values()):
+                raise OktoNexusError(ErrorCode.CONFLICT, "Connection has no qualified multiplexing capability.", {})
             self._connections = {key: value for key, value in self._connections.items() if not value.closed}
             connection = self._connections.setdefault(connection_key, RuntimeConnectionLifecycle(context=context))
             if connection.context != context:

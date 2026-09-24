@@ -12,7 +12,7 @@ runtime = runtime_fixture
 def install_versioned_codex(runtime, tmp_path, version):
     deps = runtime[0]
     peer = tmp_path / "required-peer.py"
-    source = _FAKE_SERVER_SOURCE.replace('"result": {}',
+    source = _FAKE_SERVER_SOURCE.replace('"result": {"userAgent": "okto-nexus/0.156.1"}',
         '"result": {"userAgent": "okto-nexus/' + version + ' fixture"}', 1)
     source = source.replace('method = msg.get("method")', 'method = msg.get("method"); log({"method": method})')
     peer.write_text(source, encoding="utf-8")

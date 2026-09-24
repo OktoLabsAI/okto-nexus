@@ -191,7 +191,7 @@ class EndpointService:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Attach uses an approved external target, not a process profile.", {})
         if not isinstance(inherit_ambient, bool) or not isinstance(enabled, bool):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Profile switches must be booleans.", {})
-        allowed = {"command", "provider", "model", "sandbox", "approval_policy", "env", "extra_args", "required_native_requests"}
+        allowed = {"command", "provider", "model", "sandbox", "approval_policy", "env", "extra_args", "required_native_requests", "disabled_capabilities"}
         if set(config) - allowed:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Unsupported runtime profile configuration.", {})
         if descriptor.kind != "pi" and set(config) & {"provider", "model", "extra_args"}:

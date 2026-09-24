@@ -9,6 +9,7 @@ from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
 from .runtime_causality import RuntimeCausalityService
+from .runtime_requirements import validate_effective_capability
 
 
 def denied():
@@ -39,6 +40,8 @@ class RuntimeWorkService:
         if not descriptor.capabilities.managed_work or not descriptor.capabilities.events or endpoint["consumption"] != "exclusive" or not endpoint["profile_id"]:
             raise denied()
         profile = self.access.endpoints.profile(uow, endpoint["profile_id"])
+        if profile and "managed_work" in profile["config"].get("disabled_capabilities", ()):
+            raise denied()
         return context, grant, endpoint, profile
 
     @staticmethod
@@ -110,6 +113,8 @@ class RuntimeWorkService:
         live = self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
         if len(live) > 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+        if live:
+            validate_effective_capability(live[0]["compatibility_report"], "managed_work")
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                             session_id=live[0]["session_id"] if live else None, now=now, authorization_revision=revision)
         uow.connection.execute("INSERT INTO runtime_handoff_bindings(handoff_id,claim_epoch,operation_id,grant_id,grant_revision,"
@@ -137,6 +142,10 @@ class RuntimeWorkService:
             raise denied()
         if operation["runtime_session_id"] and self.access.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
             raise denied()
+        if operation["runtime_session_id"]:
+            row = uow.connection.execute("SELECT compatibility_report FROM harness_sessions WHERE session_id=?",
+                (operation["runtime_session_id"],)).fetchone()
+            validate_effective_capability(json.loads(row[0]) if row else {}, "managed_work")
         if self.validate_claim(uow, handoff_id=binding["handoff_id"], workspace_id=operation["workspace_id"]) != operation["authorization_revision"]:
             raise denied()
         return endpoint, profile

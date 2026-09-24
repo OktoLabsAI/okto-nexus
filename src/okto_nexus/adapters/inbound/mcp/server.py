@@ -446,7 +446,8 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 42 = explicit operator attempt reconciliation; no automatic native replay.
 #: 43 = explicit canonical handoff recovery with claim/attempt fencing.
 # Native compatibility observations are separate from caller metadata.
-SURFACE_REVISION = 51
+#: 52 = per-session qualified capabilities intersect descriptor and approved profile.
+SURFACE_REVISION = 52
 
 
 # Tool modules whose publication is controlled by a config flag. These gates

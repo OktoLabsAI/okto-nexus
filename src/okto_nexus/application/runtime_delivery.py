@@ -45,12 +45,19 @@ class RuntimeDeliveryPlanner:
             if endpoint["profile_id"] and (not profile or not profile["enabled"]):
                 continue
             if profile:
+                if "conversation" in profile["config"].get("disabled_capabilities", ()):
+                    continue
                 try:
                     validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
                                                  hitl_enabled=self.config.feature_hitl)
                 except OktoNexusError:
                     continue
             live = self.outbox.live_sessions(uow, endpoint_id=endpoint["endpoint_id"])
+            if live:
+                live = [session for session in live if session["compatibility_report"].get("effective_capability_contract") == 1
+                        and session["compatibility_report"].get("effective_capabilities", {}).get("conversation") is True]
+                if not live:
+                    continue
             if len(live) > 1:
                 raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
             candidates.append((endpoint, profile, live[0]["session_id"] if live else None))
@@ -106,6 +113,8 @@ class RuntimeDeliveryPlanner:
         if profile:
             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
                                          hitl_enabled=config.feature_hitl)
+            if "conversation" in profile["config"].get("disabled_capabilities", ()):
+                raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Profile disables conversation transport.", {})
         if not self.registry.get(endpoint["adapter_id"]).capabilities.conversation:
             raise OktoNexusError(ErrorCode.CONFIG_ERROR, "adapter_capability_unsupported: conversation is unavailable.",
                 {"reason": "adapter_capability_unsupported", "capability": "conversation"})

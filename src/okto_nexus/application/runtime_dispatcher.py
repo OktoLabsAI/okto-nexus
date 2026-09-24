@@ -6,6 +6,7 @@ import time
 
 from ..domain.base import iso_plus, new_id
 from ..errors import OktoNexusError
+from ..domain.runtime_commands import RuntimeCommandNotSent
 
 
 class RuntimeDispatcher:
@@ -252,6 +253,12 @@ class RuntimeDispatcher:
                 if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=self.clock.now_iso()):
                     self.repo.observe(uow, **key, expected="SENDING", status="SENT_UNCONFIRMED",
                                       ack_level="TRANSPORT_WRITE", now=self.clock.now_iso())
+        except RuntimeCommandNotSent:
+            with self.cf.unit_of_work() as uow:
+                now = self.clock.now_iso()
+                if self.repo.owns(uow, owner_id=self.owner_id, epoch=self.epoch, now=now):
+                    self.repo.observe(uow, **key, expected="SENDING", status="REJECTED", now=now,
+                        reason="native_write_not_started", ack_level="NONE")
         except Exception:
             try:
                 with self.cf.unit_of_work() as uow:

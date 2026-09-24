@@ -5,6 +5,11 @@ import { PageContainer } from "../components/PageContainer";
 const button = "rounded-lg border border-surface-300 dark:border-surface-600 px-3 py-2 text-sm disabled:opacity-50";
 const card = "rounded-xl border border-surface-200 dark:border-surface-700 p-4 space-y-2";
 const uncertain = new Set(["OUTCOME_UNKNOWN", "SENT_UNCONFIRMED", "ACCEPTED"]);
+const capabilityLabels: Record<string, string> = {
+  conversation: "Conversation", managed_work: "Managed work", events: "Events",
+  correlated_results: "Correlated results", multiplexing: "Shared connection",
+  steer_timing: "Steering", interrupt: "Interrupt", approvals: "Approvals",
+};
 
 function operationAdvice(row: RuntimeOperationRow): string {
   if (row.reconciliation_id) return "Operator reconciliation recorded. Original transport facts remain unchanged; no native replay was requested.";
@@ -77,6 +82,15 @@ export function RuntimesView({ onApprovals }: { onApprovals: () => void }) {
             <p className="break-all">{session.session_id} · <strong>{session.lifecycle_state}</strong></p>
             <p>{session.lifecycle_state === "detached" ? "Nexus detached; the external process was not declared terminated." :
               session.current_owner_ready_record ? "Current owner readiness is recorded; process liveness is not probed." : "Historical runtime record; current readiness is not established."}</p>
+            <p>Capabilities reflect the observed runtime and approved profile. Each action still requires authorization.</p>
+            <ul aria-label="Session capabilities" className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+              {Object.entries(capabilityLabels).map(([name, label]) => {
+                const value = session.effective_capabilities?.[name];
+                const available = value === true || (name === "steer_timing" && ["IMMEDIATE", "NEXT_TURN_BOUNDARY"].includes(String(value)));
+                return <li key={name}>{label}: {available ? "Available" : "Unavailable"}
+                  {available && typeof value === "string" ? ` (${value.toLowerCase().replaceAll("_", " ")})` : ""}</li>;
+              })}
+            </ul>
           </div>)}
           {!endpoint.sessions.length && <p>No runtime session recorded.</p>}
           {endpoint.sessions_has_more && <p>Only the ten latest sessions are shown.</p>}

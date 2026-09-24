@@ -21,10 +21,8 @@ def test_unknown_version_cannot_admit_native_control(runtime, tmp_path, verb):
     assert opened.status_code == 200, opened.text
     sid = opened.json()["data"]["session_id"]
     sent = tool(client, operator, "harness_send", {"session_id": sid, "payload": {"text": "TRIGGER_HOLD"}})
-    assert sent["ok"], sent
-    op = sent["data"]["operation_id"]
-    wait_operation(runtime, op, lambda row: row["external_acceptance"] == "harness_accepted")
-    request = {"session_id": sid, "expected_operation_id": op,
+    assert not sent["ok"] and sent["error"]["code"] == "CONFIG_ERROR", sent
+    request = {"session_id": sid,
         **({"payload": {"text": "unsupported-control"}} if verb == "steer" else {})}
     result = tool(client, operator, "harness_" + verb, request)
     assert not result["ok"], result
@@ -36,7 +34,7 @@ def test_unknown_version_cannot_admit_native_control(runtime, tmp_path, verb):
     with pytest.raises(OktoNexusError, match="native_control_unverified"):
         deps.harness_supervisor.send(sid, verb, request.get("payload", {}))
     with deps.connection_factory.unit_of_work(write=False) as uow:
-        assert not uow.connection.execute("SELECT 1 FROM runtime_commands WHERE verb IN ('steer','interrupt')").fetchone()
+        assert not uow.connection.execute("SELECT 1 FROM runtime_commands").fetchone()
     wire = [json.loads(line) for line in (tmp_path / "wire.jsonl").read_text().splitlines()]
     assert not any(row.get("method") == "turn/" + verb for row in wire)
 

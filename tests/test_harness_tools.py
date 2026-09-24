@@ -68,6 +68,9 @@ class FakeConnector:
             capabilities=self.capabilities,
             started_at=utc_now_iso(),
             compatibility_report={"control_contract_basis": "tested_protocol_contract",
+                "native_version": {"pi": "0.85.1", "codex": "0.156.1", "claude_code": "2.1.281"}.get(self._kind),
+                "transport_contract": "cc_socks_peer_1" if self.capabilities.send_only else None,
+                "peer_protocol": 1 if self.capabilities.send_only else None,
                 "compatible_controls": [] if self.capabilities.send_only else ["steer", "interrupt"]},
         )
         return self.session

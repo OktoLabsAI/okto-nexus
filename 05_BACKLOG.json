@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "Descriptor capability admission above2785c65d400d21bb53a1b6b6f6e5ae80e4b6286f",
+  "execution_head": "Effective session capabilities above575c8c28ab6c4543ad8dc5b0b64949d5f735fea6",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -300,7 +300,8 @@
           "evidence": [
             "plans/pr34-remediation/P02_CONTRACTS.md",
             "plans/pr34-remediation/evidence/p02-gate.log",
-            "plans/pr34-remediation/evidence/p02-contracts.log"
+            "plans/pr34-remediation/evidence/p02-contracts.log",
+            "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md"
           ],
           "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases."
         },
@@ -353,7 +354,8 @@
             "plans/pr34-remediation/P02_CONTRACTS.md",
             "plans/pr34-remediation/evidence/p02-gate.log",
             "plans/pr34-remediation/evidence/p02-contracts.log",
-            "plans/pr34-remediation/P02_CAPABILITY_ADMISSION.md"
+            "plans/pr34-remediation/P02_CAPABILITY_ADMISSION.md",
+            "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md"
           ],
           "notes": "Contract v1 and production registry extension validated; 13 focused and 42 domain/parity checks PASS. Persistence/delegation/dispatch remain later phases. Declared-capability bypass corrected at selection/admission/revalidation. Full native per-session effective-capability intersection remains pending; this result is not full capability verification."
         },
@@ -383,7 +385,8 @@
             "plans/pr34-remediation/P02_CONTRACTS.md",
             "plans/pr34-remediation/evidence/p02-gate.log",
             "plans/pr34-remediation/evidence/p02-contracts.log",
-            "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md"
+            "plans/pr34-remediation/P02_ADDITIONAL_ADAPTER_COMPOSITION.md",
+            "plans/pr34-remediation/P02_EFFECTIVE_CAPABILITIES.md"
           ],
           "notes": "Five-adapter production composition verified over authenticated REST/MCP and canonical inbox dispatch. Fifth trusted descriptor requires no local process; Popen trap asserts that boundary. No domain/supervisor product branch added. This task verification does not promote the overall phase or binary capability probes."
         }

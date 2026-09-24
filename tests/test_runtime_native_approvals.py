@@ -39,7 +39,7 @@ def approval_peer(runtime, *, method="item/commandExecution/requestApproval", ex
     deps.config.feature_hitl = True
     source = _FAKE_SERVER_SOURCE.replace("_thread_counter = 0", "_approval_ready = threading.Event()\n_approval_reply = {}\n_thread_counter = 0")
     if control_contract:
-        source = source.replace('"result": {}',
+        source = source.replace('"result": {"userAgent": "okto-nexus/0.156.1"}',
             '"result": {"userAgent": "okto-nexus/0.156.1"}', 1)
     begin = source.index('    if "TRIGGER_SERVER_REQUEST" in text:')
     end = source.index('    if "TRIGGER_MALFORMED" in text:', begin)
