@@ -1,0 +1,105 @@
+{
+  "source_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "platform": "Windows",
+  "counts": {
+    "PASS": 9,
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "10",
+      "time": "12.011",
+      "timestamp": "2026-09-24T13:01:59.121182-03:00"
+    }
+  ],
+  "native_flags": "No native provider; isolated fixtures only",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Detached source worktree; correction not yet integrated. Concurrent full suites continue on unchanged source.",
+  "records": [
+    {
+      "class": "tests.test_receipts",
+      "test": "test_pull_emits_sender_only_delivered_receipt",
+      "status": "PASS",
+      "seconds": 0.523
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_ack_emits_read_receipt_once_and_idempotently",
+      "status": "PASS",
+      "seconds": 0.524
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_sender_can_await_read_receipt_with_event_wait",
+      "status": "PASS",
+      "seconds": 0.459
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_message_status_and_receipts_agree",
+      "status": "PASS",
+      "seconds": 0.344
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_event_cursor_anchors_a_monitor_at_now",
+      "status": "PASS",
+      "seconds": 0.393
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_ack_lands_grouped_receipt_in_sender_inbox",
+      "status": "PASS",
+      "seconds": 0.378
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_receipts_never_generate_receipts",
+      "status": "PASS",
+      "seconds": 0.385
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_self_send_produces_no_receipt",
+      "status": "PASS",
+      "seconds": 0.392
+    },
+    {
+      "class": "tests.test_receipts",
+      "test": "test_opt_out_setting_disables_inbox_receipts",
+      "status": "PASS",
+      "seconds": 0.386
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+      "status": "FAIL",
+      "seconds": 5.03
+    }
+  ],
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_receipts.py",
+    "tests/test_runtime_attach_work_channel.py::test_mixed_external_and_pull_ack_preserves_receipt_grouping_and_provenance",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\initial-green-cixexojn\\pytest",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\initial-green.xml"
+  ],
+  "environment_overrides": {
+    "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\initial-green-cixexojn",
+    "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\initial-green-cixexojn",
+    "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\receipt-regression-06mfxlx6\\initial-green-cixexojn"
+  },
+  "source_file_sha256": {
+    "src/okto_nexus/application/inbox.py": "a9f677514ecbdf637e36a27ad9ba5275d2485c4390f1fab86cb12042e609bb43",
+    "tests/test_runtime_attach_work_channel.py": "6242d72e8ad55e0c00f8f9e366c009ee43f3554ff3e7b3a28d42022f47de5dfe"
+  },
+  "exit_code": 1
+}

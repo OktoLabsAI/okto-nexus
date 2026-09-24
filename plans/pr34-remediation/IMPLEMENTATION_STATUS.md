@@ -111,3 +111,20 @@ Backlog snapshot at this update: {"PASS": 126, "NOT_RUN": 3}. PASS means only th
 ## Current environment constraint
 
 C drive reached0 free bytes during the external-work campaign, confirmed by independent SQLite WAL failure. Windows tests and the live MCP smoke now allocate new private temporary roots beneath .git/pr34-evidence on D (TEMP/TMP/TMPDIR plus pytest basetemp). Preserve XML and reduce manifests before any cleanup. Do not delete personal files or reuse old fixture stores. D had roughly580GB free at that observation. Linux campaigns completed successfully in their existing isolated WSL environment. Recheck storage before the final installation; do not mislabel disk-full failures as product regressions or silently omit them.
+
+## Active regression follow-up
+
+Full Windows handle51046 and Linux29628 remain live. Windows has observed failures
+in the Claude event-latency test and grouped read-receipt test; no terminal totals
+or traceback yet. Receipt regression independently reproduced1 FAIL (2 receipts
+instead of1), corrected only in a detached disposable worktree to preserve the
+running source freeze. Expanded isolated Windows selection handle54951 completed0:98 PASS1 POSIX SKIP142.52s. Linux equivalent handle29305 is live. Private
+record .git/pr34-evidence/receipt-regression-worktree.json contains exact paths,
+commands and generation hashes; P12_RECEIPT_GROUPING_REGRESSION.md records scope.
+Do not integrate its two changed files until both full suites terminate.
+
+Documentation milestone91bf2ad is committed/pushed: corrected surface58 headers,
+current/historical evidence index split, migration/recovery guide, ADR and changelog
+updates. No production/test changes from39c5e6c in the main working tree. Local
+0.2.0 package artifacts still represent39c5e6c and must be rebuilt after integrating
+any production correction. Installed Nexus remains0.1.10.

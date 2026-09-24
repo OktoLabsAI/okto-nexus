@@ -1,0 +1,31 @@
+{
+  "base_sha": "39c5e6cc44481467a6785b09e11219f5c57b2f62",
+  "status": "ISOLATED_CORRECTION; MAIN_INTEGRATION_PENDING",
+  "runs": {
+    "red": {
+      "manifest": "p12-receipt-grouping-red.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "initial-green": {
+      "manifest": "p12-receipt-grouping-initial-green.json",
+      "counts": {
+        "PASS": 9,
+        "FAIL": 1
+      }
+    },
+    "green-windows": {
+      "manifest": "p12-receipt-grouping-green-windows.json",
+      "counts": {
+        "PASS": 98,
+        "SKIP": 1
+      }
+    }
+  },
+  "linux": "RUNNING handle29305",
+  "changed_paths": [
+    "src/okto_nexus/application/inbox.py",
+    "tests/test_runtime_attach_work_channel.py"
+  ]
+}
