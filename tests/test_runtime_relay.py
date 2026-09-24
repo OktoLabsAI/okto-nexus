@@ -24,7 +24,7 @@ def configure(runtime, *, depth=2, outcome="completed", kind="codex"):
             "response_policy": "conversation", "public_config": {"relay_results": True}})
         assert response.status_code == 200, response.text
     # Register the actual JSON-RPC fixture adapter through existing composition.
-    codex_session(runtime)
+    codex_session(runtime, outcome=outcome)
     if kind == "claude_code":
         from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
         from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT
@@ -39,12 +39,6 @@ def configure(runtime, *, depth=2, outcome="completed", kind="codex"):
         deps.harness_connector_factories[kind] = lambda **kwargs: PiRpcConnector(
             command=[sys._base_executable, "-u", "-c", _FAKE_SERVER_SOURCE, str(Path(root) / f"pi-{next(sequence)}.jsonl")],
             cwd=root, env=kwargs["backend"]["env"])
-    if outcome != "completed":
-        from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
-        from test_harness_codex_connector import _FAKE_SERVER_SOURCE
-        source = _FAKE_SERVER_SOURCE.replace('"status": "completed"', '"status": "' + outcome + '"')
-        deps.harness_connector_factories["codex"] = lambda **kwargs: CodexAppServerConnector(
-            command=[sys._base_executable, "-u", "-c", source], cwd=root, env=kwargs["backend"]["env"])
     for agent in ("worker", "caller"):
         response = client.post("/api/v1/harness/sessions", headers={"x-api-key": operator}, json={
             "agent_id": agent, "kind": kind, "endpoint_id": "relay-" + agent, "project_root": root})

@@ -30,12 +30,13 @@ def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime, 
         json={"agent_id": "worker", "kind": "codex", "endpoint_id": "endpoint-codex", "project_root": root})
     assert opened.status_code == 200, opened.text
     failed, recovered = threading.Event(), False
+    allow_projection = threading.Event()
     ingress = deps.harness_supervisor.event_ingress
     consume = ingress.consume_terminal
 
     def consume_with_failure(uow, event):
         consume(uow, event)
-        if event.delivery_phase == "terminal" and not failed.is_set():
+        if event.delivery_phase == "terminal" and not allow_projection.is_set():
             failed.set()
             raise OSError("fixture rollback after receipt creation")
 
@@ -52,6 +53,9 @@ def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime, 
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert uow.connection.execute("SELECT status FROM message_deliveries WHERE delivery_id=?",
                         (row["delivery_id"],)).fetchone()[0] == "unread"
+                # Keep automatic retries failing until the rollback snapshot is
+                # checked; a valid fast background recovery must not race it.
+                allow_projection.set()
                 ingress.recover()
                 recovered = True
             if row["status"] == "ACCEPTED" and row.get("terminal_event_id"):

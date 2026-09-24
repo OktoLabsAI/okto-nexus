@@ -1,0 +1,510 @@
+{
+  "sha": "feeb14d171d9dad4bc7ee5400c6bb10db8a6ec53",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short --basetemp=<unique-temporary-tests> --junitxml=<temporary-results.xml>",
+  "native_flags": "all explicit native campaign flags removed; legacy live flags zero",
+  "pytest_exit": 1,
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "4",
+      "skipped": "117",
+      "tests": "2417",
+      "time": "1685.273",
+      "timestamp": "2026-09-23T23:10:31.304137-03:00"
+    }
+  ],
+  "failures": [
+    {
+      "class": "tests.test_runtime_relay",
+      "test": "test_failed_interrupted_and_unknown_results_do_not_relay[failed-failed]",
+      "kind": "failure"
+    },
+    {
+      "class": "tests.test_runtime_relay",
+      "test": "test_failed_interrupted_and_unknown_results_do_not_relay[interrupted-interrupted]",
+      "kind": "failure"
+    },
+    {
+      "class": "tests.test_runtime_relay",
+      "test": "test_failed_interrupted_and_unknown_results_do_not_relay[unknown-None]",
+      "kind": "failure"
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-True]",
+      "kind": "failure"
+    }
+  ],
+  "skipped": [
+    {
+      "class": "",
+      "test": "tests.test_tokenizer"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_discover_filters_to_interactive_and_skips_malformed"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_discover_missing_directory_returns_empty"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_missing_registry_is_negative_not_raising"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_non_interactive_session_is_negative"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_protocol_mismatch_is_loud_and_negative"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_succeeds_against_live_fake_socket"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_raises_not_found_when_registry_missing"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_raises_validation_error_for_headless_session"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_raises_config_error_on_multiple_key_files"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_falls_back_to_computed_socket_path_when_registry_omits_field"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_binds_to_observed_peer_identity"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_delivers_auth_then_user_ndjson_lines"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_rejects_non_send_turn_verbs"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_before_start_raises_not_found"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_rejects_oversized_content"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_neutralises_banner_spoofing_attempt"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_fails_loudly_and_records_error_event_when_peer_unreachable"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_trips_pid_reuse_guard_on_proc_start_mismatch"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_events_is_empty_and_finite_for_a_fresh_connector"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_capabilities_match_adr_0004_d7b"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_never_raises_on_embedded_null_byte_in_socket_path"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_raises_oktonexuserror_not_valueerror_on_embedded_null_byte"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_never_raises_on_a_genuinely_unexpected_internal_error"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_and_start_agree_when_both_protocol_mismatch_and_missing_key_apply"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_and_start_agree_when_key_file_exists_but_is_unparseable"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_reports_not_a_socket"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_raises_config_error_when_resolved_path_is_not_a_socket"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_computed_socket_path_xdg_runtime_dir_unset_matches_ev_cc_001"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_computed_socket_path_falls_back_past_103_byte_sun_path_limit"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_pid_reuse_guard_raises_when_key_file_goes_missing"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_pid_reuse_guard_detects_new_hash_key_file_after_recycle"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_against_a_peer_that_accepts_then_closes_is_documented_not_detected"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_against_a_peer_that_reads_auth_then_rejects"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_against_a_peer_that_closes_mid_message"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_registry_fixture_matches_ev_cc_001_schema_exactly"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_docstring_states_the_ack_less_limitation_plainly"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_events_can_be_called_twice_without_hanging"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_rejects_socket_owned_by_a_different_uid"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_start_rejects_socket_owned_by_a_different_uid"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_res_a3_and_b3_every_blocking_wait_in_the_module_carries_a_timeout"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_res_a4_a_failed_start_still_leaves_events_terminable"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_res_a4_a_failed_start_after_partial_probe_success_still_leaves_events_terminable"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_send_rejects_socket_that_changed_owner_uid_since_start"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_res_a2_concurrent_events_consumers_each_get_the_full_stream"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_missing_key_file_reason_is_distinct_from_missing_registry"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_registry_missing_kind_field_is_protocol_drift_not_headless"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_permission_denied_registry_is_a_distinct_permission_category"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_permission_denied_key_file_is_a_distinct_permission_category"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_success_reports_peer_protocol_verified_true_on_exact_match"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_success_reports_peer_protocol_unverified_when_field_absent"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_success_records_peer_features_without_enforcing_them"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_result_docstring_states_ok_is_not_proof_of_delivery"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_probe_success_detail_does_not_claim_delivery"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_key_file_ambiguous_reason_is_specific"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_key_file_missing_token_field_reason_is_specific"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_every_ok_false_probe_reason_maps_to_a_known_category"
+    },
+    {
+      "class": "tests.test_claude_code_attach_connector",
+      "test": "test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category"
+    },
+    {
+      "class": "tests.test_frente1_measurement",
+      "test": "test_s5_ab_assertiveness_battery_is_a_manual_gate"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_with_a_second_turn_already_queued_behind"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_single_trivial_turn"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_two_turns_share_session_and_process_survives"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_steer_interrupts_in_flight_turn_and_runs_new_one_immediately"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_after_generation_start_survives_and_reprompts_immediately"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_end_verb_drains_and_exits_cleanly"
+    },
+    {
+      "class": "tests.test_harness_claude_code_connector",
+      "test": "test_real_claude_interrupt_targets_head_turn_with_two_outstanding"
+    },
+    {
+      "class": "tests.test_harness_codex_connector",
+      "test": "test_live_against_real_codex_lan_box"
+    },
+    {
+      "class": "tests.test_harness_pi_connector",
+      "test": "test_live_against_real_pi_zai"
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_open_claude_code_attach_with_target_pid_uses_attach_capabilities"
+    },
+    {
+      "class": "tests.test_harness_tools",
+      "test": "test_harness_steer_is_rejected_when_capability_forbids_it"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_capacity_is_held_until_observed_cleanup"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_native_stream_eof_is_independent_of_process_exit"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_normal_leader_exit_reaps_escaped_child_without_touching_bystander"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_observed_stop_requires_tree_cleanup_proof"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_owner_sigkill_reaps_escaped_grandchild"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_partial_descriptor_failure_does_not_leak"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_pidfd_without_python_wrappers_uses_kernel_identity"
+    },
+    {
+      "class": "tests.test_linux_process_ownership.LinuxOwnershipTests",
+      "test": "test_terminate_preserves_native_graceful_exit_status"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[None]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[True]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[1.0]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[1]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_unverified_attach_protocol_refuses_before_socket_or_token[2]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[1]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[None]"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_protocol_drift_after_open_prevents_any_send"
+    },
+    {
+      "class": "tests.test_runtime_attach_compatibility",
+      "test": "test_attach_missing_protocol_field_is_not_a_compatible_default"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_unknown_operation_shows_cause_without_success_or_retry"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_detached_external_runtime_is_not_presented_as_terminated"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_multiple_bindings_explain_selection_instead_of_choosing_an_executor"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_authority_change_clears_previously_visible_operator_metadata"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_disabled_admission_still_shows_operator_recovery_records"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_native_approval_navigation_uses_existing_canonical_view"
+    },
+    {
+      "class": "tests.test_runtime_diagnostics_dashboard",
+      "test": "test_managed_work_diagnostic_does_not_label_work_as_conversation"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_submits_explicit_native_answer"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_form_preserves_types_and_never_selects_native_defaults"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_claude_question_keeps_original_input_and_explicit_answer"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_rejects_question_without_fabricating_answer"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_native_permission_remains_explicit_and_separate_from_input"
+    },
+    {
+      "class": "tests.test_runtime_input_dashboard",
+      "test": "test_dashboard_expired_request_shows_delivery_state_without_answer_control"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_two_turns_via_canonical_inbox_and_journal[codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_two_turns_via_canonical_inbox_and_journal[claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_active_close_observes_interrupt_terminal[codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_explicit_work_result_preserves_verification[codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_explicit_work_result_preserves_verification[claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_approval_denial_preserves_security_controls[codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_approval_denial_preserves_security_controls[claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_question_roundtrip_uses_operator_input[claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_contract_qualification[denial-claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_contract_qualification[question-claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_active_control_preserves_session[steer-codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_active_control_preserves_session[steer-claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_active_control_preserves_session[interrupt-codex]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_active_control_preserves_session[interrupt-claude_code]"
+    },
+    {
+      "class": "tests.test_runtime_native_campaign",
+      "test": "test_native_multiplex_uses_production_factory[codex]"
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_sigterm_with_live_session_reaps_the_harness_child"
+    },
+    {
+      "class": "tests.test_serve_harness_shutdown_reap",
+      "test": "test_sigint_with_live_session_reaps_the_harness_child"
+    }
+  ],
+  "scope_note": "Implementation and tests remained at feeb14d until completion. Documentation-only audit commit bdb1ca6 occurred during the run. Not the final acceptance gate."
+}
