@@ -175,11 +175,8 @@ _KEY_FILE_RE = re.compile(r"^(?P<pid>\d+)\.(?P<hash>[0-9a-fA-F]+)\.key$")
 #: breaks, the core feature survives" because D7a stays primary) - that
 #: asymmetry (unrecoverable silent corruption vs. a recoverable, loud,
 #: reported refusal of an optional capability) is why this never becomes a
-#: soft warning. A registry OMITTING the field entirely does NOT refuse -
-#: schema drift alone, with no CONTRADICTING value, is not proof of
-#: incompatibility - but ``ProbeResult.peer_protocol_verified`` is
-#: ``False`` in that case so "confirmed compatible" and "unverified,
-#: proceeding anyway" are never silently the same thing to a caller.
+#: soft warning. Missing, null, boolean or non-integer protocol values are
+#: unverified and refused as well; absence is not evidence of compatibility.
 _PROVEN_PEER_PROTOCOL = 1
 
 #: Coarse triage buckets for ``ProbeResult.category`` / every
@@ -318,12 +315,9 @@ class ProbeResult:
 
     ``peer_protocol_verified`` is ``True`` only when the registry reported
     ``peerProtocol`` and it exactly matched the one proven value
-    (``_PROVEN_PEER_PROTOCOL``). A registry OMITTING ``peerProtocol``
-    entirely still probes ``ok=True`` (schema drift alone, with no
-    contradicting value, is not refused - see ``_check_peer_protocol``), but
-    ``peer_protocol_verified=False`` in that case makes the "unverified, not
-    confirmed" distinction visible without a caller having to know to check
-    ``peer_protocol is None`` themselves.
+    (``_PROVEN_PEER_PROTOCOL``), with strict integer type. Missing or malformed
+    values produce ``ok=False`` and ``peer_protocol_verified=False``: there is
+    no safe default for an unverified ACK-less wire format.
 
     ``peer_features`` is the raw ``peerFeatures`` list read from the
     registry, recorded but deliberately never enforced - see the module
@@ -691,9 +685,9 @@ class ClaudeCodeAttachConnector:
                 },
             ) from exc
 
-    def _check_peer_protocol(self, registry: dict[str, Any]) -> int | None:
+    def _check_peer_protocol(self, registry: dict[str, Any]) -> int:
         peer_protocol = registry.get("peerProtocol")
-        if peer_protocol is not None and peer_protocol != _PROVEN_PEER_PROTOCOL:
+        if type(peer_protocol) is not int or peer_protocol != _PROVEN_PEER_PROTOCOL:
             raise OktoNexusError(
                 ErrorCode.CONFIG_ERROR,
                 f"pid {self._pid} reports peerProtocol={peer_protocol!r}; "
@@ -710,7 +704,7 @@ class ClaudeCodeAttachConnector:
                     "category": _CATEGORY_PROTOCOL_DRIFT,
                 },
             )
-        return peer_protocol if isinstance(peer_protocol, int) else None
+        return peer_protocol
 
     def _check_socket_ownership(self, socket_path: Path, st: os.stat_result) -> None:
         """Refuse to connect to (and write a bearer token at) a socket this
@@ -965,6 +959,18 @@ class ClaudeCodeAttachConnector:
             status=STATUS_STARTING,
             capabilities=self.capabilities,
             started_at=self._now(),
+            compatibility_report={
+                "schema_version": 1,
+                "observation": "attach_registry_protocol",
+                "peer_protocol": peer_protocol,
+                "native_version": registry.get("version") if isinstance(registry.get("version"), str)
+                    and re.fullmatch(r"\d{1,4}\.\d{1,4}\.\d{1,4}", registry["version"]) else None,
+                "capabilities_verified": False,
+                "compatible_native_requests": [],
+                "native_request_basis": "unverified",
+                "transport_contract": "cc_socks_peer_1",
+                "ack_level": "NONE",
+            },
             metadata={
                 "pid": self._pid,
                 "registry_session_id": registry.get("sessionId"),
@@ -1030,6 +1036,9 @@ class ClaudeCodeAttachConnector:
         check_inline_size("command.payload.content", content, _MAX_CONTENT_BYTES)
 
         self._check_no_pid_reuse()
+        # External peers may change while still alive. Recheck the wire
+        # contract before reading/writing their bearer token.
+        self._check_peer_protocol(self._read_registry())
 
         assert self._socket_path is not None  # guaranteed by start()
         # TOCTOU: the socket passed ownership validation at start() time, but

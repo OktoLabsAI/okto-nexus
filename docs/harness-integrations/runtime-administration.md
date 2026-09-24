@@ -280,3 +280,9 @@ only. Unknown versions and unqualified methods cannot satisfy explicit requireme
 Pi and attach still require equivalent evidence. Canonical approval decision decline
 may translate to native cancel when decline is absent from availableDecisions. The
 audit retains the canonical decision and original native choices; it is not an ACK.
+
+Surface47 adds the attach registry observation to the stored compatibility report.
+Exact integer peerProtocol=1 is mandatory at open and rechecked before each send;
+absence is no longer treated as compatible. Existing protocol1 injection remains
+available on supported POSIX systems. This check adds no acknowledgment, result,
+approval, managed-work or process-ownership capability to the external session.

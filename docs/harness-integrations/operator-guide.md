@@ -201,3 +201,12 @@ The exact 2.1.280 contract includes Write/Edit/Bash and AskUserQuestion. In 2.1.
 only Write and AskUserQuestion have been qualified; Edit/Bash remain unverified
 for explicit profile requirements. Native denial and explicit question input were
 executed locally on 2.1.281. This is not a sandbox or general capability grant.
+
+Attach requires `peerProtocol` to be the integer `1`, both at open and immediately
+before sending. Missing/null, boolean, float and other versions fail with
+`protocol_mismatch`; a live socket alone cannot establish wire compatibility.
+The server-owned report records `attach_registry_protocol`, `cc_socks_peer_1`, a
+bounded version when present, and `ack_level=NONE`. These are local preconditions,
+not native acceptance: no token is sent by the probe, writes stay unconfirmed,
+close detaches, and managed work/interrupt/steer remain unsupported. No native
+Claude attach session has been qualified in this remediation campaign.

@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="13",
+    version="14",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -546,6 +546,11 @@ Claude stream probes the approved executable with the sealed profile environment
 without starting a model turn. Exact version2.1.280 covers Write/Edit/Bash and
 AskUserQuestion; version2.1.281 covers only qualified Write and AskUserQuestion.
 Other versions do not satisfy explicit requirements merely by sharing a prefix.
+Attach requires exact integer peerProtocol=1 in its external registry at open and
+before each send. Missing/null/boolean/float values fail protocol_mismatch. Its
+server-owned report records attach_registry_protocol and cc_socks_peer_1 without
+tokens or socket paths. ack_level=NONE; no native request/approval, managed work,
+interrupt or result guarantee is inferred. Successful writes stay unconfirmed.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native

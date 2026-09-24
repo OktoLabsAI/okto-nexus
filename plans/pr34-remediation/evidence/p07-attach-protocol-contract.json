@@ -1,0 +1,21 @@
+{
+  "parent_sha": "90f673e807da9664325cd4f0c25afb46f51cb0ab",
+  "scope": "strict attach wire precondition worktree",
+  "behavior_red": "5 failed,2 passed in4.02s",
+  "fixture_edit_failure": "1 failed,8 passed in15.52s; misplaced assertion, corrected",
+  "linux": {
+    "sha": "90f673e + attach protocol contract worktree",
+    "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus -- /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest -q tests/test_runtime_attach_compatibility.py tests/test_claude_code_attach_connector.py tests/test_runtime_protocol_compatibility.py tests/test_runtime_attach_platform.py tests/test_runtime_contracts.py tests/test_runtime_commands.py",
+    "result": "PASS",
+    "observed": "Linux97 PASS in73.05s including actual authenticated socket composition; Windows75 PASS plus17 PASS/9 POSIX skips. Five behavior REDs corrected; dedicated native attach NOT_RUN. Full capability gate pending.",
+    "evidence": "plans/pr34-remediation/P07_ATTACH_PROTOCOL_CONTRACT.md"
+  },
+  "windows": {
+    "result": "PASS",
+    "observed": "75 passed in26.07s; separate17 passed,9 POSIX skipped in1.80s"
+  },
+  "native_attach": "NOT_RUN",
+  "pi_native": "NOT_RUN",
+  "full_capability_gate": "NOT_RUN",
+  "evidence": "plans/pr34-remediation/P07_ATTACH_PROTOCOL_CONTRACT.md"
+}

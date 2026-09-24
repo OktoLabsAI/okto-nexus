@@ -1440,14 +1440,7 @@ def test_probe_success_reports_peer_protocol_verified_true_on_exact_match(
 def test_probe_success_reports_peer_protocol_unverified_when_field_absent(
     tmp_path: Path, fake_server: _FakeSocketServer
 ) -> None:
-    """The registry omitting 'peerProtocol' entirely must NOT probe
-    identically to a confirmed match - schema drift alone (no contradicting
-    value) does not refuse (see _check_peer_protocol), but the earlier
-    module docstring's claim that this "downgrades to a warning" was not
-    actually backed by anything inspectable: ok=True and peer_protocol=None
-    look, to a caller who never thought to check peer_protocol is None,
-    identical to a fully confirmed probe. peer_protocol_verified makes the
-    distinction explicit and impossible to miss."""
+    """An absent/null protocol has no safe ACK-less fallback."""
     pid = _live_pid()
     _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path), peer_protocol=None)
     _write_key(tmp_path, pid)
@@ -1455,7 +1448,8 @@ def test_probe_success_reports_peer_protocol_unverified_when_field_absent(
 
     result = connector.probe()
 
-    assert result.ok is True  # schema drift alone is not refused
+    assert result.ok is False
+    assert result.reason == "protocol_mismatch"
     assert result.peer_protocol is None
     assert result.peer_protocol_verified is False
 

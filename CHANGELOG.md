@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 47 requires exact integer cc-socks peerProtocol=1 at attach open and
+  before send, and persists its redacted observation without inventing an ACK.
 - Surface 46 observes Claude stream's approved executable version in a bounded,
   owned probe before readiness. Exact qualified request contracts satisfy explicit
   profile requirements; unknown versions never inherit compatibility by prefix.
