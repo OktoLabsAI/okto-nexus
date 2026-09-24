@@ -5547,7 +5547,12 @@
       "stimulus": "Gerar índice a partir dos resultados e comparar com o SHA executado.",
       "expected": "PASS/FAIL/NOT_RUN/NOT_APPLICABLE corretos; versões e limitações explícitas.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P12_FINAL_AUDIT.md",
+        "plans/pr34-remediation/evidence/p12-final-node-catalogue.json",
+        "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json"
+      ],
+      "notes": "All129 verification routes catalogued with explicit test nodes or separate experiment/report evidence. Current full Windows failure retained; final integrated-source execution join, native qualification and release report still pending. Catalogue alone is not a passed report gate."
     }
   ]
 }

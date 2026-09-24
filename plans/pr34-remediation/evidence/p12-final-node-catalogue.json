@@ -1,0 +1,2582 @@
+{
+  "source_sha": "8072207f1cb382dc0bcc29154e0e67176f9dd547",
+  "scope": "Coverage catalogue only, not test execution or acceptance. Historical review mappings retain their origin; supplemental mappings are manually reviewed. Final source results must be joined separately. A platform SKIP is never silently promoted.",
+  "requirements": [
+    {
+      "test_id": "T-ID-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_identity_acceptance.py::test_open_close_reopen_preserves_every_canonical_profile_field"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Both REST and MCP open/close/reopen; all Agent dataclass fields are snapshotted after each transition, including explicit role/capabilities/metadata/tags/permissions/comm_scope. New session on reopen, no canonical mutation.",
+          "limitations": "Synthetic peers; production identity/open/presence composition."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_profile_is_unchanged_by_open_close"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Compares the complete canonical agent before open and after close, including tags, permissions and comm_scope configured through REST.",
+          "limitations": "Does not reopen the binding. The original requirement explicitly includes reopen."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ID-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_identity_acceptance.py::test_unknown_identity_is_rejected_without_factory_or_registration"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Unknown identity rejected through REST and MCP, nonempty canonical error, no factory invocation, no Agent/session inserted, existing profile unchanged.",
+          "limitations": "Synthetic peer factory observes no invocation."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_open_does_not_fabricate_credential_authentication",
+            "tests/test_pr34_remediation.py::test_unknown_agent_is_rejected_before_factory"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "REST rejects the unknown identity before connector construction and confirms no canonical agent was inserted.",
+          "limitations": "Unknown-agent MCP call is not exercised by these nodes."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ID-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_identity_acceptance.py::test_concurrent_same_agent_bindings_preserve_identity_and_deduplicate"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Concurrent distinct endpoints and same request key for one Agent; expected peer/session counts, repeat through MCP resolves identical session, canonical presence/Agent assertions.",
+          "limitations": "An in-progress identical request may return transient CONFLICT; subsequent retry resolves its original result. Synthetic peers."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_outbox.py::test_p05_concurrent_open_key_never_starts_twice",
+            "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Concurrent same-key REST opens create one peer; subsequent MCP reuse returns the same session. Changed payload conflicts.",
+          "limitations": "Concurrent distinct authorized endpoint bindings with full profile preservation are not asserted here."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ID-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged.",
+          "limitations": "Synthetic external peer; this is facade/identity normalization, not native protocol qualification."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged.",
+          "limitations": "Synthetic external peer; this is facade/identity normalization, not native protocol qualification."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ID-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-identity-failure.json",
+          "nodes": [
+            "tests/test_runtime_identity_failure_acceptance.py::test_canonical_catalogue_gates_rest_and_mcp_and_runtime_open_cannot_change_it"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ID-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-identity-failure.json",
+          "nodes": [
+            "tests/test_runtime_identity_failure_acceptance.py::test_failure_after_native_start_preserves_identity_and_reaps_exact_owned_process",
+            "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-monitor-authorization.json",
+          "nodes": [
+            "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+            "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-monitor-authorization.json",
+          "nodes": [
+            "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-audience-authority.json",
+          "nodes": [
+            "tests/test_runtime_discovery.py::test_discovery_grant_never_grants_control_and_revocation_removes_projection",
+            "tests/test_runtime_discovery.py::test_discovery_groups_authorized_endpoints_under_one_agent_and_redacts_config",
+            "tests/test_runtime_read_audience.py::test_private_session_replay_results_and_endpoint_listing_have_no_foreign_audience"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+            "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
+            "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources.",
+          "limitations": "Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+            "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
+            "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources.",
+          "limitations": "Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements."
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_commands.py::test_revocation_after_admission_prevents_native_write",
+            "tests/test_runtime_outbox.py::test_p06_changed_policy_blocks_previously_committed_intent"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes.",
+          "limitations": "Synthetic peers; authorization and durable dispatch are the production composition."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_commands.py::test_revocation_after_admission_prevents_native_write",
+            "tests/test_runtime_outbox.py::test_p06_changed_policy_blocks_previously_committed_intent"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes.",
+          "limitations": "Synthetic peers; authorization and durable dispatch are the production composition."
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-audience-authority.json",
+          "nodes": [
+            "tests/test_runtime_revocation_during_turn.py::test_revoke_accepted_turn_before_terminal_keeps_evidence_and_blocks_completion"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-audience-authority.json",
+          "nodes": [
+            "tests/test_runtime_payload_boundaries.py::test_control_payload_cannot_replace_identity_correlation_or_native_profile",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-monitor-authorization.json",
+          "nodes": [
+            "tests/test_runtime_grants.py::test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource",
+            "tests/test_runtime_monitor_authorization.py::test_anonymous_real_stdio_cannot_open_or_control_existing_runtime"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_secret_redaction.py::test_native_payload_cannot_assert_server_redaction_policy",
+            "tests/test_runtime_secret_redaction.py::test_redaction_is_scoped_to_effective_profile_and_handles_encoded_diagnostics",
+            "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_not_exposed_by_native_start_errors",
+            "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_redacted_before_journal_result_and_replay",
+            "tests/test_runtime_secret_redaction.py::test_secret_in_native_approval_is_private_without_breaking_exact_reply"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Approved opaque env reference echoed by owned process is removed before raw journal, durable result, replay and logs, including split/character fragments and two turns; constructor/start errors and allow/deny approval projections are scrubbed while diagnostic policy remains trustworthy.",
+          "limitations": "Synthetic known credential only, no personal secret files; no universal detection of encoded exfiltration. Historical e388227 FAIL retained separately and not relabeled."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_backend_diagnostics_do_not_echo_credentials",
+            "tests/test_runtime_endpoints.py::test_p03_profile_environment_isolated_and_operator_key_never_inherited",
+            "tests/test_runtime_event_journal.py::test_credentials_redacted_before_bytes_are_written"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Checks diagnostic redaction, sealed child environment including aliased operator credentials, and journal bytes with synthetic credential-shaped values.",
+          "limitations": "Arbitrary secret resolver values across all logs and exception paths need a dedicated end-to-end trace. Credential-pattern redaction alone does not prove that broader guarantee."
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-payload-boundaries.json",
+          "nodes": [
+            "tests/test_runtime_payload_boundaries.py::test_control_payload_cannot_replace_identity_correlation_or_native_profile",
+            "tests/test_runtime_payload_boundaries.py::test_unapproved_launch_options_are_rejected_before_spawn_on_both_surfaces"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-monitor-authorization.json",
+          "nodes": [
+            "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit",
+            "tests/test_runtime_monitor_authorization.py::test_valid_ept_can_monitor_but_cannot_reach_runtime_rest_or_mcp"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-12",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-operation-authorization.json",
+          "nodes": [
+            "tests/test_runtime_operation_authorization.py::test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+            "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint.",
+          "limitations": "Production selection/dispatch with synthetic native peers."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint.",
+          "limitations": "Production selection/dispatch with synthetic native peers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-acceptance.json",
+          "nodes": [
+            "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-acceptance.json",
+          "nodes": [
+            "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_ambiguous_endpoint_selection_does_not_construct_connector"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds.",
+          "limitations": "Production open selection with synthetic native peers."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_ambiguous_endpoint_selection_does_not_construct_connector"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds.",
+          "limitations": "Production open selection with synthetic native peers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_endpoint_fallback.py::test_approved_fallback_sends_once_to_b_with_the_same_logical_delivery",
+            "tests/test_runtime_endpoint_fallback.py::test_fallback_never_crosses_approval_or_logical_scope",
+            "tests/test_runtime_endpoint_fallback.py::test_fallback_revalidates_both_admission_and_target_before_write"
+          ],
+          "platform_nodes": {},
+          "rationale": "Same operation/envelope/inbox reaches approved equivalent endpoint only after pre-write proof; current scope and approvals revalidated.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-acceptance.json",
+          "nodes": [
+            "tests/test_runtime_endpoint_fallback.py::test_error_text_after_native_write_cannot_enable_endpoint_fallback"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-acceptance.json",
+          "nodes": [
+            "tests/test_runtime_effective_capabilities.py::test_profile_can_only_remove_qualified_capabilities",
+            "tests/test_runtime_effective_capabilities.py::test_unknown_codex_contract_cannot_admit_a_direct_turn",
+            "tests/test_runtime_effective_capabilities.py::test_unknown_contract_cannot_share_an_explicitly_reused_native_connection",
+            "tests/test_runtime_effective_capabilities.py::test_unknown_on_demand_contract_is_rejected_without_native_write_or_uncertain_receipt"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-ENDP-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_p02_additional_adapter_through_production_mcp_and_rest"
+          ],
+          "platform_nodes": {},
+          "rationale": "Fifth registered adapter works through real REST/MCP and inbox composition while Popen is forbidden.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[outbox]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-commit-crash.json",
+          "nodes": [
+            "tests/test_runtime_commit_crash.py::test_committed_message_survives_owner_death_before_wake_without_duplicate_effect"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-request-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces0]",
+            "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces1]",
+            "tests/test_runtime_request_acceptance.py::test_concurrent_send_key_has_one_operation_charge_and_native_effect[surfaces2]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-request-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-mcp]",
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[content-rest]",
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-mcp]",
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[owner_context-rest]",
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-mcp]",
+            "tests/test_runtime_request_acceptance.py::test_changed_request_cannot_replace_original_command[target-rest]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-approval-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_approval_acceptance.py::test_pending_message_and_concurrent_approval_have_one_native_execution"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-producers-index.json",
+          "nodes": [
+            "tests/test_runtime_approval_acceptance.py::test_pending_message_and_concurrent_approval_have_one_native_execution",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+            "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+            "tests/test_runtime_handoff_dispatch.py::test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+            "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+            "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[False]",
+            "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[True]",
+            "tests/test_runtime_result_publication.py::test_publication_and_canonical_message_commit_together"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-io-boundaries.json",
+          "nodes": [
+            "tests/test_runtime_artifact_durability.py::test_artifact_storage_does_not_hold_sqlite_writer",
+            "tests/test_runtime_event_journal.py::test_journal_io_outside_write_uow_and_full_sync",
+            "tests/test_runtime_io_boundaries.py::test_owned_spawn_secret_transport_and_fixture_model_network_are_outside_write_uow",
+            "tests/test_runtime_outbox.py::test_p06_native_send_is_outside_sqlite_write_transaction"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-TX-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_writer_contract.py::test_compatible_stdio_still_enqueues_the_canonical_delivery",
+            "tests/test_runtime_writer_contract.py::test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+            "tests/test_runtime_writer_contract.py::test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+            "tests/test_runtime_writer_contract.py::test_preexisting_legacy_connection_is_fenced_only_after_activation"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup.",
+          "limitations": "Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_writer_contract.py::test_compatible_stdio_still_enqueues_the_canonical_delivery",
+            "tests/test_runtime_writer_contract.py::test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+            "tests/test_runtime_writer_contract.py::test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+            "tests/test_runtime_writer_contract.py::test_preexisting_legacy_connection_is_fenced_only_after_activation"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup.",
+          "limitations": "Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator."
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-pull-push-index.json",
+          "nodes": [
+            "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[after_reservation]",
+            "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[before_reservation]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_consumption_acceptance.py::test_native_acceptance_then_terminal_never_redelivers_to_pull"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_not_sent_recovery.py::test_proven_not_sent_release_preserves_transport_evidence_and_original_inbox",
+            "tests/test_runtime_not_sent_recovery.py::test_release_requires_complete_server_owned_non_delivery_proof",
+            "tests/test_runtime_not_sent_recovery.py::test_safe_release_audit_and_inbox_roll_back_together"
+          ],
+          "platform_nodes": {},
+          "rationale": "Explicit release requires complete server-owned pre-write proof, preserves transport evidence and returns original delivery to authenticated pull atomically.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_consumption_acceptance.py::test_lost_confirmation_and_expired_transport_lease_keep_push_reservation"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_operation_reconciliation.py::test_active_runtime_cannot_be_released_just_by_acknowledging_risk",
+            "tests/test_runtime_operation_reconciliation.py::test_authenticated_stdio_recovery_uses_active_serve_owner",
+            "tests/test_runtime_operation_reconciliation.py::test_concurrent_recovery_is_one_atomic_decision_and_conflicting_key_fails",
+            "tests/test_runtime_operation_reconciliation.py::test_explicit_takeover_releases_same_inbox_without_rewriting_transport_or_replaying",
+            "tests/test_runtime_operation_reconciliation.py::test_late_correlated_terminal_is_retained_without_consumption_or_publication",
+            "tests/test_runtime_operation_reconciliation.py::test_recovery_has_operator_parity_and_survives_admission_flag_off",
+            "tests/test_runtime_operation_reconciliation.py::test_recovery_rolls_back_audit_and_source_when_inbox_release_fails",
+            "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+            "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change0]",
+            "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change1]",
+            "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change2]",
+            "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change3]",
+            "tests/test_runtime_operation_reconciliation.py::test_uncertain_recovery_rejects_missing_risk_and_stale_snapshot[change4]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_consumption_acceptance.py::test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-mirror-observation-index.json",
+          "nodes": [
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.attach]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.stream]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-codex]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-pi]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.attach]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.stream]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-codex]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-pi]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.attach]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.stream]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-codex]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-pi]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.attach]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.stream]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-codex]",
+            "tests/test_runtime_consumption_acceptance.py::test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-pi]",
+            "tests/test_runtime_mirror_observation.py::test_close_cancels_pending_context_without_replaying_unknown_into_new_session",
+            "tests/test_runtime_mirror_observation.py::test_context_observer_receives_delivery_without_another_executor",
+            "tests/test_runtime_mirror_observation.py::test_observation_failure_after_acceptance_is_unknown_and_never_replayed",
+            "tests/test_runtime_mirror_observation.py::test_observation_insert_failure_rolls_back_the_canonical_delivery",
+            "tests/test_runtime_mirror_observation.py::test_observation_metadata_requires_its_own_endpoint_read_authority",
+            "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[credential]",
+            "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[effective]",
+            "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[endpoint]",
+            "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[flag]",
+            "tests/test_runtime_mirror_observation.py::test_observation_revalidates_authority_before_transport[profile]",
+            "tests/test_runtime_mirror_observation.py::test_timed_out_observation_keeps_its_single_worker_until_return",
+            "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[method]",
+            "tests/test_runtime_mirror_observation.py::test_unverified_observer_does_not_receive_context_or_execution[probe]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-CONS-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-capture-worker-index.json",
+          "nodes": [
+            "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_delivery_acceptance.py::test_message_admission_commits_while_native_write_is_blocked"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_delivery_acceptance.py::test_dropped_post_commit_wake_recovers_in_same_live_owner"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_wake_generation.py::test_generation_keeps_wakes_before_wait_and_during_processing",
+            "tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer.",
+          "limitations": "Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_wake_generation.py::test_generation_keeps_wakes_before_wait_and_during_processing",
+            "tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer.",
+          "limitations": "Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark."
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+            "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable.",
+          "limitations": "External harness peers are synthetic; the Nexus producer is a separate real process."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+            "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable.",
+          "limitations": "External harness peers are synthetic; the Nexus producer is a separate real process."
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-owner-fencing-index.json",
+          "nodes": [
+            "tests/test_runtime_attempt_history.py::test_prewrite_owner_change_preserves_both_attempts_in_operator_inspection",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+            "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-owner-fencing-index.json",
+          "nodes": [
+            "tests/test_runtime_operation_reconciliation.py::test_timeout_never_allows_takeover_while_original_call_is_running",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[ACCEPTED]",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENDING]",
+            "tests/test_runtime_outbox.py::test_p06_takeover_never_replays_a_send_intent[SENT_UNCONFIRMED]",
+            "tests/test_runtime_sending_expiry.py::test_owner_crash_after_wire_acceptance_with_sending_lease_never_replays"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-capture-worker-index.json",
+          "nodes": [
+            "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session",
+            "tests/test_runtime_process_ownership.py::test_wedged_starts_and_controls_hold_bounded_slots",
+            "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_commands.py::test_control_queued_for_finished_turn_does_not_hit_next_turn",
+            "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write",
+            "tests/test_runtime_commands.py::test_stale_native_turn_control_is_rejected_without_effect",
+            "tests/test_runtime_safe_retry.py::test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+            "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+            "tests/test_runtime_scheduler_fairness.py::test_pending_limit_selects_distinct_lanes_before_truncation",
+            "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses.",
+          "limitations": "Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+            "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+            "tests/test_runtime_scheduler_fairness.py::test_pending_limit_selects_distinct_lanes_before_truncation",
+            "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses.",
+          "limitations": "Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them."
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_outbox_backpressure.py::test_concurrent_admission_reserves_only_the_last_available_slot",
+            "tests/test_runtime_outbox_backpressure.py::test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+            "tests/test_runtime_outbox_backpressure.py::test_outbox_byte_budget_rejects_before_any_canonical_commit",
+            "tests/test_runtime_outbox_backpressure.py::test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+            "tests/test_runtime_outbox_backpressure.py::test_unconfirmed_attempt_keeps_capacity_reserved"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity.",
+          "limitations": "Disposable store and synthetic peers; not a throughput or sustained flood measurement."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_outbox_backpressure.py::test_concurrent_admission_reserves_only_the_last_available_slot",
+            "tests/test_runtime_outbox_backpressure.py::test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+            "tests/test_runtime_outbox_backpressure.py::test_outbox_byte_budget_rejects_before_any_canonical_commit",
+            "tests/test_runtime_outbox_backpressure.py::test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+            "tests/test_runtime_outbox_backpressure.py::test_unconfirmed_attempt_keeps_capacity_reserved"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity.",
+          "limitations": "Disposable store and synthetic peers; not a throughput or sustained flood measurement."
+        }
+      ]
+    },
+    {
+      "test_id": "T-DISP-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_safe_retry.py::test_busy_before_native_write_waits_for_deadline_and_preserves_logical_operation",
+            "tests/test_runtime_safe_retry.py::test_safe_retry_exhaustion_is_bounded_and_can_be_released_to_pull",
+            "tests/test_runtime_safe_retry.py::test_persisted_deadline_wakes_retry_without_an_external_signal",
+            "tests/test_runtime_safe_retry.py::test_new_dispatch_owner_preserves_retry_deadline_without_early_replay"
+          ],
+          "platform_nodes": {},
+          "rationale": "Injected clock/jitter verify exact backoff; coordinator deadline wakes without new external signal; attempt cap and owner-restart deadline persist.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay",
+            "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+            "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-birth-identity-index.json",
+          "nodes": [
+            "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[after_registration]",
+            "tests/test_runtime_birth_identity.py::test_owner_death_at_birth_registration_boundary_reaps_exact_tree[before_registration]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_shutdown.py::test_lifespan_does_not_release_owner_before_runtime_drain",
+            "tests/test_runtime_shutdown.py::test_shutdown_deadline_retains_owner_and_journal_for_late_activity",
+            "tests/test_serve_harness_shutdown_reap.py::test_sigterm_with_live_session_reaps_the_harness_child"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Actual serve SIGTERM reaps owned child; shared shutdown keeps owner and journal capture while delayed close runs, rejects late work, finishes after drain.",
+          "limitations": "Actual serve signal case opens live session but does not stage active turn plus pending journal. Joint crash/turn/projection stimulus still required; Windows SIGTERM is platform-skipped."
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-04",
+      "kind": "separate_campaign_or_report",
+      "evidence": [
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/evidence/p12-crash-pressure-summary.json"
+      ]
+    },
+    {
+      "test_id": "T-LIFE-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-birth-identity-index.json",
+          "nodes": [
+            "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[kill]",
+            "tests/test_runtime_birth_identity.py::test_cleanup_uses_owned_identity_when_numeric_pid_points_at_bystander[terminate]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-settle-detach-index.json",
+          "nodes": [
+            "tests/test_runtime_attach_compatibility.py::test_attach_contract_and_ackless_delivery_through_authenticated_surfaces[1]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close",
+            "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling[production]",
+            "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[False]",
+            "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread[True]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-settle-detach-index.json",
+          "nodes": [
+            "tests/test_runtime_pi_settle_acceptance.py::test_abort_cannot_reprompt_steer_or_abort_again_before_observed_settle"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-api-review-index.json",
+          "nodes": [
+            "tests/test_runtime_native_campaign.py::test_native_two_turns_via_canonical_inbox_and_journal[claude_code]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown",
+            "tests/test_runtime_protocol_limits.py::test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+            "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+            "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Three managed adapters reject oversized unbroken stdout; bounded Unicode/stderr chunks; production framing failure and subscription overflow captured with explicit uncertainty and owned-process cleanup.",
+          "limitations": "Need explicit combined fragmented-byte UTF-8 and saturated stdout/stderr pipe-pressure assertion mapping; component StringIO test is not real pipe backpressure."
+        }
+      ]
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[42]",
+            "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[None]",
+            "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready[]",
+            "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply0]",
+            "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply1]",
+            "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter[reply2]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted",
+            "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release.",
+          "limitations": "Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted",
+            "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release.",
+          "limitations": "Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child"
+          ],
+          "platform_nodes": {},
+          "rationale": "Actual owner exits after journal terminal capture; recovered projection preserves result, causal root and exact native-write count. Other parameterized cuts retain ambiguity.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-projection-commit-index.json",
+          "nodes": [
+            "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record.",
+          "limitations": "Deterministic file fault injection rather than power-loss hardware testing."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record.",
+          "limitations": "Deterministic file fault injection rather than power-loss hardware testing."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable.",
+          "limitations": "Deterministic file fault injection."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable.",
+          "limitations": "Deterministic file fault injection."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_event_journal.py::test_reopen_preserves_distinct_equal_text_and_stable_cursors"
+          ],
+          "platform_nodes": {},
+          "rationale": "Equal text does not deduplicate distinct events; UIDs and ordered cursors survive reopen.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-projection-commit-index.json",
+          "nodes": [
+            "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once[True]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release.",
+          "limitations": "Owned Codex-shaped Python protocol peer, not a real model."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release.",
+          "limitations": "Owned Codex-shaped Python protocol peer, not a real model."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-capture-admission-index.json",
+          "nodes": [
+            "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+            "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+            "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+            "tests/test_runtime_event_buffers.py::test_expired_codex_thread_history_does_not_block_new_thread_subscription",
+            "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[attach]",
+            "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[claude]",
+            "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[codex]",
+            "tests/test_runtime_event_buffers.py::test_native_history_has_byte_bound_and_explicit_expired_replay[pi]",
+            "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown",
+            "tests/test_runtime_event_buffers.py::test_retained_terminal_drains_before_explicit_overflow",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-claude]",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-codex]",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[32768-pi]",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-claude]",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-codex]",
+            "tests/test_runtime_event_buffers.py::test_slow_subscriber_is_bounded_and_reports_a_gap[4096-pi]",
+            "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[claude]",
+            "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[codex]",
+            "tests/test_runtime_event_buffers.py::test_subscriber_admission_is_bounded_and_releases_capacity[pi]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-capture-worker-index.json",
+          "nodes": [
+            "tests/test_runtime_uncaptured_result_crash.py::test_owner_death_before_durable_capture_leaves_detectable_unknown"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-replay-acceptance.json",
+          "nodes": [
+            "tests/test_runtime_journal_retention.py::test_compaction_keeps_unprojected_records_and_original_ordinals",
+            "tests/test_runtime_journal_retention.py::test_retention_surfaces_preserve_database_results_and_reject_foreign_actor",
+            "tests/test_runtime_replay_acceptance.py::test_invalid_replay_cursor_or_limit_has_same_validation_contract",
+            "tests/test_runtime_replay_acceptance.py::test_replay_pages_keep_concurrent_append_and_retained_cursor_with_acl"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-12",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_artifact_durability.py::test_payload_and_manifest_fsync_precede_catalog_reference",
+            "tests/test_runtime_artifact_durability.py::test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+            "tests/test_runtime_artifact_durability.py::test_uncertain_artifact_fsync_never_creates_catalog_reference",
+            "tests/test_runtime_result_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference.",
+          "limitations": "Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_artifact_durability.py::test_payload_and_manifest_fsync_precede_catalog_reference",
+            "tests/test_runtime_artifact_durability.py::test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+            "tests/test_runtime_artifact_durability.py::test_uncertain_artifact_fsync_never_creates_catalog_reference",
+            "tests/test_runtime_result_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference.",
+          "limitations": "Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore."
+        }
+      ]
+    },
+    {
+      "test_id": "T-JRN-13",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_result_publication.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result",
+            "tests/test_runtime_result_publication.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission",
+            "tests/test_runtime_result_publication.py::test_result_obeys_current_sender_permissions_without_erasing_output"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn.",
+          "limitations": "Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_result_publication.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result",
+            "tests/test_runtime_result_publication.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission",
+            "tests/test_runtime_result_publication.py::test_result_obeys_current_sender_permissions_without_erasing_output"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn.",
+          "limitations": "Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+            "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Three distinct authenticated candidates and the existing multiple-endpoint pool yield one claimant/executor. Losers cannot read payload, execution binding or winning runtime; winner has explicit positive scoped access.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Every eligible authenticated candidate sees the OPEN offer without executable payload; only the winning claimant receives it after claim.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+            "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Handoff offer creates no executable outbox fan-out. Claim creates exactly one binding/native delivery; repeated claim reuses operation and charges the grant once. Native turn end leaves canonical work claimed until explicit completion.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Production app with synthetic external peers; not simultaneous approved native providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose",
+            "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[conversation]",
+            "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[handoff_execute]",
+            "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"actor_agent_id\"] = \"operator\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"execution_grant_id\"] = \"forged\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"from_agent_id\"] = \"operator\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+            "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"root_operation_id\"] = \"forged\"]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Actual connector receives authoritative identity/role/skills/workspace/profile and delivery intent without secret refs or key hashes; identity remains intact. Versioned explicitly admitted result contract performs completion and rejects forged authority.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Authenticated child MCP tool access is not fabricated; completion uses the implemented scoped structured-result contract. Synthetic native peer."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+            "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Correlated terminal/result and structured-looking text without explicit structured completion admission both leave the handoff CLAIMED. Only canonical authorized complete transitions it.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Owned synthetic process; native campaign separately tests this contract."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_handoff_epochs.py::test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate",
+            "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+            "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+            "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Authorized evidence completes/rejects through core, verification-required work stays VERIFYING, claimant cannot self-verify or impersonate creator, stale generation is fenced and authorized reviewer completes the current generation via REST.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Canonical HTTP/MCP and synthetic result peer; reviewer decision is test operator input."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Operator explicit risk-acknowledged recovery reopens uncertain old work; new claim increments epoch. Late old terminal is durably retained under its old operation while structured completion is BLOCKED and new work remains CLAIMED.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Controlled old native event is injected at production ingress; real provider replay is not assumed."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal",
+            "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+            "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[rest]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Real native RPC ack is held apart from terminal by a bounded peer gate; persisted interrupt request stays unconfirmed, work stays CLAIMED without result. Only actual interrupted terminal creates durable evidence, never automatic work completion.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[AskUserQuestion]",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[ExitPlanMode]",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[unknown]",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[approve-allow]",
+            "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[reject-deny]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Codex shell/file and Claude Write requests pass through canonical durable HITL, caller cannot decide, both operator allow/deny map to exact native replies; Claude cannot update permissions or turn unsupported policy requests into authorization.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Fixture allow/deny covers protocol contract. Real approved native denial campaigns are separate. Pi/attach do not gain unsupported approval capability."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn",
+            "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request",
+            "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[cancel]",
+            "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[terminal]",
+            "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+            "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]",
+            "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Duplicate decision reuses canonical result, conflicting decision is denied, uncertain write is never repeated. Late/cancelled/ended requests become NOT_SENT and consumed native request ID cannot be reused by next turn.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. Synthetic peers; no native deduplication or delivery ACK is invented."
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json",
+          "nodes": [
+            "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements1-200]",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements3-422]",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-item/fileChange/requestApproval-422]",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements0-200]",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements4-422]",
+            "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[pi-requirements2-422]",
+            "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim",
+            "tests/test_runtime_work_acceptance.py::test_restricted_work_profile_keeps_qualified_conversation_useful",
+            "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation",
+            "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement0]",
+            "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement1]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": "Unsupported native inputs and sandbox/approval launch contracts are rejected. Disabled work capability cannot admit/charge a managed claim, while qualified compatible Codex/Claude conversations complete after rejection.",
+          "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+        }
+      ]
+    },
+    {
+      "test_id": "T-WORK-12",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [],
+          "platform_nodes": {
+            "windows": [
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+              "tests/test_runtime_external_writer_fence.py::test_external_work_session_is_retained_without_blocking_canonical_retention",
+              "tests/test_runtime_external_writer_fence.py::test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-session_closed]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-secret_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-key_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-grant_revoked]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-wrong_session]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-stale_claim]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-foreign_actor]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-creator_policy]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-session_closed]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-secret_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-key_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-grant_revoked]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-wrong_session]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-stale_claim]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-foreign_actor]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-creator_policy]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
+              "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]"
+            ],
+            "linux": [
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+              "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+              "tests/test_runtime_external_writer_fence.py::test_external_work_session_is_retained_without_blocking_canonical_retention",
+              "tests/test_runtime_external_writer_fence.py::test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+              "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-session_closed]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-secret_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-key_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-grant_revoked]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-wrong_session]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-stale_claim]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-foreign_actor]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-creator_policy]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-session_closed]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-secret_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-key_rotated]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-grant_revoked]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-wrong_session]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-stale_claim]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-foreign_actor]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-creator_policy]",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
+              "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
+              "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+              "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]"
+            ]
+          },
+          "rationale": "Scoped T-WORK-12: same-identity authenticated claim/ACK/complete/reject, real POSIX socket fixture, authority negatives, explicit completion facts and older-writer fence. Dedicated installed native attach is still NOT_RUN.",
+          "limitations": "Retains prior platform-specific fixture assertions; real dedicated attach NOT_RUN. Must join final integrated results separately."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay.py::test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result",
+            "tests/test_runtime_relay.py::test_explicit_three_agent_chain_preserves_initiator_and_budget"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Approved bidirectional and three-agent routes execute under one causal root and originating actor with exact budgets and no managed handoff.",
+          "limitations": "Owned protocol peers, not simultaneous real providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay_process_restart.py::test_slow_canonical_chain_keeps_deadline_across_four_server_processes"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Four actual HTTP owner processes at injected clock offsets 0/600/1200/1800 preserve root/deadline/depth four; continuation at thirty minutes is denied.",
+          "limitations": "Application clock offsets simulate ten-minute hops; no real thirty-minute wait or native model."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Actual owner exits at journal-terminal, committed-child and accepted-child cuts; restarted production app preserves root/hop/budgets and never replays ambiguous native work. Exact owned process handles witness cleanup.",
+          "limitations": "Abrupt os._exit at deterministic cuts, not repeated SIGKILL under measured scheduler pressure."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay.py::test_interleaved_roots_share_sessions_without_sharing_budgets"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Two entries share the same pair of sessions; each result child references its exact parent message and root with independent budget counts.",
+          "limitations": "Owned protocol peers; test covers alternating/overlapping roots, not arbitrary cross-product scheduling."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay.py::test_same_agent_on_distinct_endpoints_keeps_operation_parent"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Two selected endpoints of one Agent produce separate roots; each child is joined through its source result to the correct initiating operation and recipient.",
+          "limitations": "Sequential endpoint selection with owned protocol peers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_causality.py::test_concurrent_children_cannot_exceed_snapshotted_budget"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Eight concurrent authenticated child creations compete for the last snapshotted message/execution budget; exactly one succeeds and seven receive QUOTA_EXCEEDED, despite later config increase.",
+          "limitations": "Bounded eight-worker fixture contention, not sustained load benchmark."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay.py::test_repeated_publication_does_not_charge_or_dispatch_again"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Eight concurrent canonical result publications return the same message; persisted outbox and generated-message counts do not grow.",
+          "limitations": "Internal canonical publication retry, not native transport replay."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_causality.py::test_expired_root_rejects_continuation_but_allows_explicit_new_entry",
+            "tests/test_runtime_causality.py::test_new_root_quota_is_independent_of_endpoint_count"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Expired root denies continuation while a fresh authenticated entry creates a new root; agent/workspace root quotas independently reject excess admission.",
+          "limitations": "Disposable canonical composition; expiry forced in fixture storage."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_relay.py::test_bidirectional_relay_stops_at_persistent_depth_and_keeps_result",
+            "tests/test_runtime_relay.py::test_failed_interrupted_and_unknown_results_do_not_relay",
+            "tests/test_runtime_relay.py::test_result_relay_obeys_canonical_human_approval"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Receipts have no transport intents; failed/interrupted/unknown results create no further turn; depth block produces one audit event; rejected human approval leaves one original intent.",
+          "limitations": "Synthetic native outcomes and actual canonical approval paths."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-10",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_causality.py::test_authenticated_reply_inherits_root_instead_of_starting_a_new_budget"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "With optional tracing OFF, forged root/depth/parent/budget fields in payload do not replace server-derived parent/root/hop in the admitted envelope.",
+          "limitations": "Authenticated synthetic content, no claim that models cannot generate arbitrary text."
+        }
+      ]
+    },
+    {
+      "test_id": "T-RELAY-11",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_notify_targets.py::test_broadcast_does_not_override_sender_permission",
+            "tests/test_runtime_notify_targets.py::test_explicit_broadcast_delivers_only_to_present_audience_and_removal_restores_private_reply",
+            "tests/test_runtime_notify_targets.py::test_result_artifact_readers_match_explicit_audience"
+          ],
+          "historical_coverage_classification": "complete",
+          "rationale": "Explicit broadcast reaches only present eligible recipients; removing target restores private reply. Sender denial blocks disclosure and artifact readers match approved audience.",
+          "limitations": "Owned Codex-shaped peer and synthetic observer endpoints; no real external recipients."
+        }
+      ]
+    },
+    {
+      "test_id": "T-PRES-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json",
+          "nodes": [
+            "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[broadcast]",
+            "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[capability]",
+            "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[direct]",
+            "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[role]",
+            "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[tag]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-PRES-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-disabled-index.json",
+          "nodes": [
+            "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-PRES-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-f12c169-index.json",
+          "nodes": [
+            "tests/test_runtime_session_recovery.py::test_restart_expires_only_old_runtime_presence_and_quarantines_binding"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-PRES-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-audience-privacy-index.json",
+          "nodes": [
+            "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[inbound]",
+            "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[outbound]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-binding-disabled-index.json",
+          "nodes": [
+            "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        },
+        {
+          "evidence": "plans/pr34-remediation/P12_FULL_REGRESSION_39C5E6C.md",
+          "nodes": [
+            "tests/test_receipts.py::test_ack_lands_grouped_receipt_in_sender_inbox"
+          ],
+          "rationale": "Feature-OFF grouped read-receipt regression is a required legacy compatibility check; full39c5e6c failed this assertion.",
+          "limitations": "Candidate correction not integrated; never omit this failing legacy path from final compatibility qualification."
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-api-review-index.json",
+          "nodes": [
+            "tests/test_harness_routes.py::test_harness_full_lifecycle_through_rest",
+            "tests/test_harness_routes.py::test_harness_kinds_lists_catalog_for_authorized_operator",
+            "tests/test_harness_routes.py::test_mcp_and_rest_surfaces_share_one_live_registry",
+            "tests/test_harness_tools.py::test_harness_close_ends_session_and_get_falls_back_to_durable_row",
+            "tests/test_harness_tools.py::test_harness_event_list_replays_in_order_and_respects_after_sequence",
+            "tests/test_harness_tools.py::test_harness_list_reports_real_connector_capabilities",
+            "tests/test_harness_tools.py::test_harness_open_preserves_agent_and_returns_running_session",
+            "tests/test_harness_tools.py::test_harness_send_steer_interrupt_dispatch_the_right_verb"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-api-review-index.json",
+          "nodes": [
+            "tests/test_pr34_remediation.py::test_p01_cached_tool_is_denied_after_disable",
+            "tests/test_runtime_admin_surfaces.py::test_admin_payload_validation_and_authority_are_shared",
+            "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-canonical-payload-index.json",
+          "nodes": [
+            "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_command_uses_granted_actor_and_real_adapter_results[rest]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.attach-rest]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[claude_code.stream-rest]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[codex-rest]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_content_reaches_adapter_with_server_identity[pi-rest]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[mcp]",
+            "tests/test_runtime_canonical_payload.py::test_canonical_payload_rejects_authority_conflicts_and_invalid_json[rest]",
+            "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[mcp]",
+            "tests/test_runtime_canonical_payload.py::test_legacy_content_aliases_normalize_without_repeating_effect[rest]",
+            "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[interrupt]",
+            "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[send]",
+            "tests/test_runtime_canonical_payload.py::test_payload_validation_does_not_precede_session_authorization[steer]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-operation-events-index.json",
+          "nodes": [
+            "tests/test_runtime_operation_events.py::test_accepted_and_final_operation_follow_push_and_public_replay",
+            "tests/test_runtime_operation_events.py::test_queued_and_unconfirmed_operation_are_distinct_without_invented_result"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_discovery.py::test_discovery_groups_authorized_endpoints_under_one_agent_and_redacts_config",
+            "tests/test_runtime_discovery.py::test_discovery_preserves_partial_attach_capabilities_without_opening_peer"
+          ],
+          "platform_nodes": {},
+          "rationale": "One canonical identity, skill catalogue and authorized endpoints; configuration redacted and partial attach capabilities explicit without spawning.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-api-review-index.json",
+          "nodes": [
+            "tests/test_surface_metrics.py::test_cuttable_reduction_helper_matches_baseline_math",
+            "tests/test_surface_metrics.py::test_measure_resident_surface_reports_components"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-API-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [],
+          "platform_nodes": {
+            "windows": [
+              "tests/test_runtime_input_dashboard.py::test_dashboard_submits_explicit_native_answer",
+              "tests/test_runtime_input_dashboard.py::test_dashboard_form_preserves_types_and_never_selects_native_defaults",
+              "tests/test_runtime_input_dashboard.py::test_dashboard_claude_question_keeps_original_input_and_explicit_answer",
+              "tests/test_runtime_input_dashboard.py::test_dashboard_rejects_question_without_fabricating_answer",
+              "tests/test_runtime_input_dashboard.py::test_dashboard_native_permission_remains_explicit_and_separate_from_input",
+              "tests/test_runtime_input_dashboard.py::test_dashboard_expired_request_shows_delivery_state_without_answer_control",
+              "tests/test_runtime_diagnostics_dashboard.py::test_session_capabilities_show_qualified_profile_restrictions[99.0.0-disabled0-Unavailable]",
+              "tests/test_runtime_diagnostics_dashboard.py::test_session_capabilities_show_qualified_profile_restrictions[0.156.1-disabled1-Available]",
+              "tests/test_runtime_diagnostics_dashboard.py::test_unknown_operation_shows_cause_without_success_or_retry",
+              "tests/test_runtime_diagnostics_dashboard.py::test_detached_external_runtime_is_not_presented_as_terminated",
+              "tests/test_runtime_diagnostics_dashboard.py::test_multiple_bindings_explain_selection_instead_of_choosing_an_executor",
+              "tests/test_runtime_diagnostics_dashboard.py::test_authority_change_clears_previously_visible_operator_metadata",
+              "tests/test_runtime_diagnostics_dashboard.py::test_disabled_admission_still_shows_operator_recovery_records",
+              "tests/test_runtime_diagnostics_dashboard.py::test_native_approval_navigation_uses_existing_canonical_view",
+              "tests/test_runtime_diagnostics_dashboard.py::test_managed_work_diagnostic_does_not_label_work_as_conversation"
+            ]
+          },
+          "rationale": "Actual isolated Edge pages reviewed for unknown, detached, ambiguous bindings, approval/input and restricted metadata. Dedicated UI campaign, not default full-suite skips.",
+          "limitations": "Detached correction candidate and Windows browser only; Linux browser NOT_RUN. Exact generation hashes remain in original dashboard manifest."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-01",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history"
+          ],
+          "platform_nodes": {},
+          "rationale": "Pre029 and029 parameterized snapshots preserve canonical rows with no endpoint/outbox synthesis; repeated migration empty and old runner rejected.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-02",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history"
+          ],
+          "platform_nodes": {},
+          "rationale": "029 snapshots with/without workspace hints retain all historical fields and event sequences; lack of approved identity/profile remains legacy_unlinked.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-03",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_legacy_profile_review.py::test_legacy_missing_profile_is_reported_without_inventing_damage_or_restoring",
+            "tests/test_runtime_legacy_profile_review.py::test_operator_restores_only_explicit_trusted_fixture_through_canonical_catalog"
+          ],
+          "platform_nodes": {},
+          "rationale": "Read-only restricted diagnostics identify missing fields without fabricating historical damage; only explicitly selected trusted fixture restores through canonical catalogue/auth.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-04",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-58ca69b.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history",
+            "tests/test_runtime_writer_contract.py::test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Migration 057 trigger creation rolls back at an injected SQL failure, then reexecutes once; historical 028/029 upgrade preserves agent data and repeated runner is empty.",
+          "limitations": "The requirement also calls for an interrupted nonempty data backfill with historical event/binding counts. Trigger creation on an empty fixture is not that stimulus."
+        },
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-coverage-review-e388227.json",
+          "nodes": [
+            "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history",
+            "tests/test_runtime_writer_contract.py::test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats"
+          ],
+          "historical_coverage_classification": "partial",
+          "rationale": "Migration 057 trigger creation rolls back at an injected SQL failure, then reexecutes once; historical 028/029 upgrade preserves agent data and repeated runner is empty.",
+          "limitations": "The requirement also calls for an interrupted nonempty data backfill with historical event/binding counts. Trigger creation on an empty fixture is not that stimulus."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-05",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_rollout.py::test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_duplicate_transport"
+          ],
+          "platform_nodes": {},
+          "rationale": "Activation preserves old unread rows; only a new delivery reaches actual owned protocol stdin after repeated old callbacks.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_rollout.py::test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_duplicate_transport"
+          ],
+          "platform_nodes": {},
+          "rationale": "Retired executable callback plus repeated real notifications leaves one outbox and exactly one recorded native turn after shutdown.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-07",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_rollout.py::test_disable_with_accepted_turn_and_pending_journal_retains_capture_and_exclusion"
+          ],
+          "platform_nodes": {},
+          "rationale": "Both accepted and SENDING/UNKNOWN cuts disable new admission while pending journal terminal projects; no publication or competing pull and exactly one native send.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-08",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_backup_restore.py::test_combined_snapshot_restores_identity_history_journal_and_artifact_without_native_replay",
+            "tests/test_runtime_backup_restore.py::test_backup_refuses_active_owner_and_requires_explicit_quiescence",
+            "tests/test_runtime_backup_restore.py::test_semantic_validation_checks_references_and_watermarks_even_with_matching_file_hashes",
+            "tests/test_runtime_backup_restore.py::test_restore_preserves_uncertain_delivery_fence_with_admission_initially_off",
+            "tests/test_runtime_backup_restore.py::test_offline_backup_still_refuses_an_unexpired_owner_lease"
+          ],
+          "platform_nodes": {},
+          "rationale": "Combined quiescent backup/restore validates DB identity, result artifact and journal references; rejects active owner/corruption, preserves uncertain reservation with disabled admission.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-MIG-09",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-final-coverage-supplement.json",
+          "nodes": [
+            "tests/test_runtime_retention_identity.py::test_prune_and_agent_deactivation_preserve_pending_transport_fences",
+            "tests/test_runtime_retention_identity.py::test_prune_and_reactivation_do_not_forget_command_idempotency"
+          ],
+          "platform_nodes": {},
+          "rationale": "Actual pruning and deactivation preserve pending/unknown delivery and idempotency fences while unrelated expired data is pruned; new inactive execution denied.",
+          "limitations": "Reviewed assertion mapping only; no new test execution or status promotion. Protocol fixtures do not qualify installed providers."
+        }
+      ]
+    },
+    {
+      "test_id": "T-E2E-01",
+      "kind": "separate_campaign_or_report",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-02",
+      "kind": "separate_campaign_or_report",
+      "evidence": []
+    },
+    {
+      "test_id": "T-E2E-03",
+      "kind": "separate_campaign_or_report",
+      "evidence": [
+        "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-codex.json",
+        "plans/pr34-remediation/evidence/p12-frames-752cd72-claude.json"
+      ]
+    },
+    {
+      "test_id": "T-E2E-04",
+      "kind": "separate_campaign_or_report",
+      "evidence": [
+        "plans/pr34-remediation/P12_RECOVERY_PRESSURE.md",
+        "plans/pr34-remediation/P12_CRASH_PRESSURE.md",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-windows-final.json",
+        "plans/pr34-remediation/evidence/p12-recovery-pressure-linux-final.json"
+      ]
+    },
+    {
+      "test_id": "T-E2E-05",
+      "kind": "separate_campaign_or_report",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md",
+        "plans/pr34-remediation/evidence/p12-benchmark-windows.json",
+        "plans/pr34-remediation/evidence/p12-benchmark-linux.json"
+      ]
+    },
+    {
+      "test_id": "T-E2E-06",
+      "kind": "explicit_test_nodes",
+      "mappings": [
+        {
+          "evidence": "plans/pr34-remediation/evidence/p12-composition-a6a18b4-index.json",
+          "nodes": [
+            "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[mcp]",
+            "tests/test_runtime_binding_acceptance.py::test_priority_change_does_not_retarget_steer_or_interrupt[rest]",
+            "tests/test_runtime_binding_acceptance.py::test_same_agent_in_two_workspaces_receives_only_each_authorized_context",
+            "tests/test_runtime_capture_admission.py::test_capture_fence_preserves_cached_reply_blocks_new_open_and_fences_stale_owner",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[command-quota]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[message-quota]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-fsync]",
+            "tests/test_runtime_capture_admission.py::test_known_capture_failure_rejects_new_execution_before_intent[stdio-quota]",
+            "tests/test_runtime_capture_admission.py::test_quota_compaction_resumes_admission_without_losing_projected_events",
+            "tests/test_runtime_capture_admission.py::test_sqlite_page_limit_cannot_acknowledge_an_executable_intent",
+            "tests/test_runtime_disabled_acceptance.py::test_disabled_stdio_http_and_rest_do_not_start_implicit_runtime[False]",
+            "tests/test_runtime_owner_contention.py::test_second_server_process_cannot_take_live_owner_or_dispatch",
+            "tests/test_runtime_relay_process_restart.py::test_slow_canonical_chain_keeps_deadline_across_four_server_processes",
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[accepted_child-75-600]",
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[committed_child-74-600]",
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-1800]",
+            "tests/test_runtime_relay_process_restart.py::test_whole_owner_crash_preserves_relay_lineage_and_never_replays_ambiguous_child[journal_terminal-73-600]",
+            "tests/test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[clean]",
+            "tests/test_runtime_signal_drain.py::test_active_turn_and_unprojected_journal_drain_before_serve_exits[term]"
+          ],
+          "historical_coverage_classification": null,
+          "rationale": null,
+          "limitations": null
+        }
+      ]
+    },
+    {
+      "test_id": "T-E2E-07",
+      "kind": "separate_campaign_or_report",
+      "evidence": []
+    }
+  ],
+  "source_file_sha256": {
+    "tests/test_runtime_identity_acceptance.py": "969ec07aa0893a0da357e1b0ee742b628977c63352631157eea6e35422bd5db0",
+    "tests/test_pr34_remediation.py": "b0849bfa7635f65e3a190bf3000698579be7cc361f8bcee53338ddc0f45bb389",
+    "tests/test_runtime_outbox.py": "eeef3370efe81c9b5e79b5cf8d51638f18f23d190ee12e1dc080c12ba8acf800",
+    "tests/test_runtime_identity_failure_acceptance.py": "53e80238417290e531f36e59897025234de5a1a532bcdb00f4cca6c95a2f4370",
+    "tests/test_runtime_process_ownership.py": "2e215bf71377b10f44cbd767fd64a1f8f51b45a67726b65a8d5de0c5c5be9d8e",
+    "tests/test_runtime_grants.py": "d902d6c289b352228b873bed528c2fa4919493c82a8e04c772b8e6c7d273c7fc",
+    "tests/test_runtime_monitor_authorization.py": "f90962aeb9f6082722fdf915d59e9944c26442a076dccd2a9f752d00123b90dd",
+    "tests/test_runtime_discovery.py": "691bc37cabc99cb1de7cf88dfbdc84f7c87afd93689c09316edc753ae1a904a2",
+    "tests/test_runtime_read_audience.py": "e59b52f96b7f9cc2456e4917a2b3dc9bfaeb140de8b57a5d04416d3fbba0a775",
+    "tests/test_runtime_commands.py": "7f74e795e79b4c051e096d940d7f6736f39f86c694bcb0dfebe109399dad3ea4",
+    "tests/test_runtime_revocation_during_turn.py": "b43c27e3b7987041e51ab7ed44106ae4df028560c635491a1317c34946831fe5",
+    "tests/test_runtime_payload_boundaries.py": "862587bd55bc3cde996ced220e200dfeebb3ad3636e726b4501c83c04070a97d",
+    "tests/test_runtime_work_results.py": "0c92c249d8aa4060c412e1c2004f15de2bac1e498f0953e4c5ca71a9f68978e1",
+    "tests/test_runtime_secret_redaction.py": "32cac8b1f920b2c9dff383581f5cc270f9d6e37426fe217aae8dcab4f5e49c02",
+    "tests/test_runtime_endpoints.py": "c1b735cac3c526a16c4274f788f6aff8666adb9de8e4a1dd3822d947ac093773",
+    "tests/test_runtime_event_journal.py": "2d1df877290527967c1d71e7c0283394abfb29128d3c84923256ab9a06b62807",
+    "tests/test_runtime_operation_authorization.py": "b0f85e510b3854b642afef9692e2dd75b386351469064a6bd050632524778d59",
+    "tests/test_runtime_binding_acceptance.py": "aa52df4848ffde51253c1e93c2984828e02b6d75c7f61555450149ecab49c096",
+    "tests/test_runtime_endpoint_fallback.py": "7c47be9e19559f32ac5db0881a263bcad93beebb48c5ffeb3c5ee2b5a32a4287",
+    "tests/test_runtime_effective_capabilities.py": "55aec04447bdfaa326672c1bad477f2d0af097d694f41674296c08ecb5d71a53",
+    "tests/test_runtime_delivery_acceptance.py": "21ba052fadbae1bf5a17dd5497f1ce87b9d12c71c2086d5e4f1cf973d07a50bf",
+    "tests/test_runtime_commit_crash.py": "acc8a7a2ff1c79fcca010f992f0e4b8147c73de72826fd75cba14a5c7e486a9c",
+    "tests/test_runtime_request_acceptance.py": "41bbefd989c2091b393f9e3c531f56bf25d28845f79b51b941e0334a64c09482",
+    "tests/test_runtime_approval_acceptance.py": "7b8c592473c15663c3d67373ca39f95741033f80b15a6a5d206f03b775855e2d",
+    "tests/test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6",
+    "tests/test_runtime_rest_producer.py": "c853b802a3c2d188abd72ddcc3663b352af831b79e72c6cf72b5c8ab0a91014a",
+    "tests/test_runtime_result_publication.py": "45392b96d63a01fc8bd80505ec7101cf3b99aa62eae09cdcbc7d97e3b08d582b",
+    "tests/test_runtime_artifact_durability.py": "10fe6540d98fbe8fab6a6f770d148a5172e23f9987203f8aa2ac880077e0d79c",
+    "tests/test_runtime_io_boundaries.py": "ee44213f5c951bcae5204198948c11171af4bb23096c9d90bfb64c1e0114ea47",
+    "tests/test_runtime_writer_contract.py": "412ff7e508f87b9e796e0a1cdfa2a3511a126ec24bdbfdc0a0a6c576c98e0571",
+    "tests/test_runtime_pull_push_race.py": "d8d2f3d1c35960d7bdcc13aa6cdecdf792d17fe867219504bf44a230ed60ff7c",
+    "tests/test_runtime_consumption_acceptance.py": "0308335cbf60a7a54b8a7e1b5a821572cfd12ac69f216b6e7ea412418c522939",
+    "tests/test_runtime_not_sent_recovery.py": "12004ab977a1c307c0bc53c0fda58f07853e971e05c80937761c5b5dbfa7e070",
+    "tests/test_runtime_operation_reconciliation.py": "396da1a4fbb9f7edd83bd3867d178d23f32cbfdab6b37c5f67491b644fe1a7a0",
+    "tests/test_runtime_mirror_observation.py": "340640a67eaecbca93392363442ede14bb04f2b81713acaaa9e1e20cefef2a49",
+    "tests/test_runtime_projection_commit_crash.py": "1a9a940df4db6f7a275491f49afdfc127623b6f571eb7403c950fc88b2fb7b3f",
+    "tests/test_runtime_wake_generation.py": "6fb191da2071e3eaa70c5582321a27a7afc1f17fbdcd8d653f78b9b034f404a2",
+    "tests/test_runtime_attempt_history.py": "bd531cca7b509b5b87a0d5d9ea933275d2950f94bde8d26887bec57fc40ba92d",
+    "tests/test_runtime_owner_contention.py": "2a6cc00bba15ee1c071ac3982021ae87b21f935621e191833bf4bfc55ae6b317",
+    "tests/test_runtime_sending_expiry.py": "46c716388b06140229e10ef482ec8da2c8abcdf183173af8478618aa6657838a",
+    "tests/test_runtime_worker_capacity.py": "f3359213197e6e8735b41d4e594050c9b64915304a7cd4ce93a888c424fe8be1",
+    "tests/test_runtime_safe_retry.py": "622583cacba05339a28e4ba4a1e65d47392eca85655df12ced4879f09b41ec33",
+    "tests/test_runtime_scheduler_fairness.py": "c8cab319f3a0600e07488e7260bf5aaf10e78a176c9c52b4a0668b7891ae5682",
+    "tests/test_runtime_outbox_backpressure.py": "cf7ddfb6e0a164e64d5a3fac1a51a5b829eca1afb4d173c776a1cc34ec326898",
+    "tests/test_runtime_boot.py": "2c6da357e6d34d168e652553ee5e5446288c21580f5f4ce20333011a8e871c81",
+    "tests/test_runtime_birth_identity.py": "ac29d209e862871ea98ea187bd1ee4d98887703f0dcb68b35e98ea4229d98776",
+    "tests/test_runtime_shutdown.py": "2dc5987f063c85eb549736dbda514b53913ba12100f04cdf959bdc927826ce6a",
+    "tests/test_serve_harness_shutdown_reap.py": "10e82faaba08fe9933bae93fbfce5e14bcbd75f8459b8adef67e7a8c5fc95914",
+    "tests/test_runtime_attach_compatibility.py": "9e836fc59de2cc631c69837006cfcbafb70d6f90d7c92629aeff631b90cc06e1",
+    "tests/test_runtime_shared_connection.py": "a5aff85f76da0260afef99ae0c5a09a4ceea8b6c1102ea46f3fc7bc75f684812",
+    "tests/test_runtime_production_multiplex.py": "e0acb239c81eece4b0c7d2385726ed91f6f3d061de6ea64aab76348ce80bc5f9",
+    "tests/test_runtime_pi_settle_acceptance.py": "cbf22690a0d90149f0a44bc78b80959291dc5eae9594aff33d7844b3ebb72a46",
+    "tests/test_runtime_native_campaign.py": "6aae0357a5e21d754f706c6fb515bb756c234480a6be74ea5c69be17e458a5b9",
+    "tests/test_runtime_event_buffers.py": "0fb1149ccc82a7387c5e9ed1f27e452d777f8f44243aefaa3349008e55751cd2",
+    "tests/test_runtime_protocol_limits.py": "d4aa3bdb7eec88039768577d9517ef1477a43fd1f4e4c67530e7fac09ef0253a",
+    "tests/test_runtime_protocol_compatibility.py": "165312328cbd5acf37d4981dee122342d171bb39e3cb92de5c3007d2628553f7",
+    "tests/test_runtime_capture_projection_isolation.py": "88a691c50ff7568d570f7a9b551df6bc249fdf6c4c810b409e9161653609fd32",
+    "tests/test_runtime_relay_process_restart.py": "a98af96134b6008132656d0412da27b5bd69636c6c82fc77a518a16f474efd0a",
+    "tests/test_runtime_capture_admission.py": "c89d725291789941acd47e0999dcbb5c41376197be713562b0a37e20c0c2a2eb",
+    "tests/test_runtime_uncaptured_result_crash.py": "358df8ff9e5efa6468884afeadf256d771bf47bba8d6600222e0f8d0c5a4cefb",
+    "tests/test_runtime_journal_retention.py": "e509d176f07787ae89f679b6e1e0bfba35332447f88fd6425eb6b80cc66ecd18",
+    "tests/test_runtime_replay_acceptance.py": "9f97037bc08a2bb916ce3c6fe6203c8036ab72fcbdfc969533341e8a4b84f932",
+    "tests/test_runtime_result_maintenance.py": "e5e5b451ddae09b3de9c9c77dbfbf4773f8306bdf7f9f828ca433bcde52514a1",
+    "tests/test_runtime_work_acceptance.py": "d398c66216e9e29c7dd9c94b7a9b5e99e7359a3e9dcf9e2bd167f87b2f00877b",
+    "tests/test_runtime_bootstrap.py": "e235e876136afd49c2abafe9ab8739d8badbec46ed0ab52e9272e52891629ead",
+    "tests/test_runtime_handoff_epochs.py": "fe9cc23c9d584e769ac5c36dd4bd35883d38599b5d5b46fced5343cb93e267fc",
+    "tests/test_runtime_handoff_recovery.py": "397c2dd19fff5b4a43d2407ed2109b2811b573690903da9cf03556035c693912",
+    "tests/test_runtime_claude_approvals.py": "f47727473ef92a1558e336667c0e14fc1909fbc12633e486b945273b716b06d2",
+    "tests/test_runtime_native_approvals.py": "e11c19e0218d159cefbda5705125d7db3050dc6ead0280ce78948889fa96e350",
+    "tests/test_runtime_profile_requirements.py": "ad6f9622e9666b20acf9dbc565aedc8590c14baf4de8adb5366b8b82220fa9bc",
+    "tests/test_runtime_external_writer_fence.py": "95e5f3ae4204b23930f60ce6be9603069996fc4e6eafe574e9e37a127bf2c8d2",
+    "tests/test_runtime_attach_work_channel.py": "038c561e25e30d8daad981ba9e1790ee71f100cc3539348bf9d12e3271d21036",
+    "tests/test_runtime_relay.py": "bc8c76c37360129d97c3a73cec42810b6aa56554997e387490c8d237c735c177",
+    "tests/test_runtime_causality.py": "8ad3d37578197fe6770581d5d049ada7e704a0d5e7dbd592748c301ae3abcfdf",
+    "tests/test_runtime_notify_targets.py": "8081dfb974f030de83ddd45a75ba35045f17c9ead041f0f9899c32ee7cdc37aa",
+    "tests/test_harness_target_grammar.py": "f977db7652fcf924405662e750fe5aea42c4a924a9b8385a9c3bd5218aa85cf9",
+    "tests/test_runtime_session_recovery.py": "f227fca7bae3731a9fd65894d909cf000008b4b6a7172262525dd8b94a3c5c15",
+    "tests/test_runtime_audience_privacy.py": "4cec2a25cfd7198b2933f6448c7d35cbef760c1e6d6c2044c741588c48e8cace",
+    "tests/test_runtime_disabled_acceptance.py": "ca250d93bc489dfaf53b1fd250e2e312c0b307350146ff60729fa904e8ff2711",
+    "tests/test_harness_routes.py": "d2e0a38e4162188383389088126ca72c1a43fdc76fe317bab861dc81346727cc",
+    "tests/test_harness_tools.py": "7657f5874186b4b58919883b0689860762ded02eac3e6c188e05adbbd9d58713",
+    "tests/test_runtime_admin_surfaces.py": "3aa0791d3e91d0f0ce2dd56aa824ab535ff665a71d2090133bce7e5cc585cc27",
+    "tests/test_runtime_canonical_payload.py": "b0a77e3193403215393d9971c1cc81f5000ad76ad4a8a113d1371cc5bc69b8cb",
+    "tests/test_runtime_operation_events.py": "ea5ffbe4830cb3b7b8645d0ca9225e7c751928cfcc7e2c35cb70b4f95f6b685e",
+    "tests/test_surface_metrics.py": "faa8ab8e8991d33a965355d89903215d249c109444f60f87c2f47da9d26c107a",
+    "tests/test_runtime_input_dashboard.py": "0b6dc997203f3ea43086f2017ea10a5b204c44b469a494222b03e168786ede54",
+    "tests/test_runtime_diagnostics_dashboard.py": "d1de7b00a6a150125a690afa2ecd76482206b13503918267f0a802024e182f46",
+    "tests/test_runtime_legacy_profile_review.py": "56222a3baf208fd44e6fc0ba1cd0b00354e2d6e955571029332b92e0b9d06670",
+    "tests/test_runtime_rollout.py": "1e23e8f607095c3237af421d5183e0db4b5911101b0c140d77a26fd0571d4fc0",
+    "tests/test_runtime_backup_restore.py": "7372374218c4f6d639ee8d541c2b099d2d0e01bc6b8feb6e93096dadf9feb65b",
+    "tests/test_runtime_retention_identity.py": "9df8525b3446868041acb56b064005676edd395e4460deaaeb60d687023c2dae",
+    "tests/test_runtime_signal_drain.py": "4f2d9edd3212bea80ba716065248c249045ae8085cac0afc73bbb39c9a67233b",
+    "tests/test_receipts.py": "87280fd35da42a0b6769ef3671e097d4e6a21e80f936c97f31e30e60f8fc5eca"
+  },
+  "unresolved_function_nodes": []
+}

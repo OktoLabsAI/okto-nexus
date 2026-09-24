@@ -31,3 +31,26 @@ Release preparation uses a git archive of39c5e6c under a fresh D directory. npm 
 Full-repository Ruff found7 errors in the historical diagnostic p11_writer_mode_probe.py (a leading plus and import placement). Changed production/test files passed Ruff. Preserve the historical reproduction before repairing its runnable copy; do not silently claim the full lint gate passed.
 
 The obsolete diagnostic has now been archived as .py.txt with byte-identical SHA256 2844bffcddc261f5054acaea8f5d794c288a557844f9aeed079db4af8e033f9f. Its old command remains explicitly historical. No production/test file was changed during the running suite.
+
+## Complete requirement catalogue, awaiting final execution join
+
+At8072207, all129 original IDs now have an explicit verification route in
+[evidence/p12-final-node-catalogue.json](evidence/p12-final-node-catalogue.json).
+122 rows have explicit test-node mappings; seven require separately recorded
+native/stress/performance/report evidence. This classification is not a count of
+passed requirements. Native/UI opt-in nodes inside the122 also need their own
+campaign results; default-suite skips do not qualify them.
+
+105 node mappings come from existing explicit scoped review catalogues. The
+[17-row supplement](evidence/p12-final-coverage-supplement.json) joins previously
+scattered mappings after source-assertion review, retaining exact platform scope
+for external-work sockets and browser tests. All listed functions exist in the
+current source;93 source-file hashes are recorded. Existence/hash checking is an
+integrity check, not behavioral proof. Historical partial coverage classifications
+are retained and must not become complete merely because a node passed.
+
+T-API-01 explicitly includes the failed ordinary grouped-receipt node from the
+current Windows regression. The five-file correction will change some recorded
+hashes at integration and must be reflected in the final join. No requirement,
+phase or task is promoted by this catalogue. Current Windows full result and
+Linux running status are recorded in P12_FULL_REGRESSION_39C5E6C.md.
