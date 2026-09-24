@@ -4551,8 +4551,12 @@
       ],
       "stimulus": "Policies inbound/outbound excluem participantes.",
       "expected": "Resolver e projeção respeitam as mesmas exclusões sem expor policies privadas.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_AUDIENCE_PRIVACY.md",
+        "plans/pr34-remediation/evidence/p12-audience-privacy-index.json"
+      ],
+      "notes": "Both inbound/outbound exclusion enforced at actual authenticated message admission and reverse result publication after policy change; private policy absent from peer envelope/output and denied response.2 PASS per platform, synthetic protocol subprocess."
     },
     {
       "test_id": "T-API-01",

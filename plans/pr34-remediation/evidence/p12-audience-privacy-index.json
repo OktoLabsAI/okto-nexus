@@ -1,0 +1,36 @@
+{
+  "source_sha": "5f0e55342d078ccfb1dc92c6183488f516032ba4",
+  "file_sha256": {
+    "tests/test_runtime_audience_privacy.py": "4cec2a25cfd7198b2933f6448c7d35cbef760c1e6d6c2044c741588c48e8cace"
+  },
+  "runs": {
+    "windows": {
+      "manifest": "p12-audience-privacy-windows.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "linux": {
+      "manifest": "p12-audience-privacy-linux.json",
+      "counts": {
+        "PASS": 2
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-PRES-04",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[inbound]",
+          "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[outbound]"
+        ],
+        "linux": [
+          "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[inbound]",
+          "tests/test_runtime_audience_privacy.py::test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[outbound]"
+        ]
+      }
+    }
+  ]
+}

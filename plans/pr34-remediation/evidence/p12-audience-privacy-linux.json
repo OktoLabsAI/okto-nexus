@@ -1,0 +1,35 @@
+{
+  "source_sha": "5f0e55342d078ccfb1dc92c6183488f516032ba4",
+  "platform": "Linux",
+  "counts": {
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "35.167",
+      "timestamp": "2026-09-24T09:59:38.220114-03:00"
+    }
+  ],
+  "native_flags": "Owned synthetic Codex protocol process; temporary store; no provider/personal configuration.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_audience_privacy.py -q --junitxml=.git/pr34-evidence/audience-privacy-linux.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_audience_privacy",
+      "test": "test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[inbound]",
+      "status": "PASS",
+      "seconds": 17.162
+    },
+    {
+      "class": "tests.test_runtime_audience_privacy",
+      "test": "test_scope_exclusions_apply_to_delivery_and_result_without_disclosing_policy[outbound]",
+      "status": "PASS",
+      "seconds": 9.195
+    }
+  ]
+}
