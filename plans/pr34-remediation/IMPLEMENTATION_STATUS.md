@@ -15,9 +15,14 @@ See [SELF_CONNECTIONS.md](SELF_CONNECTIONS.md) and
   real authenticated stdio/HTTP, idempotency, revocation and identity fencing).
   Build/Twine/live MCP/lock PASS; unchanged862 Ruff diagnostics. Native providers
   and full-suite rerun NOT_RUN for this follow-up; no historical counts reused.
-- New package is .git/pr34-evidence/self-connections/dist. Local rollout is
-  NOT_APPLIED; the previously installed build remains the default-enabled build.
-  Personal store and active installation were not modified in this follow-up.
+- Local rollout on 2026-09-24: INSTALLED_VERIFIED_NOT_STARTED from
+  .git/pr34-evidence/self-connections/dist. All275 package files match the wheel;
+  all69 non-Nexus dependency versions preserved. Actual installed HTTP/MCP/UI
+  smoke PASS in a disposable store; no native provider or personal store used.
+  No Nexus process detected before installation; service left stopped.
+- Remote executors are planned separately in
+  [IMPLEMENTATION_PLAN.md](../remote-executors/IMPLEMENTATION_PLAN.md);
+  no remote execution capability is claimed by this reinstall.
 - Pre-existing static local edits and .nexus-policy-guardrail-test stay preserved.
   The committed index and content-addressed asset contain the updated dashboard.
 

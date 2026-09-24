@@ -263,8 +263,33 @@
     }
   },
   "local_rollout": {
-    "status": "NOT_APPLIED",
-    "reason": "Updated package prepared separately. Running installation/personal store not modified by this follow-up."
+    "status": "INSTALLED_VERIFIED_NOT_STARTED",
+    "at_utc": "2026-09-24T21:39:52.696680+00:00",
+    "command": [
+      "uv",
+      "tool",
+      "install",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\self-connections\\dist\\okto_nexus-0.2.0-py3-none-any.whl[serve]",
+      "--force",
+      "--reinstall-package",
+      "okto-nexus",
+      "--python",
+      "C:/Python313/python.exe",
+      "--constraints",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\self-connections\\install-constraints.txt"
+    ],
+    "verification": {
+      "package_files_match": 275,
+      "non_nexus_dependencies_preserved": 69,
+      "smoke_exit_code": 0
+    },
+    "smoke_command": "rtk proxy C:/Users/jpamb/AppData/Roaming/uv/tools/okto-nexus/Scripts/python.exe <absolute plans/pr34-remediation/check_agent_connections_install.py>",
+    "smoke_environment": "Actual installed package; PYTHONPATH removed; disposable cwd and TEMP/TMP; no personal store",
+    "smoke_log": ".git\\pr34-evidence\\self-connections\\installed-smoke.log",
+    "smoke_log_sha256": "fdfa0e668106daa974963cf4213d740190dfbdcc0522927c62bc42834f4f4534",
+    "serve": "No Nexus process detected before reinstall; service not started",
+    "native_processes_started": 0,
+    "personal_store": "Not opened or migrated"
   },
   "native_providers": "NOT_RUN: synthetic connectors and real HTTP/MCP/browser only",
   "limits": [

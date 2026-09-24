@@ -8946,7 +8946,12 @@
       }
     ],
     "tests": "164 integrated PASS; final UI2 PASS and self discovery/opening6 PASS, including extension and revocation race; no counts reused as a full-suite result.",
-    "local_rollout": "NOT_APPLIED",
-    "next_dependency": "Apply the new build after stopping the active installation. Actual providers/remote bridge are outside this fixture qualification."
+    "local_rollout": "INSTALLED_VERIFIED_NOT_STARTED",
+    "next_dependency": "User may start the installed build. Remote executors remain a separate planned extension."
+  },
+  "remote_executors_plan": {
+    "status": "PLANNED_NOT_IMPLEMENTED",
+    "specification": "plans/remote-executors/IMPLEMENTATION_PLAN.md",
+    "next_dependency": "R00: baseline, contract mapping and security/protocol decisions"
   }
 }
