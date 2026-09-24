@@ -1,0 +1,48 @@
+{
+  "source_sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1,
+    "PASS": 3
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "4",
+      "time": "18.006",
+      "timestamp": "2026-09-24T07:20:52.433973-03:00"
+    }
+  ],
+  "native_flags": "Synthetic fixtures only; failed winner-read assertion was an invalid test permission assumption.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_work_acceptance.py -q --junitxml=.git/pr34-evidence/work-acceptance-windows.xml",
+  "limitations": "3 PASS1 FAIL: winner read expected without an explicit read grant. Corrected test setup adds endpoint-scoped read permission; no product security change or product RED claim.",
+  "records": [
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_competitive_claim_losers_cannot_read_winning_payload_or_runtime",
+      "status": "FAIL",
+      "seconds": 3.745
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[rest]",
+      "status": "PASS",
+      "seconds": 4.284
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+      "status": "PASS",
+      "seconds": 4.189
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_restricted_work_profile_keeps_qualified_conversation_useful",
+      "status": "PASS",
+      "seconds": 4.436
+    }
+  ]
+}

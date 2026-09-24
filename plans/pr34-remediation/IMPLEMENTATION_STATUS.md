@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `536b993` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `d1e300c` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface56, identity24. No personal database is a fixture.
@@ -14,9 +14,11 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 Recovery-pressure milestone536b993 is committed/pushed; T-E2E-04 scoped PASS. No recovery campaign remains running.
 
-Comparable benchmark is complete; Windows36799 and Linux71095 terminal exit0/PASS,120 measured turns per revision/platform plus warmups. Full source/script hashes, all samples, controls and process cleanup verified. T-E2E-05 scoped PASS. Current synthetic turn latency is higher than original; full overhead and differing guarantees are published in P12_COMPARABLE_PERFORMANCE.md. No running campaign/test handles remain. No production source changed in this unit.
+Comparable benchmark milestone d1e300c is committed/pushed. Current synthetic latency is higher; measured overhead/guarantee differences remain in P12_COMPARABLE_PERFORMANCE.md.
 
-Next: exact WORK-01 losing-claim privacy, WORK-08 delayed native interrupt terminal, WORK-11 unsupported work requirements with compatible conversation retained; lifecycle active-turn SIGTERM and fragmented UTF-8/pipe pressure. Then finish original matrix mapping, final committed-source suites, finding index, build and reinstall. Keep Pi/attach native NOT_RUN per existing authorization.
+WORK acceptance unit is complete locally: three selections47/46/25 PASS per platform,114 distinct nodes. New six-case test file covers losing-claim privacy, real-pipe delayed interrupt and unsupported work/sandbox profiles with conversation preserved. Every WORK01–11 mapping resolves to PASS on both platforms in P12_WORK_ACCEPTANCE.md and its index. WORK12 remains NOT_RUN for the complete attach/external authenticated channel stimulus. Production code is unchanged. No test/campaign processes remain running.
+
+Next: lifecycle active-turn SIGTERM and fragmented UTF-8/pipe-pressure acceptance; finish original matrix mapping and remaining gates, then final committed-source suites, finding index, build/reinstall0.2.0. Keep native Pi/attach NOT_RUN under existing authorization. Do not repeat completed provider sends or migrations.
 
 ## Recent completed milestones
 
@@ -49,4 +51,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"NOT_RUN": 59, "PASS": 70}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 81, "NOT_RUN": 48}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.

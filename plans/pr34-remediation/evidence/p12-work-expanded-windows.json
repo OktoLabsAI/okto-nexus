@@ -1,0 +1,310 @@
+{
+  "source_sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d",
+  "platform": "windows",
+  "counts": {
+    "PASS": 47
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "47",
+      "time": "154.377",
+      "timestamp": "2026-09-24T07:21:48.422399-03:00"
+    }
+  ],
+  "native_flags": "No installed providers selected; synthetic native protocol pipes and isolated stores only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_work_acceptance.py tests/test_runtime_handoff_dispatch.py tests/test_runtime_work_results.py tests/test_runtime_profile_requirements.py -q --junitxml=.git/pr34-evidence/work-acceptance-expanded-windows.xml",
+  "limitations": "Synthetic protocol peers; new WORK file had four cases at this run. Final generation selection reruns that file after adding unsupported sandbox cases. No native provider campaign.",
+  "records": [
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_competitive_claim_losers_cannot_read_winning_payload_or_runtime",
+      "status": "PASS",
+      "seconds": 4.018
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[rest]",
+      "status": "PASS",
+      "seconds": 4.244
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+      "status": "PASS",
+      "seconds": 5.006
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_restricted_work_profile_keeps_qualified_conversation_useful",
+      "status": "PASS",
+      "seconds": 5.344
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+      "status": "PASS",
+      "seconds": 3.56
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_cannot_silently_fall_back_to_unmanaged_claim",
+      "status": "PASS",
+      "seconds": 1.868
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+      "status": "PASS",
+      "seconds": 3.945
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+      "status": "PASS",
+      "seconds": 2.808
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[False]",
+      "status": "PASS",
+      "seconds": 2.802
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[True]",
+      "status": "PASS",
+      "seconds": 2.736
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_delegated_managed_claim_has_same_rest_and_mcp_admission",
+      "status": "PASS",
+      "seconds": 2.842
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_revocation_between_admission_and_write_prevents_native_effect",
+      "status": "PASS",
+      "seconds": 2.722
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_strict_claim_credentials_have_rest_mcp_parity[strict]",
+      "status": "PASS",
+      "seconds": 3.161
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_conversation_grant_cannot_authorize_work",
+      "status": "PASS",
+      "seconds": 3.096
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[deny]",
+      "status": "PASS",
+      "seconds": 1.938
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[require_approval]",
+      "status": "PASS",
+      "seconds": 1.8
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_canonical_approval_creates_dispatch_receipt_only_after_human_decision",
+      "status": "PASS",
+      "seconds": 2.832
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[legacy_receipt_absent]",
+      "status": "PASS",
+      "seconds": 1.808
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[enable_hitl]",
+      "status": "PASS",
+      "seconds": 2.013
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[revoke]",
+      "status": "PASS",
+      "seconds": 3.691
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[rework]",
+      "status": "PASS",
+      "seconds": 3.852
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_explicitly_authorized_structured_result_completes_canonical_handoff",
+      "status": "PASS",
+      "seconds": 3.767
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_reject_uses_canonical_rejection",
+      "status": "PASS",
+      "seconds": 4.059
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_completion_cannot_self_verify",
+      "status": "PASS",
+      "seconds": 3.942
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.884
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.827
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+      "status": "PASS",
+      "seconds": 3.841
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+      "status": "PASS",
+      "seconds": 3.899
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+      "status": "PASS",
+      "seconds": 4.21
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 4.025
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"actor_agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 3.795
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"from_agent_id\"] = \"operator\"]",
+      "status": "PASS",
+      "seconds": 3.879
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"execution_grant_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.84
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_result_cannot_replace_its_authority[decision[\"root_operation_id\"] = \"forged\"]",
+      "status": "PASS",
+      "seconds": 3.921
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_structured_looking_output_without_admission_does_not_complete",
+      "status": "PASS",
+      "seconds": 3.776
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_revoked_grant_blocks_structured_completion_and_retains_evidence",
+      "status": "PASS",
+      "seconds": 4.028
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_completion_and_its_receipt_rollback_and_retry_together",
+      "status": "PASS",
+      "seconds": 3.746
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_managed_revalidation_does_not_write_to_a_read_snapshot",
+      "status": "PASS",
+      "seconds": 3.755
+    },
+    {
+      "class": "tests.test_runtime_work_results",
+      "test": "test_rest_structured_contract_is_idempotent_with_mcp_and_cannot_be_changed",
+      "status": "PASS",
+      "seconds": 3.857
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+      "status": "PASS",
+      "seconds": 1.807
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements0-200]",
+      "status": "PASS",
+      "seconds": 1.872
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements1-200]",
+      "status": "PASS",
+      "seconds": 2.036
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[pi-requirements2-422]",
+      "status": "PASS",
+      "seconds": 1.837
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements3-422]",
+      "status": "PASS",
+      "seconds": 1.871
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements4-422]",
+      "status": "PASS",
+      "seconds": 1.87
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_profile_requirements_are_validated_against_exact_adapter_contract[codex-item/fileChange/requestApproval-422]",
+      "status": "PASS",
+      "seconds": 1.889
+    },
+    {
+      "class": "tests.test_runtime_profile_requirements",
+      "test": "test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim",
+      "status": "PASS",
+      "seconds": 3.885
+    }
+  ],
+  "test_file_sha256": {
+    "test_runtime_handoff_dispatch.py": "cbaa6dd4b698f810a56fe9078c76b2e86534620a3319fec11d25c3c47b3a2bc6",
+    "test_runtime_work_results.py": "0c92c249d8aa4060c412e1c2004f15de2bac1e498f0953e4c5ca71a9f68978e1",
+    "test_runtime_profile_requirements.py": "ad6f9622e9666b20acf9dbc565aedc8590c14baf4de8adb5366b8b82220fa9bc"
+  }
+}

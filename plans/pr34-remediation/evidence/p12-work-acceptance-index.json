@@ -1,0 +1,308 @@
+{
+  "parent_sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d",
+  "new_test_sha256": "d398c66216e9e29c7dd9c94b7a9b5e99e7359a3e9dcf9e2bd167f87b2f00877b",
+  "production_changes": false,
+  "unique_nodes_per_platform": {
+    "windows": 114,
+    "linux": 114
+  },
+  "manifests": [
+    "plans/pr34-remediation/evidence/p12-work-expanded-windows.json",
+    "plans/pr34-remediation/evidence/p12-work-approval-windows.json",
+    "plans/pr34-remediation/evidence/p12-work-generation-windows.json",
+    "plans/pr34-remediation/evidence/p12-work-expanded-linux.json",
+    "plans/pr34-remediation/evidence/p12-work-approval-linux.json",
+    "plans/pr34-remediation/evidence/p12-work-generation-linux.json"
+  ],
+  "requirements": {
+    "T-WORK-01": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime",
+        "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+          "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+        ],
+        "linux": [
+          "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+          "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+        ]
+      },
+      "rationale": "Three distinct authenticated candidates and the existing multiple-endpoint pool yield one claimant/executor. Losers cannot read payload, execution binding or winning runtime; winner has explicit positive scoped access.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+    },
+    "T-WORK-02": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+        ],
+        "linux": [
+          "tests/test_runtime_work_acceptance.py::test_competitive_claim_losers_cannot_read_winning_payload_or_runtime"
+        ]
+      },
+      "rationale": "Every eligible authenticated candidate sees the OPEN offer without executable payload; only the winning claimant receives it after claim.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+    },
+    "T-WORK-03": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+        "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+          "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor"
+        ],
+        "linux": [
+          "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+          "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor"
+        ]
+      },
+      "rationale": "Handoff offer creates no executable outbox fan-out. Claim creates exactly one binding/native delivery; repeated claim reuses operation and charges the grant once. Native turn end leaves canonical work claimed until explicit completion.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Production app with synthetic external peers; not simultaneous approved native providers."
+    },
+    "T-WORK-04": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose",
+        "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+        "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[conversation]",
+          "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[handoff_execute]",
+          "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"actor_agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"execution_grant_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"from_agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"root_operation_id\"] = \"forged\"]"
+        ],
+        "linux": [
+          "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[conversation]",
+          "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose[handoff_execute]",
+          "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"action\"] = \"verify\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"actor_agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = 2]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"claim_epoch\"] = True]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"execution_grant_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"from_agent_id\"] = \"operator\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"handoff_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"operation_id\"] = \"forged\"]",
+          "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority[decision[\"root_operation_id\"] = \"forged\"]"
+        ]
+      },
+      "rationale": "Actual connector receives authoritative identity/role/skills/workspace/profile and delivery intent without secret refs or key hashes; identity remains intact. Versioned explicitly admitted result contract performs completion and rejects forged authority.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Authenticated child MCP tool access is not fabricated; completion uses the implemented scoped structured-result contract. Synthetic native peer."
+    },
+    "T-WORK-05": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+        "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+          "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete"
+        ],
+        "linux": [
+          "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+          "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete"
+        ]
+      },
+      "rationale": "Correlated terminal/result and structured-looking text without explicit structured completion admission both leave the handoff CLAIMED. Only canonical authorized complete transitions it.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Owned synthetic process; native campaign separately tests this contract."
+    },
+    "T-WORK-06": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+        "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection",
+        "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+        "tests/test_runtime_handoff_epochs.py::test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_handoff_epochs.py::test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate",
+          "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+          "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+          "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection"
+        ],
+        "linux": [
+          "tests/test_runtime_handoff_epochs.py::test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate",
+          "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+          "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+          "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection"
+        ]
+      },
+      "rationale": "Authorized evidence completes/rejects through core, verification-required work stays VERIFYING, claimant cannot self-verify or impersonate creator, stale generation is fenced and authorized reviewer completes the current generation via REST.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Canonical HTTP/MCP and synthetic result peer; reviewer decision is test operator input."
+    },
+    "T-WORK-07": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work"
+        ],
+        "linux": [
+          "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work"
+        ]
+      },
+      "rationale": "Operator explicit risk-acknowledged recovery reopens uncertain old work; new claim increments epoch. Late old terminal is durably retained under its old operation while structured completion is BLOCKED and new work remains CLAIMED.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Controlled old native event is injected at production ingress; real provider replay is not assumed."
+    },
+    "T-WORK-08": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+          "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[rest]"
+        ],
+        "linux": [
+          "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+          "tests/test_runtime_work_acceptance.py::test_managed_interrupt_ack_waits_for_native_terminal[rest]"
+        ]
+      },
+      "rationale": "Real native RPC ack is held apart from terminal by a bounded peer gate; persisted interrupt request stays unconfirmed, work stays CLAIMED without result. Only actual interrupted terminal creates durable evidence, never automatic work completion.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+    },
+    "T-WORK-09": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+        "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl",
+        "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[AskUserQuestion]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[ExitPlanMode]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[unknown]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[approve-allow]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[reject-deny]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]"
+        ],
+        "linux": [
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[AskUserQuestion]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[ExitPlanMode]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[unknown]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[approve-allow]",
+          "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl[reject-deny]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]"
+        ]
+      },
+      "rationale": "Codex shell/file and Claude Write requests pass through canonical durable HITL, caller cannot decide, both operator allow/deny map to exact native replies; Claude cannot update permissions or turn unsupported policy requests into authorization.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Fixture allow/deny covers protocol contract. Real approved native denial campaigns are separate. Pi/attach do not gain unsupported approval capability."
+    },
+    "T-WORK-10": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+        "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+        "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed",
+        "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request",
+        "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn",
+          "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[cancel]",
+          "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[terminal]",
+          "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed"
+        ],
+        "linux": [
+          "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn",
+          "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[cancel]",
+          "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request[terminal]",
+          "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+          "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]",
+          "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed"
+        ]
+      },
+      "rationale": "Duplicate decision reuses canonical result, conflicting decision is denied, uncertain write is never repeated. Late/cancelled/ended requests become NOT_SENT and consumed native request ID cannot be reused by next turn.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. Synthetic peers; no native deduplication or delivery ACK is invented."
+    },
+    "T-WORK-11": {
+      "status": "PASS",
+      "bases": [
+        "tests/test_runtime_work_acceptance.py::test_restricted_work_profile_keeps_qualified_conversation_useful",
+        "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation",
+        "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+        "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract",
+        "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim"
+      ],
+      "executed_nodes": {
+        "windows": [
+          "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements1-200]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements3-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-item/fileChange/requestApproval-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements0-200]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements4-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[pi-requirements2-422]",
+          "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim",
+          "tests/test_runtime_work_acceptance.py::test_restricted_work_profile_keeps_qualified_conversation_useful",
+          "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement0]",
+          "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement1]"
+        ],
+        "linux": [
+          "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements1-200]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[claude_code.stream-requirements3-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-item/fileChange/requestApproval-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements0-200]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[codex-requirements4-422]",
+          "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract[pi-requirements2-422]",
+          "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim",
+          "tests/test_runtime_work_acceptance.py::test_restricted_work_profile_keeps_qualified_conversation_useful",
+          "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement0]",
+          "tests/test_runtime_work_acceptance.py::test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement1]"
+        ]
+      },
+      "rationale": "Unsupported native inputs and sandbox/approval launch contracts are rejected. Disabled work capability cannot admit/charge a managed claim, while qualified compatible Codex/Claude conversations complete after rejection.",
+      "limitations": "Synthetic peers in production composition; installed native campaign is separate. "
+    }
+  },
+  "limitations": [
+    "Synthetic native protocol peers; approved installed provider campaigns remain separate.",
+    "WORK-12 not qualified; no phase/final gate promotion.",
+    "Expanded run preceded appended sandbox cases; generation run reruns all six new cases at the final recorded hash."
+  ]
+}

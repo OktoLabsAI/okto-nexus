@@ -1,0 +1,178 @@
+{
+  "source_sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d",
+  "platform": "windows",
+  "counts": {
+    "PASS": 25
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "25",
+      "time": "101.946",
+      "timestamp": "2026-09-24T07:26:23.609663-03:00"
+    }
+  ],
+  "native_flags": "No installed providers selected; synthetic native protocol pipes and isolated stores only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_work_acceptance.py tests/test_runtime_handoff_epochs.py tests/test_runtime_handoff_recovery.py -q --junitxml=.git/pr34-evidence/work-generation-windows.xml",
+  "limitations": "Synthetic protocol peers and isolated stores; no installed native provider campaign. Exact commands and hashes in P12_WORK_ACCEPTANCE.md.",
+  "records": [
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_competitive_claim_losers_cannot_read_winning_payload_or_runtime",
+      "status": "PASS",
+      "seconds": 4.708
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[rest]",
+      "status": "PASS",
+      "seconds": 5.032
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_managed_interrupt_ack_waits_for_native_terminal[mcp]",
+      "status": "PASS",
+      "seconds": 5.108
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_restricted_work_profile_keeps_qualified_conversation_useful",
+      "status": "PASS",
+      "seconds": 5.432
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement0]",
+      "status": "PASS",
+      "seconds": 5.081
+    },
+    {
+      "class": "tests.test_runtime_work_acceptance",
+      "test": "test_unsupported_sandbox_profile_cannot_replace_compatible_conversation[requirement1]",
+      "status": "PASS",
+      "seconds": 6.186
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_late_unfenced_result_cannot_transition_reclaimed_work[complete]",
+      "status": "PASS",
+      "seconds": 0.87
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_late_unfenced_result_cannot_transition_reclaimed_work[reject]",
+      "status": "PASS",
+      "seconds": 0.756
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate",
+      "status": "PASS",
+      "seconds": 3.795
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_approved_handoff_revalidates_original_creator_binding[False]",
+      "status": "PASS",
+      "seconds": 1.826
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_approved_handoff_revalidates_original_creator_binding[True]",
+      "status": "PASS",
+      "seconds": 1.066
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_operator_reopens_same_handoff_without_releasing_work_as_conversation",
+      "status": "PASS",
+      "seconds": 4.092
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change0]",
+      "status": "PASS",
+      "seconds": 4.327
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change1]",
+      "status": "PASS",
+      "seconds": 4.15
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change2]",
+      "status": "PASS",
+      "seconds": 4.678
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change3]",
+      "status": "PASS",
+      "seconds": 3.95
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_only_operator_can_recover_work_even_with_admission_disabled",
+      "status": "PASS",
+      "seconds": 4.019
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[COMPLETED]",
+      "status": "PASS",
+      "seconds": 4.325
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[VERIFYING]",
+      "status": "PASS",
+      "seconds": 3.665
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[REJECTED]",
+      "status": "PASS",
+      "seconds": 3.993
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_work_recovery_and_transport_audit_roll_back_with_canonical_event",
+      "status": "PASS",
+      "seconds": 4.252
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_concurrent_recovery_records_one_canonical_transition_and_audit",
+      "status": "PASS",
+      "seconds": 3.918
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_late_structured_terminal_cannot_complete_reclaimed_work",
+      "status": "PASS",
+      "seconds": 4.563
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_terminal_native_turn_can_be_recovered_without_fabricating_handoff_completion",
+      "status": "PASS",
+      "seconds": 4.265
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_authenticated_stdio_work_recovery_uses_active_serve_owner",
+      "status": "PASS",
+      "seconds": 6.398
+    }
+  ],
+  "test_file_sha256": {
+    "test_runtime_work_acceptance.py": "d398c66216e9e29c7dd9c94b7a9b5e99e7359a3e9dcf9e2bd167f87b2f00877b",
+    "test_runtime_handoff_epochs.py": "fe9cc23c9d584e769ac5c36dd4bd35883d38599b5d5b46fced5343cb93e267fc",
+    "test_runtime_handoff_recovery.py": "397c2dd19fff5b4a43d2407ed2109b2811b573690903da9cf03556035c693912"
+  }
+}

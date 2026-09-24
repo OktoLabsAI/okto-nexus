@@ -2512,7 +2512,9 @@
           "title": "Rodar regressão completa e matriz adversarial pela composição real.",
           "status": "IN_PROGRESS",
           "owner": "Codex",
-          "implementation_refs": [],
+          "implementation_refs": [
+            "tests/test_runtime_work_acceptance.py"
+          ],
           "test_results": [
             {
               "sha": "e388227f98c1230e8104df12b602e5943b4baf52",
@@ -2541,6 +2543,13 @@
               "result": "PASS",
               "observed": "21 PASS each platform; per-node manifests and Ruff PASS.",
               "evidence": "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+            },
+            {
+              "sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d + new test hash in index",
+              "command": "Exact three Windows/Linux selections in P12_WORK_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "47/46/25 PASS per platform,114 distinct nodes; one existing Starlette deprecation warning in each generation selection. WORK01-11 mapped; WORK12 not qualified.",
+              "evidence": "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
             }
           ],
           "evidence": [
@@ -2550,7 +2559,8 @@
             "plans/pr34-remediation/P12_SUITE_E388227.md",
             "plans/pr34-remediation/P12_SUITE_58CA69B.md",
             "plans/pr34-remediation/P12_BINDING_ACCEPTANCE.md",
-            "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+            "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+            "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -3950,12 +3960,12 @@
       ],
       "stimulus": "Vários agentes e endpoints tentam executar uma oferta.",
       "expected": "Um claimant e uma execução; demais recebem apenas informação permitida.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
-        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
+      "notes": "Three distinct authenticated candidates and the existing multiple-endpoint pool yield one claimant/executor. Losers cannot read payload, execution binding or winning runtime; winner has explicit positive scoped access. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-02",
@@ -3967,10 +3977,12 @@
       ],
       "stimulus": "Agente elegível observa handoff ainda não claimed.",
       "expected": "Payload executável restrito conforme o core; não vaza pelo envelope de oferta.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md"
-      ]
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Every eligible authenticated candidate sees the OPEN offer without executable payload; only the winning claimant receives it after claim. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-03",
@@ -3982,11 +3994,12 @@
       ],
       "stimulus": "Handoff cria mensagem sintética e intent de dispatch.",
       "expected": "Só uma entrada executora; notificação não gera outro turno de trabalho.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
+      "notes": "Handoff offer creates no executable outbox fan-out. Claim creates exactly one binding/native delivery; repeated claim reuses operation and charges the grant once. Native turn end leaves canonical work claimed until explicit completion. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-04",
@@ -3998,11 +4011,12 @@
       ],
       "stimulus": "Runtime inicia como agente com role, profile e capabilities existentes.",
       "expected": "Obtém contexto autorizado correto, sem novo Agent nem secrets/perfis alheios.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_BOOTSTRAP_CREATION_AUTHORITY.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial executed safe identity context evidence; authenticated child tool/bootstrap completion contract still pending. Aggregate NOT_RUN is not PASS."
+      "notes": "Actual connector receives authoritative identity/role/skills/workspace/profile and delivery intent without secret refs or key hashes; identity remains intact. Versioned explicitly admitted result contract performs completion and rejects forged authority. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-05",
@@ -4014,12 +4028,12 @@
       ],
       "stimulus": "Emitir turn_completed sem evidências/complete explícito.",
       "expected": "Turno encerra; handoff não é marcado COMPLETED indevidamente.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
-        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
+      "notes": "Correlated terminal/result and structured-looking text without explicit structured completion admission both leave the handoff CLAIMED. Only canonical authorized complete transitions it. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-06",
@@ -4031,12 +4045,12 @@
       ],
       "stimulus": "Claimant autorizado entrega resultado/evidências pelo caminho canônico.",
       "expected": "Mesmas validações/transições de complete/verify/reject já existentes.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
-        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
+      "notes": "Authorized evidence completes/rejects through core, verification-required work stays VERIFYING, claimant cannot self-verify or impersonate creator, stale generation is fenced and authorized reviewer completes the current generation via REST. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-07",
@@ -4048,12 +4062,12 @@
       ],
       "stimulus": "Cancelar/reatribuir com política explícita e receber final tardio.",
       "expected": "Evidência registrada no claim antigo; novo trabalho não é concluído por ela.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_MANAGED_DISPATCH.md",
-        "plans/pr34-remediation/P09_STRUCTURED_WORK_RESULTS.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial fixture evidence only; aggregate scenario not certified. See scoped results and pending coverage in managed dispatch evidence."
+      "notes": "Operator explicit risk-acknowledged recovery reopens uncertain old work; new claim increments epoch. Late old terminal is durably retained under its old operation while structured completion is BLOCKED and new work remains CLAIMED. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-08",
@@ -4065,8 +4079,12 @@
       ],
       "stimulus": "Peer aceita pedido de cancelamento sem sinal final imediato.",
       "expected": "Estado INTERRUPT_REQUESTED; não declarar interrupção concluída antecipadamente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
+      ],
+      "notes": "Real native RPC ack is held apart from terminal by a bounded peer gate; persisted interrupt request stays unconfirmed, work stays CLAIMED without result. Only actual interrupted terminal creates durable evidence, never automatic work completion. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-09",
@@ -4078,14 +4096,12 @@
       ],
       "stimulus": "Runtime pede aprovação e recebe allow/deny pelo HITL.",
       "expected": "Correlação e escopo corretos; nenhuma autoaprovação ou troca silenciosa para sandbox permissivo.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_NATIVE_APPROVALS.md",
-        "plans/pr34-remediation/P09_CLAUDE_APPROVALS.md",
-        "plans/pr34-remediation/P09_NATIVE_INPUTS.md",
-        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial binary Codex approval evidence; aggregate multi-adapter/input gate remains NOT_RUN. See evidence for exact fixture and native scope."
+      "notes": "Codex shell/file and Claude Write requests pass through canonical durable HITL, caller cannot decide, both operator allow/deny map to exact native replies; Claude cannot update permissions or turn unsupported policy requests into authorization. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-10",
@@ -4097,14 +4113,12 @@
       ],
       "stimulus": "Duplicar decisão e entregar decisão após encerrar o turno.",
       "expected": "Idempotência; decisão não alcança outro turno.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_NATIVE_APPROVALS.md",
-        "plans/pr34-remediation/P09_CLAUDE_APPROVALS.md",
-        "plans/pr34-remediation/P09_NATIVE_INPUTS.md",
-        "plans/pr34-remediation/P09_CLAUDE_INPUT_AND_POOL.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Partial binary Codex approval evidence; aggregate multi-adapter/input gate remains NOT_RUN. See evidence for exact fixture and native scope."
+      "notes": "Duplicate decision reuses canonical result, conflicting decision is denied, uncertain write is never repeated. Late/cancelled/ended requests become NOT_SENT and consumed native request ID cannot be reused by next turn. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-11",
@@ -4116,12 +4130,12 @@
       ],
       "stimulus": "Trabalho exige approvals/sandbox que aquele adapter não implementa.",
       "expected": "Não elegível para esse trabalho; capacidades conversacionais compatíveis continuam úteis.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
-        "plans/pr34-remediation/P09_PROFILE_REQUIREMENTS.md",
-        "plans/pr34-remediation/P09_NATIVE_INPUTS.md"
+        "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-work-acceptance-index.json"
       ],
-      "notes": "Exact native request profile requirements implemented/tested; aggregate sandbox/profile negotiation gate still NOT_RUN pending P11 capability probes."
+      "notes": "Unsupported native inputs and sandbox/approval launch contracts are rejected. Disabled work capability cannot admit/charge a managed claim, while qualified compatible Codex/Claude conversations complete after rejection. Exact parameterized Windows/Linux PASS nodes and source hashes are in the index. Synthetic peer qualification only; WORK-12 and native gates remain separate."
     },
     {
       "test_id": "T-WORK-12",

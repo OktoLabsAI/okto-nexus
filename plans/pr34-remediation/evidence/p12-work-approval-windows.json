@@ -1,0 +1,305 @@
+{
+  "source_sha": "d1e300c2cf17e1ec1b6f1e67a17769066c2f0c9d",
+  "platform": "windows",
+  "counts": {
+    "PASS": 46
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "46",
+      "time": "197.362",
+      "timestamp": "2026-09-24T07:24:22.732224-03:00"
+    }
+  ],
+  "native_flags": "No installed providers selected; synthetic native protocol pipes and isolated stores only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_bootstrap.py tests/test_runtime_native_approvals.py tests/test_runtime_claude_approvals.py tests/test_runtime_native_inputs.py -q --junitxml=.git/pr34-evidence/work-approval-windows.xml",
+  "limitations": "Synthetic protocol peers and isolated stores; no installed native provider campaign. Exact commands and hashes in P12_WORK_ACCEPTANCE.md.",
+  "records": [
+    {
+      "class": "tests.test_runtime_bootstrap",
+      "test": "test_runtime_receives_its_canonical_identity_and_delivery_purpose[conversation]",
+      "status": "PASS",
+      "seconds": 3.652
+    },
+    {
+      "class": "tests.test_runtime_bootstrap",
+      "test": "test_runtime_receives_its_canonical_identity_and_delivery_purpose[handoff_execute]",
+      "status": "PASS",
+      "seconds": 3.127
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_cancel_only_native_denial_does_not_grant_policy_amendment[approve-accept]",
+      "status": "PASS",
+      "seconds": 4.903
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_cancel_only_native_denial_does_not_grant_policy_amendment[reject-cancel]",
+      "status": "PASS",
+      "seconds": 3.908
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_cancel_only_native_denial_does_not_grant_policy_amendment[revoked-cancel]",
+      "status": "PASS",
+      "seconds": 3.786
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-approve-accept]",
+      "status": "PASS",
+      "seconds": 4.477
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_native_request_is_durable_and_only_operator_can_decide[item/commandExecution/requestApproval-reject-decline]",
+      "status": "PASS",
+      "seconds": 3.748
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-approve-accept]",
+      "status": "PASS",
+      "seconds": 3.838
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_native_request_is_durable_and_only_operator_can_decide[item/fileChange/requestApproval-reject-decline]",
+      "status": "PASS",
+      "seconds": 3.757
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_late_approval_does_not_reach_another_turn",
+      "status": "PASS",
+      "seconds": 4.355
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_changed_authority_or_expiry_declines_the_native_request[permission]",
+      "status": "PASS",
+      "seconds": 3.831
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_changed_authority_or_expiry_declines_the_native_request[flag]",
+      "status": "PASS",
+      "seconds": 3.876
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_changed_authority_or_expiry_declines_the_native_request[expiry]",
+      "status": "PASS",
+      "seconds": 3.93
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_journal_retries_approval_projection_without_duplicating_request",
+      "status": "PASS",
+      "seconds": 4.008
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_uncertain_native_reply_is_never_replayed",
+      "status": "PASS",
+      "seconds": 4.474
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_native_approval_on_administrative_turn_uses_same_hitl",
+      "status": "PASS",
+      "seconds": 4.032
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_authority_changed_after_decision_before_write_is_declined",
+      "status": "PASS",
+      "seconds": 3.793
+    },
+    {
+      "class": "tests.test_runtime_native_approvals",
+      "test": "test_owner_restart_never_replays_a_pending_native_approval",
+      "status": "PASS",
+      "seconds": 5.181
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_permission_roundtrip_uses_canonical_hitl[approve-allow]",
+      "status": "PASS",
+      "seconds": 4.212
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_permission_roundtrip_uses_canonical_hitl[reject-deny]",
+      "status": "PASS",
+      "seconds": 3.831
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_late_decision_cannot_revive_native_request[cancel]",
+      "status": "PASS",
+      "seconds": 4.045
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_late_decision_cannot_revive_native_request[terminal]",
+      "status": "PASS",
+      "seconds": 3.761
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_consumed_request_id_is_not_reused_in_next_turn",
+      "status": "PASS",
+      "seconds": 3.931
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[ExitPlanMode]",
+      "status": "PASS",
+      "seconds": 3.814
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[AskUserQuestion]",
+      "status": "PASS",
+      "seconds": 4.074
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_permission_does_not_implicitly_change_policy_or_answer_questions[unknown]",
+      "status": "PASS",
+      "seconds": 3.972
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_question_requires_explicit_answer_then_returns_original_questions[blue-False-approve]",
+      "status": "PASS",
+      "seconds": 3.858
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_question_requires_explicit_answer_then_returns_original_questions[answer1-True-approve]",
+      "status": "PASS",
+      "seconds": 3.901
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_question_requires_explicit_answer_then_returns_original_questions[custom fixture answer-False-approve]",
+      "status": "PASS",
+      "seconds": 3.923
+    },
+    {
+      "class": "tests.test_runtime_claude_approvals",
+      "test": "test_claude_question_requires_explicit_answer_then_returns_original_questions[None-False-reject]",
+      "status": "PASS",
+      "seconds": 3.96
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_native_input_requires_valid_explicit_operator_answers",
+      "status": "PASS",
+      "seconds": 4.221
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_native_input_and_elicitation_keep_answer_separate_from_permission[approve-item/tool/requestUserInput-params0-answer0]",
+      "status": "PASS",
+      "seconds": 3.993
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_native_input_and_elicitation_keep_answer_separate_from_permission[approve-mcpServer/elicitation/request-params1-answer1]",
+      "status": "PASS",
+      "seconds": 4.082
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_native_input_and_elicitation_keep_answer_separate_from_permission[reject-item/tool/requestUserInput-params0-answer0]",
+      "status": "PASS",
+      "seconds": 4.24
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_native_input_and_elicitation_keep_answer_separate_from_permission[reject-mcpServer/elicitation/request-params1-answer1]",
+      "status": "PASS",
+      "seconds": 5.024
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_invalid_form_answer_stays_pending_without_native_write[content0]",
+      "status": "PASS",
+      "seconds": 5.159
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_invalid_form_answer_stays_pending_without_native_write[content1]",
+      "status": "PASS",
+      "seconds": 8.435
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_invalid_form_answer_stays_pending_without_native_write[content2]",
+      "status": "PASS",
+      "seconds": 6.083
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_invalid_form_answer_stays_pending_without_native_write[content3]",
+      "status": "PASS",
+      "seconds": 4.002
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_unsupported_native_inputs_are_not_advertised_as_human_approvals[params0]",
+      "status": "PASS",
+      "seconds": 4.651
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_unsupported_native_inputs_are_not_advertised_as_human_approvals[params1]",
+      "status": "PASS",
+      "seconds": 4.138
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_uncorrelated_url_and_remote_schema_elicitation_are_rejected_without_followup[params0]",
+      "status": "PASS",
+      "seconds": 5.035
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_uncorrelated_url_and_remote_schema_elicitation_are_rejected_without_followup[params1]",
+      "status": "PASS",
+      "seconds": 4.832
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_uncorrelated_url_and_remote_schema_elicitation_are_rejected_without_followup[params2]",
+      "status": "PASS",
+      "seconds": 4.038
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_input_answer_and_human_decision_rollback_together",
+      "status": "PASS",
+      "seconds": 4.233
+    },
+    {
+      "class": "tests.test_runtime_native_inputs",
+      "test": "test_expired_human_input_returns_decline_without_sending_the_answer",
+      "status": "PASS",
+      "seconds": 3.854
+    }
+  ],
+  "test_file_sha256": {
+    "test_runtime_bootstrap.py": "e235e876136afd49c2abafe9ab8739d8badbec46ed0ab52e9272e52891629ead",
+    "test_runtime_native_approvals.py": "e11c19e0218d159cefbda5705125d7db3050dc6ead0280ce78948889fa96e350",
+    "test_runtime_claude_approvals.py": "f47727473ef92a1558e336667c0e14fc1909fbc12633e486b945273b716b06d2",
+    "test_runtime_native_inputs.py": "95925a82c9b1169902441c08670a77e23e4c61543c32a926c9c09be4703d50af"
+  }
+}
