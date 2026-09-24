@@ -1,0 +1,52 @@
+{
+  "source_sha": "3b7eb2cbec0222ee14d6e92827dd4ed844004cb4",
+  "file_sha256": {
+    "tests/test_runtime_rest_producer.py": "c853b802a3c2d188abd72ddcc3663b352af831b79e72c6cf72b5c8ab0a91014a"
+  },
+  "runs": {
+    "windows": {
+      "manifest": "p12-producers-windows.json",
+      "counts": {
+        "PASS": 10
+      }
+    },
+    "linux": {
+      "manifest": "p12-producers-linux.json",
+      "counts": {
+        "PASS": 10
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-TX-06",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[False]",
+          "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[True]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+          "tests/test_runtime_handoff_dispatch.py::test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+          "tests/test_runtime_result_publication.py::test_publication_and_canonical_message_commit_together",
+          "tests/test_runtime_approval_acceptance.py::test_pending_message_and_concurrent_approval_have_one_native_execution",
+          "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime"
+        ],
+        "linux": [
+          "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[False]",
+          "tests/test_runtime_rest_producer.py::test_rest_steering_has_atomic_canonical_message_delivery_and_intent[True]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+          "tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+          "tests/test_runtime_handoff_dispatch.py::test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+          "tests/test_runtime_result_publication.py::test_publication_and_canonical_message_commit_together",
+          "tests/test_runtime_approval_acceptance.py::test_pending_message_and_concurrent_approval_have_one_native_execution",
+          "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime"
+        ]
+      }
+    }
+  ]
+}

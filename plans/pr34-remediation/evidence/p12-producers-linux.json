@@ -1,0 +1,83 @@
+{
+  "source_sha": "3b7eb2cbec0222ee14d6e92827dd4ed844004cb4",
+  "platform": "linux",
+  "counts": {
+    "PASS": 10
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "10",
+      "time": "121.572",
+      "timestamp": "2026-09-24T10:02:58.991728-03:00"
+    }
+  ],
+  "native_flags": "Synthetic peers/protocol children and actual Nexus stdio writer, temporary stores; no provider calls.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_rest_producer.py tests/test_runtime_delivery_acceptance.py::test_each_canonical_write_rolls_back_without_orphan_intent tests/test_runtime_handoff_dispatch.py::test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant tests/test_runtime_result_publication.py::test_publication_and_canonical_message_commit_together tests/test_runtime_approval_acceptance.py tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime -q --junitxml=.git/pr34-evidence/producers-linux.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_rest_producer",
+      "test": "test_rest_steering_has_atomic_canonical_message_delivery_and_intent[False]",
+      "status": "PASS",
+      "seconds": 13.035
+    },
+    {
+      "class": "tests.test_runtime_rest_producer",
+      "test": "test_rest_steering_has_atomic_canonical_message_delivery_and_intent[True]",
+      "status": "PASS",
+      "seconds": 12.512
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+      "status": "PASS",
+      "seconds": 10.258
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+      "status": "PASS",
+      "seconds": 10.988
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+      "status": "PASS",
+      "seconds": 10.444
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+      "status": "PASS",
+      "seconds": 9.378
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+      "status": "PASS",
+      "seconds": 9.685
+    },
+    {
+      "class": "tests.test_runtime_result_publication",
+      "test": "test_publication_and_canonical_message_commit_together",
+      "status": "PASS",
+      "seconds": 9.165
+    },
+    {
+      "class": "tests.test_runtime_approval_acceptance",
+      "test": "test_pending_message_and_concurrent_approval_have_one_native_execution",
+      "status": "PASS",
+      "seconds": 7.074
+    },
+    {
+      "class": "tests.test_runtime_outbox",
+      "test": "test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+      "status": "PASS",
+      "seconds": 16.012
+    }
+  ]
+}

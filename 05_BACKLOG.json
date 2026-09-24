@@ -3322,8 +3322,12 @@
       ],
       "stimulus": "Criar mensagem por MCP, REST, handoff sintético, aprovação e projector.",
       "expected": "Todos usam a transação/planejamento corretos; não há produtor que contorne outbox/coalescência.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PRODUCER_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-producers-index.json"
+      ],
+      "notes": "MCP, REST steering, synthetic handoff, approval executor, result publication and independent stdio writer use canonical transactional admission; actual post-write rollback cuts plus positive controls.10 PASS/platform, exact joins in unit doc."
     },
     {
       "test_id": "T-TX-07",
