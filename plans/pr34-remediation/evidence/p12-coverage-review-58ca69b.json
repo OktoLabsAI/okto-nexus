@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "source_sha": "58ca69b1afbb04c4272717d8e0028dcb36166e6f",
+  "method": "Manual review of test bodies against original stimuli. Review alone is not execution evidence. Existing e388227 mappings are retained only for unchanged tests; corrected or extended stimuli are replaced below.",
+  "requirements": [
+    {
+      "test_id": "T-AUTH-05",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_commands.py::test_revocation_after_admission_prevents_native_write",
+        "tests/test_runtime_outbox.py::test_p06_changed_policy_blocks_previously_committed_intent"
+      ],
+      "rationale": "Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes.",
+      "limitations": "Synthetic peers; authorization and durable dispatch are the production composition."
+    },
+    {
+      "test_id": "T-DISP-10",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_outbox_backpressure.py::test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+        "tests/test_runtime_outbox_backpressure.py::test_outbox_byte_budget_rejects_before_any_canonical_commit",
+        "tests/test_runtime_outbox_backpressure.py::test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+        "tests/test_runtime_outbox_backpressure.py::test_concurrent_admission_reserves_only_the_last_available_slot",
+        "tests/test_runtime_outbox_backpressure.py::test_unconfirmed_attempt_keeps_capacity_reserved"
+      ],
+      "rationale": "Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity.",
+      "limitations": "Disposable store and synthetic peers; not a throughput or sustained flood measurement."
+    },
+    {
+      "test_id": "T-JRN-12",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_artifact_durability.py::test_payload_and_manifest_fsync_precede_catalog_reference",
+        "tests/test_runtime_artifact_durability.py::test_uncertain_artifact_fsync_never_creates_catalog_reference",
+        "tests/test_runtime_artifact_durability.py::test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+        "tests/test_runtime_result_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay"
+      ],
+      "rationale": "Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference.",
+      "limitations": "Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore."
+    },
+    {
+      "test_id": "T-JRN-13",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_result_publication.py::test_result_obeys_current_sender_permissions_without_erasing_output",
+        "tests/test_runtime_result_publication.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission",
+        "tests/test_runtime_result_publication.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result"
+      ],
+      "rationale": "Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn.",
+      "limitations": "Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion."
+    },
+    {
+      "test_id": "T-MIG-04",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_writer_contract.py::test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+        "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history"
+      ],
+      "rationale": "Migration 057 trigger creation rolls back at an injected SQL failure, then reexecutes once; historical 028/029 upgrade preserves agent data and repeated runner is empty.",
+      "limitations": "The requirement also calls for an interrupted nonempty data backfill with historical event/binding counts. Trigger creation on an empty fixture is not that stimulus."
+    },
+    {
+      "test_id": "T-ID-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_pr34_remediation.py::test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected"
+      ],
+      "rationale": "Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged.",
+      "limitations": "Synthetic external peer; this is facade/identity normalization, not native protocol qualification."
+    },
+    {
+      "test_id": "T-AUTH-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+        "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
+        "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized"
+      ],
+      "rationale": "A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources.",
+      "limitations": "Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements."
+    },
+    {
+      "test_id": "T-AUTH-12",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces"
+      ],
+      "rationale": "Caller without authority cannot reuse an operator's completed open key to obtain the persisted reply.",
+      "limitations": "Other persisted operation/control/result surfaces need matching authorization-before-idempotency assertions."
+    },
+    {
+      "test_id": "T-ENDP-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions"
+      ],
+      "rationale": "Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint.",
+      "limitations": "Production selection/dispatch with synthetic native peers."
+    },
+    {
+      "test_id": "T-ENDP-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_endpoints.py::test_p03_ambiguous_endpoint_selection_does_not_construct_connector"
+      ],
+      "rationale": "Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds.",
+      "limitations": "Production open selection with synthetic native peers."
+    },
+    {
+      "test_id": "T-TX-02",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery"
+      ],
+      "rationale": "Pending committed delivery is recovered by a replacement dispatcher and retains exactly one inbox row.",
+      "limitations": "Dispatcher replacement in one process is not the specified process kill after commit and before wake."
+    },
+    {
+      "test_id": "T-TX-07",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p06_native_send_is_outside_sqlite_write_transaction",
+        "tests/test_runtime_event_journal.py::test_journal_io_outside_write_uow_and_full_sync",
+        "tests/test_runtime_artifact_durability.py::test_artifact_storage_does_not_hold_sqlite_writer"
+      ],
+      "rationale": "Thread-local transaction instrumentation covers native send and journal fsync; artifact storage proves independent SQLite writes can proceed.",
+      "limitations": "Aggregate requirement additionally instruments spawn, network, secret resolvers and model paths."
+    },
+    {
+      "test_id": "T-TX-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_writer_contract.py::test_preexisting_legacy_connection_is_fenced_only_after_activation",
+        "tests/test_runtime_writer_contract.py::test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+        "tests/test_runtime_writer_contract.py::test_compatible_stdio_still_enqueues_the_canonical_delivery",
+        "tests/test_runtime_writer_contract.py::test_future_writer_contract_cannot_be_downgraded_by_owner_start"
+      ],
+      "rationale": "Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup.",
+      "limitations": "Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator."
+    },
+    {
+      "test_id": "T-DISP-03",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_wake_generation.py::test_generation_keeps_wakes_before_wait_and_during_processing",
+        "tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery"
+      ],
+      "rationale": "Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer.",
+      "limitations": "Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark."
+    },
+    {
+      "test_id": "T-DISP-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+        "tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner"
+      ],
+      "rationale": "Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable.",
+      "limitations": "External harness peers are synthetic; the Nexus producer is a separate real process."
+    },
+    {
+      "test_id": "T-DISP-09",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_scheduler_fairness.py::test_pending_limit_selects_distinct_lanes_before_truncation",
+        "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+        "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+        "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+      ],
+      "rationale": "A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses.",
+      "limitations": "Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them."
+    },
+    {
+      "test_id": "T-JRN-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted",
+        "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+      ],
+      "rationale": "Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release.",
+      "limitations": "Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign."
+    },
+    {
+      "test_id": "T-JRN-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+      ],
+      "rationale": "Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record.",
+      "limitations": "Deterministic file fault injection rather than power-loss hardware testing."
+    },
+    {
+      "test_id": "T-JRN-05",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed"
+      ],
+      "rationale": "Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable.",
+      "limitations": "Deterministic file fault injection."
+    },
+    {
+      "test_id": "T-JRN-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked"
+      ],
+      "rationale": "All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release.",
+      "limitations": "Owned Codex-shaped Python protocol peer, not a real model."
+    },
+    {
+      "test_id": "T-JRN-11",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_event_journal.py::test_replay_cursors_cover_append_and_reject_unbounded_limits",
+        "tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session"
+      ],
+      "rationale": "Append between replay pages preserves sequence without gaps; invalid limits/cursors rejected, and foreign authenticated caller cannot read event history.",
+      "limitations": "Expired/retained cursor behavior across retention needs explicit mapping; no claim that native replay is available."
+    },
+    {
+      "test_id": "T-ID-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_identity_acceptance.py::test_open_close_reopen_preserves_every_canonical_profile_field"
+      ],
+      "rationale": "Both REST and MCP open/close/reopen; all Agent dataclass fields are snapshotted after each transition, including explicit role/capabilities/metadata/tags/permissions/comm_scope. New session on reopen, no canonical mutation.",
+      "limitations": "Synthetic peers; production identity/open/presence composition."
+    },
+    {
+      "test_id": "T-ID-02",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_identity_acceptance.py::test_unknown_identity_is_rejected_without_factory_or_registration"
+      ],
+      "rationale": "Unknown identity rejected through REST and MCP, nonempty canonical error, no factory invocation, no Agent/session inserted, existing profile unchanged.",
+      "limitations": "Synthetic peer factory observes no invocation."
+    },
+    {
+      "test_id": "T-ID-03",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_identity_acceptance.py::test_concurrent_same_agent_bindings_preserve_identity_and_deduplicate"
+      ],
+      "rationale": "Concurrent distinct endpoints and same request key for one Agent; expected peer/session counts, repeat through MCP resolves identical session, canonical presence/Agent assertions.",
+      "limitations": "An in-progress identical request may return transient CONFLICT; subsequent retry resolves its original result. Synthetic peers."
+    },
+    {
+      "test_id": "T-AUTH-09",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_redacted_before_journal_result_and_replay",
+        "tests/test_runtime_secret_redaction.py::test_resolved_secret_is_not_exposed_by_native_start_errors",
+        "tests/test_runtime_secret_redaction.py::test_secret_in_native_approval_is_private_without_breaking_exact_reply",
+        "tests/test_runtime_secret_redaction.py::test_redaction_is_scoped_to_effective_profile_and_handles_encoded_diagnostics",
+        "tests/test_runtime_secret_redaction.py::test_native_payload_cannot_assert_server_redaction_policy"
+      ],
+      "rationale": "Approved opaque env reference echoed by owned process is removed before raw journal, durable result, replay and logs, including split/character fragments and two turns; constructor/start errors and allow/deny approval projections are scrubbed while diagnostic policy remains trustworthy.",
+      "limitations": "Synthetic known credential only, no personal secret files; no universal detection of encoded exfiltration. Historical e388227 FAIL retained separately and not relabeled."
+    },
+    {
+      "test_id": "T-WORK-01",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor"
+      ],
+      "rationale": "Three concurrent candidates across two Agents and three endpoints produce one claimant, outbox binding, charged grant and native send.",
+      "limitations": "Loser responses and offer projections are not inspected for restricted payload; privacy portion of aggregate requirement still needs explicit evidence."
+    },
+    {
+      "test_id": "T-WORK-03",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_handoff_dispatch.py::test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+        "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow"
+      ],
+      "rationale": "Handoff offer creates no executable outbox fan-out. Claim creates exactly one binding/native delivery; repeated claim reuses operation and charges the grant once. Native turn end leaves canonical work claimed until explicit completion.",
+      "limitations": "Production app with synthetic external peers; not simultaneous approved native providers."
+    },
+    {
+      "test_id": "T-WORK-04",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_bootstrap.py::test_runtime_receives_its_canonical_identity_and_delivery_purpose",
+        "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+        "tests/test_runtime_work_results.py::test_structured_result_cannot_replace_its_authority"
+      ],
+      "rationale": "Actual connector receives authoritative identity/role/skills/workspace/profile and delivery intent without secret refs or key hashes; identity remains intact. Versioned explicitly admitted result contract performs completion and rejects forged authority.",
+      "limitations": "Authenticated child MCP tool access is not fabricated; completion uses the implemented scoped structured-result contract. Synthetic native peer."
+    },
+    {
+      "test_id": "T-WORK-05",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_handoff_dispatch.py::test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+        "tests/test_runtime_work_results.py::test_structured_looking_output_without_admission_does_not_complete"
+      ],
+      "rationale": "Correlated terminal/result and structured-looking text without explicit structured completion admission both leave the handoff CLAIMED. Only canonical authorized complete transitions it.",
+      "limitations": "Owned synthetic process; native campaign separately tests this contract."
+    },
+    {
+      "test_id": "T-WORK-06",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_work_results.py::test_explicitly_authorized_structured_result_completes_canonical_handoff",
+        "tests/test_runtime_work_results.py::test_structured_reject_uses_canonical_rejection",
+        "tests/test_runtime_work_results.py::test_structured_completion_cannot_self_verify",
+        "tests/test_runtime_handoff_epochs.py::test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate"
+      ],
+      "rationale": "Authorized evidence completes/rejects through core, verification-required work stays VERIFYING, claimant cannot self-verify or impersonate creator, stale generation is fenced and authorized reviewer completes the current generation via REST.",
+      "limitations": "Canonical HTTP/MCP and synthetic result peer; reviewer decision is test operator input."
+    },
+    {
+      "test_id": "T-WORK-07",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_handoff_recovery.py::test_late_structured_terminal_cannot_complete_reclaimed_work"
+      ],
+      "rationale": "Operator explicit risk-acknowledged recovery reopens uncertain old work; new claim increments epoch. Late old terminal is durably retained under its old operation while structured completion is BLOCKED and new work remains CLAIMED.",
+      "limitations": "Controlled old native event is injected at production ingress; real provider replay is not assumed."
+    },
+    {
+      "test_id": "T-WORK-08",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_commands.py::test_interrupt_is_not_queued_behind_a_blocked_normal_write"
+      ],
+      "rationale": "Interrupt can bypass blocked normal write and remains SENT_UNCONFIRMED with the exact target operation, not terminal success.",
+      "limitations": "Need exact managed-work delayed terminal/canonical interrupt-requested projection evidence; an interrupt write return alone is not acceptance."
+    },
+    {
+      "test_id": "T-WORK-09",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+        "tests/test_runtime_claude_approvals.py::test_claude_permission_roundtrip_uses_canonical_hitl",
+        "tests/test_runtime_claude_approvals.py::test_claude_permission_does_not_implicitly_change_policy_or_answer_questions"
+      ],
+      "rationale": "Codex shell/file and Claude Write requests pass through canonical durable HITL, caller cannot decide, both operator allow/deny map to exact native replies; Claude cannot update permissions or turn unsupported policy requests into authorization.",
+      "limitations": "Fixture allow/deny covers protocol contract. Real approved native denial campaigns are separate. Pi/attach do not gain unsupported approval capability."
+    },
+    {
+      "test_id": "T-WORK-10",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_native_approvals.py::test_native_request_is_durable_and_only_operator_can_decide",
+        "tests/test_runtime_native_approvals.py::test_late_approval_does_not_reach_another_turn",
+        "tests/test_runtime_native_approvals.py::test_uncertain_native_reply_is_never_replayed",
+        "tests/test_runtime_claude_approvals.py::test_claude_late_decision_cannot_revive_native_request",
+        "tests/test_runtime_claude_approvals.py::test_claude_consumed_request_id_is_not_reused_in_next_turn"
+      ],
+      "rationale": "Duplicate decision reuses canonical result, conflicting decision is denied, uncertain write is never repeated. Late/cancelled/ended requests become NOT_SENT and consumed native request ID cannot be reused by next turn.",
+      "limitations": "Synthetic peers; no native deduplication or delivery ACK is invented."
+    },
+    {
+      "test_id": "T-WORK-11",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_profile_requirements.py::test_persisted_profile_requiring_unsupported_input_cannot_spawn",
+        "tests/test_runtime_profile_requirements.py::test_profile_requirements_are_validated_against_exact_adapter_contract",
+        "tests/test_runtime_profile_requirements.py::test_required_hitl_is_rechecked_for_open_conversation_and_managed_claim"
+      ],
+      "rationale": "Unsupported native requirement is rejected before spawn; disabling required HITL fences managed claim without grant charge and retains incoming logical inbox delivery.",
+      "limitations": "Need jointly mapped compatible conversational endpoint and unsupported sandbox requirement assertions to complete the exact aggregate stimulus."
+    }
+  ]
+}
