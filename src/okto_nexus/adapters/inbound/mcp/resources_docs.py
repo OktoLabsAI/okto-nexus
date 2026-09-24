@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="15",
+    version="16",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -558,6 +558,11 @@ new control intent. Current version contracts: Codex0.156.1, Claude2.1.281,
 Pi0.85.1. Pi is observed with a bounded owned --version probe; its contract has
 protocol-fixture coverage, not a native provider campaign in this remediation.
 These fields verify only controls; capabilities_verified remains false overall.
+Surface49 reuses live multiplexing connections through the production factory
+only for the same agent/workspace/adapter/profile revision and resolved backend
+environment, with matching HITL mode. Each opening still creates an independent
+logical session; closing a sibling detaches it without stopping the others.
+The final close observes owned process shutdown. No cross-agent sharing occurs.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native

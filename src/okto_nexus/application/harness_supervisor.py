@@ -543,9 +543,20 @@ class HarnessSupervisor:
                 if self.event_ingress:
                     self._endpoint_repo.validate_start(uow, request_id=open_request_id,
                         endpoint_id=endpoint_id, now=self._clock.now_iso(), mark_effects=True)
-        connection_key = getattr(connector, "connection_key", id(connector))
         context = (owning_agent_id, project_root, profile_id, profile_revision, kind)
         with self._lock:
+            reuse_key = getattr(connector, "connection_reuse_key", None)
+            if reuse_key is not None and connector.capabilities.multiplexes_sessions:
+                for live in self._live.values():
+                    if (live.session.lifecycle_state == "protocol_ready" and
+                            live.connector.capabilities.multiplexes_sessions and
+                            getattr(live.connector, "connection_reuse_key", None) == reuse_key and
+                            live.lifecycle and live.lifecycle.connection.context == context):
+                        connector = live.connector
+                        break
+            # Selection and acquiring the sibling's lifecycle scope share the
+            # close lock: the final close cannot race between these two steps.
+            connection_key = getattr(connector, "connection_key", id(connector))
             self._connections = {key: value for key, value in self._connections.items() if not value.closed}
             connection = self._connections.setdefault(connection_key, RuntimeConnectionLifecycle(context=context))
             if connection.context != context:

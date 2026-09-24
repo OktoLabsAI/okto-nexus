@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface49 connects compatible Codex sessions through one live production
+  connection while preserving per-session events, ownership and isolated profiles.
 - Native event capture no longer waits on SQLite projection; bounded journal
   batches preserve durable output during streaming bursts and commit atomically.
 - Surface 48 requires server-owned control compatibility at admission and dispatch;

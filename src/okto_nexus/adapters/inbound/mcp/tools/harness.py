@@ -10,6 +10,7 @@ All enabled surfaces use the same authorization and application services.
 from __future__ import annotations
 
 import functools
+import hashlib
 import inspect
 import json
 import os
@@ -365,6 +366,14 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
         if not callable(configure_requirements):
             raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Adapter cannot verify required native contracts.", {})
         configure_requirements(required)
+    configure_reuse = getattr(connector, "configure_connection_reuse", None)
+    if profile and callable(configure_reuse):
+        # Include resolved environment so rotating a secret cannot silently reuse
+        # an old process. The digest is private memory, never an API/store field.
+        material = [endpoint["agent_id"], endpoint["workspace_id"], endpoint["adapter_id"],
+                    project_root, profile["profile_id"], profile["revision"],
+                    effective_backend, list(required), bool(deps.config.feature_hitl)]
+        configure_reuse(hashlib.sha256(json.dumps(material, sort_keys=True).encode()).digest())
     return connector, endpoint, {"profile_id": endpoint["profile_id"],
         "inherit_ambient": bool(profile and profile["inherit_ambient"]),
         "revision": profile["revision"] if profile else None}

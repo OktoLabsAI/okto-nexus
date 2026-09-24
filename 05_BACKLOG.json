@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "82f7c7774b183a380aec3f5089d18592775c759e + effective controls/capture isolation worktree",
+  "execution_head": "8e7888a + production multiplex worktree",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1079,9 +1079,10 @@
             "plans/pr34-remediation/P07_CODEX_EARLY_EVENTS.md",
             "plans/pr34-remediation/P07_CODEX_THREAD_ADMISSION.md",
             "plans/pr34-remediation/P07_CLAUDE_ADMISSION.md",
-            "plans/pr34-remediation/P07_LINUX_COMPOSITION.md"
+            "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
+            "plans/pr34-remediation/P07_PRODUCTION_MULTIPLEX.md"
           ],
-          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Codex early-event cache bounded; replay restores native turn state. Lifetime session bookkeeping and Claude pending turns remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion."
+          "notes": "Real Codex and Claude stream basic enabled path passed with canonical inbox/outbox/journal. Full native controls/multiplexing/boot/kill matrix still pending; see NATIVE_CAMPAIGN.md. Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Native histories/subscriber queues bounded with explicit gaps and production overflow-to-unknown evidence. Other native bookkeeping and broader lifecycle/correlation gates remain pending. Codex early-event cache bounded; replay restores native turn state. Lifetime session bookkeeping and Claude pending turns remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion. Production factory reuse now exercised without shared-peer injection: Windows31/Linux31 PASS; native Codex0.156.1 multiplex1 PASS. See P07_PRODUCTION_MULTIPLEX.md. Broader gates pending."
         },
         {
           "task_id": "P07-T03",
@@ -1248,9 +1249,10 @@
             "plans/pr34-remediation/P07_CODEX_ACTIVE_CLOSE.md",
             "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
             "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
-            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md"
+            "plans/pr34-remediation/P07_DURABLE_COMMANDS.md",
+            "plans/pr34-remediation/P07_PRODUCTION_MULTIPLEX.md"
           ],
-          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion."
+          "notes": " Shared leases, connection identity, scoped Codex event fanout and journaled observable/idempotent close now implemented. Native active-turn close, boot/POSIX/buffers and full lifecycle matrix remain pending. Observed-active Codex turn close now interrupts/settles; fixture multiplex and real single-thread close passed. Pending-start correlation and broader matrix remain pending. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending. Supported Linux composition qualified with all four fixture connectors; fixed missing Python pidfd wrappers and guardian-masked native EOF. Initial failures retained in evidence. Broader compatibility inventory has obsolete expectations to adapt; no final phase promotion. Durable controls contract v2 and command journal recovery implemented above 90ec3cc; see P07_DURABLE_COMMANDS.md. No phase gate promotion. Production factory reuse now exercised without shared-peer injection: Windows31/Linux31 PASS; native Codex0.156.1 multiplex1 PASS. See P07_PRODUCTION_MULTIPLEX.md. Broader gates pending."
         },
         {
           "task_id": "P07-T06",

@@ -42,7 +42,8 @@ def runtime(tmp_path, request):
             return peer
         return build
 
-    deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
+    if getattr(request, "param", None) != "production":
+        deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
     if getattr(request, "param", None) == "additional":
         from okto_nexus.application.adapter_registry import AdapterDescriptor
         from okto_nexus.domain.endpoints import EndpointCapabilities

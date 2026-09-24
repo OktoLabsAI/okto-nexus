@@ -22,6 +22,7 @@ class EnvelopeConnector:
         self._attempts = {}
         self._steered_attempts = {}
         self.required_native_requests = ()
+        self.connection_reuse_key = None
 
     def control_target(self, session_id):
         with self._attempt_lock:
@@ -35,6 +36,10 @@ class EnvelopeConnector:
 
     def configure_native_requirements(self, requirements):
         self.required_native_requests = tuple(requirements)
+
+    def configure_connection_reuse(self, key):
+        """Opaque in-memory key from approved composition, never native metadata."""
+        self.connection_reuse_key = key
 
     def start(self, *, owning_agent_id):
         session = self.native.start(owning_agent_id=owning_agent_id)

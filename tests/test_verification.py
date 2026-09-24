@@ -1321,7 +1321,7 @@ def test_ts11_surface_revision_and_verify_description_budget(tmp_path):
     server = FakeServer()
     register_meta_tools(server, deps)
     info = _ok(server.tools["nexus_info"]())
-    assert info["surface_revision"] == SURFACE_REVISION == 48
+    assert info["surface_revision"] == SURFACE_REVISION == 49
     assert info["features"]["feature_verification"] is True
     # The one-line tool description budget (docstring IS the MCP description).
     doc = tools["handoff_verify"].__doc__

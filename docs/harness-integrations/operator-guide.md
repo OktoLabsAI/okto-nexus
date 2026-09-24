@@ -227,3 +227,17 @@ observations; consult the milestone evidence for failures and precise scope.
 No version match establishes native deduplication, replay or general capability
 verification. Trusted processless extensions can report a tested protocol contract
 without inventing a native executable version.
+
+From surface49, opening a compatible Codex endpoint can reuse an already live
+connection. Sharing requires the same canonical agent, workspace, adapter,
+profile ID/revision, resolved backend environment and HITL mode. Secret rotation
+or a profile change creates a separate connection. No native or caller metadata
+can select another connection. The comparison key is private process memory and
+is never persisted or returned. Pi, Claude stream and attach do not gain sharing.
+
+Each open still creates its own logical session and native thread, with its own
+delivery lane and event attribution. Closing one session detaches that thread;
+the process stays alive for its siblings. Closing the last session observes owned
+process termination. This does not fan out an inbox delivery to multiple endpoints
+or authorize additional work. Simultaneous first opens may create separate owned
+connections; reuse selects a ready live connection, never a speculative startup.

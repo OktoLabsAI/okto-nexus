@@ -82,7 +82,12 @@ def test_native_active_control_preserves_session(tmp_path, kind, verb, native_au
     _run_native_campaign(tmp_path, kind, native_auth_config, native_control=verb)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False, require_native_contract=True, native_control=None):
+@pytest.mark.parametrize("kind", ["codex"])
+def test_native_multiplex_uses_production_factory(tmp_path, kind, native_auth_config):
+    _run_native_campaign(tmp_path, kind, native_auth_config, multiplex=True)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False, require_native_contract=True, native_control=None, multiplex=False):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
@@ -160,6 +165,60 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             assert operator_key not in json.dumps(native._env)
             assert not any("NEXUS" in name and name != "_NEXUS_PROFILE_ENV_SEALED" for name in native._env)
             runtime = deps, client, str(root), [], operator_key, caller_key
+            if multiplex:
+                from test_runtime_commands import wait_close_result
+                created = client.post("/api/v1/harness/endpoints", headers=headers, json={
+                    "endpoint_id": "native-sibling", "agent_id": "worker", "adapter_id": adapter,
+                    "project_root": str(root), "profile_id": "native-fixture", "enabled": True})
+                assert created.status_code == 200, created.text
+                opened = client.post("/api/v1/harness/sessions", headers=headers, json={
+                    "agent_id": "worker", "kind": kind, "project_root": str(root),
+                    "endpoint_id": "native-sibling", "idempotency_key": "campaign-sibling"})
+                assert opened.status_code == 200, opened.text
+                sibling = opened.json()["data"]["session_id"]
+                assert deps.harness_supervisor.get(session_id).connection_id == opened.json()["data"]["connection_id"]
+                assert deps.harness_supervisor._live[sibling].connector.native is native
+                operations = []
+                for sid, marker in ((session_id, "OKTO_THREAD_ONE"), (sibling, "OKTO_THREAD_TWO")):
+                    sent = tool(client, operator_key, "harness_send", {"session_id": sid,
+                        "payload": {"text": "Reply only " + marker + ". Use no tools, files or network."}})
+                    assert sent["ok"], sent
+                    operations.append((sent["data"]["operation_id"], marker, sid))
+
+                def durable(operation_id, marker):
+                    deadline = time.monotonic() + 120
+                    while time.monotonic() < deadline:
+                        result = tool(client, operator_key, "harness_get", {"operation_id": operation_id})
+                        assert result["ok"], result
+                        if result["data"]["result_durable"]:
+                            assert result["data"]["result"]["output_text"].strip() == marker
+                            return
+                        time.sleep(.1)
+                    pytest.fail("Native multiplex operation did not produce its correlated durable result")
+
+                threads = []
+                for operation_id, marker, sid in operations:
+                    durable(operation_id, marker)
+                    events = deps.harness_supervisor.replay_events(sid)
+                    own = {e.thread_id for e in events if e.thread_id}
+                    assert len(own) == 1 and all(e.session_id == sid for e in events)
+                    threads.append(own)
+                assert threads[0].isdisjoint(threads[1])
+                closed = tool(client, operator_key, "harness_close", {"session_id": session_id})
+                assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "detached"
+                assert native_process.poll() is None
+                sent = tool(client, operator_key, "harness_send", {"session_id": sibling,
+                    "payload": {"text": "Reply only OKTO_SIBLING_SURVIVES. Use no tools, files or network."}})
+                assert sent["ok"], sent
+                durable(sent["data"]["operation_id"], "OKTO_SIBLING_SURVIVES")
+                closed = tool(client, operator_key, "harness_close", {"session_id": sibling})
+                assert wait_close_result(client, operator_key, closed)["lifecycle_state"] == "stopped"
+                assert native_process.wait(timeout=15) is not None
+                (tmp_path / "native-multiplex-observation.json").write_text(json.dumps({
+                    "native_version": compatibility["native_version"], "same_process": True,
+                    "distinct_threads": True, "durable_results": 3, "sibling_survived_detach": True,
+                    "final_stop_observed": True}), encoding="utf-8")
+                return
             if native_approval or native_input:
                 from okto_nexus.domain.base import iso_plus
                 marker = root / "approval-denied-fixture.txt"
@@ -423,8 +482,9 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
             assert native_process.wait(timeout=15) is not None
     finally:
         supervisor = getattr(deps, "harness_supervisor", None)
-        if supervisor and session_id and supervisor.get(session_id):
-            supervisor.close(session_id)
+        if supervisor:
+            for live_session in supervisor.list_live():
+                supervisor.close(live_session.session_id)
         if native_process is not None and native_process.poll() is None:
             native_process.kill()
             native_process.wait(timeout=5)
