@@ -2,6 +2,14 @@
 from ..errors import ErrorCode, OktoNexusError
 
 
+def validate_declared_command(capabilities, verb):
+    required = {"send_turn": "conversation", "steer": "steer_timing", "interrupt": "interrupt"}.get(verb)
+    if required and not getattr(capabilities, required):
+        raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+            "adapter_capability_unsupported: the registered adapter does not support this operation.",
+            {"reason": "adapter_capability_unsupported", "capability": required})
+
+
 def validate_effective_control(report, verb):
     """Pure server-owned evidence check, additional to permission/turn fences."""
     if verb in {"steer", "interrupt"} and (

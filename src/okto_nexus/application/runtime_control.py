@@ -7,7 +7,7 @@ import json
 from ..domain.base import check_inline_size, new_id
 from ..domain.runtime_context import RuntimeRequestContext
 from ..errors import ErrorCode, OktoNexusError
-from .runtime_requirements import validate_effective_control
+from .runtime_requirements import validate_declared_command, validate_effective_control
 
 
 def validate_runtime_payload(value, *, required):
@@ -89,6 +89,7 @@ class RuntimeControlService:
                         expected_turn_id is not None and expected_turn_id != target["turn_id"]):
                     raise OktoNexusError(ErrorCode.CONFLICT, "Control targets a stale operation or native turn.", {})
             endpoint = self.access.endpoints.get(uow, session.endpoint_id)
+            validate_declared_command(self.access.registry.get(endpoint["adapter_id"]).capabilities, verb)
             revision = self.access.endpoints.session_profile_revision(uow, session_id)
             grant = self.access.authorize(context, action=action, session_id=session_id, consume=True, uow=uow)
             row = self.commands.enqueue(uow, context=context, key=key, request_hash=digest, session=session,
@@ -118,6 +119,7 @@ class RuntimeControlService:
                 (operation["grant_id"] and (not grant or grant["revision"] != operation["grant_revision"]))):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Command authority or binding changed before dispatch.", {})
         session = self.supervisor.get(operation["runtime_session_id"])
+        validate_declared_command(self.access.registry.get(endpoint["adapter_id"]).capabilities, operation["verb"])
         if not session or session.owner_epoch != operation["expected_owner_epoch"]:
             raise OktoNexusError(ErrorCode.CONFLICT, "Command session is no longer owned.", {})
         validate_effective_control(session.compatibility_report, operation["verb"])

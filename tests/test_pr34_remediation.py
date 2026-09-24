@@ -49,13 +49,13 @@ def runtime(tmp_path, request):
 
     if getattr(request, "param", None) != "production":
         deps.harness_connector_factories = {kind: factory(kind) for kind in ("pi", "codex", "claude_code")}
-    if getattr(request, "param", None) == "additional":
+    if getattr(request, "param", None) in {"additional", "additional_readonly"}:
         from okto_nexus.application.adapter_registry import AdapterDescriptor
         from okto_nexus.domain.endpoints import EndpointCapabilities
         registry = harness.build_connector_factories(deps)
         registry.register(AdapterDescriptor("fixture.additional.v1", "fixture.additional.v1", None,
             "fixture-no-process", factory("fixture.additional.v1"), lambda _: None,
-            EndpointCapabilities(conversation=True, events=True), FakeConnector().capabilities))
+            EndpointCapabilities(conversation=request.param != "additional_readonly", events=True), FakeConnector().capabilities))
         deps.harness_adapter_registry = registry
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     _, operator_key = ensure_operator_key(deps, auth)
@@ -81,7 +81,7 @@ def runtime(tmp_path, request):
     with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=10) as client:
         if deps.config.feature_harness_integrations:
             kinds = [("pi", None), ("codex", None), ("claude_code", "stream"), ("claude_code", "attach")]
-            if getattr(request, "param", None) == "additional":
+            if getattr(request, "param", None) in {"additional", "additional_readonly"}:
                 kinds.append(("fixture.additional.v1", None))
             for kind, substrate in kinds:
                 adapter_id = kind + ("." + substrate if substrate else "")

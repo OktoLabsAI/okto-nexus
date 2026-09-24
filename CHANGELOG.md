@@ -6,6 +6,8 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface51 enforces registered adapter conversation/control restrictions at
+  admission and revalidation; unsupported transport leaves logical inbox delivery intact.
 - Add a tested repository procedure for combined offline SQLite/journal/artifact
   backup and restore; strict snapshot validation never repairs incomplete tails.
 - Surface50/schema057 fences incompatible writers and mismatched message producers

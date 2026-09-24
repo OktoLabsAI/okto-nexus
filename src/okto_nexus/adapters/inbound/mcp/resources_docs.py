@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="17",
+    version="18",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -571,6 +571,10 @@ Align the client flag with the owner; never retry a different native operation.
 Disabling admission retains the writer-version fence and pending operation facts;
 compatible OFF clients can still create ordinary canonical deliveries. These
 internal SQLite compatibility markers are not authentication or execution grants.
+A false conversation capability excludes the adapter from logical-message transport
+selection and rejects direct turns before a durable command is admitted. Pending
+operations revalidate the registered descriptor before send-intent; an operator
+grant never grants a technical capability. Close remains available for cleanup.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native

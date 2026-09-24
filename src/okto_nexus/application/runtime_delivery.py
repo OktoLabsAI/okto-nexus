@@ -31,6 +31,8 @@ class RuntimeDeliveryPlanner:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Payload sender is not the authenticated actor.", {})
         candidates = []
         for endpoint in self.endpoints.list(uow, agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
+            if not self.registry.get(endpoint["adapter_id"]).capabilities.conversation:
+                continue
             if not endpoint["enabled"] or endpoint["activation_state"] != "approved" or endpoint["consumption"] != "exclusive":
                 continue
             if endpoint["health"] == "quarantined":
@@ -104,4 +106,7 @@ class RuntimeDeliveryPlanner:
         if profile:
             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
                                          hitl_enabled=config.feature_hitl)
+        if not self.registry.get(endpoint["adapter_id"]).capabilities.conversation:
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR, "adapter_capability_unsupported: conversation is unavailable.",
+                {"reason": "adapter_capability_unsupported", "capability": "conversation"})
         return endpoint, profile
