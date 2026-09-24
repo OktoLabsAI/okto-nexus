@@ -1,0 +1,320 @@
+{
+  "source_sha": "96a52e0b9fbb9b536f2d15d295cd3a5ba5578392",
+  "platform": "linux",
+  "counts": {
+    "PASS": 49
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "49",
+      "time": "191.145",
+      "timestamp": "2026-09-24T08:22:07.138803-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; synthetic peers and a disposable non-listening loopback socket only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_consumption_acceptance.py tests/test_runtime_result_correlation.py tests/test_runtime_restart.py tests/test_runtime_event_journal.py tests/test_harness_target_grammar.py -q --junitxml=.git/pr34-evidence/consumption-acceptance-final-linux.xml",
+  "limitations": "Parent SHA plus final test hash. Selected fixture gate only.",
+  "records": [
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_native_acceptance_then_terminal_never_redelivers_to_pull",
+      "status": "PASS",
+      "seconds": 20.83
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_lost_confirmation_and_expired_transport_lease_keep_push_reservation",
+      "status": "PASS",
+      "seconds": 7.225
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease",
+      "status": "PASS",
+      "seconds": 4.243
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-pi]",
+      "status": "PASS",
+      "seconds": 3.125
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-codex]",
+      "status": "PASS",
+      "seconds": 3.036
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.009
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.244
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-pi]",
+      "status": "PASS",
+      "seconds": 3.507
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-codex]",
+      "status": "PASS",
+      "seconds": 3.109
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.237
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.071
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-pi]",
+      "status": "PASS",
+      "seconds": 3.072
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-codex]",
+      "status": "PASS",
+      "seconds": 3.195
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.721
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.405
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-pi]",
+      "status": "PASS",
+      "seconds": 3.469
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-codex]",
+      "status": "PASS",
+      "seconds": 3.38
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.112
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.529
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-False]",
+      "status": "PASS",
+      "seconds": 3.942
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_terminal_is_correlated_to_transport_attempt_and_releases_lane[False-True]",
+      "status": "PASS",
+      "seconds": 4.169
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-False]",
+      "status": "PASS",
+      "seconds": 5.089
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_terminal_is_correlated_to_transport_attempt_and_releases_lane[True-True]",
+      "status": "PASS",
+      "seconds": 5.342
+    },
+    {
+      "class": "tests.test_runtime_result_correlation",
+      "test": "test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next",
+      "status": "PASS",
+      "seconds": 4.426
+    },
+    {
+      "class": "tests.test_runtime_restart",
+      "test": "test_restart_recovers_captured_old_attempt_without_reexecuting[False-started]",
+      "status": "PASS",
+      "seconds": 5.902
+    },
+    {
+      "class": "tests.test_runtime_restart",
+      "test": "test_restart_recovers_captured_old_attempt_without_reexecuting[False-terminal]",
+      "status": "PASS",
+      "seconds": 5.184
+    },
+    {
+      "class": "tests.test_runtime_restart",
+      "test": "test_restart_recovers_captured_old_attempt_without_reexecuting[True-started]",
+      "status": "PASS",
+      "seconds": 5.458
+    },
+    {
+      "class": "tests.test_runtime_restart",
+      "test": "test_restart_recovers_captured_old_attempt_without_reexecuting[True-terminal]",
+      "status": "PASS",
+      "seconds": 5.157
+    },
+    {
+      "class": "tests.test_runtime_restart",
+      "test": "test_old_attempt_terminal_after_frozen_recovery_boundary_stays_unknown",
+      "status": "PASS",
+      "seconds": 3.28
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_reopen_preserves_distinct_equal_text_and_stable_cursors",
+      "status": "PASS",
+      "seconds": 0.012
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_exclusive_owner_lock",
+      "status": "PASS",
+      "seconds": 0.006
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_normalized_output_is_redacted_before_durable_capture",
+      "status": "PASS",
+      "seconds": 0.006
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+      "status": "PASS",
+      "seconds": 0.009
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_quota_and_fsync_failure_stop_admission",
+      "status": "PASS",
+      "seconds": 0.007
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_credentials_redacted_before_bytes_are_written",
+      "status": "PASS",
+      "seconds": 0.006
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_rollback_and_restart_recover_exactly_once",
+      "status": "PASS",
+      "seconds": 2.999
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_journal_io_outside_write_uow_and_full_sync",
+      "status": "PASS",
+      "seconds": 2.249
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_projection_batch_rolls_back_before_publication",
+      "status": "PASS",
+      "seconds": 2.941
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_hardlink_replacement_is_refused",
+      "status": "PASS",
+      "seconds": 0.006
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_after_checkpoint_loss_does_not_duplicate_result",
+      "status": "PASS",
+      "seconds": 3.065
+    },
+    {
+      "class": "tests.test_runtime_event_journal",
+      "test": "test_replay_cursors_cover_append_and_reject_unbounded_limits",
+      "status": "PASS",
+      "seconds": 3.274
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_target_reaches_one_canonical_executor_with_full_envelope[direct]",
+      "status": "PASS",
+      "seconds": 3.246
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_target_reaches_one_canonical_executor_with_full_envelope[capability]",
+      "status": "PASS",
+      "seconds": 3.751
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_target_reaches_one_canonical_executor_with_full_envelope[role]",
+      "status": "PASS",
+      "seconds": 3.136
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_target_reaches_one_canonical_executor_with_full_envelope[tag]",
+      "status": "PASS",
+      "seconds": 3.171
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_target_reaches_one_canonical_executor_with_full_envelope[broadcast]",
+      "status": "PASS",
+      "seconds": 3.342
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_failed_transport_preserves_durable_delivery_and_blocks_duplicate_lane",
+      "status": "PASS",
+      "seconds": 3.105
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_send_only_target_keeps_write_distinct_from_ack",
+      "status": "PASS",
+      "seconds": 2.863
+    },
+    {
+      "class": "tests.test_harness_target_grammar",
+      "test": "test_correlated_relay_can_reach_send_only_target_without_inventing_a_reply",
+      "status": "PASS",
+      "seconds": 4.887
+    }
+  ],
+  "test_file_sha256": {
+    "tests/test_runtime_consumption_acceptance.py": "0308335cbf60a7a54b8a7e1b5a821572cfd12ac69f216b6e7ea412418c522939"
+  }
+}

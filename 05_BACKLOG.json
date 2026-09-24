@@ -2529,7 +2529,8 @@
             "src/okto_nexus/config.py",
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
-            "tests/test_runtime_delivery_acceptance.py"
+            "tests/test_runtime_delivery_acceptance.py",
+            "tests/test_runtime_consumption_acceptance.py"
           ],
           "test_results": [
             {
@@ -2587,6 +2588,13 @@
               "result": "PASS",
               "observed": "RED1 FAIL; final78 PASS Windows86.46s/Linux96.86s; Ruff and isolated live MCP smoke PASS. Final gate not passed.",
               "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+            },
+            {
+              "sha": "96a52e0b9fbb9b536f2d15d295cd3a5ba5578392 + new-test hash in index",
+              "command": "Exact preparation/final commands in P12_CONSUMPTION_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "Final49 PASS Windows201.95s/Linux191.18s. Socket preparation failure retained; four requirements qualified, safe-mirror/journal exact cuts still partial.",
+              "evidence": "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
             }
           ],
           "evidence": [
@@ -2600,7 +2608,8 @@
             "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
             "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
-            "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md"
+            "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+            "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -3372,8 +3381,12 @@
       ],
       "stimulus": "Observar ACK confiável do harness e depois fazer inbox_pull.",
       "expected": "Ack/receipt canônicos aplicados uma vez; não iniciar nova execução pelo pull.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim."
     },
     {
       "test_id": "T-CONS-03",
@@ -3403,8 +3416,12 @@
       ],
       "stimulus": "Perder confirmação depois de write e vencer lease.",
       "expected": "Incerteza visível; lease não libera outro executor automaticamente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim."
     },
     {
       "test_id": "T-CONS-05",
@@ -3435,8 +3452,12 @@
       ],
       "stimulus": "Várias falhas de socket seguras antes de aceitação.",
       "expected": "Contador/lease da inbox não é consumido como tentativa de transporte.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim."
     },
     {
       "test_id": "T-CONS-07",
@@ -3450,7 +3471,11 @@
       "stimulus": "Configurar observador e executor para a mesma entrega.",
       "expected": "Observador não inicia outro send_turn executor; configuração insegura é rejeitada.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "PARTIAL:16 unsafe mirror create/update REST/MCP cases pass for four adapters, which lack context_without_execution. Positive safe observer transport not qualified; aggregate remains NOT_RUN."
     },
     {
       "test_id": "T-CONS-08",
@@ -4424,8 +4449,12 @@
       ],
       "stimulus": "Usar direct/capability/role/tag/broadcast pelas superfícies reais.",
       "expected": "Harnesses elegíveis recebem pela mesma semântica, sem inserts manuais de presença em produção.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CONSUMPTION_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-consumption-acceptance-index.json"
+      ],
+      "notes": "Final49 fixture PASS per platform. Exact node mapping includes accepted push versus pull, unknown write with expired transport lease, two real local socket refusals with unchanged canonical inbox attempts/lease, and all five target strategies. Synthetic adapters; no native replay/deduplication claim."
     },
     {
       "test_id": "T-PRES-02",

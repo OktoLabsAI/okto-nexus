@@ -1,0 +1,29 @@
+{
+  "source_sha": "96a52e0b9fbb9b536f2d15d295cd3a5ba5578392",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "13.910",
+      "timestamp": "2026-09-24T08:20:40.277689-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; synthetic peers and a disposable non-listening loopback socket only.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_consumption_acceptance.py::test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease -q --junitxml=.git/pr34-evidence/consumption-socket-initial-windows.xml",
+  "limitations": "Earlier uncommitted test generation; final test hash does not apply. Socket preparation failure is a fixture timeout before explicit refusal; product correctly stayed UNKNOWN, not a reproduced product defect.",
+  "records": [
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease",
+      "status": "FAIL",
+      "seconds": 11.584
+    }
+  ]
+}

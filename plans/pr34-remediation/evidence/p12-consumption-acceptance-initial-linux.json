@@ -1,0 +1,131 @@
+{
+  "source_sha": "96a52e0b9fbb9b536f2d15d295cd3a5ba5578392",
+  "platform": "linux",
+  "counts": {
+    "PASS": 18
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "18",
+      "time": "69.838",
+      "timestamp": "2026-09-24T08:18:11.929114-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; synthetic peers and a disposable non-listening loopback socket only.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_consumption_acceptance.py -q --junitxml=.git/pr34-evidence/consumption-acceptance-initial-linux.xml",
+  "limitations": "Earlier uncommitted test generation; final test hash does not apply. Socket preparation failure is a fixture timeout before explicit refusal; product correctly stayed UNKNOWN, not a reproduced product defect.",
+  "records": [
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_native_acceptance_then_terminal_never_redelivers_to_pull",
+      "status": "PASS",
+      "seconds": 5.966
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_lost_confirmation_and_expired_transport_lease_keep_push_reservation",
+      "status": "PASS",
+      "seconds": 3.672
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-pi]",
+      "status": "PASS",
+      "seconds": 3.68
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-codex]",
+      "status": "PASS",
+      "seconds": 3.308
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.192
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-create-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.27
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-pi]",
+      "status": "PASS",
+      "seconds": 3.191
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-codex]",
+      "status": "PASS",
+      "seconds": 4.641
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 2.982
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[rest-update-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.228
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-pi]",
+      "status": "PASS",
+      "seconds": 3.372
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-codex]",
+      "status": "PASS",
+      "seconds": 3.346
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.133
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-create-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.151
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-pi]",
+      "status": "PASS",
+      "seconds": 3.483
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-codex]",
+      "status": "PASS",
+      "seconds": 3.121
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.stream]",
+      "status": "PASS",
+      "seconds": 3.235
+    },
+    {
+      "class": "tests.test_runtime_consumption_acceptance",
+      "test": "test_unsafe_mirror_configuration_cannot_add_an_executor[mcp-update-claude_code.attach]",
+      "status": "PASS",
+      "seconds": 3.291
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "source_sha": "96a52e0b9fbb9b536f2d15d295cd3a5ba5578392",
+  "final_test_sha256": {
+    "tests/test_runtime_consumption_acceptance.py": "0308335cbf60a7a54b8a7e1b5a821572cfd12ac69f216b6e7ea412418c522939"
+  },
+  "runs": {
+    "initial-windows": {
+      "manifest": "p12-consumption-acceptance-initial-windows.json",
+      "counts": {
+        "PASS": 18
+      }
+    },
+    "initial-linux": {
+      "manifest": "p12-consumption-acceptance-initial-linux.json",
+      "counts": {
+        "PASS": 18
+      }
+    },
+    "socket-preparation-windows": {
+      "manifest": "p12-consumption-acceptance-socket-preparation-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "final-windows": {
+      "manifest": "p12-consumption-acceptance-final-windows.json",
+      "counts": {
+        "PASS": 49
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-consumption-acceptance-final-linux.json",
+      "counts": {
+        "PASS": 49
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-CONS-02",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_consumption_acceptance.py::test_native_acceptance_then_terminal_never_redelivers_to_pull"
+        ],
+        "linux": [
+          "tests/test_runtime_consumption_acceptance.py::test_native_acceptance_then_terminal_never_redelivers_to_pull"
+        ]
+      }
+    },
+    {
+      "test_id": "T-CONS-04",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_consumption_acceptance.py::test_lost_confirmation_and_expired_transport_lease_keep_push_reservation"
+        ],
+        "linux": [
+          "tests/test_runtime_consumption_acceptance.py::test_lost_confirmation_and_expired_transport_lease_keep_push_reservation"
+        ]
+      }
+    },
+    {
+      "test_id": "T-CONS-06",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_consumption_acceptance.py::test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease"
+        ],
+        "linux": [
+          "tests/test_runtime_consumption_acceptance.py::test_two_refused_sockets_do_not_consume_inbox_attempts_or_lease"
+        ]
+      }
+    },
+    {
+      "test_id": "T-PRES-01",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[direct]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[capability]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[role]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[tag]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[broadcast]"
+        ],
+        "linux": [
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[direct]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[capability]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[role]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[tag]",
+          "tests/test_harness_target_grammar.py::test_target_reaches_one_canonical_executor_with_full_envelope[broadcast]"
+        ]
+      }
+    }
+  ],
+  "partial_requirements": [
+    "T-CONS-07",
+    "T-CONS-08",
+    "T-JRN-03",
+    "T-JRN-07"
+  ],
+  "limitations": "No native provider or installed connector campaign. Journal/checkpoint/restart components do not qualify every required crash/deduplication stimulus."
+}
