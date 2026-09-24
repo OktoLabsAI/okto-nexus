@@ -1,0 +1,68 @@
+{
+  "source_sha": "d8e237d37d2fa1430df05c12d6cd95f4fe251934",
+  "fixture_generations": {
+    "preparation": {
+      "tests\\test_runtime_pull_push_race.py": "cab0383735fe6ba2625728746f565ac59a899cb79ed780a957c78c7b8954ce77"
+    },
+    "second-preparation": {
+      "tests\\test_runtime_pull_push_race.py": "c70472b1a8d5b239133aba3289882443c78f217ce3dffafd6fd15d7dc248610b"
+    },
+    "verified": {
+      "tests/test_runtime_pull_push_race.py": "d8d2f3d1c35960d7bdcc13aa6cdecdf792d17fe867219504bf44a230ed60ff7c"
+    }
+  },
+  "runs": {
+    "preparation-windows": {
+      "manifest": "p12-pull-push-preparation-windows.json",
+      "counts": {
+        "FAIL": 2
+      }
+    },
+    "preparation-linux": {
+      "manifest": "p12-pull-push-preparation-linux.json",
+      "counts": {
+        "FAIL": 2
+      }
+    },
+    "second-preparation-windows": {
+      "manifest": "p12-pull-push-second-preparation-windows.json",
+      "counts": {
+        "FAIL": 2
+      }
+    },
+    "second-preparation-linux": {
+      "manifest": "p12-pull-push-second-preparation-linux.json",
+      "counts": {
+        "FAIL": 2
+      }
+    },
+    "verified-windows": {
+      "manifest": "p12-pull-push-verified-windows.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "verified-linux": {
+      "manifest": "p12-pull-push-verified-linux.json",
+      "counts": {
+        "PASS": 2
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-CONS-01",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[before_reservation]",
+          "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[after_reservation]"
+        ],
+        "linux": [
+          "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[before_reservation]",
+          "tests/test_runtime_pull_push_race.py::test_pull_contends_with_uncommitted_push_reservation[after_reservation]"
+        ]
+      }
+    }
+  ]
+}

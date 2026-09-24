@@ -3371,8 +3371,12 @@
       ],
       "stimulus": "Dois consumers disputam a mesma MessageDelivery em barreira controlada.",
       "expected": "Uma reserva executora vence; payload não é entregue a dois executores.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_PULL_PUSH_RACE.md",
+        "plans/pr34-remediation/evidence/p12-pull-push-index.json"
+      ],
+      "notes": "Barrier before/after push reservation: actual canonical pull competes at SQLite BEGIN IMMEDIATE, sees no payload, one push executor wins. Actual MCP send plus independently wired InboxService;2 PASS per platform. Preparatory HTTP-loop barrier failures retained."
     },
     {
       "test_id": "T-CONS-02",

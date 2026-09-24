@@ -1,0 +1,38 @@
+{
+  "source_sha": "d8e237d37d2fa1430df05c12d6cd95f4fe251934",
+  "platform": "Windows",
+  "counts": {
+    "FAIL": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "2",
+      "skipped": "0",
+      "tests": "2",
+      "time": "21.576",
+      "timestamp": "2026-09-24T09:42:12.389253-03:00"
+    }
+  ],
+  "native_flags": "Processless synthetic connector; temporary store, no provider or personal configuration.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_pull_push_race.py -q --junitxml=.git/pr34-evidence/pull-push-race-windows.xml",
+  "limitations": "Suite elapsed time is not a performance benchmark. SKIP is not PASS.",
+  "records": [
+    {
+      "class": "tests.test_runtime_pull_push_race",
+      "test": "test_pull_contends_with_uncommitted_push_reservation[before_reservation]",
+      "status": "FAIL",
+      "seconds": 9.737
+    },
+    {
+      "class": "tests.test_runtime_pull_push_race",
+      "test": "test_pull_contends_with_uncommitted_push_reservation[after_reservation]",
+      "status": "FAIL",
+      "seconds": 9.571
+    }
+  ],
+  "file_sha256": {
+    "tests\\test_runtime_pull_push_race.py": "cab0383735fe6ba2625728746f565ac59a899cb79ed780a957c78c7b8954ce77"
+  }
+}
