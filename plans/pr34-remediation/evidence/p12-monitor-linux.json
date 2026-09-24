@@ -1,0 +1,154 @@
+{
+  "source_sha": "9df5b3983a0663aa2b3e72819eb516a8a4c8a08d",
+  "platform": "linux",
+  "counts": {
+    "PASS": 21
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "21",
+      "time": "75.596",
+      "timestamp": "2026-09-24T05:39:25.563741-03:00"
+    }
+  ],
+  "native_flags": "No native/browser campaigns selected; synthetic peers only.",
+  "command": "python -m pytest -q --tb=short --junitxml=<unique-temporary-results.xml>",
+  "limitations": "Parent SHA plus new test-file hash; actual restricted credentials and stdio, synthetic external peers. No native provider campaign. Not a full suite or performance benchmark.",
+  "records": [
+    {
+      "class": "tests.test_runtime_monitor_authorization",
+      "test": "test_valid_ept_can_monitor_but_cannot_reach_runtime_rest_or_mcp",
+      "status": "PASS",
+      "seconds": 3.951
+    },
+    {
+      "class": "tests.test_runtime_monitor_authorization",
+      "test": "test_read_only_runtime_grant_has_identical_control_denials_and_audit",
+      "status": "PASS",
+      "seconds": 4.061
+    },
+    {
+      "class": "tests.test_runtime_monitor_authorization",
+      "test": "test_anonymous_real_stdio_cannot_open_or_control_existing_runtime",
+      "status": "PASS",
+      "seconds": 7.074
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+      "status": "PASS",
+      "seconds": 4.653
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_grant_open_requires_explicit_scoped_binding",
+      "status": "PASS",
+      "seconds": 3.102
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[revoke]",
+      "status": "PASS",
+      "seconds": 3.194
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[expire]",
+      "status": "PASS",
+      "seconds": 3.311
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[permissions]",
+      "status": "PASS",
+      "seconds": 3.3
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[scope]",
+      "status": "PASS",
+      "seconds": 3.212
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[credential]",
+      "status": "PASS",
+      "seconds": 3.232
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authority_is_revalidated_before_send[profile]",
+      "status": "PASS",
+      "seconds": 3.11
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_internal_missing_authentication_cannot_impersonate_operator",
+      "status": "PASS",
+      "seconds": 2.084
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_native_options_and_payload_identity_are_rejected",
+      "status": "PASS",
+      "seconds": 3.083
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource",
+      "status": "PASS",
+      "seconds": 7.263
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_concurrent_grant_budget_has_one_admitted_send",
+      "status": "PASS",
+      "seconds": 3.545
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+      "status": "PASS",
+      "seconds": 3.09
+    },
+    {
+      "class": "tests.test_runtime_grants",
+      "test": "test_p04_operator_cannot_send_using_a_replaced_profile",
+      "status": "PASS",
+      "seconds": 2.947
+    },
+    {
+      "class": "tests.test_poll_tokens",
+      "test": "test_poll_token_issue_stores_hash_only_and_returns_once",
+      "status": "PASS",
+      "seconds": 0.729
+    },
+    {
+      "class": "tests.test_poll_tokens",
+      "test": "test_ept_events_are_forward_only_and_summary_projected",
+      "status": "PASS",
+      "seconds": 1.154
+    },
+    {
+      "class": "tests.test_poll_tokens",
+      "test": "test_ept_inbox_count_and_peek_are_envelope_only",
+      "status": "PASS",
+      "seconds": 1.166
+    },
+    {
+      "class": "tests.test_poll_tokens",
+      "test": "test_ept_is_rejected_on_mutating_routes_even_with_loopback_trust",
+      "status": "PASS",
+      "seconds": 0.994
+    }
+  ],
+  "source_state": "parent SHA plus new acceptance test",
+  "dirty_files_sha256": {
+    "tests/test_runtime_monitor_authorization.py": "f90962aeb9f6082722fdf915d59e9944c26442a076dccd2a9f752d00123b90dd"
+  },
+  "command_document": "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md"
+}

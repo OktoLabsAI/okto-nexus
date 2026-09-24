@@ -1,0 +1,35 @@
+{
+  "parent_sha": "9df5b3983a0663aa2b3e72819eb516a8a4c8a08d",
+  "source_state": "new acceptance test only; production unchanged",
+  "file_sha256": "f90962aeb9f6082722fdf915d59e9944c26442a076dccd2a9f752d00123b90dd",
+  "requirement_nodes": {
+    "T-AUTH-01": [
+      "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit",
+      "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp"
+    ],
+    "T-AUTH-02": [
+      "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit"
+    ],
+    "T-AUTH-08": [
+      "tests/test_runtime_monitor_authorization.py::test_anonymous_real_stdio_cannot_open_or_control_existing_runtime",
+      "tests/test_runtime_grants.py::test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource"
+    ],
+    "T-AUTH-11": [
+      "tests/test_runtime_monitor_authorization.py::test_valid_ept_can_monitor_but_cannot_reach_runtime_rest_or_mcp",
+      "tests/test_runtime_monitor_authorization.py::test_read_only_runtime_grant_has_identical_control_denials_and_audit"
+    ]
+  },
+  "windows": {
+    "passed": 21,
+    "seconds": 61.71,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 21,
+    "seconds": 75.62,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
+  "limitations": "T-AUTH-01 parity includes identical denials for open/all controls and positive scoped read/send. Other authorization axes retain separate requirements. No provider/native/version qualification or full gate claim."
+}
