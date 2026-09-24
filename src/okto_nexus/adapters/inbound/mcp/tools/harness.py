@@ -358,14 +358,16 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
     configured_pid = endpoint["public_config"].get("target_pid")
     if target_pid is not None and target_pid != configured_pid:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Attach target does not match the approved endpoint.", {})
-    connector = build_connector(build_connector_factories(deps), kind=kind, project_root=project_root,
+    from okto_nexus.adapters.outbound.harness.secret_redaction import BackendSecretRedactor
+    redactor = BackendSecretRedactor.from_environment(profile, effective_backend.get("env", {}))
+    connector = redactor.call(build_connector, build_connector_factories(deps), kind=kind, project_root=project_root,
                                 substrate=substrate, target_pid=configured_pid, backend=effective_backend)
     required = profile["config"].get("required_native_requests", ()) if profile else ()
     if required:
         configure_requirements = getattr(connector, "configure_native_requirements", None)
         if not callable(configure_requirements):
             raise OktoNexusError(ErrorCode.CONFIG_ERROR, "Adapter cannot verify required native contracts.", {})
-        configure_requirements(required)
+        redactor.call(configure_requirements, required)
     configure_reuse = getattr(connector, "configure_connection_reuse", None)
     if profile and callable(configure_reuse):
         # Include resolved environment so rotating a secret cannot silently reuse
@@ -373,12 +375,12 @@ def construct_profile_connector(deps, *, endpoint, profile, kind, project_root, 
         material = [endpoint["agent_id"], endpoint["workspace_id"], endpoint["adapter_id"],
                     project_root, profile["profile_id"], profile["revision"],
                     effective_backend, list(required), bool(deps.config.feature_hitl)]
-        configure_reuse(hashlib.sha256(json.dumps(material, sort_keys=True).encode()).digest())
+        redactor.call(configure_reuse, hashlib.sha256(json.dumps(material, sort_keys=True).encode()).digest())
     from okto_nexus.adapters.outbound.harness.qualified import QualifiedConnector
     descriptor = build_connector_factories(deps).get(endpoint["adapter_id"])
     connector = QualifiedConnector(connector, descriptor=descriptor,
         disabled=profile["config"].get("disabled_capabilities", ()) if profile else (),
-        hitl_enabled=bool(deps.config.feature_hitl))
+        hitl_enabled=bool(deps.config.feature_hitl), redactor=redactor)
     return connector, endpoint, {"profile_id": endpoint["profile_id"],
         "inherit_ambient": bool(profile and profile["inherit_ambient"]),
         "revision": profile["revision"] if profile else None}

@@ -26,6 +26,17 @@ exists. Their existence does not establish durability, Windows lifecycle, or
 the new acceptance gates. We do not reimplement the superseded blanket
 harness-to-harness ban.
 
+## F13 additional reproduced path at e388227
+
+The completed full Windows suite was green, but an independent approved-profile
+audit showed that an opaque secret_refs value echoed by an owned protocol peer
+was persisted in journal/result/replay. Known credential-pattern redaction alone
+was insufficient. Four subsequent behavioral regressions covered complete/split/
+one-character output and a startup error. See P03_BACKEND_SECRET_REDACTION.md and
+evidence/p12-backend-secret-audit.json for the source, isolated fixture and narrow
+correction. No personal/provider credential was used; no historical capture was
+replayed. The final gate remains separate from these selected checks.
+
 ## P09 authenticated handoff boundary (F02/F07, parent c67e7dc)
 
 Confirmed through actual HTTP MCP: creator API key with claimant agent_id could complete claimed work. Fixed shared service actor/binding validation for all handoff verbs; HITL preserves original creator binding. See P09_AUTHENTICATED_HANDOFF.md and test_runtime_handoff_epochs.py. Windows 212 PASS; Linux 25 PASS. Scoped runtime bootstrap/dispatch remains pending.

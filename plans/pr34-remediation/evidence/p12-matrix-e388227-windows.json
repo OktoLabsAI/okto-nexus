@@ -1,0 +1,1861 @@
+{
+  "schema_version": 1,
+  "source_sha": "e388227f98c1230e8104df12b602e5943b4baf52",
+  "scope": "Reviewed source assertions joined to explicitly supplied completed executions only; no historical totals merged.",
+  "counts": {
+    "NOT_RUN": 112,
+    "PASS": 16,
+    "FAIL": 1
+  },
+  "platforms": [
+    "Windows"
+  ],
+  "requirements": [
+    {
+      "test_id": "T-ID-01",
+      "name": "Perfil preservado",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_profile_is_unchanged_by_open_close",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_profile_is_unchanged_by_open_close",
+              "status": "PASS",
+              "seconds": 1.689
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Does not reopen the binding. The original requirement explicitly includes reopen.",
+      "rationale": "Compares the complete canonical agent before open and after close, including tags, permissions and comm_scope configured through REST."
+    },
+    {
+      "test_id": "T-ID-02",
+      "name": "Agente inexistente",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_unknown_agent_is_rejected_before_factory",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_unknown_agent_is_rejected_before_factory",
+              "status": "PASS",
+              "seconds": 1.767
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_open_does_not_fabricate_credential_authentication",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_open_does_not_fabricate_credential_authentication",
+              "status": "PASS",
+              "seconds": 1.919
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Unknown-agent MCP call is not exercised by these nodes.",
+      "rationale": "REST rejects the unknown identity before connector construction and confirms no canonical agent was inserted."
+    },
+    {
+      "test_id": "T-ID-03",
+      "name": "Abertura concorrente",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p05_concurrent_open_key_never_starts_twice",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p05_concurrent_open_key_never_starts_twice",
+              "status": "PASS",
+              "seconds": 1.53
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p05_open_idempotency_reuses_one_session_across_surfaces",
+              "status": "PASS",
+              "seconds": 1.648
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Concurrent distinct authorized endpoint bindings with full profile preservation are not asserted here.",
+      "rationale": "Concurrent same-key REST opens create one peer; subsequent MCP reuse returns the same session. Changed payload conflicts."
+    },
+    {
+      "test_id": "T-ID-04",
+      "name": "Metadata legada",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_p01_legacy_metadata_is_session_data_and_role_conflict_is_rejected",
+              "status": "PASS",
+              "seconds": 1.764
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Synthetic external peer; this is facade/identity normalization, not native protocol qualification.",
+      "rationale": "Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged."
+    },
+    {
+      "test_id": "T-ID-05",
+      "name": "Catálogo de habilidades",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ID-06",
+      "name": "Falha de start",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-01",
+      "name": "MCP versus REST",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-02",
+      "name": "Sessão alheia",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-03",
+      "name": "Leitura alheia",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-04",
+      "name": "Grant válido",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_grants.py::test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+          "results": [
+            {
+              "class": "tests.test_runtime_grants",
+              "test": "test_p04_grant_allows_same_scoped_action_in_rest_and_mcp",
+              "status": "PASS",
+              "seconds": 3.945
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_grants.py::test_p04_grant_open_requires_explicit_scoped_binding",
+          "results": [
+            {
+              "class": "tests.test_runtime_grants",
+              "test": "test_p04_grant_open_requires_explicit_scoped_binding",
+              "status": "PASS",
+              "seconds": 2.073
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_grants.py::test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+          "results": [
+            {
+              "class": "tests.test_runtime_grants",
+              "test": "test_p04_wrong_endpoint_is_opaque_and_internal_control_is_authorized",
+              "status": "PASS",
+              "seconds": 1.75
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements.",
+      "rationale": "A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources."
+    },
+    {
+      "test_id": "T-AUTH-05",
+      "name": "Revogação antes do envio",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_commands.py::test_revocation_after_admission_prevents_native_write",
+          "results": [
+            {
+              "class": "tests.test_runtime_commands",
+              "test": "test_revocation_after_admission_prevents_native_write",
+              "status": "PASS",
+              "seconds": 2.467
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p06_changed_policy_blocks_previously_committed_intent",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p06_changed_policy_blocks_previously_committed_intent",
+              "status": "PASS",
+              "seconds": 1.967
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Synthetic peers; authorization and durable dispatch are the production composition.",
+      "rationale": "Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes."
+    },
+    {
+      "test_id": "T-AUTH-06",
+      "name": "Revogação após aceitação",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-07",
+      "name": "Impersonação no payload",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-08",
+      "name": "Stdio sem identidade",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-09",
+      "name": "Segredos de backend",
+      "status": "FAIL",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_backend_diagnostics_do_not_echo_credentials",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_backend_diagnostics_do_not_echo_credentials",
+              "status": "PASS",
+              "seconds": 0.0
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_endpoints.py::test_p03_profile_environment_isolated_and_operator_key_never_inherited",
+          "results": [
+            {
+              "class": "tests.test_runtime_endpoints",
+              "test": "test_p03_profile_environment_isolated_and_operator_key_never_inherited",
+              "status": "PASS",
+              "seconds": 0.01
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_event_journal.py::test_credentials_redacted_before_bytes_are_written",
+          "results": [
+            {
+              "class": "tests.test_runtime_event_journal",
+              "test": "test_credentials_redacted_before_bytes_are_written",
+              "status": "PASS",
+              "seconds": 0.026
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Arbitrary secret resolver values across all logs and exception paths need a dedicated end-to-end trace. Credential-pattern redaction alone does not prove that broader guarantee.",
+      "rationale": "Checks diagnostic redaction, sealed child environment including aliased operator credentials, and journal bytes with synthetic credential-shaped values.",
+      "external_observations": [
+        {
+          "source_sha": "e388227f98c1230e8104df12b602e5943b4baf52",
+          "test_id": "T-AUTH-09",
+          "status": "FAIL",
+          "command": "rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/audit_backend_secret.py",
+          "observations": {
+            "journal_contains_resolved_secret": true,
+            "durable_result_contains_resolved_secret": true,
+            "replay_contains_resolved_secret": true
+          },
+          "limitations": "Synthetic secret reference and owned Python Codex-shaped protocol peer, production HTTP/MCP/journal. No personal/provider credentials or model calls. Other logging/startup-error paths not exercised."
+        }
+      ]
+    },
+    {
+      "test_id": "T-AUTH-10",
+      "name": "Bypass por opções nativas",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-11",
+      "name": "EPT e caminho de monitoração",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-AUTH-12",
+      "name": "Idempotência não vaza dados",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p05_open_idempotency_reuses_one_session_across_surfaces",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p05_open_idempotency_reuses_one_session_across_surfaces",
+              "status": "PASS",
+              "seconds": 1.648
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Other persisted operation/control/result surfaces need matching authorization-before-idempotency assertions.",
+      "rationale": "Caller without authority cannot reuse an operator's completed open key to obtain the persisted reply."
+    },
+    {
+      "test_id": "T-ENDP-01",
+      "name": "Duas conexões, uma entrega",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_one_delivery_does_not_execute_on_two_sessions",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_one_delivery_does_not_execute_on_two_sessions",
+              "status": "PASS",
+              "seconds": 2.556
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Production selection/dispatch with synthetic native peers.",
+      "rationale": "Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint."
+    },
+    {
+      "test_id": "T-ENDP-02",
+      "name": "Dois workspaces",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ENDP-03",
+      "name": "Continuação fixada",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ENDP-04",
+      "name": "Binding ambíguo",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_endpoints.py::test_p03_ambiguous_endpoint_selection_does_not_construct_connector",
+          "results": [
+            {
+              "class": "tests.test_runtime_endpoints",
+              "test": "test_p03_ambiguous_endpoint_selection_does_not_construct_connector",
+              "status": "PASS",
+              "seconds": 2.676
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Production open selection with synthetic native peers.",
+      "rationale": "Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds."
+    },
+    {
+      "test_id": "T-ENDP-05",
+      "name": "Fallback seguro",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ENDP-06",
+      "name": "Fallback inseguro",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ENDP-07",
+      "name": "Capabilities efetivas",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-ENDP-08",
+      "name": "Extensão adicional",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-01",
+      "name": "Rollback de criação",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-02",
+      "name": "Crash após commit",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p05_lost_wake_recovered_by_new_owner_without_new_logical_delivery",
+              "status": "PASS",
+              "seconds": 1.883
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Dispatcher replacement in one process is not the specified process kill after commit and before wake.",
+      "rationale": "Pending committed delivery is recovered by a replacement dispatcher and retains exactly one inbox row."
+    },
+    {
+      "test_id": "T-TX-03",
+      "name": "Request repetida",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-04",
+      "name": "Chave com outro payload",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-05",
+      "name": "Aprovação pendente",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-06",
+      "name": "Todos os produtores",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-TX-07",
+      "name": "Sem IO no UoW",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p06_native_send_is_outside_sqlite_write_transaction",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p06_native_send_is_outside_sqlite_write_transaction",
+              "status": "PASS",
+              "seconds": 2.174
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_event_journal.py::test_journal_io_outside_write_uow_and_full_sync",
+          "results": [
+            {
+              "class": "tests.test_runtime_event_journal",
+              "test": "test_journal_io_outside_write_uow_and_full_sync",
+              "status": "PASS",
+              "seconds": 1.777
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_artifact_durability.py::test_artifact_storage_does_not_hold_sqlite_writer",
+          "results": [
+            {
+              "class": "tests.test_runtime_artifact_durability",
+              "test": "test_artifact_storage_does_not_hold_sqlite_writer",
+              "status": "PASS",
+              "seconds": 1.571
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Aggregate requirement additionally instruments spawn, network, secret resolvers and model paths.",
+      "rationale": "Thread-local transaction instrumentation covers native send and journal fsync; artifact storage proves independent SQLite writes can proceed."
+    },
+    {
+      "test_id": "T-TX-08",
+      "name": "Writer incompatível",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_writer_contract.py::test_preexisting_legacy_connection_is_fenced_only_after_activation",
+          "results": [
+            {
+              "class": "tests.test_runtime_writer_contract",
+              "test": "test_preexisting_legacy_connection_is_fenced_only_after_activation",
+              "status": "PASS",
+              "seconds": 0.233
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_writer_contract.py::test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+          "results": [
+            {
+              "class": "tests.test_runtime_writer_contract",
+              "test": "test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+              "status": "PASS",
+              "seconds": 3.756
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_writer_contract.py::test_compatible_stdio_still_enqueues_the_canonical_delivery",
+          "results": [
+            {
+              "class": "tests.test_runtime_writer_contract",
+              "test": "test_compatible_stdio_still_enqueues_the_canonical_delivery",
+              "status": "PASS",
+              "seconds": 3.811
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_writer_contract.py::test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+          "results": [
+            {
+              "class": "tests.test_runtime_writer_contract",
+              "test": "test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+              "status": "PASS",
+              "seconds": 0.232
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator.",
+      "rationale": "Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup."
+    },
+    {
+      "test_id": "T-CONS-01",
+      "name": "Pull versus push concorrentes",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-02",
+      "name": "Push aceito e pull posterior",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-03",
+      "name": "Falha anterior ao envio",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-04",
+      "name": "Envio desconhecido",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-05",
+      "name": "Takeover explícito",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-06",
+      "name": "Retry do transporte",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-07",
+      "name": "Mirror-only",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-CONS-08",
+      "name": "Receipts duplicados",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-01",
+      "name": "Retorno independente do harness",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-02",
+      "name": "Wakeup perdido",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-03",
+      "name": "Lost wakeup race",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_wake_generation.py::test_generation_keeps_wakes_before_wait_and_during_processing",
+          "results": [
+            {
+              "class": "tests.test_runtime_wake_generation",
+              "test": "test_generation_keeps_wakes_before_wait_and_during_processing",
+              "status": "PASS",
+              "seconds": 0.002
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_wake_generation.py::test_wake_during_scan_drains_without_waiting_for_recovery",
+          "results": [
+            {
+              "class": "tests.test_runtime_wake_generation",
+              "test": "test_wake_during_scan_drains_without_waiting_for_recovery",
+              "status": "PASS",
+              "seconds": 2.857
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark.",
+      "rationale": "Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer."
+    },
+    {
+      "test_id": "T-DISP-04",
+      "name": "Stdio escritor separado",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p06_stdio_producer_wakes_serve_without_owning_runtime",
+              "status": "PASS",
+              "seconds": 3.528
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox.py::test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox",
+              "test": "test_p06_stdio_open_runs_only_in_the_existing_serve_owner",
+              "status": "PASS",
+              "seconds": 3.563
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "External harness peers are synthetic; the Nexus producer is a separate real process.",
+      "rationale": "Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable."
+    },
+    {
+      "test_id": "T-DISP-05",
+      "name": "Dois owners",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-06",
+      "name": "SENDING expirado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-07",
+      "name": "Thread travada",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-08",
+      "name": "Ordem e controle",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-DISP-09",
+      "name": "Fairness",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_scheduler_fairness.py::test_pending_limit_selects_distinct_lanes_before_truncation",
+          "results": [
+            {
+              "class": "tests.test_runtime_scheduler_fairness",
+              "test": "test_pending_limit_selects_distinct_lanes_before_truncation[delivery]",
+              "status": "PASS",
+              "seconds": 2.543
+            },
+            {
+              "class": "tests.test_runtime_scheduler_fairness",
+              "test": "test_pending_limit_selects_distinct_lanes_before_truncation[close]",
+              "status": "PASS",
+              "seconds": 2.636
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_scheduler_fairness.py::test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+          "results": [
+            {
+              "class": "tests.test_runtime_scheduler_fairness",
+              "test": "test_healthy_lane_dispatches_while_first_native_call_is_blocked",
+              "status": "PASS",
+              "seconds": 2.98
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_scheduler_fairness.py::test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+          "results": [
+            {
+              "class": "tests.test_runtime_scheduler_fairness",
+              "test": "test_one_agent_cannot_reserve_all_normal_workers_with_extra_endpoints",
+              "status": "PASS",
+              "seconds": 3.006
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker",
+          "results": [
+            {
+              "class": "tests.test_runtime_worker_capacity",
+              "test": "test_observed_native_result_does_not_free_a_still_blocked_agent_worker[production]",
+              "status": "PASS",
+              "seconds": 6.944
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them.",
+      "rationale": "A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses."
+    },
+    {
+      "test_id": "T-DISP-10",
+      "name": "Backlog cheio",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox_backpressure.py::test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox_backpressure",
+              "test": "test_outbox_recipient_backlog_is_bounded_without_partial_message_commit",
+              "status": "PASS",
+              "seconds": 4.129
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox_backpressure.py::test_outbox_byte_budget_rejects_before_any_canonical_commit",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox_backpressure",
+              "test": "test_outbox_byte_budget_rejects_before_any_canonical_commit",
+              "status": "PASS",
+              "seconds": 1.689
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox_backpressure.py::test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox_backpressure",
+              "test": "test_full_transport_backlog_rolls_back_managed_claim_and_grant",
+              "status": "PASS",
+              "seconds": 3.934
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox_backpressure.py::test_concurrent_admission_reserves_only_the_last_available_slot",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox_backpressure",
+              "test": "test_concurrent_admission_reserves_only_the_last_available_slot",
+              "status": "PASS",
+              "seconds": 3.692
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_outbox_backpressure.py::test_unconfirmed_attempt_keeps_capacity_reserved",
+          "results": [
+            {
+              "class": "tests.test_runtime_outbox_backpressure",
+              "test": "test_unconfirmed_attempt_keeps_capacity_reserved",
+              "status": "PASS",
+              "seconds": 3.702
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Disposable store and synthetic peers; not a throughput or sustained flood measurement.",
+      "rationale": "Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity."
+    },
+    {
+      "test_id": "T-DISP-11",
+      "name": "Backoff",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-01",
+      "name": "Boot idempotente",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-02",
+      "name": "Janela de spawn",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-03",
+      "name": "SIGTERM",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-04",
+      "name": "SIGKILL sob carga",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-05",
+      "name": "PID reutilizado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-06",
+      "name": "Attach preservado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "name": "Close concorrente",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "name": "Multiplexação",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-09",
+      "name": "Pi settle",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-10",
+      "name": "Claude multi-turn",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-11",
+      "name": "Frame inválido e buffers",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "name": "Drift de protocolo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-01",
+      "name": "SQLite indisponível",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_terminal_storage_failure_is_not_silently_accepted",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_terminal_storage_failure_is_not_silently_accepted",
+              "status": "PASS",
+              "seconds": 1.633
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked",
+          "results": [
+            {
+              "class": "tests.test_runtime_capture_projection_isolation",
+              "test": "test_native_burst_is_journaled_while_projection_is_blocked",
+              "status": "PASS",
+              "seconds": 4.705
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign.",
+      "rationale": "Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release."
+    },
+    {
+      "test_id": "T-JRN-02",
+      "name": "Crash após journal",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-03",
+      "name": "Crash após projeção",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-04",
+      "name": "Cauda truncada",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+          "results": [
+            {
+              "class": "tests.test_runtime_event_journal",
+              "test": "test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+              "status": "PASS",
+              "seconds": 0.062
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Deterministic file fault injection rather than power-loss hardware testing.",
+      "rationale": "Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record."
+    },
+    {
+      "test_id": "T-JRN-05",
+      "name": "Corrupção no meio",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_event_journal.py::test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+          "results": [
+            {
+              "class": "tests.test_runtime_event_journal",
+              "test": "test_incomplete_tail_recovers_but_complete_corruption_fails_closed",
+              "status": "PASS",
+              "seconds": 0.062
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Deterministic file fault injection.",
+      "rationale": "Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable."
+    },
+    {
+      "test_id": "T-JRN-06",
+      "name": "Mesmo texto, eventos diferentes",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-07",
+      "name": "Evento duplicado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-08",
+      "name": "Deltas e terminal",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_capture_projection_isolation.py::test_native_burst_is_journaled_while_projection_is_blocked",
+          "results": [
+            {
+              "class": "tests.test_runtime_capture_projection_isolation",
+              "test": "test_native_burst_is_journaled_while_projection_is_blocked",
+              "status": "PASS",
+              "seconds": 4.705
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Owned Codex-shaped Python protocol peer, not a real model.",
+      "rationale": "All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release."
+    },
+    {
+      "test_id": "T-JRN-09",
+      "name": "Falta de espaço",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-10",
+      "name": "Resultado anterior à captura",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-JRN-11",
+      "name": "Replay paginado",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_event_journal.py::test_replay_cursors_cover_append_and_reject_unbounded_limits",
+          "results": [
+            {
+              "class": "tests.test_runtime_event_journal",
+              "test": "test_replay_cursors_cover_append_and_reject_unbounded_limits",
+              "status": "PASS",
+              "seconds": 2.731
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_pr34_remediation.py::test_authenticated_mcp_cannot_control_or_read_foreign_session",
+          "results": [
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_send-args0]",
+              "status": "PASS",
+              "seconds": 1.529
+            },
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_steer-args1]",
+              "status": "PASS",
+              "seconds": 1.821
+            },
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_interrupt-args2]",
+              "status": "PASS",
+              "seconds": 1.53
+            },
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_close-args3]",
+              "status": "PASS",
+              "seconds": 1.7
+            },
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_get-args4]",
+              "status": "PASS",
+              "seconds": 1.591
+            },
+            {
+              "class": "tests.test_pr34_remediation",
+              "test": "test_authenticated_mcp_cannot_control_or_read_foreign_session[harness_event_list-args5]",
+              "status": "PASS",
+              "seconds": 1.614
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Expired/retained cursor behavior across retention needs explicit mapping; no claim that native replay is available.",
+      "rationale": "Append between replay pages preserves sequence without gaps; invalid limits/cursors rejected, and foreign authenticated caller cannot read event history."
+    },
+    {
+      "test_id": "T-JRN-12",
+      "name": "Artifact e UoW",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_artifact_durability.py::test_payload_and_manifest_fsync_precede_catalog_reference",
+          "results": [
+            {
+              "class": "tests.test_runtime_artifact_durability",
+              "test": "test_payload_and_manifest_fsync_precede_catalog_reference",
+              "status": "PASS",
+              "seconds": 1.658
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_artifact_durability.py::test_uncertain_artifact_fsync_never_creates_catalog_reference",
+          "results": [
+            {
+              "class": "tests.test_runtime_artifact_durability",
+              "test": "test_uncertain_artifact_fsync_never_creates_catalog_reference",
+              "status": "PASS",
+              "seconds": 1.635
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_artifact_durability.py::test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+          "results": [
+            {
+              "class": "tests.test_runtime_artifact_durability",
+              "test": "test_runtime_artifact_catalog_rolls_back_with_publication_and_reuses_durable_blob",
+              "status": "PASS",
+              "seconds": 2.567
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_result_maintenance.py::test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay",
+          "results": [
+            {
+              "class": "tests.test_runtime_result_maintenance",
+              "test": "test_cleanup_is_idempotent_and_retry_uses_new_artifact_generation_without_native_replay",
+              "status": "PASS",
+              "seconds": 3.742
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore.",
+      "rationale": "Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference."
+    },
+    {
+      "test_id": "T-JRN-13",
+      "name": "Resultado negado por policy",
+      "status": "PASS",
+      "coverage_review": "complete",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_result_publication.py::test_result_obeys_current_sender_permissions_without_erasing_output",
+          "results": [
+            {
+              "class": "tests.test_runtime_result_publication",
+              "test": "test_result_obeys_current_sender_permissions_without_erasing_output",
+              "status": "PASS",
+              "seconds": 3.735
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_result_publication.py::test_publication_uses_canonical_approval_and_never_grants_itself_permission",
+          "results": [
+            {
+              "class": "tests.test_runtime_result_publication",
+              "test": "test_publication_uses_canonical_approval_and_never_grants_itself_permission[approve]",
+              "status": "PASS",
+              "seconds": 3.711
+            },
+            {
+              "class": "tests.test_runtime_result_publication",
+              "test": "test_publication_uses_canonical_approval_and_never_grants_itself_permission[reject]",
+              "status": "PASS",
+              "seconds": 3.907
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_result_publication.py::test_guardrail_blocks_only_publication_and_retains_the_private_native_result",
+          "results": [
+            {
+              "class": "tests.test_runtime_result_publication",
+              "test": "test_guardrail_blocks_only_publication_and_retains_the_private_native_result",
+              "status": "PASS",
+              "seconds": 2.492
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion.",
+      "rationale": "Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn."
+    },
+    {
+      "test_id": "T-WORK-01",
+      "name": "Claim competitivo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-02",
+      "name": "Oferta sem payload",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-03",
+      "name": "Coalescência",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-04",
+      "name": "Bootstrap canônico",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-05",
+      "name": "Fim de turno não é aceite",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-06",
+      "name": "Conclusão válida",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-07",
+      "name": "Resultado de claim antigo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-08",
+      "name": "Interrupt aceito",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-09",
+      "name": "Approval nativo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-10",
+      "name": "Approval repetido/tardio",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-11",
+      "name": "Perfil incompatível",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-WORK-12",
+      "name": "Attach gerenciado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-01",
+      "name": "Cadeia legítima",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-02",
+      "name": "Cadeia lenta",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-03",
+      "name": "Restart no meio",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-04",
+      "name": "Conversas intercaladas",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-05",
+      "name": "Múltiplos endpoints",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-06",
+      "name": "Fan-out concorrente",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-07",
+      "name": "Retry de filho",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-08",
+      "name": "Nova conversa legítima",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-09",
+      "name": "Loop de receipt/erro",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-10",
+      "name": "Spoofing/trace desligado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-RELAY-11",
+      "name": "Resposta broadcast explícita",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-PRES-01",
+      "name": "Targets reais",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-PRES-02",
+      "name": "Heartbeat por binding",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-PRES-03",
+      "name": "Stale e crash",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-PRES-04",
+      "name": "Audiencia e privacidade",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-01",
+      "name": "Flag desligada",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-02",
+      "name": "Flag ligada",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-03",
+      "name": "Schema em cache",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-04",
+      "name": "Payload compatível",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-05",
+      "name": "Estado por operação",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-06",
+      "name": "Descoberta unificada",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-07",
+      "name": "Métrica da superfície",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-API-08",
+      "name": "UI diagnóstica",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-01",
+      "name": "Antes de 029",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-02",
+      "name": "029 existente",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-03",
+      "name": "Perfil já danificado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-04",
+      "name": "Idempotência do runner",
+      "status": "NOT_RUN",
+      "coverage_review": "partial",
+      "execution": [
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_writer_contract.py::test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+          "results": [
+            {
+              "class": "tests.test_runtime_writer_contract",
+              "test": "test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+              "status": "PASS",
+              "seconds": 0.541
+            }
+          ],
+          "missing": false
+        },
+        {
+          "platform": "Windows",
+          "node": "tests/test_runtime_endpoints.py::test_p03_additive_upgrade_preserves_agent_and_legacy_history",
+          "results": [
+            {
+              "class": "tests.test_runtime_endpoints",
+              "test": "test_p03_additive_upgrade_preserves_agent_and_legacy_history[28]",
+              "status": "PASS",
+              "seconds": 0.259
+            },
+            {
+              "class": "tests.test_runtime_endpoints",
+              "test": "test_p03_additive_upgrade_preserves_agent_and_legacy_history[29]",
+              "status": "PASS",
+              "seconds": 0.274
+            }
+          ],
+          "missing": false
+        }
+      ],
+      "limitations": "The requirement also calls for an interrupted nonempty data backfill with historical event/binding counts. Trigger creation on an empty fixture is not that stimulus.",
+      "rationale": "Migration 057 trigger creation rolls back at an injected SQL failure, then reexecutes once; historical 028/029 upgrade preserves agent data and repeated runner is empty."
+    },
+    {
+      "test_id": "T-MIG-05",
+      "name": "Histórico unread",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-06",
+      "name": "Cutover único",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-07",
+      "name": "Rollback ativo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-08",
+      "name": "Backup/restore",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-MIG-09",
+      "name": "Retenção e exclusão",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-01",
+      "name": "Três full-duplex simultâneos",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-02",
+      "name": "Attach real dedicado",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-03",
+      "name": "No-polling nativo",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-04",
+      "name": "Leaks repetidos",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-05",
+      "name": "Performance comparável",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-06",
+      "name": "Composição real",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    },
+    {
+      "test_id": "T-E2E-07",
+      "name": "Relatório honesto",
+      "status": "NOT_RUN",
+      "coverage_review": "not_reviewed",
+      "execution": [],
+      "limitations": "Source coverage has not been reviewed in this audit."
+    }
+  ]
+}

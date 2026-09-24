@@ -6,6 +6,10 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Redact resolved backend credentials before native diagnostics, journal, result
+  and approval projection, including split streaming values; preserve native
+  correlation and typed pre-write retry proofs.
+
 - Surface56/schema061 selects approved equivalent endpoints only after proven
   non-delivery, preserving logical identity, admission context and work authority.
 - Surface55/schema060 retries transient local lane refusals only before native

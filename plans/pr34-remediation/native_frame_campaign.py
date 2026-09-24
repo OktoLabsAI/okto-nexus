@@ -15,6 +15,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import subprocess
 import sys
 import tempfile
@@ -36,6 +37,7 @@ CODEX_EVENTS = {"thread/started", "thread/status/changed", "turn/started", "turn
 CLAUDE_TYPES = {"system", "assistant", "user", "result", "stream_event",
                 "control_request", "control_response", "control_cancel_request", "keep_alive"}
 CLAUDE_CONTROLS = {"initialize": "initialize", "interrupt": "interrupt", "can_use_tool": "approval_request"}
+MODEL_LABEL = re.compile(r"(?:gpt-[0-9][a-z0-9.-]{0,64}|o[134](?:-[a-z0-9.-]{1,64})?|claude-(?:opus|sonnet|haiku)-[0-9][a-z0-9.-]{0,64})\Z")
 
 
 class FrameRecorder:
@@ -48,6 +50,7 @@ class FrameRecorder:
         self._identities = {}
         self.current_test = "setup"
         self.test_results = []
+        self.backend_observations = []
 
     def _alias(self, family, value):
         if not isinstance(value, (str, int)) or isinstance(value, bool):
@@ -63,6 +66,24 @@ class FrameRecorder:
                 self.overflow = True
                 return None
             obj = payload if isinstance(payload, dict) else {}
+            candidates = [obj]
+            for key in ("params", "result"):
+                if isinstance(obj.get(key), dict):
+                    candidates.append(obj[key])
+                    if isinstance(obj[key].get("thread"), dict):
+                        candidates.append(obj[key]["thread"])
+            for candidate in candidates:
+                model, provider = candidate.get("model"), candidate.get("modelProvider")
+                labels = {"test": self.current_test, "adapter": adapter, "direction": direction}
+                if isinstance(model, str) and MODEL_LABEL.fullmatch(model):
+                    labels["model"] = model
+                if isinstance(provider, str) and provider in {"openai", "anthropic"}:
+                    labels["provider"] = provider
+                if len(labels) > 3 and labels not in self.backend_observations:
+                    if len(self.backend_observations) < 128:
+                        self.backend_observations.append(labels)
+                    else:
+                        self.overflow = True
             category, name = "unclassified", "unclassified"
             if adapter == "codex":
                 method = obj.get("method")
@@ -151,6 +172,14 @@ class FrameRecorder:
                 and not self.overflow and bool(outbound) and not forbidden
                 and any(frame["direction"] == "in" for frame in self.frames))
 
+    def status(self, exit_code):
+        if any(row["outcome"] == "failed" for row in self.test_results):
+            return "FAIL"
+        if not any(row["phase"] == "call" for row in self.test_results) or any(
+                row["outcome"] == "skipped" for row in self.test_results):
+            return "NOT_RUN"
+        return "PASS" if self.qualification(exit_code) else "FAIL"
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -209,9 +238,11 @@ def main():
         "selection": args.selection,
         "command": "python plans/pr34-remediation/native_frame_campaign.py --adapter=<recorded adapter> --executable=<explicit installed binary> --auth-source=<approved login file> --selection=<recorded selection> --output=<evidence JSON>",
         "adapter": args.adapter, "pytest_exit_code": code,
-        "status": "PASS" if recorder.qualification(code) else "FAIL",
+        "status": recorder.status(code),
         "test_results": recorder.test_results, "outbound_categories": dict(counts),
         "overflow": recorder.overflow, "compatibility": compatibility, "frames": recorder.frames,
+        "backend_observations": recorder.backend_observations,
+        "backend_observation_policy": "Only recognized public model-label syntax and openai/anthropic provider identifiers from protocol fields; absent fields remain not observed, never inferred from installation or login.",
         "limitations": "Protocol JSON frames observed at existing reader/writer boundaries; stderr is not protocol. Write return is not harness acceptance. Raw prompts, credentials, native IDs and payloads omitted. Peer alias identifies the owned stdout stream; request/thread/turn aliases are observational linkage, not authentication. Test driver polls Nexus operation reads; this is not harness status polling. Real qualification is limited to recorded versions and isolated configuration. Pi/dedicated attach NOT_RUN."}
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"status": result["status"], "outbound_categories": dict(counts), "frames": len(recorder.frames)}))

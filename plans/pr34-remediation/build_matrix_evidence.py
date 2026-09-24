@@ -13,10 +13,12 @@ import json
 from pathlib import Path
 
 
-def build(backlog, review, manifests):
+def build(backlog, review, manifests, observations=()):
     sha = review["source_sha"]
     if not manifests or any(manifest["source_sha"] != sha for manifest in manifests):
         raise ValueError("Every execution manifest must match the reviewed source SHA")
+    if any(observation["source_sha"] != sha for observation in observations):
+        raise ValueError("Every behavioral observation must match the reviewed source SHA")
     requirements = {row["test_id"]: row for row in backlog["tests"]}
     reviews = review["requirements"]
     if len({row["test_id"] for row in reviews}) != len(reviews):
@@ -52,6 +54,11 @@ def build(backlog, review, manifests):
                   and all(status == "PASS" for status in statuses)
                   and not any(item["missing"] for item in row["execution"])):
                 row["status"] = "PASS"
+        external = [item for item in observations if item["test_id"] == test_id]
+        if external:
+            row["external_observations"] = external
+            if any(item["status"] in {"FAIL", "ERROR"} for item in external):
+                row["status"] = "FAIL"
         rows.append(row)
     return {"schema_version": 1, "source_sha": sha,
             "scope": "Reviewed source assertions joined to explicitly supplied completed executions only; no historical totals merged.",
@@ -64,11 +71,13 @@ def main():
     parser.add_argument("--backlog", type=Path, default=Path("05_BACKLOG.json"))
     parser.add_argument("--review", type=Path, required=True)
     parser.add_argument("--manifest", type=Path, action="append", required=True)
+    parser.add_argument("--observation", type=Path, action="append", default=[])
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     def read(path):
         return json.loads(path.read_text(encoding="utf-8"))
-    result = build(read(args.backlog), read(args.review), [read(path) for path in args.manifest])
+    result = build(read(args.backlog), read(args.review), [read(path) for path in args.manifest],
+                   [read(path) for path in args.observation])
     args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result["counts"]))
 

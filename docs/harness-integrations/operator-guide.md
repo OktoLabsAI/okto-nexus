@@ -1,6 +1,6 @@
 # Harness integrations — operator guide for 0.2.0
 
-This guide describes the implemented remediation on `feature/v0.2.0`, surface45.
+This guide describes the implemented remediation on `feature/v0.2.0`, surface56.
 The release gate is still open. See [implementation status](../../plans/pr34-remediation/IMPLEMENTATION_STATUS.md)
 for executed tests and remaining work. Captures under `evidence/` describe older
 builds, not current configuration instructions or permission to reuse their
@@ -37,6 +37,15 @@ For an existing Agent such as `worker`:
 
 Exact shared MCP/REST configuration requests, revisions and grant restrictions
 are documented in [runtime administration](runtime-administration.md).
+
+Approved backend credentials resolved from secret references are scrubbed from
+native diagnostics, approval projections and durable output. For connections
+with known credentials, raw text payload fields are withheld and normalized
+streaming text is redacted before journal capture, including values split across
+frames. The compatibility report labels this redaction policy. Native approval
+still requires its original authorized decision. See the
+[redaction evidence and limits](../../plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md);
+this does not discover unknown secrets inside external credential files. The protection applies to new captures; existing append-only journals and results are not rewritten or replayed. If historical exposure is confirmed, rotate the affected credential and use the approved retention/incident procedure.
 
 For Codex, configure a dedicated `CODEX_HOME` in the approved profile and use
 `adapter_id="codex"`. After approving that profile and endpoint, a typical

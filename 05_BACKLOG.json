@@ -462,10 +462,19 @@
             "src/okto_nexus/application/endpoints.py",
             "src/okto_nexus/application/harness_supervisor.py"
           ],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "353211114bf513972f697d369febb533a10c824d + four paths hashed in evidence",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_secret_redaction.py tests/test_runtime_event_buffers.py tests/test_runtime_protocol_limits.py tests/test_runtime_effective_capabilities.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "56 PASS Windows121.13s /56 PASS Linux125.26s; RED and intermediate failures retained.",
+              "evidence": "plans/pr34-remediation/evidence/p03-backend-secret-correction.json"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P03_ENDPOINTS.md",
-            "plans/pr34-remediation/evidence/p03-gate.log"
+            "plans/pr34-remediation/evidence/p03-gate.log",
+            "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md"
           ],
           "notes": "Parent SHA 8207e7b; 19 fixture/import tests PASS. Native tests NOT_RUN. See P03 evidence for outstanding lifecycle and admin parity dependencies."
         },
@@ -1540,13 +1549,21 @@
               "result": "PASS",
               "observed": "10 passed; partial phase coverage",
               "evidence": "plans/pr34-remediation/evidence/p08-journal-expanded.log"
+            },
+            {
+              "sha": "353211114bf513972f697d369febb533a10c824d + four paths hashed in evidence",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short tests/test_runtime_secret_redaction.py tests/test_runtime_event_buffers.py tests/test_runtime_protocol_limits.py tests/test_runtime_effective_capabilities.py tests/test_import_boundary.py",
+              "result": "PASS",
+              "observed": "56 PASS Windows121.13s /56 PASS Linux125.26s; RED and intermediate failures retained.",
+              "evidence": "plans/pr34-remediation/evidence/p03-backend-secret-correction.json"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
             "plans/pr34-remediation/evidence/p08-integrated-gate.log",
             "plans/pr34-remediation/evidence/p08-journal-expanded.log",
-            "plans/pr34-remediation/P08_JOURNAL_RETENTION.md"
+            "plans/pr34-remediation/P08_JOURNAL_RETENTION.md",
+            "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md"
           ],
           "notes": "Journal fsync, CRC, quota, OS writer lock, redaction and atomic result/checkpoint recovery integrated into serve. Remaining: operation/claim correlation, authorized notifications, artifacts, all crash cuts, lifecycle drain and operator diagnostics. Not VERIFIED. Explicit projected-segment compaction and authenticated REST/MCP quota recovery implemented; see P08_JOURNAL_RETENTION.md. Windows power-loss qualification remains NOT_RUN."
         },
@@ -2420,13 +2437,22 @@
           "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [],
-          "test_results": [],
+          "test_results": [
+            {
+              "sha": "e388227f98c1230e8104df12b602e5943b4baf52",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q --tb=short --junitxml=<unique temporary results.xml> (campaign flags explicitly off; full wrapper in evidence document)",
+              "result": "PASS",
+              "observed": "2389 PASS119 SKIP2 warnings1951.48s Windows; independent backend-secret audit FAIL is not covered by this green suite.",
+              "evidence": "plans/pr34-remediation/P12_SUITE_E388227.md"
+            }
+          ],
           "evidence": [
             "plans/pr34-remediation/P12_SUITE_FEEB14D.md",
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
-            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md"
+            "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
+            "plans/pr34-remediation/P12_SUITE_E388227.md"
           ],
-          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained."
+          "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
         {
           "task_id": "P12-T02",
@@ -2567,8 +2593,11 @@
       ],
       "stimulus": "Passar role/metadata antigos, incluindo JSON em string e campos conflitantes.",
       "expected": "Normalização/depreciação explícita; nenhum descarte silencioso ou profile overwrite.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Conflicting legacy role is rejected before factory invocation; JSON-string metadata becomes session metadata while canonical profile metadata remains unchanged. Limitations: Synthetic external peer; this is facade/identity normalization, not native protocol qualification."
     },
     {
       "test_id": "T-ID-05",
@@ -2651,8 +2680,11 @@
       ],
       "stimulus": "Delegação estreita autoriza uma ação específica em workspace/endpoint/handoff.",
       "expected": "Ação permitida funciona; ações e recursos adjacentes continuam negados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. A scoped grant enables read/send on its endpoint over REST and MCP, exhausts its execution budget, denies adjacent actions/listing, requires explicit binding for open, and returns identical opaque errors for foreign and missing resources. Limitations: Synthetic peers in the production HTTP/MCP composition. Work-specific grants have separate T-WORK requirements."
     },
     {
       "test_id": "T-AUTH-05",
@@ -2665,8 +2697,11 @@
       ],
       "stimulus": "Enfileirar comando autorizado, revogar grant/policy antes de dispatch.",
       "expected": "Nova validação impede envio; intenção tem estado/motivo explícito.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Pause dispatch, commit an authorized command or canonical delivery, revoke grant or sender permission, resume and observe REJECTED with zero native writes. Limitations: Synthetic peers; authorization and durable dispatch are the production composition."
     },
     {
       "test_id": "T-AUTH-06",
@@ -2724,12 +2759,14 @@
       ],
       "stimulus": "Fornecer secrets em env/refs e inspecionar respostas, logs, journal e erros.",
       "expected": "Secrets não aparecem; perfil efetivo redigido continua diagnosticável.",
-      "execution_status": "FAIL",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
-        "plans/pr34-remediation/evidence/p12-backend-secret-audit.json"
+        "plans/pr34-remediation/evidence/p12-backend-secret-audit.json",
+        "plans/pr34-remediation/P03_BACKEND_SECRET_REDACTION.md",
+        "plans/pr34-remediation/evidence/p03-backend-secret-correction.json"
       ],
-      "notes": "Behavioral FAIL at e388227: approved secret_refs value echoed by owned Python protocol peer appears in journal, durable result and replay. Only synthetic credential used. Known-value redaction and streaming/error paths require correction; prior pattern-redaction checks did not cover this."
+      "notes": "Historical e388227 behavioral FAIL retained. Corrected connection-scoped known backend values before journal/result/replay/approval/error exposure; single/split/character fragments, two turns, logs, constructor/start, escaping, boundedness and trusted policy labels verified with synthetic peers in production composition. Final regression56 PASS Windows and56 PASS Linux; no provider calls."
     },
     {
       "test_id": "T-AUTH-10",
@@ -2785,8 +2822,11 @@
       ],
       "stimulus": "Mesmo Agent possui dois endpoints executores elegíveis.",
       "expected": "A policy escolhe um binding; não ocorre fan-out executor dentro do Agent.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Opens two approved endpoints for one canonical identity, sends one canonical message and verifies exactly one native send at the selected higher-priority endpoint. Limitations: Production selection/dispatch with synthetic native peers."
     },
     {
       "test_id": "T-ENDP-02",
@@ -2830,8 +2870,11 @@
       ],
       "stimulus": "Duas sessões não intercambiáveis sem default ou seletor explícito.",
       "expected": "AMBIGUOUS_BINDING; não usa a primeira entrada da registry.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Two equally eligible endpoints return AMBIGUOUS_BINDING without constructing a connector; explicit endpoint selection succeeds. Limitations: Production open selection with synthetic native peers."
     },
     {
       "test_id": "T-ENDP-05",
@@ -3007,8 +3050,11 @@
       ],
       "stimulus": "Tentar escrever com processo/schema capability antigo enquanto integração gerenciada está ativa.",
       "expected": "Defesa explícita de incompatibilidade; não gerar mensagens sem reservas/intents exigidas.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Already-open legacy SQLite writers are rejected after activation; actual feature-OFF stdio writer cannot commit an unreserved delivery; a compatible stdio writer remains usable; future contract cannot be downgraded by owner startup. Limitations: Writer compatibility is a store integrity fence, not protection against an arbitrary database administrator."
     },
     {
       "test_id": "T-CONS-01",
@@ -3161,8 +3207,11 @@
       ],
       "stimulus": "Commit acontece entre drainage e entrada na espera.",
       "expected": "Generation/deadline impede dormir indefinidamente com trabalho pendente.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Preserves 1000 wakes and the snapshot-to-wait race; production scan is held while a message commits, then dispatch proceeds before a one-hour recovery timer. Limitations: Deterministic event barriers exercise the race; elapsed time is a bounded assertion, not a throughput benchmark."
     },
     {
       "test_id": "T-DISP-04",
@@ -3174,8 +3223,11 @@
       ],
       "stimulus": "Processo stdio atualizado escreve no mesmo store.",
       "expected": "Serve recebe wake/reconcilia; stdio não cria supervisor/filho próprio.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Actual authenticated stdio process creates a canonical intent against the HTTP owner's store; owner identity is unchanged and the owner's peer receives the write. Stdio open succeeds through owner proxy with an absent child-local executable. Limitations: External harness peers are synthetic; the Nexus producer is a separate real process."
     },
     {
       "test_id": "T-DISP-05",
@@ -3239,12 +3291,13 @@
       ],
       "stimulus": "Um endpoint lento e outro saudável sob backlog.",
       "expected": "Endpoint saudável continua processando; quotas por agente impedem multiplicar limite com endpoints.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/evidence/p12-dispatch-fairness-red.json",
-        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md"
+        "plans/pr34-remediation/P06_CAPACITY_AND_FAIRNESS.md",
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
       ],
-      "notes": "Previously reproduced lane and agent-slot defects corrected, including actual occupied-call fences. Aggregate flood plus delayed-handshake campaign remains NOT_RUN; selected positives are not the aggregate gate."
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. A slow lane with backlog cannot hide a healthy lane. Additional endpoints do not multiply an agent's normal worker budget. A real owned protocol-peer terminal cannot free the still-blocked transport stack's slot, while another agent progresses. Limitations: Matches this row's slow-endpoint/backlog/per-agent stimulus. Repeated flood, delayed startup and crash-pressure sampling remain separately required by T-E2E-04 and P12; this row does not certify them."
     },
     {
       "test_id": "T-DISP-10",
@@ -3256,8 +3309,11 @@
       ],
       "stimulus": "Exceder limites de quantidade e bytes.",
       "expected": "Backpressure antes de efeitos indevidos; estado informado, sem descarte de resultados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Count and byte exhaustion return explicit QUOTA_EXCEEDED before partial canonical effects. Concurrent producers cannot exceed the final slot, managed claims/grants roll back, accepted unread delivery is not discarded, and explicit safe cancellation restores capacity. Limitations: Disposable store and synthetic peers; not a throughput or sustained flood measurement."
     },
     {
       "test_id": "T-DISP-11",
@@ -3452,12 +3508,13 @@
       ],
       "stimulus": "Receber resultado final com projeção bloqueada.",
       "expected": "Journal durável preserva resultado; volta do SQLite permite projeção única.",
-      "execution_status": "NOT_RUN",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P08_EVENT_JOURNAL.md",
-        "plans/pr34-remediation/NATIVE_CAMPAIGN.md"
+        "plans/pr34-remediation/NATIVE_CAMPAIGN.md",
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
       ],
-      "notes": "Partial executed evidence recorded; entire scenario not yet certified. See scoped results in documents. Do not interpret NOT_RUN for the aggregate as absence of those partial runs."
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Projection repository failure retains terminal bytes and recovers one result after restoration. An owned protocol peer emits 256 deltas plus terminal while projection is locked; durable journal advances and full output projects after release. Limitations: Injected projection failure/block and real local protocol process, not a real provider or physical disk-loss campaign."
     },
     {
       "test_id": "T-JRN-02",
@@ -3502,8 +3559,11 @@
       ],
       "stimulus": "Cortar último registro durante append.",
       "expected": "Recuperar prefixo íntegro; expor lacuna, não interpretar bytes parciais como resultado válido.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Appends incomplete frame bytes to a closed journal; reopening reports one tail repair and preserves exactly the complete record. Limitations: Deterministic file fault injection rather than power-loss hardware testing."
     },
     {
       "test_id": "T-JRN-05",
@@ -3515,8 +3575,11 @@
       ],
       "stimulus": "Checksum inválido em segmento já fechado.",
       "expected": "Parada/quarentena e diagnóstico, sem pular silenciosamente conteúdo.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Flips a byte inside a complete journal frame after close, verifies checksum failure at restart and rejects further appends as unavailable. Limitations: Deterministic file fault injection."
     },
     {
       "test_id": "T-JRN-06",
@@ -3558,8 +3621,11 @@
       ],
       "stimulus": "Acumular deltas transitórios e finalizar turno.",
       "expected": "Terminal durável inclui/referencia texto completo e flush dos registros necessários.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. All 256 native delta characters and final native text survive journal capture under blocked projection and appear in the durable correlated result after release. Limitations: Owned Codex-shaped Python protocol peer, not a real model."
     },
     {
       "test_id": "T-JRN-09",
@@ -3617,8 +3683,11 @@
       ],
       "stimulus": "Falhar entre gravação de artifact e commit de refs.",
       "expected": "Nenhuma referência confirmada para arquivo inexistente; órfão recolhível quando aplicável.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Payload and manifest fsync precede catalog reference. Failed fsync creates no reference; failure after publication writes rolls back catalog while retaining reusable durable bytes. Authorized cleanup collects unpublished bytes, preserves unrelated files and never repeats native inference. Limitations: Injected storage/commit faults on disposable filesystem; directory-fsync guarantees remain platform-specific as documented in backup/restore."
     },
     {
       "test_id": "T-JRN-13",
@@ -3630,8 +3699,11 @@
       ],
       "stimulus": "Guardrail/approval bloqueia divulgação do resultado.",
       "expected": "Original protegido continua durável; publicação pendente/negada não apaga evidência.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/evidence/p12-matrix-e388227-windows.json"
+      ],
+      "notes": "Source e388227, completed Windows suite: exact requirement assertions reviewed and all mapped parameterized nodes PASS. Current permissions, pending/rejected approval and active guardrail each prevent publication while retaining private durable output. Caller cannot decide operator approval and the rejection notification does not become another native turn. Limitations: Owned protocol peer with actual canonical policy and publication services; not a real-model behavior assertion."
     },
     {
       "test_id": "T-WORK-01",

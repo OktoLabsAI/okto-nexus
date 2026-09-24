@@ -50,6 +50,14 @@ def test_partial_or_missing_coverage_is_not_pass():
     assert build(backlog, review, [manifest])["counts"] == {"NOT_RUN": 1}
 
 
+def test_behavioral_audit_failure_overrides_a_green_selected_suite():
+    backlog, review, manifest = inputs()
+    observation = {"source_sha": "fixture-sha", "test_id": "T-ID-01", "status": "FAIL"}
+    assert build(backlog, review, [manifest], [observation])["counts"] == {"FAIL": 1}
+    with pytest.raises(ValueError, match="SHA"):
+        build(backlog, review, [manifest], [observation | {"source_sha": "other-sha"}])
+
+
 def test_frames_never_persist_body_or_arbitrary_protocol_labels():
     recorder = FrameRecorder()
     secret = "fixture-sensitive-string"
@@ -97,6 +105,15 @@ def test_recording_overflow_cannot_be_reported_as_complete_trace():
     assert not recorder.qualification(0)
 
 
+def test_unexecuted_native_cases_remain_not_run():
+    recorder = FrameRecorder()
+    assert recorder.status(5) == "NOT_RUN"
+    recorder.test_results = [{"phase": "setup", "outcome": "skipped"}]
+    assert recorder.status(0) == "NOT_RUN"
+    recorder.test_results.append({"phase": "setup", "outcome": "failed"})
+    assert recorder.status(1) == "FAIL"
+
+
 def test_failed_native_write_retains_uncertainty_and_exception():
     recorder = FrameRecorder()
     def failed(peer, payload):
@@ -104,3 +121,15 @@ def test_failed_native_write_retains_uncertainty_and_exception():
     with pytest.raises(OSError, match="fixture failure"):
         recorder.writer("codex", failed)(object(), {"method": "turn/start"})
     assert recorder.frames[0]["boundary"] == "write_failed_or_uncertain"
+
+
+def test_protocol_model_observations_are_explicit_and_do_not_include_arbitrary_labels():
+    recorder = FrameRecorder()
+    recorder.record("codex", "in", {"id": 1, "result": {"model": "gpt-5.3-codex",
+        "thread": {"modelProvider": "openai"}}}, peer=1)
+    recorder.record("claude_code", "in", {"type": "system", "model": "claude-opus-4-6"}, peer=2)
+    recorder.record("codex", "in", {"result": {"model": "fixture-private-model-secret",
+        "modelProvider": "fixture-private-provider-secret"}}, peer=1)
+    labels = json.dumps(recorder.backend_observations)
+    assert "gpt-5.3-codex" in labels and "claude-opus-4-6" in labels and "openai" in labels
+    assert "fixture-private" not in labels

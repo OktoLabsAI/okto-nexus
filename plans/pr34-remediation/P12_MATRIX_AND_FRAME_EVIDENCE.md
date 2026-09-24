@@ -4,6 +4,13 @@
 `e388227f98c1230e8104df12b602e5943b4baf52`, feature/v0.2.0.
 **IN PROGRESS; final gate NOT PASSED.** No application contracts changed in this unit.
 
+Continuation: execution58066 is now terminal with2389 PASS/119 SKIP/2 warnings;
+see P12_SUITE_E388227.md. The running-state paragraphs below describe the start
+of this evidence-tool unit. A separately reproduced backend-secret defect was
+then implemented in P03_BACKEND_SECRET_REDACTION.md; this full-suite source does
+not include that later correction. The matrix generator now also accepts explicit
+SHA-matched behavioral observations so a green suite cannot mask their failures.
+
 ## Source review and execution are different facts
 
 `evidence/p12-coverage-review-e388227.json` maps original matrix stimuli to
