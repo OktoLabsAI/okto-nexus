@@ -1,0 +1,59 @@
+{
+  "source_sha": "c9763741d7f976c84989ed9732bc8064dc43399b",
+  "platform": "windows",
+  "counts": {
+    "PASS": 6
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "6",
+      "time": "32.596",
+      "timestamp": "2026-09-24T08:06:54.430644-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; disposable synthetic peers.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_delivery_acceptance.py -q --junitxml=.git/pr34-evidence/delivery-acceptance-initial-windows.xml",
+  "limitations": "Production at parent SHA. Historical uncommitted test generation; final file hashes do not apply. Initial green used a loose15s observation; RED tightened to3s with1s recovery and proves actual missing dispatch, not imports/mocks assuming a fix.",
+  "records": [
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+      "status": "PASS",
+      "seconds": 4.195
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+      "status": "PASS",
+      "seconds": 3.417
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+      "status": "PASS",
+      "seconds": 4.082
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+      "status": "PASS",
+      "seconds": 3.154
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_message_admission_commits_while_native_write_is_blocked",
+      "status": "PASS",
+      "seconds": 3.094
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_dropped_post_commit_wake_recovers_in_same_live_owner",
+      "status": "PASS",
+      "seconds": 13.507
+    }
+  ]
+}

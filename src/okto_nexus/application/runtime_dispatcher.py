@@ -145,8 +145,12 @@ class RuntimeDispatcher:
         observed = 0
         retry_deadline = None
         while not self._stop.is_set():
-            timeout = 10 if retry_deadline is None else min(10, max(0,
-                iso_to_epoch(retry_deadline) - iso_to_epoch(self.clock.now_iso())))
+            # A lost commit notification must be recovered at its own deadline,
+            # including intervals shorter than the owner heartbeat tick.
+            timeout = min(10, max(0, recovered + self.recovery_seconds - time.monotonic()))
+            if retry_deadline is not None:
+                timeout = min(timeout, max(0,
+                    iso_to_epoch(retry_deadline) - iso_to_epoch(self.clock.now_iso())))
             generation = self._wait_for_wake(observed, timeout=timeout)
             signaled = generation != observed
             observed = generation
@@ -187,6 +191,9 @@ class RuntimeDispatcher:
                     retry_deadline = self.repo.next_retry_deadline(uow, after=now)
             except Exception:
                 retry_deadline = None
+                # An unavailable store must not turn an expired recovery timer
+                # into an unbounded busy loop. Wakes still interrupt this delay.
+                recovered = time.monotonic()
                 # No speculative replay on transient storage failure. Indexed
                 # recovery will revisit only PENDING; SENDING remains fenced.
                 logging.getLogger(__name__).warning("Runtime dispatcher storage/recovery failed; intents remain durable.")

@@ -1,0 +1,29 @@
+{
+  "source_sha": "c9763741d7f976c84989ed9732bc8064dc43399b",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "8.621",
+      "timestamp": "2026-09-24T08:08:14.489692-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; disposable synthetic peers.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_delivery_acceptance.py::test_dropped_post_commit_wake_recovers_in_same_live_owner -q --junitxml=.git/pr34-evidence/delivery-recovery-deadline-red-windows.xml",
+  "limitations": "Production at parent SHA. Historical uncommitted test generation; final file hashes do not apply. Initial green used a loose15s observation; RED tightened to3s with1s recovery and proves actual missing dispatch, not imports/mocks assuming a fix.",
+  "records": [
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_dropped_post_commit_wake_recovers_in_same_live_owner",
+      "status": "FAIL",
+      "seconds": 7.059
+    }
+  ]
+}

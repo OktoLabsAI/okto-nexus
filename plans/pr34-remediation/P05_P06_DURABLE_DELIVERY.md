@@ -27,7 +27,7 @@ Successful write is SENT_UNCONFIRMED / TRANSPORT_WRITE, not an invented ACK.
 
 Local wakes use a coalescing event. Stdio writes the same SQLite transaction and
 sends a bounded loopback-only UDP hint naming only the owner; the hint grants no
-authority and carries no work or key. Recovery scans are indexed at 30 seconds.
+authority and carries no work or key. Recovery scans are indexed at 30 seconds by default. Configure the startup-only interval with `OKTO_NEXUS_RUNTIME_RECOVERY_INTERVAL_SECONDS` or `--runtime-recovery-interval-seconds` (CLI overrides environment; integer1..86400, default30). Zero/invalid values fail closed: this setting cannot silently disable recovery. The coordinator waits for the earliest recovery, retry or heartbeat deadline; a shorter recovery interval does not wait for the ten-second heartbeat tick. Transient store failure waits for the next interval instead of spinning. This is internal store recovery polling, not native peer status polling; commit/IPC wakes remain the normal path. See P12_DELIVERY_ACCEPTANCE.md for the reproduced deadline defect and correction.
 Stdio controls proxy through the owner's existing authenticated REST surface;
 they cannot become another runtime manager. The owner's address comes from its
 current local descriptor, never historical LAN evidence. Proxy failure does not

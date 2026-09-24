@@ -10,6 +10,18 @@ the body cannot supply operator authority. These operations configure existing
 agents' connections; they never register or replace the Agent profile. Configuring
 an endpoint does not itself spawn a process.
 
+Committed delivery intents survive a lost notification. The active `serve` owner
+performs an indexed store recovery scan every30 seconds by default, in addition
+to normal commit/IPC wakes and retry deadlines. Set the startup configuration
+`OKTO_NEXUS_RUNTIME_RECOVERY_INTERVAL_SECONDS` or pass
+`--runtime-recovery-interval-seconds` to change this interval (integer1..86400;
+CLI overrides environment; restart required). Invalid values, including zero,
+fail closed. The recovery deadline also bounds the coordinator's wait when it is
+shorter than the heartbeat interval. This is internal SQLite recovery polling,
+not native harness status polling. A store failure delays the next attempt
+instead of spinning; an uncertain native send is never replayed merely because
+this timer expires.
+
 `harness_list` keeps the same tool name. Its `view` selects `adapters`, `endpoints`,
 `profiles`, `bindings`, `outbox`, `journal` or `artifacts`. `maintenance` is an object (or JSON object
 string); its `action` defaults to `list` for endpoint/profile views. Do not pass

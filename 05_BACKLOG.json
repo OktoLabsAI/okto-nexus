@@ -998,7 +998,10 @@
             "src/okto_nexus/application/runtime_dispatcher.py",
             "src/okto_nexus/application/runtime_open.py",
             "src/okto_nexus/application/messages.py",
-            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql"
+            "src/okto_nexus/migrations/032_runtime_delivery_outbox.sql",
+            "src/okto_nexus/config.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "tests/test_runtime_delivery_acceptance.py"
           ],
           "test_results": [
             {
@@ -1007,12 +1010,20 @@
               "result": "PASS",
               "observed": "55 passed in 60.96s; native scenarios recorded separately in unit document",
               "evidence": "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
+            },
+            {
+              "sha": "c9763741d7f976c84989ed9732bc8064dc43399b + final file hashes in index",
+              "command": "Exact RED/final/smoke commands in P12_DELIVERY_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "RED1 FAIL; final78 PASS Windows86.46s/Linux96.86s; Ruff and isolated live MCP smoke PASS. Final gate not passed.",
+              "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P05_P06_DURABLE_DELIVERY.md",
             "plans/pr34-remediation/evidence/p05-p06-gate.log",
-            "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md"
+            "plans/pr34-remediation/P07_COORDINATED_SHUTDOWN.md",
+            "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md"
           ],
           "notes": "Parent 2fb9f59. 77 selected tests PASS plus real stdio owner-proxy test; 176 canonical tests PASS. Not VERIFIED: pending producer/HITL/claim integration, direct command operation durability, native correlation and crash campaigns. Coordinated owner/journal drain, bounded shutdown workers, late-open admission barrier and wake generations implemented; 55 integrated PASS, fresh isolated Codex 2 PASS and Claude 1 PASS. Full restart/boot and broader final matrix remain pending."
         },
@@ -2514,7 +2525,11 @@
           "owner": "Codex",
           "implementation_refs": [
             "tests/test_runtime_work_acceptance.py",
-            "tests/test_runtime_request_acceptance.py"
+            "tests/test_runtime_request_acceptance.py",
+            "src/okto_nexus/config.py",
+            "src/okto_nexus/application/runtime_dispatcher.py",
+            "src/okto_nexus/adapters/inbound/mcp/tools/harness.py",
+            "tests/test_runtime_delivery_acceptance.py"
           ],
           "test_results": [
             {
@@ -2565,6 +2580,13 @@
               "result": "PASS",
               "observed": "9 PASS Windows31.59s;9 PASS Linux35.05s; Ruff PASS.",
               "evidence": "plans/pr34-remediation/evidence/p12-request-acceptance-index.json"
+            },
+            {
+              "sha": "c9763741d7f976c84989ed9732bc8064dc43399b + final file hashes in index",
+              "command": "Exact RED/final/smoke commands in P12_DELIVERY_ACCEPTANCE.md",
+              "result": "PASS",
+              "observed": "RED1 FAIL; final78 PASS Windows86.46s/Linux96.86s; Ruff and isolated live MCP smoke PASS. Final gate not passed.",
+              "evidence": "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
             }
           ],
           "evidence": [
@@ -2577,7 +2599,8 @@
             "plans/pr34-remediation/P12_MONITOR_AUTHORIZATION.md",
             "plans/pr34-remediation/P12_WORK_ACCEPTANCE.md",
             "plans/pr34-remediation/P12_COVERAGE_REVIEW_F12C169.md",
-            "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md"
+            "plans/pr34-remediation/P12_REQUEST_ACCEPTANCE.md",
+            "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md"
           ],
           "notes": " Complete Windows inventory2296 PASS/4 FAIL/117 SKIP; four fixture corrections selected39 PASS. This is not a full gate PASS. See P12_SUITE_FEEB14D.md. Current full Windows regression at e388227 is running as exec58066; no aggregate result yet. See current evidence document; historical failures are retained. Windows exec58066 now terminal exit0; P12_SUITE_E388227.md supersedes the preceding running status. Source correction for independently reproduced T-AUTH-09 is not covered by that immutable full run."
         },
@@ -3200,8 +3223,12 @@
       ],
       "stimulus": "Falhar entre writes de message, delivery, evento e outbox.",
       "expected": "Tudo é revertido; nenhuma entrega sem intenção requerida ou vice-versa.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim."
     },
     {
       "test_id": "T-TX-02",
@@ -3449,8 +3476,12 @@
       ],
       "stimulus": "Travar write/aceitação do adapter e chamar message_create.",
       "expected": "Chamada termina após commit/wake sem precisar destravar adapter.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim."
     },
     {
       "test_id": "T-DISP-02",
@@ -3462,8 +3493,12 @@
       ],
       "stimulus": "Descartar IPC/sinal pós-commit mantendo serve vivo.",
       "expected": "Reconciliação indexada recupera intent no prazo configurado.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_DELIVERY_ACCEPTANCE.md",
+        "plans/pr34-remediation/evidence/p12-delivery-acceptance-index.json"
+      ],
+      "notes": "Final78 PASS each platform; four after-write transactional rollback cuts, nonblocking canonical message admission and same-owner dropped-wake recovery. Deadline RED retained; earliest timer fix plus fail-closed startup interval1..86400 (default30), bounded store-error delay. Synthetic peers; no native provider claim."
     },
     {
       "test_id": "T-DISP-03",

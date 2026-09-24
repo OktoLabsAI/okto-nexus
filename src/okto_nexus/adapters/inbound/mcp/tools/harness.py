@@ -480,7 +480,8 @@ def build_dispatcher(deps):
             _transport_attempt={key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
-                                  validate=validate_dispatch, dispatch=dispatch)
+                                  validate=validate_dispatch, dispatch=dispatch,
+                                  recovery_seconds=deps.config.runtime_recovery_interval_seconds)
     def select_fallback(uow, operation):
         if managed(uow, operation):
             return None  # Endpoint-scoped work grants cannot be borrowed.

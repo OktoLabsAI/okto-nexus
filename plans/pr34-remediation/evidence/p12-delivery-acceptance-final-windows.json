@@ -1,0 +1,497 @@
+{
+  "source_sha": "c9763741d7f976c84989ed9732bc8064dc43399b",
+  "platform": "windows",
+  "counts": {
+    "PASS": 78
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "78",
+      "time": "86.445",
+      "timestamp": "2026-09-24T08:10:04.620353-03:00"
+    }
+  ],
+  "native_flags": "No native campaign; disposable synthetic peers.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_delivery_acceptance.py tests/test_runtime_wake_generation.py tests/test_runtime_safe_retry.py tests/test_runtime_shutdown.py tests/test_config.py -q --junitxml=.git/pr34-evidence/delivery-acceptance-final-windows.xml",
+  "limitations": "Parent SHA plus final file hashes; selected fixture gate, no native qualification.",
+  "records": [
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[message]",
+      "status": "PASS",
+      "seconds": 3.765
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[delivery]",
+      "status": "PASS",
+      "seconds": 2.913
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[outbox]",
+      "status": "PASS",
+      "seconds": 3.396
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_each_canonical_write_rolls_back_without_orphan_intent[event]",
+      "status": "PASS",
+      "seconds": 3.254
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_message_admission_commits_while_native_write_is_blocked",
+      "status": "PASS",
+      "seconds": 3.564
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_recovery_interval_configuration_reaches_production_dispatcher",
+      "status": "PASS",
+      "seconds": 0.27
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_dropped_post_commit_wake_recovers_in_same_live_owner",
+      "status": "PASS",
+      "seconds": 4.491
+    },
+    {
+      "class": "tests.test_runtime_delivery_acceptance",
+      "test": "test_unavailable_store_keeps_bounded_recovery_delay",
+      "status": "PASS",
+      "seconds": 2.808
+    },
+    {
+      "class": "tests.test_runtime_wake_generation",
+      "test": "test_generation_keeps_wakes_before_wait_and_during_processing",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_runtime_wake_generation",
+      "test": "test_wake_during_scan_drains_without_waiting_for_recovery",
+      "status": "PASS",
+      "seconds": 5.494
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_busy_before_native_write_waits_for_deadline_and_preserves_logical_operation",
+      "status": "PASS",
+      "seconds": 7.044
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_safe_retry_exhaustion_is_bounded_and_can_be_released_to_pull",
+      "status": "PASS",
+      "seconds": 4.913
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_can_be_cancelled_without_sending_at_its_deadline",
+      "status": "PASS",
+      "seconds": 3.57
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_new_turns_cannot_overtake_a_retry_wait_on_the_same_lane",
+      "status": "PASS",
+      "seconds": 3.631
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_revalidates_actor_authority_before_any_new_native_call",
+      "status": "PASS",
+      "seconds": 4.079
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_persisted_deadline_wakes_retry_without_an_external_signal",
+      "status": "PASS",
+      "seconds": 4.21
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_new_dispatch_owner_preserves_retry_deadline_without_early_replay",
+      "status": "PASS",
+      "seconds": 3.458
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[ack_level-TRANSPORT_WRITE]",
+      "status": "PASS",
+      "seconds": 3.174
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[retry_basis-None]",
+      "status": "PASS",
+      "seconds": 3.184
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_retry_wait_label_alone_does_not_authorize_safe_cancellation[reason-unknown]",
+      "status": "PASS",
+      "seconds": 3.48
+    },
+    {
+      "class": "tests.test_runtime_safe_retry",
+      "test": "test_lost_non_delivery_proof_commit_never_enables_replay",
+      "status": "PASS",
+      "seconds": 3.402
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_does_not_release_owner_before_runtime_drain",
+      "status": "PASS",
+      "seconds": 3.192
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_shutdown_deadline_retains_owner_and_journal_for_late_activity",
+      "status": "PASS",
+      "seconds": 3.118
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_open_finishing_after_shutdown_cannot_leave_a_live_session",
+      "status": "PASS",
+      "seconds": 3.076
+    },
+    {
+      "class": "tests.test_runtime_shutdown",
+      "test": "test_lifespan_refuses_startup_when_another_owner_holds_store",
+      "status": "PASS",
+      "seconds": 0.906
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_defaults_when_env_unset[OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_defaults_when_env_unset[OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_defaults_when_env_unset[OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_defaults_when_env_unset[OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_parses_valid_env_value[OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_parses_valid_env_value[OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_parses_valid_env_value[OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_parses_valid_env_value[OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[abc-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[  -OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[1.5-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[0-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_INBOX_LEASE_TTL_SECONDS-inbox_lease_ttl_seconds-300]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_SESSION_STALE_TTL_SECONDS-session_stale_ttl_seconds-60]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_MAX_SHARED_MD_EVENTS-max_shared_md_events-1000]",
+      "status": "PASS",
+      "seconds": 0.002
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_invalid_env_value_is_a_startup_error[-5-OKTO_NEXUS_MAX_EVENT_LIMIT-max_event_limit-1000]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_cli_flag_overrides_env[--inbox-lease-ttl-seconds-inbox_lease_ttl_seconds]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_cli_flag_overrides_env[--session-stale-ttl-seconds-session_stale_ttl_seconds]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_cli_flag_overrides_env[--max-shared-md-events-max_shared_md_events]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_knob_cli_flag_overrides_env[--max-event-limit-max_event_limit]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_meta_harness_receipt_display_config_pipeline",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_to_epoch_tolerates_all_utc_spellings",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_to_epoch_raises_stdlib_errors",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_shifts_and_stays_fixed_width",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00Z]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00.123Z]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07T00:00:00.000000+00:00]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[2026-06-07 00:00:00.000000Z]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_iso_plus_rejects_non_canonical_clock_value[None]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_inbox_pull_rejects_non_lexicographic_clock",
+      "status": "PASS",
+      "seconds": 0.257
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_handoff_claim_rejects_non_lexicographic_clock",
+      "status": "PASS",
+      "seconds": 0.27
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_check_inline_size_inclusive_boundary_for_strings",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_check_inline_size_measures_json_for_non_strings",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_check_inline_size_rejects_unserialisable",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_normalize_cursor_grammar",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_config",
+      "test": "test_clamp_limit_grammar",
+      "status": "PASS",
+      "seconds": 0.001
+    }
+  ],
+  "file_sha256": {
+    "src/okto_nexus/config.py": "86abfdf9fdf29bbaaebce7df40252c5de58b5873284ef0baf30ab481bd8e591f",
+    "src/okto_nexus/application/runtime_dispatcher.py": "8729364727d9b0c6a32f73adf3f1f63f56e52ab33bf645fcfc5b8cf43b38b15b",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "ee875cca9fbc081488cc3dbd30431c8fc6a9dde2896b70d33cf676319b5bb3d7",
+    "tests/test_runtime_delivery_acceptance.py": "21ba052fadbae1bf5a17dd5497f1ce87b9d12c71c2086d5e4f1cf973d07a50bf"
+  }
+}
