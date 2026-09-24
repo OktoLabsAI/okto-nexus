@@ -69,7 +69,7 @@ class SqliteRuntimeCommandRepo:
             query += "OR (busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.starts_turn=1 AND busy.terminal_event_id IS NULL) "
             query += "OR (busy.status='PENDING' AND (busy.verb<>'send_turn' OR (busy.created_at,busy.operation_id)<(c.created_at,c.operation_id))))) "
             query += "AND NOT EXISTS (SELECT 1 FROM delivery_outbox d WHERE COALESCE(json_extract(d.next_binding,'$.endpoint_id'),d.endpoint_id)=c.endpoint_id AND d.reconciliation_id IS NULL AND "
-            query += "(d.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR (d.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND d.terminal_event_id IS NULL) "
+            query += "d.external_completed_at IS NULL AND (d.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR (d.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND d.terminal_event_id IS NULL) "
             query += "OR (d.status IN ('PENDING','RETRY_WAIT') AND (d.created_at,d.operation_id)<(c.created_at,c.operation_id)))) "
         if not control:
             # One unresolved normal native write per represented agent across

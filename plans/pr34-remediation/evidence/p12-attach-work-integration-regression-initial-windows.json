@@ -1,0 +1,666 @@
+{
+  "source_sha": "49ebd0e7165d687dea9e535e8f13ba0691061a81",
+  "platform": "windows",
+  "counts": {
+    "PASS": 104
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "104",
+      "time": "127.166",
+      "timestamp": "2026-09-24T11:58:38.011935-03:00"
+    }
+  ],
+  "native_flags": "No installed provider invoked; selected isolated fixtures only",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_inbox.py tests/test_inbox_service.py tests/test_runtime_handoff_dispatch.py tests/test_runtime_handoff_epochs.py tests/test_runtime_handoff_recovery.py tests/test_migrations.py tests/test_import_boundary.py -q --tb=short --junitxml=.git/pr34-evidence/attach-work-regression-initial-windows.xml",
+  "limitations": "Fixtures do not qualify installed native providers. Generations are not additive counts; legacy writer bypass remains an explicit RED until fixed.",
+  "records": [
+    {
+      "class": "tests.test_inbox",
+      "test": "test_delivery_status_vocabulary",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_new_delivery_id_prefixed_and_unique",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_message_delivery_model_defaults",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_none_for_absent_target",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_normalizes",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_target_strategy_rejects_missing_and_unknown",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_hits_named_agent_only",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_unknown_agent_is_empty",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_capability_string_and_list_any_of",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_accepts_plain_dict_candidate",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_role_exact_case_sensitive",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_broadcast_hits_all_candidates",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_mixed_is_union",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_direct_with_fallback_at_send_is_direct_only_when_delayed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_malformed_target_raises",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_resolve_validates_target_even_with_empty_candidates",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_requires_workspace_audience",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_rejects_direct_with_fallback",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_rejects_broadcast_nested_in_mixed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_assert_allows_safe_targets",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_requires_known_recipient_only_for_directed",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_005_creates_message_deliveries",
+      "status": "PASS",
+      "seconds": 0.204
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_005_enforces_one_delivery_per_message_recipient",
+      "status": "PASS",
+      "seconds": 0.21
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_006_adds_attempts_defaulting_to_zero",
+      "status": "PASS",
+      "seconds": 0.252
+    },
+    {
+      "class": "tests.test_inbox",
+      "test": "test_migration_006_recorded_and_history_index_present",
+      "status": "PASS",
+      "seconds": 0.214
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_returns_unread_and_marks_in_flight",
+      "status": "PASS",
+      "seconds": 0.27
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_ack_moves_to_history",
+      "status": "PASS",
+      "seconds": 0.264
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_is_non_destructive",
+      "status": "PASS",
+      "seconds": 0.241
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_lease_expiry_redelivers_unacked",
+      "status": "PASS",
+      "seconds": 0.278
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_count_history_write_nothing_even_with_expired_leases",
+      "status": "PASS",
+      "seconds": 0.322
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_reads_use_readonly_uow_and_mutations_use_write_uow",
+      "status": "PASS",
+      "seconds": 0.294
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_reclaims_own_expired_and_never_touches_other_recipients",
+      "status": "PASS",
+      "seconds": 0.324
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_concurrent_pull_delivers_exactly_once",
+      "status": "PASS",
+      "seconds": 0.289
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_lease_seconds_sets_and_clamps_the_lease",
+      "status": "PASS",
+      "seconds": 0.315
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_lease_seconds_default_and_validation",
+      "status": "PASS",
+      "seconds": 0.268
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_poison_delivery_parks_after_max_attempts_and_frees_the_head",
+      "status": "PASS",
+      "seconds": 0.34
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_include_parked_must_be_boolean",
+      "status": "PASS",
+      "seconds": 0.232
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_is_envelope_only_pull_and_history_return_full_body",
+      "status": "PASS",
+      "seconds": 0.269
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_short_body_previews_whole_body",
+      "status": "PASS",
+      "seconds": 0.252
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_include_bodies_opts_into_full_body_and_validates",
+      "status": "PASS",
+      "seconds": 0.286
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_renews_lease_and_prevents_redelivery",
+      "status": "PASS",
+      "seconds": 0.337
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_seconds_clamped",
+      "status": "PASS",
+      "seconds": 0.317
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_extend_fails_precisely_per_lane_and_extends_nothing",
+      "status": "PASS",
+      "seconds": 0.393
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_keyset_pages_do_not_duplicate_under_interleaved_acks",
+      "status": "PASS",
+      "seconds": 0.431
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_pagination_walks_all_pages",
+      "status": "PASS",
+      "seconds": 0.334
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_history_rejects_foreign_cursor",
+      "status": "PASS",
+      "seconds": 0.276
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_message_status_reflects_the_delivery_cycle",
+      "status": "PASS",
+      "seconds": 0.306
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_message_status_unknown_message_is_not_found",
+      "status": "PASS",
+      "seconds": 0.235
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_inbox_is_global_across_workspaces",
+      "status": "PASS",
+      "seconds": 0.254
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_requires_agent_id",
+      "status": "PASS",
+      "seconds": 0.243
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_pull_clamps_limit",
+      "status": "PASS",
+      "seconds": 0.244
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_ack_of_foreign_or_unknown_message_is_zero",
+      "status": "PASS",
+      "seconds": 0.255
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_peek_surfaces_both_unread_and_in_flight",
+      "status": "PASS",
+      "seconds": 0.266
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_count_reports_expired_lease_as_unread",
+      "status": "PASS",
+      "seconds": 0.261
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_build_service_lease_ttl_comes_from_config",
+      "status": "PASS",
+      "seconds": 0.267
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_build_service_reuses_existing_repos",
+      "status": "PASS",
+      "seconds": 0.219
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_register_exposes_queue_tools_and_envelopes_errors",
+      "status": "PASS",
+      "seconds": 0.274
+    },
+    {
+      "class": "tests.test_inbox_service",
+      "test": "test_inbox_peek_tool_is_envelope_only_with_include_bodies_opt_in",
+      "status": "PASS",
+      "seconds": 0.273
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competitive_pool_with_multiple_agents_and_endpoints_has_one_executor",
+      "status": "PASS",
+      "seconds": 4.846
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_cannot_silently_fall_back_to_unmanaged_claim",
+      "status": "PASS",
+      "seconds": 2.903
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_claim_dispatch_result_and_explicit_completion_are_one_canonical_flow",
+      "status": "PASS",
+      "seconds": 3.911
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_managed_claim_commit_cut_rolls_back_claim_delivery_and_grant",
+      "status": "PASS",
+      "seconds": 3.135
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[False]",
+      "status": "PASS",
+      "seconds": 3.168
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_competing_admissions_create_only_one_execution[True]",
+      "status": "PASS",
+      "seconds": 3.212
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_delegated_managed_claim_has_same_rest_and_mcp_admission",
+      "status": "PASS",
+      "seconds": 3.191
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_revocation_between_admission_and_write_prevents_native_effect",
+      "status": "PASS",
+      "seconds": 2.989
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_strict_claim_credentials_have_rest_mcp_parity[strict]",
+      "status": "PASS",
+      "seconds": 3.071
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_conversation_grant_cannot_authorize_work",
+      "status": "PASS",
+      "seconds": 2.001
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[deny]",
+      "status": "PASS",
+      "seconds": 2.903
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_policy_changed_after_creation_cannot_be_adopted_as_dispatch_authority[require_approval]",
+      "status": "PASS",
+      "seconds": 3.041
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_canonical_approval_creates_dispatch_receipt_only_after_human_decision",
+      "status": "PASS",
+      "seconds": 3.174
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[legacy_receipt_absent]",
+      "status": "PASS",
+      "seconds": 2.818
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_creation_authority_is_not_invented_for_legacy_or_new_hitl[enable_hitl]",
+      "status": "PASS",
+      "seconds": 2.032
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[revoke]",
+      "status": "PASS",
+      "seconds": 3.824
+    },
+    {
+      "class": "tests.test_runtime_handoff_dispatch",
+      "test": "test_late_managed_output_is_retained_without_unauthorized_publication[rework]",
+      "status": "PASS",
+      "seconds": 3.795
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_late_unfenced_result_cannot_transition_reclaimed_work[complete]",
+      "status": "PASS",
+      "seconds": 0.328
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_late_unfenced_result_cannot_transition_reclaimed_work[reject]",
+      "status": "PASS",
+      "seconds": 0.363
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_authenticated_mcp_and_rest_fence_rework_and_keep_verifier_separate",
+      "status": "PASS",
+      "seconds": 1.409
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_approved_handoff_revalidates_original_creator_binding[False]",
+      "status": "PASS",
+      "seconds": 1.15
+    },
+    {
+      "class": "tests.test_runtime_handoff_epochs",
+      "test": "test_approved_handoff_revalidates_original_creator_binding[True]",
+      "status": "PASS",
+      "seconds": 0.941
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_operator_reopens_same_handoff_without_releasing_work_as_conversation",
+      "status": "PASS",
+      "seconds": 3.359
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change0]",
+      "status": "PASS",
+      "seconds": 3.198
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change1]",
+      "status": "PASS",
+      "seconds": 3.32
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change2]",
+      "status": "PASS",
+      "seconds": 3.417
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change3]",
+      "status": "PASS",
+      "seconds": 3.768
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_only_operator_can_recover_work_even_with_admission_disabled",
+      "status": "PASS",
+      "seconds": 3.915
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[COMPLETED]",
+      "status": "PASS",
+      "seconds": 3.803
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[VERIFYING]",
+      "status": "PASS",
+      "seconds": 3.413
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[REJECTED]",
+      "status": "PASS",
+      "seconds": 3.583
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_work_recovery_and_transport_audit_roll_back_with_canonical_event",
+      "status": "PASS",
+      "seconds": 3.81
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_concurrent_recovery_records_one_canonical_transition_and_audit",
+      "status": "PASS",
+      "seconds": 4.074
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_late_structured_terminal_cannot_complete_reclaimed_work",
+      "status": "PASS",
+      "seconds": 4.152
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_terminal_native_turn_can_be_recovered_without_fabricating_handoff_completion",
+      "status": "PASS",
+      "seconds": 4.728
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_authenticated_stdio_work_recovery_uses_active_serve_owner",
+      "status": "PASS",
+      "seconds": 5.906
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_unknown_ledger_version_fails_closed_before_applying_anything",
+      "status": "PASS",
+      "seconds": 0.043
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_failed_migration_rolls_back_only_itself",
+      "status": "PASS",
+      "seconds": 0.063
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_concurrent_bootstrap_applies_each_migration_exactly_once",
+      "status": "PASS",
+      "seconds": 0.394
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_bootstrap_retries_while_another_process_holds_the_lock",
+      "status": "PASS",
+      "seconds": 0.681
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_lock_retry_exhausted_raises_actionable_migration_error",
+      "status": "PASS",
+      "seconds": 0.038
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts2_migration_022_backfills_comm_scope_into_inline_binding",
+      "status": "PASS",
+      "seconds": 0.316
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts3_migration_022_converts_governance_policies_to_detached_globals",
+      "status": "PASS",
+      "seconds": 0.114
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_inner_layers_have_files",
+      "status": "PASS",
+      "seconds": 0.004
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_domain_and_application_do_not_import_infrastructure",
+      "status": "PASS",
+      "seconds": 0.735
+    },
+    {
+      "class": "tests.test_import_boundary",
+      "test": "test_replay_core_modules_are_in_scope_and_clean",
+      "status": "PASS",
+      "seconds": 0.013
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "dc597d74d730e66dd8596f071cf078ba987cf6f0c837416e3a44ac2c9ae49389",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+    "src/okto_nexus/adapters/inbound/mcp/tools/inbox.py": "2faee27b9a01cf23a53b92b08be496aea8f7dad0766e5f895958689c888663a5",
+    "src/okto_nexus/adapters/outbound/harness/qualified.py": "9b9f04f0c2c8c367773dd17df6e6a15bcc64327cc7e0e74a2a535756bbb0dd50",
+    "src/okto_nexus/adapters/outbound/sqlite/messages_repo.py": "759820743c1d89d6fda0e8fba7db98e7039068c0a382a2923aeff63dcabce00e",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "fc48855b1f7009fe17a68b6cf4770f6a17af0f0b7b0d905f9625d16d8be66301",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "c11c97c53db36d3f5e66156e1cc9df7cc420fd2d92295270d1e705038e59f6aa",
+    "src/okto_nexus/application/handoff.py": "2032074be464662895930fc2abc744d27c4890e26c565dabee3a064667ff2194",
+    "src/okto_nexus/application/inbox.py": "c2ffcdc991f49545406055b279480fcc42a5ee62be74079a7ea6587f66edbd1a",
+    "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+    "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+    "src/okto_nexus/application/runtime_work.py": "87666a8f4036f353f8df072983069ed4f31f10e014c9db08fcd2f112e8f9ccc0",
+    "src/okto_nexus/domain/harness.py": "4d2f1a1518f2e2b61fc8c4fd4f63f60d7760cef5a48077fc42587d23fc02bb06",
+    "tests/test_runtime_attach_work_channel.py": "740b31a56c3d59a87bfc56ab61e2ad70c27ca885afd9e87a07817e7c9410956f",
+    "src/okto_nexus/application/runtime_external_work.py": "ea72d73be8cd83a36cd2d5a3d8e5c78f4d02ad918cb4770be2cce80ddfd27ad5",
+    "src/okto_nexus/migrations/064_runtime_external_work.sql": "8c9385f947978cd0ce382ff89a7b42e2156b060af5be6decfef19fc7061c87a9"
+  }
+}

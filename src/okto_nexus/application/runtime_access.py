@@ -47,7 +47,7 @@ class RuntimeAccessService:
 
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
                   represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
-                  audit=True):
+                  audit=True, _returning_external_work=False):
         now, allowed, selected = self.clock.now_iso(), False, None
         with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None
@@ -69,7 +69,11 @@ class RuntimeAccessService:
                 represented = self.agents.get(uow, endpoint["agent_id"])
                 enabled = enabled and represented is not None and represented.is_active
                 enabled = enabled and endpoint["enabled"] and endpoint["activation_state"] == "approved"
-                enabled = enabled and endpoint["health"] != "quarantined"
+                # A proved response through Nexus does not need a live native
+                # connection. All credential/grant/policy/revision gates stay
+                # active; this internal option never authorizes new dispatch.
+                enabled = enabled and (endpoint["health"] != "quarantined" or
+                    (_returning_external_work and action == "execute_work" and substrate == "attach" and not consume))
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]

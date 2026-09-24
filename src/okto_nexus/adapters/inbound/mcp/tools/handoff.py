@@ -110,10 +110,9 @@ _P_SESSION_OPT = "Session_id attributing this operation to a specific open sessi
 #: INVARIANT: the sensitive handoff verbs (claim/complete/reject) share the
 #: trust wording with message_create/inbox_* - one credential story bus-wide.
 _P_SESSION_TRUST = (
-    "Your session_id from session_open (optional in trust_mode=open; REQUIRED "
-    "together with session_secret in trust_mode=strict)."
+    "Session from session_open; pass its secret in strict mode or for managed external attach work. Otherwise optional."
 )
-_P_SESSION_SECRET = "session_secret from session_open for session_id (optional in open mode but VALIDATED if supplied; REQUIRED in strict mode)."
+_P_SESSION_SECRET = "Secret of that session; required in strict mode and managed external attach work, validated whenever supplied."
 _P_HANDOFF_AGENT = (
     "Your agent_id (the worker); scopes visibility/eligibility and ownership. REQUIRED."
 )
@@ -261,7 +260,7 @@ def build_service(deps: Any) -> HandoffService:
     from .harness import build_access_service
     from .messages import wake_runtime
     service.runtime_work = RuntimeWorkService(access=build_access_service(deps), outbox=SqliteRuntimeOutboxRepo(),
-        messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock,
+        messages=repos.messages, deliveries=repos.deliveries, clock=deps.clock, sessions=repos.sessions,
         validate_claim=service.validate_managed_claim, wake=lambda: wake_runtime(deps),
         owner_provider=lambda: getattr(deps, "runtime_dispatcher", None))
 
@@ -396,6 +395,7 @@ def register(server: Any, deps: Any) -> None:
             agent_id=agent_id,
             result=result,
             claim_epoch=claim_epoch,
+            session_id=session_id, session_secret=session_secret,
         )
 
     @server.tool()
@@ -454,6 +454,7 @@ def register(server: Any, deps: Any) -> None:
             agent_id=agent_id,
             reason=reason,
             claim_epoch=claim_epoch,
+            session_id=session_id, session_secret=session_secret,
         )
 
     @server.tool()

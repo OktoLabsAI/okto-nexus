@@ -395,7 +395,8 @@ be disabled. Required native requests conflict with disabled approvals.
 
 Current conversation contracts are Codex0.156.1, Claude stream2.1.280/2.1.281 and
 Pi0.85.1. Pi is fixture-qualified only; its native campaign remains NOT_RUN.
-Attach requires exact integer peerProtocol1 and retains unconfirmed injection only.
+Attach requires exact integer peerProtocol1 and its native transport retains unconfirmed injection only.
+Surface58 can supplement this with a separately authenticated Nexus work channel; see the operator guide.
 Neither attach nor any spawned connector gains native deduplication, native replay
 or an agent ACK from this contract. Unknown versions remain inspectable and closable,
 but cannot execute turns or borrow advertised controls or multiplexing. Qualify an

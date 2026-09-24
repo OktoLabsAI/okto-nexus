@@ -74,3 +74,18 @@ See P12_MIRROR_OBSERVATION.md and its generation-specific evidence. Implementati
 reservation and uses subordinate transport attempts with no ACK, result or work authority. During this
 unit, a public-read OperationalError and a closed-session pending observation were also retained and
 corrected; their failed runs are not counted as acceptance passes.
+
+
+## External attach work compatibility, corrected before publication
+
+T-WORK-12/F02/F07/F14: the pre-fence working integration admitted a legacy writer-v1 claimant/epoch
+handoff transition without the new external proof. This development-generation defect was reproduced
+by test_runtime_external_writer_fence.py (1 clean FAIL) and fixed by migration064's narrow triggers and
+ConnectionFactory's external-work capability marker. Final three legacy-writer destinations/ACK checks
+and authenticated current completion pass on Windows/Linux. Parent49ebd0e still refused managed attach;
+this is not claimed as a reproduced vulnerability of that commit or the original PR34. Exact generation
+hashes and the integrated external work gate: P12_ATTACH_WORK_INTEGRATION.md.
+
+### External work development-generation retention/recovery corrections
+
+Before publishing the external work integration, real tests reproduced retention FK failure for a referenced closed session and an invalid permission refusal when rejecting an explicitly recovered OPEN offer. IdentityRepo count/prune now retain referenced audit sessions while deleting unrelated expired sessions. HandoffService scopes the external-return guard to the current CLAIMED handoff. Both REDs and final Windows81 PASS1 SKIP/Linux82 PASS operational evidence are retained in P12_ATTACH_WORK_INTEGRATION.md and its manifests. These are unpublished working-generation defects, not findings against the earlier PR or parent49ebd0e.

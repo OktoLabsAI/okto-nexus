@@ -2015,6 +2015,11 @@ class MessageDeliveryRepo(Protocol):
         backs the ``message.read`` receipt events."""
         ...
 
+    def mark_external_work_ack(self, uow: UnitOfWork, *, operation_id: str,
+                              session_id: str, at: str) -> bool:
+        """Consume matching push work after canonical external authentication."""
+        ...
+
     def mark_runtime_processed(self, uow: UnitOfWork, *, operation_id: str,
                                terminal_event_id: str, at: str) -> list[dict]:
         """Consume matching push reservation only with correlated durable proof.

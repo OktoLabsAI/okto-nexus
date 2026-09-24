@@ -10,6 +10,7 @@ from ..errors import ErrorCode, OktoNexusError
 from .runtime_bootstrap import delivery_context
 from .runtime_causality import RuntimeCausalityService
 from .runtime_requirements import validate_effective_capability
+from .runtime_external_work import ExternalWorkChannel, ExternalWorkProof
 
 
 def denied():
@@ -17,13 +18,15 @@ def denied():
 
 
 class RuntimeWorkService:
-    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, owner_provider=None):
+    def __init__(self, *, access, outbox, messages, deliveries, clock, validate_claim, wake, sessions, owner_provider=None):
         self.access, self.outbox = access, outbox
         self.messages, self.deliveries, self.clock = messages, deliveries, clock
         self.validate_claim, self.wake = validate_claim, wake
         self.owner_provider = owner_provider
+        self.external = ExternalWorkChannel(access=access, sessions=sessions)
 
-    def authorize(self, uow, *, context, endpoint_id, grant_id, agent_id, workspace_id, consume=False, audit=True):
+    def authorize(self, uow, *, context, endpoint_id, grant_id, agent_id, workspace_id, consume=False, audit=True,
+                  session_id=None, session_secret=None, external_proof=None):
         if not context or not grant_id or not endpoint_id:
             raise denied()
         context = replace(context, execution_grant_id=grant_id)
@@ -34,15 +37,18 @@ class RuntimeWorkService:
             raise denied()
         endpoint = self.access.endpoints.get(uow, endpoint_id)
         descriptor = self.access.registry.get(endpoint["adapter_id"])
-        # Attach has no authenticated work completion channel in this version.
-        # Events alone are not a work grant; a selected approved native profile
-        # and explicit caller delegation are both required.
-        if not descriptor.capabilities.managed_work or not descriptor.capabilities.events or endpoint["consumption"] != "exclusive" or not endpoint["profile_id"]:
+        if endpoint["consumption"] != "exclusive":
+            raise denied()
+        if descriptor.substrate == "attach":
+            proof = self.external.current(uow, context=context, endpoint=endpoint, proof=external_proof,
+                session_id=session_id, session_secret=session_secret)
+            return context, grant, endpoint, None, proof
+        if not descriptor.capabilities.managed_work or not descriptor.capabilities.events or not endpoint["profile_id"]:
             raise denied()
         profile = self.access.endpoints.profile(uow, endpoint["profile_id"])
         if profile and "managed_work" in profile["config"].get("disabled_capabilities", ()):
             raise denied()
-        return context, grant, endpoint, profile
+        return context, grant, endpoint, profile, None
 
     @staticmethod
     def request_hash(*, handoff_id, agent_id, endpoint_id, grant_id, claim_epoch, idempotency_key,
@@ -68,19 +74,21 @@ class RuntimeWorkService:
         return dict(row) if row else None
 
     def enqueue(self, uow, *, handoff, authorized, key, digest, now, completion_mode="authenticated_nexus_call"):
-        context, grant, endpoint, profile = authorized
+        context, grant, endpoint, profile, proof = authorized
+        if proof and completion_mode != "authenticated_nexus_call":
+            raise denied()
         if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE handoff_id=? AND claim_epoch=?",
                 (handoff.handoff_id, handoff.claim_epoch)).fetchone():
             raise OktoNexusError(ErrorCode.CONFLICT, "This claim already has a managed execution; use its original request key.", {})
         revision = self.validate_claim(uow, handoff=handoff)
         active = uow.connection.execute("SELECT count(*),COALESCE(sum(recipient_agent_id=?),0),"
-            "COALESCE(sum(workspace_id=?),0) FROM delivery_outbox WHERE status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN') "
-            "OR (status IN ('ACCEPTED','SENT_UNCONFIRMED') AND terminal_event_id IS NULL)",
+            "COALESCE(sum(workspace_id=?),0) FROM delivery_outbox WHERE external_completed_at IS NULL AND (status IN ('PENDING','CLAIMED','SENDING','OUTCOME_UNKNOWN') "
+            "OR (status IN ('ACCEPTED','SENT_UNCONFIRMED') AND terminal_event_id IS NULL))",
             (handoff.claimed_by, handoff.workspace_id)).fetchone()
         if any(count >= limit for count, limit in zip(active, (256, 32, 128))):
             raise OktoNexusError(ErrorCode.QUOTA_EXCEEDED, "Managed delivery capacity is exhausted.", {})
         self.authorize(uow, context=context, endpoint_id=endpoint["endpoint_id"], grant_id=grant["grant_id"],
-                       agent_id=handoff.claimed_by, workspace_id=handoff.workspace_id, consume=True)
+                       agent_id=handoff.claimed_by, workspace_id=handoff.workspace_id, consume=True, external_proof=proof)
         message = self.messages.create(uow, message_id=new_id("msg"), workspace_id=handoff.workspace_id,
             from_agent_id=handoff.from_agent_id, target=json.dumps({"strategy": "direct", "agent_id": handoff.claimed_by}),
             subject="Managed handoff execution", body=handoff.payload or "", trace_id=handoff.trace_id, created_at=now)
@@ -95,6 +103,16 @@ class RuntimeWorkService:
         bootstrap = delivery_context(uow, agents=self.access.agents, endpoint=endpoint,
                                      profile=profile, intent="handoff_execute")
         bootstrap["causality"] = causality.context(cause)
+        if proof:
+            bootstrap["completion"] = {"automatic_on_turn_end": False,
+                "mode": "authenticated_nexus_call", "external_channel_contract": 1,
+                "session_id": proof.session_id, "ack_required": True}
+            bootstrap["instructions"] += (
+                " Use your separately configured authenticated Nexus client and approved session credentials."
+                " First call inbox_ack for this envelope's message_id with that session_id and session_secret."
+                " Then call handoff_complete or handoff_reject with the exact handoff_id and claim_epoch"
+                " and the same session proof. Keep credentials in your client context, never in output."
+                " The attach socket provides no ACK or result event; only those Nexus calls record your work.")
         if completion_mode == "structured_result_v1":
             bootstrap["completion"] = {"automatic_on_turn_end": False, "mode": completion_mode,
                 "required_response": {"nexus_work_result": {"schema_version": 1,
@@ -114,13 +132,14 @@ class RuntimeWorkService:
         if len(live) > 1:
             raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
         if live:
-            validate_effective_capability(live[0]["compatibility_report"], "managed_work")
+            validate_effective_capability(live[0]["compatibility_report"], "conversation" if proof else "managed_work")
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
                             session_id=live[0]["session_id"] if live else None, now=now, authorization_revision=revision)
         uow.connection.execute("INSERT INTO runtime_handoff_bindings(handoff_id,claim_epoch,operation_id,grant_id,grant_revision,"
-            "actor_agent_id,idempotency_key,request_hash,created_at,completion_mode) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            "actor_agent_id,idempotency_key,request_hash,created_at,completion_mode,external_session_id,external_secret_binding) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
             (handoff.handoff_id, handoff.claim_epoch, operation_id, grant["grant_id"], grant["revision"],
-             context.actor_agent_id, key, digest, now, completion_mode))
+             context.actor_agent_id, key, digest, now, completion_mode,
+             proof.session_id if proof else None, proof.secret_binding if proof else None))
         return dict(operation_id=operation_id, claim_epoch=handoff.claim_epoch, status="PENDING", grant_id=grant["grant_id"])
 
     def revalidate(self, uow, *, operation):
@@ -135,17 +154,19 @@ class RuntimeWorkService:
         if not handoff or handoff["status"] != "CLAIMED" or handoff["claimed_by"] != operation["recipient_agent_id"] or handoff["claim_epoch"] != binding["claim_epoch"]:
             raise denied()
         context = RuntimeRequestContext(operation["actor_agent_id"], "agent_key", credential_binding=operation["credential_binding"])
-        _, grant, endpoint, profile = self.authorize(uow, context=context, endpoint_id=operation["endpoint_id"],
-            grant_id=binding["grant_id"], agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"], audit=False)
+        proof = (ExternalWorkProof(binding["external_session_id"], binding["external_secret_binding"])
+                 if binding["external_session_id"] else None)
+        _, grant, endpoint, profile, _ = self.authorize(uow, context=context, endpoint_id=operation["endpoint_id"],
+            grant_id=binding["grant_id"], agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"], audit=False, external_proof=proof)
         if (grant["revision"] != binding["grant_revision"] or endpoint["revision"] != operation["endpoint_revision"]
-                or profile["revision"] != operation["profile_revision"]):
+                or (profile["revision"] if profile else None) != operation["profile_revision"]):
             raise denied()
-        if operation["runtime_session_id"] and self.access.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
+        if profile and operation["runtime_session_id"] and self.access.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
             raise denied()
         if operation["runtime_session_id"]:
             row = uow.connection.execute("SELECT compatibility_report FROM harness_sessions WHERE session_id=?",
                 (operation["runtime_session_id"],)).fetchone()
-            validate_effective_capability(json.loads(row[0]) if row else {}, "managed_work")
+            validate_effective_capability(json.loads(row[0]) if row else {}, "conversation" if proof else "managed_work")
         if self.validate_claim(uow, handoff_id=binding["handoff_id"], workspace_id=operation["workspace_id"]) != operation["authorization_revision"]:
             raise denied()
         return endpoint, profile
@@ -190,6 +211,63 @@ class RuntimeWorkService:
         return {"project_root": row["root_realpath"], "handoff_id": row["handoff_id"],
                 "agent_id": row["recipient_agent_id"], "claim_epoch": row["claim_epoch"],
                 field: decision[field]}, action, dict(row)
+
+    def authorize_external_completion(self, uow, *, context, handoff_id, agent_id, claim_epoch,
+                                      session_id, session_secret):
+        row = uow.connection.execute("SELECT b.* FROM runtime_handoff_bindings b JOIN handoffs h "
+            "ON h.handoff_id=b.handoff_id AND h.claim_epoch=b.claim_epoch WHERE b.handoff_id=? "
+            "AND b.external_session_id IS NOT NULL", (handoff_id,)).fetchone()
+        if row is None:
+            return None
+        if type(claim_epoch) is not int or claim_epoch != row["claim_epoch"]:
+            raise denied()
+        binding = dict(row)
+        operation = self.outbox.get(uow, binding["operation_id"])
+        self.external.returning(uow, context=context, operation=operation, binding=binding,
+            agent_id=agent_id, session_id=session_id, session_secret=session_secret,
+            claim_epoch=claim_epoch, require_ack=True)
+        self._validate_external_claim(uow, operation=operation, binding=binding)
+        return operation["operation_id"]
+
+    def _validate_external_claim(self, uow, *, operation, binding):
+        if self.validate_claim(uow, handoff_id=binding["handoff_id"],
+                workspace_id=operation["workspace_id"]) != operation["authorization_revision"]:
+            raise denied()
+
+    def acknowledge_external(self, uow, *, context, agent_id, message_ids, session_id, session_secret, now):
+        if not message_ids:
+            return {}
+        placeholders = ",".join("?" for _ in message_ids)
+        rows = uow.connection.execute("SELECT b.* FROM runtime_handoff_bindings b JOIN delivery_outbox o "
+            "USING(operation_id) WHERE b.external_session_id IS NOT NULL AND o.recipient_agent_id=? "
+            "AND o.message_id IN (" + placeholders + ")", (agent_id, *message_ids)).fetchall()
+        changed = {}
+        for row in rows:
+            binding = dict(row)
+            operation = self.outbox.get(uow, binding["operation_id"])
+            self.external.returning(uow, context=context, operation=operation, binding=binding,
+                agent_id=agent_id, session_id=session_id, session_secret=session_secret, repeated_ack=True)
+            if not operation["external_completed_at"]:
+                self._validate_external_claim(uow, operation=operation, binding=binding)
+            consumed = self.deliveries.mark_external_work_ack(uow, operation_id=operation["operation_id"],
+                session_id=session_id, at=now)
+            if consumed:
+                uow.connection.execute("UPDATE runtime_handoff_bindings SET external_acked_at=? WHERE operation_id=?",
+                    (now, operation["operation_id"]))
+                uow.connection.execute("UPDATE delivery_outbox SET status='ACCEPTED',ack_level='AGENT_ACK',"
+                    "reason='authenticated_nexus_ack',updated_at=? WHERE operation_id=?",
+                    (now, operation["operation_id"]))
+                changed[operation["message_id"]] = {"ack_source": "authenticated_nexus_call", "ack_level": "AGENT_ACK",
+                    "human_read": False, "operation_id": operation["operation_id"], "terminal_event_id": None}
+        return changed
+
+    @staticmethod
+    def record_external_completion(uow, *, operation_id, action, now):
+        if operation_id is not None:
+            uow.connection.execute("UPDATE runtime_handoff_bindings SET external_completion_action=? WHERE operation_id=?",
+                (action, operation_id))
+            uow.connection.execute("UPDATE delivery_outbox SET external_completed_at=?,updated_at=? WHERE operation_id=?",
+                (now, now, operation_id))
 
     def require_result_owner(self, uow):
         owner = self.owner_provider() if self.owner_provider else None
@@ -241,7 +319,8 @@ class RuntimeWorkService:
     @staticmethod
     def binding(uow, *, handoff_id, claim_epoch):
         row = uow.connection.execute("SELECT b.operation_id,b.claim_epoch,b.grant_id,b.completion_mode,o.status,o.ack_level,o.reason,"
-            "o.runtime_session_id,o.terminal_event_id FROM runtime_handoff_bindings b "
+            "o.runtime_session_id,o.terminal_event_id,o.external_completed_at,b.external_acked_at,b.external_completion_action "
+            "FROM runtime_handoff_bindings b "
             "JOIN delivery_outbox o ON o.operation_id=b.operation_id WHERE b.handoff_id=? AND b.claim_epoch=?",
             (handoff_id, claim_epoch)).fetchone()
         return dict(row) if row else None

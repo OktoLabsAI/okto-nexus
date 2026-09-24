@@ -532,6 +532,16 @@ class SqliteMessageDeliveryRepo(_ClockBacked):
             "status='unread',lease_expires_at=NULL WHERE consumer_kind='push' AND consumer_operation_id=? "
             "AND status IN ('unread','delivered')", (operation_id,)).rowcount == 1
 
+    def mark_external_work_ack(self, uow, *, operation_id, session_id, at):
+        """CAS after application authentication; no native terminal is fabricated."""
+        return uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "
+            "WHERE status IN ('unread','delivered') AND consumer_kind='push' AND consumer_operation_id=? "
+            "AND delivery_id IN (SELECT o.delivery_id FROM delivery_outbox o JOIN runtime_handoff_bindings b "
+            "USING(operation_id) WHERE o.operation_id=? AND b.external_session_id=? "
+            "AND b.external_acked_at IS NULL AND o.reconciliation_id IS NULL "
+            "AND o.status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED','OUTCOME_UNKNOWN'))",
+            (at, operation_id, operation_id, session_id)).rowcount == 1
+
     def mark_runtime_processed(self, uow, *, operation_id, terminal_event_id, at):
         """Consume only the matching push reservation with durable terminal proof."""
         rows = uow.connection.execute("UPDATE message_deliveries SET status='read',read_at=? "

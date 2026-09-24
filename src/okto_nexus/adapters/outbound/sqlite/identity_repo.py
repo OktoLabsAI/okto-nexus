@@ -556,7 +556,8 @@ class SqliteSessionRepo(_ClockBacked):
         try:
             row = uow.connection.execute(
                 "SELECT COUNT(*) FROM sessions WHERE status = 'closed' "
-                "AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?",
+                "AND COALESCE(closed_at, last_heartbeat_at, started_at) < ? "
+                "AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b WHERE b.external_session_id=sessions.session_id)",
                 (cutoff,),
             ).fetchone()
         except sqlite3.Error as exc:
@@ -572,6 +573,8 @@ class SqliteSessionRepo(_ClockBacked):
         sessions are never deleted regardless of age (the session reaper closes
         them first; only then do they age into this window). Bounded by
         ``limit`` per batch so the WAL writer lock is held briefly.
+        External work references retain their canonical session audit record;
+        skip those rows rather than failing the entire batch on their FK.
         """
         try:
             cur = uow.connection.execute(
@@ -580,6 +583,8 @@ class SqliteSessionRepo(_ClockBacked):
                     SELECT session_id FROM sessions
                     WHERE status = 'closed'
                       AND COALESCE(closed_at, last_heartbeat_at, started_at) < ?
+                      AND NOT EXISTS(SELECT 1 FROM runtime_handoff_bindings b
+                                     WHERE b.external_session_id=sessions.session_id)
                     ORDER BY COALESCE(closed_at, last_heartbeat_at, started_at) ASC,
                              session_id ASC
                     LIMIT ?

@@ -60,7 +60,8 @@ class QualifiedConnector:
     def send(self, session, command):
         capability = {"send_turn": "conversation", "steer": "steer_timing", "interrupt": "interrupt"}.get(command.verb)
         if command.verb == "send_turn" and command.payload.get("envelope", {}).get("intent") == "handoff_execute":
-            capability = "managed_work"
+            capability = ("conversation" if command.external_work_channel and self.descriptor.substrate == "attach"
+                          else "managed_work")
         if capability:
             try:
                 validate_effective_capability(session.compatibility_report, capability)

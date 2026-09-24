@@ -46,7 +46,7 @@ class SqliteRuntimeJournalRepo:
                 self.presence.close(uow, session_id=session.presence_session_id, at=event.occurred_at)
             if state != "stop_requested":
                 uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='runtime_lost',updated_at=? "
-                    "WHERE runtime_session_id=? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
+                    "WHERE runtime_session_id=? AND terminal_event_id IS NULL AND external_completed_at IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
                     (now, event.session_id))
                 uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='runtime_lost',updated_at=? "
                     "WHERE runtime_session_id=? AND starts_turn=1 AND terminal_event_id IS NULL "

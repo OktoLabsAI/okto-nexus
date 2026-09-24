@@ -120,11 +120,15 @@ pela composição HTTP/MCP real; os quatro conectores nativos continuam sem essa
 A ausência da rota positiva foi reproduzida em a6a18b4 e registrada no milestone b263de9.
 Código, decisões de persistência e execuções por geração: plans/pr34-remediation/P12_MIRROR_OBSERVATION.md.
 
-### Decisão em implementação: canal Nexus externo do attach
+### Decisão implementada: canal Nexus externo do attach v1
 
-O requisito T-WORK-12 e o contrato de consumo exigem claim/ack/complete autenticados externamente
-para trabalho gerenciado no attach. A referência nexus_work_session_id reutiliza a sessão canônica
-existente; não é uma credencial nem ACK nativo. Sua aprovação administrativa foi implementada e
-qualificada separadamente. O teste positivo de admissão continua FAIL, e o fluxo completo ainda é
-pendente. Esta é uma decisão nova de implementação, não capacidade atribuída ao protocolo cc-socks.
-Estado, reprodução e dependências: plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md.
+T-WORK-12 e o contrato de consumo exigem claim/ack/complete autenticados externamente para trabalho
+gerenciado no attach. nexus_work_session_id reutiliza a sessão canônica; não é credencial nem ACK nativo.
+O canal integra as provas e transições existentes, exige self-claim e registra ACK/conclusão separados de
+eventos/resultados nativos. A capacidade nativa managed_work permanece falsa. Schema064/surface58.
+
+A lacuna de compatibilidade com writers antigos foi reproduzida na geração de desenvolvimento anterior
+à proteção e corrigida antes da publicação do milestone. Não é um achado atribuído retroativamente à
+PR34 ou ao parent49ebd0e, que ainda recusava esse trabalho. Código, hashes por geração, falhas e testes
+positivos/negativos: plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md. A sessão nativa dedicada do
+Claude attach permanece NOT_RUN; um socket POSIX de fixture não é qualificação do provider instalado.

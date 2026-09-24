@@ -119,12 +119,21 @@ the enclosing operation access remains audited. Stored attempt durability is dis
 and result durability. The fifth processless adapter proves this extension; native built-in descriptors
 continue to advertise no context_without_execution capability.
 
-## External attach work reference (preparatory contract)
+## External attach work contract v1 (surface58/schema064)
 
-Existing attach public_config now accepts nexus_work_session_id. EndpointService validates an active,
-same-agent/workspace canonical session with a secret and no harness-owned presence binding at create,
-reference update or explicit enable. Null removes the reference; disable remains available after closure.
-This is operator approval of a reference, not possession proof or a native capability. RuntimeWorkService
-still rejects attach work until authenticated claim/ACK/complete is integrated. Schema063/surface57/identity25
-remain unchanged in this preparatory milestone. See P12_ATTACH_WORK_CHANNEL.md for the failing acceptance
-reproducer and required next dependency; do not advertise a working managed attach channel yet.
+public_config.nexus_work_session_id pins an active, same-agent/workspace canonical session; configuration
+is never proof. ExternalWorkChannel reuses agent authentication and verify_session_credentials(strict)
+with a persisted nonsecret fingerprint, existing execute_work grant and canonical claim_epoch. Managed
+external attach requires authenticated self-claim and prior explicit Nexus ACK before complete/reject.
+
+RuntimeWorkService and the existing InboxService/HandoffService perform all mutations in their original
+writer transactions. runtime_handoff_bindings stores external session/ACK/completion facts; delivery_outbox
+stores external_completed_at. No new inbox, task queue, native event or result table is introduced. The
+trusted HarnessCommand.external_work_channel flag is set only after server-side revalidation, never from
+a native/public payload. QualifiedConnector retains false native managed_work/events for attach.
+
+Public operation inspection exposes external_work separately from native result durability. Discovery
+exposes configured/authentication-required only, with no external session ID/secret. A narrow ConnectionFactory
+capability marker and migration triggers fence old writers that would otherwise bypass the new proof through
+legacy completion. Legacy unbound writers remain subject to the existing global contract. Scope/evidence:
+P12_ATTACH_WORK_INTEGRATION.md; configuration history: P12_ATTACH_WORK_CHANNEL.md.

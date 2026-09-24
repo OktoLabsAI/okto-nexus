@@ -72,7 +72,7 @@ class SqliteRuntimeOutboxRepo:
             "FROM (SELECT *,COALESCE(json_extract(next_binding,'$.endpoint_id'),endpoint_id) AS dispatch_endpoint_id "
             "FROM delivery_outbox) pending WHERE (pending.status='PENDING' OR "
             "(pending.status='RETRY_WAIT' AND pending.next_attempt_at<=?)) AND pending.reconciliation_id IS NULL AND NOT EXISTS "
-            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.dispatch_endpoint_id AND busy.reconciliation_id IS NULL AND "
+            "(SELECT 1 FROM delivery_outbox busy WHERE busy.endpoint_id=pending.dispatch_endpoint_id AND busy.reconciliation_id IS NULL AND busy.external_completed_at IS NULL AND "
             "(busy.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN') OR "
             "(busy.status IN ('SENT_UNCONFIRMED','ACCEPTED') AND busy.terminal_event_id IS NULL))) "
             "AND NOT EXISTS (SELECT 1 FROM runtime_commands c WHERE c.endpoint_id=pending.dispatch_endpoint_id AND c.reconciliation_id IS NULL AND "
@@ -83,7 +83,7 @@ class SqliteRuntimeOutboxRepo:
             "AND earlier.status IN ('PENDING','RETRY_WAIT') AND earlier.reconciliation_id IS NULL "
             "AND (earlier.created_at,earlier.operation_id)<(pending.created_at,pending.operation_id)) "
             "AND NOT EXISTS (SELECT 1 FROM delivery_outbox active WHERE active.recipient_agent_id=pending.recipient_agent_id "
-            "AND active.reconciliation_id IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
+            "AND active.reconciliation_id IS NULL AND active.external_completed_at IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN')) "
             "AND NOT EXISTS (SELECT 1 FROM runtime_commands active JOIN agent_endpoints endpoint USING(endpoint_id) "
             "WHERE endpoint.agent_id=pending.recipient_agent_id AND active.verb='send_turn' "
             "AND active.reconciliation_id IS NULL AND active.status IN ('CLAIMED','SENDING','OUTCOME_UNKNOWN'))")
@@ -142,7 +142,7 @@ class SqliteRuntimeOutboxRepo:
             (epoch, owner_id, lease_expires_at))
         # A previous external call might still finish. Never retry SENDING.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
-            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
+            "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL AND external_completed_at IS NULL", (now,))
         uow.connection.execute("UPDATE delivery_outbox SET status='PENDING',owner_epoch=NULL,attempt_id=NULL,updated_at=? WHERE status='CLAIMED'", (now,))
         uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED') AND terminal_event_id IS NULL", (now,))
@@ -166,7 +166,7 @@ class SqliteRuntimeOutboxRepo:
         # Captured acceptance alone is not a live connection or finished result.
         # Preserve its native identifiers for explicit reconciliation, not retry.
         uow.connection.execute("UPDATE delivery_outbox SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
-            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
+            "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND external_completed_at IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')",
             (now, epoch))
         uow.connection.execute("UPDATE runtime_commands SET status='OUTCOME_UNKNOWN',reason='owner_lost',updated_at=? "
             "WHERE owner_epoch<>? AND terminal_event_id IS NULL AND status IN ('SENDING','SENT_UNCONFIRMED','ACCEPTED')", (now, epoch))

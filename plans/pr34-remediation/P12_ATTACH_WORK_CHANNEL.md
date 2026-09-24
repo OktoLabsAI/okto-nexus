@@ -1,4 +1,6 @@
-# P12 external attach work channel — implementation in progress
+# P12 external attach work channel — configuration milestone history
+
+Superseded for current integration status by [P12_ATTACH_WORK_INTEGRATION.md](P12_ATTACH_WORK_INTEGRATION.md). The RED/configuration-only statements below describe the earlier49ebd0e milestone.
 
 Parent: 48a8ea2124f0efc08b78a116891253fd0f011a79 on feature/v0.2.0. Configuration is implemented; T-WORK-12 is FAIL: the positive managed admission acceptance reproducer is now executed and fails. The positive claim/ACK/complete route is not yet implemented or qualified. Native attach remains NOT_RUN without a dedicated approved session.
 

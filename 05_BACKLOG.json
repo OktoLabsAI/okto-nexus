@@ -4310,12 +4310,13 @@
       ],
       "stimulus": "Executar attach sem ACK e depois com canal Nexus autenticado externo.",
       "expected": "Sem canal, não anunciar managed work confiável; com canal, claim/ack/complete são validados.",
-      "execution_status": "FAIL",
+      "execution_status": "PASS",
       "evidence": [
         "plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md",
-        "plans/pr34-remediation/evidence/p12-attach-work-config-index.json"
+        "plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md",
+        "plans/pr34-remediation/evidence/p12-attach-work-integration-index.json"
       ],
-      "execution_note": "Configuration approval qualified separately. Positive managed claim with a fresh post-configuration grant fails with PERMISSION_DENIED; authenticated claim/ACK/complete implementation remains pending. Native dedicated attach NOT_RUN."
+      "execution_note": "Scoped external channel qualification: authenticated self-claim/ACK/complete/reject, authority negatives, real POSIX socket fixture, canonical outcomes/lane reuse and legacy-writer fence. Native dedicated Claude attach remains NOT_RUN; no installed provider campaign performed."
     },
     {
       "test_id": "T-RELAY-01",

@@ -100,6 +100,8 @@ class InboxService:
         max_limit: int = MAX_INBOX_LIMIT,
         event_emitter: Any = None,
         config: Any = None,
+        external_work_provider: Any = None,
+        request_context_provider: Any = None,
     ) -> None:
         self._config = config
         self._cf = connection_factory
@@ -111,6 +113,8 @@ class InboxService:
         self._lease_ttl = int(lease_ttl_seconds)
         self._default_limit = int(default_limit)
         self._max_limit = int(max_limit)
+        self._external_work_provider = external_work_provider
+        self._request_context_provider = request_context_provider
 
     # ------------------------------------------------------------------ #
     # inbox_pull
@@ -157,15 +161,20 @@ class InboxService:
     # ------------------------------------------------------------------ #
     # inbox_ack
     # ------------------------------------------------------------------ #
-    def ack(self, *, agent_id: Any, message_ids: Any) -> dict[str, Any]:
+    def ack(self, *, agent_id: Any, message_ids: Any, session_id=None, session_secret=None) -> dict[str, Any]:
         """Move the recipient's deliveries for ``message_ids`` to history (read)."""
         aid = self._require_agent_id(agent_id)
         ids = self._coerce_ids(message_ids)
         now = self._clock.now_iso()
+        work = self._external_work_provider() if self._external_work_provider else None
+        context = self._request_context_provider() if self._request_context_provider else None
         with self._cf.unit_of_work() as uow:
+            external = work.acknowledge_external(uow, context=context, agent_id=aid, message_ids=ids,
+                session_id=session_id, session_secret=session_secret, now=now) if work else {}
             acked_ids = self._deliveries.mark_read(
                 uow, recipient_agent_id=aid, message_ids=ids, read_at=now
             )
+            acked_ids = sorted(set(acked_ids) | external.keys())
             # Read receipts (sender-visible): one message.read per delivery
             # that ACTUALLY transitioned (an already-read or unknown id never
             # produces a receipt), atomic with the transition itself.
@@ -180,14 +189,12 @@ class InboxService:
                         }
                         for m in acked_messages
                     ]
-                    self._emit_receipts(
-                        uow,
-                        read_items,
-                        type_=MESSAGE_READ_TYPE,
-                        recipient=aid,
-                        at=now,
-                    )
-                self._deliver_read_receipts(uow, acked_messages, reader=aid, at=now)
+                    for item in read_items:
+                        self._emit_receipts(uow, [item], type_=MESSAGE_READ_TYPE,
+                            recipient=aid, at=now, acknowledgement=external.get(item["message_id"]))
+                for message in acked_messages:
+                    self._deliver_read_receipts(uow, [message], reader=aid, at=now,
+                        acknowledgement=external.get(message.message_id))
             self._touch(uow, aid, now)
         return {"acknowledged": len(acked_ids), "read_message_ids": acked_ids}
 

@@ -1,0 +1,483 @@
+{
+  "source_sha": "49ebd0e7165d687dea9e535e8f13ba0691061a81",
+  "requirement": "T-WORK-12",
+  "status": "PASS",
+  "reason": "Scoped T-WORK-12: same-identity authenticated claim/ACK/complete/reject, real POSIX socket fixture, authority negatives, explicit completion facts and older-writer fence. Dedicated installed native attach is still NOT_RUN.",
+  "runs": {
+    "admission-initial-windows": {
+      "manifest": "p12-attach-work-integration-admission-initial-windows.json",
+      "counts": {
+        "PASS": 1
+      }
+    },
+    "completion-initial-windows": {
+      "manifest": "p12-attach-work-integration-completion-initial-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "completion-second-windows": {
+      "manifest": "p12-attach-work-integration-completion-second-windows.json",
+      "counts": {
+        "PASS": 1
+      }
+    },
+    "expanded-windows": {
+      "manifest": "p12-attach-work-integration-expanded-windows.json",
+      "counts": {
+        "PASS": 16
+      }
+    },
+    "socket-windows": {
+      "manifest": "p12-attach-work-integration-socket-windows.json",
+      "counts": {
+        "PASS": 16,
+        "SKIP": 1
+      }
+    },
+    "socket-linux": {
+      "manifest": "p12-attach-work-integration-socket-linux.json",
+      "counts": {
+        "PASS": 17
+      }
+    },
+    "regression-initial-windows": {
+      "manifest": "p12-attach-work-integration-regression-initial-windows.json",
+      "counts": {
+        "PASS": 104
+      }
+    },
+    "authority-windows": {
+      "manifest": "p12-attach-work-integration-authority-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "authority-d-windows": {
+      "manifest": "p12-attach-work-integration-authority-d-windows.json",
+      "counts": {
+        "PASS": 22,
+        "SKIP": 1
+      }
+    },
+    "authority-linux": {
+      "manifest": "p12-attach-work-integration-authority-linux.json",
+      "counts": {
+        "PASS": 23
+      }
+    },
+    "final-windows": {
+      "manifest": "p12-attach-work-integration-final-windows.json",
+      "counts": {
+        "PASS": 30,
+        "SKIP": 1
+      }
+    },
+    "regression-final-windows": {
+      "manifest": "p12-attach-work-integration-regression-final-windows.json",
+      "counts": {
+        "PASS": 384
+      }
+    },
+    "writer-red-windows": {
+      "manifest": "p12-attach-work-integration-writer-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "final-linux": {
+      "manifest": "p12-attach-work-integration-final-linux.json",
+      "counts": {
+        "PASS": 415
+      },
+      "exit_code": 0,
+      "handle": 3911
+    },
+    "writer-green-windows": {
+      "manifest": "p12-attach-work-integration-writer-green-windows.json",
+      "counts": {
+        "PASS": 47,
+        "SKIP": 1
+      },
+      "exit_code": 0,
+      "handle": 59737
+    },
+    "writer-green-linux": {
+      "manifest": "p12-attach-work-integration-writer-green-linux.json",
+      "counts": {
+        "PASS": 48
+      },
+      "exit_code": 0,
+      "handle": 64199
+    },
+    "retention-red-windows": {
+      "manifest": "p12-attach-work-integration-retention-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "retention-green-windows": {
+      "manifest": "p12-attach-work-integration-retention-green-windows.json",
+      "counts": {
+        "PASS": 36
+      }
+    },
+    "retention-green-linux": {
+      "manifest": "p12-attach-work-integration-retention-green-linux.json",
+      "counts": {
+        "PASS": 36
+      }
+    },
+    "recovery-red-windows": {
+      "manifest": "p12-attach-work-integration-recovery-red-windows.json",
+      "counts": {
+        "FAIL": 1
+      }
+    },
+    "operational-final-windows": {
+      "manifest": "p12-attach-work-integration-operational-final-windows.json",
+      "counts": {
+        "PASS": 81,
+        "SKIP": 1
+      }
+    },
+    "operational-final-linux": {
+      "manifest": "p12-attach-work-integration-operational-final-linux.json",
+      "counts": {
+        "PASS": 82
+      }
+    }
+  },
+  "native_provider_campaign": "NOT_RUN in this milestone; fixture peers and one actual Unix socket fixture only",
+  "environment_failure": "C drive free=0; independent SQLite WAL probe failed. Windows tests now isolate TEMP/TMP/TMPDIR and pytest basetemp on D. No personal files removed.",
+  "live_mcp_smoke": {
+    "command_argv": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "scripts/live_client.py"
+    ],
+    "environment_overrides": {
+      "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-final-i1rgpqgr",
+      "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-final-i1rgpqgr",
+      "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-final-i1rgpqgr"
+    },
+    "exit_code": 0,
+    "observed": [
+      "LIVE E2E RESULT: PASS"
+    ],
+    "provider_calls": "none; isolated canonical MCP fixtures"
+  },
+  "static_checks": {
+    "ruff": "PASS",
+    "git diff --check": "PASS"
+  },
+  "requirement_nodes": {
+    "windows": [
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_external_work_session_is_retained_without_blocking_canonical_retention",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-session_closed]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-secret_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-key_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-grant_revoked]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-wrong_session]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-stale_claim]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-foreign_actor]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-creator_policy]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-session_closed]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-secret_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-key_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-grant_revoked]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-wrong_session]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-stale_claim]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-foreign_actor]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-creator_policy]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
+        "status": "SKIP"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]",
+        "status": "PASS"
+      }
+    ],
+    "linux": [
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_external_work_session_is_retained_without_blocking_canonical_retention",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_external_writer_fence.py::test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-session_closed]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-secret_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-key_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-grant_revoked]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-wrong_session]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-stale_claim]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-foreign_actor]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[ack-creator_policy]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-session_closed]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-secret_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-key_rotated]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-grant_revoked]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-wrong_session]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-stale_claim]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-foreign_actor]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_revalidates_return_authority[complete-creator_policy]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_over_real_attach_socket_and_authenticated_nexus",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_external_completion_releases_lane_for_a_new_canonical_delivery",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+        "status": "PASS"
+      },
+      {
+        "node": "tests/test_runtime_attach_work_channel.py::test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]",
+        "status": "PASS"
+      }
+    ]
+  },
+  "live_mcp_smoke_before_retention_recovery": {
+    "command_argv": [
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "scripts/live_client.py"
+    ],
+    "environment_overrides": {
+      "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-mcp-23o04r9v",
+      "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-mcp-23o04r9v",
+      "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-live-mcp-23o04r9v"
+    },
+    "exit_code": 0,
+    "observed": [
+      "LIVE E2E RESULT: PASS"
+    ],
+    "provider_calls": "none; isolated canonical MCP fixtures"
+  }
+}

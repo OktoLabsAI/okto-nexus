@@ -1,0 +1,568 @@
+{
+  "source_sha": "49ebd0e7165d687dea9e535e8f13ba0691061a81",
+  "platform": "windows",
+  "counts": {
+    "PASS": 81,
+    "SKIP": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "1",
+      "tests": "82",
+      "time": "175.379",
+      "timestamp": "2026-09-24T12:31:59.719484-03:00"
+    }
+  ],
+  "native_flags": "No installed provider invoked; selected isolated fixtures only",
+  "command": "Python subprocess wrapper with fresh D temporary root on Windows; WSL Ubuntu on Linux.",
+  "limitations": "Generation-specific fixture evidence; native dedicated attach NOT_RUN. Overlapping runs must not be summed.",
+  "records": [
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+      "status": "PASS",
+      "seconds": 3.73
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+      "status": "PASS",
+      "seconds": 2.851
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+      "status": "PASS",
+      "seconds": 2.907
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_external_work_session_is_retained_without_blocking_canonical_retention",
+      "status": "PASS",
+      "seconds": 3.783
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_recovered_external_claim_does_not_block_direct_rejection_of_open_work",
+      "status": "PASS",
+      "seconds": 3.738
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+      "status": "PASS",
+      "seconds": 3.249
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+      "status": "PASS",
+      "seconds": 3.278
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+      "status": "PASS",
+      "seconds": 3.029
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+      "status": "PASS",
+      "seconds": 2.986
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-session_closed]",
+      "status": "PASS",
+      "seconds": 3.047
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-secret_rotated]",
+      "status": "PASS",
+      "seconds": 3.277
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-key_rotated]",
+      "status": "PASS",
+      "seconds": 3.236
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-grant_revoked]",
+      "status": "PASS",
+      "seconds": 2.858
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-wrong_session]",
+      "status": "PASS",
+      "seconds": 3.148
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-stale_claim]",
+      "status": "PASS",
+      "seconds": 3.237
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-foreign_actor]",
+      "status": "PASS",
+      "seconds": 3.12
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-creator_policy]",
+      "status": "PASS",
+      "seconds": 2.799
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-session_closed]",
+      "status": "PASS",
+      "seconds": 2.979
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-secret_rotated]",
+      "status": "PASS",
+      "seconds": 3.075
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-key_rotated]",
+      "status": "PASS",
+      "seconds": 3.074
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-grant_revoked]",
+      "status": "PASS",
+      "seconds": 3.218
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-wrong_session]",
+      "status": "PASS",
+      "seconds": 2.967
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-stale_claim]",
+      "status": "PASS",
+      "seconds": 3.172
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-foreign_actor]",
+      "status": "PASS",
+      "seconds": 2.907
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-creator_policy]",
+      "status": "PASS",
+      "seconds": 3.225
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_over_real_attach_socket_and_authenticated_nexus",
+      "status": "SKIP",
+      "seconds": 0.0
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_can_return_after_native_detach_and_quarantine",
+      "status": "PASS",
+      "seconds": 2.902
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_completion_releases_lane_for_a_new_canonical_delivery",
+      "status": "PASS",
+      "seconds": 3.48
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+      "status": "PASS",
+      "seconds": 2.873
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+      "status": "PASS",
+      "seconds": 3.18
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+      "status": "PASS",
+      "seconds": 2.809
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+      "status": "PASS",
+      "seconds": 2.868
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+      "status": "PASS",
+      "seconds": 2.885
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+      "status": "PASS",
+      "seconds": 3.015
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+      "status": "PASS",
+      "seconds": 2.884
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]",
+      "status": "PASS",
+      "seconds": 2.965
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_operator_reopens_same_handoff_without_releasing_work_as_conversation",
+      "status": "PASS",
+      "seconds": 3.306
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change0]",
+      "status": "PASS",
+      "seconds": 3.395
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change1]",
+      "status": "PASS",
+      "seconds": 2.983
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change2]",
+      "status": "PASS",
+      "seconds": 2.984
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_rejects_stale_work_or_attempt_and_unacknowledged_risk[change3]",
+      "status": "PASS",
+      "seconds": 3.156
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_only_operator_can_recover_work_even_with_admission_disabled",
+      "status": "PASS",
+      "seconds": 3.339
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[COMPLETED]",
+      "status": "PASS",
+      "seconds": 3.02
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[VERIFYING]",
+      "status": "PASS",
+      "seconds": 3.143
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_recovery_cannot_reopen_completed_canonical_work[REJECTED]",
+      "status": "PASS",
+      "seconds": 3.046
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_work_recovery_and_transport_audit_roll_back_with_canonical_event",
+      "status": "PASS",
+      "seconds": 2.939
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_concurrent_recovery_records_one_canonical_transition_and_audit",
+      "status": "PASS",
+      "seconds": 3.4
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_late_structured_terminal_cannot_complete_reclaimed_work",
+      "status": "PASS",
+      "seconds": 3.369
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_terminal_native_turn_can_be_recovered_without_fabricating_handoff_completion",
+      "status": "PASS",
+      "seconds": 4.142
+    },
+    {
+      "class": "tests.test_runtime_handoff_recovery",
+      "test": "test_authenticated_stdio_work_recovery_uses_active_serve_owner",
+      "status": "PASS",
+      "seconds": 5.704
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_deletes_events_past_window_and_keeps_recent",
+      "status": "PASS",
+      "seconds": 0.282
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_deletes_old_read_deliveries_and_keeps_recent_read",
+      "status": "PASS",
+      "seconds": 0.298
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_deletes_old_closed_sessions_keeps_recent_closed_and_active",
+      "status": "PASS",
+      "seconds": 0.323
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_never_deletes_unread_delivered_or_parked_deliveries",
+      "status": "PASS",
+      "seconds": 0.313
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_never_touches_handoffs_messages_or_open_sessions",
+      "status": "PASS",
+      "seconds": 0.295
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_dry_run_counts_without_deleting",
+      "status": "PASS",
+      "seconds": 0.306
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_uses_config_windows_when_args_omitted",
+      "status": "PASS",
+      "seconds": 0.276
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_batches_drain_fully_and_max_batches_caps_work",
+      "status": "PASS",
+      "seconds": 0.315
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs0]",
+      "status": "PASS",
+      "seconds": 0.291
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs1]",
+      "status": "PASS",
+      "seconds": 0.244
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs2]",
+      "status": "PASS",
+      "seconds": 0.282
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs3]",
+      "status": "PASS",
+      "seconds": 0.269
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs4]",
+      "status": "PASS",
+      "seconds": 0.273
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_prune_rejects_malformed_inputs_fail_closed[kwargs5]",
+      "status": "PASS",
+      "seconds": 0.259
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_config_retention_defaults",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_config_retention_env_and_cli_precedence",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_config_retention_invalid_values_fail_closed[env0]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_config_retention_invalid_values_fail_closed[env1]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_config_retention_invalid_values_fail_closed[env2]",
+      "status": "PASS",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_admin_prune_cli_deletes_and_prints_report",
+      "status": "PASS",
+      "seconds": 0.303
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_admin_prune_cli_dry_run_deletes_nothing",
+      "status": "PASS",
+      "seconds": 0.279
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_admin_prune_cli_window_override_flags",
+      "status": "PASS",
+      "seconds": 0.311
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_admin_prune_cli_vacuum_compacts_freed_pages",
+      "status": "PASS",
+      "seconds": 0.351
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_admin_prune_cli_bad_project_root_exits_one",
+      "status": "PASS",
+      "seconds": 0.289
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_main_dispatches_admin_prune_subcommand",
+      "status": "PASS",
+      "seconds": 0.341
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_maybe_auto_prune_disabled_by_default_deletes_nothing",
+      "status": "PASS",
+      "seconds": 0.301
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_maybe_auto_prune_enabled_prunes_with_configured_windows",
+      "status": "PASS",
+      "seconds": 0.352
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_maybe_auto_prune_is_bounded_not_a_full_drain",
+      "status": "PASS",
+      "seconds": 0.408
+    },
+    {
+      "class": "tests.test_retention",
+      "test": "test_main_runs_auto_prune_before_serving",
+      "status": "PASS",
+      "seconds": 0.278
+    },
+    {
+      "class": "tests.test_runtime_retention_identity",
+      "test": "test_prune_and_agent_deactivation_preserve_pending_transport_fences[False]",
+      "status": "PASS",
+      "seconds": 2.858
+    },
+    {
+      "class": "tests.test_runtime_retention_identity",
+      "test": "test_prune_and_agent_deactivation_preserve_pending_transport_fences[True]",
+      "status": "PASS",
+      "seconds": 2.84
+    },
+    {
+      "class": "tests.test_runtime_retention_identity",
+      "test": "test_prune_and_reactivation_do_not_forget_command_idempotency",
+      "status": "PASS",
+      "seconds": 4.294
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/adapters/inbound/mcp/server.py": "199be85c46330c143a0bf6fcb729f9189e96e01ae1db16dfc932f81e24dfc46c",
+    "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "3282e1349803584cfb6b0155d9612aa7307cbb165a1380715bd23a78ac35879f",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+    "src/okto_nexus/adapters/inbound/mcp/tools/inbox.py": "b4d68eafce153df404a89737bce64f36fe3d4ac42dd5ec513b71653e22ee52c7",
+    "src/okto_nexus/adapters/outbound/harness/qualified.py": "9b9f04f0c2c8c367773dd17df6e6a15bcc64327cc7e0e74a2a535756bbb0dd50",
+    "src/okto_nexus/adapters/outbound/sqlite/connection.py": "36baf3c17038bc6d22a176fa3fb68ed8ee4a933452d8ec8d20111260ce640977",
+    "src/okto_nexus/adapters/outbound/sqlite/identity_repo.py": "78ba6c5351cae078bc45b4ec8c5ff614180cc44b8db50fe067e9aca93a240799",
+    "src/okto_nexus/adapters/outbound/sqlite/messages_repo.py": "759820743c1d89d6fda0e8fba7db98e7039068c0a382a2923aeff63dcabce00e",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "fc48855b1f7009fe17a68b6cf4770f6a17af0f0b7b0d905f9625d16d8be66301",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "c11c97c53db36d3f5e66156e1cc9df7cc420fd2d92295270d1e705038e59f6aa",
+    "src/okto_nexus/application/handoff.py": "bfb4764b801dc9d0fdc28eb3deaca1f251b8cb80df04535e62e3e676661925e0",
+    "src/okto_nexus/application/inbox.py": "c2ffcdc991f49545406055b279480fcc42a5ee62be74079a7ea6587f66edbd1a",
+    "src/okto_nexus/application/ports.py": "271754d8d25efee847627085e9ddc2b97af153098245d8bba531810982174ca6",
+    "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+    "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+    "src/okto_nexus/application/runtime_discovery.py": "8e040d9c45c871ceaddfa2724ca793620aba74fe088c4c1010c5da5ffe67b9c3",
+    "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+    "src/okto_nexus/domain/harness.py": "4d2f1a1518f2e2b61fc8c4fd4f63f60d7760cef5a48077fc42587d23fc02bb06",
+    "tests/test_comm_presets.py": "3fc315caebd025dec262061d1dd9d07e44fca63f7720ac89ef1097d156d213ce",
+    "tests/test_feature_flags.py": "98873727e483159d93017387bd1a1a8e54887dea38c0e53b10b4b8b38fd44139",
+    "tests/test_handoff_dependencies.py": "2d828a2ec4092c77daa2218da2d4f646a6b878009245258db0518adea0cd581c",
+    "tests/test_health.py": "5fbbf6cda4d54c0f230dbd999184a33acd4ea6a960935da764026d7b0b04073b",
+    "tests/test_memory.py": "8276d7572b8d004be353acb583d882d3d75bf3a53c0c12c42715b38605d940e4",
+    "tests/test_replay_marker.py": "32dbfff9f155d9d2acc5e6a17e09190367baa298c2d9a8edfab9d355f2bf2906",
+    "tests/test_runtime_attach_work_channel.py": "038c561e25e30d8daad981ba9e1790ee71f100cc3539348bf9d12e3271d21036",
+    "tests/test_verification.py": "a633a5a3005df6666630e129943a2ff3859cea16d00cacb142f95a4f8d06a40f",
+    "src/okto_nexus/application/runtime_external_work.py": "ea72d73be8cd83a36cd2d5a3d8e5c78f4d02ad918cb4770be2cce80ddfd27ad5",
+    "src/okto_nexus/migrations/064_runtime_external_work.sql": "8b4d28ccb7b9489bfc44600861c892229107e94a6b6b3987d492c79ebcab3a92",
+    "tests/test_runtime_external_writer_fence.py": "95e5f3ae4204b23930f60ce6be9603069996fc4e6eafe574e9e37a127bf2c8d2"
+  },
+  "environment_overrides": {
+    "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-operational-final-wsh8z304",
+    "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-operational-final-wsh8z304",
+    "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-operational-final-wsh8z304"
+  },
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_runtime_external_writer_fence.py",
+    "tests/test_runtime_attach_work_channel.py",
+    "tests/test_runtime_handoff_recovery.py",
+    "tests/test_retention.py",
+    "tests/test_runtime_retention_identity.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-operational-final-wsh8z304\\pytest",
+    "--junitxml=.git/pr34-evidence/attach-work-operational-final-windows.xml"
+  ],
+  "terminal_observation": "Completed JUnit present; former process handle no longer available at resume. Exit code not independently recovered."
+}

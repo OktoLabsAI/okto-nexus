@@ -1,0 +1,363 @@
+{
+  "source_sha": "49ebd0e7165d687dea9e535e8f13ba0691061a81",
+  "platform": "windows",
+  "counts": {
+    "PASS": 47,
+    "SKIP": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "1",
+      "tests": "48",
+      "time": "113.645",
+      "timestamp": "2026-09-24T12:16:13.928648-03:00"
+    }
+  ],
+  "native_flags": "No installed provider invoked; selected isolated fixtures only",
+  "command": "Python subprocess wrapper; exact child argv and isolated environment recorded below.",
+  "limitations": "Fixture qualification only; native dedicated Claude attach remains NOT_RUN. Broad final-linux ran before the narrow writer marker/trigger fix; writer-green carries the corrected source hashes. Do not sum overlapping generations.",
+  "records": [
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[COMPLETED]",
+      "status": "PASS",
+      "seconds": 3.018
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[VERIFYING]",
+      "status": "PASS",
+      "seconds": 2.587
+    },
+    {
+      "class": "tests.test_runtime_external_writer_fence",
+      "test": "test_legacy_writer_cannot_complete_external_work_without_the_new_contract[REJECTED]",
+      "status": "PASS",
+      "seconds": 2.513
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-complete]",
+      "status": "PASS",
+      "seconds": 3.051
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[rest-reject]",
+      "status": "PASS",
+      "seconds": 4.156
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-complete]",
+      "status": "PASS",
+      "seconds": 3.024
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel[mcp-reject]",
+      "status": "PASS",
+      "seconds": 3.314
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-session_closed]",
+      "status": "PASS",
+      "seconds": 2.942
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-secret_rotated]",
+      "status": "PASS",
+      "seconds": 2.595
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-key_rotated]",
+      "status": "PASS",
+      "seconds": 2.674
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-grant_revoked]",
+      "status": "PASS",
+      "seconds": 2.619
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-wrong_session]",
+      "status": "PASS",
+      "seconds": 2.88
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-stale_claim]",
+      "status": "PASS",
+      "seconds": 2.624
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-foreign_actor]",
+      "status": "PASS",
+      "seconds": 2.639
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[ack-creator_policy]",
+      "status": "PASS",
+      "seconds": 2.516
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-session_closed]",
+      "status": "PASS",
+      "seconds": 2.65
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-secret_rotated]",
+      "status": "PASS",
+      "seconds": 2.707
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-key_rotated]",
+      "status": "PASS",
+      "seconds": 3.082
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-grant_revoked]",
+      "status": "PASS",
+      "seconds": 3.254
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-wrong_session]",
+      "status": "PASS",
+      "seconds": 3.184
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-stale_claim]",
+      "status": "PASS",
+      "seconds": 3.082
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-foreign_actor]",
+      "status": "PASS",
+      "seconds": 3.145
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_revalidates_return_authority[complete-creator_policy]",
+      "status": "PASS",
+      "seconds": 3.017
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_over_real_attach_socket_and_authenticated_nexus",
+      "status": "SKIP",
+      "seconds": 0.001
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_work_can_return_after_native_detach_and_quarantine",
+      "status": "PASS",
+      "seconds": 3.193
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_external_completion_releases_lane_for_a_new_canonical_delivery",
+      "status": "PASS",
+      "seconds": 3.331
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-rest]",
+      "status": "PASS",
+      "seconds": 2.917
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[missing_proof-mcp]",
+      "status": "PASS",
+      "seconds": 2.721
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-rest]",
+      "status": "PASS",
+      "seconds": 2.721
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[wrong_secret-mcp]",
+      "status": "PASS",
+      "seconds": 2.968
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-rest]",
+      "status": "PASS",
+      "seconds": 2.707
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[structured_completion-mcp]",
+      "status": "PASS",
+      "seconds": 1.788
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-rest]",
+      "status": "PASS",
+      "seconds": 2.591
+    },
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_configured_attach_requires_authenticated_self_claim_proof[foreign_actor-mcp]",
+      "status": "PASS",
+      "seconds": 2.766
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_writer_migration_trigger_failure_rolls_back_and_upgrade_repeats",
+      "status": "PASS",
+      "seconds": 0.499
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_future_writer_contract_cannot_be_downgraded_by_owner_start",
+      "status": "PASS",
+      "seconds": 0.171
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_preexisting_legacy_connection_is_fenced_only_after_activation",
+      "status": "PASS",
+      "seconds": 0.17
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_feature_off_stdio_cannot_commit_unreserved_delivery_to_active_store",
+      "status": "PASS",
+      "seconds": 3.744
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_operator_disable_changes_writer_mode_atomically_and_retains_fences[stored_runtime]",
+      "status": "PASS",
+      "seconds": 5.798
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_compatible_stdio_still_enqueues_the_canonical_delivery",
+      "status": "PASS",
+      "seconds": 4.138
+    },
+    {
+      "class": "tests.test_runtime_writer_contract",
+      "test": "test_writer_contract_diagnostics_are_operator_only",
+      "status": "PASS",
+      "seconds": 1.874
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_unknown_ledger_version_fails_closed_before_applying_anything",
+      "status": "PASS",
+      "seconds": 0.026
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_failed_migration_rolls_back_only_itself",
+      "status": "PASS",
+      "seconds": 0.034
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_concurrent_bootstrap_applies_each_migration_exactly_once",
+      "status": "PASS",
+      "seconds": 0.25
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_bootstrap_retries_while_another_process_holds_the_lock",
+      "status": "PASS",
+      "seconds": 0.635
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_lock_retry_exhausted_raises_actionable_migration_error",
+      "status": "PASS",
+      "seconds": 0.041
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts2_migration_022_backfills_comm_scope_into_inline_binding",
+      "status": "PASS",
+      "seconds": 0.099
+    },
+    {
+      "class": "tests.test_migrations",
+      "test": "test_ts3_migration_022_converts_governance_policies_to_detached_globals",
+      "status": "PASS",
+      "seconds": 0.129
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/adapters/inbound/mcp/server.py": "199be85c46330c143a0bf6fcb729f9189e96e01ae1db16dfc932f81e24dfc46c",
+    "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "3282e1349803584cfb6b0155d9612aa7307cbb165a1380715bd23a78ac35879f",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+    "src/okto_nexus/adapters/inbound/mcp/tools/inbox.py": "b4d68eafce153df404a89737bce64f36fe3d4ac42dd5ec513b71653e22ee52c7",
+    "src/okto_nexus/adapters/outbound/harness/qualified.py": "9b9f04f0c2c8c367773dd17df6e6a15bcc64327cc7e0e74a2a535756bbb0dd50",
+    "src/okto_nexus/adapters/outbound/sqlite/connection.py": "36baf3c17038bc6d22a176fa3fb68ed8ee4a933452d8ec8d20111260ce640977",
+    "src/okto_nexus/adapters/outbound/sqlite/messages_repo.py": "759820743c1d89d6fda0e8fba7db98e7039068c0a382a2923aeff63dcabce00e",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_commands_repo.py": "fc48855b1f7009fe17a68b6cf4770f6a17af0f0b7b0d905f9625d16d8be66301",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_journal_repo.py": "433a7bf6bb7de658e3400dc322170f68d254dbf105e1acb047ef230f84bdc259",
+    "src/okto_nexus/adapters/outbound/sqlite/runtime_outbox_repo.py": "c11c97c53db36d3f5e66156e1cc9df7cc420fd2d92295270d1e705038e59f6aa",
+    "src/okto_nexus/application/handoff.py": "2032074be464662895930fc2abc744d27c4890e26c565dabee3a064667ff2194",
+    "src/okto_nexus/application/inbox.py": "c2ffcdc991f49545406055b279480fcc42a5ee62be74079a7ea6587f66edbd1a",
+    "src/okto_nexus/application/ports.py": "271754d8d25efee847627085e9ddc2b97af153098245d8bba531810982174ca6",
+    "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+    "src/okto_nexus/application/runtime_control.py": "ded87a532e659b1711774427a94cee7fc2b41894b576dd7a7d4cbde64b91ddbe",
+    "src/okto_nexus/application/runtime_discovery.py": "8e040d9c45c871ceaddfa2724ca793620aba74fe088c4c1010c5da5ffe67b9c3",
+    "src/okto_nexus/application/runtime_work.py": "131063da1424b625ad5682b69ed30b8e1f543c523b61a5bcd9acafaaeecd3158",
+    "src/okto_nexus/domain/harness.py": "4d2f1a1518f2e2b61fc8c4fd4f63f60d7760cef5a48077fc42587d23fc02bb06",
+    "tests/test_comm_presets.py": "3fc315caebd025dec262061d1dd9d07e44fca63f7720ac89ef1097d156d213ce",
+    "tests/test_feature_flags.py": "98873727e483159d93017387bd1a1a8e54887dea38c0e53b10b4b8b38fd44139",
+    "tests/test_handoff_dependencies.py": "2d828a2ec4092c77daa2218da2d4f646a6b878009245258db0518adea0cd581c",
+    "tests/test_health.py": "5fbbf6cda4d54c0f230dbd999184a33acd4ea6a960935da764026d7b0b04073b",
+    "tests/test_memory.py": "8276d7572b8d004be353acb583d882d3d75bf3a53c0c12c42715b38605d940e4",
+    "tests/test_replay_marker.py": "32dbfff9f155d9d2acc5e6a17e09190367baa298c2d9a8edfab9d355f2bf2906",
+    "tests/test_runtime_attach_work_channel.py": "038c561e25e30d8daad981ba9e1790ee71f100cc3539348bf9d12e3271d21036",
+    "tests/test_verification.py": "a633a5a3005df6666630e129943a2ff3859cea16d00cacb142f95a4f8d06a40f",
+    "src/okto_nexus/application/runtime_external_work.py": "ea72d73be8cd83a36cd2d5a3d8e5c78f4d02ad918cb4770be2cce80ddfd27ad5",
+    "src/okto_nexus/migrations/064_runtime_external_work.sql": "8b4d28ccb7b9489bfc44600861c892229107e94a6b6b3987d492c79ebcab3a92",
+    "tests/test_runtime_external_writer_fence.py": "93e7cdb69739850477061906a57be23eb23211f348a09ba3d07ab59ce7592226"
+  },
+  "handle": 59737,
+  "exit_code": 0,
+  "command_argv": [
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+    "-m",
+    "pytest",
+    "tests/test_runtime_external_writer_fence.py",
+    "tests/test_runtime_attach_work_channel.py",
+    "tests/test_runtime_writer_contract.py",
+    "tests/test_migrations.py",
+    "-q",
+    "--tb=short",
+    "--basetemp=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-writer-green-qr4mw1ym\\pytest",
+    "--junitxml=.git/pr34-evidence/attach-work-writer-green-windows.xml"
+  ],
+  "environment_overrides": {
+    "TEMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-writer-green-qr4mw1ym",
+    "TMP": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-writer-green-qr4mw1ym",
+    "TMPDIR": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.git\\pr34-evidence\\attach-work-writer-green-qr4mw1ym"
+  }
+}

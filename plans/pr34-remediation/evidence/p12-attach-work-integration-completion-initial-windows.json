@@ -1,0 +1,44 @@
+{
+  "source_sha": "49ebd0e7165d687dea9e535e8f13ba0691061a81",
+  "platform": "windows",
+  "counts": {
+    "FAIL": 1
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "1",
+      "time": "6.056",
+      "timestamp": "2026-09-24T11:52:12.541972-03:00"
+    }
+  ],
+  "native_flags": "No installed provider invoked; selected isolated fixtures only",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_attach_work_channel.py -q --tb=short --junitxml=.git/pr34-evidence/attach-work-completion-initial-windows.xml",
+  "limitations": "Fixtures do not qualify installed native providers. Generations are not additive counts; legacy writer bypass remains an explicit RED until fixed.",
+  "records": [
+    {
+      "class": "tests.test_runtime_attach_work_channel",
+      "test": "test_attach_managed_claim_requires_an_approved_external_nexus_channel",
+      "status": "FAIL",
+      "seconds": 4.425
+    }
+  ],
+  "source_file_sha256": {
+    "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "dc597d74d730e66dd8596f071cf078ba987cf6f0c837416e3a44ac2c9ae49389",
+    "src/okto_nexus/adapters/inbound/mcp/tools/harness.py": "0f2caf09e54d7266ea7576e34301d2c905aa368e226acbee8dfb05ef6e73b56b",
+    "src/okto_nexus/adapters/inbound/mcp/tools/inbox.py": "2faee27b9a01cf23a53b92b08be496aea8f7dad0766e5f895958689c888663a5",
+    "src/okto_nexus/adapters/outbound/harness/qualified.py": "9b9f04f0c2c8c367773dd17df6e6a15bcc64327cc7e0e74a2a535756bbb0dd50",
+    "src/okto_nexus/adapters/outbound/sqlite/messages_repo.py": "759820743c1d89d6fda0e8fba7db98e7039068c0a382a2923aeff63dcabce00e",
+    "src/okto_nexus/application/handoff.py": "2032074be464662895930fc2abc744d27c4890e26c565dabee3a064667ff2194",
+    "src/okto_nexus/application/inbox.py": "c2ffcdc991f49545406055b279480fcc42a5ee62be74079a7ea6587f66edbd1a",
+    "src/okto_nexus/application/runtime_access.py": "820e355b4d1903e6e4d1554a048a46179c631500609ec1d5835b9745a711cd95",
+    "src/okto_nexus/application/runtime_work.py": "a0ab2174deae8a730c390be8e241e81a47d375bc443ebec17f291dc8b9cb41bc",
+    "src/okto_nexus/domain/harness.py": "4d2f1a1518f2e2b61fc8c4fd4f63f60d7760cef5a48077fc42587d23fc02bb06",
+    "tests/test_runtime_attach_work_channel.py": "c57673876efcd1662b8a4aedff9f5e6618d1807a0d9169c80aff434532b852ae",
+    "src/okto_nexus/application/runtime_external_work.py": "495f9b584bb081a7c3f3a20f23b985e6e0910952bd552bfbf1950a1c32a16a04",
+    "src/okto_nexus/migrations/064_runtime_external_work.sql": "8c9385f947978cd0ce382ff89a7b42e2156b060af5be6decfef19fc7061c87a9"
+  }
+}

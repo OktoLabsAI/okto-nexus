@@ -358,6 +358,7 @@ class HarnessCommand:
     operation_id: str | None = None
     attempt_id: str | None = None
     owner_epoch: int | None = None
+    external_work_channel: bool = False
     expected_operation_id: str | None = None
     expected_turn_id: str | None = None
 

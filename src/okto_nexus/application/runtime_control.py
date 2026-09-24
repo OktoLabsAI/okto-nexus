@@ -199,11 +199,17 @@ class RuntimeControlService:
                 result = uow.connection.execute("SELECT result_id,output_text,output_truncated,publication_state,delivery_outcome,relay_state,relay_reason FROM runtime_results "
                     "WHERE operation_id=? ORDER BY captured_at DESC LIMIT 1", (operation_id,)).fetchone()
                 binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
+                external = uow.connection.execute("SELECT b.external_acked_at AS acknowledged_at,"
+                    "b.external_completion_action AS completion_action,h.status AS handoff_status "
+                    "FROM runtime_handoff_bindings b JOIN handoffs h USING(handoff_id) "
+                    "WHERE b.operation_id=? AND b.external_session_id IS NOT NULL", (operation_id,)).fetchone()
                 outcome = uow.connection.execute("SELECT state,reason,response FROM runtime_work_outcomes WHERE operation_id=?", (operation_id,)).fetchone()
             return {"operation_id": operation_id, "session_id": delivery["runtime_session_id"], "state": delivery["status"],
                 "attempt_id": delivery["attempt_id"], "owner_epoch": delivery["owner_epoch"], "reconciliation_id": delivery["reconciliation_id"],
                 "durable": True, "ack_level": delivery["ack_level"], "reason": delivery["reason"],
                 "context_observations": self._context_observations(context, operation_id),
+                "external_work": (dict(external, contract_version=1, completion_channel="authenticated_nexus_call",
+                    completed_at=delivery["external_completed_at"]) if external else None),
                 "external_acceptance": "observed" if delivery["ack_level"] in {"HARNESS_ACCEPTED", "AGENT_ACK"} else "not_observed",
                 "result_durable": delivery["terminal_event_id"] is not None, "result": dict(result) if result else None,
                 "handoff": dict(binding) if binding else None,

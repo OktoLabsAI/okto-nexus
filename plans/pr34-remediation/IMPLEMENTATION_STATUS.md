@@ -4,10 +4,10 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `48a8ea2` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `49ebd0e`; the external work integration is the milestone containing this status update on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
-- Current schema063, surface57, identity25. No personal database is a fixture.
+- Current schema064, surface58, identity25. No personal database is a fixture.
 - PR34 was reread through GitHub during this continuation: OPEN, head `d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397`, base `27b06fe48b9f95b35c94f50827fea83d178f4e12`, branch `feature/harness-integrations`, unchanged from review. No PR currently targets head branch `feature/v0.2.0` according to the read-only query. No PR message/merge was performed.
 
 ## Exact resume point
@@ -64,7 +64,9 @@ Mirror observation implemented: T-CONS-07 scoped PASS. Additive schema063 and op
 
 External attach work configuration implemented after48a8ea2: EndpointService now approves only active same-agent/workspace Nexus session references, rejecting harness-owned presence and missing secrets atomically across REST/MCP. Configuration does not prove possession or enable managed work.30 fixture cases and54 selected regression nodes PASS each platform; isolated MCP smoke and static checks PASS, all handles terminal. Exact generations are recorded in P12_ATTACH_WORK_CHANNEL.md. Positive managed claim with a fresh post-update grant remains an explicit RED acceptance test, so T-WORK-12 is now FAIL (previously NOT_RUN). No native provider run. No schema/surface change yet.
 
-Next: integrate authenticated external attach claim/ACK/complete using the dependencies and code locations in P12_ATTACH_WORK_CHANNEL.md. The committed RED test must turn green as part of this complete route, not be suppressed or recategorized as native unavailability. Then finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
+External attach integration supersedes that preparatory RED: T-WORK-12 scoped PASS. See P12_ATTACH_WORK_INTEGRATION.md and its generation-specific manifests. Final operational gate Windows81 PASS1 POSIX SKIP/Linux82 PASS; writer/attach/migration gate Windows47 PASS1 POSIX SKIP/Linux48 PASS; broader pre-writer-fix regression384 PASS each platform, with exact hashes and overlaps retained. The older-writer bypass was reproduced and fixed with an additive capability fence. Retention FK failure and reopened-offer rejection refusal were also reproduced and corrected before publication. Completed final JUnit files were recovered; prior process exit codes were unavailable at resume. Required isolated live MCP smoke and static checks PASS; all handles terminal. No new installed-provider run.
+
+Next: final original-matrix/finding audit and immutable committed-source full Windows/Linux suites with persistent XML, then release/package/build/reinstall0.2.0. The126 scoped PASS rows require a final evidence/finding join; three original rows remain NOT_RUN. The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external channel is fixture-qualified; installed native attach is not.
 
 ## Recent completed milestones
 
@@ -97,4 +99,9 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 125, "FAIL": 1, "NOT_RUN": 3}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 126, "NOT_RUN": 3}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+
+
+## Current environment constraint
+
+C drive reached0 free bytes during the external-work campaign, confirmed by independent SQLite WAL failure. Windows tests and the live MCP smoke now allocate new private temporary roots beneath .git/pr34-evidence on D (TEMP/TMP/TMPDIR plus pytest basetemp). Preserve XML and reduce manifests before any cleanup. Do not delete personal files or reuse old fixture stores. D had roughly580GB free at that observation. Linux campaigns completed successfully in their existing isolated WSL environment. Recheck storage before the final installation; do not mislabel disk-full failures as product regressions or silently omit them.

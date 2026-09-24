@@ -899,7 +899,8 @@ class HandoffService:
             if managed:
                 context = self._request_context_provider() if self._request_context_provider else None
                 authorized = self.runtime_work.authorize(uow, context=context, endpoint_id=runtime_endpoint_id,
-                    grant_id=execution_grant_id, agent_id=agent_id, workspace_id=workspace_id)
+                    grant_id=execution_grant_id, agent_id=agent_id, workspace_id=workspace_id,
+                    session_id=session_id, session_secret=session_secret)
                 context = authorized[0]
                 digest = self.runtime_work.request_hash(handoff_id=handoff_id, agent_id=agent_id,
                     endpoint_id=runtime_endpoint_id, grant_id=execution_grant_id,
@@ -1012,6 +1013,17 @@ class HandoffService:
     # ------------------------------------------------------------------ #
     # complete
     # ------------------------------------------------------------------ #
+    def _authorize_external_work_return(self, uow, **kwargs):
+        external = uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings b JOIN handoffs h "
+            "ON b.handoff_id=h.handoff_id AND b.claim_epoch=h.claim_epoch WHERE b.handoff_id=? "
+            "AND h.status='CLAIMED' AND b.external_session_id IS NOT NULL", (kwargs["handoff_id"],)).fetchone()
+        if not external:
+            return None
+        if not self.runtime_work or not self._request_context_provider:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "External Nexus work channel is not authorized.", {})
+        return self.runtime_work.authorize_external_completion(uow,
+            context=self._request_context_provider(), **kwargs)
+
     def handoff_complete(
         self,
         *,
@@ -1020,6 +1032,8 @@ class HandoffService:
         agent_id: Any,
         result: Any = None,
         claim_epoch: Any = None,
+        session_id: Any = None,
+        session_secret: Any = None,
         _runtime_result_id: str | None = None,
     ) -> dict[str, Any]:
         """Owner-only delivery: ``CLAIMED -> COMPLETED`` or ``-> VERIFYING``.
@@ -1059,6 +1073,9 @@ class HandoffService:
             else:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
+                agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
+
             # Verification routing (I4): the ROW's contract picks the
             # destination. The feature flag gates contract CREATION only - a
             # verifiable handoff must never silently skip its verification,
@@ -1087,6 +1104,9 @@ class HandoffService:
                 self._raise_claimed_transition_error(
                     uow, workspace_id, handoff_id, agent_id, verb="complete"
                 )
+            if external_operation:
+                self.runtime_work.record_external_completion(uow, operation_id=external_operation,
+                    action="complete", now=now)
             self._touch_agent(uow, agent_id, now)
             if not verifiable:
                 payload = {
@@ -1416,6 +1436,8 @@ class HandoffService:
         agent_id: Any,
         reason: Any = None,
         claim_epoch: Any = None,
+        session_id: Any = None,
+        session_secret: Any = None,
         _runtime_result_id: str | None = None,
     ) -> dict[str, Any]:
         """Reject a handoff.
@@ -1451,6 +1473,9 @@ class HandoffService:
             else:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
+                agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
+
             handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
             if handoff.status in TERMINAL_STATUSES:
                 raise OktoNexusError(
@@ -1516,6 +1541,9 @@ class HandoffService:
                 self._raise_claimed_transition_error(
                     uow, workspace_id, handoff_id, agent_id, verb="reject"
                 )
+            if external_operation:
+                self.runtime_work.record_external_completion(uow, operation_id=external_operation,
+                    action="reject", now=now)
             self._touch_agent(uow, agent_id, now)
             payload = {
                 "handoff_id": updated.handoff_id,

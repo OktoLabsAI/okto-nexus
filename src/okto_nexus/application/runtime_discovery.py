@@ -70,6 +70,12 @@ class RuntimeDiscoveryService:
                 "profile_id", "revision", "health", "response_policy", "consumption")}
         item.update(enabled=bool(endpoint["enabled"]), profile_revision=profile["revision"] if profile else None,
                     declared_capabilities=asdict(descriptor.capabilities), capability_verification="not_probed")
+        if descriptor.substrate == "attach":
+            # Configuration is not possession proof, a live connection or a
+            # native capability. Do not disclose the external session or key.
+            item["external_work_channel"] = {"contract_version": 1,
+                "configured": bool(endpoint["public_config"].get("nexus_work_session_id")),
+                "authentication_required": True, "native_ack": False}
         rows = uow.connection.execute("SELECT session_id,status,lifecycle_state,owner_epoch,runtime_profile_revision,started_at,ended_at,compatibility_report "
             "FROM harness_sessions WHERE endpoint_id=? ORDER BY started_at DESC,session_id DESC LIMIT 11", (endpoint["endpoint_id"],)).fetchall()
         sessions = []

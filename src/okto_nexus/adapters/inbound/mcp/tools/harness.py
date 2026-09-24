@@ -469,6 +469,8 @@ def build_dispatcher(deps):
         operation = operation | {"runtime_session_id": session_id}
         with deps.connection_factory.unit_of_work(write=False) as uow:
             validate_dispatch(uow, operation)
+            external_work = uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=? "
+                "AND external_session_id IS NOT NULL", (operation["operation_id"],)).fetchone() is not None
             current = outbox.get(uow, operation["operation_id"])
             if (not current or current["status"] != "SENDING" or current["owner_epoch"] != operation["owner_epoch"] or
                     not outbox.owns(uow, owner_id=operation["owner_id"], epoch=operation["owner_epoch"], now=deps.clock.now_iso())):
@@ -480,7 +482,8 @@ def build_dispatcher(deps):
                 "workspace_id": operation["workspace_id"], "canonical_envelope_hash": operation["request_hash"],
                 "execution_profile": {"profile_id": profile["profile_id"], "revision": profile["revision"]} if profile else None}
         supervisor.send(session_id, "send_turn", payload,
-            _transport_attempt={key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")})
+            _transport_attempt={"external_work_channel": external_work,
+                **{key: operation[key] for key in ("operation_id", "attempt_id", "owner_epoch")}})
 
     dispatcher = RuntimeDispatcher(connection_factory=deps.connection_factory, repo=outbox, clock=deps.clock,
                                   validate=validate_dispatch, dispatch=dispatch,

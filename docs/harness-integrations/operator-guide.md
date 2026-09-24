@@ -233,7 +233,8 @@ before sending. Missing/null, boolean, float and other versions fail with
 The server-owned report records `attach_registry_protocol`, `cc_socks_peer_1`, a
 bounded version when present, and `ack_level=NONE`. These are local preconditions,
 not native acceptance: no token is sent by the probe, writes stay unconfirmed,
-close detaches, and managed work/interrupt/steer remain unsupported. No native
+close detaches, and native managed work/interrupt/steer remain unsupported. The separate
+authenticated Nexus work channel below supplies business acknowledgements only. No native
 Claude attach session has been qualified in this remediation campaign.
 
 Steering and interruption require `compatible_controls` from the server-owned
@@ -343,19 +344,44 @@ newly admitted deliveries may reach the new observer; closed-session pending con
 Inspect observations under their original executor operation ID, not as independent executable operations.
 
 
-### External attach work channel: configuration groundwork
+### Authenticated external attach work (surface58, schema064)
 
-The optional attach public_config.nexus_work_session_id references an active canonical Nexus session
-for the same agent and workspace. It contains no secret. Operator create/update checks the reference;
-a harness-owned presence session is not an external client session. Endpoint edits revoke existing
-grants, so any subsequent authorized work must use a grant issued for the new configuration.
+Attach's native transport remains send-only and unconfirmed. A separately configured authenticated
+Nexus client can now claim, acknowledge and complete/reject work for the same existing agent. This
+external channel does not add native events, ACK, result capture, sandbox, steering or interrupt.
 
-This reference is currently preparatory: the authenticated claim/ACK/complete path is still under
-implementation and managed attach work remains rejected. Do not interpret successful configuration
-as verified native execution, ACK, events or result capture. Follow
-plans/pr34-remediation/P12_ATTACH_WORK_CHANNEL.md for the acceptance gate.
+The operator approves public_config.nexus_work_session_id, an active canonical session of the
+endpoint's agent/workspace. The session must have a secret and cannot be a harness-created presence
+record. Keep the secret private in the external client's configuration. Never place it, an agent key
+or the operator key in the endpoint's public_config or native prompt.
 
-If the referenced session closes, disabling the endpoint still works. Remove the reference with
-nexus_work_session_id=null (preserving the approved target_pid) before reconfiguration; enabling with
-a closed reference is rejected. These operations neither resend uncertain work nor terminate the
-external attach process.
+Configure the reference first, then issue execute_work (and read/discover as needed) grants: endpoint
+edits revoke earlier grants. The same authenticated agent must call handoff_claim with its approved
+session proof, runtime_endpoint_id, execution_grant_id and idempotency_key. Even trust_mode=open
+requires proof for this route. A delegate's key cannot substitute for the external agent's identity.
+
+After receiving the canonical envelope, the client calls inbox_ack with message_id and the same
+session proof, then handoff_complete or handoff_reject with the exact handoff_id/claim_epoch and
+proof. Completion requires the prior explicit ACK; verification and evidence requirements still use
+the canonical handoff services. The envelope supplies identifiers/instructions, never credentials.
+
+Inspect harness_get(operation_id): socket write is SENT_UNCONFIRMED/TRANSPORT_WRITE; authenticated
+Nexus receipt is AGENT_ACK; external_work records the external acknowledgement/completion separately.
+Native result_durable stays false when no native result exists. Repeated ACK emits no duplicate
+receipt. External completion frees the lane for a new authorized delivery, not a replay of the old one.
+
+A valid external client may return work after native detach/quarantine, while current key/session,
+grant, endpoint enable/revision, policies and claim remain valid. Revocation or changed authority is
+not bypassed. Unknown sends retain their ownership; use explicit canonical reconciliation rather than
+blind retry. Detaching never terminates the external process.
+
+Restart older Nexus writers after upgrade. Migration064 prevents a pre-064 connection from using
+legacy completion/consumption to bypass external proof. Do not add SQLite capability markers manually.
+If the referenced session closes, disabling the endpoint still works; remove the reference with
+nexus_work_session_id=null while preserving target_pid before reconfiguration.
+
+Qualification: real production HTTP/MCP with an owned disposable POSIX socket fixture, plus authority
+and writer-compatibility tests. The installed Claude application's dedicated attach session remains
+NOT_RUN. Exact evidence and limitations: plans/pr34-remediation/P12_ATTACH_WORK_INTEGRATION.md.
+
+Canonical sessions referenced by external work remain as audit identities after closure; retention continues deleting unrelated expired sessions. Closure still revokes return authority. After explicit operator recovery reopens an offer, its recipient can reject that OPEN offer through the canonical flow without the old external-session proof. This does not replay or complete the old transport operation.
