@@ -1,0 +1,25 @@
+{
+  "parent_sha": "28d107829c89557b0fac2ee2ebf8f2a76494f7c8",
+  "dirty_files_sha256": {
+    "tests/test_runtime_operation_authorization.py": "b0f85e510b3854b642afef9692e2dd75b386351469064a6bd050632524778d59"
+  },
+  "requirement_nodes": {
+    "T-AUTH-12": [
+      "tests/test_runtime_operation_authorization.py::test_foreign_actor_cannot_reuse_command_key_or_inspect_persisted_result",
+      "tests/test_runtime_operation_authorization.py::test_revoked_actor_cannot_recover_cached_control_reply"
+    ]
+  },
+  "windows": {
+    "passed": 30,
+    "seconds": 112.47,
+    "exit_code": 0
+  },
+  "linux": {
+    "passed": 30,
+    "seconds": 121.96,
+    "exit_code": 0
+  },
+  "ruff": "PASS",
+  "commands": "plans\\pr34-remediation\\P12_OPERATION_AUTHORIZATION.md",
+  "limitations": "Scoped authorization; production unchanged. Crash fixture edits started after the selected tests had executed; those files are not imported by this selection and have separate pending qualification."
+}

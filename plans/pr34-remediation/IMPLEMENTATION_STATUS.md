@@ -40,6 +40,8 @@ Monitor/stdio acceptance milestone above9df5b39: new test_runtime_monitor_author
 
 Identity/start-failure acceptance above e3326ad: T-ID-05/06 scoped PASS. New catalogue and post-spawn validation/persistence failure tests plus stronger handshake-timeout identity assertions. Windows48 PASS48.41s/Linux48 PASS69.93s; Ruff PASS; persistent XMLs reduced with parent/test hashes. No production change. See P12_IDENTITY_FAILURE_ACCEPTANCE.md for initial invalid fixture comparisons and exact commands. No live processes. Next: cross-actor idempotency/operation-read assertions and remaining matrix, crash/load/performance and release gates. Final gate remains NOT PASSED.
 
+Operation authorization above28d1078: T-AUTH-12 scoped PASS, five new acceptance cases plus existing commands/grants:30 PASS Windows112.47s/Linux121.96s; Ruff PASS. Positive authorized key recovery, opaque foreign operation reads and four revoked cached-control replies verified; no production change. P12_OPERATION_AUTHORIZATION.md and sanitized manifests record parent/new-test hash. Next: actual owner crash after canonical commit before wake (new fixture/test under development), remaining matrix/crash/load/performance and release gates.
+
 Milestones pushed: 8307965 (0.2.0), 63c9623 (P00 baseline), 613b64f (P01 containment). P02 commit: 8207e7b; evidence: P02_CONTRACTS.md.
 
 P03: migration 030, profiles/endpoints, canonical runtime presence and isolated child environments implemented. 19 tests PASS (evidence/p03-gate.log). Seven later-phase regressions remain outstanding. Native Codex/Claude/Pi/attach NOT_RUN so far. All phase statuses use backlog vocabulary; IMPLEMENTED does not imply VERIFIED.
