@@ -1,0 +1,55 @@
+{
+  "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+  "platform": "linux",
+  "counts": {
+    "PASS": 4
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "4",
+      "time": "85.274",
+      "timestamp": "2026-09-24T09:04:38.506485-03:00"
+    }
+  ],
+  "native_flags": "Owned Python protocol fixtures only; no installed providers.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_uncaptured_result_crash.py tests/test_runtime_projection_commit_crash.py -q --junitxml=.git/pr34-evidence/uncaptured-result-linux.xml",
+  "limitations": "Selected acceptance gate. Pre-capture output is irrecoverable without native replay; no replay/deduplication capability invented.",
+  "records": [
+    {
+      "class": "tests.test_runtime_uncaptured_result_crash",
+      "test": "test_owner_death_before_durable_capture_leaves_detectable_unknown[before_output_capture]",
+      "status": "PASS",
+      "seconds": 25.345
+    },
+    {
+      "class": "tests.test_runtime_uncaptured_result_crash",
+      "test": "test_owner_death_before_durable_capture_leaves_detectable_unknown[before_terminal_capture]",
+      "status": "PASS",
+      "seconds": 20.715
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[False]",
+      "status": "PASS",
+      "seconds": 13.534
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[True]",
+      "status": "PASS",
+      "seconds": 14.99
+    }
+  ],
+  "source_detail": {
+    "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+    "file_sha256": {
+      "tests/runtime_relay_process_fixture.py": "3b81fafae40dd6feb930ecaffa2b9b7174a7c2cfe507530d2b31f676b490632f",
+      "tests/test_runtime_uncaptured_result_crash.py": "358df8ff9e5efa6468884afeadf256d771bf47bba8d6600222e0f8d0c5a4cefb",
+      "tests/test_runtime_projection_commit_crash.py": "e16643f2685928bf6ac4eb35419f9c3d425ca50268073609af64b98e970eb144"
+    }
+  }
+}

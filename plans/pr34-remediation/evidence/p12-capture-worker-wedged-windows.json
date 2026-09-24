@@ -1,0 +1,44 @@
+{
+  "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+  "platform": "windows",
+  "counts": {
+    "PASS": 3
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "3",
+      "time": "19.648",
+      "timestamp": "2026-09-24T09:04:40.304231-03:00"
+    }
+  ],
+  "native_flags": "Owned Python protocol fixtures only; no installed providers.",
+  "command": "rtk proxy .venv/Scripts/python.exe -m pytest tests/test_runtime_process_ownership.py::test_wedged_starts_and_controls_hold_bounded_slots tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session tests/test_runtime_worker_capacity.py -q --junitxml=.git/pr34-evidence/wedged-worker-review-windows.xml",
+  "limitations": "Selected acceptance gate. Pre-capture output is irrecoverable without native replay; no replay/deduplication capability invented.",
+  "records": [
+    {
+      "class": "tests.test_runtime_process_ownership",
+      "test": "test_wedged_starts_and_controls_hold_bounded_slots",
+      "status": "PASS",
+      "seconds": 0.604
+    },
+    {
+      "class": "tests.test_runtime_process_ownership",
+      "test": "test_rest_owner_start_timeout_has_no_running_session",
+      "status": "PASS",
+      "seconds": 6.614
+    },
+    {
+      "class": "tests.test_runtime_worker_capacity",
+      "test": "test_observed_native_result_does_not_free_a_still_blocked_agent_worker[production]",
+      "status": "PASS",
+      "seconds": 9.914
+    }
+  ],
+  "source_detail": {
+    "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d"
+  }
+}

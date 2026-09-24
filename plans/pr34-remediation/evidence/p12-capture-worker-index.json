@@ -1,0 +1,88 @@
+{
+  "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+  "file_sha256": {
+    "tests/runtime_relay_process_fixture.py": "3b81fafae40dd6feb930ecaffa2b9b7174a7c2cfe507530d2b31f676b490632f",
+    "tests/test_runtime_uncaptured_result_crash.py": "358df8ff9e5efa6468884afeadf256d771bf47bba8d6600222e0f8d0c5a4cefb",
+    "tests/test_runtime_projection_commit_crash.py": "1a9a940df4db6f7a275491f49afdfc127623b6f571eb7403c950fc88b2fb7b3f"
+  },
+  "runs": {
+    "uncaptured-windows": {
+      "manifest": "p12-capture-worker-uncaptured-windows.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "wedged-windows": {
+      "manifest": "p12-capture-worker-wedged-windows.json",
+      "counts": {
+        "PASS": 3
+      }
+    },
+    "receipt-windows": {
+      "manifest": "p12-capture-worker-receipt-windows.json",
+      "counts": {
+        "PASS": 2
+      }
+    },
+    "uncaptured-linux": {
+      "manifest": "p12-capture-worker-uncaptured-linux.json",
+      "counts": {
+        "PASS": 4
+      }
+    },
+    "wedged-linux": {
+      "manifest": "p12-capture-worker-wedged-linux.json",
+      "counts": {
+        "PASS": 3
+      }
+    },
+    "receipt-linux": {
+      "manifest": "p12-capture-worker-receipt-linux.json",
+      "counts": {
+        "PASS": 2
+      }
+    }
+  },
+  "requirements": [
+    {
+      "test_id": "T-JRN-10",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_uncaptured_result_crash.py::test_owner_death_before_durable_capture_leaves_detectable_unknown"
+        ],
+        "linux": [
+          "tests/test_runtime_uncaptured_result_crash.py::test_owner_death_before_durable_capture_leaves_detectable_unknown"
+        ]
+      }
+    },
+    {
+      "test_id": "T-CONS-08",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once"
+        ],
+        "linux": [
+          "tests/test_runtime_projection_commit_crash.py::test_committed_projection_survives_owner_death_and_replay_once"
+        ]
+      }
+    },
+    {
+      "test_id": "T-DISP-07",
+      "status": "PASS",
+      "nodes": {
+        "windows": [
+          "tests/test_runtime_process_ownership.py::test_wedged_starts_and_controls_hold_bounded_slots",
+          "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session",
+          "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+        ],
+        "linux": [
+          "tests/test_runtime_process_ownership.py::test_wedged_starts_and_controls_hold_bounded_slots",
+          "tests/test_runtime_process_ownership.py::test_rest_owner_start_timeout_has_no_running_session",
+          "tests/test_runtime_worker_capacity.py::test_observed_native_result_does_not_free_a_still_blocked_agent_worker"
+        ]
+      }
+    }
+  ]
+}

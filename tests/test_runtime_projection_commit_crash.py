@@ -76,6 +76,16 @@ def test_committed_projection_survives_owner_death_and_replay_once(tmp_path, rew
         assert len([row for row in native_records(home) if "fixture_pid" in row]) == 1
         assert recovered.rows("SELECT ordinal FROM runtime_journal_checkpoint")[0]["ordinal"] >= marker["checkpoint"]
         assert recovered.rows("PRAGMA foreign_key_check") == []
+        receipt = recovered.rows("SELECT message_id,body FROM messages WHERE subject LIKE 'runtime processing receipt:%'")[0]
+        assert json.loads(receipt["body"])["human_read"] is False
+        pulled = tool(recovered.client, recovered.ready["caller"], "inbox_pull", {"agent_id": "caller"})
+        assert pulled["ok"] and receipt["message_id"] in [m["message_id"] for m in pulled["data"]["messages"]]
+        for expected in (1, 0):
+            acked = tool(recovered.client, recovered.ready["caller"], "inbox_ack", {
+                "agent_id": "caller", "message_ids": [receipt["message_id"]]})
+            assert acked["ok"] and acked["data"]["acknowledged"] == expected, acked
+        assert recovered.rows("SELECT count(*) AS n FROM messages")[0]["n"] == 3
+        assert recovered.rows("SELECT count(*) AS n FROM delivery_outbox")[0]["n"] == 1
     finally:
         if recovered:
             recovered.close()

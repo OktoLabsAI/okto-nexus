@@ -3488,8 +3488,12 @@
       ],
       "stimulus": "Reaplicar ACK e projetar receipt após restart.",
       "expected": "Ack e read_receipt idempotentes, sem cascata automática de respostas.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed."
     },
     {
       "test_id": "T-DISP-01",
@@ -3593,8 +3597,12 @@
       ],
       "stimulus": "Repetir falhas de uma API bloqueante não cancelável.",
       "expected": "Limite de threads/slots preservado e endpoint quarentenado, sem crescimento ilimitado.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed."
     },
     {
       "test_id": "T-DISP-08",
@@ -4010,8 +4018,12 @@
       ],
       "stimulus": "Matar processo antes de capturar evento, sem replay nativo disponível.",
       "expected": "Execução UNKNOWN/resultado indisponível detectável, sem sucesso ou recuperação inventados.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_CAPTURE_AND_RECEIPTS.md",
+        "plans/pr34-remediation/evidence/p12-capture-worker-index.json"
+      ],
+      "notes": "Exact production fixture/scoped assertion joins: pre-capture owner death remains UNKNOWN, recovered receipt repeated ACK is idempotent and non-executing, and stuck API workers retain bounded slots. No native replay, native attach or forced thread cancellation claimed."
     },
     {
       "test_id": "T-JRN-11",

@@ -4,7 +4,7 @@ Updated2026-09-24. **IN PROGRESS — final gate NOT PASSED.** The full original 
 
 ## Current branch and preservation
 
-- All milestones committed/pushed through `1445470` on `feature/v0.2.0`; no merge/reset/force push.
+- All milestones committed/pushed through `3c61a85` on `feature/v0.2.0`; no merge/reset/force push.
 - Package source version0.2.0; installed Nexus still0.1.10. Final build/reinstall remains pending.
 - Protected pre-existing changes: the three generated dashboard files and `.nexus-policy-guardrail-test/`. Never stage them incidentally; frontend build must use a temporary output directory.
 - Current schema061, surface57, identity25. No personal database is a fixture.
@@ -35,6 +35,8 @@ Projection commit crash unit: T-JRN-03/07 scoped PASS,8 distinct fixture nodes p
 API review complete: Windows107 PASS2 POSIX SKIP/Linux109 PASS, both terminal. API02/03/07 and historical approved native LIFE10 have exact joins; see P12_API_REVIEW.md. Canonical payload gap reproduced as VALIDATION_ERROR, new test uncommitted pending implementation. No running tests.
 
 Canonical conversational command contract3 implemented: T-API-04 scoped PASS.17 final new contract cases/platform,66 distinct passing selected nodes including metadata/regression, required isolated live MCP smoke PASS. Preparation failures retained and corrected; all handles terminal. See P12_CANONICAL_PAYLOAD.md. No running tests.
+
+Capture/receipt/worker acceptance complete: JRN10, CONS08 and DISP07 scoped PASS,7 distinct nodes/platform. Real pre-capture owner death remains UNKNOWN; recovered receipt ACK twice produces no cascade; stuck API slots remain bounded. All six handles terminal, no failures/skips, production unchanged. See P12_CAPTURE_AND_RECEIPTS.md. No running tests.
 
 Next: finish coverage review/join for remaining original matrix (TX, CONS, DISP, lifecycle, journal, presence, API and E2E). The e388227/58ca69b review JSONs are only partial catalogues; do not assume missing entries lack implementation. Review actual test bodies and then run final immutable-source suites with persistent XML and per-node reduction. Finish finding index, operational/release audit, package checks and build/reinstall0.2.0. Native Pi/attach remain NOT_RUN per authorization; WORK12 external authenticated attach channel still unqualified.
 
@@ -69,4 +71,4 @@ Codex and Claude local isolated campaigns at752cd72 ran with the user's authoriz
 - [Historical status through af53f82](IMPLEMENTATION_HISTORY_TO_AF53F82.md) preserves the previous chronological status verbatim, including superseded resume points. Do not treat its old running handles or pending labels as current.
 - Specs01–06 at repository root remain authoritative. Existing migration/capacity/fallback/identity mechanisms must not be reimplemented merely because an old historical paragraph called them pending.
 
-Backlog snapshot at this update: {"PASS": 106, "NOT_RUN": 23}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.
+Backlog snapshot at this update: {"PASS": 109, "NOT_RUN": 20}. PASS means only the recorded scoped requirement evidence; it is not a passed final gate.

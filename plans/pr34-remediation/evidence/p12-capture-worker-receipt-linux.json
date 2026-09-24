@@ -1,0 +1,43 @@
+{
+  "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+  "platform": "linux",
+  "counts": {
+    "PASS": 2
+  },
+  "suites": [
+    {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "2",
+      "time": "48.930",
+      "timestamp": "2026-09-24T09:08:08.417582-03:00"
+    }
+  ],
+  "native_flags": "Owned Python protocol fixtures only; no installed providers.",
+  "command": "rtk proxy wsl -d Ubuntu --cd /mnt/d/Projetos/Techridy/okto_labs_okto_nexus /var/tmp/okto-pr34-native-python-q84f5fav/venv/bin/python -m pytest tests/test_runtime_projection_commit_crash.py -q --junitxml=.git/pr34-evidence/recovered-receipt-linux.xml",
+  "limitations": "Selected acceptance gate. Pre-capture output is irrecoverable without native replay; no replay/deduplication capability invented.",
+  "records": [
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[False]",
+      "status": "PASS",
+      "seconds": 18.877
+    },
+    {
+      "class": "tests.test_runtime_projection_commit_crash",
+      "test": "test_committed_projection_survives_owner_death_and_replay_once[True]",
+      "status": "PASS",
+      "seconds": 15.941
+    }
+  ],
+  "source_detail": {
+    "source_sha": "3c61a859c07d45604ec889bcc66ee52e1060ad6d",
+    "file_sha256": {
+      "tests/runtime_relay_process_fixture.py": "3b81fafae40dd6feb930ecaffa2b9b7174a7c2cfe507530d2b31f676b490632f",
+      "tests/test_runtime_uncaptured_result_crash.py": "358df8ff9e5efa6468884afeadf256d771bf47bba8d6600222e0f8d0c5a4cefb",
+      "tests/test_runtime_projection_commit_crash.py": "1a9a940df4db6f7a275491f49afdfc127623b6f571eb7403c950fc88b2fb7b3f"
+    }
+  }
+}

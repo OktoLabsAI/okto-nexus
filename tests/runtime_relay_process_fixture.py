@@ -57,6 +57,26 @@ def main():
         command=[sys._base_executable, "-u", str(peer_script), str(home / f"native-{os.getpid()}-{next(counter)}.jsonl")],
         cwd=str(root), env=kwargs["backend"]["env"])}
 
+    if cut in {"before_output_capture", "before_terminal_capture"}:
+        from okto_nexus.adapters.outbound.harness.event_journal import FileRuntimeEventJournal
+
+        append = FileRuntimeEventJournal.append
+
+        def exit_before_capture(self, event, **kwargs):
+            targeted = (event.kind == "output_delta" if cut == "before_output_capture"
+                else event.delivery_phase == "terminal")
+            if targeted and event.operation_id:
+                # Observe the actual native event but kill the owner before the
+                # journal append/fsync. This marker is test evidence, not replay.
+                (home / "uncaptured-event.json").write_text(json.dumps({
+                    "operation_id": event.operation_id, "attempt_id": event.attempt_id,
+                    "kind": event.kind, "phase": event.delivery_phase,
+                    "watermark": self.watermark}), encoding="utf-8")
+                os._exit(78)
+            return append(self, event, **kwargs)
+
+        FileRuntimeEventJournal.append = exit_before_capture
+
     project = SqliteRuntimeJournalRepo.project
     def project_at_cut(self, uow, **kwargs):
         event = kwargs["event"]
