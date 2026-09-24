@@ -361,6 +361,70 @@
       ],
       "rationale": "Unsupported native requirement is rejected before spawn; disabling required HITL fences managed claim without grant charge and retains incoming logical inbox delivery.",
       "limitations": "Need jointly mapped compatible conversational endpoint and unsupported sandbox requirement assertions to complete the exact aggregate stimulus."
+    },
+    {
+      "test_id": "T-LIFE-01",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_boot.py::test_stable_boot_preserves_identity_and_repeated_start_does_not_duplicate",
+        "tests/test_runtime_boot.py::test_one_failed_boot_does_not_prevent_other_endpoint",
+        "tests/test_runtime_boot.py::test_failed_native_start_persists_quarantine_and_boot_cannot_replay"
+      ],
+      "rationale": "Restart production lifespan with stable boot specs; repeated boot reuses session/request, identity preserved. Failed connector isolated, remaining endpoint ready; uncertain failed start stays quarantined on restart.",
+      "limitations": "Disposable production bootstrap and synthetic peers; native processes qualified separately."
+    },
+    {
+      "test_id": "T-LIFE-03",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_serve_harness_shutdown_reap.py::test_sigterm_with_live_session_reaps_the_harness_child",
+        "tests/test_runtime_shutdown.py::test_lifespan_does_not_release_owner_before_runtime_drain",
+        "tests/test_runtime_shutdown.py::test_shutdown_deadline_retains_owner_and_journal_for_late_activity"
+      ],
+      "rationale": "Actual serve SIGTERM reaps owned child; shared shutdown keeps owner and journal capture while delayed close runs, rejects late work, finishes after drain.",
+      "limitations": "Actual serve signal case opens live session but does not stage active turn plus pending journal. Joint crash/turn/projection stimulus still required; Windows SIGTERM is platform-skipped."
+    },
+    {
+      "test_id": "T-LIFE-07",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_shared_connection.py::test_concurrent_close_drains_final_event_once",
+        "tests/test_runtime_shared_connection.py::test_close_state_survives_projection_failure_and_repeated_close"
+      ],
+      "rationale": "Concurrent closes overlap final native event and EOF; same durable close operation, one connector close, one captured final, closing entry released. Projection failure/repeated close recovery is separately exercised.",
+      "limitations": "Controlled peer EOF, no native model. Error and EOF use the shared cleanup path."
+    },
+    {
+      "test_id": "T-LIFE-08",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_production_multiplex.py::test_production_factory_reuses_compatible_connection_and_preserves_sibling",
+        "tests/test_runtime_shared_connection.py::test_active_close_observes_interrupt_completion_before_detaching_shared_thread"
+      ],
+      "rationale": "Production factories reuse exact native connection for two endpoints, one detach preserves process and sibling durable result, last close observes stop. Active-close terminal correlation and stale-terminal uncertainty tested.",
+      "limitations": "Owned Codex protocol peer. Real Codex multiplex also passed separately at752cd72, not counted in this full-suite manifest."
+    },
+    {
+      "test_id": "T-LIFE-11",
+      "coverage": "partial",
+      "nodes": [
+        "tests/test_runtime_protocol_limits.py::test_unterminated_oversized_frame_rejects_and_reaps_owned_peer",
+        "tests/test_runtime_protocol_limits.py::test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline",
+        "tests/test_runtime_protocol_limits.py::test_oversized_turn_fault_reaches_production_journal_without_completion",
+        "tests/test_runtime_event_buffers.py::test_production_overflow_reaps_owned_process_and_journals_unknown"
+      ],
+      "rationale": "Three managed adapters reject oversized unbroken stdout; bounded Unicode/stderr chunks; production framing failure and subscription overflow captured with explicit uncertainty and owned-process cleanup.",
+      "limitations": "Need explicit combined fragmented-byte UTF-8 and saturated stdout/stderr pipe-pressure assertion mapping; component StringIO test is not real pipe backpressure."
+    },
+    {
+      "test_id": "T-LIFE-12",
+      "coverage": "complete",
+      "nodes": [
+        "tests/test_runtime_protocol_compatibility.py::test_pi_incompatible_readiness_is_quarantined_without_affecting_other_adapter",
+        "tests/test_runtime_protocol_compatibility.py::test_codex_incompatible_thread_identity_never_becomes_ready"
+      ],
+      "rationale": "Malformed/unsupported Pi readiness fails with protocol_incompatible diagnostic and quarantines binding while Codex can still open; invalid Codex native thread identity never becomes ready or receives turn/start.",
+      "limitations": "Synthetic incompatible protocol peers; native binary version qualification is separately controlled."
     }
   ]
 }

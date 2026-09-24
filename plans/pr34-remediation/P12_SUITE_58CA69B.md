@@ -22,9 +22,9 @@ fixture processes are allowed. No ambient provider invocation is authorized.
 
 ## Reviewed coverage
 
-`evidence/p12-coverage-review-58ca69b.json` currently reviews35 requirements,
+`evidence/p12-coverage-review-58ca69b.json` currently reviews41 requirements,
 including the unchanged prior mapping plus explicit identity/secret corrections
-and ten work requirements. Complete and partial coverage remain distinct.
+ten work requirements and six lifecycle requirements. Complete and partial coverage remain distinct.
 Examples of unresolved exact assertions: pool-offer privacy, delayed managed
 interrupt completion and combined incompatible-profile/conversation behavior.
 These are not promoted from their names or from a green unrelated test.
