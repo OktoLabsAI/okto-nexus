@@ -1,0 +1,4938 @@
+{
+  "status": "PASS",
+  "versions": {
+    "original": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+    "current": "536b9932775b6cc8566ad318073e919e4dd720c2"
+  },
+  "order": [
+    "original",
+    "current",
+    "current",
+    "original",
+    "original",
+    "current"
+  ],
+  "samples_per_round": 40,
+  "warmup_per_round": 5,
+  "rounds": [
+    {
+      "label": "original",
+      "index": 0,
+      "evidence": {
+        "status": "PASS",
+        "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": false,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 11.1707,
+            "persisted_terminal_ms": 77.566,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1217
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 10.2451,
+            "persisted_terminal_ms": 125.1432,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1522
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 17.1526,
+            "persisted_terminal_ms": 86.0377,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1564
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 8.7191,
+            "persisted_terminal_ms": 102.1891,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1164
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 18.5519,
+            "persisted_terminal_ms": 122.9225,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.145
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 14.5907,
+            "persisted_terminal_ms": 108.3432,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1576
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 10.6466,
+            "persisted_terminal_ms": 119.6513,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0952
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 37.3077,
+            "persisted_terminal_ms": 134.5953,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1678
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 8.1903,
+            "persisted_terminal_ms": 125.5794,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1043
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 23.5876,
+            "persisted_terminal_ms": 110.3811,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1099
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 28.0927,
+            "persisted_terminal_ms": 144.6455,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2691
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 6.9333,
+            "persisted_terminal_ms": 96.7562,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0974
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 11.728,
+            "persisted_terminal_ms": 123.6424,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1136
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 7.0559,
+            "persisted_terminal_ms": 92.7057,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.129
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 9.2409,
+            "persisted_terminal_ms": 99.8404,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0759
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 7.4203,
+            "persisted_terminal_ms": 139.5388,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0886
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 7.2806,
+            "persisted_terminal_ms": 88.4847,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1051
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 18.4636,
+            "persisted_terminal_ms": 139.2133,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1218
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 35.9897,
+            "persisted_terminal_ms": 149.1154,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0982
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 28.3679,
+            "persisted_terminal_ms": 130.5587,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0917
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 7.1339,
+            "persisted_terminal_ms": 96.9127,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0885
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 14.6163,
+            "persisted_terminal_ms": 110.271,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1484
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 8.4811,
+            "persisted_terminal_ms": 139.4812,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0903
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 10.9436,
+            "persisted_terminal_ms": 92.2186,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1215
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 10.256,
+            "persisted_terminal_ms": 95.2328,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1138
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 19.5522,
+            "persisted_terminal_ms": 120.697,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2651
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 38.4468,
+            "persisted_terminal_ms": 157.522,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.229
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 12.9,
+            "persisted_terminal_ms": 83.3631,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1328
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 14.9508,
+            "persisted_terminal_ms": 150.3535,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1552
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 7.702,
+            "persisted_terminal_ms": 154.8316,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0987
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 7.9489,
+            "persisted_terminal_ms": 106.6543,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1173
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 23.2976,
+            "persisted_terminal_ms": 108.2635,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1679
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 21.5319,
+            "persisted_terminal_ms": 127.1973,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1433
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 20.6359,
+            "persisted_terminal_ms": 133.6724,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2077
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 9.8744,
+            "persisted_terminal_ms": 114.3927,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1343
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 25.1522,
+            "persisted_terminal_ms": 79.0358,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1715
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 33.4287,
+            "persisted_terminal_ms": 133.8582,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1649
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 9.7818,
+            "persisted_terminal_ms": 122.8883,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1281
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 8.8894,
+            "persisted_terminal_ms": 88.1954,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1158
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 10.8593,
+            "persisted_terminal_ms": 93.5466,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1085
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    },
+    {
+      "label": "current",
+      "index": 1,
+      "evidence": {
+        "status": "PASS",
+        "sha": "536b9932775b6cc8566ad318073e919e4dd720c2",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": true,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 138.0575,
+            "persisted_terminal_ms": 343.6654,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4309
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2748
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 30.5245
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 120.7703,
+            "persisted_terminal_ms": 344.72,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5209
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5175
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 55.082699999999996
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 180.3788,
+            "persisted_terminal_ms": 414.6892,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2532999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.4501
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 63.7237
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 147.6929,
+            "persisted_terminal_ms": 377.6509,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3195000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.8518
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 67.1933
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 178.5819,
+            "persisted_terminal_ms": 369.5564,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.745
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2668
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 86.01350000000001
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 137.8967,
+            "persisted_terminal_ms": 328.337,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2610999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3924
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 44.2816
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 165.9426,
+            "persisted_terminal_ms": 481.3975,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.0791
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.0003
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 71.7473
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 190.3384,
+            "persisted_terminal_ms": 451.6911,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 3.1098
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.961
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 76.46690000000001
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 144.8497,
+            "persisted_terminal_ms": 344.1071,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2577
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3615
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 72.36840000000001
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 180.4471,
+            "persisted_terminal_ms": 452.4421,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7649
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9488
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 104.5979
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 128.2216,
+            "persisted_terminal_ms": 296.9634,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5019
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.83
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 74.1572
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 158.5309,
+            "persisted_terminal_ms": 362.9107,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4972
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.374
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 87.92739999999999
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 163.4053,
+            "persisted_terminal_ms": 316.6196,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5936
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6218
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 89.9058
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 165.7023,
+            "persisted_terminal_ms": 367.9647,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5798
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5025
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 73.63069999999999
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 173.8392,
+            "persisted_terminal_ms": 457.787,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3248
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.8213
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 89.0788
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 144.0242,
+            "persisted_terminal_ms": 424.6383,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 24.3002
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6606
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 69.2541
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 155.9943,
+            "persisted_terminal_ms": 384.9332,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5725
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4626
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 111.0409
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 129.3048,
+            "persisted_terminal_ms": 264.3418,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5701
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3693
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 67.7035
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 120.5201,
+            "persisted_terminal_ms": 386.171,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.8218
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2468
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 47.6188
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 158.4714,
+            "persisted_terminal_ms": 408.8473,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.8252
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4054
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 68.7157
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 169.8873,
+            "persisted_terminal_ms": 371.4408,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5011999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.173
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 95.2321
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 206.5189,
+            "persisted_terminal_ms": 462.1577,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.9133
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4747
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 113.5778
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 179.7828,
+            "persisted_terminal_ms": 527.3526,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.9033
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.3181
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 68.2518
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 252.3014,
+            "persisted_terminal_ms": 518.2257,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5247
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 2.0258
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 172.594
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 210.6261,
+            "persisted_terminal_ms": 457.5022,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7721
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4903
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 112.19930000000001
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 186.8673,
+            "persisted_terminal_ms": 493.4185,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.6797
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2205
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 100.9783
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 144.4385,
+            "persisted_terminal_ms": 326.525,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4064999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.8889
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 47.1288
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 189.9341,
+            "persisted_terminal_ms": 337.6377,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4989
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.1842
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 90.0466
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 159.4171,
+            "persisted_terminal_ms": 341.0891,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4443000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5669
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 92.1286
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 155.4041,
+            "persisted_terminal_ms": 408.4631,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1825
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.047
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 112.18209999999999
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 168.4384,
+            "persisted_terminal_ms": 436.8189,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7308
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9452
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 70.4155
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 134.7126,
+            "persisted_terminal_ms": 302.562,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7022
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.0592
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 32.9286
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 134.2261,
+            "persisted_terminal_ms": 378.4313,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 2.6887
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4442
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 61.6895
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 146.8488,
+            "persisted_terminal_ms": 381.7991,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.0493999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6493
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 66.5356
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 129.9106,
+            "persisted_terminal_ms": 406.3577,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3667
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.391
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 65.9419
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 166.5611,
+            "persisted_terminal_ms": 305.505,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3833
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.5744
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 57.665200000000006
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 157.5419,
+            "persisted_terminal_ms": 432.6447,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4929000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.348
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 77.9491
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 164.3167,
+            "persisted_terminal_ms": 378.6354,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4046
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9475
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 78.8877
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 148.1703,
+            "persisted_terminal_ms": 356.6263,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4224999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.6557
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 82.27539999999999
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 129.7075,
+            "persisted_terminal_ms": 345.0231,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2084
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9026
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 92.0939
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    },
+    {
+      "label": "current",
+      "index": 2,
+      "evidence": {
+        "status": "PASS",
+        "sha": "536b9932775b6cc8566ad318073e919e4dd720c2",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": true,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 150.0441,
+            "persisted_terminal_ms": 472.6404,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5845
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5138
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 56.3544
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 135.3864,
+            "persisted_terminal_ms": 384.2604,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5215
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.29
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 64.03999999999999
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 151.1509,
+            "persisted_terminal_ms": 445.1794,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4335
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2687
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 52.1579
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 139.4741,
+            "persisted_terminal_ms": 358.435,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1789
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2403
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 91.3378
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 152.6274,
+            "persisted_terminal_ms": 320.3095,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1881
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.083
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 63.7516
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 174.282,
+            "persisted_terminal_ms": 387.6039,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1320000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3593
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 75.4943
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 128.6991,
+            "persisted_terminal_ms": 397.3911,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.9297
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7253
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 46.3319
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 152.1815,
+            "persisted_terminal_ms": 374.3718,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1616
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3596
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 65.9033
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 157.207,
+            "persisted_terminal_ms": 439.4788,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3485
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5819
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 56.0241
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 173.9592,
+            "persisted_terminal_ms": 394.3723,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.6183
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.906
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 70.7069
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 141.2162,
+            "persisted_terminal_ms": 401.396,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.361
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.1004
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 63.9833
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 218.113,
+            "persisted_terminal_ms": 544.0195,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.8636
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.3044
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 101.81649999999999
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 147.7617,
+            "persisted_terminal_ms": 372.0899,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2645
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3418
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 72.4434
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 140.7233,
+            "persisted_terminal_ms": 280.7595,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4013
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1941
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 58.770999999999994
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 147.9731,
+            "persisted_terminal_ms": 291.7025,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.498
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9602
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 45.5666
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 120.7341,
+            "persisted_terminal_ms": 377.5756,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2654
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5061
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 41.8444
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 135.635,
+            "persisted_terminal_ms": 345.8398,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2504
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.3909
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 59.4891
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 145.478,
+            "persisted_terminal_ms": 328.0255,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5997
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.377
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 47.3342
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 181.5082,
+            "persisted_terminal_ms": 327.357,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2671999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4737
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 61.392999999999994
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 112.6566,
+            "persisted_terminal_ms": 208.24,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1016
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4294
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 46.5342
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 128.1974,
+            "persisted_terminal_ms": 334.5158,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3616
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.2029
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 61.5146
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 164.2953,
+            "persisted_terminal_ms": 364.4601,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2902
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.8346
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 76.005
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 191.9495,
+            "persisted_terminal_ms": 405.8911,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.304
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.4519
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 97.8867
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 96.2517,
+            "persisted_terminal_ms": 268.3106,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 2.0374
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2221
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 57.6709
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 190.1876,
+            "persisted_terminal_ms": 414.8143,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3646
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.4799
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 95.2295
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 123.4256,
+            "persisted_terminal_ms": 331.9937,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5287
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6793
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 68.7555
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 175.145,
+            "persisted_terminal_ms": 465.3599,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.353
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2626
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 79.7363
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 106.8035,
+            "persisted_terminal_ms": 374.1008,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3621
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3983
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 51.025999999999996
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 196.9686,
+            "persisted_terminal_ms": 526.4946,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3495
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7968
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 102.2971
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 144.1339,
+            "persisted_terminal_ms": 316.2109,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4588
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.4626
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 74.5226
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 119.5838,
+            "persisted_terminal_ms": 404.9365,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4251999999999998
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.8928
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 58.5398
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 145.1165,
+            "persisted_terminal_ms": 367.6731,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.969
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3373
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 37.3448
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 216.1467,
+            "persisted_terminal_ms": 400.3149,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.8804
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7652
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 96.5043
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 196.3802,
+            "persisted_terminal_ms": 344.0174,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4777
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.5215
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 121.5262
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 241.8112,
+            "persisted_terminal_ms": 467.8935,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7376
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.0609
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 105.09740000000001
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 191.1289,
+            "persisted_terminal_ms": 389.6391,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.333
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5121
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 85.2349
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 142.2222,
+            "persisted_terminal_ms": 380.8158,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.9926
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.0662
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 31.2205
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 161.3592,
+            "persisted_terminal_ms": 444.5392,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2022
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.6543
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 70.3346
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 187.1878,
+            "persisted_terminal_ms": 383.4979,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7803
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9428
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 92.9583
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 197.7771,
+            "persisted_terminal_ms": 386.9647,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2113
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6495
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 99.53659999999999
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    },
+    {
+      "label": "original",
+      "index": 3,
+      "evidence": {
+        "status": "PASS",
+        "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": false,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 11.216,
+            "persisted_terminal_ms": 82.7718,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1218
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 11.8216,
+            "persisted_terminal_ms": 71.8363,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1345
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 11.0229,
+            "persisted_terminal_ms": 93.4387,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1104
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 10.9479,
+            "persisted_terminal_ms": 94.0768,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1059
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 9.7031,
+            "persisted_terminal_ms": 108.7105,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0969
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 20.3721,
+            "persisted_terminal_ms": 91.895,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1414
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 20.8998,
+            "persisted_terminal_ms": 191.6145,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1373
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 9.5,
+            "persisted_terminal_ms": 169.4216,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0849
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 10.6668,
+            "persisted_terminal_ms": 81.7822,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1126
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 7.3515,
+            "persisted_terminal_ms": 112.3729,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1133
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 29.948,
+            "persisted_terminal_ms": 91.9145,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1629
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 12.8387,
+            "persisted_terminal_ms": 105.1329,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1126
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 11.1935,
+            "persisted_terminal_ms": 125.0879,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1398
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 11.8134,
+            "persisted_terminal_ms": 93.9105,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1251
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 14.2694,
+            "persisted_terminal_ms": 80.8347,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1176
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 9.7845,
+            "persisted_terminal_ms": 144.3069,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0976
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 29.0278,
+            "persisted_terminal_ms": 132.2357,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1902
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 13.7054,
+            "persisted_terminal_ms": 94.5704,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.145
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 7.3351,
+            "persisted_terminal_ms": 117.8765,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1172
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 24.9655,
+            "persisted_terminal_ms": 64.9657,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1538
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 23.0362,
+            "persisted_terminal_ms": 143.7489,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1087
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 16.0859,
+            "persisted_terminal_ms": 107.4475,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1666
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 10.4921,
+            "persisted_terminal_ms": 107.3078,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1011
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 52.9116,
+            "persisted_terminal_ms": 124.4955,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1178
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 21.0505,
+            "persisted_terminal_ms": 114.5759,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1403
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 32.9118,
+            "persisted_terminal_ms": 122.0706,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1594
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 19.2456,
+            "persisted_terminal_ms": 91.9602,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1455
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 10.85,
+            "persisted_terminal_ms": 83.1184,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1142
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 14.3471,
+            "persisted_terminal_ms": 74.921,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1477
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 17.6919,
+            "persisted_terminal_ms": 90.3773,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1532
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 7.8026,
+            "persisted_terminal_ms": 100.4685,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1016
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 13.3016,
+            "persisted_terminal_ms": 135.1474,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1529
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 10.8909,
+            "persisted_terminal_ms": 65.7709,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1055
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 34.3976,
+            "persisted_terminal_ms": 138.9059,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1759
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 6.6428,
+            "persisted_terminal_ms": 122.4507,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1145
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 8.1054,
+            "persisted_terminal_ms": 115.7149,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1144
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 45.984,
+            "persisted_terminal_ms": 130.7632,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1782
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 36.5933,
+            "persisted_terminal_ms": 110.424,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1079
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 11.3672,
+            "persisted_terminal_ms": 61.1548,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0946
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 12.1486,
+            "persisted_terminal_ms": 93.7344,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1444
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    },
+    {
+      "label": "original",
+      "index": 4,
+      "evidence": {
+        "status": "PASS",
+        "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": false,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 11.2422,
+            "persisted_terminal_ms": 138.5376,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1403
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 12.2848,
+            "persisted_terminal_ms": 83.5375,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1362
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 12.8428,
+            "persisted_terminal_ms": 74.1752,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1331
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 12.154,
+            "persisted_terminal_ms": 112.766,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1362
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 8.7869,
+            "persisted_terminal_ms": 127.6249,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1346
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 13.0842,
+            "persisted_terminal_ms": 117.4785,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1577
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 25.0823,
+            "persisted_terminal_ms": 139.9802,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1539
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 20.4258,
+            "persisted_terminal_ms": 108.9294,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.151
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 22.4231,
+            "persisted_terminal_ms": 79.1558,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1191
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 11.3248,
+            "persisted_terminal_ms": 111.4365,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1199
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 7.5231,
+            "persisted_terminal_ms": 122.5932,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1099
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 9.3449,
+            "persisted_terminal_ms": 114.4982,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1223
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 14.3065,
+            "persisted_terminal_ms": 119.0964,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1293
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 10.5682,
+            "persisted_terminal_ms": 123.7732,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0849
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 10.7399,
+            "persisted_terminal_ms": 108.1374,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1276
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 8.1356,
+            "persisted_terminal_ms": 86.1888,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1311
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 22.8619,
+            "persisted_terminal_ms": 59.0366,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.114
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 7.3283,
+            "persisted_terminal_ms": 91.0879,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0815
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 10.879,
+            "persisted_terminal_ms": 44.8086,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.115
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 10.7995,
+            "persisted_terminal_ms": 193.8117,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0747
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 19.5819,
+            "persisted_terminal_ms": 117.7736,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0684
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 20.7581,
+            "persisted_terminal_ms": 110.189,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.145
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 15.0616,
+            "persisted_terminal_ms": 139.0097,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.147
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 10.8996,
+            "persisted_terminal_ms": 92.5663,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1188
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 11.8643,
+            "persisted_terminal_ms": 77.7577,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1098
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 11.593,
+            "persisted_terminal_ms": 142.752,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1087
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 6.465,
+            "persisted_terminal_ms": 79.0385,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0788
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 7.3206,
+            "persisted_terminal_ms": 73.7478,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0818
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 8.4656,
+            "persisted_terminal_ms": 74.9909,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1301
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 22.4737,
+            "persisted_terminal_ms": 83.0843,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.11
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 14.7282,
+            "persisted_terminal_ms": 144.1007,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1368
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 11.2564,
+            "persisted_terminal_ms": 54.9579,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1249
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 9.3723,
+            "persisted_terminal_ms": 74.1244,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0737
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 23.6035,
+            "persisted_terminal_ms": 86.5373,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1249
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 13.4954,
+            "persisted_terminal_ms": 70.443,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1344
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 15.054,
+            "persisted_terminal_ms": 78.2745,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0969
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 28.5224,
+            "persisted_terminal_ms": 92.562,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1254
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 22.1708,
+            "persisted_terminal_ms": 79.025,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.088
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 7.7706,
+            "persisted_terminal_ms": 63.0,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0885
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 8.8038,
+            "persisted_terminal_ms": 77.3674,
+            "components": {
+              "fsync": {
+                "count": 0,
+                "total_ms": 0
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.0729
+              },
+              "runtime_policy": {
+                "count": 0,
+                "total_ms": 0
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    },
+    {
+      "label": "current",
+      "index": 5,
+      "evidence": {
+        "status": "PASS",
+        "sha": "536b9932775b6cc8566ad318073e919e4dd720c2",
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "platform": "Windows-11-10.0.26200-SP0",
+        "cpu_count": 16,
+        "modern": true,
+        "dependencies": {
+          "httpx": "0.28.1",
+          "uvicorn": "0.49.0",
+          "fastapi": "0.136.3",
+          "mcp": "1.28.0"
+        },
+        "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+        "peer_sha256": "ac1f7a472379257534cab6fb85d93ecf5b469901605f9ab126cb4df577533bbb",
+        "warmup": 5,
+        "samples": [
+          {
+            "index": 5,
+            "admission_ms": 172.1384,
+            "persisted_terminal_ms": 308.3737,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1476
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.1983
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 69.8786
+              }
+            }
+          },
+          {
+            "index": 6,
+            "admission_ms": 102.3443,
+            "persisted_terminal_ms": 388.4177,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1934
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6352
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 54.9555
+              }
+            }
+          },
+          {
+            "index": 7,
+            "admission_ms": 162.8858,
+            "persisted_terminal_ms": 366.6189,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4195
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2739
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 101.36630000000001
+              }
+            }
+          },
+          {
+            "index": 8,
+            "admission_ms": 150.9848,
+            "persisted_terminal_ms": 261.9556,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3757000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7436
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 89.15650000000001
+              }
+            }
+          },
+          {
+            "index": 9,
+            "admission_ms": 163.9851,
+            "persisted_terminal_ms": 348.565,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5397
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7242
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 87.7932
+              }
+            }
+          },
+          {
+            "index": 10,
+            "admission_ms": 80.7607,
+            "persisted_terminal_ms": 327.0489,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.6209
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3507
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 33.1576
+              }
+            }
+          },
+          {
+            "index": 11,
+            "admission_ms": 136.4284,
+            "persisted_terminal_ms": 276.1495,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.5131999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.9368
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 70.508
+              }
+            }
+          },
+          {
+            "index": 12,
+            "admission_ms": 119.4844,
+            "persisted_terminal_ms": 409.7914,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 37.9095
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4875
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 57.7734
+              }
+            }
+          },
+          {
+            "index": 13,
+            "admission_ms": 124.54,
+            "persisted_terminal_ms": 320.1935,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4143000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7965
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 57.5498
+              }
+            }
+          },
+          {
+            "index": 14,
+            "admission_ms": 115.1544,
+            "persisted_terminal_ms": 268.1912,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3225
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3635
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 66.7909
+              }
+            }
+          },
+          {
+            "index": 15,
+            "admission_ms": 144.6874,
+            "persisted_terminal_ms": 359.5671,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2686
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5218
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 65.8556
+              }
+            }
+          },
+          {
+            "index": 16,
+            "admission_ms": 136.7547,
+            "persisted_terminal_ms": 303.1685,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.6249
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.481
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 87.9767
+              }
+            }
+          },
+          {
+            "index": 17,
+            "admission_ms": 150.955,
+            "persisted_terminal_ms": 359.004,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7056
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.3067
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 60.2896
+              }
+            }
+          },
+          {
+            "index": 18,
+            "admission_ms": 220.6652,
+            "persisted_terminal_ms": 487.8853,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 3.0989999999999998
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4395
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 86.7869
+              }
+            }
+          },
+          {
+            "index": 19,
+            "admission_ms": 137.6704,
+            "persisted_terminal_ms": 517.9213,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4167
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.3323
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 54.9354
+              }
+            }
+          },
+          {
+            "index": 20,
+            "admission_ms": 133.1137,
+            "persisted_terminal_ms": 305.5129,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4653
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.1979
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 84.9823
+              }
+            }
+          },
+          {
+            "index": 21,
+            "admission_ms": 103.2823,
+            "persisted_terminal_ms": 284.5092,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.7092
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.9266
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 41.7146
+              }
+            }
+          },
+          {
+            "index": 22,
+            "admission_ms": 1311.0409,
+            "persisted_terminal_ms": 2869.1055,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3738
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9812
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 642.6576
+              }
+            }
+          },
+          {
+            "index": 23,
+            "admission_ms": 106.2657,
+            "persisted_terminal_ms": 323.7108,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1892
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3382
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 39.5458
+              }
+            }
+          },
+          {
+            "index": 24,
+            "admission_ms": 103.2222,
+            "persisted_terminal_ms": 255.4042,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2597
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3888
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 37.3511
+              }
+            }
+          },
+          {
+            "index": 25,
+            "admission_ms": 103.2801,
+            "persisted_terminal_ms": 276.273,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4143000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.366
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 59.4747
+              }
+            }
+          },
+          {
+            "index": 26,
+            "admission_ms": 125.5114,
+            "persisted_terminal_ms": 333.7184,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.0585
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3379
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 83.86449999999999
+              }
+            }
+          },
+          {
+            "index": 27,
+            "admission_ms": 108.5074,
+            "persisted_terminal_ms": 311.5635,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3712
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.1846
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 53.4215
+              }
+            }
+          },
+          {
+            "index": 28,
+            "admission_ms": 162.4504,
+            "persisted_terminal_ms": 321.8106,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4179
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.8334
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 75.4534
+              }
+            }
+          },
+          {
+            "index": 29,
+            "admission_ms": 157.6972,
+            "persisted_terminal_ms": 315.9433,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.3319
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3111
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 99.3815
+              }
+            }
+          },
+          {
+            "index": 30,
+            "admission_ms": 115.0327,
+            "persisted_terminal_ms": 349.7437,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.6366
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4745
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 77.2317
+              }
+            }
+          },
+          {
+            "index": 31,
+            "admission_ms": 144.7252,
+            "persisted_terminal_ms": 332.6404,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2099
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4808
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 61.8787
+              }
+            }
+          },
+          {
+            "index": 32,
+            "admission_ms": 116.2131,
+            "persisted_terminal_ms": 275.3198,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1041
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3399
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 40.045500000000004
+              }
+            }
+          },
+          {
+            "index": 33,
+            "admission_ms": 84.4764,
+            "persisted_terminal_ms": 368.4298,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 23.6906
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4945
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 39.9092
+              }
+            }
+          },
+          {
+            "index": 34,
+            "admission_ms": 106.5069,
+            "persisted_terminal_ms": 305.7595,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1234
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6072
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 66.4567
+              }
+            }
+          },
+          {
+            "index": 35,
+            "admission_ms": 126.4589,
+            "persisted_terminal_ms": 384.9651,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4236
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.675
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 67.87729999999999
+              }
+            }
+          },
+          {
+            "index": 36,
+            "admission_ms": 150.8949,
+            "persisted_terminal_ms": 357.6286,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.4642
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 1.011
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 70.21979999999999
+              }
+            }
+          },
+          {
+            "index": 37,
+            "admission_ms": 157.8142,
+            "persisted_terminal_ms": 270.9814,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2251
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.7288
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 110.00540000000001
+              }
+            }
+          },
+          {
+            "index": 38,
+            "admission_ms": 196.2771,
+            "persisted_terminal_ms": 433.1989,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2701
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.4805
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 77.0565
+              }
+            }
+          },
+          {
+            "index": 39,
+            "admission_ms": 356.8098,
+            "persisted_terminal_ms": 530.5667,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.1297
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.659
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 302.8383
+              }
+            }
+          },
+          {
+            "index": 40,
+            "admission_ms": 166.26,
+            "persisted_terminal_ms": 332.5588,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2366000000000001
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.9818
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 95.0497
+              }
+            }
+          },
+          {
+            "index": 41,
+            "admission_ms": 133.1515,
+            "persisted_terminal_ms": 310.4667,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.0534999999999999
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.5414
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 68.1397
+              }
+            }
+          },
+          {
+            "index": 42,
+            "admission_ms": 110.5928,
+            "persisted_terminal_ms": 312.4844,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.2055
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.2451
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 36.796
+              }
+            }
+          },
+          {
+            "index": 43,
+            "admission_ms": 102.6172,
+            "persisted_terminal_ms": 246.9005,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.0376
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.6453
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 64.75150000000001
+              }
+            }
+          },
+          {
+            "index": 44,
+            "admission_ms": 115.814,
+            "persisted_terminal_ms": 376.8792,
+            "components": {
+              "fsync": {
+                "count": 5,
+                "total_ms": 1.424
+              },
+              "authentication": {
+                "count": 1,
+                "total_ms": 0.3864
+              },
+              "runtime_policy": {
+                "count": 6,
+                "total_ms": 37.3907
+              }
+            }
+          }
+        ],
+        "limitations": [
+          "Synthetic local Codex peer; no provider latency or native qualification",
+          "Original has no new authorization/journal guarantees; their absence is measured, never emulated",
+          "Terminal timing observes persisted SQLite events at1ms intervals; not native status polling",
+          "Python os.fsync timing includes journal; SQLite internal C fsync is inside end-to-end latency only",
+          "Nested/concurrent timing categories are observations, not additive causal overhead estimates"
+        ],
+        "local_open": false,
+        "invalid_credential_status": 401,
+        "sqlite_settings": {
+          "synchronous": 2,
+          "journal_mode": "wal"
+        },
+        "owned_peers_stopped": 1
+      }
+    }
+  ],
+  "benchmark_sha256": "b10e2bb94d19dd1b17dfdb546f3561703311e55dc0a66e8ca125f69b047e0874",
+  "runner_sha256": "06a06407ce8d2b445800be6830d6c00856b0c5d1032814580c4aae7f8fcd4af7",
+  "percentile_method": "nearest rank; no dropped outliers; three isolated rounds per revision",
+  "metrics": {
+    "original": {
+      "admission_ms": {
+        "n": 120,
+        "mean": 15.689635833333334,
+        "p50": 11.8216,
+        "p95": 34.3976,
+        "p99": 45.984
+      },
+      "persisted_terminal_ms": {
+        "n": 120,
+        "mean": 107.30639416666666,
+        "p50": 108.1374,
+        "p95": 149.1154,
+        "p99": 191.6145
+      },
+      "components": {
+        "fsync": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        "authentication": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 0.12684833333333334,
+            "p50": 0.1217,
+            "p95": 0.1759,
+            "p99": 0.2651
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "p99": 1
+          }
+        },
+        "runtime_policy": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 0.0,
+            "p50": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        }
+      }
+    },
+    "current": {
+      "admission_ms": {
+        "n": 120,
+        "mean": 162.15766,
+        "p50": 147.9731,
+        "p95": 216.1467,
+        "p99": 356.8098
+      },
+      "persisted_terminal_ms": {
+        "n": 120,
+        "mean": 390.5005658333333,
+        "p50": 367.6731,
+        "p95": 517.9213,
+        "p99": 544.0195
+      },
+      "components": {
+        "fsync": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 2.1532533333333332,
+            "p50": 1.4179,
+            "p95": 2.0374,
+            "p99": 24.3002
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 5.0,
+            "p50": 5,
+            "p95": 5,
+            "p99": 5
+          }
+        },
+        "authentication": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 0.7536141666666667,
+            "p50": 0.6453,
+            "p95": 1.5744,
+            "p99": 1.9368
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 1.0,
+            "p50": 1,
+            "p95": 1,
+            "p99": 1
+          }
+        },
+        "runtime_policy": {
+          "total_ms_per_turn": {
+            "n": 120,
+            "mean": 78.53518083333333,
+            "p50": 69.2541,
+            "p95": 112.18209999999999,
+            "p99": 302.8383
+          },
+          "calls_per_turn": {
+            "n": 120,
+            "mean": 6.0,
+            "p50": 6,
+            "p95": 6,
+            "p99": 6
+          }
+        }
+      }
+    }
+  }
+}

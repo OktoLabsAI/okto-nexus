@@ -1,0 +1,62 @@
+{
+  "purpose": "Preparation trials only; not comparative performance qualification",
+  "trials": [
+    {
+      "raw_file": "benchmark-current-diagnostic.json",
+      "status": "PASS",
+      "sha": "536b993",
+      "benchmark_sha256": "607756885b60c76fd02f667249707500a0899da12fa948a8b94255d506663745",
+      "sample_count": 5,
+      "failure_type": null,
+      "failure_message": ""
+    },
+    {
+      "raw_file": "benchmark-original-diagnostic.json",
+      "status": "FAIL",
+      "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+      "benchmark_sha256": "607756885b60c76fd02f667249707500a0899da12fa948a8b94255d506663745",
+      "sample_count": 0,
+      "failure_type": "AttributeError",
+      "failure_message": "'HarnessEvent' object has no attribute 'sequence'"
+    },
+    {
+      "raw_file": "benchmark-original-diagnostic2.json",
+      "status": "FAIL",
+      "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+      "benchmark_sha256": "66342b6cee128331266c37dc3931e4a964ba4944716d0f1c9b302aeadd6909b2",
+      "sample_count": 5,
+      "failure_type": "AssertionError",
+      "failure_message": ""
+    },
+    {
+      "raw_file": "benchmark-original-diagnostic3.json",
+      "status": "PASS",
+      "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+      "benchmark_sha256": "9592a00356cbde74e9681e2585b5af2eb8de28c935cde6f19776b6a502ecd910",
+      "sample_count": 5,
+      "failure_type": null,
+      "failure_message": ""
+    },
+    {
+      "raw_file": "benchmark-current-diagnostic2.json",
+      "status": "PASS",
+      "sha": "536b993",
+      "benchmark_sha256": "9592a00356cbde74e9681e2585b5af2eb8de28c935cde6f19776b6a502ecd910",
+      "sample_count": 5,
+      "failure_type": null,
+      "failure_message": ""
+    },
+    {
+      "raw_file": "benchmark-windows.json",
+      "status": "FAIL",
+      "sha": {
+        "original": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
+        "current": "536b9932775b6cc8566ad318073e919e4dd720c2"
+      },
+      "benchmark_sha256": "1a3915b3f999b95ff7eb31041835afbe5e4ed9a5a28bd1558c7c93cd00b418a3",
+      "sample_count": 0,
+      "failure_type": "AssertionError",
+      "failure_message": "Traceback (most recent call last):\n  File \"<workspace>\\plans\\pr34-remediation\\runtime_comparison_benchmark.py\", line 190, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>\\plans\\pr34-remediation\\runtime_comparison_benchmark.py\", line 103, in main\n    app = build_app(deps, **options)\n  File \"<workspace>\\.git\\pr34-benchmark-d7d87d0c3ee2\\src\\okto_nexus\\adapters\\inbound\\http\\app.py\", line 353, in build_app\n    deps.config, deps.clock, detect_pinned_fields(deps.config)\n                             ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\n  File \"<workspace>\\.git\\pr34-benchmark-d7d87d0c3ee2\\src\\okto_nexus\\application\\settings.py\", line 496, in detect_pinned_fields\n    defaults = NexusConfig()\n  File \"<string>\", line 3, in __init__\n  File \"<workspace>\\.git\\pr34-benchmark-d7d87d0c3ee2\\src\\okto_nexus\\config.py\", line 151, in <lambda>\n    home_dir: Path = field(default_factory=lambda: Path.home() / \".okto_nexus\")\n                                                   ~~~~~~~~~^^\n  File \"C:\\Python313\\Lib\\pathlib\\_abc.py\", line 758, in home\n    return cls(\"~\").expanduser()\n           ~~~~~~~~~~~~~~~~~~~^^\n  File \"C:\\Python313\\Lib\\pathlib\\_local.py\", line 808, in expanduser\n    raise RuntimeError(\"Could not determine home directory.\")\nRuntimeError: Could not determine home directory.\n"
+    }
+  ]
+}

@@ -2582,7 +2582,9 @@
           "status": "IN_PROGRESS",
           "owner": "Codex",
           "implementation_refs": [
-            "plans/pr34-remediation/native_frame_campaign.py"
+            "plans/pr34-remediation/native_frame_campaign.py",
+            "plans/pr34-remediation/runtime_comparison_benchmark.py",
+            "plans/pr34-remediation/run_comparison_benchmark.py"
           ],
           "test_results": [
             {
@@ -2591,12 +2593,20 @@
               "result": "PASS",
               "observed": "Codex7 PASS132.09s; Claude6 PASS66.07s. Temporary login copies removed. Pi/attach NOT_RUN.",
               "evidence": "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+            },
+            {
+              "sha": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397 -> 536b9932775b6cc8566ad318073e919e4dd720c2; benchmark hashes in evidence",
+              "command": "Exact Windows/Linux commands in P12_COMPARABLE_PERFORMANCE.md",
+              "result": "PASS",
+              "observed": "120 measured turns per revision per platform,3 rounds each, with all controls enabled; timing overhead published and cleanup verified.",
+              "evidence": "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md"
             }
           ],
           "evidence": [
             "plans/pr34-remediation/P12_REMAINING_GATE_AUDIT.md",
             "plans/pr34-remediation/P12_MATRIX_AND_FRAME_EVIDENCE.md",
-            "plans/pr34-remediation/P12_NATIVE_FRAMES.md"
+            "plans/pr34-remediation/P12_NATIVE_FRAMES.md",
+            "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md"
           ],
           "notes": ""
         },
@@ -4714,8 +4724,13 @@
       ],
       "stimulus": "Benchmark antes/depois na mesma configuração, incluindo journal/authorization.",
       "expected": "Percentis e overhead medidos; sem remover segurança ou durabilidade para melhorar números.",
-      "execution_status": "NOT_RUN",
-      "evidence": []
+      "execution_status": "PASS",
+      "evidence": [
+        "plans/pr34-remediation/P12_COMPARABLE_PERFORMANCE.md",
+        "plans/pr34-remediation/evidence/p12-benchmark-windows.json",
+        "plans/pr34-remediation/evidence/p12-benchmark-linux.json"
+      ],
+      "notes": "Immutable d7d87d0 versus536b993 on each platform, identical synthetic peer/interpreter/dependencies/SQLite FULL+WAL, credentials required,5 warmups+40 measured turns in each of3 rounds per revision.120 samples/revision/platform; nearest-rank percentiles, full samples and observed auth/runtime policy/fsync cost published. Current latency is higher; guarantees differ and no causal decomposition, provider/SLA/capacity claim is made. All rounds terminal PASS and owned peers stopped."
     },
     {
       "test_id": "T-E2E-06",
