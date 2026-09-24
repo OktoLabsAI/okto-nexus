@@ -256,8 +256,9 @@ def test_harness_open_rejects_substrate_for_non_claude_code_kind(ctx):
     assert result["error"]["code"] == "VALIDATION_ERROR"
 
 
-def test_harness_open_claude_code_attach_requires_separate_opt_in(ctx):
+def test_harness_open_claude_code_attach_respects_explicit_disable(ctx):
     _deps, server, _connectors, project_root = ctx
+    _deps.config.feature_harness_attach = False
     result = _call(
         server,
         "harness_open",
@@ -501,7 +502,7 @@ def test_harness_open_rejects_backend_for_claude_code_attach_substrate(capturing
         backend={"env": {"X": "1"}},
     )
     assert not result["ok"]
-    assert result["error"]["code"] == "PERMISSION_DENIED"
+    assert result["error"]["code"] == "VALIDATION_ERROR"
     assert received_backend["claude_code"] == []
 
 
