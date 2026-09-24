@@ -67,7 +67,16 @@ def test_native_question_roundtrip_uses_operator_input(tmp_path, kind, native_au
     _run_native_campaign(tmp_path, kind, native_auth_config, native_input=True)
 
 
-def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False):
+@pytest.mark.parametrize("kind", ["claude_code"])
+@pytest.mark.parametrize("flow", ["denial", "question"])
+def test_native_contract_qualification(tmp_path, kind, flow, native_auth_config):
+    if os.environ.get("OKTO_NEXUS_QUALIFY_NATIVE_CONTRACT") != "1":
+        pytest.skip("NOT_RUN: explicit contract qualification required")
+    _run_native_campaign(tmp_path, kind, native_auth_config,
+        native_approval=flow == "denial", native_input=flow == "question", require_native_contract=False)
+
+
+def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=False, managed_work=False, native_approval=False, native_input=False, require_native_contract=True):
     executable, config_dir = native_auth_config
     root = tmp_path / "project"
     root.mkdir()
@@ -106,8 +115,10 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 "profile_id": "native-fixture", "adapter_id": adapter, "enabled": True,
                 "inherit_ambient": False, "config": {"command": command,
                     "env": {environment_key: str(config_dir)},
-                    "required_native_requests": ["item/commandExecution/requestApproval"]
-                        if kind == "codex" and native_approval else []}})
+                    "required_native_requests": [] if not require_native_contract else ["item/commandExecution/requestApproval"]
+                        if kind == "codex" and native_approval else
+                        ["control_request:can_use_tool/Write"] if kind == "claude_code" and native_approval else
+                        ["control_request:can_use_tool/AskUserQuestion"] if kind == "claude_code" and native_input else []}})
             assert response.status_code == 200, response.text
             response = client.post("/api/v1/harness/endpoints", headers=headers, json={
                 "endpoint_id": "native-fixture", "agent_id": "worker", "adapter_id": adapter,
@@ -119,10 +130,10 @@ def _run_native_campaign(tmp_path, kind, native_auth_config, *, active_close=Fal
                 "endpoint_id": "native-fixture", "idempotency_key": "campaign-open"})
             assert response.status_code == 200, response.text
             session_id = response.json()["data"]["session_id"]
-            if kind == "codex":
-                compatibility = response.json()["data"]["compatibility_report"]
-                assert compatibility["native_version"] and compatibility["observation"] == "initialize_version"
-                assert compatibility["capabilities_verified"] is False
+            compatibility = response.json()["data"]["compatibility_report"]
+            assert compatibility["native_version"]
+            assert compatibility["observation"] == ("initialize_version" if kind == "codex" else "executable_version")
+            assert compatibility["capabilities_verified"] is False
             native = deps.harness_supervisor._live[session_id].connector.native
             request_observations = []
             if kind == "codex" and native_approval:

@@ -420,7 +420,7 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="12",
+    version="13",
     body="""\
 Agents are GLOBAL identities; workspaces are per-project. workspace_list /
 agent_list / agent_get / capability_list are deliberately cross-workspace
@@ -532,8 +532,9 @@ Revocation, expiry, key/profile changes and feature flags are checked per read.
 Results group endpoint bindings under one agent_id with canonical skill_names.
 They omit private config, paths, secrets, metadata and notification audiences.
 Session compatibility_report is server-owned and separate from caller metadata.
-It may include a bounded native_version observed during initialize; this is not
-capability verification. Unknown versions remain null, capabilities_verified=false.
+It may include a bounded native_version observed during initialize (Codex) or a
+bounded owned --version probe (Claude stream); this is not capability verification.
+Unrecognized formats remain null, capabilities_verified=false.
 No native home path, full user-agent or arbitrary handshake fields are exposed.
 compatible_native_requests lists the exact tested-version protocol contract; it
 is not a grant or proof of every capability. Profile required_native_requests
@@ -541,6 +542,10 @@ must also match this server-owned runtime report before readiness or any turn.
 Unverified requirements fail with native_requirements_unverified. Native command
 approval rejection uses decline, or cancel when the peer offers cancel only;
 accept never selects session-wide or policy-amendment grants.
+Claude stream probes the approved executable with the sealed profile environment,
+without starting a model turn. Exact version2.1.280 covers Write/Edit/Bash and
+AskUserQuestion; version2.1.281 covers only qualified Write and AskUserQuestion.
+Other versions do not satisfy explicit requirements merely by sharing a prefix.
 declared_capabilities are adapter contract declarations; capability_verification
 and process_liveness are not_probed. current_owner_ready_record describes a
 persisted ready session under the current live owner lease/profile, not a native

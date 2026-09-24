@@ -191,3 +191,13 @@ An observed version alone does not grant permissions or verify all capabilities.
 For native command approvals, a human rejection maps to decline when available,
 or cancel when the native request offers only cancel. Approve maps only to accept;
 policy-amendment and session-wide alternatives are never inferred.
+
+Claude stream also records `executable_version` from a read-only `--version`
+probe of the approved executable, with the same isolated environment and working
+directory. The owned probe has a three-second deadline and bounded output; a
+timeout stops startup and reaps its process tree. No model turn is used to discover
+the version. Malformed output grants no compatible native requests.
+The exact 2.1.280 contract includes Write/Edit/Bash and AskUserQuestion. In 2.1.281,
+only Write and AskUserQuestion have been qualified; Edit/Bash remain unverified
+for explicit profile requirements. Native denial and explicit question input were
+executed locally on 2.1.281. This is not a sandbox or general capability grant.

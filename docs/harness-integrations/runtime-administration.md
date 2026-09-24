@@ -274,7 +274,9 @@ or claim compatibility of untested protocol features.
 Surface45 checks required_native_requests again after native startup, inside the
 bounded startup worker and before presence/session publication. A rejected open
 ends only its logical session and cancels its owned startup scope. Version contract
-matching currently covers Codex0.156.1; other adapters require equivalent evidence
-before an explicit native requirement can pass. Canonical approval decision decline
+matching covers Codex0.156.1. Surface46 adds Claude stream's bounded, owned read-only
+version probe: 2.1.280 Write/Edit/Bash/AskUserQuestion, and 2.1.281 Write/AskUserQuestion
+only. Unknown versions and unqualified methods cannot satisfy explicit requirements.
+Pi and attach still require equivalent evidence. Canonical approval decision decline
 may translate to native cancel when decline is absent from availableDecisions. The
 audit retains the canonical decision and original native choices; it is not an ACK.

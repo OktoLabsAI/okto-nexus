@@ -138,6 +138,7 @@ from .framing import FrameLimitExceeded, MAX_FRAME_CHARS, protocol_lines, stderr
 from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
 from .environment import child_environment
+from .compatibility import claude_version_observation
 
 import json
 import hashlib
@@ -247,6 +248,7 @@ class ClaudeCodeStreamConnector:
         *,
         binary: str = "claude",
         argv: Sequence[str] | None = None,
+        version_argv: Sequence[str] = ("--version",),
         cwd: str | None = None,
         env: Mapping[str, str] | None = None,
     ) -> None:
@@ -262,13 +264,15 @@ class ClaudeCodeStreamConnector:
             Full argument list passed after ``binary`` (default
             :data:`_DEFAULT_ARGV`). Overridable for the same reason.
         cwd, env:
-            Passed straight through to :class:`subprocess.Popen`. ``env``
-            entries are MERGED over a copy of the current process
-            environment (never replace it outright - the child needs the
-            inherited ``PATH``/auth state to run at all).
+            Passed through the approved child environment builder, preserving
+            sealed profile isolation.
+        version_argv:
+            Read-only version arguments for the same executable. Trusted
+            constructor injection for protocol fixtures; not a profile option.
         """
         self._binary = binary
         self._argv: tuple[str, ...] = tuple(argv) if argv is not None else _DEFAULT_ARGV
+        self._version_argv = tuple(version_argv)
         self._cwd = cwd
         self._env = dict(env) if env is not None else None
         self.native_approvals_enabled = False
@@ -377,6 +381,8 @@ class ClaudeCodeStreamConnector:
             argv.extend(["--permission-prompt-tool", "stdio"])
         spawn_env = child_environment(self._env)
         try:
+            compatibility = claude_version_observation(
+                [self._binary, *self._version_argv], cwd=self._cwd, env=spawn_env)
             proc = spawn_owned_process(  # noqa: S603 - argv is fixed/injected by the caller, not user input
                 argv,
                 stdin=subprocess.PIPE,
@@ -397,6 +403,7 @@ class ClaudeCodeStreamConnector:
                 status="STARTING",
                 capabilities=self.capabilities,
                 started_at=utc_now_iso(),
+                compatibility_report=compatibility,
             )
             self._session = session
 

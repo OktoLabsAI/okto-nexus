@@ -6,6 +6,9 @@ All notable changes to Okto Nexus are documented in this file.
 
 ### 0.2.0 development
 
+- Surface 46 observes Claude stream's approved executable version in a bounded,
+  owned probe before readiness. Exact qualified request contracts satisfy explicit
+  profile requirements; unknown versions never inherit compatibility by prefix.
 - Surface 45 enforces required native request contracts before readiness and maps
   explicit rejection to Codex cancel-only choices without granting policy amendments.
 - Surface 44 and migration056 persist redacted native compatibility observations
