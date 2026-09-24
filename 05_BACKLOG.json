@@ -6,7 +6,7 @@
   "pull_request": 34,
   "review_head": "d7d87d0c3ee2ea2ed7c63cdb8f9cafdbd5ee0397",
   "observed_base": "27b06fe48b9f95b35c94f50827fea83d178f4e12",
-  "execution_head": "39ac366",
+  "execution_head": "27b6526",
   "notice": "Execution in progress; final gate NOT PASSED. P10 fixture matrix executed; native relay/advanced aggregate pending. P11 shared administration in progress. Pi and dedicated Claude attach native NOT_RUN.",
   "task_status_vocabulary": [
     "NOT_STARTED",
@@ -1262,7 +1262,8 @@
             "src/okto_nexus/migrations/039_runtime_boot_and_reconciliation.sql",
             "src/okto_nexus/application/runtime_boot.py",
             "tests/test_runtime_session_recovery.py",
-            "tests/test_runtime_boot.py"
+            "tests/test_runtime_boot.py",
+            "tests/test_runtime_protocol_compatibility.py"
           ],
           "test_results": [
             {
@@ -1299,6 +1300,13 @@
               "result": "PASS",
               "observed": "29 passed, 51.42s; Linux boot/recovery separately 15 passed, 43.16s; native providers NOT_RUN",
               "evidence": "plans/pr34-remediation/P07_APPROVED_BOOT.md"
+            },
+            {
+              "sha": "27b6526 + protocol readiness validation worktree",
+              "command": "rtk proxy .venv/Scripts/python.exe -m pytest -q tests/test_runtime_protocol_compatibility.py tests/test_harness_pi_connector.py tests/test_harness_codex_connector.py tests/test_runtime_session_recovery.py tests/test_runtime_boot.py",
+              "result": "PASS",
+              "observed": "80 PASS/2 SKIP in69.69s. Linux focused6 PASS; real isolated Codex0.156.1 two turns1 PASS. Full version/effective capability negotiation remains pending.",
+              "evidence": "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md"
             }
           ],
           "evidence": [
@@ -1307,7 +1315,8 @@
             "plans/pr34-remediation/P07_RESTART_JOURNAL.md",
             "plans/pr34-remediation/P07_LINUX_COMPOSITION.md",
             "plans/pr34-remediation/P07_SESSION_RECOVERY.md",
-            "plans/pr34-remediation/P07_APPROVED_BOOT.md"
+            "plans/pr34-remediation/P07_APPROVED_BOOT.md",
+            "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md"
           ],
           "notes": "Durable STARTING reservations, owner/profile fences, old-session reconciliation and bounded approved boot implemented in production composition. Boot authority is narrow and issuer/revision-bound; uncertain starts remain quarantined. Native boot, wider crash/load/version matrix and durable turn controls remain pending. See current evidence for Windows/Linux scope; phase gate not promoted."
         }
@@ -3161,7 +3170,10 @@
       "stimulus": "Binário/schema incompatível com o descriptor.",
       "expected": "Capacidade/binding degradado com diagnóstico; outros conectores permanecem operacionais.",
       "execution_status": "NOT_RUN",
-      "evidence": []
+      "evidence": [
+        "plans/pr34-remediation/P07_PROTOCOL_READINESS_VALIDATION.md"
+      ],
+      "notes": "Partial Pi/Codex handshake-shape drift proof passes on Windows/Linux. Full binary/version/effective capability gate remains NOT_RUN; do not promote from this subset."
     },
     {
       "test_id": "T-JRN-01",

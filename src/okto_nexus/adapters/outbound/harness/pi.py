@@ -693,12 +693,13 @@ class PiRpcConnector:
                 # which is precisely the kind of second, untested exit path
                 # this audit is meant to find.
                 transport.start()
-                # Readiness probe (protocol reference §1): a cheap, harmless,
-                # idempotent verb that works even before any turn has ever
-                # run. Its CONTENT is ignored - only the fact that a
-                # `response` envelope with `command == "get_state"` arrived
-                # matters (regardless of `success`).
-                transport.request(_VERB_GET_STATE, {}, timeout_s=self._handshake_timeout_s)
+                # Readiness requires a successful response in the documented
+                # object shape; a rejected command only proves pipe connectivity.
+                response = transport.request(_VERB_GET_STATE, {}, timeout_s=self._handshake_timeout_s)
+                if response.get("success") is not True or not isinstance(response.get("data"), dict):
+                    raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+                        "protocol_incompatible: Pi get_state readiness was rejected or malformed.",
+                        {"reason": "protocol_incompatible", "stage": "get_state"})
             except BaseException:
                 transport.close()
                 with self._session_lock:

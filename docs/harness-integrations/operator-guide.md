@@ -169,3 +169,8 @@ and subsequent milestones. Selected isolated Codex and Claude stream scenarios h
 run; this does not qualify every advanced scenario/version. Pi native and dedicated
 Claude attach native remain `NOT_RUN`. Fixtures and historical PR counts are not
 current real-provider results. Follow status/backlog for release requirements.
+
+Protocol readiness rejects Pi get_state responses unless success is true and data
+is an object. Codex thread/start must return a bounded nonempty string thread ID.
+Failure reports protocol_incompatible and quarantines that failed open; it does
+not prove compatibility of other capabilities or prohibit healthy adapters.

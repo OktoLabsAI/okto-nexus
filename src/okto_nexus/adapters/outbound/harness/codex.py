@@ -649,7 +649,12 @@ class CodexAppServerConnector:
         result = self._transport.request(  # type: ignore[union-attr]
             _METHOD_THREAD_START, thread_start_params, timeout_s=self._handshake_timeout_s
         )
-        thread_id = result["thread"]["id"]
+        thread = result.get("thread") if isinstance(result, dict) else None
+        thread_id = thread.get("id") if isinstance(thread, dict) else None
+        if not isinstance(thread_id, str) or not thread_id.strip() or len(thread_id) > 256:
+            raise OktoNexusError(ErrorCode.CONFIG_ERROR,
+                "protocol_incompatible: Codex thread/start returned an invalid thread identity.",
+                {"reason": "protocol_incompatible", "stage": "thread/start"})
 
         session_id = new_harness_session_id()
         state = _ThreadState(session_id=session_id, thread_id=thread_id, owning_agent_id=owning_agent_id)
