@@ -684,9 +684,11 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     from .connections import build_router as connection_router
     from .connections_v1 import build_router as connection_v1_router
     from .runtime_v1 import build_router as runtime_v1_router
+    from .executor_link import build_router as executor_link_router
     app.include_router(connection_router(), prefix="/api/v1")
     app.include_router(connection_v1_router(), prefix="/v1")
     app.include_router(runtime_v1_router(), prefix="/v1")
+    app.include_router(executor_link_router(), prefix="/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)
