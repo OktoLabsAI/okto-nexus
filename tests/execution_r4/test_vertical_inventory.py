@@ -150,6 +150,13 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     key, client_intent_id="binding-apply-one",
                     proposal=proposal)
                 assert binding.binding_id == proposal.binding_id
+                preview = await http.resolve_r4_intent(
+                    key, client_intent_id="start-preview",
+                    intent="runtime.start", binding_id=binding.binding_id,
+                    workspace_binding_id=binding.workspace_binding_id,
+                    new_session=True)
+                assert preview.can_submit is False
+                assert "remote_execution_unavailable" in preview.blockers
                 submit_frame = {
                     "protocol_major": 1,
                     "contract_revision": R4_PREVIEW_REVISION,

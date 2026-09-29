@@ -13,6 +13,9 @@ from nexus_connector_core.protocol import strict_json
 
 from ....application.executor_inventory import publish_executor_inventory
 from ....application.execution_realizations import publish_executor_realization
+from ....application.execution_intents import (
+    read_execution_intent, resolve_execution_intent,
+)
 from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
@@ -52,6 +55,19 @@ class RealizationPublishRequest(BaseModel):
     local_root_proof_digest: _Digest
     configuration_digest: _Digest
     local_consent_id: _Id
+
+
+class ResolveIntentRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    intent: Annotated[str, Field(strict=True)]
+    binding_id: _Id
+    workspace_binding_id: _Id
+    session_id: _Id | None = None
+    new_session: bool | None = None
+    text: Annotated[str, Field(max_length=65536, strict=True)] | None = None
+    target: dict[str, object] | None = None
 
 
 def build_router() -> APIRouter:
@@ -168,6 +184,32 @@ def build_router() -> APIRouter:
             status_code=200 if publication.reused else 201,
             headers={"Cache-Control": "no-store"},
         )
+
+    @router.post("/runtime/intents:resolve")
+    async def resolve_intent(body: ResolveIntentRequest,
+                             request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+        resolution = await anyio.to_thread.run_sync(
+            lambda: resolve_execution_intent(
+                factory, actor_agent_id=agent.agent_id,
+                request=body.model_dump(exclude_none=True)))
+        return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
+
+    @router.get("/runtime/intents/{client_intent_id}")
+    async def intent_view(client_intent_id: str,
+                          request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+        view = await anyio.to_thread.run_sync(
+            lambda: read_execution_intent(
+                factory, actor_agent_id=agent.agent_id,
+                client_intent_id=client_intent_id))
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/operations/{operation_id}/receipts")
     async def publish_operation_receipt(operation_id: str,
