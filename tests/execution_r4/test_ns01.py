@@ -70,13 +70,13 @@ def test_ns01_03(capsys):
     assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
     for extra in ("serve", "serve-lite"):
         requirements = project["project"]["optional-dependencies"][extra]
-        assert "nexus-connector-core==0.2.12.dev0" in requirements
+        assert "nexus-connector-core==0.2.13.dev0" in requirements
         assert not any(item.startswith("okto-nexus-connector") for item in requirements)
     assert "mcp>=1.0,<2" in project["project"]["dependencies"]
     wheel = (ROOT / "vendor/wheels/"
-             "nexus_connector_core-0.2.12.dev0-py3-none-any.whl")
+             "nexus_connector_core-0.2.13.dev0-py3-none-any.whl")
     assert hashlib.sha256(wheel.read_bytes()).hexdigest() == (
-        "bd5326357608906bdd80ccefc3db4890137d9e8dc00935a88c5f6dd955bf9d8e"
+        "be0d974b036d6384e69655cff5556d6f5ee853f991a913087fe947c56fa2be96"
     )
     assert main(["--help"]) == 0
     assert "HTTP" in capsys.readouterr().out
