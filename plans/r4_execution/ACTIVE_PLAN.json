@@ -1,0 +1,10 @@
+{
+  "active_server_plan": "plans/01_ARQUITETURA_E_PLANO_MESTRE.md",
+  "active_backlog": "plans/BACKLOG_R4.json",
+  "active_test_matrix": "plans/MATRIZ_TESTES_R4.json",
+  "crosswalk": "plans/07_RASTREABILIDADE_R3.md",
+  "legacy_plans": "superseded_as_execution_backlog; files_and_evidence_preserved",
+  "core_contract_owner": "okto-nexus-connector-core",
+  "server_admission_owner": "okto-nexus",
+  "remote_execution_owner": "okto-nexus-connector"
+}

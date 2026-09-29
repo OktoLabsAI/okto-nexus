@@ -1,0 +1,37 @@
+{
+  "captured_at": "2026-09-29",
+  "source": {
+    "repo": "okto-nexus",
+    "branch": "feature/v0.2.0",
+    "head_at_start": "7ed52c22865a92c3768bc32508ed9e35dc5efdc3",
+    "python": "3.13.1",
+    "os": "Windows-11-10.0.26200-SP0",
+    "lock_file": "uv.lock",
+    "preexisting_worktree": {
+      "tracked_deletions": 599,
+      "tracked_modifications": 3,
+      "untracked_entries": 10,
+      "note": "Planning package was supplemented during execution; no reset or clean was run."
+    },
+    "head_file_sha256": {
+      "pyproject.toml": "70941240de8d6abe8b5d5565100782a6bd721f82e27290488dcf8410d89d3107",
+      "src/okto_nexus/adapters/inbound/mcp/server.py": "d53bffee793a8319eed5aa3eb94b6d5f3a0194e325ef734e6049da192e331a91",
+      "src/okto_nexus/adapters/inbound/http/app.py": "b1f268ab51c1088dd2e8378a43bc52be608be939fbeb8350f7efedc70a5bb2dc",
+      "01_PLANO_IMPLEMENTACAO.md": "003444977ff6dea720fbc06a67dd9515db9c8226ade3d79e1c9170fb2acceadf",
+      "uv.lock": "efaf39ffb966f793eb76dd1fa4236f3c6aa2801b984c47b3686be2f87e7963e0"
+    }
+  },
+  "core": {
+    "head_at_start": "1560d314ed2b478515dcbbe533436d7d0b027b09",
+    "version_at_start": "0.2.10.dev0",
+    "nxl_revision_at_start": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+    "new_inventory_wheel": "0.2.11.dev0",
+    "new_inventory_wheel_sha256": "41193bc203bb6425163b8992effb6dfa701d3ef309ed08832a58d84cc0c3158d",
+    "provider_qualified_by_this_work": false
+  },
+  "connector": {
+    "head_at_start": "77fee6d8cde643d4310df5bbc5dfb643c496f677",
+    "version_at_start": "0.4.0.dev0",
+    "cn5_qualified_by_this_work": false
+  }
+}
