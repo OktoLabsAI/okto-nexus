@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
 CORE_INVENTORY_VERSION = "0.2.12.dev0"
+# Promoted only after admission, lease, dispatcher and Connector conformance.
+SERVER_R4_EXECUTION_READY = False
 
 
 def _core():
@@ -32,18 +34,22 @@ def _core():
 def protocol_info() -> dict[str, Any]:
     """Advertise implemented facts; r3 never masquerades as r4 readiness."""
     core = _core()
+    remote_ready = bool(
+        SERVER_R4_EXECUTION_READY
+        and getattr(core, "R4_BUNDLE_EXECUTABLE", False)
+        and core.CONTRACT_REVISION == R4_NXL_REVISION
+    )
     return {
         "management_revision": MANAGEMENT_REVISION,
         "protocol_major": 1,
-        "nxl_accepted": ([R4_NXL_REVISION]
-                         if core.CONTRACT_REVISION == R4_NXL_REVISION else []),
+        "nxl_accepted": [R4_NXL_REVISION] if remote_ready else [],
         "nxl_historical_revision": core.CONTRACT_REVISION,
         "core_version": core.__version__,
         "catalog_format": core.CATALOG_FORMAT_VERSION,
         "availability_format": core.AVAILABILITY_FORMAT_VERSION,
         "executor_snapshot_format": core.SNAPSHOT_FORMAT_VERSION,
         "limits": {"inventory_candidates": 128, "snapshot_age_ms": 300000},
-        "remote_execution_ready": core.CONTRACT_REVISION == R4_NXL_REVISION,
+        "remote_execution_ready": remote_ready,
     }
 
 
