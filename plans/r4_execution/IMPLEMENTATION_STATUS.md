@@ -49,6 +49,8 @@ O wheel Nexus recompilado contém `066_execution_r4_expand.sql`; instalado em am
 
 Atualização Core `0.2.15.dev0` (commit `941d813`, SHA-256 `4caa45add41da1fbc409316b90c34beafd60e3ea8a752c866071616af50f152a`): reducers puros de lease correlacionada e recibo de operação, com 19 testes direcionados. O ACK de aplicação continua distinto da concessão; o host ainda não instala `ExecutionContext` nem executa efeito remoto via R4. Nexus e Connector fixam o mesmo wheel; `uv lock --check`, `uv sync --frozen`, 14 testes do cliente Connector e o teste vertical de inventário passaram. O bundle continua `development-partial`, sem anúncio R4 como executável.
 
+Atualização Core `0.2.16.dev0` (commit `4721bf4`, SHA-256 `19b28e7f8f20c02032c32cd6b47f7d9e5b7f3b5b503c3e17620cc8ba6ee17946`): reducers puros correlacionam ACKs `binding.attached` e `reconcile.accepted` com tentativa, conexão e geração; vencimento usa o instante monotônico anterior ao envio. Vinte testes direcionados passaram. Canal/lane prontos continuam separados da lease Core e de efeito nativo. O bundle ainda é `development-partial` e a revisão R4 não é anunciada como executável.
+
 ## Gates
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.
