@@ -2,6 +2,7 @@
 
 import shutil
 import sqlite3
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
@@ -9,6 +10,9 @@ import pytest
 from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
 from okto_nexus.adapters.outbound.sqlite.execution_identity import (
     ensure_execution_installation, register_remote_executor,
+)
+from okto_nexus.adapters.outbound.sqlite.execution_workspace import (
+    bind_approved_workspace, workspace_binding_diff_hash,
 )
 from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner
 from okto_nexus.bootstrap.dependencies import bootstrap
@@ -171,3 +175,92 @@ def test_ns02_03(tmp_path):
         assert tuple(row) == ("DISCONNECTED", None, 1)
         count = uow.connection.execute("SELECT COUNT(*) FROM agents").fetchone()[0]
         assert count == 3  # operator seed plus two explicit fixtures
+
+
+def test_ns02_04(tmp_path):
+    """An approved opaque root binding never merges distinct remote roots."""
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    factory = deps.connection_factory
+    server_id = ensure_execution_installation(factory).server_id
+    now = datetime(2026, 9, 29, tzinfo=timezone.utc)
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        conn.execute("INSERT INTO agents(agent_id,created_at) VALUES (?,?)",
+                     ("agent-a", now.isoformat()))
+        conn.execute("INSERT INTO workspaces(workspace_id,created_at,display_name) "
+                     "VALUES (?,?,?)", ("ws-a", now.isoformat(), "same repo"))
+    executor = register_remote_executor(
+        factory, actor_agent_id="agent-a", connector_id="connector-a",
+        client_intent_id="register-a",
+    ).executor_id
+
+    def approve(proposal_id: str, root: str):
+        digest = workspace_binding_diff_hash(
+            server_id=server_id, executor_id=executor, workspace_id="ws-a",
+            subject_agent_id="agent-a", realization_handle=root,
+        )
+        with factory.unit_of_work() as uow:
+            uow.connection.execute(
+                "INSERT INTO execution_proposals(proposal_id,server_id,client_intent_id,"
+                "actor_agent_id,subject_agent_id,executor_id,expected_revisions_json,"
+                "diff_hash,expires_at,status,created_at) "
+                "VALUES (?,?,?,?,?,?,?,?,'2026-10-01T00:00:00+00:00','APPLIED',?)",
+                (proposal_id, server_id, proposal_id, "agent-a", "agent-a",
+                 executor, "{}", digest, now.isoformat()),
+            )
+
+    root_a = "root_aaaaaaaaaaaaaaaa"
+    root_b = "root_bbbbbbbbbbbbbbbb"
+    approve("proposal-a", root_a)
+    first = bind_approved_workspace(
+        factory, proposal_id="proposal-a", server_id=server_id,
+        executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+        realization_handle=root_a, now=now,
+    )
+    assert first.status == "PENDING_VALIDATION"
+    assert bind_approved_workspace(
+        factory, proposal_id="proposal-a", server_id=server_id,
+        executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+        realization_handle=root_a, now=now,
+    ) == first
+    assert bind_approved_workspace(
+        factory, proposal_id="proposal-a", server_id=server_id,
+        executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+        realization_handle=root_a,
+        now=datetime(2026, 10, 2, tzinfo=timezone.utc),
+    ) == first
+    with pytest.raises(OktoNexusError):
+        bind_approved_workspace(
+            factory, proposal_id="proposal-a", server_id=server_id,
+            executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+            realization_handle=root_b, now=now,
+        )
+    with pytest.raises(OktoNexusError):
+        workspace_binding_diff_hash(
+            server_id=server_id, executor_id=executor, workspace_id="ws-a",
+            subject_agent_id="agent-a", realization_handle=r"C:\\same-repo\\folder",
+        )
+    approve("proposal-b", root_b)
+    with pytest.raises(OktoNexusError):
+        bind_approved_workspace(
+            factory, proposal_id="proposal-b", server_id=server_id,
+            executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+            realization_handle=root_b,
+            now=datetime(2026, 10, 2, tzinfo=timezone.utc),
+        )
+    second = bind_approved_workspace(
+        factory, proposal_id="proposal-b", server_id=server_id,
+        executor_id=executor, workspace_id="ws-a", subject_agent_id="agent-a",
+        realization_handle=root_b, now=now,
+    )
+    assert second.workspace_binding_id != first.workspace_binding_id
+    with factory.unit_of_work(write=False) as uow:
+        rows = uow.connection.execute(
+            "SELECT workspace_binding_id,realization_handle FROM "
+            "execution_workspace_bindings WHERE server_id=? AND executor_id=?",
+            (server_id, executor),
+        ).fetchall()
+    assert {tuple(row) for row in rows} == {
+        (first.workspace_binding_id, root_a),
+        (second.workspace_binding_id, root_b),
+    }
