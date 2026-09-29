@@ -13,7 +13,10 @@ from pathlib import Path
 
 import httpx
 import pytest
-from nexus_connector_core import R4_PREVIEW_REVISION
+from nexus_connector_core import (
+    ExecutionContext, Operation, OperationReceipt, R4_PREVIEW_REVISION,
+    intent_hash, r4_submit_intent_hash,
+)
 
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.bootstrap.dependencies import bootstrap
@@ -60,6 +63,33 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     executor_id=registered.executor_id, snapshot=snapshot,
                 )
                 assert accepted.inventory_revision == snapshot["inventory_revision"]
+                submit_frame = {
+                    "protocol_major": 1,
+                    "contract_revision": R4_PREVIEW_REVISION,
+                    "type": "operation.submit", "server_id": me.server_id,
+                    "executor_id": registered.executor_id,
+                    "binding_id": "binding", "agent_id": "agent-a",
+                    "workspace_id": "ws",
+                    "workspace_binding_id": "workspace-binding",
+                    "session_id": "session", "session_owner_generation": 1,
+                    "authorization_revision": 1,
+                    "configuration_revision": 1,
+                    "binding_revision": 1, "credential_epoch": 1,
+                    "connection_id": "control", "connection_generation": 1,
+                    "grant_id": "grant", "operation_id": "op",
+                    "action": "turn.submit", "payload": {"text": "Hello"},
+                }
+                submit_frame["intent_hash"] = r4_submit_intent_hash(submit_frame)
+                context = ExecutionContext(
+                    me.server_id, registered.executor_id, "binding",
+                    "agent-a", "ws", 1, 1, 1, 100.0,
+                    frozenset({"turn.submit"}),
+                )
+                core_receipt = OperationReceipt(
+                    "op", intent_hash(Operation(
+                        "op", "session", "turn.submit", {"text": "Hello"}),
+                        context), "RECEIVED_DURABLE", False, True, "session",
+                )
                 with deps.connection_factory.unit_of_work() as uow:
                     conn = uow.connection
                     now = "2026-09-29T00:00:00Z"
@@ -97,7 +127,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         (me.server_id, registered.executor_id, "op", "agent-a",
                          "agent-a", "binding", "ws", "workspace-binding",
-                         "session", "runtime.open", "sha256:" + "a" * 64,
+                         "session", "turn.submit", submit_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
                 ticket = await http.request_r4_binding_ticket(
@@ -105,21 +135,14 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     credential_request_id="ticket-request",
                     scopes=("receipt:publish",),
                 )
-                receipt = {
-                    "protocol_major": 1,
-                    "contract_revision": R4_PREVIEW_REVISION,
-                    "type": "operation.receipt", "server_id": me.server_id,
-                    "executor_id": registered.executor_id,
-                    "binding_id": "binding", "agent_id": "agent-a",
-                    "session_id": "session", "connection_id": "control",
-                    "connection_generation": 1, "operation_id": "op",
-                    "intent_hash": "sha256:" + "a" * 64,
-                    "receipt_revision": 1, "stage": "RECEIVED_DURABLE",
-                    "possible_effect": False, "retry_safe": True,
-                }
-                receipt_ack = await http.publish_operation_receipt(
-                    ticket.ticket, frame=receipt)
+                receipt_ack = await http.publish_core_turn_receipt(
+                    ticket.ticket, submit_frame=submit_frame,
+                    core_receipt=core_receipt, context=context,
+                    receipt_revision=1)
                 assert receipt_ack.operation_id == "op"
+                view = await http.get_operation(key, "op")
+                assert view["executor_stage"] == "RECEIVED_DURABLE"
+                assert view["intent_hash"] == submit_frame["intent_hash"]
                 return registered, snapshot
 
     registered, snapshot = asyncio.run(roundtrip())
