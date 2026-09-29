@@ -119,7 +119,10 @@ def _mcp_json_snippet(host: str, port: int, api_key: str) -> str:
     return json.dumps(
         {
             "mcpServers": {
-                "okto-nexus": {"url": f"http://{host}:{port}/mcp?api_key={api_key}"}
+                "okto-nexus": {
+                    "url": f"http://{host}:{port}/mcp",
+                    "headers": {"Authorization": f"Bearer {api_key}"},
+                }
             }
         },
         indent=2,
@@ -427,7 +430,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
     import signal
     import threading
 
-    from ..mcp.server import bootstrap, maybe_auto_prune
+    from okto_nexus.bootstrap.dependencies import bootstrap, maybe_auto_prune
     from ....application.auth import AgentKeyAuthService
     from ....domain.ids import resolve_workspace_id
     from ..http.app import build_app, ensure_operator_key

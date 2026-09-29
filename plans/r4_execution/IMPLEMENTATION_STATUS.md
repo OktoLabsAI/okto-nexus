@@ -15,6 +15,8 @@
 | CON-R4-05 | IN_PROGRESS | Preview do Connector usa a revisão do mesmo Core; função de publicação R4 usa o candidato completo. 18 testes CN4 e 1 novo teste passaram. Publicação HTTP autenticada ainda não foi implementada. |
 | NS04.01/04.03 | IN_PROGRESS | Nexus consome catálogo e snapshot do Core sem criar runtime ou depender da aplicação Connector; dois testes locais e teste de protocolo passaram. Persistência e publicação por executor ainda pendentes. |
 | NS01.04 | IN_PROGRESS | `GET /v1/connections/protocol` retorna objeto direto com header de revisão e indica NXL R4 indisponível. As demais rotas `/v1` ainda pendentes. 30 testes HTTP existentes passaram. |
+| NS01.02/01.03 | IN_PROGRESS | Entrada principal agora é `adapters.inbound.cli.main`, sem ramo MCP stdio. Invocação sem comando mostra ajuda; flags antigas falham sem bootstrap. `serve` continua HTTP. 73 testes de CLI, retenção, tail e paridade passaram. Extra Core fixado, mas lock/instalação limpa ainda pendentes. |
+| NS01.01 | IN_PROGRESS | `Deps`/bootstrap em `bootstrap.dependencies`, registro de tools/resources/instructions em `mcp.registration`; HTTP e CLI importam os módulos separados. Quatro testes de extração/paridade e 34 testes direcionados de HTTP passaram. |
 
 O mesmo wheel local `nexus_connector_core-0.2.11.dev0-py3-none-any.whl` foi usado nos testes de consumidor Connector e Nexus: SHA-256 `41193bc203bb6425163b8992effb6dfa701d3ef309ed08832a58d84cc0c3158d`. Importação isolada com `python -I` passou. O artefato não foi publicado em PyPI; os extras `serve`/`serve-lite` do Nexus e a dependência do Connector fixam a versão, mas instalação nova exige disponibilizar esse wheel no índice/ambiente de instalação. O `uv.lock` do Nexus ainda não reflete essa dependência.
 
@@ -22,4 +24,6 @@ O mesmo wheel local `nexus_connector_core-0.2.11.dev0-py3-none-any.whl` foi usad
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.
 
-O pacote atual em `plans/` não contém `BACKLOG_R4.json`, `07_RASTREABILIDADE_R3.md`, `08_FONTES_BASELINE_E_DECISOES.md`, `contratos/` nem `validar_pacote.py`, embora `00_ENTREGAR_AO_AGENTE.md` e `VALIDACAO_DO_PACOTE.json` os citem. Portanto a validação documental anterior não é reproduzível neste workspace e o crosswalk completo de NS00.02 não pode ser marcado DONE. As tarefas independentes seguem a especificação textual disponível; nenhuma tarefa integral foi marcada DONE por um recorte parcial.
+O pacote completo em `plans/` foi disponibilizado durante a execução. `python plans/validar_pacote.py` passou oito verificações documentais; `tests/execution_r4/test_ns00.py` passou os dois cenários de baseline e crosswalk. Essa validação não prova capacidade de produto. As demais tarefas seguem a especificação e nenhuma é marcada DONE por um recorte parcial.
+
+Um wheel do Nexus foi instalado com o extra `serve-lite` num ambiente isolado com o wheel Core local; `python -I` importou ambos de `site-packages`, mostrou o help e serviu `/v1/connections/protocol` com `remote_execution_ready=false`. O teste não substitui a atualização do lock nem o bundle NXL R4.

@@ -54,7 +54,7 @@ from okto_nexus.application.retention import RetentionService
 from okto_nexus.domain.ids import resolve_workspace_id
 from okto_nexus.errors import OktoNexusError
 
-from ..mcp.server import bootstrap
+from okto_nexus.bootstrap.dependencies import bootstrap
 
 
 def _build_parser() -> argparse.ArgumentParser:

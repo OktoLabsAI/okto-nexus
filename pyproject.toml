@@ -47,7 +47,7 @@ Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 # DEFAULT serve build (`okto-nexus serve`): HTTP transport + dashboard + the
 # semantic-search model, so `uv tool install ".[serve]"` ships embeddings by
 # design. The capability is INSTALLED but still gated by embedding_mode (off by
-# default) - shipping the model does NOT auto-enable search. The stdio server
+# default) - shipping the model does NOT auto-enable search. The base library
 # stays dependency-light; `serve` fails closed with an install hint when the
 # transport extra is missing. For a lighter build without torch, use the
 # `serve-lite` extra below.
@@ -65,7 +65,7 @@ serve = [
     # Token counting for the workspace-analytics view (message "size" = TOKENS,
     # not bytes). o200k_base (GPT-4o family) is available since 0.7.0; loaded
     # fully offline from a vendored BPE blob. Lives ONLY here (serve), never in
-    # the stdio core - the tokenizer adapter imports it lazily.
+    # the base library - the tokenizer adapter imports it lazily.
     "tiktoken>=0.7,<1",
 ]
 # Slim serve build WITHOUT the embedding model (no torch): HTTP transport +
@@ -80,7 +80,7 @@ serve-lite = [
 ]
 # The semantic-search model on its own (Frente 3). `serve` already bundles it;
 # this extra stays for composing onto the slim build (`.[serve-lite,embeddings]`)
-# or a bare stdio host. Cosine is pure-Python (no numpy), so only the model
+# or an embedding-only host. Cosine is pure-Python (no numpy), so only the model
 # lives behind this extra. Heavy: pulls sentence-transformers + torch.
 embeddings = [
     "sentence-transformers>=2.5",
@@ -93,7 +93,7 @@ dev = [
 ]
 
 [project.scripts]
-okto-nexus = "okto_nexus.adapters.inbound.mcp.server:main"
+okto-nexus = "okto_nexus.adapters.inbound.cli.main:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

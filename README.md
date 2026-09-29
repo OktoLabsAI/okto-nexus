@@ -13,7 +13,7 @@ without requiring a cloud broker.
 - `/api/v1` — operator REST APIs, read-only monitor endpoints, and SSE;
 - `/` — the bundled React dashboard.
 
-The classic stdio transport remains supported. Coordination records live in one
+MCP is available through HTTP. Coordination records live in one
 SQLite database in WAL mode. Optional metrics, referenced workspace files, and
 the derived `shared.md` view live outside that database.
 
@@ -100,10 +100,10 @@ Available extras:
 
 | Extra | Includes | Use it when |
 |---|---|---|
-| none | stdio MCP core | You only need a lightweight local stdio server |
-| `serve-lite` | FastAPI, Uvicorn, dashboard | You need HTTP without Torch/model dependencies |
+| none | CLI and coordination library | You are embedding Nexus components |
+| `serve-lite` | FastAPI, Uvicorn, Core, dashboard | You need HTTP without Torch/model dependencies |
 | `embeddings` | sentence-transformers | You want the local embedding provider separately |
-| `serve` | HTTP stack, embeddings, tokenizer | You want the complete supported hub |
+| `serve` | HTTP stack, Core, embeddings, tokenizer | You want the complete supported hub |
 | `dev` | pytest, FastAPI, Uvicorn, httpx | You are developing or testing Nexus |
 
 The published wheel and sdist contain the compiled dashboard. Node.js is only
@@ -151,60 +151,27 @@ values must first exist in **Registry** before an identity can use them.
 
 ## Connect an MCP client
 
-The dashboard generates snippets for Claude Code, Claude Desktop, Codex,
-Cursor, VS Code, Windsurf, and Cline. The generic streamable-HTTP URL is:
+Configure the selected MCP client to use this streamable-HTTP endpoint:
 
 ```text
-http://127.0.0.1:8202/mcp?api_key=nxs_REPLACE_ME
+http://127.0.0.1:8202/mcp
 ```
 
-Credential extraction order is query `api_key`, `x-api-key` header, then
-`Authorization: Bearer`. Treat client configuration containing a query key as
-a secret.
-
-Examples:
-
-```bash
-claude mcp add -t http okto-nexus \
-  "http://127.0.0.1:8202/mcp?api_key=nxs_REPLACE_ME"
-
-codex mcp add okto-nexus \
-  --url "http://127.0.0.1:8202/mcp?api_key=nxs_REPLACE_ME"
-```
-
-Generic JSON:
+Send the existing agent key in the `Authorization: Bearer nxs_...` header.
+The HTTP endpoint still accepts older query-key configurations during
+migration, but new configurations should keep the key out of the URL.
+Generic client configuration shape (use the fields your client supports):
 
 ```json
 {
   "mcpServers": {
     "okto-nexus": {
-      "url": "http://127.0.0.1:8202/mcp?api_key=nxs_REPLACE_ME"
+      "url": "http://127.0.0.1:8202/mcp",
+      "headers": {"Authorization": "Bearer nxs_REPLACE_ME"}
     }
   }
 }
 ```
-
-### Stdio
-
-Run `okto-nexus` without a subcommand for stdio:
-
-```json
-{
-  "mcpServers": {
-    "okto-nexus": {
-      "command": "okto-nexus",
-      "args": [],
-      "env": {
-        "OKTO_NEXUS_HOME": "/absolute/path/to/nexus-home"
-      }
-    }
-  }
-}
-```
-
-Without `OKTO_NEXUS_API_KEY`, stdio preserves the cooperative anonymous model.
-Set that variable to an active `nxs_...` key to bind the process to the same
-authenticated identity rules as HTTP. An invalid configured key fails closed.
 
 ## Agent pre-flight
 
@@ -284,9 +251,9 @@ in a worker thread so it does not block the shared event loop.
 ## Architecture
 
 ```text
-MCP stdio             MCP HTTP              REST / SSE / SPA        CLI
-    \                     |                         |                 /
-     +---------------- inbound adapters and transport auth ----------------+
+MCP HTTP              REST / SSE / SPA        CLI
+    \                         |                 /
+     +----------- inbound adapters and transport auth ----------+
                                       |
                              application services
        identity · messages · inbox · handoffs · events · artifacts
@@ -326,8 +293,7 @@ Important boundaries:
 | MCP `/mcp` | Active `nxs_` key required | Active `nxs_` key required |
 | EPT monitor endpoints | Scoped `nxsept_` accepted | Scoped `nxsept_` accepted |
 
-MCP-over-HTTP connections always represent an agent; stdio may use the
-cooperative anonymous mode. The dashboard/REST loopback trust path represents
+MCP-over-HTTP connections always represent an agent. The dashboard/REST loopback trust path represents
 the local operator. Browser-origin checks protect mutating operator routes, and
 binding beyond loopback removes keyless REST trust.
 
@@ -730,7 +696,7 @@ For `serve` settings managed by the runtime catalog, effective precedence is:
 CLI flag > environment variable > stored dashboard override > default
 ```
 
-Within the core/stdio bootstrap there is no stored layer, so precedence is
+Within the shared bootstrap there is no stored layer, so precedence is
 `CLI > env > default`. Unknown flags, missing values, invalid enums, and
 out-of-range numbers fail closed with `CONFIG_ERROR`. Boolean CLI flags take
 an explicit value such as `--feature-trace true`.
@@ -815,7 +781,6 @@ The other flags gate live behavior.
 | `OKTO_NEXUS_LOG_LEVEL` | `--log-level` | `warning` | `critical` through `trace` |
 | — | `--project-root` | `.` | Initial dashboard workspace |
 | `OKTO_NEXUS_NO_BANNER` | — | unset | Suppress serve banner |
-| `OKTO_NEXUS_API_KEY` | — | unset | Optional stdio authenticated identity |
 
 ## Operations
 
@@ -824,7 +789,7 @@ The other flags gate live behavior.
 | Command | Purpose |
 |---|---|
 | `okto-nexus serve` | Start MCP HTTP, REST, SSE, and dashboard |
-| `okto-nexus` | Start MCP over stdio |
+| `okto-nexus` | Show CLI help |
 | `okto-nexus tail` | Operator NDJSON follower over the event service |
 | `okto-nexus admin prune` | Enforce retention, optionally vacuum |
 | `okto-nexus admin issue-keys` | Add keys to legacy keyless identities |

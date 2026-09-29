@@ -41,12 +41,13 @@ from ....domain.approvals import OPERATOR_AGENT_ID
 from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
 from ....errors import OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
+from ...outbound.execution.core_inventory import MANAGEMENT_REVISION
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
 from ...outbound.tokenizer import resolve_tokenizer
-from ..mcp.server import (
+from okto_nexus.bootstrap.dependencies import Deps
+from ..mcp.registration import (
     SERVER_INSTRUCTIONS,
-    Deps,
     _load_fastmcp,
     register_meta_tools,
     register_resources,
@@ -85,6 +86,16 @@ def ok(data: Any) -> JSONResponse:
 def err(status: int, code: str, message: str) -> JSONResponse:
     return JSONResponse(
         {"ok": False, "error": {"code": code, "message": message}}, status_code=status
+    )
+
+
+def v1_err(status: int, code: str, message: str) -> JSONResponse:
+    """R4 direct error representation; no legacy ok/data envelope."""
+    return JSONResponse(
+        {"error": {"code": code, "stage": "authentication", "message": message,
+                   "possible_effect": False, "retry_safe": False,
+                   "operation_id": None, "action": None}},
+        status_code=status,
     )
 
 
@@ -178,6 +189,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path.rstrip("/") or "/"
+        is_v1 = path == "/v1" or path.startswith("/v1/")
+        if is_v1 and (request.query_params.get("api_key") or
+                      request.headers.get("x-api-key")):
+            return v1_err(401, "AUTH_FAILED", "Use only the Authorization bearer header on /v1.")
         if (
             path in PUBLIC_PATHS
             or request.url.path.startswith(PUBLIC_PREFIXES)
@@ -212,6 +227,7 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
         if (
             not is_mcp
+            and not is_v1
             and not extract_api_key(request)
             and getattr(request.app.state, "local_open", False)
             and request.client is not None
@@ -238,7 +254,7 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
 
         auth: AgentKeyAuthService = request.app.state.auth
         deps: Deps = request.app.state.deps
-        api_key = extract_api_key(request)
+        api_key = extract_bearer(request) if is_v1 else extract_api_key(request)
 
         def _resolve():
             with deps.connection_factory.unit_of_work() as uow:
@@ -249,9 +265,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         except OktoNexusError as exc:
             return err(503, exc.code, exc.message)
         if agent is None:
-            return err(
-                401, "AUTH_FAILED", "Authentication failed: unknown or inactive api_key"
-            )
+            if is_v1:
+                return v1_err(401, "AUTH_FAILED", "Authentication failed: unknown or inactive bearer.")
+            return err(401, "AUTH_FAILED", "Authentication failed: unknown or inactive api_key")
 
         if is_mcp:
             from ....application.connection_policy import method_enabled
@@ -263,6 +279,16 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
         finally:
             current_agent.reset(token)
+
+
+class V1RevisionMiddleware(BaseHTTPMiddleware):
+    """Advertise the exact management contract on every /v1 response."""
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        response = await call_next(request)
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            response.headers["X-Nexus-Connections-Revision"] = MANAGEMENT_REVISION
+        return response
 
 
 class TelemetryMiddleware(BaseHTTPMiddleware):
@@ -552,6 +578,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
     app.add_middleware(TelemetryMiddleware)
     app.add_middleware(ApiKeyAuthMiddleware)
+    app.add_middleware(V1RevisionMiddleware)
 
     @app.get("/healthz")
     async def healthz() -> JSONResponse:  # public liveness probe
