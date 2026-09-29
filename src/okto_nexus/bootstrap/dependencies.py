@@ -35,6 +35,7 @@ from okto_nexus.adapters.outbound.sqlite.comm_preset_repo import (
 from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
 from okto_nexus.adapters.outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from okto_nexus.adapters.outbound.sqlite.events_repo import SqliteEventEmitter, SqliteEventRepo
+from okto_nexus.adapters.outbound.sqlite.execution_identity import ensure_execution_installation
 from okto_nexus.adapters.outbound.sqlite.governance_repo import SqliteGovernanceRepo
 from okto_nexus.adapters.outbound.sqlite.guardrails_repo import (
     SqliteAgentGroupRepo,
@@ -185,6 +186,7 @@ def bootstrap(
     config._connection_key_ttl_pinned = config.connection_key_ttl_seconds != 86400
     factory = ConnectionFactory(config)  # ensures home_dir exists
     MigrationRunner(factory).apply()  # idempotent; MIGRATION_ERROR on failure
+    ensure_execution_installation(factory)
     clock = SystemClock()
     repos, emitter = build_repos(clock, config)
     externalize_legacy_artifacts(

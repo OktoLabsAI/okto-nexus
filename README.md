@@ -794,6 +794,7 @@ The other flags gate live behavior.
 | `okto-nexus admin prune` | Enforce retention, optionally vacuum |
 | `okto-nexus admin issue-keys` | Add keys to legacy keyless identities |
 | `okto-nexus admin export` | Export a workspace replay stream as NDJSON |
+| `okto-nexus admin migrate-mcp-entry` | Migrate one selected Nexus stdio config entry to HTTP |
 
 Use `--help` on every command for the full argument grammar.
 
@@ -856,6 +857,23 @@ okto-nexus admin export \
 The first line is a manifest; subsequent lines are raw events ordered by
 `event_id`. CLI export is operator-shell access and remains available even
 when the REST replay flag is off.
+
+### Selected MCP config migration
+
+Set `OKTO_NEXUS_MCP_KEY` in the operator environment to the selected agent's
+existing `nxs_` key. The command never issues or rotates a key. Plan a change
+to one explicitly chosen entry:
+
+```bash
+okto-nexus admin migrate-mcp-entry --config /path/to/.mcp.json \
+  --entry okto-nexus --url http://127.0.0.1:8202/mcp
+```
+
+Review the redacted diff summary and its full `expected_sha256`, then apply
+with `--apply --expected-sha256 <reviewed-hash>`. The command backs up the
+original file and refuses concurrent edits. Other `mcpServers` entries retain
+their values. It rejects entries with environment values or unknown fields
+that need a manual migration.
 
 ### Ephemeral monitor token
 

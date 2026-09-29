@@ -20,12 +20,18 @@
 | NS01.01 | IN_PROGRESS | `Deps`/bootstrap em `bootstrap.dependencies`, registro de tools/resources/instructions em `mcp.registration`; HTTP e CLI importam os módulos separados. Quatro testes de extração/paridade e 34 testes direcionados de HTTP passaram. |
 | NS00.05 | IN_PROGRESS | Peer sintético com perda de resposta após commit e consulta do mesmo recibo; manifesto classifica provider e dois hosts como NOT_RUN. Cenário NS00.05 passou, mas peers de produto ainda pendentes. |
 | NS02.01 | IN_PROGRESS | Chaves imutáveis por Server/executor/binding/sessão/stream/aprovação e geração tipada; teste de colisão entre namespaces passou. Writers persistentes ainda pendentes. |
+| NS01.05 | IN_PROGRESS | Comando `admin migrate-mcp-entry` planeja uma entrada explicitamente escolhida, mostra diff sem chave, exige hash revisado para aplicar, cria backup e recusa edição concorrente. Cenário passou. Nenhuma configuração real do operador foi alterada; NS01.04 ainda incompleto. |
+| NS02.02/02.03 | IN_PROGRESS | Migração 066 adiciona 20 extensões, FKs/índices, preserva endpoint negado e passa em banco legado; bootstrap mantém server_id/executor local estáveis sem claim. Registro remoto interno é idempotente e vinculado ao ator; rota autenticada e ticket bootstrap ainda pendentes. Três testes NS02 passaram. |
 
 O mesmo wheel local `nexus_connector_core-0.2.11.dev0-py3-none-any.whl` foi usado nos testes de consumidor Connector e Nexus: SHA-256 `41193bc203bb6425163b8992effb6dfa701d3ef309ed08832a58d84cc0c3158d`. Importação isolada com `python -I` passou. O artefato não foi publicado em PyPI; os extras `serve`/`serve-lite` do Nexus e a dependência do Connector fixam a versão, mas instalação nova exige disponibilizar esse wheel no índice/ambiente de instalação. O `uv.lock` do Nexus ainda não reflete essa dependência.
 
 Substituição posterior: o wheel `0.2.12.dev0` de hash `bd5326357608906bdd80ccefc3db4890137d9e8dc00935a88c5f6dd955bf9d8e` foi copiado byte a byte para os três repositórios; os pins Nexus/Connector e `uv.lock` do Nexus foram atualizados. Os parágrafos anteriores registram o marco anterior, não o artefato corrente. O NXL segue R3.
 
 `uv lock --check` e `uv sync --extra serve-lite --extra dev --frozen` passaram usando `vendor/wheels` do próprio Nexus. A suíte direcionada NS00/NS01/inventário passou 13 testes no ambiente sincronizado. O ADR em `docs/adr/0001-r4-authority-and-wire.md` registra responsabilidades, representação direta `/v1` e invariantes de efeitos; NS00.03/04 exercitam separação do envelope legado e rejeição R3/R4, inclusive receipt histórico R3. Nenhum desses resultados qualifica o dispatcher remoto.
+
+O Core tem no commit `c67487e` um preview de codec NXL R4 em wheel `0.2.13.dev0`, mas `R4_BUNDLE_EXECUTABLE=False` e a revisão negociável continua R3. O Nexus/Connector ainda instalam `0.2.12.dev0`; não promover o preview a gate remoto. A suíte NS01/NS02/retenção passou 38 testes depois da migração 066.
+
+O wheel Nexus recompilado contém `066_execution_r4_expand.sql`; instalado em ambiente separado e iniciado com `python -I`, aplicou até a revisão 66 e persistiu os IDs de instalação. A validação foi feita em banco temporário, sem aplicar migração no banco do operador.
 
 ## Gates
 

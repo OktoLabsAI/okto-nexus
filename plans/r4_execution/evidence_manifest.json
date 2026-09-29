@@ -14,6 +14,8 @@
     {"ids": ["NS00.03", "NS00.04"], "command": "python -m pytest tests/execution_r4/test_ns00.py -q", "exit_code": 0, "scope": "direct representation and r3 historical rejection"},
     {"ids": ["NS00.05"], "command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_05 -q", "exit_code": 0, "scope": "synthetic causal peer; no provider"},
     {"ids": ["NS01.01", "NS01.02", "NS01.03"], "command": "python -m pytest tests/execution_r4/test_ns01.py -q", "exit_code": 0, "scope": "transport separation and pinned wheel packaging"},
+    {"ids": ["NS01.05"], "command": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_05 -q", "exit_code": 0, "scope": "selected config CAS/backup and concurrent edit; no user config migrated"},
+    {"ids": ["NS02.01", "NS02.02", "NS02.03"], "command": "python -m pytest tests/execution_r4/test_ns02.py -q", "exit_code": 0, "scope": "keys, additive migration, local identity and internal remote registration; no ticket/WSS"},
     {"ids": ["CORE-R4-02"], "command": "python -m pytest tests/test_passive_discovery.py tests/test_executor_inventory.py -q", "exit_code": 0, "scope": "Core source/wheel only; no provider"}
   ]
 }

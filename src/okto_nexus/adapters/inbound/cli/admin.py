@@ -217,6 +217,21 @@ def _build_parser() -> argparse.ArgumentParser:
             "Write NDJSON to this file (UTF-8, LF newlines). Omit to stream to stdout."
         ),
     )
+
+    migrate = sub.add_parser(
+        "migrate-mcp-entry",
+        help="Plan or apply migration of one selected Nexus stdio MCP entry to HTTP.",
+    )
+    migrate.add_argument("--config", required=True, metavar="PATH",
+                         help="Explicit MCP JSON config path; no home scan.")
+    migrate.add_argument("--entry", required=True,
+                         help="Exact mcpServers entry name to migrate.")
+    migrate.add_argument("--url", required=True,
+                         help="Direct HTTP(S) URL ending in /mcp, without a key.")
+    migrate.add_argument("--apply", action="store_true",
+                         help="Apply the reviewed plan with a backup and CAS.")
+    migrate.add_argument("--expected-sha256",
+                         help="Full SHA-256 printed by the reviewed plan; required with --apply.")
     return parser
 
 
@@ -332,6 +347,35 @@ def run_admin(
     ns, extra = parser.parse_known_args(list(argv))
     environ = env if env is not None else os.environ
     sink = out if out is not None else sys.stdout
+    if ns.command == "migrate-mcp-entry":
+        from pathlib import Path
+        from .mcp_config_migration import (
+            MigrationConflict, apply_entry_migration, plan_entry_migration,
+        )
+        try:
+            if extra:
+                raise MigrationConflict("Unknown migrate-mcp-entry option.")
+            plan = plan_entry_migration(
+                Path(ns.config), entry_name=ns.entry, url=ns.url,
+                existing_api_key=environ.get("OKTO_NEXUS_MCP_KEY", ""),
+            )
+            if ns.apply:
+                if not ns.expected_sha256 or ns.expected_sha256 != plan.expected_sha256:
+                    raise MigrationConflict("--apply requires the SHA-256 of the reviewed plan.")
+                backup = apply_entry_migration(plan)
+                sink.write(json.dumps({"applied": not plan.already_applied,
+                                       "already_current": plan.already_applied,
+                                       "entry": ns.entry,
+                                       "backup": str(backup) if backup else None},
+                                      ensure_ascii=True) + "\n")
+            else:
+                sink.write(json.dumps(plan.redacted_summary(), indent=2,
+                                      ensure_ascii=True) + "\n")
+            sink.flush()
+            return 0
+        except (MigrationConflict, OSError) as exc:
+            print(f"[okto-nexus admin] CONFIG_ERROR: {exc}", file=sys.stderr)
+            return 1
     try:
         deps = (deps_factory or bootstrap)(environ, extra)
         # Anchor to a real workspace, fail-closed (WORKSPACE_UNRESOLVED on a
