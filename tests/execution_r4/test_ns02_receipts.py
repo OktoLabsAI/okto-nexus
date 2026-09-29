@@ -142,3 +142,14 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
             executor_id=executor_id, operation_id="op",
             subject_agent_id="foreign",
         )
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE execution_receipts SET canonical_frame='{}' "
+            "WHERE server_id=? AND executor_id=? AND operation_id=? "
+            "AND receipt_revision=2", (server_id, executor_id, "op"),
+        )
+    with pytest.raises(OktoNexusError):
+        read_execution_operation_history(
+            restored.connection_factory, server_id=server_id,
+            executor_id=executor_id, operation_id="op", subject_agent_id="agent",
+        )

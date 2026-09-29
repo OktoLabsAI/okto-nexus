@@ -67,6 +67,14 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
                         raw.encode("utf-8")).hexdigest()) != row["frame_digest"]:
                     raise ValueError("invalid stored receipt")
                 parsed = decode_r4_frame(raw.encode("utf-8"))
+                if (parsed["server_id"] != server_id or
+                        parsed["executor_id"] != executor_id or
+                        parsed["operation_id"] != operation_id or
+                        parsed["agent_id"] != subject_agent_id or
+                        parsed["binding_id"] != operation["binding_id"] or
+                        parsed["session_id"] != operation["session_id"] or
+                        parsed["intent_hash"] != operation["intent_hash"]):
+                    raise ValueError("stored receipt has a different operation")
                 projection = reduce_r4_receipt(projection, parsed)
                 receipts.append(parsed)
         except (CoreError, ValueError, TypeError) as exc:
@@ -141,16 +149,18 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                                             parsed["receipt_revision"],
                                             existing["stage"], True)
         rows = conn.execute(
-            "SELECT canonical_frame FROM execution_receipts WHERE server_id=? "
+            "SELECT canonical_frame,frame_digest FROM execution_receipts WHERE server_id=? "
             "AND executor_id=? AND operation_id=? ORDER BY receipt_revision", key,
         ).fetchall()
         projection = None
         try:
             for row in rows:
-                if row["canonical_frame"] is None:
+                raw_previous = row["canonical_frame"]
+                if (raw_previous is None or "sha256:" + hashlib.sha256(
+                        raw_previous.encode("utf-8")).hexdigest() != row["frame_digest"]):
                     raise ValueError("missing receipt provenance")
                 projection = reduce_r4_receipt(
-                    projection, decode_r4_frame(row["canonical_frame"].encode("utf-8")))
+                    projection, decode_r4_frame(raw_previous.encode("utf-8")))
             projection = reduce_r4_receipt(projection, parsed)
         except (CoreError, ValueError, TypeError) as exc:
             raise OktoNexusError(ErrorCode.CONFLICT,
