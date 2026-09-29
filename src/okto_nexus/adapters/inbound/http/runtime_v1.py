@@ -16,10 +16,12 @@ from ....application.execution_realizations import publish_executor_realization
 from ....application.execution_intents import (
     read_execution_intent, resolve_execution_intent,
 )
+from ....application.execution_admission import submit_execution_operation
 from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
 from ....domain.execution.keys import ExecutorKey
+from ...outbound.execution.core_inventory import protocol_info
 from ...outbound.sqlite.execution_receipts import (
     append_execution_receipt, read_execution_operation_history,
 )
@@ -68,6 +70,15 @@ class ResolveIntentRequest(BaseModel):
     new_session: bool | None = None
     text: Annotated[str, Field(max_length=65536, strict=True)] | None = None
     target: dict[str, object] | None = None
+
+
+class OperationSubmitRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    operation_id: _Id
+    resolution_revision: Annotated[int, Field(ge=1, strict=True)]
+    intent_hash: _Digest
 
 
 def build_router() -> APIRouter:
@@ -210,6 +221,23 @@ def build_router() -> APIRouter:
                 factory, actor_agent_id=agent.agent_id,
                 client_intent_id=client_intent_id))
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.post("/runtime/operations")
+    async def submit_operation(body: OperationSubmitRequest,
+                               request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+        view, reused = await anyio.to_thread.run_sync(
+            lambda: submit_execution_operation(
+                factory, actor_agent_id=agent.agent_id,
+                request=body.model_dump(),
+                fresh_publications=request.app.state.inventory_fresh_publications,
+                remote_ready=protocol_info()["remote_execution_ready"],
+            ))
+        return JSONResponse(view, status_code=200 if reused else 202,
+                            headers={"Cache-Control": "no-store"})
 
     @router.post("/runtime/operations/{operation_id}/receipts")
     async def publish_operation_receipt(operation_id: str,

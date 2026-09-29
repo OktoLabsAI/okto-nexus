@@ -55,7 +55,7 @@ class ExecutionOperationHistory:
             "executor_stage": latest["stage"] if latest else None,
             "possible_effect": latest["possible_effect"] if latest else False,
             "retry_safe": latest["retry_safe"] if latest else False,
-            "receipt_revision": latest["receipt_revision"] if latest else None,
+            "receipt_revision": latest["receipt_revision"] if latest else 0,
             "last_observed_at": self.last_observed_at,
             "error": ({"code": latest["error_code"]} if latest and
                       latest.get("error_code") else None),

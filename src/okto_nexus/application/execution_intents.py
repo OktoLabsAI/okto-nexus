@@ -16,6 +16,7 @@ from ..adapters.outbound.sqlite.connection import ConnectionFactory
 from ..adapters.outbound.sqlite.execution_agent_revisions import (
     current_agent_revisions,
 )
+from .execution_binding_proposals import _agent_guard
 
 
 _INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit"}
@@ -170,11 +171,12 @@ def resolve_execution_intent(
         conn.execute(
             "INSERT INTO execution_client_intents(server_id,actor_agent_id,"
             "client_intent_id,body_hash,intent_id,operation_id,"
-            "resolution_revision,resolved_json,created_at) "
-            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'))",
+            "resolution_revision,resolved_json,created_at,source_guard_digest) "
+            "VALUES (?,?,?,?,?,?,1,?,strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)",
             (server_id, actor_agent_id, request["client_intent_id"],
              body_hash, intent_id, operation_id,
-             canonical_json(resolved).decode("utf-8")),
+             canonical_json(resolved).decode("utf-8"),
+             _agent_guard(conn, actor_agent_id)),
         )
         return resolved
 
@@ -196,5 +198,19 @@ def read_execution_intent(factory: ConnectionFactory, *, actor_agent_id: str,
     if row is None:
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "The client intent was not found.", {})
-    return {"resolution": json.loads(row["resolved_json"]),
-            "operation": None}
+    resolution = json.loads(row["resolved_json"])
+    from ..adapters.outbound.sqlite.execution_receipts import (
+        read_execution_operation_history,
+    )
+    try:
+        operation = read_execution_operation_history(
+            factory, server_id=server_id,
+            executor_id=resolution["scope"]["executor_id"],
+            operation_id=resolution["operation_id"],
+            subject_agent_id=actor_agent_id,
+        ).public_view()
+    except OktoNexusError as exc:
+        if exc.code != ErrorCode.NOT_FOUND:
+            raise
+        operation = None
+    return {"resolution": resolution, "operation": operation}
