@@ -115,6 +115,10 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         factory, server_id=server_id, executor_id=executor_id, agent_id="agent",
         binding_id="binding", scopes=frozenset({"receipt:publish"}),
     )
+    history_ticket = issue_execution_ticket(
+        factory, server_id=server_id, executor_id=executor_id, agent_id="agent",
+        binding_id="binding", scopes=frozenset({"history:read"}),
+    )
     with TestClient(app, raise_server_exceptions=False) as client:
         path = "/v1/runtime/operations/op/receipts"
         assert client.get("/v1/runtime/operations/op").status_code == 401
@@ -122,6 +126,10 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
             "/v1/runtime/operations/op",
             headers={"Authorization": f"Bearer {foreign_key}"})
         assert foreign_view.status_code == 404
+        out_of_scope = client.get(
+            "/v1/runtime/operations/op",
+            headers={"Authorization": f"Bearer {issued.ticket}"})
+        assert out_of_scope.status_code == 403
         assert client.post(path, json=second).status_code == 401
         response = client.post(path, json=second,
                                headers={"Authorization": f"Bearer {issued.ticket}"})
@@ -140,6 +148,11 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         assert view["retry_safe"] is False
         assert view["scope"]["agent_id"] == "agent"
         assert view["client_intent_id"] is None  # Legacy seeded operation.
+        ticket_view = client.get(
+            "/v1/runtime/operations/op",
+            headers={"Authorization": f"Bearer {history_ticket.ticket}"})
+        assert ticket_view.status_code == 200, ticket_view.text
+        assert ticket_view.json() == view
     assert append_execution_receipt(factory, principal=principal,
                                     frame=second).reused is True
     with factory.unit_of_work(write=False) as uow:

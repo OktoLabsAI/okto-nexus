@@ -286,3 +286,30 @@ def verify_execution_ticket(factory: ConnectionFactory, *, ticket: str,
     return VerifiedExecutionTicket(ticket_id, server_id, executor_id,
                                    binding_id, agent_id, scopes, epoch,
                                    authorization)
+
+
+def verify_execution_history_ticket(factory: ConnectionFactory, *, ticket: str,
+                                    server_id: str, operation_id: str
+                                    ) -> VerifiedExecutionTicket:
+    """Resolve a history ticket only through its own admitted operation."""
+    if (not isinstance(ticket, str) or not ticket.startswith("nxt4_") or
+            not 32 <= len(ticket) <= 4096):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                              "The execution ticket is invalid.", {})
+    with factory.unit_of_work(write=False) as uow:
+        target = uow.connection.execute(
+            "SELECT t.executor_id,t.binding_id FROM execution_link_tickets t "
+            "JOIN execution_operations o ON o.server_id=t.server_id AND "
+            "o.executor_id=t.executor_id AND o.binding_id=t.binding_id AND "
+            "o.subject_agent_id=t.agent_id WHERE t.secret_hash=? AND "
+            "t.server_id=? AND o.operation_id=?",
+            (_hash(ticket), server_id, operation_id),
+        ).fetchone()
+    if target is None:
+        raise OktoNexusError(ErrorCode.NOT_FOUND,
+                              "The operation was not found in this ticket scope.", {})
+    return verify_execution_ticket(
+        factory, ticket=ticket, server_id=server_id,
+        executor_id=target["executor_id"], binding_id=target["binding_id"],
+        scope="history:read",
+    )

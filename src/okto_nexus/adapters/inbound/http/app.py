@@ -212,11 +212,19 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
                 return err(401, "AUTH_FAILED", "Use only the connection bearer credential.")
             return await call_next(request)
         if ((request.method == "PUT" and re.fullmatch(
-                r"/v1/runtime/executors/[^/]{1,160}/inventory", path)) or
-                (request.method == "POST" and re.fullmatch(
-                r"/v1/runtime/operations/[^/]{1,160}/receipts", path))):
+                 r"/v1/runtime/executors/[^/]{1,160}/inventory", path)) or
+                 (request.method == "POST" and re.fullmatch(
+                 r"/v1/runtime/operations/[^/]{1,160}/receipts", path))):
             # This route has its own ticket audience and scope check. A
             # canonical agent key does not substitute for that ticket.
+            return await call_next(request)
+        if (request.method == "GET" and re.fullmatch(
+                r"/v1/runtime/operations/[^/]{1,160}", path) and
+                (extract_bearer(request) or "").startswith("nxt4_") and
+                not request.query_params.get("api_key") and
+                not request.headers.get("x-api-key")):
+            # A history ticket is accepted only by this operation reader.
+            # Every scope and canonical ownership check stays in the route.
             return await call_next(request)
         is_mcp = request.url.path.startswith("/mcp")
         bearer = extract_bearer(request)
