@@ -2,6 +2,7 @@
 
 from dataclasses import replace
 import json
+import time
 from pathlib import Path
 
 import pytest
@@ -15,6 +16,7 @@ from okto_nexus.adapters.outbound.execution.core_inventory import (
 )
 from okto_nexus.adapters.outbound.sqlite.execution_identity import ensure_execution_installation
 from okto_nexus.application.executor_inventory import publish_executor_inventory
+from okto_nexus.application.executor_inventory_views import read_executor_inventory
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.execution.keys import ExecutorKey
 from okto_nexus.errors import OktoNexusError
@@ -147,9 +149,40 @@ def test_remote_inventory_http_requires_executor_ticket(tmp_path):
         Draft202012Validator(contract["$defs"]["InventoryAccepted"]).validate(
             sent.json())
         assert sent.json()["inventory_revision"] == snapshot["inventory_revision"]
-        assert sent.json()["fresh_for_ms"] == 120_000
-        assert client.put(path, json=snapshot, headers={
-            "Authorization": f"Bearer {ticket}"}).status_code == 200
+        assert 119_900 <= sent.json()["fresh_for_ms"] <= 120_000
+        viewed = client.get(path, headers={
+            "Authorization": f"Bearer {key}"})
+        assert viewed.status_code == 200
+        Draft202012Validator({"$defs": contract["$defs"],
+                              **contract["$defs"]["InventoryView"]}).validate(
+                                  viewed.json())
+        assert viewed.json()["freshness"] == "OFFLINE"
+        assert viewed.json()["eligible_for_new_start"] is False
+        options = client.get(
+            "/v1/agents/agent-a/runtime-options",
+            params={"executor_id": info["executor_id"]},
+            headers={"Authorization": f"Bearer {key}"},
+        )
+        assert options.status_code == 200, options.text
+        Draft202012Validator({"$defs": contract["$defs"],
+                              **contract["$defs"]["RuntimeOptions"]}).validate(
+                                  options.json())
+        assert all(not row["can_start"] and not row["can_bind"]
+                   for row in options.json()["options"])
+        assert all(row["technical_state"] == "NOT_INSTALLED"
+                   for row in options.json()["options"])
+        assert client.get(
+            "/v1/agents/another/runtime-options",
+            params={"executor_id": info["executor_id"]},
+            headers={"Authorization": f"Bearer {key}"},
+        ).status_code == 403
+        app.state.inventory_fresh_publications[
+            (info["server_id"], info["executor_id"])
+        ] = (1, time.monotonic() - 121, 0)
+        replay = client.put(path, json=snapshot, headers={
+            "Authorization": f"Bearer {ticket}"})
+        assert replay.status_code == 200
+        assert replay.json()["fresh_for_ms"] == 0
         assert client.put(path.replace(info["executor_id"], "other"),
                           json=snapshot, headers={
                               "Authorization": f"Bearer {ticket}"}).status_code == 403
@@ -158,3 +191,14 @@ def test_remote_inventory_http_requires_executor_ticket(tmp_path):
                                headers={"Authorization": f"Bearer {ticket}"})
         assert malformed.status_code == 400
         assert malformed.json()["error"]["code"] == "VALIDATION_ERROR"
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE execution_executors SET control_state='CONTROL_READY' "
+            "WHERE server_id=? AND executor_id=?",
+            (info["server_id"], info["executor_id"]),
+        )
+    assert read_executor_inventory(
+        deps.connection_factory, server_id=info["server_id"],
+        executor_id=info["executor_id"], agent_id="agent-a",
+        fresh_publications={},
+    )["freshness"] == "STALE"
