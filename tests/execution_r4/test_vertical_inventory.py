@@ -70,6 +70,10 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
     from okto_nexus_connector.services.discovery_service import (
         executor_inventory_snapshot,
     )
+    from okto_nexus_connector.services.realization_service import (
+        publish_local_realization,
+    )
+    from okto_nexus_connector.storage.state_store import StateStore
     from okto_nexus_connector.transport.https_client import NexusHTTPClient
 
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
@@ -113,24 +117,24 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
                         ("2026-09-29T00:00:00Z",),
                     )
-                realization = await http.publish_r4_realization(
-                    registered.bootstrap_ticket,
-                    executor_id=registered.executor_id,
-                    request={
-                        "client_intent_id": "realization-one",
-                        "agent_id": "agent-a",
-                        "local_realization_ref": "root_local_1234567890123456",
-                        "realization_revision": 1, "workspace_id": "ws",
-                        "workspace_label": "Project Alpha",
-                        "adapter_id": "codex_app_server",
-                        "candidate_ref": snapshot["evidence"][0]["candidate_ref"],
-                        "inventory_revision": snapshot["inventory_revision"],
-                        "local_root_proof_digest": "sha256:" + "b" * 64,
-                        "configuration_digest": "sha256:" + "c" * 64,
-                        "local_consent_id": "consent-one",
-                    },
+                local_store = StateStore(tmp_path / "connector-state.json")
+                realization = await publish_local_realization(
+                    local_store, http, registered.bootstrap_ticket,
+                    server_id=registered.server_id,
+                    executor_id=registered.executor_id, agent_id="agent-a",
+                    client_intent_id="realization-one", candidates=[candidate],
+                    adapter_id="codex_app_server",
+                    candidate_ref=snapshot["evidence"][0]["candidate_ref"],
+                    inventory_revision=snapshot["inventory_revision"],
+                    workspace_root=tmp_path, workspace_id="ws",
+                    workspace_label="Project Alpha",
+                    configuration_digest="sha256:" + "c" * 64,
+                    local_consent_id="consent-one",
                 )
                 assert realization.agent_id == "agent-a"
+                local_record = local_store.load().realizations[0]
+                assert local_record.realization_ref == realization.realization_ref
+                assert local_record.workspace_root == str(tmp_path.resolve())
                 submit_frame = {
                     "protocol_major": 1,
                     "contract_revision": R4_PREVIEW_REVISION,
