@@ -19,6 +19,8 @@ from nexus_connector_core.protocol import CONTRACT_REVISION, require_contract
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.bootstrap.dependencies import bootstrap
 
+from lab_peer import CausalPeer
+
 ROOT = Path(__file__).resolve().parents[2]
 PLANS = ROOT / "plans"
 
@@ -94,3 +96,22 @@ def test_ns00_04():
     with pytest.raises(CoreError) as incompatible:
         decode_frame(canonical_json(changed))
     assert incompatible.value.code == "VERSION_INCOMPATIBLE"
+
+
+def test_ns00_05():
+    """Lab peer models a lost reply, with provider/multi-host gates still open."""
+    manifest = json.loads((PLANS / "r4_execution/evidence_manifest.json").read_text())
+    assert manifest["layers"]["provider"] == "NOT_RUN"
+    assert manifest["layers"]["two_hosts"] == "NOT_RUN"
+    assert all(state == "OPEN" for state in manifest["gates"].values())
+    assert all(item["exit_code"] == 0 and item["command"]
+               for item in manifest["evidence"])
+    peer = CausalPeer()
+    peer.drop_next_reply = True
+    assert peer.submit("op-a", "sha256:original") is None
+    receipt = peer.query("op-a")
+    assert receipt is not None and receipt.possible_effect
+    assert peer.submit("op-a", "sha256:original") == receipt
+    assert peer.effect_count == 1
+    with pytest.raises(ValueError):
+        peer.submit("op-a", "sha256:changed")

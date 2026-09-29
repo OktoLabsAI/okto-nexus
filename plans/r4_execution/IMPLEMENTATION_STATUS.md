@@ -18,6 +18,8 @@
 | NS01.04 | IN_PROGRESS | `GET /v1/connections/protocol` retorna objeto direto com header de revisão e indica NXL R4 indisponível. As demais rotas `/v1` ainda pendentes. 30 testes HTTP existentes passaram. |
 | NS01.02/01.03 | IN_PROGRESS | Entrada principal agora é `adapters.inbound.cli.main`, sem ramo MCP stdio. Invocação sem comando mostra ajuda; flags antigas falham sem bootstrap. `serve` continua HTTP. 73 testes de CLI, retenção, tail e paridade passaram. Extra Core fixado, mas lock/instalação limpa ainda pendentes. |
 | NS01.01 | IN_PROGRESS | `Deps`/bootstrap em `bootstrap.dependencies`, registro de tools/resources/instructions em `mcp.registration`; HTTP e CLI importam os módulos separados. Quatro testes de extração/paridade e 34 testes direcionados de HTTP passaram. |
+| NS00.05 | IN_PROGRESS | Peer sintético com perda de resposta após commit e consulta do mesmo recibo; manifesto classifica provider e dois hosts como NOT_RUN. Cenário NS00.05 passou, mas peers de produto ainda pendentes. |
+| NS02.01 | IN_PROGRESS | Chaves imutáveis por Server/executor/binding/sessão/stream/aprovação e geração tipada; teste de colisão entre namespaces passou. Writers persistentes ainda pendentes. |
 
 O mesmo wheel local `nexus_connector_core-0.2.11.dev0-py3-none-any.whl` foi usado nos testes de consumidor Connector e Nexus: SHA-256 `41193bc203bb6425163b8992effb6dfa701d3ef309ed08832a58d84cc0c3158d`. Importação isolada com `python -I` passou. O artefato não foi publicado em PyPI; os extras `serve`/`serve-lite` do Nexus e a dependência do Connector fixam a versão, mas instalação nova exige disponibilizar esse wheel no índice/ambiente de instalação. O `uv.lock` do Nexus ainda não reflete essa dependência.
 
