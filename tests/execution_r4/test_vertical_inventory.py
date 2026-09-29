@@ -92,8 +92,13 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     label="Remote host",
                 )
                 assert registered.server_id == me.server_id
+                binary = tmp_path / "synthetic-codex.exe"
+                binary.write_bytes(b"synthetic Core candidate")
+                candidate = InstallationCandidate(
+                    "codex_app_server", str(binary), fingerprint(binary),
+                    "explicit", "selected")
                 snapshot = executor_inventory_snapshot(
-                    [], server_id=registered.server_id,
+                    [candidate], server_id=registered.server_id,
                     executor_id=registered.executor_id,
                     producer_instance_id="connector-process-a",
                     publication_sequence=1,
@@ -103,6 +108,29 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     executor_id=registered.executor_id, snapshot=snapshot,
                 )
                 assert accepted.inventory_revision == snapshot["inventory_revision"]
+                with deps.connection_factory.unit_of_work() as uow:
+                    uow.connection.execute(
+                        "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
+                        ("2026-09-29T00:00:00Z",),
+                    )
+                realization = await http.publish_r4_realization(
+                    registered.bootstrap_ticket,
+                    executor_id=registered.executor_id,
+                    request={
+                        "client_intent_id": "realization-one",
+                        "agent_id": "agent-a",
+                        "local_realization_ref": "root_local_1234567890123456",
+                        "realization_revision": 1, "workspace_id": "ws",
+                        "workspace_label": "Project Alpha",
+                        "adapter_id": "codex_app_server",
+                        "candidate_ref": snapshot["evidence"][0]["candidate_ref"],
+                        "inventory_revision": snapshot["inventory_revision"],
+                        "local_root_proof_digest": "sha256:" + "b" * 64,
+                        "configuration_digest": "sha256:" + "c" * 64,
+                        "local_consent_id": "consent-one",
+                    },
+                )
+                assert realization.agent_id == "agent-a"
                 submit_frame = {
                     "protocol_major": 1,
                     "contract_revision": R4_PREVIEW_REVISION,
@@ -110,7 +138,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     "executor_id": registered.executor_id,
                     "binding_id": "binding", "agent_id": "agent-a",
                     "workspace_id": "ws",
-                    "workspace_binding_id": "workspace-binding",
+                    "workspace_binding_id": realization.workspace_binding_id,
                     "session_id": "session", "session_owner_generation": 1,
                     "authorization_revision": 1,
                     "configuration_revision": 1,
@@ -149,8 +177,9 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     conn = uow.connection
                     now = "2026-09-29T00:00:00Z"
                     conn.execute(
-                        "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
-                        (now,),
+                        "UPDATE execution_workspace_bindings SET status='READY' "
+                        "WHERE server_id=? AND workspace_binding_id=?",
+                        (me.server_id, realization.workspace_binding_id),
                     )
                     conn.execute(
                         "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
@@ -159,20 +188,15 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         (now, now),
                     )
                     conn.execute(
-                        "INSERT INTO execution_workspace_bindings(server_id,"
-                        "workspace_binding_id,executor_id,workspace_id,realization_handle,"
-                        "revision,status) VALUES (?,?,?,?,?,1,'READY')",
-                        (me.server_id, "workspace-binding", registered.executor_id,
-                         "ws", "root_1234567890123456"),
-                    )
-                    conn.execute(
                         "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
                         "endpoint_id,workspace_binding_id,candidate_ref,inventory_revision,"
                         "realization_ref,realization_revision,binding_revision) "
                         "VALUES (?,?,?,?,?,?,?,?,1,1)",
                         (me.server_id, "binding", registered.executor_id,
-                         "endpoint", "workspace-binding", "candidate",
-                         snapshot["inventory_revision"], "realization"),
+                         "endpoint", realization.workspace_binding_id,
+                         snapshot["evidence"][0]["candidate_ref"],
+                         snapshot["inventory_revision"],
+                         realization.realization_ref),
                     )
                     conn.execute(
                         "INSERT INTO execution_operations(server_id,executor_id,operation_id,"
@@ -181,7 +205,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "expected_revisions_json,admission_state,created_at) "
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         (me.server_id, registered.executor_id, "op", "agent-a",
-                         "agent-a", "binding", "ws", "workspace-binding",
+                         "agent-a", "binding", "ws", realization.workspace_binding_id,
                          "session", "turn.submit", submit_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
@@ -197,7 +221,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                             "admission_state,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                             (me.server_id, registered.executor_id, operation_id,
                              "agent-a", "agent-a", "binding", "ws",
-                             "workspace-binding", "session", action,
+                             realization.workspace_binding_id, "session", action,
                              frame["intent_hash"], "{}", "{}", "ACCEPTED", now),
                         )
                     conn.execute(
@@ -207,7 +231,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "expected_revisions_json,admission_state,created_at) "
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         (me.server_id, registered.executor_id, "steer-op", "agent-a",
-                         "agent-a", "binding", "ws", "workspace-binding",
+                          "agent-a", "binding", "ws", realization.workspace_binding_id,
                          "session", "turn.steer", steer_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
@@ -216,11 +240,6 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     credential_request_id="ticket-request",
                     scopes=("receipt:publish",),
                 )
-                binary = tmp_path / "synthetic-codex.exe"
-                binary.write_bytes(b"synthetic Core candidate")
-                candidate = InstallationCandidate(
-                    "codex_app_server", str(binary), fingerprint(binary),
-                    "explicit", "selected")
                 journal = await asyncio.to_thread(
                     SQLiteJournal, tmp_path / "connector-core.db")
                 native_factory = _NativeFactory()

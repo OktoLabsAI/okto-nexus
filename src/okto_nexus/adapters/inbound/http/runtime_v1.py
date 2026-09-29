@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import anyio
 import time
+from typing import Annotated
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ConfigDict, Field
 
 from nexus_connector_core.protocol import strict_json
 
 from ....application.executor_inventory import publish_executor_inventory
+from ....application.execution_realizations import publish_executor_realization
 from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
@@ -27,6 +30,28 @@ from .identity_ctx import get_authenticated_agent
 
 MAX_INVENTORY_BODY_BYTES = 1024 * 1024
 MAX_RECEIPT_BODY_BYTES = 64 * 1024
+
+_Id = Annotated[str, Field(min_length=1, max_length=160, strict=True)]
+_Digest = Annotated[str, Field(pattern=r"^sha256:[0-9a-f]{64}$", strict=True)]
+_CandidateRef = Annotated[str, Field(
+    pattern=r"^nexus-install-v1:[0-9a-f]{64}$", strict=True)]
+
+
+class RealizationPublishRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    agent_id: _Id
+    local_realization_ref: _Id
+    realization_revision: Annotated[int, Field(ge=1, strict=True)]
+    workspace_id: _Id | None
+    workspace_label: Annotated[str, Field(max_length=160, strict=True)]
+    adapter_id: _Id
+    candidate_ref: _CandidateRef
+    inventory_revision: _Digest
+    local_root_proof_digest: _Digest
+    configuration_digest: _Digest
+    local_consent_id: _Id
 
 
 def build_router() -> APIRouter:
@@ -117,6 +142,32 @@ def build_router() -> APIRouter:
 
         view = await anyio.to_thread.run_sync(_read)
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.post("/runtime/executors/{executor_id}/realizations")
+    async def publish_realization(executor_id: str,
+                                  body: RealizationPublishRequest,
+                                  request: Request) -> JSONResponse:
+        token = extract_bearer(request)
+        if token is None:
+            return v1_err(401, "AUTH_FAILED",
+                          "An execution ticket is required.")
+        factory = request.app.state.deps.connection_factory
+
+        def _publish():
+            installation = ensure_execution_installation(factory)
+            principal = verify_execution_ticket(
+                factory, ticket=token, server_id=installation.server_id,
+                executor_id=executor_id, scope="realization:publish",
+            )
+            return publish_executor_realization(
+                factory, principal=principal, request=body.model_dump())
+
+        publication = await anyio.to_thread.run_sync(_publish)
+        return JSONResponse(
+            publication.public_dict(),
+            status_code=200 if publication.reused else 201,
+            headers={"Cache-Control": "no-store"},
+        )
 
     @router.post("/runtime/operations/{operation_id}/receipts")
     async def publish_operation_receipt(operation_id: str,

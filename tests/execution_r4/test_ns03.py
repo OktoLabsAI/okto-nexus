@@ -152,7 +152,8 @@ def test_ns03_03(tmp_path):
         agent_id="agent-a", now=now, expires_in=60,
     )
     assert issued.audience == "nexus-executor-control"
-    assert set(issued.scopes) == {"link:connect", "inventory:publish"}
+    assert set(issued.scopes) == {
+        "link:connect", "inventory:publish", "realization:publish"}
     assert verify_execution_ticket(
         factory, ticket=issued.ticket, server_id=server_id,
         executor_id=executor_a, scope="inventory:publish", now=now,
@@ -359,7 +360,7 @@ def test_register_executor_is_scoped_and_returns_only_bootstrap_authority(tmp_pa
         Draft202012Validator(schema).validate(first.json())
         assert first.json()["state"] == "AWAITING_INVENTORY"
         assert first.json()["bootstrap_ticket"]["scopes"] == [
-            "inventory:publish", "link:connect"]
+            "inventory:publish", "link:connect", "realization:publish"]
         assert first.headers["Cache-Control"] == "no-store"
         retry = client.post(path, json=body, headers={
             "Authorization": f"Bearer {key_a}"})

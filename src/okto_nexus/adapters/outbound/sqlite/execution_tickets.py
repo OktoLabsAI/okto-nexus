@@ -16,7 +16,9 @@ from .execution_agent_revisions import current_agent_revisions
 
 
 AUDIENCE = "nexus-executor-control"
-BOOTSTRAP_SCOPES = frozenset({"link:connect", "inventory:publish"})
+BOOTSTRAP_SCOPES = frozenset({
+    "link:connect", "inventory:publish", "realization:publish",
+})
 _ALL_SCOPES = frozenset({
     "link:connect", "lane:attach", "inventory:publish",
     "realization:publish", "receipt:publish", "history:read",

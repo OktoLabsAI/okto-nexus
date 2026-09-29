@@ -214,7 +214,9 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         if ((request.method == "PUT" and re.fullmatch(
                  r"/v1/runtime/executors/[^/]{1,160}/inventory", path)) or
                  (request.method == "POST" and re.fullmatch(
-                 r"/v1/runtime/operations/[^/]{1,160}/receipts", path))):
+                  r"/v1/runtime/operations/[^/]{1,160}/receipts", path)) or
+                  (request.method == "POST" and re.fullmatch(
+                  r"/v1/runtime/executors/[^/]{1,160}/realizations", path))):
             # This route has its own ticket audience and scope check. A
             # canonical agent key does not substitute for that ticket.
             return await call_next(request)
