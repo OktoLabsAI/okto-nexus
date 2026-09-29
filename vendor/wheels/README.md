@@ -25,3 +25,8 @@ Current pinned artifact: `nexus_connector_core-0.2.20.dev0-py3-none-any.whl`,
 SHA-256 `7e9addcb72c52aefe35ea136b4c706721b104f6f9ce4a804a0071d2e829ec4c1`.
 Steer receipts now have a verified Core-to-R4 projection. Remote R4 execution
 remains disabled.
+
+Current pinned artifact: `nexus_connector_core-0.2.21.dev0-py3-none-any.whl`,
+SHA-256 `6cf55425acc44b4ead9bfd1abd6e216d2c9ed00c7e137d76800b1a42f2f065ed`.
+Verified projections now cover submit, steer, interrupt and close receipts.
+Remote R4 execution remains disabled.

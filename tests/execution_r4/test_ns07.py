@@ -7,8 +7,8 @@ from dataclasses import replace
 import pytest
 from fastapi.testclient import TestClient
 from nexus_connector_core import (
-    CoreError, ExecutionContext, InstallationCandidate, OperationKey,
-    ShutdownPolicy,
+    CoreError, ExecutionContext, InstallationCandidate, Operation,
+    OperationKey, ShutdownPolicy, intent_hash,
 )
 from nexus_connector_core.discovery import fingerprint
 
@@ -181,8 +181,12 @@ def test_ns07_02(tmp_path):
                                              expected_turn_id=factory.native.active_turn_id)
             assert steered.operation_id == "steer_one"
             interrupted = await executor.control(operation_id="interrupt_one",
-                                                 verb="interrupt")
+                                                 verb="interrupt",
+                                                 reason="Requested by the agent")
             assert interrupted.operation_id == "interrupt_one"
+            assert interrupted.intent_hash == intent_hash(
+                Operation("interrupt_one", "session_one", "turn.interrupt",
+                          {"reason": "Requested by the agent"}), context)
             before = list(factory.native.sent)
             stale = EmbeddedExecutor(
                 host, context=replace(context, configuration_revision=2),
@@ -192,8 +196,12 @@ def test_ns07_02(tmp_path):
             with pytest.raises(CoreError):
                 await stale.submit(operation_id="stale_submit", text="Denied")
             assert factory.native.sent == before
-            closed = await executor.close(operation_id="close_one")
+            closed = await executor.close(operation_id="close_one",
+                                          reason="Requested by the agent")
             assert closed.operation_id == "close_one"
+            assert closed.intent_hash == intent_hash(
+                Operation("close_one", "session_one", "runtime.close",
+                          {"reason": "Requested by the agent"}), context)
             assert [item[1] for item in factory.native.sent] == [
                 "submit_one", "steer_one", "interrupt_one"]
             assert factory.native.stopped

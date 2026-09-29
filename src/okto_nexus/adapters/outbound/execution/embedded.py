@@ -94,17 +94,21 @@ class EmbeddedExecutor:
 
     async def control(self, *, operation_id: str, verb: str,
                       text: str | None = None,
-                      expected_turn_id: str | None = None) -> OperationReceipt:
+                      expected_turn_id: str | None = None,
+                      reason: str | None = None) -> OperationReceipt:
         runtime = await self._runtime()
         return await runtime.control(
             ControlOperation(operation_id=operation_id,
                              session_id=self.session_id, verb=verb,
-                             text=text, expected_turn_id=expected_turn_id),
+                             text=text, expected_turn_id=expected_turn_id,
+                             reason=reason),
             self.context,
         )
 
-    async def close(self, *, operation_id: str) -> OperationReceipt:
+    async def close(self, *, operation_id: str,
+                    reason: str | None = None) -> OperationReceipt:
         runtime = await self._runtime()
         return await runtime.close(
             CloseOperation(operation_id=operation_id,
-                           session_id=self.session_id), self.context)
+                           session_id=self.session_id,
+                           reason=reason), self.context)

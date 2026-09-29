@@ -126,6 +126,20 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     "expected_turn_id": "turn-from-native",
                 }
                 steer_frame["intent_hash"] = r4_submit_intent_hash(steer_frame)
+                interrupt_frame = {
+                    **submit_frame, "operation_id": "interrupt-op",
+                    "action": "turn.interrupt",
+                    "payload": {"reason": "Requested by the agent"},
+                    "expected_turn_id": "turn-from-native",
+                }
+                interrupt_frame["intent_hash"] = r4_submit_intent_hash(
+                    interrupt_frame)
+                close_frame = {
+                    **submit_frame, "operation_id": "close-op",
+                    "action": "runtime.close",
+                    "payload": {"reason": "Requested by the agent"},
+                }
+                close_frame["intent_hash"] = r4_submit_intent_hash(close_frame)
                 context = ExecutionContext(
                     me.server_id, registered.executor_id, "binding",
                     "agent-a", "ws", 1, 1, 1, time.monotonic() + 60,
@@ -171,6 +185,21 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                          "session", "turn.submit", submit_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
+                    for operation_id, action, frame in (
+                        ("interrupt-op", "turn.interrupt", interrupt_frame),
+                        ("close-op", "runtime.close", close_frame),
+                    ):
+                        conn.execute(
+                            "INSERT INTO execution_operations(server_id,executor_id,"
+                            "operation_id,subject_agent_id,actor_agent_id,binding_id,"
+                            "workspace_id,workspace_binding_id,session_id,action,"
+                            "intent_hash,semantic_payload,expected_revisions_json,"
+                            "admission_state,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                            (me.server_id, registered.executor_id, operation_id,
+                             "agent-a", "agent-a", "binding", "ws",
+                             "workspace-binding", "session", action,
+                             frame["intent_hash"], "{}", "{}", "ACCEPTED", now),
+                        )
                     conn.execute(
                         "INSERT INTO execution_operations(server_id,executor_id,operation_id,"
                         "subject_agent_id,actor_agent_id,binding_id,workspace_id,"
@@ -210,6 +239,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "agent-a", "ws", 1, 1, 1,
                         context.lease_deadline_monotonic,
                         frozenset({"runtime.open", "turn.submit", "turn.steer",
+                                   "turn.interrupt",
                                    "runtime.close"}),
                     )
                     prepared = await runtime.prepare(
@@ -235,19 +265,42 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         ticket.ticket, submit_frame=steer_frame,
                         core_receipt=steer_receipt,
                         context=opening_context, receipt_revision=1)
-                    await runtime.close(CloseOperation(
-                        "close-op", "session"), opening_context)
+                    interrupt_receipt = await runtime.control(
+                        ControlOperation(
+                            "interrupt-op", "session", "interrupt",
+                            expected_turn_id="turn-from-native",
+                            reason="Requested by the agent"),
+                        opening_context)
+                    interrupt_ack = await http.publish_core_interrupt_receipt(
+                        ticket.ticket, submit_frame=interrupt_frame,
+                        core_receipt=interrupt_receipt,
+                        context=opening_context, receipt_revision=1)
+                    close_receipt = await runtime.close(
+                        CloseOperation("close-op", "session",
+                                       "Requested by the agent"),
+                        opening_context)
+                    close_ack = await http.publish_core_close_receipt(
+                        ticket.ticket, submit_frame=close_frame,
+                        core_receipt=close_receipt,
+                        context=opening_context, receipt_revision=1)
                 finally:
                     await runtime.shutdown(ShutdownPolicy(0, 0))
                     await journal.aclose()
                 assert receipt_ack.operation_id == "op"
                 assert steer_ack.operation_id == "steer-op"
+                assert interrupt_ack.operation_id == "interrupt-op"
+                assert close_ack.operation_id == "close-op"
                 view = await http.get_operation(key, "op")
                 assert view["executor_stage"] == core_receipt.stage
                 assert view["intent_hash"] == submit_frame["intent_hash"]
                 steer_view = await http.get_operation(key, "steer-op")
                 assert steer_view["executor_stage"] == steer_receipt.stage
                 assert steer_view["intent_hash"] == steer_frame["intent_hash"]
+                for frame, receipt in ((interrupt_frame, interrupt_receipt),
+                                       (close_frame, close_receipt)):
+                    result = await http.get_operation(key, frame["operation_id"])
+                    assert result["executor_stage"] == receipt.stage
+                    assert result["intent_hash"] == frame["intent_hash"]
                 return registered, snapshot
 
     registered, snapshot = asyncio.run(roundtrip())

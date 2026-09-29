@@ -69,6 +69,8 @@ Atualização Core `0.2.19.dev0` (commit `cf15b02`, SHA-256 `3b1b334f61f8ad5a2a5
 
 Atualização Core `0.2.20.dev0` (SHA-256 `7e9addcb72c52aefe35ea136b4c706721b104f6f9ce4a804a0071d2e829ec4c1`): projeção verificada de `turn.steer` compara texto, escopo e `expected_turn_id` com o hash do journal Core antes de produzir o hash R4. O cliente HTTPS do Connector publica esse recibo; o teste vertical em processo executou submit e steer no Core com peer sintético, publicou ambos no Nexus e consultou as duas operações. Binding/operações continuam semeados; não prova daemon, provider ou dois hosts. `turn.interrupt` e `runtime.close` ainda precisam alinhar o `reason` exigido pelo wire R4 com a semântica do Core.
 
+Atualização Core `0.2.21.dev0` (SHA-256 `6cf55425acc44b4ead9bfd1abd6e216d2c9ed00c7e137d76800b1a42f2f065ed`): `turn.interrupt` e `runtime.close` incluem `reason` opcional no hash do journal; chamadas legadas sem reason continuam válidas. As projeções R4 exigem e conferem o reason antes de publicar. O teste vertical em processo agora executa e publica submit, steer, interrupt e close do Core pelo cliente Connector, consulta quatro `OperationView` no Nexus e verifica o adapter embedded. Binding e operações seguem semeados; não há admissão/dispatcher de produto, provider real, daemon ou dois hosts.
+
 ## Gates
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.
