@@ -711,14 +711,14 @@ wheels = [
 
 [[package]]
 name = "nexus-connector-core"
-version = "0.2.16.dev0"
+version = "0.2.17.dev0"
 source = { registry = "vendor/wheels" }
 dependencies = [
     { name = "jsonschema" },
     { name = "rfc8785" },
 ]
 wheels = [
-    { path = "nexus_connector_core-0.2.16.dev0-py3-none-any.whl" },
+    { path = "nexus_connector_core-0.2.17.dev0-py3-none-any.whl" },
 ]
 
 [[package]]
@@ -991,8 +991,8 @@ requires-dist = [
     { name = "fastapi", marker = "extra == 'serve-lite'", specifier = ">=0.110,!=0.137.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.27" },
     { name = "mcp", specifier = ">=1.0,<2" },
-    { name = "nexus-connector-core", marker = "extra == 'serve'", specifier = "==0.2.16.dev0" },
-    { name = "nexus-connector-core", marker = "extra == 'serve-lite'", specifier = "==0.2.16.dev0" },
+    { name = "nexus-connector-core", marker = "extra == 'serve'", specifier = "==0.2.17.dev0" },
+    { name = "nexus-connector-core", marker = "extra == 'serve-lite'", specifier = "==0.2.17.dev0" },
     { name = "pydantic", specifier = ">=2" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "sentence-transformers", marker = "extra == 'embeddings'", specifier = ">=2.5" },
