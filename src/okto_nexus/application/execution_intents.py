@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 import secrets
+import time
 from typing import Any, Mapping
 
 from nexus_connector_core import r4_submit_intent_hash
@@ -24,7 +25,8 @@ _INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit"}
 
 def resolve_execution_intent(
     factory: ConnectionFactory, *, actor_agent_id: str,
-    request: Mapping[str, Any],
+    request: Mapping[str, Any], remote_ready: bool = False,
+    fresh_publications: Mapping | None = None,
 ) -> dict[str, Any]:
     """Store a stable resolution; never write an effect outbox or call Core."""
     required = {"client_intent_id", "intent", "binding_id",
@@ -84,15 +86,20 @@ def resolve_execution_intent(
                                       "The client intent ID has different content.", {})
             return json.loads(prior["resolved_json"])
         binding = conn.execute(
-            "SELECT b.*,ep.agent_id,ep.adapter_id,ep.profile_id,"
+            "SELECT b.*,ep.agent_id,ep.adapter_id,ep.profile_id,ep.protocol,"
             "w.workspace_id,w.status AS workspace_status,"
-            "r.status AS realization_status FROM execution_bindings b "
+            "r.status AS realization_status,"
+            "r.revision AS current_realization_revision,"
+            "e.control_state,e.revoked_at,e.registered_by_agent_id "
+            "FROM execution_bindings b "
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
             "JOIN execution_workspace_bindings w ON w.server_id=b.server_id "
             "AND w.executor_id=b.executor_id AND "
             "w.workspace_binding_id=b.workspace_binding_id "
             "JOIN execution_realizations r ON r.server_id=b.server_id "
             "AND r.executor_id=b.executor_id AND r.realization_ref=b.realization_ref "
+            "JOIN execution_executors e ON e.server_id=b.server_id "
+            "AND e.executor_id=b.executor_id "
             "WHERE b.server_id=? AND b.binding_id=? AND ep.agent_id=?",
             (server_id, request["binding_id"], actor_agent_id),
         ).fetchone()
@@ -101,17 +108,52 @@ def resolve_execution_intent(
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                   "The binding was not found in this agent scope.", {})
         action = _INTENTS[request["intent"]]
-        blockers = ["remote_execution_unavailable"]
+        blockers = []
+        if not remote_ready:
+            blockers.append("remote_execution_unavailable")
+        if (binding["protocol"] != "nxl-r4" or
+                binding["control_state"] != "CONTROL_READY" or
+                binding["revoked_at"] is not None or
+                binding["registered_by_agent_id"] != actor_agent_id):
+            blockers.append("executor_not_ready")
         if (binding["workspace_status"] != "READY" or
-                binding["realization_status"] != "READY"):
+                binding["realization_status"] != "READY" or
+                binding["realization_revision"] !=
+                binding["current_realization_revision"]):
             blockers.append("realization_not_ready")
+        current = conn.execute(
+            "SELECT c.inventory_revision,c.publication_sequence,"
+            "s.observation_age_ms,s.canonical_projection "
+            "FROM execution_inventory_current c "
+            "JOIN execution_inventory_snapshots s ON s.server_id=c.server_id "
+            "AND s.executor_id=c.executor_id AND "
+            "s.publication_sequence=c.publication_sequence "
+            "WHERE c.server_id=? AND c.executor_id=?",
+            (server_id, binding["executor_id"]),
+        ).fetchone()
+        fresh = (fresh_publications or {}).get(
+            (server_id, binding["executor_id"]))
+        if (current is None or fresh is None or
+                current["inventory_revision"] !=
+                binding["inventory_revision"] or
+                fresh[0] != current["publication_sequence"] or
+                current["observation_age_ms"] +
+                max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
+            blockers.append("inventory_not_fresh")
+        elif not any(
+            item["adapter_id"] == binding["adapter_id"] and
+            item["candidate_ref"] == binding["candidate_ref"]
+            for item in json.loads(current["canonical_projection"])["evidence"]
+        ):
+            blockers.append("candidate_not_current")
         session_id = ("ses_" + secrets.token_hex(16)
                       if action == "runtime.open" else request["session_id"])
         owner_generation = 1
         if action == "turn.submit":
             session = conn.execute(
                 "SELECT binding_id,workspace_id,workspace_binding_id,"
-                "owner_generation,lifecycle_state FROM execution_sessions "
+                "owner_generation,lifecycle_state,lease_state "
+                "FROM execution_sessions "
                 "WHERE server_id=? AND executor_id=? AND session_id=?",
                 (server_id, binding["executor_id"], session_id),
             ).fetchone()
@@ -119,7 +161,8 @@ def resolve_execution_intent(
                     session["workspace_id"] != binding["workspace_id"] or
                     session["workspace_binding_id"] !=
                     binding["workspace_binding_id"] or
-                    session["lifecycle_state"] != "READY"):
+                    session["lifecycle_state"] != "READY" or
+                    session["lease_state"] != "ACTIVE"):
                 blockers.append("session_not_ready")
             else:
                 owner_generation = session["owner_generation"]
@@ -136,16 +179,22 @@ def resolve_execution_intent(
             "binding_revision": binding["binding_revision"],
             "credential_epoch": revisions.credential_epoch,
         }
+        profile = conn.execute(
+            "SELECT enabled,revision FROM runtime_profiles WHERE profile_id=?",
+            (binding["profile_id"],),
+        ).fetchone() if binding["profile_id"] else None
         payload = (
             {"adapter_id": binding["adapter_id"],
              "candidate_ref": binding["candidate_ref"],
              "inventory_revision": binding["inventory_revision"],
              "realization_ref": binding["realization_ref"],
              "realization_revision": binding["realization_revision"],
-             "profile_revision": 1, "mode": "managed"}
+             "profile_revision": profile["revision"] if profile else 1,
+             "mode": "managed"}
             if action == "runtime.open" else {"text": request["text"]}
         )
-        if action == "runtime.open" and binding["profile_id"] is None:
+        if action == "runtime.open" and (
+                profile is None or not profile["enabled"]):
             blockers.append("profile_unresolved")
         semantic = {
             **{name: scope[name] for name in (
@@ -165,7 +214,7 @@ def resolve_execution_intent(
             "resolution_revision": 1,
             "expires_at": (datetime.now(timezone.utc) +
                            timedelta(minutes=10)).isoformat(),
-            "can_submit": False, "blockers": blockers,
+            "can_submit": not blockers, "blockers": blockers,
             "dispatch_owner": "server",
         }
         conn.execute(

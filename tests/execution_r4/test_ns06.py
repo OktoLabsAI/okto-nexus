@@ -136,7 +136,8 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
                      "VALUES ('ws',?)", (now,))
         conn.execute(
             "INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,"
-            "created_at,updated_at) VALUES ('profile','codex_app_server','{}',1,?,?)",
+            "revision,created_at,updated_at) "
+            "VALUES ('profile','codex_app_server','{}',1,3,?,?)",
             (now, now),
         )
         conn.execute(
@@ -187,25 +188,20 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
             "publication_sequence,inventory_revision) "
             "VALUES (?,'executor',1,?)", (server_id, inventory),
         )
+    freshness = {(server_id, "executor"): (1, time.monotonic(), 0)}
     resolution = resolve_execution_intent(
         factory, actor_agent_id="agent-a", request={
             "client_intent_id": "start", "intent": "runtime.start",
             "binding_id": "binding", "workspace_binding_id": "wxb",
             "new_session": True,
-        })
-    assert resolution["blockers"] == ["remote_execution_unavailable"]
-    # The fixture qualifies only this private writer call; the HTTP protocol
-    # remains non-executable and never promotes this preview resolution.
-    resolution["blockers"] = []
-    resolution["can_submit"] = True
-    with factory.unit_of_work() as uow:
-        uow.connection.execute(
-            "UPDATE execution_client_intents SET resolved_json=? "
-            "WHERE client_intent_id='start'", (json.dumps(resolution),),
-        )
+        }, remote_ready=True, fresh_publications=freshness)
+    assert resolution["blockers"] == []
+    assert resolution["can_submit"] is True
+    assert resolution["semantic_intent"]["payload"]["profile_revision"] == 3
+    # Only this private fixture is qualified. The HTTP protocol still refuses
+    # product admission until the Core bundle and remote host are ready.
     request = {key: resolution[key] for key in (
         "client_intent_id", "operation_id", "resolution_revision", "intent_hash")}
-    freshness = {(server_id, "executor"): (1, time.monotonic(), 0)}
     # Interrupt the same transaction at its final write.
     with factory.unit_of_work() as uow:
         uow.connection.execute(
@@ -237,6 +233,28 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     assert read_execution_intent(
         factory, actor_agent_id="agent-a", client_intent_id="start"
     )["operation"] == first
+    next_resolution = resolve_execution_intent(
+        factory, actor_agent_id="agent-a", request={
+            "client_intent_id": "start-two", "intent": "runtime.start",
+            "binding_id": "binding", "workspace_binding_id": "wxb",
+            "new_session": True,
+        }, remote_ready=True, fresh_publications=freshness)
+    next_request = {key: next_resolution[key] for key in (
+        "client_intent_id", "operation_id", "resolution_revision", "intent_hash")}
+    from okto_nexus.errors import OktoNexusError
+    with pytest.raises(OktoNexusError):
+        submit_execution_operation(
+            factory, actor_agent_id="agent-a", request=next_request,
+            fresh_publications={}, remote_ready=True)
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE agents SET metadata=? WHERE agent_id='agent-a'",
+            ('{"display_name":"Changed after resolve"}',),
+        )
+    with pytest.raises(OktoNexusError):
+        submit_execution_operation(
+            factory, actor_agent_id="agent-a", request=next_request,
+            fresh_publications=freshness, remote_ready=True)
     with factory.unit_of_work(write=False) as uow:
         conn = uow.connection
         assert conn.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1

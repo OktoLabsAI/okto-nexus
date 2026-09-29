@@ -206,7 +206,9 @@ def build_router() -> APIRouter:
         resolution = await anyio.to_thread.run_sync(
             lambda: resolve_execution_intent(
                 factory, actor_agent_id=agent.agent_id,
-                request=body.model_dump(exclude_none=True)))
+                request=body.model_dump(exclude_none=True),
+                remote_ready=protocol_info()["remote_execution_ready"],
+                fresh_publications=request.app.state.inventory_fresh_publications))
         return JSONResponse(resolution, headers={"Cache-Control": "no-store"})
 
     @router.get("/runtime/intents/{client_intent_id}")
