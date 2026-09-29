@@ -9,6 +9,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing import Annotated
 
 from ....domain.permissions import PERMISSION_REGISTRY, PermissionSet
+from ....application.execution_binding_proposals import (
+    apply_execution_binding, prepare_execution_binding,
+)
 from ....errors import OktoNexusError
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ...outbound.sqlite.execution_identity import (
@@ -45,6 +48,33 @@ class BindingTicketRequest(BaseModel):
     audience: Annotated[str, Field(strict=True)]
     scopes: Annotated[list[_Id], Field(min_length=1, max_length=8)]
     expires_in: Annotated[int, Field(ge=1, le=600, strict=True)] = 600
+
+
+class BindingPrepareRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    agent_id_hint: _Id | None = None
+    executor_id: _Id
+    adapter_id: _Id
+    candidate_ref: Annotated[str, Field(
+        pattern=r"^nexus-install-v1:[0-9a-f]{64}$", strict=True)]
+    inventory_revision: Annotated[str, Field(
+        pattern=r"^sha256:[0-9a-f]{64}$", strict=True)]
+    realization_ref: _Id
+    workspace_id: _Id
+    alias: Annotated[str, Field(min_length=1, max_length=120, strict=True)]
+
+
+class BindingApplyRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    proposal_id: _Id
+    proposal_revision: Annotated[int, Field(ge=1, strict=True)]
+    approved_diff_hash: Annotated[str, Field(
+        pattern=r"^sha256:[0-9a-f]{64}$", strict=True)]
+    operator_proof_ref: _Id | None = None
 
 
 _BINDING_TICKET_SCOPES = frozenset({
@@ -153,6 +183,42 @@ def build_router() -> APIRouter:
             "bootstrap_ticket": ticket.public_dict(),
         }, status_code=200 if registration.reused else 201,
            headers={"Cache-Control": "no-store"})
+
+    @router.post("/connections/bindings:prepare")
+    async def prepare_binding(body: BindingPrepareRequest,
+                              request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+
+        def _prepare():
+            return prepare_execution_binding(
+                factory, actor_agent_id=agent.agent_id,
+                request=body.model_dump(exclude_none=True),
+                fresh_publications=request.app.state.inventory_fresh_publications,
+            )
+
+        proposal = await anyio.to_thread.run_sync(_prepare)
+        return JSONResponse(proposal, headers={"Cache-Control": "no-store"})
+
+    @router.post("/connections/bindings:apply")
+    async def apply_binding(body: BindingApplyRequest,
+                            request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+
+        def _apply():
+            return apply_execution_binding(
+                factory, actor_agent_id=agent.agent_id,
+                request=body.model_dump(exclude_none=True),
+                fresh_publications=request.app.state.inventory_fresh_publications,
+            )
+
+        view = await anyio.to_thread.run_sync(_apply)
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.post("/connections/bindings/{binding_id}/ticket")
     async def binding_ticket(binding_id: str, body: BindingTicketRequest,

@@ -135,17 +135,32 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                 local_record = local_store.load().realizations[0]
                 assert local_record.realization_ref == realization.realization_ref
                 assert local_record.workspace_root == str(tmp_path.resolve())
+                proposal = await http.prepare_r4_binding(
+                    key, client_intent_id="binding-prepare-one",
+                    executor_id=registered.executor_id,
+                    adapter_id="codex_app_server",
+                    candidate_ref=snapshot["evidence"][0]["candidate_ref"],
+                    inventory_revision=snapshot["inventory_revision"],
+                    realization_ref=realization.realization_ref,
+                    workspace_id="ws", alias="assistant-alpha",
+                    agent_id_hint="agent-a",
+                )
+                assert proposal.can_apply
+                binding = await http.apply_r4_binding(
+                    key, client_intent_id="binding-apply-one",
+                    proposal=proposal)
+                assert binding.binding_id == proposal.binding_id
                 submit_frame = {
                     "protocol_major": 1,
                     "contract_revision": R4_PREVIEW_REVISION,
                     "type": "operation.submit", "server_id": me.server_id,
                     "executor_id": registered.executor_id,
-                    "binding_id": "binding", "agent_id": "agent-a",
+                    "binding_id": proposal.binding_id, "agent_id": "agent-a",
                     "workspace_id": "ws",
                     "workspace_binding_id": realization.workspace_binding_id,
                     "session_id": "session", "session_owner_generation": 1,
-                    "authorization_revision": 1,
-                    "configuration_revision": 1,
+                    "authorization_revision": binding.authorization_revision,
+                    "configuration_revision": binding.configuration_revision,
                     "binding_revision": 1, "credential_epoch": 1,
                     "connection_id": "control", "connection_generation": 1,
                     "grant_id": "grant", "operation_id": "op",
@@ -173,35 +188,14 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                 }
                 close_frame["intent_hash"] = r4_submit_intent_hash(close_frame)
                 context = ExecutionContext(
-                    me.server_id, registered.executor_id, "binding",
-                    "agent-a", "ws", 1, 1, 1, time.monotonic() + 60,
+                    me.server_id, registered.executor_id, proposal.binding_id,
+                    "agent-a", "ws", binding.authorization_revision,
+                    binding.configuration_revision, 1, time.monotonic() + 60,
                     frozenset({"turn.submit"}),
                 )
                 with deps.connection_factory.unit_of_work() as uow:
                     conn = uow.connection
                     now = "2026-09-29T00:00:00Z"
-                    conn.execute(
-                        "UPDATE execution_workspace_bindings SET status='READY' "
-                        "WHERE server_id=? AND workspace_binding_id=?",
-                        (me.server_id, realization.workspace_binding_id),
-                    )
-                    conn.execute(
-                        "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
-                        "adapter_id,protocol,enabled,created_at,updated_at) "
-                        "VALUES ('endpoint','agent-a','ws','codex','native',0,?,?)",
-                        (now, now),
-                    )
-                    conn.execute(
-                        "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
-                        "endpoint_id,workspace_binding_id,candidate_ref,inventory_revision,"
-                        "realization_ref,realization_revision,binding_revision) "
-                        "VALUES (?,?,?,?,?,?,?,?,1,1)",
-                        (me.server_id, "binding", registered.executor_id,
-                         "endpoint", realization.workspace_binding_id,
-                         snapshot["evidence"][0]["candidate_ref"],
-                         snapshot["inventory_revision"],
-                         realization.realization_ref),
-                    )
                     conn.execute(
                         "INSERT INTO execution_operations(server_id,executor_id,operation_id,"
                         "subject_agent_id,actor_agent_id,binding_id,workspace_id,"
@@ -209,7 +203,8 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "expected_revisions_json,admission_state,created_at) "
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         (me.server_id, registered.executor_id, "op", "agent-a",
-                         "agent-a", "binding", "ws", realization.workspace_binding_id,
+                         "agent-a", proposal.binding_id, "ws",
+                         realization.workspace_binding_id,
                          "session", "turn.submit", submit_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
@@ -224,7 +219,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                             "intent_hash,semantic_payload,expected_revisions_json,"
                             "admission_state,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                             (me.server_id, registered.executor_id, operation_id,
-                             "agent-a", "agent-a", "binding", "ws",
+                             "agent-a", "agent-a", proposal.binding_id, "ws",
                              realization.workspace_binding_id, "session", action,
                              frame["intent_hash"], "{}", "{}", "ACCEPTED", now),
                         )
@@ -235,12 +230,14 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         "expected_revisions_json,admission_state,created_at) "
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                         (me.server_id, registered.executor_id, "steer-op", "agent-a",
-                          "agent-a", "binding", "ws", realization.workspace_binding_id,
+                          "agent-a", proposal.binding_id, "ws",
+                          realization.workspace_binding_id,
                          "session", "turn.steer", steer_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
                 ticket = await http.request_r4_binding_ticket(
-                    key, binding_id="binding", client_intent_id="ticket-intent",
+                    key, binding_id=proposal.binding_id,
+                    client_intent_id="ticket-intent",
                     credential_request_id="ticket-request",
                     scopes=("receipt:publish",),
                 )
@@ -258,8 +255,10 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     native_factory=native_factory)
                 try:
                     opening_context = ExecutionContext(
-                        me.server_id, registered.executor_id, "binding",
-                        "agent-a", "ws", 1, 1, 1,
+                        me.server_id, registered.executor_id,
+                        proposal.binding_id,
+                        "agent-a", "ws", binding.authorization_revision,
+                        binding.configuration_revision, 1,
                         context.lease_deadline_monotonic,
                         frozenset({"runtime.open", "turn.submit", "turn.steer",
                                    "turn.interrupt",
