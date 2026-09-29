@@ -89,10 +89,11 @@ def err(status: int, code: str, message: str) -> JSONResponse:
     )
 
 
-def v1_err(status: int, code: str, message: str) -> JSONResponse:
+def v1_err(status: int, code: str, message: str, *,
+           stage: str = "authentication") -> JSONResponse:
     """R4 direct error representation; no legacy ok/data envelope."""
     return JSONResponse(
-        {"error": {"code": code, "stage": "authentication", "message": message,
+        {"error": {"code": code, "stage": stage, "message": message,
                    "possible_effect": False, "retry_safe": False,
                    "operation_id": None, "action": None}},
         status_code=status,
@@ -263,6 +264,8 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         try:
             agent = await anyio.to_thread.run_sync(_resolve)
         except OktoNexusError as exc:
+            if is_v1:
+                return v1_err(503, exc.code, exc.message)
             return err(503, exc.code, exc.message)
         if agent is None:
             if is_v1:
@@ -551,6 +554,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # becomes the documented envelope.
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request, exc: Exception):
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            return v1_err(500, "INTERNAL", "An internal server error occurred.",
+                          stage="internal")
         return JSONResponse(
             {
                 "ok": False,
