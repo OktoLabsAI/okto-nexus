@@ -202,6 +202,84 @@ def test_ns03_03(tmp_path):
         )
 
 
+def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    factory = deps.connection_factory
+    server_id = ensure_execution_installation(factory).server_id
+    app = build_app(deps)
+    stamp = "2026-09-29T00:00:00Z"
+    with factory.unit_of_work() as uow:
+        for agent_id in ("registrar", "lane-agent"):
+            uow.connection.execute(
+                "INSERT INTO agents(agent_id,created_at) VALUES (?,?)",
+                (agent_id, stamp),
+            )
+            app.state.auth.issue_key(uow, agent_id=agent_id)
+        uow.connection.execute(
+            "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
+            (stamp,),
+        )
+        uow.connection.execute(
+            "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
+            "adapter_id,protocol,enabled,created_at,updated_at) "
+            "VALUES ('endpoint','lane-agent','ws','codex','native',0,?,?)",
+            (stamp, stamp),
+        )
+    executor_id = register_remote_executor(
+        factory, actor_agent_id="registrar", connector_id="connector",
+        client_intent_id="register",
+    ).executor_id
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO execution_workspace_bindings(server_id,"
+            "workspace_binding_id,executor_id,workspace_id,realization_handle,"
+            "revision,status) VALUES (?,?,?,?,?,1,'READY')",
+            (server_id, "workspace-binding", executor_id, "ws",
+             "root_1234567890123456"),
+        )
+        uow.connection.execute(
+            "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
+            "endpoint_id,workspace_binding_id,candidate_ref,inventory_revision,"
+            "realization_ref,realization_revision,binding_revision) "
+            "VALUES (?,?,?,?,?,?,?,?,1,1)",
+            (server_id, "binding", executor_id, "endpoint",
+             "workspace-binding", "candidate", "sha256:" + "a" * 64,
+             "realization"),
+        )
+    issued = issue_execution_ticket(
+        factory, server_id=server_id, executor_id=executor_id,
+        agent_id="lane-agent", binding_id="binding",
+        scopes=frozenset({"receipt:publish"}),
+    )
+    assert verify_execution_ticket(
+        factory, ticket=issued.ticket, server_id=server_id,
+        executor_id=executor_id, binding_id="binding",
+        scope="receipt:publish",
+    ).agent_id == "lane-agent"
+    with pytest.raises(OktoNexusError):
+        issue_execution_ticket(
+            factory, server_id=server_id, executor_id=executor_id,
+            agent_id="registrar", binding_id="binding",
+            scopes=frozenset({"receipt:publish"}),
+        )
+    with pytest.raises(OktoNexusError):
+        issue_execution_ticket(
+            factory, server_id=server_id, executor_id=executor_id,
+            agent_id="lane-agent",
+        )
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE agent_endpoints SET agent_id='registrar' "
+            "WHERE endpoint_id='endpoint'",
+        )
+    with pytest.raises(OktoNexusError):
+        verify_execution_ticket(
+            factory, ticket=issued.ticket, server_id=server_id,
+            executor_id=executor_id, binding_id="binding",
+            scope="receipt:publish",
+        )
+
+
 def test_register_executor_is_scoped_and_returns_only_bootstrap_authority(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     factory = deps.connection_factory

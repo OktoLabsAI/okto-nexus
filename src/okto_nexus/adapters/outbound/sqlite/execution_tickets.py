@@ -96,15 +96,17 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
             (server_id, executor_id),
         ).fetchone()
         if (target is None or target["kind"] != "remote" or
-                target["registered_by_agent_id"] != agent_id or
-                target["revoked_at"] is not None):
+                target["revoked_at"] is not None or
+                (binding_id is None and
+                 target["registered_by_agent_id"] != agent_id)):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "The executor is unavailable to this agent.", {})
         if binding_id is not None:
             binding = conn.execute(
-                "SELECT 1 FROM execution_bindings WHERE server_id=? AND "
-                "executor_id=? AND binding_id=?",
-                (server_id, executor_id, binding_id),
+                "SELECT 1 FROM execution_bindings b JOIN agent_endpoints ep "
+                "ON ep.endpoint_id=b.endpoint_id WHERE b.server_id=? AND "
+                "b.executor_id=? AND b.binding_id=? AND ep.agent_id=?",
+                (server_id, executor_id, binding_id, agent_id),
             ).fetchone()
             if binding is None:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
@@ -157,9 +159,13 @@ def verify_execution_ticket(factory: ConnectionFactory, *, ticket: str,
     with factory.unit_of_work(write=False) as uow:
         row = uow.connection.execute(
             "SELECT t.*,e.revoked_at AS executor_revoked_at,"
-            "e.registered_by_agent_id FROM execution_link_tickets t "
+            "e.registered_by_agent_id,ep.agent_id AS binding_agent_id "
+            "FROM execution_link_tickets t "
             "JOIN execution_executors e ON e.server_id=t.server_id AND "
-            "e.executor_id=t.executor_id WHERE t.secret_hash=?",
+            "e.executor_id=t.executor_id LEFT JOIN execution_bindings b ON "
+            "b.server_id=t.server_id AND b.executor_id=t.executor_id AND "
+            "b.binding_id=t.binding_id LEFT JOIN agent_endpoints ep ON "
+            "ep.endpoint_id=b.endpoint_id WHERE t.secret_hash=?",
             (_hash(ticket),),
         ).fetchone()
         if (row is None or row["server_id"] != server_id or
@@ -168,7 +174,9 @@ def verify_execution_ticket(factory: ConnectionFactory, *, ticket: str,
                 row["audience"] != AUDIENCE or row["revoked_at"] is not None or
                 row["executor_revoked_at"] is not None or
                 (binding_id is None and
-                 row["registered_by_agent_id"] != row["agent_id"])):
+                 row["registered_by_agent_id"] != row["agent_id"]) or
+                (binding_id is not None and
+                 row["binding_agent_id"] != row["agent_id"])):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "The execution ticket is invalid for this target.", {})
         expires = datetime.fromisoformat(row["expires_at"].replace("Z", "+00:00"))
