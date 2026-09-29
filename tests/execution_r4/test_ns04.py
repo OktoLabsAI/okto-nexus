@@ -13,6 +13,7 @@ from nexus_connector_core import InstallationCandidate
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.outbound.execution.core_inventory import (
     discover_local_candidates, local_catalog, local_inventory_snapshot,
+    resolve_local_installation_selection,
 )
 from okto_nexus.adapters.outbound.sqlite.execution_identity import ensure_execution_installation
 from okto_nexus.application.executor_inventory import publish_executor_inventory
@@ -33,6 +34,39 @@ def test_ns04_01(monkeypatch, tmp_path):
                   if row["adapter_id"] == "claude_attach")
     assert attach["support_status"] == "registered_unqualified"
     assert discover_local_candidates(path_env=str(tmp_path)).candidates == ()
+
+
+def test_ns04_05_local_selection_uses_exact_revision_and_installation(tmp_path):
+    import nexus_connector_core as core
+
+    candidates = [
+        InstallationCandidate(
+            adapter_id="codex_app_server", executable=str(tmp_path / name),
+            fingerprint="sha256:" + "a" * 64, source="path", trust="selected",
+            version="0.157.0", architecture="x86_64",
+            build_identity="sha256:" + "b" * 64,
+        )
+        for name in ("copy-a", "copy-b")
+    ]
+    revision = core.calculate_inventory_revision(candidates)
+    ref_b = core.installation_ref("codex_app_server", candidates[1].executable)
+    chosen = resolve_local_installation_selection(
+        list(reversed(candidates)), adapter_id="codex_app_server",
+        candidate_ref=ref_b, expected_inventory_revision=revision,
+    )
+    assert chosen.executable == candidates[1].executable
+    with pytest.raises(core.CoreError):
+        resolve_local_installation_selection(
+            candidates, adapter_id="codex_app_server",
+            candidate_ref=candidates[0].fingerprint,
+            expected_inventory_revision=revision,
+        )
+    with pytest.raises(core.CoreError):
+        resolve_local_installation_selection(
+            [replace(candidates[0], fingerprint="sha256:" + "c" * 64),
+             candidates[1]], adapter_id="codex_app_server",
+            candidate_ref=ref_b, expected_inventory_revision=revision,
+        )
 
 
 def test_ns04_03(tmp_path):

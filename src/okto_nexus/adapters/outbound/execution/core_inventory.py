@@ -98,3 +98,23 @@ def local_inventory_snapshot(
     )
     core.verify_executor_inventory_snapshot(snapshot)
     return snapshot
+
+
+def resolve_local_installation_selection(
+    candidates: Iterable[InstallationCandidate], *, adapter_id: str,
+    candidate_ref: str, expected_inventory_revision: str,
+) -> InstallationCandidate:
+    """Resolve a displayed local selection against fresh Core evidence.
+
+    The caller supplies only candidates discovered on this Nexus host. Remote
+    inventory rows are path-free and must be resolved by their own executor.
+    No process, runtime or provider is composed here.
+    """
+    core = _core()
+    items = tuple(candidates)
+    current_revision = core.calculate_inventory_revision(items)
+    if current_revision != expected_inventory_revision:
+        raise core.CoreError("STALE_GENERATION", "inventory_selection",
+                             retry_safe=True,
+                             message="The selected inventory revision is stale.")
+    return core.resolve_installation(items, adapter_id, candidate_ref)
