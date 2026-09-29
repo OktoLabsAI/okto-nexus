@@ -14,6 +14,7 @@ from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
 from ....domain.execution.keys import ExecutorKey
+from ...outbound.sqlite.execution_receipts import append_execution_receipt
 from ...outbound.sqlite.execution_identity import ensure_execution_installation
 from ...outbound.sqlite.execution_tickets import verify_execution_ticket
 from .app import extract_bearer, v1_err
@@ -21,6 +22,7 @@ from .identity_ctx import get_authenticated_agent
 
 
 MAX_INVENTORY_BODY_BYTES = 1024 * 1024
+MAX_RECEIPT_BODY_BYTES = 64 * 1024
 
 
 def build_router() -> APIRouter:
@@ -111,6 +113,55 @@ def build_router() -> APIRouter:
 
         view = await anyio.to_thread.run_sync(_read)
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
+
+    @router.post("/runtime/operations/{operation_id}/receipts")
+    async def publish_operation_receipt(operation_id: str,
+                                        request: Request) -> JSONResponse:
+        token = extract_bearer(request)
+        if token is None:
+            return v1_err(401, "AUTH_FAILED",
+                          "An execution ticket is required.")
+        content_length = request.headers.get("content-length")
+        if content_length is not None and (
+                not content_length.isdecimal() or
+                int(content_length) > MAX_RECEIPT_BODY_BYTES):
+            return v1_err(413, "CAPACITY_EXCEEDED",
+                          "The receipt body is too large.", stage="validation")
+        parts: list[bytes] = []
+        size = 0
+        async for chunk in request.stream():
+            size += len(chunk)
+            if size > MAX_RECEIPT_BODY_BYTES:
+                return v1_err(413, "CAPACITY_EXCEEDED",
+                              "The receipt body is too large.", stage="validation")
+            parts.append(chunk)
+        try:
+            frame = strict_json(b"".join(parts).decode("utf-8", errors="strict"))
+        except (UnicodeError, ValueError, RecursionError):
+            return v1_err(400, "VALIDATION_ERROR",
+                          "The receipt body is invalid JSON.", stage="validation")
+        if not isinstance(frame, dict) or frame.get("operation_id") != operation_id:
+            return v1_err(400, "VALIDATION_ERROR",
+                          "The receipt operation ID does not match the route.",
+                          stage="validation")
+        factory = request.app.state.deps.connection_factory
+
+        def _publish():
+            installation = ensure_execution_installation(factory)
+            principal = verify_execution_ticket(
+                factory, ticket=token, server_id=installation.server_id,
+                executor_id=frame.get("executor_id"),
+                binding_id=frame.get("binding_id"), scope="receipt:publish",
+            )
+            return append_execution_receipt(
+                factory, principal=principal, frame=frame)
+
+        accepted = await anyio.to_thread.run_sync(_publish)
+        return JSONResponse({
+            "operation_id": accepted.operation_id,
+            "receipt_revision": accepted.receipt_revision,
+            "stage": accepted.stage, "accepted": True, "reused": accepted.reused,
+        }, headers={"Cache-Control": "no-store"})
 
     @router.get("/agents/{agent_id}/runtime-options")
     async def runtime_options(agent_id: str, executor_id: str,

@@ -210,8 +210,10 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             if request.query_params.get("api_key") or request.headers.get("x-api-key"):
                 return err(401, "AUTH_FAILED", "Use only the connection bearer credential.")
             return await call_next(request)
-        if (request.method == "PUT" and re.fullmatch(
-                r"/v1/runtime/executors/[^/]{1,160}/inventory", path)):
+        if ((request.method == "PUT" and re.fullmatch(
+                r"/v1/runtime/executors/[^/]{1,160}/inventory", path)) or
+                (request.method == "POST" and re.fullmatch(
+                r"/v1/runtime/operations/[^/]{1,160}/receipts", path))):
             # This route has its own ticket audience and scope check. A
             # canonical agent key does not substitute for that ticket.
             return await call_next(request)
