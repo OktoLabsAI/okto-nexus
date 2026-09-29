@@ -208,13 +208,14 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
     server_id = ensure_execution_installation(factory).server_id
     app = build_app(deps)
     stamp = "2026-09-29T00:00:00Z"
+    keys = {}
     with factory.unit_of_work() as uow:
         for agent_id in ("registrar", "lane-agent"):
             uow.connection.execute(
                 "INSERT INTO agents(agent_id,created_at) VALUES (?,?)",
                 (agent_id, stamp),
             )
-            app.state.auth.issue_key(uow, agent_id=agent_id)
+            keys[agent_id] = app.state.auth.issue_key(uow, agent_id=agent_id)
         uow.connection.execute(
             "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
             (stamp,),
@@ -246,16 +247,6 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
              "workspace-binding", "candidate", "sha256:" + "a" * 64,
              "realization"),
         )
-    issued = issue_execution_ticket(
-        factory, server_id=server_id, executor_id=executor_id,
-        agent_id="lane-agent", binding_id="binding",
-        scopes=frozenset({"receipt:publish"}),
-    )
-    assert verify_execution_ticket(
-        factory, ticket=issued.ticket, server_id=server_id,
-        executor_id=executor_id, binding_id="binding",
-        scope="receipt:publish",
-    ).agent_id == "lane-agent"
     with pytest.raises(OktoNexusError):
         issue_execution_ticket(
             factory, server_id=server_id, executor_id=executor_id,
@@ -267,6 +258,63 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
             factory, server_id=server_id, executor_id=executor_id,
             agent_id="lane-agent",
         )
+    path = "/v1/connections/bindings/binding/ticket"
+    body = {"client_intent_id": "lane-intent",
+            "credential_request_id": "request-one",
+            "audience": "nexus-executor-control",
+            "scopes": ["receipt:publish"], "expires_in": 300}
+    with TestClient(app, raise_server_exceptions=False) as client:
+        foreign = client.post(path, json=body, headers={
+            "Authorization": f"Bearer {keys['registrar']}"})
+        assert foreign.status_code == 404
+        first = client.post(path, json=body, headers={
+            "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert first.status_code == 200, first.text
+        assert first.headers["Cache-Control"] == "no-store"
+        assert first.json()["binding_id"] == "binding"
+        assert verify_execution_ticket(
+            factory, ticket=first.json()["ticket"], server_id=server_id,
+            executor_id=executor_id, binding_id="binding",
+            scope="receipt:publish").agent_id == "lane-agent"
+        replay = client.post(path, json=body, headers={
+            "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert replay.status_code == 409
+        assert replay.json()["error"]["code"] == "CREDENTIAL_MATERIAL_UNAVAILABLE"
+        assert replay.json()["error"]["ticket_id"] == first.json()["ticket_id"]
+        changed = client.post(path, json={**body, "scopes": ["history:read"]},
+                              headers={"Authorization": f"Bearer {keys['lane-agent']}"})
+        assert changed.status_code == 409
+        successor_body = {**body, "credential_request_id": "request-two",
+                          "replaces_ticket_id": first.json()["ticket_id"]}
+        successor = client.post(path, json=successor_body, headers={
+            "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert successor.status_code == 200, successor.text
+        assert successor.json()["ticket"] != first.json()["ticket"]
+        without_reference = client.post(path, json={
+            **body, "credential_request_id": "request-three"}, headers={
+                "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert without_reference.status_code == 409
+        assert without_reference.json()["error"]["ticket_id"] == (
+            successor.json()["ticket_id"])
+        with factory.unit_of_work() as uow:
+            uow.connection.execute(
+                "UPDATE execution_link_tickets SET bound_connection_id='connection' "
+                "WHERE ticket_id=?", (successor.json()["ticket_id"],))
+        installed = client.post(path, json={
+            **body, "credential_request_id": "request-four",
+            "replaces_ticket_id": successor.json()["ticket_id"]}, headers={
+                "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert installed.status_code == 409
+        assert installed.json()["error"]["code"] == "CONFLICT"
+    with pytest.raises(OktoNexusError):
+        verify_execution_ticket(
+            factory, ticket=first.json()["ticket"], server_id=server_id,
+            executor_id=executor_id, binding_id="binding",
+            scope="receipt:publish")
+    assert verify_execution_ticket(
+        factory, ticket=successor.json()["ticket"], server_id=server_id,
+        executor_id=executor_id, binding_id="binding",
+        scope="receipt:publish").agent_id == "lane-agent"
     with factory.unit_of_work() as uow:
         uow.connection.execute(
             "UPDATE agent_endpoints SET agent_id='registrar' "
@@ -274,7 +322,7 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
         )
     with pytest.raises(OktoNexusError):
         verify_execution_ticket(
-            factory, ticket=issued.ticket, server_id=server_id,
+            factory, ticket=successor.json()["ticket"], server_id=server_id,
             executor_id=executor_id, binding_id="binding",
             scope="receipt:publish",
         )

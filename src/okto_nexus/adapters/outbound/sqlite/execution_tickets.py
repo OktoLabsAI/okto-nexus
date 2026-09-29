@@ -58,6 +58,15 @@ class VerifiedExecutionTicket:
     authorization_revision: int
 
 
+class TicketRequestConflict(Exception):
+    """Scoped request metadata that can be returned without ticket material."""
+
+    def __init__(self, code: str, ticket_id: str, message: str):
+        super().__init__(message)
+        self.code = code
+        self.ticket_id = ticket_id
+
+
 def _hash(ticket: str) -> str:
     return "sha256:" + hashlib.sha256(ticket.encode("utf-8")).hexdigest()
 
@@ -67,7 +76,11 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
                            scopes: frozenset[str] = BOOTSTRAP_SCOPES,
                            binding_id: str | None = None,
                            expires_in: int = 600,
-                           now: datetime | None = None) -> IssuedExecutionTicket:
+                           now: datetime | None = None,
+                           client_intent_id: str | None = None,
+                           credential_request_id: str | None = None,
+                           replaces_ticket_id: str | None = None,
+                           ) -> IssuedExecutionTicket:
     """Issue a random ticket after checking its canonical actor and target."""
     if (not isinstance(expires_in, int) or isinstance(expires_in, bool) or
             not 1 <= expires_in <= 600 or not scopes or
@@ -77,6 +90,16 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
     if binding_id is None and scopes != BOOTSTRAP_SCOPES:
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                               "A binding is required for this ticket scope.", {})
+    request_fields = (client_intent_id, credential_request_id)
+    if any(value is not None for value in (*request_fields, replaces_ticket_id)):
+        if (binding_id is None or any(
+                not isinstance(value, str) or not 1 <= len(value) <= 160
+                for value in request_fields) or
+                (replaces_ticket_id is not None and
+                 (not isinstance(replaces_ticket_id, str) or
+                  not 1 <= len(replaces_ticket_id) <= 160))):
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                  "Invalid binding ticket request identity.", {})
     instant = now or datetime.now(timezone.utc)
     if instant.tzinfo is None:
         raise ValueError("now must be timezone-aware")
@@ -118,6 +141,61 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
         if agent is None or not agent["is_active"] or not agent["api_key_hash"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "The agent has no active canonical key.", {})
+        if credential_request_id is not None:
+            prior = conn.execute(
+                "SELECT ticket_id,client_intent_id,scopes_json,"
+                "requested_duration_seconds,replaces_ticket_id FROM "
+                "execution_link_tickets WHERE server_id=? AND executor_id=? "
+                "AND binding_id=? AND agent_id=? AND credential_request_id=?",
+                (server_id, executor_id, binding_id, agent_id,
+                 credential_request_id),
+            ).fetchone()
+            if prior is not None:
+                if (prior["client_intent_id"] != client_intent_id or
+                        prior["scopes_json"] != canonical_json(
+                            list(ordered_scopes)).decode("utf-8") or
+                        prior["requested_duration_seconds"] != expires_in or
+                        prior["replaces_ticket_id"] != replaces_ticket_id):
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                                          "The credential request ID has different content.", {})
+                raise TicketRequestConflict(
+                    "CREDENTIAL_MATERIAL_UNAVAILABLE", prior["ticket_id"],
+                    "Ticket material is unavailable after its first response.")
+            active = conn.execute(
+                "SELECT ticket_id FROM execution_link_tickets WHERE server_id=? "
+                "AND executor_id=? AND binding_id=? AND agent_id=? AND "
+                "audience=? AND revoked_at IS NULL AND expires_at>? "
+                "ORDER BY expires_at DESC LIMIT 1",
+                (server_id, executor_id, binding_id, agent_id,
+                 AUDIENCE, instant.isoformat()),
+            ).fetchone()
+            if active is not None and replaces_ticket_id is None:
+                raise TicketRequestConflict(
+                    "CREDENTIAL_REPLACEMENT_REQUIRED", active["ticket_id"],
+                    "An active ticket must be replaced explicitly.")
+            if active is not None and replaces_ticket_id != active["ticket_id"]:
+                raise TicketRequestConflict(
+                    "CREDENTIAL_REPLACEMENT_REQUIRED", active["ticket_id"],
+                    "The current active ticket must be replaced explicitly.")
+            if replaces_ticket_id is not None:
+                replaced = conn.execute(
+                    "SELECT ticket_id,client_intent_id,bound_connection_id,"
+                    "revoked_at,expires_at FROM execution_link_tickets WHERE "
+                    "ticket_id=? AND server_id=? AND executor_id=? AND "
+                    "binding_id=? AND agent_id=? AND audience=?",
+                    (replaces_ticket_id, server_id, executor_id,
+                     binding_id, agent_id, AUDIENCE),
+                ).fetchone()
+                if (replaced is None or replaced["revoked_at"] is not None or
+                        replaced["bound_connection_id"] is not None or
+                        replaced["client_intent_id"] != client_intent_id or
+                        replaced["expires_at"] <= instant.isoformat()):
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                                          "The prior ticket cannot be replaced.", {})
+                conn.execute(
+                    "UPDATE execution_link_tickets SET revoked_at=? WHERE ticket_id=?",
+                    (instant.isoformat(), replaces_ticket_id),
+                )
         if binding_id is None:
             # A lost registration response may be retried with the same
             # intent. The successor replaces the old bootstrap credential;
@@ -131,11 +209,15 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
         conn.execute(
             "INSERT INTO execution_link_tickets(ticket_id,secret_hash,server_id,"
             "executor_id,binding_id,agent_id,audience,scopes_json,credential_epoch,"
-            "authorization_revision,expires_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            "authorization_revision,expires_at,client_intent_id,"
+            "credential_request_id,replaces_ticket_id,requested_duration_seconds) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (ticket_id, _hash(ticket), server_id, executor_id, binding_id,
              agent_id, AUDIENCE, canonical_json(list(ordered_scopes)).decode("utf-8"),
              revisions.credential_epoch, revisions.authorization,
-             (instant + timedelta(seconds=expires_in)).isoformat()),
+             (instant + timedelta(seconds=expires_in)).isoformat(),
+             client_intent_id, credential_request_id, replaces_ticket_id,
+             expires_in if credential_request_id is not None else None),
         )
     return IssuedExecutionTicket(
         ticket_id, ticket, executor_id, binding_id, agent_id, expires_in,

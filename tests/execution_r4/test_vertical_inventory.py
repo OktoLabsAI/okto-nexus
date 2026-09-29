@@ -16,7 +16,6 @@ import pytest
 from nexus_connector_core import R4_PREVIEW_REVISION
 
 from okto_nexus.adapters.inbound.http.app import build_app
-from okto_nexus.adapters.outbound.sqlite.execution_tickets import issue_execution_ticket
 from okto_nexus.bootstrap.dependencies import bootstrap
 
 
@@ -101,10 +100,10 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                          "session", "runtime.open", "sha256:" + "a" * 64,
                          "{}", "{}", "ACCEPTED", now),
                     )
-                ticket = issue_execution_ticket(
-                    deps.connection_factory, server_id=me.server_id,
-                    executor_id=registered.executor_id, agent_id="agent-a",
-                    binding_id="binding", scopes=frozenset({"receipt:publish"}),
+                ticket = await http.request_r4_binding_ticket(
+                    key, binding_id="binding", client_intent_id="ticket-intent",
+                    credential_request_id="ticket-request",
+                    scopes=("receipt:publish",),
                 )
                 receipt = {
                     "protocol_major": 1,

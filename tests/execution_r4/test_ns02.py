@@ -84,7 +84,7 @@ def test_ns02_02(tmp_path):
         conn.commit()
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == [66, 67, 68]
+    assert MigrationRunner(factory).apply() == [66, 67, 68, 69]
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:

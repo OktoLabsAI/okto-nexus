@@ -11,12 +11,17 @@ from typing import Annotated
 from ....domain.permissions import PERMISSION_REGISTRY, PermissionSet
 from ....errors import OktoNexusError
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
-from ...outbound.sqlite.execution_identity import register_remote_executor
-from ...outbound.sqlite.execution_tickets import issue_execution_ticket
+from ...outbound.sqlite.execution_identity import (
+    ensure_execution_installation, register_remote_executor,
+)
+from ...outbound.sqlite.execution_tickets import (
+    AUDIENCE, TicketRequestConflict, issue_execution_ticket,
+)
 from ...outbound.execution.core_inventory import (
     MANAGEMENT_REVISION, protocol_info,
 )
 from .identity_ctx import get_authenticated_agent
+from .app import v1_err
 
 
 _Id = Annotated[str, Field(min_length=1, max_length=160, strict=True)]
@@ -29,6 +34,23 @@ class RegisterExecutorRequest(BaseModel):
     connector_id: _Id
     label: Annotated[str, Field(max_length=120, strict=True)]
     control_capabilities: Annotated[list[_Id], Field(max_length=64)]
+
+
+class BindingTicketRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    credential_request_id: _Id
+    replaces_ticket_id: _Id | None = None
+    audience: Annotated[str, Field(strict=True)]
+    scopes: Annotated[list[_Id], Field(min_length=1, max_length=8)]
+    expires_in: Annotated[int, Field(ge=1, le=600, strict=True)] = 600
+
+
+_BINDING_TICKET_SCOPES = frozenset({
+    "link:connect", "lane:attach", "receipt:publish", "history:read",
+    "lease:request",
+})
 
 
 def build_router() -> APIRouter:
@@ -131,5 +153,58 @@ def build_router() -> APIRouter:
             "bootstrap_ticket": ticket.public_dict(),
         }, status_code=200 if registration.reused else 201,
            headers={"Cache-Control": "no-store"})
+
+    @router.post("/connections/bindings/{binding_id}/ticket")
+    async def binding_ticket(binding_id: str, body: BindingTicketRequest,
+                             request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        scopes = frozenset(body.scopes)
+        if (body.audience != AUDIENCE or len(scopes) != len(body.scopes) or
+                not scopes <= _BINDING_TICKET_SCOPES):
+            return v1_err(400, "VALIDATION_ERROR",
+                          "Invalid binding ticket audience or scopes.",
+                          stage="validation")
+        factory = request.app.state.deps.connection_factory
+
+        def _issue():
+            server_id = ensure_execution_installation(factory).server_id
+            with factory.unit_of_work(write=False) as uow:
+                target = uow.connection.execute(
+                    "SELECT b.executor_id FROM execution_bindings b JOIN "
+                    "agent_endpoints ep ON ep.endpoint_id=b.endpoint_id WHERE "
+                    "b.server_id=? AND b.binding_id=? AND ep.agent_id=?",
+                    (server_id, binding_id, agent.agent_id),
+                ).fetchone()
+            if target is None:
+                return None
+            return issue_execution_ticket(
+                factory, server_id=server_id,
+                executor_id=target["executor_id"], agent_id=agent.agent_id,
+                binding_id=binding_id, scopes=scopes,
+                expires_in=body.expires_in,
+                client_intent_id=body.client_intent_id,
+                credential_request_id=body.credential_request_id,
+                replaces_ticket_id=body.replaces_ticket_id,
+            )
+
+        try:
+            issued = await anyio.to_thread.run_sync(_issue)
+        except TicketRequestConflict as exc:
+            return JSONResponse({"error": {
+                "code": exc.code, "stage": "credential",
+                "message": str(exc), "ticket_id": exc.ticket_id,
+                "possible_effect": False, "retry_safe": False,
+                "operation_id": None,
+                "action": "Request a replacement with a new credential_request_id."
+                if exc.code == "CREDENTIAL_MATERIAL_UNAVAILABLE" else None,
+            }}, status_code=409, headers={"Cache-Control": "no-store"})
+        if issued is None:
+            return v1_err(404, "NOT_FOUND",
+                          "The binding was not found in this scope.",
+                          stage="authorization")
+        return JSONResponse(issued.public_dict(),
+                            headers={"Cache-Control": "no-store"})
 
     return router
