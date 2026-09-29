@@ -60,7 +60,8 @@ from .lock import HEARTBEAT_INTERVAL_SECONDS, ServeLock
 #: The SPA shell and its bundles are public by design - they contain no
 #: data; every byte of data still rides the key-gated /api/v1 surface.
 PUBLIC_PATHS = frozenset(
-    {"/", "/healthz", "/api/v1/info", "/api/v1/license", "/favicon.ico"}
+    {"/", "/healthz", "/api/v1/info", "/api/v1/license",
+     "/v1/connections/protocol", "/favicon.ico"}
 )
 PUBLIC_PREFIXES = ("/assets/", "/logos/")
 
@@ -595,7 +596,9 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             )
 
     from .connections import build_router as connection_router
+    from .connections_v1 import build_router as connection_v1_router
     app.include_router(connection_router(), prefix="/api/v1")
+    app.include_router(connection_v1_router(), prefix="/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)
