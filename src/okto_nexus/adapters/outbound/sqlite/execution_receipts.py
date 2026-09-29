@@ -224,10 +224,20 @@ def append_execution_receipt(factory: ConnectionFactory, *,
              projection.source_connection_generation, digest,
              raw.decode("utf-8")),
         )
+        state = ("RECONCILING" if projection.stage == "OUTCOME_UNKNOWN" else
+                 "RESOLVED_TERMINAL" if projection.stage in {
+                     "SUCCEEDED", "FAILED", "CANCELLED"} else "DISPATCHED")
         conn.execute(
-            "UPDATE execution_dispatch_outbox SET last_receipt_revision=? "
+            "UPDATE execution_dispatch_outbox SET last_receipt_revision=?,"
+            "dispatch_state=?,reservation_class=NULL,reserved_bytes=0,"
+            "reserved_at=NULL "
             "WHERE server_id=? AND executor_id=? AND operation_id=?",
-            (projection.receipt_revision, *key),
+            (projection.receipt_revision, state, *key),
+        )
+        conn.execute(
+            "UPDATE execution_operations SET admission_state=? WHERE "
+            "server_id=? AND executor_id=? AND operation_id=?",
+            (state, *key),
         )
     return AcceptedExecutionReceipt(parsed["operation_id"],
                                     projection.receipt_revision,

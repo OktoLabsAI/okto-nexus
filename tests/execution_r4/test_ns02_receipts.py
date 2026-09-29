@@ -88,8 +88,10 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
                       "workspace-binding", "session", "runtime.open", first["intent_hash"],
                       "{}", "{}", "ACCEPTED", now))
         conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
-                     "operation_id,dispatch_state) VALUES (?,?,?,'PENDING')",
-                     (server_id, executor_id, "op"))
+                     "operation_id,dispatch_state,attempt_token,attempt_no,"
+                     "reservation_class,reserved_bytes,reserved_at) "
+                     "VALUES (?,?,?,'SENDING','attempt',1,'regular',100,?)",
+                     (server_id, executor_id, "op", now))
     admitted_view = read_execution_operation_history(
         factory, server_id=server_id, executor_id=None,
         operation_id="op", subject_agent_id="agent",
@@ -99,6 +101,11 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
     assert admitted_view["possible_effect"] is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is True
+    with factory.unit_of_work(write=False) as uow:
+        freed = uow.connection.execute(
+            "SELECT dispatch_state,reserved_bytes,reservation_class "
+            "FROM execution_dispatch_outbox WHERE operation_id='op'").fetchone()
+        assert tuple(freed) == ("DISPATCHED", 0, None)
     with pytest.raises(OktoNexusError):
         append_execution_receipt(factory, principal=principal,
                                  frame={**first, "stage": "RUNNING"})
@@ -143,6 +150,7 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         assert view_response.status_code == 200, view_response.text
         view = view_response.json()
         assert view["executor_stage"] == "RUNNING"
+        assert view["admission_state"] == "DISPATCHED"
         assert view["receipt_revision"] == 2
         assert view["possible_effect"] is True
         assert view["retry_safe"] is False
@@ -155,14 +163,27 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         assert ticket_view.json() == view
     assert append_execution_receipt(factory, principal=principal,
                                     frame=second).reused is True
+    unknown = {**second, "receipt_revision": 3,
+               "stage": "OUTCOME_UNKNOWN"}
+    assert append_execution_receipt(
+        factory, principal=principal, frame=unknown).reused is False
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute(
             "SELECT receipt_revision,source_connection_id,"
             "source_connection_generation,frame_digest,canonical_frame "
             "FROM execution_receipts ORDER BY receipt_revision").fetchall()
         outbox = uow.connection.execute(
-            "SELECT last_receipt_revision FROM execution_dispatch_outbox").fetchone()
-    assert len(rows) == 2 and outbox[0] == 2
+            "SELECT last_receipt_revision,dispatch_state,reserved_bytes "
+            "FROM execution_dispatch_outbox").fetchone()
+    assert len(rows) == 3 and tuple(outbox) == (3, "RECONCILING", 0)
+    terminal = {**unknown, "receipt_revision": 4, "stage": "SUCCEEDED"}
+    assert append_execution_receipt(
+        factory, principal=principal, frame=terminal).reused is False
+    with factory.unit_of_work(write=False) as uow:
+        settled = uow.connection.execute(
+            "SELECT dispatch_state,last_receipt_revision,reserved_bytes "
+            "FROM execution_dispatch_outbox WHERE operation_id='op'").fetchone()
+        assert tuple(settled) == ("RESOLVED_TERMINAL", 4, 0)
     assert rows[1]["source_connection_id"] == "control"
     assert rows[1]["source_connection_generation"] == 1
     assert rows[1]["frame_digest"].startswith("sha256:")
@@ -173,8 +194,9 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         executor_id=executor_id, operation_id="op", subject_agent_id="agent",
     )
     assert [item["stage"] for item in history.receipts] == [
-        "RECEIVED_DURABLE", "RUNNING"]
-    assert history.public_view()["executor_stage"] == "RUNNING"
+        "RECEIVED_DURABLE", "RUNNING", "OUTCOME_UNKNOWN", "SUCCEEDED"]
+    assert history.public_view()["executor_stage"] == "SUCCEEDED"
+    assert history.public_view()["admission_state"] == "RESOLVED_TERMINAL"
     with pytest.raises(OktoNexusError):
         read_execution_operation_history(
             restored.connection_factory, server_id=server_id,
