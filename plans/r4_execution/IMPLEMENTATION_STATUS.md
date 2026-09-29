@@ -79,6 +79,8 @@ O teste vertical subsequente passou a validar a raiz e o candidato no Connector,
 
 O cliente Connector agora também consulta `intents:resolve` depois de apply no teste vertical. A resolução é durável e bloqueada (`can_submit=false`); a fixture continua executando as operações Core separadamente, sem despachá-las a partir dessa resolução.
 
+O cliente HTTPS do Connector passou a enviar a tupla exata `client_intent_id`/`operation_id`/`resolution_revision`/`intent_hash` para `POST /v1/runtime/operations`, após verificar `can_submit` e blockers. A resposta é conferida contra escopo, ação e hash da resolução; retorno divergente preserva possível efeito e exige consulta. O teste vertical confirma que a resolução bloqueada não gera requisição de admissão. O método legado de submit e o daemon ainda não usam esse fluxo R4.
+
 ## Gates
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.

@@ -157,6 +157,10 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     new_session=True)
                 assert preview.can_submit is False
                 assert "remote_execution_unavailable" in preview.blockers
+                from okto_nexus_connector.errors import ConnectorError
+                with pytest.raises(ConnectorError) as blocked:
+                    await http.submit_r4_operation(key, preview)
+                assert blocked.value.code == "EXECUTOR_OFFLINE"
                 submit_frame = {
                     "protocol_major": 1,
                     "contract_revision": R4_PREVIEW_REVISION,
