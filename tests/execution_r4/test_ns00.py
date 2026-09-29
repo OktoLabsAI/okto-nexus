@@ -3,10 +3,21 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.resources
 import json
 import re
 import subprocess
 from pathlib import Path
+
+import pytest
+from fastapi.testclient import TestClient
+
+from nexus_connector_core.models import CoreError
+from nexus_connector_core.frame_codec import decode_frame
+from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.protocol import CONTRACT_REVISION, require_contract
+from okto_nexus.adapters.inbound.http.app import build_app
+from okto_nexus.bootstrap.dependencies import bootstrap
 
 ROOT = Path(__file__).resolve().parents[2]
 PLANS = ROOT / "plans"
@@ -47,3 +58,39 @@ def test_ns00_02():
     assert sum(bool(re.fullmatch(r"J\d{2}", item)) for item in ids) == 34
     assert active["active_backlog"] == "plans/BACKLOG_R4.json"
     assert active["legacy_plans"].startswith("superseded")
+
+
+def test_ns00_03(tmp_path):
+    """Direct R4 representation cannot be interpreted as legacy or r3 wire."""
+    adr = (ROOT / "docs/adr/0001-r4-authority-and-wire.md").read_text(encoding="utf-8")
+    assert "nexus-connector-core" in adr
+    assert "X-Nexus-Connections-Revision" in adr
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    with TestClient(build_app(deps)) as client:
+        direct = client.get("/v1/connections/protocol")
+        legacy = client.get("/api/v1/info")
+    assert direct.status_code == legacy.status_code == 200
+    assert "ok" not in direct.json()
+    assert legacy.json()["ok"] is True
+    assert "data" in legacy.json()
+    assert direct.headers["X-Nexus-Connections-Revision"] == (
+        "nexus-connections-2026-09-29-r4"
+    )
+    assert CONTRACT_REVISION.endswith("-r3")
+    with pytest.raises(CoreError) as incompatible:
+        require_contract(1, "nxl-1-agent-centric-http-only-2026-09-29-r4")
+    assert incompatible.value.code == "VERSION_INCOMPATIBLE"
+
+
+def test_ns00_04():
+    """The installed r3 codec keeps historical receipts and fences r4 bytes."""
+    resource = importlib.resources.files("nexus_connector_core.contracts.nxl.v1")
+    fixtures = json.loads(resource.joinpath("fixtures.json").read_text(encoding="utf-8"))
+    historical = next(frame for frame in fixtures["frames"]["valid"]
+                      if frame["type"] == "operation.receipt")
+    assert decode_frame(canonical_json(historical)) == historical
+    changed = {**historical,
+               "contract_revision": "nxl-1-agent-centric-http-only-2026-09-29-r4"}
+    with pytest.raises(CoreError) as incompatible:
+        decode_frame(canonical_json(changed))
+    assert incompatible.value.code == "VERSION_INCOMPATIBLE"

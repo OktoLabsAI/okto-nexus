@@ -8,7 +8,8 @@ from nexus_connector_core import InstallationCandidate
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
 from okto_nexus.adapters.outbound.execution.core_inventory import (
-    MANAGEMENT_REVISION, local_catalog, local_inventory_snapshot,
+    MANAGEMENT_REVISION, discover_local_candidates, local_catalog,
+    local_inventory_snapshot,
 )
 
 
@@ -24,6 +25,11 @@ def test_local_catalog_and_empty_inventory_need_no_runtime():
     assert snapshot["evidence"] == []
     assert all(row["state"] != "READY_FOR_RUNTIME"
                for row in snapshot["availability"]["availability"])
+
+
+def test_local_discovery_calls_public_core_facade_without_runtime(tmp_path):
+    found = discover_local_candidates(path_env=str(tmp_path))
+    assert found.candidates == ()
 
 
 def test_two_copies_keep_distinct_installation_refs(tmp_path):

@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import importlib
 import json
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -53,6 +55,24 @@ def test_ns01_02(tmp_path, capsys):
         exit_code = main(args)
         assert exit_code == (0 if not args else 2)
     assert "HTTP /mcp" in capsys.readouterr().err
+
+
+def test_ns01_03(capsys):
+    """Packaged serve-lite pins a local, byte-verified Core wheel."""
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    assert project["project"]["scripts"]["okto-nexus"].endswith("cli.main:main")
+    for extra in ("serve", "serve-lite"):
+        requirements = project["project"]["optional-dependencies"][extra]
+        assert "nexus-connector-core==0.2.12.dev0" in requirements
+        assert not any(item.startswith("okto-nexus-connector") for item in requirements)
+    assert "mcp>=1.0,<2" in project["project"]["dependencies"]
+    wheel = (ROOT / "vendor/wheels/"
+             "nexus_connector_core-0.2.12.dev0-py3-none-any.whl")
+    assert hashlib.sha256(wheel.read_bytes()).hexdigest() == (
+        "bd5326357608906bdd80ccefc3db4890137d9e8dc00935a88c5f6dd955bf9d8e"
+    )
+    assert main(["--help"]) == 0
+    assert "HTTP" in capsys.readouterr().out
 
 
 def test_mcp_config_uses_bearer_header():

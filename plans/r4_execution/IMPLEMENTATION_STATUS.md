@@ -12,6 +12,7 @@
 | ID | Estado | Evidência e limite |
 |---|---|---|
 | CORE-R4-02/03 | IN_PROGRESS | Core `0.2.11.dev0` gera e valida snapshot de inventário sem path, com revisão SHA-256/JCS completa e ref da instalação; 33 testes de Core passaram. NXL ainda é r3. |
+| CORE-R4-02 | IN_PROGRESS | Core `0.2.12.dev0` expõe `discover_installations` sem runtime; o Nexus usa essa fachada para descoberta local. 27 testes direcionados de Core passaram, e `python -I` importou o wheel instalado. SHA-256 `bd5326357608906bdd80ccefc3db4890137d9e8dc00935a88c5f6dd955bf9d8e`. NXL ainda é r3. |
 | CON-R4-05 | IN_PROGRESS | Preview do Connector usa a revisão do mesmo Core; função de publicação R4 usa o candidato completo. 18 testes CN4 e 1 novo teste passaram. Publicação HTTP autenticada ainda não foi implementada. |
 | NS04.01/04.03 | IN_PROGRESS | Nexus consome catálogo e snapshot do Core sem criar runtime ou depender da aplicação Connector; dois testes locais e teste de protocolo passaram. Persistência e publicação por executor ainda pendentes. |
 | NS01.04 | IN_PROGRESS | `GET /v1/connections/protocol` retorna objeto direto com header de revisão e indica NXL R4 indisponível. As demais rotas `/v1` ainda pendentes. 30 testes HTTP existentes passaram. |
@@ -19,6 +20,10 @@
 | NS01.01 | IN_PROGRESS | `Deps`/bootstrap em `bootstrap.dependencies`, registro de tools/resources/instructions em `mcp.registration`; HTTP e CLI importam os módulos separados. Quatro testes de extração/paridade e 34 testes direcionados de HTTP passaram. |
 
 O mesmo wheel local `nexus_connector_core-0.2.11.dev0-py3-none-any.whl` foi usado nos testes de consumidor Connector e Nexus: SHA-256 `41193bc203bb6425163b8992effb6dfa701d3ef309ed08832a58d84cc0c3158d`. Importação isolada com `python -I` passou. O artefato não foi publicado em PyPI; os extras `serve`/`serve-lite` do Nexus e a dependência do Connector fixam a versão, mas instalação nova exige disponibilizar esse wheel no índice/ambiente de instalação. O `uv.lock` do Nexus ainda não reflete essa dependência.
+
+Substituição posterior: o wheel `0.2.12.dev0` de hash `bd5326357608906bdd80ccefc3db4890137d9e8dc00935a88c5f6dd955bf9d8e` foi copiado byte a byte para os três repositórios; os pins Nexus/Connector e `uv.lock` do Nexus foram atualizados. Os parágrafos anteriores registram o marco anterior, não o artefato corrente. O NXL segue R3.
+
+`uv lock --check` e `uv sync --extra serve-lite --extra dev --frozen` passaram usando `vendor/wheels` do próprio Nexus. A suíte direcionada NS00/NS01/inventário passou 13 testes no ambiente sincronizado. O ADR em `docs/adr/0001-r4-authority-and-wire.md` registra responsabilidades, representação direta `/v1` e invariantes de efeitos; NS00.03/04 exercitam separação do envelope legado e rejeição R3/R4, inclusive receipt histórico R3. Nenhum desses resultados qualifica o dispatcher remoto.
 
 ## Gates
 

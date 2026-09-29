@@ -7,6 +7,7 @@ Core's path-free projection. No Connector application is imported here.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Iterable
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.2.11.dev0"
+CORE_INVENTORY_VERSION = "0.2.12.dev0"
 
 
 def _core():
@@ -66,6 +67,14 @@ def local_catalog() -> dict[str, Any]:
             for item in catalog.runtimes
         ],
     }
+
+
+def discover_local_candidates(*, trusted_roots: tuple[Path, ...] = (),
+                              path_env: str | None = None):
+    """Retain complete candidates on the Nexus host without a dummy runtime."""
+    return _core().discover_installations(
+        trusted_roots=trusted_roots, path_env=path_env,
+    )
 
 
 def local_inventory_snapshot(
