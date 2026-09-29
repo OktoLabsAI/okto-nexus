@@ -49,6 +49,7 @@ from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
 from ...outbound.sqlite.observability_repo import SqliteObservabilityQueries
 from ...outbound.tokenizer import resolve_tokenizer
 from okto_nexus.bootstrap.dependencies import Deps
+from okto_nexus.bootstrap.runtime_host import EmbeddedRuntimeHost
 from ..mcp.registration import (
     SERVER_INSTRUCTIONS,
     _load_fastmcp,
@@ -491,6 +492,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         # mounting pattern). The lock heartbeat keeps takeover honest (D4).
         heartbeat_task: asyncio.Task | None = None
         metrics_task: asyncio.Task | None = None
+        embedded_core_host: EmbeddedRuntimeHost | None = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -526,9 +528,17 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                     raise RuntimeError("Another runtime owner holds this store; serve startup refused.")
                 if deps.config.feature_harness_integrations:
                     await anyio.to_thread.run_sync(run_runtime_boot, deps)
+            # Composition is owned by serve's lifespan. No Core stores or
+            # native workers are opened until an approved local selection is
+            # passed to acquire().
+            embedded_core_host = EmbeddedRuntimeHost(
+                deps.config.home_dir.resolve() / "core-runtime")
+            app.state.embedded_core_host = embedded_core_host
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            if embedded_core_host is not None:
+                deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             supervisor = getattr(deps, "harness_supervisor", None)
             if (dispatcher and dispatcher.epoch is not None and supervisor
