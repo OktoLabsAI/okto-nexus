@@ -15,3 +15,8 @@ Current pinned artifact: `nexus_connector_core-0.2.18.dev0-py3-none-any.whl`,
 SHA-256 `547ab7dfde09adff79f38f5cdf688e5b9d0d7ed3caddf4de445766afdefde0da`.
 The Core now verifies projection of a native turn receipt into the separate R4
 wire hash domain. Remote R4 execution remains disabled.
+
+Current pinned artifact: `nexus_connector_core-0.2.19.dev0-py3-none-any.whl`,
+SHA-256 `3b1b334f61f8ad5a2a59c63dcd127ced26a9d426dde7bff68085e4081d01c072`.
+Projection failures after a Core receipt preserve possible effect and refuse
+safe retry. Remote R4 execution remains disabled.

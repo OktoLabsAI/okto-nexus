@@ -63,6 +63,8 @@ Atualização Core `0.2.18.dev0` (commit `da47d79`, SHA-256 `547ab7dfde09adff79f
 
 O cliente HTTPS do Connector agora chama a projeção Core antes de publicar um recibo de turno. O teste vertical Nexus–Connector usa intenção R4 e recibo Core sintéticos com hashes de domínios distintos, depois consulta o ACK do Nexus. Continua sem admissão real, daemon, provider ou dois hosts.
 
+Atualização Core `0.2.19.dev0` (commit `cf15b02`, SHA-256 `3b1b334f61f8ad5a2a59c63dcd127ced26a9d426dde7bff68085e4081d01c072`): falhas de projeção depois de um recibo Core agora preservam `possible_effect=true` e `retry_safe=false`, inclusive em escopo, payload e schema divergentes. Vinte e cinco testes direcionados passaram. O wheel anterior fica apenas para rastreabilidade.
+
 ## Gates
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.
