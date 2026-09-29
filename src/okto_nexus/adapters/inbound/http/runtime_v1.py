@@ -14,7 +14,9 @@ from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
 from ....domain.execution.keys import ExecutorKey
-from ...outbound.sqlite.execution_receipts import append_execution_receipt
+from ...outbound.sqlite.execution_receipts import (
+    append_execution_receipt, read_execution_operation_history,
+)
 from ...outbound.sqlite.execution_identity import ensure_execution_installation
 from ...outbound.sqlite.execution_tickets import verify_execution_ticket
 from .app import extract_bearer, v1_err
@@ -162,6 +164,24 @@ def build_router() -> APIRouter:
             "receipt_revision": accepted.receipt_revision,
             "stage": accepted.stage, "accepted": True, "reused": accepted.reused,
         }, headers={"Cache-Control": "no-store"})
+
+    @router.get("/runtime/operations/{operation_id}")
+    async def operation_view(operation_id: str,
+                             request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        factory = request.app.state.deps.connection_factory
+
+        def _read():
+            server_id = ensure_execution_installation(factory).server_id
+            return read_execution_operation_history(
+                factory, server_id=server_id, executor_id=None,
+                operation_id=operation_id, subject_agent_id=agent.agent_id,
+            ).public_view()
+
+        view = await anyio.to_thread.run_sync(_read)
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.get("/agents/{agent_id}/runtime-options")
     async def runtime_options(agent_id: str, executor_id: str,

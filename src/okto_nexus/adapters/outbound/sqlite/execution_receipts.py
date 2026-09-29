@@ -33,27 +33,61 @@ class ExecutionOperationHistory:
     intent_hash: str
     admission_state: str
     receipts: tuple[dict[str, Any], ...]
+    subject_agent_id: str
+    workspace_id: str
+    actor_agent_id: str
+    client_intent_id: str | None
+    last_observed_at: str
+
+    def public_view(self) -> dict[str, Any]:
+        latest = self.receipts[-1] if self.receipts else None
+        return {
+            "operation_id": self.operation_id,
+            "client_intent_id": self.client_intent_id,
+            "scope": {"server_id": self.server_id,
+                      "executor_id": self.executor_id,
+                      "binding_id": self.binding_id,
+                      "agent_id": self.subject_agent_id,
+                      "workspace_id": self.workspace_id,
+                      "session_id": self.session_id},
+            "action": self.action, "intent_hash": self.intent_hash,
+            "admission_state": self.admission_state,
+            "executor_stage": latest["stage"] if latest else None,
+            "possible_effect": latest["possible_effect"] if latest else False,
+            "retry_safe": latest["retry_safe"] if latest else False,
+            "receipt_revision": latest["receipt_revision"] if latest else None,
+            "last_observed_at": self.last_observed_at,
+            "error": ({"code": latest["error_code"]} if latest and
+                      latest.get("error_code") else None),
+            "follow_up_operation_ids": [],
+        }
 
 
 def read_execution_operation_history(factory: ConnectionFactory, *,
-                                     server_id: str, executor_id: str,
+                                     server_id: str, executor_id: str | None,
                                      operation_id: str,
                                      subject_agent_id: str
                                      ) -> ExecutionOperationHistory:
     """Read one subject's operation and verified Core facts without a runtime."""
     with factory.unit_of_work(write=False) as uow:
         conn = uow.connection
-        operation = conn.execute(
-            "SELECT binding_id,subject_agent_id,session_id,action,intent_hash,"
-            "admission_state FROM execution_operations WHERE server_id=? AND "
-            "executor_id=? AND operation_id=?",
-            (server_id, executor_id, operation_id),
-        ).fetchone()
-        if operation is None or operation["subject_agent_id"] != subject_agent_id:
+        found = conn.execute(
+            "SELECT executor_id,binding_id,subject_agent_id,actor_agent_id,"
+            "workspace_id,session_id,action,intent_hash,admission_state,created_at "
+            "FROM execution_operations WHERE server_id=? AND operation_id=? "
+            "AND subject_agent_id=? AND (? IS NULL OR executor_id=?) LIMIT 2",
+            (server_id, operation_id, subject_agent_id, executor_id, executor_id),
+        ).fetchall()
+        if not found:
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                  "The operation was not found in this scope.", {})
+        if len(found) != 1:
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                 "The operation ID is ambiguous in this scope.", {})
+        operation = found[0]
+        executor_id = operation["executor_id"]
         rows = conn.execute(
-            "SELECT canonical_frame,frame_digest FROM execution_receipts WHERE "
+            "SELECT canonical_frame,frame_digest,received_at FROM execution_receipts WHERE "
             "server_id=? AND executor_id=? AND operation_id=? "
             "ORDER BY receipt_revision",
             (server_id, executor_id, operation_id),
@@ -80,11 +114,23 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
         except (CoreError, ValueError, TypeError) as exc:
             raise OktoNexusError(ErrorCode.DB_ERROR,
                                  "Stored operation receipt history is invalid.", {}) from exc
+        intent_rows = conn.execute(
+            "SELECT client_intent_id FROM execution_client_intents WHERE "
+            "server_id=? AND actor_agent_id=? AND operation_id=? LIMIT 2",
+            (server_id, operation["actor_agent_id"], operation_id),
+        ).fetchall()
+        if len(intent_rows) > 1:
+            raise OktoNexusError(ErrorCode.DB_ERROR,
+                                 "The operation has ambiguous intent provenance.", {})
         return ExecutionOperationHistory(
             server_id, executor_id, operation_id, operation["binding_id"],
             operation["session_id"], operation["action"],
             operation["intent_hash"], operation["admission_state"],
             tuple(receipts),
+            operation["subject_agent_id"], operation["workspace_id"],
+            operation["actor_agent_id"],
+            intent_rows[0]["client_intent_id"] if intent_rows else None,
+            rows[-1]["received_at"] if rows else operation["created_at"],
         )
 
 

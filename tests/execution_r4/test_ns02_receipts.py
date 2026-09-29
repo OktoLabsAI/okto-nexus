@@ -48,12 +48,14 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         conn = uow.connection
         now = "2026-09-29T00:00:00Z"
         conn.execute("INSERT INTO agents(agent_id,created_at) VALUES ('agent',?)", (now,))
+        conn.execute("INSERT INTO agents(agent_id,created_at) VALUES ('foreign',?)", (now,))
         conn.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)", (now,))
         conn.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
                      "adapter_id,protocol,enabled,created_at,updated_at) "
                      "VALUES ('endpoint','agent','ws','codex','native',0,?,?)",
                      (now, now))
-        app.state.auth.issue_key(uow, agent_id="agent")
+        agent_key = app.state.auth.issue_key(uow, agent_id="agent")
+        foreign_key = app.state.auth.issue_key(uow, agent_id="foreign")
     executor_id = register_remote_executor(
         factory, actor_agent_id="agent", connector_id="connector",
         client_intent_id="register",
@@ -88,6 +90,13 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
                      "operation_id,dispatch_state) VALUES (?,?,?,'PENDING')",
                      (server_id, executor_id, "op"))
+    admitted_view = read_execution_operation_history(
+        factory, server_id=server_id, executor_id=None,
+        operation_id="op", subject_agent_id="agent",
+    ).public_view()
+    assert admitted_view["admission_state"] == "ACCEPTED"
+    assert admitted_view["executor_stage"] is None
+    assert admitted_view["possible_effect"] is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is True
     with pytest.raises(OktoNexusError):
@@ -108,6 +117,11 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
     )
     with TestClient(app, raise_server_exceptions=False) as client:
         path = "/v1/runtime/operations/op/receipts"
+        assert client.get("/v1/runtime/operations/op").status_code == 401
+        foreign_view = client.get(
+            "/v1/runtime/operations/op",
+            headers={"Authorization": f"Bearer {foreign_key}"})
+        assert foreign_view.status_code == 404
         assert client.post(path, json=second).status_code == 401
         response = client.post(path, json=second,
                                headers={"Authorization": f"Bearer {issued.ticket}"})
@@ -115,6 +129,17 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
         assert response.json() == {"operation_id": "op", "receipt_revision": 2,
                                    "stage": "RUNNING", "accepted": True,
                                    "reused": False}
+        view_response = client.get(
+            "/v1/runtime/operations/op",
+            headers={"Authorization": f"Bearer {agent_key}"})
+        assert view_response.status_code == 200, view_response.text
+        view = view_response.json()
+        assert view["executor_stage"] == "RUNNING"
+        assert view["receipt_revision"] == 2
+        assert view["possible_effect"] is True
+        assert view["retry_safe"] is False
+        assert view["scope"]["agent_id"] == "agent"
+        assert view["client_intent_id"] is None  # Legacy seeded operation.
     assert append_execution_receipt(factory, principal=principal,
                                     frame=second).reused is True
     with factory.unit_of_work(write=False) as uow:
@@ -136,6 +161,7 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
     )
     assert [item["stage"] for item in history.receipts] == [
         "RECEIVED_DURABLE", "RUNNING"]
+    assert history.public_view()["executor_stage"] == "RUNNING"
     with pytest.raises(OktoNexusError):
         read_execution_operation_history(
             restored.connection_factory, server_id=server_id,
