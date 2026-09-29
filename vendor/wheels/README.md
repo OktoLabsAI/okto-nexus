@@ -10,3 +10,8 @@ Este wheel inclui codec R4 `development-partial`, mas o contrato negociável
 continua R3; efeitos remotos R4 permanecem fechados. O wheel 0.2.12 permanece
 somente para rastreabilidade da versão anterior. A versão 0.2.13 também
 permanece para rastreabilidade do primeiro preview R4.
+
+Current pinned artifact: `nexus_connector_core-0.2.18.dev0-py3-none-any.whl`,
+SHA-256 `547ab7dfde09adff79f38f5cdf688e5b9d0d7ed3caddf4de445766afdefde0da`.
+The Core now verifies projection of a native turn receipt into the separate R4
+wire hash domain. Remote R4 execution remains disabled.

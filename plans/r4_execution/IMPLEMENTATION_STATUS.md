@@ -59,6 +59,8 @@ Atualização Core `0.2.16.dev0` (commit `4721bf4`, SHA-256 `19b28e7f8f20c02032c
 
 Atualização Core `0.2.17.dev0` (commit `af2534a`, SHA-256 `c35526cb347df56388ffae3fb3c3daf34745b8d48f01ff82c8116112409b7f`): schema fechado para 21 tipos de frame, incluindo handshake, attach, reconcile, eventos, notificações de aprovação e encerramento. Reducers de watermark de eventos e correlação de aprovação são puros; 24 testes direcionados passaram. A execução R4 permanece desabilitada até implementação e qualificação dos hosts, dispatcher, lease aplicada e provider.
 
+Atualização Core `0.2.18.dev0` (commit `da47d79`, SHA-256 `547ab7dfde09adff79f38f5cdf688e5b9d0d7ed3caddf4de445766afdefde0da`): projeção pura verifica um recibo `turn.submit` do journal Core antes de gerar o frame R4 com hash de wire distinto. Divergência de texto, escopo ou ID é recusada. Vinte e cinco testes direcionados passaram. `runtime.open`, demais ações e host remoto ainda precisam de projeções e qualificação; bundle continua `development-partial`.
+
 ## Gates
 
 G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efeito remoto ou multi-host. O endpoint de protocolo anuncia `nxl_accepted=[]` e `remote_execution_ready=false` enquanto o bundle R4 não existir. Não executar efeitos remotos com r3.

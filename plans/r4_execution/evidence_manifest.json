@@ -1,6 +1,6 @@
 {
   "purpose": "R4 execution evidence; synthetic tests never qualify providers",
-  "core_wheel_sha256": "c35526cb347df56388ffae3fb3c3daf34745b8d48f01ff82c8116112409b7f",
+  "core_wheel_sha256": "547ab7dfde09adff79f38f5cdf688e5b9d0d7ed3caddf4de445766afdefde0da",
   "layers": {
     "unit_contract": "PASS_PARTIAL",
     "core_real": "PASS_DISCOVERY_AND_INVENTORY_ONLY",
@@ -24,7 +24,7 @@
     {"ids": ["NS04.01", "NS04.03"], "command": "python -m pytest tests/execution_r4/test_ns04.py -q", "exit_code": 0, "scope": "Core catalog and ticket-authenticated HTTP snapshot ingress; no provider"},
     {"ids": ["NS04.04"], "command": "python -m pytest tests/execution_r4/test_ns04.py::test_remote_inventory_http_requires_executor_ticket -q", "exit_code": 0, "scope": "agent-scoped inventory/options, technical states and restart/replay freshness; no positive start readiness"},
     {"ids": ["NS04.05", "CON-R4-05"], "command": "python -m pytest tests/execution_r4/test_ns04.py tests/unit/test_executor_inventory_r4.py -q (per repository)", "exit_code": 0, "scope": "local Core revision and installation selection in both hosts; no binding apply or remote provider"},
-    {"ids": ["NS03.03", "NS04.03", "NS06.04", "CON-R4-03", "CON-R4-05"], "command": "OKTO_CONNECTOR_SRC=<connector src> python -m pytest tests/execution_r4/test_vertical_inventory.py -q", "exit_code": 0, "scope": "Nexus ASGI router and Connector HTTP client exchange Core inventory, binding ticket and scoped receipt in one process with Core 0.2.17 wheel; admitted operation and binding are seeded, no provider or two hosts"},
+    {"ids": ["NS03.03", "NS04.03", "NS06.04", "CON-R4-03", "CON-R4-05"], "command": "OKTO_CONNECTOR_SRC=<connector src> python -m pytest tests/execution_r4/test_vertical_inventory.py -q", "exit_code": 0, "scope": "Nexus ASGI router and Connector HTTP client exchange Core inventory, binding ticket and scoped receipt in one process with Core 0.2.18 wheel; admitted operation and binding are seeded, no provider or two hosts"},
     {"ids": ["NS07.01"], "command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_01 tests/execution_r4/test_ns07.py::test_passive_serve_does_not_open_core_stores -q", "exit_code": 0, "scope": "one runtime per session, independent selections on one executor, shared persistent slot quota, concurrent starts, cancelled waiter and passive serve without stores; no approved binding, dispatch or native effect"},
     {"ids": ["NS07.02"], "command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_02 -q", "exit_code": 0, "scope": "Nexus embedded adapter and real Core open/submit/steer/interrupt/close against synthetic native peer; context is seeded, no Server admission or provider"},
     {"ids": ["NS02.05", "NS06.04"], "command": "python -m pytest tests/execution_r4/test_ns02_receipts.py -q", "exit_code": 0, "scope": "subject or history-ticket scoped public OperationView before and after verified Core receipts; no resolve/admit writer or operator view"},
@@ -32,6 +32,7 @@
     {"ids": ["CORE-R4-01", "CORE-R4-02"], "command": "python -m pytest tests/test_r4_lease_reducer.py tests/test_r4_receipt_reducer.py tests/test_r4_development_bundle.py -q", "exit_code": 0, "scope": "19 pure Core schema and reducer checks; R4 bundle remains non-executable"},
     {"ids": ["CORE-R4-01", "CORE-R4-02"], "command": "python -m pytest tests/test_r4_control_reducer.py tests/test_r4_lease_reducer.py tests/test_r4_receipt_reducer.py tests/test_r4_development_bundle.py -q", "exit_code": 0, "scope": "20 Core schema/reducer checks through 0.2.16; attach/reconcile ACK does not imply lease or native effect"},
     {"ids": ["CORE-R4-01", "CORE-R4-02"], "command": "python -m pytest tests/test_r4_development_bundle.py tests/test_r4_control_reducer.py tests/test_r4_lease_reducer.py tests/test_r4_receipt_reducer.py tests/test_r4_event_reducer.py tests/test_r4_approval_reducer.py -q", "exit_code": 0, "scope": "24 Core checks through 0.2.17; 21 closed frame kinds, pure reducers, no executable R4 host path"},
+    {"ids": ["CORE-R4-01", "CORE-R4-02", "NS07.02", "CON-R4-03"], "command": "python -m pytest tests/test_r4_development_bundle.py tests/test_r4_control_reducer.py tests/test_r4_lease_reducer.py tests/test_r4_receipt_reducer.py tests/test_r4_event_reducer.py tests/test_r4_approval_reducer.py tests/test_r4_receipt_bridge.py -q", "exit_code": 0, "scope": "25 Core checks through 0.2.18; verified turn receipt projection across distinct Core and R4 hash domains, no executable remote host"},
     {"ids": ["CORE-R4-02"], "command": "python -m pytest tests/test_passive_discovery.py tests/test_executor_inventory.py -q", "exit_code": 0, "scope": "Core source/wheel only; no provider"}
   ]
 }
