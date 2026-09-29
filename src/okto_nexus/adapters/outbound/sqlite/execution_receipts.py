@@ -22,6 +22,64 @@ class AcceptedExecutionReceipt:
     reused: bool
 
 
+@dataclass(frozen=True, slots=True)
+class ExecutionOperationHistory:
+    server_id: str
+    executor_id: str
+    operation_id: str
+    binding_id: str
+    session_id: str
+    action: str
+    intent_hash: str
+    admission_state: str
+    receipts: tuple[dict[str, Any], ...]
+
+
+def read_execution_operation_history(factory: ConnectionFactory, *,
+                                     server_id: str, executor_id: str,
+                                     operation_id: str,
+                                     subject_agent_id: str
+                                     ) -> ExecutionOperationHistory:
+    """Read one subject's operation and verified Core facts without a runtime."""
+    with factory.unit_of_work(write=False) as uow:
+        conn = uow.connection
+        operation = conn.execute(
+            "SELECT binding_id,subject_agent_id,session_id,action,intent_hash,"
+            "admission_state FROM execution_operations WHERE server_id=? AND "
+            "executor_id=? AND operation_id=?",
+            (server_id, executor_id, operation_id),
+        ).fetchone()
+        if operation is None or operation["subject_agent_id"] != subject_agent_id:
+            raise OktoNexusError(ErrorCode.NOT_FOUND,
+                                 "The operation was not found in this scope.", {})
+        rows = conn.execute(
+            "SELECT canonical_frame,frame_digest FROM execution_receipts WHERE "
+            "server_id=? AND executor_id=? AND operation_id=? "
+            "ORDER BY receipt_revision",
+            (server_id, executor_id, operation_id),
+        ).fetchall()
+        receipts: list[dict[str, Any]] = []
+        projection = None
+        try:
+            for row in rows:
+                raw = row["canonical_frame"]
+                if raw is None or ("sha256:" + hashlib.sha256(
+                        raw.encode("utf-8")).hexdigest()) != row["frame_digest"]:
+                    raise ValueError("invalid stored receipt")
+                parsed = decode_r4_frame(raw.encode("utf-8"))
+                projection = reduce_r4_receipt(projection, parsed)
+                receipts.append(parsed)
+        except (CoreError, ValueError, TypeError) as exc:
+            raise OktoNexusError(ErrorCode.DB_ERROR,
+                                 "Stored operation receipt history is invalid.", {}) from exc
+        return ExecutionOperationHistory(
+            server_id, executor_id, operation_id, operation["binding_id"],
+            operation["session_id"], operation["action"],
+            operation["intent_hash"], operation["admission_state"],
+            tuple(receipts),
+        )
+
+
 def append_execution_receipt(factory: ConnectionFactory, *,
                              principal: VerifiedExecutionTicket,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:

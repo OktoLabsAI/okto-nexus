@@ -13,7 +13,9 @@ from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.outbound.sqlite.execution_identity import (
     ensure_execution_installation, register_remote_executor,
 )
-from okto_nexus.adapters.outbound.sqlite.execution_receipts import append_execution_receipt
+from okto_nexus.adapters.outbound.sqlite.execution_receipts import (
+    append_execution_receipt, read_execution_operation_history,
+)
 from okto_nexus.adapters.outbound.sqlite.execution_tickets import (
     VerifiedExecutionTicket, issue_execution_ticket,
 )
@@ -127,3 +129,16 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
     assert rows[1]["source_connection_generation"] == 1
     assert rows[1]["frame_digest"].startswith("sha256:")
     assert '"stage":"RUNNING"' in rows[1]["canonical_frame"]
+    restored = bootstrap({}, ["--home", str(tmp_path / "home")])
+    history = read_execution_operation_history(
+        restored.connection_factory, server_id=server_id,
+        executor_id=executor_id, operation_id="op", subject_agent_id="agent",
+    )
+    assert [item["stage"] for item in history.receipts] == [
+        "RECEIVED_DURABLE", "RUNNING"]
+    with pytest.raises(OktoNexusError):
+        read_execution_operation_history(
+            restored.connection_factory, server_id=server_id,
+            executor_id=executor_id, operation_id="op",
+            subject_agent_id="foreign",
+        )
