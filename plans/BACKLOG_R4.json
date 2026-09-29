@@ -1,0 +1,3274 @@
+{
+  "plan_revision": "nexus-server-unified-r4-2026-09-29",
+  "status": "PENDING",
+  "phases": [
+    {
+      "id": "NS00",
+      "title": "Baseline, unificação e contrato executável",
+      "depends_on": [],
+      "anchors": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS01",
+      "title": "Bootstrap neutro e remoção correta de MCP stdio",
+      "depends_on": [
+        "NS00"
+      ],
+      "anchors": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS02",
+      "title": "Schema, identidades e extensões persistentes",
+      "depends_on": [
+        "NS01"
+      ],
+      "anchors": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS03",
+      "title": "Autenticação centrada no agente e credenciais derivadas",
+      "depends_on": [
+        "NS02"
+      ],
+      "anchors": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS04",
+      "title": "Catálogo, disponibilidade e snapshots por executor",
+      "depends_on": [
+        "NS02",
+        "NS03"
+      ],
+      "anchors": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS05",
+      "title": "Realização e bindings sem atrito recorrente",
+      "depends_on": [
+        "NS03",
+        "NS04"
+      ],
+      "anchors": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS06",
+      "title": "Intenções, admissão única e dispatcher",
+      "depends_on": [
+        "NS02",
+        "NS03",
+        "NS05"
+      ],
+      "anchors": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS07",
+      "title": "Executor local via Core público",
+      "depends_on": [
+        "NS03",
+        "NS05",
+        "NS06"
+      ],
+      "anchors": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS08",
+      "title": "Canal WSS R4 e lanes autenticadas",
+      "depends_on": [
+        "NS03",
+        "NS06"
+      ],
+      "anchors": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS09",
+      "title": "Abertura remota, lease e controle completo",
+      "depends_on": [
+        "NS05",
+        "NS06",
+        "NS08"
+      ],
+      "anchors": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS10",
+      "title": "Eventos duráveis, ACK e replay",
+      "depends_on": [
+        "NS06",
+        "NS08",
+        "NS09"
+      ],
+      "anchors": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS11",
+      "title": "Decisão canônica e aprovação nativa íntegra",
+      "depends_on": [
+        "NS06",
+        "NS07",
+        "NS09",
+        "NS10"
+      ],
+      "anchors": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS12",
+      "title": "Ferramentas diretas e governança de trabalho",
+      "depends_on": [
+        "NS03",
+        "NS06",
+        "NS07",
+        "NS11"
+      ],
+      "anchors": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS13",
+      "title": "Dashboard e CLI orientados por dados",
+      "depends_on": [
+        "NS04",
+        "NS05",
+        "NS06",
+        "NS11"
+      ],
+      "anchors": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS14",
+      "title": "Recuperação, revogação, shutdown e limites",
+      "depends_on": [
+        "NS07",
+        "NS08",
+        "NS09",
+        "NS10",
+        "NS11"
+      ],
+      "anchors": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS15",
+      "title": "Migração, cutover e eliminação de cópias",
+      "depends_on": [
+        "NS01",
+        "NS02",
+        "NS07",
+        "NS12",
+        "NS13",
+        "NS14"
+      ],
+      "anchors": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "status": "PENDING"
+    },
+    {
+      "id": "NS16",
+      "title": "Artefatos, integração vertical e liberação",
+      "depends_on": [
+        "NS09",
+        "NS10",
+        "NS11",
+        "NS12",
+        "NS13",
+        "NS14",
+        "NS15"
+      ],
+      "anchors": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "status": "PENDING"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "NS00.01",
+      "phase_id": "NS00",
+      "title": "Registrar branch, HEAD, fonte e capacidade realmente instalada",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [],
+      "files_or_symbols": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "implementation_steps": [
+        "Confirmar feature/v0.2.0 e registrar git rev-parse HEAD, git status --short, Python, SO e lock de dependências.",
+        "Comparar com 7ed52c2 sem reset e guardar hashes dos arquivos antes de alterar.",
+        "Registrar versões/SHA reais do Core e Connector; separar CN5 como plano de correção pendente de prova."
+      ],
+      "forbidden_shortcut": "Não usar main do Nexus ou assumir que 0.2.10 equivale a um wheel qualificado.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-00-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-00-01"
+      ],
+      "acceptance": "Mesmo HEAD e alteração local preservados; manifest distingue fonte, wheel e qualificação; nenhuma alteração destrutiva.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS00.02",
+      "phase_id": "NS00",
+      "title": "Encerrar planos concorrentes sem perder requisito",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS00.01"
+      ],
+      "files_or_symbols": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "implementation_steps": [
+        "Instalar este pacote como backlog ativo.",
+        "Gerar crosswalk por N00.1–N13.5 e TN/J usando 07_RASTREABILIDADE_R3.md.",
+        "Marcar planos antigos superseded somente em metadados; manter arquivo/evidência legados."
+      ],
+      "forbidden_shortcut": "Não apagar exigências de HTTP direto, consumo exclusivo, attach condicionado ou 100 mil identidades.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-00-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-00-02"
+      ],
+      "acceptance": "70 tarefas originais e 79 cenários TN/J possuem destino; nenhuma tarefa está DONE só por estar descrita.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS00.03",
+      "phase_id": "NS00",
+      "title": "Fixar responsabilidades e interfaces R4 entre repositórios",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS00.02"
+      ],
+      "files_or_symbols": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "implementation_steps": [
+        "Copiar decisões de 02_CONTRATOS_HTTP_NXL_E_ESTADOS.md para ADR R4.",
+        "Registrar Core como owner dos schemas/reducers, Server da admissão e Connector da execução remota.",
+        "Produzir fixtures de /v1 direto e erro tipado; registrar mudanças necessárias no cliente atual."
+      ],
+      "forbidden_shortcut": "Não tratar HTTP bool de aprovação ou payload genérico r3 como autorização suficiente.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-00-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-00-03"
+      ],
+      "acceptance": "Objetos /v1 diretos são aceitos; ok/data legado não é confundido; divergências produzem VERSION_INCOMPATIBLE antes de efeito.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS00.04",
+      "phase_id": "NS00",
+      "title": "Solicitar bundle Core R4 e preservar histórico r3",
+      "owner": "Server + Core",
+      "status": "PENDING",
+      "dependencies": [
+        "NS00.03"
+      ],
+      "files_or_symbols": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "implementation_steps": [
+        "Abrir entregas CORE-R4-01–CORE-R4-04 do handoff com schemas fechados.",
+        "Exigir novos ACKs de attach/reconcile, grant correlacionado e owner obrigatório conforme delta.",
+        "Importar o artefato no Server somente depois de conformance/hash; desenvolver demais fases com fixtures enquanto estiver pendente."
+      ],
+      "forbidden_shortcut": "Não editar os JSONs embarcados do Core dentro do Server nem declarar R4 já publicado.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-00-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-00-04"
+      ],
+      "acceptance": "R3 não executa efeitos R4; receipts históricos continuam interpretáveis; gate remoto permanece BLOCKED_EXTERNAL até artefato compartilhado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS00.05",
+      "phase_id": "NS00",
+      "title": "Construir harness de testes e limites de evidência",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS00.04"
+      ],
+      "files_or_symbols": [
+        "pyproject.toml",
+        "01_PLANO_IMPLEMENTACAO.md e planos legados",
+        "plans/nexus-server-r4/",
+        "contratos do Core"
+      ],
+      "implementation_steps": [
+        "Criar peers Server/Connector e native de laboratório com barreiras causais.",
+        "Separar unit/contract, Core real, processo de SO, provider e dois hosts.",
+        "Testes de produto começam NOT_RUN; registrar versões, comandos e exit codes."
+      ],
+      "forbidden_shortcut": "Não promover sentinela de spawn a prova de que provider funcionou.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-00-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-00-05",
+        "TN-01",
+        "TN-02"
+      ],
+      "acceptance": "Campanha pode passar em contrato sem marcar provider/multihost como PASS; segredos de laboratório identificados e isolados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS01.01",
+      "phase_id": "NS01",
+      "title": "Extrair Deps e composição antes de remover transporte",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS00.05"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "implementation_steps": [
+        "Mover Deps, construção de repositórios e dependências compartilhadas para bootstrap/dependencies.py.",
+        "Mover registro de tools/resources/instructions para mcp/registration.py preservando nomes e schemas.",
+        "Alterar imports do HTTP/CLI para módulos neutros; evitar efeito colateral no import."
+      ],
+      "forbidden_shortcut": "Não apagar mcp/server.py inteiro enquanto HTTP ainda importa seus símbolos.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-01-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-01-01"
+      ],
+      "acceptance": "HTTP mantém tools/resources e identidade; import não abre listener ou subprocesso; não há dependência do Connector.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS01.02",
+      "phase_id": "NS01",
+      "title": "Remover o ramo MCP stdio sem shim",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.01"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "implementation_steps": [
+        "Inventariar chamadas SDK de stdio, entrypoints e exemplos command/args Nexus.",
+        "Retirar transporte, branch de CLI e fallback; preservar protocolos nativos do Core.",
+        "Comando antigo falha com instrução HTTP ou ajuda, sem iniciar um servidor."
+      ],
+      "forbidden_shortcut": "Não criar stdio→HTTP proxy nem instalar helper MCP local.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-01-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-01-02"
+      ],
+      "acceptance": "Nenhuma sessão MCP stdio nasce; serve continua HTTP; nenhum adaptador nativo é removido por usar stdin/stdout.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS01.03",
+      "phase_id": "NS01",
+      "title": "Definir CLI principal e extras de instalação",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.02"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "implementation_steps": [
+        "Apontar okto-nexus para módulo CLI neutro.",
+        "Preservar serve/serve-lite, comandos existentes e help; declarar Core nos extras de execução local.",
+        "Manter mcp>=1,<2 e funcionalidades de embedding sem mudança implícita."
+      ],
+      "forbidden_shortcut": "Não incluir pacote Connector ou modelos pesados novos no serve-lite.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-01-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-01-03"
+      ],
+      "acceptance": "CLI não inicia stdio sem argumentos; extras contêm o Core necessário e não exigem a aplicação Connector.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS01.04",
+      "phase_id": "NS01",
+      "title": "Montar routers /v1 com autenticação específica",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.03"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "implementation_steps": [
+        "Adicionar connections_v1/runtime_v1 e link WSS na composição HTTP.",
+        "Preservar /api/v1 e envelope legado; resposta /v1 direta com revisão em header.",
+        "WebSocket valida ticket explicitamente, sem depender do middleware BaseHTTP ou da conveniência de operador loopback."
+      ],
+      "forbidden_shortcut": "Não liberar WebSocket por ser loopback ou confiar em agent_id do corpo.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-01-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-01-04"
+      ],
+      "acceptance": "Só protocolo público expõe dados não privados; endpoints escopados rejeitam credenciais de audiência errada antes do handler.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS01.05",
+      "phase_id": "NS01",
+      "title": "Migrar configuração MCP apenas selecionada",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.04"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/mcp/server.py",
+        "adapters/inbound/http/app.py",
+        "bootstrap/dependencies.py",
+        "adapters/inbound/cli/main.py",
+        "pyproject.toml"
+      ],
+      "implementation_steps": [
+        "Gerar plano de diff para uma entrada Nexus stdio escolhida pelo operador.",
+        "Escrever HTTP direto com backup e CAS, sem buscar/rotacionar key.",
+        "Manter demais MCPs e guardar ownership dos campos migrados."
+      ],
+      "forbidden_shortcut": "Não varrer home atrás de secrets ou converter todas as configurações do usuário.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-01-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-01-05",
+        "TN-29",
+        "TN-30",
+        "TN-31"
+      ],
+      "acceptance": "Somente entrada selecionada muda; key/id intactos; concorrência recusa sem sobrescrever terceiros; stdio não retorna como rollback.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS02.01",
+      "phase_id": "NS02",
+      "title": "Definir chaves de escopo imutáveis",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.05"
+      ],
+      "files_or_symbols": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "implementation_steps": [
+        "Implementar ExecutorKey/BindingKey/SessionKey/StreamKey/ApprovalKey da arquitetura.",
+        "Exigir chaves completas nas mutações internas e usar IDs curtos só no resolver humano inequívoco.",
+        "Tipar gerações/revisões separadamente; não truncar campos."
+      ],
+      "forbidden_shortcut": "Não concatenar IDs em strings com separadores ambíguos.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-02-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-02-01"
+      ],
+      "acceptance": "Nenhuma colisão ou remoção cruzada; UI pede escopo quando alias curto é ambíguo.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS02.02",
+      "phase_id": "NS02",
+      "title": "Criar extensões aditivas e índices",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.01"
+      ],
+      "files_or_symbols": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "implementation_steps": [
+        "Aplicar tabelas/colunas do documento 03 com FKs para entidades existentes.",
+        "Reusar política de agent_endpoints/runtime_profiles sem flags duplicadas.",
+        "Criar índices de idempotência, outbox, subject/executor e stream antes do hot path."
+      ],
+      "forbidden_shortcut": "Não duplicar inbox ou criar user/tenant para ownership.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-02-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-02-02"
+      ],
+      "acceptance": "Migrações idempotentes; dados legados e negações preservados; consulta indexada encontra escopo exato.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS02.03",
+      "phase_id": "NS02",
+      "title": "Persistir identidade técnica local e remota",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.02"
+      ],
+      "files_or_symbols": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "implementation_steps": [
+        "Criar server_id persistido e embedded_executor_id único pela migração.",
+        "Registrar connector_id remoto sob autenticação e retornar executor_id canônico.",
+        "Separar clone de estado de posse válida: generation CAS e reconciliação antes de efeito."
+      ],
+      "forbidden_shortcut": "Não derivar identidade somente do hostname ou gerar executor diferente a cada restart.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-02-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-02-03"
+      ],
+      "acceptance": "IDs estáveis, nenhum Agent novo e nenhum takeover automático por clone de diretório.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS02.04",
+      "phase_id": "NS02",
+      "title": "Separar workspace lógico da realização física",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.03"
+      ],
+      "files_or_symbols": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "implementation_steps": [
+        "Manter IDs legados baseados em path.",
+        "Acrescentar workspace_executor_binding com handle de root validado no executor.",
+        "Rotas remotas nunca chamam realpath/isdir/stat sobre handle/path de outro host."
+      ],
+      "forbidden_shortcut": "Não mesclar por Git remote, nome ou igualdade textual de pasta.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-02-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-02-04"
+      ],
+      "acceptance": "Nenhuma resolução de filesystem remoto em A; associação depende de permissão e aprovação explícita; histórico não é re-hasheado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS02.05",
+      "phase_id": "NS02",
+      "title": "Implementar writers transacionais e readers de histórico",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.04"
+      ],
+      "files_or_symbols": [
+        "domain/execution/keys.py",
+        "adapters/outbound/sqlite/execution_*.py",
+        "migrations/",
+        "application/identity.py",
+        "agent_endpoints/runtime_profiles existentes"
+      ],
+      "implementation_steps": [
+        "Criar repos para operações/outbox/receipts/ingresso/decisões conforme T1–T5.",
+        "Readers consultam namespace sem compor runtime.",
+        "Todas as transações são curtas e livres de chamadas nativas/rede."
+      ],
+      "forbidden_shortcut": "Não usar SQL no router ou abrir transação durante await de provider.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-02-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-02-05",
+        "TN-03",
+        "TN-04",
+        "TN-05"
+      ],
+      "acceptance": "Commit termina antes do I/O; consultas continuam responsivas e reproduzem os registros por IDs exatos.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS03.01",
+      "phase_id": "NS03",
+      "title": "Implementar /me pela autoridade já existente",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.05"
+      ],
+      "files_or_symbols": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "implementation_steps": [
+        "Reusar AgentKeyAuthService.resolve e cache limitado.",
+        "Responder somente agente autenticado, server_id, permissões e revisões.",
+        "Conferir hint de agente em onboarding e recusar divergência sem listagem global."
+      ],
+      "forbidden_shortcut": "Não criar outro resolvedor por Connector ou retornar todos os agentes.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-03-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-03-01"
+      ],
+      "acceptance": "Lookup escopado/indexado; spoof recusado; nenhum cadastro ou rotação ocorre.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS03.02",
+      "phase_id": "NS03",
+      "title": "Implementar proposta/aplicação com política herdada",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.01"
+      ],
+      "files_or_symbols": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "implementation_steps": [
+        "Resolver sujeito e política atual; comparar revisões e diff.",
+        "Permitir self-bind só nas capacidades já autorizadas e exigir operador para escalada.",
+        "Apply usa CAS e auditoria ator/sujeito sem side effects de processo."
+      ],
+      "forbidden_shortcut": "Não conceder método negado porque catálogo diz supported.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-03-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-03-02"
+      ],
+      "acceptance": "Agente não autoaprova; operador aplica uma revisão; repetição retorna a mesma proposta aplicada sem gerar outra identidade.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS03.03",
+      "phase_id": "NS03",
+      "title": "Emitir tickets escopados e revogáveis",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.02"
+      ],
+      "files_or_symbols": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "implementation_steps": [
+        "Persistir hash, audiência, scopes, epochs, validade e conexão de consumo.",
+        "Bootstrap permite só fatos técnicos daquele executor; binding ticket permite só sua lane.",
+        "Rotação invalida derivados e emissão velha; renovação legítima é idempotente por intenção."
+      ],
+      "forbidden_shortcut": "Não emitir chave raiz de Connector nem usar ticket de A para B.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-03-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-03-03"
+      ],
+      "acceptance": "Alvo/audiência/epoch incorretos recusados; outro agente permanece operacional; novo ticket não revive key revogada.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS03.04",
+      "phase_id": "NS03",
+      "title": "Implementar capability MCP de sessão com audiência própria",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.03"
+      ],
+      "files_or_symbols": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "implementation_steps": [
+        "Emitir segredo uma vez/no-store para sessão reservada autorizada.",
+        "Guard HTTP resolve capability para mesmo agente e limita casos de uso, workspace, owner e lease.",
+        "Renovar validade canônica sem presumir hot reload; tokens NXL/EPT não são MCP."
+      ],
+      "forbidden_shortcut": "Não entregar key administrativa/canônica ao runtime como fallback.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-03-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-03-04"
+      ],
+      "acceptance": "Só ações permitidas têm efeito; ticket errado falha; revogação bloqueia MCP sem depender de proxy Connector.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS03.05",
+      "phase_id": "NS03",
+      "title": "Gerar comando protegido e não recuperar hash como segredo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.04"
+      ],
+      "files_or_symbols": [
+        "application/auth.py",
+        "application/execution_leases.py",
+        "connections_v1.py",
+        "execution_link_tickets",
+        "execution_session_capabilities"
+      ],
+      "implementation_steps": [
+        "UI gera comando connect com URL e hint; chave entra por stdin/entrada mascarada no Connector.",
+        "Preservar chave já usada pelo MCP; só rotação explícita usa issue_key.",
+        "Validar shell quoting e origem antes de transmitir credencial."
+      ],
+      "forbidden_shortcut": "Não colocar segredo em argv, copiar hash como key ou girar key para montar snippet.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-03-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-03-05",
+        "TN-06",
+        "TN-07",
+        "TN-08",
+        "TN-09"
+      ],
+      "acceptance": "Comando sem segredo de longa duração; nenhuma chamada de emissão; MCP anterior continua autenticando o mesmo agente.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS04.01",
+      "phase_id": "NS04",
+      "title": "Consumir catálogo sem compor runtime falso",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.05",
+        "NS03.05"
+      ],
+      "files_or_symbols": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "implementation_steps": [
+        "Usar get_runtime_catalog como consulta síncrona de metadados.",
+        "Expor nomes/IDs/modos/suporte sem classes ou módulos.",
+        "Server sem binário inicia APIs normalmente e mostra inventário local vazio/inconclusivo."
+      ],
+      "forbidden_shortcut": "Não chamar create_runtime com candidato inventado nem manter lista de IDs em frontend.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-04-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-04-01"
+      ],
+      "acceptance": "Catálogo vem do Core sem spawn/porta/credencial; attach continua registrado não qualificado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS04.02",
+      "phase_id": "NS04",
+      "title": "Preservar candidatos e avaliar no host correto",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS04.01"
+      ],
+      "files_or_symbols": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "implementation_steps": [
+        "Adapter local usa discovery público e conserva todos os campos InstallationCandidate.",
+        "Avaliar pelo Core no executor; nunca refazer qualified_build no Server remoto.",
+        "Disponibilidade insuficiente permanece NOT_PROBED/PREPARATION_REQUIRED."
+      ],
+      "forbidden_shortcut": "Não reduzir Pi a Node nem preencher arquitetura/version por suposição.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-04-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-04-02"
+      ],
+      "acceptance": "Refs/build/version/architecture preservados; avaliação remota utiliza host remoto; nenhum provider é iniciado para listar.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS04.03",
+      "phase_id": "NS04",
+      "title": "Gerar e ingressar revisão completa do inventário",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS04.02"
+      ],
+      "files_or_symbols": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "implementation_steps": [
+        "Calcular hash canônico de evidence e formatos sem timestamp.",
+        "Validar ticket, executor, sequence, digest, tamanho e projection antes do commit.",
+        "Snapshot antigo não substitui atual; TTL/restart requer refresh."
+      ],
+      "forbidden_shortcut": "Não usar schema_version do StateStore, ref+version apenas ou ordem de array como revisão.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-04-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-04-03"
+      ],
+      "acceptance": "Bytes/qualificação alterados mudam revisão; reorder/timestamp isolado não muda; stale/adulterado recusados antes de binding.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS04.04",
+      "phase_id": "NS04",
+      "title": "Expor opções com estados técnicos e canônicos separados",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS04.03"
+      ],
+      "files_or_symbols": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "implementation_steps": [
+        "GET runtime-options exige executor selecionado e permissão de agente.",
+        "Combinar fatos recebidos com freshness/conectividade e políticas sem reescrever assessment.",
+        "Devolver can_prepare/can_bind/can_start e reason_codes separados."
+      ],
+      "forbidden_shortcut": "Não transformar daemon online em runtime pronto ou READY técnico em permissão.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-04-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-04-04"
+      ],
+      "acceptance": "UI recebe razões verdadeiras; nenhuma combinação bloqueante habilita start; dados de outro executor não são apresentados ao principal errado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS04.05",
+      "phase_id": "NS04",
+      "title": "Resolver instalação da revisão exibida",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS04.04"
+      ],
+      "files_or_symbols": [
+        "application/executor_inventory.py",
+        "adapters/outbound/execution/embedded.py",
+        "runtime_v1.py",
+        "Core catalog/availability/installation APIs"
+      ],
+      "implementation_steps": [
+        "Resposta de seleção leva executor/adapter/ref/revisão.",
+        "Resolver somente no executor produtor pelo helper Core público e conferir a revisão/TTL antes de apply.",
+        "Legacy ref baseada em fingerprint migra só com alvo único."
+      ],
+      "forbidden_shortcut": "Não usar candidates[0], label ou hash de build como instalação.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-04-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-04-05"
+      ],
+      "acceptance": "B continua B após reorder; drift/stale recusa antes de efeito; ref legada ambígua exige reseleção.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS05.01",
+      "phase_id": "NS05",
+      "title": "Registrar realização no executor proprietário",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.05",
+        "NS04.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "implementation_steps": [
+        "Executor valida diretório/candidato/perfil e consentimento local.",
+        "Publicar handle/prova limitada no Server, sem argv/env ou paths por default.",
+        "Registrar realization_ref/revision ligada ao agente/executor/workspace."
+      ],
+      "forbidden_shortcut": "Não autorizar uma pasta por estar no payload do Server.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-05-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-05-01"
+      ],
+      "acceptance": "Somente escopo correto resolve; Server não testa filesystem remoto; nenhum spawn ao preparar.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS05.02",
+      "phase_id": "NS05",
+      "title": "Compor proposta agregada de vínculo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS05.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "implementation_steps": [
+        "Prepare recebe snapshot/realização exatos e calcula diff de confiança/política.",
+        "Retornar IDs técnicos gerados internamente e aprovações requeridas.",
+        "Dados legados não observados bloqueiam start sem pedir JSON manual."
+      ],
+      "forbidden_shortcut": "Não gerar formulário que exige comando nativo ou profile_id para uso normal.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-05-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-05-02"
+      ],
+      "acceptance": "Uma confirmação mostra agente, host, instalação, projeto e escopo; backend já resolveu detalhes técnicos.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS05.03",
+      "phase_id": "NS05",
+      "title": "Aplicar proposta com CAS e recibo recuperável",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS05.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "implementation_steps": [
+        "Exigir proposal_revision e approved_diff_hash válidos.",
+        "Atualizar endpoint/profile/binding em T1 e retornar mesma resolução após retry.",
+        "Mudança concorrente de policy/inventory/root invalida proposta."
+      ],
+      "forbidden_shortcut": "Não considerar POST reenviado uma nova criação.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-05-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-05-03"
+      ],
+      "acceptance": "Sem duplicação; resposta recupera mesmo binding; mudança de escopo exige nova aprovação.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS05.04",
+      "phase_id": "NS05",
+      "title": "Implementar reuso e novo processo explícito",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS05.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "implementation_steps": [
+        "Resolver alias com filtros de executor/workspace e política.",
+        "Reusar só sessão compatível com mesma realização/grant vigente.",
+        "new_session cria intenção própria; prompt inicial é operação filha separada após READY."
+      ],
+      "forbidden_shortcut": "Não reiniciar ao detectar timeout nem distribuir prompt a todos os bindings.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-05-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-05-04"
+      ],
+      "acceptance": "Reuso não cria processo; new_session autorizado é distinto; unknown/ambiguidade não escolhe substituto.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS05.05",
+      "phase_id": "NS05",
+      "title": "Tratar drift e login de provider como estados explícitos",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS05.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/endpoints.py",
+        "execution_bindings",
+        "execution_workspace_bindings",
+        "AgentEndpointSetup.tsx"
+      ],
+      "implementation_steps": [
+        "Prepare/open revalidam evidências no Core.",
+        "Erro de login/binário/build vai ao executor correto com ação local guiada.",
+        "Rebind altera revisão e exige diff; não retorna binding antigo como se tivesse aplicado candidato novo."
+      ],
+      "forbidden_shortcut": "Não instalar/atualizar provider silenciosamente nem enviar credencial de provider ao Server.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-05-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-05-05",
+        "TN-13",
+        "TN-14",
+        "TN-15",
+        "TN-16"
+      ],
+      "acceptance": "Recusas anteriores ao efeito têm diagnóstico; rebind efetivo preserva agente/key e não desliga outra sessão.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS06.01",
+      "phase_id": "NS06",
+      "title": "Implementar resolve sem executar",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS02.05",
+        "NS03.05",
+        "NS05.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "implementation_steps": [
+        "Persistir client_intent_id/body_hash antes de devolver IDs.",
+        "Produzir IntentResolution com scope e revisões fechadas.",
+        "Não adicionar outbox de efeito nem chamar executor em resolve."
+      ],
+      "forbidden_shortcut": "Não tratar resolve como start nem deixar client inventar grant.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-06-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-06-01"
+      ],
+      "acceptance": "Zero efeitos; mesmos IDs; body diferente conflita; consulta recupera resposta perdida.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS06.02",
+      "phase_id": "NS06",
+      "title": "Admitir operação e outbox atomicamente",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "implementation_steps": [
+        "POST operations confirma resolução/intent_hash e autorização atual.",
+        "Gravar operação + outbox + claim lógico pertinente em T2.",
+        "Retornar 202 após commit, nunca antes; replay idêntico retorna status existente."
+      ],
+      "forbidden_shortcut": "Não fazer rede/processo em UoW nem criar segunda delivery.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-06-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-06-02"
+      ],
+      "acceptance": "Uma operação/outbox lógica e um claim; falha pré-commit não anuncia sucesso; pós-commit é consultável.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS06.03",
+      "phase_id": "NS06",
+      "title": "Implementar dispatcher com reserva e revalidação",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "implementation_steps": [
+        "Reservar item/bytes por token exato antes de create_task.",
+        "Selecionar Embedded ou Remote por executor_id canônico e revalidar autorização após espera.",
+        "Controle usa capacidade independente; liberar custo reservado uma vez em todos os caminhos."
+      ],
+      "forbidden_shortcut": "Não permitir que quatro submits bloqueiem interrupt nem recalcular outro JSON para devolver quota.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-06-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-06-03"
+      ],
+      "acceptance": "Controle progride; operação obsoleta produz zero efeito; quota volta exatamente a zero ao concluir.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS06.04",
+      "phase_id": "NS06",
+      "title": "Separar dispatch, receipt e consulta",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "implementation_steps": [
+        "Criar rota de receipts e mesma aplicação para WSS receipt.",
+        "Receipt valida operação/scope/hash e grava fatos sem dispatch.",
+        "Em resultado de rede incerto, alterar outbox para consulta/reconcile e manter operation_id."
+      ],
+      "forbidden_shortcut": "Não publicar receipt em POST operations com payload text_length como nova intenção.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-06-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-06-04"
+      ],
+      "acceptance": "Receipt idempotente não cria trabalho; um efeito máximo por intenção demonstrada; unknown não é retry seguro por timeout.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS06.05",
+      "phase_id": "NS06",
+      "title": "Preservar consumo exclusivo e causalidade do domínio",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_intents.py",
+        "application/execution_dispatch.py",
+        "runtime_open.py",
+        "runtime_control.py",
+        "delivery_outbox",
+        "execution_dispatch_outbox"
+      ],
+      "implementation_steps": [
+        "Conectar RuntimeDeliveryPlanner/outbox existente ao novo dispatcher.",
+        "MCP pull/local/remoto disputam mesmo claim.",
+        "Observer context-only não recebe prompt executável; turn final não completa handoff automaticamente."
+      ],
+      "forbidden_shortcut": "Não criar nova inbox técnica ou remover limites de relay.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-06-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-06-05"
+      ],
+      "acceptance": "Um executor lógico; observers não executam; handoff permanece pendente até caso de uso governado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS07.01",
+      "phase_id": "NS07",
+      "title": "Compor stores e runtime por ownership explícito",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.05",
+        "NS05.05",
+        "NS06.05"
+      ],
+      "files_or_symbols": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "implementation_steps": [
+        "Abrir SQLiteJournal/ledger Core fora do loop bloqueante, single-flight.",
+        "Criar runtime por sessão/realização selecionada, com mapa local e callbacks públicos.",
+        "Compartilhar ledger da instalação e não usar private factory/state."
+      ],
+      "forbidden_shortcut": "Não criar uma nova quota de oito para cada binding por stores separados.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-07-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-07-01"
+      ],
+      "acceptance": "Uma inicialização possuída por store; nenhum worker órfão; quota física agregada respeitada.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS07.02",
+      "phase_id": "NS07",
+      "title": "Adaptar prepare/open/control preservando IDs",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS07.01"
+      ],
+      "files_or_symbols": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "implementation_steps": [
+        "Converter AuthorizedExecution em DTOs Core com argumentos nomeados.",
+        "Contexto completo e deadline já aprovado permanecem íntegros.",
+        "CoreError projeta code/stage/retry_safe/possible_effect sem inferências."
+      ],
+      "forbidden_shortcut": "Não fabricar native_turn_id ou ignorar configuração/owner divergente.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-07-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-07-02"
+      ],
+      "acceptance": "IDs conservados e erros tipados; operação legítima funciona; scope/generation errados não alcançam peer.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS07.03",
+      "phase_id": "NS07",
+      "title": "Gerar ambiente e cliente MCP por abertura",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS07.02"
+      ],
+      "files_or_symbols": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "implementation_steps": [
+        "Criar ownership de config por digest da tupla completa, sem truncar IDs.",
+        "Template Core produz URL/capability consumíveis pelo harness; environment callback exclusivo daquela abertura.",
+        "Verificar marker antes de write, aplicar atomicamente e manter credenciais fora do prompt/argv."
+      ],
+      "forbidden_shortcut": "Não reutilizar HOME/token da primeira sessão de um binding.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-07-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-07-03"
+      ],
+      "acceptance": "Configurações distintas, URL correta, tokens por sessão; marker estrangeiro impede sobrescrita; nenhum MCP proxy.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS07.04",
+      "phase_id": "NS07",
+      "title": "Compor aprovação e bridge Pi por portas públicas",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS07.03"
+      ],
+      "files_or_symbols": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "implementation_steps": [
+        "Habilitar native approvals somente com grants necessários e callback completo.",
+        "Pi native-action backend chama casos de uso canônicos locais; no remoto isso pertence ao Connector HTTP.",
+        "Resume usa CodexResumeGrant público só quando autorizado e qualificado."
+      ],
+      "forbidden_shortcut": "Não importar CopiedAdapterFactory nem interpretar texto como claim/complete.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-07-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-07-04"
+      ],
+      "acceptance": "Ação canônica passa pelo guard; fora de escopo recusa; capability não implementada é explicitamente indisponível.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS07.05",
+      "phase_id": "NS07",
+      "title": "Ligar eventos e encerramento ao host persistente",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS07.04"
+      ],
+      "files_or_symbols": [
+        "bootstrap/runtime_host.py",
+        "adapters/outbound/execution/embedded.py",
+        "launch_context.py",
+        "Core create_runtime/Journal/ledger"
+      ],
+      "implementation_steps": [
+        "Registrar pumps/producers por SessionKey antes de aguardar.",
+        "Fechar clientes CLI/MCP não fecha runtime; serve owner conserva lifecycle.",
+        "Shutdown usa Core.shutdown e preserva unknown/releases, sem apagar instância/stores prematuramente."
+      ],
+      "forbidden_shortcut": "Não fazer sys.exit como prova de que supervisor continua vivo.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-07-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-07-05",
+        "TN-10",
+        "TN-11",
+        "TN-12"
+      ],
+      "acceptance": "Mesma abertura/handle permanece alcançável; controles independentes; consultas relatam físico e durável separadamente.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS08.01",
+      "phase_id": "NS08",
+      "title": "Autenticar upgrade e negociar versão antes de efeitos",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.05",
+        "NS06.05"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "implementation_steps": [
+        "Verificar TLS/origem/subprotocolo/ticket/audiência antes de aceitar link.",
+        "Conferir server/executor com principal e alocar connection_id/generation por CAS.",
+        "Rejeitar r3 para efeitos R4 sem fallback de grants."
+      ],
+      "forbidden_shortcut": "Não confiar na sessão HTTP de operador loopback para autenticar Connector.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-08-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-08-01"
+      ],
+      "acceptance": "Somente namespace/protocolo correto progride; zero efeito em negociação inválida; secrets ausentes do log.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS08.02",
+      "phase_id": "NS08",
+      "title": "Confirmar attach explicitamente e isolar agentes",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS08.01"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "implementation_steps": [
+        "Validar ticket de cada binding/agente e token capturado de attach.",
+        "Persistir/admitir lane e emitir binding.attached da mesma tentativa.",
+        "Rotação/revogação fecha proof antiga e resultado tardio não marca epoch nova como pronta."
+      ],
+      "forbidden_shortcut": "Não equiparar write no socket a aceite do Server.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-08-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-08-02"
+      ],
+      "acceptance": "B permanece válido; A só abre sob ACK novo; ticket A não concede B; ausência de ACK mantém PENDING.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS08.03",
+      "phase_id": "NS08",
+      "title": "Implementar reconciliação e readiness por sessão",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS08.02"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "implementation_steps": [
+        "Executar reconcile paginado e aguardar reconcile.accepted.",
+        "Falha de storage fica RECOVERING; vazio só após consulta bem-sucedida.",
+        "Separar CONTROL_READY, lane ADMITTED, lease instalada e runtime READY."
+      ],
+      "forbidden_shortcut": "Não marcar online=true após capturar falha e substituir report por vazio.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-08-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-08-03"
+      ],
+      "acceptance": "Operação nova fica bloqueada até recuperação; controles/história permitidos conforme escopo; nenhuma falsificação de liveness.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS08.04",
+      "phase_id": "NS08",
+      "title": "Validar escopo de todos os frames",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS08.03"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "implementation_steps": [
+        "Conferir origem autenticada em operation, ACK, reconcile, approval, detach, lease e query.",
+        "DTO interno retém connection_id/generation e scope completo até último recurso.",
+        "Revalidação após filas impede token antigo; handlers nunca resolvem pelo primeiro registro."
+      ],
+      "forbidden_shortcut": "Não limitar verificação aos frames produtivos.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-08-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-08-04"
+      ],
+      "acceptance": "Zero dados/efeitos estrangeiros; caso legítimo passa; consultas durante handshake não ganham scope adicional.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS08.05",
+      "phase_id": "NS08",
+      "title": "Controlar filas, watchdog e cancelamento do link",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS08.04"
+      ],
+      "files_or_symbols": [
+        "adapters/inbound/http/executor_link.py",
+        "adapters/outbound/execution/remote.py",
+        "execution_executors",
+        "Core NXL R4 bundle"
+      ],
+      "implementation_steps": [
+        "Limitar itens/bytes antes de tasks e reservar classe de controle.",
+        "Watchdog periódico mede atividade válida e não lease; backoff só reconecta.",
+        "Socket perdido não cancela producer durável aceito; filas de geração velha não executam depois do reconnect."
+      ],
+      "forbidden_shortcut": "Não manter milhares de tasks esperando semáforo ou reenviar efeitos para drenar fila.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-08-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-08-05",
+        "TN-17",
+        "TN-18",
+        "TN-19",
+        "TN-20"
+      ],
+      "acceptance": "Memória/pendências limitadas; controles progridem; receipt é recuperado por ID sem duplicar trabalho.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS09.01",
+      "phase_id": "NS09",
+      "title": "Despachar remote open por realização aprovada",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS05.05",
+        "NS06.05",
+        "NS08.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "implementation_steps": [
+        "NXL runtime.open transmite refs/candidato/modelo/perfil e scope, nunca executable/argv/path.",
+        "Connector valida snapshot e resolve localmente pelo Core; Server aguarda receipt/evento para declarar ready.",
+        "CLI Connector solicita operação canônica e não aplica localmente por fora."
+      ],
+      "forbidden_shortcut": "Não condicionar implementação do verbo ao teste futuro nem anunciar suporte por constar no enum.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-09-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-09-01"
+      ],
+      "acceptance": "Um open com mesmo ID em Core; Server não acessa filesystem B; modo não suportado recusa antes de spawn.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns09.py::test_ns09_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS09.02",
+      "phase_id": "NS09",
+      "title": "Instalar lease inicial e renovar com correlação",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS09.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "implementation_steps": [
+        "Solicitante captura t0 por request_id antes do envio.",
+        "Server emite serial/duração e contexto completos; Connector instala deadline=t0+budget, rejeita replay/reboot.",
+        "Subsequentemente Core.renew_lease confirma geração antes de lease.applied/novo trabalho."
+      ],
+      "forbidden_shortcut": "Não usar agora+120 a cada frame nem heartbeat como renovação.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-09-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-09-02"
+      ],
+      "acceptance": "Replay não estende deadline; resposta tardia não permite efeito; gerações/revisões correspondem ao grant legítimo.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns09.py::test_ns09_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS09.03",
+      "phase_id": "NS09",
+      "title": "Completar matriz de verbos e targeting",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS09.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "implementation_steps": [
+        "Suportar submit/steer/interrupt/close/approval/input por operação e capacidade.",
+        "Targeting nativo/current-run vem do Core e eventos observados.",
+        "Remote close conserva ID e receipt; nenhum segundo resolve local."
+      ],
+      "forbidden_shortcut": "Não converter steer em interrupt+reprompt nem inventar native turn para Pi.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-09-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-09-03"
+      ],
+      "acceptance": "Somente capacidades reais passam; expected_turn preservado; operação desconhecida gera erro tipado antes do efeito.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns09.py::test_ns09_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS09.04",
+      "phase_id": "NS09",
+      "title": "Revogar sem troca silenciosa de ownership",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS09.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "implementation_steps": [
+        "Server fecha novos grants/capabilities e emite revoke/detach correlacionados.",
+        "Canal novo exige CAS/reconcile; old owner/credential/config fences permanecem.",
+        "Unknown não é realocado a outro executor disponível."
+      ],
+      "forbidden_shortcut": "Não copiar permissões de linha de lease ou do frame para fazer passar Core.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-09-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-09-04"
+      ],
+      "acceptance": "Contexto obsoleto recusado; nenhum processo substituto; histórico continua consultável no scope autorizado.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns09.py::test_ns09_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS09.05",
+      "phase_id": "NS09",
+      "title": "Qualificar desconexão de controle e ferramentas separadamente",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS09.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_leases.py",
+        "adapters/outbound/execution/remote.py",
+        "runtime_v1.py",
+        "contrato Connector R4"
+      ],
+      "implementation_steps": [
+        "Testar WSS perdido com HTTP MCP ativo e inverso.",
+        "Session capability continua sujeita à lease/grant; tools-only independente não exige daemon.",
+        "Estados de tool_path/controller/processo são separados no Server."
+      ],
+      "forbidden_shortcut": "Não criar túnel MCP ou stdio fallback para reparar partição.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-09-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-09-05"
+      ],
+      "acceptance": "Sem bypass/replay de tool mutável; tools-only legítimo permanece independente; runtime gerenciado respeita sua autorização.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns09.py::test_ns09_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS10.01",
+      "phase_id": "NS10",
+      "title": "Ingressar evento com deduplicação e watermark contíguo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.05",
+        "NS08.05",
+        "NS09.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "implementation_steps": [
+        "Validar StreamKey, bytes/hash e owner/canal.",
+        "Em T3 comparar duplicatas e persistir inéditos, avançando apenas trecho contíguo.",
+        "Emitir ACK após commit, não após enqueue/UI."
+      ],
+      "forbidden_shortcut": "Não tratar ACK de UI como durabilidade nem confirmar além de gap.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-10-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-10-01"
+      ],
+      "acceptance": "Watermark só chega a1 até seq2; duplicata legítima não duplica projeção; conflito de hash é explícito.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns10.py::test_ns10_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS10.02",
+      "phase_id": "NS10",
+      "title": "Separar leitura finita de follower contínuo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS10.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "implementation_steps": [
+        "Core history adapter lê snapshot finito de eventos pelo Journal port.",
+        "Follower contínuo tem task própria, não é usado para aguardar lote cheio.",
+        "Batches 0/1/127/128/129 retornam conforme disponível e respeitam bytes."
+      ],
+      "forbidden_shortcut": "Não esperar 128 eventos para publicar um único registro.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-10-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-10-02"
+      ],
+      "acceptance": "Página termina; seq1 é enviada prontamente; próximo snapshot vazio não prende o request.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns10.py::test_ns10_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS10.03",
+      "phase_id": "NS10",
+      "title": "Usar target correto e aplicar ACK local uma vez",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS10.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "implementation_steps": [
+        "Bridge fixa target do batch e aceita só ACK do stream/canal até sequência escrita.",
+        "Manter remote_acked/core_applied separados.",
+        "Igualdade satisfaz replay correspondente, não lote novo."
+      ],
+      "forbidden_shortcut": "Não limpar ACK1 nem usar current>0 para confirmar batch2.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-10-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-10-03"
+      ],
+      "acceptance": "Replay1 conclui; batch2 aguarda; obrigação de aplicar ACK converge sem novo send_turn.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns10.py::test_ns10_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS10.04",
+      "phase_id": "NS10",
+      "title": "Recuperar publicador sem evento novo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS10.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "implementation_steps": [
+        "Registro de stream possui task/cursores/retry timer e função ensure_publisher.",
+        "Falha transitória de read/send/ack preserva obrigação; reconnect assegura task viva e acorda stream.",
+        "Drain cancela timers de observers sem reativar após fechamento."
+      ],
+      "forbidden_shortcut": "Não sinalizar Event de task morta como se fosse recuperação.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-10-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-10-04"
+      ],
+      "acceptance": "Task é retomada uma vez, seq1 publicada/confirmada, payloads offline não crescem ilimitadamente em RAM.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns10.py::test_ns10_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS10.05",
+      "phase_id": "NS10",
+      "title": "Preservar projeções canônicas e retenção",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS10.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_ingress.py",
+        "execution_event_ingress",
+        "execution_event_watermarks",
+        "dashboard SSE",
+        "Core Journal events/ack"
+      ],
+      "implementation_steps": [
+        "Mapear lifecycle/turn/tool/approval/input/error sem rotular tudo como tool.",
+        "Preservar native_type e last_projection offset.",
+        "Compactar somente dados elegíveis/ACK aplicados; gap irrecuperável explícito; terminal não perdido em flood."
+      ],
+      "forbidden_shortcut": "Não inventar reasoning interno ausente nem usar final de turno como handoff_complete.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-10-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-10-05",
+        "TN-21",
+        "TN-22",
+        "TN-23",
+        "TN-24",
+        "TN-25"
+      ],
+      "acceptance": "Estado idempotente e auditável; ACK não depende UI; handoff/causalidade continuam íntegros.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns10.py::test_ns10_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS11.01",
+      "phase_id": "NS11",
+      "title": "Persistir proposta operacional separada de exibição",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS06.05",
+        "NS07.05",
+        "NS09.05",
+        "NS10.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "implementation_steps": [
+        "Validar evento Core e scope completo; armazenar immutable operational_request e hash original.",
+        "Produzir display_projection redigida separada.",
+        "Canonical request ID referencia native request/turn sem converter tipos ou colidir entre sessões."
+      ],
+      "forbidden_shortcut": "Não substituir hashes hexadecimais por redacted nem recalcular o request recebido.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-11-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-11-01"
+      ],
+      "acceptance": "Hash/JSON operacional byte-semanticamente preservados; UI não vaza secrets; dois namespaces não se sobrescrevem.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns11.py::test_ns11_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS11.02",
+      "phase_id": "NS11",
+      "title": "Autorizar operador e aplicar CAS antes do efeito",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS11.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "implementation_steps": [
+        "Validar principal/proof de operador, subject, pedido/hash/revision/expiry e decisão.",
+        "Em T4 confirmar decisão e criar operation/outbox única.",
+        "Chave do agente que transporta solicitação não se autoaprova."
+      ],
+      "forbidden_shortcut": "Não chamar Core antes do Server nem aceitar applied=true sem decisão correlacionada.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-11-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-11-02"
+      ],
+      "acceptance": "Sem autoridade zero operação nativa; uma decisão canônica vence; perdedora recebe conflito consultável.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns11.py::test_ns11_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS11.03",
+      "phase_id": "NS11",
+      "title": "Despachar aplicação única e traduzir pelo contrato",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS11.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "implementation_steps": [
+        "Mapear approve/deny confirmado para accept/decline/cancel conforme pedido.",
+        "Usar operation.submit com decision_id e proposta íntegra; notification approval.decision não aplica.",
+        "NativeApprovalOperation usa argumentos nomeados e SessionKey validada."
+      ],
+      "forbidden_shortcut": "Não deixar CLI aplicar nativo depois do POST em paralelo com dispatcher.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-11-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-11-03"
+      ],
+      "acceptance": "Uma aplicação por operation_id; request/turn/scope corretos; accept/decline legítimos passam e pedido velho não afeta turno novo.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns11.py::test_ns11_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS11.04",
+      "phase_id": "NS11",
+      "title": "Conservar producers, recibos e incerteza de decisão",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS11.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "implementation_steps": [
+        "DecisionAttempt guarda token, client intent, producer e resultado canônico/nativo.",
+        "Cancelamento do waiter só encerra espera; resultados ficam consultáveis.",
+        "Depois de confirmação, CoreError seguro vira native_refused e efeito possível vira unknown, nunca novo pending."
+      ],
+      "forbidden_shortcut": "Não cunhar op_appr_request_id sem namespace/digest nem repetir POST por timeout.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-11-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-11-04"
+      ],
+      "acceptance": "Producer permanece ou resultado é classificado; mesma decisão converge; nenhuma execução duplicada ou estado pending fictício.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns11.py::test_ns11_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS11.05",
+      "phase_id": "NS11",
+      "title": "Tratar input sensível e administrativo explicitamente",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS11.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_decisions.py",
+        "application/approvals.py",
+        "execution_decisions",
+        "NativeApprovalInput.tsx",
+        "Core NativeApprovalOperation"
+      ],
+      "implementation_steps": [
+        "Tipo nativo versus administrativo vem do pedido validado.",
+        "Guardar digest/ref e limitar raw response; implementar AUTHORIZED_INPUT_UNAVAILABLE se crash perder dado não persistido.",
+        "Negativa temporalmente permitida conserva action/scope; resposta expirada positiva não passa."
+      ],
+      "forbidden_shortcut": "Não converter sessão nativa ausente em administrativa nem logar input bruto.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-11-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-11-05"
+      ],
+      "acceptance": "Limite de recuperação declarado; nenhuma resposta inventada ou desvio de namespace; consultar decisão não revela conteúdo sensível.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns11.py::test_ns11_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS12.01",
+      "phase_id": "NS12",
+      "title": "Unificar acesso MCP e native-actions no domínio",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS03.05",
+        "NS06.05",
+        "NS07.05",
+        "NS11.05"
+      ],
+      "files_or_symbols": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "implementation_steps": [
+        "Adaptar capability/principal para casos de uso existentes de contexto/inbox/claim/complete.",
+        "Bridge Pi aceita ações/payloads tipados limitados e ids idempotentes.",
+        "Mesmo claim lógico é compartilhado com pull MCP."
+      ],
+      "forbidden_shortcut": "Não criar inbox ou motor de handoff no Core/Connector.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-12-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-12-01"
+      ],
+      "acceptance": "Um claimant lógico; repeat é idempotente; policy/delivery budget preservados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns12.py::test_ns12_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS12.02",
+      "phase_id": "NS12",
+      "title": "Aplicar autorização da sessão ao MCP HTTP",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS12.01"
+      ],
+      "files_or_symbols": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "implementation_steps": [
+        "Resolver capability de sessão no guard existente sem perder AgentKeyAuthService para chaves canônicas.",
+        "Restringir cada tool por grant/sessão/workspace/revocation.",
+        "Tools-only mantém sua política separada."
+      ],
+      "forbidden_shortcut": "Não permitir tools/call como permissão universal.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-12-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-12-02"
+      ],
+      "acceptance": "Mesmo agente, scopes diferentes; managed não contorna lease; tools-only não depende do WSS.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns12.py::test_ns12_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS12.03",
+      "phase_id": "NS12",
+      "title": "Preservar causalidade e resultado governado",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS12.02"
+      ],
+      "files_or_symbols": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "implementation_steps": [
+        "Ligar receipt/eventos a delivery/root/parent/correlation sem regenerar budgets.",
+        "Fim de turno atualiza execução, não complete de handoff.",
+        "Reply routing e evidence passam pelo caso de uso existente."
+      ],
+      "forbidden_shortcut": "Não enviar resultado para primeiro agente ou restaurar hop_count após reconnect.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-12-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-12-03"
+      ],
+      "acceptance": "Sem complete automático nem aumento do orçamento causal; destinatário e evidência preservados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns12.py::test_ns12_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS12.04",
+      "phase_id": "NS12",
+      "title": "Publicar capacidades apenas demonstradas",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS12.03"
+      ],
+      "files_or_symbols": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "implementation_steps": [
+        "Interseccionar implementação Core, versão/build, SO, perfil e política; separar conversation de execute_work.",
+        "execute_work exige caminho MCP HTTP/native-actions comprovado.",
+        "Attach/external só quando Core qualificado; espelhamento não executa."
+      ],
+      "forbidden_shortcut": "Não inferir managed_work pelo nome do adapter.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-12-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-12-04"
+      ],
+      "acceptance": "Primeiro não recebe execute_work; segundo segue grant/claim; nenhum false READY por metadado estático.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns12.py::test_ns12_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS12.05",
+      "phase_id": "NS12",
+      "title": "Manter superfície MCP compacta",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS12.04"
+      ],
+      "files_or_symbols": [
+        "/mcp guards",
+        "application/handoff*",
+        "application/runtime_delivery.py",
+        "application/runtime_causality.py",
+        "/v1/runtime/native-actions"
+      ],
+      "implementation_steps": [
+        "Reusar ferramentas por intenção e recursos de referência; não gerar tool por executor/adapter.",
+        "Medir esquema/tokens antes/depois com muitos hosts.",
+        "Atualizar instructions para workspace handles/remoto sem forçar CLI manual no agente."
+      ],
+      "forbidden_shortcut": "Não exigir nova coleção de tools proporcional aos hosts.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-12-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-12-05",
+        "TN-26",
+        "TN-27",
+        "TN-28"
+      ],
+      "acceptance": "Número de ferramentas não cresce por host; orientação compatível com identidade/workspace e sem stdio.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns12.py::test_ns12_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS13.01",
+      "phase_id": "NS13",
+      "title": "Implementar seleção executor→instalação→workspace",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS04.05",
+        "NS05.05",
+        "NS06.05",
+        "NS11.05"
+      ],
+      "files_or_symbols": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "implementation_steps": [
+        "Consumir runtime-options da API e renderizar rótulos/razões do Core.",
+        "Armazenar executor/ref/revisão da escolha, nunca índice.",
+        "Refresh/revoke entre seleção e apply invalida formulário e mostra ação."
+      ],
+      "forbidden_shortcut": "Não manter enum autoritativo em TS ou escolher primeiro candidato após reorder.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-13-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-13-01"
+      ],
+      "acceptance": "UI mantém alvo correto quando válido e recusa stale; fatos remotos não são reavaliados pelo OS do Server.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns13.py::test_ns13_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS13.02",
+      "phase_id": "NS13",
+      "title": "Substituir configuração técnica por consentimento agregado",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS13.01"
+      ],
+      "files_or_symbols": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "implementation_steps": [
+        "Separar tools-only de managed e futuro attach.",
+        "Ocultar IDs/profile/JSON/TTL de connection-key no caminho comum.",
+        "Exibir resumo de agente/host/projeto/escopo e aprovação real uma vez."
+      ],
+      "forbidden_shortcut": "Não eliminar política para reduzir clicks nem instalar Connector no Server local.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-13-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-13-02"
+      ],
+      "acceptance": "Segundo uso reutiliza sem chave/JSON manual; local não exige Connector; remoto não pede provider secret ao Server.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns13.py::test_ns13_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS13.03",
+      "phase_id": "NS13",
+      "title": "Implementar acompanhamento por IDs e estados honestos",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS13.02"
+      ],
+      "files_or_symbols": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "implementation_steps": [
+        "Start/interrupt/stop/decision devolvem operação/decision_id e consulta.",
+        "Exibir canonical acceptance separado de native stage e unknown.",
+        "Timeout mantém cartão consultável, sem auto-retry de efeito."
+      ],
+      "forbidden_shortcut": "Não mostrar sucesso porque o POST recebeu 202.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-13-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-13-03"
+      ],
+      "acceptance": "Mesmo ID reaparece e estado converge sem segundo start; UI offline não altera ACK durável.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns13.py::test_ns13_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS13.04",
+      "phase_id": "NS13",
+      "title": "Concluir CLI humana/headless e logs observadores",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS13.03"
+      ],
+      "files_or_symbols": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "implementation_steps": [
+        "Comandos runtime usam mesmos casos de uso e `--json`.",
+        "Cliente grava client_intent_id antes de mutações e respeita non-interactive.",
+        "Ctrl+C no follower não encerra supervisor; daemon/serve têm namespaces próprios."
+      ],
+      "forbidden_shortcut": "Não pedir segredo por argv ou converter headless em autoapprove.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-13-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-13-04"
+      ],
+      "acceptance": "Erros estáveis e ação corretiva; identidade correta; follower termina sem matar runtime.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns13.py::test_ns13_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS13.05",
+      "phase_id": "NS13",
+      "title": "Expor diagnóstico e aprovações sem vazar dados",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS13.04"
+      ],
+      "files_or_symbols": [
+        "frontend/src/components/AgentConnectionsPanel.tsx",
+        "AgentEndpointSetup.tsx",
+        "NativeApprovalInput.tsx",
+        "frontend/src/api.ts",
+        "adapters/inbound/cli/main.py"
+      ],
+      "implementation_steps": [
+        "Doctor/status separa API, controle, lane, inventário, runtime, provider, ferramenta e storage.",
+        "Decisão mostra autoridade e resultado canônico/nativo; preservar operacional íntegro fora da exibição.",
+        "Conferir acessibilidade/locale/paths com espaços e redaction."
+      ],
+      "forbidden_shortcut": "Não enviar raw operational proposal ou chave para qualquer observador.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-13-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-13-05",
+        "TN-32",
+        "TN-33",
+        "TN-34"
+      ],
+      "acceptance": "Scopes/reasons úteis sem secrets; canal de apresentação não torna agente seu próprio aprovador.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns13.py::test_ns13_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS14.01",
+      "phase_id": "NS14",
+      "title": "Recuperar histórico antes de admitir após restart",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS07.05",
+        "NS08.05",
+        "NS09.05",
+        "NS10.05",
+        "NS11.05"
+      ],
+      "files_or_symbols": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "implementation_steps": [
+        "Abrir journal/ledger independentemente de provider e consultar claims/recibos/fences paginados.",
+        "Reconstituir obrigações e consultar execuções incertas.",
+        "Refresh do inventário e reconcile precedem novo efeito."
+      ],
+      "forbidden_shortcut": "Não retornar vazio por journal_if_open=None nem exigir binário para ler receipt.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-14-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-14-01"
+      ],
+      "acceptance": "Histórico responde; ownership desconhecido permanece; nenhum novo spawn para recuperar dados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS14.02",
+      "phase_id": "NS14",
+      "title": "Invalidar autoridade em todas as superfícies",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS14.01"
+      ],
+      "files_or_symbols": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "implementation_steps": [
+        "Rotação/revogação altera epochs e fecha caches/lanes/capabilities online.",
+        "Manter hold conservador em commit incerto e comparar linha completa na recuperação.",
+        "Processo local/remote respeita prazo sem importar permissões da linha."
+      ],
+      "forbidden_shortcut": "Não limpar hold por timeout ou Future.done.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-14-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-14-02"
+      ],
+      "acceptance": "Contexto antigo zero efeito; rollback comprovado recupera disponibilidade; verdadeiramente unknown continua restrito.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS14.03",
+      "phase_id": "NS14",
+      "title": "Implementar shutdown DRAINING_PENDING com orçamento único",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS14.02"
+      ],
+      "files_or_symbols": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "implementation_steps": [
+        "Fechar novas admissões e agendar Core.shutdown em paralelo com controles urgentes.",
+        "Ao esgotar prazo, retornar relatório por recurso e conservar loop/IPC de recuperação se unknown.",
+        "Stores só fecham depois de producers/obrigações resolvidos ou transferência qualificada explícita."
+      ],
+      "forbidden_shortcut": "Não sair com code1 supondo que supervisor segue vivo; não serializar N vezes 50 s.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-14-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-14-03"
+      ],
+      "acceptance": "Prazo público limitado; ambos relatados; força não espera storage; segunda recuperação alcança mesmos owners sem duplicação.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS14.04",
+      "phase_id": "NS14",
+      "title": "Aplicar quotas e cache limitados com medições",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS14.03"
+      ],
+      "files_or_symbols": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "implementation_steps": [
+        "Implementar limites de itens/bytes, fair scheduling e reserva crítica.",
+        "Cache positivo limitado/TTL com invalidação; métricas sem cardinalidade por agente.",
+        "Ensaio sintético com 100 mil identidades e churn."
+      ],
+      "forbidden_shortcut": "Não usar número de agentes como promessa de concorrência física.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-14-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-14-04"
+      ],
+      "acceptance": "Sem full enumeration por onboarding; memória bounded; controles e outro agente progridem; resultados e hardware registrados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS14.05",
+      "phase_id": "NS14",
+      "title": "Testar falhas de processo e limites de plataforma",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS14.04"
+      ],
+      "files_or_symbols": [
+        "application/execution_recovery.py",
+        "bootstrap/runtime_host.py",
+        "execution_leases.py",
+        "auth cache",
+        "execution history"
+      ],
+      "implementation_steps": [
+        "Usar processo inofensivo possuído em SO qualificado para shutdown/crash do owner.",
+        "Validar birth/guardian/árvore e retain unknown quando falta prova.",
+        "Separar os testes de provider e de máquina remota da simulação."
+      ],
+      "forbidden_shortcut": "Não remover require_containment para obter PASS.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-14-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-14-05",
+        "TN-35",
+        "TN-36",
+        "TN-37"
+      ],
+      "acceptance": "Apenas ownership comprovado é controlado; backend ausente é BLOCKED/NOT_RUN, não PASS universal.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS15.01",
+      "phase_id": "NS15",
+      "title": "Executar M0–M3 com preservação e retomada",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS01.05",
+        "NS02.05",
+        "NS07.05",
+        "NS12.05",
+        "NS13.05",
+        "NS14.05"
+      ],
+      "files_or_symbols": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "implementation_steps": [
+        "Gerar backup consistente e conteagens/digests.",
+        "Backfill por batches idempotentes com migration_map e tradução legada fechada.",
+        "Preservar keys/IDs/políticas e marcar candidato incompleto para rediscovery."
+      ],
+      "forbidden_shortcut": "Não apagar coluna/linha para caber no schema novo.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-15-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-15-01"
+      ],
+      "acceptance": "Mesmos IDs/negações/conteagens; batches convergem; nenhuma migração abre processo.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS15.02",
+      "phase_id": "NS15",
+      "title": "Drenar owner antigo antes de trocar execução",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS15.01"
+      ],
+      "files_or_symbols": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "implementation_steps": [
+        "Bloquear novos efeitos no supervisor legado e conservar queries.",
+        "Encerrar/observar recursos pelo owner que realmente os possui.",
+        "Só habilitar Core após resolução ou bloqueio explícito por unknown; nunca adotar PID."
+      ],
+      "forbidden_shortcut": "Não transferir pipes/handle por copiar estado.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-15-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-15-02"
+      ],
+      "acceptance": "Ativa encerra pelo mecanismo correto; unknown não duplica; rollback não reativa stdio.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS15.03",
+      "phase_id": "NS15",
+      "title": "Remover loaders/codecs duplicados depois de paridade",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS15.02"
+      ],
+      "files_or_symbols": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "implementation_steps": [
+        "Substituir usos do registry e classes nativas pelo Core em todas as superfícies.",
+        "Remover parsers/spawn antigos e wrappers transitórios já sem consumidores.",
+        "Manter migração de IDs legados isolada, sem catálogo paralelo no hot path."
+      ],
+      "forbidden_shortcut": "Não remover domínio/planner/handoff junto com a física.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-15-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-15-03"
+      ],
+      "acceptance": "Runtime físico só existe no Core; domínio e HTTP MCP preservados; nenhum import da aplicação Connector.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS15.04",
+      "phase_id": "NS15",
+      "title": "Migrar configuração e documentar rollback seguro",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS15.03"
+      ],
+      "files_or_symbols": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "implementation_steps": [
+        "Layout novo de HOME/config usa owner digest e marker verificado.",
+        "Sessão ativa mantém caminho original até resolução.",
+        "Runbook diferencia rollback pré-efeito, drain posterior e restore explícito."
+      ],
+      "forbidden_shortcut": "Não mover pasta ativa nem excluir journal para voltar versão.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-15-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-15-04"
+      ],
+      "acceptance": "Config alheia intacta; rollback recusado quando inseguro; histórico e operações unknown preservados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS15.05",
+      "phase_id": "NS15",
+      "title": "Atualizar documentação e instruções operacionais",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS15.04"
+      ],
+      "files_or_symbols": [
+        "migrations/",
+        "execution_migration_map",
+        "adapters/outbound/harness/*",
+        "application/adapter_registry.py",
+        "runbooks"
+      ],
+      "implementation_steps": [
+        "Remover rituais/stdin/fachada e orientar HTTP direto + Core local.",
+        "Documentar estados/capacidades/limites de suporte e comandos reais.",
+        "Declarar protocolos/versionamento e proofs que faltam, sem herdá-los de mock."
+      ],
+      "forbidden_shortcut": "Não anunciar quatro adapters operacionais porque catálogo tem quatro entradas.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-15-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-15-05",
+        "TN-38",
+        "TN-39",
+        "TN-40"
+      ],
+      "acceptance": "Nenhum comando fictício apresentado como existente; docs não contradizem gate/qualificação e negações.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS16.01",
+      "phase_id": "NS16",
+      "title": "Construir artefatos imutáveis e contratos instalados",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS09.05",
+        "NS10.05",
+        "NS11.05",
+        "NS12.05",
+        "NS13.05",
+        "NS14.05",
+        "NS15.05"
+      ],
+      "files_or_symbols": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "implementation_steps": [
+        "Build wheel/sdist em cópia limpa; fixar Core por versão/hash e revisão R4.",
+        "Instalar sem clones irmãos nem app Connector no modo local.",
+        "Testar import -I, assets/UI, CLI, catálogo, disponibilidade e conformance."
+      ],
+      "forbidden_shortcut": "Não usar último wheel por ordem lexical ou main no runtime.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-16-01 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-16-01"
+      ],
+      "acceptance": "Hashes/versões registrados; serve-lite funcional sem torch novo; nenhum schema é obtido remotamente em execução.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns16.py::test_ns16_01 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS16.02",
+      "phase_id": "NS16",
+      "title": "Executar conjunto completo de regressões sem inflar números",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS16.01"
+      ],
+      "files_or_symbols": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "implementation_steps": [
+        "Rodar suíte Nexus e testes R4; incorporar causas CN1–CN5 relevantes nas fronteiras.",
+        "Comparar falhas preexistentes/ambiente, não somar subconjunto como teste novo.",
+        "Preservar controles positivos e registrar adaptação de fixture causal."
+      ],
+      "forbidden_shortcut": "Não xfail bugs ou fazer revisor parecer autor de XML recebido.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-16-02 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-16-02"
+      ],
+      "acceptance": "Resultados por camada/node/versão; nenhum PASS sem execução; falha externa distinguida de defeito funcional.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns16.py::test_ns16_02 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS16.03",
+      "phase_id": "NS16",
+      "title": "Qualificar ciclo local sem Connector instalado",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS16.02"
+      ],
+      "files_or_symbols": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "implementation_steps": [
+        "Nexus+Core no host com um harness autorizado e qualificado.",
+        "UI/CLI usa catálogo/realização, abre, envia tarefa inofensiva, recebe eventos, decide, interrompe e para.",
+        "MCP HTTP direto opera com mesma identidade e capability limitada."
+      ],
+      "forbidden_shortcut": "Não usar peer fake como prova de provider real.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-16-03 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-16-03"
+      ],
+      "acceptance": "Mesmo adapter Core; nenhum Connector/WSS local obrigatório; governança e shutdown demonstrados.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns16.py::test_ns16_03 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS16.04",
+      "phase_id": "NS16",
+      "title": "Qualificar ciclo remoto heterogêneo",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS16.03"
+      ],
+      "files_or_symbols": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "implementation_steps": [
+        "Instalar Server A sem binários/paths/providers de B; Connector B com mesmo Core e revisão.",
+        "Configurar agente existente, publicar inventário, selecionar instalação e despachar runtime.open do Server.",
+        "Exercitar tarefa inofensiva, evento/ACK, approval/input, interrupt/close, partições/restart e recibo perdido; depois repetir em outro host delimitado."
+      ],
+      "forbidden_shortcut": "Não declarar G2 por localhost ou por testar Core sem aplicativos.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-16-04 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-16-04"
+      ],
+      "acceptance": "Nenhum filesystem remoto resolvido em A, nenhuma execução duplicada, mesmos IDs; limitações de provider/SO explícitas.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns16.py::test_ns16_04 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    },
+    {
+      "id": "NS16.05",
+      "phase_id": "NS16",
+      "title": "Emitir decisão por escopo e handoff final",
+      "owner": "Server",
+      "status": "PENDING",
+      "dependencies": [
+        "NS16.04"
+      ],
+      "files_or_symbols": [
+        "CI",
+        "tests/execution_r4/",
+        "wheels Nexus/Core/Connector",
+        "matriz TN/J",
+        "release report"
+      ],
+      "implementation_steps": [
+        "Gerar relatório com G0/G1/G2/G3 e capacidades realmente demonstradas.",
+        "Anexar artefatos, hashes, migrations, testes, owners e bloqueios; atualizar crosswalk.",
+        "Não publicar release/push automaticamente; aprovação de entrega não amplia permissão de agentes."
+      ],
+      "forbidden_shortcut": "Não marcar integralmente DONE enquanto remote open/approvals/estado incerto estiverem sem implementação ou evidência.",
+      "deliverables": [
+        "Código/contrato correspondente à tarefa, com diff rastreado.",
+        "Caso TR4-16-05 e evidência na camada indicada."
+      ],
+      "test_ids": [
+        "TR4-16-05",
+        "TN-41",
+        "TN-42",
+        "TN-43",
+        "TN-44",
+        "TN-45",
+        "J01",
+        "J02",
+        "J03",
+        "J04",
+        "J05",
+        "J06",
+        "J07",
+        "J08",
+        "J09",
+        "J10",
+        "J11",
+        "J12",
+        "J13",
+        "J14",
+        "J15",
+        "J16",
+        "J17",
+        "J18",
+        "J19",
+        "J20",
+        "J21",
+        "J22",
+        "J23",
+        "J24",
+        "J25",
+        "J26",
+        "J27",
+        "J28",
+        "J29",
+        "J30",
+        "J31",
+        "J32",
+        "J33",
+        "J34"
+      ],
+      "acceptance": "Decisão proporcional, sem ambiguidades; outro agente consegue instalar artefato e repetir campanha sem inferir campos/rotas.",
+      "evidence": null,
+      "test_command_proposed": "python -m pytest tests/execution_r4/test_ns16.py::test_ns16_05 -q",
+      "command_status": "TO_BE_IMPLEMENTED; o teste nomeado deve ser criado pelo executor"
+    }
+  ]
+}

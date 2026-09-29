@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-29",
+  "task": "plan_unification_only",
+  "products_tested_in_this_turn": false,
+  "repositories_modified": false,
+  "server": {
+    "repository": "OktoLabsAI/okto-nexus",
+    "requested_branch": "feature/0.2.0",
+    "resolved_branch": "feature/v0.2.0",
+    "sha": "7ed52c22865a92c3768bc32508ed9e35dc5efdc3",
+    "package_version": "0.2.0"
+  },
+  "core": {
+    "repository": "OktoLabsAI/okto-nexus-connector-core",
+    "branch": "main",
+    "sha": "1560d314ed2b478515dcbbe533436d7d0b027b09",
+    "package_version": "0.2.10.dev0",
+    "wire_revision": "nxl-1-agent-centric-http-only-2026-09-25-r3",
+    "wire_status": "development-partial",
+    "catalog_format": 1,
+    "availability_format": 2
+  },
+  "connector": {
+    "repository": "OktoLabsAI/okto-nexus-connector",
+    "branch": "main",
+    "sha": "87b8fd2e3e403cb6a70a1ce265618e29c7a6b86c",
+    "package_version": "0.4.0.dev0",
+    "latest_correction_plan": "CN5",
+    "cn5_completion_verified": false
+  },
+  "target": {
+    "plan_revision": "nexus-server-unified-r4-2026-09-29",
+    "wire_revision": "nxl-1-agent-centric-http-only-2026-09-29-r4",
+    "management_revision": "nexus-connections-2026-09-29-r4",
+    "state": "PROPOSED_NOT_IMPLEMENTED"
+  },
+  "method": "selected static source inspection via live GitHub connector, user files and previous audit evidence; no whole-repo or product-test claims"
+}
