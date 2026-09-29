@@ -50,12 +50,19 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
     with factory.unit_of_work() as uow:
         conn = uow.connection
         existing = conn.execute(
-            "SELECT publication_sequence,inventory_revision FROM execution_inventory_current "
-            "WHERE server_id=? AND executor_id=?",
+            "SELECT c.publication_sequence,c.inventory_revision,"
+            "s.producer_instance_id FROM execution_inventory_current c "
+            "JOIN execution_inventory_snapshots s ON s.server_id=c.server_id "
+            "AND s.executor_id=c.executor_id AND "
+            "s.publication_sequence=c.publication_sequence "
+            "WHERE c.server_id=? AND c.executor_id=?",
             (principal.server_id, principal.executor_id),
         ).fetchone()
         if existing is not None:
-            old_sequence, old_revision = existing
+            old_sequence, old_revision = existing[:2]
+            if existing["producer_instance_id"] != producer_instance_id:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                                      "A different producer requires channel reconciliation.", {})
             if sequence < old_sequence or (sequence == old_sequence and revision != old_revision):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "Stale or conflicting inventory sequence.", {})

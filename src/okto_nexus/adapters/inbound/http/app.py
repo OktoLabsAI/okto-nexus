@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import re
 import time
 from pathlib import Path
 from typing import Any
@@ -26,6 +27,8 @@ from urllib.parse import urlsplit
 
 import anyio.to_thread
 from fastapi import FastAPI, Request, Response
+from fastapi.exception_handlers import request_validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -206,6 +209,11 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
         if path == "/api/v1/connections/open":
             if request.query_params.get("api_key") or request.headers.get("x-api-key"):
                 return err(401, "AUTH_FAILED", "Use only the connection bearer credential.")
+            return await call_next(request)
+        if (request.method == "PUT" and re.fullmatch(
+                r"/v1/runtime/executors/[^/]{1,160}/inventory", path)):
+            # This route has its own ticket audience and scope check. A
+            # canonical agent key does not substitute for that ticket.
             return await call_next(request)
         is_mcp = request.url.path.startswith("/mcp")
         bearer = extract_bearer(request)
@@ -552,9 +560,25 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # Safety net: NO unhandled exception may leave the API as a plain-text
     # 500 ("Internal Server Error" breaks every JSON client). Everything
     # becomes the documented envelope.
+    @app.exception_handler(RequestValidationError)
+    async def validation_exception_handler(request, exc: RequestValidationError):
+        if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            return v1_err(400, "VALIDATION_ERROR",
+                          "The request does not match the R4 contract.",
+                          stage="validation")
+        return await request_validation_exception_handler(request, exc)
+
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request, exc: Exception):
         if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
+            if isinstance(exc, OktoNexusError):
+                status = {"VALIDATION_ERROR": 400, "CONFLICT": 409,
+                          "PERMISSION_DENIED": 403, "NOT_FOUND": 404}.get(
+                              exc.code, 500)
+                return v1_err(status, exc.code if status < 500 else "INTERNAL",
+                              exc.message if status < 500 else
+                              "An internal server error occurred.",
+                              stage="admission" if status < 500 else "internal")
             return v1_err(500, "INTERNAL", "An internal server error occurred.",
                           stage="internal")
         return JSONResponse(
@@ -630,8 +654,10 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
 
     from .connections import build_router as connection_router
     from .connections_v1 import build_router as connection_v1_router
+    from .runtime_v1 import build_router as runtime_v1_router
     app.include_router(connection_router(), prefix="/api/v1")
     app.include_router(connection_v1_router(), prefix="/v1")
+    app.include_router(runtime_v1_router(), prefix="/v1")
     app.include_router(routes.build_router(), prefix="/api/v1")
     app.include_router(stream.build_router(), prefix="/api/v1")
     app.mount("/mcp", mcp_app)

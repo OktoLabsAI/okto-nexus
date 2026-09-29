@@ -5,14 +5,30 @@ from __future__ import annotations
 import anyio
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated
 
 from ....domain.permissions import PERMISSION_REGISTRY, PermissionSet
 from ....errors import OktoNexusError
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
+from ...outbound.sqlite.execution_identity import register_remote_executor
+from ...outbound.sqlite.execution_tickets import issue_execution_ticket
 from ...outbound.execution.core_inventory import (
     MANAGEMENT_REVISION, protocol_info,
 )
 from .identity_ctx import get_authenticated_agent
+
+
+_Id = Annotated[str, Field(min_length=1, max_length=160, strict=True)]
+
+
+class RegisterExecutorRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    client_intent_id: _Id
+    connector_id: _Id
+    label: Annotated[str, Field(max_length=120, strict=True)]
+    control_capabilities: Annotated[list[_Id], Field(max_length=64)]
 
 
 def build_router() -> APIRouter:
@@ -75,5 +91,45 @@ def build_router() -> APIRouter:
                 "credential_epoch": revisions.credential_epoch,
             },
         })
+
+    @router.post("/connections/executors:register")
+    async def register_executor(request: Request,
+                                body: RegisterExecutorRequest) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return JSONResponse({"error": {"code": "AUTH_FAILED",
+                                        "stage": "authentication",
+                                        "message": "Authentication is required.",
+                                        "possible_effect": False,
+                                        "retry_safe": False,
+                                        "operation_id": None, "action": None}},
+                                status_code=401)
+        factory = request.app.state.deps.connection_factory
+
+        def _register():
+            registration = register_remote_executor(
+                factory, actor_agent_id=agent.agent_id,
+                connector_id=body.connector_id,
+                client_intent_id=body.client_intent_id, label=body.label,
+                # Advertised capabilities are included in the idempotency
+                # digest but never authorize an effect by themselves.
+                control_capabilities=tuple(body.control_capabilities),
+            )
+            ticket = issue_execution_ticket(
+                factory, server_id=registration.server_id,
+                executor_id=registration.executor_id,
+                agent_id=agent.agent_id,
+            )
+            return registration, ticket
+
+        registration, ticket = await anyio.to_thread.run_sync(_register)
+        return JSONResponse({
+            "server_id": registration.server_id,
+            "executor_id": registration.executor_id,
+            "connector_id": registration.connector_id,
+            "state": "AWAITING_INVENTORY",
+            "bootstrap_ticket": ticket.public_dict(),
+        }, status_code=200 if registration.reused else 201,
+           headers={"Cache-Control": "no-store"})
 
     return router

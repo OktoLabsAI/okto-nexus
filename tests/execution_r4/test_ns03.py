@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from datetime import datetime, timedelta, timezone
 
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
@@ -11,7 +12,14 @@ import pytest
 
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.inbound.http import connections_v1
+from okto_nexus.adapters.outbound.sqlite.execution_identity import (
+    ensure_execution_installation, register_remote_executor,
+)
+from okto_nexus.adapters.outbound.sqlite.execution_tickets import (
+    issue_execution_ticket, verify_execution_ticket,
+)
 from okto_nexus.bootstrap.dependencies import bootstrap
+from okto_nexus.errors import OktoNexusError
 
 
 def test_ns03_01(tmp_path):
@@ -115,3 +123,142 @@ def test_ns03_01(tmp_path):
         assert failed.json()["error"]["code"] == "INTERNAL"
         assert "ok" not in failed.json()
         assert "sensitive internal detail" not in failed.text
+
+
+def test_ns03_03(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    factory = deps.connection_factory
+    server_id = ensure_execution_installation(factory).server_id
+    app = build_app(deps)
+    with factory.unit_of_work() as uow:
+        for agent_id in ("agent-a", "agent-b"):
+            uow.connection.execute("INSERT INTO agents(agent_id,created_at) "
+                                   "VALUES (?,?)",
+                                   (agent_id, "2026-09-29T00:00:00Z"))
+    with factory.unit_of_work() as uow:
+        app.state.auth.issue_key(uow, agent_id="agent-a")
+        app.state.auth.issue_key(uow, agent_id="agent-b")
+    executor_a = register_remote_executor(
+        factory, actor_agent_id="agent-a", connector_id="connector-a",
+        client_intent_id="register-a",
+    ).executor_id
+    executor_b = register_remote_executor(
+        factory, actor_agent_id="agent-b", connector_id="connector-b",
+        client_intent_id="register-b",
+    ).executor_id
+    now = datetime(2026, 9, 29, tzinfo=timezone.utc)
+    issued = issue_execution_ticket(
+        factory, server_id=server_id, executor_id=executor_a,
+        agent_id="agent-a", now=now, expires_in=60,
+    )
+    assert issued.audience == "nexus-executor-control"
+    assert set(issued.scopes) == {"link:connect", "inventory:publish"}
+    assert verify_execution_ticket(
+        factory, ticket=issued.ticket, server_id=server_id,
+        executor_id=executor_a, scope="inventory:publish", now=now,
+    ).agent_id == "agent-a"
+    for target, scope, instant in (
+        (executor_b, "inventory:publish", now),
+        (executor_a, "receipt:publish", now),
+        (executor_a, "inventory:publish", now + timedelta(seconds=60)),
+    ):
+        with pytest.raises(OktoNexusError):
+            verify_execution_ticket(
+                factory, ticket=issued.ticket, server_id=server_id,
+                executor_id=target, scope=scope, now=instant,
+            )
+    with pytest.raises(OktoNexusError):
+        issue_execution_ticket(
+            factory, server_id=server_id, executor_id=executor_b,
+            agent_id="agent-a", now=now,
+        )
+    with factory.unit_of_work() as uow:
+        app.state.auth.issue_key(uow, agent_id="agent-a")
+    with pytest.raises(OktoNexusError):
+        verify_execution_ticket(
+            factory, ticket=issued.ticket, server_id=server_id,
+            executor_id=executor_a, scope="inventory:publish", now=now,
+        )
+    assert verify_execution_ticket(
+        factory, ticket=issue_execution_ticket(
+            factory, server_id=server_id, executor_id=executor_b,
+            agent_id="agent-b", now=now,
+        ).ticket, server_id=server_id, executor_id=executor_b,
+        scope="inventory:publish", now=now,
+    ).agent_id == "agent-b"
+    fresh_a = issue_execution_ticket(
+        factory, server_id=server_id, executor_id=executor_a,
+        agent_id="agent-a", now=now,
+    )
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE execution_executors SET revoked_at=? WHERE server_id=? "
+            "AND executor_id=?", (now.isoformat(), server_id, executor_a),
+        )
+    with pytest.raises(OktoNexusError):
+        verify_execution_ticket(
+            factory, ticket=fresh_a.ticket, server_id=server_id,
+            executor_id=executor_a, scope="inventory:publish", now=now,
+        )
+
+
+def test_register_executor_is_scoped_and_returns_only_bootstrap_authority(tmp_path):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    factory = deps.connection_factory
+    app = build_app(deps)
+    with factory.unit_of_work() as uow:
+        for agent_id in ("agent-a", "agent-b"):
+            uow.connection.execute("INSERT INTO agents(agent_id,created_at) "
+                                   "VALUES (?,?)",
+                                   (agent_id, "2026-09-29T00:00:00Z"))
+    with factory.unit_of_work() as uow:
+        key_a = app.state.auth.issue_key(uow, agent_id="agent-a")
+        key_b = app.state.auth.issue_key(uow, agent_id="agent-b")
+    body = {"client_intent_id": "register-a", "connector_id": "connector-a",
+            "label": "Remote host", "control_capabilities": []}
+    path = "/v1/connections/executors:register"
+    with TestClient(app, raise_server_exceptions=False) as client:
+        first = client.post(path, json=body, headers={
+            "Authorization": f"Bearer {key_a}"})
+        assert first.status_code == 201, first.text
+        contract = json.loads((Path(__file__).resolve().parents[2] /
+                               "plans/contratos/http-target.schema.json").read_text(
+                                   encoding="utf-8"))
+        schema = {"$defs": contract["$defs"],
+                  **contract["$defs"]["RegisterExecutorResponse"]}
+        Draft202012Validator(schema).validate(first.json())
+        assert first.json()["state"] == "AWAITING_INVENTORY"
+        assert first.json()["bootstrap_ticket"]["scopes"] == [
+            "inventory:publish", "link:connect"]
+        assert first.headers["Cache-Control"] == "no-store"
+        retry = client.post(path, json=body, headers={
+            "Authorization": f"Bearer {key_a}"})
+        assert retry.status_code == 200
+        assert retry.json()["executor_id"] == first.json()["executor_id"]
+        assert retry.json()["bootstrap_ticket"]["ticket"] != (
+            first.json()["bootstrap_ticket"]["ticket"])
+        with pytest.raises(OktoNexusError):
+            verify_execution_ticket(
+                factory, ticket=first.json()["bootstrap_ticket"]["ticket"],
+                server_id=first.json()["server_id"],
+                executor_id=first.json()["executor_id"],
+                scope="inventory:publish",
+            )
+        assert verify_execution_ticket(
+            factory, ticket=retry.json()["bootstrap_ticket"]["ticket"],
+            server_id=retry.json()["server_id"],
+            executor_id=retry.json()["executor_id"],
+            scope="inventory:publish",
+        ).agent_id == "agent-a"
+        changed = client.post(path, json={**body, "label": "Different"},
+                              headers={"Authorization": f"Bearer {key_a}"})
+        assert changed.status_code == 409
+        assert changed.json()["error"]["code"] == "CONFLICT"
+        foreign = client.post(path, json={**body, "client_intent_id": "other"},
+                              headers={"Authorization": f"Bearer {key_b}"})
+        assert foreign.status_code == 409
+        invalid = client.post(path, json={**body, "raw_executable": "C:/bin"},
+                              headers={"Authorization": f"Bearer {key_a}"})
+        assert invalid.status_code == 400
+        assert invalid.json()["error"]["code"] == "VALIDATION_ERROR"
+        assert "ok" not in invalid.json()

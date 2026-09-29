@@ -56,7 +56,8 @@ def ensure_execution_installation(factory: ConnectionFactory) -> ExecutionInstal
 
 def register_remote_executor(factory: ConnectionFactory, *,
                              actor_agent_id: str, connector_id: str,
-                             client_intent_id: str) -> RemoteExecutorRegistration:
+                             client_intent_id: str, label: str = "",
+                             control_capabilities: tuple[str, ...] = ()) -> RemoteExecutorRegistration:
     """Idempotently register one remote executor for the authenticated actor.
 
     This creates identity only. The new executor remains DISCONNECTED with no
@@ -71,8 +72,17 @@ def register_remote_executor(factory: ConnectionFactory, *,
         if not isinstance(value, str) or not 1 <= len(value) <= 160:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   f"Invalid {name}.", {"field": name})
+    if (not isinstance(label, str) or len(label) > 120 or
+            not isinstance(control_capabilities, tuple) or
+            len(control_capabilities) > 64 or
+            any(not isinstance(item, str) or not 1 <= len(item) <= 160
+                for item in control_capabilities) or
+            len(set(control_capabilities)) != len(control_capabilities)):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                              "Invalid executor label or capabilities.", {})
     body_hash = "sha256:" + hashlib.sha256(canonical_json(
-        {"kind": "register_remote_executor", "connector_id": connector_id}
+        {"kind": "register_remote_executor", "connector_id": connector_id,
+         "label": label, "control_capabilities": list(control_capabilities)}
     )).hexdigest()
     with factory.unit_of_work() as uow:
         conn = uow.connection
@@ -108,9 +118,14 @@ def register_remote_executor(factory: ConnectionFactory, *,
         if existing is None:
             conn.execute(
                 "INSERT INTO execution_executors(server_id,executor_id,connector_id,"
-                "registered_by_agent_id,kind,control_state,generation) "
-                "VALUES (?,?,?,?,'remote','DISCONNECTED',1)",
-                (server_id, executor_id, connector_id, actor_agent_id),
+                "registered_by_agent_id,kind,label,control_state,generation) "
+                "VALUES (?,?,?,?,'remote',?,'DISCONNECTED',1)",
+                (server_id, executor_id, connector_id, actor_agent_id, label),
+            )
+        elif existing is not None and label:
+            conn.execute(
+                "UPDATE execution_executors SET label=? WHERE server_id=? AND executor_id=?",
+                (label, server_id, executor_id),
             )
         intent_id = "intent_" + secrets.token_hex(16)
         resolved = {"server_id": server_id, "executor_id": executor_id,
