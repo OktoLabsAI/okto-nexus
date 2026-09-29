@@ -8,6 +8,7 @@ not construct a runtime or open a journal.
 from __future__ import annotations
 
 import asyncio
+import hashlib
 from collections.abc import Awaitable, Callable, Mapping
 from pathlib import Path
 
@@ -20,9 +21,9 @@ from nexus_connector_core.models import PreparedLaunch
 
 
 class EmbeddedRuntimeHost:
-    """Own one journal/runtime per executor and one slot ledger per Server.
+    """Own one journal/runtime per session and one slot ledger per Server.
 
-    Concurrent callers for an executor share one initialization task. A
+    Concurrent callers for a session share one initialization task. A
     cancelled waiter cannot cancel that task and strand an opened SQLite
     worker. A changed candidate/root map requires explicit owner shutdown;
     silently reusing a runtime would execute against the old selection.
@@ -38,8 +39,9 @@ class EmbeddedRuntimeHost:
         self.max_owned_slots = max_owned_slots
         self._lock = asyncio.Lock()
         self._ledger_task: asyncio.Task[SQLiteOwnedSlotLedger] | None = None
-        self._runtime_tasks: dict[str, asyncio.Task[tuple[RuntimeCore, SQLiteJournal]]] = {}
-        self._selections: dict[str, tuple[dict, dict]] = {}
+        self._runtime_tasks: dict[tuple[str, str], asyncio.Task[
+            tuple[RuntimeCore, SQLiteJournal]]] = {}
+        self._selections: dict[tuple[str, str], tuple[dict, dict]] = {}
         self._closing = False
 
     async def _ledger(self) -> SQLiteOwnedSlotLedger:
@@ -57,41 +59,45 @@ class EmbeddedRuntimeHost:
         )
 
     async def acquire(
-        self, *, executor_id: str,
+        self, *, executor_id: str, session_id: str,
         candidates: Mapping[str, InstallationCandidate],
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         native_factory=None,
     ) -> RuntimeCore:
-        if not isinstance(executor_id, str) or not executor_id or not all(
-            char.isascii() and (char.isalnum() or char in "_-") for char in executor_id
-        ) or len(executor_id) > 128:
-            raise ValueError("Invalid executor ID.")
+        for value, label in ((executor_id, "executor"), (session_id, "session")):
+            if (not isinstance(value, str) or not value or len(value) > 160 or
+                    not all(char.isascii() and (char.isalnum() or char in "_-")
+                            for char in value)):
+                raise ValueError(f"Invalid {label} ID.")
         # Core validates the typed values as well. The host must reject empty
         # maps before opening durable stores, especially on passive startup.
         if not candidates or not workspace_roots or not callable(environment):
             raise ValueError("A selected installation, root and environment are required.")
         selection = (dict(candidates), dict(workspace_roots))
+        key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
                 raise RuntimeError("The embedded Core host is shutting down.")
-            if executor_id in self._selections and self._selections[executor_id] != selection:
+            if key in self._selections and self._selections[key] != selection:
                 raise RuntimeError("The selected installation or root changed.")
-            task = self._runtime_tasks.get(executor_id)
+            task = self._runtime_tasks.get(key)
             if task is None:
-                self._selections[executor_id] = selection
+                self._selections[key] = selection
                 task = asyncio.create_task(self._compose(
-                    executor_id, selection, environment, native_factory))
-                self._runtime_tasks[executor_id] = task
+                    key, selection, environment, native_factory))
+                self._runtime_tasks[key] = task
         runtime, _journal = await asyncio.shield(task)
         return runtime
 
-    async def _compose(self, executor_id, selection, environment, native_factory):
+    async def _compose(self, key, selection, environment, native_factory):
         ledger = await self._ledger()
         journal: SQLiteJournal | None = None
         try:
             await asyncio.to_thread(self.store_dir.mkdir, parents=True, exist_ok=True)
-            journal = await open_journal(self.store_dir / f"{executor_id}.db")
+            digest = hashlib.sha256(
+                (key[0] + "\0" + key[1]).encode("ascii")).hexdigest()
+            journal = await open_journal(self.store_dir / f"session-{digest}.db")
             runtime = create_runtime(
                 journal=journal, environment=environment,
                 candidates=selection[0], workspace_roots=selection[1],
@@ -104,27 +110,45 @@ class EmbeddedRuntimeHost:
                 await journal.aclose()
             raise
 
-    async def shutdown(self, policy: ShutdownPolicy | None = None) -> dict[str, object]:
+    async def shutdown(self, policy: ShutdownPolicy | None = None
+                       ) -> dict[tuple[str, str], object]:
         """Drain Core before closing its stores; retain uncertain ownership."""
         async with self._lock:
             self._closing = True
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
-        reports: dict[str, object] = {}
+        reports: dict[tuple[str, str], object] = {}
         uncertain = False
-        for executor_id, task in tasks.items():
+
+        async def stop_one(key, task):
             try:
                 runtime, journal = await asyncio.shield(task)
             except Exception:
-                continue  # _compose already closed its journal on failure.
+                return key, None, False  # _compose closed its failed journal.
             report = await runtime.shutdown(policy or ShutdownPolicy())
-            reports[executor_id] = report
             if "unknown" in report.session_outcomes.values():
-                uncertain = True
-                continue
+                return key, report, True
             # Core does not own host-supplied journals. Close only after its
             # public shutdown reports no uncertain session ownership.
             await journal.aclose()
+            return key, report, False
+
+        # A Server can own many independent sessions. Drain them concurrently
+        # so the shutdown budget does not multiply by the session count.
+        stopped = await asyncio.gather(
+            *(stop_one(key, task) for key, task in tasks.items()),
+            return_exceptions=True,
+        )
+        failures = []
+        for result in stopped:
+            if isinstance(result, BaseException):
+                uncertain = True
+                failures.append(result)
+                continue
+            key, report, unresolved = result
+            uncertain |= unresolved
+            if report is not None:
+                reports[key] = report
         if ledger_task is not None and not uncertain:
             try:
                 ledger = await asyncio.shield(ledger_task)
@@ -132,4 +156,6 @@ class EmbeddedRuntimeHost:
                 pass
             else:
                 await ledger.aclose()
+        if failures:
+            raise failures[0]
         return reports

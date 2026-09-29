@@ -545,8 +545,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            embedded_shutdown_error: Exception | None = None
             if embedded_core_host is not None:
-                deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
+                try:
+                    deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
             dispatcher = getattr(deps, "runtime_dispatcher", None)
             supervisor = getattr(deps, "harness_supervisor", None)
             if (dispatcher and dispatcher.epoch is not None and supervisor
@@ -568,6 +572,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                     await heartbeat_task
             if lock is not None:
                 lock.release()
+            if embedded_shutdown_error is not None:
+                raise embedded_shutdown_error
 
     app = FastAPI(
         title="Okto Nexus",

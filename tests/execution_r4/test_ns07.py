@@ -43,7 +43,8 @@ def test_ns07_01(tmp_path, monkeypatch):
         async def environment(_launch):
             return {}
 
-        options = dict(executor_id="exe_one", candidates={"codex": _candidate()},
+        options = dict(executor_id="exe_one", session_id="session_one",
+                       candidates={"codex": _candidate()},
                        workspace_roots={"workspace": str(tmp_path)},
                        environment=environment)
         first = asyncio.create_task(host.acquire(**options))
@@ -56,7 +57,12 @@ def test_ns07_01(tmp_path, monkeypatch):
         runtime = await asyncio.wait_for(second, 10)
         assert await host.acquire(**options) is runtime
         assert calls == 1
-        await host.acquire(**{**options, "executor_id": "exe_two"})
+        await host.acquire(**{**options, "executor_id": "exe_two",
+                              "session_id": "session_two"})
+        other_session = await host.acquire(**{
+            **options, "session_id": "session_three",
+            "workspace_roots": {"workspace": str(tmp_path / "other")}})
+        assert other_session is not runtime
         assert calls == 1
         ledger = await host._ledger()
         first_key = OperationKey("server", "exe_one", "operation_one")
@@ -66,14 +72,15 @@ def test_ns07_01(tmp_path, monkeypatch):
             await ledger.reserve_owned_slot(second_key, "session_two")
         assert full.value.code == "CAPACITY_EXCEEDED"
         assert await ledger.release_owned_slot(first_key, "session_one")
-        assert (store / "exe_one.db").exists()
+        assert len(list(store.glob("session-*.db"))) == 3
         assert (store / "owned-slots.db").exists()
         with pytest.raises(RuntimeError, match="changed"):
             await host.acquire(**{**options,
                 "workspace_roots": {"workspace": str(tmp_path / "other")}})
         report = await host.shutdown(ShutdownPolicy(0, 0))
-        assert report["exe_one"].session_outcomes == {}
-        assert report["exe_two"].session_outcomes == {}
+        assert report[("exe_one", "session_one")].session_outcomes == {}
+        assert report[("exe_two", "session_two")].session_outcomes == {}
+        assert report[("exe_one", "session_three")].session_outcomes == {}
         with pytest.raises(RuntimeError, match="shutting down"):
             await host.acquire(**options)
 
