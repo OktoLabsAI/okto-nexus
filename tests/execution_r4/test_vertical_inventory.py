@@ -15,7 +15,7 @@ from pathlib import Path
 import httpx
 import pytest
 from nexus_connector_core import (
-    CloseOperation, ExecutionContext, InstallationCandidate, LaunchIntent,
+    CloseOperation, ControlOperation, ExecutionContext, InstallationCandidate, LaunchIntent,
     OpenOperation, R4_PREVIEW_REVISION, ShutdownPolicy, TurnOperation,
     create_runtime, r4_submit_intent_hash,
 )
@@ -28,6 +28,7 @@ from okto_nexus.bootstrap.dependencies import bootstrap
 
 class _Native:
     native_id = "synthetic-native"
+    active_turn_id = "turn-from-native"
 
     def __init__(self):
         self.queue = asyncio.Queue()
@@ -119,6 +120,12 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     "action": "turn.submit", "payload": {"text": "Hello"},
                 }
                 submit_frame["intent_hash"] = r4_submit_intent_hash(submit_frame)
+                steer_frame = {
+                    **submit_frame, "operation_id": "steer-op",
+                    "action": "turn.steer", "payload": {"text": "Continue"},
+                    "expected_turn_id": "turn-from-native",
+                }
+                steer_frame["intent_hash"] = r4_submit_intent_hash(steer_frame)
                 context = ExecutionContext(
                     me.server_id, registered.executor_id, "binding",
                     "agent-a", "ws", 1, 1, 1, time.monotonic() + 60,
@@ -164,6 +171,17 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                          "session", "turn.submit", submit_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
+                    conn.execute(
+                        "INSERT INTO execution_operations(server_id,executor_id,operation_id,"
+                        "subject_agent_id,actor_agent_id,binding_id,workspace_id,"
+                        "workspace_binding_id,session_id,action,intent_hash,semantic_payload,"
+                        "expected_revisions_json,admission_state,created_at) "
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        (me.server_id, registered.executor_id, "steer-op", "agent-a",
+                         "agent-a", "binding", "ws", "workspace-binding",
+                         "session", "turn.steer", steer_frame["intent_hash"],
+                         "{}", "{}", "ACCEPTED", now),
+                    )
                 ticket = await http.request_r4_binding_ticket(
                     key, binding_id="binding", client_intent_id="ticket-intent",
                     credential_request_id="ticket-request",
@@ -191,7 +209,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         me.server_id, registered.executor_id, "binding",
                         "agent-a", "ws", 1, 1, 1,
                         context.lease_deadline_monotonic,
-                        frozenset({"runtime.open", "turn.submit",
+                        frozenset({"runtime.open", "turn.submit", "turn.steer",
                                    "runtime.close"}),
                     )
                     prepared = await runtime.prepare(
@@ -208,15 +226,28 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         ticket.ticket, submit_frame=submit_frame,
                         core_receipt=core_receipt, context=opening_context,
                         receipt_revision=1)
+                    steer_receipt = await runtime.control(
+                        ControlOperation("steer-op", "session", "steer",
+                                         "Continue", "turn-from-native"),
+                        opening_context)
+                    assert native_factory.native.sent[-1] == ("steer", "steer-op")
+                    steer_ack = await http.publish_core_steer_receipt(
+                        ticket.ticket, submit_frame=steer_frame,
+                        core_receipt=steer_receipt,
+                        context=opening_context, receipt_revision=1)
                     await runtime.close(CloseOperation(
                         "close-op", "session"), opening_context)
                 finally:
                     await runtime.shutdown(ShutdownPolicy(0, 0))
                     await journal.aclose()
                 assert receipt_ack.operation_id == "op"
+                assert steer_ack.operation_id == "steer-op"
                 view = await http.get_operation(key, "op")
                 assert view["executor_stage"] == core_receipt.stage
                 assert view["intent_hash"] == submit_frame["intent_hash"]
+                steer_view = await http.get_operation(key, "steer-op")
+                assert steer_view["executor_stage"] == steer_receipt.stage
+                assert steer_view["intent_hash"] == steer_frame["intent_hash"]
                 return registered, snapshot
 
     registered, snapshot = asyncio.run(roundtrip())
@@ -234,3 +265,10 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
             (registered.server_id, registered.executor_id),
         ).fetchone()
     assert receipt["stage"] == "SUBMITTED"
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        steer_receipt = uow.connection.execute(
+            "SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? "
+            "AND operation_id='steer-op' AND receipt_revision=1",
+            (registered.server_id, registered.executor_id),
+        ).fetchone()
+    assert steer_receipt["stage"] == "SUBMITTED"
