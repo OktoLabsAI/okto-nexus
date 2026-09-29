@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -16,6 +17,10 @@ from okto_nexus.adapters.outbound.sqlite.execution_identity import (
 )
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.application.execution_admission import submit_execution_operation
+from okto_nexus.application.execution_dispatch import (
+    begin_execution_send, release_unsent_dispatch,
+    reserve_execution_dispatch,
+)
 from okto_nexus.application.execution_intents import (
     read_execution_intent, resolve_execution_intent,
 )
@@ -260,3 +265,102 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
         assert conn.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 1
         assert conn.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 1
         assert conn.execute("SELECT COUNT(*) FROM execution_dispatch_outbox").fetchone()[0] == 1
+    with factory.unit_of_work() as uow:
+        conn = uow.connection
+        for operation_id, action in (("regular-two", "turn.submit"),
+                                     ("control-one", "turn.interrupt")):
+            conn.execute(
+                "INSERT INTO execution_operations(server_id,executor_id,"
+                "operation_id,subject_agent_id,actor_agent_id,binding_id,"
+                "workspace_id,workspace_binding_id,session_id,action,intent_hash,"
+                "semantic_payload,expected_revisions_json,admission_state,created_at) "
+                "SELECT server_id,executor_id,?,subject_agent_id,actor_agent_id,"
+                "binding_id,workspace_id,workspace_binding_id,session_id,?,"
+                "intent_hash,semantic_payload,expected_revisions_json,"
+                "admission_state,created_at FROM execution_operations "
+                "WHERE operation_id=?",
+                (operation_id, action, request["operation_id"]),
+            )
+            conn.execute(
+                "INSERT INTO execution_dispatch_outbox(server_id,executor_id,"
+                "operation_id,dispatch_state) VALUES (?,'executor',?,'PENDING')",
+                (server_id, operation_id),
+            )
+    assert reserve_execution_dispatch(
+        factory, server_id=server_id, executor_id="executor",
+        remote_ready=False) is None
+    first_reservation = reserve_execution_dispatch(
+        factory, server_id=server_id, executor_id="executor",
+        remote_ready=True, regular_items=1)
+    assert first_reservation.operation_id == "control-one"
+    assert first_reservation.reservation_class == "control"
+    second_reservation = reserve_execution_dispatch(
+        factory, server_id=server_id, executor_id="executor",
+        remote_ready=True, regular_items=1)
+    assert second_reservation.reservation_class == "regular"
+    assert second_reservation.operation_id == request["operation_id"]
+    with pytest.raises(OktoNexusError):
+        begin_execution_send(
+            factory, reservation=second_reservation, remote_ready=True,
+            fresh_publications=freshness)
+    with factory.unit_of_work(write=False) as uow:
+        state = uow.connection.execute(
+            "SELECT dispatch_state FROM execution_dispatch_outbox "
+            "WHERE operation_id=?", (second_reservation.operation_id,),
+        ).fetchone()[0]
+        assert state == "RESERVED"
+    assert reserve_execution_dispatch(
+        factory, server_id=server_id, executor_id="executor",
+        remote_ready=True, regular_items=1) is None
+    release_unsent_dispatch(factory, reservation=first_reservation)
+    with pytest.raises(OktoNexusError):
+        release_unsent_dispatch(factory, reservation=first_reservation)
+    with factory.unit_of_work(write=False) as uow:
+        row = uow.connection.execute(
+            "SELECT reserved_bytes,attempt_token FROM execution_dispatch_outbox "
+            "WHERE operation_id='control-one'").fetchone()
+        assert tuple(row) == (0, None)
+    release_unsent_dispatch(factory, reservation=second_reservation)
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE execution_dispatch_outbox SET dispatch_state='FIXTURE_DONE' "
+            "WHERE operation_id IN (?,?,?)",
+            (first_reservation.operation_id,
+             second_reservation.operation_id, "regular-two"),
+        )
+    ready_resolution = resolve_execution_intent(
+        factory, actor_agent_id="agent-a", request={
+            "client_intent_id": "start-three", "intent": "runtime.start",
+            "binding_id": "binding", "workspace_binding_id": "wxb",
+            "new_session": True,
+        }, remote_ready=True, fresh_publications=freshness)
+    ready_request = {key: ready_resolution[key] for key in (
+        "client_intent_id", "operation_id", "resolution_revision", "intent_hash")}
+    submit_execution_operation(
+        factory, actor_agent_id="agent-a", request=ready_request,
+        fresh_publications=freshness, remote_ready=True)
+    scope = ready_resolution["scope"]
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO execution_leases(server_id,executor_id,session_id,"
+            "lease_serial,lease_id,grant_id,allowed_actions_json,"
+            "authorization_revision,configuration_revision,owner_generation,"
+            "connection_generation,credential_epoch,valid_until_server,"
+            "request_id,status) VALUES (?,'executor',?,1,'lease','grant',"
+            "'[\"runtime.open\"]',?,?,?,?,?,?,'lease-request','ACTIVE')",
+            (server_id, scope["session_id"],
+             scope["authorization_revision"], scope["configuration_revision"],
+             scope["session_owner_generation"], 1, scope["credential_epoch"],
+             (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat()),
+        )
+    ready_reservation = reserve_execution_dispatch(
+        factory, server_id=server_id, executor_id="executor",
+        remote_ready=True, regular_items=1)
+    assert ready_reservation.operation_id == ready_request["operation_id"]
+    authorized = begin_execution_send(
+        factory, reservation=ready_reservation, remote_ready=True,
+        fresh_publications=freshness)
+    assert authorized.lease_id == "lease"
+    assert authorized.semantic_intent["action"] == "runtime.open"
+    with pytest.raises(OktoNexusError):
+        release_unsent_dispatch(factory, reservation=ready_reservation)
