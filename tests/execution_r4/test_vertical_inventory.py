@@ -178,6 +178,19 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     "action": "turn.submit", "payload": {"text": "Hello"},
                 }
                 submit_frame["intent_hash"] = r4_submit_intent_hash(submit_frame)
+                open_frame = {
+                    **submit_frame, "operation_id": "open-op",
+                    "action": "runtime.open",
+                    "payload": {
+                        "adapter_id": "codex_app_server",
+                        "candidate_ref": snapshot["evidence"][0]["candidate_ref"],
+                        "inventory_revision": snapshot["inventory_revision"],
+                        "realization_ref": realization.realization_ref,
+                        "realization_revision": 1,
+                        "profile_revision": 1, "mode": "managed",
+                    },
+                }
+                open_frame["intent_hash"] = r4_submit_intent_hash(open_frame)
                 steer_frame = {
                     **submit_frame, "operation_id": "steer-op",
                     "action": "turn.steer", "payload": {"text": "Continue"},
@@ -217,6 +230,18 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                          "agent-a", proposal.binding_id, "ws",
                          realization.workspace_binding_id,
                          "session", "turn.submit", submit_frame["intent_hash"],
+                         "{}", "{}", "ACCEPTED", now),
+                    )
+                    conn.execute(
+                        "INSERT INTO execution_operations(server_id,executor_id,"
+                        "operation_id,subject_agent_id,actor_agent_id,binding_id,"
+                        "workspace_id,workspace_binding_id,session_id,action,"
+                        "intent_hash,semantic_payload,expected_revisions_json,"
+                        "admission_state,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        (me.server_id, registered.executor_id, "open-op", "agent-a",
+                         "agent-a", proposal.binding_id, "ws",
+                         realization.workspace_binding_id,
+                         "session", "runtime.open", open_frame["intent_hash"],
                          "{}", "{}", "ACCEPTED", now),
                     )
                     for operation_id, action, frame in (
@@ -278,9 +303,14 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     prepared = await runtime.prepare(
                         LaunchIntent("agent-a", "ws", "codex_app_server"),
                         opening_context)
-                    await runtime.open(OpenOperation(
+                    opened = await runtime.open(OpenOperation(
                         "open-op", "session", "stream", prepared),
                         opening_context)
+                    open_ack = await http.publish_core_open_receipt(
+                        ticket.ticket, submit_frame=open_frame,
+                        core_receipt=opened, context=opening_context,
+                        prepared=prepared, stream_epoch="stream",
+                        receipt_revision=1)
                     core_receipt = await runtime.submit(
                         TurnOperation("op", "session", "Hello"),
                         opening_context)
@@ -320,12 +350,15 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     await runtime.shutdown(ShutdownPolicy(0, 0))
                     await journal.aclose()
                 assert receipt_ack.operation_id == "op"
+                assert open_ack.operation_id == "open-op"
                 assert steer_ack.operation_id == "steer-op"
                 assert interrupt_ack.operation_id == "interrupt-op"
                 assert close_ack.operation_id == "close-op"
                 view = await http.get_operation(key, "op")
                 assert view["executor_stage"] == core_receipt.stage
                 assert view["intent_hash"] == submit_frame["intent_hash"]
+                opened_view = await http.get_operation(key, "open-op")
+                assert opened_view["executor_stage"] == opened.stage
                 steer_view = await http.get_operation(key, "steer-op")
                 assert steer_view["executor_stage"] == steer_receipt.stage
                 assert steer_view["intent_hash"] == steer_frame["intent_hash"]
