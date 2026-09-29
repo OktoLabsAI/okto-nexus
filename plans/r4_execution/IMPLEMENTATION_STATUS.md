@@ -34,6 +34,8 @@ O Core tem no commit `c67487e` um preview de codec NXL R4 em wheel `0.2.13.dev0`
 
 Atualização: Nexus e Connector agora fixam e vendorizam o mesmo wheel Core `0.2.13.dev0`, SHA-256 `be0d974b036d6384e69655cff5556d6f5ee853f991a913087fe947c56fa2be96`. O `uv.lock` do Nexus aponta para esse wheel local; `uv lock --check`, `uv sync --extra serve-lite --extra dev --frozen` e 22 testes direcionados de Nexus passaram. O Connector passou oito testes de catálogo e inventário consumindo o wheel R4 parcial. A revisão negociável permanece R3 e `remote_execution_ready=false`; este marco não habilita efeito remoto.
 
+Atualização seguinte: Core `0.2.14.dev0` (commit `c78daf5`, SHA-256 do wheel `759cdee946037ed5e215f901cdfb09b31baf350c7fde69e4d5f79bd41f515bee`) inclui payloads fechados de decisão/input, consulta e recibo com escopo de conexão e adapter IDs gerados do registry. Os 15 testes do codec passaram; importação `python -I` do wheel confirmou `development-partial` e `executable=False`. Nexus e Connector consumiram o mesmo wheel: 22 e oito testes direcionados passaram, respectivamente; `uv lock --check` e `uv sync --extra serve-lite --extra dev --frozen` passaram no Nexus. Ainda não há reducers nem qualificação de efeito remoto, portanto a revisão negociável permanece R3.
+
 O wheel Nexus recompilado contém `066_execution_r4_expand.sql`; instalado em ambiente separado e iniciado com `python -I`, aplicou até a revisão 66 e persistiu os IDs de instalação. A validação foi feita em banco temporário, sem aplicar migração no banco do operador.
 
 ## Gates
