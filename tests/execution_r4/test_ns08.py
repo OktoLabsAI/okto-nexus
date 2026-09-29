@@ -118,6 +118,7 @@ def test_ns08_01(tmp_path, monkeypatch):
             assert welcome["type"] == "welcome"
             assert welcome["connection_generation"] == 2
             assert welcome["control_capabilities"] == []
+            assert ws.receive_json()["type"] == "reconcile.request"
             with factory.unit_of_work(write=False) as uow:
                 row = uow.connection.execute(
                     "SELECT generation,control_state,owner_instance_id "
@@ -231,6 +232,7 @@ def test_ns08_02(tmp_path, monkeypatch):
                 subprotocols=["nxl.v1"]) as ws:
             ws.send_text(encode_r4_frame(hello).decode("utf-8"))
             welcome = ws.receive_json()
+            assert ws.receive_json()["type"] == "reconcile.request"
 
             def attach(agent, ticket, request):
                 revision = revisions[agent]
@@ -305,3 +307,91 @@ def test_ns08_02(tmp_path, monkeypatch):
         ).fetchall()
         assert [row["state"] for row in lanes] == [
             "DISCONNECTED", "DISCONNECTED"]
+
+
+def test_ns08_03(tmp_path, monkeypatch):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    app = build_app(deps)
+    factory = deps.connection_factory
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO agents(agent_id,created_at) VALUES ('agent',?)",
+            ("2026-09-29T00:00:00Z",),
+        )
+        app.state.auth.issue_key(uow, agent_id="agent")
+    registration = register_remote_executor(
+        factory, actor_agent_id="agent", connector_id="connector",
+        client_intent_id="registration",
+    )
+    installation = ensure_execution_installation(factory)
+    ticket = issue_execution_ticket(
+        factory, server_id=installation.server_id,
+        executor_id=registration.executor_id, agent_id="agent",
+        binding_id=None,
+    ).ticket
+    info = executor_link.protocol_info()
+    monkeypatch.setattr(executor_link, "protocol_info", lambda: {
+        **info, "remote_execution_ready": True,
+        "nxl_accepted": [R4_PREVIEW_REVISION],
+    })
+    base = {"protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
+            "server_id": installation.server_id,
+            "executor_id": registration.executor_id}
+    path = ("wss://127.0.0.1:8202/v1/runtime/executors/"
+            f"{registration.executor_id}/link")
+    with TestClient(app, base_url="https://127.0.0.1:8202") as client:
+        with client.websocket_connect(
+                path, headers={"Authorization": f"Bearer {ticket}"},
+                subprotocols=["nxl.v1"]) as ws:
+            hello = {
+                **base, "type": "hello", "link_attempt_id": "attempt",
+                "core_version": CORE_VERSION,
+                "management_revision": info["management_revision"],
+                "supported_nxl": [R4_PREVIEW_REVISION],
+                "snapshot_formats": [info["executor_snapshot_format"]],
+                "control_capabilities": [],
+            }
+            ws.send_text(encode_r4_frame(hello).decode("utf-8"))
+            welcome = ws.receive_json()
+            first = ws.receive_json()
+            assert first["type"] == "reconcile.request"
+            scope = {
+                **base, "connection_id": welcome["connection_id"],
+                "connection_generation": welcome["connection_generation"],
+            }
+            unavailable = {
+                **scope, "type": "error", "code": "JOURNAL_UNAVAILABLE",
+                "stage": "reconcile.report", "possible_effect": False,
+                "retry_safe": True,
+            }
+            ws.send_text(encode_r4_frame(unavailable).decode("utf-8"))
+            with factory.unit_of_work(write=False) as uow:
+                state = uow.connection.execute(
+                    "SELECT control_state FROM execution_executors "
+                    "WHERE executor_id=?", (registration.executor_id,),
+                ).fetchone()[0]
+                assert state == "RECOVERING"
+            ws.send_text(encode_r4_frame({
+                **scope, "type": "heartbeat",
+            }).decode("utf-8"))
+            retry = ws.receive_json()
+            assert retry["type"] == "reconcile.request"
+            assert retry["reconcile_id"] != first["reconcile_id"]
+            report = {
+                **scope, "type": "reconcile.report",
+                "reconcile_id": retry["reconcile_id"],
+                "cursor": retry["cursor"], "next_cursor": None,
+                "complete": True, "receipts": [], "claims": [],
+                "stream_watermarks": [], "ownership_facts": [],
+            }
+            ws.send_text(encode_r4_frame(report).decode("utf-8"))
+            accepted = ws.receive_json()
+            assert accepted["type"] == "reconcile.accepted"
+            assert accepted["recovery_remaining"] is False
+            assert accepted["ready_lane_ids"] == []
+            with factory.unit_of_work(write=False) as uow:
+                state = uow.connection.execute(
+                    "SELECT control_state FROM execution_executors "
+                    "WHERE executor_id=?", (registration.executor_id,),
+                ).fetchone()[0]
+                assert state == "CONTROL_READY"
