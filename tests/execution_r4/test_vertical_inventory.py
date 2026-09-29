@@ -9,17 +9,56 @@ from __future__ import annotations
 
 import os
 import asyncio
+import time
 from pathlib import Path
 
 import httpx
 import pytest
 from nexus_connector_core import (
-    ExecutionContext, Operation, OperationReceipt, R4_PREVIEW_REVISION,
-    intent_hash, r4_submit_intent_hash,
+    CloseOperation, ExecutionContext, InstallationCandidate, LaunchIntent,
+    OpenOperation, R4_PREVIEW_REVISION, ShutdownPolicy, TurnOperation,
+    create_runtime, r4_submit_intent_hash,
 )
+from nexus_connector_core.discovery import fingerprint
+from nexus_connector_core.journal import SQLiteJournal
 
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.bootstrap.dependencies import bootstrap
+
+
+class _Native:
+    native_id = "synthetic-native"
+
+    def __init__(self):
+        self.queue = asyncio.Queue()
+        self.stopped = False
+        self.sent = []
+
+    async def send(self, verb, payload, operation_id, *, expected_turn_id=None):
+        self.sent.append((verb, operation_id))
+
+    async def events(self):
+        while True:
+            event = await self.queue.get()
+            if event is None:
+                return
+            yield event
+
+    async def close(self):
+        self.stopped = True
+        await self.queue.put(None)
+        return "graceful"
+
+    async def observe(self):
+        return ("STOPPED" if self.stopped else "RUNNING", "IDLE")
+
+
+class _NativeFactory:
+    def __init__(self):
+        self.native = _Native()
+
+    async def open(self, prepared, session_id, context, *, stream_epoch):
+        return self.native
 
 
 def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
@@ -82,13 +121,8 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                 submit_frame["intent_hash"] = r4_submit_intent_hash(submit_frame)
                 context = ExecutionContext(
                     me.server_id, registered.executor_id, "binding",
-                    "agent-a", "ws", 1, 1, 1, 100.0,
+                    "agent-a", "ws", 1, 1, 1, time.monotonic() + 60,
                     frozenset({"turn.submit"}),
-                )
-                core_receipt = OperationReceipt(
-                    "op", intent_hash(Operation(
-                        "op", "session", "turn.submit", {"text": "Hello"}),
-                        context), "RECEIVED_DURABLE", False, True, "session",
                 )
                 with deps.connection_factory.unit_of_work() as uow:
                     conn = uow.connection
@@ -135,13 +169,53 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     credential_request_id="ticket-request",
                     scopes=("receipt:publish",),
                 )
-                receipt_ack = await http.publish_core_turn_receipt(
-                    ticket.ticket, submit_frame=submit_frame,
-                    core_receipt=core_receipt, context=context,
-                    receipt_revision=1)
+                binary = tmp_path / "synthetic-codex.exe"
+                binary.write_bytes(b"synthetic Core candidate")
+                candidate = InstallationCandidate(
+                    "codex_app_server", str(binary), fingerprint(binary),
+                    "explicit", "selected")
+                journal = await asyncio.to_thread(
+                    SQLiteJournal, tmp_path / "connector-core.db")
+                native_factory = _NativeFactory()
+
+                async def environment(_launch):
+                    return {}
+
+                runtime = create_runtime(
+                    journal=journal, environment=environment,
+                    candidates={"codex_app_server": candidate},
+                    workspace_roots={"ws": str(tmp_path)},
+                    native_factory=native_factory)
+                try:
+                    opening_context = ExecutionContext(
+                        me.server_id, registered.executor_id, "binding",
+                        "agent-a", "ws", 1, 1, 1,
+                        context.lease_deadline_monotonic,
+                        frozenset({"runtime.open", "turn.submit",
+                                   "runtime.close"}),
+                    )
+                    prepared = await runtime.prepare(
+                        LaunchIntent("agent-a", "ws", "codex_app_server"),
+                        opening_context)
+                    await runtime.open(OpenOperation(
+                        "open-op", "session", "stream", prepared),
+                        opening_context)
+                    core_receipt = await runtime.submit(
+                        TurnOperation("op", "session", "Hello"),
+                        opening_context)
+                    assert native_factory.native.sent == [("send_turn", "op")]
+                    receipt_ack = await http.publish_core_turn_receipt(
+                        ticket.ticket, submit_frame=submit_frame,
+                        core_receipt=core_receipt, context=opening_context,
+                        receipt_revision=1)
+                    await runtime.close(CloseOperation(
+                        "close-op", "session"), opening_context)
+                finally:
+                    await runtime.shutdown(ShutdownPolicy(0, 0))
+                    await journal.aclose()
                 assert receipt_ack.operation_id == "op"
                 view = await http.get_operation(key, "op")
-                assert view["executor_stage"] == "RECEIVED_DURABLE"
+                assert view["executor_stage"] == core_receipt.stage
                 assert view["intent_hash"] == submit_frame["intent_hash"]
                 return registered, snapshot
 
@@ -159,4 +233,4 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
             "AND operation_id='op' AND receipt_revision=1",
             (registered.server_id, registered.executor_id),
         ).fetchone()
-    assert receipt["stage"] == "RECEIVED_DURABLE"
+    assert receipt["stage"] == "SUBMITTED"

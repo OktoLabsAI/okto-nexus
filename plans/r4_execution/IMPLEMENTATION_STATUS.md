@@ -63,6 +63,8 @@ Atualização Core `0.2.18.dev0` (commit `da47d79`, SHA-256 `547ab7dfde09adff79f
 
 O cliente HTTPS do Connector agora chama a projeção Core antes de publicar um recibo de turno. O teste vertical Nexus–Connector usa intenção R4 e recibo Core sintéticos com hashes de domínios distintos, depois consulta o ACK do Nexus. Continua sem admissão real, daemon, provider ou dois hosts.
 
+O teste vertical passou a compor o Core real no lado do executor, abrir uma sessão com peer nativo sintético e enviar um `turn.submit` antes da projeção/publicação. O Nexus persiste `SUBMITTED` e o cliente consulta a mesma `OperationView`. A operação e o binding ainda são semeados no banco; não é prova de daemon remoto, provider real ou dois hosts.
+
 Atualização Core `0.2.19.dev0` (commit `cf15b02`, SHA-256 `3b1b334f61f8ad5a2a59c63dcd127ced26a9d426dde7bff68085e4081d01c072`): falhas de projeção depois de um recibo Core agora preservam `possible_effect=true` e `retry_safe=false`, inclusive em escopo, payload e schema divergentes. Vinte e cinco testes direcionados passaram. O wheel anterior fica apenas para rastreabilidade.
 
 ## Gates
