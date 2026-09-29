@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime, timezone
 import ipaddress
 import secrets
 from urllib.parse import urlsplit
@@ -20,6 +21,9 @@ from ....adapters.outbound.sqlite.execution_identity import (
 )
 from ....adapters.outbound.sqlite.execution_tickets import (
     verify_execution_ticket,
+)
+from ....adapters.outbound.sqlite.execution_agent_revisions import (
+    current_agent_revisions,
 )
 from ....errors import OktoNexusError
 
@@ -101,6 +105,119 @@ def build_router() -> APIRouter:
         await ws.accept(subprotocol=SUBPROTOCOL)
         connection_id: str | None = None
         generation: int | None = None
+
+        def _admit_attach(frame: dict) -> int:
+            if (frame["server_id"] != server_id or
+                    frame["executor_id"] != executor_id or
+                    frame["connection_id"] != connection_id or
+                    frame["expected_connection_generation"] != generation):
+                raise ValueError("attach scope changed")
+            verified = verify_execution_ticket(
+                factory, ticket=frame["ticket"], server_id=server_id,
+                executor_id=executor_id, binding_id=frame["binding_id"],
+                scope="lane:attach")
+            if (verified.agent_id != frame["agent_id"] or
+                    verified.credential_epoch != frame["credential_epoch"] or
+                    verified.authorization_revision !=
+                    frame["authorization_revision"]):
+                raise ValueError("attach authority changed")
+            _, revisions, _ = current_agent_revisions(
+                factory, agent_id=verified.agent_id)
+            if revisions.configuration != frame["configuration_revision"]:
+                raise ValueError("attach configuration changed")
+            with factory.unit_of_work() as uow:
+                conn = uow.connection
+                owner = conn.execute(
+                    "SELECT 1 FROM execution_executors WHERE server_id=? "
+                    "AND executor_id=? AND owner_instance_id=? AND generation=? "
+                    "AND control_state='RECOVERING' AND revoked_at IS NULL",
+                    (server_id, executor_id, connection_id, generation),
+                ).fetchone()
+                binding = conn.execute(
+                    "SELECT ep.agent_id FROM execution_bindings b JOIN "
+                    "agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
+                    "WHERE b.server_id=? AND b.executor_id=? AND b.binding_id=?",
+                    (server_id, executor_id, frame["binding_id"]),
+                ).fetchone()
+                ticket_row = conn.execute(
+                    "SELECT revoked_at,expires_at,credential_epoch,"
+                    "authorization_revision,bound_connection_id "
+                    "FROM execution_link_tickets WHERE ticket_id=?",
+                    (verified.ticket_id,),
+                ).fetchone()
+                current = conn.execute(
+                    "SELECT credential_epoch,authorization_revision,"
+                    "configuration_revision FROM execution_agent_revisions "
+                    "WHERE server_id=? AND agent_id=?",
+                    (server_id, verified.agent_id),
+                ).fetchone()
+                expires = (datetime.fromisoformat(
+                    ticket_row["expires_at"].replace("Z", "+00:00"))
+                    if ticket_row is not None else None)
+                remaining = (int((expires - datetime.now(timezone.utc))
+                                 .total_seconds()) if expires is not None else 0)
+                if (owner is None or binding is None or
+                        binding["agent_id"] != verified.agent_id or
+                        ticket_row is None or ticket_row["revoked_at"] is not None or
+                        remaining < 1 or
+                        ticket_row["bound_connection_id"] not in
+                        (None, connection_id) or current is None or
+                        tuple(current) != (
+                            frame["credential_epoch"],
+                            frame["authorization_revision"],
+                            frame["configuration_revision"]) or
+                        ticket_row["credential_epoch"] !=
+                        frame["credential_epoch"] or
+                        ticket_row["authorization_revision"] !=
+                        frame["authorization_revision"]):
+                    raise ValueError("attach authority unavailable")
+                prior = conn.execute(
+                    "SELECT connection_id,connection_generation,"
+                    "attach_request_id,ticket_id FROM execution_control_lanes "
+                    "WHERE server_id=? AND executor_id=? AND binding_id=?",
+                    (server_id, executor_id, frame["binding_id"]),
+                ).fetchone()
+                if (prior is not None and
+                        prior["connection_id"] == connection_id and
+                        prior["connection_generation"] == generation and
+                        prior["attach_request_id"] != frame["attach_request_id"]):
+                    old_ticket = conn.execute(
+                        "SELECT revoked_at FROM execution_link_tickets "
+                        "WHERE ticket_id=?", (prior["ticket_id"],),
+                    ).fetchone()
+                    if (prior["ticket_id"] == verified.ticket_id or
+                            old_ticket is None or
+                            old_ticket["revoked_at"] is None):
+                        raise ValueError("attach attempt changed")
+                conn.execute(
+                    "INSERT INTO execution_control_lanes(server_id,executor_id,"
+                    "binding_id,agent_id,ticket_id,attach_request_id,"
+                    "connection_id,connection_generation,credential_epoch,"
+                    "authorization_revision,configuration_revision,expires_at,"
+                    "state) VALUES (?,?,?,?,?,?,?,?,?,?,?,?, 'ADMITTED') "
+                    "ON CONFLICT(server_id,executor_id,binding_id) DO UPDATE SET "
+                    "agent_id=excluded.agent_id,ticket_id=excluded.ticket_id,"
+                    "attach_request_id=excluded.attach_request_id,"
+                    "connection_id=excluded.connection_id,"
+                    "connection_generation=excluded.connection_generation,"
+                    "credential_epoch=excluded.credential_epoch,"
+                    "authorization_revision=excluded.authorization_revision,"
+                    "configuration_revision=excluded.configuration_revision,"
+                    "expires_at=excluded.expires_at,state='ADMITTED'",
+                    (server_id, executor_id, frame["binding_id"],
+                     verified.agent_id, verified.ticket_id,
+                     frame["attach_request_id"], connection_id, generation,
+                     frame["credential_epoch"],
+                     frame["authorization_revision"],
+                     frame["configuration_revision"],
+                     ticket_row["expires_at"]),
+                )
+                conn.execute(
+                    "UPDATE execution_link_tickets SET bound_connection_id=? "
+                    "WHERE ticket_id=? AND revoked_at IS NULL",
+                    (connection_id, verified.ticket_id),
+                )
+                return min(600, remaining)
         try:
             raw = await asyncio.wait_for(ws.receive_text(), timeout=10)
             if len(raw.encode("utf-8")) > MAX_FRAME_BYTES:
@@ -123,7 +240,8 @@ def build_router() -> APIRouter:
             def _claim():
                 with factory.unit_of_work() as uow:
                     row = uow.connection.execute(
-                        "SELECT generation,revoked_at FROM execution_executors "
+                        "SELECT generation,revoked_at,owner_instance_id "
+                        "FROM execution_executors "
                         "WHERE server_id=? AND executor_id=? AND kind='remote'",
                         (server_id, executor_id),
                     ).fetchone()
@@ -140,6 +258,20 @@ def build_router() -> APIRouter:
                     ).rowcount
                     if changed != 1:
                         raise ValueError("executor generation changed")
+                    uow.connection.execute(
+                        "UPDATE execution_control_lanes SET state='DISCONNECTED' "
+                        "WHERE server_id=? AND executor_id=? AND "
+                        "connection_generation<>?",
+                        (server_id, executor_id, next_generation),
+                    )
+                    if row["owner_instance_id"] is not None:
+                        uow.connection.execute(
+                            "UPDATE execution_link_tickets SET "
+                            "bound_connection_id=NULL WHERE server_id=? "
+                            "AND executor_id=? AND bound_connection_id=?",
+                            (server_id, executor_id,
+                             row["owner_instance_id"]),
+                        )
                     return next_generation
 
             try:
@@ -167,6 +299,40 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_r4_frame(raw.encode("utf-8"))
+                if frame["type"] == "binding.attach":
+                    try:
+                        expires_in = await anyio.to_thread.run_sync(
+                            _admit_attach, frame)
+                    except (OktoNexusError, ValueError):
+                        await ws.send_text(encode_r4_frame({
+                            "protocol_major": 1,
+                            "contract_revision": R4_PREVIEW_REVISION,
+                            "type": "error", "server_id": server_id,
+                            "executor_id": executor_id,
+                            "connection_id": connection_id,
+                            "connection_generation": generation,
+                            "code": "ATTACH_DENIED", "stage": "binding.attach",
+                            "possible_effect": False, "retry_safe": False,
+                        }).decode("utf-8"))
+                        continue
+                    await ws.send_text(encode_r4_frame({
+                        "protocol_major": 1,
+                        "contract_revision": R4_PREVIEW_REVISION,
+                        "type": "binding.attached",
+                        "attach_request_id": frame["attach_request_id"],
+                        "server_id": server_id, "executor_id": executor_id,
+                        "connection_id": connection_id,
+                        "connection_generation": generation,
+                        "binding_id": frame["binding_id"],
+                        "agent_id": frame["agent_id"],
+                        "credential_epoch": frame["credential_epoch"],
+                        "authorization_revision":
+                        frame["authorization_revision"],
+                        "configuration_revision":
+                        frame["configuration_revision"],
+                        "expires_in": expires_in,
+                    }).decode("utf-8"))
+                    continue
                 if (frame["type"] != "heartbeat" or
                         frame["server_id"] != server_id or
                         frame["executor_id"] != executor_id or
@@ -204,7 +370,19 @@ def build_router() -> APIRouter:
                             "AND executor_id=? AND owner_instance_id=? "
                             "AND generation=?",
                             (server_id, executor_id, connection_id,
-                             generation),
+                            generation),
+                        )
+                        uow.connection.execute(
+                            "UPDATE execution_control_lanes SET state='DISCONNECTED' "
+                            "WHERE server_id=? AND executor_id=? AND "
+                            "connection_id=? AND connection_generation=?",
+                            (server_id, executor_id, connection_id, generation),
+                        )
+                        uow.connection.execute(
+                            "UPDATE execution_link_tickets SET "
+                            "bound_connection_id=NULL WHERE server_id=? "
+                            "AND executor_id=? AND bound_connection_id=?",
+                            (server_id, executor_id, connection_id),
                         )
 
                 await anyio.to_thread.run_sync(_release)

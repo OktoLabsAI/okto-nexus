@@ -17,6 +17,9 @@ from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.outbound.sqlite.execution_identity import (
     ensure_execution_installation, register_remote_executor,
 )
+from okto_nexus.adapters.outbound.sqlite.execution_agent_revisions import (
+    current_agent_revisions,
+)
 from okto_nexus.adapters.outbound.sqlite.execution_tickets import (
     issue_execution_ticket,
 )
@@ -143,3 +146,162 @@ def test_ns08_01(tmp_path, monkeypatch):
             (registration.executor_id,),
         ).fetchone()
         assert tuple(row) == (2, "DISCONNECTED", None)
+
+
+def test_ns08_02(tmp_path, monkeypatch):
+    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    app = build_app(deps)
+    factory = deps.connection_factory
+    installation = ensure_execution_installation(factory)
+    stamp = "2026-09-29T00:00:00Z"
+    with factory.unit_of_work() as uow:
+        for agent in ("registrar", "agent-a", "agent-b"):
+            uow.connection.execute(
+                "INSERT INTO agents(agent_id,created_at) VALUES (?,?)",
+                (agent, stamp),
+            )
+            app.state.auth.issue_key(uow, agent_id=agent)
+        uow.connection.execute(
+            "INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)",
+            (stamp,),
+        )
+        for agent in ("agent-a", "agent-b"):
+            uow.connection.execute(
+                "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
+                "adapter_id,protocol,enabled,created_at,updated_at) "
+                "VALUES (?,?,'ws','codex','native',0,?,?)",
+                ("ep-" + agent, agent, stamp, stamp),
+            )
+    executor_id = register_remote_executor(
+        factory, actor_agent_id="registrar", connector_id="connector",
+        client_intent_id="register",
+    ).executor_id
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "INSERT INTO execution_workspace_bindings(server_id,"
+            "workspace_binding_id,executor_id,workspace_id,realization_handle,"
+            "revision,status) VALUES (?,?,?,?,?,1,'READY')",
+            (installation.server_id, "workspace-binding", executor_id,
+             "ws", "root_1234567890123456"),
+        )
+        for agent in ("agent-a", "agent-b"):
+            uow.connection.execute(
+                "INSERT INTO execution_bindings(server_id,binding_id,"
+                "executor_id,endpoint_id,workspace_binding_id,candidate_ref,"
+                "inventory_revision,realization_ref,realization_revision,"
+                "binding_revision) VALUES (?,?,?,?,?,?,?,?,1,1)",
+                (installation.server_id, "binding-" + agent, executor_id,
+                 "ep-" + agent, "workspace-binding", "candidate",
+                 "sha256:" + "a" * 64, "realization"),
+            )
+    bootstrap_ticket = issue_execution_ticket(
+        factory, server_id=installation.server_id, executor_id=executor_id,
+        agent_id="registrar", binding_id=None,
+    ).ticket
+    tickets = {}
+    revisions = {}
+    for agent in ("agent-a", "agent-b"):
+        tickets[agent] = issue_execution_ticket(
+            factory, server_id=installation.server_id,
+            executor_id=executor_id, agent_id=agent,
+            binding_id="binding-" + agent,
+            scopes=frozenset({"lane:attach"}),
+        )
+        _, revisions[agent], _ = current_agent_revisions(
+            factory, agent_id=agent)
+    info = executor_link.protocol_info()
+    monkeypatch.setattr(executor_link, "protocol_info", lambda: {
+        **info, "remote_execution_ready": True,
+        "nxl_accepted": [R4_PREVIEW_REVISION],
+    })
+    base = {"protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION}
+    path = f"wss://127.0.0.1:8202/v1/runtime/executors/{executor_id}/link"
+    hello = {
+        **base, "type": "hello", "link_attempt_id": "attempt",
+        "server_id": installation.server_id, "executor_id": executor_id,
+        "core_version": CORE_VERSION,
+        "management_revision": info["management_revision"],
+        "supported_nxl": [R4_PREVIEW_REVISION],
+        "snapshot_formats": [info["executor_snapshot_format"]],
+        "control_capabilities": [],
+    }
+    with TestClient(app, base_url="https://127.0.0.1:8202") as client:
+        with client.websocket_connect(
+                path, headers={"Authorization": f"Bearer {bootstrap_ticket}"},
+                subprotocols=["nxl.v1"]) as ws:
+            ws.send_text(encode_r4_frame(hello).decode("utf-8"))
+            welcome = ws.receive_json()
+
+            def attach(agent, ticket, request):
+                revision = revisions[agent]
+                frame = {
+                    **base, "type": "binding.attach",
+                    "attach_request_id": request,
+                    "server_id": installation.server_id,
+                    "executor_id": executor_id,
+                    "binding_id": "binding-" + agent,
+                    "agent_id": agent,
+                    "connection_id": welcome["connection_id"],
+                    "expected_connection_generation":
+                    welcome["connection_generation"],
+                    "credential_epoch": revision.credential_epoch,
+                    "authorization_revision": revision.authorization,
+                    "configuration_revision": revision.configuration,
+                    "ticket": ticket,
+                }
+                ws.send_text(encode_r4_frame(frame).decode("utf-8"))
+                return ws.receive_json()
+
+            assert attach("agent-a", tickets["agent-b"].ticket,
+                          "crossed")["code"] == "ATTACH_DENIED"
+            assert attach("agent-b", tickets["agent-b"].ticket,
+                          "b-first")["type"] == "binding.attached"
+            assert attach("agent-a", tickets["agent-a"].ticket,
+                          "a-first")["type"] == "binding.attached"
+            with factory.unit_of_work() as uow:
+                uow.connection.execute(
+                    "UPDATE execution_link_tickets SET revoked_at=? "
+                    "WHERE ticket_id=?",
+                    (stamp, tickets["agent-a"].ticket_id),
+                )
+            assert attach("agent-a", tickets["agent-a"].ticket,
+                          "a-old")["code"] == "ATTACH_DENIED"
+            with factory.unit_of_work(write=False) as uow:
+                lanes = uow.connection.execute(
+                    "SELECT binding_id,state FROM execution_control_lanes "
+                    "ORDER BY binding_id",
+                ).fetchall()
+                assert [tuple(row) for row in lanes] == [
+                    ("binding-agent-a", "DISCONNECTED"),
+                    ("binding-agent-b", "ADMITTED")]
+            replacement = issue_execution_ticket(
+                factory, server_id=installation.server_id,
+                executor_id=executor_id, agent_id="agent-a",
+                binding_id="binding-agent-a",
+                scopes=frozenset({"lane:attach"}),
+            )
+            attached = attach("agent-a", replacement.ticket, "a-new")
+            assert attached["type"] == "binding.attached"
+            assert attached["attach_request_id"] == "a-new"
+            assert attached["connection_generation"] == (
+                welcome["connection_generation"])
+            with factory.unit_of_work() as uow:
+                uow.connection.execute(
+                    "UPDATE agent_endpoints SET revision=revision+1 "
+                    "WHERE endpoint_id='ep-agent-a'",
+                )
+            current_agent_revisions(factory, agent_id="agent-a")
+            with factory.unit_of_work(write=False) as uow:
+                lanes = uow.connection.execute(
+                    "SELECT binding_id,state FROM execution_control_lanes "
+                    "ORDER BY binding_id",
+                ).fetchall()
+                assert [tuple(row) for row in lanes] == [
+                    ("binding-agent-a", "DISCONNECTED"),
+                    ("binding-agent-b", "ADMITTED")]
+    with factory.unit_of_work(write=False) as uow:
+        lanes = uow.connection.execute(
+            "SELECT state FROM execution_control_lanes ORDER BY binding_id",
+        ).fetchall()
+        assert [row["state"] for row in lanes] == [
+            "DISCONNECTED", "DISCONNECTED"]
