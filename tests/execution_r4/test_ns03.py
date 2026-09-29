@@ -286,6 +286,10 @@ def test_binding_ticket_follows_endpoint_agent_not_executor_registrar(tmp_path):
         assert changed.status_code == 409
         successor_body = {**body, "credential_request_id": "request-two",
                           "replaces_ticket_id": first.json()["ticket_id"]}
+        broader = client.post(path, json={**successor_body,
+                                          "scopes": ["lane:attach"]}, headers={
+                                              "Authorization": f"Bearer {keys['lane-agent']}"})
+        assert broader.status_code == 409
         successor = client.post(path, json=successor_body, headers={
             "Authorization": f"Bearer {keys['lane-agent']}"})
         assert successor.status_code == 200, successor.text

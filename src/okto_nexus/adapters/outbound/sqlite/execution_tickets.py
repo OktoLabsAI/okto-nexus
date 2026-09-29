@@ -180,7 +180,9 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
             if replaces_ticket_id is not None:
                 replaced = conn.execute(
                     "SELECT ticket_id,client_intent_id,bound_connection_id,"
-                    "revoked_at,expires_at FROM execution_link_tickets WHERE "
+                    "revoked_at,expires_at,scopes_json,credential_epoch,"
+                    "authorization_revision,requested_duration_seconds "
+                    "FROM execution_link_tickets WHERE "
                     "ticket_id=? AND server_id=? AND executor_id=? AND "
                     "binding_id=? AND agent_id=? AND audience=?",
                     (replaces_ticket_id, server_id, executor_id,
@@ -189,7 +191,12 @@ def issue_execution_ticket(factory: ConnectionFactory, *, server_id: str,
                 if (replaced is None or replaced["revoked_at"] is not None or
                         replaced["bound_connection_id"] is not None or
                         replaced["client_intent_id"] != client_intent_id or
-                        replaced["expires_at"] <= instant.isoformat()):
+                        replaced["expires_at"] <= instant.isoformat() or
+                        replaced["scopes_json"] != canonical_json(
+                            list(ordered_scopes)).decode("utf-8") or
+                        replaced["credential_epoch"] != revisions.credential_epoch or
+                        replaced["authorization_revision"] != revisions.authorization or
+                        replaced["requested_duration_seconds"] != expires_in):
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The prior ticket cannot be replaced.", {})
                 conn.execute(
