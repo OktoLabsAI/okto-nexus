@@ -61,7 +61,7 @@ O conjunto publicado conferido nesta revisão é Nexus `59922386149df1e95ea9e989
 
 A [auditoria](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 têm entradas de teste candidatas coletáveis e 54 ainda não têm uma entrada proposta coletada; essa contagem mede disponibilidade do teste, não cobertura integral de aceite. A suíte dirigida Nexus R4 passou 42 testes com Core `0.2.23.dev0`. As regressões amplas registraram falhas e skips; as correções dirigidas de documentação Core e empacotamento Connector ainda precisam de nova execução completa. Consultar os [resultados](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
 
-Existe trabalho local ainda não publicado no Core para targeting público e evolução do inventário. Antes de integrá-lo, revisar a compatibilidade histórica, testar consumidores instalados e publicar um novo wheel com seus pins/locks. Esse trabalho não faz parte do artefato `0.2.23.dev0` nem comprova o fechamento de M01.
+Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
 
 ### Prioridades para continuar a execução
 

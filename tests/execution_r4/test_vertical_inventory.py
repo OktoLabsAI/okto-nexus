@@ -11,15 +11,15 @@ from __future__ import annotations
 import os
 from importlib.util import find_spec
 import asyncio
-import time
+import json
 from pathlib import Path
 
 import httpx
 import pytest
 from nexus_connector_core import (
-    CloseOperation, ControlOperation, ExecutionContext, InstallationCandidate, LaunchIntent,
+    CloseOperation, ControlOperation, CoreError, InstallationCandidate, LaunchIntent,
     OpenOperation, R4_PREVIEW_REVISION, ShutdownPolicy, TurnOperation,
-    create_runtime, r4_submit_intent_hash,
+    create_runtime, decode_r4_frame, r4_submit_intent_hash,
 )
 from nexus_connector_core.discovery import fingerprint
 from nexus_connector_core.journal import SQLiteJournal
@@ -79,6 +79,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
     )
     from okto_nexus_connector.storage.state_store import StateStore
     from okto_nexus_connector.transport.https_client import NexusHTTPClient
+    from okto_nexus_connector.transport.wss_r4 import R4ControlState, apply_r4_lease
 
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     app = build_app(deps)
@@ -215,12 +216,6 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     "payload": {"reason": "Requested by the agent"},
                 }
                 close_frame["intent_hash"] = r4_submit_intent_hash(close_frame)
-                context = ExecutionContext(
-                    me.server_id, registered.executor_id, proposal.binding_id,
-                    "agent-a", "ws", binding.authorization_revision,
-                    binding.configuration_revision, 1, time.monotonic() + 60,
-                    frozenset({"turn.submit"}),
-                )
                 with deps.connection_factory.unit_of_work() as uow:
                     conn = uow.connection
                     now = "2026-09-29T00:00:00Z"
@@ -294,16 +289,42 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     workspace_roots={"ws": str(tmp_path)},
                     native_factory=native_factory)
                 try:
-                    opening_context = ExecutionContext(
-                        me.server_id, registered.executor_id,
-                        proposal.binding_id,
-                        "agent-a", "ws", binding.authorization_revision,
-                        binding.configuration_revision, 1,
-                        context.lease_deadline_monotonic,
-                        frozenset({"runtime.open", "turn.submit", "turn.steer",
-                                   "turn.interrupt",
-                                   "runtime.close"}),
-                    )
+                    # Synthetic authenticated grant issuer; canonical Server
+                    # issuance and daemon transport remain separate milestones.
+                    class LeasePeer:
+                        def __init__(self):
+                            self.sent = []
+                            self.reply = None
+                        async def send(self, raw):
+                            frame = decode_r4_frame(raw.encode())
+                            self.sent.append(frame)
+                            if frame["type"] == "lease.renew":
+                                self.reply = dict(
+                                    protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                                    type="lease.granted", request_id=frame["request_id"],
+                                    grant_id=frame["grant_id"], scope=frame["scope"],
+                                    lease_id="lease", lease_serial=1, valid_for_ms=60000,
+                                    allowed_actions=["runtime.open", "turn.submit", "turn.steer",
+                                                     "turn.interrupt", "runtime.close"])
+                        async def recv(self):
+                            return json.dumps(self.reply)
+                    peer = LeasePeer()
+                    scope = {name: open_frame[name] for name in (
+                        "server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
+                        "workspace_binding_id", "session_id", "session_owner_generation",
+                        "authorization_revision", "configuration_revision", "binding_revision",
+                        "credential_epoch")}
+                    application = await apply_r4_lease(
+                        peer, R4ControlState(me.server_id, registered.executor_id, "control", 1, True),
+                        runtime, scope=scope, grant_id="grant")
+                    assert peer.sent[-1] == application.acknowledgement
+                    assert not native_factory.native.sent
+                    def context_for(frame):
+                        return runtime.r4_operation_context(frame, connection_id="control",
+                                                             connection_generation=1)
+                    opening_context = context_for(open_frame)
+                    with pytest.raises(CoreError):
+                        context_for({**open_frame, "workspace_binding_id": "other"})
                     prepared = await runtime.prepare(
                         LaunchIntent("agent-a", "ws", "codex_app_server"),
                         opening_context)
@@ -317,7 +338,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         receipt_revision=1)
                     core_receipt = await runtime.submit(
                         TurnOperation("op", "session", "Hello"),
-                        opening_context)
+                        context_for(submit_frame))
                     assert native_factory.native.sent == [("send_turn", "op")]
                     receipt_ack = await http.publish_core_turn_receipt(
                         ticket.ticket, submit_frame=submit_frame,
@@ -326,7 +347,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     steer_receipt = await runtime.control(
                         ControlOperation("steer-op", "session", "steer",
                                          "Continue", "turn-from-native"),
-                        opening_context)
+                        context_for(steer_frame))
                     assert native_factory.native.sent[-1] == ("steer", "steer-op")
                     steer_ack = await http.publish_core_steer_receipt(
                         ticket.ticket, submit_frame=steer_frame,
@@ -337,7 +358,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                             "interrupt-op", "session", "interrupt",
                             expected_turn_id="turn-from-native",
                             reason="Requested by the agent"),
-                        opening_context)
+                        context_for(interrupt_frame))
                     interrupt_ack = await http.publish_core_interrupt_receipt(
                         ticket.ticket, submit_frame=interrupt_frame,
                         core_receipt=interrupt_receipt,
@@ -345,7 +366,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     close_receipt = await runtime.close(
                         CloseOperation("close-op", "session",
                                        "Requested by the agent"),
-                        opening_context)
+                        context_for(close_frame))
                     close_ack = await http.publish_core_close_receipt(
                         ticket.ticket, submit_frame=close_frame,
                         core_receipt=close_receipt,

@@ -1,0 +1,200 @@
+{
+  "date": "2026-09-30",
+  "status": "DEVELOPMENT_PARTIAL",
+  "milestones": {
+    "M00": "IN_PROGRESS",
+    "M01": "IN_PROGRESS"
+  },
+  "gates": {
+    "G0": "OPEN",
+    "G1": "OPEN",
+    "G2": "OPEN",
+    "G3": "OPEN"
+  },
+  "core_version": "0.2.25.dev0",
+  "wheel": "nexus_connector_core-0.2.25.dev0-py3-none-any.whl",
+  "wheel_sha256": "e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4",
+  "identical_wheel_copies": 3,
+  "source_files_compared_to_wheel": 89,
+  "r4_manifest_sha256": "a316cfb1575c9d926c10dcf5ee3192979651aa7db0efb145fab7635094816f03",
+  "r4_executable": false,
+  "python": "3.13.1",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "runs": [
+    {
+      "name": "core_source_full",
+      "repository": "okto-nexus-connector-core",
+      "pytest_args": [
+        "tests",
+        "-q"
+      ],
+      "mode": "source on sys.path",
+      "counts": {
+        "tests": 959,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 74,
+        "passed": 885
+      },
+      "seconds": 261.763,
+      "timestamp": "2026-09-30T00:09:10.673917-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-core-025-full.xml",
+      "junit_sha256": "6a070f205da48074943dbd3a2d3d4c9869446d143e31fd2d64e9c63ac1751bfe"
+    },
+    {
+      "name": "core_installed_directed",
+      "repository": "okto-nexus-connector-core",
+      "pytest_args": [
+        "tests/test_r4_runtime_leases.py",
+        "tests/test_r4_lease_reducer.py",
+        "tests/test_r4_receipt_bridge.py",
+        "tests/test_r4_decision_bridge.py",
+        "tests/test_public_docs.py",
+        "-q"
+      ],
+      "mode": "installed Core wheel",
+      "counts": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 32
+      },
+      "seconds": 2.478,
+      "timestamp": "2026-09-30T00:13:33.728917-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-core-025-installed.xml",
+      "junit_sha256": "86aae2b9e91584710536b86fe560f31b0b8c900b6850b3ba6f3e579c3a8042b5"
+    },
+    {
+      "name": "connector_initial",
+      "repository": "okto-nexus-connector",
+      "pytest_args": [
+        "tests",
+        "-q"
+      ],
+      "mode": "fixture before selected-candidate correction",
+      "counts": {
+        "tests": 241,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 2,
+        "passed": 238
+      },
+      "seconds": 251.793,
+      "timestamp": "2026-09-30T00:13:33.026387-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-connector-025-full.xml",
+      "junit_sha256": "9379fb7af0bd4ff9f8fccd3958b850f76db1173a4cfa1281cf4cf7756ba47dee"
+    },
+    {
+      "name": "connector_final",
+      "repository": "okto-nexus-connector",
+      "pytest_args": [
+        "tests",
+        "-q"
+      ],
+      "mode": "installed Core and Connector",
+      "counts": {
+        "tests": 241,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 2,
+        "passed": 239
+      },
+      "seconds": 280.802,
+      "timestamp": "2026-09-30T00:18:13.377939-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-connector-025-full-final.xml",
+      "junit_sha256": "249fc8e8986f28ffa91ebaf264434b721e5d9115c46007f45d75141f7f0e72e8"
+    },
+    {
+      "name": "nexus_r4",
+      "repository": "okto_labs_okto_nexus",
+      "pytest_args": [
+        "tests/execution_r4",
+        "-q"
+      ],
+      "mode": "installed Core; optional Connector absent",
+      "counts": {
+        "tests": 42,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 41
+      },
+      "seconds": 48.097,
+      "timestamp": "2026-09-30T00:13:59.152187-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-nexus-r4-025.xml",
+      "junit_sha256": "84252a87e46ca309b1aaf333892ce8eba8340efa9d069ee993f1dadb4005a5cc"
+    },
+    {
+      "name": "vertical_initial",
+      "repository": "okto_labs_okto_nexus",
+      "pytest_args": [
+        "tests/execution_r4/test_vertical_inventory.py",
+        "-q"
+      ],
+      "mode": "Connector installed without websockets dependency",
+      "counts": {
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 0
+      },
+      "seconds": 2.129,
+      "timestamp": "2026-09-30T00:15:45.815440-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-nexus-025-vertical.xml",
+      "junit_sha256": "6d721932c30bc9b55966f4077a781be18ebef1f143cf5fc8393c5ece5efbbf7b"
+    },
+    {
+      "name": "vertical_final",
+      "repository": "okto_labs_okto_nexus",
+      "pytest_args": [
+        "tests/execution_r4/test_vertical_inventory.py",
+        "-q"
+      ],
+      "mode": "installed Core and Connector with dependencies",
+      "counts": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "seconds": 5.026,
+      "timestamp": "2026-09-30T00:16:09.524217-03:00",
+      "junit_file": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-nexus-025-vertical-final.xml",
+      "junit_sha256": "ea5aa96f4fb1fd920404f4bed79887623f8717420e55b1f5e1e261ffaa28fe7d"
+    }
+  ],
+  "checks_passed": [
+    "R3 generator --check",
+    "R4 generator --check",
+    "tools/verify_wheel.py in clean venv plus embedded and remote consumer smokes",
+    "python -I installed Core and Connector imports in both consumer environments",
+    "uv lock --check --find-links vendor/wheels",
+    "uv sync --extra serve-lite --extra dev --frozen",
+    "delivery plan document coverage: 14 milestones, 85 tasks, 164 original scenarios, 12 external deliverables, 4 CN5 findings, 23 routes, 7 actions, 4 language scenarios"
+  ],
+  "warnings": [
+    "Core: intentional Pi reader thread failure warning",
+    "Core: historical _ClockLateNative.close and _SlowThreadNative.close coroutine warnings",
+    "Nexus: existing Starlette httpx deprecation"
+  ],
+  "corrections": [
+    "Connector initial failure was a new fixture using empty candidate/root maps; corrected to a selected local candidate, then all four WSS tests and full Connector suite passed.",
+    "Vertical initial failure was missing websockets after a no-deps test install; installing the declared Connector dependencies resolved it."
+  ],
+  "remaining": [
+    "Canonical Server grant issuance and persistence",
+    "Full dispatcher and daemon integration, lane gating and recovery",
+    "Complete seven-action consumer conformance and executable bundle acceptance",
+    "Known broad Nexus regressions from 2026-09-29 remain open",
+    "UI/CLI and complete US English audit",
+    "Real provider, separate-host and complete Windows/Linux campaigns"
+  ],
+  "baseline_heads": {
+    "nexus": "9039e8eb92655da8fb7f04f8989456dc9dc167d2",
+    "connector": "77cec2966d8333d81cb2041871726762fd8421ca",
+    "core": "8aa60dd5b977d04c137090894b854ccfd429d1bf"
+  }
+}

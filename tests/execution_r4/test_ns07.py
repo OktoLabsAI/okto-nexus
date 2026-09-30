@@ -1,14 +1,13 @@
 """Embedded Core owner composition smoke for NS07.01."""
 
 import asyncio
-import time
 from dataclasses import replace
 
 import pytest
 from fastapi.testclient import TestClient
 from nexus_connector_core import (
-    CoreError, ExecutionContext, InstallationCandidate, Operation,
-    OperationKey, ShutdownPolicy, intent_hash,
+    CoreError, InstallationCandidate, Operation,
+    OperationKey, R4_PREVIEW_REVISION, ShutdownPolicy, intent_hash,
 )
 from nexus_connector_core.discovery import fingerprint
 
@@ -158,17 +157,32 @@ def test_ns07_02(tmp_path):
         async def environment(_launch):
             return {}
 
-        context = ExecutionContext(
-            "server", "executor", "binding", "agent", "workspace",
-            1, 1, 1, time.monotonic() + 60,
-            frozenset({"runtime.open", "turn.submit", "turn.steer",
-                       "turn.interrupt", "runtime.close"}),
-        )
-        executor = EmbeddedExecutor(
-            host, context=context, session_id="session_one",
+        scope = dict(server_id="server", executor_id="executor", binding_id="binding",
+                     agent_id="agent", workspace_id="workspace", workspace_binding_id="wxb",
+                     session_id="session_one", session_owner_generation=1,
+                     authorization_revision=1, configuration_revision=1,
+                     binding_revision=1, credential_epoch=1)
+        requests = []
+        async def request_grant(request):
+            requests.append(request)
+            assert factory.opens == (0 if request["purpose"] == "initial" else 1)
+            return dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION,
+                        type="lease.granted", request_id=request["request_id"],
+                        grant_id=request["grant_id"], lease_id="lease",
+                        lease_serial=request["expected_lease_serial"] + 1,
+                        scope=request["scope"], valid_for_ms=60000,
+                        allowed_actions=["runtime.open", "turn.submit", "turn.steer",
+                                         "turn.interrupt", "runtime.close"])
+        executor, application = await EmbeddedExecutor.authorize_r4(
+            host, scope=scope, grant_id="grant", connection_id="embedded",
+            connection_generation=1, request_grant=request_grant,
             candidate=candidate, workspace_root=str(tmp_path),
             environment=environment, native_factory=factory,
         )
+        context = application.context
+        assert application.acknowledgement["application_stage"] == "INSTALLED"
+        assert context.r4_authority.workspace_binding_id == "wxb"
+        assert factory.opens == 0
         try:
             opened = await executor.open(operation_id="open_one",
                                          stream_epoch="stream_one")
@@ -196,6 +210,13 @@ def test_ns07_02(tmp_path):
             with pytest.raises(CoreError):
                 await stale.submit(operation_id="stale_submit", text="Denied")
             assert factory.native.sent == before
+            renewed = await executor.renew_r4(
+                scope=scope, connection_id="embedded", connection_generation=1,
+                request_grant=request_grant)
+            assert renewed.acknowledgement["application_stage"] == "RENEWED"
+            assert renewed.context.r4_authority.lease_serial == 2
+            assert requests[0]["request_id"] != requests[1]["request_id"]
+            context = renewed.context
             closed = await executor.close(operation_id="close_one",
                                           reason="Requested by the agent")
             assert closed.operation_id == "close_one"

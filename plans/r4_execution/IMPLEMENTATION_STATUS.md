@@ -1,4 +1,4 @@
-# Execução R4 — estado verificado em 2026-09-29
+# Execução R4 — estado verificado em 2026-09-30
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
@@ -23,6 +23,17 @@ consome o mesmo catálogo. A evolução está documentada no
 O [relatório deste incremento](M01_TARGETING_INVENTORY.md) registra artefatos,
 testes e limites. M00/M01 e G0–G3 continuam abertos; grants/contexto,
 dispatcher e daemon completos permanecem pendentes.
+
+## Incremento de aplicação de autoridade
+
+O incremento mais recente instala autoridade R4 no runtime Core antes de
+prepare/open, renova pelo CAS existente e cerca imediatamente a revogação,
+inclusive durante renovação e esperas nativas. Nexus embedded e transporte
+Connector consomem essa API com o mesmo wheel `0.2.25.dev0`. O
+[relatório de aplicação de leases](M01_LEASE_APPLICATION.md) registra a
+campanha e os limites. A emissão canônica de grants no Server, a integração
+com o dispatcher/daemon, a recuperação completa e a qualificação final
+continuam pendentes. M00/M01 e G0–G3 permanecem abertos.
 
 ## Baseline
 

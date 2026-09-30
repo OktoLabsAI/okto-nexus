@@ -13,7 +13,7 @@ from pathlib import Path
 from nexus_connector_core import (
     CloseOperation, ControlOperation, CoreError, ExecutionContext,
     InstallationCandidate, LaunchIntent, OpenOperation, OperationReceipt,
-    PreparedLaunch, TurnOperation,
+    PreparedLaunch, R4LeaseApplication, TurnOperation, r4_lease_renew_frame,
 )
 
 from ....bootstrap.runtime_host import EmbeddedRuntimeHost
@@ -30,6 +30,64 @@ def core_error_projection(error: CoreError) -> dict[str, object]:
 
 class EmbeddedExecutor:
     """Use one approved local selection and exact Core context per session."""
+
+    @classmethod
+    async def authorize_r4(
+        cls, host: EmbeddedRuntimeHost, *, scope: Mapping[str, object],
+        grant_id: str, connection_id: str, connection_generation: int,
+        candidate: InstallationCandidate, workspace_root: str,
+        environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
+        request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
+        native_factory=None,
+    ) -> tuple[EmbeddedExecutor, R4LeaseApplication]:
+        """Install canonical Server authority before prepare or native open.
+
+        The Server supplies an authenticated grant issuer after admission.
+        This callback must persist its grant before returning it. Core owns
+        the request nonce, monotonic t0, context and application ACK.
+        """
+        scope = dict(scope)
+        runtime = await host.acquire(
+            executor_id=scope["executor_id"], session_id=scope["session_id"],
+            candidates={candidate.adapter_id: candidate},
+            workspace_roots={scope["workspace_id"]: workspace_root},
+            environment=environment, native_factory=native_factory)
+        attempt = await runtime.begin_r4_lease_request(
+            scope=scope, grant_id=grant_id, connection_id=connection_id,
+            connection_generation=connection_generation, purpose="initial")
+        grant = await request_grant(r4_lease_renew_frame(attempt))
+        application = await runtime.install_r4_lease(attempt, grant)
+        executor = cls(
+            host, context=application.context, session_id=scope["session_id"],
+            candidate=candidate, workspace_root=workspace_root,
+            environment=environment, native_factory=native_factory)
+        return executor, application
+
+    async def renew_r4(
+        self, *, scope: Mapping[str, object], connection_id: str,
+        connection_generation: int,
+        request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
+        purpose: str = "renew",
+    ) -> R4LeaseApplication:
+        if self.context.r4_authority is None:
+            raise CoreError("LEASE_REVALIDATION_REQUIRED", "embedded_renew")
+        runtime = await self._runtime()
+        attempt = await runtime.begin_r4_lease_request(
+            scope=scope, grant_id=self.context.r4_authority.grant_id,
+            connection_id=connection_id,
+            connection_generation=connection_generation, purpose=purpose)
+        grant = await request_grant(r4_lease_renew_frame(attempt))
+        application = await runtime.install_r4_lease(attempt, grant)
+        self.context = application.context
+        return application
+
+    async def revoke_r4(self, *, authorization_revision: int) -> R4LeaseApplication:
+        runtime = await self._runtime()
+        application = await runtime.revoke_r4_lease(
+            self.context, authorization_revision=authorization_revision)
+        # Retain the original context to correlate a retry of this revocation.
+        # Core refuses subsequent effects even if the caller retains it.
+        return application
 
     def __init__(
         self, host: EmbeddedRuntimeHost, *, context: ExecutionContext,
