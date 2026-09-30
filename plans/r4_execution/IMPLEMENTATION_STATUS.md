@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Durable WSS event ingress — September 30, 2026
+
+[Increment](M07_EVENT_INGRESS.md): Nexus validates the current owner and binding lane, retains canonical events with conflict detection, computes the contiguous watermark with the public Core reducer, and sends ACK only after the transaction commits. Public HTTP/WSS coverage verifies out-of-order arrival and replay. Installed focused regression: 65 passed, no skips. Connector/Core unchanged. Automatic publishers, local Core ACK recovery, projections and nonzero-stream reconciliation remain pending; NS10.01 and full delivery gates remain open.
+
+
 ## Confirmed close and paged reconciliation — September 30, 2026
 
 [Increment](M06_M07_RECONCILIATION.md): Connector schema 3 retains acknowledged hash associations and opening generation/epoch. A fresh Core owner reconciles confirmed closed sessions and 264 receipt summaries over real HTTP/WSS without native replay. Server readiness checks durable receipt integrity, current ownership, pagination and remaining sessions. Installed results: Connector 356 passed (one existing skip), Nexus 114 passed. Core 0.2.35 is unchanged and its wheel is identical in both consumers. Active session adoption, event replay, rotation and full acceptance remain pending. No milestone or gate closed.

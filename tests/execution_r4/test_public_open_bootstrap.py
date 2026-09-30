@@ -180,6 +180,25 @@ def test_public_binding_grant_admission_bootstrap_core_and_receipts(onboarding, 
                     async with NexusHTTPClient('https://127.0.0.1:8202', client=raw) as http:
                         await http.publish_core_open_receipt(lane, submit_frame=sent.frame, core_receipt=opened,
                             context=context, prepared=prepared, stream_epoch='public-epoch', receipt_revision=1)
+                        # A gap is stored without a false ACK; filling it commits
+                        # the contiguous prefix before the WSS response is visible.
+                        event_base = dict(server_id=server,executor_id=executor,
+                            session_id=sent.scope["session_id"],stream_epoch="public-epoch",
+                            category="text_delta",payload={"text":"Hello"},operation_id=opened.operation_id)
+                        batch = dict(protocol_major=1,contract_revision=R4_PREVIEW_REVISION,type="event.batch",
+                            server_id=server,executor_id=executor,binding_id=binding["binding_id"],agent_id="subject",
+                            session_id=sent.scope["session_id"],stream_epoch="public-epoch",
+                            connection_id=channel.connection_id,connection_generation=channel.connection_generation)
+                        await peer.send(encode_r4_frame({**batch,"events":[{**event_base,"sequence":2}]}).decode())
+                        await peer.send(encode_r4_frame({**batch,"events":[{**event_base,"sequence":1}]}).decode())
+                        ack = decode_r4_frame((await peer.recv()).encode())
+                        assert ack["type"] == "event.ack" and ack["sequence"] == 2
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress").fetchone()[0] == 2
+                            assert tuple(uow.connection.execute("SELECT committed_contiguous,projected_through,gap_state "
+                                "FROM execution_event_watermarks").fetchone()) == (2,0,"none")
+                        await peer.send(encode_r4_frame({**batch,"events":[{**event_base,"sequence":1}]}).decode())
+                        assert decode_r4_frame((await peer.recv()).encode())["sequence"] == 2
                         turn, dispatched = admit_public('turn-public', 'turn.submit', session_id=sent.scope['session_id'], text='Hello')
                         turn_context = runtime.r4_operation_context(dispatched.frame, connection_id=channel.connection_id,
                                                                    connection_generation=channel.connection_generation)

@@ -6,6 +6,7 @@ import asyncio
 from datetime import datetime, timezone
 import ipaddress
 import secrets
+import sqlite3
 from urllib.parse import urlsplit
 
 import anyio
@@ -377,6 +378,23 @@ def build_router() -> APIRouter:
                         continue
                     if granted is not None:
                         await _send_text(encode_r4_frame(granted).decode("utf-8"))
+                    continue
+                if frame["type"] == "event.batch":
+                    from ....application.execution_events import commit_execution_events
+                    def _commit_events():
+                        _verify()
+                        return commit_execution_events(factory,
+                            channel=ExecutionChannel(server_id,executor_id,connection_id,generation),frame=frame)
+                    try:
+                        ack = await anyio.to_thread.run_sync(_commit_events)
+                    except OktoNexusError:
+                        await ws.close(code=4403)
+                        break
+                    except sqlite3.DatabaseError:
+                        await ws.close(code=1011)
+                        break
+                    if ack is not None:
+                        await _send_text(encode_r4_frame(ack).decode("utf-8"))
                     continue
                 if frame["type"] == "reconcile.report":
                     if (pending_reconcile is None or any(
