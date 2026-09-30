@@ -67,16 +67,26 @@ O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e no
 |---|---|---|
 | [Auditoria inicial M00](M00_AUDIT.md) | 2.829 casos Nexus, 240 Connector e 925 Core coletados; 31 de 85 tarefas tinham entrada candidata coletável | Inventário histórico a atualizar; coleta não comprova os critérios de aceite |
 | [Incremento Core 0.2.28](test_runs_20260930_pending_containment.json) | Core 920 passes/74 skips; Connector 241 passes/2 skips; Nexus R4 69 passes; contenção instalada 12 passes; integração instalada 19 passes | Campanhas sobrepostas, peers sintéticos; sem aceite final de produto |
-| Campanha local instalada de conformance Core | XML local registra 99 passes, sem falhas ou skips; manifesto registra `python -I`, pacote instalado e hash do wheel | Runner e evidência ainda não rastreados no Core; revisar e publicar antes de usá-los no fechamento de M01 |
+| Campanha instalada de conformance Core | 99 passes, sem falhas ou skips; `python -I`, pacote instalado e hash do wheel | Runner/evidência publicados em `9d244cf`; contratos sintéticos, sem fechamento de M01 |
+| [Onboarding por operador](M03_OPERATOR_BINDING.md) | Nexus R4 77 passes; 11 casos com wheel instalado fora dos clones | Operador direto, inventário sintético e grant separado; sem ciclo de runtime |
 
-A última linha se refere a `tools/run_r4_installed.py` e `plans/implementation/evidence/r4-installed-campaign/` no Core. Preservar também as duas tentativas anteriores com falha de resolução de helpers, registradas em `r4-installed-conformance*.xml`. Esta revisão leu os resultados; não reexecutou suites de produto nem transforma 99 testes de contrato em prova do dispatcher, daemon ou provider.
+O runner `tools/run_r4_installed.py` e a evidência de conformance estão no
+Core em `plans/implementation/evidence/r4-installed-campaign/`. As duas
+tentativas anteriores com falha de resolução de helpers foram preservadas.
+A campanha foi reexecutada após revisar o runner. Não transforma testes de
+contrato em prova do dispatcher, daemon ou provider.
+
+O [incremento de operador](M03_OPERATOR_BINDING.md) conclui a criação
+transacional de perfil/endpoint habilitados para prepare/apply pelo operador
+canônico. Permanecem prova delegada, reuso autorizado no self-bind e a
+composição da jornada com os owners. Nenhum gate foi encerrado.
 
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |
 |---|---|
 | Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
-| Onboarding — M02/M03 | `execution_binding_proposals.py` produz proposta sem perfil e endpoint desabilitado; compor aprovação de operador, perfil e habilitação pelas entradas públicas, mantendo identidade e CAS |
+| Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; completar prova delegada e self-bind com autorização preexistente, mantendo identidade e CAS |
 | Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas faltam loop de produto, ownership e composição da abertura inicial pendente de lease |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
@@ -93,7 +103,7 @@ A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco cont
 
 | Ordem | Trabalho e responsável | Prova e publicação |
 |---|---|---|
-| 1 | Três repos: atualizar M00 por critério de aceite, defeito, nodeid e ambiente; revisar o runner Core local | Cada requisito tem implementação/caller, teste existente ou a criar, responsável e ambiente; versionar runner/evidências revisados, preservando falhas anteriores |
+| 1 | Três repos: atualizar M00 por critério de aceite, defeito, nodeid e ambiente; integrar a campanha Core publicada ao mapa de critérios | Cada requisito tem implementação/caller, teste existente ou a criar, responsável e ambiente; preservar o histórico de falhas |
 | 2 | Core + consumidores: completar a conformance instalada de M01 | Sete ações, erros, targeting, lease/revogação e histórico R3; mesmo wheel/hash nos dois consumidores; readiness de host avaliada separadamente |
 | 3 | Nexus + Connector: fechar autoridade e onboarding M02/M03 | Prepare sem efeito; aprovação exigida vinculada ao diff/revisões; apply habilita perfil/endpoint somente com autoridade válida; replay recupera o mesmo binding |
 | 4 | Nexus: ligar admissão/outbox e abertura inicial de M04 | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |

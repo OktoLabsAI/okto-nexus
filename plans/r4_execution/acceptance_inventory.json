@@ -331,14 +331,25 @@
     },
     "NS03.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_02",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_creates_profile_endpoint_and_scoped_grant",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[subject_policy]",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[operator_key]",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[configuration]",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[expiry]",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[method]",
+        "tests/execution_r4/test_binding_operator.py::test_operator_binding_rolls_back_profile_with_binding",
+        "tests/execution_r4/test_binding_operator.py::test_binding_does_not_turn_self_confirmation_into_execution_authority"
+      ],
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_binding_operator.py -q",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-03-02"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_operator_binding.json",
+      "remaining": "Delegated operator proof and authorized self-bind reuse; full original criterion and product acceptance remain open"
     },
     "NS03.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_03",

@@ -1,0 +1,61 @@
+{
+  "recorded_at": "2026-09-30T06:14:03.647706+00:00",
+  "scope": "Partial M02/M03 public operator binding integration; no product gate closed",
+  "nexus_parent_commit": "e2a63c80938717cf0c39270e63758a8264028809",
+  "core_commit": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+  "connector_unchanged_commit": "0be7faf0040266f2c12185985b132b6343cbc2fe",
+  "source_sha256": {
+    "src/okto_nexus/application/execution_binding_proposals.py": "8278a131912071109bbdef88a74ac5cdb9df56f1c5dd296f3cf7dbfa83a2fdd1",
+    "src/okto_nexus/adapters/inbound/http/connections_v1.py": "132e8db81cd8ccf8bde058a6984a91f67c4b4809d7ba71adaca31b483e5b9bc6",
+    "tests/execution_r4/test_binding_operator.py": "63f80fc3383334d38c3e936f697d92667123e6d121dd683f4e4aa3c70955e8a5"
+  },
+  "source_campaign": {
+    "file": "plans/r4_execution/evidence/operator-binding-source.xml",
+    "sha256": "d4b90b38b529b8930b463a9f690cbcd080346738db8b5b167ea56c83705cc883",
+    "tests": 77,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "installed_campaign": {
+    "file": "plans/r4_execution/evidence/operator-binding-installed.xml",
+    "sha256": "318934e69625eddb01925636e1dbf5b36d1bf6108140fa13de47e59e3d617239",
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=short --junitxml=plans/r4_execution/evidence/operator-binding-source.xml",
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-pending-installed-py313/Scripts/python.exe -I -X utf8 -c '\nimport hashlib,json,zipfile,platform,sys\nfrom pathlib import Path\nimport pytest,okto_nexus,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nreport={}\nfor module,wheel in [(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-r4-operator-binding-clean/okto_nexus-0.2.0-py3-none-any.whl\")),(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\")]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(wheel) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            expected=archive.read(name)\n            installed=package/name.split(\"/\",1)[1]\n            assert installed.read_bytes()==expected,name\n            if module is okto_nexus:\n                assert (root/\"src\"/name).read_bytes()==expected,name\n            files[name]=hashlib.sha256(expected).hexdigest()\n    report[module.__name__]={\"installed_path\":str(package),\"wheel\":str(wheel),\"wheel_sha256\":hashlib.sha256(wheel.read_bytes()).hexdigest(),\"files_sha256\":files}\nreport.update({\"python\":sys.version,\"platform\":platform.platform(),\"isolated\":bool(sys.flags.isolated),\"scope\":\"Installed operator binding HTTP integration with synthetic inventory; no provider or product gate\",\"frontend\":\"Pre-existing workspace assets packaged unchanged; no UI qualification\"})\n(root/\"plans/r4_execution/evidence/operator-binding-installed-modules.json\").write_text(json.dumps(report,indent=2)+\"\\n\",encoding=\"utf-8\")\nraise SystemExit(pytest.main([\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),str(root/\"tests/execution_r4/test_binding_operator.py\"),str(root/\"tests/execution_r4/test_ns05.py\"),\"-q\",\"--tb=short\",\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/operator-binding-installed.xml\")]))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "8a8f02a85c03f7929ce7b59a008fed2bb1c0dc3715162afdbb388bf5c07ee50e",
+  "shared_core_version": "0.2.28.dev0",
+  "shared_core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "earlier_attempts": [
+    {
+      "result": "7 setup errors",
+      "cause": "Test realization ref did not use required root_ prefix; corrected fixture"
+    },
+    {
+      "result": "5 passed, 2 failed",
+      "cause": "Grant fixture used a noncanonical timestamp; method fixture assumed a nonexistent revision column"
+    },
+    {
+      "result": "6 passed, 1 failed",
+      "cause": "Method fixture still assumed a nonexistent updated_at column; corrected to existing schema"
+    },
+    {
+      "result": "Installed artifact verification refused the first wheel before pytest",
+      "cause": "Existing setuptools build cache contained an asset absent from source; rebuilt in a new temporary staging directory, then verified all installed wheel package files against source"
+    }
+  ],
+  "limitations": [
+    "Synthetic inventory; no provider, daemon, dispatcher loop, browser or multi-host acceptance",
+    "Direct operator prepare/apply is supported; delegated operator_proof_ref and self-bind reuse of existing authorized profiles remain pending",
+    "Runtime grants are separately issued through the existing authenticated API; no implicit grant at binding apply",
+    "Attach execution, initial lease bootstrap and owner composition remain pending",
+    "Source and installed tests overlap; no counts added across campaigns",
+    "Legacy grant API returns INTERNAL_ERROR for an ISO offset timestamp rather than its required fixed-width UTC form; validation behavior remains a known defect",
+    "Wheel includes pre-existing user-modified frontend assets unchanged; no frontend build or qualification in this increment"
+  ]
+}

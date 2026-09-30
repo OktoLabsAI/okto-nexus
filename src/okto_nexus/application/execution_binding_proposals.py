@@ -12,8 +12,10 @@ import time
 from typing import Any, Mapping
 
 from nexus_connector_core.protocol import canonical_json
+from nexus_connector_core.catalog import get_runtime_catalog
 
 from ..errors import ErrorCode, OktoNexusError
+from ..adapters.outbound.sqlite.endpoints_repo import SqliteEndpointRepo
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
 from ..adapters.outbound.sqlite.execution_agent_revisions import (
     current_agent_revisions,
@@ -70,11 +72,34 @@ def _agent_guard(conn, agent_id: str) -> str:
         "profiles": [{key: row[key] for key in profile_fields}
                      for row in profiles],
     })
+def _binding_operator(uow, *, actor_agent_id, context, access) -> bool:
+    """Revalidate middleware authority inside the binding transaction."""
+    if context is None and access is None:
+        # Internal compatibility callers can only create disabled bindings.
+        return False
+    if context is None or access is None or context.actor_agent_id != actor_agent_id:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                              "The binding principal is invalid.", {})
+    operator = access.authenticate(context, uow=uow, require_feature=False)
+    if operator:
+        access.authorize(context, uow=uow, audit=False)
+    return operator
+
+
+def _require_binding_method(conn, *, subject_agent_id, adapter_id):
+    denied = conn.execute(
+        "SELECT 1 FROM agent_connection_methods WHERE agent_id=? AND method=? "
+        "AND enabled=0", (subject_agent_id, adapter_id),
+    ).fetchone()
+    if denied:
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                              "Connection method is disabled for this agent.", {})
 
 
 def prepare_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
+    context=None, access=None,
 ) -> dict[str, Any]:
     """Resolve a published local claim into a reviewable proposal, no spawn."""
     required = {
@@ -93,18 +118,29 @@ def prepare_execution_binding(
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "Invalid binding preparation field.",
                                   {"field": name})
-    if (request.get("agent_id_hint") is not None and
-            request["agent_id_hint"] != actor_agent_id):
-        raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
-                              "The agent hint does not match the authenticated agent.", {})
+    subject_agent_id = request.get("agent_id_hint") or actor_agent_id
+    if type(subject_agent_id) is not str or not 1 <= len(subject_agent_id) <= 160:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                              "Invalid binding subject.", {})
+    with factory.unit_of_work(write=False) as uow:
+        operator = _binding_operator(uow, actor_agent_id=actor_agent_id,
+                                     context=context, access=access)
+        if subject_agent_id != actor_agent_id and not operator:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "The agent hint does not match the authenticated agent.", {})
     if any(char in request["alias"] for char in ("/", "\\", ":")):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "A binding alias must not contain a path.", {})
     server_id, revisions, projection = current_agent_revisions(
-        factory, agent_id=actor_agent_id)
+        factory, agent_id=subject_agent_id)
     body_hash = _digest(dict(request))
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        operator = _binding_operator(uow, actor_agent_id=actor_agent_id,
+                                     context=context, access=access)
+        if subject_agent_id != actor_agent_id and not operator:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "Only an operator may represent another agent.", {})
         prior = conn.execute(
             "SELECT body_hash,proposal_json FROM execution_proposals WHERE "
             "server_id=? AND actor_agent_id=? AND client_intent_id=?",
@@ -134,7 +170,7 @@ def prepare_execution_binding(
             "WHERE r.server_id=? AND r.executor_id=? AND r.realization_ref=? "
             "AND r.subject_agent_id=?",
             (server_id, request["executor_id"],
-             request["realization_ref"], actor_agent_id),
+             request["realization_ref"], subject_agent_id),
         ).fetchone()
         if realization is None:
             raise OktoNexusError(ErrorCode.NOT_FOUND,
@@ -175,10 +211,20 @@ def prepare_execution_binding(
         legacy = conn.execute(
             "SELECT endpoint_id FROM agent_endpoints WHERE agent_id=? "
             "AND workspace_id=? AND adapter_id=? LIMIT 2",
-            (actor_agent_id, request["workspace_id"],
+            (subject_agent_id, request["workspace_id"],
              request["adapter_id"]),
         ).fetchall()
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
+        if operator:
+            _require_binding_method(conn, subject_agent_id=subject_agent_id,
+                                    adapter_id=request["adapter_id"])
+        descriptor = next((item for item in get_runtime_catalog().runtimes
+                           if item.adapter_id == request["adapter_id"]), None)
+        if descriptor is None:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                  "The selected adapter is not supported.", {})
+        profile_id = ("profile_" + secrets.token_hex(16)
+                      if operator and descriptor.connection_mode == "managed" else None)
         proposal_id = "prop_" + secrets.token_hex(16)
         binding_id = "bind_" + secrets.token_hex(16)
         endpoint_id = "ep_" + secrets.token_hex(16)
@@ -192,13 +238,16 @@ def prepare_execution_binding(
             "root_proof_digest": realization["local_root_proof_digest"],
             "workspace_revision": realization["workspace_revision"],
             "workspace_status": realization["workspace_status"],
-            "agent_guard_digest": _agent_guard(conn, actor_agent_id),
+            "agent_guard_digest": _agent_guard(conn, subject_agent_id),
+            "operator_approved": operator,
+            "operator_guard_digest": _agent_guard(conn, actor_agent_id) if operator else None,
+            "configuration_digest": realization["configuration_digest"],
             "alias": request["alias"],
         }
         diff_semantic = {
             "server_id": server_id, "executor_id": request["executor_id"],
-            "agent_id": actor_agent_id, "binding_id": binding_id,
-            "endpoint_id": endpoint_id,
+            "agent_id": subject_agent_id, "binding_id": binding_id,
+            "endpoint_id": endpoint_id, "profile_id": profile_id,
             "workspace_id": request["workspace_id"],
             "workspace_binding_id": realization["workspace_binding_id"],
             "adapter_id": request["adapter_id"],
@@ -210,19 +259,23 @@ def prepare_execution_binding(
         metadata = projection["metadata"]
         agent_name = _safe_label(
             metadata.get("display_name") if isinstance(metadata, dict) else None,
-            actor_agent_id)
+            subject_agent_id)
         host_name = _safe_label(executor["label"], request["executor_id"])
         project_name = _safe_label(realization["display_name"],
                                    request["workspace_id"])
         summary = (f"Connect {agent_name} to {request['adapter_id']} "
                    f"installation {request['candidate_ref']} on {host_name} "
                    f"for {project_name} as {request['alias']}.")
+        if operator:
+            summary += (" Enable the approved endpoint and its managed profile."
+                        if profile_id else " Enable the approved attach endpoint.")
+            summary += " Execution still requires a separate scoped grant."
         proposal = {
             "proposal_id": proposal_id, "proposal_revision": 1,
             "expires_at": expires_at, "server_id": server_id,
             "executor_id": request["executor_id"],
-            "agent_id": actor_agent_id, "binding_id": binding_id,
-            "endpoint_id": endpoint_id, "profile_id": None,
+            "agent_id": subject_agent_id, "binding_id": binding_id,
+            "endpoint_id": endpoint_id, "profile_id": profile_id,
             "workspace_id": request["workspace_id"],
             "workspace_binding_id": realization["workspace_binding_id"],
             "adapter_id": request["adapter_id"],
@@ -232,12 +285,12 @@ def prepare_execution_binding(
             "realization_revision": realization["revision"],
             "authorization_revision": revisions.authorization,
             "configuration_revision": revisions.configuration,
-            "required_approvals": ["agent_confirmation"],
+            "required_approvals": ["operator_confirmation" if operator else "agent_confirmation"],
             "diff": {
                 "fields_changed": ["agent", "host", "installation",
-                                   "project", "scope", "endpoint", "binding"],
+                                   "project", "scope", "endpoint", "binding"] + (["profile", "enabled"] if operator else []),
                 "approved_diff_hash": diff_hash,
-                "requires_operator": bool(blockers),
+                "requires_operator": operator or bool(blockers),
                 "summary": summary,
             },
             "can_apply": not blockers,
@@ -249,7 +302,7 @@ def prepare_execution_binding(
             "created_at,body_hash,proposal_revision,proposal_json) "
             "VALUES (?,?,?,?,?,?,?,?,?,?,'PREPARED',?,?,1,?)",
             (proposal_id, server_id, request["client_intent_id"],
-             actor_agent_id, actor_agent_id, request["executor_id"],
+             actor_agent_id, subject_agent_id, request["executor_id"],
              binding_id, canonical_json(expected).decode("utf-8"),
              diff_hash, expires_at, now.isoformat(), body_hash,
              canonical_json(proposal).decode("utf-8")),
@@ -260,6 +313,7 @@ def prepare_execution_binding(
 def apply_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
+    context=None, access=None,
 ) -> dict[str, Any]:
     """CAS a reviewed proposal into one canonical binding, without effect."""
     required = {"client_intent_id", "proposal_id", "proposal_revision",
@@ -278,9 +332,28 @@ def apply_execution_binding(
                               "Invalid binding apply fields.", {})
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=actor_agent_id)
+    with factory.unit_of_work(write=False) as uow:
+        _binding_operator(uow, actor_agent_id=actor_agent_id,
+                          context=context, access=access)
+        scoped = uow.connection.execute(
+            "SELECT subject_agent_id FROM execution_proposals WHERE proposal_id=? "
+            "AND server_id=? AND actor_agent_id=?",
+            (request["proposal_id"], server_id, actor_agent_id),
+        ).fetchone()
+        if scoped is None:
+            raise OktoNexusError(ErrorCode.NOT_FOUND,
+                                  "The binding proposal was not found.", {})
+        subject_agent_id = scoped["subject_agent_id"]
+    server_id, revisions, _ = current_agent_revisions(
+        factory, agent_id=subject_agent_id)
     body_hash = _digest(dict(request))
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        operator = _binding_operator(uow, actor_agent_id=actor_agent_id,
+                                     context=context, access=access)
+        if subject_agent_id != actor_agent_id and not operator:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "Only an operator may represent another agent.", {})
         prior = conn.execute(
             "SELECT proposal_id,apply_body_hash,applied_json FROM "
             "execution_proposals WHERE server_id=? AND actor_agent_id=? "
@@ -310,15 +383,23 @@ def apply_execution_binding(
         if (row["proposal_revision"] != request["proposal_revision"] or
                 row["diff_hash"] != request["approved_diff_hash"] or
                 not proposal["can_apply"] or
-                proposal["diff"]["requires_operator"] or
+                (proposal["diff"]["requires_operator"] and not operator) or
                 (request.get("operator_proof_ref") is not None) or
                 datetime.fromisoformat(row["expires_at"].replace(
                     "Z", "+00:00")) <= datetime.now(timezone.utc)):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The binding proposal cannot be applied.", {})
+        operator_approved = expected.get("operator_approved", False)
+        if operator_approved and (not operator or
+                _agent_guard(conn, actor_agent_id) != expected["operator_guard_digest"]):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "Operator authority changed after preparation.", {})
+        if operator_approved:
+            _require_binding_method(conn, subject_agent_id=subject_agent_id,
+                                    adapter_id=proposal["adapter_id"])
         if (revisions.authorization != expected["authorization_revision"] or
                 revisions.configuration != expected["configuration_revision"] or
-                _agent_guard(conn, actor_agent_id) != expected["agent_guard_digest"]):
+                _agent_guard(conn, subject_agent_id) != expected["agent_guard_digest"]):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "Agent policy or configuration changed.", {})
         executor = conn.execute(
@@ -327,7 +408,7 @@ def apply_execution_binding(
             (server_id, proposal["executor_id"]),
         ).fetchone()
         realization = conn.execute(
-            "SELECT r.revision,r.status,r.local_root_proof_digest,"
+            "SELECT r.revision,r.status,r.local_root_proof_digest,r.configuration_digest,"
             "r.candidate_ref,r.inventory_revision,r.workspace_binding_id,"
             "w.revision AS workspace_revision,w.status AS workspace_status,"
             "w.workspace_id FROM execution_realizations r "
@@ -337,11 +418,13 @@ def apply_execution_binding(
             "WHERE r.server_id=? AND r.executor_id=? AND r.realization_ref=? "
             "AND r.subject_agent_id=?",
             (server_id, proposal["executor_id"],
-             proposal["realization_ref"], actor_agent_id),
+             proposal["realization_ref"], subject_agent_id),
         ).fetchone()
         if (executor is None or executor["revoked_at"] is not None or
                 realization is None or
                 realization["revision"] != expected["realization_revision"] or
+                ("configuration_digest" in expected and
+                 realization["configuration_digest"] != expected["configuration_digest"]) or
                 realization["local_root_proof_digest"] != expected["root_proof_digest"] or
                 realization["workspace_revision"] != expected["workspace_revision"] or
                 realization["workspace_status"] != expected["workspace_status"] or
@@ -372,22 +455,41 @@ def apply_execution_binding(
         existing = conn.execute(
             "SELECT 1 FROM agent_endpoints WHERE agent_id=? AND "
             "workspace_id=? AND adapter_id=? LIMIT 1",
-            (actor_agent_id, proposal["workspace_id"],
+            (subject_agent_id, proposal["workspace_id"],
              proposal["adapter_id"]),
         ).fetchone()
         if existing is not None:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "An endpoint was added after preparation.", {})
         now = datetime.now(timezone.utc).isoformat()
+        profile_id = proposal["profile_id"] if operator_approved else None
+        endpoint_repo = SqliteEndpointRepo()
+        if profile_id:
+            # Technical configuration remains in the approved realization on
+            # the executor. No remote command, path or secret is resolved here.
+            endpoint_repo.put_profile(
+                uow, profile_id=profile_id, adapter_id=proposal["adapter_id"],
+                config={}, secret_refs={}, inherit_ambient=False,
+                enabled=True, now=now)
+            endpoint_repo.audit_configuration(
+                uow, context=context, kind="profile", resource_id=profile_id,
+                old_revision=None, new_revision=1,
+                fields=["enabled", "config"], now=now)
         conn.execute(
             "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
-            "adapter_id,protocol,enabled,activation_state,public_config,"
-            "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',0,'approved',?,?,?)",
-            (proposal["endpoint_id"], actor_agent_id, proposal["workspace_id"],
-             proposal["adapter_id"],
+            "adapter_id,protocol,profile_id,enabled,activation_state,public_config,"
+            "created_at,updated_at) VALUES (?,?,?,?,'nxl-r4',?,?,'approved',?,?,?)",
+            (proposal["endpoint_id"], subject_agent_id, proposal["workspace_id"],
+             proposal["adapter_id"], profile_id, int(operator_approved),
              canonical_json({"alias": expected["alias"]}).decode("utf-8"),
              now, now),
         )
+        if context is not None:
+            endpoint_repo.audit_configuration(
+                uow, context=context, kind="endpoint",
+                resource_id=proposal["endpoint_id"], old_revision=None,
+                new_revision=1, fields=["enabled", "profile_id", "public_config"],
+                now=now)
         conn.execute(
             "UPDATE execution_workspace_bindings SET status='READY',revision=revision+1 "
             "WHERE server_id=? AND executor_id=? AND workspace_binding_id=?",
@@ -413,7 +515,7 @@ def apply_execution_binding(
         view = {
             "binding_id": proposal["binding_id"], "server_id": server_id,
             "executor_id": proposal["executor_id"],
-            "agent_id": actor_agent_id, "endpoint_id": proposal["endpoint_id"],
+            "agent_id": subject_agent_id, "endpoint_id": proposal["endpoint_id"],
             "workspace_id": proposal["workspace_id"],
             "workspace_binding_id": proposal["workspace_binding_id"],
             "adapter_id": proposal["adapter_id"],
@@ -434,5 +536,5 @@ def apply_execution_binding(
              canonical_json(view).decode("utf-8"), row["proposal_id"]),
         )
     # Materialize the two dimensions changed by the new endpoint for /me.
-    current_agent_revisions(factory, agent_id=actor_agent_id)
+    current_agent_revisions(factory, agent_id=subject_agent_id)
     return view

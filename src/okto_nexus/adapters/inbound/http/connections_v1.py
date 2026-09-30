@@ -13,6 +13,8 @@ from ....application.execution_binding_proposals import (
     apply_execution_binding, prepare_execution_binding,
 )
 from ....errors import OktoNexusError
+from ....bootstrap.execution_authority import build_execution_access
+from ....domain.runtime_context import RuntimeRequestContext
 from ...outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ...outbound.sqlite.execution_identity import (
     ensure_execution_installation, register_remote_executor,
@@ -197,6 +199,10 @@ def build_router() -> APIRouter:
                 factory, actor_agent_id=agent.agent_id,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
+                context=RuntimeRequestContext(
+                    actor_agent_id=agent.agent_id, authentication_source="agent_key",
+                    credential_binding=agent.api_key_hash),
+                access=build_execution_access(request.app.state.deps),
             )
 
         proposal = await anyio.to_thread.run_sync(_prepare)
@@ -215,6 +221,10 @@ def build_router() -> APIRouter:
                 factory, actor_agent_id=agent.agent_id,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
+                context=RuntimeRequestContext(
+                    actor_agent_id=agent.agent_id, authentication_source="agent_key",
+                    credential_binding=agent.api_key_hash),
+                access=build_execution_access(request.app.state.deps),
             )
 
         view = await anyio.to_thread.run_sync(_apply)

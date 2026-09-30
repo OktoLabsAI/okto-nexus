@@ -2,6 +2,19 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento de onboarding por operador
+
+O [incremento M02/M03](M03_OPERATOR_BINDING.md) permite prepare/apply pelo
+operador autenticado representando o sujeito, com perfil/endpoint habilitados,
+CAS, auditoria e rollback transacional. O grant é emitido separadamente pela
+API existente; não foi semeado no teste. Passaram 77 casos Nexus R4 e 11 com
+wheel instalado fora dos clones. Prova delegada, self-bind autorizado e
+composição do ciclo de execução permanecem pendentes.
+
+A campanha Core instalada de 99 passes foi revisada, reexecutada e publicada
+em `9d244cf`; o wheel/runtime não mudou. Esses resultados não encerram M01,
+M03 ou G0–G3. A revisão documental abaixo é um checkpoint histórico.
+
 ## Revisão do plano de entrega total
 
 O plano foi consolidado contra Nexus `2baeaf9`, Connector `0be7faf` e Core
