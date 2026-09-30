@@ -13,7 +13,7 @@ from pathlib import Path
 from nexus_connector_core import (
     CloseOperation, ControlOperation, CoreError, ExecutionContext,
     InstallationCandidate, LaunchIntent, OpenOperation, OperationReceipt,
-    PreparedLaunch, R4LeaseApplication, TurnOperation, r4_lease_renew_frame,
+    PreparedLaunch, R4LeaseApplication, ShutdownPolicy, TurnOperation, r4_lease_renew_frame,
 )
 
 from ....bootstrap.runtime_host import EmbeddedRuntimeHost
@@ -164,9 +164,14 @@ class EmbeddedExecutor:
         )
 
     async def close(self, *, operation_id: str,
-                    reason: str | None = None) -> OperationReceipt:
+                    reason: str | None = None,
+                    policy: ShutdownPolicy | None = None) -> OperationReceipt:
         runtime = await self._runtime()
+        if self.context.r4_authority is not None and policy is None:
+            policy = ShutdownPolicy()
+        if self.context.r4_authority is not None and reason is None:
+            reason = "Close requested by the authorized agent."
         return await runtime.close(
             CloseOperation(operation_id=operation_id,
                            session_id=self.session_id,
-                           reason=reason), self.context)
+                           reason=reason, policy=policy), self.context)

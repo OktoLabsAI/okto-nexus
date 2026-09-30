@@ -1,7 +1,7 @@
 # ADR 0003: Canonical control targets and interrupt containment
 
-Status: implemented for steer and interrupt in the R4 development path.
-Runtime close policy and full Core conformance remain outstanding.
+Status: implemented for steer, interrupt and policy close in the R4 development
+path with Core 0.2.27.dev0. Full Core and product conformance remain outstanding.
 
 ## HTTP and wire projection
 
@@ -32,20 +32,17 @@ Absent text becomes `Interrupt requested by the authorized agent.`
 The HTTP shape stays unchanged; additional reason, PID, signal, argv and
 environment fields are not accepted.
 
-The normative interrupt payload permits up to 1024 characters. Core
-0.2.26 currently requires 1–256. Nonempty reasons of 257–1024 characters
-produce a durable blocked resolution (`core_interrupt_reason_unsupported`)
-instead of an invalid native operation. Empty-reason conformance also
-remains open. These are implementation gaps to fix in Core conformance,
-not permanent reductions of the delivery requirements.
+Core 0.2.27 accepts the normative 0–1024 character range. Empty text is
+preserved; only absent text receives the default. The temporary blocker
+`core_interrupt_reason_unsupported` used with Core 0.2.26 is removed.
 
 ## Authority and containment
 
-An admitted interrupt uses the independent control reservation. Dispatch
+An admitted interrupt or close uses the independent control reservation. Dispatch
 still requires the current agent authority, binding, realization, session
 owner, applied lease, allowed action, connection, unrevoked source grant
 and valid lane. The lease deadline alone does not prohibit containment.
-Discovery freshness is not needed to interrupt an already opened session.
+Discovery freshness is not needed to contain an already opened session.
 No caller-supplied containment flag or extra permission is introduced.
 
 The dispatch checks the full Core frame before consuming the productive
@@ -54,14 +51,31 @@ execution, but must remain allowed by the canonical grant. An already sent
 reservation cannot be used for a second send. Receipt history keeps the
 original operation ID and hash.
 
+## Per-operation close policy
+
+Resolution maps optional HTTP `text` to `reason` and fixes the canonical
+policy at 30 seconds of drain and 15 seconds of interrupt. Absent text becomes
+`Close requested by the authorized agent.` No new HTTP fields are introduced.
+All three payload fields are hashed and verified by the Core projector.
+`r4_close_operation` produces a typed `CloseOperation` without losing policy.
+
+Core owns one close producer per session and coalesces same-ID waiters.
+Cancellation detaches observation; another policy under the same ID conflicts.
+Draining fences productive operations. An observation deadline can return
+`OUTCOME_UNKNOWN` while the producer continues; it cannot manufacture success.
+Managed force uses the existing independent owner; attach is not force-stopped.
+
+Only a matching, authorized `SUBMITTED`/`SUCCEEDED` close receipt from the
+current executor owner projects a ready session to `CLOSED` and closes its
+lease. Receipt insertion, outbox release and session projection share one
+transaction. Progress and unknown receipts do not close the session; retry
+after a projection failure repeats the same receipt rather than native close.
+
 ## Remaining contract and product work
 
-The normative `ClosePayload` requires `drain_seconds` and
-`interrupt_seconds`; Core 0.2.26 accepts only `reason`. Its native
-`CloseOperation` also has no per-operation policy. Implement, hash, enforce
-and test that policy in Core before composing canonical close. Do not
-silently discard the normative fields or claim policy enforcement from the
-runtime's separate global shutdown settings.
+Public close effects wait for their journal frontier. Containment during
+pending lease CAS and blocked initial durable admission remains explicit
+follow-up work; the independent runtime shutdown path remains available.
 
 The R4 executable and Server readiness gates remain false. Tests qualify
 these application services with installed Core and a strict native test

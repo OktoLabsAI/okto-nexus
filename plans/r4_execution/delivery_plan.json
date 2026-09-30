@@ -6,16 +6,19 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Published development baseline and uncommitted close-policy integration work; planning only, not final product acceptance",
+    "scope": "Partial close-policy implementation and installed integration verified; full delivery remains open",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "7e891fbd78073f3b987be505b3a86c288233d74d",
-      "connector": "09b48595bc2ca99a7acff1555c12cf53e086df49",
-      "core": "ada37e30cfb8a09769e5cceb12fa3b34829095ba"
+      "nexus": "0a35455d63380cea192dd4d84ccb460d9f768411",
+      "connector": "218f25a9a09a31e7e640bf4fa1c5295f950eefe2",
+      "core": "c6f8580143a7793d2fd13dc59e44a552c04f62ab"
     },
-    "shared_core_version": "0.2.26.dev0",
-    "shared_core_wheel_sha256": "d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977",
-    "milestones_in_progress": ["M00", "M01"],
+    "shared_core_version": "0.2.27.dev0",
+    "shared_core_wheel_sha256": "f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6",
+    "milestones_in_progress": [
+      "M00",
+      "M01"
+    ],
     "closed_product_gates": [],
     "evidence": [
       "plans/r4_execution/M00_AUDIT.md",
@@ -30,17 +33,18 @@
       "plans/r4_execution/M01_EXPIRED_CONTAINMENT.md",
       "plans/r4_execution/test_runs_20260930_containment.json",
       "plans/r4_execution/M04_CANONICAL_CONTROLS.md",
-      "plans/r4_execution/test_runs_20260930_controls.json"
+      "plans/r4_execution/test_runs_20260930_controls.json",
+      "plans/r4_execution/M01_CLOSE_POLICY.md",
+      "plans/r4_execution/test_runs_20260930_close_policy.json"
     ],
-    "latest_increment": "Published canonical steer and interrupt: Nexus R4 68 passed, Connector 241 passed/2 skipped, installed controls 12 passed. Campaigns overlap and use Core 0.2.26. Close policy and terminal session projection are local work in progress. Pending-CAS containment, product dispatcher, daemon and native qualification remain open. No milestone or product gate closed.",
-    "verification_scope": "Local HEAD and origin tracking refs matched before this documentation update; wheel SHA-256 values were recalculated in all three repositories. Existing source XML was inspected. This planning review did not rerun product suites or close any gate.",
-    "work_in_progress": {
-      "status": "IN_PROGRESS",
+    "latest_increment": "Core close policy integrated through canonical Nexus services and Connector receipt publication: Core source 908 passed/74 skipped; Connector 241 passed/2 skipped; Nexus R4 69 passed; installed Core 21 passed; installed application integration 19 passed. Campaigns overlap; qualification and native peers are synthetic. No milestone or gate closed.",
+    "verification_scope": "Same wheel hashes and installed package bytes verified. Source and installed regression recorded in close-policy evidence. Nexus changes belong to the commit containing this checkpoint; dependency heads are already published.",
+    "latest_partial_increment": {
+      "status": "PARTIAL_INTEGRATION_VERIFIED",
       "scope": "Core close policy, complete interrupt reason range, canonical Nexus close and terminal receipt projection",
       "core_version": "0.2.27.dev0",
       "core_wheel_sha256": "f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6",
-      "published": false,
-      "consumer_acceptance": "NOT_RUN_ON_FINAL_COMMITTED_ARTIFACTS",
+      "consumer_acceptance": "INSTALLED_TECHNICAL_INTEGRATION_PASSED; PRODUCT_DAEMON_PROVIDER_AND_MULTIHOST_ACCEPTANCE_OPEN",
       "source_xml": "../okto-nexus-connector-core/plans/implementation/evidence/r4-close-policy-final-source.xml",
       "source_result_observed": {
         "tests": 982,
@@ -49,14 +53,17 @@
         "failures": 0,
         "errors": 0
       },
-      "immediate_integration_gap": "Nexus dependency pins select 0.2.27 while core_inventory.py and test_ns01.py still require 0.2.26.",
+      "immediate_integration_gap": "Version mismatch resolved in inventory guard, package tests, dependency pins and lock.",
       "next_steps": [
-        "Review existing Core changes, schema generation, wheel verification and source-to-artifact correspondence.",
-        "Align Nexus inventory version, package expectations, dependency pins and lock to one Core artifact.",
-        "Run Core, Nexus R4 and Connector regressions; preserve earlier failures and classify skips.",
-        "Verify close receipt rollback, cancellation, same-ID replay and unknown outcomes using installed consumers outside clones.",
-        "Publish coherent Core, Connector and Nexus commits with artifact hashes and evidence; keep milestone and product gates open until their full acceptance."
-      ]
+        "Complete containment during pending lease CAS and remaining Core conformance.",
+        "Complete canonical onboarding and product outbox ownership.",
+        "Integrate embedded and remote daemon owners, nonempty reconciliation, governance and final campaigns."
+      ],
+      "published_dependency_heads": {
+        "core": "c6f8580143a7793d2fd13dc59e44a552c04f62ab",
+        "connector": "218f25a9a09a31e7e640bf4fa1c5295f950eefe2"
+      },
+      "nexus_commit": "Commit containing this checkpoint"
     }
   },
   "sources": {

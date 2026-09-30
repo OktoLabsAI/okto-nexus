@@ -13,7 +13,7 @@ import pytest
 from fastapi.testclient import TestClient
 from nexus_connector_core import (
     ControlOperation, CoreError, LaunchIntent, OpenOperation, OperationKey, ShutdownPolicy,
-    create_runtime, r4_lease_renew_frame, r4_submit_intent_hash,
+    create_runtime, r4_close_operation, r4_lease_renew_frame, r4_submit_intent_hash,
 )
 from nexus_connector_core.journal import open_journal
 
@@ -64,7 +64,8 @@ def test_native_target_is_bound_to_the_wire_hash():
         'target':{'kind':'native_turn_id', 'expected_turn_id':'turn-b'}})
 
 
-def test_public_controls_preserve_ids_authority_and_expired_containment(tmp_path, monkeypatch):
+@pytest.mark.parametrize('finish', ['revoke', 'close'])
+def test_public_controls_preserve_ids_authority_and_expired_containment(tmp_path, monkeypatch, finish):
     pytest.importorskip('okto_nexus_connector')
     from okto_nexus_connector.transport.https_client import NexusHTTPClient
     values = setup_authority(tmp_path, monkeypatch,
@@ -222,16 +223,74 @@ def test_public_controls_preserve_ids_authority_and_expired_containment(tmp_path
                             with factory.unit_of_work(write=False) as uow:
                                 assert uow.connection.execute('SELECT used_executions FROM runtime_execution_grants').fetchone()[0] == 2
                                 assert uow.connection.execute("SELECT COUNT(*) FROM execution_client_intents WHERE client_intent_id='invalid'").fetchone()[0] == 0
-                            blocked = await resolve('turn.interrupt', 'long-reason', text='x'*257, target=current_run)
-                            assert not blocked.can_submit and 'core_interrupt_reason_unsupported' in blocked.blockers
+                            long_reason = await resolve('turn.interrupt', 'long-reason', text='x'*1024, target=current_run)
+                            assert long_reason.can_submit and long_reason.semantic_intent['payload']['reason'] == 'x'*1024
                             oversized = await resolve('turn.steer', 'oversized', text='\u00e9'*40000, target=native_target)
                             assert not oversized.can_submit and 'operation_payload_too_large' in oversized.blockers
-                            revoked = await resolve('turn.interrupt', 'revoke-before-send', target=current_run)
-                            await http.submit_r4_operation(key, revoked)
-                            reserved = reserve()
-                            access.revoke(operator, grant_id=canonical['grant_id'])
-                            with pytest.raises(OktoNexusError):
-                                dispatch(reserved)
+                            if finish == 'revoke':
+                                revoked = await resolve('turn.interrupt', 'revoke-before-send', target=current_run)
+                                await http.submit_r4_operation(key, revoked)
+                                reserved = reserve()
+                                access.revoke(operator, grant_id=canonical['grant_id'])
+                                with pytest.raises(OktoNexusError):
+                                    dispatch(reserved)
+                            else:
+                                closing = await resolve('runtime.close', 'close', text='x'*1024)
+                                assert closing.can_submit and closing.semantic_intent['target']['kind'] == 'none'
+                                await http.submit_r4_operation(key, closing)
+                                authorized_close = dispatch(reserve())
+                                assert authorized_close.frame['intent_hash'] == closing.intent_hash
+                                close_context = runtime.r4_operation_context(authorized_close.frame,
+                                    connection_id=channel.connection_id, connection_generation=channel.connection_generation)
+                                close_operation = r4_close_operation(authorized_close.frame)
+                                close_entered,close_release = asyncio.Event(),asyncio.Event()
+                                original_close = native.native.close
+                                close_calls = []
+                                async def slow_close():
+                                    close_calls.append('close')
+                                    close_entered.set()
+                                    await close_release.wait()
+                                    return await original_close()
+                                native.native.close = slow_close
+                                waiter = asyncio.create_task(runtime.close(close_operation, close_context))
+                                try:
+                                    await asyncio.wait_for(close_entered.wait(),2)
+                                    pending_close = await journal.get_receipt(OperationKey(server, executor, closing.operation_id))
+                                    assert pending_close.stage == 'SUBMISSION_STARTED'
+                                    await http.publish_core_close_receipt(ticket, submit_frame=authorized_close.frame,
+                                        core_receipt=pending_close, context=close_context, receipt_revision=1)
+                                    with factory.unit_of_work(write=False) as uow:
+                                        assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions').fetchone()[0] == 'READY'
+                                    waiter.cancel()
+                                    with pytest.raises(asyncio.CancelledError): await waiter
+                                    replay = asyncio.create_task(runtime.close(close_operation, close_context))
+                                    close_release.set()
+                                    closed = await asyncio.wait_for(replay,2)
+                                finally:
+                                    close_release.set()
+                                    await asyncio.gather(waiter,return_exceptions=True)
+                                assert closed.stage == 'SUBMITTED' and native.native.stopped
+                                assert close_calls == ['close']
+                                assert await runtime.close(close_operation, close_context) == closed
+                                with factory.unit_of_work() as uow:
+                                    uow.connection.execute("CREATE TRIGGER fail_closed BEFORE UPDATE OF lifecycle_state ON execution_sessions WHEN NEW.lifecycle_state='CLOSED' BEGIN SELECT RAISE(ABORT,'close projection fault'); END")
+                                from okto_nexus_connector.errors import ConnectorError
+                                with pytest.raises(ConnectorError):
+                                    await http.publish_core_close_receipt(ticket, submit_frame=authorized_close.frame,
+                                        core_receipt=closed, context=close_context, receipt_revision=2)
+                                with factory.unit_of_work() as uow:
+                                    assert uow.connection.execute('SELECT lifecycle_state FROM execution_sessions').fetchone()[0] == 'READY'
+                                    assert uow.connection.execute('SELECT MAX(receipt_revision) FROM execution_receipts WHERE operation_id=?',(closing.operation_id,)).fetchone()[0] == 1
+                                    uow.connection.execute('DROP TRIGGER fail_closed')
+                                await http.publish_core_close_receipt(ticket, submit_frame=authorized_close.frame,
+                                    core_receipt=closed, context=close_context, receipt_revision=2)
+                                repeated = await http.publish_core_close_receipt(ticket, submit_frame=authorized_close.frame,
+                                    core_receipt=closed, context=close_context, receipt_revision=2)
+                                assert repeated.reused
+                                with factory.unit_of_work(write=False) as uow:
+                                    assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == ('CLOSED','CLOSED')
+                                after_close = await resolve('turn.submit','after-close',text='New work')
+                                assert not after_close.can_submit and 'session_not_ready' in after_close.blockers
                             assert len(native.native.sent) == 2
                             release_unsent_dispatch(factory, reservation=held)
                 finally:

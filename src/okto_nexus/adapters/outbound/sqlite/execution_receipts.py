@@ -275,6 +275,21 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 "AND e.control_state='CONTROL_READY')",
                 (key[0], key[1], parsed['session_id'], key[2], scope['session_owner_generation'],
                  projection.source_connection_id, projection.source_connection_generation))
+        if (scope and operation['action'] == 'runtime.close' and
+                projection.stage in ('SUBMITTED', 'SUCCEEDED')):
+            # A Core close receipt is submitted only after observed stop and
+            # owned-slot release. Unknown or historical-owner receipts cannot
+            # close the current session; preserve the original receipt stage.
+            conn.execute(
+                "UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
+                "WHERE server_id=? AND executor_id=? AND session_id=? "
+                "AND owner_generation=? AND lifecycle_state='READY' "
+                "AND EXISTS (SELECT 1 FROM execution_executors e "
+                "WHERE e.server_id=execution_sessions.server_id AND e.executor_id=execution_sessions.executor_id "
+                "AND e.owner_instance_id=? AND e.generation=? AND e.revoked_at IS NULL "
+                "AND e.control_state='CONTROL_READY')",
+                (key[0], key[1], parsed['session_id'], scope['session_owner_generation'],
+                 projection.source_connection_id, projection.source_connection_generation))
     return AcceptedExecutionReceipt(parsed["operation_id"],
                                     projection.receipt_revision,
                                     projection.stage, False)

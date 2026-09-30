@@ -222,7 +222,8 @@ def test_ns07_02(tmp_path):
             assert closed.operation_id == "close_one"
             assert closed.intent_hash == intent_hash(
                 Operation("close_one", "session_one", "runtime.close",
-                          {"reason": "Requested by the agent"}), context)
+                          {"reason": "Requested by the agent", "drain_seconds":30,
+                           "interrupt_seconds":15}), context)
             assert [item[1] for item in factory.native.sent] == [
                 "submit_one", "steer_one", "interrupt_one"]
             assert factory.native.stopped

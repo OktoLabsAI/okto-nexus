@@ -23,7 +23,8 @@ from .execution_semantics import execution_intent_hash, validate_execution_targe
 
 
 _INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit",
-            "turn.steer": "turn.steer", "turn.interrupt": "turn.interrupt"}
+            "turn.steer": "turn.steer", "turn.interrupt": "turn.interrupt",
+            "runtime.close": "runtime.close"}
 
 
 def resolve_execution_intent(
@@ -62,10 +63,10 @@ def resolve_execution_intent(
             not 1 <= len(request["text"]) <= 65536):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "A session and turn text are required.", {})
-    if request["intent"] == "turn.interrupt" and "text" in request and (
-            type(request["text"]) is not str or not 1 <= len(request["text"]) <= 1024):
+    if request["intent"] in {"turn.interrupt", "runtime.close"} and "text" in request and (
+            type(request["text"]) is not str or len(request["text"]) > 1024):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                              "The interrupt reason must contain 1 to 1024 characters.", {})
+                              "The control reason must contain at most 1024 characters.", {})
     target = request.get("target", {"kind": "none", "expected_turn_id": None})
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=actor_agent_id)
@@ -106,7 +107,7 @@ def resolve_execution_intent(
                                   "The binding was not found in this agent scope.", {})
         action = _INTENTS[request["intent"]]
         validate_execution_target(binding["adapter_id"], action, target)
-        containment = action == "turn.interrupt"
+        containment = action in {"turn.interrupt", "runtime.close"}
         blockers = []
         if not remote_ready:
             blockers.append("remote_execution_unavailable")
@@ -196,14 +197,12 @@ def resolve_execution_intent(
              "profile_revision": profile["revision"] if profile else 1,
              "mode": "managed"}
             if action == "runtime.open" else
+            {"reason": request.get("text", "Close requested by the authorized agent."),
+             "drain_seconds": 30, "interrupt_seconds": 15}
+            if action == "runtime.close" else
             {"reason": request.get("text", "Interrupt requested by the authorized agent.")}
             if action == "turn.interrupt" else {"text": request["text"]}
         )
-        # Core's development bundle still has a narrower reason bound than
-        # the normative HTTP payload. Preserve the requested text and expose
-        # the incompatibility; never truncate it or admit an invalid frame.
-        if action == "turn.interrupt" and len(payload["reason"]) > 256:
-            blockers.append("core_interrupt_reason_unsupported")
         # The wire bound is UTF-8 JSON bytes, not the HTTP string's character
         # count. An oversized intent must not enter an undispatchable outbox.
         if len(canonical_json(payload)) > 65536:

@@ -10,9 +10,24 @@ o cliente Connector verifica a correlação antes de admitir a operação.
 Interrupt previamente permitido continua despachável após expiry produtiva
 com autoridade e lane válidas, sem exigir nova descoberta de binário.
 O [ADR 0003](../../docs/adr/0003-canonical-control-targets.md) registra o mapping
-de razão e as lacunas de conformance do Core para razão longa/vazia e política
-de close. NS06/M04 permanecem parciais; loop de outbox, close, decisões, owners
-e campanhas finais continuam pendentes.
+de razão e política. O incremento seguinte resolve razão longa/vazia e close
+com política; NS06/M04 permanecem parciais, com loop de outbox, decisões,
+owners e campanhas finais pendentes.
+
+## Incremento de fechamento canônico com política
+
+Core `0.2.27.dev0` aplica política por sessão, conserva um producer após
+cancelamento do waiter e confere razão/tempos no hash dos recibos. Nexus
+resolve/admite/autoriza close e projeta sessão/lease fechadas na transação
+do recibo, somente após fato de encerramento do owner corrente. Unknown
+e progresso não fecham a sessão. Os consumidores usam o mesmo wheel.
+
+O [relatório de close](M01_CLOSE_POLICY.md) registra a regressão Core de
+fonte (908 passes/74 skips), Nexus R4 (69 passes), testes instalados Core
+(21 passes) e integração instalada (19 passes), sem somar sobreposições.
+Os testes ainda usam qualificação e peer sintéticos; não demonstram daemon,
+provider, dois hosts ou UI. CAS pendente, composição dos owners e gates
+M01/M04/G0–G3 continuam abertos.
 
 ## Execução do plano de entrega
 

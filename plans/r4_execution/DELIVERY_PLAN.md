@@ -65,7 +65,7 @@ A campanha mais recente, registrada em [test_runs_20260930_containment.json](tes
 
 Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
 
-### Checkpoint atual para a entrega total — 30 de setembro de 2026
+### Checkpoint de planejamento anterior ao incremento de close
 
 Esta revisão conferiu os arquivos e evidências locais dos três repositórios. Os HEADs anteriores à revisão documental são Nexus `7e891fbd78073f3b987be505b3a86c288233d74d`, Connector `09b48595bc2ca99a7acff1555c12cf53e086df49` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. As referências locais de tracking coincidem com esses HEADs em `feature/v0.2.0`. O Core publicado continua em `0.2.26.dev0`; os parágrafos anteriores preservam checkpoints históricos.
 
@@ -75,13 +75,30 @@ O XML local `../okto-nexus-connector-core/plans/implementation/evidence/r4-close
 
 O incremento publicado de steer/interrupt tem 68 passes Nexus R4, 241 passes/2 skips Connector e 12 casos instalados, conforme [registro de controles](test_runs_20260930_controls.json). Essas campanhas têm sobreposição e não qualificam o novo wheel `0.2.27.dev0`. O estado permanece: M00/M01 em andamento, incrementos parciais dos marcos posteriores e G0–G3 abertos.
 
+### Checkpoint de implementação: Core 0.2.27 e close canônico
+
+O incremento descrito acima foi integrado e testado, conforme
+[M01_CLOSE_POLICY.md](M01_CLOSE_POLICY.md). O inventário Nexus e as
+expectativas de pacote agora exigem `0.2.27.dev0`; pins/lock e os três wheels
+usam o hash `f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6`.
+Passaram 69 testes Nexus R4, 241 Connector/2 skips, 21 testes Core instalado
+e 19 de integração instalada, além da regressão Core de fonte 908/74.
+Contagens se sobrepõem. O registro de execução contém comandos, hashes,
+falhas anteriores e limites; os commits de dependências estão no manifesto.
+
+O pacote imediato abaixo tem sua integração técnica concluída neste
+incremento. Os próximos trabalhos são contenção durante CAS pendente e
+conformance restante do Core, seguidos de onboarding público, loop de
+outbox e owners embedded/daemon. Os testes de close não demonstram esses
+fluxos de produto. M01/M04/M07/M11 e todos os gates continuam abertos.
+
 ### Prioridades para continuar a execução
 
 O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados na campanha original. A referência de commits acima já inclui este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
 
 O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
 
-O [incremento publicado de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. A política de close e a faixa completa da razão de interrupt passaram a ter implementação local no incremento descrito no checkpoint atual; ainda exigem integração, teste instalado e publicação coordenada antes de concluir M01/M04. Não há fechamento de milestone, loop de produto ou qualificação nativa por esses incrementos.
+O [incremento publicado de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. A política de close e a faixa completa da razão de interrupt foram integradas e testadas com o mesmo Core instalado no [incremento seguinte](M01_CLOSE_POLICY.md). Não há fechamento de milestone, loop de produto ou qualificação nativa por esses incrementos.
 
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|
@@ -127,6 +144,9 @@ Antes do passo 3, conferir a representação normativa da razão de interrupt/cl
 ### Pacote imediato: concluir o incremento local de close
 
 Este pacote é parte de M01/M04/M07/M11. Seu fechamento não encerra esses marcos inteiros.
+Estado atualizado: integração técnica verificada no relatório de close;
+os passos abaixo preservam o escopo executado. O próximo pacote é a
+coordenação de contenção durante CAS e a conformance restante de M01.
 
 1. **Core:** revisar o diff existente de `close_operation.py`, `close_runtime.py`, runtime, schemas e projeção. Conferir razão, política tipada, hash, deadline único, contenção durante drain, cancelamento do waiter, efeito tardio e preservação de `OUTCOME_UNKNOWN`. Executar os geradores com `--check`, conformance e verificador de wheel; registrar a correspondência entre fonte e pacote.
 2. **Nexus:** alinhar versão de inventário, dependências, lock e expectativas de pacote ao mesmo artefato. Validar `test_canonical_controls.py`, NS01, NS07, NS10 e integração vertical. Provar que apenas o recibo autorizado de fechamento observado muda a sessão para `CLOSED`, que unknown mantém incerteza e que falha transacional reverte recibo/projeção juntos.

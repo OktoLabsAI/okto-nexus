@@ -127,7 +127,7 @@ def submit_execution_operation(
             action = resolved["semantic_intent"]["action"]
             validate_execution_target(binding["adapter_id"], action,
                                       resolved["semantic_intent"]["target"])
-            containment = action == "turn.interrupt"
+            containment = action in {"turn.interrupt", "runtime.close"}
             current = conn.execute(
                 "SELECT c.inventory_revision,c.publication_sequence,"
                 "s.observation_age_ms,s.canonical_projection "
@@ -173,7 +173,7 @@ def submit_execution_operation(
                 ).fetchone() is not None:
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The session claim already exists.", {})
-            elif action in {"turn.submit", "turn.steer", "turn.interrupt"}:
+            elif action in {"turn.submit", "turn.steer", "turn.interrupt", "runtime.close"}:
                 session = conn.execute(
                     "SELECT binding_id,workspace_id,workspace_binding_id,"
                     "owner_generation,lifecycle_state,lease_state "

@@ -213,7 +213,8 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                 close_frame = {
                     **submit_frame, "operation_id": "close-op",
                     "action": "runtime.close",
-                    "payload": {"reason": "Requested by the agent"},
+                    "payload": {"reason": "Requested by the agent",
+                                "drain_seconds":30, "interrupt_seconds":15},
                 }
                 close_frame["intent_hash"] = r4_submit_intent_hash(close_frame)
                 with deps.connection_factory.unit_of_work() as uow:
@@ -365,7 +366,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                         context=opening_context, receipt_revision=1)
                     close_receipt = await runtime.close(
                         CloseOperation("close-op", "session",
-                                       "Requested by the agent"),
+                                       "Requested by the agent", ShutdownPolicy(30,15)),
                         context_for(close_frame))
                     close_ack = await http.publish_core_close_receipt(
                         ticket.ticket, submit_frame=close_frame,

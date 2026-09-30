@@ -263,7 +263,7 @@ def begin_execution_send(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The stored dispatch intent changed.", {})
         validate_execution_target(binding["adapter_id"], row["action"], semantic["target"])
-        containment = row["action"] == "turn.interrupt"
+        containment = row["action"] in {"turn.interrupt", "runtime.close"}
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
             "s.observation_age_ms,s.canonical_projection "
