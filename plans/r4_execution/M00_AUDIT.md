@@ -17,6 +17,13 @@ Provider executables report Codex CLI 0.159.0, Pi 0.87.1 and Claude Code
 containment, build fingerprints and capabilities remain to be qualified.
 No remote laboratory host or separate Server C has been verified yet.
 
+Follow-up probes confirmed a running Ubuntu WSL2 kernel
+5.15.146.1-microsoft-standard-WSL2 on x86_64. Codex reports logged in and
+Claude reports logged in through claude.ai. Only status booleans/methods
+were recorded, without credential values. Pi has a local auth file, but its
+usable authentication remains unverified. None of these probes makes a
+provider invocation or qualifies a build.
+
 Nexus collection uses its existing development venv. Core and Connector
 collection use an isolated CPython 3.13.1 venv with the pinned Core wheel
 0.2.22.dev0 and a non-editable Connector installation. Collection emulates
@@ -48,6 +55,13 @@ Executed in this audit:
 
 Neither execution proves provider behavior or the distributed product.
 The existing Starlette/httpx deprecation warning remains visible.
+
+The subsequent broad regressions and failures are recorded in
+`test_runs_20260929.json` and `M01_DECISION_CONFORMANCE.md`. Nexus stopped
+after ten failures with 831 passed and 71 skipped; 1,917 collected cases
+were not reached. This is not a full green baseline. Connector completed
+with 237 passed, two skipped and one packaging failure; its stale sibling
+wheel selection was corrected and both packaging checks then passed.
 
 ## Capacity baseline and remaining decisions
 
