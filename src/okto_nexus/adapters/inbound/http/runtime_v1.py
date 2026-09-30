@@ -17,6 +17,9 @@ from ....application.execution_intents import (
     read_execution_intent, resolve_execution_intent,
 )
 from ....application.execution_admission import submit_execution_operation
+from ....application.execution_capabilities import ExecutionCapabilityService
+from ....bootstrap.execution_authority import build_execution_access
+from ....domain.runtime_context import RuntimeRequestContext
 from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
@@ -82,8 +85,50 @@ class OperationSubmitRequest(BaseModel):
     intent_hash: _Digest
 
 
+class CapabilityRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    capability_request_id: _Id
+    binding_id: _Id
+    audience: _Id
+    actions: Annotated[list[_Id], Field(max_length=128)]
+    replaces_capability_id: _Id | None = None
+
+
 def build_router() -> APIRouter:
     router = APIRouter()
+
+    @router.post("/runtime/sessions/{session_id}/capability")
+    async def session_capability(session_id: str, body: CapabilityRequest,
+                                 request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        deps = request.app.state.deps
+        service = ExecutionCapabilityService(factory=deps.connection_factory,
+                                             access=build_execution_access(deps))
+        try:
+            issued = await anyio.to_thread.run_sync(lambda: service.issue(
+                context=RuntimeRequestContext(agent.agent_id, "agent_key",
+                                              credential_binding=agent.api_key_hash),
+                session_id=session_id, request=body.model_dump(exclude_none=True),
+                mcp_url=str(request.base_url).rstrip("/") + "/mcp"))
+        except OktoNexusError as error:
+            status = {"NOT_FOUND": 404, "PERMISSION_DENIED": 403, "CONFLICT": 409,
+                      "CREDENTIAL_MATERIAL_UNAVAILABLE": 409, "VALIDATION_ERROR": 422}.get(error.code, 500)
+            if error.code == 'CREDENTIAL_MATERIAL_UNAVAILABLE':
+                return JSONResponse({'error': {
+                    'code': error.code, 'stage': 'capability.issue', 'message': error.message,
+                    'possible_effect': False, 'retry_safe': False, 'operation_id': None,
+                    'capability_id': error.details['capability_id'],
+                    'recovery_allowed': error.details['recovery_allowed'],
+                    'action': 'Request a replacement with a new capability_request_id.'
+                    if error.details['recovery_allowed'] else 'Recover the existing executor configuration.',
+                }}, status_code=status, headers={'Cache-Control': 'no-store'})
+            response = v1_err(status, error.code, error.message, stage="capability.issue")
+            response.headers['Cache-Control'] = 'no-store'
+            return response
+        return JSONResponse(issued, headers={"Cache-Control": "no-store"})
 
     @router.put("/runtime/executors/{executor_id}/inventory")
     async def publish_inventory(executor_id: str,

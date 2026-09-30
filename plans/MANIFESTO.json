@@ -26,8 +26,8 @@
     },
     {
       "path": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
-      "bytes": 36335,
-      "sha256": "48a50fbef3e7f75a26dd116e98bfd5e404be3f885cca274402a486f1d728894a"
+      "bytes": 36975,
+      "sha256": "19189f1c768b2bf8f46ed9b7a72489db131d0b6ef191695de10de1b9cbfc73cf"
     },
     {
       "path": "03_DADOS_MIGRACAO_E_RECUPERACAO.md",
@@ -71,8 +71,8 @@
     },
     {
       "path": "PLANO_COMPLETO_NEXUS_SERVER_R4.md",
-      "bytes": 297489,
-      "sha256": "e057bd82a0cd48dbdb002f8c518b82eff909ec751c508c9872f2eba7f1d66172"
+      "bytes": 302827,
+      "sha256": "825544cfdd65dfdb0ddf21fce270cfcba9f3df2d16bb56e4c2c3baae09772eeb"
     },
     {
       "path": "RASTREABILIDADE_R3.json",
@@ -96,8 +96,8 @@
     },
     {
       "path": "contratos/http-target.schema.json",
-      "bytes": 82174,
-      "sha256": "29f89a04d4521f51ae749a41070fdc6d91b7db21d715eb9bd0f81c6198bb545d"
+      "bytes": 82362,
+      "sha256": "0ee24da73201f9516283abf4c3fbf710a45e37a138866e01c11424d8621fcf9d"
     },
     {
       "path": "contratos/nxl-r4-delta.json",
@@ -143,6 +143,14 @@
       "path": "validar_pacote.py",
       "bytes": 8030,
       "sha256": "f603f55730afb6b26332d0a08d7c28c385a0953f028a6652ffcdab457d6c57cb"
+    }
+  ],
+  "contract_clarifications": [
+    {
+      "date": "2026-09-30",
+      "scope": "Capability replay error metadata and stable-token validity after applied lease; no executable NXL readiness change.",
+      "document": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
+      "schema": "contratos/http-target.schema.json"
     }
   ]
 }

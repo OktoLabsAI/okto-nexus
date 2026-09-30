@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M02/M06 automatic control startup and authenticated inventory handoff; automatic runtime composition still pending",
+    "scope": "Partial NS03.04 session credential reservation and consumer validation; MCP/native handler and approved daemon launch integration remain pending",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "fb2c2d155bccd5d24926a335a9fbcd81c9190412",
-      "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+      "nexus": "fa68cd33b30378b7fb7d8501ccd1de8909c62099",
+      "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "shared_core_version": "0.2.28.dev0",
@@ -55,35 +55,35 @@
       "plans/r4_execution/M02_EXECUTOR_REGISTRATION.md",
       "plans/r4_execution/test_runs_20260930_registration.json",
       "plans/r4_execution/M06_DAEMON_STARTUP.md",
-      "plans/r4_execution/test_runs_20260930_startup.json"
+      "plans/r4_execution/test_runs_20260930_startup.json",
+      "plans/r4_execution/M02_SESSION_CAPABILITIES.md",
+      "plans/r4_execution/test_runs_20260930_capabilities.json"
     ],
-    "latest_increment": "The real daemon boots from persisted registration, negotiates control, proves an empty durable namespace and publishes monotonically sequenced inventory. Nexus binds bootstrap tickets to a channel and revalidates inventory-producer handoff transactionally.",
-    "verification_scope": "Final Connector: 325 regression passes plus two existing skips and 65 directed. Nexus R4: 107 passes. Final installed: 109 passes. Groups overlap; failed attempts and initial green runs are retained. No product gate closed.",
+    "latest_increment": "Canonical session capability reservation, hash-only persistence, safe replay/replacement, active-use authority port, applied-lease validity, and strict Connector consumer.",
+    "verification_scope": "Final Connector source: 343 passes and two existing skips. Final Nexus R4: 137 passes. Final installed affected integration: 120 passes. Initial failures and intermediate green runs are retained. Groups overlap; no product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial M02/M06 automatic control startup and authenticated inventory handoff; automatic runtime composition still pending",
-      "nexus_commit": "Commit containing M06_DAEMON_STARTUP.md",
+      "scope": "Partial NS03.04 session credential reservation and consumer validation; MCP/native handler and approved daemon launch integration remain pending",
+      "nexus_commit": "Commit containing M02_SESSION_CAPABILITIES.md",
       "published_dependency_heads": {
-        "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
+        "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_startup.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_capabilities.json",
       "recorded_passes": {
-        "connector_regression": 325,
-        "connector_directed": 65,
-        "nexus_r4": 107,
-        "installed_coordinated": 109,
-        "public_startup_source": 2,
-        "inventory_handoff": 8
+        "connector_regression": 343,
+        "nexus_r4_before_final_revision_guard": 134,
+        "installed_coordinated_final": 120,
+        "nexus_r4_final": 137
       },
       "recorded_skips": {
         "connector_regression": 2
       },
       "counts_overlap": true,
       "next_steps": [
-        "Compose approved canonical profile/environment/capability ports and approved-revision refresh.",
-        "Automatically attach lanes and adopt the existing execution consumers; implement lane/ticket rotation and runtime lease renewal.",
-        "Complete nonempty paginated reconciliation, durable receipt/event publication and native decision/input journeys.",
+        "Wire session capability authentication and scope/action ceilings into MCP/native use-case handlers while preserving domain permission and claim checks.",
+        "Persist the Connector issuance intent and protected material; compose approved profile/environment and current revisions in the daemon launch provider.",
+        "Complete automatic lane adoption, ticket/lease renewal, nonempty paginated recovery and durable publishers.",
         "Complete embedded execution, M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
       ]
     },

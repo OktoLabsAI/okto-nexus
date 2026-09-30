@@ -100,6 +100,21 @@ class SqliteExecutionLeaseRepository:
         uow.connection.execute(
             "UPDATE execution_sessions SET lease_state=? WHERE server_id=? AND executor_id=? AND session_id=?",
             (state, *self.key(scope)))
+        # Stable per-session secrets follow the legitimately applied lease.
+        # Merely issuing/sending a grant must not extend credential validity.
+        lease = self.latest(uow, scope)
+        if revoked:
+            uow.connection.execute(
+                "UPDATE execution_session_capabilities SET revoked_at=? WHERE server_id=? "
+                "AND executor_id=? AND session_id=? AND revoked_at IS NULL",
+                (now, *self.key(scope)))
+        else:
+            uow.connection.execute(
+                "UPDATE execution_session_capabilities SET valid_until_server=? WHERE server_id=? "
+                "AND executor_id=? AND session_id=? AND scope_json=? AND source_grant_id=? "
+                "AND source_grant_revision=? AND revoked_at IS NULL",
+                (lease['valid_until_server'], *self.key(scope), lease['scope_json'],
+                 lease['grant_id'], lease['source_grant_revision']))
 
     def apply_open_bootstrap(self, uow, scope, lease):
         """Attach the first applied lease to its already fenced opening send."""

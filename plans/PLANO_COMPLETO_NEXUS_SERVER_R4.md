@@ -346,6 +346,8 @@ Nunca recuperar plaintext a partir de hash. GET de ticket/capability já emitido
 
 Para capability já instalada, não invalidar automaticamente por um timeout do cliente: conservar sua validade e seguir a política de renovação servidor-side. Se o segredo realmente foi perdido pelo executor, bloquear nova realização e exigir recuperação de configuração compatível; nunca reiniciar trabalho incerto para obter outro token. Respostas de replay sem material retornam `CREDENTIAL_MATERIAL_UNAVAILABLE`, com identificação do derivado e recuperação permitida. Ticket novo pode ser solicitado automaticamente sob chave canônica vigente, mas o ticket anterior não volta a ser validado para nova conexão.
 
+Precisão do DTO de erro de capability: `CREDENTIAL_MATERIAL_UNAVAILABLE` inclui `capability_id` e `recovery_allowed` no objeto `error`, sem segredo. Esses campos opcionais estão declarados em `ErrorBody`. `recovery_allowed=true` informa que uma nova requisição de substituição pode ser avaliada; não reserva autorização nem dispensa revalidação transacional. Se o envio da abertura já puder ter instalado configuração, ou existir histórico de lease, a substituição automática é recusada. Renovação de validade de capability estável acompanha o commit de aplicação legítima da lease, não o simples envio do grant.
+
 ## 3. DTOs canônicos novos
 
 Os nomes abaixo são fixados para a implementação; transportar por dataclass/Pydantic equivalente sem mudar sua semântica. Modelos do Core continuam sendo consumidos, não redefinidos localmente com o mesmo nome.

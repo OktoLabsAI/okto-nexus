@@ -99,7 +99,7 @@ def v1_err(status: int, code: str, message: str, *,
     return JSONResponse(
         {"error": {"code": code, "stage": stage, "message": message,
                    "possible_effect": False, "retry_safe": False,
-                   "operation_id": None, "action": None}},
+                   "operation_id": None, "action": ""}},
         status_code=status,
     )
 
@@ -590,6 +590,12 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
     # becomes the documented envelope.
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request, exc: RequestValidationError):
+        if re.fullmatch(r"/v1/runtime/sessions/[^/]+/capability/?", request.url.path):
+            response = v1_err(422, "VALIDATION_ERROR",
+                              "The capability request does not match the R4 contract.",
+                              stage="validation")
+            response.headers['Cache-Control'] = 'no-store'
+            return response
         if request.url.path == "/v1" or request.url.path.startswith("/v1/"):
             return v1_err(400, "VALIDATION_ERROR",
                           "The request does not match the R4 contract.",

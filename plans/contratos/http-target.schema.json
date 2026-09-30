@@ -81,6 +81,14 @@
     "ErrorBody": {
       "type": "object",
       "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "recovery_allowed": {
+          "type": "boolean"
+        },
         "code": {
           "type": "string",
           "minLength": 1,

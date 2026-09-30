@@ -68,13 +68,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `fb2c2d155bccd5d24926a335a9fbcd81c9190412` | `0.2.0` |
-| Connector | `9e1a96a9e24e643861974b5ede6e987b941908e7` | `0.5.0.dev0` |
+| Nexus | `fa68cd33b30378b7fb7d8501ccd1de8909c62099` | `0.2.0` |
+| Connector | `c97c9d41c223c2c728b810cf3d1ff5e62e2016d6` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão anterior de planejamento](planning_review_20260930.json) conserva seu snapshot. A [revisão de conclusão](completion_review_20260930.json) registra os HEADs consultados para este plano. O último incremento publicado e seus testes ficam no [startup automático do controle](M06_DAEMON_STARTUP.md) e no [manifesto coordenado](test_runs_20260930_startup.json). O HEAD Nexus do quadro contém esse incremento e precede esta atualização documental; Connector e Core são dependências publicadas. Esta revisão não executa novas campanhas de produto nem promove flags de prontidão.
+A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro é o pai publicado deste incremento; Connector e Core são dependências publicadas. O commit que contém o relatório identifica a revisão Nexus sem referência circular ao próprio SHA. Nenhuma flag de prontidão foi promovida.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -156,6 +156,14 @@ boots; o caso positivo usa qualificação sintética. A reconciliação inicial
 verifica journal e ambos os ledgers, recusando fatos não vazios. Ainda faltam
 a ligação automática das lanes aos consumidores e o ambiente/capability de
 produção. Este incremento não fecha M06.
+
+A [emissão de capabilities de sessão](M02_SESSION_CAPABILITIES.md) acrescenta
+o segredo único por audiência/escopo, replay e substituição restrita, o port
+de validação de autoridade ativa e renovação de validade no commit da lease.
+O cliente Connector valida o DTO e o prazo contra o opening canônico.
+Ainda faltam o guard nos handlers MCP/nativos e sua adoção no ambiente
+aprovado do daemon; NS03.04 permanece parcial. As campanhas e tentativas
+estão no manifesto, sem transformar teste de reserva em aceite de ferramentas.
 
 ### Lacunas prioritárias observadas
 

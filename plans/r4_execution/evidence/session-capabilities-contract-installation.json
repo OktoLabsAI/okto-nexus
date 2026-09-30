@@ -1,0 +1,14 @@
+{
+  "command": [
+    "uv",
+    "pip",
+    "install",
+    "--python",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\\Scripts\\python.exe",
+    "--no-deps",
+    "--reinstall",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-final-nexus-wheel-1vb6846d\\okto_nexus-0.2.0-py3-none-any.whl"
+  ],
+  "exit_code": 0,
+  "output": "Using Python 3.13.1 environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\nResolved 1 package in 4ms\nPrepared 1 package in 364ms\nUninstalled 1 package in 162ms\nInstalled 1 package in 208ms\n - okto-nexus==0.2.0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-final-nexus-wheel-4m7zpmf5/okto_nexus-0.2.0-py3-none-any.whl)\n + okto-nexus==0.2.0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-capability-final-nexus-wheel-1vb6846d/okto_nexus-0.2.0-py3-none-any.whl)\n"
+}

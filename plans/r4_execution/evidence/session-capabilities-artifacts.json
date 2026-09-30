@@ -1,0 +1,23 @@
+{
+  "nexus": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-nexus-build-fpx64n7q",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-nexus-wheel-7xi81rp6\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "fed576ea43616c8155e4035947a3a48e41d7f9a30056beb4aa39dba86ddcca88",
+    "build_log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-capabilities-nexus-build.log",
+    "exit_code": 0
+  },
+  "connector": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-build-imemyxvm",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-wheel-9sxettlk\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "0dfe234062c4317ff7b1ff1e8af9799c1d3807b5058087ecfb12a0391d29e789",
+    "build_log": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\session-capabilities-connector-build.log",
+    "exit_code": 0
+  },
+  "core": {
+    "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+    "sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+  },
+  "environment": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h",
+  "python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-installed-pgqzez1h\\Scripts\\python.exe",
+  "requirements_sha256": "8144180643337aee64f3adc976ab1f4be1eeb47fb01e8a8a800ddfe807661e20"
+}

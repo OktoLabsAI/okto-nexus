@@ -1,4 +1,16 @@
-# Execução R4 — estado verificado em 2026-09-30
+ # Execução R4 — estado verificado em 2026-09-30
+
+## Capabilities de sessão — 30 de setembro de 2026
+
+A [emissão canônica](M02_SESSION_CAPABILITIES.md) agora retorna segredo único,
+escopo/revisões e audiência de sessão. A aplicação legítima de lease mantém
+a validade do mesmo token; o cliente Connector valida o DTO e o prazo.
+Passaram 343 regressões Connector (dois skips existentes), 137 casos Nexus R4
+e 120 casos instalados nos bytes finais.
+As campanhas se sobrepõem; o [manifesto](test_runs_20260930_capabilities.json)
+preserva as tentativas e seus limites. NS03.04 permanece parcial: falta o guard
+nos handlers MCP/nativos e a composição aprovada do ambiente do daemon.
+Nenhum gate foi encerrado.
 
 ## Plano de conclusão revisado — 30 de setembro de 2026
 
