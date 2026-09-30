@@ -21,6 +21,7 @@ from ....application.executor_inventory_views import (
     read_executor_inventory, runtime_options_from_inventory,
 )
 from ....domain.execution.keys import ExecutorKey
+from ....errors import ErrorCode, OktoNexusError
 from ...outbound.execution.core_inventory import protocol_info
 from ...outbound.sqlite.execution_receipts import (
     append_execution_receipt, read_execution_operation_history,
@@ -119,7 +120,7 @@ def build_router() -> APIRouter:
 
         def _publish():
             installation = ensure_execution_installation(factory)
-            verify_execution_ticket(
+            verified = verify_execution_ticket(
                 factory, ticket=token, server_id=installation.server_id,
                 executor_id=executor_id, scope="inventory:publish",
             )
@@ -128,9 +129,15 @@ def build_router() -> APIRouter:
                                                executor_id),
                 producer_instance_id=snapshot.get("producer_instance_id"),
                 snapshot=snapshot,
+                publication_ticket_id=verified.ticket_id,
             )
 
-        publication = await anyio.to_thread.run_sync(_publish)
+        try:
+            publication = await anyio.to_thread.run_sync(_publish)
+        except OktoNexusError as error:
+            status = {ErrorCode.CONFLICT: 409, ErrorCode.PERMISSION_DENIED: 403,
+                      ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+            return v1_err(status, error.code, error.message, stage="inventory.publish")
         freshness_key = (publication.server_id, publication.executor_id)
         if not publication.reused:
             request.app.state.inventory_fresh_publications[freshness_key] = (

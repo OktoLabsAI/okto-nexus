@@ -1,5 +1,17 @@
 # Execução R4 — estado verificado em 2026-09-30
 
+## Startup automático do controle R4 — 30 de setembro de 2026
+
+O [startup do daemon](M06_DAEMON_STARTUP.md) agora usa o registro persistido,
+negocia o canal e publica o inventário com sequência durável. O Nexus autoriza
+a troca de produtor somente pelo canal reconciliado atual e revalida a
+autoridade no commit. A jornada real prova dois boots, HTTP/WSS e IPC, sem
+criar operações ou lanes implicitamente. Evidências e limites estão no
+[manifesto coordenado](test_runs_20260930_startup.json). O startup automático
+da execução, a configuração aprovada e a reconciliação não vazia continuam
+pendentes. G0–G3 permanecem abertos.
+
+
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
 ## Incremento corrente — registro durável do executor pela CLI

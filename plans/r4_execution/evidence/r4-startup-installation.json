@@ -1,0 +1,51 @@
+[
+  {
+    "command": [
+      "uv",
+      "venv",
+      "--python",
+      "C:\\Python313\\python.exe",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Using CPython 3.13.1 interpreter at: C:\\Python313\\python.exe\nCreating virtual environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\nActivate with: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\\Scripts\\activate\n"
+  },
+  {
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\\Scripts\\python.exe",
+      "--link-mode",
+      "copy",
+      "--find-links",
+      "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-nexus-wheel-qqgmgauh\\okto_nexus-0.2.0-py3-none-any.whl[serve-lite,dev]",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-connector-wheel-a5gegh2j\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "pytest-asyncio"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Using Python 3.13.1 environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\nResolved 45 packages in 544ms\nPrepared 2 packages in 629ms\nInstalled 45 packages in 4.91s\n + annotated-doc==0.0.5\n + annotated-types==0.8.0\n + anyio==4.15.1\n + attrs==26.1.0\n + certifi==2026.7.22\n + cffi==2.1.1\n + click==8.5.0\n + colorama==0.4.6\n + cryptography==50.0.1\n + fastapi==0.142.1\n + h11==0.16.0\n + httpcore==1.0.9\n + httpx==0.28.1\n + httpx-sse==0.4.3\n + idna==3.20\n + iniconfig==2.3.0\n + jsonschema==4.26.0\n + jsonschema-specifications==2025.9.1\n + mcp==1.30.0\n + nexus-connector-core==0.2.28.dev0\n + okto-nexus==0.2.0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-nexus-wheel-qqgmgauh/okto_nexus-0.2.0-py3-none-any.whl)\n + okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-connector-wheel-a5gegh2j/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n + opentelemetry-api==1.45.0\n + packaging==26.3\n + pluggy==1.6.0\n + pycparser==3.0\n + pydantic==2.13.5\n + pydantic-core==2.46.5\n + pydantic-settings==2.15.0\n + pygments==2.21.0\n + pyjwt==2.15.1\n + pytest==9.1.1\n + pytest-asyncio==1.4.0\n + python-dotenv==1.2.3\n + python-multipart==0.0.32\n + pywin32==312\n + referencing==0.37.0\n + rfc8785==0.1.4\n + rpds-py==2026.6.3\n + sse-starlette==3.5.0\n + starlette==1.7.0\n + typing-extensions==4.16.0\n + typing-inspection==0.4.4\n + uvicorn==0.54.0\n + websockets==17.1\n"
+  },
+  {
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\\Scripts\\python.exe",
+      "--link-mode",
+      "copy",
+      "--no-deps",
+      "--reinstall-package",
+      "okto-nexus-connector",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-final-wheel-md6q8vdz\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Using Python 3.13.1 environment at: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-startup-installed-8bpn7vjx\nResolved 1 package in 3ms\nPrepared 1 package in 67ms\nUninstalled 1 package in 41ms\nInstalled 1 package in 192ms\n - okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-connector-wheel-a5gegh2j/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n + okto-nexus-connector==0.5.0.dev0 (from file:///C:/Users/jpamb/AppData/Local/Temp/okto-r4-startup-final-wheel-md6q8vdz/okto_nexus_connector-0.5.0.dev0-py3-none-any.whl)\n"
+  }
+]

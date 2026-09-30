@@ -288,7 +288,7 @@
         "TR4-02-03"
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_registration.json",
-      "remaining": "Real CLI/HTTP registration, idempotent canonical executor recovery and fresh process-local bootstrap are verified. Automatic daemon startup, complete credential/ticket lifecycle, lane isolation and the full normative scenario still require acceptance."
+      "remaining": "Real CLI/HTTP registration, idempotent canonical executor recovery and fresh process-local bootstrap are verified. Automatic lane/runtime composition, complete credential/ticket lifecycle, lane isolation and the full normative scenario still require acceptance."
     },
     "NS02.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_04",
@@ -376,7 +376,7 @@
         "TR4-03-03"
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_registration.json",
-      "remaining": "Real CLI/HTTP registration, idempotent canonical executor recovery and fresh process-local bootstrap are verified. Automatic daemon startup, complete credential/ticket lifecycle, lane isolation and the full normative scenario still require acceptance."
+      "remaining": "Real CLI/HTTP registration, idempotent canonical executor recovery and fresh process-local bootstrap are verified. Automatic lane/runtime composition, complete credential/ticket lifecycle, lane isolation and the full normative scenario still require acceptance."
     },
     "NS03.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_04",
@@ -407,15 +407,20 @@
     "NS04.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_01",
       "collected_nodeids": [
-        "tests/execution_r4/test_ns04.py::test_ns04_01"
+        "tests/execution_r4/test_ns04.py::test_ns04_01",
+        "tests/execution_r4/test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[False]",
+        "tests/execution_r4/test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[True]",
+        "tests/execution_r4/test_inventory_handoff.py::test_inventory_handoff_fences_old_ticket_producer_and_precommit_revocation"
       ],
-      "effective_test_command": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_01 -q",
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_daemon_startup.py tests/execution_r4/test_inventory_handoff.py tests/execution_r4/test_ns04.py::test_ns04_01 -q",
       "test_availability": "COLLECTED",
-      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
-      "acceptance": "NOT_RUN",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-04-01"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_startup.json",
+      "remaining": "Automatic control startup and inventory handoff are verified through real daemon/HTTP/WSS/IPC with synthetic positive qualification. Automatic lane/execution composition, nonempty recovery, runtime renewal, complete inventory/revision journeys and native multi-host acceptance remain open."
     },
     "NS04.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_02",
@@ -587,7 +592,7 @@
         "TR4-06-03"
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
-      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon startup using the now-persisted executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic lane/runtime composition after the implemented control startup, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS06.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_04",
@@ -676,15 +681,20 @@
     "NS08.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_01",
       "collected_nodeids": [
-        "tests/execution_r4/test_ns08.py::test_ns08_01"
+        "tests/execution_r4/test_ns08.py::test_ns08_01",
+        "tests/execution_r4/test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[False]",
+        "tests/execution_r4/test_daemon_startup.py::test_daemon_starts_registered_r4_control_without_legacy_fallback[True]",
+        "tests/execution_r4/test_inventory_handoff.py::test_inventory_handoff_fences_old_ticket_producer_and_precommit_revocation"
       ],
-      "effective_test_command": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_01 -q",
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_daemon_startup.py tests/execution_r4/test_inventory_handoff.py tests/execution_r4/test_ns08.py::test_ns08_01 -q",
       "test_availability": "COLLECTED",
-      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
-      "acceptance": "NOT_RUN",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-08-01"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_startup.json",
+      "remaining": "Automatic control startup and inventory handoff are verified through real daemon/HTTP/WSS/IPC with synthetic positive qualification. Automatic lane/execution composition, nonempty recovery, runtime renewal, complete inventory/revision journeys and native multi-host acceptance remain open."
     },
     "NS08.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_02",
@@ -746,7 +756,7 @@
         "TN-20"
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
-      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon startup using the now-persisted executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic lane/runtime composition after the implemented control startup, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS09.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_01",
@@ -763,7 +773,7 @@
         "TR4-09-01"
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
-      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon startup using the now-persisted executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic lane/runtime composition after the implemented control startup, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS09.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_02",

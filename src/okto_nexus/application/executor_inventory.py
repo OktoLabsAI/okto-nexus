@@ -9,6 +9,7 @@ provider I/O inside the SQLite transaction.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import json
 from typing import Any, Mapping
 
@@ -51,7 +52,8 @@ def load_current_executor_inventory(projection: str) -> dict[str, Any]:
 
 def publish_executor_inventory(factory, *, principal: ExecutorKey,
                                producer_instance_id: str,
-                               snapshot: Mapping[str, Any]) -> InventoryPublication:
+                               snapshot: Mapping[str, Any],
+                               publication_ticket_id: str | None = None) -> InventoryPublication:
     """Store one authenticated snapshot; same sequence/content is idempotent."""
     from nexus_connector_core import CoreError, __version__, verify_executor_inventory_snapshot
     from nexus_connector_core.protocol import canonical_json
@@ -76,6 +78,41 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
     revision = snapshot["inventory_revision"]
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        reconciled_producer = False
+        if publication_ticket_id is not None:
+            # Revalidate the authenticated ticket inside the publication
+            # transaction. A current reconciled channel is the only proof
+            # that permits replacing an earlier inventory producer.
+            authority = conn.execute(
+                "SELECT e.owner_instance_id,e.control_state,e.generation,"
+                "e.revoked_at AS executor_revoked_at,e.registered_by_agent_id,"
+                "t.agent_id,t.binding_id,t.bound_connection_id,t.revoked_at,"
+                "t.expires_at,t.audience,t.scopes_json,t.credential_epoch,"
+                "t.authorization_revision,r.credential_epoch AS current_epoch,"
+                "r.authorization_revision AS current_authorization "
+                "FROM execution_executors e JOIN execution_link_tickets t "
+                "ON t.server_id=e.server_id AND t.executor_id=e.executor_id "
+                "JOIN execution_agent_revisions r ON r.server_id=t.server_id "
+                "AND r.agent_id=t.agent_id WHERE e.server_id=? AND e.executor_id=? "
+                "AND t.ticket_id=?",
+                (principal.server_id, principal.executor_id, publication_ticket_id),
+            ).fetchone()
+            if (authority is None or authority['revoked_at'] is not None or
+                    authority['executor_revoked_at'] is not None or authority['binding_id'] is not None or
+                    authority['agent_id'] != authority['registered_by_agent_id'] or
+                    authority['audience'] != 'nexus-executor-control' or
+                    'inventory:publish' not in json.loads(authority['scopes_json']) or
+                    authority['credential_epoch'] != authority['current_epoch'] or
+                    authority['authorization_revision'] != authority['current_authorization'] or
+                    datetime.fromisoformat(authority['expires_at'].replace('Z', '+00:00')) <= datetime.now(timezone.utc)):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                      "The inventory publication authority has changed.", {})
+            reconciled_producer = (authority['control_state'] == 'CONTROL_READY' and
+                authority['owner_instance_id'] == producer_instance_id and
+                authority['bound_connection_id'] == producer_instance_id)
+            if (authority['generation'] > 1 or authority['owner_instance_id'] is not None) and not reconciled_producer:
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                                      "Publish through the current reconciled control channel.", {})
         existing = conn.execute(
             "SELECT c.publication_sequence,c.inventory_revision,"
             "s.producer_instance_id FROM execution_inventory_current c "
@@ -88,8 +125,9 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
         if existing is not None:
             old_sequence, old_revision = existing[:2]
             if existing["producer_instance_id"] != producer_instance_id:
-                raise OktoNexusError(ErrorCode.CONFLICT,
-                                      "A different producer requires channel reconciliation.", {})
+                if not reconciled_producer or sequence <= old_sequence:
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                                          "A different producer requires channel reconciliation and a newer sequence.", {})
             if sequence < old_sequence or (sequence == old_sequence and revision != old_revision):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "Stale or conflicting inventory sequence.", {})

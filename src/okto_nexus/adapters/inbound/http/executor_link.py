@@ -261,6 +261,9 @@ def build_router() -> APIRouter:
             connection_id = "conn_" + secrets.token_hex(16)
 
             def _claim():
+                verified = verify_execution_ticket(
+                    factory, ticket=ticket, server_id=server_id, executor_id=executor_id,
+                    binding_id=None, scope="link:connect")
                 with factory.unit_of_work() as uow:
                     row = uow.connection.execute(
                         "SELECT generation,revoked_at,owner_instance_id "
@@ -295,11 +298,26 @@ def build_router() -> APIRouter:
                             (server_id, executor_id,
                              row["owner_instance_id"]),
                         )
+                    # Bind the bootstrap proof to this exact socket owner.
+                    # Inventory handoff later checks this binding together
+                    # with CONTROL_READY in its own transaction.
+                    bound = uow.connection.execute(
+                        "UPDATE execution_link_tickets SET bound_connection_id=? "
+                        "WHERE ticket_id=? AND server_id=? AND executor_id=? AND "
+                        "revoked_at IS NULL AND julianday(expires_at)>julianday('now') "
+                        "AND credential_epoch=(SELECT credential_epoch FROM execution_agent_revisions "
+                        "WHERE server_id=? AND agent_id=?) AND authorization_revision="
+                        "(SELECT authorization_revision FROM execution_agent_revisions WHERE server_id=? AND agent_id=?)",
+                        (connection_id, verified.ticket_id, server_id, executor_id,
+                         server_id, verified.agent_id, server_id, verified.agent_id),
+                    ).rowcount
+                    if bound != 1:
+                        raise ValueError("bootstrap authority changed")
                     return next_generation
 
             try:
                 generation = await anyio.to_thread.run_sync(_claim)
-            except ValueError:
+            except (ValueError, OktoNexusError):
                 await ws.close(code=4403)
                 return
             welcome = {

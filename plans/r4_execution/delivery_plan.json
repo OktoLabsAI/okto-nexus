@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M02/M06 durable executor registration and real CLI/HTTP integration; complete delivery planning with all product gates open",
+    "scope": "Partial M02/M06 automatic control startup and authenticated inventory handoff; automatic runtime composition still pending",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "b760d69eeb874f5e27f0cbf50583bcb597981a4c",
-      "connector": "d1c30e8982210060bee549d1095ca4c5e654875e",
+      "nexus": "0e283ef5e988e18089981b9534d0c73c9a4dd100",
+      "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "shared_core_version": "0.2.28.dev0",
@@ -53,34 +53,37 @@
       "plans/r4_execution/M06_DAEMON_EXECUTION_OWNER.md",
       "plans/r4_execution/test_runs_20260930_execution_owner.json",
       "plans/r4_execution/M02_EXECUTOR_REGISTRATION.md",
-      "plans/r4_execution/test_runs_20260930_registration.json"
+      "plans/r4_execution/test_runs_20260930_registration.json",
+      "plans/r4_execution/M06_DAEMON_STARTUP.md",
+      "plans/r4_execution/test_runs_20260930_startup.json"
     ],
-    "latest_increment": "Connector persists registration intent before HTTP, recovers the canonical executor by replay, exposes executor register/list/show, and issues fresh process-local bootstrap tickets from the exact stored identity. Automatic daemon startup remains pending.",
-    "verification_scope": "300 Connector regression passes with two existing skips; 40 directed passes; 104 Nexus R4 and 78 installed passes, including a real CLI/HTTP registration journey. Counts overlap. Evidence hashes verified; no product gate closed.",
+    "latest_increment": "The real daemon boots from persisted registration, negotiates control, proves an empty durable namespace and publishes monotonically sequenced inventory. Nexus binds bootstrap tickets to a channel and revalidates inventory-producer handoff transactionally.",
+    "verification_scope": "Final Connector: 325 regression passes plus two existing skips and 65 directed. Nexus R4: 107 passes. Final installed: 109 passes. Groups overlap; failed attempts and initial green runs are retained. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial M02/M06 durable executor registration and real CLI/HTTP integration; complete delivery planning with all product gates open",
-      "nexus_commit": "Commit containing M02_EXECUTOR_REGISTRATION.md",
+      "scope": "Partial M02/M06 automatic control startup and authenticated inventory handoff; automatic runtime composition still pending",
+      "nexus_commit": "Commit containing M06_DAEMON_STARTUP.md",
       "published_dependency_heads": {
-        "connector": "d1c30e8982210060bee549d1095ca4c5e654875e",
+        "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_registration.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_startup.json",
       "recorded_passes": {
-        "connector_regression": 300,
-        "connector_directed": 40,
-        "nexus_r4": 104,
-        "installed_coordinated": 78,
-        "public_cli_source": 1
+        "connector_regression": 325,
+        "connector_directed": 65,
+        "nexus_r4": 107,
+        "installed_coordinated": 109,
+        "public_startup_source": 2,
+        "inventory_handoff": 8
       },
       "recorded_skips": {
         "connector_regression": 2
       },
       "counts_overlap": true,
       "next_steps": [
-        "Use ExecutorRegistrationService.bootstrap in automatic daemon startup, then publish inventory, attach lanes, renew tickets/leases and reconnect with the persisted identity.",
-        "Supply canonical approved profile/environment/capability ports and explicit approved-revision refresh.",
-        "Complete nonempty reconciliation, durable receipt/event publication, native request ingress and canonical decision journeys.",
+        "Compose approved canonical profile/environment/capability ports and approved-revision refresh.",
+        "Automatically attach lanes and adopt the existing execution consumers; implement lane/ticket rotation and runtime lease renewal.",
+        "Complete nonempty paginated reconciliation, durable receipt/event publication and native decision/input journeys.",
         "Complete embedded execution, M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
       ]
     },
