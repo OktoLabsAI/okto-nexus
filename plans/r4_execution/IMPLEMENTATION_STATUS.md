@@ -2,7 +2,23 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
-## Incremento corrente — seleção física aprovada no Connector
+## Incremento corrente — operações sob ownership do daemon
+
+O [owner de execução M04/M06](M06_DAEMON_EXECUTION_OWNER.md) recebe operações
+do reader WSS, instala a lease antes de abrir e traduz sete ações pelos
+contratos públicos Core. O daemon preserva produtores após cancelamento e
+observa sua conclusão antes de fechar o host. Falha de publicação encerra o
+canal sem repetir o efeito.
+
+Passaram 286 regressões Connector com dois skips, 17 contratos/casos dirigidos,
+103 casos Nexus R4 e 63 casos instalados fora dos clones, com sobreposição.
+O [manifesto coordenado](test_runs_20260930_execution_owner.json) preserva
+tentativas, correções e hashes. A jornada WSS passou a admitir/consultar
+operações, deixando a execução e os receipts a cargo do consumidor do daemon.
+Startup automático, credenciais/renovação, ambiente de produção, reconciliação
+e publicadores duráveis continuam pendentes. Nenhum gate foi fechado.
+
+## Incremento anterior — seleção física aprovada no Connector
 
 O [incremento M03/M06](M06_PHYSICAL_SELECTION.md) persiste o resultado aprovado
 do binding e resolve a instalação/workspace contra a evidência local completa.

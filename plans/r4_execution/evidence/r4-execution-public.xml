@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="7.956" timestamp="2026-09-30T05:45:35.294966-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_remote_connection" name="test_owned_connector_reader_dispatches_five_actions_over_real_websocket[connector-realization]" time="6.436"><failure message="assert 1 == 0">tests\execution_r4\test_remote_connection.py:174: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests\execution_r4\test_remote_connection.py:170: in run
+    assert await daemon._shutdown() == 0
+E   assert 1 == 0</failure></testcase></testsuite></testsuites>

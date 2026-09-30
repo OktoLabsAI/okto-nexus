@@ -1,0 +1,225 @@
+Building wheel...
+running egg_info
+creating src\okto_nexus_connector.egg-info
+writing src\okto_nexus_connector.egg-info\PKG-INFO
+writing dependency_links to src\okto_nexus_connector.egg-info\dependency_links.txt
+writing entry points to src\okto_nexus_connector.egg-info\entry_points.txt
+writing requirements to src\okto_nexus_connector.egg-info\requires.txt
+writing top-level names to src\okto_nexus_connector.egg-info\top_level.txt
+writing manifest file 'src\okto_nexus_connector.egg-info\SOURCES.txt'
+reading manifest file 'src\okto_nexus_connector.egg-info\SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src\okto_nexus_connector.egg-info\SOURCES.txt'
+running bdist_wheel
+running build
+running build_py
+creating build\lib\okto_nexus_connector
+copying src\okto_nexus_connector\errors.py -> build\lib\okto_nexus_connector
+copying src\okto_nexus_connector\redaction.py -> build\lib\okto_nexus_connector
+copying src\okto_nexus_connector\__init__.py -> build\lib\okto_nexus_connector
+creating build\lib\okto_nexus_connector\cli
+copying src\okto_nexus_connector\cli\main.py -> build\lib\okto_nexus_connector\cli
+copying src\okto_nexus_connector\cli\output.py -> build\lib\okto_nexus_connector\cli
+copying src\okto_nexus_connector\cli\prompts.py -> build\lib\okto_nexus_connector\cli
+copying src\okto_nexus_connector\cli\__init__.py -> build\lib\okto_nexus_connector\cli
+creating build\lib\okto_nexus_connector\daemon
+copying src\okto_nexus_connector\daemon\app.py -> build\lib\okto_nexus_connector\daemon
+copying src\okto_nexus_connector\daemon\lock.py -> build\lib\okto_nexus_connector\daemon
+copying src\okto_nexus_connector\daemon\manager.py -> build\lib\okto_nexus_connector\daemon
+copying src\okto_nexus_connector\daemon\__init__.py -> build\lib\okto_nexus_connector\daemon
+copying src\okto_nexus_connector\daemon\__main__.py -> build\lib\okto_nexus_connector\daemon
+creating build\lib\okto_nexus_connector\harness_config
+copying src\okto_nexus_connector\harness_config\__init__.py -> build\lib\okto_nexus_connector\harness_config
+creating build\lib\okto_nexus_connector\identity
+copying src\okto_nexus_connector\identity\import_flow.py -> build\lib\okto_nexus_connector\identity
+copying src\okto_nexus_connector\identity\vault.py -> build\lib\okto_nexus_connector\identity
+copying src\okto_nexus_connector\identity\__init__.py -> build\lib\okto_nexus_connector\identity
+creating build\lib\okto_nexus_connector\ipc
+copying src\okto_nexus_connector\ipc\client.py -> build\lib\okto_nexus_connector\ipc
+copying src\okto_nexus_connector\ipc\protocol.py -> build\lib\okto_nexus_connector\ipc
+copying src\okto_nexus_connector\ipc\server.py -> build\lib\okto_nexus_connector\ipc
+copying src\okto_nexus_connector\ipc\__init__.py -> build\lib\okto_nexus_connector\ipc
+creating build\lib\okto_nexus_connector\platform
+copying src\okto_nexus_connector\platform\paths.py -> build\lib\okto_nexus_connector\platform
+copying src\okto_nexus_connector\platform\service_install.py -> build\lib\okto_nexus_connector\platform
+copying src\okto_nexus_connector\platform\sysinfo.py -> build\lib\okto_nexus_connector\platform
+copying src\okto_nexus_connector\platform\__init__.py -> build\lib\okto_nexus_connector\platform
+creating build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\approval_state.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\connect_service.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\core_host.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\discovery_service.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\execution_selection.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\mcp_config_service.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\r4_execution.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\realization_service.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\runtime_service.py -> build\lib\okto_nexus_connector\services
+copying src\okto_nexus_connector\services\__init__.py -> build\lib\okto_nexus_connector\services
+creating build\lib\okto_nexus_connector\storage
+copying src\okto_nexus_connector\storage\state_store.py -> build\lib\okto_nexus_connector\storage
+copying src\okto_nexus_connector\storage\__init__.py -> build\lib\okto_nexus_connector\storage
+creating build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\https_client.py -> build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\r4_connection.py -> build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\wss_client.py -> build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\wss_r4.py -> build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\_batches.py -> build\lib\okto_nexus_connector\transport
+copying src\okto_nexus_connector\transport\__init__.py -> build\lib\okto_nexus_connector\transport
+creating build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\approvals.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\bind.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\connect.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\daemon.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\discover.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\doctor.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\identity.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\mcp_config.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\runtime.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\service.py -> build\lib\okto_nexus_connector\cli\commands
+copying src\okto_nexus_connector\cli\commands\__init__.py -> build\lib\okto_nexus_connector\cli\commands
+running egg_info
+writing src\okto_nexus_connector.egg-info\PKG-INFO
+writing dependency_links to src\okto_nexus_connector.egg-info\dependency_links.txt
+writing entry points to src\okto_nexus_connector.egg-info\entry_points.txt
+writing requirements to src\okto_nexus_connector.egg-info\requires.txt
+writing top-level names to src\okto_nexus_connector.egg-info\top_level.txt
+reading manifest file 'src\okto_nexus_connector.egg-info\SOURCES.txt'
+adding license file 'LICENSE'
+writing manifest file 'src\okto_nexus_connector.egg-info\SOURCES.txt'
+copying src\okto_nexus_connector\py.typed -> build\lib\okto_nexus_connector
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\okto_nexus_connector
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\cli
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\approvals.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\bind.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\connect.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\daemon.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\discover.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\doctor.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\identity.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\mcp_config.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\runtime.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\commands\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli\commands
+copying build\lib\okto_nexus_connector\cli\main.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli
+copying build\lib\okto_nexus_connector\cli\output.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli
+copying build\lib\okto_nexus_connector\cli\prompts.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli
+copying build\lib\okto_nexus_connector\cli\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\cli
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\daemon\app.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\daemon\lock.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\daemon\manager.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\daemon\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\daemon\__main__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\daemon
+copying build\lib\okto_nexus_connector\errors.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\harness_config
+copying build\lib\okto_nexus_connector\harness_config\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\harness_config
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\identity
+copying build\lib\okto_nexus_connector\identity\import_flow.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\identity
+copying build\lib\okto_nexus_connector\identity\vault.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\identity
+copying build\lib\okto_nexus_connector\identity\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\identity
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\ipc
+copying build\lib\okto_nexus_connector\ipc\client.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\ipc
+copying build\lib\okto_nexus_connector\ipc\protocol.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\ipc
+copying build\lib\okto_nexus_connector\ipc\server.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\ipc
+copying build\lib\okto_nexus_connector\ipc\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\ipc
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\platform
+copying build\lib\okto_nexus_connector\platform\paths.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\platform
+copying build\lib\okto_nexus_connector\platform\service_install.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\platform
+copying build\lib\okto_nexus_connector\platform\sysinfo.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\platform
+copying build\lib\okto_nexus_connector\platform\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\platform
+copying build\lib\okto_nexus_connector\py.typed -> build\bdist.win-amd64\wheel\.\okto_nexus_connector
+copying build\lib\okto_nexus_connector\redaction.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\approval_state.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\connect_service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\core_host.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\discovery_service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\execution_selection.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\mcp_config_service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\r4_execution.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\realization_service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\runtime_service.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+copying build\lib\okto_nexus_connector\services\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\services
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\storage
+copying build\lib\okto_nexus_connector\storage\state_store.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\storage
+copying build\lib\okto_nexus_connector\storage\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\storage
+creating build\bdist.win-amd64\wheel\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\https_client.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\r4_connection.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\wss_client.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\wss_r4.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\_batches.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\transport\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector\transport
+copying build\lib\okto_nexus_connector\__init__.py -> build\bdist.win-amd64\wheel\.\okto_nexus_connector
+running install_egg_info
+Copying src\okto_nexus_connector.egg-info to build\bdist.win-amd64\wheel\.\okto_nexus_connector-0.5.0.dev0-py3.14.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\okto_nexus_connector-0.5.0.dev0.dist-info\WHEEL
+creating 'C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-execution-final-wheel-5yazauq2\\.tmp-3kfd88p6\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'okto_nexus_connector/__init__.py'
+adding 'okto_nexus_connector/errors.py'
+adding 'okto_nexus_connector/py.typed'
+adding 'okto_nexus_connector/redaction.py'
+adding 'okto_nexus_connector/cli/__init__.py'
+adding 'okto_nexus_connector/cli/main.py'
+adding 'okto_nexus_connector/cli/output.py'
+adding 'okto_nexus_connector/cli/prompts.py'
+adding 'okto_nexus_connector/cli/commands/__init__.py'
+adding 'okto_nexus_connector/cli/commands/approvals.py'
+adding 'okto_nexus_connector/cli/commands/bind.py'
+adding 'okto_nexus_connector/cli/commands/connect.py'
+adding 'okto_nexus_connector/cli/commands/daemon.py'
+adding 'okto_nexus_connector/cli/commands/discover.py'
+adding 'okto_nexus_connector/cli/commands/doctor.py'
+adding 'okto_nexus_connector/cli/commands/identity.py'
+adding 'okto_nexus_connector/cli/commands/mcp_config.py'
+adding 'okto_nexus_connector/cli/commands/runtime.py'
+adding 'okto_nexus_connector/cli/commands/service.py'
+adding 'okto_nexus_connector/daemon/__init__.py'
+adding 'okto_nexus_connector/daemon/__main__.py'
+adding 'okto_nexus_connector/daemon/app.py'
+adding 'okto_nexus_connector/daemon/lock.py'
+adding 'okto_nexus_connector/daemon/manager.py'
+adding 'okto_nexus_connector/harness_config/__init__.py'
+adding 'okto_nexus_connector/identity/__init__.py'
+adding 'okto_nexus_connector/identity/import_flow.py'
+adding 'okto_nexus_connector/identity/vault.py'
+adding 'okto_nexus_connector/ipc/__init__.py'
+adding 'okto_nexus_connector/ipc/client.py'
+adding 'okto_nexus_connector/ipc/protocol.py'
+adding 'okto_nexus_connector/ipc/server.py'
+adding 'okto_nexus_connector/platform/__init__.py'
+adding 'okto_nexus_connector/platform/paths.py'
+adding 'okto_nexus_connector/platform/service_install.py'
+adding 'okto_nexus_connector/platform/sysinfo.py'
+adding 'okto_nexus_connector/services/__init__.py'
+adding 'okto_nexus_connector/services/approval_state.py'
+adding 'okto_nexus_connector/services/connect_service.py'
+adding 'okto_nexus_connector/services/core_host.py'
+adding 'okto_nexus_connector/services/discovery_service.py'
+adding 'okto_nexus_connector/services/execution_selection.py'
+adding 'okto_nexus_connector/services/mcp_config_service.py'
+adding 'okto_nexus_connector/services/r4_execution.py'
+adding 'okto_nexus_connector/services/realization_service.py'
+adding 'okto_nexus_connector/services/runtime_service.py'
+adding 'okto_nexus_connector/storage/__init__.py'
+adding 'okto_nexus_connector/storage/state_store.py'
+adding 'okto_nexus_connector/transport/__init__.py'
+adding 'okto_nexus_connector/transport/_batches.py'
+adding 'okto_nexus_connector/transport/https_client.py'
+adding 'okto_nexus_connector/transport/r4_connection.py'
+adding 'okto_nexus_connector/transport/wss_client.py'
+adding 'okto_nexus_connector/transport/wss_r4.py'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/licenses/LICENSE'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/METADATA'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/WHEEL'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/entry_points.txt'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/top_level.txt'
+adding 'okto_nexus_connector-0.5.0.dev0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built C:\Users\jpamb\AppData\Local\Temp\okto-r4-execution-final-wheel-5yazauq2\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl

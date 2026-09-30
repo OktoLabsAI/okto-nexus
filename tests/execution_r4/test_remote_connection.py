@@ -1,7 +1,8 @@
 """Real loopback WSS ownership with installed-compatible Connector/Core APIs.
 
 The native peer and readiness qualification are synthetic. This exercises the
-Server and Connector connection owner, not the still-pending daemon composition.
+Server and daemon-owned execution consumers. Automatic startup, credentials and
+nonempty reconciliation still require product composition.
 """
 
 import asyncio
@@ -11,8 +12,7 @@ import httpx
 import pytest
 import uvicorn
 from nexus_connector_core import (
-    CoreError, ControlOperation, InstallationCandidate, LaunchIntent, OpenOperation,
-    R4_PREVIEW_REVISION, TurnOperation, r4_close_operation,
+    InstallationCandidate, R4_PREVIEW_REVISION,
 )
 from nexus_connector_core.discovery import fingerprint
 
@@ -26,10 +26,12 @@ from test_vertical_inventory import _NativeFactory
 @pytest.mark.parametrize('onboarding', ['connector-realization'], indirect=True)
 def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
-    from okto_nexus_connector.transport.wss_r4 import connect_r4_connection, apply_r4_lease
+    from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
-    from okto_nexus_connector.services.core_host import CoreRuntimeHost
-    from okto_nexus_connector.platform.paths import state_dir
+    from okto_nexus_connector.daemon.app import DaemonApp
+    from okto_nexus_connector.errors import ConnectorError
+    from okto_nexus_connector.services.r4_execution import R4LaunchSetup
+    from okto_nexus_connector.platform.paths import state_dir, state_file
     from okto_nexus_connector.storage.state_store import StateStore
 
     deps, client, headers, prepare = onboarding
@@ -67,19 +69,29 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         port = sock.getsockname()[1]
         server = uvicorn.Server(uvicorn.Config(client.app, lifespan='off', log_level='error'))
         serving = asyncio.create_task(server.serve(sockets=[sock]))
-        host = CoreRuntimeHost(state_dir(tmp_path / 'connector-runtime'), None)
+        daemon_root = state_dir(tmp_path / 'connector-runtime')
+        state = store.load()
+        state.preferences['vault.fallback_file.approved'] = True
+        StateStore(state_file(daemon_root)).save(state)
+        monkeypatch.setenv('OKTO_NEXUS_CONNECTOR_VAULT', 'file')
+        daemon = DaemonApp(daemon_root)
         binary = tmp_path / 'remote-only' / 'codex.exe'
         candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
         class CountedFactory(_NativeFactory):
             opens = 0
-            async def open(self, *args, **kwargs):
+            async def open(self, prepared, session_id, context, *, stream_epoch):
+                assert prepared.cwd == str(tmp_path / 'remote-workspace')
+                assert context.r4_authority is not None
                 self.opens += 1
-                return await super().open(*args, **kwargs)
+                return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
         async def environment(_):
             return {}
-        runtime = None
-        owner = None
+        async def candidates(_):
+            return [candidate]
+        async def launch(_):
+            return R4LaunchSetup(environment)
+        owner = execution = None
         operations = []
         async def report(request):
             assert request['operation_ids'] == request['session_ids'] == []
@@ -97,16 +109,23 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
             admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
                 k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
             assert admitted.status_code == 202, admitted.text
-            item = await asyncio.wait_for(owner.receive_operation(control=intent in {
-                'turn.steer', 'turn.interrupt', 'runtime.close'}), 5)
-            frame = owner.require_current(item)
-            assert frame['operation_id'] == resolution['operation_id']
-            assert frame['intent_hash'] == resolution['intent_hash']
-            operations.append(frame['operation_id'])
-            return item, frame, resolution['scope']
-        def context(item):
-            return runtime.r4_operation_context(owner.require_current(item),
-                connection_id=owner.state.connection_id, connection_generation=owner.state.connection_generation)
+            operations.append(resolution['operation_id'])
+            async with asyncio.timeout(8):
+                while True:
+                    if execution.failure is not None:
+                        raise execution.failure
+                    observed = client.get('/v1/runtime/operations/' + resolution['operation_id'],
+                                          headers=headers['subject'])
+                    assert observed.status_code == 200, observed.text
+                    if observed.json()['receipt_revision'] > 0:
+                        receipt = observed.json()
+                        assert receipt['operation_id'] == resolution['operation_id']
+                        assert receipt['intent_hash'] == resolution['intent_hash']
+                        assert receipt['error'] is None, receipt
+                        assert receipt['executor_stage'] is not None
+                        break
+                    await asyncio.sleep(0.01)
+            return resolution
         try:
             async with asyncio.timeout(5):
                 while not server.started:
@@ -123,41 +142,25 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 configuration_revision=revisions.configuration)
             async with httpx.AsyncClient(transport=httpx.ASGITransport(app=client.app)) as raw:
                 async with NexusHTTPClient('https://127.0.0.1:8202', client=raw) as http:
-                    item, frame, scope = await admit('runtime.start', new_session=True)
-                    runtime = await host.build_r4(store, frame=owner.require_current(item),
-                        candidates=[candidate], environment=environment, factory=native)
-                    with pytest.raises(CoreError):
-                        context(item)
-                    assert native.opens == 0
-                    await apply_r4_lease(owner, owner.state, runtime, scope=scope, grant_id=frame['grant_id'])
-                    ctx = context(item)
-                    prepared = await runtime.prepare(LaunchIntent('subject', binding['workspace_id'], candidate.adapter_id), ctx)
-                    assert prepared.cwd == str(tmp_path / 'remote-workspace')
-                    opened = await runtime.open(OpenOperation(frame['operation_id'], scope['session_id'], 'mux-epoch', prepared), ctx)
-                    await http.publish_core_open_receipt(ticket, submit_frame=frame, core_receipt=opened,
-                        context=ctx, prepared=prepared, stream_epoch='mux-epoch', receipt_revision=1)
-                    owner.release_operation(item)
-                    item, frame, _ = await admit('turn.submit', session_id=scope['session_id'], text='Hello')
-                    ctx = context(item)
-                    receipt = await runtime.submit(TurnOperation(frame['operation_id'], scope['session_id'], frame['payload']['text']), ctx)
-                    await http.publish_core_turn_receipt(ticket, submit_frame=frame, core_receipt=receipt, context=ctx, receipt_revision=1)
-                    owner.release_operation(item)
-                    for action, target in [('steer', {'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'}),
-                                           ('interrupt', {'kind': 'current_run', 'expected_turn_id': None})]:
-                        options = {'text': 'Continue carefully.'} if action == 'steer' else {}
-                        item, frame, _ = await admit('turn.' + action, session_id=scope['session_id'], target=target, **options)
-                        ctx = context(item)
-                        receipt = await runtime.control(ControlOperation(frame['operation_id'], scope['session_id'], action,
-                            text=frame['payload'].get('text'), reason=frame['payload'].get('reason'),
-                            expected_turn_id=frame.get('expected_turn_id')), ctx)
-                        await getattr(http, 'publish_core_' + action + '_receipt')(ticket, submit_frame=frame,
-                            core_receipt=receipt, context=ctx, receipt_revision=1)
-                        owner.release_operation(item)
-                    item, frame, _ = await admit('runtime.close', session_id=scope['session_id'])
-                    ctx = context(item)
-                    receipt = await runtime.close(r4_close_operation(frame), ctx)
-                    await http.publish_core_close_receipt(ticket, submit_frame=frame, core_receipt=receipt, context=ctx, receipt_revision=1)
-                    owner.release_operation(item)
+                    async def publish(frame):
+                        await http.publish_operation_receipt(ticket, frame=frame)
+                    execution = daemon.own_r4_connection(owner, candidate_provider=candidates,
+                        launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    with pytest.raises(ConnectorError) as duplicate:
+                        daemon.own_r4_connection(owner, candidate_provider=candidates,
+                            launch_provider=launch, publish_receipt=publish, native_factory=native)
+                    assert duplicate.value.code == 'OPERATION_CONFLICT'
+                    opened = await admit('runtime.start', new_session=True)
+                    session_id = opened['scope']['session_id']
+                    await admit('turn.submit', session_id=session_id, text='Hello')
+                    await admit('turn.steer', session_id=session_id, text='Continue carefully.',
+                        target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
+                    await admit('turn.interrupt', session_id=session_id,
+                        target={'kind': 'current_run', 'expected_turn_id': None})
+                    await admit('runtime.close', session_id=session_id)
+                    async with asyncio.timeout(5):
+                        while execution.pending_count:
+                            await asyncio.sleep(0)
             assert owner.online and owner.usage == {False: (0, 0), True: (0, 0)}
             assert native.native.stopped
             assert native.opens == 1
@@ -167,10 +170,13 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
                 assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == ('CLOSED', 'CLOSED')
         finally:
-            if owner is not None:
-                await owner.close()
-            await host.shutdown_all()
-            server.should_exit = True
-            await asyncio.wait_for(serving, 5)
-            sock.close()
+            try:
+                result = await daemon._shutdown()
+                if owner is not None:
+                    await owner.close()
+                assert result == 0
+            finally:
+                server.should_exit = True
+                await asyncio.wait_for(serving, 5)
+                sock.close()
     asyncio.run(run())

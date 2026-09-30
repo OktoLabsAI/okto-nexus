@@ -580,8 +580,8 @@
       "required_scenarios": [
         "TR4-06-03"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_physical_selection.json",
-      "remaining": "Persisted approved binding and physical selection now compose Core through the host in real loopback WSS. Daemon/CLI consumers, executor registry, canonical profile/environment, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon/CLI startup, executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS06.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_04",
@@ -739,8 +739,8 @@
         "TN-19",
         "TN-20"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_physical_selection.json",
-      "remaining": "Persisted approved binding and physical selection now compose Core through the host in real loopback WSS. Daemon/CLI consumers, executor registry, canonical profile/environment, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon/CLI startup, executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS09.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_01",
@@ -756,8 +756,8 @@
       "required_scenarios": [
         "TR4-09-01"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_physical_selection.json",
-      "remaining": "Persisted approved binding and physical selection now compose Core through the host in real loopback WSS. Daemon/CLI consumers, executor registry, canonical profile/environment, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
+      "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
+      "remaining": "The real loopback WSS journey now uses daemon-owned operation consumers, approved physical selection and public Core receipt projection. Automatic daemon/CLI startup, executor registry, canonical profile/environment, renewal/reconnect, approved-revision refresh, embedded owner, nonempty reconciliation and final native multi-host acceptance remain open."
     },
     "NS09.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_02",

@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M03/M06 approved physical selection and Core host composition in real loopback WSS; no product gate",
+    "scope": "Partial M04/M06 daemon-owned operation consumers and real loopback WSS integration; no product gate",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "b6e9ed883f45d6eb8d573bb6e93b134038444686",
-      "connector": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
+      "nexus": "7e6ea4f5e1d4d34fa4c8f0303ba87a41fbe47559",
+      "connector": "23a28467e2da141c5dff389e838792ebe820e229",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "shared_core_version": "0.2.28.dev0",
@@ -49,24 +49,26 @@
       "plans/r4_execution/M06_CONNECTOR_CONNECTION_OWNER.md",
       "plans/r4_execution/test_runs_20260930_connection_owner.json",
       "plans/r4_execution/M06_PHYSICAL_SELECTION.md",
-      "plans/r4_execution/test_runs_20260930_physical_selection.json"
+      "plans/r4_execution/test_runs_20260930_physical_selection.json",
+      "plans/r4_execution/M06_DAEMON_EXECUTION_OWNER.md",
+      "plans/r4_execution/test_runs_20260930_execution_owner.json"
     ],
-    "latest_increment": "Connector schema 4 persists approved bindings against complete local evidence; physical selection checks root, binary, inventory and revisions. CoreRuntimeHost revalidates after waits and cache reuse. The real WSS journey now uses these services.",
-    "verification_scope": "27 directed and 278 Connector regression passes with two skips; 103 Nexus R4 and 55 coordinated installed passes, with overlap. Initial Connector fixture failures are preserved. No product gate closed.",
+    "latest_increment": "The daemon adopts authenticated R4 connections with independent productive/control consumers, shielded producers, initial Core lease installation and seven-action public API translation. The WSS journey now admits and queries operations without test-side Core execution.",
+    "verification_scope": "286 Connector regression passes with two skips; 17 directed contracts/consumers; 103 Nexus R4 and 63 installed passes, with overlap. Initial failures and the completed-producer observation correction are preserved. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial M03/M06 approved physical selection and Core host composition in real loopback WSS; no product gate",
-      "nexus_commit": "Commit containing M06_PHYSICAL_SELECTION.md",
+      "scope": "Partial M04/M06 daemon-owned operation consumers and real loopback WSS integration; no product gate",
+      "nexus_commit": "Commit containing M06_DAEMON_EXECUTION_OWNER.md",
       "published_dependency_heads": {
-        "connector": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
+        "connector": "23a28467e2da141c5dff389e838792ebe820e229",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_physical_selection.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_execution_owner.json",
       "recorded_passes": {
-        "connector_regression": 278,
-        "connector_directed": 27,
+        "connector_regression": 286,
+        "connector_directed": 17,
         "nexus_r4": 103,
-        "installed_coordinated": 55,
+        "installed_coordinated": 63,
         "public_wss_source": 1
       },
       "recorded_skips": {
@@ -74,10 +76,10 @@
       },
       "counts_overlap": true,
       "next_steps": [
-        "Compose R4 daemon/CLI lifecycle with approved physical selection, connection owner and persisted executor records.",
-        "Map canonical profile/environment and explicit approved-revision refresh into productive/control consumers.",
-        "Complete embedded execution, nonempty reconciliation, credential lifecycle, governance and durable receipts/events.",
-        "Complete M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
+        "Complete automatic daemon/CLI startup with persisted executor registration, credential lifecycle, ticket/lease renewal and reconnect.",
+        "Supply canonical approved profile/environment/capability ports and explicit approved-revision refresh.",
+        "Complete nonempty reconciliation, durable receipt/event publication, native request ingress and canonical decision journeys.",
+        "Complete embedded execution, M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
       ]
     },
     "installed_core_campaign": {
