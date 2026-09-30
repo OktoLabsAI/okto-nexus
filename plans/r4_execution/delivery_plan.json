@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Owned Pi native action ingress and retained producers integrated through both hosts; automatic product composition and remaining M00-M13 acceptance are pending.",
+    "scope": "Durable session capability issuance and protected persistence through the execution launch port; automatic approved configuration, restart authority reconciliation and remaining M00-M13 acceptance are pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "e1acdffe3815c0a30ed8f67eaea1167bccaac11a",
-      "connector": "f48ce20141a00a72bc67f8d0197bfad4a1f5cc75",
+      "nexus": "c7d3c50229893b9ae2de6def05f4172e6c68e543",
+      "connector": "e5236fe99f39f14978c1dd063b3321a49d540b81",
       "core": "770659b7f3404798fe6c59146c7ab9d12b84bbe4"
     },
     "shared_core_version": "0.2.30.dev0",
@@ -65,19 +65,22 @@
       "plans/r4_execution/M09_CORE_NATIVE_BRIDGE.md",
       "plans/r4_execution/test_runs_20260930_native_domain.json",
       "plans/r4_execution/M09_PI_HOST_OWNERSHIP.md",
-      "plans/r4_execution/test_runs_20260930_pi_owner.json"
+      "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "plans/r4_execution/M02_DURABLE_CAPABILITY_INTENT.md",
+      "plans/r4_execution/test_runs_20260930_capability_reservation.json"
     ],
-    "latest_increment": "Core 0.2.30.dev0 Pi ownership, Connector host adoption and Nexus host adoption in the commit containing test_runs_20260930_pi_owner.json.",
-    "verification_scope": "Nexus installed 33-case campaign rerun before publication; Core/Connector installed evidence inspected and package bytes verified. No product gate closed.",
+    "latest_increment": "Connector schema 7 and owned capability issuance; canonical Nexus HTTP loss/replay integration.",
+    "verification_scope": "Installed Connector 275 passes/one skip and Nexus 61 passes; artifact bytes verified. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INSTALLED_INTEGRATION",
-      "scope": "Owned Pi native action ingress and retained producers integrated through both hosts; automatic product composition and remaining M00-M13 acceptance are pending.",
-      "nexus_commit": "Commit containing test_runs_20260930_pi_owner.json",
-      "evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "scope": "Durable session capability issuance and protected persistence through the execution launch port; automatic approved configuration, restart authority reconciliation and remaining M00-M13 acceptance are pending.",
+      "nexus_commit": "Commit containing test_runs_20260930_capability_reservation.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_capability_reservation.json",
       "next_steps": [
-        "Complete approved configuration, durable secret intent and protected launch environment.",
-        "Complete automatic embedded/daemon composition, authority renewal and nonempty recovery.",
-        "Complete M00-M13 acceptance including domain, UI/CLI US English, migration and real provider/platform/host campaigns."
+        "Complete automatic approved configuration and protected environment composition.",
+        "Rehydrate persisted capability material only under reconciled current authority; complete renewal and terminal retention.",
+        "Complete embedded/daemon automatic runtime composition and nonempty recovery.",
+        "Complete all remaining M00-M13 criteria including domain, UI/CLI US English, migration and real provider/platform/host acceptance."
       ]
     },
     "installed_core_campaign": {

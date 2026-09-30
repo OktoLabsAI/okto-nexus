@@ -381,6 +381,8 @@
     "NS03.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_04",
       "collected_nodeids": [
+        "tests/execution_r4/test_capability_reservation.py::test_connector_persists_issuance_and_never_replaces_dispatched_secret[False]",
+        "tests/execution_r4/test_capability_reservation.py::test_connector_persists_issuance_and_never_replaces_dispatched_secret[True]",
         "tests/execution_r4/test_core_native_actions.py::test_core_native_bridge_uses_same_lease_and_canonical_domain[strict-lost_response-connector]",
         "tests/execution_r4/test_core_native_actions.py::test_core_native_bridge_uses_same_lease_and_canonical_domain[strict-lost_response-embedded]",
         "tests/execution_r4/test_core_native_actions.py::test_core_native_bridge_uses_same_lease_and_canonical_domain[strict-none-connector]",
@@ -482,8 +484,8 @@
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_capabilities.json",
       "remaining": "Core native domain backends are integrated through embedded and Connector HTTP callers. Approved automatic host composition, Pi socket lifecycle, capability renewal, workspace-scoped inbox, remaining tools, causal results and final provider/platform acceptance remain required.",
-      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
-      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_capability_reservation.json",
+      "remaining_acceptance": "Approved automatic configuration, restart authority reconciliation before secret reuse, renewal, terminal retention and the remaining audience/domain/provider acceptance remain pending."
     },
     "NS03.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_05",

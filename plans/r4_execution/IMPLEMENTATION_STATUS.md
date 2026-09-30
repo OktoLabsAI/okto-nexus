@@ -1,5 +1,24 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Emissão durável no Connector — 30 de setembro de 2026
+
+O [incremento de intenção durável](M02_DURABLE_CAPABILITY_INTENT.md) acrescenta
+schema 7, owner de emissão e composição pela porta de abertura existente.
+O ID é persistido antes do POST; o segredo é armazenado no vault antes de
+liberar configuração. Cancelamento não abandona a gravação. Replay recupera
+metadados pelo mesmo ID e não substitui segredo após envio incerto.
+
+A [campanha instalada](test_runs_20260930_capability_reservation.json) passou
+275 casos Connector (um skip existente) e 61 Nexus. Os testes incluem a
+transação canônica de emissão com resposta perdida e a corrida entre
+armazenamento do segredo e metadados recebidos por outro owner.
+
+O material persiste, mas sua reutilização após restart depende da
+reconciliação de autoridade ainda pendente. Configuração aprovada automática,
+renovação e retenção/limpeza terminal também continuam obrigatórias. O
+incremento não encerra M02/P6.1 nem gates de produto.
+
+
 ## Pi nos hosts e shutdown — 30 de setembro de 2026
 
 O [incremento Pi](M09_PI_HOST_OWNERSHIP.md) integra o owner público do Core
