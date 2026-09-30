@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Completion planning for all three products; observed Pi socket ownership is partial, with Nexus adoption still uncommitted. Automatic product composition and M00-M13 acceptance remain pending.",
+    "scope": "Owned Pi native action ingress and retained producers integrated through both hosts; automatic product composition and remaining M00-M13 acceptance are pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "1c48ba40d8216cdbfc504fe96d877c4ab0fced6e",
+      "nexus": "e1acdffe3815c0a30ed8f67eaea1167bccaac11a",
       "connector": "f48ce20141a00a72bc67f8d0197bfad4a1f5cc75",
       "core": "770659b7f3404798fe6c59146c7ab9d12b84bbe4"
     },
@@ -63,17 +63,18 @@
       "plans/r4_execution/M09_NATIVE_ACTIONS.md",
       "plans/r4_execution/test_runs_20260930_native_actions.json",
       "plans/r4_execution/M09_CORE_NATIVE_BRIDGE.md",
-      "plans/r4_execution/test_runs_20260930_native_domain.json"
+      "plans/r4_execution/test_runs_20260930_native_domain.json",
+      "plans/r4_execution/M09_PI_HOST_OWNERSHIP.md",
+      "plans/r4_execution/test_runs_20260930_pi_owner.json"
     ],
-    "latest_increment": "Core and Connector Pi owner published; Nexus host adoption and technical test evidence are present in the workspace but not yet published.",
-    "verification_scope": "Planning review inspected existing JUnit and command manifests; it did not rerun product tests or close a product gate.",
+    "latest_increment": "Core 0.2.30.dev0 Pi ownership, Connector host adoption and Nexus host adoption in the commit containing test_runs_20260930_pi_owner.json.",
+    "verification_scope": "Nexus installed 33-case campaign rerun before publication; Core/Connector installed evidence inspected and package bytes verified. No product gate closed.",
     "latest_partial_increment": {
-      "status": "PARTIAL_WORKSPACE_INTEGRATION",
-      "scope": "Owned Pi socket, retained domain producers and host composition hooks with a technical Node peer.",
-      "nexus_commit": null,
-      "evidence": "plans/r4_execution/delivery_scope_review_20260930.json",
+      "status": "PARTIAL_INSTALLED_INTEGRATION",
+      "scope": "Owned Pi native action ingress and retained producers integrated through both hosts; automatic product composition and remaining M00-M13 acceptance are pending.",
+      "nexus_commit": "Commit containing test_runs_20260930_pi_owner.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
       "next_steps": [
-        "Publish and reconcile the pending Nexus implementation and evidence.",
         "Complete approved configuration, durable secret intent and protected launch environment.",
         "Complete automatic embedded/daemon composition, authority renewal and nonempty recovery.",
         "Complete M00-M13 acceptance including domain, UI/CLI US English, migration and real provider/platform/host campaigns."

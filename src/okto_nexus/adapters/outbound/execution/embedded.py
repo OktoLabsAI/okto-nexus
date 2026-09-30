@@ -38,7 +38,7 @@ class EmbeddedExecutor:
         candidate: InstallationCandidate, workspace_root: str,
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
-        native_factory=None,
+        native_factory=None, native_action_factory=None,
     ) -> tuple[EmbeddedExecutor, R4LeaseApplication]:
         """Install canonical Server authority before prepare or native open.
 
@@ -51,7 +51,8 @@ class EmbeddedExecutor:
             executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
-            environment=environment, native_factory=native_factory)
+            environment=environment, native_factory=native_factory,
+            native_action_factory=native_action_factory)
         attempt = await runtime.begin_r4_lease_request(
             scope=scope, grant_id=grant_id, connection_id=connection_id,
             connection_generation=connection_generation, purpose="initial")
@@ -60,7 +61,8 @@ class EmbeddedExecutor:
         executor = cls(
             host, context=application.context, session_id=scope["session_id"],
             candidate=candidate, workspace_root=workspace_root,
-            environment=environment, native_factory=native_factory)
+            environment=environment, native_factory=native_factory,
+            native_action_factory=native_action_factory)
         return executor, application
 
     async def renew_r4(
@@ -94,7 +96,7 @@ class EmbeddedExecutor:
         session_id: str, candidate: InstallationCandidate,
         workspace_root: str,
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
-        native_factory=None,
+        native_factory=None, native_action_factory=None,
     ):
         if not isinstance(context, ExecutionContext):
             raise TypeError("An approved Core execution context is required.")
@@ -113,6 +115,7 @@ class EmbeddedExecutor:
         self.workspace_root = workspace_root
         self.environment = environment
         self.native_factory = native_factory
+        self.native_action_factory = native_action_factory
 
     async def _runtime(self):
         return await self.host.acquire(
@@ -120,6 +123,7 @@ class EmbeddedExecutor:
             candidates={self.candidate.adapter_id: self.candidate},
             workspace_roots={self.context.workspace_id: self.workspace_root},
             environment=self.environment, native_factory=self.native_factory,
+            native_action_factory=self.native_action_factory,
         )
 
     async def open(self, *, operation_id: str, stream_epoch: str,
@@ -171,7 +175,10 @@ class EmbeddedExecutor:
             policy = ShutdownPolicy()
         if self.context.r4_authority is not None and reason is None:
             reason = "Close requested by the authorized agent."
-        return await runtime.close(
+        receipt = await runtime.close(
             CloseOperation(operation_id=operation_id,
                            session_id=self.session_id,
                            reason=reason, policy=policy), self.context)
+        await self.host.close_native_actions(executor_id=self.context.executor_id,
+                                              session_id=self.session_id)
+        return receipt

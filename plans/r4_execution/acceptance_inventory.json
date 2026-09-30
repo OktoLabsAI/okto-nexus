@@ -438,6 +438,10 @@
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"action_id\":\"a\",\"action_id\":\"b\"}]",
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"result\":NaN}]",
         "tests/execution_r4/test_native_actions.py::test_native_to_mcp_completion_and_simultaneous_claim",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]",
         "tests/execution_r4/test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[UPDATE agents SET api_key_hash='rotated' WHERE agent_id='subject']",
         "tests/execution_r4/test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[UPDATE execution_agent_revisions SET authorization_revision=authorization_revision+1 WHERE agent_id='subject']",
         "tests/execution_r4/test_session_capabilities.py::test_active_capability_immediately_loses_changed_authority[UPDATE execution_agent_revisions SET configuration_revision=configuration_revision+1 WHERE agent_id='subject']",
@@ -478,8 +482,8 @@
       ],
       "evidence": "plans/r4_execution/test_runs_20260930_capabilities.json",
       "remaining": "Core native domain backends are integrated through embedded and Connector HTTP callers. Approved automatic host composition, Pi socket lifecycle, capability renewal, workspace-scoped inbox, remaining tools, causal results and final provider/platform acceptance remain required.",
-      "partial_evidence": "plans/r4_execution/test_runs_20260930_native_domain.json",
-      "remaining_acceptance": "Core native domain backends are integrated through embedded and Connector HTTP callers. Approved automatic host composition, Pi socket lifecycle, capability renewal, workspace-scoped inbox, remaining tools, causal results and final provider/platform acceptance remain required."
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
     },
     "NS03.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_05",
@@ -711,28 +715,36 @@
     "NS07.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_01",
       "collected_nodeids": [
-        "tests/execution_r4/test_ns07.py::test_ns07_01"
+        "tests/execution_r4/test_ns07.py::test_ns07_01",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]"
       ],
       "effective_test_command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_01 -q",
       "test_availability": "COLLECTED",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
-      "acceptance": "NOT_RUN",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-07-01"
-      ]
+      ],
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
     },
     "NS07.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_02",
       "collected_nodeids": [
-        "tests/execution_r4/test_ns07.py::test_ns07_02"
+        "tests/execution_r4/test_ns07.py::test_ns07_02",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]"
       ],
       "effective_test_command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_02 -q",
       "test_availability": "COLLECTED",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
-      "acceptance": "NOT_RUN",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-07-02"
-      ]
+      ],
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
     },
     "NS07.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_03",
@@ -1111,7 +1123,11 @@
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[[]]",
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"action_id\":\"a\",\"action_id\":\"b\"}]",
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"result\":NaN}]",
-        "tests/execution_r4/test_native_actions.py::test_native_to_mcp_completion_and_simultaneous_claim"
+        "tests/execution_r4/test_native_actions.py::test_native_to_mcp_completion_and_simultaneous_claim",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]"
       ],
       "effective_test_command": "rtk proxy <installed-python> -I plans/r4_execution/run_native_domain_installed.py nexus --final (from external pytest configuration directory)",
       "test_availability": "COLLECTED",
@@ -1120,8 +1136,8 @@
       "required_scenarios": [
         "TR4-12-01"
       ],
-      "partial_evidence": "plans/r4_execution/test_runs_20260930_native_domain.json",
-      "remaining_acceptance": "Core native domain backends are integrated through embedded and Connector HTTP callers. Approved automatic host composition, Pi socket lifecycle, capability renewal, workspace-scoped inbox, remaining tools, causal results and final provider/platform acceptance remain required."
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
     },
     "NS12.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_02",
@@ -1182,7 +1198,11 @@
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[[]]",
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"action_id\":\"a\",\"action_id\":\"b\"}]",
         "tests/execution_r4/test_native_actions.py::test_native_strict_json[{\"result\":NaN}]",
-        "tests/execution_r4/test_native_actions.py::test_native_to_mcp_completion_and_simultaneous_claim"
+        "tests/execution_r4/test_native_actions.py::test_native_to_mcp_completion_and_simultaneous_claim",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[False-embedded]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-connector]",
+        "tests/execution_r4/test_pi_native_hosts.py::test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown[True-embedded]"
       ],
       "effective_test_command": "rtk proxy <installed-python> -I plans/r4_execution/run_native_domain_installed.py nexus --final (from external pytest configuration directory)",
       "test_availability": "COLLECTED",
@@ -1191,8 +1211,8 @@
       "required_scenarios": [
         "TR4-12-02"
       ],
-      "partial_evidence": "plans/r4_execution/test_runs_20260930_native_domain.json",
-      "remaining_acceptance": "Core native domain backends are integrated through embedded and Connector HTTP callers. Approved automatic host composition, Pi socket lifecycle, capability renewal, workspace-scoped inbox, remaining tools, causal results and final provider/platform acceptance remain required."
+      "partial_evidence": "plans/r4_execution/test_runs_20260930_pi_owner.json",
+      "remaining_acceptance": "Approved automatic product composition, durable secret intent, authority renewal, remaining domain tools and applicable installed real-provider/platform/host acceptance remain pending. Embedded technical test uses a WSS authority fixture."
     },
     "NS12.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_03",

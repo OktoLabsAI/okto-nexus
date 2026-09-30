@@ -1,4 +1,14 @@
-## Current development artifact: 0.2.29.dev0
+## Current development artifact: 0.2.30.dev0
+
+nexus_connector_core-0.2.30.dev0-py3-none-any.whl, SHA-256
+e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6.
+The same bytes are used by Nexus and Connector. Pi native action ingress
+retains backend producers through timeout and shutdown. Both hosts compose
+the public Pi launch owner and retain stores while native domain work remains
+pending. Automatic approved configuration and real provider acceptance remain
+pending; R4 readiness remains false.
+
+## Historical development artifact: 0.2.29.dev0
 
 `nexus_connector_core-0.2.29.dev0-py3-none-any.whl`, SHA-256
 `a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba`.

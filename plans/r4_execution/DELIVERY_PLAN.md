@@ -90,11 +90,12 @@ automática pelas entradas de produto continuam na fila de conclusão.
 A [revisão desta entrega](delivery_scope_review_20260930.json) registra os
 HEADs, hashes e resultados observados no workspace. Core e Connector já
 publicaram o owner do socket Pi e a retenção de producers durante shutdown.
-A adoção correspondente no Nexus está em alterações locais ainda não
-publicadas. Os XMLs disponíveis registram 143 passes Core, 264 passes e um
+A adoção correspondente no Nexus é publicada no commit que contém o
+[manifesto Pi](test_runs_20260930_pi_owner.json). Os XMLs disponíveis registram 143 passes Core, 264 passes e um
 skip Connector, 33 passes Nexus e dois passes embedded com imports do
 aplicativo Connector bloqueados. São campanhas anteriores inspecionadas
-nesta revisão, com sobreposição; esta revisão não executou testes de produto.
+na revisão de planejamento, com sobreposição. O incremento seguinte
+reexecutou os 33 testes Nexus instalados antes de publicar a integração.
 
 O peer Pi é técnico e sua qualificação é forçada no teste. O caso embedded
 prepara a autoridade por uma fixture WSS compartilhada: comprova a
@@ -307,7 +308,7 @@ A rota Server de M09 já compartilha o claim canônico usado pelos handlers MCP.
 1. **Contrato e entrada Nexus implementados:** `POST /v1/runtime/native-actions` para `context`, `claim` e `complete`, com capability da audiência nativa, escopo exato e payload validado. Explicitar a tradução para os tipos públicos do Core e os limites de request; não exigir `tools/call` para a audiência nativa.
 2. **Transação e repetição:** persistir identidade, digest e resultado do pedido junto ao efeito canônico quando houver mutação. Repetição idêntica recupera o resultado autorizado; mesmo ID com conteúdo diferente falha; perda da resposta não cria uma nova tentativa com ID diferente. Revalidar autoridade e permissões antes do efeito e do replay.
 3. **Um único claim:** MCP, execução embedded e bridge Pi usam o mesmo caso de uso e a mesma propriedade de claim/epoch. Preservar isolamento por sessão, agente e workspace, budgets e causalidade de resultados. Não criar uma segunda máquina de estados de handoff no Core ou Connector.
-4. **Caller dos hosts:** aproveitar os backends e hooks já implementados, concluir a publicação do incremento Nexus e conectá-los à configuração aprovada e às referências protegidas. O peer técnico já chama a extensão pelo child Pi; o aceite exige onboarding público, composição automática e provider qualificado.
+4. **Caller dos hosts:** aproveitar os backends e hooks já implementados, conectá-los à configuração aprovada e às referências protegidas. O peer técnico já chama a extensão pelo child Pi; o aceite exige onboarding público, composição automática e provider qualificado.
 5. **Prova:** sucesso de contexto/claim/complete; audiência e ações cruzadas negadas; lease/revisão/autoridade inválidas; disputa simultânea MCP/nativa; rollback na falha do armazenamento; restart e resposta perdida antes/depois do commit; replay e conflito de digest; resultados sem causalidade recusados. Capturar contagem de efeitos e conferir o mesmo claim persistido.
 
 Concluir a composição do caller da bridge, inbox limitado ao workspace e as ferramentas restantes, integrar o ambiente dos hosts e exercitar o ciclo de vida das capabilities. O fechamento continua exigindo regressões de domínio, tools-only independente de WSS, superfície compacta e provider real quando aplicável.
@@ -656,7 +657,7 @@ Estados de tarefa: `PENDING`, `IN_PROGRESS`, `READY_FOR_ACCEPTANCE`, `DONE`, `BL
 
 A ordem inicial é M00 → M01 → M02 → M03 → M04. Depois, M05 e M06 podem avançar como frentes independentes; M07 segue M06; M08 une local/remoto/eventos. M09, M10 e M11 concluem domínio, jornadas e robustez. M12 faz o cutover e M13 aceita os artefatos finais. Isso descreve independência técnica; não pressupõe agentes paralelos nem divide ownership sem coordenação.
 
-Os próximos incrementos devem incorporar a evidência existente à auditoria, publicar o incremento Nexus pendente com suas provas e concluir as lacunas de contrato, configuração/segredos e composição automática local/remota. O fechamento respeita a ordem de auditoria, contrato, autoridade/onboarding e dispatcher. Essa ordem evita acumular novos previews de UI/WSS sem integrar os callers que produzem efeitos.
+Os próximos incrementos devem incorporar a evidência existente à auditoria, integrar o incremento Pi publicado e concluir as lacunas de contrato, configuração/segredos e composição automática local/remota. O fechamento respeita a ordem de auditoria, contrato, autoridade/onboarding e dispatcher. Essa ordem evita acumular novos previews de UI/WSS sem integrar os callers que produzem efeitos.
 
 | Gate | Condição de encerramento |
 |---|---|

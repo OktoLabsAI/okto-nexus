@@ -1,0 +1,314 @@
+{
+  "increment": "M05/M06/M09 owned Pi native actions",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "created_at_utc": "2026-09-30T13:15:22.956081+00:00",
+  "nexus_parent": "e1acdffe3815c0a30ed8f67eaea1167bccaac11a",
+  "nexus_commit": "Commit containing this manifest and M09_PI_HOST_OWNERSHIP.md",
+  "dependency_heads": {
+    "core": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+    "connector": "f48ce20141a00a72bc67f8d0197bfad4a1f5cc75"
+  },
+  "artifacts": {
+    "core": {
+      "version": "0.2.30.dev0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "qualification": "Technical Pi CLI; real providers and automatic daemon/embedded composition remain pending.",
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "c09baa8c157ca1d0d52e5bbf16be07f021d43a5e52f1f626c1e20c8efee1d7b4",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-stage-zn3h01ol",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85"
+      ]
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "396057dcb81f7a0645e6d54e94b5fc5d48fcc66ca5634db865076d60b51fa081",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-stage-ik09y4cw",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_"
+      ]
+    },
+    "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "install_command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--force-reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-nexus-wheel-q28o9u85\\okto_nexus-0.2.0-py3-none-any.whl",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-connector-wheel-aagrq2d_\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ]
+  },
+  "source_sha256": {
+    "pyproject.toml": "42b581a00fdb144843dc6f3032a298ad0e1453bd35e12c0f969d0302ba638c0b",
+    "uv.lock": "ff3501eeb5e5f2df44966df2418cf520730c321262767d084bc928376f373de3",
+    "src/okto_nexus/adapters/outbound/execution/core_inventory.py": "c4cc89d21596d0a84499091edf4e91b49d0d31aa45bdeb1e043c9c6b55164bf0",
+    "src/okto_nexus/adapters/outbound/execution/core_native_actions.py": "90545546769b1e0dbb2d275bfdc2af120080edc9ada08aca387a894272f8fc6b",
+    "src/okto_nexus/adapters/outbound/execution/embedded.py": "e4a87c06fa6048bfa9a5503617fecce531474e4c264d549a03a5ffc62af7fd76",
+    "src/okto_nexus/bootstrap/runtime_host.py": "53d58e8ccf1f5d986610ba23b73de4408a337e9cdb13c487468f509d84290320",
+    "tests/execution_r4/test_ns01.py": "3359e77f93803c82e3137d6a8ffa88bcd476f75af0a980037024751d99eca6d1",
+    "tests/execution_r4/test_ns09.py": "d40ad370af972d2128b7b5e956a41f2d3b77530661769040f5d61b311b0e2918",
+    "tests/execution_r4/test_pi_native_hosts.py": "cebb35d3259bad15fd2ec76e65c37be53f4f0a91e8482cc93cf33443dc72c8bf"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "node": "v24.15.0",
+    "requirements": "plans/r4_execution/evidence/pi-owner-installed-requirements.txt"
+  },
+  "campaigns": [
+    {
+      "name": "pi-owner-host-initial",
+      "junit": "plans/r4_execution/evidence/pi-owner-host-initial.xml",
+      "sha256": "0c3355a7830874d1be8dd6cd7563be46755c2a4fa9bdbb738c4a167885476cc6",
+      "counts": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 9
+      }
+    },
+    {
+      "name": "pi-owner-integration-initial",
+      "junit": "plans/r4_execution/evidence/pi-owner-integration-initial.xml",
+      "sha256": "90be2c1f90d444356ad67f4eb00ccab77570d7727c6b4cba782d9d5f1ef1c508",
+      "counts": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 4
+      },
+      "limit": "Source run before final resolved-host map cleanup; superseded by installed Nexus campaign."
+    },
+    {
+      "name": "pi-owner-installed-core",
+      "junit": "plans/r4_execution/evidence/pi-owner-installed-core.xml",
+      "sha256": "eb33ca1f3166560a4b39bffcb4c68d96ea979e9ed8437b53f6fd413c22de6677",
+      "counts": {
+        "tests": 143,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 143
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-c",
+          "import sys; sys.path.insert(0, 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core'); import nexus_connector_core, pytest; assert 'site-packages' in nexus_connector_core.__file__; raise SystemExit(pytest.main(sys.argv[1:]))",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_action_ownership.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_pi_extension_resource.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_action_bridge.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_runtime_bridge.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_runtime.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_r4_runtime_leases.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-core.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    },
+    {
+      "name": "pi-owner-installed-connector",
+      "junit": "plans/r4_execution/evidence/pi-owner-installed-connector.xml",
+      "sha256": "9584baf912cdc7998bfe500bedf7559285496ff548d95b7019be993706b808d8",
+      "counts": {
+        "tests": 265,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 264
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\contract",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-connector.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    },
+    {
+      "name": "pi-owner-installed-nexus",
+      "junit": "plans/r4_execution/evidence/pi-owner-installed-nexus.xml",
+      "sha256": "8b3234223d9e521fb3dafb61aa676bf9c661733f3b03a507a59db91550634b5b",
+      "counts": {
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 33
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_pi_native_hosts.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns07.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns09.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns01.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_core_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\pi-owner-installed-nexus.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 58
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      },
+      "note": "Rerun completed successfully immediately before Nexus publication."
+    },
+    {
+      "name": "pi-owner-no-connector",
+      "junit": "plans/r4_execution/evidence/pi-owner-no-connector.xml",
+      "sha256": "2ecf8eeb17fee88b3d735cf49dc32da48609bfc2145503491ea665be62b9285e",
+      "counts": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 2
+      }
+    },
+    {
+      "name": "connector-pi-owner-host-initial",
+      "repository": "connector",
+      "junit": "plans/implementation/evidence/pi-owner-host-initial.xml",
+      "sha256": "59cba503cbfba153353608cc5396d5578770d2e87f37c092483225d0e0798e0a",
+      "counts": {
+        "tests": 30,
+        "failures": 1,
+        "errors": 8,
+        "skipped": 0
+      },
+      "limit": "Initial source environment lacked pytest-asyncio; rerun used the plugin. Final installed Connector suite is authoritative for current code."
+    },
+    {
+      "name": "connector-pi-owner-host-source",
+      "repository": "connector",
+      "junit": "plans/implementation/evidence/pi-owner-host-source.xml",
+      "sha256": "abc6d45391a57fb5bd08967b67d2e836f43c92747cedb7eb64519de173d6e1c3",
+      "counts": {
+        "tests": 30,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "limit": "Initial source environment lacked pytest-asyncio; rerun used the plugin. Final installed Connector suite is authoritative for current code."
+    }
+  ],
+  "closed_product_gates": [],
+  "limitations": [
+    "Technical Node Pi CLI with patched qualification; no real provider qualification.",
+    "Host factories are supplied explicitly; automatic daemon and serve composition with approved configuration remain pending.",
+    "Embedded integration prepares Server authority through a shared WSS fixture, so it does not establish final local-only product topology.",
+    "Embedded import guard proves absence of Connector imports in that path, not a clean environment without its installed distribution.",
+    "Nexus wheel contains preexisting UI modifications and is not a clean UI release.",
+    "Core legacy test helpers use the repository root; product package imports and 482 package files are verified against installed wheels.",
+    "Installed suites overlap; do not sum their test counts as unique coverage.",
+    "M00-M13, UI/CLI US English, lifecycle renewal, nonempty recovery and real provider/platform/host acceptance remain incomplete."
+  ]
+}

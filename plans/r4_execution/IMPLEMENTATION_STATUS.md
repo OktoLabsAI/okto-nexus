@@ -1,5 +1,26 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Pi nos hosts e shutdown — 30 de setembro de 2026
+
+O [incremento Pi](M09_PI_HOST_OWNERSHIP.md) integra o owner público do Core
+0.2.30.dev0 aos hosts embedded e Connector. O child Node técnico usa a
+extensão empacotada para contexto/claim/complete. Timeout e cancelamento
+da espera conservam os produtores; journal e ledger permanecem abertos
+enquanto houver efeito de domínio pendente.
+
+A campanha Nexus instalada foi reexecutada antes desta publicação: 33 passes.
+As evidências anteriores conferidas registram Core 143 passes, Connector
+264 passes e um skip, e embedded com imports Connector bloqueados: dois passes.
+O [manifesto coordenado](test_runs_20260930_pi_owner.json) distingue tentativas,
+artefatos e limites. Os casos são sobrepostos e não qualificam provider real.
+
+O teste embedded usa uma fixture WSS para autoridade, portanto o aceite
+local puro ainda exige composição canônica no serve. Configuração aprovada,
+intenção durável de segredo, startup automático de execução, renovação,
+reconciliação não vazia e os demais critérios M00–M13 permanecem pendentes.
+Nenhum milestone integral ou gate foi encerrado.
+
+
 ## Bridge nativa Core — 30 de setembro de 2026
 
 O [incremento](M09_CORE_NATIVE_BRIDGE.md) conecta a bridge pública do Core

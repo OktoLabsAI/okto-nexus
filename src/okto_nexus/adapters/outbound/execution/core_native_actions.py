@@ -48,3 +48,20 @@ class EmbeddedNativeActions:
 def embedded_native_action_bridge(deps, grant, capability, runtime, *, clock=None):
     return ScopedNativeActionBridge(EmbeddedNativeActions(deps, grant, capability),
                                     grant, clock=clock, r4_runtime=runtime)
+
+
+def embedded_native_action_owner_factory(deps, grant, capability, *, clock=None):
+    """Bind a protected native capability to one embedded Pi launch."""
+    from dataclasses import replace
+    from types import MappingProxyType
+    from nexus_connector_core.native_action_socket import PiNativeActionOwner
+    grant = replace(grant, r4_scope=MappingProxyType(native_action_scope(grant.r4_scope)),
+                    allowed_actions=frozenset(grant.allowed_actions))
+    def build(runtime):
+        bridge = embedded_native_action_bridge(deps, grant, capability, runtime, clock=clock)
+        def context():
+            return runtime.r4_native_action_context(grant.r4_scope,
+                connection_id=grant.r4_connection_id, connection_generation=grant.connection_generation)
+        return PiNativeActionOwner(bridge, context, capability_ref=grant.capability_ref,
+                                   session_id=grant.session_id)
+    return build

@@ -38,7 +38,7 @@ from okto_nexus.errors import OktoNexusError
 
 
 def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
-                    actions=None, max_executions=1, trust_mode=None):
+                    actions=None, max_executions=1, trust_mode=None, candidate=None):
     class ManualDispatchFixture:
         def __init__(self, **kwargs):
             pass
@@ -56,6 +56,7 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
     factory = deps.connection_factory
     server_id = ensure_execution_installation(factory).server_id
     now = deps.clock.now_iso()
+    adapter_id = candidate.adapter_id if candidate is not None else "codex_app_server"
     app.state.test_agent_keys = {}
     with factory.unit_of_work() as uow:
         for agent in ('operator', 'registrar', 'subject', 'other'):
@@ -64,17 +65,18 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
         uow.connection.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)", (now,))
         uow.connection.execute(
             "INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,revision,created_at,updated_at) "
-            "VALUES ('profile','codex_app_server','{}',1,1,?,?)", (now, now))
+            "VALUES ('profile',?,'{}',1,1,?,?)", (adapter_id, now, now))
         uow.connection.execute(
             "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
             "enabled,activation_state,created_at,updated_at) VALUES "
-            "('ep','subject','ws','codex_app_server','nxl-r4','profile',1,'approved',?,?)", (now, now))
+            "('ep','subject','ws',?,'nxl-r4','profile',1,'approved',?,?)", (adapter_id, now, now))
     registration = register_remote_executor(factory, actor_agent_id='registrar',
                                            connector_id='connector', client_intent_id='register')
     executor_id = registration.executor_id
-    binary = tmp_path / 'codex.exe'
-    binary.write_bytes(b'Synthetic selected native peer')
-    candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
+    if candidate is None:
+        binary = tmp_path / 'codex.exe'
+        binary.write_bytes(b'Synthetic selected native peer')
+        candidate = InstallationCandidate('codex_app_server', str(binary), fingerprint(binary), 'explicit', 'selected')
     snapshot = build_executor_inventory_snapshot([candidate], server_id=server_id,
                 executor_id=executor_id, producer_instance_id='peer', publication_sequence=1)
     candidate_ref, revision = snapshot['evidence'][0]['candidate_ref'], snapshot['inventory_revision']
