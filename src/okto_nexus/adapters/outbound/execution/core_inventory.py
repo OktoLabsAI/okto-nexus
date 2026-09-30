@@ -77,10 +77,12 @@ def local_catalog() -> dict[str, Any]:
 
 
 def discover_local_candidates(*, trusted_roots: tuple[Path, ...] = (),
-                              path_env: str | None = None):
+                              path_env: str | None = None,
+                              pi_install_root: Path | None = None, pi_node: Path | None = None):
     """Retain complete candidates on the Nexus host without a dummy runtime."""
     return _core().discover_installations(
         trusted_roots=trusted_roots, path_env=path_env,
+        pi_install_root=pi_install_root, pi_node=pi_node,
     )
 
 

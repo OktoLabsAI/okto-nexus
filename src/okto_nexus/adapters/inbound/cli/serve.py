@@ -146,6 +146,10 @@ Options:
   --project-root P    Workspace the dashboard opens scoped to (default: .)
   --home P            Data directory (default ~/.okto_nexus)
   --db-path P         SQLite file (default {home}/nexus.db)
+  --harness-root P    Approve an absolute installation root for passive
+                      Core discovery (repeat for each trusted directory)
+  --pi-install-root P  Pi installation directory containing releases/
+  --pi-node P        Absolute Node executable; required with --pi-install-root
   --trust-mode M      open | strict
   --log-level L       Console verbosity: critical|error|warning|info|debug|
                       trace (default warning; env OKTO_NEXUS_LOG_LEVEL). Only
@@ -441,7 +445,10 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             list(args), env
         )
         _configure_logging(log_level)
+        from ....bootstrap.local_discovery import split_discovery_args
+        discovery, rest = split_discovery_args(rest)
         deps = bootstrap(env, rest)
+        deps.local_discovery = discovery
     except OktoNexusError as exc:
         print(
             f"[okto-nexus] serve bootstrap failed: {exc.code}: {exc.message}",

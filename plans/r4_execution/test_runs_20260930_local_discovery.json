@@ -1,0 +1,98 @@
+{
+  "date": "2026-09-30",
+  "branch": "feature/v0.2.0",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "40049af286bdc62317a8ec2dba7ebdb3e76c51c1",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-refresh-connector-54vhs2lo\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "7c8d2011c8c30b0e5a5b5efbd37bc21f37a90297427b0cc30b15f7ea60b29f26"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-local-discovery-swdo5559\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "baeb3a1ec1121b56125e7f44dcb60639a978900574a8d58dcba83a69010d3671"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "installed": {
+    "nexus": {
+      "tests": "38",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "51.616"
+    },
+    "isolated": {
+      "tests": "38",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "55.269"
+    },
+    "real_pi": {
+      "tests": "1",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "108.877"
+    }
+  },
+  "real_provider": {
+    "adapter": "pi_rpc",
+    "server_release_gate_override": true,
+    "native_qualification_override": false,
+    "protected_os_vault": true,
+    "synthetic_native_factory": false,
+    "version": "0.87.1",
+    "open_stage": "SUBMITTED",
+    "lease_serial_before_turn": 2,
+    "turn_stage": "SUCCEEDED",
+    "handoff_status": "COMPLETED",
+    "native_action_count": 3,
+    "wss_ticket_count": 0,
+    "close_stage": "SUCCEEDED",
+    "secret_removed": true
+  },
+  "pip_check": {
+    "normal": 0,
+    "isolated": 0
+  },
+  "evidence_sha256": {
+    "evidence\\local-discovery-artifacts.json": "5f25eeda7b3e45819723057e5eb56b46dc47521be1c45903eac869cd623ffb88",
+    "evidence\\local-discovery-installed-isolated.json": "2f839c40701444edf4ed705a7066b1f3a7a2f2d52ac12dd8c1bd1ca369582e60",
+    "evidence\\local-discovery-installed-isolated.log": "1305ab7d3cbc6a8ed25311f33de62244bedc7ae3e0876f8793a70652f44e3fbb",
+    "evidence\\local-discovery-installed-isolated.xml": "a8df52e56bd6d0a89839f6bf73d5e8c700bea59a7998bad00fe529544a2e5a56",
+    "evidence\\local-discovery-installed-nexus.json": "8e76ffe5f9ce1f3a1271a61ea4cadb46586e3212cdd353d544f3836c3fc029ef",
+    "evidence\\local-discovery-installed-nexus.log": "933d011ad21182eaa814b6735e971e7b5e10e5b9798202d56c9586d637c33d6f",
+    "evidence\\local-discovery-installed-nexus.xml": "e4099a18c89d0497aa8b9e298e0660ca038174c6e42bd6634ef665878a052344",
+    "evidence\\local-discovery-installed-real_pi.json": "464181b531a58409f6cb5f555cc799446a7fdb451ee2160d89161bbf1943bc70",
+    "evidence\\local-discovery-installed-real_pi.log": "74e7038a706e65ffa48af4535706c102dfcc958aaec2f538f85d70c26ec879d0",
+    "evidence\\local-discovery-installed-real_pi.xml": "6336f42d7aacd5ee310a1f065d254a1f417545009a151ad2b5c57e3436514e2b",
+    "evidence\\real-embedded-pi-installed.json": "a88c81b13fd67448f357db1e36efc30c41391fd859dc544c6679cc1a8c679374",
+    "evidence\\real-embedded-pi-source-provider-home.xml": "f9f60cf18202d2e6b482a9c5399db30aedc705d3318bc79e0bf8030942754dc3",
+    "evidence\\real-embedded-pi-source-short-lease.xml": "3e4e535219ff4144824aa5ad960858d3c1f3b41a9ac486c11358fc6900f1a388",
+    "evidence\\real-embedded-pi-source-stale.xml": "cf6515c7c64e2a314d51bf803c76e421d2122045ee0d5fe108e24ca430332844",
+    "evidence\\real-embedded-pi-source.json": "a88c81b13fd67448f357db1e36efc30c41391fd859dc544c6679cc1a8c679374",
+    "evidence\\real-embedded-pi-source.xml": "fad4849406a36fb01d349babc87ad4f66d917d0640ee7b0222b5f9848ec17507",
+    "evidence\\real-pi-discovery-timing.json": "d4fc8b2237e81b1a18b7aef6e7b8c929c3a9fc85ec2ab9c053c9e0ad78fe810e"
+  },
+  "limitations": [
+    "The Server R4 release-readiness flag is overridden only in the opt-in test; native qualification is real and unchanged.",
+    "Real Pi uses existing provider login under approved user HOME. The fixture seeds identities and disposable work, not binding/session/lease/receipts.",
+    "HTTP uses TestClient with actual application lifespan; this is not separate-process serve CLI or browser acceptance.",
+    "The 38-case campaigns overlap and the source/installed Pi journeys cover the same scenario.",
+    "Codex, Claude, remote Connector and remaining fixed-plan journeys and gates remain open.",
+    "Preexisting user UI assets are in the Nexus wheel but are outside this commit and its acceptance."
+  ],
+  "development_failures": [
+    "Initial duplicate operator bootstrap; corrected to preserve existing actor.",
+    "Cold inventory observation exceeded 120 seconds; preserved stale refusal and wait for a new FRESH publication.",
+    "A test-only 20-second lease expired; restored production-default 120 seconds.",
+    "Pi config folder was mistakenly used as HOME; corrected to approved user HOME."
+  ]
+}

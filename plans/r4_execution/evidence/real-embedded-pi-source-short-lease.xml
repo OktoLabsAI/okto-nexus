@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="73.143" timestamp="2026-09-30T19:53:37.263008-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_real_embedded_pi" name="test_real_pi_uses_automatic_local_dispatch_and_native_work" time="71.579"><failure message="AssertionError: CoreError('AGENT_REVOKED')&#10;assert CoreError('AGENT_REVOKED') is None&#10; +  where CoreError('AGENT_REVOKED') = &lt;okto_nexus.bootstrap.embedded_dispatch.EmbeddedDispatchOwner object at 0x000001CFDC59F230&gt;.failure">tests\execution_r4\test_real_embedded_pi.py:91: in test_real_pi_uses_automatic_local_dispatch_and_native_work
+    report['open_stage']=receipt(opened,('SUBMITTED','SUCCEEDED'))['executor_stage']
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_real_embedded_pi.py:87: in receipt
+    assert owner.failure is None,repr(owner.failure)
+E   AssertionError: CoreError('AGENT_REVOKED')
+E   assert CoreError('AGENT_REVOKED') is None
+E    +  where CoreError('AGENT_REVOKED') = &lt;okto_nexus.bootstrap.embedded_dispatch.EmbeddedDispatchOwner object at 0x000001CFDC59F230&gt;.failure</failure></testcase></testsuite></testsuites>

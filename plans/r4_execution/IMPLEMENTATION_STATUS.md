@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Real embedded Pi and local discovery configuration - September 30, 2026
+
+[Increment](M05_REAL_EMBEDDED_PI.md): serve now accepts explicit local discovery roots and the Node/Pi installation pair. The real Pi 0.87.1 journey passed through the automatic embedded owner, public binding/grant/admission, applied lease renewal, actual native extension tools, canonical handoff completion, successful turn/close receipts and protected credential cleanup. The installed proof ran outside the repository with no Connector installed and no native build qualification override. The Server release gate remains test-only overridden. Installed regressions passed 38 cases in each overlapping normal/isolated campaign; the installed real-provider case passed separately. Discovery freshness and test-configuration failures are retained. Core/Connector packages are unchanged. Codex/Claude, remote and other fixed-plan acceptance remain open; no milestone or gate closes here.
+
 ## Native capability refresh after applied renewal - September 30, 2026
 
 [Increment](M09_NATIVE_CAPABILITY_REFRESH.md): automatic Pi composition in Nexus and Connector now refreshes capability metadata under the exact applied Server/Core lease, retaining the original material, scope and actions. Core still validates every domain effect; stale metadata, revocation and a concurrent lease change refuse it. Installed campaigns passed 58 Nexus cases, 49 overlapping cases with no Connector installed, and 81 Connector cases, with pip check. Initial fixture-related restart failures and corrected final reruns are preserved. Connector is published at 40049af; Core remains fb4c8df / 0.2.38.dev0 with the same shared wheel. Full real-provider journeys and the remaining fixed-plan criteria stay open; no milestone or gate closes here.

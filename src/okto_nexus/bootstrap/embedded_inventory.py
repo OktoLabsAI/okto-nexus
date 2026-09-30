@@ -80,7 +80,9 @@ class EmbeddedInventoryOwner:
 
     async def _refresh(self):
         observed_at = time.monotonic()
-        discovery = await asyncio.to_thread(discover_local_candidates)
+        configuration = getattr(self.deps, 'local_discovery', None)
+        discovery = await asyncio.to_thread(discover_local_candidates,
+            **(configuration.arguments() if configuration is not None else {}))
         candidates = tuple(discovery.candidates)
         age_ms = max(0, int((time.monotonic() - observed_at) * 1000))
         publication = await asyncio.to_thread(self._publish, candidates, age_ms)
