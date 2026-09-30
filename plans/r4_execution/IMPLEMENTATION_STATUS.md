@@ -2,6 +2,28 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Planejamento de entrega total — revisão corrente
+
+O [plano completo](DELIVERY_PLAN.md) foi atualizado com Nexus 777de37,
+Connector 40a8cb0 e Core 9d244cf. Preserva os 14 marcos, 85 tarefas,
+164 cenários originais, 12 entregas externas e quatro cenários de idioma.
+Inclui lotes imediatos, matriz local/remota por provider/SO, limites de carga,
+riscos, migração, rollback e aceite sobre os artefatos finais.
+
+A prova delegada de operador está implementada no workspace Nexus e ainda
+não foi commitada. A [revisão de evidência](planning_review_20260930.json)
+conferiu hashes de fonte/XML e os resultados registrados: 86 casos R4,
+48 de aprovação, sete de migração e 27 instalados, com sobreposição.
+O Connector já publicou os DTOs e a correção do teste de pacote: a campanha
+completa anterior teve uma falha e dois skips; os dois testes de pacote
+passaram após a correção. Nenhuma suíte de produto foi reexecutada nesta
+revisão documental.
+
+Publicação/revisão do incremento pendente, reuso autorizado de binding,
+lease inicial, outbox e owners de execução são a fila imediata. G0–G3
+continuam abertos. As seções abaixo registram checkpoints históricos;
+referências a prova delegada pendente descrevem o estado anterior.
+
 ## Incremento de onboarding por operador
 
 O [incremento M02/M03](M03_OPERATOR_BINDING.md) permite prepare/apply pelo

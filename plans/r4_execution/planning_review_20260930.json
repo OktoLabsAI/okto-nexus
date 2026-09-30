@@ -1,0 +1,168 @@
+{
+  "reviewed_at": "2026-09-30T06:49:20.213890+00:00",
+  "scope": "Delivery planning review; existing evidence inspected, no product tests executed by this review",
+  "branch": "feature/v0.2.0",
+  "repositories": {
+    "nexus": {
+      "head": "777de3748df75bcdde836b371333816287a861a0",
+      "local_tracking_ref": "777de3748df75bcdde836b371333816287a861a0",
+      "dirty_entries": 626,
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    },
+    "connector": {
+      "head": "40a8cb07c183e000813afc63138270d77647a3a0",
+      "local_tracking_ref": "40a8cb07c183e000813afc63138270d77647a3a0",
+      "dirty_entries": 0,
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    },
+    "core": {
+      "head": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "local_tracking_ref": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "dirty_entries": 1,
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "closed_product_gates": [],
+  "workspace_increment": {
+    "status": "UNCOMMITTED_NEXUS_IMPLEMENTATION_WITH_EXISTING_TEST_EVIDENCE",
+    "report_path": "plans/r4_execution/test_runs_20260930_delegated_binding.json",
+    "report_sha256": "b7e637b55ce3ad7e9ae9aabbafafaf7fbcdda3ff702874f230d2427a7c7d5743",
+    "source_sha256_verified": {
+      "src/okto_nexus/application/approvals.py": "3d0cc8e7198197e31c90440933cab55415cb457a2627295f3d85da12ea611e88",
+      "src/okto_nexus/application/execution_binding_approvals.py": "16ecd228fd2cf7bf9170e9566cea5a0422c1e805ae3e8296f1cae3efcdcd8d1e",
+      "src/okto_nexus/application/execution_binding_proposals.py": "0117df97fe013fa97916fa43b645ffa47fb991b883cfc04eed423149b9688440",
+      "src/okto_nexus/bootstrap/dependencies.py": "3c93805ab42041da61aba13eea2f6010aefe161fd552ac536d6fc275fc1f0ce5",
+      "src/okto_nexus/adapters/inbound/http/connections_v1.py": "9c3fb6185be76955c370dc994a29c49817cca890727794d352fbd573db079c43",
+      "src/okto_nexus/adapters/inbound/http/routes.py": "13562a588b2eeb9f746e4e5c3731a4112e2931ba615b9255a1b742f8da0469a6",
+      "src/okto_nexus/migrations/077_execution_binding_operator_proof.sql": "20e6d19eca9dffffe1d6bc368f8579449f62bf37fb020f47c46dac90bb9069d2",
+      "tests/execution_r4/test_binding_operator.py": "e037d67906f9d6329d6fab3f9d6175cc8492f70545652ad2f4cdf04995c68bac",
+      "tests/execution_r4/test_ns01.py": "76b4b6b02c9b4f64238c058e0cc3ead9fed96e97da4044ad835a47a1ec95aa1f",
+      "tests/execution_r4/test_ns02.py": "a01455725f9a5acfd243e448a68650d449cf89aadec6fd401df0ef9c2a3dec50",
+      "tests/execution_r4/test_ns05.py": "81e5d83b500e1304bbafce43d22adcc0ba325de21e17bee71b180d73f0ecd99d",
+      "tests/execution_r4/test_vertical_inventory.py": "ac8881d612fe0368113331c467f91bbdc62420907eaecb3266c4952ef10e5ab8"
+    },
+    "recorded_runs_verified": [
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-targeted.xml",
+        "sha256": "eb97d4e534d62e89d54d7df846b96abc256298a33ea07d459dd6e2af0478c483",
+        "tests": 16,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0
+      },
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-source.xml",
+        "sha256": "5df495bbc31ff42d257f26543c28160519d032fafb0690b68b3eba80497754c5",
+        "tests": 85,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0
+      },
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-source-final.xml",
+        "sha256": "5f21bf8c4bed853c940186663f7f9297ef89a6f7fdcfba6013436b3e0a176467",
+        "tests": 86,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-approval-regression.xml",
+        "sha256": "33a7ea3794f453bb66c5fd4b735f617e3621cd2de81a9b25c03bff001dc08939",
+        "tests": 48,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-migrations.xml",
+        "sha256": "7c1599562c6116bc70ef4739036404a1553fd468da2f09ed42b37a87cbdee86a",
+        "tests": 7,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "plans/r4_execution/evidence/delegated-binding-installed.xml",
+        "sha256": "8bbd5b2f6e9450e1c874597affe705964329cc8a7966b158fe183fdb3a00a9cc",
+        "tests": 27,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "limitations": [
+      "Synthetic inventory/peers; provider, daemon, full outbox loop, browser and multi-host acceptance remain open",
+      "Self-bind reuse of existing approved configuration remains pending; this increment covers first-time operator-approved bindings",
+      "Operator proof is not a runtime grant; runtime grant issuance remains explicit",
+      "Installed tests use external interpreter/cwd and package files match exact wheels/source; contract fixtures remain in test directories",
+      "Pre-existing user frontend assets packaged unchanged; no frontend qualification",
+      "Campaigns overlap; counts must not be summed as unique acceptance coverage"
+    ],
+    "failure_resolution": [
+      "Targeted campaign: 15 passed, one failure because injected repository storage failure maps to HTTP 503 DB_ERROR rather than raw HTTP 500. The corrected test checks DB_ERROR and complete rollback.",
+      "First R4 campaign: 84 passed, one failure because the vertical Connector journey omitted required operator approval. It now obtains the actual operator decision and transports operator_proof_ref.",
+      "Bootstrap review found an eager optional-Core import; moved imports into the R4 action and added an isolated no-Core bootstrap regression.",
+      "Connector full campaign: 246 passed, 2 skipped, one inherited PYTHONPATH packaging failure. Isolated packaging rerun passed both cases; see the Connector summary."
+    ],
+    "publication_required_before_acceptance": true
+  },
+  "connector_evidence": {
+    "report": "plans/implementation/evidence/r4-binding-consent-summary.json",
+    "report_sha256": "d84db52b152cb6f78c6c9819f98956ecd1e2d637991a615b97ec8620d7eca547",
+    "recorded_runs": [
+      {
+        "file": "plans/implementation/evidence/r4-binding-consent.xml",
+        "sha256": "37799e42bb2ef4ed30d4f2434929d7a1375b7e2ac2c688020ddf0af81edde6cf",
+        "tests": 6,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      },
+      {
+        "file": "plans/implementation/evidence/r4-binding-consent-regression.xml",
+        "sha256": "b2e8f29460aedadaba5abf0e444295fd869ccd44789c07ca7cb599d5d8afbb46",
+        "tests": 249,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 2
+      },
+      {
+        "file": "plans/implementation/evidence/r4-binding-consent-packaging-final.xml",
+        "sha256": "475e2ca263b4d3dde6f8a5308fb4a79f50b55d4961231ba3f3447fbc3b7947f0",
+        "tests": 2,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    ],
+    "failure_resolution": "The full source campaign had 246 passes, 2 skips and one clean-venv installation failure. Inherited PYTHONPATH affected pip distribution discovery. The packaging test now isolates pip, CLI and freeze from source imports, uses an external cwd, and passed both packaging cases on rerun."
+  },
+  "document_validation": {
+    "product_tests_executed": false,
+    "commands": [
+      {
+        "command": "rtk proxy python -X utf8 plans/validar_pacote.py",
+        "exit_code": 0,
+        "result": "PASS",
+        "checks": 8
+      },
+      {
+        "command": "rtk proxy python -X utf8 plans/r4_execution/validate_delivery_plan.py --write-report",
+        "exit_code": 0,
+        "result": "PASS_DOCUMENT_COVERAGE_ONLY"
+      }
+    ],
+    "coverage": {
+      "milestones": 14,
+      "nexus_tasks": 85,
+      "original_scenarios": 164,
+      "external_deliverables": 12,
+      "cn5_findings": 4,
+      "http_and_websocket_routes": 23,
+      "operation_actions": 7,
+      "language_scenarios": 4
+    },
+    "delivery_document_sha256": "92e1babcb707f8be63c41adcb7a1d1f21d7395cf4e1fed2f30a55c0f1e13b50e"
+  }
+}

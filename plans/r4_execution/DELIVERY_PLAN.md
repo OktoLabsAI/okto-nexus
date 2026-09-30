@@ -53,11 +53,13 @@ Os HEADs abaixo foram lidos antes desta revisão documental. Nos três repositó
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `2baeaf9acd2a0da37f137e096fe2d8317e7a075a` | `0.2.0` |
-| Connector | `0be7faf0040266f2c12185985b132b6343cbc2fe` | `0.5.0.dev0` |
-| Core | `368c50d9b8496809a4865e32a774492db3e3549f` | `0.2.28.dev0` |
+| Nexus | `777de3748df75bcdde836b371333816287a861a0` | `0.2.0` |
+| Connector | `40a8cb07c183e000813afc63138270d77647a3a0` | `0.5.0.dev0` |
+| Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
+
+A [revisão de planejamento](planning_review_20260930.json) registra esses HEADs, o hash recalculado dos três wheels e as evidências locais conferidas. Há implementação Nexus não commitada de prova delegada; sua publicação e revisão fazem parte do próximo incremento. Esta revisão executa apenas validadores documentais.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -78,15 +80,27 @@ contrato em prova do dispatcher, daemon ou provider.
 
 O [incremento de operador](M03_OPERATOR_BINDING.md) conclui a criação
 transacional de perfil/endpoint habilitados para prepare/apply pelo operador
-canônico. Permanecem prova delegada, reuso autorizado no self-bind e a
-composição da jornada com os owners. Nenhum gate foi encerrado.
+canônico. A prova delegada está implementada no workspace, com evidências
+locais conferidas de 86 casos R4, 48 regressões de aprovação, sete de migração
+e 27 instalados; os grupos se sobrepõem. As tentativas anteriores falharam
+na expectativa de HTTP de storage e na ausência de consentimento do caller
+vertical; seus registros foram preservados. Publicar/revisar esse incremento,
+completar reuso autorizado no self-bind e compor a jornada com os owners
+continuam na fila. Nenhum gate foi encerrado.
+
+O Connector publicou o DTO completo de consentimento e a correção de
+isolamento do teste de pacote em ce7864d/40a8cb0. Sua regressão
+registrou 246 passes, uma falha e dois skips; após corrigir a contaminação por
+PYTHONPATH, os dois casos de pacote passaram no rerun. Isso não equivale
+a uma nova execução verde de toda a suíte. A revisão de planejamento
+preserva os hashes e os resultados desse registro.
 
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |
 |---|---|
 | Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
-| Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; completar prova delegada e self-bind com autorização preexistente, mantendo identidade e CAS |
+| Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; revisar/publicar prova delegada já testada no workspace e completar self-bind com autorização preexistente, mantendo identidade e CAS |
 | Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas faltam loop de produto, ownership e composição da abertura inicial pendente de lease |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
@@ -111,13 +125,28 @@ A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco cont
 | 6 | Três repos: completar M07–M11 | Histórico, eventos, approval/input, MCP/bridge, UI/CLI, idioma, recuperação e contenção exercitados pelos mesmos callers |
 | 7 | Três repos: concluir M12/M13 | Migração/rollback e campanhas completas sobre o conjunto final; artefatos, commits, hashes e runbooks publicados |
 
+### Próximos incrementos com saída objetiva
+
+Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do backlog nem antecipam o fechamento de um marco.
+
+| Lote | Responsável e trabalho | Testes e condição de saída |
+|---|---|---|
+| P1 — baseline e evidência | Três repos: revisar/publicar o incremento Nexus pendente, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
+| P2 — contrato compartilhado | Core: completar a conformance de cada ação/erro e os helpers públicos; consumidores: instalar o mesmo wheel | Sete ações e R3 histórico exercitados por consumidores instalados; schema gerado sem drift; promoção de executable fundamentada, readiness do host independente |
+| P3 — onboarding reutilizável | Nexus/Connector: reusar autorização e configuração aprovadas, leitura/options do binding, seleção e consentimento do host | Primeiro e segundo uso pela entrada pública; identidade cruzada, deny, drift, replay e revisão concorrente; grant explícito separado do consentimento |
+| P4 — abertura e outbox | Nexus: separar bootstrap autorizado de lease ativa; completar owner, reserva, envio e recuperação | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
+| P5 — ciclo local | Nexus/Core: conectar o owner de serve à mesma admissão, seleção, contexto, journal e projeção | Pacotes instalados sem aplicativo Connector; open/submit/steer/interrupt/close pelo caller real; peer técnico primeiro e provider real depois |
+| P6 — ciclo remoto | Connector/Nexus: integrar daemon/StateStore/WSS, reader único, tickets, attach, lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
+
+Cada lote termina com relatório, commit e push em `feature/v0.2.0` dos repositórios alterados. Um resultado parcial continua parcial no inventário, mesmo depois de publicado.
+
 ### Aceite concreto do próximo fluxo de produto
 
 A jornada abaixo deve existir como teste instalado de integração, primeiro com peer técnico e depois com os providers exigidos. O peer técnico verifica o encadeamento e não qualifica um provider.
 
 1. Partir de identidade/configuração de laboratório válidas. Registrar ou selecionar executor pela entrada pública, publicar inventário e aprovar a realização no host correto.
 2. Preparar binding e registrar consentimento do agente e prova de operador quando a política exigir. Vincular a prova ao sujeito, proposta, diff e revisões; outra identidade, prova expirada e alteração concorrente devem falhar.
-3. Aplicar a proposta por API/CLI/UI: criar vínculo reutilizável com perfil aprovado, endpoint habilitado e autoridade canônica. A habilitação não pode decorrer apenas da autenticação do próprio agente.
+3. Aplicar a proposta por API/CLI/UI: criar vínculo reutilizável com perfil aprovado, endpoint habilitado e autoridade canônica. A habilitação não pode decorrer apenas da autenticação do próprio agente. Emitir o grant de runtime explicitamente pela autoridade canônica, com ações, orçamento e validade; consentimento do binding não emite esse grant implicitamente.
 4. Resolver e admitir `runtime.open` com um `client_intent_id`; persistir operação/outbox juntas e consultar o resultado após resposta perdida. Não semear binding, grant, sessão ou operação para contornar a jornada sob teste.
 5. O dispatcher entrega o envelope inicial ao owner correto. O owner resolve a realização aprovada, obtém/instala a lease e só então prepara/abre no Core. Recibo correlacionado projeta o estado da sessão.
 6. Admitir submit, steer, interrupt e close pela mesma autoridade; observar receipts/eventos e recuperar a mesma operação após replay/restart. Somar approval/input ao fluxo em M08.
@@ -129,7 +158,7 @@ A preparação de Windows/Linux, Python suportado, providers autenticados e Serv
 
 ### Preservação do workspace
 
-O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1` e os arquivos locais da campanha citada. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
+O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1`; a campanha instalada citada já foi publicada. O incremento Nexus de prova delegada e suas evidências também estão no workspace, pendentes de commit. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
 
 ## Responsabilidades e invariantes de implementação
 
@@ -157,7 +186,7 @@ Negação explícita prevalece. O agente do endpoint vinculado é o sujeito da l
 
 Conferir branch, HEAD, dirty state, versões, lockfiles, wheel e hashes. Classificar cada requisito como existente com prova integral, parcial ou ausente. Relacionar cada teste a um nodeid realmente coletável; corrigir discrepâncias entre comandos propostos e testes existentes. Registrar provider/build/SO/arquitetura, ambientes de laboratório, credenciais disponíveis e executor de cada campanha.
 
-Separar defeitos de código de dependências de laboratório. Um Core incompleto ou daemon sem integração é trabalho interno, não bloqueio externo. Uma máquina Linux ou credencial de provider ausente é requisito de ambiente a provisionar. Definir limites de payload, fila, journal, tempo de shutdown e métricas de latência a partir do contrato e da baseline medida antes da campanha de carga.
+Separar defeitos de código de dependências de laboratório. Um Core incompleto ou daemon sem integração é trabalho interno, não bloqueio externo. Uma máquina Linux ou credencial de provider ausente é requisito de ambiente a provisionar. Registrar os limites iniciais já definidos no documento 03 e conferir sua aplicação no código; fixar os orçamentos adicionais de bytes, shutdown e latência a partir da baseline medida antes da campanha de carga. Qualquer ajuste dos defaults exige justificativa e nova evidência.
 
 **Saída:** inventário fechado, cobertura integral, ordem sem ciclos, catálogo dos comandos de teste e lista objetiva de ambientes a preparar. Testes de produto ainda não executados permanecem `NOT_RUN`.
 
@@ -353,6 +382,20 @@ A matriz mínima de plataforma automatizada deve preservar Windows e Linux e Pyt
 
 Para providers, cada linha registra adapter, modo, versão/build, fingerprint, SO/arquitetura, contenção, autenticação, targeting e capacidades efetivamente exercitadas. Managed: Codex, Pi e Claude. Attach: trilha própria para descoberta/alvo explícito, evidência de processo/socket/UID quando aplicável, não propriedade do processo externo, controles e limitações reais. Uma capacidade ausente no provider deve ser recusada corretamente; não simulada como sucesso.
 
+A matriz de providers abaixo inicia com aceite final `NOT_RUN`. M00 deve preencher versão/build, arquitetura e credencial de laboratório por linha; não usar “latest” como versão de evidência. Cada célula local/remota exige o ciclo aplicável, decisões/input, ferramentas, histórico e recuperação; capacidades indisponíveis exigem recusa comprovada.
+
+| Adapter/modo | Sistema do executor | Nexus local | Connector remoto | Fechamento |
+|---|---|---|---|---|
+| Codex app-server / managed | Windows | NOT_RUN | NOT_RUN | M13 |
+| Codex app-server / managed | Linux | NOT_RUN | NOT_RUN | M13 |
+| Pi RPC / managed | Windows | NOT_RUN | NOT_RUN | M13 |
+| Pi RPC / managed | Linux | NOT_RUN | NOT_RUN | M13 |
+| Claude stream / managed | Windows | NOT_RUN | NOT_RUN | M13 |
+| Claude stream / managed | Linux | NOT_RUN | NOT_RUN | M13 |
+| Claude attach | Cada SO compatível fixado em M00 | NOT_RUN | NOT_RUN | Trilha própria de qualificação; onde não qualificado, executar o teste de indisponibilidade e conservar a restrição normativa |
+
+Uma linha acima não declara suporte já obtido. A restrição normativa de attach deve ser mantida até qualificação explícita; não transformar ausência de laboratório numa exclusão de capacidade managed exigida.
+
 Topologias de aceite:
 
 1. **Local puro:** Nexus + Core instalados num ambiente sem aplicativo Connector; ciclo e ferramentas diretas.
@@ -362,6 +405,34 @@ Topologias de aceite:
 5. **Migração:** cópia legada preservada, operação pendente e owner vivo; upgrade, crash, retomada e restore verificados.
 
 As 34 condições J continuam obrigatórias nos destinos mapeados. Essas topologias organizam a campanha, sem substituir casos de consumo, HITL, unknown, eventos, saturação e drift.
+
+### Limites e carga que precisam de prova
+
+Aplicar os defaults do [plano de dados, seção 9](../03_DADOS_MIGRACAO_E_RECUPERACAO.md), sujeitos à qualificação de carga prevista ali:
+
+| Recurso | Baseline e asserção |
+|---|---|
+| Wire e payload | Frame 1 MiB; chunk/operação inline 64 KiB; request/input nativo 16 KiB; rejeitar excesso antes do efeito |
+| Admissão | 32 pendentes produtivos por executor; oito controles e orçamento próprio de bytes; reservar antes de criar tasks |
+| Runtime/journal | Oito slots por instalação por default; journal lógico 256 MiB com reserva crítica de 16 MiB |
+| Inventário/reconcile | 128 instalações por snapshot inicial; até 256 IDs por reconcile; páginas de claims/slots default 128 e máximo 4096 |
+| Canal e autoridade | Heartbeat 15 s, ausência 45 s; lease até 120 s/renovação 30 s; ticket até 600 s, renovação em 70% com jitter |
+| Cache/recovery | Até 4096 chaves positivas, TTL máximo 60 s com invalidação de epoch; backoff 0,5–30 s e uma task por obrigação/stream |
+
+M00 registra configuração, máquina e orçamento em bytes das filas, tempo total de shutdown e percentis de latência; M11 mede sob pressão e falha. Não anunciar capacidade além da medida. Os cenários incluem 100 mil agentes com lookup indexado, sem presumir 100 mil runtimes; nenhum timeout transforma resultado desconhecido em retry autorizado.
+
+## Riscos de entrega e ação de resolução
+
+| Risco observado | Responsável / marco | Ação e evidência exigida |
+|---|---|---|
+| Contrato válido sem integração de produto | Core + consumidores / M01–M06 | Conformance instalada e ciclo real separado, sem forçar flags de prontidão |
+| Dependência circular entre open e lease | Nexus + hosts / M04–M06 | Bootstrap `OPEN_AUTHORIZED_PENDING_LEASE`, instalação antes de prepare/open e teste de zero efeito antecipado |
+| Dupla execução após timeout, notificação ou restart | Três repos / M04, M07, M08, M11 | Outbox/producer owned, IDs duráveis, contagem de efeitos e recuperação do mesmo resultado |
+| Prova parcial tratada como aceite | Três repos / todos | Registrar camada, dirty state, skips e sobreposição; retestar o conjunto final imutável em M13 |
+| Regressões legadas e grant com expiry ISO-offset inválido | Nexus / M02, M09, M12 | Reproduzir, corrigir validação/contrato e adicionar regressão; entrada inválida não deve produzir INTERNAL_ERROR |
+| Empacotamento contaminado por clone/artefato antigo | Três repos / M13 | Build limpo, cwd externo, `python -I`, hashes de recursos; executar regressão final após correções |
+| Laboratório/provider indisponível | Três repos / M00, M13 | Preparar Windows/Linux e A/B/C cedo; manter o caso pendente até execução na topologia exigida |
+| Cutover deixa recurso sem owner ou perde histórico | Nexus + Connector / M11–M12 | Drain, checkpoints, backup e restore conjunto; falhar durante cada fronteira e confirmar retomada |
 
 ## Execução reproduzível e evidência
 
