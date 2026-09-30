@@ -54,6 +54,24 @@ class AuthorizedDispatch:
     frame: dict
 
 
+@dataclass(frozen=True, slots=True)
+class AuthorizedOpenBootstrap:
+    """An opening envelope that permits selection and lease request only.
+
+    It deliberately has no lease or Core ExecutionContext. The executor must
+    install the correlated initial lease before asking Core to prepare/open.
+    Sending this envelope fences the operation just like any other send;
+    losing its response does not authorize a second dispatch.
+    """
+    reservation: DispatchReservation
+    semantic_intent: dict
+    connection_generation: int
+    connection_id: str
+    grant_id: str
+    scope: dict
+    frame: dict
+
+
 def reserve_execution_dispatch(
     factory: ConnectionFactory, *, server_id: str, executor_id: str,
     remote_ready: bool, regular_items: int = 4,
@@ -159,7 +177,7 @@ def release_unsent_dispatch(factory: ConnectionFactory, *,
 def begin_execution_send(
     factory: ConnectionFactory, *, reservation: DispatchReservation,
     remote_ready: bool, fresh_publications: Mapping, access,
-) -> AuthorizedDispatch:
+) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
     The caller may perform I/O only after this transaction commits. A crashed
@@ -328,13 +346,17 @@ def begin_execution_send(
             "SELECT lease_id,lease_serial,grant_id,connection_generation,"
             "authorization_revision,configuration_revision,"
             "credential_epoch,owner_generation,allowed_actions_json,"
-            "valid_until_server,connection_id,scope_json,applied_at FROM execution_leases WHERE server_id=? "
-            "AND executor_id=? AND session_id=? AND status='ACTIVE' "
+            "valid_until_server,connection_id,scope_json,applied_at,status FROM execution_leases WHERE server_id=? "
+            "AND executor_id=? AND session_id=? "
             "ORDER BY lease_serial DESC LIMIT 1",
             (server_id, reservation.executor_id, row["session_id"]),
         ).fetchone()
         authority_now = datetime.fromisoformat(access.clock.now_iso().replace("Z", "+00:00"))
-        if (lease is None or row["action"] not in
+        bootstrap = row["action"] == "runtime.open" and lease is None
+        if bootstrap and session["lease_state"] != "NONE":
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                  "The initial lease requires reconciliation.", {})
+        if not bootstrap and (lease is None or lease["status"] != "ACTIVE" or row["action"] not in
                 json.loads(lease["allowed_actions_json"]) or
                 lease["applied_at"] is None or lease["scope_json"] is None or
                 json.loads(lease["scope_json"]) != scope or
@@ -357,13 +379,32 @@ def begin_execution_send(
         if action is None:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "This operation requires governance authorization.", {})
+        connection_id = binding["owner_instance_id"] if bootstrap else lease["connection_id"]
+        connection_generation = binding["generation"] if bootstrap else lease["connection_generation"]
+        if binding['kind'] == 'remote':
+            require_execution_lane(uow, scope=scope,
+                channel=ExecutionChannel(server_id, reservation.executor_id,
+                    connection_id, connection_generation), now=authority_now)
+        actor = access.agents.get(uow, row['actor_agent_id'])
+        if actor is None or not actor.is_active:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
+        context = RuntimeRequestContext(
+            actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash,
+            execution_grant_id=None if bootstrap else lease['grant_id'])
+        grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
+                         represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
+                         substrate=mode, consume=not bootstrap, uow=uow)
+        if grant is None:
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "A canonical execution grant is required for dispatch.", {})
+        grant_id = grant['grant_id']
         frame = {
             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
             "type": "operation.submit", **scope, **execution_wire_intent(semantic),
             "operation_id": reservation.operation_id, "intent_hash": row["intent_hash"],
-            "connection_id": lease["connection_id"],
-            "connection_generation": lease["connection_generation"],
-            "grant_id": lease["grant_id"],
+            "connection_id": connection_id,
+            "connection_generation": connection_generation,
+            "grant_id": grant_id,
         }
         if any(frame.get(name) != value for name, value in scope.items()):
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -373,33 +414,25 @@ def begin_execution_send(
         except CoreError as exc:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "The dispatch operation is incompatible with the Core contract.", {}) from exc
-        if binding['kind'] == 'remote':
-            require_execution_lane(uow, scope=scope,
-                channel=ExecutionChannel(server_id, reservation.executor_id,
-                    lease['connection_id'], lease['connection_generation']),
-                now=authority_now)
-        actor = access.agents.get(uow, row['actor_agent_id'])
-        if actor is None or not actor.is_active:
-            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
-        context = RuntimeRequestContext(
-            actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash,
-            execution_grant_id=lease['grant_id'])
-        access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
-                         represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
-                         substrate=mode,
-                         consume=True, uow=uow)
+        phase = "OPEN_AUTHORIZED_PENDING_LEASE" if bootstrap else "LEASE_AUTHORIZED"
         changed = conn.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='SENDING',"
-            "lease_id=?,lease_serial=?,connection_generation=? "
+            "lease_id=?,lease_serial=?,connection_generation=?,"
+            "dispatch_phase=?,dispatch_grant_id=?,dispatch_connection_id=? "
             "WHERE server_id=? AND executor_id=? AND operation_id=? "
             "AND dispatch_state='RESERVED' AND attempt_token=?",
-            (lease["lease_id"], lease["lease_serial"],
-             lease["connection_generation"], *key,
+            (None if bootstrap else lease["lease_id"],
+             None if bootstrap else lease["lease_serial"],
+             connection_generation, phase, grant_id, connection_id, *key,
              reservation.attempt_token),
         ).rowcount
         if changed != 1:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch attempt changed before send.", {})
+        if bootstrap:
+            return AuthorizedOpenBootstrap(
+                reservation, semantic, connection_generation, connection_id,
+                grant_id, scope, frame)
         return AuthorizedDispatch(
             reservation, semantic, lease["lease_id"],
             lease["lease_serial"], lease["connection_generation"],

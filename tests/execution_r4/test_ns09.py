@@ -106,7 +106,7 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
     return deps, app, access, operator, canonical, candidate, info, revisions, link_ticket, lane_ticket, server_id, executor_id
 
 
-def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id):
+def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id, *, binding_id="binding"):
     base = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, server_id=server_id, executor_id=executor_id)
     ws.send_text(encode_r4_frame(dict(**base, type='hello', link_attempt_id='attempt',
         core_version=info['core_version'], management_revision=info['management_revision'],
@@ -122,7 +122,7 @@ def negotiate(ws, info, revisions, lane_ticket, server_id, executor_id):
     assert ws.receive_json()['recovery_remaining'] is False
     ws.send_text(encode_r4_frame(dict(**base, connection_id=connection['connection_id'],
         expected_connection_generation=connection['connection_generation'], type='binding.attach',
-        attach_request_id='attach', binding_id='binding', agent_id='subject', ticket=lane_ticket,
+        attach_request_id='attach', binding_id=binding_id, agent_id='subject', ticket=lane_ticket,
         credential_epoch=revisions.credential_epoch, authorization_revision=revisions.authorization,
         configuration_revision=revisions.configuration)).decode())
     assert ws.receive_json()['type'] == 'binding.attached'
@@ -155,9 +155,21 @@ def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch)
             scope = resolution['scope']
             reservation = reserve_execution_dispatch(deps.connection_factory, server_id=server_id,
                                                        executor_id=executor_id, remote_ready=True)
-            with pytest.raises(OktoNexusError, match='applied dispatch lease'):
+            from okto_nexus.application.execution_dispatch import AuthorizedOpenBootstrap, release_unsent_dispatch
+            authorized = begin_execution_send(deps.connection_factory, reservation=reservation, remote_ready=True,
+                                 fresh_publications=app.state.inventory_fresh_publications, access=access)
+            assert isinstance(authorized, AuthorizedOpenBootstrap)
+            assert authorized.grant_id == canonical['grant_id']
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                sent = uow.connection.execute(
+                    'SELECT dispatch_state,dispatch_phase,lease_id,lease_serial FROM execution_dispatch_outbox').fetchone()
+                assert tuple(sent) == ('SENDING', 'OPEN_AUTHORIZED_PENDING_LEASE', None, None)
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_leases').fetchone()[0] == 0
+            with pytest.raises(OktoNexusError, match='reservation changed'):
                 begin_execution_send(deps.connection_factory, reservation=reservation, remote_ready=True,
                                      fresh_publications=app.state.inventory_fresh_publications, access=access)
+            with pytest.raises(OktoNexusError, match='no longer unsent'):
+                release_unsent_dispatch(deps.connection_factory, reservation=reservation)
             class Peer:
                 request = None
                 async def send(self, raw):
@@ -183,7 +195,13 @@ def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch)
                 peer = Peer()
                 state = connector.R4ControlState(server_id, executor_id, channel.connection_id, channel.connection_generation, True)
                 try:
-                    application = await connector.apply_r4_lease(peer, state, runtime, scope=scope, grant_id=canonical['grant_id'])
+                    # The dispatched open is only a bootstrap envelope until
+                    # Core has installed the correlated lease.
+                    with pytest.raises(CoreError):
+                        runtime.r4_operation_context(authorized.frame,
+                            connection_id=state.connection_id,
+                            connection_generation=state.connection_generation)
+                    application = await connector.apply_r4_lease(peer, state, runtime, scope=scope, grant_id=authorized.grant_id)
                     # Same request proves the Server processed the application
                     # without inventing another ACK frame or extending validity.
                     ws.send_text(encode_r4_frame(peer.request).decode())
@@ -199,8 +217,11 @@ def test_ns09_02_server_grant_core_application_and_replay(tmp_path, monkeypatch)
                     assert ws.receive_json() == repeated
                     with deps.connection_factory.unit_of_work(write=False) as uow:
                         assert uow.connection.execute('SELECT valid_until_server FROM execution_leases').fetchone()[0] == original_expiry
-                    authorized = begin_execution_send(deps.connection_factory, reservation=reservation,
-                        remote_ready=True, fresh_publications=app.state.inventory_fresh_publications, access=access)
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        dispatched = uow.connection.execute(
+                            'SELECT dispatch_phase,lease_id,lease_serial,dispatch_grant_id FROM execution_dispatch_outbox').fetchone()
+                        assert tuple(dispatched) == ('LEASE_AUTHORIZED', application.context.r4_authority.lease_id,
+                            1, canonical['grant_id'])
                     assert authorized.grant_id == canonical['grant_id']
                     submit = dict(protocol_major=1,contract_revision=R4_PREVIEW_REVISION,type='operation.submit',
                         **authorized.scope,connection_id=authorized.connection_id,

@@ -95,13 +95,20 @@ PYTHONPATH, os dois casos de pacote passaram no rerun. Isso não equivale
 a uma nova execução verde de toda a suíte. A revisão de planejamento
 preserva os hashes e os resultados desse registro.
 
+O [bootstrap de abertura](M04_OPEN_BOOTSTRAP.md) agora registra o envio
+autorizado antes da lease e associa sua instalação ao outbox atomicamente.
+A jornada pública de binding/grant/admissão chegou a open/turn/receipt no
+Core com peer sintético, sem semear binding ou operação. Passaram 97 casos
+R4, sete de migração e 46 instalados, com sobreposição. O dispatcher foi
+invocado pelo teste; o loop e os owners de produto continuam pendentes.
+
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |
 |---|---|
 | Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
 | Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; prova delegada revisada neste incremento; completar self-bind com autorização preexistente, mantendo identidade e CAS |
-| Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas faltam loop de produto, ownership e composição da abertura inicial pendente de lease |
+| Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas bootstrap inicial já é persistido sem lease; faltam loop de produto, ownership e composição com o resolver/owner do executor |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
 | Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
@@ -120,7 +127,7 @@ A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco cont
 | 1 | Três repos: atualizar M00 por critério de aceite, defeito, nodeid e ambiente; integrar a campanha Core publicada ao mapa de critérios | Cada requisito tem implementação/caller, teste existente ou a criar, responsável e ambiente; preservar o histórico de falhas |
 | 2 | Core + consumidores: completar a conformance instalada de M01 | Sete ações, erros, targeting, lease/revogação e histórico R3; mesmo wheel/hash nos dois consumidores; readiness de host avaliada separadamente |
 | 3 | Nexus + Connector: fechar autoridade e onboarding M02/M03 | Prepare sem efeito; aprovação exigida vinculada ao diff/revisões; apply habilita perfil/endpoint somente com autoridade válida; replay recupera o mesmo binding |
-| 4 | Nexus: ligar admissão/outbox e abertura inicial de M04 | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |
+| 4 | Nexus: ligar o bootstrap implementado ao loop de admissão/outbox de M04 | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |
 | 5 | Nexus/Core e Connector: compor os owners de M05/M06 | Local instalado sem Connector; remoto por Server/daemon reais, com StateStore, reader do socket, leases e reconciliação paginada |
 | 6 | Três repos: completar M07–M11 | Histórico, eventos, approval/input, MCP/bridge, UI/CLI, idioma, recuperação e contenção exercitados pelos mesmos callers |
 | 7 | Três repos: concluir M12/M13 | Migração/rollback e campanhas completas sobre o conjunto final; artefatos, commits, hashes e runbooks publicados |
@@ -134,7 +141,7 @@ Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do bac
 | P1 — baseline e evidência | Três repos: incorporar o incremento de prova delegada ao mapa de aceite, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
 | P2 — contrato compartilhado | Core: completar a conformance de cada ação/erro e os helpers públicos; consumidores: instalar o mesmo wheel | Sete ações e R3 histórico exercitados por consumidores instalados; schema gerado sem drift; promoção de executable fundamentada, readiness do host independente |
 | P3 — onboarding reutilizável | Nexus/Connector: reusar autorização e configuração aprovadas, leitura/options do binding, seleção e consentimento do host | Primeiro e segundo uso pela entrada pública; identidade cruzada, deny, drift, replay e revisão concorrente; grant explícito separado do consentimento |
-| P4 — abertura e outbox | Nexus: separar bootstrap autorizado de lease ativa; completar owner, reserva, envio e recuperação | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
+| P4 — abertura e outbox | Nexus: integrar o bootstrap já implementado ao loop owned; completar retomada de reserva/envio e resolução física | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
 | P5 — ciclo local | Nexus/Core: conectar o owner de serve à mesma admissão, seleção, contexto, journal e projeção | Pacotes instalados sem aplicativo Connector; open/submit/steer/interrupt/close pelo caller real; peer técnico primeiro e provider real depois |
 | P6 — ciclo remoto | Connector/Nexus: integrar daemon/StateStore/WSS, reader único, tickets, attach, lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
 

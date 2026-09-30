@@ -2,6 +2,20 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento de abertura inicial sem dependência circular
+
+O [bootstrap M04/M06](M04_OPEN_BOOTSTRAP.md) entrega runtime.open pendente
+de lease, mantendo grant/conexão e reserva persistidos antes do envio.
+Core recusa o contexto antes da instalação; o ACK associa lease e outbox
+atomicamente e o receipt projeta a sessão. Replay não faz outro envio.
+
+Passaram 97 casos R4, sete de migração e 46 instalados fora dos clones,
+com sobreposição. A jornada pública cria binding/grant/operação pelas rotas
+reais e abre/envia com Core e peer sintético. A tentativa instalada anterior
+falhou no preflight por arquivos jsonschema ausentes; venv novo passou.
+Loop de outbox, owners embedded/daemon e aceites finais continuam pendentes.
+Nenhum gate ou flag de prontidão foi promovido.
+
 ## Incremento de prova delegada publicado
 
 O [relatório M02/M03](M03_DELEGATED_BINDING.md) publica a prova transacional

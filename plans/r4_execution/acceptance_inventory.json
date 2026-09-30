@@ -554,14 +554,28 @@
     },
     "NS06.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_03",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[grant_revoked]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[open_not_granted]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[ticket_revoked]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[inventory_stale]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[profile_disabled]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[subject_policy]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[connection_changed]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[lease_state_changed]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_pins_grant_and_applied_ack_commits_atomically",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_cannot_move_initial_lease_to_another_connection",
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts"
+      ],
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_open_bootstrap.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_ns09.py -q",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-06-03"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "remaining": "Owning dispatcher loop, production local realization resolution, embedded/daemon composition, nonempty reconciliation, and final native multi-host acceptance remain open."
     },
     "NS06.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_04",
@@ -714,25 +728,55 @@
     },
     "NS09.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_01",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts"
+      ],
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_open_bootstrap.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_ns09.py -q",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-09-01"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "remaining": "Owning dispatcher loop, production local realization resolution, embedded/daemon composition, nonempty reconciliation, and final native multi-host acceptance remain open."
     },
     "NS09.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_02",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns09.py::test_ns09_02_server_grant_core_application_and_replay",
+        "tests/execution_r4/test_ns09.py::test_ns09_02_transaction_rollback_scope_and_late_ack",
+        "tests/execution_r4/test_ns09.py::test_server_lease_serial_race_and_superseded_socket_cannot_ack",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[permission]",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[method]",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[credential]",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[grant]",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[ticket]",
+        "tests/execution_r4/test_ns09.py::test_canonical_authority_changes_refuse_initial_lease[scope]",
+        "tests/execution_r4/test_ns09.py::test_revoked_lease_projection_survives_lane_and_owner_fencing[True]",
+        "tests/execution_r4/test_ns09.py::test_revoked_lease_projection_survives_lane_and_owner_fencing[False]",
+        "tests/execution_r4/test_ns09.py::test_unapplied_lease_requires_reconciliation_before_reconnect",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[grant_revoked]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[open_not_granted]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[ticket_revoked]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[inventory_stale]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[profile_disabled]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[subject_policy]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[connection_changed]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[lease_state_changed]",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_pins_grant_and_applied_ack_commits_atomically",
+        "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_cannot_move_initial_lease_to_another_connection",
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts"
+      ],
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_open_bootstrap.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_ns09.py -q",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-09-02"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "remaining": "Owning dispatcher loop, production local realization resolution, embedded/daemon composition, nonempty reconciliation, and final native multi-host acceptance remain open."
     },
     "NS09.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_03",

@@ -107,6 +107,8 @@ class ExecutionLeaseService:
                 json.loads(row['expected_revisions_json']) != scope):
             raise _conflict('The admitted session authority is no longer current.')
         source = self.repo.source_grant(uow, grant_id)
+        if row['dispatch_grant_id'] is not None and row['dispatch_grant_id'] != grant_id:
+            raise _conflict('The lease grant does not match the dispatched operation.')
         if (source is None or source['revoked_at'] is not None or _stamp(source['expires_at']) <= now or
                 source['actor_agent_id'] != scope['agent_id'] or source['represented_agent_id'] != scope['agent_id'] or
                 source['endpoint_id'] != row['endpoint_id'] or source['workspace_id'] != scope['workspace_id'] or
@@ -173,6 +175,10 @@ class ExecutionLeaseService:
             if latest is None:
                 if request['purpose'] != 'initial' or authority['lifecycle_state'] != 'OPEN_PENDING':
                     raise _conflict('An initial opening lease is required.')
+                if authority['dispatch_phase'] == 'OPEN_AUTHORIZED_PENDING_LEASE' and (
+                        authority['dispatch_connection_id'] != channel.connection_id or
+                        authority['dispatch_connection_generation'] != channel.connection_generation):
+                    raise _conflict('The opening bootstrap belongs to a different connection.')
             else:
                 if (latest['grant_id'] != request['grant_id'] or not latest['scope_json'] or
                         json.loads(latest['scope_json']) != scope or latest['status'] == 'REVOKED' or
@@ -228,4 +234,6 @@ class ExecutionLeaseService:
                     json.loads(row['allowed_actions_json']) != actions or _stamp(row['valid_until_server']) <= now):
                 raise _conflict('The lease application is stale or revoked.')
             if row['status'] == 'ISSUED':
+                if not self.repo.apply_open_bootstrap(uow, scope, row):
+                    raise _conflict('The opening bootstrap changed before lease application.')
                 self.repo.applied(uow, scope, serial=row['lease_serial'], now=now.isoformat())

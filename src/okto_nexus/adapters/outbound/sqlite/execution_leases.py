@@ -27,7 +27,9 @@ class SqliteExecutionLeaseRepository:
             "r.revision AS current_realization_revision,r.subject_agent_id,"
             "e.kind,e.control_state,e.generation,e.owner_instance_id,e.revoked_at,"
             "a.api_key_hash,a.is_active,p.semantic_payload,p.expected_revisions_json,"
-            "p.admission_state,p.actor_agent_id,i.source_guard_digest "
+            "p.admission_state,p.actor_agent_id,i.source_guard_digest,"
+            "o.dispatch_phase,o.dispatch_grant_id,o.dispatch_connection_id,"
+            "o.connection_generation AS dispatch_connection_generation "
             "FROM execution_sessions s "
             "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id AND b.binding_id=s.binding_id "
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id "
@@ -37,6 +39,7 @@ class SqliteExecutionLeaseRepository:
             "JOIN execution_realizations r ON r.server_id=b.server_id AND r.executor_id=b.executor_id AND r.realization_ref=b.realization_ref "
             "JOIN execution_operations p ON p.server_id=s.server_id AND p.executor_id=s.executor_id AND p.operation_id=s.open_operation_id "
             "JOIN execution_client_intents i ON i.server_id=p.server_id AND i.actor_agent_id=p.actor_agent_id AND i.operation_id=p.operation_id AND i.intent_id GLOB 'r4intent_*' "
+            "LEFT JOIN execution_dispatch_outbox o ON o.server_id=p.server_id AND o.executor_id=p.executor_id AND o.operation_id=p.operation_id "
             "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=?",
             self.key(scope)).fetchone()
 
@@ -97,3 +100,22 @@ class SqliteExecutionLeaseRepository:
         uow.connection.execute(
             "UPDATE execution_sessions SET lease_state=? WHERE server_id=? AND executor_id=? AND session_id=?",
             (state, *self.key(scope)))
+
+    def apply_open_bootstrap(self, uow, scope, lease):
+        """Attach the first applied lease to its already fenced opening send."""
+        conn = uow.connection
+        key = self.key(scope)
+        pending = conn.execute(
+            "SELECT o.operation_id FROM execution_dispatch_outbox o "
+            "JOIN execution_sessions s ON s.server_id=o.server_id AND s.executor_id=o.executor_id "
+            "AND s.open_operation_id=o.operation_id WHERE s.server_id=? AND s.executor_id=? "
+            "AND s.session_id=? AND o.dispatch_phase='OPEN_AUTHORIZED_PENDING_LEASE'", key).fetchone()
+        if pending is None:
+            return True
+        return conn.execute(
+            "UPDATE execution_dispatch_outbox SET dispatch_phase='LEASE_AUTHORIZED',lease_id=?,lease_serial=? "
+            "WHERE server_id=? AND executor_id=? AND operation_id=? AND dispatch_state='SENDING' "
+            "AND dispatch_phase='OPEN_AUTHORIZED_PENDING_LEASE' AND dispatch_grant_id=? "
+            "AND dispatch_connection_id=? AND connection_generation=? AND lease_id IS NULL AND lease_serial IS NULL",
+            (lease['lease_id'],lease['lease_serial'],scope['server_id'],scope['executor_id'],pending['operation_id'],
+             lease['grant_id'],lease['connection_id'],lease['connection_generation'])).rowcount == 1

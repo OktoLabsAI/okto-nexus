@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
 from nexus_connector_core import InstallationCandidate
+from nexus_connector_core.discovery import fingerprint
 import pytest
 
 from okto_nexus.adapters.inbound.http.app import build_app
@@ -37,9 +38,12 @@ def onboarding(tmp_path):
         registration = response.json()
         executor = registration["executor_id"]
         ticket = {"Authorization": "Bearer " + registration["bootstrap_ticket"]["ticket"]}
+        binary = tmp_path / "remote-only" / "codex.exe"
+        binary.parent.mkdir()
+        binary.write_bytes(b"Synthetic selected native peer")
         candidate = InstallationCandidate(
-            "codex_app_server", str(tmp_path / "remote-only" / "codex.exe"),
-            "sha256:" + "a" * 64, "explicit", "selected")
+            "codex_app_server", str(binary),
+            fingerprint(binary), "explicit", "selected")
         snapshot = local_inventory_snapshot(
             [candidate], server_id=registration["server_id"], executor_id=executor,
             producer_instance_id="peer", publication_sequence=1)
