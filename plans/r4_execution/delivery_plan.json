@@ -9,12 +9,12 @@
     "scope": "Published development artifacts and delivery planning; not final product acceptance",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "f5fbc0b9b390f9678bd0c738770856579b950ea8",
-      "connector": "d761a44b8806d43b48656ed034e9f426f664a472",
-      "core": "2ac508fabaf9614a864e680e3e99599d1b822b5c"
+      "nexus": "0145bcc7aaa7ff34a9ed50f2a12972e8e467aa06",
+      "connector": "47454d21f2cae22eba14d1b9302f764be323739d",
+      "core": "ada37e30cfb8a09769e5cceb12fa3b34829095ba"
     },
-    "shared_core_version": "0.2.25.dev0",
-    "shared_core_wheel_sha256": "e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4",
+    "shared_core_version": "0.2.26.dev0",
+    "shared_core_wheel_sha256": "d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977",
     "milestones_in_progress": ["M00", "M01"],
     "closed_product_gates": [],
     "evidence": [
@@ -24,9 +24,13 @@
       "plans/r4_execution/test_runs_20260929.json",
       "plans/r4_execution/M01_TARGETING_INVENTORY.md",
       "plans/r4_execution/M01_LEASE_APPLICATION.md",
-      "plans/r4_execution/test_runs_20260930_leases.json"
+      "plans/r4_execution/test_runs_20260930_leases.json",
+      "plans/r4_execution/M06_CANONICAL_LEASES.md",
+      "plans/r4_execution/test_runs_20260930_canonical_leases.json",
+      "plans/r4_execution/M01_EXPIRED_CONTAINMENT.md",
+      "plans/r4_execution/test_runs_20260930_containment.json"
     ],
-    "subsequent_increment": "M06_CANONICAL_LEASES.md records canonical lease issuance, migration 076, dispatch authority, and transactional open receipt readiness: 69 development tests and 14 installed-artifact tests passed; no milestone or gate closed.",
+    "latest_increment": "Core 0.2.26 preserves previously authorized containment after productive lease expiry. Recorded campaigns: Core 892 passed/74 skipped, Connector 239 passed/2 skipped, Nexus R4 56 passed, installed Nexus integration 17 passed. Campaigns overlap. Canonical lease issuance and migration 076 are included; control callers and pending-CAS coordination remain incomplete. No milestone or product gate closed.",
     "verification_scope": "Local HEAD and origin tracking refs matched; the shared wheel SHA-256 was recalculated in all three repositories. This planning review did not rerun product suites or close any gate."
   },
   "sources": {

@@ -57,15 +57,17 @@ Wheel Core da baseline inicial: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235b
 
 ### Revisão após a auditoria inicial
 
-O conjunto conferido nesta revisão é Nexus `f5fbc0b9b390f9678bd0c738770856579b950ea8`, Connector `d761a44b8806d43b48656ed034e9f426f664a472` e Core `2ac508fabaf9614a864e680e3e99599d1b822b5c`. Todos estão em `feature/v0.2.0`, com HEAD igual à referência local `origin/feature/v0.2.0` consultada. Os três repositórios contêm o mesmo wheel Core `0.2.25.dev0`, com SHA-256 `e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4`, recalculado nos três arquivos. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos.
+O conjunto conferido nesta revisão é Nexus `0145bcc7aaa7ff34a9ed50f2a12972e8e467aa06`, Connector `47454d21f2cae22eba14d1b9302f764be323739d` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. Todos estão em `feature/v0.2.0`, com HEAD igual à referência local `origin/feature/v0.2.0` consultada. Os três repositórios contêm o mesmo wheel Core `0.2.26.dev0`, com SHA-256 `d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977`, recalculado nos três arquivos. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos. Esses SHAs identificam a implementação anterior a esta revisão documental.
 
-A [auditoria](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 têm entradas de teste candidatas coletáveis e 54 ainda não têm uma entrada proposta coletada; essa contagem mede disponibilidade do teste, não cobertura integral de aceite. A suíte dirigida Nexus R4 passou 42 testes com Core `0.2.23.dev0`. As regressões amplas registraram falhas e skips; as correções dirigidas de documentação Core e empacotamento Connector ainda precisam de nova execução completa. Consultar os [resultados](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
+A [auditoria inicial](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 tinham entradas de teste candidatas coletáveis e 54 ainda não tinham uma entrada proposta coletada; essa contagem histórica mede disponibilidade do teste, não cobertura integral de aceite. O inventário deve ser atualizado em M00 após os incrementos seguintes. Consultar os [resultados iniciais](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
+
+A campanha mais recente, registrada em [test_runs_20260930_containment.json](test_runs_20260930_containment.json), executou Core completo com 892 passes/74 skips, Connector completo com 239 passes/2 skips, Nexus R4 com 56 passes e integração instalada NS07/NS09/NS10 com 17 passes. Há sobreposição entre campanhas. A revisão documental atual conferiu os artefatos e esses registros; não reexecutou suites de produto. Regressões amplas Nexus e qualificação nativa/entre hosts continuam pendentes.
 
 Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
 
 ### Prioridades para continuar a execução
 
-O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados. A referência de commits acima precede este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
+O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados na campanha original. A referência de commits acima já inclui este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
 
 O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
 
@@ -94,6 +96,21 @@ Estes pacotes detalham os marcos existentes; não substituem IDs, dependências 
 | Regressões e qualificação | Três repos / M09–M13 | Corrigir falhas conhecidas de migração, expectativas stdio, superfície compacta e attach; manter o gate original de redução de 40%. Reexecutar suites completas, idioma e campanhas reais sobre os artefatos finais. |
 
 Cada pacote encerra com caminhos de código, cenários/nodeids, comando, resultado, limites da prova e commits dos repositórios envolvidos. A aprovação documental deste plano não muda os estados dos testes para PASS.
+
+### Primeiro ciclo de implementação após esta revisão
+
+Executar os passos abaixo respeitando as dependências dos marcos. Cada passo produz um incremento revisável; nenhum deles, isoladamente, encerra a entrega total.
+
+| Passo | Alteração concreta | Verificação de conclusão |
+|---|---|---|
+| 1 | Atualizar o inventário de aceite e os defeitos com os três HEADs acima; associar os testes novos às tarefas; registrar hosts, providers e credenciais de laboratório disponíveis | Todos os requisitos têm caller, teste existente ou teste a criar, responsável e ambiente; skips aplicáveis permanecem pendentes |
+| 2 | Concluir conformance Core e a coordenação de contenção durante renovação/CAS; manter revogação, geração e recuperação de confirmação perdida | Barreiras de storage ativas durante interrupt/close e shutdown, sem efeito produtivo após expiry nem uso de contexto antigo; mesmo wheel instalado nos consumidores |
+| 3 | Completar resolve/admit/dispatch de `turn.steer`, `turn.interrupt` e `runtime.close`, targeting pelo Core e transporte dos DTOs no cliente Connector | ID/hash/alvo preservados até o efeito e recibo; replay sem duplicação; contenção expirada mantém as demais verificações de autoridade; campos e alvos inválidos recusados antes do efeito |
+| 4 | Concluir onboarding e compor o loop de outbox, abertura pendente de lease, owner embedded e daemon/StateStore | Jornada pública cria binding e abre sessão sem semear operação ou forçar readiness; execução local sem Connector e execução remota por processos reais |
+| 5 | Integrar reconciliação não vazia, eventos, revogação online e aprovação/input às mesmas operações duráveis | Restart e perda de ACK recuperam os mesmos IDs; decisão aplicada uma vez; isolamento entre agentes/Servers e controle sob saturação |
+| 6 | Fechar ferramentas, UI/CLI e idioma; corrigir regressões; executar migração e campanhas finais | Gates G1–G3 com artefatos instalados, providers reais, hosts distintos, matriz completa e runbooks exercitados |
+
+Antes do passo 3, conferir a representação normativa da razão de interrupt/close: o request HTTP e o payload NXL têm formas diferentes. Registrar qualquer inconsistência contratual e resolvê-la na fonte responsável com fixture de compatibilidade, sem introduzir um campo HTTP ad hoc. Aprovação/input mantêm autoridade própria de decisão em M08.
 
 O [status de implementação](IMPLEMENTATION_STATUS.md) registra inventário, identidade, tickets, realizações, prepare/apply, resolução, admissão, reservas, receipts, adapter embedded e negociação WSS parciais. Há ensaios de Core com peer nativo sintético e testes verticais em processo. As seguintes lacunas continuam determinantes:
 
