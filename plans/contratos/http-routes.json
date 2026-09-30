@@ -80,7 +80,7 @@
     {
       "method": "POST",
       "path": "/v1/runtime/executors/{id}/realizations",
-      "principal": "realization_publish_ticket",
+      "principal": "realization_publish_ticket_or_embedded_operator",
       "request_definition": "RealizationPublishRequest",
       "response_definition": "RealizationView",
       "success_codes": [

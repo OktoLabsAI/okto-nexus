@@ -1,0 +1,47 @@
+{
+  "increment": "M05/P5.1 public embedded realization preparation and binding approval",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "cba635a714f0f0c998badf4f075713a22b862d7d",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": "evidence/local-realization-artifacts.json",
+  "tests": {
+    "nexus": {
+      "tests": 69,
+      "passed": 69,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 242.933
+    },
+    "isolated": {
+      "tests": 27,
+      "passed": 27,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "duration_seconds": 54.03
+    }
+  },
+  "isolated_cases_are_subset": true,
+  "initial_failure": "Source assertion expected 409/422; explicit-consent validation returned the correct HTTP 400. Fixed assertion before final installed runs.",
+  "installation": "Updated Nexus wheel in the real no-Connector venv created for embedded inventory. Module and distribution absence verified; pip check passed.",
+  "limitations": [
+    "Technical discovery and credential fixtures; no native-provider journey in this increment.",
+    "Approved configuration is persisted but dispatch-time consumption and validation remain to be integrated.",
+    "Embedded executor remains RECOVERING; M05/G1 and remaining fixed-plan requirements remain open.",
+    "Preexisting user UI assets are included in the wheel but not committed or accepted here.",
+    "Core and Connector artifacts unchanged. Existing dependency deprecation warning."
+  ],
+  "evidence_hashes": {
+    "local-realization-artifacts.json": "9a12504bbe3ebd0ab2d08a76ca02373525f0f3d7460982f27a9bf70c1c85e780",
+    "local-realization-installed-isolated.json": "87410f3a406f25e86967b985d18c9cd8257ff3fe6a02b7390cf4a81d2a93e468",
+    "local-realization-installed-isolated.log": "31e008848ef1b10488436b78ba55a8d1c36d7772adc22536756c678fe8405c13",
+    "local-realization-installed-isolated.xml": "87d0036eea69109e0e0df002c3d0dd69503042b2540b901ae890084e0215b7bf",
+    "local-realization-installed-nexus.json": "62f2baee3a89c5bcbe47f3697cd858088166e94fc237a8dea868b0bfda88ca0f",
+    "local-realization-installed-nexus.log": "9f8d9cadf6e78f7fc3e6d4d682d171609236df1bc0a0454f63ff08da9ca6834e",
+    "local-realization-installed-nexus.xml": "93123592256afdb66cc754942381008d90995dfe3c37ed5b8b0470ce1c2b5cc3",
+    "local-realization-isolated-installation.json": "ef4126314357306c24d6c0e92e44291b63fa90f8ff065dcca2f2140596ef022f",
+    "local-realization-plan-validation.json": "0990a48296c7c064e416f49f402724aa93505f9fee0ec9041938b0300154ae79"
+  }
+}

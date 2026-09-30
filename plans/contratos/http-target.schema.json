@@ -1040,85 +1040,14 @@
       "additionalProperties": false
     },
     "RealizationPublishRequest": {
-      "type": "object",
-      "properties": {
-        "client_intent_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RemoteRealizationPublishRequest"
         },
-        "agent_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "local_realization_ref": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "realization_revision": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "workspace_id": {
-          "anyOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 160
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "workspace_label": {
-          "type": "string",
-          "maxLength": 4096
-        },
-        "adapter_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
-        },
-        "candidate_ref": {
-          "type": "string",
-          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
-        },
-        "inventory_revision": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "local_root_proof_digest": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "configuration_digest": {
-          "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
-        },
-        "local_consent_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 160
+        {
+          "$ref": "#/$defs/LocalRealizationPrepareRequest"
         }
-      },
-      "required": [
-        "client_intent_id",
-        "agent_id",
-        "local_realization_ref",
-        "realization_revision",
-        "workspace_id",
-        "workspace_label",
-        "adapter_id",
-        "candidate_ref",
-        "inventory_revision",
-        "local_root_proof_digest",
-        "configuration_digest",
-        "local_consent_id"
-      ],
-      "additionalProperties": false
+      ]
     },
     "RealizationView": {
       "type": "object",
@@ -3730,6 +3659,174 @@
         "request_id"
       ],
       "additionalProperties": false
+    },
+    "RemoteRealizationPublishRequest": {
+      "type": "object",
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "local_realization_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "realization_revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace_label": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_root_proof_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "configuration_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_consent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "agent_id",
+        "local_realization_ref",
+        "realization_revision",
+        "workspace_id",
+        "workspace_label",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "local_root_proof_digest",
+        "configuration_digest",
+        "local_consent_id"
+      ],
+      "additionalProperties": false
+    },
+    "LocalRealizationPrepareRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "client_intent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "workspace_label": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "adapter_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "candidate_ref": {
+          "type": "string",
+          "pattern": "^nexus-install-v1:[0-9a-f]{64}$"
+        },
+        "inventory_revision": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "local_consent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "workspace_root": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "approved": {
+          "const": true
+        },
+        "provider_home": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "secret_bindings": {
+          "type": "object",
+          "maxProperties": 64,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256
+          }
+        }
+      },
+      "required": [
+        "client_intent_id",
+        "agent_id",
+        "workspace_id",
+        "workspace_label",
+        "adapter_id",
+        "candidate_ref",
+        "inventory_revision",
+        "local_consent_id",
+        "workspace_root",
+        "approved"
+      ]
     }
   }
 }

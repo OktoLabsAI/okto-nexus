@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Public embedded realization preparation — September 30, 2026
+
+[Increment](M05_LOCAL_REALIZATION.md): authenticated operators can prepare local workspace/configuration evidence through the existing realization route, then approve the canonical binding. Migration 083 stores private local mapping and protected secret references atomically with canonical realization records. Owner/agent checks run before filesystem access and again before commit; changed request, candidate or directory is refused. Serve restart reuses the same realization. Installed regression: 69 passed; the actual environment without Connector passed 27 overlapping cases and pip check. No native session or runtime readiness is introduced. Local dispatch/lease consumption and full M05/G1 remain open. Core/Connector artifacts are unchanged.
+
+
 ## Serve-owned embedded inventory — September 30, 2026
 
 [Increment](M05_EMBEDDED_INVENTORY.md): the real serve lifecycle discovers local candidates and publishes path-free inventory under its existing store owner, with transactional epoch/generation/revocation checks, periodic refresh and retained cleanup. Public inventory/runtime-options routes expose local facts to active agents. Restart republishes under the successor owner. Installed affected regression: 55 passed; a fresh Nexus serve-lite/Core environment with no Connector module or distribution passed 13 overlapping cases and pip check. No Core runtime store or WSS ticket is opened for inventory. Core/Connector artifacts are unchanged. Local dispatch, realization/configuration and M05/G1 acceptance remain open; the embedded executor stays RECOVERING.

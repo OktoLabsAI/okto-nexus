@@ -63,6 +63,22 @@ class RealizationPublishRequest(BaseModel):
     local_consent_id: _Id
 
 
+class LocalRealizationPrepareRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    client_intent_id: _Id
+    agent_id: _Id
+    workspace_root: Annotated[str, Field(min_length=1, max_length=4096)]
+    workspace_id: _Id | None
+    workspace_label: Annotated[str, Field(max_length=160)]
+    adapter_id: _Id
+    candidate_ref: _CandidateRef
+    inventory_revision: _Digest
+    local_consent_id: _Id
+    approved: bool
+    provider_home: Annotated[str, Field(min_length=1, max_length=4096)] | None = None
+    secret_bindings: dict[str, str] = Field(default_factory=dict, max_length=64)
+
+
 class ResolveIntentRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -250,15 +266,28 @@ def build_router() -> APIRouter:
 
     @router.post("/runtime/executors/{executor_id}/realizations")
     async def publish_realization(executor_id: str,
-                                  body: RealizationPublishRequest,
+                                  body: RealizationPublishRequest | LocalRealizationPrepareRequest,
                                   request: Request) -> JSONResponse:
         token = extract_bearer(request)
         if token is None:
             return v1_err(401, "AUTH_FAILED",
-                          "An execution ticket is required.")
+                          "Authentication is required to prepare a realization.")
         factory = request.app.state.deps.connection_factory
 
+        agent = get_authenticated_agent()
+
         def _publish():
+            if isinstance(body, LocalRealizationPrepareRequest):
+                if agent is None:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                          "An authenticated local operator is required.", {})
+                from ....application.execution_local_realizations import stage_embedded_realization
+                return stage_embedded_realization(factory,
+                    owner=getattr(request.app.state, "embedded_inventory_owner", None),
+                    executor_id=executor_id, access=build_execution_access(request.app.state.deps),
+                    context=RuntimeRequestContext(agent.agent_id, "agent_key",
+                                                   credential_binding=agent.api_key_hash),
+                    request=body.model_dump())
             installation = ensure_execution_installation(factory)
             principal = verify_execution_ticket(
                 factory, ticket=token, server_id=installation.server_id,
