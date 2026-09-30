@@ -1,4 +1,11 @@
-## Current development artifact: 0.2.30.dev0
+## Current development artifact: 0.2.31.dev0
+
+nexus_connector_core-0.2.31.dev0-py3-none-any.whl, SHA-256
+6e3e6e08acee45c8c220bb87d8f79b9697cc95c177b73f37414aa601880d6339.
+
+Exact Windows Codex 0.159.0 conversation and control qualification.
+
+## Previous development artifact: 0.2.30.dev0
 
 nexus_connector_core-0.2.30.dev0-py3-none-any.whl, SHA-256
 e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6.

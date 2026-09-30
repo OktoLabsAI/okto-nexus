@@ -1,0 +1,38 @@
+{
+  "core": {
+    "version": "0.2.31.dev0",
+    "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.31.dev0-py3-none-any.whl",
+    "sha256": "6e3e6e08acee45c8c220bb87d8f79b9697cc95c177b73f37414aa601880d6339"
+  },
+  "qualification": "Exact Windows Codex 0.159.0 conversation/control qualification; no new approval qualification or R4 product acceptance.",
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-nexus-stage-lug81uk7\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "7d9962f254d7ef10d079ae0dafc176d5da9410cb79a33eb4390cde079fb237ce",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-nexus-stage-lug81uk7",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-nexus-stage-lug81uk7\\dist"
+    ]
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-connector-stage-fjd9b0re\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "ee7488e34c46d537515646763a2049fffe9d9714d14d65acaecb9d46212b3488",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-connector-stage-fjd9b0re",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\codex-0159-connector-stage-fjd9b0re\\dist"
+    ]
+  }
+}
