@@ -5,25 +5,29 @@
   "purpose": "Coordinate completion and acceptance of Nexus, Connector, and Core without replacing the normative R4 requirements.",
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
-    "date": "2026-09-29",
+    "date": "2026-09-30",
     "scope": "Published development artifacts and delivery planning; not final product acceptance",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "59922386149df1e95ea9e989a85043ccb8fd7dc0",
-      "connector": "ce91e7f80ffdf3fed1fdaae8d3357fe403fdd3ae",
-      "core": "598ec4cc85daf91489b04891e0d21e353831f984"
+      "nexus": "f5fbc0b9b390f9678bd0c738770856579b950ea8",
+      "connector": "d761a44b8806d43b48656ed034e9f426f664a472",
+      "core": "2ac508fabaf9614a864e680e3e99599d1b822b5c"
     },
-    "shared_core_version": "0.2.23.dev0",
-    "shared_core_wheel_sha256": "3b63c9e6be4ccd1c843f99753d997b5992affe85209b0e2e404ff2ccfab0c733",
+    "shared_core_version": "0.2.25.dev0",
+    "shared_core_wheel_sha256": "e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4",
     "milestones_in_progress": ["M00", "M01"],
     "closed_product_gates": [],
     "evidence": [
       "plans/r4_execution/M00_AUDIT.md",
       "plans/r4_execution/acceptance_inventory.json",
       "plans/r4_execution/M01_DECISION_CONFORMANCE.md",
-      "plans/r4_execution/test_runs_20260929.json"
+      "plans/r4_execution/test_runs_20260929.json",
+      "plans/r4_execution/M01_TARGETING_INVENTORY.md",
+      "plans/r4_execution/M01_LEASE_APPLICATION.md",
+      "plans/r4_execution/test_runs_20260930_leases.json"
     ],
-    "unpublished_core_work": "Public control targeting and inventory format evolution require installed-consumer verification and a new artifact before acceptance."
+    "unpublished_work": "Nexus canonical lease issuance, migration 076, ACK validation, and dispatch authority checks are local work in progress, pending review and acceptance.",
+    "verification_scope": "Local HEAD and origin tracking refs matched; the shared wheel SHA-256 was recalculated in all three repositories. This planning review did not rerun product suites or close any gate."
   },
   "sources": {
     "backlog": "plans/BACKLOG_R4.json",

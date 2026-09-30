@@ -1,8 +1,8 @@
-# Plano de entrega completa do Nexus Connector e Core
+# Plano de entrega completa do Nexus, Connector e Core
 
 Este plano organiza a conclusão dos três produtos na branch `feature/v0.2.0`, com implementação, integração, testes, migração e aceite final. O resultado exigido é utilizar os harnesses diretamente no Nexus e remotamente pelo Connector, pelas entradas reais de UI, CLI e API, com o mesmo Core instalado. Todos os textos produzidos pelas aplicações devem estar em inglês dos Estados Unidos, inclusive superfícies legadas e mensagens de retorno.
 
-Data da baseline: 29 de setembro de 2026. Este documento é um plano de conclusão; sua validação documental não executa testes de produto nem encerra gates de release. O trabalho anterior é aproveitado como implementação parcial a verificar.
+Data da baseline: 29 de setembro de 2026. Revisão de planejamento: 30 de setembro de 2026. Este documento é um plano de conclusão; sua validação documental não executa testes de produto nem encerra gates de release. O trabalho anterior é aproveitado como implementação parcial a verificar.
 
 ## Visão geral da entrega
 
@@ -57,13 +57,15 @@ Wheel Core da baseline inicial: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235b
 
 ### Revisão após a auditoria inicial
 
-O conjunto publicado conferido nesta revisão é Nexus `59922386149df1e95ea9e989a85043ccb8fd7dc0`, Connector `ce91e7f80ffdf3fed1fdaae8d3357fe403fdd3ae` e Core `598ec4cc85daf91489b04891e0d21e353831f984`. Todos estão em `feature/v0.2.0`. Os três repositórios contêm o mesmo wheel Core `0.2.23.dev0`, com SHA-256 `3b63c9e6be4ccd1c843f99753d997b5992affe85209b0e2e404ff2ccfab0c733`. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos.
+O conjunto conferido nesta revisão é Nexus `f5fbc0b9b390f9678bd0c738770856579b950ea8`, Connector `d761a44b8806d43b48656ed034e9f426f664a472` e Core `2ac508fabaf9614a864e680e3e99599d1b822b5c`. Todos estão em `feature/v0.2.0`, com HEAD igual à referência local `origin/feature/v0.2.0` consultada. Os três repositórios contêm o mesmo wheel Core `0.2.25.dev0`, com SHA-256 `e4918889b6c4ffc0b4cb0d172bf32f18ef9aeefbc35e0371cf94b373f34232e4`, recalculado nos três arquivos. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos.
 
 A [auditoria](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 têm entradas de teste candidatas coletáveis e 54 ainda não têm uma entrada proposta coletada; essa contagem mede disponibilidade do teste, não cobertura integral de aceite. A suíte dirigida Nexus R4 passou 42 testes com Core `0.2.23.dev0`. As regressões amplas registraram falhas e skips; as correções dirigidas de documentação Core e empacotamento Connector ainda precisam de nova execução completa. Consultar os [resultados](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
 
 Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
 
 ### Prioridades para continuar a execução
+
+Há trabalho local ainda não commitado de concessão canônica de leases no Server, migração 076, validação de ACK e autorização no despacho. Ele deve ser revisado e testado antes de integrar a referência publicada. Não constitui fechamento de NS06/NS09 nem prova de daemon, provider ou hosts distintos.
 
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|
@@ -74,6 +76,22 @@ Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, inte
 | 5 | Fechar eventos, decisões, ferramentas, UI/CLI, idioma e recuperação; migrar e repetir o aceite nos artefatos finais | Três repos, M07–M13 | Campanhas instaladas, providers reais, hosts distintos e todos os cenários aplicáveis |
 
 A preparação dos ambientes começa durante M00: confirmar autenticação utilizável de cada provider, provisionar os Servers A/C e executor B, provar isolamento/rede outbound e obter as combinações Windows/Linux declaradas. WSL disponível não demonstra sozinho hosts independentes. Enquanto essa preparação avança, os testes de contrato e integração em processos locais continuam executáveis. A ausência de um laboratório obrigatório mantém seu aceite pendente.
+
+### Próximos pacotes concretos de conclusão
+
+Estes pacotes detalham os marcos existentes; não substituem IDs, dependências ou cenários do backlog. Trabalho parcial fora da ordem de fechamento deve continuar identificado como parcial.
+
+| Pacote | Responsável / marco | Critério específico e teste obrigatório |
+|---|---|---|
+| Autoridade instalada e contenção | Core / M01; consumidores / M05–M06 | Conferir §5.4 do contrato: lease produtiva expirada impede novo efeito produtivo, mas preserva interrupt, close e resposta estritamente negativa previamente autorizados. Testar no runtime instalado, sem ampliar `allowed_actions`, com alvo antigo/errado e decisão positiva recusados. |
+| Concessão canônica e despacho | Nexus / M02, M04, M06 | Revisar a migração 076 e o trabalho local; emitir grant da autoridade persistida e aceitar ACK somente do owner/serial atuais. Testar rollback, concorrência de serial, replay sem estender prazo, consumo de budget uma vez e revogação antes/depois do ACK. |
+| Estado terminal e retomada | Nexus + Connector + Core / M06, M11 | Desconexão não converte autoridade revogada em estado mais permissivo; reconnect exige instalação anterior comprovada ou reconciliação explícita. Testar ACK tardio, reboot, geração antiga e corrida de renovação/revogação com barreiras mantidas. |
+| Jornada de binding e abertura | Nexus + Connector / M03–M06 | A entrada pública produz endpoint habilitado, perfil aprovado, realização e grant sem semeadura de banco. Compor `OPEN_AUTHORIZED_PENDING_LEASE`, instalar contexto e só então preparar/abrir; preservar modo managed/attach da abertura nas operações seguintes. |
+| Owners embedded e daemon | Nexus + Connector / M05–M06 | Ligar o loop de outbox ao owner embedded e ao daemon real, com multiplexação do socket, StateStore e reconciliação não vazia. Provar o ciclo por processos separados e repetir local puro sem Connector instalado. |
+| Revogação e decisões | Três repos / M08, M11 | Propagar revogação ao Core online e limitar efeitos offline por lease; integrar autoridade própria de approval/input. Testar aplicação nativa única, resposta negativa de contenção e isolamento de outro agente/Server. |
+| Regressões e qualificação | Três repos / M09–M13 | Corrigir falhas conhecidas de migração, expectativas stdio, superfície compacta e attach; manter o gate original de redução de 40%. Reexecutar suites completas, idioma e campanhas reais sobre os artefatos finais. |
+
+Cada pacote encerra com caminhos de código, cenários/nodeids, comando, resultado, limites da prova e commits dos repositórios envolvidos. A aprovação documental deste plano não muda os estados dos testes para PASS.
 
 O [status de implementação](IMPLEMENTATION_STATUS.md) registra inventário, identidade, tickets, realizações, prepare/apply, resolução, admissão, reservas, receipts, adapter embedded e negociação WSS parciais. Há ensaios de Core com peer nativo sintético e testes verticais em processo. As seguintes lacunas continuam determinantes:
 
