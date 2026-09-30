@@ -2,6 +2,18 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento de controles canônicos
+
+Steer e interrupt agora passam por resolução/admissão HTTP, targeting do Core,
+reserva e autorização de dispatch. O frame validado preserva alvo, ID e hash;
+o cliente Connector verifica a correlação antes de admitir a operação.
+Interrupt previamente permitido continua despachável após expiry produtiva
+com autoridade e lane válidas, sem exigir nova descoberta de binário.
+O [ADR 0003](../../docs/adr/0003-canonical-control-targets.md) registra o mapping
+de razão e as lacunas de conformance do Core para razão longa/vazia e política
+de close. NS06/M04 permanecem parciais; loop de outbox, close, decisões, owners
+e campanhas finais continuam pendentes.
+
 ## Execução do plano de entrega
 
 A [auditoria M00](M00_AUDIT.md) iniciou coleta e revisão de aceite. O

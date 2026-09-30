@@ -11,12 +11,18 @@ import secrets
 import time
 from typing import Mapping
 
+from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
+from nexus_connector_core.protocol import canonical_json
+
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
 from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_revisions
 from ..errors import ErrorCode, OktoNexusError
 from ..domain.runtime_context import RuntimeRequestContext
 from .execution_binding_proposals import _agent_guard
 from .execution_leases import ExecutionChannel, require_execution_lane
+from .execution_semantics import (
+    execution_intent_hash, execution_wire_intent, validate_execution_target,
+)
 
 
 _CONTROL = frozenset({"turn.steer", "turn.interrupt", "runtime.close",
@@ -45,13 +51,14 @@ class AuthorizedDispatch:
     connection_id: str
     grant_id: str
     scope: dict
+    frame: dict
 
 
 def reserve_execution_dispatch(
     factory: ConnectionFactory, *, server_id: str, executor_id: str,
     remote_ready: bool, regular_items: int = 4,
     regular_bytes: int = 256 * 1024, control_items: int = 2,
-    control_bytes: int = 16 * 1024,
+    control_bytes: int = 128 * 1024,
 ) -> DispatchReservation | None:
     """Reserve one exact row/byte cost before a dispatcher starts a task.
 
@@ -185,7 +192,7 @@ def begin_execution_send(
             "o.reservation_class,o.reserved_bytes,"
             "p.subject_agent_id,p.actor_agent_id,p.binding_id,p.workspace_id,"
             "p.workspace_binding_id,p.session_id,p.action,p.semantic_payload,"
-            "p.expected_revisions_json,p.admission_state "
+            "p.expected_revisions_json,p.admission_state,p.intent_hash "
             "FROM execution_dispatch_outbox o JOIN execution_operations p "
             "ON p.server_id=o.server_id AND p.executor_id=o.executor_id "
             "AND p.operation_id=o.operation_id WHERE o.server_id=? "
@@ -250,6 +257,13 @@ def begin_execution_send(
                 binding["revoked_at"] is not None):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch binding changed.", {})
+        semantic = json.loads(row["semantic_payload"])
+        if (semantic["action"] != row["action"] or
+                execution_intent_hash(semantic) != row["intent_hash"]):
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                  "The stored dispatch intent changed.", {})
+        validate_execution_target(binding["adapter_id"], row["action"], semantic["target"])
+        containment = row["action"] == "turn.interrupt"
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"
             "s.observation_age_ms,s.canonical_projection "
@@ -261,24 +275,20 @@ def begin_execution_send(
             (server_id, reservation.executor_id),
         ).fetchone()
         fresh = fresh_publications.get((server_id, reservation.executor_id))
-        if (current is None or fresh is None or
+        if not containment and (current is None or fresh is None or
                 current["inventory_revision"] != binding["inventory_revision"] or
                 fresh[0] != current["publication_sequence"] or
                 current["observation_age_ms"] +
                 max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch inventory is no longer fresh.", {})
-        if not any(
+        if not containment and not any(
             item["adapter_id"] == binding["adapter_id"] and
             item["candidate_ref"] == binding["candidate_ref"]
             for item in load_current_executor_inventory(current["canonical_projection"])["evidence"]
         ):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch candidate changed.", {})
-        semantic = json.loads(row["semantic_payload"])
-        if semantic["action"] != row["action"]:
-            raise OktoNexusError(ErrorCode.CONFLICT,
-                                  "The stored dispatch action changed.", {})
         session = conn.execute(
             "SELECT s.binding_id,s.workspace_id,s.workspace_binding_id,"
             "s.owner_generation,s.lifecycle_state,s.lease_state,p.semantic_payload AS opening_intent "
@@ -323,6 +333,7 @@ def begin_execution_send(
             "ORDER BY lease_serial DESC LIMIT 1",
             (server_id, reservation.executor_id, row["session_id"]),
         ).fetchone()
+        authority_now = datetime.fromisoformat(access.clock.now_iso().replace("Z", "+00:00"))
         if (lease is None or row["action"] not in
                 json.loads(lease["allowed_actions_json"]) or
                 lease["applied_at"] is None or lease["scope_json"] is None or
@@ -333,8 +344,8 @@ def begin_execution_send(
                 lease["configuration_revision"] != revisions.configuration or
                 lease["credential_epoch"] != revisions.credential_epoch or
                 lease["owner_generation"] != scope["session_owner_generation"] or
-                datetime.fromisoformat(lease["valid_until_server"].replace(
-                    "Z", "+00:00")) <= datetime.now(timezone.utc)):
+                (not containment and datetime.fromisoformat(lease["valid_until_server"].replace(
+                    "Z", "+00:00")) <= authority_now)):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "An applied dispatch lease is required.", {})
         # Lease application does not spend or replace per-operation authority.
@@ -346,11 +357,27 @@ def begin_execution_send(
         if action is None:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "This operation requires governance authorization.", {})
+        frame = {
+            "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
+            "type": "operation.submit", **scope, **execution_wire_intent(semantic),
+            "operation_id": reservation.operation_id, "intent_hash": row["intent_hash"],
+            "connection_id": lease["connection_id"],
+            "connection_generation": lease["connection_generation"],
+            "grant_id": lease["grant_id"],
+        }
+        if any(frame.get(name) != value for name, value in scope.items()):
+            raise OktoNexusError(ErrorCode.CONFLICT,
+                                  "The dispatch intent has a different scope.", {})
+        try:
+            frame = decode_r4_frame(canonical_json(frame))
+        except CoreError as exc:
+            raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                                  "The dispatch operation is incompatible with the Core contract.", {}) from exc
         if binding['kind'] == 'remote':
             require_execution_lane(uow, scope=scope,
                 channel=ExecutionChannel(server_id, reservation.executor_id,
                     lease['connection_id'], lease['connection_generation']),
-                now=datetime.fromisoformat(access.clock.now_iso().replace('Z', '+00:00')))
+                now=authority_now)
         actor = access.agents.get(uow, row['actor_agent_id'])
         if actor is None or not actor.is_active:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
@@ -376,4 +403,4 @@ def begin_execution_send(
         return AuthorizedDispatch(
             reservation, semantic, lease["lease_id"],
             lease["lease_serial"], lease["connection_generation"],
-            lease["connection_id"], lease["grant_id"], scope)
+            lease["connection_id"], lease["grant_id"], scope, frame)

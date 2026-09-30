@@ -11,7 +11,6 @@ import secrets
 import time
 from typing import Any, Mapping
 
-from nexus_connector_core import r4_submit_intent_hash
 from nexus_connector_core.protocol import canonical_json
 
 from ..errors import ErrorCode, OktoNexusError
@@ -20,9 +19,11 @@ from ..adapters.outbound.sqlite.execution_agent_revisions import (
     current_agent_revisions,
 )
 from .execution_binding_proposals import _agent_guard
+from .execution_semantics import execution_intent_hash, validate_execution_target
 
 
-_INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit"}
+_INTENTS = {"runtime.start": "runtime.open", "turn.submit": "turn.submit",
+            "turn.steer": "turn.steer", "turn.interrupt": "turn.interrupt"}
 
 
 def resolve_execution_intent(
@@ -50,28 +51,22 @@ def resolve_execution_intent(
              request.get("new_session") is not True)):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "An explicit new session is required to start.", {})
-    if request["intent"] == "turn.submit" and (
+    if request["intent"] != "runtime.start" and (
             type(request.get("session_id")) is not str or
             not 1 <= len(request["session_id"]) <= 160 or
-            type(request.get("text")) is not str or
-            len(request["text"]) > 65536 or
             request.get("new_session") is True):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                              "An existing session is required.", {})
+    if request["intent"] in {"turn.submit", "turn.steer"} and (
+            type(request.get("text")) is not str or
+            not 1 <= len(request["text"]) <= 65536):
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                               "A session and turn text are required.", {})
-    target = request.get("target") or {"kind": "none", "expected_turn_id": None}
-    if (not isinstance(target, Mapping) or
-            set(target) != {"kind", "expected_turn_id"} or
-            target["kind"] not in {"none", "native_turn_id", "current_run"} or
-            (target["expected_turn_id"] is not None and
-             (type(target["expected_turn_id"]) is not str or
-              not 1 <= len(target["expected_turn_id"]) <= 160)) or
-            (target["kind"] == "native_turn_id") !=
-            (target["expected_turn_id"] is not None)):
+    if request["intent"] == "turn.interrupt" and "text" in request and (
+            type(request["text"]) is not str or not 1 <= len(request["text"]) <= 1024):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                              "Invalid native turn target.", {})
-    if target["kind"] != "none":
-        raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                              "This intent cannot target an existing turn.", {})
+                              "The interrupt reason must contain 1 to 1024 characters.", {})
+    target = request.get("target", {"kind": "none", "expected_turn_id": None})
     server_id, revisions, _ = current_agent_revisions(
         factory, agent_id=actor_agent_id)
     body_hash = "sha256:" + hashlib.sha256(canonical_json(dict(request))).hexdigest()
@@ -110,6 +105,8 @@ def resolve_execution_intent(
             raise OktoNexusError(ErrorCode.NOT_FOUND,
                                   "The binding was not found in this agent scope.", {})
         action = _INTENTS[request["intent"]]
+        validate_execution_target(binding["adapter_id"], action, target)
+        containment = action == "turn.interrupt"
         blockers = []
         if not remote_ready:
             blockers.append("remote_execution_unavailable")
@@ -134,14 +131,14 @@ def resolve_execution_intent(
         ).fetchone()
         fresh = (fresh_publications or {}).get(
             (server_id, binding["executor_id"]))
-        if (current is None or fresh is None or
+        if not containment and (current is None or fresh is None or
                 current["inventory_revision"] !=
                 binding["inventory_revision"] or
                 fresh[0] != current["publication_sequence"] or
                 current["observation_age_ms"] +
                 max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
             blockers.append("inventory_not_fresh")
-        else:
+        elif not containment:
             try:
                 snapshot = load_current_executor_inventory(current["canonical_projection"])
             except OktoNexusError:
@@ -156,7 +153,7 @@ def resolve_execution_intent(
         session_id = ("ses_" + secrets.token_hex(16)
                       if action == "runtime.open" else request["session_id"])
         owner_generation = 1
-        if action == "turn.submit":
+        if action != "runtime.open":
             session = conn.execute(
                 "SELECT binding_id,workspace_id,workspace_binding_id,"
                 "owner_generation,lifecycle_state,lease_state "
@@ -198,8 +195,19 @@ def resolve_execution_intent(
              "realization_revision": binding["realization_revision"],
              "profile_revision": profile["revision"] if profile else 1,
              "mode": "managed"}
-            if action == "runtime.open" else {"text": request["text"]}
+            if action == "runtime.open" else
+            {"reason": request.get("text", "Interrupt requested by the authorized agent.")}
+            if action == "turn.interrupt" else {"text": request["text"]}
         )
+        # Core's development bundle still has a narrower reason bound than
+        # the normative HTTP payload. Preserve the requested text and expose
+        # the incompatibility; never truncate it or admit an invalid frame.
+        if action == "turn.interrupt" and len(payload["reason"]) > 256:
+            blockers.append("core_interrupt_reason_unsupported")
+        # The wire bound is UTF-8 JSON bytes, not the HTTP string's character
+        # count. An oversized intent must not enter an undispatchable outbox.
+        if len(canonical_json(payload)) > 65536:
+            blockers.append("operation_payload_too_large")
         if action == "runtime.open" and (
                 profile is None or not profile["enabled"]):
             blockers.append("profile_unresolved")
@@ -217,7 +225,7 @@ def resolve_execution_intent(
             "intent_id": intent_id, "operation_id": operation_id,
             "session_id": session_id, "reuse": False,
             "scope": scope, "semantic_intent": semantic,
-            "intent_hash": r4_submit_intent_hash(semantic),
+            "intent_hash": execution_intent_hash(semantic),
             "resolution_revision": 1,
             "expires_at": (datetime.now(timezone.utc) +
                            timedelta(minutes=10)).isoformat(),

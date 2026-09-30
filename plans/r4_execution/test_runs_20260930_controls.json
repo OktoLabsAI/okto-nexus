@@ -1,0 +1,141 @@
+{
+  "generated_at_utc": "2026-09-30T04:56:26.177916+00:00",
+  "scope": "Partial M04/NS06 canonical steer and interrupt implementation; product gates remain open",
+  "git_heads_at_recording": {
+    "nexus": "a127bf36e3292e88285a941146cc78d7eaba80d7",
+    "connector": "47454d21f2cae22eba14d1b9302f764be323739d",
+    "core": "ada37e30cfb8a09769e5cceb12fa3b34829095ba"
+  },
+  "source_provenance": "Nexus changes are identified by source digests and the commit containing this report; HEAD may be its parent.",
+  "shared_core_version": "0.2.26.dev0",
+  "shared_core_wheel_sha256": "d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977",
+  "installed_module_report": "evidence/canonical-controls-installed-modules.json",
+  "installed_module_report_sha256": "34763105973f78f7eb362e17cc04391451a63b20148cea650f7d1c8cae280a7b",
+  "test_runs": [
+    {
+      "layer": "Nexus source R4 regression with installed Core and Connector",
+      "command_argv": [
+        "rtk",
+        "proxy",
+        ".venv/Scripts/python.exe",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "tests/execution_r4",
+        "-q",
+        "--tb=short",
+        "--junitxml=plans/r4_execution/evidence/okto-nexus-canonical-controls-r4.xml"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus",
+      "exit_code": 0,
+      "tests": 68,
+      "passed": 68,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 73.184,
+      "junit_timestamp": "2026-09-30T01:53:11.278109-03:00",
+      "junit_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\okto-nexus-canonical-controls-r4.xml",
+      "junit_sha256": "98ebf64725f7e6add29788ade1b2f914f4764ed3f1e349bcc0d850eca829c4f9",
+      "skips": []
+    },
+    {
+      "layer": "Connector full source regression with installed Core",
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-delivery-audit-py313/Scripts/python.exe",
+        "-X",
+        "utf8",
+        "-c",
+        "import sys; sys.path.insert(0,'src'); import pytest; raise SystemExit(pytest.main(['tests','-q','--tb=short','--junitxml=plans/implementation/evidence/r4-canonical-controls.xml']))"
+      ],
+      "cwd": "D:\\Projetos\\Techridy\\okto-nexus-connector",
+      "exit_code": 0,
+      "tests": 243,
+      "passed": 241,
+      "skipped": 2,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 293.495,
+      "junit_timestamp": "2026-09-30T01:45:24.015963-03:00",
+      "junit_path": "D:\\Projetos\\Techridy\\okto-nexus-connector\\plans\\implementation\\evidence\\r4-canonical-controls.xml",
+      "junit_sha256": "9d0ed7f53cc59cbf0eba50c28a0b605cab65c9e0c0f51bc915d30dc5f02254f0",
+      "skips": [
+        {
+          "test": "test_27_start_session_capability_is_referenced_in_effective_environment",
+          "reason": "lab peer lacks full contract surface: BINDING_NOT_AUTHORIZED"
+        },
+        {
+          "test": "test_shim_resolution_never_runs_outside_windows",
+          "reason": "covered above"
+        }
+      ]
+    },
+    {
+      "layer": "Final installed application controls from outside clones; synthetic qualification and native peer",
+      "command_argv": [
+        "rtk",
+        "proxy",
+        "C:/Users/jpamb/AppData/Local/Temp/okto-r4-controls-installed-py313/Scripts/python.exe",
+        "-I",
+        "-X",
+        "utf8",
+        "-m",
+        "pytest",
+        "-c",
+        "pytest.ini",
+        "--confcutdir=D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4",
+        "D:/Projetos/Techridy/okto_labs_okto_nexus/tests/execution_r4/test_canonical_controls.py",
+        "-q",
+        "--tb=short",
+        "--junitxml=D:/Projetos/Techridy/okto_labs_okto_nexus/plans/r4_execution/evidence/okto-nexus-canonical-controls-installed-final.xml"
+      ],
+      "cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+      "exit_code": 0,
+      "tests": 12,
+      "passed": 12,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 5.776,
+      "junit_timestamp": "2026-09-30T01:54:55.814173-03:00",
+      "junit_path": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\okto-nexus-canonical-controls-installed-final.xml",
+      "junit_sha256": "ae4d9b621dd0dc8f79ef2654d28df6e42bdb4f701001521acfad61fc6c26a301",
+      "skips": []
+    }
+  ],
+  "campaign_counts_overlap": true,
+  "earlier_attempts": [
+    {
+      "scope": "Connector HTTP tests with global Python",
+      "result": "5 failed, 16 passed",
+      "cause": "Global environment imported an older Core without R4 exports; repeated in the audit venv with installed Core 0.2.26."
+    },
+    {
+      "scope": "Connector HTTP tests with Nexus development venv",
+      "result": "12 failed, 9 errors",
+      "cause": "pytest-asyncio was not installed in that environment; repeated with the Connector test dependencies."
+    },
+    {
+      "scope": "Installed NS07/NS09/NS10 and controls before the control capacity correction",
+      "result": "29 passed",
+      "final_artifact_evidence": false,
+      "junit": "evidence/okto-nexus-canonical-controls-installed.xml"
+    }
+  ],
+  "application_messages": "New application-authored messages are US English; full language audit remains open.",
+  "limitations": [
+    "Approved selection metadata and executable qualification are fixtures.",
+    "Native peer is strict and synthetic; no provider, daemon, dispatcher loop or multi-host qualification.",
+    "Runtime close policy and complete interrupt reason conformance remain unimplemented in Core.",
+    "Containment during pending lease CAS remains open.",
+    "Nexus frontend assets contain prior user modifications and were packaged without rebuilding; no UI acceptance claimed.",
+    "No final milestone, executable flag or product gate was closed."
+  ],
+  "published_dependency_heads": {
+    "connector": "09b48595bc2ca99a7acff1555c12cf53e086df49",
+    "core": "ada37e30cfb8a09769e5cceb12fa3b34829095ba"
+  }
+}

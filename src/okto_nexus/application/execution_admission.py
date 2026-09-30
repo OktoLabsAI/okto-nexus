@@ -10,7 +10,6 @@ import secrets
 import time
 from typing import Any, Mapping
 
-from nexus_connector_core import r4_submit_intent_hash
 from nexus_connector_core.protocol import canonical_json
 
 from ..adapters.outbound.sqlite.connection import ConnectionFactory
@@ -18,6 +17,7 @@ from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_r
 from ..adapters.outbound.sqlite.execution_receipts import read_execution_operation_history
 from ..errors import ErrorCode, OktoNexusError
 from .execution_binding_proposals import _agent_guard
+from .execution_semantics import execution_intent_hash, validate_execution_target
 
 
 def submit_execution_operation(
@@ -62,7 +62,7 @@ def submit_execution_operation(
                 resolved["resolution_revision"] !=
                 request["resolution_revision"] or
                 resolved["intent_hash"] != request["intent_hash"] or
-                r4_submit_intent_hash(resolved["semantic_intent"]) !=
+                execution_intent_hash(resolved["semantic_intent"]) !=
                 request["intent_hash"]):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The operation does not match its resolution.", {})
@@ -124,6 +124,10 @@ def submit_execution_operation(
                     binding["current_realization_revision"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The execution binding is no longer ready.", {})
+            action = resolved["semantic_intent"]["action"]
+            validate_execution_target(binding["adapter_id"], action,
+                                      resolved["semantic_intent"]["target"])
+            containment = action == "turn.interrupt"
             current = conn.execute(
                 "SELECT c.inventory_revision,c.publication_sequence,"
                 "s.observation_age_ms,s.canonical_projection "
@@ -135,7 +139,7 @@ def submit_execution_operation(
                 (server_id, executor_id),
             ).fetchone()
             fresh = fresh_publications.get((server_id, executor_id))
-            if (current is None or fresh is None or
+            if not containment and (current is None or fresh is None or
                     current["inventory_revision"] !=
                     binding["inventory_revision"] or
                     fresh[0] != current["publication_sequence"] or
@@ -143,8 +147,9 @@ def submit_execution_operation(
                     max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The selected inventory is no longer fresh.", {})
-            snapshot = load_current_executor_inventory(current["canonical_projection"])
-            if not any(item["adapter_id"] == binding["adapter_id"] and
+            snapshot = (load_current_executor_inventory(current["canonical_projection"])
+                        if not containment else None)
+            if not containment and not any(item["adapter_id"] == binding["adapter_id"] and
                        item["candidate_ref"] == binding["candidate_ref"]
                        for item in snapshot["evidence"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,
@@ -168,7 +173,7 @@ def submit_execution_operation(
                 ).fetchone() is not None:
                     raise OktoNexusError(ErrorCode.CONFLICT,
                                           "The session claim already exists.", {})
-            elif action == "turn.submit":
+            elif action in {"turn.submit", "turn.steer", "turn.interrupt"}:
                 session = conn.execute(
                     "SELECT binding_id,workspace_id,workspace_binding_id,"
                     "owner_generation,lifecycle_state,lease_state "

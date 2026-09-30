@@ -71,6 +71,8 @@ O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implem
 
 O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
 
+O [incremento de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. Passaram 68 testes R4 Nexus, 241 Connector (dois skips) e 12 casos novos instalados. O Core ainda não implementa a política de close prevista no schema nem a faixa completa da razão de interrupt; corrigir essas lacunas em M01 antes de concluir M04. Não há fechamento de milestone, loop de produto ou qualificação nativa por este incremento.
+
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|
 | 1 | Revisar critérios das 85 tarefas e 12 entregas externas; transformar lacunas de coleta em casos executáveis; medir limites e registrar ambientes | Três repos, M00 | Mapa requisito → caller → teste coletável → campanha; nenhuma lacuna escondida por contagem de testes |

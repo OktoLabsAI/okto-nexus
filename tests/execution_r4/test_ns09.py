@@ -37,16 +37,18 @@ from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.errors import OktoNexusError
 
 
-def setup_authority(tmp_path, monkeypatch, *, lease_authority=True):
+def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
+                    actions=None, max_executions=1):
     deps = bootstrap({}, ['--home', str(tmp_path / 'home'), '--feature-harness-integrations', 'true'])
     app = build_app(deps)
     factory = deps.connection_factory
     server_id = ensure_execution_installation(factory).server_id
     now = deps.clock.now_iso()
+    app.state.test_agent_keys = {}
     with factory.unit_of_work() as uow:
         for agent in ('operator', 'registrar', 'subject', 'other'):
             uow.connection.execute('INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)', (agent, now))
-            app.state.auth.issue_key(uow, agent_id=agent)
+            app.state.test_agent_keys[agent] = app.state.auth.issue_key(uow, agent_id=agent)
         uow.connection.execute("INSERT INTO workspaces(workspace_id,created_at) VALUES ('ws',?)", (now,))
         uow.connection.execute(
             "INSERT INTO runtime_profiles(profile_id,adapter_id,config,enabled,revision,created_at,updated_at) "
@@ -90,7 +92,8 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True):
     access = build_execution_access(deps)
     operator = RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True)
     canonical = access.issue(operator, actor_agent_id='subject', endpoint_id='ep',
-        actions=['open', 'send', 'interrupt', 'close'], expires_at=iso_plus(now, 3600), max_executions=1)
+        actions=actions if actions is not None else ['open', 'send', 'interrupt', 'close'],
+        expires_at=iso_plus(now, 3600), max_executions=max_executions)
     _, revisions, _ = current_agent_revisions(factory, agent_id='subject')
     lane_scopes = {'lane:attach', 'lease:request'} if lease_authority else {'lane:attach'}
     lane_ticket = issue_execution_ticket(factory, server_id=server_id, executor_id=executor_id,
