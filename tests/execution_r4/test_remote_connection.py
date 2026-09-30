@@ -2,7 +2,7 @@
 
 The native peer and readiness qualification are synthetic. This exercises the
 Server and daemon-owned execution consumers, including automatic persisted lane
-and credential composition. Nonempty reconciliation and rotation remain pending.
+and credential composition, confirmed closed-session reconciliation and pending event recovery. Full rotation/active-session adoption remain pending.
 """
 
 import asyncio
@@ -24,11 +24,12 @@ from test_vertical_inventory import _NativeFactory
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('automatic,publication_failure,reconcile_closed,history_count', [
-    (False, None, False, 0), (True, None, False, 0), (False, 'before_commit', False, 0),
-    (False, 'lost_ack', False, 0), (False, 'core_commit', False, 0),
-    (False, None, True, 0), (False, 'core_commit', True, 0), (False, None, True, 260)])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count):
+@pytest.mark.parametrize('automatic,publication_failure,reconcile_closed,history_count,event_recovery', [
+    (False, None, False, 0, None), (True, None, False, 0, None), (False, 'before_commit', False, 0, None),
+    (False, 'lost_ack', False, 0, None), (False, 'core_commit', False, 0, None),
+    (False, None, True, 0, None), (False, 'core_commit', True, 0, None), (False, None, True, 260, None),
+    (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost')])
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -233,26 +234,43 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         if len(ack_attempts) == 1:
                             raise OSError('Injected Core ACK write failure after Server commit.')
                         return await original_ack(cursor, through)
-                    monkeypatch.setattr(journal, 'acknowledge_events', interrupted_ack)
+                    if event_recovery:
+                        publish_events = owner.publish_events
+                        async def interrupted_events(**values):
+                            if event_recovery == 'ack_lost':
+                                await publish_events(**values)
+                            raise OSError('Injected event delivery interruption.')
+                        monkeypatch.setattr(owner,'publish_events',interrupted_events)
+                    else:
+                        monkeypatch.setattr(journal, 'acknowledge_events', interrupted_ack)
                     await native.native.queue.put(RuntimeEvent(server_id,executor_id,session_id,native.stream_epoch,
                         0,'text_delta','synthetic.delta',{'text':'Automatic event publication.'},turned['operation_id']))
                     stream = dict(server_id=server_id,executor_id=executor_id,binding_id=binding['binding_id'],
                                   agent_id='subject',session_id=session_id,stream_epoch=native.stream_epoch)
-                    async with asyncio.timeout(5):
-                        while True:
-                            try:
-                                progress = await asyncio.to_thread(execution.events.store.read,stream)
-                            except ConnectorError:
-                                progress = {'core_applied':0}
-                            if progress['core_applied'] == 1:
-                                break
-                            await asyncio.sleep(.01)
-                    assert progress['remote_acked'] == 1 and ack_attempts == [1,1]
-                    assert not execution.events.errors
-                    with deps.connection_factory.unit_of_work(write=False) as uow:
-                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
-                        assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
-
+                    if event_recovery:
+                        from nexus_connector_core import EventCursor
+                        async with asyncio.timeout(5):
+                            while await journal.contiguous_watermark(EventCursor(server_id,executor_id,session_id,native.stream_epoch)) < 1:
+                                await asyncio.sleep(.01)
+                            while not execution.events.errors:
+                                await asyncio.sleep(.01)
+                        progress = await asyncio.to_thread(execution.events.store.read,stream)
+                        assert progress['remote_acked'] == progress['core_applied'] == 0
+                    else:
+                        async with asyncio.timeout(5):
+                            while True:
+                                try:
+                                    progress = await asyncio.to_thread(execution.events.store.read,stream)
+                                except ConnectorError:
+                                    progress = {'core_applied':0}
+                                if progress['core_applied'] == 1:
+                                    break
+                                await asyncio.sleep(.01)
+                        assert progress['remote_acked'] == 1 and ack_attempts == [1,1]
+                        assert not execution.events.errors
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
+                            assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
                 await admit('turn.steer', session_id=session_id, text='Continue carefully.',
                     target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
                 await admit('turn.interrupt', session_id=session_id,
@@ -261,6 +279,22 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 async with asyncio.timeout(5):
                     while execution.pending_count:
                         await asyncio.sleep(0)
+                if event_recovery:
+                    generation = owner.state.connection_generation
+                    await owner.close()
+                    async with asyncio.timeout(15):
+                        while not (control.status()['execution_ready'] and control.connection.state.connection_generation > generation):
+                            await asyncio.sleep(.01)
+                    owner = control.connection
+                    execution = control.execution.owner
+                    progress = await asyncio.to_thread(execution.events.store.read,stream)
+                    assert progress['remote_acked'] == progress['core_applied'] == 1
+                    assert control._retained_lanes and owner.is_attached(binding_id=binding['binding_id'],agent_id='subject',
+                        credential_epoch=revisions.credential_epoch,authorization_revision=binding['authorization_revision'],
+                        configuration_revision=binding['configuration_revision'])
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
+                        assert uow.connection.execute('SELECT committed_contiguous FROM execution_event_watermarks').fetchone()[0] == 1
                 if publication_failure:
                     from okto_nexus_connector.storage.r4_publications import R4PublicationStore
                     from okto_nexus_connector.services.r4_publications import recover_publications

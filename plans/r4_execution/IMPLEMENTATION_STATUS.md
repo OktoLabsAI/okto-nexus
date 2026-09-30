@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Pending events during daemon reconnect — September 30, 2026
+
+[Increment](M07_EVENT_RECOVERY.md): the daemon attaches current lanes and drains persisted event obligations before reconciliation. Existing valid in-memory tickets retain their original deadlines. Lane proofs transfer before the normal reader starts. Real HTTP/WSS tests cover an undelivered event and a lost ACK, with automatic reconnect and unchanged native operation counts. Installed results: Connector 380 passed (one existing skip), Nexus 72 passed. Nexus/Core production wheels unchanged. Cold restart with unavailable active ticket material, active ownership, embedded publishing, projections and full acceptance remain open.
+
+
 ## Automatic event publisher and ACK recovery — September 30, 2026
 
 [Increment](M07_EVENT_PUBLISHER.md): Connector registers streams before native opening, owns bounded finite-journal publishers and persists remote/Core-applied ACK cursors separately. Retries recover without another event or runtime operation. Exact ACK targets share the owned WSS reader. Nexus and Connector now reconcile fully acknowledged nonzero streams for confirmed closed sessions. Installed results: Connector 375 passed (one existing skip), Nexus 70 passed. Core 0.2.35 unchanged. Unacknowledged-stream reconnect recovery, active ownership, embedded publishing, projections and full acceptance remain open.
