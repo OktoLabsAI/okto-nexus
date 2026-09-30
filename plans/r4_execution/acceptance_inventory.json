@@ -1,0 +1,2749 @@
+{
+  "captured_at": "2026-09-30T01:36:57.785081+00:00",
+  "status": "INVENTORY_ONLY_NOT_PRODUCT_ACCEPTANCE",
+  "repositories": {
+    "nexus": {
+      "branch": "feature/v0.2.0",
+      "head": "13fd60ccbc6c4df3e2692822a80d0c0ff2ecad4e",
+      "version": "0.2.0",
+      "pyproject_sha256": "226a8ec41d6a9b0422127c1657d34e524d8dce419e8a8aadb63eb692777375e4",
+      "lockfiles": {
+        "uv.lock": "a0723c723ef5a695eb812a852b58d1d2fb3e0ee05b9cf8a70e186d22dd6f7cf6"
+      },
+      "dirty_counts": {
+        " M": 5,
+        " D": 599,
+        "??": 6
+      },
+      "dirty_status_sha256": "b4f107aab37da92111b3c1b1a585453c1f4e9a71645f5675ce1da44b44e0725e",
+      "preexisting_file_hashes": {
+        "plans/evidencias/VALIDACAO_DO_PACOTE.json": "95a343538c982a840825f339a125fc97d2f84134926f98bbaeb62114465c083f",
+        "src/okto_nexus/adapters/inbound/http/static/assets/index-DTt0-V6O.js": "233a75a3aadb52cb81ee823a1ce581fc35a2f3accd8e93410611afb3cd3b0898",
+        "src/okto_nexus/adapters/inbound/http/static/assets/index-DlAmqHcP.css": "f9681761b3572743db8d43408e36c8a5a752f70301f8062d55aa8f0f12a1b719",
+        "src/okto_nexus/adapters/inbound/http/static/index.html": "606d66502ac14a7ec74d007c7c47cf22f245ecf5672e64114d6ce8919da4629c",
+        "tests/test_runtime_backup_restore.py": "1870a029a1237d88d7f6e5f7cb83b5bee7d36be3f810a2edb0d254a9ad451996",
+        "plans/r4_execution/M00_AUDIT.md": "43c39eb04ecbdee47b82b8ec20ff80613ada3dae6b15e127239ab5e02049248d",
+        "plans/r4_execution/acceptance_inventory.json": "732d0bcb716a78d5f68f5de3f79c34e4039a74be8eb02e64c2aead9058cfae9a",
+        "plans/r4_execution/audit_delivery.py": "35a905c7e08a77a4f862096aa359b7dbc2820678000be31a26757a2a8250cf87",
+        "plans/r4_execution/collect_tests.py": "e9692fe174f015c166666904e453a5faa35f6219278d42a9b8a70df96fce527a"
+      },
+      "core_wheels": {
+        "vendor\\wheels\\nexus_connector_core-0.2.22.dev0-py3-none-any.whl": "a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db"
+      }
+    },
+    "connector": {
+      "branch": "feature/v0.2.0",
+      "head": "208a9c90e14e4995951c805ccc6585596160ca1c",
+      "version": "0.5.0.dev0",
+      "pyproject_sha256": "b536d8e01bbb461bdd5920914058c3a1b6436a2ee352872c2c9cc97a16a78ec6",
+      "lockfiles": {},
+      "dirty_counts": {},
+      "dirty_status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "preexisting_file_hashes": {},
+      "core_wheels": {
+        "vendor\\wheels\\nexus_connector_core-0.2.22.dev0-py3-none-any.whl": "a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db"
+      }
+    },
+    "core": {
+      "branch": "feature/v0.2.0",
+      "head": "79a315ff634bcfc8e5c4d4bab95ab46eff4579c8",
+      "version": "0.2.22.dev0",
+      "pyproject_sha256": "dcecb69149a27f40dc2a0067e62b6ac14d67091e67ba2862cc2ab14f9cfdb1c2",
+      "lockfiles": {},
+      "dirty_counts": {
+        "??": 1
+      },
+      "dirty_status_sha256": "a4a8054aaea472f1e05b19c57adc9d13db4853db8024fac29c484edc631d70b1",
+      "preexisting_file_hashes": {
+        "=1": "9746c92de5593ef34203eb43993ffe59c783f0efae07a88eb6c152f6225e4686"
+      },
+      "core_wheels": {
+        "artifacts\\nexus_connector_core-0.2.22.dev0-py3-none-any.whl": "a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db"
+      }
+    }
+  },
+  "collections": {
+    "nexus": {
+      "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "interpreter": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe",
+      "packages": {
+        "okto-nexus": "0.2.0",
+        "okto-nexus-connector": null,
+        "nexus-connector-core": "0.2.22.dev0"
+      },
+      "exit_code": 0,
+      "errors": [],
+      "test_execution": "NOT_RUN",
+      "count": 2829,
+      "report_sha256": "228949e600caed51f755ca3fe852fbca2e978d6e1153e66cf036d551917e0e0e",
+      "command": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\.venv\\Scripts\\python.exe -X utf8 D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\collect_tests.py <report.json>"
+    },
+    "connector": {
+      "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "interpreter": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-delivery-audit-py313\\Scripts\\python.exe",
+      "packages": {
+        "okto-nexus": null,
+        "okto-nexus-connector": "0.5.0.dev0",
+        "nexus-connector-core": "0.2.22.dev0"
+      },
+      "exit_code": 0,
+      "errors": [],
+      "test_execution": "NOT_RUN",
+      "count": 240,
+      "report_sha256": "9a6435daa14124654869b9b4abad010e807f2911f6e51519fb3f1da29440bcec",
+      "command": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-delivery-audit-py313\\Scripts\\python.exe -X utf8 D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\collect_tests.py <report.json>"
+    },
+    "core": {
+      "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+      "platform": "Windows-11-10.0.26200-SP0",
+      "interpreter": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-delivery-audit-py313\\Scripts\\python.exe",
+      "packages": {
+        "okto-nexus": null,
+        "okto-nexus-connector": "0.5.0.dev0",
+        "nexus-connector-core": "0.2.22.dev0"
+      },
+      "exit_code": 0,
+      "errors": [],
+      "test_execution": "NOT_RUN",
+      "count": 925,
+      "report_sha256": "aed842ac73416a45f8c61f9948823889de81985b16bda3c169aecb8cd280cac0",
+      "command": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-delivery-audit-py313\\Scripts\\python.exe -X utf8 D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\collect_tests.py <report.json>"
+    }
+  },
+  "tasks": {
+    "NS00.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns00.py::test_ns00_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-00-01"
+      ]
+    },
+    "NS00.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns00.py::test_ns00_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-00-02"
+      ]
+    },
+    "NS00.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns00.py::test_ns00_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-00-03"
+      ]
+    },
+    "NS00.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns00.py::test_ns00_04",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_04"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_04 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-00-04"
+      ]
+    },
+    "NS00.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns00.py::test_ns00_05",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_05"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns00.py::test_ns00_05 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-00-05",
+        "TN-01",
+        "TN-02"
+      ]
+    },
+    "NS01.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns01.py::test_ns01_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-01-01"
+      ]
+    },
+    "NS01.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns01.py::test_ns01_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-01-02"
+      ]
+    },
+    "NS01.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns01.py::test_ns01_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-01-03"
+      ]
+    },
+    "NS01.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns01.py::test_ns01_04",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_v1_auth_is_bearer_only_and_direct"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns01.py::test_v1_auth_is_bearer_only_and_direct -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-01-04"
+      ]
+    },
+    "NS01.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns01.py::test_ns01_05",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_05"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns01.py::test_ns01_05 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-01-05",
+        "TN-29",
+        "TN-30",
+        "TN-31"
+      ]
+    },
+    "NS02.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-02-01"
+      ]
+    },
+    "NS02.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-02-02"
+      ]
+    },
+    "NS02.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-02-03"
+      ]
+    },
+    "NS02.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_04",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_04"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns02.py::test_ns02_04 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-02-04"
+      ]
+    },
+    "NS02.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns02.py::test_ns02_05",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-02-05",
+        "TN-03",
+        "TN-04",
+        "TN-05"
+      ]
+    },
+    "NS03.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-03-01"
+      ]
+    },
+    "NS03.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-03-02"
+      ]
+    },
+    "NS03.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns03.py::test_ns03_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-03-03"
+      ]
+    },
+    "NS03.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-03-04"
+      ]
+    },
+    "NS03.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-03-05",
+        "TN-06",
+        "TN-07",
+        "TN-08",
+        "TN-09"
+      ]
+    },
+    "NS04.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-04-01"
+      ]
+    },
+    "NS04.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-04-02"
+      ]
+    },
+    "NS04.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-04-03"
+      ]
+    },
+    "NS04.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_04",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_remote_inventory_http_requires_executor_ticket"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns04.py::test_remote_inventory_http_requires_executor_ticket -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-04-04"
+      ]
+    },
+    "NS04.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns04.py::test_ns04_05",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_05_local_selection_uses_exact_revision_and_installation"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns04.py::test_ns04_05_local_selection_uses_exact_revision_and_installation -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-04-05"
+      ]
+    },
+    "NS05.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-05-01"
+      ]
+    },
+    "NS05.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-05-02"
+      ]
+    },
+    "NS05.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns05.py::test_ns05_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-05-03"
+      ]
+    },
+    "NS05.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-05-04"
+      ]
+    },
+    "NS05.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns05.py::test_ns05_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-05-05",
+        "TN-13",
+        "TN-14",
+        "TN-15",
+        "TN-16"
+      ]
+    },
+    "NS06.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-06-01"
+      ]
+    },
+    "NS06.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-06-02"
+      ]
+    },
+    "NS06.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-06-03"
+      ]
+    },
+    "NS06.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-06-04"
+      ]
+    },
+    "NS06.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-06-05"
+      ]
+    },
+    "NS07.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns07.py::test_ns07_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-07-01"
+      ]
+    },
+    "NS07.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns07.py::test_ns07_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns07.py::test_ns07_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-07-02"
+      ]
+    },
+    "NS07.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-07-03"
+      ]
+    },
+    "NS07.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-07-04"
+      ]
+    },
+    "NS07.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-07-05",
+        "TN-10",
+        "TN-11",
+        "TN-12"
+      ]
+    },
+    "NS08.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_01",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_01 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-08-01"
+      ]
+    },
+    "NS08.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_02",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_02 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-08-02"
+      ]
+    },
+    "NS08.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_03",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_03"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns08.py::test_ns08_03 -q",
+      "test_availability": "COLLECTED",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-08-03"
+      ]
+    },
+    "NS08.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-08-04"
+      ]
+    },
+    "NS08.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-08-05",
+        "TN-17",
+        "TN-18",
+        "TN-19",
+        "TN-20"
+      ]
+    },
+    "NS09.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-09-01"
+      ]
+    },
+    "NS09.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-09-02"
+      ]
+    },
+    "NS09.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-09-03"
+      ]
+    },
+    "NS09.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-09-04"
+      ]
+    },
+    "NS09.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-09-05"
+      ]
+    },
+    "NS10.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns10.py::test_ns10_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-10-01"
+      ]
+    },
+    "NS10.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns10.py::test_ns10_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-10-02"
+      ]
+    },
+    "NS10.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns10.py::test_ns10_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-10-03"
+      ]
+    },
+    "NS10.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns10.py::test_ns10_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-10-04"
+      ]
+    },
+    "NS10.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns10.py::test_ns10_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-10-05",
+        "TN-21",
+        "TN-22",
+        "TN-23",
+        "TN-24",
+        "TN-25"
+      ]
+    },
+    "NS11.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns11.py::test_ns11_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-11-01"
+      ]
+    },
+    "NS11.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns11.py::test_ns11_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-11-02"
+      ]
+    },
+    "NS11.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns11.py::test_ns11_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-11-03"
+      ]
+    },
+    "NS11.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns11.py::test_ns11_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-11-04"
+      ]
+    },
+    "NS11.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns11.py::test_ns11_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-11-05"
+      ]
+    },
+    "NS12.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-12-01"
+      ]
+    },
+    "NS12.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-12-02"
+      ]
+    },
+    "NS12.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-12-03"
+      ]
+    },
+    "NS12.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-12-04"
+      ]
+    },
+    "NS12.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns12.py::test_ns12_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-12-05",
+        "TN-26",
+        "TN-27",
+        "TN-28"
+      ]
+    },
+    "NS13.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-13-01"
+      ]
+    },
+    "NS13.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-13-02"
+      ]
+    },
+    "NS13.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-13-03"
+      ]
+    },
+    "NS13.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-13-04"
+      ]
+    },
+    "NS13.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns13.py::test_ns13_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-13-05",
+        "TN-32",
+        "TN-33",
+        "TN-34"
+      ]
+    },
+    "NS14.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-14-01"
+      ]
+    },
+    "NS14.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-14-02"
+      ]
+    },
+    "NS14.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-14-03"
+      ]
+    },
+    "NS14.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-14-04"
+      ]
+    },
+    "NS14.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-14-05",
+        "TN-35",
+        "TN-36",
+        "TN-37"
+      ]
+    },
+    "NS15.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-15-01"
+      ]
+    },
+    "NS15.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-15-02"
+      ]
+    },
+    "NS15.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-15-03"
+      ]
+    },
+    "NS15.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-15-04"
+      ]
+    },
+    "NS15.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-15-05",
+        "TN-38",
+        "TN-39",
+        "TN-40"
+      ]
+    },
+    "NS16.01": {
+      "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_01",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-16-01"
+      ]
+    },
+    "NS16.02": {
+      "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_02",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-16-02"
+      ]
+    },
+    "NS16.03": {
+      "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_03",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-16-03"
+      ]
+    },
+    "NS16.04": {
+      "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_04",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-16-04"
+      ]
+    },
+    "NS16.05": {
+      "proposed_nodeid": "tests/execution_r4/test_ns16.py::test_ns16_05",
+      "collected_nodeids": [],
+      "effective_test_command": null,
+      "test_availability": "MISSING",
+      "implementation": "UNVERIFIED",
+      "acceptance": "NOT_RUN",
+      "required_scenarios": [
+        "TR4-16-05",
+        "TN-41",
+        "TN-42",
+        "TN-43",
+        "TN-44",
+        "TN-45",
+        "J01",
+        "J02",
+        "J03",
+        "J04",
+        "J05",
+        "J06",
+        "J07",
+        "J08",
+        "J09",
+        "J10",
+        "J11",
+        "J12",
+        "J13",
+        "J14",
+        "J15",
+        "J16",
+        "J17",
+        "J18",
+        "J19",
+        "J20",
+        "J21",
+        "J22",
+        "J23",
+        "J24",
+        "J25",
+        "J26",
+        "J27",
+        "J28",
+        "J29",
+        "J30",
+        "J31",
+        "J32",
+        "J33",
+        "J34"
+      ]
+    }
+  },
+  "scenarios": {
+    "TR4-00-01": {
+      "task_ids": [
+        "NS00.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-00-02": {
+      "task_ids": [
+        "NS00.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-00-03": {
+      "task_ids": [
+        "NS00.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-00-04": {
+      "task_ids": [
+        "NS00.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_04"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-00-05": {
+      "task_ids": [
+        "NS00.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-01-01": {
+      "task_ids": [
+        "NS01.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-01-02": {
+      "task_ids": [
+        "NS01.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-01-03": {
+      "task_ids": [
+        "NS01.03"
+      ],
+      "layer": "packaging",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-01-04": {
+      "task_ids": [
+        "NS01.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_v1_auth_is_bearer_only_and_direct"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-01-05": {
+      "task_ids": [
+        "NS01.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-02-01": {
+      "task_ids": [
+        "NS02.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-02-02": {
+      "task_ids": [
+        "NS02.02"
+      ],
+      "layer": "migration",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-02-03": {
+      "task_ids": [
+        "NS02.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-02-04": {
+      "task_ids": [
+        "NS02.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02.py::test_ns02_04"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-02-05": {
+      "task_ids": [
+        "NS02.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-03-01": {
+      "task_ids": [
+        "NS03.01"
+      ],
+      "layer": "contract_scale",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-03-02": {
+      "task_ids": [
+        "NS03.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-03-03": {
+      "task_ids": [
+        "NS03.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns03.py::test_ns03_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-03-04": {
+      "task_ids": [
+        "NS03.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-03-05": {
+      "task_ids": [
+        "NS03.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-04-01": {
+      "task_ids": [
+        "NS04.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-04-02": {
+      "task_ids": [
+        "NS04.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-04-03": {
+      "task_ids": [
+        "NS04.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-04-04": {
+      "task_ids": [
+        "NS04.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_remote_inventory_http_requires_executor_ticket"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-04-05": {
+      "task_ids": [
+        "NS04.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns04.py::test_ns04_05_local_selection_uses_exact_revision_and_installation"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-05-01": {
+      "task_ids": [
+        "NS05.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-05-02": {
+      "task_ids": [
+        "NS05.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-05-03": {
+      "task_ids": [
+        "NS05.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns05.py::test_ns05_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-05-04": {
+      "task_ids": [
+        "NS05.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-05-05": {
+      "task_ids": [
+        "NS05.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-06-01": {
+      "task_ids": [
+        "NS06.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-06-02": {
+      "task_ids": [
+        "NS06.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-06-03": {
+      "task_ids": [
+        "NS06.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-06-04": {
+      "task_ids": [
+        "NS06.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-06-05": {
+      "task_ids": [
+        "NS06.05"
+      ],
+      "layer": "domain_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-07-01": {
+      "task_ids": [
+        "NS07.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns07.py::test_ns07_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-07-02": {
+      "task_ids": [
+        "NS07.02"
+      ],
+      "layer": "core_integration",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns07.py::test_ns07_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-07-03": {
+      "task_ids": [
+        "NS07.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-07-04": {
+      "task_ids": [
+        "NS07.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-07-05": {
+      "task_ids": [
+        "NS07.05"
+      ],
+      "layer": "core_fault_injection",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-08-01": {
+      "task_ids": [
+        "NS08.01"
+      ],
+      "layer": "transport_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_01"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-08-02": {
+      "task_ids": [
+        "NS08.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_02"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-08-03": {
+      "task_ids": [
+        "NS08.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns08.py::test_ns08_03"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-08-04": {
+      "task_ids": [
+        "NS08.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-08-05": {
+      "task_ids": [
+        "NS08.05"
+      ],
+      "layer": "transport_fault_injection",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-09-01": {
+      "task_ids": [
+        "NS09.01"
+      ],
+      "layer": "cross_repo_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-09-02": {
+      "task_ids": [
+        "NS09.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-09-03": {
+      "task_ids": [
+        "NS09.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-09-04": {
+      "task_ids": [
+        "NS09.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-09-05": {
+      "task_ids": [
+        "NS09.05"
+      ],
+      "layer": "cross_repo_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-10-01": {
+      "task_ids": [
+        "NS10.01"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-10-02": {
+      "task_ids": [
+        "NS10.02"
+      ],
+      "layer": "core_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-10-03": {
+      "task_ids": [
+        "NS10.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-10-04": {
+      "task_ids": [
+        "NS10.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-10-05": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "domain_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-11-01": {
+      "task_ids": [
+        "NS11.01"
+      ],
+      "layer": "core_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-11-02": {
+      "task_ids": [
+        "NS11.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-11-03": {
+      "task_ids": [
+        "NS11.03"
+      ],
+      "layer": "cross_repo_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-11-04": {
+      "task_ids": [
+        "NS11.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-11-05": {
+      "task_ids": [
+        "NS11.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-12-01": {
+      "task_ids": [
+        "NS12.01"
+      ],
+      "layer": "domain_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-12-02": {
+      "task_ids": [
+        "NS12.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-12-03": {
+      "task_ids": [
+        "NS12.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-12-04": {
+      "task_ids": [
+        "NS12.04"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-12-05": {
+      "task_ids": [
+        "NS12.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-13-01": {
+      "task_ids": [
+        "NS13.01"
+      ],
+      "layer": "ui_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-13-02": {
+      "task_ids": [
+        "NS13.02"
+      ],
+      "layer": "ui_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-13-03": {
+      "task_ids": [
+        "NS13.03"
+      ],
+      "layer": "ui_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-13-04": {
+      "task_ids": [
+        "NS13.04"
+      ],
+      "layer": "cli_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-13-05": {
+      "task_ids": [
+        "NS13.05"
+      ],
+      "layer": "ui_security",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-14-01": {
+      "task_ids": [
+        "NS14.01"
+      ],
+      "layer": "restart_integration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-14-02": {
+      "task_ids": [
+        "NS14.02"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-14-03": {
+      "task_ids": [
+        "NS14.03"
+      ],
+      "layer": "core_fault_injection",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-14-04": {
+      "task_ids": [
+        "NS14.04"
+      ],
+      "layer": "load",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-14-05": {
+      "task_ids": [
+        "NS14.05"
+      ],
+      "layer": "os_backend",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-15-01": {
+      "task_ids": [
+        "NS15.01"
+      ],
+      "layer": "migration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-15-02": {
+      "task_ids": [
+        "NS15.02"
+      ],
+      "layer": "migration_runtime",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-15-03": {
+      "task_ids": [
+        "NS15.03"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-15-04": {
+      "task_ids": [
+        "NS15.04"
+      ],
+      "layer": "migration",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-15-05": {
+      "task_ids": [
+        "NS15.05"
+      ],
+      "layer": "unit_contract",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-16-01": {
+      "task_ids": [
+        "NS16.01"
+      ],
+      "layer": "packaging",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-16-02": {
+      "task_ids": [
+        "NS16.02"
+      ],
+      "layer": "regression_suite",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-16-03": {
+      "task_ids": [
+        "NS16.03"
+      ],
+      "layer": "provider_local",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-16-04": {
+      "task_ids": [
+        "NS16.04"
+      ],
+      "layer": "multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TR4-16-05": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "release_review",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-01": {
+      "task_ids": [
+        "NS00.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-02": {
+      "task_ids": [
+        "NS00.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns00.py::test_ns00_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-03": {
+      "task_ids": [
+        "NS02.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-04": {
+      "task_ids": [
+        "NS02.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-05": {
+      "task_ids": [
+        "NS02.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns02_receipts.py::test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-06": {
+      "task_ids": [
+        "NS03.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-07": {
+      "task_ids": [
+        "NS03.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-08": {
+      "task_ids": [
+        "NS03.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-09": {
+      "task_ids": [
+        "NS03.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-10": {
+      "task_ids": [
+        "NS07.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-11": {
+      "task_ids": [
+        "NS07.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-12": {
+      "task_ids": [
+        "NS07.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-13": {
+      "task_ids": [
+        "NS05.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-14": {
+      "task_ids": [
+        "NS05.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-15": {
+      "task_ids": [
+        "NS05.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-16": {
+      "task_ids": [
+        "NS05.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-17": {
+      "task_ids": [
+        "NS08.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-18": {
+      "task_ids": [
+        "NS08.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-19": {
+      "task_ids": [
+        "NS08.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-20": {
+      "task_ids": [
+        "NS08.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-21": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-22": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-23": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-24": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-25": {
+      "task_ids": [
+        "NS10.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-26": {
+      "task_ids": [
+        "NS12.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-27": {
+      "task_ids": [
+        "NS12.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-28": {
+      "task_ids": [
+        "NS12.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-29": {
+      "task_ids": [
+        "NS01.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-30": {
+      "task_ids": [
+        "NS01.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-31": {
+      "task_ids": [
+        "NS01.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns01.py::test_ns01_05"
+      ],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-32": {
+      "task_ids": [
+        "NS13.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-33": {
+      "task_ids": [
+        "NS13.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-34": {
+      "task_ids": [
+        "NS13.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-35": {
+      "task_ids": [
+        "NS14.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-36": {
+      "task_ids": [
+        "NS14.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-37": {
+      "task_ids": [
+        "NS14.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-38": {
+      "task_ids": [
+        "NS15.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-39": {
+      "task_ids": [
+        "NS15.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-40": {
+      "task_ids": [
+        "NS15.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-41": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-42": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-43": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-44": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "TN-45": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "legacy_acceptance",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J01": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J02": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J03": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J04": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J05": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J06": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J07": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J08": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J09": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J10": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J11": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J12": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J13": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J14": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J15": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J16": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J17": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J18": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J19": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J20": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J21": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J22": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J23": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J24": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J25": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J26": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J27": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J28": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J29": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J30": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J31": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J32": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J33": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    },
+    "J34": {
+      "task_ids": [
+        "NS16.05"
+      ],
+      "layer": "joint_multi_host",
+      "candidate_nodeids": [],
+      "coverage": "REQUIRES_REVIEW",
+      "execution": "NOT_RUN"
+    }
+  }
+}

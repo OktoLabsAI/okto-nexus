@@ -15,7 +15,7 @@ from test_runtime_result_publication import result
 
 runtime = runtime_fixture
 spec = importlib.util.spec_from_file_location("offline_runtime_backup",
-    Path(__file__).parents[1] / "plans/pr34-remediation/offline_runtime_backup.py")
+    Path(__file__).parents[1] / "tools/offline_runtime_backup.py")
 procedure = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(procedure)
 
