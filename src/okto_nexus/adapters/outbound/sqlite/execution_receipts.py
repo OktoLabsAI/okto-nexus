@@ -184,14 +184,25 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         conn = uow.connection
         if embedded_owner is not None:
             owner = embedded_owner
-            if ((parsed["server_id"], parsed["executor_id"], parsed["connection_id"], parsed["connection_generation"]) !=
-                    (owner.key.server_id, owner.key.executor_id, owner.dispatcher.owner_id, owner.generation)
+            if ((parsed["server_id"], parsed["executor_id"]) !=
+                    (owner.key.server_id, owner.key.executor_id)
                     or not owner.dispatcher.repo.owns(uow, owner_id=owner.dispatcher.owner_id,
                         epoch=owner.dispatcher.epoch, now=owner.deps.clock.now_iso())
                     or conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
                         "AND kind='embedded' AND owner_instance_id=? AND generation=? AND revoked_at IS NULL",
                         (owner.key.server_id,owner.key.executor_id,owner.dispatcher.owner_id,owner.generation)).fetchone() is None):
                 raise OktoNexusError(ErrorCode.CONFLICT, "The embedded receipt owner changed.", {})
+            # Current ownership authorizes persistence; the immutable binding
+            # and dispatched lease below identify the historical native effect.
+            from nexus_connector_core import validate_r4_receipt_binding
+            publication = conn.execute("SELECT binding_json FROM execution_local_publications "
+                "WHERE server_id=? AND executor_id=? AND operation_id=?", key).fetchone()
+            try:
+                binding = validate_r4_receipt_binding(json.loads(publication[0]))
+                if any(parsed.get(name) != value for name, value in binding["source"].items()):
+                    raise ValueError("The historical receipt source changed.")
+            except (CoreError, ValueError, TypeError) as exc:
+                raise OktoNexusError(ErrorCode.CONFLICT, "The embedded receipt binding is invalid.", {}) from exc
         operation = conn.execute(
             "SELECT binding_id,subject_agent_id,session_id,intent_hash,"
             "admission_state,action,expected_revisions_json FROM execution_operations WHERE server_id=? "

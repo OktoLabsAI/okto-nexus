@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Embedded historical receipt recovery — September 30, 2026
+
+[Increment](M05_EMBEDDED_RECOVERY.md): serve startup publishes pending Core journal facts before considering dispatch, without loading the provider or constructing a runtime. Current-owner persistence validates the immutable historical binding and original applied dispatch lease. Missing journals retain recovery state; canceled observers cannot abandon history journals. Installed results: 89 passed; 50 overlapping tests passed without Connector installed, with pip check. Slot/resource and event reconciliation remain required before retained stores become ready. Core/Connector artifacts are unchanged; M05/G1 remain open.
+
+
 ## Automatic embedded outbox dispatch — September 30, 2026
 
 [Increment](M05_EMBEDDED_DISPATCH.md): serve startup now composes the canonical local outbox pump, approved Core launch, lease installation/ACK, independent renewal and durable receipt publication. Failures return the current owner to RECOVERING; retained shutdown drains native work even after a pump cleanup error or canceled observer. Remote reconciliation retry now resets the unavailable cached snapshot under the current owner. Final installed results: 135 passed; 47 overlapping tests passed in the actual no-Connector environment, with pip check. Technical native and qualification fixtures remain; cold recovery, historical-owner publication, events/tools/vault/governance and complete provider journeys are still required. Core/Connector artifacts are unchanged. M05 and G1 remain open.

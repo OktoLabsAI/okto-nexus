@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import time
 import threading
+from contextlib import contextmanager
 
 import pytest
 from nexus_connector_core import CoreError
@@ -334,3 +335,90 @@ def test_retained_journal_requires_recovery_before_local_readiness(tmp_path,file
         with deps.connection_factory.unit_of_work(write=False) as uow:
             assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]=="RECOVERING"
     assert journal.read_bytes()==b"Existing retained journal must not be treated as an empty runtime"
+
+
+@pytest.mark.parametrize("missing_journal", [False, True])
+def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypatch,missing_journal):
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+        setup,binding,native=connected_local.__wrapped__(setup)
+        deps,app,client,headers,_,candidate,_=setup
+        opened=admit(setup,binding,"recover-open","runtime.start",new_session=True)
+        wait_receipt(setup,opened)
+        source=app.state.embedded_dispatch_owner.channel
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("CREATE TRIGGER reject_cold_receipt BEFORE INSERT ON execution_receipts "
+                "BEGIN SELECT RAISE(ABORT,'technical receipt failure'); END")
+        closed=admit(setup,binding,"recover-close","runtime.close",session_id=opened["scope"]["session_id"])
+        until=time.monotonic()+10
+        while app.state.embedded_dispatch_owner.failure is None:
+            assert time.monotonic()<until
+            time.sleep(.02)
+        assert native.native.stopped
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("DROP TRIGGER reject_cold_receipt")
+    Path(candidate.executable).unlink()
+    from types import SimpleNamespace
+    from okto_nexus.bootstrap import embedded_inventory
+    monkeypatch.setattr(embedded_inventory,"discover_local_candidates",lambda:SimpleNamespace(candidates=()))
+    if missing_journal:
+        for file in (tmp_path/"home/core-runtime").glob("session-*.db"):
+            file.rename(file.with_suffix(".retained"))
+    deps,app=app_for(tmp_path/"home")
+    with TestClient(app) as client:
+        owner=app.state.embedded_dispatch_owner
+        assert owner.channel.connection_generation>source.connection_generation
+        assert owner.pump is None  # Slot/event reconciliation is still required.
+        assert not owner.host._runtime_tasks and not owner.host._history_tasks
+        assert owner.host._ledger_task is None and native.opens==1
+        history=client.get(f"/v1/runtime/operations/{closed['operation_id']}",headers=headers["subject"])
+        assert history.status_code==200,history.text
+        if missing_journal:
+            assert isinstance(owner.recovery_failure,FileNotFoundError)
+            assert history.json().get("executor_stage")!="SUCCEEDED"
+            assert not list((tmp_path/"home/core-runtime").glob("session-*.db"))
+        else:
+            assert owner.recovery_failure is None,repr(owner.recovery_failure)
+            assert history.json()["executor_stage"]=="SUCCEEDED"
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                row=uow.connection.execute("SELECT source_connection_id,source_connection_generation FROM execution_receipts "
+                    "WHERE operation_id=?",(closed["operation_id"],)).fetchone()
+                assert tuple(row)==(source.connection_id,source.connection_generation)
+                assert uow.connection.execute("SELECT terminal FROM execution_local_publications WHERE operation_id=?",
+                    (closed["operation_id"],)).fetchone()[0]==1
+                assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]=="RECOVERING"
+
+
+def test_cancelled_history_observer_keeps_journal_owned(tmp_path,monkeypatch):
+    from okto_nexus.bootstrap import runtime_host
+    from nexus_connector_core import OperationKey
+    async def scenario():
+        host=runtime_host.EmbeddedRuntimeHost(tmp_path/"core")
+        key=OperationKey("server","executor","operation")
+        path=host._journal_path(key.executor_id,"session")
+        path.parent.mkdir()
+        path.write_bytes(b"Technical history journal placeholder")
+        entered,release,closed=asyncio.Event(),asyncio.Event(),asyncio.Event()
+        class Journal:
+            async def get_receipt(self,key):
+                entered.set()
+                await release.wait()
+                return None
+            async def aclose(self):
+                closed.set()
+        async def open_history(path):
+            return Journal()
+        monkeypatch.setattr(runtime_host,"open_journal",open_history)
+        observer=asyncio.create_task(host.historical_receipt(session_id="session",key=key))
+        await entered.wait()
+        observer.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await observer
+        assert host._history_tasks and not closed.is_set()
+        drain=asyncio.create_task(host.shutdown())
+        await asyncio.sleep(.01)
+        assert not drain.done()
+        release.set()
+        await asyncio.wait_for(drain,2)
+        assert closed.is_set() and not host._history_tasks
+        assert not host._runtime_tasks and host._ledger_task is None
+    asyncio.run(scenario())

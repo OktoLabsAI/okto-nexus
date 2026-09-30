@@ -50,6 +50,7 @@ class EmbeddedDispatchOwner:
         self._containment_task = None
         self.containment_report = None
         self.state_failure = None
+        self.recovery_failure = None
 
     def _quiesce(self):
         c = self.channel
@@ -92,6 +93,11 @@ class EmbeddedDispatchOwner:
     async def start(self):
         if not protocol_info()["remote_execution_ready"]:
             return
+        try:
+            await self._recover_publications()
+        except Exception as error:
+            self.recovery_failure = error
+            return
         if not await asyncio.to_thread(self._activate):
             return
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
@@ -99,6 +105,22 @@ class EmbeddedDispatchOwner:
             verify_link=self.verify, close_link=self.failed)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
+
+    async def _recover_publications(self):
+        """Publish retained facts once before any new dispatch is enabled."""
+        self._after = 0
+        while True:
+            rows = await asyncio.to_thread(self._page)
+            if not rows:
+                self._after = 0
+                return
+            for row in rows:
+                await asyncio.to_thread(self.verify)
+                key = OperationKey(row["server_id"],row["executor_id"],row["operation_id"])
+                receipt = await self.host.historical_receipt(session_id=row["session_id"],key=key)
+                if receipt is not None:
+                    await self._publish(json.loads(row["binding_json"]),receipt)
+            self._after = rows[-1]["rowid"]
 
     async def failed(self):
         self._stopping.set()

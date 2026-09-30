@@ -46,6 +46,31 @@ class EmbeddedRuntimeHost:
         self._closing = False
         self._native_action_owners = {}
         self.local_launch_factory = None
+        self._history_tasks = set()
+
+    def _journal_path(self, executor_id, session_id):
+        digest = hashlib.sha256((executor_id + "\0" + session_id).encode("ascii")).hexdigest()
+        return self.store_dir / f"session-{digest}.db"
+
+    async def historical_receipt(self, *, session_id, key):
+        """Read retained Core history without constructing or authorizing a runtime."""
+        async with self._lock:
+            if self._closing:
+                raise RuntimeError("The embedded Core host is shutting down.")
+            task = asyncio.create_task(self._historical_receipt(session_id, key))
+            self._history_tasks.add(task)
+            task.add_done_callback(self._history_tasks.discard)
+        return await asyncio.shield(task)
+
+    async def _historical_receipt(self, session_id, key):
+        path = self._journal_path(key.executor_id, session_id)
+        if not await asyncio.to_thread(path.is_file):
+            raise FileNotFoundError("The retained Core journal is unavailable.")
+        journal = await open_journal(path)
+        try:
+            return await journal.get_receipt(key)
+        finally:
+            await journal.aclose()
 
     async def _ledger(self) -> SQLiteOwnedSlotLedger:
         async with self._lock:
@@ -101,9 +126,7 @@ class EmbeddedRuntimeHost:
         journal: SQLiteJournal | None = None
         try:
             await asyncio.to_thread(self.store_dir.mkdir, parents=True, exist_ok=True)
-            digest = hashlib.sha256(
-                (key[0] + "\0" + key[1]).encode("ascii")).hexdigest()
-            journal = await open_journal(self.store_dir / f"session-{digest}.db")
+            journal = await open_journal(self._journal_path(*key))
             native_owner = None
             async def native_launch(prepared, session_id, context):
                 if native_owner is None:
@@ -147,6 +170,9 @@ class EmbeddedRuntimeHost:
             self._closing = True
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
+            history_tasks = tuple(self._history_tasks)
+        # Canceled observers cannot abandon an open history journal.
+        await asyncio.gather(*history_tasks, return_exceptions=True)
         reports: dict[tuple[str, str], object] = {}
         uncertain = False
 
