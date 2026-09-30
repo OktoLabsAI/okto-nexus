@@ -150,14 +150,17 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
 
 
 def append_execution_receipt(factory: ConnectionFactory, *,
-                             principal: VerifiedExecutionTicket,
+                             principal: VerifiedExecutionTicket | None = None,
+                             embedded_owner=None,
                              frame: Mapping[str, Any]) -> AcceptedExecutionReceipt:
     """Accept a Core fact only for the ticket's admitted operation.
 
     This never creates an operation or authorizes a native effect. Core owns
     the frame schema and ordered receipt reducer; SQLite owns durability.
     """
-    if "receipt:publish" not in principal.scopes or principal.binding_id is None:
+    if (principal is None) == (embedded_owner is None):
+        raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "One authenticated receipt owner is required.", {})
+    if principal is not None and ("receipt:publish" not in principal.scopes or principal.binding_id is None):
         raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                              "The ticket cannot publish operation receipts.", {})
     try:
@@ -169,7 +172,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
     if parsed["type"] != "operation.receipt":
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                              "An operation receipt frame is required.", {})
-    if (parsed["server_id"] != principal.server_id or
+    if principal is not None and (parsed["server_id"] != principal.server_id or
             parsed["executor_id"] != principal.executor_id or
             parsed["binding_id"] != principal.binding_id or
             parsed["agent_id"] != principal.agent_id):
@@ -179,6 +182,16 @@ def append_execution_receipt(factory: ConnectionFactory, *,
     key = (parsed["server_id"], parsed["executor_id"], parsed["operation_id"])
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        if embedded_owner is not None:
+            owner = embedded_owner
+            if ((parsed["server_id"], parsed["executor_id"], parsed["connection_id"], parsed["connection_generation"]) !=
+                    (owner.key.server_id, owner.key.executor_id, owner.dispatcher.owner_id, owner.generation)
+                    or not owner.dispatcher.repo.owns(uow, owner_id=owner.dispatcher.owner_id,
+                        epoch=owner.dispatcher.epoch, now=owner.deps.clock.now_iso())
+                    or conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
+                        "AND kind='embedded' AND owner_instance_id=? AND generation=? AND revoked_at IS NULL",
+                        (owner.key.server_id,owner.key.executor_id,owner.dispatcher.owner_id,owner.generation)).fetchone() is None):
+                raise OktoNexusError(ErrorCode.CONFLICT, "The embedded receipt owner changed.", {})
         operation = conn.execute(
             "SELECT binding_id,subject_agent_id,session_id,intent_hash,"
             "admission_state,action,expected_revisions_json FROM execution_operations WHERE server_id=? "

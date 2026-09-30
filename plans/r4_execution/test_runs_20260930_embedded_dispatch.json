@@ -1,0 +1,138 @@
+{
+  "date": "2026-09-30",
+  "scope": "M05 automatic serve-owned embedded dispatch; partial integration, no milestone or gate closure.",
+  "commits": {
+    "core": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+    "connector": "cba635a714f0f0c998badf4f075713a22b862d7d",
+    "nexus": "Commit containing this manifest"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-dispatch-release-ccjn9_84\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "b4c71c0bcf7fe29a98212c13fe66ecb66548b3f8c8dc205e98cb2e4c4ac6a050"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "campaigns": {
+    "initial": {
+      "nexus": {
+        "exit_code": 1,
+        "tests": 132,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 131,
+        "seconds": 430.481,
+        "timestamp": "2026-09-30T17:39:08.430021-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-nexus-initial.xml",
+        "overlaps_nexus_suite": false
+      },
+      "isolated": {
+        "exit_code": 0,
+        "tests": 44,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 44,
+        "seconds": 103.253,
+        "timestamp": "2026-09-30T17:39:08.985924-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-isolated-initial.xml",
+        "overlaps_nexus_suite": true
+      }
+    },
+    "corrected_before_final_cleanup": {
+      "nexus": {
+        "exit_code": 0,
+        "tests": 134,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 134,
+        "seconds": 417.13,
+        "timestamp": "2026-09-30T17:52:43.248301-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-nexus-pre-quiesce.xml",
+        "overlaps_nexus_suite": false
+      },
+      "isolated": {
+        "exit_code": 0,
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 46,
+        "seconds": 107.409,
+        "timestamp": "2026-09-30T17:52:43.220098-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-isolated-pre-quiesce.xml",
+        "overlaps_nexus_suite": true
+      }
+    },
+    "final": {
+      "nexus": {
+        "exit_code": 0,
+        "tests": 135,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 135,
+        "seconds": 437.622,
+        "timestamp": "2026-09-30T18:01:34.010146-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-nexus.xml",
+        "overlaps_nexus_suite": false
+      },
+      "isolated": {
+        "exit_code": 0,
+        "tests": 47,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 47,
+        "seconds": 121.009,
+        "timestamp": "2026-09-30T18:01:33.965826-03:00",
+        "evidence": "evidence/embedded-dispatch-installed-isolated.xml",
+        "overlaps_nexus_suite": true
+      }
+    }
+  },
+  "counting": "The isolated suite overlaps the Nexus suite. Campaigns are successive runs, not additive coverage.",
+  "limitations": [
+    "Technical native factory and forced contract qualification; production readiness remains false.",
+    "Cold recovery and historical-owner publication remain incomplete.",
+    "Events, tools, vault, approval/input and full real Pi/Codex/Claude journeys remain open.",
+    "The wheel includes preexisting uncommitted UI bytes; those assets are excluded from this commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "resolved_regression": "Initial remote NS08 reconciliation retry reused the cached page/ID after JOURNAL_UNAVAILABLE. Current-owner verification and snapshot reset resolve the failure.",
+  "evidence_sha256": {
+    "embedded-dispatch-artifacts-initial.json": "18cbb09b18a018005812e8fb6a01eeb15d7e6c38815310621da94f5839fd0fdd",
+    "embedded-dispatch-artifacts-pre-quiesce.json": "ae105182704c457826f75fe34757a06c2ae95a20641a96db8e3ccccc58342231",
+    "embedded-dispatch-artifacts.json": "9d6bbe36f660b14bcf715306c31a704880216bbd1b20bad61be0143728c88c0f",
+    "embedded-dispatch-installed-isolated-initial.json": "328694bd57031b8804a55574dfef5a502ff65e272883f074c62889dc501c5a1b",
+    "embedded-dispatch-installed-isolated-initial.log": "5070cf20182395eabe7c33513b7acf56084e560e2799ecf77cc8d81e9758f588",
+    "embedded-dispatch-installed-isolated-initial.xml": "85fb3c616ef50b8e74cdc61865f33da7817be23eed1397b9597af2615d80954f",
+    "embedded-dispatch-installed-isolated-pre-quiesce.json": "328694bd57031b8804a55574dfef5a502ff65e272883f074c62889dc501c5a1b",
+    "embedded-dispatch-installed-isolated-pre-quiesce.log": "c75363fb01f1264c4b48cbcf91e9ee5846a92329749aa7e7aa12dce2e5f74ba2",
+    "embedded-dispatch-installed-isolated-pre-quiesce.xml": "697b795e8271fa63e7f3e5658d5dabc062f89eda3df194d7b1a96fa42b745791",
+    "embedded-dispatch-installed-isolated.json": "328694bd57031b8804a55574dfef5a502ff65e272883f074c62889dc501c5a1b",
+    "embedded-dispatch-installed-isolated.log": "ece9baedc7f00ecb0ef4f07f3da7ff75720bc151b5821d8dfafe0940a8adc51f",
+    "embedded-dispatch-installed-isolated.xml": "17a6ca6bda8f7668d91428e290449bec06caa0384d027f691eb466df6038c87d",
+    "embedded-dispatch-installed-nexus-initial.json": "2b652681f7b4326f5975a9e422317a50020174c35cae64a2c9225a85fd333462",
+    "embedded-dispatch-installed-nexus-initial.log": "22744af6c6f636336bf2b20670388c3c25deaa4353efd9c40e3dcd5edbc1d08a",
+    "embedded-dispatch-installed-nexus-initial.xml": "c4301e34353b28872b10e255c87c9d66abcc5e2ee5a141447e57546a4cb4d041",
+    "embedded-dispatch-installed-nexus-pre-quiesce.json": "3fb2049dcb4d21ab5ffc1977faa9fb14314dd8c96f0fe0c82976437e176cc4b1",
+    "embedded-dispatch-installed-nexus-pre-quiesce.log": "2565e30a6fe3d382c9702a92bc43e58480b0b3b00019237afbb4d1afb0be657d",
+    "embedded-dispatch-installed-nexus-pre-quiesce.xml": "edcf5ece7ee47a04531d96e082f8498fcc9402a55f8f55a926a29523b291ebf7",
+    "embedded-dispatch-installed-nexus.json": "3fb2049dcb4d21ab5ffc1977faa9fb14314dd8c96f0fe0c82976437e176cc4b1",
+    "embedded-dispatch-installed-nexus.log": "76f5b41106dcddbd542964da0b3f757aa79002ee158114588fba804f316cb03e",
+    "embedded-dispatch-installed-nexus.xml": "b746dd6e99086d5b657c16493411509b84e2f6330ce5c200d5cdb745c2464cb3",
+    "embedded-dispatch-isolated-installation-initial.json": "284b5e1f08028c01e2b34b68c85b06b658a0d4fd62bf8c8602a52bccd2eadd08",
+    "embedded-dispatch-isolated-installation.json": "4558e633758190547a52d7d3d654dd02814b06020b22be80bb71fa0b2140af8a"
+  }
+}

@@ -132,6 +132,14 @@ class EmbeddedRuntimeHost:
         owner = self._native_action_owners.get((executor_id, session_id))
         return owner is None or await owner.close(timeout_seconds=timeout_seconds)
 
+    async def operation_receipt(self, *, session_id, key):
+        """Read the host-owned journal without creating a runtime or replaying work."""
+        task = self._runtime_tasks.get((key.executor_id, session_id))
+        if task is None:
+            return None
+        _, journal = await asyncio.shield(task)
+        return await journal.get_receipt(key)
+
     async def shutdown(self, policy: ShutdownPolicy | None = None
                        ) -> dict[tuple[str, str], object]:
         """Drain Core before closing its stores; retain uncertain ownership."""

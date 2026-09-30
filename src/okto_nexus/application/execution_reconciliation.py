@@ -42,6 +42,12 @@ class ExecutionReconciliation:
             (c.server_id, c.executor_id, c.connection_id, c.connection_generation)).fetchone() is None:
             raise ValueError('The reconciliation owner is no longer current.')
 
+    def retry(self):
+        """Discard an unavailable report's cached page under the current owner."""
+        with self.factory.unit_of_work(write=False) as uow:
+            self._owner(uow.connection)
+        self._reset()
+
     def request(self):
         if self.pending is not None:
             return self.pending

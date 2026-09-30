@@ -426,6 +426,10 @@ def build_router() -> APIRouter:
                         frame["executor_id"] == executor_id and
                         frame["connection_id"] == connection_id and
                         frame["connection_generation"] == generation):
+                    def _retry_reconcile():
+                        _verify()
+                        reconciliation.retry()
+                    await anyio.to_thread.run_sync(_retry_reconcile)
                     pending_reconcile = None
                     continue
                 if frame["type"] == "binding.attach":

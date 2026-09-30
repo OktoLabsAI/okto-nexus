@@ -545,6 +545,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         metrics_task: asyncio.Task | None = None
         embedded_core_host: EmbeddedRuntimeHost | None = None
         embedded_inventory = None
+        embedded_dispatch = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -593,10 +594,19 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 await embedded_inventory.start()
                 from ....application.execution_local_launch import ApprovedLocalLaunch
                 embedded_core_host.local_launch_factory = lambda scope: ApprovedLocalLaunch(embedded_inventory, scope)
+                from ....bootstrap.embedded_dispatch import EmbeddedDispatchOwner
+                embedded_dispatch = EmbeddedDispatchOwner(embedded_inventory, embedded_core_host)
+                app.state.embedded_dispatch_owner = embedded_dispatch
+                await embedded_dispatch.start()
             async with mcp_server.session_manager.run():
                 yield
         finally:
             embedded_shutdown_error: Exception | None = None
+            if embedded_dispatch is not None:
+                try:
+                    await embedded_dispatch.close()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
             if embedded_inventory is not None:
                 try:
                     await embedded_inventory.close()

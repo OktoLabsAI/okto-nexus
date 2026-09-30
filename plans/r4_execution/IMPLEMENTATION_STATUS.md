@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Automatic embedded outbox dispatch — September 30, 2026
+
+[Increment](M05_EMBEDDED_DISPATCH.md): serve startup now composes the canonical local outbox pump, approved Core launch, lease installation/ACK, independent renewal and durable receipt publication. Failures return the current owner to RECOVERING; retained shutdown drains native work even after a pump cleanup error or canceled observer. Remote reconciliation retry now resets the unavailable cached snapshot under the current owner. Final installed results: 135 passed; 47 overlapping tests passed in the actual no-Connector environment, with pip check. Technical native and qualification fixtures remain; cold recovery, historical-owner publication, events/tools/vault/governance and complete provider journeys are still required. Core/Connector artifacts are unchanged. M05 and G1 remain open.
+
+
 ## Approved local launch configuration — September 30, 2026
 
 [Increment](M05_LOCAL_LAUNCH.md): the serve-composed Core host resolves the persisted approved local mapping before acquiring runtime stores and revalidates configuration/authority around secret resolution. Canonical digests, candidate fingerprint, physical directories, profile, agent and current owner are checked. Core open uses approved auth references and environment. Installed results: 78 passed; 36 overlapping cases passed in the actual no-Connector environment, with pip check. The positive case uses public binding/admission and canonical leases, but a technical native factory, forced readiness and manual reserve/begin. Automatic embedded dispatch, vault/tools, receipts/events, renewal/recovery and full M05/G1 remain open. Core/Connector artifacts are unchanged.

@@ -1,0 +1,336 @@
+"""Public local operations are dispatched by serve, without WSS or Connector."""
+import asyncio
+import json
+from pathlib import Path
+import time
+import threading
+
+import pytest
+from nexus_connector_core import CoreError
+
+from okto_nexus.bootstrap import embedded_dispatch
+from okto_nexus.adapters.inbound.http import runtime_v1
+from okto_nexus.domain.base import iso_plus
+from okto_nexus.errors import OktoNexusError
+from okto_nexus.adapters.outbound.sqlite.execution_receipts import append_execution_receipt
+from test_local_realization import local_setup, publish
+from test_binding_operator import prepare_operator
+from test_vertical_inventory import _NativeFactory
+from test_embedded_inventory import app_for
+from fastapi.testclient import TestClient
+
+
+@pytest.fixture(autouse=True)
+def qualified_contract(monkeypatch):
+    # Qualifies only this technical campaign. Production readiness stays false.
+    info = runtime_v1.protocol_info()
+    monkeypatch.setattr(runtime_v1,"protocol_info",lambda:{**info,"remote_execution_ready":True})
+    monkeypatch.setattr(embedded_dispatch,"protocol_info",lambda:{**info,"remote_execution_ready":True})
+
+
+@pytest.fixture
+def connected_local(local_setup):
+    deps,app,client,headers,body,candidate,root=local_setup
+    owner=app.state.embedded_dispatch_owner
+    assert owner.pump is not None
+    class NativeFactory(_NativeFactory):
+        opens=0
+        async def open(self,*args,**kwargs):
+            self.opens+=1
+            self.native=_NativeFactory().native
+            return await super().open(*args,**kwargs)
+    native=NativeFactory()
+    owner.native_factory=native
+    response=publish(local_setup,changes={"secret_bindings":{}})
+    assert response.status_code==201,response.text
+    view=response.json()
+    _,apply=prepare_operator(client,headers,dict(client_intent_id="automatic-binding",agent_id_hint="subject",
+        executor_id=view["executor_id"],adapter_id=body["adapter_id"],candidate_ref=body["candidate_ref"],
+        inventory_revision=body["inventory_revision"],realization_ref=view["realization_ref"],
+        workspace_id=view["workspace_id"],alias="automatic-local"))
+    response=client.post("/v1/connections/bindings:apply",json=apply,headers=headers["operator"])
+    assert response.status_code==200,response.text
+    binding=response.json()
+    grant=client.post("/api/v1/harness/grants",headers=headers["operator"],json={
+        "actor_agent_id":"subject","endpoint_id":binding["endpoint_id"],
+        "actions":["open","send","steer","interrupt","close"],"max_executions":10,
+        "expires_at":iso_plus(deps.clock.now_iso(),600)})
+    assert grant.status_code==200,grant.text
+    return local_setup,binding,native
+
+
+def admit(setup,binding,intent_id,intent,**options):
+    _,_,client,headers,*_=setup
+    response=client.post("/v1/runtime/intents:resolve",headers=headers["subject"],json={
+        "client_intent_id":intent_id,"intent":intent,"binding_id":binding["binding_id"],
+        "workspace_binding_id":binding["workspace_binding_id"],**options})
+    assert response.status_code==200,response.text
+    resolution=response.json()
+    assert resolution["can_submit"],resolution
+    request={k:resolution[k] for k in ("client_intent_id","operation_id","resolution_revision","intent_hash")}
+    response=client.post("/v1/runtime/operations",headers=headers["subject"],json=request)
+    assert response.status_code==202,response.text
+    replay=client.post("/v1/runtime/operations",headers=headers["subject"],json=request)
+    assert replay.status_code==200 and replay.json()["operation_id"]==resolution["operation_id"]
+    return resolution
+
+
+def wait_receipt(setup,resolution,stages=("SUBMITTED","SUCCEEDED")):
+    _,app,client,headers,*_=setup
+    until=time.monotonic()+10
+    while True:
+        view=client.get(f"/v1/runtime/operations/{resolution['operation_id']}",headers=headers["subject"]).json()
+        if view.get("executor_stage") in stages:
+            return view
+        owner=app.state.embedded_dispatch_owner
+        assert owner.failure is None,repr(owner.failure)
+        assert owner.pump.error is None,repr(owner.pump.error)
+        assert time.monotonic()<until,view
+        time.sleep(.02)
+
+
+def test_serve_dispatches_local_open_turn_controls_and_close(connected_local):
+    setup,binding,native=connected_local
+    deps,app,client,headers,*_=setup
+    opened=admit(setup,binding,"auto-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    assert native.opens==1
+    session=opened["scope"]["session_id"]
+    sent=admit(setup,binding,"auto-send","turn.submit",session_id=session,text="Hello")
+    wait_receipt(setup,sent)
+    steered=admit(setup,binding,"auto-steer","turn.steer",session_id=session,text="Continue carefully.",
+                  target={"kind":"native_turn_id","expected_turn_id":"turn-from-native"})
+    wait_receipt(setup,steered)
+    interrupted=admit(setup,binding,"auto-interrupt","turn.interrupt",session_id=session,
+                      target={"kind":"current_run","expected_turn_id":None})
+    wait_receipt(setup,interrupted)
+    closed=admit(setup,binding,"auto-close","runtime.close",session_id=session)
+    wait_receipt(setup,closed,stages=("SUCCEEDED",))
+    assert native.native.stopped and native.opens==1
+    assert [verb for verb,_ in native.native.sent]==["send_turn","steer","interrupt"]
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_link_tickets").fetchone()[0]==0
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_local_publications").fetchone()[0]==5
+        assert uow.connection.execute("SELECT lifecycle_state FROM execution_sessions").fetchone()[0]=="CLOSED"
+        assert uow.connection.execute("SELECT MIN(attempt_no),MAX(attempt_no) FROM execution_dispatch_outbox").fetchone()[:]==(1,1)
+        revision=uow.connection.execute("SELECT MAX(receipt_revision) FROM execution_receipts WHERE operation_id=?",
+                                        (closed["operation_id"],)).fetchone()[0]
+    # Recover the crash window after accepting the terminal receipt but before
+    # acknowledging its publication obligation, without creating a new fact.
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_local_publications SET terminal=0 WHERE operation_id=?",(closed["operation_id"],))
+    until=time.monotonic()+5
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            terminal=uow.connection.execute("SELECT terminal FROM execution_local_publications WHERE operation_id=?",
+                                            (closed["operation_id"],)).fetchone()[0]
+            assert uow.connection.execute("SELECT MAX(receipt_revision) FROM execution_receipts WHERE operation_id=?",
+                                          (closed["operation_id"],)).fetchone()[0]==revision
+        if terminal:
+            break
+        assert time.monotonic()<until
+        time.sleep(.02)
+    binary=Path(setup[5].executable)
+    assert binary.resolve().parent==setup[6].resolve().parent
+    binary.unlink()
+    history=client.get(f"/v1/runtime/operations/{closed['operation_id']}",headers=headers["subject"])
+    assert history.status_code==200 and history.json()["executor_stage"]=="SUCCEEDED"
+
+
+def test_stale_local_owner_cannot_start_native_work(connected_local):
+    setup,binding,native=connected_local
+    deps,app,*_=setup
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_executors SET generation=generation+1 WHERE kind='embedded'")
+    until=time.monotonic()+5
+    owner=app.state.embedded_dispatch_owner
+    while owner.pump.error is None and owner.failure is None:
+        assert time.monotonic()<until
+        time.sleep(.02)
+    assert native.opens==0
+
+
+def test_local_owner_renews_installed_lease(connected_local):
+    setup,binding,native=connected_local
+    deps,app,*_=setup
+    app.state.embedded_dispatch_owner.leases.max_duration_ms=2000
+    opened=admit(setup,binding,"renew-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    until=time.monotonic()+6
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE status='ACTIVE'").fetchone()[0]
+        if serial is not None and serial>=2:
+            break
+        assert app.state.embedded_dispatch_owner.failure is None,repr(app.state.embedded_dispatch_owner.failure)
+        assert time.monotonic()<until
+        time.sleep(.02)
+    closed=admit(setup,binding,"renew-close","runtime.close",session_id=opened["scope"]["session_id"])
+    wait_receipt(setup,closed,stages=("SUCCEEDED",))
+    assert native.opens==1
+
+
+def test_receipt_replay_requires_current_embedded_owner(connected_local):
+    setup,binding,native=connected_local
+    deps,app,*_=setup
+    opened=admit(setup,binding,"receipt-owner","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        frame=json.loads(uow.connection.execute("SELECT canonical_frame FROM execution_receipts LIMIT 1").fetchone()[0])
+    owner=app.state.embedded_inventory_owner
+    assert append_execution_receipt(deps.connection_factory,embedded_owner=owner,frame=frame).reused
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_executors SET generation=generation+1 WHERE kind='embedded'")
+    with pytest.raises(OktoNexusError):
+        append_execution_receipt(deps.connection_factory,embedded_owner=owner,frame=frame)
+    assert native.opens==1
+
+
+def test_blocked_session_does_not_delay_other_session_renewal(connected_local):
+    setup,binding,native=connected_local
+    deps,app,client,*_=setup
+    owner=app.state.embedded_dispatch_owner
+    owner.leases.max_duration_ms=4000
+    first=admit(setup,binding,"independent-first","runtime.start",new_session=True)
+    wait_receipt(setup,first)
+    second=admit(setup,binding,"independent-second","runtime.start",new_session=True)
+    wait_receipt(setup,second)
+    gate=owner.sessions[first["scope"]["session_id"]]["gate"]
+    client.portal.call(gate.acquire)
+    try:
+        until=time.monotonic()+5
+        while True:
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE session_id=? AND status='ACTIVE'",
+                                              (second["scope"]["session_id"],)).fetchone()[0]
+            if serial is not None and serial>=2:
+                break
+            assert owner.failure is None,repr(owner.failure)
+            assert time.monotonic()<until
+            time.sleep(.02)
+        assert gate.locked() and native.opens==2
+    finally:
+        client.portal.call(gate.release)
+
+
+def test_lost_receipt_persistence_never_reopens_operation(connected_local):
+    setup,binding,native=connected_local
+    deps,app,client,headers,*_=setup
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("CREATE TRIGGER reject_local_receipt BEFORE INSERT ON execution_receipts "
+                               "BEGIN SELECT RAISE(ABORT,'technical receipt failure'); END")
+    opened=admit(setup,binding,"lost-receipt","runtime.start",new_session=True)
+    until=time.monotonic()+10
+    while app.state.embedded_dispatch_owner.failure is None:
+        assert time.monotonic()<until
+        time.sleep(.02)
+    assert native.opens==1
+
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_local_publications").fetchone()[0]==1
+    replay=client.post("/v1/runtime/operations",headers=headers["subject"],json={
+        k:opened[k] for k in ("client_intent_id","operation_id","resolution_revision","intent_hash")})
+    assert replay.status_code==200 and replay.json()["operation_id"]==opened["operation_id"]
+    assert native.opens==1
+    until=time.monotonic()+5
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            state=uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]
+        if state=="RECOVERING":
+            break
+        assert time.monotonic()<until
+        time.sleep(.02)
+    blocked=client.post("/v1/runtime/intents:resolve",headers=headers["subject"],json={
+        "client_intent_id":"after-failure","intent":"runtime.start","binding_id":binding["binding_id"],
+        "workspace_binding_id":binding["workspace_binding_id"],"new_session":True})
+    assert blocked.status_code==200,blocked.text
+    assert not blocked.json()["can_submit"] and "executor_not_ready" in blocked.json()["blockers"]
+
+
+def test_control_lane_remains_available_while_turn_send_waits(connected_local):
+    setup,binding,native=connected_local
+    _,app,client,*_=setup
+    opened=admit(setup,binding,"held-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    entered=threading.Event()
+    release=asyncio.Event()
+    original=native.native.send
+    async def held(verb,*args,**kwargs):
+        if verb=="send_turn":
+            entered.set()
+            await release.wait()
+        return await original(verb,*args,**kwargs)
+    native.native.send=held
+    try:
+        admit(setup,binding,"held-send","turn.submit",session_id=opened["scope"]["session_id"],text="Wait")
+        assert entered.wait(3)
+        interrupted=admit(setup,binding,"held-interrupt","turn.interrupt",session_id=opened["scope"]["session_id"],
+                          target={"kind":"current_run","expected_turn_id":None})
+        wait_receipt(setup,interrupted)
+        assert ("interrupt",interrupted["operation_id"]) in native.native.sent
+        assert not release.is_set()
+    finally:
+        client.portal.call(release.set)
+
+
+def test_cancelled_shutdown_observer_keeps_native_producer_owned(connected_local):
+    setup,binding,native=connected_local
+    _,app,client,*_=setup
+    opened=admit(setup,binding,"shutdown-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    entered=threading.Event()
+    release=asyncio.Event()
+    original=native.native.send
+    async def held(verb,*args,**kwargs):
+        entered.set()
+        await release.wait()
+        return await original(verb,*args,**kwargs)
+    native.native.send=held
+    try:
+        admit(setup,binding,"shutdown-turn","turn.submit",session_id=opened["scope"]["session_id"],text="Wait")
+        assert entered.wait(3)
+        async def scenario():
+            owner=app.state.embedded_dispatch_owner
+            observer=asyncio.create_task(owner.close())
+            await asyncio.sleep(.05)
+            observer.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await observer
+            assert owner.workers and not owner._close_task.done()
+            release.set()
+            await asyncio.wait_for(owner.close(),5)
+            assert not owner.workers and owner.pump.task.done()
+        client.portal.call(scenario)
+    finally:
+        client.portal.call(release.set)
+
+
+def test_dispatch_cleanup_failure_still_drains_core(connected_local,monkeypatch):
+    setup,binding,native=connected_local
+    _,app,client,*_=setup
+    opened=admit(setup,binding,"cleanup-error","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    owner=app.state.embedded_dispatch_owner
+    original=owner.pump.stop
+    async def failed_stop():
+        await original()
+        raise OSError("Technical outbox cleanup failure")
+    with monkeypatch.context() as patch:
+        patch.setattr(owner.pump,"stop",failed_stop)
+        with pytest.raises(OSError,match="Technical outbox cleanup failure"):
+            client.portal.call(owner._close)
+    assert native.native.stopped and not owner.workers and not owner.renewals
+
+
+@pytest.mark.parametrize("filename",["session-retained.db","owned-slots.db"])
+def test_retained_journal_requires_recovery_before_local_readiness(tmp_path,filename):
+    home=tmp_path/"home"
+    journal=home/"core-runtime"/filename
+    journal.parent.mkdir(parents=True)
+    journal.write_bytes(b"Existing retained journal must not be treated as an empty runtime")
+    deps,app=app_for(home)
+    with TestClient(app):
+        assert app.state.embedded_dispatch_owner.pump is None
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]=="RECOVERING"
+    assert journal.read_bytes()==b"Existing retained journal must not be treated as an empty runtime"
