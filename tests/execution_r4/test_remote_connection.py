@@ -28,7 +28,8 @@ from test_vertical_inventory import _NativeFactory
     (False, None, False, 0, None), (True, None, False, 0, None), (False, 'before_commit', False, 0, None),
     (False, 'lost_ack', False, 0, None), (False, 'core_commit', False, 0, None),
     (False, None, True, 0, None), (False, 'core_commit', True, 0, None), (False, None, True, 260, None),
-    (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost')])
+    (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
+    (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost')])
 def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
@@ -237,7 +238,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     if event_recovery:
                         publish_events = owner.publish_events
                         async def interrupted_events(**values):
-                            if event_recovery == 'ack_lost':
+                            if event_recovery.endswith('ack_lost'):
                                 await publish_events(**values)
                             raise OSError('Injected event delivery interruption.')
                         monkeypatch.setattr(owner,'publish_events',interrupted_events)
@@ -281,7 +282,15 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         await asyncio.sleep(0)
                 if event_recovery:
                     generation = owner.state.connection_generation
-                    await owner.close()
+                    old_ticket = control.execution.lanes[binding['binding_id']].ticket.ticket_id
+                    if event_recovery.startswith('cold_'):
+                        assert await daemon._shutdown() == 0
+                        daemon = DaemonApp(daemon_root)
+                        daemon._start_transports()
+                        control = daemon.r4_controls[server_id]
+                        assert not control._retained_lanes
+                    else:
+                        await owner.close()
                     async with asyncio.timeout(15):
                         while not (control.status()['execution_ready'] and control.connection.state.connection_generation > generation):
                             await asyncio.sleep(.01)
@@ -295,6 +304,16 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     with deps.connection_factory.unit_of_work(write=False) as uow:
                         assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
                         assert uow.connection.execute('SELECT committed_contiguous FROM execution_event_watermarks').fetchone()[0] == 1
+                        if event_recovery.startswith('cold_'):
+                            rows = uow.connection.execute(
+                                'SELECT ticket_id,client_intent_id,replaces_ticket_id,revoked_at FROM execution_link_tickets WHERE binding_id=?',
+                                (binding['binding_id'],)).fetchall()
+                            assert len(rows) == 2
+                            old = next(row for row in rows if row['ticket_id'] == old_ticket)
+                            new = next(row for row in rows if row['ticket_id'] != old_ticket)
+                            assert old['revoked_at'] is not None and new['revoked_at'] is None
+                            assert new['replaces_ticket_id'] == old_ticket
+                            assert new['client_intent_id'] == old['client_intent_id']
                 if publication_failure:
                     from okto_nexus_connector.storage.r4_publications import R4PublicationStore
                     from okto_nexus_connector.services.r4_publications import recover_publications

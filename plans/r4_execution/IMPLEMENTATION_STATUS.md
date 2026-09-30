@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Durable ticket recovery after daemon recreation — September 30, 2026
+
+[Increment](M06_TICKET_RECOVERY.md): lane startup and receipt/event recovery share persisted non-secret ticket intents. Lost material is recovered with the original logical intent and a new credential request, under unchanged Server replacement rules. Two HTTP/WSS cases recreate the daemon without its retained cache and recover pending events without native replay or expiry injection. Installed results: Connector 404 passed (one existing skip), Nexus 74 passed. Core/Nexus production wheels unchanged. Process-kill qualification, active ownership, full rotation, embedded publishing, projections and final acceptance remain pending. No milestone or gate closed.
+
+
 ## Pending events during daemon reconnect — September 30, 2026
 
 [Increment](M07_EVENT_RECOVERY.md): the daemon attaches current lanes and drains persisted event obligations before reconciliation. Existing valid in-memory tickets retain their original deadlines. Lane proofs transfer before the normal reader starts. Real HTTP/WSS tests cover an undelivered event and a lost ACK, with automatic reconnect and unchanged native operation counts. Installed results: Connector 380 passed (one existing skip), Nexus 72 passed. Nexus/Core production wheels unchanged. Cold restart with unavailable active ticket material, active ownership, embedded publishing, projections and full acceptance remain open.
