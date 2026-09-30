@@ -27,6 +27,8 @@ from ....adapters.outbound.sqlite.execution_agent_revisions import (
 )
 from ....errors import OktoNexusError
 from ....application.execution_leases import ExecutionChannel, ExecutionLeaseService
+from ....application.execution_dispatch_pump import ExecutionDispatchPump
+from ....adapters.outbound.sqlite.execution_dispatch_ownership import recover_fenced_reservations
 from ....bootstrap.execution_authority import build_execution_access
 
 
@@ -107,6 +109,21 @@ def build_router() -> APIRouter:
         await ws.accept(subprotocol=SUBPROTOCOL)
         connection_id: str | None = None
         generation: int | None = None
+        pump = None
+        send_lock = asyncio.Lock()
+
+        async def _send_text(raw):
+            async with send_lock:
+                await asyncio.wait_for(ws.send_text(raw), timeout=5)
+
+        async def _send_operation(frame):
+            # The pump holds the same writer lock used by protocol replies.
+            await asyncio.wait_for(ws.send_text(encode_r4_frame(frame).decode("utf-8")), timeout=5)
+
+        async def _close_dispatch_link():
+            async with send_lock:
+                await asyncio.wait_for(ws.close(code=1011), timeout=5)
+
         leases = ExecutionLeaseService(
             factory=factory, access=build_execution_access(ws.app.state.deps),
             fresh_publications=ws.app.state.inventory_fresh_publications)
@@ -296,7 +313,7 @@ def build_router() -> APIRouter:
                 "snapshot_format": info["executor_snapshot_format"],
                 "control_capabilities": [],
             }
-            await ws.send_text(encode_r4_frame(welcome).decode("utf-8"))
+            await _send_text(encode_r4_frame(welcome).decode("utf-8"))
 
             def _reconciliation_targets():
                 with factory.unit_of_work(write=False) as uow:
@@ -340,9 +357,11 @@ def build_router() -> APIRouter:
                     "session_ids": sessions[:256],
                     "stream_watermarks": [],
                 }
-                await ws.send_text(encode_r4_frame(
+                await _send_text(encode_r4_frame(
                     pending_reconcile).decode("utf-8"))
 
+            await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
+                factory, channel=ExecutionChannel(server_id, executor_id, connection_id, generation)))
             await _request_reconcile()
             while True:
                 raw = await asyncio.wait_for(ws.receive_text(), timeout=30)
@@ -361,7 +380,7 @@ def build_router() -> APIRouter:
                     try:
                         granted = await anyio.to_thread.run_sync(_lease_transition)
                     except OktoNexusError:
-                        await ws.send_text(encode_r4_frame({
+                        await _send_text(encode_r4_frame({
                             "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
                             "type": "error", "server_id": server_id, "executor_id": executor_id,
                             "connection_id": connection_id, "connection_generation": generation,
@@ -370,7 +389,7 @@ def build_router() -> APIRouter:
                         }).decode("utf-8"))
                         continue
                     if granted is not None:
-                        await ws.send_text(encode_r4_frame(granted).decode("utf-8"))
+                        await _send_text(encode_r4_frame(granted).decode("utf-8"))
                     continue
                 if frame["type"] == "reconcile.report":
                     if (pending_reconcile is None or any(
@@ -426,8 +445,17 @@ def build_router() -> APIRouter:
                         "session_lease_requirements": [],
                     }
                     pending_reconcile = None
-                    await ws.send_text(encode_r4_frame(
+                    await _send_text(encode_r4_frame(
                         accepted).decode("utf-8"))
+                    if complete_empty and pump is None:
+                        pump = ExecutionDispatchPump(
+                            factory=factory,
+                            channel=ExecutionChannel(server_id, executor_id, connection_id, generation),
+                            access=leases.access,
+                            fresh_publications=ws.app.state.inventory_fresh_publications,
+                            send=_send_operation, send_lock=send_lock,
+                            verify_link=_verify, close_link=_close_dispatch_link)
+                        pump.start()
                     continue
                 if frame["type"] == "error" and (
                         frame["stage"] == "reconcile.report" and
@@ -442,7 +470,7 @@ def build_router() -> APIRouter:
                         expires_in = await anyio.to_thread.run_sync(
                             _admit_attach, frame)
                     except (OktoNexusError, ValueError):
-                        await ws.send_text(encode_r4_frame({
+                        await _send_text(encode_r4_frame({
                             "protocol_major": 1,
                             "contract_revision": R4_PREVIEW_REVISION,
                             "type": "error", "server_id": server_id,
@@ -453,7 +481,7 @@ def build_router() -> APIRouter:
                             "possible_effect": False, "retry_safe": False,
                         }).decode("utf-8"))
                         continue
-                    await ws.send_text(encode_r4_frame({
+                    await _send_text(encode_r4_frame({
                         "protocol_major": 1,
                         "contract_revision": R4_PREVIEW_REVISION,
                         "type": "binding.attached",
@@ -510,6 +538,11 @@ def build_router() -> APIRouter:
         except (CoreError, UnicodeError, ValueError, RecursionError):
             await ws.close(code=4406)
         finally:
+            # Drain the owned database/send producer before releasing the
+            # connection identity. AnyIO cancellation must not orphan it.
+            if pump is not None:
+                with anyio.CancelScope(shield=True):
+                    await pump.stop()
             if connection_id is not None and generation is not None:
                 def _release():
                     with factory.unit_of_work() as uow:

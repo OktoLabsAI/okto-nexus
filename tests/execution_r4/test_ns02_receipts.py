@@ -98,7 +98,9 @@ def test_ns02_05_receipt_ingress_requires_admission_and_preserves_provenance(tmp
     ).public_view()
     assert admitted_view["admission_state"] == "ACCEPTED"
     assert admitted_view["executor_stage"] is None
-    assert admitted_view["possible_effect"] is False
+    # SENDING may already have reached the executor without a durable receipt.
+    assert admitted_view["possible_effect"] is True
+    assert admitted_view["retry_safe"] is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is False
     assert append_execution_receipt(factory, principal=principal, frame=first).reused is True
     with factory.unit_of_work(write=False) as uow:

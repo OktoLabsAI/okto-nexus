@@ -39,6 +39,8 @@ class DispatchReservation:
     attempt_no: int
     reservation_class: str
     reserved_bytes: int
+    owner_connection_id: str | None = None
+    owner_connection_generation: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -77,6 +79,7 @@ def reserve_execution_dispatch(
     remote_ready: bool, regular_items: int = 4,
     regular_bytes: int = 256 * 1024, control_items: int = 2,
     control_bytes: int = 128 * 1024,
+    channel: ExecutionChannel | None = None,
 ) -> DispatchReservation | None:
     """Reserve one exact row/byte cost before a dispatcher starts a task.
 
@@ -93,6 +96,14 @@ def reserve_execution_dispatch(
                               "Invalid dispatch capacity.", {})
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        if channel is not None:
+            if channel.server_id != server_id or channel.executor_id != executor_id:
+                raise OktoNexusError(ErrorCode.CONFLICT, "The dispatch owner has a different scope.", {})
+            if conn.execute(
+                    "SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
+                    "AND owner_instance_id=? AND generation=? AND control_state='CONTROL_READY' AND revoked_at IS NULL",
+                    (server_id, executor_id, channel.connection_id, channel.connection_generation)).fetchone() is None:
+                return None
         used = {"regular": [0, 0], "control": [0, 0]}
         for row in conn.execute(
             "SELECT reservation_class,COUNT(*) AS items,"
@@ -135,10 +146,12 @@ def reserve_execution_dispatch(
             changed = conn.execute(
                 "UPDATE execution_dispatch_outbox SET dispatch_state='RESERVED',"
                 "attempt_token=?,attempt_no=attempt_no+1,"
-                "reservation_class=?,reserved_bytes=?,reserved_at=? "
+                "reservation_class=?,reserved_bytes=?,reserved_at=?,reservation_owner=?,reservation_generation=? "
                 "WHERE server_id=? AND executor_id=? AND operation_id=? "
                 "AND dispatch_state='PENDING'",
-                (token, lane, cost, now, server_id, executor_id,
+                (token, lane, cost, now,
+                 channel.connection_id if channel else None,
+                 channel.connection_generation if channel else None, server_id, executor_id,
                  row["operation_id"]),
             ).rowcount
             if changed != 1:
@@ -146,7 +159,9 @@ def reserve_execution_dispatch(
                                       "The dispatch row changed during reservation.", {})
             return DispatchReservation(
                 server_id, executor_id, row["operation_id"], token,
-                row["attempt_no"] + 1, lane, cost)
+                row["attempt_no"] + 1, lane, cost,
+                channel.connection_id if channel else None,
+                channel.connection_generation if channel else None)
     return None
 
 
@@ -160,14 +175,15 @@ def release_unsent_dispatch(factory: ConnectionFactory, *,
         changed = uow.connection.execute(
             "UPDATE execution_dispatch_outbox SET dispatch_state='PENDING',"
             "attempt_token=NULL,reservation_class=NULL,reserved_bytes=0,"
-            "reserved_at=NULL WHERE server_id=? AND executor_id=? "
+            "reserved_at=NULL,reservation_owner=NULL,reservation_generation=NULL WHERE server_id=? AND executor_id=? "
             "AND operation_id=? AND attempt_token=? AND attempt_no=? "
             "AND dispatch_state='RESERVED' AND reservation_class=? "
-            "AND reserved_bytes=?",
+            "AND reserved_bytes=? AND reservation_owner IS ? AND reservation_generation IS ?",
             (reservation.server_id, reservation.executor_id,
              reservation.operation_id, reservation.attempt_token,
              reservation.attempt_no, reservation.reservation_class,
-             reservation.reserved_bytes),
+             reservation.reserved_bytes, reservation.owner_connection_id,
+             reservation.owner_connection_generation),
         ).rowcount
         if changed != 1:
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -177,6 +193,7 @@ def release_unsent_dispatch(factory: ConnectionFactory, *,
 def begin_execution_send(
     factory: ConnectionFactory, *, reservation: DispatchReservation,
     remote_ready: bool, fresh_publications: Mapping, access,
+    channel: ExecutionChannel | None = None,
 ) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
@@ -207,7 +224,7 @@ def begin_execution_send(
         conn = uow.connection
         row = conn.execute(
             "SELECT o.dispatch_state,o.attempt_token,o.attempt_no,"
-            "o.reservation_class,o.reserved_bytes,"
+            "o.reservation_class,o.reserved_bytes,o.reservation_owner,o.reservation_generation,"
             "p.subject_agent_id,p.actor_agent_id,p.binding_id,p.workspace_id,"
             "p.workspace_binding_id,p.session_id,p.action,p.semantic_payload,"
             "p.expected_revisions_json,p.admission_state,p.intent_hash "
@@ -221,6 +238,8 @@ def begin_execution_send(
                 row["attempt_no"] != reservation.attempt_no or
                 row["reservation_class"] != reservation.reservation_class or
                 row["reserved_bytes"] != reservation.reserved_bytes or
+                row["reservation_owner"] != reservation.owner_connection_id or
+                row["reservation_generation"] != reservation.owner_connection_generation or
                 row["admission_state"] not in {
                     "ACCEPTED", "DISPATCH_PENDING"}):
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -275,6 +294,15 @@ def begin_execution_send(
                 binding["revoked_at"] is not None):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch binding changed.", {})
+        if reservation.owner_connection_id is not None and (
+                binding["owner_instance_id"] != reservation.owner_connection_id or
+                binding["generation"] != reservation.owner_connection_generation):
+            raise OktoNexusError(ErrorCode.CONFLICT, "The dispatch reservation owner changed.", {})
+        if channel is not None and (
+                channel.server_id != server_id or channel.executor_id != reservation.executor_id or
+                channel.connection_id != binding["owner_instance_id"] or
+                channel.connection_generation != binding["generation"]):
+            raise OktoNexusError(ErrorCode.CONFLICT, "The dispatch source connection changed.", {})
         semantic = json.loads(row["semantic_payload"])
         if (semantic["action"] != row["action"] or
                 execution_intent_hash(semantic) != row["intent_hash"]):

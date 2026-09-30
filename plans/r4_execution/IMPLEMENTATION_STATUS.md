@@ -2,6 +2,24 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento corrente — loop WSS com owner persistido
+
+O [incremento M04/M06](M04_REMOTE_DISPATCH_PUMP.md) liga a admissão ao loop
+real de envio do Server. A jornada pública percorre open/submit/steer/interrupt/
+close com Core e peer sintético. Desconexão mantém o mesmo ID em reconciliação,
+sem segundo envio. Reservas possuem owner/geração; cancelamento do waiter não
+abandona o produtor de banco e a autoridade é revalidada após esperar o writer.
+
+Passaram 102 testes R4 no rerun completo, sete de migração e 70 instalados
+fora dos clones, com sobreposição. Tentativas com falha de harness assíncrono
+e expectativa antiga de efeito possível foram preservadas e corrigidas.
+O [manifesto](test_runs_20260930_dispatch_pump.json) fixa comandos e hashes.
+Daemon, resolver físico, embedded, reconciliação não vazia e aceites finais
+continuam pendentes. Nenhum gate ou flag de prontidão foi promovido.
+
+As seções seguintes são checkpoints históricos; a referência a loop pendente
+na campanha de bootstrap descreve seu estado antes deste incremento.
+
 ## Incremento de abertura inicial sem dependência circular
 
 O [bootstrap M04/M06](M04_OPEN_BOOTSTRAP.md) entrega runtime.open pendente

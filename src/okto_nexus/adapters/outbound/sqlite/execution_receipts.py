@@ -39,13 +39,16 @@ class ExecutionOperationHistory:
     actor_agent_id: str
     client_intent_id: str | None
     last_observed_at: str
+    dispatch_state: str | None = None
+    dispatch_error: dict | None = None
+    execution_scope: dict | None = None
 
     def public_view(self) -> dict[str, Any]:
         latest = self.receipts[-1] if self.receipts else None
         return {
             "operation_id": self.operation_id,
             "client_intent_id": self.client_intent_id,
-            "scope": {"server_id": self.server_id,
+            "scope": self.execution_scope or {"server_id": self.server_id,
                       "executor_id": self.executor_id,
                       "binding_id": self.binding_id,
                       "agent_id": self.subject_agent_id,
@@ -54,12 +57,16 @@ class ExecutionOperationHistory:
             "action": self.action, "intent_hash": self.intent_hash,
             "admission_state": self.admission_state,
             "executor_stage": latest["stage"] if latest else None,
-            "possible_effect": latest["possible_effect"] if latest else False,
+            "possible_effect": latest["possible_effect"] if latest else self.dispatch_state in {
+                "SENDING", "DISPATCHED", "RECONCILING"},
             "retry_safe": latest["retry_safe"] if latest else False,
             "receipt_revision": latest["receipt_revision"] if latest else 0,
             "last_observed_at": self.last_observed_at,
-            "error": ({"code": latest["error_code"]} if latest and
-                      latest.get("error_code") else None),
+            "error": ({"code": latest["error_code"], "stage": "executor",
+                       "message": f"The executor reported {latest['error_code']}.",
+                       "possible_effect": latest["possible_effect"], "retry_safe": latest["retry_safe"],
+                       "operation_id": self.operation_id, "action": "Query this operation before requesting new work."}
+                      if latest and latest.get("error_code") else self.dispatch_error if not latest else None),
             "follow_up_operation_ids": [],
         }
 
@@ -74,7 +81,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
         conn = uow.connection
         found = conn.execute(
             "SELECT executor_id,binding_id,subject_agent_id,actor_agent_id,"
-            "workspace_id,session_id,action,intent_hash,admission_state,created_at "
+            "workspace_id,session_id,action,intent_hash,admission_state,created_at,expected_revisions_json "
             "FROM execution_operations WHERE server_id=? AND operation_id=? "
             "AND subject_agent_id=? AND (? IS NULL OR executor_id=?) LIMIT 2",
             (server_id, operation_id, subject_agent_id, executor_id, executor_id),
@@ -123,6 +130,10 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
         if len(intent_rows) > 1:
             raise OktoNexusError(ErrorCode.DB_ERROR,
                                  "The operation has ambiguous intent provenance.", {})
+        dispatch = conn.execute(
+            "SELECT dispatch_state,last_error FROM execution_dispatch_outbox "
+            "WHERE server_id=? AND executor_id=? AND operation_id=?",
+            (server_id, executor_id, operation_id)).fetchone()
         return ExecutionOperationHistory(
             server_id, executor_id, operation_id, operation["binding_id"],
             operation["session_id"], operation["action"],
@@ -132,6 +143,9 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
             operation["actor_agent_id"],
             intent_rows[0]["client_intent_id"] if intent_rows else None,
             rows[-1]["received_at"] if rows else operation["created_at"],
+            dispatch['dispatch_state'] if dispatch else None,
+            json.loads(dispatch['last_error']) if dispatch and dispatch['last_error'] else None,
+            json.loads(operation['expected_revisions_json']) or None,
         )
 
 

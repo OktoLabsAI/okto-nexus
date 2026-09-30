@@ -39,6 +39,16 @@ from okto_nexus.errors import OktoNexusError
 
 def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
                     actions=None, max_executions=1):
+    class ManualDispatchFixture:
+        def __init__(self, **kwargs):
+            pass
+        def start(self):
+            pass
+        async def stop(self):
+            pass
+    # This fixture isolates lease/dispatch transactions. The public integration
+    # test does not use this fixture and exercises the actual socket sender.
+    monkeypatch.setattr(executor_link, 'ExecutionDispatchPump', ManualDispatchFixture)
     deps = bootstrap({}, ['--home', str(tmp_path / 'home'), '--feature-harness-integrations', 'true'])
     app = build_app(deps)
     factory = deps.connection_factory

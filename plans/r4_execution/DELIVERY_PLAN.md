@@ -49,17 +49,17 @@ Continuam fora do escopo normativo: novo login de usuário Nexus, SSO, tenant ob
 
 ### Checkpoint vigente — 30 de setembro de 2026
 
-Os HEADs abaixo foram lidos antes desta revisão documental. Nos três repositórios, a branch é `feature/v0.2.0` e HEAD coincide com a referência local de tracking consultada.
+Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente. Nos três repositórios, a branch é `feature/v0.2.0` e HEAD coincide com a referência local de tracking consultada.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `777de3748df75bcdde836b371333816287a861a0` | `0.2.0` |
+| Nexus | `550d9894ffa4fa6e8baeb16f3b82b1502a2ba26d` | `0.2.0` |
 | Connector | `40a8cb07c183e000813afc63138270d77647a3a0` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão de planejamento](planning_review_20260930.json) registra esses HEADs, o hash recalculado dos três wheels e as evidências locais conferidas. O [incremento de prova delegada](M03_DELEGATED_BINDING.md) foi revisado e é publicado no commit que contém esse relatório; o snapshot anterior conserva o estado não commitado observado naquele momento. Esta revisão executa apenas validadores documentais.
+A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [relatório de dispatch remoto](M04_REMOTE_DISPATCH_PUMP.md) e no [manifesto de execução](test_runs_20260930_dispatch_pump.json). A prova delegada e o bootstrap foram publicados antes deste incremento. Os HEADs do quadro são os pais publicados; o novo código é identificado pelo commit que contém o relatório, evitando referência circular ao próprio SHA.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -99,8 +99,10 @@ O [bootstrap de abertura](M04_OPEN_BOOTSTRAP.md) agora registra o envio
 autorizado antes da lease e associa sua instalação ao outbox atomicamente.
 A jornada pública de binding/grant/admissão chegou a open/turn/receipt no
 Core com peer sintético, sem semear binding ou operação. Passaram 97 casos
-R4, sete de migração e 46 instalados, com sobreposição. O dispatcher foi
-invocado pelo teste; o loop e os owners de produto continuam pendentes.
+R4, sete de migração e 46 instalados, com sobreposição. Naquela campanha o dispatcher foi invocado pelo teste. O incremento seguinte
+[liga o loop Server ao WSS](M04_REMOTE_DISPATCH_PUMP.md): a jornada pública
+percorre open/submit/steer/interrupt/close e testa perda de conexão sem reenvio.
+Os owners embedded/daemon e o resolver físico de produto continuam pendentes.
 
 ### Lacunas prioritárias observadas
 
@@ -108,7 +110,7 @@ invocado pelo teste; o loop e os owners de produto continuam pendentes.
 |---|---|
 | Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
 | Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; prova delegada revisada neste incremento; completar self-bind com autorização preexistente, mantendo identidade e CAS |
-| Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas bootstrap inicial já é persistido sem lease; faltam loop de produto, ownership e composição com o resolver/owner do executor |
+| Dispatcher — M04 | Loop WSS Server já reserva, revalida, envia e recupera reservas de owner substituído; completar composição embedded/daemon, resolver físico, governança e recuperação de envios incertos |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
 | Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
@@ -127,7 +129,7 @@ A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco cont
 | 1 | Três repos: atualizar M00 por critério de aceite, defeito, nodeid e ambiente; integrar a campanha Core publicada ao mapa de critérios | Cada requisito tem implementação/caller, teste existente ou a criar, responsável e ambiente; preservar o histórico de falhas |
 | 2 | Core + consumidores: completar a conformance instalada de M01 | Sete ações, erros, targeting, lease/revogação e histórico R3; mesmo wheel/hash nos dois consumidores; readiness de host avaliada separadamente |
 | 3 | Nexus + Connector: fechar autoridade e onboarding M02/M03 | Prepare sem efeito; aprovação exigida vinculada ao diff/revisões; apply habilita perfil/endpoint somente com autoridade válida; replay recupera o mesmo binding |
-| 4 | Nexus: ligar o bootstrap implementado ao loop de admissão/outbox de M04 | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |
+| 4 | Nexus: completar M04 a partir do loop WSS implementado, com composição dos executores e recuperação | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |
 | 5 | Nexus/Core e Connector: compor os owners de M05/M06 | Local instalado sem Connector; remoto por Server/daemon reais, com StateStore, reader do socket, leases e reconciliação paginada |
 | 6 | Três repos: completar M07–M11 | Histórico, eventos, approval/input, MCP/bridge, UI/CLI, idioma, recuperação e contenção exercitados pelos mesmos callers |
 | 7 | Três repos: concluir M12/M13 | Migração/rollback e campanhas completas sobre o conjunto final; artefatos, commits, hashes e runbooks publicados |
@@ -141,7 +143,7 @@ Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do bac
 | P1 — baseline e evidência | Três repos: incorporar o incremento de prova delegada ao mapa de aceite, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
 | P2 — contrato compartilhado | Core: completar a conformance de cada ação/erro e os helpers públicos; consumidores: instalar o mesmo wheel | Sete ações e R3 histórico exercitados por consumidores instalados; schema gerado sem drift; promoção de executable fundamentada, readiness do host independente |
 | P3 — onboarding reutilizável | Nexus/Connector: reusar autorização e configuração aprovadas, leitura/options do binding, seleção e consentimento do host | Primeiro e segundo uso pela entrada pública; identidade cruzada, deny, drift, replay e revisão concorrente; grant explícito separado do consentimento |
-| P4 — abertura e outbox | Nexus: integrar o bootstrap já implementado ao loop owned; completar retomada de reserva/envio e resolução física | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
+| P4 — abertura e outbox | Nexus: partir do loop WSS já implementado; completar reconciliação de envio incerto, composição local e resolução física | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
 | P5 — ciclo local | Nexus/Core: conectar o owner de serve à mesma admissão, seleção, contexto, journal e projeção | Pacotes instalados sem aplicativo Connector; open/submit/steer/interrupt/close pelo caller real; peer técnico primeiro e provider real depois |
 | P6 — ciclo remoto | Connector/Nexus: integrar daemon/StateStore/WSS, reader único, tickets, attach, lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
 

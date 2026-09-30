@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M04/M06 opening bootstrap and public HTTP admission integration",
+    "scope": "Partial M04/M06 owned Server WSS dispatch integration; no product gate",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "9aa567dc3ceb755a5e8ea6ff6a8944aaf58df3ae",
+      "nexus": "550d9894ffa4fa6e8baeb16f3b82b1502a2ba26d",
       "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
@@ -43,29 +43,32 @@
       "plans/r4_execution/M03_DELEGATED_BINDING.md",
       "plans/r4_execution/test_runs_20260930_delegated_binding.json",
       "plans/r4_execution/M04_OPEN_BOOTSTRAP.md",
-      "plans/r4_execution/test_runs_20260930_open_bootstrap.json"
+      "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "plans/r4_execution/M04_REMOTE_DISPATCH_PUMP.md",
+      "plans/r4_execution/test_runs_20260930_dispatch_pump.json"
     ],
-    "latest_increment": "Opening bootstrap no longer requires a preinstalled lease. It pins canonical grant and connection before sending, and attaches the first applied lease atomically. Public HTTP onboarding/admission reaches Core open/turn/receipt with a synthetic peer; the owning dispatcher loop remains pending.",
-    "verification_scope": "97 Nexus R4 source cases, seven migration cases and 46 installed cases passed with overlap. Installed bytes match the exact wheels; Nexus and Connector package bytes also match source. The first installed attempt failed at environment preflight and was repeated in a new venv. No product gate closed.",
+    "latest_increment": "The Server owns one WSS outbox pump with durable connection/generation reservations, authority revalidation after writer waits, no-send recovery and uncertain-send reconciliation. The public technical journey exercises open/submit/steer/interrupt/close.",
+    "verification_scope": "102 Nexus R4 source cases, seven migration cases and 70 installed cases passed with overlap. Earlier failures and reruns are preserved. Installed package bytes match the exact wheels, and Nexus/Connector sources. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "OPEN_AUTHORIZED_PENDING_LEASE with durable source grant/channel and atomic lease application",
-      "nexus_commit": "Commit containing M04_OPEN_BOOTSTRAP.md",
+      "scope": "Partial M04/M06 owned Server WSS dispatch integration; no product gate",
+      "nexus_commit": "Commit containing M04_REMOTE_DISPATCH_PUMP.md",
       "published_dependency_heads": {
         "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
       "recorded_passes": {
-        "nexus_r4": 97,
+        "nexus_r4": 102,
         "migrations": 7,
-        "installed_coordinated": 46
+        "installed_coordinated": 70
       },
       "counts_overlap": true,
       "next_steps": [
-        "Compose the owning outbox loop with physical realization resolution and embedded/daemon executors.",
-        "Complete authorized self-bind reuse, nonempty reconciliation, and recovery of fenced sends.",
-        "Complete governance, UI/CLI, US English audit, migration and native multi-host acceptance."
+        "Complete M00 requirement-level audit and M01 installed conformance before enabling readiness.",
+        "Complete authorized self-bind reuse, physical realization resolution, embedded owner and Connector daemon composition.",
+        "Complete nonempty reconciliation, uncertain-send recovery, governance and all seven actions.",
+        "Complete UI/CLI, US English audit, migration/rollback and native multi-host acceptance."
       ]
     },
     "installed_core_campaign": {

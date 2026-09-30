@@ -565,17 +565,22 @@
         "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_revalidates_authority_after_reservation[lease_state_changed]",
         "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_pins_grant_and_applied_ack_commits_atomically",
         "tests/execution_r4/test_open_bootstrap.py::test_open_bootstrap_cannot_move_initial_lease_to_another_connection",
-        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts"
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[False]",
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[True]",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_send_loss_is_unknown_and_never_requeued",
+        "tests/execution_r4/test_dispatch_pump.py::test_cancelled_stop_waiter_keeps_database_producer_owned",
+        "tests/execution_r4/test_dispatch_pump.py::test_old_connection_cannot_send_after_owned_reservation_recovery"
       ],
-      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_open_bootstrap.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_ns09.py -q",
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_dispatch_pump.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_open_bootstrap.py -q",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL",
       "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-06-03"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
-      "remaining": "Owning dispatcher loop, production local realization resolution, embedded/daemon composition, nonempty reconciliation, and final native multi-host acceptance remain open."
+      "evidence": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "remaining": "Physical realization resolver, embedded/daemon composition, nonempty reconciliation, production watchdog/limits/shutdown budget and native multi-host acceptance remain open."
     },
     "NS06.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_04",
@@ -713,33 +718,43 @@
     },
     "NS08.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns08.py::test_ns08_05",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[False]",
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[True]",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_revalidates_after_writer_wait_and_exposes_terminal_rejection",
+        "tests/execution_r4/test_dispatch_pump.py::test_dispatch_send_loss_is_unknown_and_never_requeued",
+        "tests/execution_r4/test_dispatch_pump.py::test_cancelled_stop_waiter_keeps_database_producer_owned",
+        "tests/execution_r4/test_dispatch_pump.py::test_old_connection_cannot_send_after_owned_reservation_recovery"
+      ],
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_dispatch_pump.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_open_bootstrap.py -q",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-08-05",
         "TN-17",
         "TN-18",
         "TN-19",
         "TN-20"
-      ]
+      ],
+      "evidence": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "remaining": "Physical realization resolver, embedded/daemon composition, nonempty reconciliation, production watchdog/limits/shutdown budget and native multi-host acceptance remain open."
     },
     "NS09.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_01",
       "collected_nodeids": [
-        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts"
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[False]",
+        "tests/execution_r4/test_public_open_bootstrap.py::test_public_binding_grant_admission_bootstrap_core_and_receipts[True]"
       ],
-      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_open_bootstrap.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_ns09.py -q",
+      "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_dispatch_pump.py tests/execution_r4/test_public_open_bootstrap.py tests/execution_r4/test_open_bootstrap.py -q",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL",
       "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-09-01"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
-      "remaining": "Owning dispatcher loop, production local realization resolution, embedded/daemon composition, nonempty reconciliation, and final native multi-host acceptance remain open."
+      "evidence": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "remaining": "Physical realization resolver, embedded/daemon composition, nonempty reconciliation, production watchdog/limits/shutdown budget and native multi-host acceptance remain open."
     },
     "NS09.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns09.py::test_ns09_02",
