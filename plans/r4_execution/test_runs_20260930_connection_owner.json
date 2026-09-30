@@ -1,0 +1,123 @@
+{
+  "recorded_at": "2026-09-30T08:09:13.195059+00:00",
+  "scope": "Partial M06 Connector connection ownership and real loopback WSS integration; no product gate",
+  "parent_and_dependency_commits": {
+    "nexus": "672e85efa3fbc65284f1a054650259221aca72f0",
+    "connector": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "tests/execution_r4/test_remote_connection.py": "c24dec689176d471171b8a808e99f02e1a9bfd8be2a9f54e7d1e985815f69615"
+  },
+  "connector_evidence": {
+    "commit": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
+    "file": "plans/implementation/evidence/r4-connection-report.json",
+    "sha256": "46e4de67380f3c0f3da3b0b56e1a049c0b223b2f5ea8375763c658345809bf5b"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-installed-commit-barrier.xml",
+      "sha256": "a8b80e96fb218f77af0c5059c3475585c60e80889e8fb0f8599afe2f93cc0acd",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-installed-final.xml",
+      "sha256": "8753c6d0940c87f5c0845d6fca636c94f6cbc5c71d96715ac2584eb517cbda92",
+      "tests": 27,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-installed.xml",
+      "sha256": "5741187518945c54c025baf760dc4472908336549ca4e821765059d4adf700d7",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-public-final.xml",
+      "sha256": "b1267617c2d60463673ea9581c2b9e405ec55186b55c684848bcb75586b2328d",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-public-initial.xml",
+      "sha256": "2ff80c93c02df80070f18cc8cb6f719f5377b657062850c94b77c5e4b4d24d75",
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-connection-public.xml",
+      "sha256": "8547a80eeb89b6aa20039850dd6178c317cd47ce50a685ae74be2661a369bda2",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "source_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_remote_connection.py -q --tb=line --junitxml=plans/r4_execution/evidence/r4-connection-public-final.xml",
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-connection-installed-msk801qw/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nwheel=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-connection-wheel.json\").read_text())[\"wheel\"]\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-wheel-fwgjf64l/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(wheel),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Connector single-reader contracts and real loopback WSS Server integration with synthetic native peer; no daemon/provider qualification\")\n(root/\"plans/r4_execution/evidence/r4-connection-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\",\nstr(connector/\"tests/contract/test_r4_connection.py\"),str(connector/\"tests/contract/test_wss_r4.py\"),\nstr(root/\"tests/execution_r4/test_remote_connection.py\"),str(root/\"tests/execution_r4/test_public_open_bootstrap.py\"),\nstr(root/\"tests/execution_r4/test_ns09.py\"),\"-q\",\"--tb=line\",\n\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-connection-installed-commit-barrier.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "ec1d607d17d9fc8007c03cf5b8e385947901983f7ef717265817e87ec9c2712d",
+  "initial_installed_modules_manifest_sha256": "4695d3b896a7ef54918fb119251d907d6a0e803daff063e9a0e75afb122d64ad",
+  "artifact_manifest_sha256": "cb08a21ea67b8c8c6e2e99f616b5e34166daccb05c803123c3b09d3e0a956eef",
+  "artifacts": {
+    "initial": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-connection-build-amwrcgcq",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-connection-wheel-9zh3ucpi\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "6de9f0cef8cab196c9b8a78bfd03f99177852ee1bda28d20c85cd10aee761f45",
+      "build_log": "plans/r4_execution/evidence/r4-connection-initial-build.log",
+      "build_log_sha256": "11d6144e535284e89d383279931ebcfd1db81337c845b99d0951458663bb0460"
+    },
+    "final": {
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-connection-final-build-mtj5kvqg",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-connection-final-wheel-6u9l_o5y\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "8366c22298f582b38b6c2e24f24f6bb1c12e020ec63db859e8a2df2218f78981",
+      "build_log": "plans/r4_execution/evidence/r4-connection-final-build.log",
+      "build_log_sha256": "4345c7b2bc4a97b7c868857bc2788e1d832f8dfe4505d4e99d4807f6e7fef9dd"
+    }
+  },
+  "initial_installation_log_sha256": "f53fef78739494f92b02bd91282bea7fe7abd3a0502b12cc92beb74812f1d53c",
+  "final_wheel_refresh": {
+    "environment": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-connection-installed-msk801qw",
+    "command": [
+      "uv",
+      "pip",
+      "install",
+      "--python",
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-connection-installed-msk801qw/Scripts/python.exe",
+      "--link-mode",
+      "copy",
+      "--no-deps",
+      "--reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-connection-final-wheel-6u9l_o5y\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl"
+    ],
+    "verification": "Installed files match the final wheel and Connector source byte for byte."
+  },
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "failure_analysis": [
+    "The first Nexus source attempt imported an older installed Connector wheel; the new wheel was built and installed before execution.",
+    "Initial installed campaign passed 26 cases. The expanded rerun passed 26 and failed the real WSS journey: an HTTP receipt overtook the Server lease.applied commit.",
+    "The Connector now replays the identical lease request after lease.applied on the same socket and validates the identical reply before returning. No new lease, serial, request or local deadline is created.",
+    "Final campaign passed 28 installed cases. The deterministic contract barrier and real WSS source journey also passed.",
+    "Git whitespace checking finds trailing spaces only inside preserved historical pytest failure XML; production source, tests and authored documentation pass."
+  ],
+  "limitations": [
+    "Actual Server and Connector connection owner run in one laboratory process over real loopback WSS; native peer and readiness qualification are synthetic.",
+    "The daemon still uses its legacy transport. StateStore/R4 executor and binding persistence, physical resolver, dispatcher consumers and credential lifecycle remain pending.",
+    "Nonempty reconciliation and event/notification/receipt replay handling are incomplete; unsupported preview frames fence the connection.",
+    "Core and Nexus production bytes are unchanged in this increment. The previous Nexus wheel is reused and verified against source.",
+    "Two Connector regression skips remain: the MCP capability lab peer lacks full contract authority, and the non-Windows shim case is excluded on Windows.",
+    "No provider, Linux, independent-host, UI or final product gate is qualified. Counts overlap."
+  ],
+  "product_gates_closed": []
+}

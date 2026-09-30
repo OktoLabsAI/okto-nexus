@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M04/M06 owned Server WSS dispatch integration; no product gate",
+    "scope": "Partial M06 Connector connection ownership and real loopback WSS integration; no product gate",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "550d9894ffa4fa6e8baeb16f3b82b1502a2ba26d",
-      "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
+      "nexus": "672e85efa3fbc65284f1a054650259221aca72f0",
+      "connector": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "shared_core_version": "0.2.28.dev0",
@@ -45,30 +45,36 @@
       "plans/r4_execution/M04_OPEN_BOOTSTRAP.md",
       "plans/r4_execution/test_runs_20260930_open_bootstrap.json",
       "plans/r4_execution/M04_REMOTE_DISPATCH_PUMP.md",
-      "plans/r4_execution/test_runs_20260930_dispatch_pump.json"
+      "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "plans/r4_execution/M06_CONNECTOR_CONNECTION_OWNER.md",
+      "plans/r4_execution/test_runs_20260930_connection_owner.json"
     ],
-    "latest_increment": "The Server owns one WSS outbox pump with durable connection/generation reservations, authority revalidation after writer waits, no-send recovery and uncertain-send reconciliation. The public technical journey exercises open/submit/steer/interrupt/close.",
-    "verification_scope": "102 Nexus R4 source cases, seven migration cases and 70 installed cases passed with overlap. Earlier failures and reruns are preserved. Installed package bytes match the exact wheels, and Nexus/Connector sources. No product gate closed.",
+    "latest_increment": "Connector single-reader ownership, bounded operation reservations and correlated lease/attach producers now drive the real loopback WSS five-action journey. A same-request lease replay confirms the Server applied-ACK commit before cross-channel receipt publication.",
+    "verification_scope": "256 Connector regression passes with two recorded skips; 13 directed contract/lifecycle passes; 28 coordinated installed passes and one public source journey pass, with overlap. The installed campaign exposed an ACK/receipt ordering race that was corrected and reverified. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial M04/M06 owned Server WSS dispatch integration; no product gate",
-      "nexus_commit": "Commit containing M04_REMOTE_DISPATCH_PUMP.md",
+      "scope": "Partial M06 Connector connection ownership and real loopback WSS integration; no product gate",
+      "nexus_commit": "Commit containing M06_CONNECTOR_CONNECTION_OWNER.md",
       "published_dependency_heads": {
-        "connector": "40a8cb07c183e000813afc63138270d77647a3a0",
+        "connector": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_connection_owner.json",
       "recorded_passes": {
-        "nexus_r4": 102,
-        "migrations": 7,
-        "installed_coordinated": 70
+        "connector_regression": 256,
+        "connector_contracts": 13,
+        "installed_coordinated": 28,
+        "public_wss_source": 1
+      },
+      "recorded_skips": {
+        "connector_regression": 2
       },
       "counts_overlap": true,
       "next_steps": [
-        "Complete M00 requirement-level audit and M01 installed conformance before enabling readiness.",
-        "Complete authorized self-bind reuse, physical realization resolution, embedded owner and Connector daemon composition.",
-        "Complete nonempty reconciliation, uncertain-send recovery, governance and all seven actions.",
-        "Complete UI/CLI, US English audit, migration/rollback and native multi-host acceptance."
+        "Compose the R4 connection owner with daemon lifecycle and persisted executor/binding records.",
+        "Resolve approved physical realizations and dispatch through productive/control consumers using canonical authority.",
+        "Complete embedded execution, nonempty reconciliation, credential lifecycle, governance and durable receipts/events.",
+        "Complete M00/M01 acceptance, UI/CLI, US English audit, migration and native multi-host qualification."
       ]
     },
     "installed_core_campaign": {

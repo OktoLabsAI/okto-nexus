@@ -2,7 +2,21 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
-## Incremento corrente — loop WSS com owner persistido
+## Incremento corrente — owner de conexão R4 no Connector
+
+O [owner M06](M06_CONNECTOR_CONNECTION_OWNER.md) recebe operações e correlaciona
+leases/attaches pelo mesmo reader. Possui filas limitadas, revalidação de lane,
+proteção dos produtores contra cancelamento e confirmação ordenada do commit
+de `lease.applied` antes de liberar execução e receipts por outro canal.
+
+Passaram 13 contratos/ciclos de vida e 28 casos instalados, com sobreposição.
+A jornada pública percorre cinco ações em WebSocket real de loopback e Core
+com peer sintético. A repetição instalada encontrou uma corrida entre ACK e
+receipt HTTP; o Connector foi corrigido e a campanha passou. O manifesto
+coordenado preserva as tentativas e hashes. Daemon/StateStore, resolver físico,
+embedded e reconciliação não vazia continuam pendentes. Nenhum gate foi fechado.
+
+## Incremento anterior — loop WSS com owner persistido
 
 O [incremento M04/M06](M04_REMOTE_DISPATCH_PUMP.md) liga a admissão ao loop
 real de envio do Server. A jornada pública percorre open/submit/steer/interrupt/

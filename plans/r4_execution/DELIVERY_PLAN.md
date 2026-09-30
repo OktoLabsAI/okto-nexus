@@ -53,13 +53,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `550d9894ffa4fa6e8baeb16f3b82b1502a2ba26d` | `0.2.0` |
-| Connector | `40a8cb07c183e000813afc63138270d77647a3a0` | `0.5.0.dev0` |
+| Nexus | `672e85efa3fbc65284f1a054650259221aca72f0` | `0.2.0` |
+| Connector | `6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [relatório de dispatch remoto](M04_REMOTE_DISPATCH_PUMP.md) e no [manifesto de execução](test_runs_20260930_dispatch_pump.json). A prova delegada e o bootstrap foram publicados antes deste incremento. Os HEADs do quadro são os pais publicados; o novo código é identificado pelo commit que contém o relatório, evitando referência circular ao próprio SHA.
+A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [relatório do owner Connector](M06_CONNECTOR_CONNECTION_OWNER.md) e no [manifesto coordenado](test_runs_20260930_connection_owner.json). A prova delegada e o bootstrap foram publicados antes deste incremento. Os HEADs do quadro são os pais publicados; o novo código é identificado pelo commit que contém o relatório, evitando referência circular ao próprio SHA.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -104,6 +104,14 @@ R4, sete de migração e 46 instalados, com sobreposição. Naquela campanha o d
 percorre open/submit/steer/interrupt/close e testa perda de conexão sem reenvio.
 Os owners embedded/daemon e o resolver físico de produto continuam pendentes.
 
+O [owner de conexão Connector](M06_CONNECTOR_CONNECTION_OWNER.md) completa
+reader único e filas limitadas para a jornada técnica remota. Passaram 13
+contratos/ciclos de vida e 28 casos instalados. A repetição da integração
+revelou uma corrida entre ACK de lease e receipt HTTP; o owner agora confirma
+o commit com replay idempotente da mesma requisição no WSS. A campanha
+corrigida passou. Integração com o daemon, StateStore e resolver físico ainda
+é necessária antes de aceitar M06.
+
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |
@@ -112,7 +120,7 @@ Os owners embedded/daemon e o resolver físico de produto continuam pendentes.
 | Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; prova delegada revisada neste incremento; completar self-bind com autorização preexistente, mantendo identidade e CAS |
 | Dispatcher — M04 | Loop WSS Server já reserva, revalida, envia e recupera reservas de owner substituído; completar composição embedded/daemon, resolver físico, governança e recuperação de envios incertos |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
-| Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
+| Remoto — M06 | Reader único e correlação de lease/attach integrados à jornada WSS técnica; ligar o owner ao daemon/StateStore, resolver físico, renovação de tickets e reconciliação não vazia; extrair SQL/transições restantes do handler Server |
 | Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
 | Jornadas e idioma — M10 | Completar UI/CLI, infraestrutura de testes de navegador e auditoria US English, incluindo superfícies legadas |
 | Robustez e migração — M11/M12 | Provar recovery, revogação online/offline, ownership/shutdown e limites; ensaiar cutover e rollback com dados legados |
