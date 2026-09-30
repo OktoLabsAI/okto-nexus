@@ -5,6 +5,7 @@ automatic daemon composition, native Pi socket ownership or a release build.
 """
 import asyncio
 from contextlib import AsyncExitStack
+from dataclasses import replace
 from types import SimpleNamespace
 import time
 
@@ -29,9 +30,13 @@ from test_vertical_inventory import _NativeFactory
 
 
 @pytest.mark.parametrize("backend", ["embedded", "connector"])
-@pytest.mark.parametrize("fault", ["none", "lost_response", "server_revocation"])
+@pytest.mark.parametrize("refresh,fault", [
+    (False, "none"), (False, "lost_response"), (False, "server_revocation"),
+    (True, "none"), (True, "lost_response"), (True, "server_revocation"),
+    (True, "metadata_lease"), (True, "metadata_scope"), (True, "lease_race"),
+])
 @pytest.mark.parametrize("opening", ["strict"], indirect=True)
-def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_path, monkeypatch, backend, fault):
+def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_path, monkeypatch, backend, fault, refresh):
     if backend == "connector":
         from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4SessionCapability
         from okto_nexus_connector.transport.native_actions import native_action_bridge
@@ -65,11 +70,22 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
             # READY receipt materialization is independently covered by the public open campaign.
             with deps.connection_factory.unit_of_work() as uow:
                 uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY'")
+            async def renew():
+                renewal = await runtime.begin_r4_lease_request(scope=sent.scope, grant_id=sent.grant_id,
+                    connection_id=channel.connection_id, connection_generation=channel.connection_generation,
+                    purpose="renew")
+                renewed = await runtime.install_r4_lease(renewal,
+                    leases.issue(r4_lease_renew_frame(renewal), channel=channel))
+                leases.applied(renewed.acknowledgement, channel=channel)
+                return renewed.context
+            if refresh:
+                context = await renew()
+                assert context.r4_authority.lease_serial == 2
             cap_type = R4SessionCapability if backend == "connector" else SimpleNamespace
             cap = cap_type(capability_id=issued["capability_id"], capability_ref=issued["capability_ref"],
                 capability=issued["capability"], scope=issued["scope"], audience=issued["audience"],
                 actions=tuple(issued["actions"]), expires_in=issued["expires_in"],
-                deadline_monotonic=time.monotonic() + issued["expires_in"] - .5, mcp_url=None)
+                deadline_monotonic=time.monotonic() + (-1 if refresh else issued["expires_in"] - .5), mcp_url=None)
             async with AsyncExitStack() as stack:
                 if backend == "connector":
                     raw = await stack.enter_async_context(httpx.AsyncClient(
@@ -77,6 +93,18 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
                     http = await stack.enter_async_context(NexusHTTPClient("https://127.0.0.1:8202", client=raw))
                     bridge = native_action_bridge(http, cap, runtime, connection_id=channel.connection_id,
                                                   connection_generation=channel.connection_generation)
+                    if refresh:
+                        from okto_nexus_connector.transport.native_actions import RefreshingNativeActionBridge
+                        async def metadata(original):
+                            result = await http.describe_r4_session_capability(app.state.test_agent_keys['subject'],
+                                frame=sent.frame, capability_id=original.capability_id,
+                                audience=original.audience, actions=original.actions)
+                            if fault == 'metadata_lease': result = replace(result, lease_serial=1)
+                            if fault == 'metadata_scope': result = replace(result, scope=dict(result.scope, agent_id='other'))
+                            if fault == 'lease_race': await renew()
+                            return result
+                        bridge = RefreshingNativeActionBridge(http, cap, runtime, metadata,
+                            connection_id=channel.connection_id, connection_generation=channel.connection_generation)
                 else:
                     s = cap.scope
                     grant = NativeActionGrant(cap.capability_ref, s["server_id"], s["executor_id"],
@@ -84,8 +112,31 @@ def test_core_native_bridge_uses_same_lease_and_canonical_domain(opening, tmp_pa
                         channel.connection_generation, s["authorization_revision"], s["configuration_revision"],
                         cap.deadline_monotonic, frozenset(cap.actions), s, channel.connection_id)
                     bridge = embedded_native_action_bridge(deps, grant, cap.capability, runtime)
+                    if refresh:
+                        from okto_nexus.adapters.outbound.execution.core_native_actions import RefreshingEmbeddedNativeActionBridge
+                        from okto_nexus.application.execution_capabilities import ExecutionCapabilityService
+                        from okto_nexus.domain.runtime_context import RuntimeRequestContext
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            credential = uow.connection.execute("SELECT api_key_hash FROM agents WHERE agent_id='subject'").fetchone()[0]
+                        actor = RuntimeRequestContext('subject', 'agent_key', credential_binding=credential)
+                        async def metadata():
+                            start = time.monotonic()
+                            result = ExecutionCapabilityService(factory=deps.connection_factory, access=access).describe(
+                                context=actor, session_id=s['session_id'], binding_id=s['binding_id'],
+                                capability_id=cap.capability_id, request_id='metadata-read', mcp_url='https://127.0.0.1:8202/mcp')
+                            if fault == 'metadata_lease': result['lease_serial'] = 1
+                            if fault == 'metadata_scope': result['scope'] = dict(result['scope'], agent_id='other')
+                            if fault == 'lease_race': await renew()
+                            return result, start + result['expires_in'] - .5
+                        bridge = RefreshingEmbeddedNativeActionBridge(deps, grant, cap.capability, runtime, metadata)
                 assert not (set(cap.actions) & context.allowed_actions)
                 base = (cap.scope["session_id"], cap.capability_ref, "work")
+                if fault in ('metadata_lease', 'metadata_scope', 'lease_race'):
+                    with pytest.raises(CoreError) as refused:
+                        await bridge.invoke(HandoffClaim('claim', *base, 'original-key'), context)
+                    assert refused.value.code == 'STALE_GENERATION' and not refused.value.possible_effect
+                    assert rows(opening) == (("OPEN", 0), 0, 0)
+                    return
                 read = await bridge.invoke(ContextGet("read", *base), context)
                 assert read["status"] == "OPEN"
                 claim = HandoffClaim("claim", *base, "original-key")

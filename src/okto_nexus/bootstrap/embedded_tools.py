@@ -131,7 +131,18 @@ class EmbeddedToolsOwner:
                 scope["agent_id"],scope["workspace_id"],scope["session_id"],self.owner.channel.connection_generation,
                 scope["authorization_revision"],scope["configuration_revision"],deadline,frozenset(actions),scope,
                 self.owner.channel.connection_id)
-            native_factory=embedded_native_action_owner_factory(self.owner.deps,grant,cap["capability"])
+            async def metadata():
+                await asyncio.to_thread(self.owner.verify)
+                await asyncio.to_thread(launch.check)
+                sent_at=time.monotonic()
+                result=await asyncio.to_thread(service.describe,context=context,session_id=scope["session_id"],
+                    binding_id=scope["binding_id"],capability_id=cap["capability_id"],
+                    request_id="capmeta_"+secrets.token_hex(16),mcp_url=self.origin.rstrip("/")+"/mcp")
+                await asyncio.to_thread(self.owner.verify)
+                await asyncio.to_thread(launch.check)
+                return result,sent_at+result["expires_in"]-.5
+            native_factory=embedded_native_action_owner_factory(self.owner.deps,grant,cap["capability"],
+                                                                  metadata_provider=metadata)
         else:
             from .local_mcp_home import session_mcp_home
             loopback=urlsplit(self.origin).hostname in ("127.0.0.1","localhost","::1")

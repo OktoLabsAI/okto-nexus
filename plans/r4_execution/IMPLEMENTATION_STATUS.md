@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Native capability refresh after applied renewal - September 30, 2026
+
+[Increment](M09_NATIVE_CAPABILITY_REFRESH.md): automatic Pi composition in Nexus and Connector now refreshes capability metadata under the exact applied Server/Core lease, retaining the original material, scope and actions. Core still validates every domain effect; stale metadata, revocation and a concurrent lease change refuse it. Installed campaigns passed 58 Nexus cases, 49 overlapping cases with no Connector installed, and 81 Connector cases, with pip check. Initial fixture-related restart failures and corrected final reruns are preserved. Connector is published at 40049af; Core remains fb4c8df / 0.2.38.dev0 with the same shared wheel. Full real-provider journeys and the remaining fixed-plan criteria stay open; no milestone or gate closes here.
+
 ## Serve-owned session tools and automatic MCP — September 30, 2026
 
 [Increment](M05_EMBEDDED_TOOLS.md): the local dispatcher reserves canonical session capabilities under its store owner, persists material in the protected vault before native configuration, and composes checked per-session MCP homes or the existing Pi action owner. Confirmed close removes material; uncertain ownership retains it. The automatic Codex technical peer exercised real MCP identity, handoff claim/completion and a repeat call after automatic lease renewal. Installed results: 133 passed; 70 overlapping cases passed without Connector, with pip check. A separate installed SessionToolVault/Windows Credential Manager roundtrip passed with cleanup. Full Claude/Pi qualification, Pi deadline refresh, live configuration recovery and remaining M05/M09 acceptance remain open. Core/Connector artifacts are unchanged; no gate closed.

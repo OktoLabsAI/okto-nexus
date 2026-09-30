@@ -343,7 +343,7 @@ def test_retained_journal_requires_recovery_before_local_readiness(tmp_path,file
 
 @pytest.mark.parametrize("missing_journal", [False, True])
 def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypatch,missing_journal):
-    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch,None) as setup:
         setup,binding,native=connected_local.__wrapped__(setup)
         deps,app,client,headers,_,candidate,_=setup
         opened=admit(setup,binding,"recover-open","runtime.start",new_session=True)
@@ -508,7 +508,7 @@ def test_local_event_owner_change_prevents_commit(connected_local):
 def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
     from nexus_connector_core import RuntimeEvent
     from okto_nexus.bootstrap import embedded_events
-    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch,None) as setup:
         setup,binding,native=connected_local.__wrapped__(setup)
         deps,app,client,headers,_,candidate,_=setup
         opened=admit(setup,binding,"replay-events","runtime.start",new_session=True)
@@ -543,7 +543,7 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
 
 @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
 def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
-    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch,None) as setup:
         setup,binding,native=connected_local.__wrapped__(setup)
         deps,app,client,headers,*_=setup
         opened=admit(setup,binding,"resource-open","runtime.start",new_session=True)

@@ -1,7 +1,9 @@
 """Embedded Core native actions through the same canonical domain as HTTP."""
 
 import anyio
+from dataclasses import replace
 from nexus_connector_core import CoreError
+from nexus_connector_core.clock import RollbackFencedClock, SystemClock
 from nexus_connector_core.native_action_bridge import (
     ScopedNativeActionBridge, native_action_scope, native_action_request_body,
 )
@@ -50,7 +52,43 @@ def embedded_native_action_bridge(deps, grant, capability, runtime, *, clock=Non
                                     grant, clock=clock, r4_runtime=runtime)
 
 
-def embedded_native_action_owner_factory(deps, grant, capability, *, clock=None):
+class RefreshingEmbeddedNativeActionBridge:
+    """Renew only the deadline proven by matching applied Server/Core leases."""
+
+    def __init__(self, deps, grant, capability, runtime, metadata_provider, *, clock=None):
+        self.deps, self.grant, self.capability = deps, grant, capability
+        self.runtime, self.metadata_provider = runtime, metadata_provider
+        self.clock = RollbackFencedClock(clock or SystemClock())
+
+    async def invoke(self, request, context):
+        grant = self.grant
+        def current():
+            value = self.runtime.r4_native_action_context(grant.r4_scope,
+                connection_id=grant.r4_connection_id, connection_generation=grant.connection_generation)
+            if value != context:
+                raise CoreError('STALE_GENERATION', 'native_action')
+            return value
+        current()
+        try:
+            metadata, deadline = await self.metadata_provider()
+        except OktoNexusError as error:
+            raise CoreError(error.code, 'native_action', operation_id=request.operation_id,
+                            message=error.message) from None
+        authority = current().r4_authority
+        if (metadata['capability_ref'] != grant.capability_ref
+                or canonical_json(metadata['scope']) != canonical_json(dict(grant.r4_scope))
+                or metadata['audience'] != 'nexus-native-session'
+                or set(metadata['actions']) != grant.allowed_actions or metadata['mcp_url'] is not None
+                or authority is None or (metadata['lease_id'], metadata['lease_serial']) !=
+                    (authority.lease_id, authority.lease_serial)):
+            raise CoreError('STALE_GENERATION', 'native_action')
+        renewed = replace(grant, expires_monotonic=min(deadline, context.lease_deadline_monotonic))
+        bridge = embedded_native_action_bridge(self.deps, renewed, self.capability, self.runtime,
+                                                clock=self.clock)
+        return await bridge.invoke(request, context)
+
+
+def embedded_native_action_owner_factory(deps, grant, capability, *, clock=None, metadata_provider=None):
     """Bind a protected native capability to one embedded Pi launch."""
     from dataclasses import replace
     from types import MappingProxyType
@@ -58,7 +96,9 @@ def embedded_native_action_owner_factory(deps, grant, capability, *, clock=None)
     grant = replace(grant, r4_scope=MappingProxyType(native_action_scope(grant.r4_scope)),
                     allowed_actions=frozenset(grant.allowed_actions))
     def build(runtime):
-        bridge = embedded_native_action_bridge(deps, grant, capability, runtime, clock=clock)
+        bridge = (embedded_native_action_bridge(deps, grant, capability, runtime, clock=clock)
+                  if metadata_provider is None else RefreshingEmbeddedNativeActionBridge(
+                      deps, grant, capability, runtime, metadata_provider, clock=clock))
         def context():
             return runtime.r4_native_action_context(grant.r4_scope,
                 connection_id=grant.r4_connection_id, connection_generation=grant.connection_generation)

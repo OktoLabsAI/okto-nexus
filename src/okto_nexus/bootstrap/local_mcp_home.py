@@ -94,4 +94,3 @@ def session_mcp_home(root, *, frame, configuration_digest, template):
                            tuple(_identity(p) for p in (root, home, config.parent)))
     result.require_current()
     return result
-

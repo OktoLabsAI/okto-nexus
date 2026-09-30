@@ -17,10 +17,11 @@ from test_binding_operator import prepare_operator
 
 
 @pytest.fixture
-def local_setup(tmp_path, monkeypatch):
-    binary = tmp_path / "codex.exe"
+def local_setup(tmp_path, monkeypatch, request):
+    adapter = getattr(request, "param", "codex_app_server")
+    binary = tmp_path / ("pi.exe" if adapter == "pi_rpc" else "codex.exe")
     binary.write_bytes(b"Local realization technical candidate")
-    candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
+    candidate = InstallationCandidate(adapter, str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
                         lambda: SimpleNamespace(candidates=(candidate,)))
     root = tmp_path / "workspace"

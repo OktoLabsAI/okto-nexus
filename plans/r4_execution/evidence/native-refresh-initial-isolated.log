@@ -1,0 +1,250 @@
+......................................FF...FFFFFF                        [100%]
+================================== FAILURES ===================================
+______ test_restart_recovers_historical_receipt_without_provider[False] _______
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_recovers_historic0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78604B0>
+missing_journal = False
+
+    @pytest.mark.parametrize("missing_journal", [False, True])
+    def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypatch,missing_journal):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD868D860>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_recovers_historic0'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78604B0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+_______ test_restart_recovers_historical_receipt_without_provider[True] _______
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_recovers_historic1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD7682AC0>
+missing_journal = True
+
+    @pytest.mark.parametrize("missing_journal", [False, True])
+    def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypatch,missing_journal):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:346: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD76804B0>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_recovers_historic1'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD7682AC0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+______________ test_restart_publishes_uncommitted_native_events _______________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_publishes_uncommi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ACEC0>
+
+    def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
+        from nexus_connector_core import RuntimeEvent
+        from okto_nexus.bootstrap import embedded_events
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:511: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AF460>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_restart_publishes_uncommi0'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ACEC0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+________ test_released_resources_reconcile_before_new_admission[None] _________
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AE0B0>
+fault = None
+
+    @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+    def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AD630>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc0'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AE0B0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+___ test_released_resources_reconcile_before_new_admission[occupied_ledger] ___
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ACA60>
+fault = 'occupied_ledger'
+
+    @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+    def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AFD90>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc1'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ACA60>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+___ test_released_resources_reconcile_before_new_admission[missing_ledger] ____
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AD6A0>
+fault = 'missing_ledger'
+
+    @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+    def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AD0F0>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc2'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AD6A0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+__ test_released_resources_reconcile_before_new_admission[untracked_journal] __
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ADFD0>
+fault = 'untracked_journal'
+
+    @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+    def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AE7B0>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc3'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78ADFD0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+______ test_released_resources_reconcile_before_new_admission[event_gap] ______
+
+tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AE4A0>
+fault = 'event_gap'
+
+    @pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+    def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+>       with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py:546: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\contextlib.py:305: in helper
+    return _GeneratorContextManager(func, args, kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <contextlib._GeneratorContextManager object at 0x0000021BD78AD160>
+func = <function local_setup at 0x0000021BD5159580>
+args = (WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4161/test_released_resources_reconc4'), <_pytest.monkeypatch.MonkeyPatch object at 0x0000021BD78AE4A0>)
+kwds = {}
+
+    def __init__(self, func, args, kwds):
+>       self.gen = func(*args, **kwds)
+                   ^^^^^^^^^^^^^^^^^^^
+E       TypeError: local_setup() missing 1 required positional argument: 'request'
+
+C:\Python313\Lib\contextlib.py:109: TypeError
+============================== warnings summary ===============================
+..\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-embedded-inventory-2z7k3itc\isolated\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_restart_recovers_historical_receipt_without_provider[False]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_restart_recovers_historical_receipt_without_provider[True]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_restart_publishes_uncommitted_native_events
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_released_resources_reconcile_before_new_admission[None]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_released_resources_reconcile_before_new_admission[occupied_ledger]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_released_resources_reconcile_before_new_admission[missing_ledger]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_released_resources_reconcile_before_new_admission[untracked_journal]
+FAILED D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_embedded_dispatch.py::test_released_resources_reconcile_before_new_admission[event_gap]
+8 failed, 41 passed, 9 deselected, 1 warning in 132.72s (0:02:12)

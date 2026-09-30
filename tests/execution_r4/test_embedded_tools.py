@@ -119,3 +119,49 @@ def test_cancelled_tool_waiter_keeps_issuance_owned(connected_local,monkeypatch)
         release.set()
     client.portal.call(owner.close)
     assert native.opens==0 and not vault.values
+
+
+@pytest.mark.parametrize('local_setup', ['pi_rpc'], indirect=True)
+def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(connected_local,monkeypatch):
+    from okto_nexus.application.execution_capabilities import ExecutionCapabilityService
+    from nexus_connector_core.native_action_bridge import ContextGet, HandoffClaim, HandoffComplete
+    setup,binding,native,vault,environments=enable_tools(connected_local)
+    deps,app,client,*_=setup
+    owner=app.state.embedded_dispatch_owner
+    monkeypatch.setattr(owner.leases,'max_duration_ms',6000)
+    original=ExecutionCapabilityService.issue
+    def short_metadata(self,**kwargs):
+        return dict(original(self,**kwargs),expires_in=2)
+    monkeypatch.setattr(ExecutionCapabilityService,'issue',short_metadata)
+    opened=admit(setup,binding,'pi-tools-open','runtime.start',new_session=True)
+    wait_receipt(setup,opened)
+    session_id=opened['scope']['session_id']
+    config=owner.tools.configurations[session_id]
+    assert config['native_factory'] is not None, (setup[5].adapter_id,config['cap']['audience'])
+    seed_work(setup,workspace=opened['scope']['workspace_id'])
+    until=time.monotonic()+10
+    while True:
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            serial=uow.connection.execute("SELECT MAX(lease_serial) FROM execution_leases WHERE status='ACTIVE'").fetchone()[0]
+        if serial>=2 and time.monotonic()>config['deadline']:
+            break
+        assert time.monotonic()<until
+        time.sleep(.02)
+    async def actions():
+        host=owner.host
+        assert owner.failure is None, repr(owner.failure)
+        native_owner=host._native_action_owners[(opened['scope']['executor_id'],session_id)]
+        service=native_owner._service
+        context=service._context_provider()
+        base=(session_id,config['cap']['capability_ref'],'work')
+        assert (await service._bridge.invoke(ContextGet('pi-read',*base),context))['status']=='OPEN'
+        claimed=await service._bridge.invoke(HandoffClaim('pi-claim',*base,'pi-key'),context)
+        assert (await service._bridge.invoke(HandoffComplete('pi-complete',*base,claimed['claim_epoch'],
+            {'summary':'Reviewed.'}),context))['status']=='COMPLETED'
+    client.portal.call(actions)
+    assert native.opens==1 and len(vault.values)==1
+    assert config['cap']['capability'] not in json.dumps(environments)
+    closed=admit(setup,binding,'pi-tools-close','runtime.close',session_id=session_id)
+    wait_receipt(setup,closed,stages=('SUCCEEDED',))
+    client.portal.call(owner.close)
+    assert not vault.values
