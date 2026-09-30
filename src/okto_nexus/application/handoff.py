@@ -115,7 +115,7 @@ from ..domain.handoff import (
     validate_verdict,
     validate_verify_by,
 )
-from ..domain.ids import resolve_workspace_id
+from .execution_tools import resolve_tool_workspace as resolve_workspace_id
 from ..domain.inbox import DELIVERY_UNREAD, new_delivery_id
 from ..domain.routing import RoutingAgent, can_agent_see_event, is_agent_eligible
 from ..domain.tag_selector import reachable, scope_selector, selector_matches
@@ -968,6 +968,8 @@ class HandoffService:
                     uow, workspace_id=workspace_id, handoff_id=handoff_id,
                     claimed_by=agent_id, lease_expires_at=lease_expires_at, updated_at=now,
                 )
+            from .execution_tool_claims import remember_claim
+            remember_claim(uow, claimed)
             if managed and not reused:
                 operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
                     key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode)
@@ -1073,6 +1075,8 @@ class HandoffService:
             else:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1473,6 +1477,8 @@ class HandoffService:
             else:
                 self._require_actor(uow, agent_id)
             permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
             external_operation = self._authorize_external_work_return(uow, handoff_id=handoff_id,
                 agent_id=agent_id, claim_epoch=claim_epoch, session_id=session_id, session_secret=session_secret)
 
@@ -1893,6 +1899,15 @@ class HandoffService:
         another agent. Internal approval execution separately revalidates the
         captured creator binding and all canonical creation policies.
         """
+        from ..domain.execution_principal import current_execution_principal, current_execution_tool
+        from .execution_tools import ExecutionToolConnectionFactory, denied
+        principal = current_execution_principal.get()
+        if principal is not None:
+            if not isinstance(self._cf, ExecutionToolConnectionFactory) or agent_id != principal.scope['agent_id']:
+                raise denied()
+            self._cf.capabilities.authorize_principal(uow, principal=principal,
+                actions=('tools/call', current_execution_tool.get()))
+            return None
         context = self._request_context_provider() if self._request_context_provider else None
         if context is None:
             return None

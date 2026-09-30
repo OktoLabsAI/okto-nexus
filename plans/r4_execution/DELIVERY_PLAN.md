@@ -166,6 +166,13 @@ Ainda faltam o guard nos handlers MCP/nativos e sua adoção no ambiente
 aprovado do daemon; NS03.04 permanece parcial. As campanhas e tentativas
 estão no manifesto, sem transformar teste de reserva em aceite de ferramentas.
 
+O incremento de [autoridade MCP](M09_MCP_SESSION_AUTHORITY.md) integra oito
+ferramentas, incluindo claim/complete canônicos com escopo de sessão persistido.
+O guard roda também no UOW do efeito. Ações nativas, inbox limitado ao
+workspace e demais ferramentas continuam pendentes, assim como a adoção nos
+hosts. O [manifesto corrente](test_runs_20260930_mcp_capabilities.json) preserva
+o alcance dos testes e não encerra gates.
+
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |

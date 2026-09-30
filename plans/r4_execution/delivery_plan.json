@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Complete delivery planning review after the published session capability increment; all product gates remain open.",
+    "scope": "Managed MCP session authentication, scoped canonical handoff claims and transaction-bound authority; native domain actions and remaining tool paths are still pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "a0081a1494139a4296283f5ca96820be2bbf4751",
+      "nexus": "fa911ffdd8ed7d94354b5c1ff1c247209e97e287",
       "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
@@ -57,34 +57,22 @@
       "plans/r4_execution/M06_DAEMON_STARTUP.md",
       "plans/r4_execution/test_runs_20260930_startup.json",
       "plans/r4_execution/M02_SESSION_CAPABILITIES.md",
-      "plans/r4_execution/test_runs_20260930_capabilities.json"
+      "plans/r4_execution/test_runs_20260930_capabilities.json",
+      "plans/r4_execution/M09_MCP_SESSION_AUTHORITY.md",
+      "plans/r4_execution/test_runs_20260930_mcp_capabilities.json"
     ],
-    "latest_increment": "Canonical session capability reservation, hash-only persistence, safe replay/replacement, active-use authority port, applied-lease validity, and strict Connector consumer.",
-    "verification_scope": "Final Connector source: 343 passes and two existing skips. Final Nexus R4: 137 passes. Final installed affected integration: 120 passes. Initial failures and intermediate green runs are retained. Groups overlap; no product gate closed.",
+    "latest_increment": "Managed MCP handlers and canonical handoff claim ownership.",
+    "verification_scope": "See the linked increment manifest for exact campaigns, failed attempts, reruns and installed artifacts. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial NS03.04 session credential reservation and consumer validation; MCP/native handler and approved daemon launch integration remain pending",
-      "nexus_commit": "a0081a1494139a4296283f5ca96820be2bbf4751",
-      "published_dependency_heads": {
-        "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
-        "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
-      },
-      "evidence": "plans/r4_execution/test_runs_20260930_capabilities.json",
-      "recorded_passes": {
-        "connector_regression": 343,
-        "nexus_r4_before_final_revision_guard": 134,
-        "installed_coordinated_final": 120,
-        "nexus_r4_final": 137
-      },
-      "recorded_skips": {
-        "connector_regression": 2
-      },
-      "counts_overlap": true,
+      "scope": "Managed MCP session authentication, scoped canonical handoff claims and transaction-bound authority; native domain actions and remaining tool paths are still pending.",
+      "nexus_commit": "Commit containing M09_MCP_SESSION_AUTHORITY.md",
+      "evidence": "plans/r4_execution/test_runs_20260930_mcp_capabilities.json",
       "next_steps": [
-        "Wire session capability authentication and scope/action ceilings into MCP/native use-case handlers while preserving domain permission and claim checks.",
-        "Persist the Connector issuance intent and protected material; compose approved profile/environment and current revisions in the daemon launch provider.",
-        "Complete automatic lane adoption, ticket/lease renewal, nonempty paginated recovery and durable publishers.",
-        "Complete embedded execution, M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
+        "Implement native context/claim/complete with durable request IDs and the same canonical claim.",
+        "Complete workspace-scoped inbox and remaining managed MCP tools, causal results and exclusive consumption.",
+        "Compose protected launch configuration and automatic execution/renewal/recovery in daemon and embedded hosts.",
+        "Complete all remaining M00-M13 criteria and final independent-host/provider acceptance."
       ]
     },
     "installed_core_campaign": {

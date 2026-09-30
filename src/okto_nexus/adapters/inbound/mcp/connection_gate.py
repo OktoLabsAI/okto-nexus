@@ -3,6 +3,8 @@ import functools
 import inspect
 
 from ....application.connection_policy import require_method
+from ....application.execution_tools import check_tool_arguments
+from ....domain.execution_principal import current_execution_tool
 from ....errors import OktoNexusError
 from ..http.identity_ctx import get_authenticated_agent
 
@@ -24,22 +26,36 @@ class ConnectionGateServer:
         register = self.inner.tool(*args, **kwargs)
 
         def decorate(fn):
+            signature = inspect.signature(fn)
+
+            def admit(a, kw):
+                arguments = signature.bind(*a, **kw)
+                arguments.apply_defaults()
+                check_tool_arguments(fn.__name__, arguments.arguments)
+                self.check()
+
             if inspect.iscoroutinefunction(fn):
                 @functools.wraps(fn)
                 async def wrapped(*a, **kw):
+                    token = current_execution_tool.set(fn.__name__)
                     try:
-                        self.check()
+                        admit(a, kw)
+                        return await fn(*a, **kw)
                     except OktoNexusError as exc:
                         return {"ok": False, "error": exc.to_error_dict()}
-                    return await fn(*a, **kw)
+                    finally:
+                        current_execution_tool.reset(token)
             else:
                 @functools.wraps(fn)
                 def wrapped(*a, **kw):
+                    token = current_execution_tool.set(fn.__name__)
                     try:
-                        self.check()
+                        admit(a, kw)
+                        return fn(*a, **kw)
                     except OktoNexusError as exc:
                         return {"ok": False, "error": exc.to_error_dict()}
-                    return fn(*a, **kw)
+                    finally:
+                        current_execution_tool.reset(token)
             register(wrapped)
             return fn
         return decorate

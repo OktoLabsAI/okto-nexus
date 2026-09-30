@@ -30,6 +30,8 @@ SERVER_INSTRUCTIONS = """\nOkto Nexus - local agent coordination bus (workspace-
 
 YOUR IDENTITY. You connect over MCP streamable HTTP; the nxs_ API key sent in your Authorization bearer header IS your agent identity, created by the operator on the dashboard. Use that agent_id consistently as from_agent_id / agent_id in every call. EVERYTHING you need is exposed as MCP tools on THIS connection - never shell out to the okto-nexus CLI, attach a stdio server, or spawn helper processes (sole exception: an EPT poller holding only a short-lived nxsept_ token, never your nxs_ key).
 
+MANAGED SESSIONS. With an nxc4_ session bearer, call agent_whoami and use its session_scope.workspace_id as project_root. Use the bound agent and session only; do not open a legacy session or request another credential. Claim and complete work through authorized handoff tools, preserving claim_epoch. The following key-based pre-flight applies only to nxs_ connections.
+
 PRE-FLIGHT - run on your FIRST turn, in order, BEFORE the user's task (cheap, idempotent):
   1. agent_whoami() - your agent_id, role, capabilities, permissions, and communication style when set. Use that agent_id everywhere.
   2. workspace_resolve(project_root=<cwd>) then session_open(agent_id=<you>, workspace_id=<resolved>). Store the returned session_secret. Pass session_id + session_secret on the verbs that accept them (message_create - named from_session_id there; handoff claim/complete/verify/reject/cancel; inbox pull/ack/extend; poll_token_*) - each validated call advances your heartbeat, keeping you in the broadcast audience. Read-only verbs (event_*, inbox count/peek, discovery) do NOT advance it: call session_heartbeat on idle or read-only stretches.
@@ -378,7 +380,7 @@ ERRORS & RETRIES. Every tool answers {ok:true,data} or {ok:false,error:{code,mes
 #: 56 = approved equivalent-endpoint fallback with persisted admission/target binding.
 #: 57 = canonical conversational command payload contract3.
 #: 58 = authenticated external attach work v1 and separate Nexus acknowledgement/completion facts.
-SURFACE_REVISION = 60
+SURFACE_REVISION = 61
 
 
 # Tool modules whose publication is controlled by a config flag. These gates
@@ -459,6 +461,15 @@ def register_tools(server: Any, deps: Deps) -> list[str]:
 
     A tool module participates by exposing ``register(server, deps) -> None``.
     """
+    # Tool services get a request-aware transaction port, while transport
+    # authentication and background owners retain the original factory.
+    from ....application.execution_capabilities import ExecutionCapabilityService
+    from ....application.execution_tools import ExecutionToolConnectionFactory
+    from ....bootstrap.execution_authority import build_execution_access, ExecutionToolDependencies
+    capabilities = ExecutionCapabilityService(factory=deps.connection_factory,
+                                             access=build_execution_access(deps))
+    deps = ExecutionToolDependencies(deps,
+        ExecutionToolConnectionFactory(deps.connection_factory, capabilities))
     registered: list[str] = []
     prefix = _tools_pkg.__name__ + "."
     registration_server = (
@@ -501,6 +512,9 @@ def register_meta_tools(server: Any, deps: Deps) -> None:
     they describe the WHOLE server (surface revision, schema ledger), not any
     one slice.
     """
+
+    from .connection_gate import ConnectionGateServer
+    server = ConnectionGateServer(server, deps)
 
     @server.tool()
     @tool_envelope

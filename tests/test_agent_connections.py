@@ -245,40 +245,33 @@ def test_upgrade_from_64_preserves_identity_and_is_idempotent(tmp_path):
     with factory.unit_of_work() as uow:
         agents.upsert(uow, agent_id='existing', role='reviewer', capabilities={'review': True}, metadata={'keep': 'profile'})
         before = agents.get(uow, 'existing')
-    assert MigrationRunner(factory).apply() == [65]
+    assert MigrationRunner(factory).apply() == list(range(65, 82))
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         assert agents.get(uow, 'existing') == before
         assert not uow.connection.execute('PRAGMA foreign_key_check').fetchall()
 
 
-def test_disabling_mcp_fences_an_already_authenticated_stdio_connection(runtime):
-    import asyncio
-    import json
-    import sys
-
-    from test_pr34_remediation import stdio_environment
-
-    deps, http, _, _, operator, _ = runtime
-
-    async def query():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-
-        params = StdioServerParameters(command=sys.executable, args=[
-            '-m', 'okto_nexus.adapters.inbound.mcp.server', '--home', str(deps.config.home_dir),
-            '--feature-harness-integrations', 'true'], env=stdio_environment(runtime))
-        async with stdio_client(params) as (reader, writer), ClientSession(reader, writer) as session:
-            await session.initialize()
-            first = await session.call_tool('agent_whoami', {})
-            assert (first.structuredContent or json.loads(first.content[0].text))['ok']
-            response = http.put('/api/v1/agents/caller/connections', headers={'x-api-key': operator}, json={
-                'expected_revision': 0, 'methods': {'mcp': False}})
-            assert response.status_code == 200
-            second = await session.call_tool('agent_whoami', {})
-            assert (second.structuredContent or json.loads(second.content[0].text))['error']['code'] == 'PERMISSION_DENIED'
-
-    asyncio.run(asyncio.wait_for(query(), timeout=30))
+def test_disabling_mcp_fences_an_already_authenticated_http_client(runtime):
+    # R4 serves stateless HTTP MCP. Reuse the authenticated HTTP connection;
+    # a prior successful call must not cache permission past a policy change.
+    _deps, http, _, peers, operator, caller = runtime
+    before = len(peers)
+    assert tool(http, caller, 'agent_whoami', {})['ok']
+    response = http.put('/api/v1/agents/caller/connections', headers={'x-api-key': operator}, json={
+        'expected_revision': 0, 'methods': {'mcp': False}})
+    assert response.status_code == 200
+    refused = http.post('/mcp/', headers={'Authorization': 'Bearer ' + caller,
+        'Accept': 'application/json, text/event-stream'}, json={
+            'jsonrpc': '2.0', 'id': 2, 'method': 'tools/call',
+            'params': {'name': 'agent_whoami', 'arguments': {}}})
+    assert refused.status_code == 403
+    assert refused.json()['error']['code'] == 'PERMISSION_DENIED'
+    response = http.put('/api/v1/agents/caller/connections', headers={'x-api-key': operator}, json={
+        'expected_revision': 1, 'methods': {'mcp': True}})
+    assert response.status_code == 200
+    assert tool(http, caller, 'agent_whoami', {})['ok']
+    assert len(peers) == before
 
 
 @pytest.mark.parametrize('runtime', [False], indirect=True)

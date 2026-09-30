@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="16" skipped="0" tests="18" time="37.710" timestamp="2026-09-30T08:00:46.030349-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth" time="2.293"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...db75144f461aa31bd312d286049e6bc', connection_id='conn_fd7d3da5f143918133b06feb964088b8', connection_generation=2), ...)
+
+    def test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth(opening):
+        opening[0].config.trust_mode = 'strict'
+        cap = activate(opening)
+        seed_work(opening)
+&gt;       who = envelope(rpc(opening, cap['capability']))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_protocol_ceiling_is_not_tool_permission[actions0]" time="2.113"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_prot...8d55c50578dd243fb666c1e58c0877e', connection_id='conn_b67674bd8ab4e3512ab3f74d732467d8', connection_generation=2), ...)
+actions = ['tools/call']
+
+    @pytest.mark.parametrize('actions', [['tools/call'], ['agent_whoami']])
+    def test_protocol_ceiling_is_not_tool_permission(opening, actions):
+        cap = activate(opening, actions=actions)
+&gt;       result = envelope(rpc(opening, cap['capability']))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_protocol_ceiling_is_not_tool_permission[actions1]" time="2.084"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_prot...dfa6776ce5fe3085f286b94b7509588', connection_id='conn_e9df8ccef4edc4c074dfe19c190f4897', connection_generation=2), ...)
+actions = ['agent_whoami']
+
+    @pytest.mark.parametrize('actions', [['tools/call'], ['agent_whoami']])
+    def test_protocol_ceiling_is_not_tool_permission(opening, actions):
+        cap = activate(opening, actions=actions)
+&gt;       result = envelope(rpc(opening, cap['capability']))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:83: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[handoff_claim-arguments0]" time="1.834"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...6894e9e00b3ae6cd4fd59942aa82199', connection_id='conn_85b978348b21253666a0c56e673b3dfc', connection_generation=2), ...)
+name = 'handoff_claim'
+arguments = {'project_root': 'other-workspace', 'agent_id': 'subject', 'handoff_id': 'work'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[handoff_claim-arguments1]" time="1.945"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...95b4759ef3b971e568eaa6f56d402d2', connection_id='conn_0d586b7f08066b87db8f1b2f2fcff35d', connection_generation=2), ...)
+name = 'handoff_claim'
+arguments = {'project_root': 'ws', 'agent_id': 'other', 'handoff_id': 'work'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[handoff_claim-arguments2]" time="2.323"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...1c3935fad1812af3b12bf2013068923', connection_id='conn_01ba6e3fc756fae71fca90b7ddcb4791', connection_generation=2), ...)
+name = 'handoff_claim'
+arguments = {'project_root': 'ws', 'agent_id': 'subject', 'handoff_id': 'work', 'session_id': 'other-session'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[handoff_claim-arguments3]" time="1.676"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...8de9ce9161318e2063772b209e60dd3', connection_id='conn_7dffaaa9b575889d331a62b808a6566e', connection_generation=2), ...)
+name = 'handoff_claim'
+arguments = {'project_root': 'ws', 'agent_id': 'subject', 'handoff_id': 'work', 'session_secret': 'legacy-secret'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[handoff_claim-arguments4]" time="2.008"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...5afebbd4bb58f8c8489dd578cd30e7c', connection_id='conn_14d97009442d69466fb502ece3289b89', connection_generation=2), ...)
+name = 'handoff_claim'
+arguments = {'project_root': 'ws', 'agent_id': 'subject', 'handoff_id': 'work', 'runtime_endpoint_id': 'ep'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[inbox_pull-arguments5]" time="1.830"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...ca7e94a2c1194c2716d507e02238b42', connection_id='conn_ab52d74f7030143576129f7cc3059741', connection_generation=2), ...)
+name = 'inbox_pull', arguments = {'agent_id': 'subject'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[session_open-arguments6]" time="1.837"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...60878092c04dc5dffe36f55a8a8298e', connection_id='conn_d7a3b80395a7a84450aa77f282268f32', connection_generation=2), ...)
+name = 'session_open', arguments = {'agent_id': 'subject', 'workspace_id': 'ws'}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[workspace_list-arguments7]" time="1.873"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...5a4020bc2990fcc4098c267497c79d1', connection_id='conn_8d78aba3c8effd69780dedc498ce639f', connection_generation=2), ...)
+name = 'workspace_list', arguments = {}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface[nexus_info-arguments8]" time="1.789"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mana...ee1a6aefeabdf6985834a9f07fe5fc6', connection_id='conn_5a356ffb284f8efeb7496729b5a4a759', connection_generation=2), ...)
+name = 'nexus_info', arguments = {}
+
+    @pytest.mark.parametrize('name,arguments', [
+        ('handoff_claim', args(project_root='other-workspace')),
+        ('handoff_claim', args(agent_id='other')),
+        ('handoff_claim', args(session_id='other-session')),
+        ('handoff_claim', args(session_secret='legacy-secret')),
+        ('handoff_claim', args(runtime_endpoint_id='ep')),
+        ('inbox_pull', {'agent_id': 'subject'}),
+        ('session_open', {'agent_id': 'subject', 'workspace_id': 'ws'}),
+        ('workspace_list', {}),
+        ('nexus_info', {}),
+    ])
+    def test_managed_mcp_cannot_escape_to_other_scope_or_unadapted_surface(opening, name, arguments):
+        cap = activate(opening, actions=['tools/call', name])
+        seed_work(opening)
+&gt;       result = envelope(rpc(opening, cap['capability'], name, arguments))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:101: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_mcp_capability_keeps_canonical_handoff_eligibility" time="1.927"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mcp_...4a36753fcf33733511067546142f5e8', connection_id='conn_923d172efb0b6a18260b368fa944545f', connection_generation=2), ...)
+
+    def test_mcp_capability_keeps_canonical_handoff_eligibility(opening):
+        cap = activate(opening)
+        seed_work(opening, target='other')
+&gt;       result = envelope(rpc(opening, cap['capability'], 'handoff_claim', args()))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_mcp_capability_cannot_complete_an_unowned_claim" time="2.013"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mcp_...af3a482d544a508c65bb2e0596c6760', connection_id='conn_5020e9003b496ebb96b432b448b83023', connection_generation=2), ...)
+
+    def test_mcp_capability_cannot_complete_an_unowned_claim(opening):
+        cap = activate(opening)
+        seed_work(opening)
+        with opening[0].connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE handoffs SET status='CLAIMED',claimed_by='subject',claim_epoch=1 WHERE handoff_id='work'")
+&gt;       result = envelope(rpc(opening, cap['capability'], 'handoff_complete', args(claim_epoch=1)))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_mcp_revocation_and_audience_do_not_change_tools_only_identity" time="2.252"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mcp_...6a0a059e9f24e94f3a22691e516a3ff', connection_id='conn_871bf9dac84c346327774dc0fb87080b', connection_generation=2), ...)
+
+    def test_mcp_revocation_and_audience_do_not_change_tools_only_identity(opening):
+        cap = activate(opening)
+&gt;       assert envelope(rpc(opening, cap['capability']))['ok']
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_native_capability_is_not_mcp_or_a_legacy_key" time="2.148" /><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_mcp_reserved_capability_cannot_initialize_active_identity" time="2.064" /><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_mcp_revalidates_after_transport_authentication_before_domain_effect" time="1.955"><failure message="AssertionError: Invalid Host header&#10;assert 421 == 200&#10; +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3901/test_mcp_...ecbe350efcd329bbfe034adcaa9b31e', connection_id='conn_38a9be571f42859c5b2c86f9d918b60c', connection_generation=2), ...)
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x00000276901391D0&gt;
+
+    def test_mcp_revalidates_after_transport_authentication_before_domain_effect(opening, monkeypatch):
+        from okto_nexus.adapters.inbound.mcp.connection_gate import ConnectionGateServer
+        cap = activate(opening)
+        seed_work(opening)
+        original = ConnectionGateServer.check
+        def revoke_after_check(self):
+            original(self)
+            with opening[0].connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_session_capabilities SET revoked_at='2026-01-01T00:00:00Z'")
+        monkeypatch.setattr(ConnectionGateServer, 'check', revoke_after_check)
+&gt;       result = envelope(rpc(opening, cap['capability'], 'handoff_claim', args()))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_mcp_session_capabilities.py:154: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+response = &lt;Response [421 Misdirected Request]&gt;
+
+    def envelope(response):
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: Invalid Host header
+E       assert 421 == 200
+E        +  where 421 = &lt;Response [421 Misdirected Request]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:38: AssertionError</failure></testcase></testsuite></testsuites>

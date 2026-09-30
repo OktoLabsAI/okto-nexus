@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.652" timestamp="2026-09-30T08:03:25.983254-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth" time="3.310"><failure message="AssertionError: {'ok': False, 'error': {'code': 'INTERNAL_ERROR', 'message': 'Refusing to persist event: visibility \'{&quot;type&quot;: &quot;public...the emitting slice.', 'details': {'visibility': '{&quot;type&quot;: &quot;public&quot;}', 'supported': ['eligible', 'private', 'public']}}}&#10;assert False is True">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3904/test_mana...8ade81ca644baef5acd43099a3bca98', connection_id='conn_9e1402444213b2139855c65be94f4936', connection_generation=2), ...)
+
+    def test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth(opening):
+        opening[0].config.trust_mode = 'strict'
+        cap = activate(opening)
+        seed_work(opening)
+        who = envelope(rpc(opening, cap['capability']))
+        assert who['ok'] is True and who['data']['agent_id'] == 'subject'
+        claimed = envelope(rpc(opening, cap['capability'], 'handoff_claim', args()))
+&gt;       assert claimed['ok'] is True, claimed
+E       AssertionError: {'ok': False, 'error': {'code': 'INTERNAL_ERROR', 'message': 'Refusing to persist event: visibility \'{"type": "public...the emitting slice.', 'details': {'visibility': '{"type": "public"}', 'supported': ['eligible', 'private', 'public']}}}
+E       assert False is True
+
+tests\execution_r4\test_mcp_session_capabilities.py:68: AssertionError</failure></testcase></testsuite></testsuites>

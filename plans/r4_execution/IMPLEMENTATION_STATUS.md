@@ -1,5 +1,16 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Autoridade MCP de sessão — 30 de setembro de 2026
+
+O [incremento de handlers MCP](M09_MCP_SESSION_AUTHORITY.md) integra oito
+ferramentas ao escopo R4, revalida autoridade no UOW do domínio e vincula
+claim/complete à sessão e à geração canônicas. Chaves tools-only continuam
+separadas. NS03.04/NS12.01/NS12.02 permanecem parciais: faltam ações nativas,
+inbox limitado ao workspace, demais ferramentas e adoção pelos hosts.
+O [manifesto](test_runs_20260930_mcp_capabilities.json) registra campanhas,
+falhas corrigidas, hashes e limites. Nenhum gate foi encerrado.
+
+
 ## Capabilities de sessão — 30 de setembro de 2026
 
 A [emissão canônica](M02_SESSION_CAPABILITIES.md) agora retorna segredo único,

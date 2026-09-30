@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="3.203" timestamp="2026-09-30T08:01:38.662885-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_mcp_session_capabilities" name="test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth" time="2.157"><failure message="AssertionError: {'ok': False, 'error': {'code': 'PERMISSION_DENIED', 'message': 'Handoff actor is not authorized.'}}&#10;assert False is True">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3902/test_mana...65f1557f3e2c77272efa86c4a91d05a', connection_id='conn_eec8a5d6718fc66fe73ad31a689ee748', connection_generation=2), ...)
+
+    def test_managed_mcp_claim_and_complete_share_canonical_domain_and_strict_auth(opening):
+        opening[0].config.trust_mode = 'strict'
+        cap = activate(opening)
+        seed_work(opening)
+        who = envelope(rpc(opening, cap['capability']))
+        assert who['ok'] is True and who['data']['agent_id'] == 'subject'
+        claimed = envelope(rpc(opening, cap['capability'], 'handoff_claim', args()))
+&gt;       assert claimed['ok'] is True, claimed
+E       AssertionError: {'ok': False, 'error': {'code': 'PERMISSION_DENIED', 'message': 'Handoff actor is not authorized.'}}
+E       assert False is True
+
+tests\execution_r4\test_mcp_session_capabilities.py:68: AssertionError</failure></testcase></testsuite></testsuites>

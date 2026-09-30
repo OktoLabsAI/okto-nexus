@@ -13,3 +13,17 @@ def build_execution_access(deps):
         connection_factory=deps.connection_factory, agents=deps.repos.agents,
         endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(),
         config=deps.config, clock=deps.clock)
+
+
+class ExecutionToolDependencies:
+    """Keep shared services/live owners while decorating the tool transaction port."""
+
+    def __init__(self, deps, factory):
+        object.__setattr__(self, '_deps', deps)
+        object.__setattr__(self, 'connection_factory', factory)
+
+    def __getattr__(self, name):
+        return getattr(self._deps, name)
+
+    def __setattr__(self, name, value):
+        setattr(self._deps, name, value)

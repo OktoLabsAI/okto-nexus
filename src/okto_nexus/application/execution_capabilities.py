@@ -207,24 +207,47 @@ class ExecutionCapabilityService:
         except (ValueError, TypeError, RecursionError):
             raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability scope is invalid.') from None
         with self.factory.unit_of_work(write=False) as uow:
-            credential = uow.connection.execute(
-                'SELECT * FROM execution_session_capabilities WHERE secret_hash=?', (digest,)).fetchone()
-            if (credential is None or credential['audience'] != audience or credential['revoked_at'] is not None or
-                    not credential['scope_json'] or credential['scope_json'] != expected_json or
-                    action not in json.loads(credential['actions_json']) or
-                    _stamp(credential['valid_until_server']) <= _stamp(self.access.clock.now_iso())):
-                raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability is unavailable in this scope.')
-            authority, _ = self._authority(uow, expected_scope,
-                grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'])
-            lease = self.repo.latest(uow, expected_scope)
-            if (authority['lifecycle_state'] != 'READY' or authority['lease_state'] != 'ACTIVE' or
-                    lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None or
-                    lease['scope_json'] != credential['scope_json'] or
-                    lease['grant_id'] != credential['source_grant_id'] or
-                    lease['source_grant_revision'] != credential['source_grant_revision'] or
-                    _stamp(lease['valid_until_server']) <= _stamp(self.access.clock.now_iso())):
-                raise _error(ErrorCode.PERMISSION_DENIED, 'An active session and applied lease are required.')
-            if audience == 'nexus-mcp-session':
-                require_method(uow, expected_scope['agent_id'], 'mcp')
-            return {'capability_id': credential['capability_id'], 'scope': dict(expected_scope),
-                    'audience': audience, 'actions': json.loads(credential['actions_json'])}
+            return self._authorize_hash(uow, digest=digest, audience=audience,
+                                        actions=(action,), expected_json=expected_json)
+
+    def _authorize_hash(self, uow, *, digest, audience, actions=(), expected_json=None):
+        credential = uow.connection.execute(
+            'SELECT * FROM execution_session_capabilities WHERE secret_hash=?', (digest,)).fetchone()
+        if (credential is None or credential['audience'] != audience or credential['revoked_at'] is not None or
+                not credential['scope_json'] or
+                (expected_json is not None and credential['scope_json'] != expected_json) or
+                any(a not in json.loads(credential['actions_json']) for a in actions) or
+                _stamp(credential['valid_until_server']) <= _stamp(self.access.clock.now_iso())):
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability is unavailable in this scope.')
+        expected_scope = json.loads(credential['scope_json'])
+        authority, _ = self._authority(uow, expected_scope,
+            grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'])
+        lease = self.repo.latest(uow, expected_scope)
+        if (authority['lifecycle_state'] != 'READY' or authority['lease_state'] != 'ACTIVE' or
+                lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None or
+                lease['scope_json'] != credential['scope_json'] or
+                lease['grant_id'] != credential['source_grant_id'] or
+                lease['source_grant_revision'] != credential['source_grant_revision'] or
+                _stamp(lease['valid_until_server']) <= _stamp(self.access.clock.now_iso())):
+            raise _error(ErrorCode.PERMISSION_DENIED, 'An active session and applied lease are required.')
+        if audience == 'nexus-mcp-session':
+            require_method(uow, expected_scope['agent_id'], 'mcp')
+        return {'capability_id': credential['capability_id'], 'scope': dict(expected_scope),
+                'audience': audience, 'actions': json.loads(credential['actions_json'])}
+
+    def authenticate_transport(self, *, token, audience):
+        from types import MappingProxyType
+        from ..domain.execution_principal import ExecutionPrincipal
+        if (type(token) is not str or not token.startswith('nxc4_') or
+                not 32 <= len(token) <= 4096 or audience not in AUDIENCES):
+            raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability is invalid.')
+        digest = hashlib.sha256(token.encode()).hexdigest()
+        with self.factory.unit_of_work(write=False) as uow:
+            credential = self._authorize_hash(uow, digest=digest, audience=audience)
+        return ExecutionPrincipal(credential['capability_id'], digest, audience,
+                                  MappingProxyType(credential['scope']))
+
+    def authorize_principal(self, uow, *, principal, actions):
+        return self._authorize_hash(uow, digest=principal.secret_hash,
+            audience=principal.audience, actions=actions,
+            expected_json=canonical_json(dict(principal.scope)).decode())

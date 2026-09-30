@@ -38,7 +38,7 @@ from okto_nexus.errors import OktoNexusError
 
 
 def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
-                    actions=None, max_executions=1):
+                    actions=None, max_executions=1, trust_mode=None):
     class ManualDispatchFixture:
         def __init__(self, **kwargs):
             pass
@@ -50,6 +50,8 @@ def setup_authority(tmp_path, monkeypatch, *, lease_authority=True,
     # test does not use this fixture and exercises the actual socket sender.
     monkeypatch.setattr(executor_link, 'ExecutionDispatchPump', ManualDispatchFixture)
     deps = bootstrap({}, ['--home', str(tmp_path / 'home'), '--feature-harness-integrations', 'true'])
+    if trust_mode is not None:
+        deps.config.trust_mode = trust_mode
     app = build_app(deps)
     factory = deps.connection_factory
     server_id = ensure_execution_installation(factory).server_id

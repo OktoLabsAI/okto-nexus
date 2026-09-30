@@ -42,7 +42,7 @@ from ....application.workspace_analytics import WorkspaceAnalyticsService
 from ....application.workspace_overview import WorkspaceListService
 from ....domain.approvals import OPERATOR_AGENT_ID
 from ....domain.poll_tokens import POLL_TOKEN_PREFIX, is_well_formed_poll_token
-from ....errors import OktoNexusError
+from ....errors import ErrorCode, OktoNexusError
 from ...outbound.embedding import resolve_embedding_provider
 from ...outbound.execution.core_inventory import MANAGEMENT_REVISION
 from ...outbound.sqlite.embeddings_repo import SqliteMessageVectorStore
@@ -228,8 +228,44 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             # A history ticket is accepted only by this operation reader.
             # Every scope and canonical ownership check stays in the route.
             return await call_next(request)
-        is_mcp = request.url.path.startswith("/mcp")
+        is_mcp = path == "/mcp" or path.startswith("/mcp/")
         bearer = extract_bearer(request)
+        supplied = extract_api_key(request)
+        if (bearer or '').startswith('nxc4_') or (supplied or '').startswith('nxc4_'):
+            if (not is_mcp or not bearer or supplied != bearer or
+                    request.query_params.get('api_key') or request.headers.get('x-api-key')):
+                return (v1_err if is_v1 else err)(401, 'AUTH_FAILED',
+                    'Use the session capability bearer only on its supported audience endpoint.')
+            from dataclasses import replace
+            from ....application.execution_capabilities import ExecutionCapabilityService
+            from ....bootstrap.execution_authority import build_execution_access
+            from ....domain.execution_principal import current_execution_principal
+            deps = request.app.state.deps
+            service = ExecutionCapabilityService(factory=deps.connection_factory,
+                                                 access=build_execution_access(deps))
+
+            def resolve_capability():
+                principal = service.authenticate_transport(token=bearer, audience='nexus-mcp-session')
+                with deps.connection_factory.unit_of_work(write=False) as uow:
+                    agent = deps.repos.agents.get(uow, principal.scope['agent_id'])
+                if agent is None:
+                    raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                         'The session identity is unavailable.', {})
+                # Never let a legacy context builder turn this derived identity
+                # into canonical-key authority using a database key hash.
+                return principal, replace(agent, api_key_hash=None)
+
+            try:
+                principal, agent = await anyio.to_thread.run_sync(resolve_capability)
+            except OktoNexusError:
+                return err(401, 'AUTH_FAILED', 'The session capability is invalid or inactive.')
+            principal_token = current_execution_principal.set(principal)
+            agent_token = current_agent.set(agent)
+            try:
+                return await call_next(request)
+            finally:
+                current_agent.reset(agent_token)
+                current_execution_principal.reset(principal_token)
         bearer_is_poll_token = bool(bearer and bearer.startswith(POLL_TOKEN_PREFIX))
         bearer_is_allowed_poll = (
             request.method == "GET"

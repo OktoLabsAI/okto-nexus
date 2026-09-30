@@ -84,13 +84,13 @@ def test_ns02_02(tmp_path):
         conn.commit()
     finally:
         conn.close()
-    assert MigrationRunner(factory).apply() == [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80]
+    assert MigrationRunner(factory).apply() == [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81]
     assert MigrationRunner(factory).apply() == []
     conn = factory.get_connection()
     try:
         names = {row[0] for row in conn.execute(
             "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'execution_%'")}
-        assert len(names) == 22
+        assert len(names) == 23
         assert {"execution_operations", "execution_dispatch_outbox",
                 "execution_event_ingress", "execution_event_watermarks"} <= names
         assert conn.execute("SELECT enabled FROM agent_endpoints WHERE endpoint_id='ep-a'").fetchone()[0] == 0
