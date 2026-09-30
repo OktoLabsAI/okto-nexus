@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Receipt recovery from Core facts — September 30, 2026
+
+[Increment](M07_RECEIPT_BINDING.md): Core 0.2.35 validates a non-secret association between Core and R4 hashes before effects. Connector persists it, migrates publication storage to schema 2, and reconstructs pending receipts from the journal at startup. Installed results: Core 104 passed, Connector 353 passed (one skip), Nexus 84 passed. Recovery after Core commit/before wire persistence is verified through real HTTP/WSS with a technical peer. Nonempty session reconciliation, acknowledged-operation history, rotation and full acceptance remain pending.
+
 ## Durable Connector receipt publication — September 30, 2026
 
 [Increment](M07_DURABLE_PUBLICATION.md): reserve before Core effects, persist projected receipts before HTTP, and replay ready pages at startup using fresh scoped authority. Installed tests: Connector 349 passed (one existing skip), Nexus 83 passed. Lost delivery/acknowledgment, retained writes, startup ordering, authorization changes and 257 receipts are covered. Unprojected reservations, nonempty session reconciliation, ticket rotation and full acceptance remain open.

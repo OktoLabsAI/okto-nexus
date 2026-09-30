@@ -25,7 +25,7 @@ from test_vertical_inventory import _NativeFactory
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
 @pytest.mark.parametrize('automatic,publication_failure', [(False, None), (True, None),
-                                                          (False, 'before_commit'), (False, 'lost_ack')])
+    (False, 'before_commit'), (False, 'lost_ack'), (False, 'core_commit')])
 def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
@@ -202,6 +202,13 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         daemon.own_r4_connection(owner, candidate_provider=candidates,
                             launch_provider=launch, publish_receipt=publish, native_factory=native)
                     assert duplicate.value.code == 'OPERATION_CONFLICT'
+                if publication_failure == 'core_commit':
+                    original_record = execution.publications.record
+                    def interrupted_record(frame):
+                        if frame['stage'] == 'SUCCEEDED':
+                            raise OSError('The receipt projection write was interrupted.')
+                        original_record(frame)
+                    monkeypatch.setattr(execution.publications, 'record', interrupted_record)
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
                 await admit('turn.submit', session_id=session_id, text='Hello')
@@ -218,8 +225,13 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     from okto_nexus_connector.services.r4_publications import recover_publications
                     pending = R4PublicationStore.for_state(daemon.store)
                     saved = pending.ready(server_id, executor_id)
-                    assert len(saved) == 1 and saved[0]['stage'] == 'SUCCEEDED'
-                    assert saved[0]['connection_id'] == owner.state.connection_id
+                    if publication_failure == 'core_commit':
+                        assert not saved
+                        bound = pending.unprojected(server_id, executor_id)
+                        assert len(bound) == 1 and bound[0]['source']['connection_id'] == owner.state.connection_id
+                    else:
+                        assert len(saved) == 1 and saved[0]['stage'] == 'SUCCEEDED'
+                        assert saved[0]['connection_id'] == owner.state.connection_id
                     # Simulate the previous credential's expiry. Recovery cannot
                     # replace a still-bound live ticket and must not bypass it.
                     with deps.connection_factory.unit_of_work() as uow:
@@ -229,7 +241,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         pass
                     async with NexusHTTPClient(base_url) as recovery_http:
                         recovered = await recover_publications(daemon.store, daemon.vault, recovery_http,
-                            server_id=server_id, executor_id=executor_id, require_current=current)
+                            server_id=server_id, executor_id=executor_id, require_current=current,
+                            journal=await daemon.host.ensure_history_journal())
                     assert list(recovered) == [binding['binding_id']]
                     assert not pending.pending(server_id, executor_id)
                     final = client.get('/v1/runtime/operations/' + operations[-1], headers=headers['subject']).json()
@@ -243,7 +256,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
-                expected_session = ('READY', 'SUPERSEDED') if publication_failure == 'before_commit' else ('CLOSED', 'CLOSED')
+                expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') else ('CLOSED', 'CLOSED')
                 # Receipt ingress preserves history after disconnect. Adoption
                 # of that fact into session readiness remains reconciliation.
                 assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == expected_session
