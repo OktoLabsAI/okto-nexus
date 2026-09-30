@@ -68,13 +68,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `fa68cd33b30378b7fb7d8501ccd1de8909c62099` | `0.2.0` |
+| Nexus | `a0081a1494139a4296283f5ca96820be2bbf4751` | `0.2.0` |
 | Connector | `c97c9d41c223c2c728b810cf3d1ff5e62e2016d6` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro é o pai publicado deste incremento; Connector e Core são dependências publicadas. O commit que contém o relatório identifica a revisão Nexus sem referência circular ao próprio SHA. Nenhuma flag de prontidão foi promovida.
+A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro já contém esse incremento publicado; Connector e Core são as dependências publicadas verificadas. A revisão documental da entrega parte desse conjunto e está registrada em [total_delivery_review_20260930.json](total_delivery_review_20260930.json). Nenhuma flag de prontidão foi promovida.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -86,6 +86,7 @@ O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e no
 | [Incremento Core 0.2.28](test_runs_20260930_pending_containment.json) | Core 920 passes/74 skips; Connector 241 passes/2 skips; Nexus R4 69 passes; contenção instalada 12 passes; integração instalada 19 passes | Campanhas sobrepostas, peers sintéticos; sem aceite final de produto |
 | Campanha instalada de conformance Core | 99 passes, sem falhas ou skips; `python -I`, pacote instalado e hash do wheel | Runner/evidência publicados em `9d244cf`; contratos sintéticos, sem fechamento de M01 |
 | [Onboarding por operador](M03_OPERATOR_BINDING.md) | Nexus R4 77 passes; 11 casos com wheel instalado fora dos clones | Operador direto, inventário sintético e grant separado; sem ciclo de runtime |
+| [Capabilities de sessão](test_runs_20260930_capabilities.json) | Nexus R4: 137 passes; integração instalada: 120 passes; Connector: 343 passes e dois skips existentes | Grupos sobrepostos; reserva e validação de autoridade comprovadas; handlers MCP/nativos, composição do ambiente e aceite de provider pendentes |
 
 O runner `tools/run_r4_installed.py` e a evidência de conformance estão no
 Core em `plans/implementation/evidence/r4-installed-campaign/`. As duas
@@ -231,6 +232,19 @@ O controle e o inventário já iniciam automaticamente. A ligação de runtime d
 
 Os subpassos admitem testes técnicos com peers e qualificação sintética explicitamente identificados durante o desenvolvimento. A saída de produto P6.5 exige prontidão obtida pelo contrato e pelo host. O fechamento de M06 permanece condicionado a todos os critérios normativos, inclusive CON-R4-02/04 e CN5 Q03.
 
+### Conclusão da autoridade de sessão antes da adoção pelos hosts
+
+O checkpoint publicado já emite e valida capabilities limitadas à sessão. Os próximos incrementos devem fechar as fronteiras abaixo. São partes de M02/M05/M06/M09, preservando o grafo de fechamento dos milestones.
+
+| Ordem | Implementação restante | Testes e critério de aceite |
+|---|---|---|
+| 1 — guard Nexus (M02; aceite de domínio M09) | Integrar a capability aos handlers MCP/nativos e aos casos de uso. Validar audiência, ação, sessão, binding, revisões e lease aplicada; preservar permissões de domínio e claims | Chamada autorizada pelo handler real; negar token reservado sem sessão ativa, audiência/ação/escopo incorretos, grant revogado, lease expirada e revisão alterada. A chave de agente tools-only mantém sua jornada própria |
+| 2 — intenção e segredo Connector (M02/P6.1) | Persistir a intenção de emissão antes do HTTP, guardar material em armazenamento protegido e compor o ambiente aprovado. Recuperar perda de resposta pelos metadados canônicos | Crash antes/depois do envio e da gravação; nenhuma credencial em argv, logs ou estado público; substituição apenas quando comprovadamente permitida; sessão em execução não recebe retry cego de emissão |
+| 3 — adoção pelos hosts (M05/P6.2) | Conectar seleção, configuração e referências autorizadas ao owner embedded e ao daemon, usando as APIs públicas Core | Fluxo público de onboarding → open → ferramenta com pacote instalado, sem ambiente sintético de produção; local sem aplicativo Connector e remoto sem paths livres no Server |
+| 4 — ciclo de vida (P6.3/M09/M11) | Renovar e revogar autoridade com a lease aplicada, sem reancorar replay ou substituir silenciosamente material ativo | Sessão ultrapassa a primeira validade; perda de ACK, resposta tardia, revogação e mudança de owner não permitem novo efeito. Falhar separadamente WSS e MCP HTTP e comprovar isolamento |
+
+A emissão HTTP isolada e o port de autorização já testados não encerram esses aceites. Cada incremento atualiza o inventário com os nodeids executados e publica código, evidência e hashes juntos.
+
 ### Aceite concreto do próximo fluxo de produto
 
 A jornada abaixo deve existir como teste instalado de integração, primeiro com peer técnico e depois com os providers exigidos. O peer técnico verifica o encadeamento e não qualifica um provider.
@@ -249,7 +263,7 @@ A preparação de Windows/Linux, Python suportado, providers autenticados e Serv
 
 ### Preservação do workspace
 
-O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1`; a campanha instalada citada já foi publicada. O incremento Nexus de prova delegada e suas evidências são publicados separadamente dessas alterações prévias. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
+O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1`; a campanha instalada citada já foi publicada. Os incrementos de implementação e suas evidências são publicados separadamente dessas alterações prévias. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
 
 ## Responsabilidades e invariantes de implementação
 

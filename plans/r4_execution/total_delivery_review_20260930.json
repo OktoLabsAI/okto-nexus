@@ -1,0 +1,75 @@
+{
+  "reviewed_at": "2026-09-30T10:49:30.248804+00:00",
+  "scope": "Complete delivery plan review; historical product evidence verified, no new product tests executed by this review.",
+  "repositories": {
+    "nexus": {
+      "head": "a0081a1494139a4296283f5ca96820be2bbf4751",
+      "tracking_ref": "a0081a1494139a4296283f5ca96820be2bbf4751",
+      "branch": "feature/v0.2.0",
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    },
+    "connector": {
+      "head": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
+      "tracking_ref": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
+      "branch": "feature/v0.2.0",
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    },
+    "core": {
+      "head": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "tracking_ref": "9d244cfecc31c817661d560bbcee75cc9f8d5513",
+      "branch": "feature/v0.2.0",
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "plan_document": "plans/r4_execution/DELIVERY_PLAN.md",
+  "document_validation": {
+    "coverage": "PASS_DOCUMENT_COVERAGE_ONLY",
+    "counts": {
+      "milestones": 14,
+      "completion_batches": 13,
+      "remote_completion_steps": 5,
+      "nexus_tasks": 85,
+      "original_scenarios": 164,
+      "external_deliverables": 12,
+      "cn5_findings": 4,
+      "http_and_websocket_routes": 23,
+      "operation_actions": 7,
+      "language_scenarios": 4
+    },
+    "package_status": "PASS",
+    "package_checks": 8
+  },
+  "commands": [
+    "rtk proxy python -X utf8 plans/r4_execution/validate_delivery_plan.py --write-report",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 plans/validar_pacote.py --output plans/r4_execution/evidence/total-delivery-review-package-validation.json"
+  ],
+  "reviewed_file_sha256": {
+    "plans/r4_execution/DELIVERY_PLAN.md": "7a6e80d2fdf7f9d7f855292de0ff4bc683b572b613b6e3e84aec2c796bfa0d3d",
+    "plans/r4_execution/delivery_plan.json": "561ecf104cb7a9359fb2d7e56a659be1c455befa628eae6638e2e8b9b962ba37",
+    "plans/r4_execution/delivery_coverage.json": "8120c319d5de0480fa8be3a7b0052f7c8b8a16b9bc098852541725a0bd00cdf9",
+    "plans/r4_execution/evidence/total-delivery-review-package-validation.json": "3af54bd71756a5db9f034c55cbd40144881b15234988f7e03798253f9f4f798a",
+    "plans/r4_execution/test_runs_20260930_capabilities.json": "6aa62bea5412e1ecb494e1af821846d4682708c3b3c8ce3d2139944727b035fe"
+  },
+  "historical_evidence_verified": {
+    "source_test_evidence_hashes": 56,
+    "nexus_r4_passed": 137,
+    "installed_integration_passed": 120,
+    "connector_passed": 343,
+    "connector_skipped": 2,
+    "groups_overlap": true,
+    "provider_acceptance": false
+  },
+  "product_tests_executed_by_this_review": false,
+  "closed_product_gates": [],
+  "readiness_promoted": false,
+  "remaining_delivery": [
+    "M00-M01: complete acceptance inventory, laboratory preparation and installed shared contract conformance.",
+    "M02-M04: complete authority, reusable onboarding and canonical admission/dispatch.",
+    "M05-M06: finish embedded and daemon execution through public callers and approved launch configuration.",
+    "M07-M09: durable observation, decisions/input, scoped tool access and governed work.",
+    "M10-M11: complete UI/CLI, US English, recovery, revocation, containment and limits.",
+    "M12-M13: demonstrate migration/rollback and qualify immutable final artifacts with real providers and independent hosts."
+  ],
+  "workspace_preservation": "Preexisting 599 plan deletions, three UI assets, plans/evidencias/VALIDACAO_DO_PACOTE.json, the Nexus test directory and Core =1 remain outside this planning commit.",
+  "acceptance_policy": "Planning coverage is not product acceptance. No mandatory case may be silently omitted; final G0-G3 closure requires linked execution evidence."
+}

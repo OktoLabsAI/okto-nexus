@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial NS03.04 session credential reservation and consumer validation; MCP/native handler and approved daemon launch integration remain pending",
+    "scope": "Complete delivery planning review after the published session capability increment; all product gates remain open.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "fa68cd33b30378b7fb7d8501ccd1de8909c62099",
+      "nexus": "a0081a1494139a4296283f5ca96820be2bbf4751",
       "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
@@ -64,7 +64,7 @@
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
       "scope": "Partial NS03.04 session credential reservation and consumer validation; MCP/native handler and approved daemon launch integration remain pending",
-      "nexus_commit": "Commit containing M02_SESSION_CAPABILITIES.md",
+      "nexus_commit": "a0081a1494139a4296283f5ca96820be2bbf4751",
       "published_dependency_heads": {
         "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
@@ -101,7 +101,8 @@
       "commit": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "planning_review": "plans/r4_execution/planning_review_20260930.json",
-    "completion_planning_review": "plans/r4_execution/completion_review_20260930.json"
+    "completion_planning_review": "plans/r4_execution/completion_review_20260930.json",
+    "total_delivery_review": "plans/r4_execution/total_delivery_review_20260930.json"
   },
   "sources": {
     "backlog": "plans/BACKLOG_R4.json",
