@@ -1,0 +1,48 @@
+{
+  "qualification": "Retained owner observation of delayed R4 close receipt; no reconnection acceptance.",
+  "core": {
+    "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.34.dev0-py3-none-any.whl",
+    "sha256": "67de77b9250fc773887bd4d0f9c2c0cd5ea4af6ee0b433d38d837e58de7018ba",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-core-5jgi848j",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-core-5jgi848j\\dist"
+    ]
+  },
+  "connector": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-connector-ekvrkthv\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "67a3a1e92a4f73deb2b97bf112c125ddfb1477b9c17c8eb3259ae57f30ec3bf3",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-connector-ekvrkthv",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-connector-ekvrkthv\\dist"
+    ]
+  },
+  "nexus": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-nexus-3_on9pzj\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "828aee363869fde5a6c2c6ec6dd00cf306fafa5ee130a921a0a401c7d066da57",
+    "command": [
+      "C:/Python313/python.exe",
+      "-m",
+      "pip",
+      "wheel",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-nexus-3_on9pzj",
+      "--no-deps",
+      "--no-build-isolation",
+      "--wheel-dir",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\late-close-nexus-3_on9pzj\\dist"
+    ]
+  }
+}

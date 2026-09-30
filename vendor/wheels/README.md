@@ -1,4 +1,11 @@
-## Current development artifact: 0.2.33.dev0
+## Current development artifact: 0.2.34.dev0
+
+nexus_connector_core-0.2.34.dev0-py3-none-any.whl, SHA-256
+67de77b9250fc773887bd4d0f9c2c0cd5ea4af6ee0b433d38d837e58de7018ba.
+
+Retained policy-close receipt completion.
+
+## Previous development artifact: 0.2.33.dev0
 
 nexus_connector_core-0.2.33.dev0-py3-none-any.whl, SHA-256
 1f119d5626e9de4c8dc2589b0941289d300e995b6a422ebc16b627be5b61fee1.

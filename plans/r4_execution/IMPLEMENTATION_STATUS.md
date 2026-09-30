@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Late close publication — September 30, 2026
+
+[Increment](M07_LATE_CLOSE_PUBLICATION.md): daemon and embedded owners await the retained Core close producer through durable terminal completion. Installed tests: Core 78, Connector 337 (one skip), Nexus 81. Deadline, cancellation and injected storage failure paths are covered. Disconnect/restart recovery and full acceptance remain open.
+
 ## Terminal R4 close — September 30, 2026
 
 [Increment](M07_TERMINAL_CLOSE.md): Core 0.2.33 persists terminal close and the daemon publishes SUCCEEDED through the public operation query. Installed regressions: Core 76, Connector 336 (one skip), Nexus 81. Real Pi/Codex/Claude close receipts are SUCCEEDED. Delayed/disconnected publication and full acceptance remain pending.

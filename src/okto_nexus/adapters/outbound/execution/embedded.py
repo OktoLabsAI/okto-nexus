@@ -178,7 +178,8 @@ class EmbeddedExecutor:
         receipt = await runtime.close(
             CloseOperation(operation_id=operation_id,
                            session_id=self.session_id,
-                           reason=reason, policy=policy), self.context)
+                           reason=reason, policy=policy), self.context,
+            **({"wait_for_completion": True} if self.context.r4_authority is not None else {}))
         await self.host.close_native_actions(executor_id=self.context.executor_id,
                                               session_id=self.session_id)
         return receipt

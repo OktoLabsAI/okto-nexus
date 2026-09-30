@@ -249,7 +249,25 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
                             assert not result["raw_capability_present"] and not result["native_ref_in_argv"]
                             assert "nexus_connector_core" in result["extension"]
                             if backend == "embedded":
-                                await executor.close(operation_id="close", policy=ShutdownPolicy(1,1))
+                                committed, allow_commit = asyncio.Event(), asyncio.Event()
+                                record = runtime._journal.record_receipt
+                                async def delayed_record(key, receipt):
+                                    if key.operation_id == "close" and receipt.stage == "SUCCEEDED":
+                                        committed.set()
+                                        await allow_commit.wait()
+                                    return await record(key, receipt)
+                                monkeypatch.setattr(runtime._journal, "record_receipt", delayed_record)
+                                closing = asyncio.create_task(executor.close(
+                                    operation_id="close", policy=ShutdownPolicy(1,1)))
+                                try:
+                                    await asyncio.wait_for(committed.wait(), 5)
+                                    await asyncio.sleep(2.1)
+                                    assert not closing.done()
+                                    allow_commit.set()
+                                    assert (await asyncio.wait_for(closing, 5)).stage == "SUCCEEDED"
+                                finally:
+                                    allow_commit.set()
+                                    await asyncio.gather(closing, return_exceptions=True)
                             else:
                                 await runtime.close(CloseOperation("close", scope["session_id"], "Done.",
                                                                  ShutdownPolicy(1,1)), applied.context)
