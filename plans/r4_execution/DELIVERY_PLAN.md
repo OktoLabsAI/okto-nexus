@@ -68,15 +68,23 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `a694d8ae47761e6958eb1d0f7add4cbc5428ed62` | `0.2.0` |
-| Connector | `c97c9d41c223c2c728b810cf3d1ff5e62e2016d6` | `0.5.0.dev0` |
-| Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
+| Nexus | `ddc7b0a470fb47a0f68f3e76588bad0e69d77448` | `0.2.0` |
+| Connector | `1b16110c2da98edc3d9fed50cbbb8c3799a022bf` | `0.5.0.dev0` |
+| Core | `cfcf121a69bb324ae34d06a267a37d130246d847` | `0.2.29.dev0` |
 
-O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
+O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
 A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro também contém a integração parcial dos handlers MCP descrita abaixo; Connector e Core são as dependências publicadas verificadas. A revisão documental anterior está preservada em [total_delivery_review_20260930.json](total_delivery_review_20260930.json). A atualização do checkpoint após os handlers MCP está em [full_delivery_checkpoint_20260930.json](full_delivery_checkpoint_20260930.json). Nenhuma flag de prontidão foi promovida.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
+
+O [incremento da bridge Core](M09_CORE_NATIVE_BRIDGE.md) integra a autoridade
+nativa R4 e os backends embedded/HTTP. Sua
+[evidência coordenada](test_runs_20260930_native_domain.json) inclui pacotes
+instalados, recuperação de resposta perdida, execução embedded com imports
+Connector recusados e a correção de concorrência de leitura/escrita do estado
+no Windows. Configuração aprovada, socket Pi, renovação e adoção automática
+pelos hosts continuam na fila de conclusão.
 
 ### Evidência disponível e seu alcance
 

@@ -27,3 +27,17 @@ class ExecutionToolDependencies:
 
     def __setattr__(self, name, value):
         setattr(self._deps, name, value)
+
+
+def build_native_action_service(deps):
+    """One canonical composition for native HTTP and the embedded Core caller."""
+    from ..application.execution_capabilities import ExecutionCapabilityService
+    from ..application.execution_native_actions import NativeActionService
+    from ..adapters.outbound.sqlite.execution_native_actions import SqliteNativeActionRepository
+    from ..adapters.inbound.mcp.tools.handoff import build_service
+    capabilities = ExecutionCapabilityService(factory=deps.connection_factory,
+                                               access=build_execution_access(deps))
+    return NativeActionService(factory=deps.connection_factory, capabilities=capabilities,
+        repository=SqliteNativeActionRepository(), clock=deps.clock,
+        build_handoff=lambda factory: build_service(
+            ExecutionToolDependencies(deps, factory), register_approval_executor=False))

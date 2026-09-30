@@ -6,11 +6,9 @@ from fastapi.responses import JSONResponse
 from nexus_connector_core.protocol import strict_json
 
 from ....application.execution_capabilities import ExecutionCapabilityService
-from ....application.execution_native_actions import NativeActionService, MAX_NATIVE_BYTES
-from ....bootstrap.execution_authority import build_execution_access, ExecutionToolDependencies
+from ....application.execution_native_actions import MAX_NATIVE_BYTES
+from ....bootstrap.execution_authority import build_execution_access, build_native_action_service
 from ....errors import OktoNexusError
-from ...outbound.sqlite.execution_native_actions import SqliteNativeActionRepository
-from ..mcp.tools.handoff import build_service
 from .app import extract_bearer, v1_err
 
 
@@ -55,10 +53,7 @@ def build_router():
             body = strict_json(b''.join(parts).decode('utf-8', errors='strict'))
         except (ValueError, UnicodeError, RecursionError):
             return error_response(400, 'VALIDATION_ERROR', 'The native action body is invalid JSON.')
-        service = NativeActionService(factory=deps.connection_factory, capabilities=capabilities,
-            repository=SqliteNativeActionRepository(), clock=deps.clock,
-            build_handoff=lambda factory: build_service(
-                ExecutionToolDependencies(deps, factory), register_approval_executor=False))
+        service = build_native_action_service(deps)
         try:
             response = await anyio.to_thread.run_sync(lambda: service.invoke(principal=principal, body=body))
         except OktoNexusError as error:

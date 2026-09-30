@@ -1,3 +1,12 @@
+## Current development artifact: 0.2.29.dev0
+
+`nexus_connector_core-0.2.29.dev0-py3-none-any.whl`, SHA-256
+`a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba`.
+The same wheel is used by Nexus and Connector. Native domain capabilities
+are fenced by the current installed R4 session authority, independently of
+the seven runtime operations. Host lifecycle integration and provider
+qualification remain pending. R4 execution readiness remains false.
+
 # Wheel Core fixado para R4
 
 Current: `nexus_connector_core-0.2.14.dev0-py3-none-any.whl`

@@ -1,5 +1,22 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Bridge nativa Core — 30 de setembro de 2026
+
+O [incremento](M09_CORE_NATIVE_BRIDGE.md) conecta a bridge pública do Core
+0.2.29.dev0 ao domínio canônico por dois backends: Nexus embedded e Connector
+HTTP. O escopo da capability é limitado pela autoridade instalada no runtime;
+o caller preserva IDs e não repete automaticamente mutações incertas.
+O teste embedded também recusa todos os imports do aplicativo Connector.
+
+A campanha ampla revelou uma disputa de leitura/escrita do state.json no
+Windows. A leitura agora usa o mesmo lock da escrita; o teste controlado
+reproduziu a ausência de exclusão antes da correção.
+Os resultados finais, a falha original e os artefatos estão no
+[manifesto](test_runs_20260930_native_domain.json). A composição automática
+dos hosts, o ciclo do socket Pi e a renovação de capabilities permanecem
+pendentes. Nenhum milestone ou gate é encerrado.
+
+
 ## Ações nativas canônicas — 30 de setembro de 2026
 
 O [incremento nativo](M09_NATIVE_ACTIONS.md) adiciona a rota pública de
