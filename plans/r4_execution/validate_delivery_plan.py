@@ -87,15 +87,17 @@ def validate() -> dict:
             before, after = milestone_batch[dependency], milestone_batch[milestone]
             require(before == after or before in batch_ancestors[after],
                     f"Batch order violates milestone dependency: {dependency} -> {milestone}")
-    steps = batches["P6"]["steps"]
-    require(len(steps) == 5 and {step["id"] for step in steps} ==
-            {f"P6.{i}" for i in range(1, 6)}, "Remote completion steps are incomplete.")
-    prior_steps: set[str] = set()
-    for step in steps:
-        require(set(step["depends_on"]) <= prior_steps and
-                f"| {step['id']} —" in document,
-                f"Remote step is undocumented or out of order: {step['id']}")
-        prior_steps.add(step["id"])
+    for batch_id in ("P5", "P6"):
+        steps = batches[batch_id]["steps"]
+        require(len(steps) == 5 and {step["id"] for step in steps} ==
+                {f"{batch_id}.{i}" for i in range(1, 6)},
+                f"Completion steps are incomplete: {batch_id}")
+        prior_steps: set[str] = set()
+        for step in steps:
+            require(set(step["depends_on"]) <= prior_steps and
+                    f"| {step['id']} —" in document,
+                    f"Step is undocumented or out of order: {step['id']}")
+            prior_steps.add(step["id"])
 
     task_map: dict[str, str] = {}
     phases = {phase["id"] for phase in backlog["phases"]}
@@ -177,7 +179,9 @@ def validate() -> dict:
                           hashlib.sha256(path.read_bytes()).hexdigest()
                           for path in sources.values()},
         "counts": {"milestones": len(milestones), "completion_batches": len(batches),
-                   "remote_completion_steps": len(steps), "nexus_tasks": len(task_map),
+                   "local_completion_steps": len(batches["P5"]["steps"]),
+                   "remote_completion_steps": len(batches["P6"]["steps"]),
+                   "nexus_tasks": len(task_map),
                    "original_scenarios": len(test_map),
                    "external_deliverables": len(external),
                    "cn5_findings": len(plan["cn5_findings"]),

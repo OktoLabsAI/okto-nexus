@@ -64,15 +64,15 @@ Continuam fora do escopo normativo: novo login de usuário Nexus, SSO, tenant ob
 
 ### Checkpoint vigente — 30 de setembro de 2026
 
-Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente. Nos três repositórios, a branch é `feature/v0.2.0` e HEAD coincide com a referência local de tracking consultada.
+Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente. Nos três repositórios, a branch é `feature/v0.2.0`; os SHAs foram conferidos diretamente em origin. Este checkpoint distingue commits publicados de alterações locais ainda não publicadas.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `ddc7b0a470fb47a0f68f3e76588bad0e69d77448` | `0.2.0` |
-| Connector | `1b16110c2da98edc3d9fed50cbbb8c3799a022bf` | `0.5.0.dev0` |
-| Core | `cfcf121a69bb324ae34d06a267a37d130246d847` | `0.2.29.dev0` |
+| Nexus | `1c48ba40d8216cdbfc504fe96d877c4ab0fced6e` | `0.2.0` |
+| Connector | `f48ce20141a00a72bc67f8d0197bfad4a1f5cc75` | `0.5.0.dev0` |
+| Core | `770659b7f3404798fe6c59146c7ab9d12b84bbe4` | `0.2.30.dev0` |
 
-O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `a465c1ec1aaba9814872b21984a436bbf4cac5f28c2b4bed776f1a7042426cba`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
+O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
 A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro também contém a integração parcial dos handlers MCP descrita abaixo; Connector e Core são as dependências publicadas verificadas. A revisão documental anterior está preservada em [total_delivery_review_20260930.json](total_delivery_review_20260930.json). A atualização do checkpoint após os handlers MCP está em [full_delivery_checkpoint_20260930.json](full_delivery_checkpoint_20260930.json). Nenhuma flag de prontidão foi promovida.
 
@@ -83,8 +83,24 @@ nativa R4 e os backends embedded/HTTP. Sua
 [evidência coordenada](test_runs_20260930_native_domain.json) inclui pacotes
 instalados, recuperação de resposta perdida, execução embedded com imports
 Connector recusados e a correção de concorrência de leitura/escrita do estado
-no Windows. Configuração aprovada, socket Pi, renovação e adoção automática
-pelos hosts continuam na fila de conclusão.
+no Windows. O socket Pi e seus hooks de composição têm evidência técnica
+parcial no checkpoint abaixo. Configuração aprovada, renovação e composição
+automática pelas entradas de produto continuam na fila de conclusão.
+
+A [revisão desta entrega](delivery_scope_review_20260930.json) registra os
+HEADs, hashes e resultados observados no workspace. Core e Connector já
+publicaram o owner do socket Pi e a retenção de producers durante shutdown.
+A adoção correspondente no Nexus está em alterações locais ainda não
+publicadas. Os XMLs disponíveis registram 143 passes Core, 264 passes e um
+skip Connector, 33 passes Nexus e dois passes embedded com imports do
+aplicativo Connector bloqueados. São campanhas anteriores inspecionadas
+nesta revisão, com sobreposição; esta revisão não executou testes de produto.
+
+O peer Pi é técnico e sua qualificação é forçada no teste. O caso embedded
+prepara a autoridade por uma fixture WSS compartilhada: comprova a
+independência de imports e o owner, mas não comprova o produto local sem
+WSS. O wheel Nexus inclui assets previamente modificados, sem aceite de UI.
+Esses resultados não encerram M05/M06/M09 nem compõem uma release final.
 
 ### Evidência disponível e seu alcance
 
@@ -172,23 +188,23 @@ o segredo único por audiência/escopo, replay e substituição restrita, o port
 de validação de autoridade ativa e renovação de validade no commit da lease.
 O cliente Connector valida o DTO e o prazo contra o opening canônico.
 Naquela campanha ainda faltavam os guards dos handlers. O incremento MCP
-seguinte cobre oito ferramentas; permanecem ações nativas, ferramentas
-restantes e adoção no ambiente aprovado dos hosts. NS03.04 permanece parcial. As campanhas e tentativas
+seguinte cobre oito ferramentas; as ações nativas foram integradas no incremento
+posterior. Permanecem ferramentas restantes e adoção no ambiente aprovado dos hosts. NS03.04 permanece parcial. As campanhas e tentativas
 estão no manifesto, sem transformar teste de reserva em aceite de ferramentas.
 
 O incremento de [autoridade MCP](M09_MCP_SESSION_AUTHORITY.md) integra oito
 ferramentas, incluindo claim/complete canônicos com escopo de sessão persistido.
-O guard roda também no UOW do efeito. Ações nativas, inbox limitado ao
-workspace e demais ferramentas continuam pendentes, assim como a adoção nos
-hosts. O [manifesto corrente](test_runs_20260930_mcp_capabilities.json) preserva
+O guard roda também no UOW do efeito. Inbox limitado ao workspace, demais
+ferramentas e adoção automática no ambiente aprovado dos hosts continuam
+pendentes. Ações nativas foram acrescentadas no incremento seguinte. O [manifesto corrente](test_runs_20260930_mcp_capabilities.json) preserva
 o alcance dos testes e não encerra gates.
 
 O incremento de [ações nativas](M09_NATIVE_ACTIONS.md) implementa contexto,
 claim e complete pela rota pública, com audiência própria, resultado durável
 e efeito no mesmo UOW. A disputa com MCP usa o mesmo claim; recuperação de
 resposta perdida e recriação da aplicação preservam o resultado original.
-A composição da bridge pública Core nos hosts continua pendente, assim como
-inbox e ferramentas restantes. O [manifesto](test_runs_20260930_native_actions.json)
+A bridge pública Core e os hooks dos hosts já têm integração técnica parcial.
+Permanecem configuração e composição automáticas de produto, inbox e ferramentas restantes. O [manifesto](test_runs_20260930_native_actions.json)
 registra campanhas dirigidas, regressão e instalação, sem fechar gates.
 
 ### Lacunas prioritárias observadas
@@ -200,7 +216,7 @@ registra campanhas dirigidas, regressão e instalação, sem fechar gates.
 | Dispatcher — M04 | Loop WSS Server já reserva, revalida, envia e recupera reservas de owner substituído; completar composição embedded/daemon com o resolver físico aprovado, governança e recuperação de envios incertos |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Reader, seleção e consumidores de efeitos já são adotados pelo daemon na jornada WSS técnica; startup de controle e inventário já usa o registro persistido; conectar automaticamente lanes/consumidores ao perfil/ambiente aprovado, refresh de revisões, renovação de tickets/leases e reconciliação não vazia; extrair SQL/transições restantes do handler Server |
-| Governança e observação — M07–M09 | Oito handlers MCP já validam capability e autoridade na transação; ações nativas HTTP já compartilham claims e replay; completar demais ferramentas/inbox, adoção da bridge Pi nos hosts, eventos/receipts recuperáveis, decisões/input e consumo exclusivo entre canais |
+| Governança e observação — M07–M09 | Oito handlers MCP já validam capability e autoridade na transação; ações nativas HTTP já compartilham claims e replay; completar demais ferramentas/inbox, composição automática da bridge Pi a partir do perfil aprovado, eventos/receipts recuperáveis, decisões/input e consumo exclusivo entre canais |
 | Jornadas e idioma — M10 | Completar UI/CLI, infraestrutura de testes de navegador e auditoria US English, incluindo superfícies legadas |
 | Robustez e migração — M11/M12 | Provar recovery, revogação online/offline, ownership/shutdown e limites; ensaiar cutover e rollback com dados legados |
 | Qualificação — M13 | Resolver regressões conhecidas, pipeline/empacotamento e matriz provider/SO/hosts sobre os artefatos finais |
@@ -243,6 +259,20 @@ Estes lotes organizam o trabalho restante de M00 a M13. Não substituem as taref
 
 Cada lote termina com relatório, commit e push em `feature/v0.2.0` dos repositórios alterados. Um resultado parcial continua parcial no inventário, mesmo depois de publicado.
 
+### Decomposição do ciclo local restante (P5)
+
+A configuração aprovada e a intenção durável de segredo são requisitos
+comuns a P5 e P6.1. Implementar os contratos comuns uma vez e integrar cada
+host, preservando a independência das topologias.
+
+| Passo | Mudança e fronteira | Prova de saída |
+|---|---|---|
+| P5.1 — composição canônica | Ligar binding, perfil, candidato completo, root aprovado e contexto ao owner de serve; retirar semeadura de autoridade do teste de produto | Onboarding público → admissão → lease local aplicada → prepare/open; nenhum WSS, daemon ou import Connector; configuração inválida falha antes do spawn |
+| P5.2 — ambiente e ferramentas | Resolver referências protegidas por abertura; usar renderização pública Core para MCP HTTP e owner Pi; persistir intenção antes de emitir capability | Segredo ausente, resposta perdida e drift de configuração; nenhuma credencial em argv/logs; ferramenta alcança o mesmo claim canônico |
+| P5.3 — ciclo e observação | Encadear as cinco ações iniciais, receipts, eventos, seleção/reuso e encerramento pelo dispatcher local | UI/API/CLI consultam o mesmo operation_id; novo turno não cria processo; sessão nova é explícita; dois ambientes simultâneos não se misturam |
+| P5.4 — recuperação e autoridade | Renovar/revogar contexto e capability; recuperar journal/ledger e obrigações; manter owner enquanto houver efeito incerto | Execução além da primeira validade, restart, waiter cancelado e shutdown com producer pendente; nenhum efeito após revogação; histórico sem binário |
+| P5.5 — instalação local pura | Instalar Nexus e Core em ambiente novo, sem aplicativo Connector; executar pelo serve e callers públicos | Confirmar ausência de Connector e WSS local; peer técnico pelo fluxo público, sem semear binding/operação no aceite; repetir com providers reais em M13 e governança completa de M08/M09 |
+
 ### Decomposição do ciclo remoto restante (P6)
 
 O controle e o inventário já iniciam automaticamente. A ligação de runtime deve ser concluída em incrementos verificáveis, usando os contratos normativos de perfil, sessão, ticket e capability. Se faltar um campo público necessário, registrar a lacuna, ajustar a fonte contratual competente e testar os consumidores antes de adotá-lo.
@@ -272,12 +302,12 @@ A emissão HTTP isolada e o port de autorização já testados não encerram ess
 
 ### Integração nativa: fronteira Server e adoção pelos hosts
 
-A rota Server de M09 já compartilha o claim canônico usado pelos handlers MCP. A composição do caller nos hosts é a próxima fronteira. Sua implementação pode avançar antes do fechamento das dependências de M09; o aceite integral do marco continua subordinado a M08 e aos critérios normativos.
+A rota Server de M09 já compartilha o claim canônico usado pelos handlers MCP. A composição automática do caller com a configuração aprovada é a próxima fronteira; os hooks e o socket já têm prova técnica parcial. Sua implementação pode avançar antes do fechamento das dependências de M09; o aceite integral do marco continua subordinado a M08 e aos critérios normativos.
 
 1. **Contrato e entrada Nexus implementados:** `POST /v1/runtime/native-actions` para `context`, `claim` e `complete`, com capability da audiência nativa, escopo exato e payload validado. Explicitar a tradução para os tipos públicos do Core e os limites de request; não exigir `tools/call` para a audiência nativa.
 2. **Transação e repetição:** persistir identidade, digest e resultado do pedido junto ao efeito canônico quando houver mutação. Repetição idêntica recupera o resultado autorizado; mesmo ID com conteúdo diferente falha; perda da resposta não cria uma nova tentativa com ID diferente. Revalidar autoridade e permissões antes do efeito e do replay.
 3. **Um único claim:** MCP, execução embedded e bridge Pi usam o mesmo caso de uso e a mesma propriedade de claim/epoch. Preservar isolamento por sessão, agente e workspace, budgets e causalidade de resultados. Não criar uma segunda máquina de estados de handoff no Core ou Connector.
-4. **Caller dos hosts:** implementar o adapter necessário para a bridge pública do Core e compô-lo nos hosts com referências protegidas e configuração aprovada. O teste isolado do endpoint precede a integração instalada; o aceite da bridge exige a chamada originada pelo harness.
+4. **Caller dos hosts:** aproveitar os backends e hooks já implementados, concluir a publicação do incremento Nexus e conectá-los à configuração aprovada e às referências protegidas. O peer técnico já chama a extensão pelo child Pi; o aceite exige onboarding público, composição automática e provider qualificado.
 5. **Prova:** sucesso de contexto/claim/complete; audiência e ações cruzadas negadas; lease/revisão/autoridade inválidas; disputa simultânea MCP/nativa; rollback na falha do armazenamento; restart e resposta perdida antes/depois do commit; replay e conflito de digest; resultados sem causalidade recusados. Capturar contagem de efeitos e conferir o mesmo claim persistido.
 
 Concluir a composição do caller da bridge, inbox limitado ao workspace e as ferramentas restantes, integrar o ambiente dos hosts e exercitar o ciclo de vida das capabilities. O fechamento continua exigindo regressões de domínio, tools-only independente de WSS, superfície compacta e provider real quando aplicável.
@@ -495,6 +525,30 @@ Nenhum teste de aceite pode depender de `sys.path` apontando para clone irmão, 
 
 ## Campanhas de teste e ambientes
 
+### Campanhas obrigatórias por entrega
+
+Cada campanha tem um responsável por consolidar a evidência; os três
+repositórios corrigem suas falhas. Os IDs abaixo organizam execuções, sem
+substituir os IDs normativos TR4/TN/J/TLANG.
+
+| Campanha | Responsável | Execução e momento | Critério de aprovação |
+|---|---|---|---|
+| C01 — contrato e pacote | Core | A cada alteração contratual; repetir M13 em venv novo | Mesmos bytes Core nos consumidores; APIs públicas, schemas, recursos, sete ações e histórico R3; rejeição antes do efeito |
+| C02 — onboarding e admissão | Nexus | M02–M04; repetir caminhos afetados e M13 | Entradas públicas, consentimento, replay/CAS, outbox atômica, ID original após resposta perdida |
+| C03 — local puro | Nexus | P5; governança em M08/M09; repetir M13 | Serve instalado sem Connector e sem WSS local; todas as ações aplicáveis, eventos, ferramentas e recuperação |
+| C04 — remoto automático | Connector | P6/P7; governança em M08/M09; repetir M13 | Registro persistido → boot → lane reconciliada → lease → efeito; A/B/C independentes no aceite final |
+| C05 — domínio e decisões | Nexus | M08/M09; repetir M13 | Aprovação/input únicos, disputa MCP/Pi, consumo exclusivo, causalidade, tools-only e canais independentes |
+| C06 — interface e idioma | Nexus + Connector | M10 e frontend de M13 | Browser/CLI reais, sucesso e erro, acessibilidade dos textos, TLANG-01–04 e recursos do wheel |
+| C07 — falhas e atualização | Três repos | M11/M12; repetir provas afetadas em M13 | Crash/partição/saturação, autoridade e ownership preservados, upgrade/restore/rollback sem perda |
+| C08 — aceite integral | Três repos | M13 sobre commits e artefatos congelados | Regressões completas, matriz real de provider/SO/topologia, todos os casos aplicáveis aprovados e G0–G3 fechados |
+
+Se um teste falhar, registrar o defeito com requisito, reprodução, owner,
+milestone e impacto. Corrigir e reexecutar a campanha afetada; preservar a
+tentativa que falhou. Após congelar os artefatos, qualquer mudança de código,
+dependência ou asset cria um novo conjunto de artefatos e invalida as provas
+afetadas. O relatório final deve identificar quais execuções pertencem
+exatamente ao conjunto entregue.
+
 ### Preparação obrigatória do laboratório em M00
 
 | Recurso | Responsável | Como comprovar disponibilidade | Estado nesta revisão |
@@ -602,7 +656,7 @@ Estados de tarefa: `PENDING`, `IN_PROGRESS`, `READY_FOR_ACCEPTANCE`, `DONE`, `BL
 
 A ordem inicial é M00 → M01 → M02 → M03 → M04. Depois, M05 e M06 podem avançar como frentes independentes; M07 segue M06; M08 une local/remoto/eventos. M09, M10 e M11 concluem domínio, jornadas e robustez. M12 faz o cutover e M13 aceita os artefatos finais. Isso descreve independência técnica; não pressupõe agentes paralelos nem divide ownership sem coordenação.
 
-Os próximos incrementos devem fechar primeiro a auditoria de cobertura e o contrato compartilhado, depois concluir autoridade/onboarding e o loop canônico de dispatch. Essa ordem evita acumular novos previews de UI/WSS sem integrar os callers que produzem efeitos.
+Os próximos incrementos devem incorporar a evidência existente à auditoria, publicar o incremento Nexus pendente com suas provas e concluir as lacunas de contrato, configuração/segredos e composição automática local/remota. O fechamento respeita a ordem de auditoria, contrato, autoridade/onboarding e dispatcher. Essa ordem evita acumular novos previews de UI/WSS sem integrar os callers que produzem efeitos.
 
 | Gate | Condição de encerramento |
 |---|---|
