@@ -105,6 +105,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 assert context.r4_authority is not None
                 self.opens += 1
                 self.context = context
+                self.stream_epoch = stream_epoch
                 return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
         async def environment(_):
@@ -221,7 +222,37 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     monkeypatch.setattr(execution.publications, 'record', interrupted_record)
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
-                await admit('turn.submit', session_id=session_id, text='Hello')
+                turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if automatic or (reconcile_closed and not publication_failure and not history_count):
+                    from nexus_connector_core import RuntimeEvent
+                    journal = await daemon.host.ensure_history_journal()
+                    original_ack = journal.acknowledge_events
+                    ack_attempts = []
+                    async def interrupted_ack(cursor, through):
+                        ack_attempts.append(through)
+                        if len(ack_attempts) == 1:
+                            raise OSError('Injected Core ACK write failure after Server commit.')
+                        return await original_ack(cursor, through)
+                    monkeypatch.setattr(journal, 'acknowledge_events', interrupted_ack)
+                    await native.native.queue.put(RuntimeEvent(server_id,executor_id,session_id,native.stream_epoch,
+                        0,'text_delta','synthetic.delta',{'text':'Automatic event publication.'},turned['operation_id']))
+                    stream = dict(server_id=server_id,executor_id=executor_id,binding_id=binding['binding_id'],
+                                  agent_id='subject',session_id=session_id,stream_epoch=native.stream_epoch)
+                    async with asyncio.timeout(5):
+                        while True:
+                            try:
+                                progress = await asyncio.to_thread(execution.events.store.read,stream)
+                            except ConnectorError:
+                                progress = {'core_applied':0}
+                            if progress['core_applied'] == 1:
+                                break
+                            await asyncio.sleep(.01)
+                    assert progress['remote_acked'] == 1 and ack_attempts == [1,1]
+                    assert not execution.events.errors
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_event_ingress').fetchone()[0] == 1
+                        assert tuple(uow.connection.execute('SELECT committed_contiguous,projected_through FROM execution_event_watermarks').fetchone()) == (1,0)
+
                 await admit('turn.steer', session_id=session_id, text='Continue carefully.',
                     target={'kind': 'native_turn_id', 'expected_turn_id': 'turn-from-native'})
                 await admit('turn.interrupt', session_id=session_id,

@@ -144,3 +144,17 @@ def test_stale_or_malformed_report_is_rejected(recovery, fault):
     with pytest.raises(ValueError):
         service.accept(report)
     assert state(factory) == "RECOVERING"
+
+
+@pytest.mark.parametrize("reported,epoch,gap,ready",[(1,"epoch","none",True),(0,"epoch","none",False),
+    (2,"epoch","none",False),(1,"other","none",False),(1,"epoch","pending",False)])
+def test_stream_readiness_requires_matching_durable_contiguous_prefix(recovery,reported,epoch,gap,ready):
+    factory,service,report,_,_=recovery
+    c=service.channel
+    with factory.unit_of_work() as uow:
+        conn=uow.connection
+        conn.execute("UPDATE execution_sessions SET stream_epoch=?",(epoch,))
+        conn.execute("INSERT INTO execution_event_watermarks(server_id,executor_id,session_id,stream_epoch,"
+                     "committed_contiguous,gap_state) VALUES (?,?,'session','epoch',1,?)",(c.server_id,c.executor_id,gap))
+    report["stream_watermarks"][0]["sequence"]=reported
+    assert service.accept(report)["recovery_remaining"] is not ready

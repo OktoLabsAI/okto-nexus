@@ -1,0 +1,47 @@
+{
+  "increment": "M07 automatic Connector event publisher and split durable ACK recovery",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "requirements": [
+    "NS10.02-NS10.04 (partial)",
+    "NS08.03 confirmed closed streams (partial)"
+  ],
+  "reference_commits": {
+    "nexus": "cbe3694f3dceb3f4f1e5a072e453cd64ec2c83c3",
+    "connector": "235dbdcc49d4ac0a29ae015b9ecb52b3647726ff",
+    "core": "97892edba088ac85c9977b8bd8fde27f725ea2a3"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/event-publisher-artifacts.json",
+  "tests": {
+    "connector": {
+      "tests": 376,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 375
+    },
+    "nexus": {
+      "tests": 70,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 70
+    }
+  },
+  "unchanged_core": "Core 0.2.35.dev0 unchanged; wheel and installed/source bytes verified. Prior Core tests are not counted again.",
+  "verification": [
+    "Stream identity persisted before Core open; failed registration prevents native opening.",
+    "Finite 0/1/127/128/129 event snapshots; bounded batches; one publisher task per stream.",
+    "Remote ACK and Core-applied cursors survive recreation and retry storage failures without a new event or native operation.",
+    "Single-reader exact stream/channel ACK correlation, late duplicates, stale ACK target and timeouts.",
+    "Automatic HTTP/WSS event publication and injected first Core ACK failure converge with one durable Server event and five unchanged runtime operations.",
+    "Fresh-host reconnect of a closed stream with matching nonzero cursors; Server refuses watermark/epoch/gap mismatches."
+  ],
+  "limits": [
+    "Recovery-phase publication of unacknowledged streams, active ownership adoption and automatic embedded publishing remain pending.",
+    "History/UI/decision projections, authority rotation, retention/pressure and full migration/rollback remain pending.",
+    "Technical native peer and fixture readiness; no new real-provider, platform or independent-host qualification.",
+    "One existing Connector skip and one existing Nexus dependency deprecation warning. User UI assets included without new UI acceptance.",
+    "All M00-M13/G0-G3 criteria remain in scope. No milestone or gate closed."
+  ]
+}

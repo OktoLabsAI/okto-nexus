@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Automatic event publisher and ACK recovery — September 30, 2026
+
+[Increment](M07_EVENT_PUBLISHER.md): Connector registers streams before native opening, owns bounded finite-journal publishers and persists remote/Core-applied ACK cursors separately. Retries recover without another event or runtime operation. Exact ACK targets share the owned WSS reader. Nexus and Connector now reconcile fully acknowledged nonzero streams for confirmed closed sessions. Installed results: Connector 375 passed (one existing skip), Nexus 70 passed. Core 0.2.35 unchanged. Unacknowledged-stream reconnect recovery, active ownership, embedded publishing, projections and full acceptance remain open.
+
+
 ## Durable WSS event ingress — September 30, 2026
 
 [Increment](M07_EVENT_INGRESS.md): Nexus validates the current owner and binding lane, retains canonical events with conflict detection, computes the contiguous watermark with the public Core reducer, and sends ACK only after the transaction commits. Public HTTP/WSS coverage verifies out-of-order arrival and replay. Installed focused regression: 65 passed, no skips. Connector/Core unchanged. Automatic publishers, local Core ACK recovery, projections and nonzero-stream reconciliation remain pending; NS10.01 and full delivery gates remain open.

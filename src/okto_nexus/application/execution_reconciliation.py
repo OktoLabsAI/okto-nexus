@@ -133,9 +133,16 @@ class ExecutionReconciliation:
                 if stream in streams or watermark['session_id'] not in claims:
                     raise ValueError('The stream watermark has no matching claim.')
                 streams.add(stream)
-                # Nonzero streams still require durable event ingress/replay.
-                # Never turn an unimplemented event ACK into readiness.
-                self.blocked |= watermark['sequence'] != 0
+                persisted = conn.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks "
+                    "WHERE server_id=? AND executor_id=? AND session_id=? AND stream_epoch=?",
+                    (c.server_id,c.executor_id,*stream)).fetchone()
+                epoch = conn.execute("SELECT stream_epoch FROM execution_sessions WHERE server_id=? AND executor_id=? AND session_id=?",
+                    (c.server_id,c.executor_id,watermark['session_id'])).fetchone()[0]
+                committed = persisted['committed_contiguous'] if persisted is not None else 0
+                self.blocked |= (watermark['sequence'] != committed or
+                    epoch not in (None,watermark['stream_epoch']) or
+                    (committed>0 and epoch!=watermark['stream_epoch']) or
+                    (persisted is not None and persisted['gap_state'] != 'none'))
             if any(claim['state'] == 'RELEASED' and sum(s[0] == session for s in streams) != 1
                    for session, claim in claims.items()):
                 self.blocked = True
