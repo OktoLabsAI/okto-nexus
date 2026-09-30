@@ -67,6 +67,8 @@ Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, inte
 
 O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados. A referência de commits acima precede este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
 
+O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
+
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|
 | 1 | Revisar critérios das 85 tarefas e 12 entregas externas; transformar lacunas de coleta em casos executáveis; medir limites e registrar ambientes | Três repos, M00 | Mapa requisito → caller → teste coletável → campanha; nenhuma lacuna escondida por contagem de testes |

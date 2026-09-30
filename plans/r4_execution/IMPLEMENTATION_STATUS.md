@@ -45,6 +45,14 @@ dirigidos com os três aplicativos instalados fora dos clones. Onboarding,
 dispatcher/daemon de produto, embedded composto, recuperação e qualificação
 continuam pendentes; nenhum marco ou gate foi encerrado.
 
+## Incremento de contenção expirada
+
+O [incremento de contenção expirada](M01_EXPIRED_CONTAINMENT.md) distribui
+Core `0.2.26.dev0` aos dois consumidores. Interrupt, close e respostas
+estritamente negativas preservam as ações previamente concedidas após
+expiração produtiva; revogação e escopo continuam cercados. A coordenação
+de controles durante CAS pendente permanece explicitamente incompleta.
+
 ## Baseline
 
 - Nexus: `feature/v0.2.0`, HEAD inicial `7ed52c22865a92c3768bc32508ed9e35dc5efdc3`, Python 3.13.1, Windows 11 10.0.26200, `uv.lock` existente.
