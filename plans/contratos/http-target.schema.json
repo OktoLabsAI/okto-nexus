@@ -3626,6 +3626,110 @@
         "operation"
       ],
       "additionalProperties": false
+    },
+    "CapabilityMetadata": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "scope": {
+          "$ref": "#/$defs/ExecutionScope"
+        },
+        "audience": {
+          "type": "string",
+          "enum": [
+            "nexus-mcp-session",
+            "nexus-native-session"
+          ]
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "maxItems": 128
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 120
+        },
+        "mcp_url": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "lease_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "lease_serial": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "capability_id",
+        "capability_ref",
+        "scope",
+        "audience",
+        "actions",
+        "expires_in",
+        "mcp_url",
+        "request_id",
+        "lease_id",
+        "lease_serial"
+      ],
+      "additionalProperties": false
+    },
+    "CapabilityMetadataQuery": {
+      "type": "object",
+      "properties": {
+        "binding_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": [
+        "binding_id",
+        "capability_id",
+        "request_id"
+      ],
+      "additionalProperties": false
     }
   }
 }

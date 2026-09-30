@@ -10,7 +10,7 @@
   "original_task_mapping_count": 70,
   "original_TN_count": 45,
   "original_J_count": 34,
-  "planned_http_routes": 23,
+  "planned_http_routes": 24,
   "synthetic_schema_shape_fixtures": 16,
   "file_hashes_exclude_manifest_itself": true,
   "files": [
@@ -26,8 +26,8 @@
     },
     {
       "path": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
-      "bytes": 39324,
-      "sha256": "abb316e8f42a9c2abe1901a5eec7bc817614e23f6682aabc3fdc6c232ce215b8"
+      "bytes": 40677,
+      "sha256": "cddf8bdcd89866d7b3bac5b46aed9e1ab9cc69cb4fe9271131008aa5e09dc6e7"
     },
     {
       "path": "03_DADOS_MIGRACAO_E_RECUPERACAO.md",
@@ -71,8 +71,8 @@
     },
     {
       "path": "PLANO_COMPLETO_NEXUS_SERVER_R4.md",
-      "bytes": 304869,
-      "sha256": "a9577c582fa1e47bda8f30e8287c68fb274809be02c7ecc098371646a4c2080d"
+      "bytes": 306222,
+      "sha256": "fc6f022d33d6fd8453de37fd6e498804cee3477c60621b68947e659f8f094c26"
     },
     {
       "path": "RASTREABILIDADE_R3.json",
@@ -81,8 +81,8 @@
     },
     {
       "path": "contratos/README.md",
-      "bytes": 1356,
-      "sha256": "7ae627419436de92671facdb31590765ddeb8093a6df88db2ff9f28475eb8272"
+      "bytes": 1421,
+      "sha256": "0df34f03ea3ba99fda782e79b2f6e94cc74017c3c08c3263824e8a962120a45a"
     },
     {
       "path": "contratos/fixtures-planejamento.json",
@@ -91,13 +91,13 @@
     },
     {
       "path": "contratos/http-routes.json",
-      "bytes": 9086,
-      "sha256": "82decdbc8cc6742c9ffbf52131c9e3b82c69e7094fff59770daff2257d740155"
+      "bytes": 9882,
+      "sha256": "ec0895e1492e07f972d1bf70731d8eff8dfd594fab8deb6f3ca5bfc7afb609c5"
     },
     {
       "path": "contratos/http-target.schema.json",
-      "bytes": 88566,
-      "sha256": "92d1f16f7338dac4228d43d17981b58bb6dede09344c56306377849ba2bab9e4"
+      "bytes": 90972,
+      "sha256": "48d242f9a87d5a1dc4a547f1685606a35918f0ab0d66626f05ce8381c37c2d7d"
     },
     {
       "path": "contratos/nxl-r4-delta.json",
@@ -141,8 +141,8 @@
     },
     {
       "path": "validar_pacote.py",
-      "bytes": 8030,
-      "sha256": "f603f55730afb6b26332d0a08d7c28c385a0953f028a6652ffcdab457d6c57cb"
+      "bytes": 8184,
+      "sha256": "f182821972ef2988bc69a3abd04f065567f348b66e90e04d0854f76ea965b228"
     }
   ],
   "contract_clarifications": [
@@ -151,6 +151,13 @@
       "scope": "Capability replay error metadata and stable-token validity after applied lease; no executable NXL readiness change.",
       "document": "02_CONTRATOS_HTTP_NXL_E_ESTADOS.md",
       "schema": "contratos/http-target.schema.json"
+    }
+  ],
+  "implementation_contract_additions": [
+    {
+      "date": "2026-09-30",
+      "route": "GET /v1/runtime/sessions/{id}/capability",
+      "reason": "Implement metadata-only authority recovery specified in section 2.4; retain the original 23 routes."
     }
   ]
 }

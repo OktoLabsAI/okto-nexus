@@ -190,6 +190,41 @@ class ExecutionCapabilityService:
         return (authority['lifecycle_state'] == 'OPEN_PENDING' and
                 authority['dispatch_phase'] is None and self.repo.latest(uow, scope) is None)
 
+    def describe(self, *, context, session_id, binding_id, capability_id, request_id, mcp_url):
+        """Read current applied authority; never return or replace secret material."""
+        if any(type(v) is not str or not 1 <= len(v) <= 160
+               for v in (session_id, binding_id, capability_id, request_id)):
+            raise _error(ErrorCode.VALIDATION_ERROR, 'Invalid capability metadata request.')
+        server_id = ensure_execution_installation(self.factory).server_id
+        with self.factory.unit_of_work(write=False) as uow:
+            target = self._target(uow, server_id=server_id, session_id=session_id,
+                                  binding_id=binding_id, context=context)
+            credential = uow.connection.execute(
+                'SELECT * FROM execution_session_capabilities WHERE capability_id=? '
+                'AND server_id=? AND executor_id=? AND session_id=?',
+                (capability_id, server_id, target['executor_id'], session_id)).fetchone()
+            if credential is None:
+                raise _error(ErrorCode.NOT_FOUND, 'The session capability was not found.')
+            current = self._authorize_hash(uow, digest=credential['secret_hash'],
+                                           audience=credential['audience'])
+            scope = current['scope']
+            if scope['binding_id'] != binding_id:
+                raise _error(ErrorCode.NOT_FOUND, 'The session capability was not found.')
+            lease = self.repo.latest(uow, scope)
+            # _authorize_hash requires READY, a matching ACTIVE applied lease,
+            # current grant/revisions, unrevoked material and domain admission.
+            until = min(_stamp(credential['valid_until_server']),
+                        _stamp(lease['valid_until_server']))
+            ttl = min(120, int((until - _stamp(self.access.clock.now_iso())).total_seconds()))
+            if ttl < 1:
+                raise _error(ErrorCode.PERMISSION_DENIED, 'The session authority expires too soon.')
+            prefix = 'mcp-cap:' if current['audience'] == 'nexus-mcp-session' else 'native-cap:'
+            return dict(request_id=request_id, capability_id=capability_id,
+                capability_ref=prefix + capability_id, scope=scope,
+                audience=current['audience'], actions=current['actions'], expires_in=ttl,
+                lease_id=lease['lease_id'], lease_serial=lease['lease_serial'],
+                mcp_url=mcp_url if current['audience'] == 'nexus-mcp-session' else None)
+
     def authorize_call(self, *, token, audience, action, expected_scope):
         """Check the credential ceiling; the caller must still authorize its domain action.
 

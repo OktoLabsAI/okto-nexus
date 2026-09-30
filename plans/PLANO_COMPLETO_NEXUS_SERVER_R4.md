@@ -348,6 +348,29 @@ Para capability já instalada, não invalidar automaticamente por um timeout do 
 
 Precisão do DTO de erro de capability: `CREDENTIAL_MATERIAL_UNAVAILABLE` inclui `capability_id` e `recovery_allowed` no objeto `error`, sem segredo. Esses campos opcionais estão declarados em `ErrorBody`. `recovery_allowed=true` informa que uma nova requisição de substituição pode ser avaliada; não reserva autorização nem dispensa revalidação transacional. Se o envio da abertura já puder ter instalado configuração, ou existir histórico de lease, a substituição automática é recusada. Renovação de validade de capability estável acompanha o commit de aplicação legítima da lease, não o simples envio do grant.
 
+### 2.5. Consulta de autoridade da capability — adição de implementação
+
+A consulta prevista na seção 2.4 é concretizada por
+`GET /v1/runtime/sessions/{id}/capability`, com query fechada
+`binding_id`, `capability_id` e `request_id` (nonce novo por leitura,
+sem parâmetros duplicados). A rota exige chave canônica do sujeito ou
+autoridade de operador; capability de sessão não autentica essa consulta.
+
+`CapabilityMetadata` retorna o nonce, identidade/ref da capability, escopo,
+audiência, ações, `expires_in`, `lease_id`, `lease_serial` e URL MCP
+somente para essa audiência. Não retorna segredo nem seu hash. Exige sessão
+READY, lease ACTIVE aplicada e capability/grant/revisões vigentes. O prazo
+é limitado pela capability e pela lease, sem emissão ou extensão no GET.
+
+O consumidor captura t0 antes do HTTP e verifica nonce, escopo exato, tipos,
+origem, audiência e ações. A validade local é limitada também pela lease
+atualmente instalada no Core; ID e serial devem coincidir. Relógio persistido
+não autoriza novo prazo. Recuperar material do vault não reabre sessão nem
+reenvia operação. Revalidar autoridade após cada espera.
+
+Esta adição preserva as 23 rotas originais e acrescenta uma consulta, totalizando
+24 rotas. Não muda a revisão do wire NXL nem os sete verbos de execução.
+
 ## 3. DTOs canônicos novos
 
 Os nomes abaixo são fixados para a implementação; transportar por dataclass/Pydantic equivalente sem mudar sua semântica. Modelos do Core continuam sendo consumidos, não redefinidos localmente com o mesmo nome.

@@ -1,5 +1,27 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Metadados e recuperação de capability — 30 de setembro de 2026
+
+O [incremento](M02_CAPABILITY_RECOVERY.md) implementa consulta HTTP sem
+material e recuperação explícita do segredo no vault. O Server exige
+autoridade ativa/aplicada; o Connector compara lease ID/serial com o Core
+e limita a validade pelo menor prazo. GET não renova, emite ou substitui.
+
+Passaram 283 testes Connector (um skip existente) e 73 Nexus com wheels
+instalados e bytes conferidos. O teste recupera o mesmo segredo após
+recriar o owner, inclusive com renovação aplicada, e consulta o domínio.
+Revogação, serial divergente, metadata inválida e vault vazio são recusados.
+
+O build inicial herdou assets antigos; ambos os runners pararam antes de
+pytest. A reconstrução em staging limpo e os resultados finais estão no
+[manifesto](test_runs_20260930_capability_recovery.json). A consulta adiciona
+uma rota às 23 originais; o contrato e a cobertura passam a 24 rotas.
+
+Composição automática, reconciliação não vazia do daemon, agendamento de
+recuperação/renovação e retenção terminal permanecem pendentes. Não há
+aceite de restart completo, provider real ou fechamento de gates.
+
+
 ## Emissão durável no Connector — 30 de setembro de 2026
 
 O [incremento de intenção durável](M02_DURABLE_CAPABILITY_INTENT.md) acrescenta

@@ -107,7 +107,7 @@ def main() -> int:
         schema=read_json(root/'contratos/http-target.schema.json')
         Draft202012Validator.check_schema(schema)
         routes=read_json(root/'contratos/http-routes.json')['routes']
-        assert len(routes)==23
+        assert len(routes)==24
         route_keys={(r['method'],r['path']) for r in routes};assert len(route_keys)==len(routes)
         for route in routes:
             for key in ('request_definition','response_definition'):

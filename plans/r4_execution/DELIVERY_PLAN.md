@@ -29,7 +29,7 @@ Cada marco abaixo define responsáveis, funcionalidades, testes e saída. O acom
 
 A ordem normativa continua sendo [arquitetura R4](../01_ARQUITETURA_E_PLANO_MESTRE.md), [contratos](../02_CONTRATOS_HTTP_NXL_E_ESTADOS.md), [dados e migração](../03_DADOS_MIGRACAO_E_RECUPERACAO.md), [backlog](../04_BACKLOG_EXECUCAO.md), [testes e aceite](../05_TESTES_E_ACEITE.md) e [handoff Core e Connector](../06_HANDOFF_CORE_CONNECTOR.md). Este documento organiza a execução e acrescenta o requisito de idioma; não reduz requisitos nem cria uma autoridade de contrato concorrente.
 
-A cobertura inclui as 85 tarefas NS00–NS16, os 164 cenários originais (85 TR4, 45 TN e 34 J), as quatro entregas CORE-R4, as oito entregas CON-R4, os quatro achados CN5, as 23 rotas HTTP/WSS e os sete verbos de operação. Acrescenta quatro cenários de idioma. O mapeamento completo é verificável em [delivery_plan.json](delivery_plan.json) e [delivery_coverage.json](delivery_coverage.json).
+A cobertura inclui as 85 tarefas NS00–NS16, os 164 cenários originais (85 TR4, 45 TN e 34 J), as quatro entregas CORE-R4, as oito entregas CON-R4, os quatro achados CN5, as 23 rotas HTTP/WSS originais e a consulta adicional de metadata (24 rotas) e os sete verbos de operação. Acrescenta quatro cenários de idioma. O mapeamento completo é verificável em [delivery_plan.json](delivery_plan.json) e [delivery_coverage.json](delivery_coverage.json).
 
 Cada tarefa mantém seus critérios e dependências originais. O marco indica quando ela deve ser encerrada, não quando é permitido começar um protótipo. Dentro do mesmo marco, vale o grafo do backlog. Um componente necessário a um marco posterior pode receber contratos e fixtures antes, sem declarar a integração pronta.
 
@@ -68,8 +68,8 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `c7d3c50229893b9ae2de6def05f4172e6c68e543` | `0.2.0` |
-| Connector | `e5236fe99f39f14978c1dd063b3321a49d540b81` | `0.5.0.dev0` |
+| Nexus | `b3f8bc1e7713e4f0199b2497d0cddee542a7d5db` | `0.2.0` |
+| Connector | `f1ee452de5d2c9a2429e8f270f2308bffd24fc68` | `0.5.0.dev0` |
 | Core | `770659b7f3404798fe6c59146c7ab9d12b84bbe4` | `0.2.30.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
@@ -110,6 +110,14 @@ registrou 275 passes Connector, um skip e 61 passes Nexus. A porta de abertura
 foi exercitada com peer técnico. Reidratação sob autoridade reconciliada,
 configuração automática, renovação e retenção terminal continuam pendentes;
 P6.1 permanece parcial.
+
+A [recuperação explícita](M02_CAPABILITY_RECOVERY.md) acrescenta leitura
+correlacionada de metadata e recuperação do segredo sob lease aplicada
+concordante no Server e Core. A [campanha](test_runs_20260930_capability_recovery.json)
+passou 283 testes Connector (um skip) e 73 Nexus. A primeira tentativa de
+build foi recusada por assets obsoletos; o rebuild isolado foi verificado.
+A porta existe; sua adoção automática após reconciliação do daemon e o
+agendamento de renovação continuam pendentes.
 
 ### Evidência disponível e seu alcance
 
@@ -303,7 +311,7 @@ O checkpoint publicado já emite e valida capabilities limitadas à sessão e pr
 | Ordem | Implementação restante | Testes e critério de aceite |
 |---|---|---|
 | 1 — guard Nexus (M02; aceite de domínio M09) | Partir dos oito handlers MCP e das três ações nativas HTTP publicados; integrar inbox limitado ao workspace e demais ferramentas aos mesmos casos de uso. Validar audiência, ação, sessão, binding, revisões e lease aplicada; preservar permissões de domínio e claims | Chamada autorizada pelo handler real; negar token reservado sem sessão ativa, audiência/ação/escopo incorretos, grant revogado, lease expirada e revisão alterada. A chave de agente tools-only mantém sua jornada própria |
-| 2 — intenção e segredo Connector (M02/P6.1) | Partir do owner de emissão e do vault já integrados à porta de abertura; compor o ambiente aprovado automaticamente e reidratar material após restart sob autoridade reconciliada. Recuperar perda de resposta pelos metadados canônicos | Crash antes/depois do envio e da gravação; nenhuma credencial em argv, logs ou estado público; substituição apenas quando comprovadamente permitida; sessão em execução não recebe retry cego de emissão |
+| 2 — intenção e segredo Connector (M02/P6.1) | Partir do owner de emissão e do vault já integrados à porta de abertura; compor o ambiente aprovado automaticamente e adotar a porta de recuperação após reconciliação de restart, com retenção terminal e agendamento de renovação. Recuperar perda de resposta pelos metadados canônicos | Crash antes/depois do envio e da gravação; nenhuma credencial em argv, logs ou estado público; substituição apenas quando comprovadamente permitida; sessão em execução não recebe retry cego de emissão |
 | 3 — adoção pelos hosts (M05/P6.2) | Conectar seleção, configuração e referências autorizadas ao owner embedded e ao daemon, usando as APIs públicas Core | Fluxo público de onboarding → open → ferramenta com pacote instalado, sem ambiente sintético de produção; local sem aplicativo Connector e remoto sem paths livres no Server |
 | 4 — ciclo de vida (P6.3/M09/M11) | Renovar e revogar autoridade com a lease aplicada, sem reancorar replay ou substituir silenciosamente material ativo | Sessão ultrapassa a primeira validade; perda de ACK, resposta tardia, revogação e mudança de owner não permitem novo efeito. Falhar separadamente WSS e MCP HTTP e comprovar isolamento |
 

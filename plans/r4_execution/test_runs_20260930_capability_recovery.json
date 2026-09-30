@@ -1,0 +1,213 @@
+{
+  "increment": "Capability authority metadata and explicit protected-material recovery",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "created_at_utc": "2026-09-30T13:48:34.023680+00:00",
+  "nexus_parent": "b3f8bc1e7713e4f0199b2497d0cddee542a7d5db",
+  "connector_parent": "e5236fe99f39f14978c1dd063b3321a49d540b81",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "nexus_commit": "Commit containing this report and M02_CAPABILITY_RECOVERY.md",
+  "connector_commit": "f1ee452de5d2c9a2429e8f270f2308bffd24fc68",
+  "artifacts": {
+    "core": {
+      "version": "0.2.30.dev0",
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-pi-owner-core-wheel-85cnb6ls\\nexus_connector_core-0.2.30.dev0-py3-none-any.whl",
+      "sha256": "e060e033be05fdd4c9aff5c90902d191483d400b3f6778fa7bb5395b66f561e6"
+    },
+    "qualification": "Fresh capability metadata and protected material recovery under applied Server/Core leases; technical peer, not automatic host restart or provider qualification.",
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-wheel-cnfc2uk2\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "0a7dc654c0e4515a46ee331a1a12ec5fd4937c9aeb67808f3dda002f12987e3d",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-stage-agbnkf9c",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-wheel-cnfc2uk2"
+      ],
+      "staging_source": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-stage-agbnkf9c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-connector-r5lfju6w\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "dc99b34075985f84b85abebb408acf71534b8afa7cb2322419e8876f96da2b6a",
+      "command": [
+        "C:\\Python313\\python.exe",
+        "-m",
+        "pip",
+        "wheel",
+        "D:\\Projetos\\Techridy\\okto-nexus-connector",
+        "--no-deps",
+        "--no-build-isolation",
+        "--wheel-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-recovery-connector-r5lfju6w"
+      ]
+    },
+    "installed_python": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "install_command": [
+      "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+      "-I",
+      "-m",
+      "pip",
+      "install",
+      "--no-deps",
+      "--force-reinstall",
+      "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-capability-recovery-nexus-wheel-cnfc2uk2\\okto_nexus-0.2.0-py3-none-any.whl"
+    ]
+  },
+  "campaigns": [
+    {
+      "repository": "nexus",
+      "suite": "connector",
+      "junit": "plans/r4_execution/evidence/capability-recovery-installed-connector.xml",
+      "sha256": "397c811c28953972e07f555acbe0267667b331281bf5556140beb88cc6f30bd6",
+      "counts": {
+        "tests": 284,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 1,
+        "passed": 283
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\test_r4_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\unit",
+          "D:\\Projetos\\Techridy\\okto-nexus-connector\\tests\\contract",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\capability-recovery-installed-connector.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 59
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    },
+    {
+      "repository": "nexus",
+      "suite": "nexus",
+      "junit": "plans/r4_execution/evidence/capability-recovery-installed-nexus.xml",
+      "sha256": "dfab6f66f4ebd99a32dcbd38316cb38d2a49adb7efd5ddb5ca6aa00d6fa84c8c",
+      "counts": {
+        "tests": 73,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 73
+      },
+      "execution": {
+        "command": [
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+          "-I",
+          "-m",
+          "pytest",
+          "-c",
+          "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+          "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests",
+          "-o",
+          "asyncio_mode=auto",
+          "-o",
+          "asyncio_default_fixture_loop_scope=function",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_capability_recovery.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_capability_reservation.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_session_capabilities.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns07.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns09.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_ns01.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_core_native_actions.py",
+          "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_remote_connection.py",
+          "-q",
+          "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\capability-recovery-installed-nexus.xml"
+        ],
+        "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+        "verified_packages": {
+          "nexus": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+            "files": 333
+          },
+          "connector": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+            "files": 59
+          },
+          "core": {
+            "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+            "files": 91
+          }
+        },
+        "exit_code": 0,
+        "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+        "limitations": "Technical harness peer; no real provider qualification or automatic host lifecycle."
+      }
+    }
+  ],
+  "source_sha256": {
+    "nexus": {
+      "src/okto_nexus/application/execution_capabilities.py": "b048607b352c7f24efc094f31965b056be1f1e726ca3196ad2986e000f51756d",
+      "src/okto_nexus/adapters/inbound/http/runtime_v1.py": "8d0c091ae44bf4f83f03b99025fcf529bbcf41fbe323153b7c530eeb12f28200",
+      "tests/execution_r4/test_capability_recovery.py": "ce814a94fce085e08c5db120f26e828ab97700589424b529149bbd808e3b6a8d"
+    },
+    "connector": {
+      "src/okto_nexus_connector/services/session_capabilities.py": "f66d4bba7c4b99b0eb92638582cd2f00af549b6516f5b63c22e16a39f47920a1",
+      "src/okto_nexus_connector/transport/https_client.py": "685cacbdeec23901c112808bea90e1787d27efd22d6471e939606f5087a919db",
+      "tests/unit/test_capability_metadata.py": "331d4885d158c844c8455456303bcd779b52b1d49d824fb554cbc8838d979145"
+    }
+  },
+  "product_gates_closed": [],
+  "failed_attempt": "plans/r4_execution/evidence/capability-recovery-build-initial.json",
+  "limitations": [
+    "Core runtime, journals and leases are real; native provider is a technical peer and READY/selection use fixtures.",
+    "Recreating the capability owner/StateStore does not qualify a complete daemon or Core process restart.",
+    "Automatic configuration, nonempty reconciliation, recovery/renewal scheduling and terminal retention remain pending.",
+    "Nexus technical wheel includes preexisting modified UI assets and is not a clean UI release.",
+    "Initial in-place build retained obsolete assets; byte verification stopped both suite launchers before pytest. Clean staging rebuild passed.",
+    "Suites overlap; no unique aggregate count or real provider/platform/independent-host acceptance is claimed.",
+    "Core unchanged at 0.2.30.dev0; current campaign verifies its installed bytes but does not rerun Core tests."
+  ],
+  "development_campaigns": [
+    {
+      "repository": "nexus",
+      "junit": "plans/r4_execution/evidence/capability-recovery-source.xml",
+      "passed": 5,
+      "limit": "Before adding renewed lease and metadata-query cases; superseded by installed campaign."
+    },
+    {
+      "repository": "connector",
+      "junit": "plans/implementation/evidence/capability-recovery-source.xml",
+      "passed": 19
+    }
+  ],
+  "document_validation": {
+    "original_package": "plans/r4_execution/evidence/capability-recovery-package-validation.json",
+    "delivery_coverage": "plans/r4_execution/delivery_coverage.json",
+    "routes": 24,
+    "product_tests_executed_by_validators": false
+  }
+}

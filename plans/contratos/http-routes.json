@@ -284,6 +284,18 @@
       ],
       "effect": "upgrade autenticado próprio; NXLr4",
       "implementation_status": "SPECIFIED_NOT_IMPLEMENTED"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/runtime/sessions/{id}/capability",
+      "principal": "authorized_session_subject_or_operator",
+      "request_definition": "CapabilityMetadataQuery",
+      "response_definition": "CapabilityMetadata",
+      "success_codes": [
+        200
+      ],
+      "effect": "Consulta correlacionada da autoridade ativa; sem material, emissão, renovação ou efeito nativo; no-store.",
+      "implementation_status": "IMPLEMENTED_PARTIAL_ACCEPTANCE"
     }
   ]
 }

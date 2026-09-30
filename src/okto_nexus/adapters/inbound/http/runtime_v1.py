@@ -98,6 +98,32 @@ class CapabilityRequest(BaseModel):
 def build_router() -> APIRouter:
     router = APIRouter()
 
+    @router.get("/runtime/sessions/{session_id}/capability")
+    async def capability_metadata(session_id: str, request: Request) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        query = request.query_params
+        required = {"binding_id", "capability_id", "request_id"}
+        if set(query) != required or len(query.multi_items()) != len(required):
+            return v1_err(422, "VALIDATION_ERROR", "Invalid capability metadata query.")
+        deps = request.app.state.deps
+        service = ExecutionCapabilityService(factory=deps.connection_factory,
+                                             access=build_execution_access(deps))
+        try:
+            metadata = await anyio.to_thread.run_sync(lambda: service.describe(
+                context=RuntimeRequestContext(agent.agent_id, "agent_key",
+                                              credential_binding=agent.api_key_hash),
+                session_id=session_id, **dict(query),
+                mcp_url=str(request.base_url).rstrip("/") + "/mcp"))
+        except OktoNexusError as error:
+            status = {"NOT_FOUND": 404, "PERMISSION_DENIED": 403, "CONFLICT": 409,
+                      "VALIDATION_ERROR": 422}.get(error.code, 500)
+            response = v1_err(status, error.code, error.message, stage="capability.metadata")
+            response.headers['Cache-Control'] = 'no-store'
+            return response
+        return JSONResponse(metadata, headers={"Cache-Control": "no-store"})
+
     @router.post("/runtime/sessions/{session_id}/capability")
     async def session_capability(session_id: str, body: CapabilityRequest,
                                  request: Request) -> JSONResponse:

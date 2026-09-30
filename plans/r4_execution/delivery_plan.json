@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Durable session capability issuance and protected persistence through the execution launch port; automatic approved configuration, restart authority reconciliation and remaining M00-M13 acceptance are pending.",
+    "scope": "Current capability metadata and explicit protected-material recovery under matching applied Server/Core leases; automatic host reconciliation and remaining M00-M13 acceptance are pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "c7d3c50229893b9ae2de6def05f4172e6c68e543",
-      "connector": "e5236fe99f39f14978c1dd063b3321a49d540b81",
+      "nexus": "b3f8bc1e7713e4f0199b2497d0cddee542a7d5db",
+      "connector": "f1ee452de5d2c9a2429e8f270f2308bffd24fc68",
       "core": "770659b7f3404798fe6c59146c7ab9d12b84bbe4"
     },
     "shared_core_version": "0.2.30.dev0",
@@ -67,19 +67,21 @@
       "plans/r4_execution/M09_PI_HOST_OWNERSHIP.md",
       "plans/r4_execution/test_runs_20260930_pi_owner.json",
       "plans/r4_execution/M02_DURABLE_CAPABILITY_INTENT.md",
-      "plans/r4_execution/test_runs_20260930_capability_reservation.json"
+      "plans/r4_execution/test_runs_20260930_capability_reservation.json",
+      "plans/r4_execution/M02_CAPABILITY_RECOVERY.md",
+      "plans/r4_execution/test_runs_20260930_capability_recovery.json"
     ],
-    "latest_increment": "Connector schema 7 and owned capability issuance; canonical Nexus HTTP loss/replay integration.",
-    "verification_scope": "Installed Connector 275 passes/one skip and Nexus 61 passes; artifact bytes verified. No product gate closed.",
+    "latest_increment": "Metadata-only GET and Connector vault recovery; 24 routes preserve the original 23 and add the previously specified metadata consultation.",
+    "verification_scope": "Installed Connector 283 passes/one skip and Nexus 73 passes after isolated rebuild; initial stale-asset preflight failure retained. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INSTALLED_INTEGRATION",
-      "scope": "Durable session capability issuance and protected persistence through the execution launch port; automatic approved configuration, restart authority reconciliation and remaining M00-M13 acceptance are pending.",
-      "nexus_commit": "Commit containing test_runs_20260930_capability_reservation.json",
-      "evidence": "plans/r4_execution/test_runs_20260930_capability_reservation.json",
+      "scope": "Current capability metadata and explicit protected-material recovery under matching applied Server/Core leases; automatic host reconciliation and remaining M00-M13 acceptance are pending.",
+      "nexus_commit": "Commit containing test_runs_20260930_capability_recovery.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_capability_recovery.json",
       "next_steps": [
         "Complete automatic approved configuration and protected environment composition.",
-        "Rehydrate persisted capability material only under reconciled current authority; complete renewal and terminal retention.",
-        "Complete embedded/daemon automatic runtime composition and nonempty recovery.",
+        "Adopt explicit capability recovery after nonempty host reconciliation and schedule renewal; complete terminal retention.",
+        "Complete automatic embedded/daemon runtime composition.",
         "Complete all remaining M00-M13 criteria including domain, UI/CLI US English, migration and real provider/platform/host acceptance."
       ]
     },
@@ -152,6 +154,7 @@
   ],
   "cn5_findings": {"Q01": "M08", "Q02": "M08", "Q03": "M06", "Q04": "M07"},
   "http_route_closure": {
+    "GET /v1/runtime/sessions/{id}/capability": "M02",
     "GET /v1/connections/protocol": "M02",
     "GET /v1/connections/me": "M02",
     "POST /v1/connections/executors:register": "M02",
