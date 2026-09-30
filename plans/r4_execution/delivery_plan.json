@@ -9,7 +9,7 @@
     "scope": "Partial M02/M06 automatic control startup and authenticated inventory handoff; automatic runtime composition still pending",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "0e283ef5e988e18089981b9534d0c73c9a4dd100",
+      "nexus": "fb2c2d155bccd5d24926a335a9fbcd81c9190412",
       "connector": "9e1a96a9e24e643861974b5ede6e987b941908e7",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
@@ -100,7 +100,8 @@
       "qualifies_product_gate": false,
       "commit": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
-    "planning_review": "plans/r4_execution/planning_review_20260930.json"
+    "planning_review": "plans/r4_execution/planning_review_20260930.json",
+    "completion_planning_review": "plans/r4_execution/completion_review_20260930.json"
   },
   "sources": {
     "backlog": "plans/BACKLOG_R4.json",
@@ -193,5 +194,20 @@
     "synthetic_evidence_qualifies_provider": false,
     "gate_closure": {"G0": "M02", "G1": "M13", "G2": "M13", "G3": "M13"},
     "commit_policy": "Commit coherent tested increments and push feature/v0.2.0 in each changed repository; milestone closure requires all acceptance evidence, independently of commit count."
-  }
+  },
+  "execution_batches": [
+    {"id": "P1", "title": "Baseline and acceptance evidence", "milestones": ["M00"], "owners": ["Nexus", "Connector", "Core"], "depends_on": [], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P2", "title": "Shared contract", "milestones": ["M01"], "owners": ["Core", "Nexus", "Connector"], "depends_on": ["P1"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P3", "title": "Reusable onboarding", "milestones": ["M02", "M03"], "owners": ["Nexus", "Connector"], "depends_on": ["P2"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P4", "title": "Opening and outbox", "milestones": ["M04"], "owners": ["Nexus", "Connector"], "depends_on": ["P3"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P5", "title": "Embedded cycle", "milestones": ["M05"], "owners": ["Nexus", "Core"], "depends_on": ["P4"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P6", "title": "Remote cycle", "milestones": ["M06"], "owners": ["Connector", "Nexus", "Core"], "depends_on": ["P4"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence.", "steps": [{"id": "P6.1", "title": "Approved configuration and protected launch environment", "depends_on": []}, {"id": "P6.2", "title": "Automatic lane attachment and execution ownership", "depends_on": ["P6.1"]}, {"id": "P6.3", "title": "Ticket lease and capability lifecycle", "depends_on": ["P6.2"]}, {"id": "P6.4", "title": "Nonempty paginated recovery and publication obligations", "depends_on": ["P6.2"]}, {"id": "P6.5", "title": "Installed integration through independent product processes", "depends_on": ["P6.3", "P6.4"]}]},
+    {"id": "P7", "title": "Durable observation", "milestones": ["M07"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P6"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P8", "title": "Decisions and input", "milestones": ["M08"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P5", "P7"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P9", "title": "Tools and domain", "milestones": ["M09"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P10", "title": "User journeys and US English", "milestones": ["M10"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P11", "title": "Failures and limits", "milestones": ["M11"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P8"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P12", "title": "Installation upgrades", "milestones": ["M12"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P9", "P10", "P11"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."},
+    {"id": "P13", "title": "Complete delivery", "milestones": ["M13"], "owners": ["Nexus", "Connector", "Core"], "depends_on": ["P12"], "status": "PLANNED_REMAINING_WORK", "acceptance": "All mapped milestone requirements and original task dependencies remain mandatory; use the delivery document for batch exit evidence."}
+  ]
 }

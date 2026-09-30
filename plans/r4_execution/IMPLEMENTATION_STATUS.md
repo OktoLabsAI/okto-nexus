@@ -1,5 +1,18 @@
 # Execução R4 — estado verificado em 2026-09-30
 
+## Plano de conclusão revisado — 30 de setembro de 2026
+
+O [plano coordenado](DELIVERY_PLAN.md) foi revisado sobre Nexus `fb2c2d1`,
+Connector `9e1a96a` e Core `9d244cf`. A sequência P1–P13 agora explicita
+os lotes até o aceite final; P6.1–P6.5 detalham configuração aprovada,
+composição automática, renovação, recuperação e integração instalada.
+A [revisão registrada](completion_review_20260930.json) distingue inspeção
+de código/evidências de execução de testes. Esta atualização é documental;
+nenhuma tarefa de implementação ou gate foi encerrado por ela.
+
+As seções abaixo preservam o contexto de cada incremento na data em que
+foi testado. Para pendências atuais, usar o checkpoint e a fila do plano.
+
 ## Startup automático do controle R4 — 30 de setembro de 2026
 
 O [startup do daemon](M06_DAEMON_STARTUP.md) agora usa o registro persistido,

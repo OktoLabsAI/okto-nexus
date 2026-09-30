@@ -68,13 +68,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `0e283ef5e988e18089981b9534d0c73c9a4dd100` | `0.2.0` |
+| Nexus | `fb2c2d155bccd5d24926a335a9fbcd81c9190412` | `0.2.0` |
 | Connector | `9e1a96a9e24e643861974b5ede6e987b941908e7` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [startup automático do controle](M06_DAEMON_STARTUP.md) e no [manifesto coordenado](test_runs_20260930_startup.json). O consumidor daemon, a prova delegada e o bootstrap de abertura foram publicados antes deste incremento. O HEAD Nexus do quadro é o pai publicado deste relatório; Connector e Core são dependências publicadas. O commit que contém o relatório identifica a revisão Nexus sem referência circular ao próprio SHA.
+A [revisão anterior de planejamento](planning_review_20260930.json) conserva seu snapshot. A [revisão de conclusão](completion_review_20260930.json) registra os HEADs consultados para este plano. O último incremento publicado e seus testes ficam no [startup automático do controle](M06_DAEMON_STARTUP.md) e no [manifesto coordenado](test_runs_20260930_startup.json). O HEAD Nexus do quadro contém esse incremento e precede esta atualização documental; Connector e Core são dependências publicadas. Esta revisão não executa novas campanhas de produto nem promove flags de prontidão.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -189,7 +189,7 @@ A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco cont
 
 ### Próximos incrementos com saída objetiva
 
-Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do backlog nem antecipam o fechamento de um marco.
+Estes lotes organizam o trabalho restante de M00 a M13. Não substituem as tarefas e dependências do backlog nem antecipam o fechamento de um marco. As dependências estruturadas estão em `execution_batches` de [delivery_plan.json](delivery_plan.json). P5 e P6 são frentes independentes depois de P4; P9, P10 e P11 podem avançar depois de P8. A preparação de testes, interface e laboratório começa antes do fechamento dessas dependências.
 
 | Lote | Responsável e trabalho | Testes e condição de saída |
 |---|---|---|
@@ -199,8 +199,29 @@ Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do bac
 | P4 — abertura e outbox | Nexus: partir do loop WSS já implementado; completar reconciliação de envio incerto, composição local e consumidores do resolver físico aprovado | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
 | P5 — ciclo local | Nexus/Core: conectar o owner de serve à mesma admissão, seleção, contexto, journal e projeção | Pacotes instalados sem aplicativo Connector; open/submit/steer/interrupt/close pelo caller real; peer técnico primeiro e provider real depois |
 | P6 — ciclo remoto | Connector/Nexus: partir do startup de controle e inventário publicado; compor perfil/ambiente/capability aprovados, attach automático, rotação de tickets, renovação de lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
+| P7 — observação durável | Três repos / M07: concluir publicadores de eventos e receipts, ingresso transacional, ACK e replay paginado | Reiniciar sem novo evento nativo e recuperar publicação; duplicação, gaps, perda de ACK e namespaces coincidentes; histórico disponível sem provider |
+| P8 — decisões e input | Três repos / M08: integrar pedidos nativos às decisões canônicas e operações únicas, com retenção protegida | Aprovação/input pela UI/API/CLI; concorrência, timeout, reboot, negação e autoaprovação; exatamente uma aplicação nativa autorizada |
+| P9 — ferramentas e domínio | Nexus com Core/Connector / M09: MCP HTTP direto, capability de sessão, bridge Pi e trabalho governado | Tools-only sem daemon; audiência/ação proibida; revogação; disputa de consumo, handoff e resultados com causalidade; regressões do domínio |
+| P10 — jornadas e idioma | Nexus/Connector com revisão Core / M10: concluir interface, CLI humana/headless e inglês US em todas as mensagens próprias | Primeiro/segundo uso, sessão nova/reuso, offline, aprovação, input e histórico em navegador real; TLANG-01–04; assets conferidos no wheel |
+| P11 — falhas e limites | Três repos / M11: recovery, revogação, shutdown, ownership, contenção e carga | Kill/partição/disco cheio nas fronteiras de commit; zero efeito sem autoridade; controle sob saturação; memória/filas/shutdown dentro dos limites; CN5 completo |
+| P12 — atualização de instalações | Três repos / M12: migração, drain, cutover, remoção de duplicação e rollback | Bases legadas e sessões pendentes; interromper cada checkpoint, repetir migração, restaurar banco/journal e comprovar retomada sem reset |
+| P13 — entrega integral | Três repos / M13: congelar commits, construir artefatos e executar campanhas finais | Mesmo Core por hash; Windows/Linux e Python suportados; providers reais local/remoto, A/B/C, UI/CLI e regressões; todos os casos obrigatórios aceitos e G0–G3 fechados |
 
 Cada lote termina com relatório, commit e push em `feature/v0.2.0` dos repositórios alterados. Um resultado parcial continua parcial no inventário, mesmo depois de publicado.
+
+### Decomposição do ciclo remoto restante (P6)
+
+O controle e o inventário já iniciam automaticamente. A ligação de runtime deve ser concluída em incrementos verificáveis, usando os contratos normativos de perfil, sessão, ticket e capability. Se faltar um campo público necessário, registrar a lacuna, ajustar a fonte contratual competente e testar os consumidores antes de adotá-lo.
+
+| Passo | Mudança e fronteira | Prova de saída |
+|---|---|---|
+| P6.1 — configuração aprovada | Nexus expõe a configuração autorizada; Connector associa perfil, realização, configuração e revisões ao binding persistido. Compor ambiente e referências protegidas pelo Core; incluir instalações explícitas aprovadas no inventário completo | Nenhum ambiente sintético vazio usado como configuração de produção; perfil desabilitado, configuração alterada durante espera, segredo ausente e candidato fora do inventário falham antes do efeito; nenhuma credencial em logs/estado público |
+| P6.2 — composição automática | Daemon obtém ticket do binding, espera ACK da lane atual e registra o consumidor de operações existente. Abrir somente após instalar lease; manter um owner por conexão e namespace | CLI de registro/onboarding → restart do daemon → admissão pública → Core, sem o teste chamar attach/adoption/execute manualmente; repetir com duas identidades e namespaces isolados |
+| P6.3 — renovação e rotação | Ligar renovação de tickets/leases e lifecycle da capability; revalidar autorização e configuração após cada espera. Preservar request/serial e prazo monotônico; revogar somente no escopo correto | Sessão permanece correta além da primeira validade; replay não amplia prazo; ACK antigo, resposta tardia, revogação e mudança de owner não reautorizam efeito; capability ativa não é substituída por retry cego |
+| P6.4 — recuperação não vazia | Substituir a aceitação exclusiva de namespace vazio por reconciliação paginada de journal, claims, slots, operações e watermarks. Retomar obrigações de publicação com P7 | Mais de 256 registros; crash após efeito possível; storage indisponível e cursor inválido mantêm recuperação pendente; nenhuma operação incerta é reenviada por ausência de resposta |
+| P6.5 — composição instalada | Executar Server e daemon em processos independentes, usando estado persistido e entradas públicas. Vincular receipts ao ciclo real e confirmar shutdown dos owners | Open/submit/steer/interrupt/close com o mesmo Core instalado, sem forçar prontidão no aceite; depois incorporar decisões/input em P8 e providers/hosts reais em P13 |
+
+Os subpassos admitem testes técnicos com peers e qualificação sintética explicitamente identificados durante o desenvolvimento. A saída de produto P6.5 exige prontidão obtida pelo contrato e pelo host. O fechamento de M06 permanece condicionado a todos os critérios normativos, inclusive CON-R4-02/04 e CN5 Q03.
 
 ### Aceite concreto do próximo fluxo de produto
 

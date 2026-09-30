@@ -55,6 +55,48 @@ def validate() -> dict:
     for milestone in milestones:
         visit(milestone, set())
 
+    batches = {item["id"]: item for item in plan["execution_batches"]}
+    require(len(batches) == len(plan["execution_batches"]) == 13 and
+            set(batches) == {f"P{i}" for i in range(1, 14)},
+            "Expected 13 distinct completion batches.")
+    batch_ancestors: dict[str, set[str]] = {}
+
+    def visit_batch(batch: str, trail: set[str]) -> set[str]:
+        require(batch in batches, f"Unknown completion batch: {batch}")
+        require(batch not in trail, f"Completion batch dependency cycle: {batch}")
+        if batch not in batch_ancestors:
+            prior: set[str] = set()
+            for dependency in batches[batch]["depends_on"]:
+                prior |= {dependency} | visit_batch(dependency, trail | {batch})
+            batch_ancestors[batch] = prior
+        return batch_ancestors[batch]
+
+    milestone_batch: dict[str, str] = {}
+    for batch, item in batches.items():
+        visit_batch(batch, set())
+        require(bool(item["owners"]) and f"| {batch} —" in document,
+                f"Completion batch has no owner or documented exit: {batch}")
+        for milestone in item["milestones"]:
+            require(milestone in milestones and milestone not in milestone_batch,
+                    f"Unknown or duplicate batch milestone: {milestone}")
+            milestone_batch[milestone] = batch
+    require(set(milestone_batch) == set(milestones),
+            "Some milestones have no completion batch.")
+    for milestone, item in milestones.items():
+        for dependency in item["depends_on"]:
+            before, after = milestone_batch[dependency], milestone_batch[milestone]
+            require(before == after or before in batch_ancestors[after],
+                    f"Batch order violates milestone dependency: {dependency} -> {milestone}")
+    steps = batches["P6"]["steps"]
+    require(len(steps) == 5 and {step["id"] for step in steps} ==
+            {f"P6.{i}" for i in range(1, 6)}, "Remote completion steps are incomplete.")
+    prior_steps: set[str] = set()
+    for step in steps:
+        require(set(step["depends_on"]) <= prior_steps and
+                f"| {step['id']} —" in document,
+                f"Remote step is undocumented or out of order: {step['id']}")
+        prior_steps.add(step["id"])
+
     task_map: dict[str, str] = {}
     phases = {phase["id"] for phase in backlog["phases"]}
     for milestone in milestones.values():
@@ -134,7 +176,8 @@ def validate() -> dict:
         "source_sha256": {str(path.relative_to(ROOT)).replace("\\", "/"):
                           hashlib.sha256(path.read_bytes()).hexdigest()
                           for path in sources.values()},
-        "counts": {"milestones": len(milestones), "nexus_tasks": len(task_map),
+        "counts": {"milestones": len(milestones), "completion_batches": len(batches),
+                   "remote_completion_steps": len(steps), "nexus_tasks": len(task_map),
                    "original_scenarios": len(test_map),
                    "external_deliverables": len(external),
                    "cn5_findings": len(plan["cn5_findings"]),
