@@ -422,3 +422,115 @@ def test_cancelled_history_observer_keeps_journal_owned(tmp_path,monkeypatch):
         assert closed.is_set() and not host._history_tasks
         assert not host._runtime_tasks and host._ledger_task is None
     asyncio.run(scenario())
+
+
+def test_local_events_commit_and_reapply_lost_core_ack(connected_local,monkeypatch):
+    from nexus_connector_core import RuntimeEvent
+    setup,binding,native=connected_local
+    deps,app,client,*_=setup
+    opened=admit(setup,binding,"event-open","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    owner=app.state.embedded_dispatch_owner
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        scope=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+    async def scenario():
+        _,journal=await owner.host._runtime_tasks[(scope["executor_id"],scope["session_id"])]
+        original=journal.acknowledge_events
+        failed=asyncio.Event()
+        async def ack(cursor,through):
+            if through>0 and not failed.is_set():
+                failed.set()
+                raise OSError("Technical Core ACK failure")
+            return await original(cursor,through)
+        monkeypatch.setattr(journal,"acknowledge_events",ack)
+        await native.native.queue.put(RuntimeEvent(scope["server_id"],scope["executor_id"],
+            scope["session_id"],scope["stream_epoch"],0,"text_delta","technical.output",{"text":"Hello"}))
+        await asyncio.wait_for(failed.wait(),5)
+    client.portal.call(scenario)
+    until=time.monotonic()+5
+    while owner.failure is None:
+        assert time.monotonic()<until
+        time.sleep(.02)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT committed_contiguous FROM execution_event_watermarks").fetchone()[0]==1
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress").fetchone()[0]==1
+    # A successor host applies the committed ACK even though the first owner
+    # failed before acknowledging Core. It does not duplicate the event.
+    client.portal.call(owner.close)
+    async def recover():
+        from okto_nexus.bootstrap.runtime_host import EmbeddedRuntimeHost
+        host=EmbeddedRuntimeHost(owner.host.store_dir)
+        # Verify ACK application through the actual publisher using the current
+        # owner identity, with a reopened history-only host.
+        original_host=owner.host
+        owner.host=host
+        try:
+            assert not await owner.events.step(scope)
+            async def compact(journal):
+                count,_=await journal.compact_acked(max_rows=128)
+                assert count==1
+            await host.with_history(executor_id=scope["executor_id"],session_id=scope["session_id"],read=compact)
+        finally:
+            owner.host=original_host
+            await host.shutdown()
+    client.portal.call(recover)
+
+
+def test_local_event_owner_change_prevents_commit(connected_local):
+    from dataclasses import asdict
+    from nexus_connector_core import RuntimeEvent, R4_PREVIEW_REVISION
+    from okto_nexus.application.execution_events import commit_execution_events
+    setup,binding,_=connected_local
+    deps,app,*_=setup
+    opened=admit(setup,binding,"event-fence","runtime.start",new_session=True)
+    wait_receipt(setup,opened)
+    owner=app.state.embedded_dispatch_owner
+    with deps.connection_factory.unit_of_work() as uow:
+        scope=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+        uow.connection.execute("UPDATE execution_executors SET generation=generation+1 WHERE kind='embedded'")
+    frame={k:scope[k] for k in ("server_id","executor_id","binding_id","agent_id","session_id","stream_epoch")}
+    event=asdict(RuntimeEvent(scope["server_id"],scope["executor_id"],scope["session_id"],scope["stream_epoch"],1,
+        "text_delta","technical.output",{"text":"Hello"}))
+    event.pop("operation_id")
+    frame.update(type="event.batch",protocol_major=1,contract_revision=R4_PREVIEW_REVISION,
+        connection_id=owner.channel.connection_id,connection_generation=owner.channel.connection_generation,events=[event])
+    with pytest.raises((ValueError,OktoNexusError)):
+        commit_execution_events(deps.connection_factory,channel=owner.channel,frame=frame,embedded_owner=owner)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_event_ingress").fetchone()[0]==0
+
+
+def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
+    from nexus_connector_core import RuntimeEvent
+    from okto_nexus.bootstrap import embedded_events
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+        setup,binding,native=connected_local.__wrapped__(setup)
+        deps,app,client,headers,_,candidate,_=setup
+        opened=admit(setup,binding,"replay-events","runtime.start",new_session=True)
+        wait_receipt(setup,opened)
+        owner=app.state.embedded_dispatch_owner
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            scope=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+        def unavailable(*args,**kwargs):
+            raise OSError("Technical event storage failure")
+        with monkeypatch.context() as patch:
+            patch.setattr(embedded_events,"commit_execution_events",unavailable)
+            client.portal.call(native.native.queue.put,RuntimeEvent(scope["server_id"],scope["executor_id"],
+                scope["session_id"],scope["stream_epoch"],0,"text_delta","technical.output",{"text":"Retained"}))
+            until=time.monotonic()+5
+            while owner.failure is None:
+                assert time.monotonic()<until
+                time.sleep(.02)
+            assert isinstance(owner.failure,OSError)
+    Path(candidate.executable).unlink()
+    for _ in range(2):
+        deps,app=app_for(tmp_path/"home")
+        with TestClient(app) as client:
+            owner=app.state.embedded_dispatch_owner
+            assert owner.recovery_failure is None,repr(owner.recovery_failure)
+            assert not owner.host._runtime_tasks and owner.pump is None
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                rows=uow.connection.execute("SELECT payload_json FROM execution_event_ingress").fetchall()
+                assert len(rows)==1 and json.loads(rows[0][0])["payload"]=={"text":"Retained"}
+                assert uow.connection.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks").fetchone()[:]==(1,"none")
+    assert native.opens==1

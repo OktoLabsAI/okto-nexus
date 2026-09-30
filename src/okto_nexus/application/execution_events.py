@@ -12,7 +12,7 @@ from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepo
 from .execution_leases import require_execution_lane
 
 
-def commit_execution_events(factory, *, channel, frame):
+def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
     frame = decode_r4_frame(encode_r4_frame(frame))
     if frame["type"] != "event.batch" or any(frame[k] != getattr(channel,k) for k in (
             "server_id","executor_id","connection_id","connection_generation")):
@@ -38,7 +38,17 @@ def commit_execution_events(factory, *, channel, frame):
             (frame["server_id"],frame["agent_id"])).fetchone()
         if current is None or tuple(current) != (scope["credential_epoch"],scope["authorization_revision"],scope["configuration_revision"]):
             raise ValueError("The event authority changed.")
-        require_execution_lane(uow,scope=scope,channel=channel,now=datetime.now(timezone.utc))
+        if embedded_owner is None:
+            require_execution_lane(uow,scope=scope,channel=channel,now=datetime.now(timezone.utc))
+        else:
+            embedded_owner.verify(uow=uow)
+            if embedded_owner.channel != channel or conn.execute(
+                    "SELECT 1 FROM execution_local_streams l JOIN execution_local_publications p "
+                    "ON p.server_id=l.server_id AND p.executor_id=l.executor_id AND p.operation_id=l.opening_operation_id "
+                    "WHERE l.server_id=? AND l.executor_id=? AND l.session_id=? AND l.stream_epoch=? "
+                    "AND l.binding_id=? AND l.agent_id=?",
+                    (*key,frame["binding_id"],frame["agent_id"])).fetchone() is None:
+                raise ValueError("The event has no approved embedded stream.")
         session = conn.execute("SELECT s.stream_epoch,ep.agent_id,a.is_active FROM execution_sessions s "
             "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id AND b.binding_id=s.binding_id "
             "JOIN agent_endpoints ep ON ep.endpoint_id=b.endpoint_id JOIN agents a ON a.agent_id=ep.agent_id "

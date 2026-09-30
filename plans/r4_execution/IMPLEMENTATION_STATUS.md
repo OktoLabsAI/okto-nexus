@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Embedded event publication and cold replay — September 30, 2026
+
+[Increment](M05_EMBEDDED_EVENTS.md): migration 085 registers local streams before native open. Serve maintenance publishes bounded Core event pages through canonical Nexus ingress under the current owner, then applies durable ACKs to Core. Restart reapplies committed ACKs and replays uncommitted native events without loading the provider. Installed results: 108 passed; 53 overlapping tests passed without Connector installed, with pip check. Resource/slot reconciliation, full event consumption, tools/governance and complete provider journeys remain required. Core/Connector artifacts are unchanged; M05/M07/G1 remain open.
+
+
 ## Embedded historical receipt recovery — September 30, 2026
 
 [Increment](M05_EMBEDDED_RECOVERY.md): serve startup publishes pending Core journal facts before considering dispatch, without loading the provider or constructing a runtime. Current-owner persistence validates the immutable historical binding and original applied dispatch lease. Missing journals retain recovery state; canceled observers cannot abandon history journals. Installed results: 89 passed; 50 overlapping tests passed without Connector installed, with pip check. Slot/resource and event reconciliation remain required before retained stores become ready. Core/Connector artifacts are unchanged; M05/G1 remain open.

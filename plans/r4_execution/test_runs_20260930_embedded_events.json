@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-30",
+  "scope": "Partial M05/M07 embedded event publication and cold replay; no milestone or gate closure.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-events-lq0vp5pk\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "18e829f417afbb11c18e286cf8dd2ea068e4ca3ab6c9f8ba3685851fd4e52fc7"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "runs": {
+    "nexus": {
+      "passed": 108,
+      "seconds": 253.32,
+      "overlapping_subset": false,
+      "result": "evidence/embedded-events-installed-nexus.xml"
+    },
+    "isolated": {
+      "passed": 53,
+      "seconds": 145.412,
+      "overlapping_subset": true,
+      "result": "evidence/embedded-events-installed-isolated.xml"
+    }
+  },
+  "source_regression": {
+    "passed": 33,
+    "evidence": "evidence/embedded-events-source.xml"
+  },
+  "development_failures": "Two initial directed cases used the invalid technical category output; corrected to text_delta before the successful source and installed campaigns.",
+  "limitations": [
+    "Technical native factory and qualification fixtures.",
+    "Retained resources still require reconciliation; retained stores remain RECOVERING.",
+    "No full real-provider journey acceptance.",
+    "Preexisting UI edits included in wheel, excluded from commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "evidence_sha256": {
+    "embedded-events-artifacts.json": "573ad8d909d42f3e4aff3a52194897c3ea10e57881d3d78adc7c793c4f87c098",
+    "embedded-events-installed-isolated.json": "952212b74fbd0928e83ca79754a22d21427b673a29db384aeda469264921651e",
+    "embedded-events-installed-isolated.log": "d1d736e3d36bbd49ed1e700c3280999970aba26451858dec8c4fb7ff9f257d60",
+    "embedded-events-installed-isolated.xml": "8f34ee997a13b9fc482a097c17734223f51558f10467ec4d2f3ed8ee205e3eb9",
+    "embedded-events-installed-nexus.json": "af19ce9fddbb105f8b7a811df9901d6273e87bab019112a3bc3818de40ca4ff2",
+    "embedded-events-installed-nexus.log": "1cfb05b3161139f02e20c28526aaea582fe7804cf6670e5364a4ec90da52672e",
+    "embedded-events-installed-nexus.xml": "98f5f3ac5b7dfd09b3379fad8bb484de42c2893e8c87164cffaa471ae30c66e6",
+    "embedded-events-isolated-installation.json": "156edd7d8655bc85ed3902f7f8a0e145f792b2e053d460c396547ae1ff9fc2cd",
+    "embedded-events-source.xml": "0a3d4b812fd9f8d9c6aab31fcb24537dc7c40014a75b2a28dbbbb0859e266519"
+  }
+}

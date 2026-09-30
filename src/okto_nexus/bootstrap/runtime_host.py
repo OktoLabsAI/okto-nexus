@@ -54,21 +54,31 @@ class EmbeddedRuntimeHost:
 
     async def historical_receipt(self, *, session_id, key):
         """Read retained Core history without constructing or authorizing a runtime."""
+        async def read(journal):
+            return await journal.get_receipt(key)
+        return await self.with_history(executor_id=key.executor_id,session_id=session_id,read=read)
+
+    async def with_history(self, *, executor_id, session_id, read):
+        """Retain a journal reader through observer cancellation and shutdown."""
         async with self._lock:
             if self._closing:
                 raise RuntimeError("The embedded Core host is shutting down.")
-            task = asyncio.create_task(self._historical_receipt(session_id, key))
+            task = asyncio.create_task(self._read_history(executor_id, session_id, read))
             self._history_tasks.add(task)
             task.add_done_callback(self._history_tasks.discard)
         return await asyncio.shield(task)
 
-    async def _historical_receipt(self, session_id, key):
-        path = self._journal_path(key.executor_id, session_id)
+    async def _read_history(self, executor_id, session_id, read):
+        runtime_task = self._runtime_tasks.get((executor_id,session_id))
+        if runtime_task is not None:
+            _, journal = await asyncio.shield(runtime_task)
+            return await read(journal)
+        path = self._journal_path(executor_id, session_id)
         if not await asyncio.to_thread(path.is_file):
             raise FileNotFoundError("The retained Core journal is unavailable.")
         journal = await open_journal(path)
         try:
-            return await journal.get_receipt(key)
+            return await read(journal)
         finally:
             await journal.aclose()
 

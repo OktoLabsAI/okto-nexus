@@ -51,6 +51,8 @@ class EmbeddedDispatchOwner:
         self.containment_report = None
         self.state_failure = None
         self.recovery_failure = None
+        from .embedded_events import EmbeddedEventPublisher
+        self.events = EmbeddedEventPublisher(self)
 
     def _quiesce(self):
         c = self.channel
@@ -95,6 +97,7 @@ class EmbeddedDispatchOwner:
             return
         try:
             await self._recover_publications()
+            await self.events.recover()
         except Exception as error:
             self.recovery_failure = error
             return
@@ -156,7 +159,7 @@ class EmbeddedDispatchOwner:
         await asyncio.to_thread(self.verify)
         return await asyncio.to_thread(self.leases.issue, request, channel=self.channel)
 
-    def _bind(self, frame, binding):
+    def _bind(self, frame, binding, stream_epoch=None):
         raw = canonical_json(binding).decode()
         with self.factory.unit_of_work() as uow:
             self.verify(uow=uow)
@@ -171,6 +174,11 @@ class EmbeddedDispatchOwner:
             uow.connection.execute("INSERT INTO execution_local_publications "
                 "(server_id,executor_id,operation_id,session_id,binding_json) VALUES (?,?,?,?,?)",
                 (c.server_id,c.executor_id,frame["operation_id"],frame["session_id"],raw))
+            if stream_epoch is not None:
+                uow.connection.execute("INSERT INTO execution_local_streams "
+                    "(server_id,executor_id,session_id,stream_epoch,opening_operation_id,binding_id,agent_id) "
+                    "VALUES (?,?,?,?,?,?,?)",(c.server_id,c.executor_id,frame["session_id"],stream_epoch,
+                        frame["operation_id"],frame["binding_id"],frame["agent_id"]))
 
     async def _execute_owned(self, frame):
         try:
@@ -220,7 +228,7 @@ class EmbeddedDispatchOwner:
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
             binding = prepare_r4_receipt_binding(frame, context, **options)
-            await asyncio.to_thread(self._bind, frame, binding)
+            await asyncio.to_thread(self._bind, frame, binding, options.get("stream_epoch"))
             await asyncio.to_thread(self.verify)
             if action == "runtime.open":
                 receipt = await runtime.open(OpenOperation(frame["operation_id"],key,epoch,prepared),context)
@@ -303,6 +311,7 @@ class EmbeddedDispatchOwner:
                     receipt = await self.host.operation_receipt(session_id=row["session_id"],key=key)
                     if receipt is not None:
                         await self._publish(json.loads(row["binding_json"]),receipt)
+                await self.events.pass_once()
                 try:
                     await asyncio.wait_for(self._stopping.wait(),.1)
                 except asyncio.TimeoutError:
