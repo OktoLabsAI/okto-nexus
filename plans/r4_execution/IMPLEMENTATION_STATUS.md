@@ -502,3 +502,7 @@ G0, G1, G2 e G3 permanecem abertos. Nenhum teste acima prova provider real, efei
 O pacote completo em `plans/` foi disponibilizado durante a execução. `python plans/validar_pacote.py` passou oito verificações documentais; `tests/execution_r4/test_ns00.py` passou os dois cenários de baseline e crosswalk. Essa validação não prova capacidade de produto. As demais tarefas seguem a especificação e nenhuma é marcada DONE por um recorte parcial.
 
 Um wheel do Nexus foi instalado com o extra `serve-lite` num ambiente isolado com o wheel Core local; `python -I` importou ambos de `site-packages`, mostrou o help e serviu `/v1/connections/protocol` com `remote_execution_ready=false`. O teste não substitui a atualização do lock nem o bundle NXL R4.
+
+## Approved launch configuration — 2026-09-30
+
+Connector commit `4447adc3700b3d700fab2458fdebeb46b52be0e1` adds schema 8 and the default digest-bound launch port. Installed verification: Connector 305 passed / one skipped; Nexus 73 passed. Core remains 0.2.30.dev0 with the same shared hash. See [evidence](test_runs_20260930_approved_launch.json). Automatic tool composition, public configuration capture and daemon adoption remain pending under M02/P6.1/M06; no gate closed.

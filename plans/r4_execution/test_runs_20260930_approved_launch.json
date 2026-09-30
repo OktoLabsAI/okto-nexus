@@ -1,0 +1,36 @@
+{
+  "increment": "M02/P6.1 approved persisted launch configuration",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "connector_commit": "4447adc3700b3d700fab2458fdebeb46b52be0e1",
+  "core_commit": "770659b7f3404798fe6c59146c7ab9d12b84bbe4",
+  "changes": [
+    "Schema 8 stores scoped configuration digests and protected references.",
+    "Default R4 owner resolves approved configuration without external launch callback.",
+    "Environment checks authority and provider-home identity before and after vault resolution.",
+    "Vault resolution runs off the event loop."
+  ],
+  "tests": {
+    "source_connector": {
+      "passed": 262,
+      "skipped": 1
+    },
+    "installed_connector": {
+      "passed": 305,
+      "skipped": 1
+    },
+    "installed_nexus": {
+      "passed": 73,
+      "warnings": 1
+    }
+  },
+  "artifacts": "plans/r4_execution/evidence/approved-launch-artifacts.json",
+  "evidence": [
+    "plans/r4_execution/evidence/approved-launch-installed-connector.json",
+    "plans/r4_execution/evidence/approved-launch-installed-nexus.json"
+  ],
+  "limitations": [
+    "Technical native peers, not real provider qualification.",
+    "Public configuration capture, automatic MCP/Pi tool composition and daemon lane adoption remain pending.",
+    "No milestone or product gate closed."
+  ]
+}
