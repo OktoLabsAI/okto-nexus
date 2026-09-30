@@ -55,7 +55,7 @@ Continuam fora do escopo normativo: novo login de usuário Nexus, SSO, tenant ob
 
 Wheel Core da baseline inicial: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4.
 
-### Revisão após a auditoria inicial
+### Revisão anterior após a auditoria inicial
 
 O conjunto conferido nesta revisão é Nexus `0145bcc7aaa7ff34a9ed50f2a12972e8e467aa06`, Connector `47454d21f2cae22eba14d1b9302f764be323739d` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. Todos estão em `feature/v0.2.0`, com HEAD igual à referência local `origin/feature/v0.2.0` consultada. Os três repositórios contêm o mesmo wheel Core `0.2.26.dev0`, com SHA-256 `d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977`, recalculado nos três arquivos. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos. Esses SHAs identificam a implementação anterior a esta revisão documental.
 
@@ -65,13 +65,23 @@ A campanha mais recente, registrada em [test_runs_20260930_containment.json](tes
 
 Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
 
+### Checkpoint atual para a entrega total — 30 de setembro de 2026
+
+Esta revisão conferiu os arquivos e evidências locais dos três repositórios. Os HEADs anteriores à revisão documental são Nexus `7e891fbd78073f3b987be505b3a86c288233d74d`, Connector `09b48595bc2ca99a7acff1555c12cf53e086df49` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. As referências locais de tracking coincidem com esses HEADs em `feature/v0.2.0`. O Core publicado continua em `0.2.26.dev0`; os parágrafos anteriores preservam checkpoints históricos.
+
+Há um incremento **local, ainda não aceito nem publicado**, de política de `runtime.close`, ampliação da razão de interrupt e projeção transacional de sessão fechada. O wheel Core `0.2.27.dev0` existe nos três repositórios com SHA-256 `f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6`. Pins e lock já foram parcialmente alterados, mas `CORE_INVENTORY_VERSION` em `src/okto_nexus/adapters/outbound/execution/core_inventory.py` e as expectativas de `tests/execution_r4/test_ns01.py` ainda exigem `0.2.26.dev0`. Resolver essa inconsistência é a primeira ação de integração, antes de usar o ambiente como baseline de aceite.
+
+O XML local `../okto-nexus-connector-core/plans/implementation/evidence/r4-close-policy-final-source.xml` registra 908 passes, 74 skips e zero falhas/erros em 982 casos. É evidência de fonte com alterações locais; ainda precisa ser ligada ao commit e aos artefatos instalados. A revisão do plano apenas leu esse resultado. Não executou essa suíte nem validou o incremento nos consumidores. O resultado anterior com falha de documentação deve ser preservado no histórico.
+
+O incremento publicado de steer/interrupt tem 68 passes Nexus R4, 241 passes/2 skips Connector e 12 casos instalados, conforme [registro de controles](test_runs_20260930_controls.json). Essas campanhas têm sobreposição e não qualificam o novo wheel `0.2.27.dev0`. O estado permanece: M00/M01 em andamento, incrementos parciais dos marcos posteriores e G0–G3 abertos.
+
 ### Prioridades para continuar a execução
 
 O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados na campanha original. A referência de commits acima já inclui este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
 
 O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
 
-O [incremento de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. Passaram 68 testes R4 Nexus, 241 Connector (dois skips) e 12 casos novos instalados. O Core ainda não implementa a política de close prevista no schema nem a faixa completa da razão de interrupt; corrigir essas lacunas em M01 antes de concluir M04. Não há fechamento de milestone, loop de produto ou qualificação nativa por este incremento.
+O [incremento publicado de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. A política de close e a faixa completa da razão de interrupt passaram a ter implementação local no incremento descrito no checkpoint atual; ainda exigem integração, teste instalado e publicação coordenada antes de concluir M01/M04. Não há fechamento de milestone, loop de produto ou qualificação nativa por esses incrementos.
 
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|
@@ -107,12 +117,24 @@ Executar os passos abaixo respeitando as dependências dos marcos. Cada passo pr
 |---|---|---|
 | 1 | Atualizar o inventário de aceite e os defeitos com os três HEADs acima; associar os testes novos às tarefas; registrar hosts, providers e credenciais de laboratório disponíveis | Todos os requisitos têm caller, teste existente ou teste a criar, responsável e ambiente; skips aplicáveis permanecem pendentes |
 | 2 | Concluir conformance Core e a coordenação de contenção durante renovação/CAS; manter revogação, geração e recuperação de confirmação perdida | Barreiras de storage ativas durante interrupt/close e shutdown, sem efeito produtivo após expiry nem uso de contexto antigo; mesmo wheel instalado nos consumidores |
-| 3 | Completar resolve/admit/dispatch de `turn.steer`, `turn.interrupt` e `runtime.close`, targeting pelo Core e transporte dos DTOs no cliente Connector | ID/hash/alvo preservados até o efeito e recibo; replay sem duplicação; contenção expirada mantém as demais verificações de autoridade; campos e alvos inválidos recusados antes do efeito |
+| 3 | Aproveitar steer/interrupt publicados; concluir e integrar o incremento local de `runtime.close`, targeting pelo Core e transporte dos DTOs no cliente Connector | ID/hash/alvo/política preservados até o efeito e recibo; replay sem duplicação; contenção expirada mantém as demais verificações de autoridade; campos e alvos inválidos recusados antes do efeito |
 | 4 | Concluir onboarding e compor o loop de outbox, abertura pendente de lease, owner embedded e daemon/StateStore | Jornada pública cria binding e abre sessão sem semear operação ou forçar readiness; execução local sem Connector e execução remota por processos reais |
 | 5 | Integrar reconciliação não vazia, eventos, revogação online e aprovação/input às mesmas operações duráveis | Restart e perda de ACK recuperam os mesmos IDs; decisão aplicada uma vez; isolamento entre agentes/Servers e controle sob saturação |
 | 6 | Fechar ferramentas, UI/CLI e idioma; corrigir regressões; executar migração e campanhas finais | Gates G1–G3 com artefatos instalados, providers reais, hosts distintos, matriz completa e runbooks exercitados |
 
 Antes do passo 3, conferir a representação normativa da razão de interrupt/close: o request HTTP e o payload NXL têm formas diferentes. Registrar qualquer inconsistência contratual e resolvê-la na fonte responsável com fixture de compatibilidade, sem introduzir um campo HTTP ad hoc. Aprovação/input mantêm autoridade própria de decisão em M08.
+
+### Pacote imediato: concluir o incremento local de close
+
+Este pacote é parte de M01/M04/M07/M11. Seu fechamento não encerra esses marcos inteiros.
+
+1. **Core:** revisar o diff existente de `close_operation.py`, `close_runtime.py`, runtime, schemas e projeção. Conferir razão, política tipada, hash, deadline único, contenção durante drain, cancelamento do waiter, efeito tardio e preservação de `OUTCOME_UNKNOWN`. Executar os geradores com `--check`, conformance e verificador de wheel; registrar a correspondência entre fonte e pacote.
+2. **Nexus:** alinhar versão de inventário, dependências, lock e expectativas de pacote ao mesmo artefato. Validar `test_canonical_controls.py`, NS01, NS07, NS10 e integração vertical. Provar que apenas o recibo autorizado de fechamento observado muda a sessão para `CLOSED`, que unknown mantém incerteza e que falha transacional reverte recibo/projeção juntos.
+3. **Connector:** verificar que o publisher conserva razão/política e recusa projeção divergente. Executar sua regressão com o Core instalado e dependências de teste próprias. A passagem do cliente HTTPS não demonstra que o daemon despacha a operação.
+4. **Conjunto instalado:** instalar os três pacotes fora dos clones, registrar imports e hashes, repetir o ciclo técnico e cancelamento/replay sem substituir o Core por fonte do diretório irmão. Rodar também Nexus local sem o aplicativo Connector quando o owner de produto estiver integrado em M05.
+5. **Registro e publicação:** guardar comandos, XML, skips e limites; publicar Core, depois Connector e Nexus com pins compatíveis, staging explícito e push na branch autorizada. Manter a lacuna de CAS pendente e a contenção com journal bloqueado no backlog de robustez até prova específica.
+
+**Aceite do pacote:** não existe divergência entre wheel selecionado e verificação de versão; Core e consumidores passam os casos aplicáveis sobre o mesmo hash; nenhum cancelamento duplica o fechamento; nenhum timeout se torna sucesso; os três commits e as evidências estão relacionados. Antes disso, o incremento permanece `IN_PROGRESS`.
 
 O [status de implementação](IMPLEMENTATION_STATUS.md) registra inventário, identidade, tickets, realizações, prepare/apply, resolução, admissão, reservas, receipts, adapter embedded e negociação WSS parciais. Há ensaios de Core com peer nativo sintético e testes verticais em processo. As seguintes lacunas continuam determinantes:
 
@@ -325,6 +347,19 @@ Nenhum teste de aceite pode depender de `sys.path` apontando para clone irmão, 
 
 ## Campanhas de teste e ambientes
 
+### Preparação obrigatória do laboratório em M00
+
+| Recurso | Responsável | Como comprovar disponibilidade | Estado nesta revisão |
+|---|---|---|---|
+| Windows e Linux, Python 3.11/3.12/3.13 | Três repositórios | Instalação limpa, coleta/regressão e relatório por combinação | Matriz completa ainda não verificada |
+| Servers A/C e executor B independentes | Nexus + Connector | Identidade de host, isolamento de disco, TLS, rede outbound e dois Servers ativos | Aceite entre hosts pendente |
+| Codex, Pi e Claude com contas de laboratório | Core + hosts | Binário/build/fingerprint, autenticação e capacidade exercitada por modo/SO | Qualificação final pendente |
+| Navegador e frontend empacotado | Nexus | Runner reproduzível, fluxo real e correspondência assets–wheel | Infraestrutura/aceite pendentes |
+| Bases e journals legados de laboratório | Nexus + Connector | Backup consistente, migração interrompida e restauração ensaiada | Campanha final pendente |
+| Destino de logs e artefatos de teste | Três repositórios | Manifest com hashes, redaction e correlação de operações por host | Consolidar em M00 |
+
+Disponibilidade é registrada sem incluir segredos nos relatórios. Para cada recurso ausente, registrar responsável, ação de preparação e quais cenários dependem dele; continuar os trabalhos independentes. WSL ou um peer sintético não encerram a célula de hosts independentes ou de provider real.
+
 | Camada | Ambiente e prova exigida |
 |---|---|
 | Documento | Validador R4 original e validador deste plano; cobertura e grafo, sem alegação de produto. |
@@ -393,6 +428,19 @@ Manter commits coerentes, testados e com push em `feature/v0.2.0` de cada reposi
 O calendário depende da auditoria M00, das regressões encontradas e da disponibilidade de hosts/providers. Não há prazo de conclusão comprovado nesta baseline. Após M00, estimar cada pacote restante, reservar capacidade para correções dos testes de falha e atualizar a previsão a cada marco; a ordem e os critérios acima já permitem iniciar o trabalho sem depender de uma estimativa fictícia.
 
 ## Entrega final verificável
+
+### Checklist de fechamento por milestone
+
+Cada milestone deve produzir um registro único com:
+
+1. Requisitos NS/CORE/CON, cenários TR4/TN/J/TLANG e rotas/ações atendidos, com links para caller público e implementação.
+2. Resultado dos testes positivos, negativos, recuperação e compatibilidade exigidos pelo marco; skips e casos não executados com causa explícita.
+3. Conjunto dos commits dos três repositórios, hash do Core usado, versões/pins/locks, ambiente e comandos reproduzíveis.
+4. Mudanças de schema/configuração e evidência de upgrade/rollback, quando aplicável; mensagens próprias em US English.
+5. Defeitos restantes com destino e impacto no aceite. Defeito que viola critério do próprio marco impede `DONE`.
+6. Commit/push dos incrementos, revisão do relatório e atualização do status. Se houver novo código após o teste, reexecutar as provas afetadas antes de fechar.
+
+M13 consolida esses registros em um manifesto final e repete as campanhas sobre os artefatos congelados. Uma melhoria em um dos produtos só é aceita como integração quando os consumidores correspondentes foram exercitados.
 
 Entregar os três repositórios coerentes na branch autorizada, o conjunto de commits e artefatos imutáveis, mesmo hash Core nos consumidores, migrações e rollback demonstrados, matriz completa de testes e capacidades, UI/CLI utilizáveis, textos próprios US English, runbooks e restrições técnicas explícitas. O relatório final deve permitir partir de qualquer requisito e encontrar sua implementação, entrada pública, cenário, execução e artefato.
 
