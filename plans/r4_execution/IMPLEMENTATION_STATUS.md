@@ -2,6 +2,21 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento de contenção durante renovação pendente
+
+O [incremento Core 0.2.28](M01_PENDING_CONTAINMENT.md) permite interrupt,
+close e respostas estritamente negativas durante CAS de renovação do mesmo
+escopo, sem manter locks de sessão aguardando storage. Trabalho produtivo,
+conexão/escopo alterados, ação retirada e revogação continuam bloqueados.
+Renovação tardia não confirma sessão drenando/fechada. O mesmo wheel foi
+instalado nos dois consumidores.
+
+Core completo: 920 passes/74 skips; novos casos instalados: 12 passes;
+Nexus R4: 69 passes; integração instalada: 19 passes. Há sobreposição.
+A porta CAS fica retida nos testes; isso não prova admissão paralela por
+writer SQLite bloqueado. Conformance integral, onboarding, loop de outbox,
+owners e qualificação real continuam pendentes. G0–G3 permanecem abertos.
+
 ## Incremento de controles canônicos
 
 Steer e interrupt agora passam por resolução/admissão HTTP, targeting do Core,

@@ -92,6 +92,22 @@ conformance restante do Core, seguidos de onboarding público, loop de
 outbox e owners embedded/daemon. Os testes de close não demonstram esses
 fluxos de produto. M01/M04/M07/M11 e todos os gates continuam abertos.
 
+### Checkpoint de implementação: Core 0.2.28 e CAS pendente
+
+O [incremento de contenção pendente](M01_PENDING_CONTAINMENT.md) implementa
+a coordenação de locks e autoridade durante renovação do mesmo escopo.
+Novo trabalho produtivo permanece bloqueado; mudanças de conexão/escopo,
+ações retiradas e revogação não reutilizam a autoridade anterior.
+O mesmo wheel `0.2.28.dev0`, SHA-256
+`27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`, está nos
+três repositórios com pins/lock/inventário alinhados.
+
+Core completo passou 920 casos/74 skips; os 12 casos novos passaram com o
+pacote instalado, Nexus R4 passou 69 e integração instalada passou 19.
+O manifesto registra também a campanha Connector e os limites de storage.
+A conformance integral de M01 e os owners/loops de produto continuam como
+próximas entregas. Nenhum milestone ou gate foi encerrado.
+
 ### Prioridades para continuar a execução
 
 O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados na campanha original. A referência de commits acima já inclui este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.

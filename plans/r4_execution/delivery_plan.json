@@ -6,15 +6,15 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial close-policy implementation and installed integration verified; full delivery remains open",
+    "scope": "Pending same-scope renewal containment and installed consumers verified; full delivery remains open",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "0a35455d63380cea192dd4d84ccb460d9f768411",
-      "connector": "218f25a9a09a31e7e640bf4fa1c5295f950eefe2",
-      "core": "c6f8580143a7793d2fd13dc59e44a552c04f62ab"
+      "nexus": "726d5e329e7dabdf5a8160d1ea8065236388a625",
+      "connector": "0be7faf0040266f2c12185985b132b6343cbc2fe",
+      "core": "368c50d9b8496809a4865e32a774492db3e3549f"
     },
-    "shared_core_version": "0.2.27.dev0",
-    "shared_core_wheel_sha256": "f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6",
+    "shared_core_version": "0.2.28.dev0",
+    "shared_core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
     "milestones_in_progress": [
       "M00",
       "M01"
@@ -35,35 +35,28 @@
       "plans/r4_execution/M04_CANONICAL_CONTROLS.md",
       "plans/r4_execution/test_runs_20260930_controls.json",
       "plans/r4_execution/M01_CLOSE_POLICY.md",
-      "plans/r4_execution/test_runs_20260930_close_policy.json"
+      "plans/r4_execution/test_runs_20260930_close_policy.json",
+      "plans/r4_execution/M01_PENDING_CONTAINMENT.md",
+      "plans/r4_execution/test_runs_20260930_pending_containment.json"
     ],
-    "latest_increment": "Core close policy integrated through canonical Nexus services and Connector receipt publication: Core source 908 passed/74 skipped; Connector 241 passed/2 skipped; Nexus R4 69 passed; installed Core 21 passed; installed application integration 19 passed. Campaigns overlap; qualification and native peers are synthetic. No milestone or gate closed.",
+    "latest_increment": "Core source 920 passed/74 skipped; installed pending containment 12 passed; Nexus R4 69 passed; installed application integration 19 passed; Connector 241 passed/2 skipped. Same-scope authorized containment progresses while lease CAS is retained. Changed authority remains fenced. Campaigns overlap and use synthetic peers; no product milestone or gate closed.",
     "verification_scope": "Same wheel hashes and installed package bytes verified. Source and installed regression recorded in close-policy evidence. Nexus changes belong to the commit containing this checkpoint; dependency heads are already published.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Core close policy, complete interrupt reason range, canonical Nexus close and terminal receipt projection",
-      "core_version": "0.2.27.dev0",
-      "core_wheel_sha256": "f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6",
-      "consumer_acceptance": "INSTALLED_TECHNICAL_INTEGRATION_PASSED; PRODUCT_DAEMON_PROVIDER_AND_MULTIHOST_ACCEPTANCE_OPEN",
-      "source_xml": "../okto-nexus-connector-core/plans/implementation/evidence/r4-close-policy-final-source.xml",
-      "source_result_observed": {
-        "tests": 982,
-        "passed": 908,
-        "skipped": 74,
-        "failures": 0,
-        "errors": 0
-      },
-      "immediate_integration_gap": "Version mismatch resolved in inventory guard, package tests, dependency pins and lock.",
-      "next_steps": [
-        "Complete containment during pending lease CAS and remaining Core conformance.",
-        "Complete canonical onboarding and product outbox ownership.",
-        "Integrate embedded and remote daemon owners, nonempty reconciliation, governance and final campaigns."
-      ],
+      "scope": "Authorized containment during same-scope pending renewal CAS",
+      "core_version": "0.2.28.dev0",
+      "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
       "published_dependency_heads": {
-        "core": "c6f8580143a7793d2fd13dc59e44a552c04f62ab",
-        "connector": "218f25a9a09a31e7e640bf4fa1c5295f950eefe2"
+        "core": "368c50d9b8496809a4865e32a774492db3e3549f",
+        "connector": "0be7faf0040266f2c12185985b132b6343cbc2fe"
       },
-      "nexus_commit": "Commit containing this checkpoint"
+      "nexus_commit": "Commit containing this checkpoint",
+      "evidence": "plans/r4_execution/test_runs_20260930_pending_containment.json",
+      "next_steps": [
+        "Finish M01 operation and lease conformance with a complete installed consumer campaign.",
+        "Complete public canonical onboarding, product outbox ownership and embedded/daemon composition.",
+        "Complete reconciliation, governance, UI/CLI, language audit, migration and native multi-host acceptance."
+      ]
     }
   },
   "sources": {
