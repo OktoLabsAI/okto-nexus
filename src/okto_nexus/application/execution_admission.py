@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .executor_inventory import load_current_executor_inventory
+
 from datetime import datetime, timezone
 import json
 import secrets
@@ -142,7 +144,7 @@ def submit_execution_operation(
                     max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The selected inventory is no longer fresh.", {})
-            snapshot = json.loads(current["canonical_projection"])
+            snapshot = load_current_executor_inventory(current["canonical_projection"])
             if not any(item["adapter_id"] == binding["adapter_id"] and
                        item["candidate_ref"] == binding["candidate_ref"]
                        for item in snapshot["evidence"]):

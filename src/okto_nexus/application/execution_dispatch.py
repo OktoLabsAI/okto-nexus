@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .executor_inventory import load_current_executor_inventory
+
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -265,7 +267,7 @@ def begin_execution_send(
         if not any(
             item["adapter_id"] == binding["adapter_id"] and
             item["candidate_ref"] == binding["candidate_ref"]
-            for item in json.loads(current["canonical_projection"])["evidence"]
+            for item in load_current_executor_inventory(current["canonical_projection"])["evidence"]
         ):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch candidate changed.", {})

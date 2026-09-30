@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.2.23.dev0"
+CORE_INVENTORY_VERSION = "0.2.24.dev0"
 # Promoted only after admission, lease, dispatcher and Connector conformance.
 SERVER_R4_EXECUTION_READY = False
 
@@ -69,6 +69,7 @@ def local_catalog() -> dict[str, Any]:
                 "implementation_platforms": list(item.implementation_platforms),
                 "support_status": item.support_status,
                 "discoverable": item.discoverable,
+                "control_targeting": [control.to_dict() for control in item.control_targeting],
             }
             for item in catalog.runtimes
         ],

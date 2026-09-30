@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .executor_inventory import load_current_executor_inventory
+
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
@@ -162,7 +164,7 @@ def prepare_execution_binding(
                 int((time.monotonic() - fresh[1]) * 1000) >= 120_000):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected inventory is no longer fresh.", {})
-        snapshot = json.loads(current["canonical_projection"])
+        snapshot = load_current_executor_inventory(current["canonical_projection"])
         if not any(
             item["adapter_id"] == request["adapter_id"] and
             item["candidate_ref"] == request["candidate_ref"]

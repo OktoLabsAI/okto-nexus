@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from .executor_inventory import load_current_executor_inventory
+
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
@@ -140,12 +142,18 @@ def resolve_execution_intent(
                 current["observation_age_ms"] +
                 max(0, int((time.monotonic() - fresh[1]) * 1000)) >= 120_000):
             blockers.append("inventory_not_fresh")
-        elif not any(
-            item["adapter_id"] == binding["adapter_id"] and
-            item["candidate_ref"] == binding["candidate_ref"]
-            for item in json.loads(current["canonical_projection"])["evidence"]
-        ):
-            blockers.append("candidate_not_current")
+        else:
+            try:
+                snapshot = load_current_executor_inventory(current["canonical_projection"])
+            except OktoNexusError:
+                blockers.append("inventory_incompatible")
+            else:
+                if not any(
+                    item["adapter_id"] == binding["adapter_id"] and
+                    item["candidate_ref"] == binding["candidate_ref"]
+                    for item in snapshot["evidence"]
+                ):
+                    blockers.append("candidate_not_current")
         session_id = ("ses_" + secrets.token_hex(16)
                       if action == "runtime.open" else request["session_id"])
         owner_generation = 1

@@ -9,6 +9,7 @@ provider I/O inside the SQLite transaction.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 from typing import Any, Mapping
 
 from ..domain.execution.keys import ExecutorKey
@@ -24,15 +25,41 @@ class InventoryPublication:
     reused: bool
 
 
+def load_current_executor_inventory(projection: str) -> dict[str, Any]:
+    """Revalidate retained evidence before using it for a new product action.
+
+    Historical snapshots stay readable, but an upgrade requires publication
+    of evidence from the current shared Core before admission or dispatch.
+    """
+    from nexus_connector_core import (
+        CoreError, __version__, verify_executor_inventory_snapshot,
+    )
+
+    try:
+        snapshot = json.loads(projection)
+        verify_executor_inventory_snapshot(snapshot)
+        if snapshot["core_version"] != __version__:
+            raise ValueError("Inventory Core version has changed")
+        return snapshot
+    except (CoreError, ValueError, TypeError) as exc:
+        raise OktoNexusError(
+            ErrorCode.CONFLICT,
+            "Refresh the executor inventory with the current Core before continuing.",
+            {},
+        ) from exc
+
+
 def publish_executor_inventory(factory, *, principal: ExecutorKey,
                                producer_instance_id: str,
                                snapshot: Mapping[str, Any]) -> InventoryPublication:
     """Store one authenticated snapshot; same sequence/content is idempotent."""
-    from nexus_connector_core import CoreError, verify_executor_inventory_snapshot
+    from nexus_connector_core import CoreError, __version__, verify_executor_inventory_snapshot
     from nexus_connector_core.protocol import canonical_json
 
     try:
         verify_executor_inventory_snapshot(snapshot)
+        if snapshot["core_version"] != __version__:
+            raise ValueError("Inventory Core version does not match the installed Core")
         projection = canonical_json(dict(snapshot))
     except (CoreError, ValueError, TypeError) as exc:
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,

@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 from jsonschema import Draft202012Validator
-from nexus_connector_core import InstallationCandidate
+from nexus_connector_core import InstallationCandidate, get_executor_inventory_schema
 
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.outbound.execution.core_inventory import (
@@ -180,6 +180,9 @@ def test_remote_inventory_http_requires_executor_ticket(tmp_path):
         contract = json.loads((Path(__file__).resolve().parents[2] /
                                "plans/contratos/http-target.schema.json").read_text(
                                    encoding="utf-8"))
+        # Inventory v2 is generated and versioned by the installed Core.
+        # The original HTTP plan remains the source for application envelopes.
+        contract["$defs"].update(get_executor_inventory_schema()["$defs"])
         Draft202012Validator(contract["$defs"]["InventoryAccepted"]).validate(
             sent.json())
         assert sent.json()["inventory_revision"] == snapshot["inventory_revision"]
@@ -225,6 +228,22 @@ def test_remote_inventory_http_requires_executor_ticket(tmp_path):
                                headers={"Authorization": f"Bearer {ticket}"})
         assert malformed.status_code == 400
         assert malformed.json()["error"]["code"] == "VALIDATION_ERROR"
+        populated = local_inventory_snapshot([
+            InstallationCandidate("codex_app_server", str(tmp_path / "codex"),
+                                  "sha256:" + "a" * 64, "explicit", "selected")],
+            server_id=info["server_id"], executor_id=info["executor_id"],
+            producer_instance_id="producer-a", publication_sequence=2)
+        accepted = client.put(path, json=populated, headers={
+            "Authorization": f"Bearer {ticket}"})
+        assert accepted.status_code == 200, accepted.text
+        populated_view = client.get(path, headers={
+            "Authorization": f"Bearer {key}"}).json()
+        Draft202012Validator({"$defs": contract["$defs"],
+                              **contract["$defs"]["InventoryView"]}).validate(populated_view)
+        assert populated_view["snapshot"] == populated
+        assert populated["evidence"][0]["capability_report"] is None
+        assert populated["evidence"][0]["qualified_control_actions"] == []
+        assert str(tmp_path) not in json.dumps(populated_view)
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute(
             "UPDATE execution_executors SET control_state='CONTROL_READY' "

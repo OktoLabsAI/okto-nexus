@@ -7,6 +7,8 @@ consent proof; the Server stores only opaque references and digests.
 
 from __future__ import annotations
 
+from .executor_inventory import load_current_executor_inventory
+
 from dataclasses import dataclass
 import hashlib
 import json
@@ -133,7 +135,7 @@ def publish_executor_realization(
         if current is None or current["inventory_revision"] != request["inventory_revision"]:
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected inventory revision is stale.", {})
-        snapshot = json.loads(current["canonical_projection"])
+        snapshot = load_current_executor_inventory(current["canonical_projection"])
         if not any(
             evidence["adapter_id"] == request["adapter_id"] and
             evidence["candidate_ref"] == request["candidate_ref"]

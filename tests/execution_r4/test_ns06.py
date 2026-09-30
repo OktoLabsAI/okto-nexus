@@ -131,8 +131,14 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     factory = deps.connection_factory
     server_id = ensure_execution_installation(factory).server_id
     now = "2026-09-29T00:00:00Z"
-    candidate = "nexus-install-v1:" + "a" * 64
-    inventory = "sha256:" + "b" * 64
+    from nexus_connector_core import InstallationCandidate, build_executor_inventory_snapshot
+    snapshot = build_executor_inventory_snapshot([
+        InstallationCandidate("codex_app_server", str(tmp_path / "codex"),
+                              "sha256:" + "a" * 64, "explicit", "selected")],
+        server_id=server_id, executor_id="executor",
+        producer_instance_id="fixture", publication_sequence=1)
+    candidate = snapshot["evidence"][0]["candidate_ref"]
+    inventory = snapshot["inventory_revision"]
     with factory.unit_of_work() as uow:
         conn = uow.connection
         conn.execute("INSERT INTO agents(agent_id,created_at) VALUES ('agent-a',?)",
@@ -184,9 +190,10 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
             "publication_sequence,inventory_revision,catalog_format,"
             "availability_format,snapshot_format,core_version,canonical_projection,"
             "received_at,observation_age_ms,producer_instance_id) "
-            "VALUES (?,'executor',1,?,1,1,1,'synthetic',?,?,0,'fixture')",
-            (server_id, inventory, json.dumps({"evidence": [{
-                "adapter_id": "codex_app_server", "candidate_ref": candidate}]}), now),
+            "VALUES (?,'executor',1,?,?,?,?,?,?,?,0,'fixture')",
+            (server_id, inventory, snapshot["catalog"]["format_version"],
+             snapshot["availability"]["format_version"], snapshot["snapshot_format_version"],
+             snapshot["core_version"], json.dumps(snapshot), now),
         )
         conn.execute(
             "INSERT INTO execution_inventory_current(server_id,executor_id,"
@@ -207,6 +214,31 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     # product admission until the Core bundle and remote host are ready.
     request = {key: resolution[key] for key in (
         "client_intent_id", "operation_id", "resolution_revision", "intent_hash")}
+    # A retained projection cannot become executable after a Core upgrade,
+    # even when publication freshness and the binding revision still match.
+    from okto_nexus.errors import OktoNexusError
+    historical = {**snapshot, "snapshot_format_version": 1}
+    with factory.unit_of_work() as uow:
+        uow.connection.execute(
+            "UPDATE execution_inventory_snapshots SET canonical_projection=?",
+            (json.dumps(historical),))
+    outdated = resolve_execution_intent(
+        factory, actor_agent_id="agent-a", request={
+            "client_intent_id": "outdated-inventory", "intent": "runtime.start",
+            "binding_id": "binding", "workspace_binding_id": "wxb",
+            "new_session": True,
+        }, remote_ready=True, fresh_publications=freshness)
+    assert not outdated["can_submit"]
+    assert "inventory_incompatible" in outdated["blockers"]
+    with pytest.raises(OktoNexusError, match="Refresh the executor inventory"):
+        submit_execution_operation(
+            factory, actor_agent_id="agent-a", request=request,
+            fresh_publications=freshness, remote_ready=True)
+    with factory.unit_of_work() as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+        uow.connection.execute(
+            "UPDATE execution_inventory_snapshots SET canonical_projection=?",
+            (json.dumps(snapshot),))
     # Interrupt the same transaction at its final write.
     with factory.unit_of_work() as uow:
         uow.connection.execute(

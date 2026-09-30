@@ -15,7 +15,7 @@ from okto_nexus.adapters.outbound.execution.core_inventory import (
 
 def test_local_catalog_and_empty_inventory_need_no_runtime():
     catalog = local_catalog()
-    assert catalog["format_version"] == 1
+    assert catalog["format_version"] == 2
     assert any(row["adapter_id"] == "codex_app_server"
                for row in catalog["runtimes"])
     snapshot = local_inventory_snapshot(
@@ -23,6 +23,11 @@ def test_local_catalog_and_empty_inventory_need_no_runtime():
         producer_instance_id="serve-a", publication_sequence=1,
     )
     assert snapshot["evidence"] == []
+    assert snapshot["catalog"] == catalog
+    pi = next(row for row in catalog["runtimes"] if row["adapter_id"] == "pi_rpc")
+    steer = next(control for control in pi["control_targeting"] if control["action"] == "turn.steer")
+    assert steer["native_turn_id"] == "forbidden"
+    assert steer["steer_timing"] == "NEXT_TURN_BOUNDARY"
     assert all(row["state"] != "READY_FOR_RUNTIME"
                for row in snapshot["availability"]["availability"])
 
@@ -36,9 +41,9 @@ def test_two_copies_keep_distinct_installation_refs(tmp_path):
     candidates = [
         InstallationCandidate(
             adapter_id="codex_app_server", executable=str(tmp_path / name),
-            fingerprint="sha256:same-content", source="path", trust="selected",
+            fingerprint="sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", source="path", trust="selected",
             version="0.157.0", architecture="x86_64",
-            build_identity="sha256:same-build",
+            build_identity="sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
         )
         for name in ("first", "second")
     ]
@@ -48,6 +53,7 @@ def test_two_copies_keep_distinct_installation_refs(tmp_path):
     )
     refs = {row["candidate_ref"] for row in snapshot["evidence"]}
     assert len(refs) == 2
+    assert all(row["qualified_control_actions"] == [] for row in snapshot["evidence"])
     assert str(tmp_path) not in str(snapshot)
 
 

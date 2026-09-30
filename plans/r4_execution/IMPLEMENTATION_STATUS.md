@@ -13,6 +13,17 @@ dispatcher canônico, contexto/grant completo, daemon e campanhas finais
 ainda não estão aceitos. Os [resultados de regressão](test_runs_20260929.json)
 registram falhas e skips sem convertê-los em aprovação.
 
+## Incremento de targeting e inventário
+
+Core `0.2.24.dev0` publica targeting pelo registry, valida os controles no
+runtime e gera schema fechado de inventário v2 com os campos previstos no
+plano. Nexus revalida evidência persistida antes de novos efeitos; Connector
+consome o mesmo catálogo. A evolução está documentada no
+[ADR 0002](../../docs/adr/0002-core-inventory-format-evolution.md).
+O [relatório deste incremento](M01_TARGETING_INVENTORY.md) registra artefatos,
+testes e limites. M00/M01 e G0–G3 continuam abertos; grants/contexto,
+dispatcher e daemon completos permanecem pendentes.
+
 ## Baseline
 
 - Nexus: `feature/v0.2.0`, HEAD inicial `7ed52c22865a92c3768bc32508ed9e35dc5efdc3`, Python 3.13.1, Windows 11 10.0.26200, `uv.lock` existente.

@@ -1,6 +1,7 @@
 """Optional two-application HTTP inventory and receipt conformance.
 
-Set OKTO_CONNECTOR_SRC to the Connector's src directory. This exercises the
+Install Connector in the test environment, or explicitly set OKTO_CONNECTOR_SRC
+for a source-level development run. This exercises the
 real Nexus ASGI router and Connector HTTP client against the same Core wheel;
 it is a contract test, not provider or two-host evidence.
 """
@@ -8,6 +9,7 @@ it is a contract test, not provider or two-host evidence.
 from __future__ import annotations
 
 import os
+from importlib.util import find_spec
 import asyncio
 import time
 from pathlib import Path
@@ -64,9 +66,11 @@ class _NativeFactory:
 
 def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
     source = os.environ.get("OKTO_CONNECTOR_SRC")
-    if not source or not Path(source).is_dir():
-        pytest.skip("Set OKTO_CONNECTOR_SRC for the cross-repo contract run")
-    monkeypatch.syspath_prepend(source)
+    if source:
+        assert Path(source).is_dir(), "OKTO_CONNECTOR_SRC must name an existing directory"
+        monkeypatch.syspath_prepend(source)
+    elif find_spec("okto_nexus_connector") is None:
+        pytest.skip("Install Connector for the two-application contract run")
     from okto_nexus_connector.services.discovery_service import (
         executor_inventory_snapshot,
     )
