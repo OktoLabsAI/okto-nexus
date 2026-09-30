@@ -141,6 +141,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         assert receipt['intent_hash'] == resolution['intent_hash']
                         assert receipt['error'] is None, receipt
                         assert receipt['executor_stage'] is not None
+                        if intent == 'runtime.close':
+                            assert receipt['executor_stage'] == 'SUCCEEDED'
                         break
                     await asyncio.sleep(0.01)
             return resolution

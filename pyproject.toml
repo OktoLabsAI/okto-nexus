@@ -60,7 +60,7 @@ Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 serve = [
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
-    "nexus-connector-core==0.2.32.dev0",
+    "nexus-connector-core==0.2.33.dev0",
     "sentence-transformers>=2.5",
     # Token counting for the workspace-analytics view (message "size" = TOKENS,
     # not bytes). o200k_base (GPT-4o family) is available since 0.7.0; loaded
@@ -76,7 +76,7 @@ serve = [
 serve-lite = [
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
-    "nexus-connector-core==0.2.32.dev0",
+    "nexus-connector-core==0.2.33.dev0",
 ]
 # The semantic-search model on its own (Frente 3). `serve` already bundles it;
 # this extra stays for composing onto the slim build (`.[serve-lite,embeddings]`)

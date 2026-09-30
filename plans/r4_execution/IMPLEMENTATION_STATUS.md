@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Terminal R4 close — September 30, 2026
+
+[Increment](M07_TERMINAL_CLOSE.md): Core 0.2.33 persists terminal close and the daemon publishes SUCCEEDED through the public operation query. Installed regressions: Core 76, Connector 336 (one skip), Nexus 81. Real Pi/Codex/Claude close receipts are SUCCEEDED. Delayed/disconnected publication and full acceptance remain pending.
+
 ## Native close outcomes — September 30, 2026
 
 [Correction](M11_NATIVE_CLOSE_OUTCOMES.md): Core 0.2.32 reports confirmed normal/forced stop instead of losing the adapter outcome. Installed Core 966 passed / 74 skipped; Connector 336 passed / one skipped; Nexus 81 passed. Codex/Claude real R4 close accepted without receipt errors. Terminal close publication and full product acceptance remain open.

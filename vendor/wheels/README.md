@@ -1,4 +1,11 @@
-## Current development artifact: 0.2.32.dev0
+## Current development artifact: 0.2.33.dev0
+
+nexus_connector_core-0.2.33.dev0-py3-none-any.whl, SHA-256
+1f119d5626e9de4c8dc2589b0941289d300e995b6a422ebc16b627be5b61fee1.
+
+Durable R4 terminal close receipts.
+
+## Previous development artifact: 0.2.32.dev0
 
 nexus_connector_core-0.2.32.dev0-py3-none-any.whl, SHA-256
 a32d49400c0e22ccedd1fbe7f26b8f74ff0b3bb2d55f21eac469dd0ae8a8784f.
