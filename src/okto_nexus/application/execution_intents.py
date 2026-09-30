@@ -115,8 +115,7 @@ def resolve_execution_intent(
             blockers.append("remote_execution_unavailable")
         if (binding["protocol"] != "nxl-r4" or
                 binding["control_state"] != "CONTROL_READY" or
-                binding["revoked_at"] is not None or
-                binding["registered_by_agent_id"] != actor_agent_id):
+                binding["revoked_at"] is not None):
             blockers.append("executor_not_ready")
         if (binding["workspace_status"] != "READY" or
                 binding["realization_status"] != "READY" or

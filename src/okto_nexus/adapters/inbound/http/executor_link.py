@@ -26,6 +26,8 @@ from ....adapters.outbound.sqlite.execution_agent_revisions import (
     current_agent_revisions,
 )
 from ....errors import OktoNexusError
+from ....application.execution_leases import ExecutionChannel, ExecutionLeaseService
+from ....bootstrap.execution_authority import build_execution_access
 
 
 SUBPROTOCOL = "nxl.v1"
@@ -105,6 +107,9 @@ def build_router() -> APIRouter:
         await ws.accept(subprotocol=SUBPROTOCOL)
         connection_id: str | None = None
         generation: int | None = None
+        leases = ExecutionLeaseService(
+            factory=factory, access=build_execution_access(ws.app.state.deps),
+            fresh_publications=ws.app.state.inventory_fresh_publications)
 
         def _admit_attach(frame: dict) -> int:
             if (frame["server_id"] != server_id or
@@ -345,6 +350,28 @@ def build_router() -> APIRouter:
                     await ws.close(code=4409)
                     break
                 frame = decode_r4_frame(raw.encode("utf-8"))
+                if frame["type"] in {"lease.renew", "lease.applied"}:
+                    def _lease_transition():
+                        _verify()  # Recheck the authenticated link credential.
+                        channel = ExecutionChannel(server_id, executor_id, connection_id, generation)
+                        if frame["type"] == "lease.renew":
+                            return leases.issue(frame, channel=channel)
+                        leases.applied(frame, channel=channel)
+                        return None
+                    try:
+                        granted = await anyio.to_thread.run_sync(_lease_transition)
+                    except OktoNexusError:
+                        await ws.send_text(encode_r4_frame({
+                            "protocol_major": 1, "contract_revision": R4_PREVIEW_REVISION,
+                            "type": "error", "server_id": server_id, "executor_id": executor_id,
+                            "connection_id": connection_id, "connection_generation": generation,
+                            "code": "LEASE_REVALIDATION_REQUIRED", "stage": frame["type"],
+                            "possible_effect": False, "retry_safe": False,
+                        }).decode("utf-8"))
+                        continue
+                    if granted is not None:
+                        await ws.send_text(encode_r4_frame(granted).decode("utf-8"))
+                    continue
                 if frame["type"] == "reconcile.report":
                     if (pending_reconcile is None or any(
                             frame[field] != pending_reconcile[field]

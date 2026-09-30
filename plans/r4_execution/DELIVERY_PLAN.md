@@ -65,7 +65,7 @@ Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, inte
 
 ### Prioridades para continuar a execução
 
-Há trabalho local ainda não commitado de concessão canônica de leases no Server, migração 076, validação de ACK e autorização no despacho. Ele deve ser revisado e testado antes de integrar a referência publicada. Não constitui fechamento de NS06/NS09 nem prova de daemon, provider ou hosts distintos.
+O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados. A referência de commits acima precede este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
 
 | Ordem | Trabalho | Responsável e fechamento | Prova exigida |
 |---|---|---|---|

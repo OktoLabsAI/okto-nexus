@@ -127,7 +127,7 @@ def test_ns06_01(tmp_path):
 
 def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_path):
     """The real protocol gate stays closed; this tests the isolated T2 writer."""
-    deps = bootstrap({}, ["--home", str(tmp_path / "home")])
+    deps = bootstrap({}, ["--home", str(tmp_path / "home"), "--feature-harness-integrations", "true"])
     factory = deps.connection_factory
     server_id = ensure_execution_installation(factory).server_id
     now = "2026-09-29T00:00:00Z"
@@ -141,7 +141,7 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     inventory = snapshot["inventory_revision"]
     with factory.unit_of_work() as uow:
         conn = uow.connection
-        conn.execute("INSERT INTO agents(agent_id,created_at) VALUES ('agent-a',?)",
+        conn.execute("INSERT INTO agents(agent_id,api_key_hash,created_at) VALUES ('agent-a','fixture-agent-key-hash',?)",
                      (now,))
         conn.execute("INSERT INTO workspaces(workspace_id,created_at) "
                      "VALUES ('ws',?)", (now,))
@@ -174,9 +174,9 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
         )
         conn.execute(
             "INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,"
-            "adapter_id,protocol,profile_id,enabled,created_at,updated_at) "
+            "adapter_id,protocol,profile_id,enabled,activation_state,created_at,updated_at) "
             "VALUES ('ep','agent-a','ws','codex_app_server','nxl-r4',"
-            "'profile',0,?,?)", (now, now),
+            "'profile',1,'approved',?,?)", (now, now),
         )
         conn.execute(
             "INSERT INTO execution_bindings(server_id,binding_id,executor_id,"
@@ -200,6 +200,14 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
             "publication_sequence,inventory_revision) "
             "VALUES (?,'executor',1,?)", (server_id, inventory),
         )
+    from okto_nexus.bootstrap.execution_authority import build_execution_access
+    from okto_nexus.domain.runtime_context import RuntimeRequestContext
+    from okto_nexus.domain.base import iso_plus
+    access = build_execution_access(deps)
+    canonical_grant = access.issue(
+        RuntimeRequestContext('operator', 'http_loopback', trusted_local_operator=True),
+        actor_agent_id='agent-a', endpoint_id='ep', actions=['open'],
+        expires_at=iso_plus(deps.clock.now_iso(), 3600))
     freshness = {(server_id, "executor"): (1, time.monotonic(), 0)}
     resolution = resolve_execution_intent(
         factory, actor_agent_id="agent-a", request={
@@ -334,7 +342,7 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     with pytest.raises(OktoNexusError):
         begin_execution_send(
             factory, reservation=second_reservation, remote_ready=True,
-            fresh_publications=freshness)
+            fresh_publications=freshness, access=access)
     with factory.unit_of_work(write=False) as uow:
         state = uow.connection.execute(
             "SELECT dispatch_state FROM execution_dispatch_outbox "
@@ -374,13 +382,16 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
     scope = ready_resolution["scope"]
     with factory.unit_of_work() as uow:
         uow.connection.execute(
+            "UPDATE execution_executors SET owner_instance_id='fixture-channel' "
+            "WHERE server_id=? AND executor_id='executor'", (server_id,))
+        uow.connection.execute(
             "INSERT INTO execution_leases(server_id,executor_id,session_id,"
             "lease_serial,lease_id,grant_id,allowed_actions_json,"
             "authorization_revision,configuration_revision,owner_generation,"
             "connection_generation,credential_epoch,valid_until_server,"
-            "request_id,status) VALUES (?,'executor',?,1,'lease','grant',"
+            "request_id,status) VALUES (?,'executor',?,1,'lease',?,"
             "'[\"runtime.open\"]',?,?,?,?,?,?,'lease-request','ACTIVE')",
-            (server_id, scope["session_id"],
+            (server_id, scope["session_id"], canonical_grant['grant_id'],
              scope["authorization_revision"], scope["configuration_revision"],
              scope["session_owner_generation"], 1, scope["credential_epoch"],
              (datetime.now(timezone.utc) + timedelta(minutes=5)).isoformat()),
@@ -389,9 +400,30 @@ def test_ns06_02_atomic_admission_and_replay_with_synthetic_qualification(tmp_pa
         factory, server_id=server_id, executor_id="executor",
         remote_ready=True, regular_items=1)
     assert ready_reservation.operation_id == ready_request["operation_id"]
+    # A historical ACTIVE row has no proof that Core installed its grant.
+    with pytest.raises(OktoNexusError, match="applied dispatch lease"):
+        begin_execution_send(factory, reservation=ready_reservation,
+                             remote_ready=True, fresh_publications=freshness, access=access)
+    from okto_nexus.adapters.outbound.sqlite.execution_tickets import issue_execution_ticket
+    fixture_ticket = issue_execution_ticket(factory, server_id=server_id, executor_id='executor',
+        agent_id='agent-a', binding_id='binding', scopes=frozenset({'lane:attach', 'lease:request'}))
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_link_tickets SET bound_connection_id='fixture-channel' WHERE ticket_id=?",
+                               (fixture_ticket.ticket_id,))
+        uow.connection.execute(
+            "INSERT INTO execution_control_lanes(server_id,executor_id,binding_id,agent_id,ticket_id,"
+            "attach_request_id,connection_id,connection_generation,credential_epoch,authorization_revision,"
+            "configuration_revision,expires_at,state) VALUES (?,'executor','binding','agent-a',?,"
+            "'fixture-attach','fixture-channel',1,?,?,?,?,'ADMITTED')",
+            (server_id, fixture_ticket.ticket_id, scope['credential_epoch'], scope['authorization_revision'],
+             scope['configuration_revision'], iso_plus(deps.clock.now_iso(), 300)))
+        uow.connection.execute(
+            "UPDATE execution_leases SET scope_json=?,applied_at=?,connection_id='fixture-channel' "
+            "WHERE server_id=? AND executor_id='executor' AND session_id=?",
+            (json.dumps(scope), datetime.now(timezone.utc).isoformat(), server_id, scope['session_id']))
     authorized = begin_execution_send(
         factory, reservation=ready_reservation, remote_ready=True,
-        fresh_publications=freshness)
+        fresh_publications=freshness, access=access)
     assert authorized.lease_id == "lease"
     assert authorized.semantic_intent["action"] == "runtime.open"
     with pytest.raises(OktoNexusError):

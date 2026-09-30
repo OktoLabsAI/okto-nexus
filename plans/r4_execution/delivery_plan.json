@@ -26,7 +26,7 @@
       "plans/r4_execution/M01_LEASE_APPLICATION.md",
       "plans/r4_execution/test_runs_20260930_leases.json"
     ],
-    "unpublished_work": "Nexus canonical lease issuance, migration 076, ACK validation, and dispatch authority checks are local work in progress, pending review and acceptance.",
+    "subsequent_increment": "M06_CANONICAL_LEASES.md records canonical lease issuance, migration 076, dispatch authority, and transactional open receipt readiness: 69 development tests and 14 installed-artifact tests passed; no milestone or gate closed.",
     "verification_scope": "Local HEAD and origin tracking refs matched; the shared wheel SHA-256 was recalculated in all three repositories. This planning review did not rerun product suites or close any gate."
   },
   "sources": {

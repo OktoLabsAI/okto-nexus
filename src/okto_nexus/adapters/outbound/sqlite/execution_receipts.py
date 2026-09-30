@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
+import json
 from typing import Any, Mapping
 
 from nexus_connector_core import CoreError, decode_r4_frame, reduce_r4_receipt
@@ -166,7 +167,7 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         conn = uow.connection
         operation = conn.execute(
             "SELECT binding_id,subject_agent_id,session_id,intent_hash,"
-            "admission_state FROM execution_operations WHERE server_id=? "
+            "admission_state,action,expected_revisions_json FROM execution_operations WHERE server_id=? "
             "AND executor_id=? AND operation_id=?", key,
         ).fetchone()
         if operation is None:
@@ -182,6 +183,24 @@ def append_execution_receipt(factory: ConnectionFactory, *,
                 }):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                  "The receipt does not match an admitted operation.", {})
+        # Canonical R4 admissions carry an immutable scope and a dispatched
+        # lease. Historical rows remain readable without promoting a session.
+        scope = json.loads(operation['expected_revisions_json'])
+        if scope:
+            dispatched = conn.execute(
+                "SELECT l.scope_json,l.connection_id,l.connection_generation,l.applied_at "
+                "FROM execution_dispatch_outbox o JOIN execution_leases l "
+                "ON l.server_id=o.server_id AND l.executor_id=o.executor_id "
+                "AND l.lease_id=o.lease_id AND l.lease_serial=o.lease_serial "
+                "WHERE o.server_id=? AND o.executor_id=? AND o.operation_id=? "
+                "AND o.dispatch_state IN ('SENDING','DISPATCHED','RECONCILING','RESOLVED_TERMINAL')",
+                key).fetchone()
+            if (dispatched is None or not dispatched['applied_at'] or
+                    not dispatched['scope_json'] or json.loads(dispatched['scope_json']) != scope or
+                    dispatched['connection_id'] != parsed['connection_id'] or
+                    dispatched['connection_generation'] != parsed['connection_generation']):
+                raise OktoNexusError(ErrorCode.CONFLICT,
+                                     "The receipt has no matching authorized dispatch.", {})
         existing = conn.execute(
             "SELECT frame_digest,stage FROM execution_receipts WHERE server_id=? "
             "AND executor_id=? AND operation_id=? AND receipt_revision=?",
@@ -239,6 +258,23 @@ def append_execution_receipt(factory: ConnectionFactory, *,
             "server_id=? AND executor_id=? AND operation_id=?",
             (state, *key),
         )
+        if (scope and operation['action'] == 'runtime.open' and
+                projection.stage in ('SUBMITTED', 'SUCCEEDED') and projection.native_id):
+            # Core open returns SUBMITTED only after registering its native
+            # handle and starting the event pump. Preserve that receipt stage;
+            # readiness is distinct from a successful turn or lease install.
+            # A historical owner may publish its receipt but cannot make a
+            # replaced executor ready. Reconciliation owns that transition.
+            conn.execute(
+                "UPDATE execution_sessions SET lifecycle_state='READY' "
+                "WHERE server_id=? AND executor_id=? AND session_id=? "
+                "AND open_operation_id=? AND owner_generation=? AND lifecycle_state='OPEN_PENDING' "
+                "AND EXISTS (SELECT 1 FROM execution_executors e "
+                "WHERE e.server_id=execution_sessions.server_id AND e.executor_id=execution_sessions.executor_id "
+                "AND e.owner_instance_id=? AND e.generation=? AND e.revoked_at IS NULL "
+                "AND e.control_state='CONTROL_READY')",
+                (key[0], key[1], parsed['session_id'], key[2], scope['session_owner_generation'],
+                 projection.source_connection_id, projection.source_connection_generation))
     return AcceptedExecutionReceipt(parsed["operation_id"],
                                     projection.receipt_revision,
                                     projection.stage, False)

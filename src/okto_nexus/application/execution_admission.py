@@ -111,7 +111,6 @@ def submit_execution_operation(
                 (server_id, executor_id, scope["binding_id"]),
             ).fetchone()
             if (binding is None or binding["agent_id"] != actor_agent_id or
-                    binding["registered_by_agent_id"] != actor_agent_id or
                     binding["protocol"] != "nxl-r4" or
                     binding["control_state"] != "CONTROL_READY" or
                     binding["revoked_at"] is not None or

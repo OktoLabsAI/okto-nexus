@@ -35,6 +35,16 @@ campanha e os limites. A emissão canônica de grants no Server, a integração
 com o dispatcher/daemon, a recuperação completa e a qualificação final
 continuam pendentes. M00/M01 e G0–G3 permanecem abertos.
 
+## Incremento de concessão canônica e recibos
+
+O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) liga
+o WSS ao serviço de autorização e à persistência 076, exige aplicação antes
+do despacho, consome budget atomicamente e projeta prontidão a partir do
+recibo Core de abertura. Passaram 69 testes (56 R4 + 13 grants) e 14 casos
+dirigidos com os três aplicativos instalados fora dos clones. Onboarding,
+dispatcher/daemon de produto, embedded composto, recuperação e qualificação
+continuam pendentes; nenhum marco ou gate foi encerrado.
+
 ## Baseline
 
 - Nexus: `feature/v0.2.0`, HEAD inicial `7ed52c22865a92c3768bc32508ed9e35dc5efdc3`, Python 3.13.1, Windows 11 10.0.26200, `uv.lock` existente.
