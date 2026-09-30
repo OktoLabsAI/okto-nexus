@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Approved local launch configuration — September 30, 2026
+
+[Increment](M05_LOCAL_LAUNCH.md): the serve-composed Core host resolves the persisted approved local mapping before acquiring runtime stores and revalidates configuration/authority around secret resolution. Canonical digests, candidate fingerprint, physical directories, profile, agent and current owner are checked. Core open uses approved auth references and environment. Installed results: 78 passed; 36 overlapping cases passed in the actual no-Connector environment, with pip check. The positive case uses public binding/admission and canonical leases, but a technical native factory, forced readiness and manual reserve/begin. Automatic embedded dispatch, vault/tools, receipts/events, renewal/recovery and full M05/G1 remain open. Core/Connector artifacts are unchanged.
+
+
 ## Public embedded realization preparation — September 30, 2026
 
 [Increment](M05_LOCAL_REALIZATION.md): authenticated operators can prepare local workspace/configuration evidence through the existing realization route, then approve the canonical binding. Migration 083 stores private local mapping and protected secret references atomically with canonical realization records. Owner/agent checks run before filesystem access and again before commit; changed request, candidate or directory is refused. Serve restart reuses the same realization. Installed regression: 69 passed; the actual environment without Connector passed 27 overlapping cases and pip check. No native session or runtime readiness is introduced. Local dispatch/lease consumption and full M05/G1 remain open. Core/Connector artifacts are unchanged.

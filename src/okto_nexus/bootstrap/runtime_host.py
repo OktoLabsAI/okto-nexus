@@ -45,6 +45,7 @@ class EmbeddedRuntimeHost:
         self._selections: dict[tuple[str, str], tuple[dict, dict, object]] = {}
         self._closing = False
         self._native_action_owners = {}
+        self.local_launch_factory = None
 
     async def _ledger(self) -> SQLiteOwnedSlotLedger:
         async with self._lock:

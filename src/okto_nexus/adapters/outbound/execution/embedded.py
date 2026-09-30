@@ -7,6 +7,7 @@ Connector application and never chooses a provider path from an HTTP body.
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Awaitable, Callable, Mapping
 from pathlib import Path
 
@@ -47,6 +48,12 @@ class EmbeddedExecutor:
         the request nonce, monotonic t0, context and application ACK.
         """
         scope = dict(scope)
+        local_launch = None
+        if host.local_launch_factory is not None:
+            local_launch = await asyncio.to_thread(host.local_launch_factory, scope)
+            if candidate != local_launch.candidate or workspace_root != local_launch.workspace_root:
+                raise CoreError("PROFILE_DRIFT", "embedded_selection")
+            environment = local_launch.environment
         runtime = await host.acquire(
             executor_id=scope["executor_id"], session_id=scope["session_id"],
             candidates={candidate.adapter_id: candidate},
@@ -63,6 +70,7 @@ class EmbeddedExecutor:
             candidate=candidate, workspace_root=workspace_root,
             environment=environment, native_factory=native_factory,
             native_action_factory=native_action_factory)
+        executor.local_launch = local_launch
         return executor, application
 
     async def renew_r4(
@@ -116,6 +124,7 @@ class EmbeddedExecutor:
         self.environment = environment
         self.native_factory = native_factory
         self.native_action_factory = native_action_factory
+        self.local_launch = None
 
     async def _runtime(self):
         return await self.host.acquire(
@@ -129,6 +138,13 @@ class EmbeddedExecutor:
     async def open(self, *, operation_id: str, stream_epoch: str,
                    mode: str = "managed", model: str | None = None,
                    auth_refs: tuple[str, ...] = ()) -> OperationReceipt:
+        if self.host.local_launch_factory is not None and self.local_launch is None:
+            raise CoreError("BINDING_NOT_AUTHORIZED", "embedded_configuration")
+        if self.local_launch is not None:
+            await asyncio.to_thread(self.local_launch.check)
+            if auth_refs and set(auth_refs) != set(self.local_launch.auth_refs):
+                raise CoreError("BINDING_NOT_AUTHORIZED", "embedded_configuration")
+            auth_refs = self.local_launch.auth_refs
         runtime = await self._runtime()
         prepared = await runtime.prepare(
             LaunchIntent(agent_id=self.context.agent_id,

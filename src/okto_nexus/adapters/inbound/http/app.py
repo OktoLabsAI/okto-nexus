@@ -591,6 +591,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                 embedded_inventory = EmbeddedInventoryOwner(deps, app.state.inventory_fresh_publications)
                 app.state.embedded_inventory_owner = embedded_inventory
                 await embedded_inventory.start()
+                from ....application.execution_local_launch import ApprovedLocalLaunch
+                embedded_core_host.local_launch_factory = lambda scope: ApprovedLocalLaunch(embedded_inventory, scope)
             async with mcp_server.session_manager.run():
                 yield
         finally:
