@@ -99,8 +99,7 @@ class EmbeddedToolsOwner:
         native=adapter=="pi_rpc"
         if not native and adapter not in ("codex_app_server","claude_stream"):
             raise CoreError("CAPABILITY_UNSUPPORTED","local_tools")
-        if not native and launch.record["provider_home"] is not None and not launch.auth_refs:
-            raise CoreError("PROVIDER_AUTH_REQUIRED","local_tools")
+        process_http=not native and launch.record["provider_home"] is not None and not launch.auth_refs
         audience="nexus-native-session" if native else "nexus-mcp-session"
         actions=("handoff.get","handoff.claim","handoff.complete") if native else MCP_ACTIONS
         request_id,context=await asyncio.to_thread(self._stage,frame,audience,actions)
@@ -146,12 +145,14 @@ class EmbeddedToolsOwner:
         else:
             from .local_mcp_home import session_mcp_home
             loopback=urlsplit(self.origin).hostname in ("127.0.0.1","localhost","::1")
-            template=harness_http_template(adapter,cap["mcp_url"],cap["capability_ref"],entry_name="nexus",
+            entry_name="nexus_"+hashlib.sha256(cap["capability_ref"].encode()).hexdigest()[:16] if process_http else "nexus"
+            template=harness_http_template(adapter,cap["mcp_url"],cap["capability_ref"],entry_name=entry_name,
                 approved_origins={self.origin},harness_is_local=loopback,loopback_reachable=loopback,format_qualified=True)
-            home=await asyncio.to_thread(session_mcp_home,self.owner.deps.config.home_dir/"session-mcp",
-                frame=frame,configuration_digest=launch._snapshot,template=template)
+            if not process_http:
+                home=await asyncio.to_thread(session_mcp_home,self.owner.deps.config.home_dir/"session-mcp",
+                    frame=frame,configuration_digest=launch._snapshot,template=template)
         self.configurations[frame["session_id"]]=dict(cap=cap,deadline=deadline,home=home,template=template,
-            request_id=request_id,native_factory=native_factory,snapshot=launch._snapshot)
+            request_id=request_id,native_factory=native_factory,snapshot=launch._snapshot,process_http=process_http)
 
     def decorate(self, launch):
         config=self.configurations.get(launch.scope["session_id"])

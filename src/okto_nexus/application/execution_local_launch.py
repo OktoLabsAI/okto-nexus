@@ -162,11 +162,13 @@ class ApprovedLocalLaunch:
             resolver=ToolResolver()
             if config["template"] is not None:
                 templates=(config["template"],)
-                provider_home=str(config["home"].home)
+                if config["home"] is not None:
+                    provider_home=str(config["home"].home)
         await asyncio.to_thread(tools_current)
         value = await child_environment(prepared, resolver,
             secret_bindings=self.record["configuration"]["secret_bindings"],
-            provider_home=provider_home, trusted_home=provider_home is not None,http_templates=templates)
+            provider_home=provider_home, trusted_home=provider_home is not None,http_templates=templates,
+            process_http=bool(self.tools and self.tools.get("process_http")))
         await asyncio.to_thread(tools_current)
         await asyncio.to_thread(self.check)
         return value

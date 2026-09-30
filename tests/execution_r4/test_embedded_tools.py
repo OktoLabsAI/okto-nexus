@@ -8,6 +8,7 @@ import tomllib
 import pytest
 
 from test_embedded_dispatch import qualified_contract, connected_local, admit, wait_receipt
+from test_embedded_dispatch import connect_local
 from test_local_realization import local_setup
 from test_mcp_session_capabilities import rpc,envelope,seed_work,args
 
@@ -165,3 +166,27 @@ def test_automatic_pi_bridge_survives_initial_deadline_with_applied_renewal(conn
     wait_receipt(setup,closed,stages=('SUCCEEDED',))
     client.portal.call(owner.close)
     assert not vault.values
+
+
+@pytest.mark.parametrize('local_setup',['codex_app_server','claude_stream'],indirect=True)
+def test_approved_provider_home_uses_process_mcp_without_copying_login(local_setup,tmp_path):
+    from nexus_connector_core.environment import ProcessHTTPEnvironment
+    provider_home=tmp_path/'approved-home'
+    provider_home.mkdir()
+    local_setup[4]['provider_home']=str(provider_home)
+    setup,binding,native,vault,environments=enable_tools(connect_local(local_setup))
+    _,app,client,*_=setup
+    opened=admit(setup,binding,'home-tools-open','runtime.start',new_session=True)
+    wait_receipt(setup,opened)
+    environment=environments[0]
+    assert isinstance(environment,ProcessHTTPEnvironment)
+    assert environment['HOME']==str(provider_home.resolve())
+    assert not list(provider_home.iterdir())
+    template=environment.http_templates[0]
+    assert template.entry_name.startswith('nexus_') and template.entry_name!='nexus'
+    assert environment[template.bearer_env_name] in vault.values.values()
+    assert envelope(rpc(setup,environment[template.bearer_env_name]))['ok']
+    closed=admit(setup,binding,'home-tools-close','runtime.close',session_id=opened['scope']['session_id'])
+    wait_receipt(setup,closed,stages=('SUCCEEDED',))
+    client.portal.call(app.state.embedded_dispatch_owner.close)
+    assert not vault.values and not list(provider_home.iterdir())
