@@ -30,6 +30,27 @@ from okto_nexus.domain.keys import generate_api_key
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def test_basic_bootstrap_does_not_import_optional_core(tmp_path):
+    probe = subprocess.run(
+        [sys.executable, "-I", "-c", """
+import importlib.abc
+import sys
+class NoCore(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == 'nexus_connector_core' or fullname.startswith('nexus_connector_core.'):
+            raise ModuleNotFoundError('Core intentionally unavailable')
+sys.meta_path.insert(0, NoCore())
+from okto_nexus.bootstrap.dependencies import bootstrap
+deps = bootstrap({}, ['--home', sys.argv[1]])
+assert deps.approvals is not None
+print('ok')
+""", str(tmp_path / "base-home")],
+        cwd=tmp_path, capture_output=True, text=True, timeout=15,
+    )
+    assert probe.returncode == 0, probe.stderr
+    assert probe.stdout.strip() == "ok"
+
+
 def test_ns01_01(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])
     direct = create_server(deps)

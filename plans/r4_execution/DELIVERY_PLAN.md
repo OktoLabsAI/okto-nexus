@@ -59,7 +59,7 @@ Os HEADs abaixo foram lidos antes desta revisão documental. Nos três repositó
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão de planejamento](planning_review_20260930.json) registra esses HEADs, o hash recalculado dos três wheels e as evidências locais conferidas. Há implementação Nexus não commitada de prova delegada; sua publicação e revisão fazem parte do próximo incremento. Esta revisão executa apenas validadores documentais.
+A [revisão de planejamento](planning_review_20260930.json) registra esses HEADs, o hash recalculado dos três wheels e as evidências locais conferidas. O [incremento de prova delegada](M03_DELEGATED_BINDING.md) foi revisado e é publicado no commit que contém esse relatório; o snapshot anterior conserva o estado não commitado observado naquele momento. Esta revisão executa apenas validadores documentais.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -80,12 +80,12 @@ contrato em prova do dispatcher, daemon ou provider.
 
 O [incremento de operador](M03_OPERATOR_BINDING.md) conclui a criação
 transacional de perfil/endpoint habilitados para prepare/apply pelo operador
-canônico. A prova delegada está implementada no workspace, com evidências
+canônico. A prova delegada foi revisada para publicação neste incremento, com evidências
 locais conferidas de 86 casos R4, 48 regressões de aprovação, sete de migração
 e 27 instalados; os grupos se sobrepõem. As tentativas anteriores falharam
 na expectativa de HTTP de storage e na ausência de consentimento do caller
-vertical; seus registros foram preservados. Publicar/revisar esse incremento,
-completar reuso autorizado no self-bind e compor a jornada com os owners
+vertical; seus registros foram preservados.
+Completar reuso autorizado no self-bind e compor a jornada com os owners
 continuam na fila. Nenhum gate foi encerrado.
 
 O Connector publicou o DTO completo de consentimento e a correção de
@@ -100,7 +100,7 @@ preserva os hashes e os resultados desse registro.
 | Área | Lacuna e destino |
 |---|---|
 | Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
-| Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; revisar/publicar prova delegada já testada no workspace e completar self-bind com autorização preexistente, mantendo identidade e CAS |
+| Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; prova delegada revisada neste incremento; completar self-bind com autorização preexistente, mantendo identidade e CAS |
 | Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas faltam loop de produto, ownership e composição da abertura inicial pendente de lease |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
@@ -131,7 +131,7 @@ Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do bac
 
 | Lote | Responsável e trabalho | Testes e condição de saída |
 |---|---|---|
-| P1 — baseline e evidência | Três repos: revisar/publicar o incremento Nexus pendente, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
+| P1 — baseline e evidência | Três repos: incorporar o incremento de prova delegada ao mapa de aceite, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
 | P2 — contrato compartilhado | Core: completar a conformance de cada ação/erro e os helpers públicos; consumidores: instalar o mesmo wheel | Sete ações e R3 histórico exercitados por consumidores instalados; schema gerado sem drift; promoção de executable fundamentada, readiness do host independente |
 | P3 — onboarding reutilizável | Nexus/Connector: reusar autorização e configuração aprovadas, leitura/options do binding, seleção e consentimento do host | Primeiro e segundo uso pela entrada pública; identidade cruzada, deny, drift, replay e revisão concorrente; grant explícito separado do consentimento |
 | P4 — abertura e outbox | Nexus: separar bootstrap autorizado de lease ativa; completar owner, reserva, envio e recuperação | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
@@ -158,7 +158,7 @@ A preparação de Windows/Linux, Python suportado, providers autenticados e Serv
 
 ### Preservação do workspace
 
-O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1`; a campanha instalada citada já foi publicada. O incremento Nexus de prova delegada e suas evidências também estão no workspace, pendentes de commit. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
+O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1`; a campanha instalada citada já foi publicada. O incremento Nexus de prova delegada e suas evidências são publicados separadamente dessas alterações prévias. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
 
 ## Responsabilidades e invariantes de implementação
 

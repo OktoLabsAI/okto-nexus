@@ -234,6 +234,7 @@ def test_ns05_03(tmp_path):
         )
     with deps.connection_factory.unit_of_work() as uow:
         key = app.state.auth.issue_key(uow, agent_id="agent-a")
+        operator_key = app.state.auth.issue_key(uow, agent_id="operator")
     headers = {"Authorization": f"Bearer {key}"}
     with TestClient(app, raise_server_exceptions=False) as client:
         registration = client.post(
@@ -312,6 +313,13 @@ def test_ns05_03(tmp_path):
         assert client.post(apply_route, json={**apply_body,
                                               "approved_diff_hash": "sha256:" + "f" * 64},
                            headers=headers).status_code == 409
+        proof_ref = next(item for item in proposal["required_approvals"] if item.startswith("apr_"))
+        assert client.post(apply_route, json=apply_body, headers=headers).status_code == 403
+        approved = client.post(
+            f"/api/v1/approvals/{proof_ref}/decision", json={"decision": "approve"},
+            headers={"Authorization": f"Bearer {operator_key}"})
+        assert approved.status_code == 200, approved.text
+        apply_body["operator_proof_ref"] = proof_ref
         committed = client.post(apply_route, json=apply_body, headers=headers)
         assert committed.status_code == 200, committed.text
         view = committed.json()

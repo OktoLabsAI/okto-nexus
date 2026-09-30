@@ -197,6 +197,7 @@ def build_router() -> APIRouter:
         def _prepare():
             return prepare_execution_binding(
                 factory, actor_agent_id=agent.agent_id,
+                approvals=request.app.state.deps.approvals,
                 request=body.model_dump(exclude_none=True),
                 fresh_publications=request.app.state.inventory_fresh_publications,
                 context=RuntimeRequestContext(

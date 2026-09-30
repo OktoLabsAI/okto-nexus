@@ -90,6 +90,7 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
         )
     with deps.connection_factory.unit_of_work() as uow:
         key = app.state.auth.issue_key(uow, agent_id="agent-a")
+        operator_key = app.state.auth.issue_key(uow, agent_id="operator")
     async def roundtrip():
         transport = httpx.ASGITransport(app=app)
         async with httpx.AsyncClient(transport=transport) as raw:
@@ -151,9 +152,15 @@ def test_connector_publishes_core_snapshot_to_nexus(tmp_path, monkeypatch):
                     agent_id_hint="agent-a",
                 )
                 assert proposal.can_apply
+                proof_ref = next(item for item in proposal.required_approvals if item.startswith("apr_"))
+                approved = await raw.post(
+                    f"http://127.0.0.1:8202/api/v1/approvals/{proof_ref}/decision",
+                    json={"decision": "approve"},
+                    headers={"Authorization": f"Bearer {operator_key}"})
+                assert approved.status_code == 200, approved.text
                 binding = await http.apply_r4_binding(
                     key, client_intent_id="binding-apply-one",
-                    proposal=proposal)
+                    proposal=proposal, operator_proof_ref=proof_ref)
                 assert binding.binding_id == proposal.binding_id
                 preview = await http.resolve_r4_intent(
                     key, client_intent_id="start-preview",

@@ -226,7 +226,7 @@ def bootstrap(
         config=config,
         event_emitter=emitter,
     )
-    return Deps(
+    deps = Deps(
         config=config,
         connection_factory=factory,
         clock=clock,
@@ -236,6 +236,14 @@ def bootstrap(
         approvals=approvals,
         telemetry=telemetry,
     )
+    from .execution_authority import build_execution_access
+    from ..application.execution_binding_approvals import (
+        BINDING_APPROVAL_ACTION, ExecutionBindingApprovals,
+    )
+    approvals.register_transactional_decision(
+        BINDING_APPROVAL_ACTION,
+        ExecutionBindingApprovals(access=build_execution_access(deps)).decide)
+    return deps
 
 
 def _package_version() -> str:

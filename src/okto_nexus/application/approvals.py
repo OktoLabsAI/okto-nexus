@@ -137,6 +137,7 @@ class ApprovalService:
         self._idempotent_decisions = set()
         self._decision_validators = {}
         self._decision_details = {}
+        self._transactional_decisions = {}
 
     # ------------------------------------------------------------------ #
     # Wiring
@@ -155,6 +156,15 @@ class ApprovalService:
 
     def register_decision_listener(self, action, listener):
         self._decision_listeners[action] = listener
+
+    def register_transactional_decision(self, action, handler):
+        """Register a database-only decision, committed with its audit event.
+
+        The handler authenticates decision_context and must not perform
+        external I/O. It receives replay=True for an already decided row.
+        Existing re-execution actions retain their separate transaction flow.
+        """
+        self._transactional_decisions[action] = handler
 
     def register_decision_validator(self, action, validator, *, detail=None):
         # Transactional validation/storage only: no external I/O allowed.
@@ -183,6 +193,7 @@ class ApprovalService:
         policy_id: str,
         kwargs: Mapping[str, Any],
         trace_id: str | None = None,
+        approval_id: str | None = None,
     ) -> dict[str, Any]:
         """Persist the intercepted action + emit ``approval.requested``.
 
@@ -193,7 +204,7 @@ class ApprovalService:
         deliberately NOT persisted - the submitter's authenticity was verified
         at interception time and secrets never land in the table.
         """
-        approval_id = new_id("apr")
+        approval_id = approval_id or new_id("apr")
         now = self._clock.now_iso()
         caller = str(agent_id) if agent_id is not None else ""
         request_payload = json.dumps(
@@ -255,6 +266,7 @@ class ApprovalService:
         decided_by: str,
         justification: Any = None,
         response: Any = None,
+        decision_context: Any = None,
     ) -> dict[str, Any]:
         """Decide one pending approval: approve re-executes, reject notifies.
 
@@ -292,6 +304,35 @@ class ApprovalService:
             row = self._approvals.get(uow, aid)
             if row is None:
                 raise self._not_found(aid)
+            transactional = self._transactional_decisions.get(row.action)
+            if transactional is not None:
+                result = transactional(
+                    uow, row, approved=approving, response=response,
+                    context=decision_context, decided_by=decider,
+                    replay=row.status != STATUS_PENDING,
+                )
+                if row.status != STATUS_PENDING:
+                    if (row.status != target_status or row.decided_by != decider or
+                            row.justification != just):
+                        raise OktoNexusError(ErrorCode.CONFLICT,
+                                              "The approval already has a different decision.", {})
+                    return {"approval_id": aid, "status": row.status,
+                            "decided_by": row.decided_by, "decided_at": row.decided_at,
+                            "reused": True, "executed_result": result}
+                if not self._approvals.mark_decided(
+                        uow, approval_id=aid, status=target_status,
+                        decided_by=decider, justification=just, decided_at=now):
+                    raise OktoNexusError(ErrorCode.CONFLICT,
+                                          "The approval changed during the decision.", {})
+                self._approvals.set_executed_result(
+                    uow, approval_id=aid,
+                    executed_result=json.dumps(result, ensure_ascii=False))
+                self._emit_decision(
+                    uow, row, event_type=EVENT_APPROVAL_GRANTED if approving else EVENT_APPROVAL_DENIED,
+                    decided_by=decider)
+                return {"approval_id": aid, "status": target_status,
+                        "decided_by": decider, "decided_at": now,
+                        "executed_result": result}
             validator = self._decision_validators.get(row.action)
             if validator:
                 validator(uow, row, approved=approving, response=response)

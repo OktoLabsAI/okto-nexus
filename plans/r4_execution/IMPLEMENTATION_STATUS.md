@@ -2,6 +2,15 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Incremento de prova delegada publicado
+
+O [relatório M02/M03](M03_DELEGATED_BINDING.md) publica a prova transacional
+de operador e os testes já registrados: 86 R4, 48 de aprovação, sete de
+migração e 27 instalados, com sobreposição. Fonte e XMLs foram conferidos
+contra os hashes da campanha; a revisão não representa uma nova execução.
+Reuso de binding, lease inicial e composição do dispatcher/owners continuam
+pendentes; nenhum gate foi encerrado.
+
 ## Planejamento de entrega total — revisão corrente
 
 O [plano completo](DELIVERY_PLAN.md) foi atualizado com Nexus 777de37,

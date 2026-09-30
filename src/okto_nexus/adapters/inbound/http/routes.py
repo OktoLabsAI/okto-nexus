@@ -572,6 +572,11 @@ def _approval_service(deps):
     return service
 
 
+def _binding_decision_context():
+    from ..mcp.tools.harness import request_context
+    return request_context()
+
+
 def _require_operator() -> None:
     """Operator-only gate for the HITL surfaces (FR8/BR4).
 
@@ -3196,6 +3201,7 @@ def build_router() -> APIRouter:
                 decided_by=decided_by,
                 justification=body.justification,
                 response=body.response,
+                decision_context=_binding_decision_context(),
             )
 
         try:

@@ -12,6 +12,7 @@ from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.adapters.outbound.execution.core_inventory import local_inventory_snapshot
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.base import iso_plus
+from okto_nexus.errors import OktoNexusError
 
 
 @pytest.fixture
@@ -204,17 +205,139 @@ def test_binding_does_not_turn_self_confirmation_into_execution_authority(onboar
     assert denied.status_code == 403
     response = client.post("/v1/connections/bindings:prepare", json=prepare,
                            headers=headers["subject"])
-    assert response.status_code == 200, response.text
-    proposal = response.json()
-    apply = {"client_intent_id": "apply", "proposal_id": proposal["proposal_id"],
-             "proposal_revision": proposal["proposal_revision"],
-             "approved_diff_hash": proposal["diff"]["approved_diff_hash"]}
-    response = client.post("/v1/connections/bindings:apply", json=apply,
+    assert response.status_code == 403, response.text
+    assert_no_binding(deps)
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT enabled FROM agent_connection_methods").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM runtime_execution_grants").fetchone()[0] == 0
+
+
+def prepare_delegated(client, headers, prepare):
+    response = client.post("/v1/connections/bindings:prepare", json=prepare,
                            headers=headers["subject"])
     assert response.status_code == 200, response.text
+    proposal = response.json()
+    approval_id = next(item for item in proposal["required_approvals"] if item.startswith("apr_"))
+    apply = {"client_intent_id": "apply", "proposal_id": proposal["proposal_id"],
+             "proposal_revision": proposal["proposal_revision"],
+             "approved_diff_hash": proposal["diff"]["approved_diff_hash"],
+             "operator_proof_ref": approval_id}
+    return proposal, apply, approval_id
+
+
+def decide_binding(client, headers, approval_id, decision="approve"):
+    return client.post(f"/api/v1/approvals/{approval_id}/decision",
+                       json={"decision": decision}, headers=headers["operator"])
+
+
+def test_binding_delegated_proof_uses_atomic_operator_decision(onboarding):
+    deps, client, headers, prepare = onboarding
+    proposal, apply, approval_id = prepare_delegated(client, headers, prepare)
+    assert_no_binding(deps)
+    replay = client.post("/v1/connections/bindings:prepare", json=prepare,
+                         headers=headers["subject"])
+    assert replay.json() == proposal
+    assert client.post("/v1/connections/bindings:apply", json=apply,
+                       headers=headers["subject"]).status_code == 403
+    # Neither a caller-provided decider string nor an agent bearer is proof.
+    with pytest.raises(OktoNexusError):
+        deps.approvals.decide(approval_id=approval_id, decision="approve", decided_by="operator")
+    assert client.post(f"/api/v1/approvals/{approval_id}/decision",
+                       json={"decision": "approve"}, headers=headers["subject"]).status_code == 403
+    detail = client.get(f"/api/v1/approvals/{approval_id}", headers=headers["operator"])
+    assert detail.status_code == 200, detail.text
+    assert detail.json()["data"]["request_payload"]["kwargs"]["approved_diff_hash"] == apply["approved_diff_hash"]
+    approved = decide_binding(client, headers, approval_id)
+    assert approved.status_code == 200, approved.text
+    assert approved.json()["data"]["executed_result"]["operator_proof_ref"] == approval_id
+    assert_no_binding(deps)
+    # Both proof and decision survive reopening the database before apply.
+    reopened = bootstrap({}, ["--home", str(deps.config.home_dir),
+                               "--feature-harness-integrations", "true"])
+    assert reopened.approvals.get_approval(approval_id=approval_id)["status"] == "approved"
+    with reopened.connection_factory.unit_of_work(write=False) as uow:
+        proof = uow.connection.execute("SELECT operator_proof_json FROM execution_proposals").fetchone()[0]
+        assert json.loads(proof)["approval_id"] == approval_id
+        assert uow.connection.execute("SELECT COUNT(*) FROM approvals").fetchone()[0] == 1
+    repeated = decide_binding(client, headers, approval_id)
+    assert repeated.status_code == 200 and repeated.json()["data"]["reused"] is True
+    assert decide_binding(client, headers, approval_id, "reject").status_code == 409
+    committed = client.post("/v1/connections/bindings:apply", json=apply,
+                            headers=headers["subject"])
+    assert committed.status_code == 200, committed.text
+    assert client.post("/v1/connections/bindings:apply", json=apply,
+                       headers=headers["subject"]).json() == committed.json()
+    assert decide_binding(client, headers, approval_id).status_code == 200
     with deps.connection_factory.unit_of_work(write=False) as uow:
+        endpoint = uow.connection.execute("SELECT enabled,profile_id,agent_id FROM agent_endpoints").fetchone()
+        assert tuple(endpoint) == (1, proposal["profile_id"], "subject")
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_dispatch_outbox").fetchone()[0] == 0
+
+
+@pytest.mark.parametrize("change", ["operator_key", "subject_policy", "expiry", "wrong_proposal"])
+def test_binding_delegated_proof_cannot_authorize_changed_scope(onboarding, change):
+    deps, client, headers, prepare = onboarding
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    other_apply = None
+    if change == "wrong_proposal":
+        _, other_apply, _ = prepare_delegated(
+            client, headers, {**prepare, "client_intent_id": "another", "alias": "different"})
+    assert decide_binding(client, headers, approval_id).status_code == 200
+    with deps.connection_factory.unit_of_work() as uow:
+        if change == "operator_key":
+            client.app.state.auth.issue_key(uow, agent_id="operator")
+        elif change == "subject_policy":
+            uow.connection.execute("UPDATE agents SET permissions=? WHERE agent_id='subject'",
+                                   (json.dumps({"messages": {"send_direct": False}}),))
+        elif change == "expiry":
+            uow.connection.execute("UPDATE execution_proposals SET expires_at='2000-01-01T00:00:00Z'")
+    if other_apply:
+        apply = {**other_apply, "operator_proof_ref": approval_id}
+    response = client.post("/v1/connections/bindings:apply", json=apply,
+                           headers=headers["subject"])
+    assert response.status_code in (403, 409), response.text
+    assert_no_binding(deps)
+
+
+def test_binding_rejected_proposal_cannot_be_applied(onboarding):
+    deps, client, headers, prepare = onboarding
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    rejected = decide_binding(client, headers, approval_id, "reject")
+    assert rejected.status_code == 200, rejected.text
+    assert rejected.json()["data"]["executed_result"]["operator_proof_ref"] is None
+    assert decide_binding(client, headers, approval_id).status_code == 409
+    response = client.post("/v1/connections/bindings:apply", json=apply,
+                           headers=headers["subject"])
+    assert response.status_code == 403
+    assert_no_binding(deps)
+
+
+def test_binding_proof_and_decision_roll_back_together(onboarding):
+    deps, client, headers, prepare = onboarding
+    _, apply, approval_id = prepare_delegated(client, headers, prepare)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("CREATE TRIGGER reject_proof_result BEFORE UPDATE OF executed_result ON approvals "
+                               "BEGIN SELECT RAISE(ABORT,'Injected decision result failure'); END")
+    failed = decide_binding(client, headers, approval_id)
+    assert failed.status_code == 503, failed.text
+    assert failed.json()["error"]["code"] == "DB_ERROR"
+    with deps.connection_factory.unit_of_work() as uow:
         conn = uow.connection
-        endpoint = conn.execute("SELECT enabled,profile_id FROM agent_endpoints").fetchone()
-        assert tuple(endpoint) == (0, None)
-        assert conn.execute("SELECT enabled FROM agent_connection_methods").fetchone()[0] == 0
-        assert conn.execute("SELECT COUNT(*) FROM runtime_execution_grants").fetchone()[0] == 0
+        assert conn.execute("SELECT status FROM approvals").fetchone()[0] == "pending"
+        assert conn.execute("SELECT operator_proof_json FROM execution_proposals").fetchone()[0] is None
+        conn.execute("DROP TRIGGER reject_proof_result")
+    assert_no_binding(deps)
+    assert decide_binding(client, headers, approval_id).status_code == 200
+    assert client.post("/v1/connections/bindings:apply", json=apply,
+                       headers=headers["subject"]).status_code == 200
+
+
+def test_binding_stale_proposal_cannot_receive_operator_proof(onboarding):
+    deps, client, headers, prepare = onboarding
+    _, _, approval_id = prepare_delegated(client, headers, prepare)
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agents SET metadata='{}' WHERE agent_id='subject'")
+        uow.connection.execute("UPDATE execution_proposals SET expires_at='2000-01-01T00:00:00Z'")
+    assert decide_binding(client, headers, approval_id).status_code == 409
+    assert decide_binding(client, headers, approval_id, "reject").status_code == 200
+    assert_no_binding(deps)

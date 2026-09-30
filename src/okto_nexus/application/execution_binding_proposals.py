@@ -99,7 +99,7 @@ def _require_binding_method(conn, *, subject_agent_id, adapter_id):
 def prepare_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
-    context=None, access=None,
+    context=None, access=None, approvals=None,
 ) -> dict[str, Any]:
     """Resolve a published local claim into a reviewable proposal, no spawn."""
     required = {
@@ -215,7 +215,14 @@ def prepare_execution_binding(
              request["adapter_id"]),
         ).fetchall()
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
-        if operator:
+        request_operator_proof = bool(
+            not operator and access is not None and
+            access.config.feature_harness_integrations)
+        if request_operator_proof and approvals is None:
+            raise OktoNexusError(ErrorCode.INTERNAL_ERROR,
+                                  "Binding approval is not available.", {})
+        enable_requested = operator or request_operator_proof
+        if enable_requested:
             _require_binding_method(conn, subject_agent_id=subject_agent_id,
                                     adapter_id=request["adapter_id"])
         descriptor = next((item for item in get_runtime_catalog().runtimes
@@ -224,7 +231,13 @@ def prepare_execution_binding(
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                   "The selected adapter is not supported.", {})
         profile_id = ("profile_" + secrets.token_hex(16)
-                      if operator and descriptor.connection_mode == "managed" else None)
+                      if enable_requested and descriptor.connection_mode == "managed" else None)
+        if (enable_requested and descriptor.connection_mode == "attach" and
+                not access.config.feature_harness_attach):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                  "Attach connections are disabled.", {})
+        approval_id = ("apr_" + secrets.token_hex(16)
+                       if request_operator_proof and not blockers else None)
         proposal_id = "prop_" + secrets.token_hex(16)
         binding_id = "bind_" + secrets.token_hex(16)
         endpoint_id = "ep_" + secrets.token_hex(16)
@@ -240,6 +253,7 @@ def prepare_execution_binding(
             "workspace_status": realization["workspace_status"],
             "agent_guard_digest": _agent_guard(conn, subject_agent_id),
             "operator_approved": operator,
+            "operator_approval_id": approval_id,
             "operator_guard_digest": _agent_guard(conn, actor_agent_id) if operator else None,
             "configuration_digest": realization["configuration_digest"],
             "alias": request["alias"],
@@ -266,7 +280,7 @@ def prepare_execution_binding(
         summary = (f"Connect {agent_name} to {request['adapter_id']} "
                    f"installation {request['candidate_ref']} on {host_name} "
                    f"for {project_name} as {request['alias']}.")
-        if operator:
+        if enable_requested:
             summary += (" Enable the approved endpoint and its managed profile."
                         if profile_id else " Enable the approved attach endpoint.")
             summary += " Execution still requires a separate scoped grant."
@@ -285,12 +299,12 @@ def prepare_execution_binding(
             "realization_revision": realization["revision"],
             "authorization_revision": revisions.authorization,
             "configuration_revision": revisions.configuration,
-            "required_approvals": ["operator_confirmation" if operator else "agent_confirmation"],
+            "required_approvals": ["operator_confirmation" if operator else "agent_confirmation"] + ([approval_id] if approval_id else []),
             "diff": {
                 "fields_changed": ["agent", "host", "installation",
-                                   "project", "scope", "endpoint", "binding"] + (["profile", "enabled"] if operator else []),
+                                   "project", "scope", "endpoint", "binding"] + (["profile", "enabled"] if enable_requested else []),
                 "approved_diff_hash": diff_hash,
-                "requires_operator": operator or bool(blockers),
+                "requires_operator": enable_requested or bool(blockers),
                 "summary": summary,
             },
             "can_apply": not blockers,
@@ -307,6 +321,17 @@ def prepare_execution_binding(
              diff_hash, expires_at, now.isoformat(), body_hash,
              canonical_json(proposal).decode("utf-8")),
         )
+        if approval_id:
+            from .execution_binding_approvals import BINDING_APPROVAL_ACTION
+            approvals.intercept(
+                uow, workspace_id=proposal["workspace_id"],
+                agent_id=subject_agent_id, action=BINDING_APPROVAL_ACTION,
+                policy_id="execution.binding.operator-required",
+                approval_id=approval_id,
+                kwargs={"proposal_id": proposal_id, "server_id": server_id,
+                        "proposal_revision": 1, "approved_diff_hash": diff_hash,
+                        "summary": summary},
+            )
         return proposal
 
 
@@ -383,8 +408,10 @@ def apply_execution_binding(
         if (row["proposal_revision"] != request["proposal_revision"] or
                 row["diff_hash"] != request["approved_diff_hash"] or
                 not proposal["can_apply"] or
-                (proposal["diff"]["requires_operator"] and not operator) or
-                (request.get("operator_proof_ref") is not None) or
+                (proposal["diff"]["requires_operator"] and not operator and
+                 not expected.get("operator_approval_id")) or
+                (request.get("operator_proof_ref") is not None and
+                 not expected.get("operator_approval_id")) or
                 datetime.fromisoformat(row["expires_at"].replace(
                     "Z", "+00:00")) <= datetime.now(timezone.utc)):
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -394,14 +421,25 @@ def apply_execution_binding(
                 _agent_guard(conn, actor_agent_id) != expected["operator_guard_digest"]):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "Operator authority changed after preparation.", {})
-        if operator_approved:
-            _require_binding_method(conn, subject_agent_id=subject_agent_id,
-                                    adapter_id=proposal["adapter_id"])
         if (revisions.authorization != expected["authorization_revision"] or
                 revisions.configuration != expected["configuration_revision"] or
                 _agent_guard(conn, subject_agent_id) != expected["agent_guard_digest"]):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "Agent policy or configuration changed.", {})
+        if expected.get("operator_approval_id"):
+            from .execution_binding_approvals import verify_binding_operator_proof
+            verify_binding_operator_proof(
+                conn, proposal_row=row, expected=expected,
+                proof_ref=request.get("operator_proof_ref"))
+            # Delegated proof approves this immutable diff, never an actor
+            # change or a runtime grant. Apply still belongs to the agent.
+            operator_approved = True
+        if operator_approved:
+            if access is None or not access.config.feature_harness_integrations:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                      "Harness integrations are disabled.", {})
+            _require_binding_method(conn, subject_agent_id=subject_agent_id,
+                                    adapter_id=proposal["adapter_id"])
         executor = conn.execute(
             "SELECT revoked_at FROM execution_executors WHERE server_id=? "
             "AND executor_id=?",

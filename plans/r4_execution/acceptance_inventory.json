@@ -339,7 +339,15 @@
         "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[expiry]",
         "tests/execution_r4/test_binding_operator.py::test_operator_binding_revalidates_before_apply[method]",
         "tests/execution_r4/test_binding_operator.py::test_operator_binding_rolls_back_profile_with_binding",
-        "tests/execution_r4/test_binding_operator.py::test_binding_does_not_turn_self_confirmation_into_execution_authority"
+        "tests/execution_r4/test_binding_operator.py::test_binding_does_not_turn_self_confirmation_into_execution_authority",
+        "tests/execution_r4/test_binding_operator.py::test_binding_delegated_proof_uses_atomic_operator_decision",
+        "tests/execution_r4/test_binding_operator.py::test_binding_delegated_proof_cannot_authorize_changed_scope[operator_key]",
+        "tests/execution_r4/test_binding_operator.py::test_binding_delegated_proof_cannot_authorize_changed_scope[subject_policy]",
+        "tests/execution_r4/test_binding_operator.py::test_binding_delegated_proof_cannot_authorize_changed_scope[expiry]",
+        "tests/execution_r4/test_binding_operator.py::test_binding_delegated_proof_cannot_authorize_changed_scope[wrong_proposal]",
+        "tests/execution_r4/test_binding_operator.py::test_binding_rejected_proposal_cannot_be_applied",
+        "tests/execution_r4/test_binding_operator.py::test_binding_proof_and_decision_roll_back_together",
+        "tests/execution_r4/test_binding_operator.py::test_binding_stale_proposal_cannot_receive_operator_proof"
       ],
       "effective_test_command": "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_binding_operator.py -q",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
@@ -348,8 +356,8 @@
       "required_scenarios": [
         "TR4-03-02"
       ],
-      "evidence": "plans/r4_execution/test_runs_20260930_operator_binding.json",
-      "remaining": "Delegated operator proof and authorized self-bind reuse; full original criterion and product acceptance remain open"
+      "evidence": "plans/r4_execution/test_runs_20260930_delegated_binding.json",
+      "remaining": "Self-bind reuse of existing approved configuration and final product acceptance remain open; direct and delegated operator approval are now verified"
     },
     "NS03.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns03.py::test_ns03_03",
