@@ -29,7 +29,8 @@ from test_vertical_inventory import _NativeFactory
     (False, 'lost_ack', False, 0, None), (False, 'core_commit', False, 0, None),
     (False, None, True, 0, None), (False, 'core_commit', True, 0, None), (False, None, True, 260, None),
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
-    (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost')])
+    (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
+    (True, None, False, 0, 'active_disconnect')])
 def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
@@ -70,6 +71,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     monkeypatch.setattr(runtime_v1, 'protocol_info', lambda: qualified)
     from okto_nexus.adapters.inbound.http import connections_v1
     monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
+
+    if event_recovery == 'active_disconnect':
+        from functools import partial
+        monkeypatch.setattr(executor_link, 'ExecutionLeaseService',
+            partial(executor_link.ExecutionLeaseService, max_duration_ms=5000))
 
     async def run():
         sock = socket.socket()
@@ -225,6 +231,25 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
+                if event_recovery == 'active_disconnect':
+                    import time
+                    await owner.close()
+                    async with asyncio.timeout(3):
+                        while not control.cleanup_pending:
+                            await asyncio.sleep(.01)
+                    assert time.monotonic() < native.context.lease_deadline_monotonic
+                    assert not native.native.stopped and daemon.host._journal is not None
+                    assert not control.status()['execution_ready']
+                    async with asyncio.timeout(8):
+                        while not native.native.stopped:
+                            await asyncio.sleep(.01)
+                    assert time.monotonic() >= native.context.lease_deadline_monotonic
+                    assert native.opens == 1
+                    assert [kind for kind, _ in native.native.sent] == ['send_turn']
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 2
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
+                    return
                 if automatic or (reconcile_closed and not publication_failure and not history_count):
                     from nexus_connector_core import RuntimeEvent
                     journal = await daemon.host.ensure_history_journal()

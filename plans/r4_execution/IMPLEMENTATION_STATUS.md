@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Granted lease retention after WSS loss — September 30, 2026
+
+[Increment](M06_DISCONNECTED_LEASES.md): automatic transport-loss cleanup retains Core runtimes until their installed leases expire, are revoked, close or release ownership. Unknown state and inspection failures retain cleanup; an explicit daemon stop uses normal shutdown. All started inspections remain owned through errors. Real HTTP/WSS coverage verifies no premature native stop and no repeated work. Final installed results: Connector 410 passed (one existing skip), Nexus 75 passed. Core/Nexus production wheels unchanged. Live-session adoption and durable release evidence remain pending; no milestone or gate closed.
+
+
 ## Durable ticket recovery after daemon recreation — September 30, 2026
 
 [Increment](M06_TICKET_RECOVERY.md): lane startup and receipt/event recovery share persisted non-secret ticket intents. Lost material is recovered with the original logical intent and a new credential request, under unchanged Server replacement rules. Two HTTP/WSS cases recreate the daemon without its retained cache and recover pending events without native replay or expiry injection. Installed results: Connector 404 passed (one existing skip), Nexus 74 passed. Core/Nexus production wheels unchanged. Process-kill qualification, active ownership, full rotation, embedded publishing, projections and final acceptance remain pending. No milestone or gate closed.
