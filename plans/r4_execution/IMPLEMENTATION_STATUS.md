@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Durable Connector receipt publication — September 30, 2026
+
+[Increment](M07_DURABLE_PUBLICATION.md): reserve before Core effects, persist projected receipts before HTTP, and replay ready pages at startup using fresh scoped authority. Installed tests: Connector 349 passed (one existing skip), Nexus 83 passed. Lost delivery/acknowledgment, retained writes, startup ordering, authorization changes and 257 receipts are covered. Unprojected reservations, nonempty session reconciliation, ticket rotation and full acceptance remain open.
+
 ## Late close publication — September 30, 2026
 
 [Increment](M07_LATE_CLOSE_PUBLICATION.md): daemon and embedded owners await the retained Core close producer through durable terminal completion. Installed tests: Core 78, Connector 337 (one skip), Nexus 81. Deadline, cancellation and injected storage failure paths are covered. Disconnect/restart recovery and full acceptance remain open.

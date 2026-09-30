@@ -1,0 +1,34 @@
+{
+  "scope": "Source investigations before the final installed campaign",
+  "attempts": [
+    {
+      "command": "System Python pytest for four Connector test files",
+      "result": "4 collection errors; obsolete Core in user site-packages; switched to the existing isolated test venv"
+    },
+    {
+      "command": "Connector four-file source suite, first run",
+      "result": "53 passed, 1 failed; release assertion raced the new durable local acknowledgment"
+    },
+    {
+      "command": "Connector four-file source suite, second run",
+      "result": "53 passed, 1 failed; replaced busy receipt decoding loop with yielding acknowledgment wait"
+    },
+    {
+      "command": "Nexus remote source integration, first run",
+      "result": "2 passed, 2 failed; historical receipt does not adopt the disconnected session and fenced daemon shutdown reports recovery"
+    },
+    {
+      "command": "Connector four-file source suite after new startup/cancellation tests",
+      "result": "55 passed, 1 failed; startup fixture lacked the approved realization"
+    },
+    {
+      "command": "Startup source test fixture corrections",
+      "result": "Initial shared-state lock and realization digest setup failed; corrected setup preserves the approved realization and maps registration to the existing executor; final targeted test passed"
+    },
+    {
+      "command": "Nexus remote source integration after expectation correction",
+      "result": "4 passed, 1 existing dependency deprecation warning"
+    }
+  ],
+  "note": "No installed result is inferred from these source runs; see the installed XML/log/JSON artifacts."
+}
