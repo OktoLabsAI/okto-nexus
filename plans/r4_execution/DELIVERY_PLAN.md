@@ -68,13 +68,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `a0081a1494139a4296283f5ca96820be2bbf4751` | `0.2.0` |
+| Nexus | `c9790957b4da51ba7d957c87e22cd4ccec932c7e` | `0.2.0` |
 | Connector | `c97c9d41c223c2c728b810cf3d1ff5e62e2016d6` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro já contém esse incremento publicado; Connector e Core são as dependências publicadas verificadas. A revisão documental da entrega parte desse conjunto e está registrada em [total_delivery_review_20260930.json](total_delivery_review_20260930.json). Nenhuma flag de prontidão foi promovida.
+A [revisão anterior de planejamento](planning_review_20260930.json) e a [revisão de conclusão](completion_review_20260930.json) conservam seus snapshots. O incremento corrente de [capabilities de sessão](M02_SESSION_CAPABILITIES.md) e o [manifesto coordenado](test_runs_20260930_capabilities.json) registram implementação, testes e limites. O HEAD Nexus do quadro também contém a integração parcial dos handlers MCP descrita abaixo; Connector e Core são as dependências publicadas verificadas. A revisão documental anterior está preservada em [total_delivery_review_20260930.json](total_delivery_review_20260930.json). A atualização do checkpoint após os handlers MCP está em [full_delivery_checkpoint_20260930.json](full_delivery_checkpoint_20260930.json). Nenhuma flag de prontidão foi promovida.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -87,6 +87,7 @@ O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e no
 | Campanha instalada de conformance Core | 99 passes, sem falhas ou skips; `python -I`, pacote instalado e hash do wheel | Runner/evidência publicados em `9d244cf`; contratos sintéticos, sem fechamento de M01 |
 | [Onboarding por operador](M03_OPERATOR_BINDING.md) | Nexus R4 77 passes; 11 casos com wheel instalado fora dos clones | Operador direto, inventário sintético e grant separado; sem ciclo de runtime |
 | [Capabilities de sessão](test_runs_20260930_capabilities.json) | Nexus R4: 137 passes; integração instalada: 120 passes; Connector: 343 passes e dois skips existentes | Grupos sobrepostos; reserva e validação de autoridade comprovadas; handlers MCP/nativos, composição do ambiente e aceite de provider pendentes |
+| [Handlers MCP](test_runs_20260930_mcp_capabilities.json) | R4: 159 passes; integração instalada: 165 passes; arquivo final de handlers: 23 passes; strict instalado após correção da fixture: um pass | Campanhas sobrepostas e executadas em momentos diferentes; oito ferramentas e claims canônicos comprovados; ações nativas, inbox, hosts e providers pendentes |
 
 O runner `tools/run_r4_installed.py` e a evidência de conformance estão no
 Core em `plans/implementation/evidence/r4-installed-campaign/`. As duas
@@ -162,8 +163,9 @@ A [emissão de capabilities de sessão](M02_SESSION_CAPABILITIES.md) acrescenta
 o segredo único por audiência/escopo, replay e substituição restrita, o port
 de validação de autoridade ativa e renovação de validade no commit da lease.
 O cliente Connector valida o DTO e o prazo contra o opening canônico.
-Ainda faltam o guard nos handlers MCP/nativos e sua adoção no ambiente
-aprovado do daemon; NS03.04 permanece parcial. As campanhas e tentativas
+Naquela campanha ainda faltavam os guards dos handlers. O incremento MCP
+seguinte cobre oito ferramentas; permanecem ações nativas, ferramentas
+restantes e adoção no ambiente aprovado dos hosts. NS03.04 permanece parcial. As campanhas e tentativas
 estão no manifesto, sem transformar teste de reserva em aceite de ferramentas.
 
 O incremento de [autoridade MCP](M09_MCP_SESSION_AUTHORITY.md) integra oito
@@ -182,12 +184,12 @@ o alcance dos testes e não encerra gates.
 | Dispatcher — M04 | Loop WSS Server já reserva, revalida, envia e recupera reservas de owner substituído; completar composição embedded/daemon com o resolver físico aprovado, governança e recuperação de envios incertos |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
 | Remoto — M06 | Reader, seleção e consumidores de efeitos já são adotados pelo daemon na jornada WSS técnica; startup de controle e inventário já usa o registro persistido; conectar automaticamente lanes/consumidores ao perfil/ambiente aprovado, refresh de revisões, renovação de tickets/leases e reconciliação não vazia; extrair SQL/transições restantes do handler Server |
-| Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
+| Governança e observação — M07–M09 | Oito handlers MCP já validam capability e autoridade na transação; completar demais ferramentas/inbox, ações nativas/bridge Pi, eventos/receipts recuperáveis, decisões/input e consumo exclusivo entre canais |
 | Jornadas e idioma — M10 | Completar UI/CLI, infraestrutura de testes de navegador e auditoria US English, incluindo superfícies legadas |
 | Robustez e migração — M11/M12 | Provar recovery, revogação online/offline, ownership/shutdown e limites; ensaiar cutover e rollback com dados legados |
 | Qualificação — M13 | Resolver regressões conhecidas, pipeline/empacotamento e matriz provider/SO/hosts sobre os artefatos finais |
 
-Regressões Nexus conhecidas de migração, expectativas MCP stdio, superfície compacta/descrições e fixtures de Claude attach têm destino em M02/M09/M12 conforme o domínio. Preservar o gate de redução de 40% da superfície compacta. Uma expectativa antiga só deve mudar quando o contrato e a regressão substituta justificarem a alteração.
+As duas regressões de upgrade e expectativa MCP stdio registradas na campanha de 311 casos foram corrigidas no incremento MCP; passaram os 20 casos dirigidos e a campanha instalada correspondente. A suíte de 311 casos ainda requer reexecução completa. Outras regressões de migração, superfície compacta/descrições e fixtures de Claude attach continuam com destino em M02/M09/M12 conforme o domínio. Preservar o gate de redução de 40% da superfície compacta. Uma expectativa antiga só deve mudar quando o contrato e a regressão substituta justificarem a alteração.
 
 ### Fila imediata de execução
 
@@ -241,16 +243,28 @@ Os subpassos admitem testes técnicos com peers e qualificação sintética expl
 
 ### Conclusão da autoridade de sessão antes da adoção pelos hosts
 
-O checkpoint publicado já emite e valida capabilities limitadas à sessão. Os próximos incrementos devem fechar as fronteiras abaixo. São partes de M02/M05/M06/M09, preservando o grafo de fechamento dos milestones.
+O checkpoint publicado já emite e valida capabilities limitadas à sessão e protege oito ferramentas MCP na transação do domínio. Os próximos incrementos devem fechar as fronteiras abaixo. São partes de M02/M05/M06/M09, preservando o grafo de fechamento dos milestones.
 
 | Ordem | Implementação restante | Testes e critério de aceite |
 |---|---|---|
-| 1 — guard Nexus (M02; aceite de domínio M09) | Integrar a capability aos handlers MCP/nativos e aos casos de uso. Validar audiência, ação, sessão, binding, revisões e lease aplicada; preservar permissões de domínio e claims | Chamada autorizada pelo handler real; negar token reservado sem sessão ativa, audiência/ação/escopo incorretos, grant revogado, lease expirada e revisão alterada. A chave de agente tools-only mantém sua jornada própria |
+| 1 — guard Nexus (M02; aceite de domínio M09) | Partir dos oito handlers MCP publicados e integrar ações nativas, inbox limitado ao workspace e demais ferramentas aos mesmos casos de uso. Validar audiência, ação, sessão, binding, revisões e lease aplicada; preservar permissões de domínio e claims | Chamada autorizada pelo handler real; negar token reservado sem sessão ativa, audiência/ação/escopo incorretos, grant revogado, lease expirada e revisão alterada. A chave de agente tools-only mantém sua jornada própria |
 | 2 — intenção e segredo Connector (M02/P6.1) | Persistir a intenção de emissão antes do HTTP, guardar material em armazenamento protegido e compor o ambiente aprovado. Recuperar perda de resposta pelos metadados canônicos | Crash antes/depois do envio e da gravação; nenhuma credencial em argv, logs ou estado público; substituição apenas quando comprovadamente permitida; sessão em execução não recebe retry cego de emissão |
 | 3 — adoção pelos hosts (M05/P6.2) | Conectar seleção, configuração e referências autorizadas ao owner embedded e ao daemon, usando as APIs públicas Core | Fluxo público de onboarding → open → ferramenta com pacote instalado, sem ambiente sintético de produção; local sem aplicativo Connector e remoto sem paths livres no Server |
 | 4 — ciclo de vida (P6.3/M09/M11) | Renovar e revogar autoridade com a lease aplicada, sem reancorar replay ou substituir silenciosamente material ativo | Sessão ultrapassa a primeira validade; perda de ACK, resposta tardia, revogação e mudança de owner não permitem novo efeito. Falhar separadamente WSS e MCP HTTP e comprovar isolamento |
 
 A emissão HTTP isolada e o port de autorização já testados não encerram esses aceites. Cada incremento atualiza o inventário com os nodeids executados e publica código, evidência e hashes juntos.
+
+### Próximo incremento de domínio: ações nativas e paridade com MCP
+
+O trabalho imediato de M09 parte do claim canônico já usado pelos handlers MCP. Sua implementação pode avançar antes do fechamento das dependências de M09; o aceite integral do marco continua subordinado a M08 e aos critérios normativos.
+
+1. **Contrato e entrada Nexus:** implementar `POST /v1/runtime/native-actions` para `context`, `claim` e `complete`, com capability da audiência nativa, escopo exato e payload validado. Explicitar a tradução para os tipos públicos do Core e os limites de request; não exigir `tools/call` para a audiência nativa.
+2. **Transação e repetição:** persistir identidade, digest e resultado do pedido junto ao efeito canônico quando houver mutação. Repetição idêntica recupera o resultado autorizado; mesmo ID com conteúdo diferente falha; perda da resposta não cria uma nova tentativa com ID diferente. Revalidar autoridade e permissões antes do efeito e do replay.
+3. **Um único claim:** MCP, execução embedded e bridge Pi usam o mesmo caso de uso e a mesma propriedade de claim/epoch. Preservar isolamento por sessão, agente e workspace, budgets e causalidade de resultados. Não criar uma segunda máquina de estados de handoff no Core ou Connector.
+4. **Caller dos hosts:** implementar o adapter necessário para a bridge pública do Core e compô-lo nos hosts com referências protegidas e configuração aprovada. O teste isolado do endpoint precede a integração instalada; o aceite da bridge exige a chamada originada pelo harness.
+5. **Prova:** sucesso de contexto/claim/complete; audiência e ações cruzadas negadas; lease/revisão/autoridade inválidas; disputa simultânea MCP/nativa; rollback na falha do armazenamento; restart e resposta perdida antes/depois do commit; replay e conflito de digest; resultados sem causalidade recusados. Capturar contagem de efeitos e conferir o mesmo claim persistido.
+
+Após esse incremento, concluir inbox limitado ao workspace e as ferramentas restantes, integrar o ambiente dos hosts e exercitar o ciclo de vida das capabilities. O fechamento continua exigindo regressões de domínio, tools-only independente de WSS, superfície compacta e provider real quando aplicável.
 
 ### Aceite concreto do próximo fluxo de produto
 

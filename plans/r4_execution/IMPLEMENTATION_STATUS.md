@@ -1,5 +1,22 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Plano de entrega total — checkpoint após integração MCP
+
+O [plano completo](DELIVERY_PLAN.md) mantém 14 milestones, 13 lotes,
+85 tarefas Nexus, 164 cenários originais, 12 entregas Core/Connector e
+quatro cenários de idioma. O checkpoint foi atualizado para Nexus
+`c979095`, Connector `c97c9d4` e Core `9d244cf`.
+Os critérios de saída dos lotes agora estão explícitos também no JSON.
+A fila detalha ações nativas e paridade de claims com MCP antes da adoção
+pelos hosts, preservando as dependências de fechamento dos marcos.
+
+A [verificação documental](full_delivery_checkpoint_20260930.json) registra
+hashes, cobertura e evidência histórica conferida. Esta revisão não executa
+testes de produto nem fecha G0–G3. Permanecem obrigatórios os ciclos local
+sem Connector, remoto em hosts independentes, providers reais, UI/CLI,
+recuperação, migração/rollback e todos os textos próprios em US English.
+
+
 ## Autoridade MCP de sessão — 30 de setembro de 2026
 
 O [incremento de handlers MCP](M09_MCP_SESSION_AUTHORITY.md) integra oito
