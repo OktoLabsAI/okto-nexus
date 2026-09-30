@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Native close outcomes — September 30, 2026
+
+[Correction](M11_NATIVE_CLOSE_OUTCOMES.md): Core 0.2.32 reports confirmed normal/forced stop instead of losing the adapter outcome. Installed Core 966 passed / 74 skipped; Connector 336 passed / one skipped; Nexus 81 passed. Codex/Claude real R4 close accepted without receipt errors. Terminal close publication and full product acceptance remain open.
+
 ## Core 0.2.31 and Codex 0.159.0 — September 30, 2026
 
 [Increment](M01_CODEX_0159_QUALIFICATION.md): exact Windows Codex qualification and matching Core wheels in both consumers. Installed tests: Core 951 passed / 74 skipped; Connector 336 passed / one skipped; Nexus 81 passed. Real Pi/Codex/Claude turns succeeded under locally installed R4 grants. Close classification and full Server journeys remain open. No full milestone or gate closed.
