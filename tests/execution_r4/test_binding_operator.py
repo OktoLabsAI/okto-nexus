@@ -62,17 +62,25 @@ def onboarding(tmp_path, request):
             "local_consent_id": "consent",
         }
         local = store = None
-        if getattr(request, 'param', None) == 'connector-realization':
+        if getattr(request, 'param', None) in ('connector-realization', 'connector-configured'):
             from okto_nexus_connector.services.realization_service import stage_local_realization, publication_body
             from okto_nexus_connector.storage.state_store import StateStore
             store = StateStore(tmp_path / 'connector-state.json')
             workspace = tmp_path / 'remote-workspace'
             workspace.mkdir()
+            digest = 'sha256:' + 'c' * 64
+            if getattr(request, 'param', None) == 'connector-configured':
+                from okto_nexus_connector.services.launch_configuration import stage_launch_configuration
+                configuration = stage_launch_configuration(store, server_id=registration['server_id'],
+                    executor_id=executor, agent_id='subject', local_consent_id='consent',
+                    adapter_id=candidate.adapter_id, profile_revision=1,
+                    secret_bindings={'OPENAI_API_KEY': 'vault:provider-demo'})
+                digest = configuration.configuration_digest
             local = stage_local_realization(store, server_id=registration['server_id'], executor_id=executor,
                 agent_id='subject', client_intent_id='realization', candidates=[candidate],
                 adapter_id=candidate.adapter_id, candidate_ref=snapshot['evidence'][0]['candidate_ref'],
                 inventory_revision=snapshot['inventory_revision'], workspace_root=workspace,
-                workspace_id=None, workspace_label='Project', configuration_digest='sha256:' + 'c' * 64,
+                workspace_id=None, workspace_label='Project', configuration_digest=digest,
                 local_consent_id='consent')
             realization_body = publication_body(local)
         response = client.post(f"/v1/runtime/executors/{executor}/realizations", json=realization_body, headers=ticket)

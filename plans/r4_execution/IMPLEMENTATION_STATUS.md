@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Automatic daemon lanes — September 30, 2026
+
+[Implementation and limits](M06_AUTOMATIC_LANES.md): installed Connector 336 passed / one skipped; Nexus 81 passed. Initial attachment and execution now start from approved persisted bindings. Renewal and nonempty reconciliation remain open. No milestone or gate closed.
+
 ## Metadados e recuperação de capability — 30 de setembro de 2026
 
 O [incremento](M02_CAPABILITY_RECOVERY.md) implementa consulta HTTP sem
