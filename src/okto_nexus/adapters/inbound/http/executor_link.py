@@ -33,7 +33,7 @@ from ....bootstrap.execution_authority import build_execution_access
 
 
 SUBPROTOCOL = "nxl.v1"
-MAX_FRAME_BYTES = 64 * 1024
+MAX_FRAME_BYTES = 1024 * 1024
 
 
 def _loopback(host: str | None) -> bool:
@@ -333,50 +333,19 @@ def build_router() -> APIRouter:
             }
             await _send_text(encode_r4_frame(welcome).decode("utf-8"))
 
-            def _reconciliation_targets():
-                with factory.unit_of_work(write=False) as uow:
-                    conn = uow.connection
-                    operations = [row[0] for row in conn.execute(
-                        "SELECT operation_id FROM execution_operations WHERE "
-                        "server_id=? AND executor_id=? AND "
-                        "admission_state<>'RESOLVED_TERMINAL' "
-                        "ORDER BY operation_id LIMIT 257",
-                        (server_id, executor_id),
-                    )]
-                    sessions = [row[0] for row in conn.execute(
-                        "SELECT session_id FROM execution_sessions WHERE "
-                        "server_id=? AND executor_id=? AND "
-                        "lifecycle_state NOT IN ('CLOSED','FAILED') "
-                        "ORDER BY session_id LIMIT 257",
-                        (server_id, executor_id),
-                    )]
-                    return operations, sessions
-
+            from ....application.execution_reconciliation import ExecutionReconciliation
+            reconciliation = ExecutionReconciliation(factory,
+                ExecutionChannel(server_id, executor_id, connection_id, generation))
             pending_reconcile: dict | None = None
 
             async def _request_reconcile():
                 nonlocal pending_reconcile
                 try:
-                    operations, sessions = await anyio.to_thread.run_sync(
-                        _reconciliation_targets)
+                    pending_reconcile = await anyio.to_thread.run_sync(reconciliation.request)
                 except Exception:
                     # Storage failure is never represented as an empty report.
                     return
-                pending_reconcile = {
-                    "protocol_major": 1,
-                    "contract_revision": R4_PREVIEW_REVISION,
-                    "type": "reconcile.request",
-                    "reconcile_id": "rec_" + secrets.token_hex(16),
-                    "connection_id": connection_id,
-                    "connection_generation": generation,
-                    "server_id": server_id, "executor_id": executor_id,
-                    "cursor": None,
-                    "operation_ids": operations[:256],
-                    "session_ids": sessions[:256],
-                    "stream_watermarks": [],
-                }
-                await _send_text(encode_r4_frame(
-                    pending_reconcile).decode("utf-8"))
+                await _send_text(encode_r4_frame(pending_reconcile).decode("utf-8"))
 
             await anyio.to_thread.run_sync(lambda: recover_fenced_reservations(
                 factory, channel=ExecutionChannel(server_id, executor_id, connection_id, generation)))
@@ -417,55 +386,13 @@ def build_router() -> APIRouter:
                                           "executor_id", "cursor"))):
                         await ws.close(code=4406)
                         break
-                    complete_empty = (
-                        frame["complete"] and frame["next_cursor"] is None and
-                        not pending_reconcile["operation_ids"] and
-                        not pending_reconcile["session_ids"] and
-                        not frame["receipts"] and not frame["claims"] and
-                        not frame["stream_watermarks"] and
-                        not frame["ownership_facts"])
-                    if complete_empty:
-                        def _ready():
-                            with factory.unit_of_work() as uow:
-                                conn = uow.connection
-                                if conn.execute(
-                                        "SELECT 1 FROM execution_operations "
-                                        "WHERE server_id=? AND executor_id=? AND "
-                                        "admission_state<>'RESOLVED_TERMINAL' "
-                                        "LIMIT 1", (server_id, executor_id)
-                                ).fetchone() or conn.execute(
-                                        "SELECT 1 FROM execution_sessions "
-                                        "WHERE server_id=? AND executor_id=? AND "
-                                        "lifecycle_state NOT IN ('CLOSED','FAILED') "
-                                        "LIMIT 1", (server_id, executor_id)
-                                ).fetchone():
-                                    return False
-                                return conn.execute(
-                                    "UPDATE execution_executors SET "
-                                    "control_state='CONTROL_READY' WHERE "
-                                    "server_id=? AND executor_id=? AND "
-                                    "owner_instance_id=? AND generation=? AND "
-                                    "control_state='RECOVERING'",
-                                    (server_id, executor_id,
-                                     connection_id, generation),
-                                ).rowcount == 1
-                        complete_empty = await anyio.to_thread.run_sync(_ready)
-                    accepted = {
-                        "protocol_major": 1,
-                        "contract_revision": R4_PREVIEW_REVISION,
-                        "type": "reconcile.accepted",
-                        "reconcile_id": pending_reconcile["reconcile_id"],
-                        "connection_id": connection_id,
-                        "connection_generation": generation,
-                        "server_id": server_id, "executor_id": executor_id,
-                        "recovery_remaining": not complete_empty,
-                        "ready_lane_ids": [],
-                        "session_lease_requirements": [],
-                    }
+                    def _accept_reconcile():
+                        _verify()
+                        return reconciliation.accept(frame)
+                    accepted = await anyio.to_thread.run_sync(_accept_reconcile)
                     pending_reconcile = None
-                    await _send_text(encode_r4_frame(
-                        accepted).decode("utf-8"))
-                    if complete_empty and pump is None:
+                    await _send_text(encode_r4_frame(accepted).decode("utf-8"))
+                    if not accepted["recovery_remaining"] and pump is None:
                         pump = ExecutionDispatchPump(
                             factory=factory,
                             channel=ExecutionChannel(server_id, executor_id, connection_id, generation),

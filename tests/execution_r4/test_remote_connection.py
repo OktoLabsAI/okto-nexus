@@ -24,9 +24,11 @@ from test_vertical_inventory import _NativeFactory
 
 
 @pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
-@pytest.mark.parametrize('automatic,publication_failure', [(False, None), (True, None),
-    (False, 'before_commit'), (False, 'lost_ack'), (False, 'core_commit')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure):
+@pytest.mark.parametrize('automatic,publication_failure,reconcile_closed,history_count', [
+    (False, None, False, 0), (True, None, False, 0), (False, 'before_commit', False, 0),
+    (False, 'lost_ack', False, 0), (False, 'core_commit', False, 0),
+    (False, None, True, 0), (False, 'core_commit', True, 0), (False, None, True, 260)])
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -102,6 +104,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 assert prepared.cwd == str(tmp_path / 'remote-workspace')
                 assert context.r4_authority is not None
                 self.opens += 1
+                self.context = context
                 return await super().open(prepared, session_id, context, stream_epoch=stream_epoch)
         native = CountedFactory()
         async def environment(_):
@@ -111,6 +114,8 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
         async def launch(_):
             return R4LaunchSetup(environment)
         owner = execution = None
+        recovery_host = None
+        dispatched = {}
         operations = []
         async def report(request):
             assert request['operation_ids'] == request['session_ids'] == []
@@ -202,6 +207,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         daemon.own_r4_connection(owner, candidate_provider=candidates,
                             launch_provider=launch, publish_receipt=publish, native_factory=native)
                     assert duplicate.value.code == 'OPERATION_CONFLICT'
+                execute = execution._execute
+                async def capture(item):
+                    dispatched[item.frame['action']] = item.frame
+                    return await execute(item)
+                execution._execute = capture
                 if publication_failure == 'core_commit':
                     original_record = execution.publications.record
                     def interrupted_record(frame):
@@ -247,21 +257,103 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     assert not pending.pending(server_id, executor_id)
                     final = client.get('/v1/runtime/operations/' + operations[-1], headers=headers['subject']).json()
                     assert final['executor_stage'] == 'SUCCEEDED' and final['receipt_revision'] == 1
-            assert owner.online is (not bool(publication_failure))
+                if reconcile_closed:
+                    from okto_nexus_connector.services.r4_reconciliation import R4ReconciliationReporter
+                    from okto_nexus_connector.services.core_host import CoreRuntimeHost
+                    generation = owner.state.connection_generation
+                    await execution.stop()
+                    await owner.close()
+                    async with asyncio.timeout(5):
+                        while True:
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                state = uow.connection.execute('SELECT control_state FROM execution_executors WHERE executor_id=?',
+                                    (executor_id,)).fetchone()[0]
+                            if state == 'DISCONNECTED':
+                                break
+                            await asyncio.sleep(.01)
+                    if history_count:
+                        # Synthetic historical facts exercise pagination. The
+                        # five actual native commands above are not repeated.
+                        import hashlib
+                        from nexus_connector_core import (OperationKey, OperationReceipt, prepare_r4_receipt_binding,
+                            project_r4_bound_receipt, r4_submit_intent_hash)
+                        from nexus_connector_core.protocol import canonical_json
+                        from okto_nexus_connector.storage.r4_publications import R4PublicationStore
+                        journal = await daemon.host.ensure_history_journal()
+                        publications = R4PublicationStore.for_state(daemon.store)
+                        template = dispatched['turn.submit']
+                        with deps.connection_factory.unit_of_work(write=False) as uow:
+                            tables = {table: dict(uow.connection.execute('SELECT * FROM ' + table + ' WHERE operation_id=?',
+                                (template['operation_id'],)).fetchone()) for table in
+                                ('execution_operations','execution_dispatch_outbox','execution_receipts')}
+                        prepared_history = []
+                        for index in range(history_count):
+                            frame = dict(template, operation_id=f'history-{index:04}-' + 'x' * 140)
+                            frame['intent_hash'] = r4_submit_intent_hash(frame)
+                            association = prepare_r4_receipt_binding(frame, native.context)
+                            key = OperationKey(server_id, executor_id, frame['operation_id'])
+                            await journal.admit(key, association['core_intent_hash'], session_id)
+                            await journal.mark_possible_effect(key)
+                            fact = await journal.record_receipt(key, OperationReceipt(key.operation_id,
+                                association['core_intent_hash'], 'SUBMITTED', True, False, session_id,
+                                native_id=native.native.native_id))
+                            projected = project_r4_bound_receipt(association, fact, key=key, receipt_revision=1)
+                            await asyncio.to_thread(publications.reserve, frame)
+                            await asyncio.to_thread(publications.bind, association)
+                            await asyncio.to_thread(publications.record, projected)
+                            await asyncio.to_thread(publications.acknowledge, projected)
+                            prepared_history.append((frame, projected))
+                        with deps.connection_factory.unit_of_work() as uow:
+                            for frame, projected in prepared_history:
+                                for table, source in tables.items():
+                                    values = dict(source, operation_id=frame['operation_id'])
+                                    if 'intent_hash' in values:
+                                        values['intent_hash'] = frame['intent_hash']
+                                    if table == 'execution_receipts':
+                                        raw = canonical_json(projected)
+                                        values.update(canonical_frame=raw.decode(),
+                                                      frame_digest='sha256:' + hashlib.sha256(raw).hexdigest())
+                                    if table == 'execution_dispatch_outbox':
+                                        values['attempt_token'] = frame['operation_id']
+                                    uow.connection.execute('INSERT INTO ' + table + '(' + ','.join(values) + ') VALUES (' +
+                                        ','.join('?' for _ in values) + ')', tuple(values.values()))
+                    recovery_host = CoreRuntimeHost(daemon.host.root, daemon.vault)
+                    reporter = R4ReconciliationReporter(daemon.store, recovery_host, server_id, executor_id)
+                    reports = []
+                    async def reconciled(request):
+                        report = await reporter.report(request)
+                        reports.append(report)
+                        return report
+                    owner = await asyncio.wait_for(connect_r4_connection(
+                        f'ws://127.0.0.1:{port}/v1/runtime/executors/{executor_id}/link',
+                        registered.json()['bootstrap_ticket']['ticket'], server_id=server_id, executor_id=executor_id,
+                        management_revision=info['management_revision'], snapshot_format=info['executor_snapshot_format'],
+                        boot_id='recovery-boot', report_reconciliation=reconciled), 10)
+                    assert owner.state.control_ready and owner.state.connection_generation > generation
+                    assert reports and reports[0]['receipts'] and reports[0]['claims'][0]['state'] == 'RELEASED'
+                    assert not reporter.blocked
+                    if history_count:
+                        from nexus_connector_core import encode_r4_frame
+                        assert len(reports) == 2 and len(reports[0]['receipts']) == 256
+                        assert sum(len(report['receipts']) for report in reports) == history_count + 4
+                        assert len(encode_r4_frame(reports[0])) > 64 * 1024
+            assert owner.online is (not bool(publication_failure) or reconcile_closed)
             assert owner.usage == {False: (0, 0), True: (0, 0)}
             assert native.native.stopped
             assert native.opens == 1
             assert [kind for kind, _ in native.native.sent] == ['send_turn', 'steer', 'interrupt']
             with deps.connection_factory.unit_of_work(write=False) as uow:
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5
-                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count
+                assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 5 + history_count
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
-                expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') else ('CLOSED', 'CLOSED')
+                expected_session = ('READY', 'SUPERSEDED') if publication_failure in ('before_commit', 'core_commit') and not reconcile_closed else ('CLOSED', 'CLOSED')
                 # Receipt ingress preserves history after disconnect. Adoption
                 # of that fact into session readiness remains reconciliation.
                 assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == expected_session
         finally:
             try:
+                if recovery_host is not None:
+                    await recovery_host.shutdown_all()
                 result = await daemon._shutdown()
                 if owner is not None:
                     await owner.close()

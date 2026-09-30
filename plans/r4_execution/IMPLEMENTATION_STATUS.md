@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Confirmed close and paged reconciliation — September 30, 2026
+
+[Increment](M06_M07_RECONCILIATION.md): Connector schema 3 retains acknowledged hash associations and opening generation/epoch. A fresh Core owner reconciles confirmed closed sessions and 264 receipt summaries over real HTTP/WSS without native replay. Server readiness checks durable receipt integrity, current ownership, pagination and remaining sessions. Installed results: Connector 356 passed (one existing skip), Nexus 114 passed. Core 0.2.35 is unchanged and its wheel is identical in both consumers. Active session adoption, event replay, rotation and full acceptance remain pending. No milestone or gate closed.
+
+
 ## Receipt recovery from Core facts — September 30, 2026
 
 [Increment](M07_RECEIPT_BINDING.md): Core 0.2.35 validates a non-secret association between Core and R4 hashes before effects. Connector persists it, migrates publication storage to schema 2, and reconstructs pending receipts from the journal at startup. Installed results: Core 104 passed, Connector 353 passed (one skip), Nexus 84 passed. Recovery after Core commit/before wire persistence is verified through real HTTP/WSS with a technical peer. Nonempty session reconciliation, acknowledged-operation history, rotation and full acceptance remain pending.
