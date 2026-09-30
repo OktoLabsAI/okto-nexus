@@ -22,21 +22,32 @@ def _refuse():
 
 class ProviderSecretResolver:
     """Resolve explicitly consented provider references from this host only."""
+    def __init__(self, vault=None):
+        self.vault = vault
+
     async def resolve(self, reference):
+        from ..adapters.outbound.provider_vault import ProviderVaultError, validate_provider_secret
         prefix, _, name = reference.partition(":")
+        if prefix=="vault" and self.vault is not None:
+            try:
+                return await asyncio.to_thread(self.vault.resolve,reference)
+            except ProviderVaultError:
+                raise CoreError("PROVIDER_AUTH_REQUIRED", "environment") from None
         if prefix != "provider" or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]{0,127}", name):
             raise CoreError("PROVIDER_AUTH_REQUIRED", "environment")
         value = os.environ.get(name)
-        if not value or any(prefix in value for prefix in ("nxs_", "nxsept_", "nxc4_", "nxt4_")):
+        try:
+            return validate_provider_secret(value)
+        except ProviderVaultError:
             raise CoreError("PROVIDER_AUTH_REQUIRED", "environment")
-        return value
 
 
 class ApprovedLocalLaunch:
     def __init__(self, owner, scope, *, resolver=None):
         self.owner = owner
         self.scope = dict(scope)
-        self.resolver = resolver or ProviderSecretResolver()
+        from ..adapters.outbound.provider_vault import ProviderVault
+        self.resolver = resolver or ProviderSecretResolver(ProviderVault(owner.deps.config.home_dir,scope["agent_id"]))
         self._snapshot, self.candidate, self.record = self._read()
         self.workspace_root = self.record["root"]["path"]
         self.auth_refs = tuple(sorted(set(self.record["configuration"]["secret_bindings"].values())))

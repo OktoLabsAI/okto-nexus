@@ -31,6 +31,10 @@ def qualified_contract(monkeypatch):
 
 @pytest.fixture
 def connected_local(local_setup):
+    return connect_local(local_setup)
+
+
+def connect_local(local_setup, *, secret_bindings=None):
     deps,app,client,headers,body,candidate,root=local_setup
     owner=app.state.embedded_dispatch_owner
     assert owner.pump is not None
@@ -42,7 +46,7 @@ def connected_local(local_setup):
             return await super().open(*args,**kwargs)
     native=NativeFactory()
     owner.native_factory=native
-    response=publish(local_setup,changes={"secret_bindings":{}})
+    response=publish(local_setup,changes={"secret_bindings":secret_bindings or {}})
     assert response.status_code==201,response.text
     view=response.json()
     _,apply=prepare_operator(client,headers,dict(client_intent_id="automatic-binding",agent_id_hint="subject",

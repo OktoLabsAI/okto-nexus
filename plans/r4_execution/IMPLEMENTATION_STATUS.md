@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Protected local provider credentials — September 30, 2026
+
+[Increment](M05_PROVIDER_VAULT.md): local owner CLI stores/removes provider secrets in the protected OS credential store with installation/agent isolation. ApprovedLocalLaunch resolves vault references off-loop and retains its authority/configuration checks around resolution. Installed results: 122 passed; 67 overlapping cases passed without Connector, with pip check. Actual Windows Credential Manager and separate installed CLI process roundtrips passed with credential cleanup and no plaintext file/output. Initial source failures and corrections are retained. Session tool capability composition, Linux/macOS vault qualification and full M05 remain open; Core/Connector artifacts are unchanged.
+
+
 ## Embedded released-resource reconciliation — September 30, 2026
 
 [Increment](M05_EMBEDDED_RESOURCE_RECONCILIATION.md): serve verifies retained Core journals, claims, released global slots and recovered event watermarks before submitting proofs to canonical reconciliation. Its readiness transaction checks the current embedded owner/epoch. A proven release closes the old session and enables a new public admission with the approved binding after restart. Occupied/missing stores, untracked journals and pending event gaps retain RECOVERING. Installed results: 113 passed; 58 overlapping tests passed without Connector, with pip check. Uncertain native processes, complete tools/governance and real-provider journeys remain required. Core/Connector artifacts are unchanged; M05/G1 remain open.

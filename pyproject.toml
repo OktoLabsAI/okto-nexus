@@ -58,6 +58,8 @@ Issues = "https://github.com/OktoLabsAI/okto-nexus/issues"
 # (empirical bisect via Okto Pulse). Nexus has no empty-path routes today, so
 # this is defense-in-depth against a future landmine.
 serve = [
+    "pywin32; sys_platform == 'win32'",
+    "keyring; sys_platform != 'win32'",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "nexus-connector-core==0.2.38.dev0",
@@ -74,6 +76,8 @@ serve = [
 # is absent; `off` keeps it disabled. Use on hosts that won't run real semantic
 # search. Install with `uv tool install ".[serve-lite]"`.
 serve-lite = [
+    "pywin32; sys_platform == 'win32'",
+    "keyring; sys_platform != 'win32'",
     "fastapi>=0.110,!=0.137.0",
     "uvicorn>=0.29",
     "nexus-connector-core==0.2.38.dev0",

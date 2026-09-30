@@ -14,6 +14,7 @@ Usage:
   okto-nexus serve [options]   Start HTTP MCP, REST and dashboard
   okto-nexus tail [options]    Stream the event log as NDJSON
   okto-nexus admin <command>   Run maintenance commands
+  okto-nexus provider-credentials <set|remove>  Manage provider secrets
 
 Use `okto-nexus serve --help` for server options. Agents connect to /mcp
 over HTTP with their existing API key.
@@ -35,6 +36,9 @@ def main(argv: list[str] | None = None) -> int:
     if command == "admin":
         from .admin import run_admin
         return run_admin(rest)
+    if command == "provider-credentials":
+        from .provider_credentials import run_provider_credentials
+        return run_provider_credentials(rest)
     print(
         "[okto-nexus] MCP stdio is no longer available. "
         "Run `okto-nexus serve` and connect to its HTTP /mcp endpoint.\n\n"

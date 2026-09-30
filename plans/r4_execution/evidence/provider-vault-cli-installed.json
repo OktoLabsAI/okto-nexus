@@ -1,0 +1,46 @@
+{
+  "platform": "Windows-11-10.0.26200-SP0",
+  "executable": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe",
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "provider-credentials",
+        "set",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-provider-vault-cli-t71xf57q",
+        "--agent-id",
+        "probe-agent",
+        "--reference",
+        "vault:probe",
+        "--secret-stdin"
+      ],
+      "exit_code": 0,
+      "secret_absent_from_output": true
+    },
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus.adapters.inbound.cli.main",
+        "provider-credentials",
+        "remove",
+        "--home",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-provider-vault-cli-t71xf57q",
+        "--agent-id",
+        "probe-agent",
+        "--reference",
+        "vault:probe"
+      ],
+      "exit_code": 0,
+      "secret_absent_from_output": true
+    }
+  ],
+  "roundtrip": true,
+  "removed": true,
+  "plaintext_files_created": false
+}
