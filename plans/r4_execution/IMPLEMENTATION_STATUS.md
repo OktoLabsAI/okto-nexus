@@ -2,6 +2,20 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
+## Revisão do plano de entrega total
+
+O plano foi consolidado contra Nexus `2baeaf9`, Connector `0be7faf` e Core
+`368c50d`, com o mesmo hash do wheel Core `0.2.28.dev0` recalculado nos três
+repositórios. A fila vigente começa pela conclusão da auditoria/conformance,
+seguida de aprovação e perfil no onboarding público, abertura inicial com
+lease e composição do dispatcher com os owners embedded/daemon.
+
+A campanha local Core instalada registra 99 passes, mas runner/evidências
+ainda não estão versionados. Sua revisão/publicação faz parte do próximo
+incremento. Esta revisão documental não reexecutou testes de produto nem
+encerrou M00/M01 ou G0–G3. As seções seguintes são registros históricos;
+as prioridades atuais estão em [DELIVERY_PLAN.md](DELIVERY_PLAN.md).
+
 ## Incremento de contenção durante renovação pendente
 
 O [incremento Core 0.2.28](M01_PENDING_CONTAINMENT.md) permite interrupt,

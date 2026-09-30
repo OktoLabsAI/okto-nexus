@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Pending same-scope renewal containment and installed consumers verified; full delivery remains open",
+    "scope": "Full delivery plan consolidated against current repository heads, shared artifact hashes, recorded tests, and remaining product integration gaps",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "726d5e329e7dabdf5a8160d1ea8065236388a625",
+      "nexus": "2baeaf9acd2a0da37f137e096fe2d8317e7a075a",
       "connector": "0be7faf0040266f2c12185985b132b6343cbc2fe",
       "core": "368c50d9b8496809a4865e32a774492db3e3549f"
     },
@@ -40,7 +40,7 @@
       "plans/r4_execution/test_runs_20260930_pending_containment.json"
     ],
     "latest_increment": "Core source 920 passed/74 skipped; installed pending containment 12 passed; Nexus R4 69 passed; installed application integration 19 passed; Connector 241 passed/2 skipped. Same-scope authorized containment progresses while lease CAS is retained. Changed authority remains fenced. Campaigns overlap and use synthetic peers; no product milestone or gate closed.",
-    "verification_scope": "Same wheel hashes and installed package bytes verified. Source and installed regression recorded in close-policy evidence. Nexus changes belong to the commit containing this checkpoint; dependency heads are already published.",
+    "verification_scope": "Planning review: repository heads and all three Core wheel hashes read directly; existing source and installed test reports inspected. Product suites were not rerun during this review. Published heads identify the implementation before this documentation commit.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
       "scope": "Authorized containment during same-scope pending renewal CAS",
@@ -50,13 +50,25 @@
         "core": "368c50d9b8496809a4865e32a774492db3e3549f",
         "connector": "0be7faf0040266f2c12185985b132b6343cbc2fe"
       },
-      "nexus_commit": "Commit containing this checkpoint",
+      "nexus_commit": "2baeaf9acd2a0da37f137e096fe2d8317e7a075a",
       "evidence": "plans/r4_execution/test_runs_20260930_pending_containment.json",
       "next_steps": [
         "Finish M01 operation and lease conformance with a complete installed consumer campaign.",
         "Complete public canonical onboarding, product outbox ownership and embedded/daemon composition.",
         "Complete reconciliation, governance, UI/CLI, language audit, migration and native multi-host acceptance."
       ]
+    },
+    "local_unpublished_campaign": {
+      "repository": "core",
+      "runner": "tools/run_r4_installed.py",
+      "manifest": "plans/implementation/evidence/r4-installed-campaign/manifest.json",
+      "results": "plans/implementation/evidence/r4-installed-campaign/results.xml",
+      "tests": 99,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "status": "LOCAL_EVIDENCE_REQUIRES_REVIEW_AND_PUBLICATION",
+      "qualifies_product_gate": false
     }
   },
   "sources": {

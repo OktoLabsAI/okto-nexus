@@ -47,148 +47,79 @@ Continuam fora do escopo normativo: novo login de usuário Nexus, SSO, tenant ob
 
 ## Baseline e lacunas que orientam a sequência
 
-| Repositório | HEAD de referência | Pacote observado |
+### Checkpoint vigente — 30 de setembro de 2026
+
+Os HEADs abaixo foram lidos antes desta revisão documental. Nos três repositórios, a branch é `feature/v0.2.0` e HEAD coincide com a referência local de tracking consultada.
+
+| Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `2ce437d5189f0fdf08b1332e836249b2a838dbf3` | `0.2.0` |
-| Connector | `208a9c90e14e4995951c805ccc6585596160ca1c` | `0.5.0.dev0` |
-| Core | `79a315ff634bcfc8e5c4d4bab95ab46eff4579c8` | `0.2.22.dev0` |
+| Nexus | `2baeaf9acd2a0da37f137e096fe2d8317e7a075a` | `0.2.0` |
+| Connector | `0be7faf0040266f2c12185985b132b6343cbc2fe` | `0.5.0.dev0` |
+| Core | `368c50d9b8496809a4865e32a774492db3e3549f` | `0.2.28.dev0` |
 
-Wheel Core da baseline inicial: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4.
+O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-### Revisão anterior após a auditoria inicial
+O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
-O conjunto conferido nesta revisão é Nexus `0145bcc7aaa7ff34a9ed50f2a12972e8e467aa06`, Connector `47454d21f2cae22eba14d1b9302f764be323739d` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. Todos estão em `feature/v0.2.0`, com HEAD igual à referência local `origin/feature/v0.2.0` consultada. Os três repositórios contêm o mesmo wheel Core `0.2.26.dev0`, com SHA-256 `d1fd93375b84f68f14c7a6a84b609bcee0d14876b8c75ec00a71a11d8ec71977`, recalculado nos três arquivos. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos. Esses SHAs identificam a implementação anterior a esta revisão documental.
+### Evidência disponível e seu alcance
 
-A [auditoria inicial](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 tinham entradas de teste candidatas coletáveis e 54 ainda não tinham uma entrada proposta coletada; essa contagem histórica mede disponibilidade do teste, não cobertura integral de aceite. O inventário deve ser atualizado em M00 após os incrementos seguintes. Consultar os [resultados iniciais](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
-
-A campanha mais recente, registrada em [test_runs_20260930_containment.json](test_runs_20260930_containment.json), executou Core completo com 892 passes/74 skips, Connector completo com 239 passes/2 skips, Nexus R4 com 56 passes e integração instalada NS07/NS09/NS10 com 17 passes. Há sobreposição entre campanhas. A revisão documental atual conferiu os artefatos e esses registros; não reexecutou suites de produto. Regressões amplas Nexus e qualificação nativa/entre hosts continuam pendentes.
-
-Targeting público e inventário v2 foram publicados no Core `0.2.24.dev0`, integrados no Nexus e Connector com o mesmo wheel e registrados em [M01_TARGETING_INVENTORY.md](M01_TARGETING_INVENTORY.md). O incremento `0.2.25.dev0` acrescenta instalação de autoridade R4 no runtime, renovação/revogação e consumidores de contrato, conforme [M01_LEASE_APPLICATION.md](M01_LEASE_APPLICATION.md). Essas evidências substituem a observação anterior de trabalho local não publicado; ainda não encerram M01 nem qualificam o dispatcher e o daemon.
-
-### Checkpoint de planejamento anterior ao incremento de close
-
-Esta revisão conferiu os arquivos e evidências locais dos três repositórios. Os HEADs anteriores à revisão documental são Nexus `7e891fbd78073f3b987be505b3a86c288233d74d`, Connector `09b48595bc2ca99a7acff1555c12cf53e086df49` e Core `ada37e30cfb8a09769e5cceb12fa3b34829095ba`. As referências locais de tracking coincidem com esses HEADs em `feature/v0.2.0`. O Core publicado continua em `0.2.26.dev0`; os parágrafos anteriores preservam checkpoints históricos.
-
-Há um incremento **local, ainda não aceito nem publicado**, de política de `runtime.close`, ampliação da razão de interrupt e projeção transacional de sessão fechada. O wheel Core `0.2.27.dev0` existe nos três repositórios com SHA-256 `f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6`. Pins e lock já foram parcialmente alterados, mas `CORE_INVENTORY_VERSION` em `src/okto_nexus/adapters/outbound/execution/core_inventory.py` e as expectativas de `tests/execution_r4/test_ns01.py` ainda exigem `0.2.26.dev0`. Resolver essa inconsistência é a primeira ação de integração, antes de usar o ambiente como baseline de aceite.
-
-O XML local `../okto-nexus-connector-core/plans/implementation/evidence/r4-close-policy-final-source.xml` registra 908 passes, 74 skips e zero falhas/erros em 982 casos. É evidência de fonte com alterações locais; ainda precisa ser ligada ao commit e aos artefatos instalados. A revisão do plano apenas leu esse resultado. Não executou essa suíte nem validou o incremento nos consumidores. O resultado anterior com falha de documentação deve ser preservado no histórico.
-
-O incremento publicado de steer/interrupt tem 68 passes Nexus R4, 241 passes/2 skips Connector e 12 casos instalados, conforme [registro de controles](test_runs_20260930_controls.json). Essas campanhas têm sobreposição e não qualificam o novo wheel `0.2.27.dev0`. O estado permanece: M00/M01 em andamento, incrementos parciais dos marcos posteriores e G0–G3 abertos.
-
-### Checkpoint de implementação: Core 0.2.27 e close canônico
-
-O incremento descrito acima foi integrado e testado, conforme
-[M01_CLOSE_POLICY.md](M01_CLOSE_POLICY.md). O inventário Nexus e as
-expectativas de pacote agora exigem `0.2.27.dev0`; pins/lock e os três wheels
-usam o hash `f0a3203d3d6faa50ecdbcf98614cc9fdf121e0dfafb1be1d3f0b84d0f4c39af6`.
-Passaram 69 testes Nexus R4, 241 Connector/2 skips, 21 testes Core instalado
-e 19 de integração instalada, além da regressão Core de fonte 908/74.
-Contagens se sobrepõem. O registro de execução contém comandos, hashes,
-falhas anteriores e limites; os commits de dependências estão no manifesto.
-
-O pacote imediato abaixo tem sua integração técnica concluída neste
-incremento. Os próximos trabalhos são contenção durante CAS pendente e
-conformance restante do Core, seguidos de onboarding público, loop de
-outbox e owners embedded/daemon. Os testes de close não demonstram esses
-fluxos de produto. M01/M04/M07/M11 e todos os gates continuam abertos.
-
-### Checkpoint de implementação: Core 0.2.28 e CAS pendente
-
-O [incremento de contenção pendente](M01_PENDING_CONTAINMENT.md) implementa
-a coordenação de locks e autoridade durante renovação do mesmo escopo.
-Novo trabalho produtivo permanece bloqueado; mudanças de conexão/escopo,
-ações retiradas e revogação não reutilizam a autoridade anterior.
-O mesmo wheel `0.2.28.dev0`, SHA-256
-`27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`, está nos
-três repositórios com pins/lock/inventário alinhados.
-
-Core completo passou 920 casos/74 skips; os 12 casos novos passaram com o
-pacote instalado, Nexus R4 passou 69 e integração instalada passou 19.
-O manifesto registra também a campanha Connector e os limites de storage.
-A conformance integral de M01 e os owners/loops de produto continuam como
-próximas entregas. Nenhum milestone ou gate foi encerrado.
-
-### Prioridades para continuar a execução
-
-O incremento de [concessão canônica de leases](M06_CANONICAL_LEASES.md) implementa a migração 076, validação de ACK, autorização no despacho e projeção transacional do recibo de abertura. Passaram 69 testes e 14 casos dirigidos com os aplicativos instalados na campanha original. A referência de commits acima já inclui este incremento. Não constitui fechamento de NS06/NS09/NS10 nem prova de daemon, provider ou hosts distintos.
-
-O [incremento Core 0.2.26.dev0](M01_EXPIRED_CONTAINMENT.md) preserva contenção previamente autorizada após expiração produtiva e foi distribuído aos consumidores. Os callers de controle no Nexus e a coordenação de controles durante CAS pendente ainda precisam ser concluídos; o marco M01 permanece aberto.
-
-O [incremento publicado de controles canônicos](M04_CANONICAL_CONTROLS.md) integra steer e interrupt às rotas de resolução/admissão, targeting Core, autorização de dispatch e publicação de recibos. A política de close e a faixa completa da razão de interrupt foram integradas e testadas com o mesmo Core instalado no [incremento seguinte](M01_CLOSE_POLICY.md). Não há fechamento de milestone, loop de produto ou qualificação nativa por esses incrementos.
-
-| Ordem | Trabalho | Responsável e fechamento | Prova exigida |
-|---|---|---|---|
-| 1 | Revisar critérios das 85 tarefas e 12 entregas externas; transformar lacunas de coleta em casos executáveis; medir limites e registrar ambientes | Três repos, M00 | Mapa requisito → caller → teste coletável → campanha; nenhuma lacuna escondida por contagem de testes |
-| 2 | Concluir targeting, grant/contexto, revogação e conformance de todas as ações/erros; integrar o mesmo wheel | Core com consumidores, M01 | Testes positivos e negativos com Core instalado, compatibilidade R3 e hashes verificados |
-| 3 | Resolver regressões conhecidas de migração, MCP HTTP, superfície compacta e attach, preservando as condições originais | Nexus, M02/M09/M12 conforme domínio | Reexecução dos casos identificados e regressão completa antes do aceite final; manter o gate de redução de 40% |
-| 4 | Completar autoridade, onboarding público e dispatcher; ligar os hosts embedded e remoto | Nexus/Connector, M02–M06 | Intenção real chega ao efeito único sem operação semeada nem prontidão forçada |
-| 5 | Fechar eventos, decisões, ferramentas, UI/CLI, idioma e recuperação; migrar e repetir o aceite nos artefatos finais | Três repos, M07–M13 | Campanhas instaladas, providers reais, hosts distintos e todos os cenários aplicáveis |
-
-A preparação dos ambientes começa durante M00: confirmar autenticação utilizável de cada provider, provisionar os Servers A/C e executor B, provar isolamento/rede outbound e obter as combinações Windows/Linux declaradas. WSL disponível não demonstra sozinho hosts independentes. Enquanto essa preparação avança, os testes de contrato e integração em processos locais continuam executáveis. A ausência de um laboratório obrigatório mantém seu aceite pendente.
-
-### Próximos pacotes concretos de conclusão
-
-Estes pacotes detalham os marcos existentes; não substituem IDs, dependências ou cenários do backlog. Trabalho parcial fora da ordem de fechamento deve continuar identificado como parcial.
-
-| Pacote | Responsável / marco | Critério específico e teste obrigatório |
+| Registro | Resultado registrado | Limite |
 |---|---|---|
-| Autoridade instalada e contenção | Core / M01; consumidores / M05–M06 | Conferir §5.4 do contrato: lease produtiva expirada impede novo efeito produtivo, mas preserva interrupt, close e resposta estritamente negativa previamente autorizados. Testar no runtime instalado, sem ampliar `allowed_actions`, com alvo antigo/errado e decisão positiva recusados. |
-| Concessão canônica e despacho | Nexus / M02, M04, M06 | Revisar a migração 076 e o trabalho local; emitir grant da autoridade persistida e aceitar ACK somente do owner/serial atuais. Testar rollback, concorrência de serial, replay sem estender prazo, consumo de budget uma vez e revogação antes/depois do ACK. |
-| Estado terminal e retomada | Nexus + Connector + Core / M06, M11 | Desconexão não converte autoridade revogada em estado mais permissivo; reconnect exige instalação anterior comprovada ou reconciliação explícita. Testar ACK tardio, reboot, geração antiga e corrida de renovação/revogação com barreiras mantidas. |
-| Jornada de binding e abertura | Nexus + Connector / M03–M06 | A entrada pública produz endpoint habilitado, perfil aprovado, realização e grant sem semeadura de banco. Compor `OPEN_AUTHORIZED_PENDING_LEASE`, instalar contexto e só então preparar/abrir; preservar modo managed/attach da abertura nas operações seguintes. |
-| Owners embedded e daemon | Nexus + Connector / M05–M06 | Ligar o loop de outbox ao owner embedded e ao daemon real, com multiplexação do socket, StateStore e reconciliação não vazia. Provar o ciclo por processos separados e repetir local puro sem Connector instalado. |
-| Revogação e decisões | Três repos / M08, M11 | Propagar revogação ao Core online e limitar efeitos offline por lease; integrar autoridade própria de approval/input. Testar aplicação nativa única, resposta negativa de contenção e isolamento de outro agente/Server. |
-| Regressões e qualificação | Três repos / M09–M13 | Corrigir falhas conhecidas de migração, expectativas stdio, superfície compacta e attach; manter o gate original de redução de 40%. Reexecutar suites completas, idioma e campanhas reais sobre os artefatos finais. |
+| [Auditoria inicial M00](M00_AUDIT.md) | 2.829 casos Nexus, 240 Connector e 925 Core coletados; 31 de 85 tarefas tinham entrada candidata coletável | Inventário histórico a atualizar; coleta não comprova os critérios de aceite |
+| [Incremento Core 0.2.28](test_runs_20260930_pending_containment.json) | Core 920 passes/74 skips; Connector 241 passes/2 skips; Nexus R4 69 passes; contenção instalada 12 passes; integração instalada 19 passes | Campanhas sobrepostas, peers sintéticos; sem aceite final de produto |
+| Campanha local instalada de conformance Core | XML local registra 99 passes, sem falhas ou skips; manifesto registra `python -I`, pacote instalado e hash do wheel | Runner e evidência ainda não rastreados no Core; revisar e publicar antes de usá-los no fechamento de M01 |
 
-Cada pacote encerra com caminhos de código, cenários/nodeids, comando, resultado, limites da prova e commits dos repositórios envolvidos. A aprovação documental deste plano não muda os estados dos testes para PASS.
+A última linha se refere a `tools/run_r4_installed.py` e `plans/implementation/evidence/r4-installed-campaign/` no Core. Preservar também as duas tentativas anteriores com falha de resolução de helpers, registradas em `r4-installed-conformance*.xml`. Esta revisão leu os resultados; não reexecutou suites de produto nem transforma 99 testes de contrato em prova do dispatcher, daemon ou provider.
 
-### Primeiro ciclo de implementação após esta revisão
+### Lacunas prioritárias observadas
 
-Executar os passos abaixo respeitando as dependências dos marcos. Cada passo produz um incremento revisável; nenhum deles, isoladamente, encerra a entrega total.
-
-| Passo | Alteração concreta | Verificação de conclusão |
-|---|---|---|
-| 1 | Atualizar o inventário de aceite e os defeitos com os três HEADs acima; associar os testes novos às tarefas; registrar hosts, providers e credenciais de laboratório disponíveis | Todos os requisitos têm caller, teste existente ou teste a criar, responsável e ambiente; skips aplicáveis permanecem pendentes |
-| 2 | Concluir conformance Core e a coordenação de contenção durante renovação/CAS; manter revogação, geração e recuperação de confirmação perdida | Barreiras de storage ativas durante interrupt/close e shutdown, sem efeito produtivo após expiry nem uso de contexto antigo; mesmo wheel instalado nos consumidores |
-| 3 | Aproveitar steer/interrupt publicados; concluir e integrar o incremento local de `runtime.close`, targeting pelo Core e transporte dos DTOs no cliente Connector | ID/hash/alvo/política preservados até o efeito e recibo; replay sem duplicação; contenção expirada mantém as demais verificações de autoridade; campos e alvos inválidos recusados antes do efeito |
-| 4 | Concluir onboarding e compor o loop de outbox, abertura pendente de lease, owner embedded e daemon/StateStore | Jornada pública cria binding e abre sessão sem semear operação ou forçar readiness; execução local sem Connector e execução remota por processos reais |
-| 5 | Integrar reconciliação não vazia, eventos, revogação online e aprovação/input às mesmas operações duráveis | Restart e perda de ACK recuperam os mesmos IDs; decisão aplicada uma vez; isolamento entre agentes/Servers e controle sob saturação |
-| 6 | Fechar ferramentas, UI/CLI e idioma; corrigir regressões; executar migração e campanhas finais | Gates G1–G3 com artefatos instalados, providers reais, hosts distintos, matriz completa e runbooks exercitados |
-
-Antes do passo 3, conferir a representação normativa da razão de interrupt/close: o request HTTP e o payload NXL têm formas diferentes. Registrar qualquer inconsistência contratual e resolvê-la na fonte responsável com fixture de compatibilidade, sem introduzir um campo HTTP ad hoc. Aprovação/input mantêm autoridade própria de decisão em M08.
-
-### Pacote imediato: concluir o incremento local de close
-
-Este pacote é parte de M01/M04/M07/M11. Seu fechamento não encerra esses marcos inteiros.
-Estado atualizado: integração técnica verificada no relatório de close;
-os passos abaixo preservam o escopo executado. O próximo pacote é a
-coordenação de contenção durante CAS e a conformance restante de M01.
-
-1. **Core:** revisar o diff existente de `close_operation.py`, `close_runtime.py`, runtime, schemas e projeção. Conferir razão, política tipada, hash, deadline único, contenção durante drain, cancelamento do waiter, efeito tardio e preservação de `OUTCOME_UNKNOWN`. Executar os geradores com `--check`, conformance e verificador de wheel; registrar a correspondência entre fonte e pacote.
-2. **Nexus:** alinhar versão de inventário, dependências, lock e expectativas de pacote ao mesmo artefato. Validar `test_canonical_controls.py`, NS01, NS07, NS10 e integração vertical. Provar que apenas o recibo autorizado de fechamento observado muda a sessão para `CLOSED`, que unknown mantém incerteza e que falha transacional reverte recibo/projeção juntos.
-3. **Connector:** verificar que o publisher conserva razão/política e recusa projeção divergente. Executar sua regressão com o Core instalado e dependências de teste próprias. A passagem do cliente HTTPS não demonstra que o daemon despacha a operação.
-4. **Conjunto instalado:** instalar os três pacotes fora dos clones, registrar imports e hashes, repetir o ciclo técnico e cancelamento/replay sem substituir o Core por fonte do diretório irmão. Rodar também Nexus local sem o aplicativo Connector quando o owner de produto estiver integrado em M05.
-5. **Registro e publicação:** guardar comandos, XML, skips e limites; publicar Core, depois Connector e Nexus com pins compatíveis, staging explícito e push na branch autorizada. Manter a lacuna de CAS pendente e a contenção com journal bloqueado no backlog de robustez até prova específica.
-
-**Aceite do pacote:** não existe divergência entre wheel selecionado e verificação de versão; Core e consumidores passam os casos aplicáveis sobre o mesmo hash; nenhum cancelamento duplica o fechamento; nenhum timeout se torna sucesso; os três commits e as evidências estão relacionados. Antes disso, o incremento permanece `IN_PROGRESS`.
-
-O [status de implementação](IMPLEMENTATION_STATUS.md) registra inventário, identidade, tickets, realizações, prepare/apply, resolução, admissão, reservas, receipts, adapter embedded e negociação WSS parciais. Há ensaios de Core com peer nativo sintético e testes verticais em processo. As seguintes lacunas continuam determinantes:
-
-| Área | Lacuna de entrega |
+| Área | Lacuna e destino |
 |---|---|
-| Core R4 | `R4_BUNDLE_EXECUTABLE=False`; completar e qualificar contrato, reducers, targeting e aplicação de autoridade antes de anunciá-lo executável. |
-| Execução local | O adapter embedded ainda recebe seleção/contexto das fixtures; faltam composição canônica, dispatcher de produto, ambiente por abertura e integração da jornada. |
-| Execução remota | O cliente `wss_r4.py` negocia, mas não integra o daemon/StateStore, o ciclo de tickets, lanes, leases e o dispatcher de efeitos. |
-| Reconciliação | O Server apenas promove o caso vazio confirmado; faltam páginas, merge de receipts/claims/watermarks, ownership e readiness por sessão. |
-| Governança | Completar operador versus agente, capability de sessão, decisões, inputs, native-actions, eventos e consumo exclusivo nos novos caminhos. |
-| Organização | Extrair SQL e transições do handler WSS para casos de uso e repositórios, conforme as fronteiras normativas. |
-| Testes | Finalizar os casos ausentes e substituir, nos testes de aceite, semeadura de operações e readiness simulada por entradas públicas reais. |
-| CI e UI | O workflow do Connector contém `if: false` e referência antiga ao Core; o `frontend/package.json` não declara testes de UI. Criar uma campanha reproduzível local antes de depender de hosted runners. |
-| Idioma | Novas mensagens foram escritas em inglês; a auditoria de todo o conteúdo das três aplicações ainda é necessária. |
+| Core R4 — M01 | `R4_BUNDLE_EXECUTABLE=False`; revisar conformance das sete ações, erros e consumidores instalados antes de promover o contrato |
+| Onboarding — M02/M03 | `execution_binding_proposals.py` produz proposta sem perfil e endpoint desabilitado; compor aprovação de operador, perfil e habilitação pelas entradas públicas, mantendo identidade e CAS |
+| Dispatcher — M04 | `execution_dispatch.py` já reserva e revalida, mas faltam loop de produto, ownership e composição da abertura inicial pendente de lease |
+| Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
+| Remoto — M06 | Integrar `transport/wss_r4.py` ao daemon/StateStore, renovação de tickets, dispatcher e reconciliação não vazia; extrair SQL/transições do handler Server |
+| Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
+| Jornadas e idioma — M10 | Completar UI/CLI, infraestrutura de testes de navegador e auditoria US English, incluindo superfícies legadas |
+| Robustez e migração — M11/M12 | Provar recovery, revogação online/offline, ownership/shutdown e limites; ensaiar cutover e rollback com dados legados |
+| Qualificação — M13 | Resolver regressões conhecidas, pipeline/empacotamento e matriz provider/SO/hosts sobre os artefatos finais |
 
-G0, G1, G2 e G3 continuam abertos nesta baseline. Resultados anteriores não serão somados como se fossem execução dos artefatos finais. Esta leitura identifica lacunas estáticas e evidências registradas; não substitui uma nova execução de regressões.
+Regressões Nexus conhecidas de migração, expectativas MCP stdio, superfície compacta/descrições e fixtures de Claude attach têm destino em M02/M09/M12 conforme o domínio. Preservar o gate de redução de 40% da superfície compacta. Uma expectativa antiga só deve mudar quando o contrato e a regressão substituta justificarem a alteração.
 
-O Nexus contém alterações prévias do usuário: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém o arquivo não rastreado `=1`. Preservar esses itens, trabalhar com staging por caminhos explícitos e não executar reset/clean. Builds de frontend devem usar staging isolado até comparar os assets existentes.
+### Fila imediata de execução
+
+A ordem abaixo detalha os próximos incrementos. O fechamento de cada marco continua dependente de todos os seus requisitos originais.
+
+| Ordem | Trabalho e responsável | Prova e publicação |
+|---|---|---|
+| 1 | Três repos: atualizar M00 por critério de aceite, defeito, nodeid e ambiente; revisar o runner Core local | Cada requisito tem implementação/caller, teste existente ou a criar, responsável e ambiente; versionar runner/evidências revisados, preservando falhas anteriores |
+| 2 | Core + consumidores: completar a conformance instalada de M01 | Sete ações, erros, targeting, lease/revogação e histórico R3; mesmo wheel/hash nos dois consumidores; readiness de host avaliada separadamente |
+| 3 | Nexus + Connector: fechar autoridade e onboarding M02/M03 | Prepare sem efeito; aprovação exigida vinculada ao diff/revisões; apply habilita perfil/endpoint somente com autoridade válida; replay recupera o mesmo binding |
+| 4 | Nexus: ligar admissão/outbox e abertura inicial de M04 | `OPEN_AUTHORIZED_PENDING_LEASE` permite resolver a realização e obter lease; nenhum prepare/open/spawn antes da instalação; budget e efeito no máximo uma vez |
+| 5 | Nexus/Core e Connector: compor os owners de M05/M06 | Local instalado sem Connector; remoto por Server/daemon reais, com StateStore, reader do socket, leases e reconciliação paginada |
+| 6 | Três repos: completar M07–M11 | Histórico, eventos, approval/input, MCP/bridge, UI/CLI, idioma, recuperação e contenção exercitados pelos mesmos callers |
+| 7 | Três repos: concluir M12/M13 | Migração/rollback e campanhas completas sobre o conjunto final; artefatos, commits, hashes e runbooks publicados |
+
+### Aceite concreto do próximo fluxo de produto
+
+A jornada abaixo deve existir como teste instalado de integração, primeiro com peer técnico e depois com os providers exigidos. O peer técnico verifica o encadeamento e não qualifica um provider.
+
+1. Partir de identidade/configuração de laboratório válidas. Registrar ou selecionar executor pela entrada pública, publicar inventário e aprovar a realização no host correto.
+2. Preparar binding e registrar consentimento do agente e prova de operador quando a política exigir. Vincular a prova ao sujeito, proposta, diff e revisões; outra identidade, prova expirada e alteração concorrente devem falhar.
+3. Aplicar a proposta por API/CLI/UI: criar vínculo reutilizável com perfil aprovado, endpoint habilitado e autoridade canônica. A habilitação não pode decorrer apenas da autenticação do próprio agente.
+4. Resolver e admitir `runtime.open` com um `client_intent_id`; persistir operação/outbox juntas e consultar o resultado após resposta perdida. Não semear binding, grant, sessão ou operação para contornar a jornada sob teste.
+5. O dispatcher entrega o envelope inicial ao owner correto. O owner resolve a realização aprovada, obtém/instala a lease e só então prepara/abre no Core. Recibo correlacionado projeta o estado da sessão.
+6. Admitir submit, steer, interrupt e close pela mesma autoridade; observar receipts/eventos e recuperar a mesma operação após replay/restart. Somar approval/input ao fluxo em M08.
+7. Repetir local puro e remoto, com contagem de efeitos nativos e asserções de estado persistido. O caminho remoto não recebe paths livres nem depende de binários no Server.
+
+Testes negativos obrigatórios desse fluxo: falta de consentimento, autoaprovação, perfil desabilitado, inventário stale, drift de root/binário, revisão alterada, perda de resposta de apply/open, lease ausente/expirada/revogada, ACK antigo, fila cheia e desconexão após efeito possível. Cada falha precisa de resposta própria em US English e preservar a consulta pelo ID original.
+
+A preparação de Windows/Linux, Python suportado, providers autenticados e Servers A/C + executor B começa em M00. Ausência de laboratório mantém o aceite dependente pendente; WSL e processos locais não provam hosts independentes. Continuar os trabalhos sem essa dependência.
+
+### Preservação do workspace
+
+O Nexus contém alterações prévias: 599 exclusões em `plans/`, três assets HTTP modificados, uma evidência modificada e um diretório de teste não rastreado. O Core contém `=1` e os arquivos locais da campanha citada. Usar staging explícito, preservar esses itens e construir frontend em diretório isolado até comparar os assets existentes.
 
 ## Responsabilidades e invariantes de implementação
 
