@@ -510,3 +510,7 @@ Connector commit `4447adc3700b3d700fab2458fdebeb46b52be0e1` adds schema 8 and th
 ## Approved Pi native tools — 2026-09-30
 
 Connector `f1714f4f392c3ed7d41b14be8151d5af6a4669d9` composes durable Pi capabilities with approved configuration through the R4 owner. Installed tests: Connector 310 passed / one skipped; Nexus 77 passed, including actual technical Pi child execution and retained shutdown producers. See [evidence](test_runs_20260930_approved_native.json). Core remains unchanged. Automatic boot adoption, MCP composition and complete provider/platform acceptance remain pending; no gate closed.
+
+## Approved MCP session configuration — 2026-09-30
+
+Connector `45c37e60e9546205b042544a706c27c160eb94dc` composes Codex/Claude direct HTTP configuration from approved references and durable capabilities. Installed verification: Connector 328 passed / one skipped; Nexus 78 passed, including canonical identity, claim and completion using the generated environment. See [evidence](test_runs_20260930_approved_mcp.json). The initial boundary-test false positive is retained with the AST correction. Core is unchanged. Automatic daemon boot, native-login migration, lifecycle recovery and final provider/platform acceptance remain pending; no gate closed.
