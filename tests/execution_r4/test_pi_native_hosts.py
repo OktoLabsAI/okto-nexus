@@ -118,12 +118,13 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
             channel = negotiate(ws, info, revisions, lane, server_id, executor_id)
             resolution = admit(deps, app)
             scope = resolution["scope"]
-            response = client.post(f"/v1/runtime/sessions/{scope['session_id']}/capability",
-                headers={"Authorization":"Bearer " + app.state.test_agent_keys["subject"]},
-                json=dict(capability_request_id="native", binding_id="binding",
-                          audience="nexus-native-session", actions=["handoff.get","handoff.claim","handoff.complete"]))
-            assert response.status_code == 200, response.text
-            cap = response.json()
+            if backend == "embedded":
+                response = client.post(f"/v1/runtime/sessions/{scope['session_id']}/capability",
+                    headers={"Authorization":"Bearer " + app.state.test_agent_keys["subject"]},
+                    json=dict(capability_request_id="native", binding_id="binding",
+                              audience="nexus-native-session", actions=["handoff.get","handoff.claim","handoff.complete"]))
+                assert response.status_code == 200, response.text
+                cap = response.json()
             state = (deps, app)
             seed_work(state)
             reserved = reserve_execution_dispatch(deps.connection_factory, server_id=server_id,
@@ -159,10 +160,17 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
                         from okto_nexus_connector.storage.state_store import StateStore
                         from okto_nexus_connector.platform.paths import state_dir
                         from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4SessionCapability, R4Realization, R4BindingView
-                        from okto_nexus_connector.transport.native_actions import native_action_owner_factory
+                        from okto_nexus_connector.services.launch_configuration import stage_launch_configuration
+                        from okto_nexus_connector.services.session_capabilities import SessionCapabilityOwner, ApprovedNativeLaunchProvider
+                        from okto_nexus_connector.identity.vault import RestrictedFileVault
                         store = StateStore(tmp_path / "connector-state.json")
                         revision = calculate_inventory_revision([candidate])
-                        digest = "sha256:" + "a" * 64
+                        vault = RestrictedFileVault(tmp_path, approved=True)
+                        result_ref = vault.store("test-result", str(result_file))
+                        config = stage_launch_configuration(store, server_id=server_id, executor_id=executor_id,
+                            agent_id="subject", local_consent_id="consent", adapter_id="pi_rpc", profile_revision=1,
+                            secret_bindings={"PI_TEST_RESULT": result_ref})
+                        digest = config.configuration_digest
                         local = stage_local_realization(store, server_id=server_id, executor_id=executor_id,
                             agent_id="subject", client_intent_id="pi-local", candidates=[candidate],
                             adapter_id="pi_rpc", candidate_ref=candidate.installation_ref, inventory_revision=revision,
@@ -175,14 +183,18 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
                             "real", 1, 1, scope["authorization_revision"], scope["configuration_revision"], "APPROVED"))
                         raw = await stack.enter_async_context(httpx.AsyncClient(transport=httpx.ASGITransport(app=app)))
                         http = await stack.enter_async_context(NexusHTTPClient("https://127.0.0.1:8202", client=raw))
-                        typed = R4SessionCapability(cap["capability_id"], cap["capability_ref"], cap["capability"],
-                            scope, cap["audience"], tuple(cap["actions"]), cap["expires_in"],
-                            time.monotonic() + cap["expires_in"] - .5, None)
-                        launch = native_action_owner_factory(http, typed, connection_id=channel.connection_id,
-                                                             connection_generation=channel.connection_generation)
-                        host = CoreRuntimeHost(state_dir(tmp_path / "connector-core"), None)
+                        host = CoreRuntimeHost(state_dir(tmp_path / "connector-core"), vault)
+                        capability_owner = SessionCapabilityOwner(store, vault)
+                        stack.push_async_callback(capability_owner.close)
+                        async def candidates(frame):
+                            return [candidate]
+                        provider = ApprovedNativeLaunchProvider(capability_owner, http,
+                            app.state.test_agent_keys["subject"], host, store,
+                            candidate_provider=candidates, require_current=lambda frame: None)
+                        setup = await provider(sent.frame)
+                        assert store.load().session_capabilities[0].status == "STORED"
                         runtime = await host.build_r4(store, frame=sent.frame, candidates=[candidate],
-                                                       environment=environment, native_action_factory=launch)
+                            environment=setup.environment, native_action_factory=setup.native_action_factory)
                         journal = await host.ensure_journal()
                         attempt = await runtime.begin_r4_lease_request(scope=scope, grant_id=sent.grant_id,
                             connection_id=channel.connection_id, connection_generation=channel.connection_generation,
@@ -203,7 +215,7 @@ def test_owned_pi_child_reaches_canonical_domain_and_retains_pending_shutdown(tm
                                                 auth_refs=(cap["capability_ref"],))
                         else:
                             prepared = await runtime.prepare(LaunchIntent("subject","ws","pi_rpc",
-                                auth_refs=(cap["capability_ref"],)), applied.context)
+                                auth_refs=setup.auth_refs), applied.context)
                             await runtime.open(OpenOperation(sent.frame["operation_id"], scope["session_id"], "epoch",
                                                              prepared), applied.context)
                         with deps.connection_factory.unit_of_work() as uow:

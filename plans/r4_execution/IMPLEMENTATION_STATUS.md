@@ -506,3 +506,7 @@ Um wheel do Nexus foi instalado com o extra `serve-lite` num ambiente isolado co
 ## Approved launch configuration — 2026-09-30
 
 Connector commit `4447adc3700b3d700fab2458fdebeb46b52be0e1` adds schema 8 and the default digest-bound launch port. Installed verification: Connector 305 passed / one skipped; Nexus 73 passed. Core remains 0.2.30.dev0 with the same shared hash. See [evidence](test_runs_20260930_approved_launch.json). Automatic tool composition, public configuration capture and daemon adoption remain pending under M02/P6.1/M06; no gate closed.
+
+## Approved Pi native tools — 2026-09-30
+
+Connector `f1714f4f392c3ed7d41b14be8151d5af6a4669d9` composes durable Pi capabilities with approved configuration through the R4 owner. Installed tests: Connector 310 passed / one skipped; Nexus 77 passed, including actual technical Pi child execution and retained shutdown producers. See [evidence](test_runs_20260930_approved_native.json). Core remains unchanged. Automatic boot adoption, MCP composition and complete provider/platform acceptance remain pending; no gate closed.
