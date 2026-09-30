@@ -249,7 +249,8 @@ class ExecutionCapabilityService:
             return self._authorize_hash(uow, digest=digest, audience=audience,
                                         actions=(action,), expected_json=expected_json)
 
-    def _authorize_hash(self, uow, *, digest, audience, actions=(), expected_json=None):
+    def _authorize_hash(self, uow, *, digest, audience, actions=(), expected_json=None,
+                        transport_only=False):
         credential = uow.connection.execute(
             'SELECT * FROM execution_session_capabilities WHERE secret_hash=?', (digest,)).fetchone()
         if (credential is None or credential['audience'] != audience or credential['revoked_at'] is not None or
@@ -262,7 +263,8 @@ class ExecutionCapabilityService:
         authority, _ = self._authority(uow, expected_scope,
             grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'])
         lease = self.repo.effective(uow, expected_scope)
-        if (authority['lifecycle_state'] != 'READY' or authority['lease_state'] != 'ACTIVE' or
+        states = ('OPEN_PENDING', 'READY') if transport_only and audience == 'nexus-mcp-session' and not actions else ('READY',)
+        if (authority['lifecycle_state'] not in states or authority['lease_state'] != 'ACTIVE' or
                 lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None or
                 lease['scope_json'] != credential['scope_json'] or
                 lease['grant_id'] != credential['source_grant_id'] or
@@ -274,7 +276,7 @@ class ExecutionCapabilityService:
         return {'capability_id': credential['capability_id'], 'scope': dict(expected_scope),
                 'audience': audience, 'actions': json.loads(credential['actions_json'])}
 
-    def authenticate_transport(self, *, token, audience):
+    def authenticate_transport(self, *, token, audience, opening_handshake=False):
         from types import MappingProxyType
         from ..domain.execution_principal import ExecutionPrincipal
         if (type(token) is not str or not token.startswith('nxc4_') or
@@ -282,7 +284,12 @@ class ExecutionCapabilityService:
             raise _error(ErrorCode.PERMISSION_DENIED, 'The session capability is invalid.')
         digest = hashlib.sha256(token.encode()).hexdigest()
         with self.factory.unit_of_work(write=False) as uow:
-            credential = self._authorize_hash(uow, digest=digest, audience=audience)
+            # Native clients initialize their MCP transport during open,
+            # before its receipt can mark the session READY. Applied lease
+            # and all scope/grant checks still hold; every domain unit of
+            # work reauthorizes with transport_only=False below.
+            credential = self._authorize_hash(uow, digest=digest, audience=audience,
+                                               transport_only=opening_handshake is True)
         return ExecutionPrincipal(credential['capability_id'], digest, audience,
                                   MappingProxyType(credential['scope']))
 

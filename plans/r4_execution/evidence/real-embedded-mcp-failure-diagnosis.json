@@ -1,0 +1,17 @@
+{
+  "scope": "Diagnosis from the inspected events of failed real installed journeys before the opening-handshake correction; no native qualification override.",
+  "codex": {
+    "native_version": "0.159.0",
+    "mcp_initialize_http_status": 401,
+    "handoff_status": "OPEN",
+    "cause": "Session MCP initialization occurred before the open receipt marked the session READY."
+  },
+  "claude": {
+    "native_version": "2.1.282",
+    "session_mcp_status": "connected",
+    "denied_tool": "handoff_get",
+    "handoff_status": "OPEN",
+    "cause": "Native MCP tool permission was not granted.",
+    "remaining_work": "Integrate canonical native approval handling; do not bypass permission policy."
+  }
+}

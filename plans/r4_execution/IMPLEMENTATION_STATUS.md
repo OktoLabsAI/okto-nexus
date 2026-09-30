@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Selected version observation and opening MCP handshake - September 30, 2026
+
+[Increment](M05_MCP_OPENING_HANDSHAKE.md): Core 0.2.40 observes missing selected versions at the guarded launch frontier; Nexus permits bounded MCP initialization under an applied lease before READY while retaining domain gates. Installed regressions passed 101 Core, 45 Connector, 79 Nexus and 78 overlapping no-Connector cases (one Connector-only case deselected). Real Codex now reaches MCP ready; both Codex and Claude fail governed handoff completion because native tool permission decisions are not yet composed. Failure evidence and test-drain cleanup are retained. Next: complete the existing M08 native approval/input path and rerun the real journeys. No milestone or release gate closes.
+
 ## Process-only MCP with approved existing login - September 30, 2026
 
 [Increment](M05_PROCESS_HTTP_LOGIN.md): Core 0.2.39.dev0 composes bounded process-only MCP arguments for Codex/Claude while preserving approved local login. Nexus and Connector select this mode for approved provider homes without imported provider secret references. Installed campaigns passed 83 Core, 45 Connector and 15 Nexus cases, plus the overlapping 15-case no-Connector campaign; clean artifact verification and pip check passed. Real Codex/Claude integration is pending. No milestone or gate closes here.

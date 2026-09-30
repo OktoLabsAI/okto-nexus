@@ -1,0 +1,90 @@
+{
+  "date": "2026-09-30",
+  "core_commit": "ae9be53",
+  "connector_commit": "67f2ea0",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-launch-observation-core-c9trj5it\\dist\\nexus_connector_core-0.2.40.dev0-py3-none-any.whl",
+      "sha256": "2c3585c61595944b0539030f6897873671e611ed74a32dea48ef02d8934f2448"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-launch-observation-connector-jmdwgnkq\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "cf74f0de1b372e8867500e4c1b606e89353549de59f0c77956273a3e0d16a49b"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-mcp-opening-nexus-51vkn_pl\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "91cb13febe541e77a9e9786b1f0d56f8467c1a88c7bd6ba8170e3c51f8c9eb66"
+    }
+  },
+  "installed_regression": {
+    "core": {
+      "tests": 101,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "connector": {
+      "tests": 45,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "nexus": {
+      "tests": 79,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "isolated": {
+      "tests": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "isolated_deselected": [
+    "test_connector_requests_canonical_capability_over_public_http (requires the absent Connector application)"
+  ],
+  "real_campaigns": [
+    {
+      "provider": "codex_app_server",
+      "artifact_manifest": "process-http-artifacts.json",
+      "result": "failed before open: passive inventory version was absent",
+      "evidence": "real-embedded-mcp-initial-codex_app_server.xml"
+    },
+    {
+      "provider": "codex_app_server",
+      "artifact_manifest": "launch-observation-artifacts.json",
+      "result": "real open/renew/turn succeeded; session MCP initialize returned 401; handoff stayed OPEN",
+      "evidence": "real-embedded-mcp-before-handshake-codex_app_server.xml"
+    },
+    {
+      "provider": "claude_stream",
+      "artifact_manifest": "launch-observation-artifacts.json",
+      "result": "real open/renew/turn succeeded; native permission denied handoff_get; handoff stayed OPEN; failed test-server drain required process termination and credential cleanup",
+      "evidence": "real-embedded-mcp-before-handshake-claude_stream.xml"
+    },
+    {
+      "provider": "codex_app_server",
+      "artifact_manifest": "mcp-opening-artifacts.json",
+      "result": "session MCP became ready; native permission rejected handoff_get; handoff stayed OPEN; test process ended normally",
+      "evidence": "real-embedded-mcp-after-handshake-codex_app_server.xml"
+    }
+  ],
+  "corrections": [
+    "Core observes a missing version from the selected executable at the guarded launch boundary without resolving credentials.",
+    "Nexus permits initialize/initialized/tools-list/ping during OPEN_PENDING only under applied current lease; domain actions continue to require READY.",
+    "Test server graceful HTTP drain is bounded so retained MCP streams do not postpone owner shutdown indefinitely."
+  ],
+  "development_failures": [
+    "Core installed runner initially omitted the repository root required by a tests-only helper import; Windows path escaping then required as_posix; both attempts are retained.",
+    "Initial source handshake test had only tools/call permission; corrected fixture explicitly grants agent_whoami/handoff_claim. Its first suite had 63 passes and 1 fixture failure; final installed suite passed."
+  ],
+  "remaining": "M08: compose and qualify native approvals/input in embedded and remote paths, then rerun both real MCP handoff journeys. All other fixed-plan gates remain open.",
+  "limits": [
+    "No native qualification override in real tests; Server release readiness overridden only in tests.",
+    "Nexus wheels contain preexisting uncommitted UI assets; no UI acceptance.",
+    "Overlapping regression counts must not be added.",
+    "Pi success belongs to the prior published artifact set."
+  ]
+}

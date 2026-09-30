@@ -248,9 +248,18 @@ class ApiKeyAuthMiddleware(BaseHTTPMiddleware):
             deps = request.app.state.deps
             service = ExecutionCapabilityService(factory=deps.connection_factory,
                                                  access=build_execution_access(deps))
+            opening_handshake = False
+            if request.method == 'POST':
+                try:
+                    rpc = await request.json()
+                    opening_handshake = (type(rpc) is dict and rpc.get('jsonrpc') == '2.0' and
+                        rpc.get('method') in ('initialize', 'notifications/initialized', 'tools/list', 'ping'))
+                except (ValueError, UnicodeError):
+                    pass
 
             def resolve_capability():
-                principal = service.authenticate_transport(token=bearer, audience='nexus-mcp-session')
+                principal = service.authenticate_transport(token=bearer, audience='nexus-mcp-session',
+                                                           opening_handshake=opening_handshake)
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     agent = deps.repos.agents.get(uow, principal.scope['agent_id'])
                 if agent is None:

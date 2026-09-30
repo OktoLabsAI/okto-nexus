@@ -220,3 +220,35 @@ def test_mcp_managed_and_key_requests_keep_separate_concurrent_identities(openin
         assert managed.result()['session_scope'] == cap['scope']
         key_identity = other.result()
         assert key_identity['agent_id'] == 'other' and 'session_scope' not in key_identity
+
+def test_opening_mcp_transport_requires_applied_lease_and_cannot_use_domain_tools(opening):
+    cap=issue(opening,actions=['tools/call','agent_whoami','handoff_claim']).json()
+    client=TestClient(opening[1],base_url="https://127.0.0.1:8202")
+    headers={"Authorization":"Bearer "+cap["capability"],
+             "Accept":"application/json, text/event-stream"}
+    body={"jsonrpc":"2.0","id":1,"method":"initialize",
+          "params":{"protocolVersion":"2024-11-05","capabilities":{},
+                    "clientInfo":{"name":"opening-campaign","version":"1"}}}
+    assert client.post("/mcp/",headers=headers,json=body).status_code==401
+    begin(opening)
+    leases,_,_,ack=apply_lease(opening)
+    assert client.post("/mcp/",headers=headers,json=body).status_code==401
+    leases.applied(ack,channel=opening[5])
+    response=client.post("/mcp/",headers=headers,json=body)
+    assert response.status_code==200,response.text
+    assert client.post("/mcp/",headers=headers,json={
+        "jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}).status_code==200
+    assert rpc(opening,cap["capability"]).status_code==401
+    seed_work(opening)
+    assert rpc(opening,cap["capability"],"handoff_claim",args()).status_code==401
+    for method in ('resources/read','prompts/get'):
+        assert client.post('/mcp/',headers=headers,json={
+            'jsonrpc':'2.0','id':3,'method':method,'params':{}}).status_code==401
+    with opening[0].connection_factory.unit_of_work() as uow:
+        assert uow.connection.execute("SELECT status FROM handoffs WHERE handoff_id='work'").fetchone()[0]=="OPEN"
+        uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY'")
+    assert envelope(rpc(opening,cap["capability"]))["ok"] is True
+    with opening[0].connection_factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE execution_session_capabilities SET revoked_at=?",
+                               (opening[0].clock.now_iso(),))
+    assert client.post("/mcp/",headers=headers,json=body).status_code==401
