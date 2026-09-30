@@ -4,6 +4,27 @@ Este plano organiza a conclusão dos três produtos na branch `feature/v0.2.0`, 
 
 Data da baseline: 29 de setembro de 2026. Este documento é um plano de conclusão; sua validação documental não executa testes de produto nem encerra gates de release. O trabalho anterior é aproveitado como implementação parcial a verificar.
 
+## Visão geral da entrega
+
+| Marco | Entrega verificável | Depende de |
+|---|---|---|
+| M00 | Inventário de requisitos, testes executáveis, defeitos e ambientes | — |
+| M01 | Contrato Core completo e mesmo wheel nos dois consumidores | M00 |
+| M02 | Composição, persistência, identidade e autorização | M01 |
+| M03 | Descoberta, consentimento e bindings reutilizáveis | M02 |
+| M04 | Admissão e dispatcher canônicos das sete operações | M03 |
+| M05 | Harnesses diretamente no Nexus, sem aplicativo Connector | M04 |
+| M06 | Harnesses via daemon Connector, WSS, reconciliação e leases | M04 |
+| M07 | Eventos, receipts, histórico e replay duráveis | M06 |
+| M08 | Aprovações e input com aplicação nativa única | M05, M07 |
+| M09 | MCP HTTP direto, bridge Pi e trabalho governado | M08 |
+| M10 | Jornadas UI/CLI completas e textos US English | M08 |
+| M11 | Recuperação, revogação, shutdown e limites sob falha | M08 |
+| M12 | Migração, cutover e rollback testados | M09, M10, M11 |
+| M13 | Artefatos finais e aceite local, remoto e por provider/SO | M12 |
+
+Cada marco abaixo define responsáveis, funcionalidades, testes e saída. O acompanhamento fica em [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md); os requisitos, dependências e cenários continuam rastreáveis nos arquivos de cobertura. A entrega total exige os quatro gates encerrados e evidência sobre o conjunto final dos três produtos.
+
 ## Fontes e cobertura obrigatória
 
 A ordem normativa continua sendo [arquitetura R4](../01_ARQUITETURA_E_PLANO_MESTRE.md), [contratos](../02_CONTRATOS_HTTP_NXL_E_ESTADOS.md), [dados e migração](../03_DADOS_MIGRACAO_E_RECUPERACAO.md), [backlog](../04_BACKLOG_EXECUCAO.md), [testes e aceite](../05_TESTES_E_ACEITE.md) e [handoff Core e Connector](../06_HANDOFF_CORE_CONNECTOR.md). Este documento organiza a execução e acrescenta o requisito de idioma; não reduz requisitos nem cria uma autoridade de contrato concorrente.
@@ -32,7 +53,27 @@ Continuam fora do escopo normativo: novo login de usuário Nexus, SSO, tenant ob
 | Connector | `208a9c90e14e4995951c805ccc6585596160ca1c` | `0.5.0.dev0` |
 | Core | `79a315ff634bcfc8e5c4d4bab95ab46eff4579c8` | `0.2.22.dev0` |
 
-Wheel Core corrente: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4.
+Wheel Core da baseline inicial: SHA-256 `a909fab422f506c9631ef1ed57cea4ec09d235bc44f9e92ab1f84b4e289e02db`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4.
+
+### Revisão após a auditoria inicial
+
+O conjunto publicado conferido nesta revisão é Nexus `59922386149df1e95ea9e989a85043ccb8fd7dc0`, Connector `ce91e7f80ffdf3fed1fdaae8d3357fe403fdd3ae` e Core `598ec4cc85daf91489b04891e0d21e353831f984`. Todos estão em `feature/v0.2.0`. Os três repositórios contêm o mesmo wheel Core `0.2.23.dev0`, com SHA-256 `3b63c9e6be4ccd1c843f99753d997b5992affe85209b0e2e404ff2ccfab0c733`. O conjunto é uma referência de desenvolvimento; M00/M01 continuam em andamento e G0–G3 abertos.
+
+A [auditoria](M00_AUDIT.md) coletou 2.829 casos Nexus, 240 Connector e 925 Core na configuração registrada. Das 85 tarefas, 31 têm entradas de teste candidatas coletáveis e 54 ainda não têm uma entrada proposta coletada; essa contagem mede disponibilidade do teste, não cobertura integral de aceite. A suíte dirigida Nexus R4 passou 42 testes com Core `0.2.23.dev0`. As regressões amplas registraram falhas e skips; as correções dirigidas de documentação Core e empacotamento Connector ainda precisam de nova execução completa. Consultar os [resultados](test_runs_20260929.json) e o [relatório M01](M01_DECISION_CONFORMANCE.md) para limites e falhas individuais.
+
+Existe trabalho local ainda não publicado no Core para targeting público e evolução do inventário. Antes de integrá-lo, revisar a compatibilidade histórica, testar consumidores instalados e publicar um novo wheel com seus pins/locks. Esse trabalho não faz parte do artefato `0.2.23.dev0` nem comprova o fechamento de M01.
+
+### Prioridades para continuar a execução
+
+| Ordem | Trabalho | Responsável e fechamento | Prova exigida |
+|---|---|---|---|
+| 1 | Revisar critérios das 85 tarefas e 12 entregas externas; transformar lacunas de coleta em casos executáveis; medir limites e registrar ambientes | Três repos, M00 | Mapa requisito → caller → teste coletável → campanha; nenhuma lacuna escondida por contagem de testes |
+| 2 | Concluir targeting, grant/contexto, revogação e conformance de todas as ações/erros; integrar o mesmo wheel | Core com consumidores, M01 | Testes positivos e negativos com Core instalado, compatibilidade R3 e hashes verificados |
+| 3 | Resolver regressões conhecidas de migração, MCP HTTP, superfície compacta e attach, preservando as condições originais | Nexus, M02/M09/M12 conforme domínio | Reexecução dos casos identificados e regressão completa antes do aceite final; manter o gate de redução de 40% |
+| 4 | Completar autoridade, onboarding público e dispatcher; ligar os hosts embedded e remoto | Nexus/Connector, M02–M06 | Intenção real chega ao efeito único sem operação semeada nem prontidão forçada |
+| 5 | Fechar eventos, decisões, ferramentas, UI/CLI, idioma e recuperação; migrar e repetir o aceite nos artefatos finais | Três repos, M07–M13 | Campanhas instaladas, providers reais, hosts distintos e todos os cenários aplicáveis |
+
+A preparação dos ambientes começa durante M00: confirmar autenticação utilizável de cada provider, provisionar os Servers A/C e executor B, provar isolamento/rede outbound e obter as combinações Windows/Linux declaradas. WSL disponível não demonstra sozinho hosts independentes. Enquanto essa preparação avança, os testes de contrato e integração em processos locais continuam executáveis. A ausência de um laboratório obrigatório mantém seu aceite pendente.
 
 O [status de implementação](IMPLEMENTATION_STATUS.md) registra inventário, identidade, tickets, realizações, prepare/apply, resolução, admissão, reservas, receipts, adapter embedded e negociação WSS parciais. Há ensaios de Core com peer nativo sintético e testes verticais em processo. As seguintes lacunas continuam determinantes:
 
@@ -281,7 +322,7 @@ Os comandos abaixo distinguem os existentes dos que precisam ser criados. Execut
 | Nexus, ambiente atual | `rtk proxy uv sync --extra serve-lite --extra dev --frozen --find-links vendor/wheels` |
 | Nexus, dirigido | `rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q` no Windows; usar o interpretador do venv equivalente em Linux. Cenários ausentes devem ser implementados e coletados primeiro. |
 | Nexus, regressão | `rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests -q`; classificar falhas preexistentes e skips por causa, sem removê-los para obter verde. |
-| Core | `rtk proxy python -m pytest tests -q`, `rtk proxy python contracts/generate.py --check`, `rtk proxy python tools/build_artifacts.py`, verificadores de wheel e instalação offline existentes. Ampliar geração/check para cobrir R4 integralmente. |
+| Core | `rtk proxy python -m pytest tests -q`, `rtk proxy python contracts/generate.py --check`, `rtk proxy python contracts/generate_r4.py --check`, `rtk proxy python tools/build_artifacts.py`, verificadores de wheel e instalação offline existentes. O check R4 já existe; completar a conformance sem confundir geração válida com execução qualificada. |
 | Connector | `rtk proxy python -m pytest tests -q` após instalação do mesmo Core e extra `test`; corrigir workflow, paths de artefato e pins antigos. |
 | Frontend | `rtk proxy npm ci` e `rtk proxy npm run build` existentes; criar scripts de teste de componentes e navegador, fixar dependências e registrar comandos no catálogo M00. Não presumir que `npm test` existe. |
 | Instalação final | Criar runners que instalem wheels em venvs novos e executem fora dos clones, com `python -I`, sem editable install/PYTHONPATH. Verificar também assets, SQL, schemas, extensão Pi e dependências offline declaradas. |
