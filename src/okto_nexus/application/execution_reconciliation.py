@@ -22,8 +22,9 @@ def _receipt(row):
 
 
 class ExecutionReconciliation:
-    def __init__(self, factory, channel):
+    def __init__(self, factory, channel, *, owner_guard=None):
         self.factory, self.channel = factory, channel
+        self.owner_guard = owner_guard
         self._reset()
 
     def _reset(self):
@@ -36,6 +37,8 @@ class ExecutionReconciliation:
         self.pages = 0
 
     def _owner(self, conn):
+        if self.owner_guard is not None:
+            self.owner_guard(conn)
         c = self.channel
         if conn.execute("SELECT 1 FROM execution_executors WHERE server_id=? AND executor_id=? "
             "AND owner_instance_id=? AND generation=? AND control_state='RECOVERING' AND revoked_at IS NULL",

@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Embedded released-resource reconciliation — September 30, 2026
+
+[Increment](M05_EMBEDDED_RESOURCE_RECONCILIATION.md): serve verifies retained Core journals, claims, released global slots and recovered event watermarks before submitting proofs to canonical reconciliation. Its readiness transaction checks the current embedded owner/epoch. A proven release closes the old session and enables a new public admission with the approved binding after restart. Occupied/missing stores, untracked journals and pending event gaps retain RECOVERING. Installed results: 113 passed; 58 overlapping tests passed without Connector, with pip check. Uncertain native processes, complete tools/governance and real-provider journeys remain required. Core/Connector artifacts are unchanged; M05/G1 remain open.
+
+
 ## Embedded event publication and cold replay — September 30, 2026
 
 [Increment](M05_EMBEDDED_EVENTS.md): migration 085 registers local streams before native open. Serve maintenance publishes bounded Core event pages through canonical Nexus ingress under the current owner, then applies durable ACKs to Core. Restart reapplies committed ACKs and replays uncommitted native events without loading the provider. Installed results: 108 passed; 53 overlapping tests passed without Connector installed, with pip check. Resource/slot reconciliation, full event consumption, tools/governance and complete provider journeys remain required. Core/Connector artifacts are unchanged; M05/M07/G1 remain open.

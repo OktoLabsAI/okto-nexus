@@ -1,0 +1,54 @@
+{
+  "date": "2026-09-30",
+  "scope": "Partial M05 released-resource reconciliation, cold readiness and new public admission; no milestone or gate closure.",
+  "artifacts": {
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\artifacts\\nexus_connector_core-0.2.38.dev0-py3-none-any.whl",
+      "sha256": "f9bc5c3002593845416187b91802dfe914fd89b04036fd699be48e81dfff321b"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-lease-renewal-final-connector-g0xipv52\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "e540cd1ee34e1208399d0261d905d73068861ccec7f92065ec099d541c001683"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-resources-zi5_kri2\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "46872305aa66999e1c0ff3fb3ccb2326be87fbc52a157245588bc12ceeffa2ca"
+    },
+    "isolated_python": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe"
+  },
+  "runs": {
+    "nexus": {
+      "passed": 113,
+      "seconds": 284.869,
+      "overlapping_subset": false,
+      "result": "evidence/embedded-resources-installed-nexus.xml"
+    },
+    "isolated": {
+      "passed": 58,
+      "seconds": 171.001,
+      "overlapping_subset": true,
+      "result": "evidence/embedded-resources-installed-isolated.xml"
+    }
+  },
+  "source_directed": {
+    "passed": 5,
+    "scope": "Released-resource positive path and occupied/missing ledger, untracked journal and event gap refusal; repeated in installed campaigns."
+  },
+  "limitations": [
+    "Technical native factory and qualification fixtures.",
+    "Uncertain native processes still require adoption or containment; they remain blocked.",
+    "Full tools/governance, pressure/platform qualification and real-provider public journeys remain open.",
+    "Preexisting UI edits included in wheel, excluded from commit and UI acceptance.",
+    "Existing Starlette/httpx deprecation warning."
+  ],
+  "evidence_sha256": {
+    "embedded-resources-artifacts.json": "30a3bd13830d0f67b9ee8fa431a21eaa23c5163db7941541f53abf8ac17c3b1a",
+    "embedded-resources-installed-isolated.json": "8a4c76f3ff0ca160df14226c08ee141ad49c07c603939745293ea48c51d55412",
+    "embedded-resources-installed-isolated.log": "9c7d26c869dbf3edd23879f1b678c971b4209f352d7c1bcb52f8d939eb8f3298",
+    "embedded-resources-installed-isolated.xml": "4721fb26d66613406343adb7c058b89865058cfc52f9086d0fc008f91e103628",
+    "embedded-resources-installed-nexus.json": "afd6af81cfd394886e1805cddca73c5a50508fa102bd1b941a6b1ac04e5372c0",
+    "embedded-resources-installed-nexus.log": "e408a584c6856420eb0ba60c9b3eb79b93e721d49f268cf24a855c542b4fa516",
+    "embedded-resources-installed-nexus.xml": "88645cb933b76d7bfcc378de2f524f005b8f61dcc2e365cfb6003e9b0f31930a",
+    "embedded-resources-isolated-installation.json": "156edd7d8655bc85ed3902f7f8a0e145f792b2e053d460c396547ae1ff9fc2cd"
+  }
+}

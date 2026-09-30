@@ -76,8 +76,8 @@ class EmbeddedDispatchOwner:
             raise OktoNexusError(ErrorCode.CONFLICT, "The embedded dispatch owner changed.", {})
 
     def _activate(self):
-        # Retained journals require reconciliation, never a fresh empty-session
-        # assumption. A later recovery pass must prove their durable state.
+        # Only an empty installation uses fresh activation. Retained stores
+        # must pass the Core resource reconciliation performed by start().
         if self.host.store_dir.exists() and any(self.host.store_dir.iterdir()):
             return False
         with self.factory.unit_of_work() as uow:
@@ -98,10 +98,12 @@ class EmbeddedDispatchOwner:
         try:
             await self._recover_publications()
             await self.events.recover()
+            from .embedded_reconciliation import EmbeddedReconciliation
+            recovered = await EmbeddedReconciliation(self).recover()
         except Exception as error:
             self.recovery_failure = error
             return
-        if not await asyncio.to_thread(self._activate):
+        if not recovered and not await asyncio.to_thread(self._activate):
             return
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),

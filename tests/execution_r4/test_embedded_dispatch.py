@@ -367,9 +367,9 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
     with TestClient(app) as client:
         owner=app.state.embedded_dispatch_owner
         assert owner.channel.connection_generation>source.connection_generation
-        assert owner.pump is None  # Slot/event reconciliation is still required.
-        assert not owner.host._runtime_tasks and not owner.host._history_tasks
-        assert owner.host._ledger_task is None and native.opens==1
+        assert (owner.pump is None)==missing_journal
+        assert not owner.host._runtime_tasks
+        assert native.opens==1
         history=client.get(f"/v1/runtime/operations/{closed['operation_id']}",headers=headers["subject"])
         assert history.status_code==200,history.text
         if missing_journal:
@@ -385,7 +385,8 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
                 assert tuple(row)==(source.connection_id,source.connection_generation)
                 assert uow.connection.execute("SELECT terminal FROM execution_local_publications WHERE operation_id=?",
                     (closed["operation_id"],)).fetchone()[0]==1
-                assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]=="RECOVERING"
+                assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]=="CONTROL_READY"
+                assert uow.connection.execute("SELECT lifecycle_state FROM execution_sessions").fetchone()[0]=="CLOSED"
 
 
 def test_cancelled_history_observer_keeps_journal_owned(tmp_path,monkeypatch):
@@ -528,9 +529,63 @@ def test_restart_publishes_uncommitted_native_events(tmp_path,monkeypatch):
         with TestClient(app) as client:
             owner=app.state.embedded_dispatch_owner
             assert owner.recovery_failure is None,repr(owner.recovery_failure)
-            assert not owner.host._runtime_tasks and owner.pump is None
+            assert not owner.host._runtime_tasks and owner.pump is not None
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 rows=uow.connection.execute("SELECT payload_json FROM execution_event_ingress").fetchall()
                 assert len(rows)==1 and json.loads(rows[0][0])["payload"]=={"text":"Retained"}
                 assert uow.connection.execute("SELECT committed_contiguous,gap_state FROM execution_event_watermarks").fetchone()[:]==(1,"none")
     assert native.opens==1
+
+
+@pytest.mark.parametrize("fault",[None,"occupied_ledger","missing_ledger","untracked_journal","event_gap"])
+def test_released_resources_reconcile_before_new_admission(tmp_path,monkeypatch,fault):
+    with contextmanager(local_setup.__wrapped__)(tmp_path,monkeypatch) as setup:
+        setup,binding,native=connected_local.__wrapped__(setup)
+        deps,app,client,headers,*_=setup
+        opened=admit(setup,binding,"resource-open","runtime.start",new_session=True)
+        wait_receipt(setup,opened)
+        old_channel=app.state.embedded_dispatch_owner.channel
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            stream=dict(uow.connection.execute("SELECT * FROM execution_local_streams").fetchone())
+    # The normal Core shutdown observed native stop and persisted release.
+    assert native.native.stopped
+    store=tmp_path/"home/core-runtime"
+    if fault=="occupied_ledger":
+        from nexus_connector_core import SQLiteOwnedSlotLedger,OperationKey
+        async def retain():
+            ledger=SQLiteOwnedSlotLedger(store/"owned-slots.db")
+            try:
+                await ledger.reserve_owned_slot(OperationKey(old_channel.server_id,old_channel.executor_id,"unknown-opening"),"unknown-session")
+            finally:
+                await ledger.aclose()
+        asyncio.run(retain())
+    elif fault=="missing_ledger":
+        (store/"owned-slots.db").rename(store/"retained-ledger.db")
+    elif fault=="untracked_journal":
+        (store/"session-untracked.db").write_bytes(b"Unaccounted journal")
+    elif fault=="event_gap":
+        with deps.connection_factory.unit_of_work() as uow:
+            uow.connection.execute("INSERT INTO execution_event_watermarks "
+                "(server_id,executor_id,session_id,stream_epoch,committed_contiguous,gap_state) VALUES (?,?,?,?,0,'pending')",
+                tuple(stream[k] for k in ("server_id","executor_id","session_id","stream_epoch")))
+    deps,app=app_for(tmp_path/"home")
+    with TestClient(app) as client:
+        owner=app.state.embedded_dispatch_owner
+        assert owner.channel.connection_generation>old_channel.connection_generation
+        assert not owner.host._runtime_tasks
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            state=uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0]
+            session=uow.connection.execute("SELECT lifecycle_state FROM execution_sessions WHERE session_id=?",
+                (opened["scope"]["session_id"],)).fetchone()[0]
+        if fault:
+            assert state=="RECOVERING" and owner.pump is None
+            assert owner.recovery_failure is not None
+            assert native.opens==1
+        else:
+            assert state=="CONTROL_READY" and session=="CLOSED"
+            assert owner.recovery_failure is None and owner.pump is not None
+            owner.native_factory=native
+            next_setup=(deps,app,client,headers,*setup[4:])
+            next_open=admit(next_setup,binding,"after-recovery","runtime.start",new_session=True)
+            wait_receipt(next_setup,next_open)
+            assert native.opens==2
