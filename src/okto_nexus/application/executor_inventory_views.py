@@ -22,18 +22,22 @@ def read_executor_inventory(factory, *, server_id: str, executor_id: str,
     """
     with factory.unit_of_work(write=False) as uow:
         row = uow.connection.execute(
-            "SELECT e.control_state,e.registered_by_agent_id,"
+            "SELECT e.control_state,e.registered_by_agent_id,e.kind,"
             "c.publication_sequence,s.canonical_projection,s.observation_age_ms "
             "FROM execution_executors e JOIN execution_inventory_current c "
             "ON c.server_id=e.server_id AND c.executor_id=e.executor_id "
             "JOIN execution_inventory_snapshots s ON s.server_id=c.server_id "
             "AND s.executor_id=c.executor_id AND "
             "s.publication_sequence=c.publication_sequence "
-            "WHERE e.server_id=? AND e.executor_id=? AND e.kind='remote' "
+            "WHERE e.server_id=? AND e.executor_id=? "
             "AND e.revoked_at IS NULL",
             (server_id, executor_id),
         ).fetchone()
-    if row is None or row["registered_by_agent_id"] != agent_id:
+        local_agent = uow.connection.execute(
+            "SELECT 1 FROM agents WHERE agent_id=? AND is_active=1", (agent_id,)).fetchone()
+    if (row is None or
+            (row["kind"] == "remote" and row["registered_by_agent_id"] != agent_id) or
+            (row["kind"] == "embedded" and local_agent is None)):
         raise OktoNexusError(ErrorCode.NOT_FOUND,
                               "No inventory is available for this executor.", {})
     snapshot = json.loads(row["canonical_projection"])

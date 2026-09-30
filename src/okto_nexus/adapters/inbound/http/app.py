@@ -543,6 +543,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
         heartbeat_task: asyncio.Task | None = None
         metrics_task: asyncio.Task | None = None
         embedded_core_host: EmbeddedRuntimeHost | None = None
+        embedded_inventory = None
         if lock is not None:
 
             async def _beat() -> None:
@@ -584,10 +585,20 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             embedded_core_host = EmbeddedRuntimeHost(
                 deps.config.home_dir.resolve() / "core-runtime")
             app.state.embedded_core_host = embedded_core_host
+            if deps.config.feature_harness_integrations:
+                from ....bootstrap.embedded_inventory import EmbeddedInventoryOwner
+                embedded_inventory = EmbeddedInventoryOwner(deps, app.state.inventory_fresh_publications)
+                app.state.embedded_inventory_owner = embedded_inventory
+                await embedded_inventory.start()
             async with mcp_server.session_manager.run():
                 yield
         finally:
             embedded_shutdown_error: Exception | None = None
+            if embedded_inventory is not None:
+                try:
+                    await embedded_inventory.close()
+                except Exception as exc:
+                    embedded_shutdown_error = exc
             if embedded_core_host is not None:
                 try:
                     deps.embedded_core_shutdown_status = await embedded_core_host.shutdown()

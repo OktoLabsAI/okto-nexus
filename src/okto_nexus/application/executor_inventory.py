@@ -53,7 +53,8 @@ def load_current_executor_inventory(projection: str) -> dict[str, Any]:
 def publish_executor_inventory(factory, *, principal: ExecutorKey,
                                producer_instance_id: str,
                                snapshot: Mapping[str, Any],
-                               publication_ticket_id: str | None = None) -> InventoryPublication:
+                               publication_ticket_id: str | None = None,
+                               embedded_owner: tuple[str, int, int] | None = None) -> InventoryPublication:
     """Store one authenticated snapshot; same sequence/content is idempotent."""
     from nexus_connector_core import CoreError, __version__, verify_executor_inventory_snapshot
     from nexus_connector_core.protocol import canonical_json
@@ -79,6 +80,23 @@ def publish_executor_inventory(factory, *, principal: ExecutorKey,
     with factory.unit_of_work() as uow:
         conn = uow.connection
         reconciled_producer = False
+        if embedded_owner is not None:
+            from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+            owner_id, epoch, generation = embedded_owner
+            local = conn.execute(
+                "SELECT 1 FROM execution_installation i JOIN execution_executors e "
+                "ON e.server_id=i.server_id AND e.executor_id=i.embedded_executor_id "
+                "WHERE i.server_id=? AND e.executor_id=? AND e.kind='embedded' "
+                "AND e.owner_instance_id=? AND e.generation=? AND e.revoked_at IS NULL "
+                "AND e.control_state IN ('RECOVERING','CONTROL_READY')",
+                (principal.server_id, principal.executor_id, producer_instance_id, generation)).fetchone()
+            if (publication_ticket_id is not None or producer_instance_id != owner_id or
+                    local is None or not SqliteRuntimeOutboxRepo().owns(
+                        uow, owner_id=owner_id, epoch=epoch,
+                        now=datetime.now(timezone.utc).isoformat())):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
+                                      "The embedded inventory owner is no longer current.", {})
+            reconciled_producer = True
         if publication_ticket_id is not None:
             # Revalidate the authenticated ticket inside the publication
             # transaction. A current reconciled channel is the only proof

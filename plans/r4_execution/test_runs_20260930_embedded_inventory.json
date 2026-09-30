@@ -1,0 +1,31 @@
+{
+  "increment": "M05/P5.1 automatic embedded inventory foundation",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "core_commit": "fb4c8df70a66b9d9df7729fee5cbff453b591d31",
+  "connector_commit": "cba635a714f0f0c998badf4f075713a22b862d7d",
+  "nexus_commit": "The commit containing this manifest.",
+  "artifacts": "evidence/embedded-inventory-artifacts.json",
+  "tests": {
+    "nexus": {
+      "tests": 55,
+      "passed": 55,
+      "failed": 0,
+      "skipped": 0
+    },
+    "isolated_without_connector": {
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "isolated_cases_are_subset": true,
+  "installation": "Fresh venv, pip installation of Nexus serve-lite and Core plus test dependencies. Connector module and distribution are absent. pip check passed.",
+  "limitations": [
+    "Embedded executor remains RECOVERING; runtime options do not authorize starts.",
+    "Technical discovery fixture and agent credential setup; no full onboarding or local native execution acceptance.",
+    "Local realization/configuration, canonical dispatcher, lease integration and remaining M05/G1 requirements remain open.",
+    "Preexisting user UI asset edits remain uncommitted and are included in the wheel without UI acceptance.",
+    "Core and Connector production artifacts are unchanged. Existing dependency deprecation warning."
+  ]
+}

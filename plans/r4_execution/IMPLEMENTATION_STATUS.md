@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Serve-owned embedded inventory — September 30, 2026
+
+[Increment](M05_EMBEDDED_INVENTORY.md): the real serve lifecycle discovers local candidates and publishes path-free inventory under its existing store owner, with transactional epoch/generation/revocation checks, periodic refresh and retained cleanup. Public inventory/runtime-options routes expose local facts to active agents. Restart republishes under the successor owner. Installed affected regression: 55 passed; a fresh Nexus serve-lite/Core environment with no Connector module or distribution passed 13 overlapping cases and pip check. No Core runtime store or WSS ticket is opened for inventory. Core/Connector artifacts are unchanged. Local dispatch, realization/configuration and M05/G1 acceptance remain open; the embedded executor stays RECOVERING.
+
+
 ## Automatic runtime lease renewal — September 30, 2026
 
 [Increment](M06_RUNTIME_LEASE_RENEWAL.md): the automatic daemon renews live sessions using Server grants and Core deadlines, revalidates local authority and retains renewal producers during shutdown. Compatible Server renewal keeps applied authority until ACK, including dispatch and session tools. Core 0.2.38 publishes coherent session/R4 contexts before post-CAS I/O. Final installed results: Core 154 passed; Connector 417 passed and one existing skip; Nexus 144 passed. Real Pi 0.87.1, Codex 0.159.0 and Claude 2.1.282 completed local Core turn/renewal/terminal-close probes with locally constructed grants. The initial installed Nexus failure remains recorded; it is resolved in the final run. Same Core wheel in both consumers. Full provider journeys, live-session adoption, rotation and remaining fixed-plan acceptance are pending. No milestone or gate closed.
