@@ -1,5 +1,20 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Ações nativas canônicas — 30 de setembro de 2026
+
+O [incremento nativo](M09_NATIVE_ACTIONS.md) adiciona a rota pública de
+contexto/claim/complete com audiência própria e ledger transacional de
+pedidos/resultados. MCP e ações nativas disputam o mesmo claim e podem
+concluir trabalho adquirido pelo outro canal quando o escopo da sessão é
+o mesmo. A migration 082 é aditiva.
+
+A [evidência](test_runs_20260930_native_actions.json) registra as tentativas,
+correções, regressões e teste do wheel instalado. A adoção pelo daemon,
+executor embedded e bridge Pi permanece pendente, junto com inbox e demais
+ferramentas, causalidade completa e aceites de provider. NS03.04/NS12.01/
+NS12.02 continuam parciais; nenhum gate ou flag foi promovido.
+
+
 ## Plano de entrega total — checkpoint após integração MCP
 
 O [plano completo](DELIVERY_PLAN.md) mantém 14 milestones, 13 lotes,

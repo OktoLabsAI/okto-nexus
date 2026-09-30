@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="14" time="32.309" timestamp="2026-09-30T08:34:43.659776-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_actions" name="test_native_public_lifecycle_durable_replay_and_strict_identity[strict]" time="2.726" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[scope]" time="2.154" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[boolean_revision]" time="2.233" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[extra]" time="2.161" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[agent]" time="2.138" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[key]" time="2.127" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[epoch]" time="2.158" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_invalid_or_cross_scope_requests_have_no_effect[action]" time="2.238" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_actions_use_domain_permission_not_mcp_permission" time="2.175" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_route_rejects_mcp_canonical_and_missing_credentials" time="2.152" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_replay_revalidates_revocation_and_digest" time="2.047" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_receipt_failure_rolls_back_domain_and_claim_ownership" time="2.346" /><testcase classname="tests.execution_r4.test_native_actions" name="test_native_concurrent_replay_has_one_effect" time="2.169" /><testcase classname="tests.execution_r4.test_native_actions" name="test_mcp_and_native_share_the_same_claim_and_complete" time="1.918"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;CONFLICT&quot;,&quot;stage&quot;:&quot;capability.issue&quot;,&quot;message&quot;:&quot;The capability request ID has different content.&quot;,&quot;possible_effect&quot;:false,&quot;retry_safe&quot;:false,&quot;operation_id&quot;:null,&quot;action&quot;:&quot;&quot;}}&#10;assert 409 == 200&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3914/test_mcp_...34bf2482da863e6654328451a51bfda', connection_id='conn_8851e85185044fb2615d9c1a7f3dc4c1', connection_generation=2), ...)
+
+    def test_mcp_and_native_share_the_same_claim_and_complete(opening):
+        native = issue(opening, audience='nexus-native-session',
+                       actions=['handoff.get', 'handoff.claim', 'handoff.complete']).json()
+&gt;       mcp = activate(opening)
+              ^^^^^^^^^^^^^^^^^
+
+tests\execution_r4\test_native_actions.py:140: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+state = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3914/test_mcp_...34bf2482da863e6654328451a51bfda', connection_id='conn_8851e85185044fb2615d9c1a7f3dc4c1', connection_generation=2), ...)
+actions = None, audience = 'nexus-mcp-session'
+
+    def activate(state, *, actions=None, audience='nexus-mcp-session'):
+        response = issue(state, audience=audience, actions=actions or [
+            'tools/call', 'agent_whoami', 'handoff_list_available', 'handoff_get',
+            'handoff_claim', 'handoff_complete', 'event_cursor', 'event_get', 'event_wait'])
+&gt;       assert response.status_code == 200, response.text
+E       AssertionError: {"error":{"code":"CONFLICT","stage":"capability.issue","message":"The capability request ID has different content.","possible_effect":false,"retry_safe":false,"operation_id":null,"action":""}}
+E       assert 409 == 200
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\execution_r4\test_mcp_session_capabilities.py:20: AssertionError</failure></testcase></testsuite></testsuites>

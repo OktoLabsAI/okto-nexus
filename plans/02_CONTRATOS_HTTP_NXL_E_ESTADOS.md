@@ -151,6 +151,41 @@ Todas são novas ou adaptações a implementar; o Nexus inspecionado não implem
 
 **Resolução da diferença com o Connector atual:** `IntentResolution` do cliente passa a ler `scope` completo; `/approval-decisions` deixa de retornar bool como informação suficiente; `BindingProposal` incorpora executor, instalação e realização; CLI start/submit não chama Core diretamente; receipt usa a rota própria. Essas mudanças pertencem ao agente Connector e constam de `06_HANDOFF_CORE_CONNECTOR.md`. O Server não deve preservar o fluxo defeituoso duplicando efeitos.
 
+### 4.0. Ações nativas de domínio e repetição durável
+
+A audiência aceita em `POST /v1/runtime/native-actions` é exclusivamente
+`nexus-native-session`, via bearer. Chave canônica, ticket NXL e capability MCP
+não a substituem. Os verbos HTTP `context`, `claim`, `complete` correspondem
+respectivamente às ações `handoff.get`, `handoff.claim`, `handoff.complete`
+da bridge pública Core e do ceiling da capability. Não se exige `tools/call`.
+
+Payloads fechados:
+
+- `context`: `handoff_id`.
+- `claim`: `handoff_id`, `idempotency_key` (1–128 caracteres) e
+  `claim_epoch` opcional. O epoch fornecido somente permite reutilizar um
+  claim ativo já pertencente à mesma sessão/escopo; não despacha outro runtime.
+- `complete`: `handoff_id`, `claim_epoch` inteiro positivo e `result` JSON.
+
+O `operation_id` do pedido tipado Core é o `action_id` HTTP. Escopo completo,
+IDs e epoch são validados sem coerção. Request e resposta têm limite de
+16 KiB; JSON duplicado/não finito e campos extras são recusados. Um resultado
+de claim grande demais exige referência de artefato e não deixa o claim aplicado.
+
+O registro durável do pedido e o efeito canônico fazem commit juntos.
+Repetição do mesmo ID/conteúdo recupera a resposta original após revalidar
+autoridade e acesso ao domínio. ID/conteúdo conflitantes retornam 409.
+Reutilizar `idempotency_key` com outro `action_id` também retorna 409:
+o caller deve recuperar o ID original. A resposta armazenada é um recibo
+original; estado corrente é obtido por novo pedido de contexto. Mudança de
+geração do claim impede recuperar dados da geração anterior.
+
+MCP e ações nativas compartilham handoff, claim/epoch, permissões, visibilidade
+e eventos; não há um domínio paralelo no Core/Connector. Perda da resposta
+após efeito possível conserva `OUTCOME_UNKNOWN` e o ID original, sem retry
+automático nem nova identidade. Segredos não são gravados no ledger e todas
+as respostas da rota usam `Cache-Control: no-store`.
+
 ### 4.1. Exemplo de fluxo remoto sem ambiguidade
 
 ```text

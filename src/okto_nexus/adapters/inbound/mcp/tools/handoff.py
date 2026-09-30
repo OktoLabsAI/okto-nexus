@@ -174,7 +174,7 @@ def _request_context():
     return RuntimeRequestContext(actor.agent_id, "agent_key", credential_binding=actor.api_key_hash) if actor else None
 
 
-def build_service(deps: Any) -> HandoffService:
+def build_service(deps: Any, *, register_approval_executor: bool = True) -> HandoffService:
     """Wire the SQLite repos into ``deps.repos`` and build the service.
 
     Idempotent: repositories already present on ``deps.repos`` are reused so the
@@ -269,7 +269,8 @@ def build_service(deps: Any) -> HandoffService:
     def _execute_handoff(kwargs: dict[str, Any]) -> dict[str, Any]:
         return service.handoff_create(**kwargs, _approved_execution=True)
 
-    approvals.register_executor(ACTION_HANDOFF_CREATE, _execute_handoff)
+    if register_approval_executor:
+        approvals.register_executor(ACTION_HANDOFF_CREATE, _execute_handoff)
 
     return service
 

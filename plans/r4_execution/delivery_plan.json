@@ -6,10 +6,10 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Full delivery planning checkpoint after the managed MCP increment; all remaining M00-M13 criteria and G0-G3 gates are preserved.",
+    "scope": "Native HTTP context/claim/complete with durable replay and canonical MCP claim parity; host composition and remaining M00-M13 acceptance are pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "c9790957b4da51ba7d957c87e22cd4ccec932c7e",
+      "nexus": "a694d8ae47761e6958eb1d0f7add4cbc5428ed62",
       "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
@@ -59,18 +59,20 @@
       "plans/r4_execution/M02_SESSION_CAPABILITIES.md",
       "plans/r4_execution/test_runs_20260930_capabilities.json",
       "plans/r4_execution/M09_MCP_SESSION_AUTHORITY.md",
-      "plans/r4_execution/test_runs_20260930_mcp_capabilities.json"
+      "plans/r4_execution/test_runs_20260930_mcp_capabilities.json",
+      "plans/r4_execution/M09_NATIVE_ACTIONS.md",
+      "plans/r4_execution/test_runs_20260930_native_actions.json"
     ],
-    "latest_increment": "Managed MCP handlers and canonical handoff claim ownership.",
+    "latest_increment": "Canonical native HTTP actions, transactional receipts and MCP claim parity.",
     "verification_scope": "See the linked increment manifest for exact campaigns, failed attempts, reruns and installed artifacts. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Managed MCP session authentication, scoped canonical handoff claims and transaction-bound authority; native domain actions and remaining tool paths are still pending.",
-      "nexus_commit": "c9790957b4da51ba7d957c87e22cd4ccec932c7e",
-      "evidence": "plans/r4_execution/test_runs_20260930_mcp_capabilities.json",
+      "scope": "Native HTTP context/claim/complete with durable replay and canonical MCP claim parity; host composition and remaining M00-M13 acceptance are pending.",
+      "nexus_commit": "Commit containing M09_NATIVE_ACTIONS.md",
+      "evidence": "plans/r4_execution/test_runs_20260930_native_actions.json",
       "next_steps": [
-        "Implement native context/claim/complete with durable request IDs and the same canonical claim.",
-        "Complete workspace-scoped inbox and remaining managed MCP tools, causal results and exclusive consumption.",
+        "Implement the approved host backend for the public Core native bridge and exercise it through Connector and embedded callers.",
+        "Complete workspace-scoped inbox, remaining managed MCP tools, exclusive consumption and causal results.",
         "Compose protected launch configuration and automatic execution/renewal/recovery in daemon and embedded hosts.",
         "Complete all remaining M00-M13 criteria and final independent-host/provider acceptance."
       ]

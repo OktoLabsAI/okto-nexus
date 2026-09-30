@@ -1,0 +1,267 @@
+{
+  "generated_at": "2026-09-30T11:56:15.686185+00:00",
+  "status": "PARTIAL_INTEGRATION_VERIFIED",
+  "scope": "Native HTTP context/claim/complete with durable transaction-bound replay and shared MCP claims. Approved Core bridge host composition and provider acceptance remain pending.",
+  "baseline_heads": {
+    "nexus": "a694d8ae47761e6958eb1d0f7add4cbc5428ed62",
+    "connector": "c97c9d41c223c2c728b810cf3d1ff5e62e2016d6",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "nexus_commit": "Commit containing M09_NATIVE_ACTIONS.md",
+  "source_sha256": {
+    "src/okto_nexus/adapters/inbound/http/app.py": "faae6d470899d56bc51568e46e565526adf4ad1a449aea18ec3a58e8f0f4c5e0",
+    "src/okto_nexus/adapters/inbound/http/native_actions_v1.py": "b4c00b3b4cd1d494ad6163c5d65c3edc4172e6e9ed96fe2d7e76e67f8ba0baf9",
+    "src/okto_nexus/adapters/inbound/mcp/tools/handoff.py": "de6b5a8e1a8c03ac861d022cc578cc5b9ba091649900f0c8890cd150e27f9919",
+    "src/okto_nexus/adapters/outbound/sqlite/execution_native_actions.py": "92115793f699c2f91b924be6f091b93028ee84b9226c8c4d40219388b14cedac",
+    "src/okto_nexus/application/execution_tools.py": "c4021fd75e57002b796abc1b57c3418853d4edcbf38dc2bca7ff5b354d1f79a1",
+    "src/okto_nexus/application/execution_native_actions.py": "b7e5a4c9229deca17e312e902775c923941e928aa4df9a72676355eb29af496d",
+    "src/okto_nexus/application/handoff.py": "7ae6731e311073c68b3c7f89135aa2f665ae070948ce385585ced49f781a3988",
+    "src/okto_nexus/migrations/082_execution_native_actions.sql": "c806ad840c4462301b5b9bf4ca4b7124affbd22903a2c7e325495729e2c87ec5",
+    "tests/execution_r4/test_native_actions.py": "747527d8c400e504ae39591e530f4abbc4e83055b9e61a901ab6404f1924cc9b",
+    "tests/execution_r4/test_ns02.py": "38ff1a4450e47825620fee07289993df46ae6f2911c2e3669574dff16f150d31",
+    "tests/test_agent_connections.py": "102c8e0db2d9d79a15edf56473ac69e0b9cda68ad1e24f8a3b6c7fb10e8c8ec3"
+  },
+  "final_test_sources_sha256": {
+    "tests/execution_r4/lab_peer.py": "3e063db3fd57992ea91956460aaa26a4ff52b0de6c8dd1d5bcd52461aa0808c0",
+    "tests/execution_r4/test_binding_operator.py": "6ea384aa22e65ae6064b577bd3d8f858da418f432821b095ad271b4c23572a60",
+    "tests/execution_r4/test_canonical_controls.py": "6d144566588ce11f7f0f8e408e7c1d794420ff60f68287e0f6045ecd6211ecb9",
+    "tests/execution_r4/test_cli_http_only.py": "436d651c27c0ab429156d0a756ec124067ff2dcd37e6b47969cd9e8d0ce1ae2d",
+    "tests/execution_r4/test_core_inventory.py": "3ae53193dda8265363f1ee82bec268d10fe4c8a543c49e04e8451a8637492cc3",
+    "tests/execution_r4/test_daemon_startup.py": "8dc04fa0142e045e009236e1a4b5fd2e95843ce5ca769058d3df2678e26f7487",
+    "tests/execution_r4/test_dispatch_pump.py": "77acc7819c3e5a71532dd4e7ba70d39d08ad296a9830ab446018830021163f96",
+    "tests/execution_r4/test_executor_registration_cli.py": "33758230e61ee49b3f028d08d3f0b0fbe168342eddafeca167ffd1a5764570eb",
+    "tests/execution_r4/test_inventory_handoff.py": "95a5a187b533a39abfe0237065bfb36ee6db829e02749632112583f36721edec",
+    "tests/execution_r4/test_mcp_session_capabilities.py": "dae5ff232816af6fc09af692df8a02ec4250c14e734d9136e0b327e7173d0394",
+    "tests/execution_r4/test_native_actions.py": "747527d8c400e504ae39591e530f4abbc4e83055b9e61a901ab6404f1924cc9b",
+    "tests/execution_r4/test_ns00.py": "71d3895c0e34efc1a69bdfe75dc15d39803ca7bd762d053d401f25724ee85bc5",
+    "tests/execution_r4/test_ns01.py": "76b4b6b02c9b4f64238c058e0cc3ead9fed96e97da4044ad835a47a1ec95aa1f",
+    "tests/execution_r4/test_ns02.py": "38ff1a4450e47825620fee07289993df46ae6f2911c2e3669574dff16f150d31",
+    "tests/execution_r4/test_ns02_receipts.py": "d805840fc2f0a9ddb36144b2c462a75e252c134ab00641bc22173c0cc94404fd",
+    "tests/execution_r4/test_ns03.py": "33aeb0bb63e3ab1e8a0a74e04c624ade4b265c87402947821f3716e31c0aee70",
+    "tests/execution_r4/test_ns04.py": "88b03fc900844286d79bfd7c031d6820788a5686741696fde78207e46c7ee88c",
+    "tests/execution_r4/test_ns05.py": "81e5d83b500e1304bbafce43d22adcc0ba325de21e17bee71b180d73f0ecd99d",
+    "tests/execution_r4/test_ns06.py": "face7386be4f7806cdc6c78040113a19b8dd1a3af7e426053fcc2d8807c55c96",
+    "tests/execution_r4/test_ns07.py": "dead324488d2c41ece3d268cb5703b42f41b59005a8ad3850fa2e757c405ba4f",
+    "tests/execution_r4/test_ns08.py": "bffb3af20a3d2c854e406d16f7093bb0aba6e5d51ba9e82d710ddc8e8f2daaf6",
+    "tests/execution_r4/test_ns09.py": "300abdaf6ef5667990a535bcac1efcc114b09942048fed46aabae0c6e0403cfe",
+    "tests/execution_r4/test_ns10.py": "e9ff041a54e69dc4e05deb906a40994dc796bc6de25dec8198819f71114ed84d",
+    "tests/execution_r4/test_open_bootstrap.py": "306c1806d27601f4c46f2fa8534e037d2eda94241d641bf45b3f8ae88755aab5",
+    "tests/execution_r4/test_public_open_bootstrap.py": "6359c4dc33a5138a6caaa1ed7e372061a6cef1607dd655787a16a9e65c9f534f",
+    "tests/execution_r4/test_remote_connection.py": "f50b8640691a56d7199d61686e41a83562940b26c7ab878f37511ecce1ad2d5a",
+    "tests/execution_r4/test_session_capabilities.py": "aaf75ed80cf70fea922c1d49a32f45dc0711856332a5fe1d559363c04357fbff",
+    "tests/execution_r4/test_vertical_inventory.py": "ac8881d612fe0368113331c467f91bbdc62420907eaecb3266c4952ef10e5ab8"
+  },
+  "normative_contract_sha256": {
+    "plans/02_CONTRATOS_HTTP_NXL_E_ESTADOS.md": "abb316e8f42a9c2abe1901a5eec7bc817614e23f6682aabc3fdc6c232ce215b8",
+    "plans/PLANO_COMPLETO_NEXUS_SERVER_R4.md": "a9577c582fa1e47bda8f30e8287c68fb274809be02c7ecc098371646a4c2080d",
+    "plans/contratos/http-target.schema.json": "92d1f16f7338dac4228d43d17981b58bb6dede09344c56306377849ba2bab9e4",
+    "plans/MANIFESTO.json": "447ede1518654d90840869ce25d3a6125e87001340170dcc062dc50e97317d97"
+  },
+  "runs": {
+    "native-actions-directed.xml": {
+      "tests": 52,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 51,
+      "sha256": "2f9bb9bdd21e3ad643f620c7ce3aa2667e62eccdb47a4de3f50dd54dc63c5451",
+      "duration_seconds": 109.775,
+      "suite_timestamps": [
+        "2026-09-30T08:36:26.082893-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-final.xml": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 29,
+      "sha256": "eea3fc3b2e5e14729387ce86305dd8ba60900d440ebe93a92128b236ce303767",
+      "duration_seconds": 57.354,
+      "suite_timestamps": [
+        "2026-09-30T08:38:54.126571-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-initial.xml": {
+      "tests": 14,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 13,
+      "sha256": "0d6c90f42ce8cca15dee62b7ec5684f5b2866d9aa171cc23101647e24a40605a",
+      "duration_seconds": 32.309,
+      "suite_timestamps": [
+        "2026-09-30T08:34:43.659776-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-installed-final.xml": {
+      "tests": 77,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 77,
+      "sha256": "cd4cec17947d925315f2e30a42e6dbf20abddf533120341805a2c2a4d291bdc2",
+      "duration_seconds": 170.216,
+      "suite_timestamps": [
+        "2026-09-30T08:51:31.573382-03:00"
+      ],
+      "final_replay_fence_present": true
+    },
+    "native-actions-installed.xml": {
+      "tests": 191,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 191,
+      "sha256": "7bfd0226dd4577bfc5c201e197696afd491d39a25b03ee8a24a7cb0e4d5ff6a3",
+      "duration_seconds": 302.504,
+      "suite_timestamps": [
+        "2026-09-30T08:44:21.662981-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-r4.xml": {
+      "tests": 186,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 186,
+      "sha256": "248f7b9f01bb11e8b6e900c86d6dce52502254e59eeddb0cfab658d89cd135aa",
+      "duration_seconds": 352.065,
+      "suite_timestamps": [
+        "2026-09-30T08:41:50.864673-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-regression.xml": {
+      "tests": 311,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 311,
+      "sha256": "f6057a4502f129832a37b3e9f65fb6a4738b545142258ff9bacbf8e7bbe4ce30",
+      "duration_seconds": 224.258,
+      "suite_timestamps": [
+        "2026-09-30T08:39:32.268644-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-replay-disclosure-red.xml": {
+      "tests": 1,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 0,
+      "sha256": "f2793e6275918e433e568e75202dbf68d748b0daf52ab5f2bb262ddab2c7c040",
+      "duration_seconds": 4.227,
+      "suite_timestamps": [
+        "2026-09-30T08:48:31.575008-03:00"
+      ],
+      "final_replay_fence_present": false
+    },
+    "native-actions-replay-final.xml": {
+      "tests": 51,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 51,
+      "sha256": "1c65c11fe8c4fe8bc296f4a1213c176ea0143eae16b9499bc1a286077da009ee",
+      "duration_seconds": 141.949,
+      "suite_timestamps": [
+        "2026-09-30T08:49:29.693949-03:00"
+      ],
+      "final_replay_fence_present": true
+    },
+    "native-actions-restart.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "sha256": "38567faa25bafd0d26de1b8d69dee36bf6869e63a98ca3323a9aa10b262354e8",
+      "duration_seconds": 5.43,
+      "suite_timestamps": [
+        "2026-09-30T08:40:54.437912-03:00"
+      ],
+      "final_replay_fence_present": false
+    }
+  },
+  "commands": "plans/r4_execution/evidence/native-actions-commands.json",
+  "campaigns_overlap": true,
+  "verification_boundary": {
+    "broad_before_final_replay_fence": {
+      "r4": 186,
+      "regression": 311,
+      "installed": 191
+    },
+    "final_source_cases": 51,
+    "final_installed_cases": 77,
+    "reason_for_final_rerun_scope": "The final change only fences payload disclosure in native replay. Reexecuted all native/MCP cases, and installed native/MCP, migration, agent-connection and HTTP-parity cases against the rebuilt wheel.",
+    "current_r4_test_collection_has_two_additional_expiration_cases": true,
+    "broad_suites_not_claimed_as_final_source_reruns": true
+  },
+  "artifacts": {
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-final-wheel-bc25943l\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "81886ffa394e966bebf34ee72c5513a2905dbaaebbb2a0e43ff3b45cc04791f2"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capability-connector-wheel-9sxettlk\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "0dfe234062c4317ff7b1ff1e8af9799c1d3807b5058087ecfb12a0391d29e789"
+    },
+    "core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "installed_verification": {
+    "isolated": true,
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "package_files": 480,
+    "consumer_files_match_current_source": 389,
+    "manifest": "plans/r4_execution/evidence/native-actions-installed-final-modules.json",
+    "environment_note": "Created a fresh venv, installed pinned dependencies and all three wheels, then replaced only Nexus with its rebuilt final wheel before the final campaign. All files were compared with wheel bytes and consumer source before execution."
+  },
+  "corrected_failures": [
+    "Initial fixture reused one issuance request ID for two audiences; distinct durable request IDs fixed the setup.",
+    "An absent legacy ErrorCode member masked capacity rejection as uncertainty; the contract string code is now used.",
+    "Context replay exposed a former claimant payload after lease expiry. Final authorization checks current ownership and expiry even before lazy expiration materializes."
+  ],
+  "evidence_sha256": {
+    "plans/r4_execution/evidence/native-actions-artifacts-before-replay-fence.json": "bac09cfd9052048dfb7004c6124e89baf6d144b17965d6c15eb7f1a11dbf55ef",
+    "plans/r4_execution/evidence/native-actions-artifacts.json": "3de5bbddd68431d0fd7ae2a0adcf8eb46fb6ecb787eeb0a456856354eae89379",
+    "plans/r4_execution/evidence/native-actions-build.log": "5fb3988871b063672e9c9eb06debdae1daf3a4e359036ce42fdc86e7c4719fb7",
+    "plans/r4_execution/evidence/native-actions-commands.json": "d2073df181a01c796a0dc94cd4df19802040470543728c82db412ebda2cacb53",
+    "plans/r4_execution/evidence/native-actions-directed.xml": "2f9bb9bdd21e3ad643f620c7ce3aa2667e62eccdb47a4de3f50dd54dc63c5451",
+    "plans/r4_execution/evidence/native-actions-final-build.log": "69f326d5db4ed0ce8dcab164d05ce4577e20e6396f2763a6b99989444a861410",
+    "plans/r4_execution/evidence/native-actions-final-installation.json": "c656b77e2e639c29334a51c21c884c754a5624bfde4c0ce426832f541f45dcaa",
+    "plans/r4_execution/evidence/native-actions-final.xml": "eea3fc3b2e5e14729387ce86305dd8ba60900d440ebe93a92128b236ce303767",
+    "plans/r4_execution/evidence/native-actions-initial.xml": "0d6c90f42ce8cca15dee62b7ec5684f5b2866d9aa171cc23101647e24a40605a",
+    "plans/r4_execution/evidence/native-actions-installation.json": "74c5e9198783b1a4c86095e7e3c7edea29f602984fd47e9145193349df8830b5",
+    "plans/r4_execution/evidence/native-actions-installed-final-modules.json": "10278e2569df4390ec48810a2e466e8730a3ddf10ff79404252a84f9eba54ac9",
+    "plans/r4_execution/evidence/native-actions-installed-final.xml": "cd4cec17947d925315f2e30a42e6dbf20abddf533120341805a2c2a4d291bdc2",
+    "plans/r4_execution/evidence/native-actions-installed-modules.json": "ecd70e76e5764f38ae2c3cd269b7d2ac08e5527882e250bc527ce5ba1dde79a4",
+    "plans/r4_execution/evidence/native-actions-installed.xml": "7bfd0226dd4577bfc5c201e197696afd491d39a25b03ee8a24a7cb0e4d5ff6a3",
+    "plans/r4_execution/evidence/native-actions-package.json": "6e669d2e4a8fb1f5a303891c81cf13858cde028b6cc70f23491eb38d09abe6f6",
+    "plans/r4_execution/evidence/native-actions-prefence-sources.json": "64188713b1bc944d7d3cd836b5e735e5be97e53f85c243f17784d28410d3475e",
+    "plans/r4_execution/evidence/native-actions-r4.xml": "248f7b9f01bb11e8b6e900c86d6dce52502254e59eeddb0cfab658d89cd135aa",
+    "plans/r4_execution/evidence/native-actions-regression.xml": "f6057a4502f129832a37b3e9f65fb6a4738b545142258ff9bacbf8e7bbe4ce30",
+    "plans/r4_execution/evidence/native-actions-replay-disclosure-red.xml": "f2793e6275918e433e568e75202dbf68d748b0daf52ab5f2bb262ddab2c7c040",
+    "plans/r4_execution/evidence/native-actions-replay-final.xml": "1c65c11fe8c4fe8bc296f4a1213c176ea0143eae16b9499bc1a286077da009ee",
+    "plans/r4_execution/evidence/native-actions-restart.xml": "38567faa25bafd0d26de1b8d69dee36bf6869e63a98ca3323a9aa10b262354e8"
+  },
+  "closed_product_gates": [],
+  "readiness_promoted": false,
+  "limits": [
+    "Executor qualification and READY state are synthetic fixture preconditions; existing handoffs are seeded.",
+    "Application recreation proves database replay across fresh application/factory objects, not operating-system reboot or process death during commit.",
+    "Three preexisting modified UI assets are included in test wheels, remain outside this commit, and do not qualify UI or a clean release.",
+    "The native route is not yet adopted by the Core bridge backend in approved embedded/daemon launch composition.",
+    "Workspace-scoped inbox, remaining tools, causal results, all other M00-M13 criteria and real-provider independent-host acceptance remain required."
+  ],
+  "raw_evidence_whitespace_exception": "native-actions-initial.xml line 9 retains pytest traceback trailing whitespace. Source, contracts and documentation pass git diff --check; raw failed-run evidence is preserved byte-for-byte."
+}

@@ -53,6 +53,20 @@ def check_tool_arguments(name, arguments):
         raise denied('A managed tool call cannot request another runtime execution.')
 
 
+NATIVE_ACTIONS = {
+    'context': 'handoff.get', 'claim': 'handoff.claim', 'complete': 'handoff.complete',
+}
+
+
+def execution_actions(principal):
+    action = current_execution_tool.get()
+    if principal.audience == 'nexus-mcp-session' and action in MANAGED_TOOLS:
+        return ('tools/call', action)
+    if principal.audience == 'nexus-native-session' and action in NATIVE_ACTIONS.values():
+        return (action,)
+    raise denied()
+
+
 class ExecutionToolConnectionFactory:
     """Decorate the existing unit-of-work port for managed MCP services only.
 
@@ -72,9 +86,27 @@ class ExecutionToolConnectionFactory:
         with self.inner.unit_of_work(write=write) as uow:
             principal = current_execution_principal.get()
             if principal is not None:
-                tool = current_execution_tool.get()
-                if tool not in MANAGED_TOOLS:
-                    raise denied()
                 self.capabilities.authorize_principal(uow, principal=principal,
-                    actions=('tools/call', tool))
+                    actions=execution_actions(principal))
             yield uow
+
+
+class BoundExecutionConnectionFactory(ExecutionToolConnectionFactory):
+    """Join one native request transaction; never commit a nested domain call.
+
+    A fresh instance belongs to one synchronous invocation, never to shared
+    application state. The outer factory retains commit/rollback ownership.
+    """
+
+    def __init__(self, inner, capabilities, uow):
+        super().__init__(inner, capabilities)
+        self._uow = uow
+
+    @contextmanager
+    def unit_of_work(self, write=True):
+        principal = current_execution_principal.get()
+        if principal is None:
+            raise denied()
+        self.capabilities.authorize_principal(self._uow, principal=principal,
+                                              actions=execution_actions(principal))
+        yield self._uow

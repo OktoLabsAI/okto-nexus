@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-m",
+    "pip",
+    "install",
+    "--force-reinstall",
+    "--no-deps",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-final-wheel-bc25943l\\okto_nexus-0.2.0-py3-none-any.whl"
+  ],
+  "exit_code": 0,
+  "stdout": "Processing c:\\users\\jpamb\\appdata\\local\\temp\\okto-r4-native-final-wheel-bc25943l\\okto_nexus-0.2.0-py3-none-any.whl\nInstalling collected packages: okto-nexus\n  Attempting uninstall: okto-nexus\n    Found existing installation: okto-nexus 0.2.0\n    Uninstalling okto-nexus-0.2.0:\n      Successfully uninstalled okto-nexus-0.2.0\nSuccessfully installed okto-nexus-0.2.0\n",
+  "stderr": "\n[notice] A new release of pip is available: 24.3.1 -> 26.2.1\n[notice] To update, run: C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe -m pip install --upgrade pip\n"
+}

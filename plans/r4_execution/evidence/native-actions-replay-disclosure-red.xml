@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.227" timestamp="2026-09-30T08:48:31.575008-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_native_actions" name="test_native_context_replay_cannot_reveal_payload_after_claim_expiration" time="2.614"><failure message="AssertionError: assert 200 == 403&#10; +  where 200 = &lt;Response [200 OK]&gt;.status_code&#10; +    where &lt;Response [200 OK]&gt; = invoke((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3921/test_nati...c2d627f7a0d5d4ea726fd63250f7772', connection_id='conn_d2c2ac26491f649501c61023fc99726e', connection_generation=2), ...), {'capability_id': 'cap_6c9f4641ce7e61073aff3e9d1645f5aa', 'capability_ref': 'native-cap:cap_6c9f4641ce7e61073aff3e9d16...scope': {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}, ...}, {'action_id': 'owned-context', 'scope': {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}, 'action': 'context', 'payload': {'handoff_id': 'work'}})">opening = (Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3921/test_nati...c2d627f7a0d5d4ea726fd63250f7772', connection_id='conn_d2c2ac26491f649501c61023fc99726e', connection_generation=2), ...)
+
+    def test_native_context_replay_cannot_reveal_payload_after_claim_expiration(opening):
+        cap = native_cap(opening)
+        seed_work(opening)
+        assert invoke(opening, cap).status_code == 200
+        body = request_body(cap, 'context', 'owned-context')
+        original = invoke(opening, cap, body)
+        assert original.status_code == 200 and 'payload' in original.json()['result']
+        with opening[0].connection_factory.unit_of_work() as uow:
+            uow.connection.execute("UPDATE handoffs SET lease_expires_at='2000-01-01T00:00:00.000000Z' WHERE handoff_id='work'")
+        current = invoke(opening, cap, request_body(cap, 'context', 'current-context'))
+        assert current.status_code == 200, current.text
+        assert current.json()['result']['status'] == 'OPEN'
+        assert 'payload' not in current.json()['result']
+&gt;       assert invoke(opening, cap, body).status_code == 403
+E       AssertionError: assert 200 == 403
+E        +  where 200 = &lt;Response [200 OK]&gt;.status_code
+E        +    where &lt;Response [200 OK]&gt; = invoke((Deps(config=NexusConfig(home_dir=WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-3921/test_nati...c2d627f7a0d5d4ea726fd63250f7772', connection_id='conn_d2c2ac26491f649501c61023fc99726e', connection_generation=2), ...), {'capability_id': 'cap_6c9f4641ce7e61073aff3e9d1645f5aa', 'capability_ref': 'native-cap:cap_6c9f4641ce7e61073aff3e9d16...scope': {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}, ...}, {'action_id': 'owned-context', 'scope': {'agent_id': 'subject', 'authorization_revision': 1, 'binding_id': 'binding', 'binding_revision': 1, ...}, 'action': 'context', 'payload': {'handoff_id': 'work'}})
+
+tests\execution_r4\test_native_actions.py:274: AssertionError</failure></testcase></testsuite></testsuites>

@@ -888,7 +888,12 @@ class HandoffService:
         if not managed and self._claim_trust_guard:
             self._claim_trust_guard.require(tool="handoff_claim", agent_id=agent_id,
                                            session_id=session_id, session_secret=session_secret)
-        if not managed and (completion_mode != "authenticated_nexus_call" or any(value is not None for value in (execution_grant_id, idempotency_key, claim_epoch))):
+        from ..domain.execution_principal import current_execution_principal
+        principal = current_execution_principal.get()
+        scoped_existing = (principal is not None and principal.audience == 'nexus-native-session'
+                           and claim_epoch is not None)
+        if not managed and (completion_mode != "authenticated_nexus_call" or any(value is not None for value in (execution_grant_id, idempotency_key)) or
+                            (claim_epoch is not None and not scoped_existing)):
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Managed claim options require runtime_endpoint_id.", {})
         if managed and not self.runtime_work:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Managed handoff execution is unavailable.", {})
@@ -952,7 +957,16 @@ class HandoffService:
                         },
                     )
 
-            if reused:
+            if scoped_existing:
+                from .execution_tool_claims import require_claim
+                require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+                if handoff.status != STATUS_CLAIMED or handoff.claimed_by != agent_id:
+                    raise OktoNexusError(ErrorCode.INVALID_TRANSITION,
+                                         "The session no longer owns this active claim.", {})
+                self._require_claim_epoch(handoff, claim_epoch)
+                claimed = handoff
+                reused = True
+            elif reused:
                 # Lost admission response retries return the ORIGINAL claim
                 # operation, never a new rework generation or another dispatch.
                 claimed = handoff
@@ -969,7 +983,8 @@ class HandoffService:
                     claimed_by=agent_id, lease_expires_at=lease_expires_at, updated_at=now,
                 )
             from .execution_tool_claims import remember_claim
-            remember_claim(uow, claimed)
+            if not scoped_existing:
+                remember_claim(uow, claimed)
             if managed and not reused:
                 operation = self.runtime_work.enqueue(uow, handoff=claimed, authorized=authorized,
                     key=idempotency_key, digest=digest, now=now, completion_mode=completion_mode)
@@ -1891,6 +1906,35 @@ class HandoffService:
                 {"handoff_id": handoff.handoff_id},
             )
 
+    def authorize_native_replay(self, uow, *, workspace_id, handoff_id, agent_id,
+                                action, claim_epoch, includes_payload=False):
+        """Revalidate domain access to a durable native receipt without repeating effects."""
+        self._require_actor(uow, agent_id)
+        handoff = self._load_in_workspace(uow, workspace_id, handoff_id)
+        if agent_id not in (handoff.from_agent_id, handoff.claimed_by):
+            viewer = self._routing_agent(uow, agent_id, workspace_id)
+            if not can_agent_see_event(viewer, handoff, self._clock.now_iso()):
+                raise OktoNexusError(ErrorCode.NOT_OWNER, "You may not read this handoff.", {})
+        if handoff.claim_epoch != claim_epoch:
+            raise OktoNexusError(ErrorCode.CONFLICT, "The handoff claim generation changed.", {})
+        if includes_payload and (handoff.claimed_by != agent_id or (
+                handoff.status == STATUS_CLAIMED and (not handoff.lease_expires_at or
+                handoff.lease_expires_at <= self._clock.now_iso()))):
+            raise OktoNexusError(ErrorCode.NOT_OWNER,
+                                 "This session may no longer read the claimed payload.", {})
+        if action != 'context':
+            permission_set_for(self._agents, uow, agent_id).require("handoffs", "work")
+            from .execution_tool_claims import require_claim
+            require_claim(uow, handoff_id=handoff_id, claim_epoch=claim_epoch)
+            if handoff.claimed_by != agent_id:
+                raise OktoNexusError(ErrorCode.NOT_OWNER, "This session no longer owns the claim.", {})
+            if action == 'claim':
+                agent = self._routing_agent(uow, agent_id, workspace_id)
+                if (not is_agent_eligible(agent, handoff.target, handoff.created_at, self._clock.now_iso())
+                        or not self._claimant_in_creator_audience(uow, handoff, agent_id)):
+                    raise OktoNexusError(ErrorCode.NOT_ELIGIBLE_TO_CLAIM,
+                                         "Agent is not eligible to claim this handoff.", {})
+
     def _require_actor(self, uow: UnitOfWork, agent_id: Any) -> str | None:
         """Bind authenticated transport identity before reading or mutating work.
 
@@ -1900,13 +1944,13 @@ class HandoffService:
         captured creator binding and all canonical creation policies.
         """
         from ..domain.execution_principal import current_execution_principal, current_execution_tool
-        from .execution_tools import ExecutionToolConnectionFactory, denied
+        from .execution_tools import ExecutionToolConnectionFactory, denied, execution_actions
         principal = current_execution_principal.get()
         if principal is not None:
             if not isinstance(self._cf, ExecutionToolConnectionFactory) or agent_id != principal.scope['agent_id']:
                 raise denied()
             self._cf.capabilities.authorize_principal(uow, principal=principal,
-                actions=('tools/call', current_execution_tool.get()))
+                actions=execution_actions(principal))
             return None
         context = self._request_context_provider() if self._request_context_provider else None
         if context is None:
