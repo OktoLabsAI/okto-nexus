@@ -1,0 +1,140 @@
+{
+  "recorded_at": "2026-09-30T09:12:19.497146+00:00",
+  "scope": "Partial M02/M06 durable executor registration through real Connector CLI and HTTP; no automatic daemon startup acceptance",
+  "parent_and_dependency_commits": {
+    "nexus": "b760d69eeb874f5e27f0cbf50583bcb597981a4c",
+    "connector": "d1c30e8982210060bee549d1095ca4c5e654875e",
+    "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
+  },
+  "source_sha256": {
+    "tests/execution_r4/test_executor_registration_cli.py": "33758230e61ee49b3f028d08d3f0b0fbe168342eddafeca167ffd1a5764570eb"
+  },
+  "connector_evidence": {
+    "commit": "d1c30e8982210060bee549d1095ca4c5e654875e",
+    "file": "plans/implementation/evidence/r4-registration-report.json",
+    "sha256": "92688a7d241181638ebebd0663f16b438f1aa21b5f72255f5f1f2717b3029eaf"
+  },
+  "runs": [
+    {
+      "file": "plans/r4_execution/evidence/r4-registration-installed.xml",
+      "sha256": "def3aedc71fdd6a7bb399fa4a976f7c9787f9e049c5c7efac7ec215540d4ffbe",
+      "tests": 78,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 78,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "78",
+          "time": "62.334",
+          "timestamp": "2026-09-30T06:07:31.923872-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-registration-public.xml",
+      "sha256": "923ff63061f7e3794ca08429727c29e64485ca8e052c367e02473d85ff62950c",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "1",
+          "time": "6.474",
+          "timestamp": "2026-09-30T06:05:41.934881-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    },
+    {
+      "file": "plans/r4_execution/evidence/r4-registration-source.xml",
+      "sha256": "e13120fbc19686861d92916a9990a511ab595251fe962de97280994a18443f38",
+      "tests": 104,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 104,
+      "suites": [
+        {
+          "name": "pytest",
+          "errors": "0",
+          "failures": "0",
+          "skipped": "0",
+          "tests": "104",
+          "time": "171.929",
+          "timestamp": "2026-09-30T06:06:57.945610-03:00",
+          "hostname": "Alienware_m15"
+        }
+      ]
+    }
+  ],
+  "connector_runs": {
+    "regression_passes": 300,
+    "regression_skips": 2,
+    "directed_passes": 40,
+    "counts_overlap": true
+  },
+  "source_commands": [
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4/test_executor_registration_cli.py -q --tb=short --junitxml=plans/r4_execution/evidence/r4-registration-public.xml",
+    "rtk proxy .venv/Scripts/python.exe -X utf8 -m pytest tests/execution_r4 -q --tb=line --junitxml=plans/r4_execution/evidence/r4-registration-source.xml"
+  ],
+  "installed_command": "rtk proxy C:/Users/jpamb/AppData/Local/Temp/okto-r4-registration-installed-qa2si_je/Scripts/python.exe -I -X utf8 -c '\nimport json,hashlib,zipfile,sys,platform,os\nfrom pathlib import Path\nimport pytest,okto_nexus,okto_nexus_connector,nexus_connector_core\nroot=Path(\"D:/Projetos/Techridy/okto_labs_okto_nexus\")\nconnector=root.parent/\"okto-nexus-connector\"\nwheel=json.loads(Path(\"C:/Users/jpamb/AppData/Local/Temp/r4-registration-wheel.json\").read_text())[\"wheel\"]\nmanifest={}\nfor module,artifact,source in [\n(okto_nexus,Path(\"C:/Users/jpamb/AppData/Local/Temp/okto-dispatch-pump-wheel-fwgjf64l/okto_nexus-0.2.0-py3-none-any.whl\"),root/\"src\"),\n(okto_nexus_connector,Path(wheel),connector/\"src\"),\n(nexus_connector_core,root/\"vendor/wheels/nexus_connector_core-0.2.28.dev0-py3-none-any.whl\",None)]:\n    package=Path(module.__file__).resolve().parent\n    assert \"site-packages\" in package.parts\n    files={}\n    with zipfile.ZipFile(artifact) as archive:\n        for name in archive.namelist():\n            if not name.startswith(module.__name__+\"/\") or name.endswith(\"/\"): continue\n            data=archive.read(name)\n            assert (package/name.split(\"/\",1)[1]).read_bytes()==data,name\n            if source is not None: assert (source/name).read_bytes()==data,name\n            files[name]=hashlib.sha256(data).hexdigest()\n    manifest[module.__name__]={\"path\":str(package),\"wheel\":str(artifact),\"wheel_sha256\":hashlib.sha256(artifact.read_bytes()).hexdigest(),\"files_sha256\":files}\nmanifest.update(python=sys.version,platform=platform.platform(),isolated=bool(sys.flags.isolated),\nscope=\"Durable executor registration and real HTTP CLI journey plus physical selection, daemon-owned consumers and WSS contracts; synthetic native peer, no automatic startup or provider qualification\")\n(root/\"plans/r4_execution/evidence/r4-registration-installed-modules.json\").write_text(json.dumps(manifest,indent=2)+\"\\n\",encoding=\"utf-8\")\nargs=[\"-c\",\"pytest.ini\",\"--rootdir=\"+str(root/\"tests\"),\"--confcutdir=\"+str(root/\"tests\"),\"-o\",\"asyncio_mode=auto\",\nstr(connector/\"tests/unit/test_executor_registration.py\"),str(connector/\"tests/unit/test_r4_execution.py\"),str(connector/\"tests/unit/test_execution_selection.py\"),str(connector/\"tests/unit/test_realization_service_r4.py\"),str(connector/\"tests/unit/test_state_store.py\"),str(connector/\"tests/contract/test_r4_connection.py\"),str(connector/\"tests/contract/test_wss_r4.py\"),\nstr(root/\"tests/execution_r4/test_executor_registration_cli.py\"),str(root/\"tests/execution_r4/test_remote_connection.py\"),str(root/\"tests/execution_r4/test_public_open_bootstrap.py\"),\nstr(root/\"tests/execution_r4/test_ns09.py\"),\"-q\",\"--tb=line\",\n\"--junitxml=\"+str(root/\"plans/r4_execution/evidence/r4-registration-installed.xml\")]\nraise SystemExit(pytest.main(args))\n'",
+  "installed_cwd": "C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed",
+  "installed_modules_manifest_sha256": "f49845feeafde8cfa73b9c3e3d0f70a9e0d551c7c1aeea6fb7a6ce5b079702d1",
+  "installation_log_sha256": "259f163f75ab3aef8e17586d93f67043c5f503bd7970b343632790679d6548ac",
+  "artifact": {
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-registration-build-u58look0",
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-registration-wheel-w0m3kkhd\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+    "sha256": "927bb98c9956fea8f688b972e7b1e2193a437fc07ef16b8c674c8ce103a86a42",
+    "installed_env": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-registration-installed-qa2si_je",
+    "build_log": "plans/r4_execution/evidence/r4-registration-build.log",
+    "build_log_sha256": "71cb3777c6129fde0617f46018fcf5ebb6c19e45937b869dbb184d90436f897f"
+  },
+  "artifact_manifest_sha256": "1bc20fff4a6e965dcc9310b42b771945c53ab9a5a6631f76d4e790835b931527",
+  "installed_artifacts": {
+    "okto_nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-dispatch-pump-wheel-fwgjf64l\\okto_nexus-0.2.0-py3-none-any.whl",
+      "wheel_sha256": "405d2d37ff94616069c50ee8fff6d86a36c872b33c159aa63a30bb1f337cf64e"
+    },
+    "okto_nexus_connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-registration-wheel-w0m3kkhd\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "wheel_sha256": "927bb98c9956fea8f688b972e7b1e2193a437fc07ef16b8c674c8ce103a86a42"
+    },
+    "nexus_connector_core": {
+      "wheel": "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\vendor\\wheels\\nexus_connector_core-0.2.28.dev0-py3-none-any.whl",
+      "wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c"
+    }
+  },
+  "environment": {
+    "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "isolated": true
+  },
+  "core_wheel_sha256": "27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c",
+  "verification": [
+    "The test invokes real CLI main over real loopback HTTP for identity import and executor register/replay/list/show; no executor row is seeded for this registration.",
+    "Server and Connector state agree on the same canonical executor and client intent. Fresh bootstrap from reloaded state preserves the executor ID.",
+    "The executor remains DISCONNECTED; registration does not authorize runtime work or invent a binding/lease.",
+    "Bootstrap/canonical secrets are excluded from local state, public CLI output and bootstrap repr. Clock-based tests reject a response whose original local lifetime expired.",
+    "The complete Connector regression passes 300 cases with two historical skips; Nexus R4 passes 104; an isolated fresh installed campaign passes 78 cases.",
+    "Installed package files match wheels and current Nexus/Connector production bytes. Counts overlap; no production source changed after the artifact was built."
+  ],
+  "limitations": [
+    "Persisted registration is now available to automatic startup, but the daemon does not yet call the service during boot.",
+    "Inventory publication, lane attachment, ticket/lease renewal, reconnect, approved-revision refresh and production runtime environment remain pending.",
+    "Schema 5 is additive and older binaries reject it; full upgrade/backup/restore/rollback qualification remains M12.",
+    "No Core or Nexus production change, readiness promotion, real-provider/Linux/independent-host acceptance or product gate closure."
+  ],
+  "product_gates_closed": []
+}

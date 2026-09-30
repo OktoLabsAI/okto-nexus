@@ -2,7 +2,22 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
-## Incremento corrente — operações sob ownership do daemon
+## Incremento corrente — registro durável do executor pela CLI
+
+O [registro M02/M06](M02_EXECUTOR_REGISTRATION.md) persiste intenção/resultado
+no schema Connector 5, recupera o mesmo executor após repetição e disponibiliza
+bootstrap process-local com prazo capturado antes do HTTP. A CLI importa
+identidade e registra/lista/consulta usando o Server real. `identity add` agora
+preserva o perfil autenticado necessário aos comandos seguintes.
+
+Passaram 300 regressões Connector com dois skips, 40 casos dirigidos, 104
+casos Nexus R4 e 78 casos instalados fora dos clones, com sobreposição.
+O [manifesto](test_runs_20260930_registration.json) fixa comandos, estado e
+hashes. O registro não cria lane ou lease. Startup automático do daemon,
+renovação, reconciliação e ambiente de produção continuam pendentes; nenhum
+gate foi fechado.
+
+## Incremento anterior — operações sob ownership do daemon
 
 O [owner de execução M04/M06](M06_DAEMON_EXECUTION_OWNER.md) recebe operações
 do reader WSS, instala a lease antes de abrir e traduz sete ações pelos

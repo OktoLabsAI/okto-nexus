@@ -33,6 +33,21 @@ A cobertura inclui as 85 tarefas NS00–NS16, os 164 cenários originais (85 TR4
 
 Cada tarefa mantém seus critérios e dependências originais. O marco indica quando ela deve ser encerrada, não quando é permitido começar um protótipo. Dentro do mesmo marco, vale o grafo do backlog. Um componente necessário a um marco posterior pode receber contratos e fixtures antes, sem declarar a integração pronta.
 
+## Entregas por repositório e integração
+
+| Repositório | Responsabilidade de entrega | Evidência para aceitar |
+|---|---|---|
+| Core | Contrato público R4, discovery/seleção, adapters e capacidades, contexto/lease, execução, journal, decisões/input e contenção | Conformance instalada; testes de cada ação e erro; compatibilidade histórica; matriz de providers/SO com builds fixados |
+| Nexus | Identidade/política, consentimento/binding, admissão/outbox, execução local, controle remoto, domínio/MCP, persistência e UI/API/CLI | Jornadas pelas entradas reais; ciclo local sem Connector; Server remoto sem acesso ao disco do executor; migração, browser, recuperação e regressões |
+| Connector | Estado/vault/identidade, registro/inventário/realização, daemon WSS, attach/reconcile/lease, host Core e CLI | Startup a partir de estado persistido; ciclo remoto em processos e hosts separados; reboot, renovação/revogação, perda de rede e instalação |
+| Conjunto | Mesmo Core, causalidade e autoridade consistentes, sete ações, histórico durável, textos US English e atualização segura | Manifesto dos três commits e hashes; G0–G3 fechados; todos os cenários obrigatórios aprovados nos artefatos finais |
+
+A ordem de publicação de uma mudança de contrato é Core → pacote/hash →
+adoção em Nexus e Connector → integração instalada. Mudanças restritas a um
+consumidor mantêm o contrato fixado e reexecutam os testes de integração
+afetados. O milestone só fecha quando as dependências e seus critérios de
+aceite também estiverem completos.
+
 ## Resultado de produto esperado
 
 O operador seleciona um agente existente, o executor local ou remoto, uma instalação descoberta pelo Core e um workspace aprovado. A proposta mostra o consentimento necessário. Após aplicação, o vínculo é reutilizável. Iniciar, enviar um turno, controlar, aprovar, fornecer input, observar e encerrar passam pela admissão canônica do Nexus, que cria a operação durável e a despacha uma única vez.
@@ -53,13 +68,13 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `7e6ea4f5e1d4d34fa4c8f0303ba87a41fbe47559` | `0.2.0` |
-| Connector | `23a28467e2da141c5dff389e838792ebe820e229` | `0.5.0.dev0` |
+| Nexus | `b760d69eeb874f5e27f0cbf50583bcb597981a4c` | `0.2.0` |
+| Connector | `d1c30e8982210060bee549d1095ca4c5e654875e` | `0.5.0.dev0` |
 | Core | `9d244cfecc31c817661d560bbcee75cc9f8d5513` | `0.2.28.dev0` |
 
 O SHA-256 do wheel Core foi recalculado nos três repositórios e é o mesmo: `27df75100dea033ca5456f2d571eb41b6311fa3ce530a723ecd6c606d257953c`. A versão do pacote não equivale à revisão do wire. O contrato histórico R3 continua separado do preview R4. M00/M01 permanecem em andamento; os demais marcos contêm incrementos parciais, sem aceite integral. G0–G3 continuam abertos.
 
-A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [relatório do consumidor daemon](M06_DAEMON_EXECUTION_OWNER.md) e no [manifesto coordenado](test_runs_20260930_execution_owner.json). A prova delegada e o bootstrap foram publicados antes deste incremento. Os HEADs do quadro são os pais publicados; o novo código é identificado pelo commit que contém o relatório, evitando referência circular ao próprio SHA.
+A [revisão de planejamento](planning_review_20260930.json) conserva o snapshot anterior. O checkpoint corrente e seus testes ficam no [registro persistente de executor](M02_EXECUTOR_REGISTRATION.md) e no [manifesto coordenado](test_runs_20260930_registration.json). O consumidor daemon, a prova delegada e o bootstrap de abertura foram publicados antes deste incremento. O HEAD Nexus do quadro é o pai publicado deste relatório; Connector e Core são dependências publicadas. O commit que contém o relatório identifica a revisão Nexus sem referência circular ao próprio SHA.
 
 O histórico está no [status de implementação](IMPLEMENTATION_STATUS.md) e nos relatórios de [decisões](M01_DECISION_CONFORMANCE.md), [targeting/inventário](M01_TARGETING_INVENTORY.md), [aplicação de leases](M01_LEASE_APPLICATION.md), [leases canônicas](M06_CANONICAL_LEASES.md), [contenção expirada](M01_EXPIRED_CONTAINMENT.md), [controles](M04_CANONICAL_CONTROLS.md), [close](M01_CLOSE_POLICY.md) e [contenção durante CAS](M01_PENDING_CONTAINMENT.md). Close e contenção durante renovação já foram integrados; a fila seguinte não deve tratá-los como incrementos ainda ausentes.
 
@@ -124,6 +139,15 @@ instalados, com sobreposição. As sete traduções foram exercitadas com Core e
 peer sintético. Startup automático, ambiente/capability de produção, renovação,
 reconciliação e publicadores duráveis ainda impedem o aceite completo.
 
+O [registro persistente de executor](M02_EXECUTOR_REGISTRATION.md) acrescenta
+o schema 5 e a CLI de registro, consulta e listagem. A intenção é gravada
+antes do HTTP; replay recupera o mesmo executor e um novo bootstrap mantém
+o segredo fora do estado e da saída. Foram registrados 300 passes Connector
+(dois skips existentes), 40 dirigidos, 104 Nexus R4 e 78 instalados, com
+sobreposição. A prova pública usa CLI e HTTP reais. Usar esse registro no
+startup automático, publicar inventário, anexar lanes e renovar autoridade
+continuam pendentes; registro isolado não autoriza execução.
+
 ### Lacunas prioritárias observadas
 
 | Área | Lacuna e destino |
@@ -132,7 +156,7 @@ reconciliação e publicadores duráveis ainda impedem o aceite completo.
 | Onboarding — M02/M03 | Aprovação direta do operador cria perfil/endpoint habilitados; prova delegada revisada neste incremento; completar self-bind com autorização preexistente, mantendo identidade e CAS |
 | Dispatcher — M04 | Loop WSS Server já reserva, revalida, envia e recupera reservas de owner substituído; completar composição embedded/daemon com o resolver físico aprovado, governança e recuperação de envios incertos |
 | Local — M05 | `bootstrap/runtime_host.py` precisa receber seleção/contexto da autoridade canônica e operar no ciclo real de `serve`, sem aplicativo Connector |
-| Remoto — M06 | Reader, seleção e consumidores de efeitos já são adotados pelo daemon na jornada WSS técnica; completar startup automático/CLI e registro de executor, perfil/ambiente, refresh de revisões, renovação de tickets/leases e reconciliação não vazia; extrair SQL/transições restantes do handler Server |
+| Remoto — M06 | Reader, seleção e consumidores de efeitos já são adotados pelo daemon na jornada WSS técnica; usar o registro persistente e a CLI já publicados no startup automático, completar perfil/ambiente, refresh de revisões, renovação de tickets/leases e reconciliação não vazia; extrair SQL/transições restantes do handler Server |
 | Governança e observação — M07–M09 | Completar eventos/receipts recuperáveis, decisões/input com aplicação única, capability MCP, bridge Pi e consumo exclusivo |
 | Jornadas e idioma — M10 | Completar UI/CLI, infraestrutura de testes de navegador e auditoria US English, incluindo superfícies legadas |
 | Robustez e migração — M11/M12 | Provar recovery, revogação online/offline, ownership/shutdown e limites; ensaiar cutover e rollback com dados legados |
@@ -160,12 +184,12 @@ Estes lotes refinam M00–M06. Não substituem as tarefas e dependências do bac
 
 | Lote | Responsável e trabalho | Testes e condição de saída |
 |---|---|---|
-| P1 — baseline e evidência | Três repos: incorporar o incremento de prova delegada ao mapa de aceite, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
+| P1 — baseline e evidência | Três repos: incorporar os incrementos de daemon e registro persistente ao mapa de aceite, atualizar nodeids por critério e classificar regressões e ambientes | Hashes de fonte/artefatos conferidos; falhas e reruns preservados; nenhum requisito sem responsável, teste ou motivo de pendência |
 | P2 — contrato compartilhado | Core: completar a conformance de cada ação/erro e os helpers públicos; consumidores: instalar o mesmo wheel | Sete ações e R3 histórico exercitados por consumidores instalados; schema gerado sem drift; promoção de executable fundamentada, readiness do host independente |
 | P3 — onboarding reutilizável | Nexus/Connector: reusar autorização e configuração aprovadas, leitura/options do binding, seleção e consentimento do host | Primeiro e segundo uso pela entrada pública; identidade cruzada, deny, drift, replay e revisão concorrente; grant explícito separado do consentimento |
 | P4 — abertura e outbox | Nexus: partir do loop WSS já implementado; completar reconciliação de envio incerto, composição local e consumidores do resolver físico aprovado | Resolver realização → instalar lease → prepare/open; nenhum spawn antecipado; resposta perdida/crash não criam nova operação; fila saturada preserva controle |
 | P5 — ciclo local | Nexus/Core: conectar o owner de serve à mesma admissão, seleção, contexto, journal e projeção | Pacotes instalados sem aplicativo Connector; open/submit/steer/interrupt/close pelo caller real; peer técnico primeiro e provider real depois |
-| P6 — ciclo remoto | Connector/Nexus: completar startup automático dos owners já integrados, com executor persistido, perfil/ambiente, tickets, attach, renovação de lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
+| P6 — ciclo remoto | Connector/Nexus: ligar ExecutorRegistrationService.bootstrap ao startup automático dos owners já integrados, publicar inventário e completar perfil/ambiente, tickets, attach, renovação de lease e reconciliação paginada | Server/daemon reais; report não vazio com mais de 256 IDs; reconnect/rotação/ACK antigo; mesmo ciclo de cinco ações antes de decisões/input em M08 |
 
 Cada lote termina com relatório, commit e push em `feature/v0.2.0` dos repositórios alterados. Um resultado parcial continua parcial no inventário, mesmo depois de publicado.
 
@@ -261,7 +285,7 @@ Implementar a jornada real de realização local/remota, consentimento no host d
 
 Concluir `ExecutorPort` e o DTO autorizado comum. Implementar o loop de outbox, ownership de reservas, retomada após crash, filas finitas de itens/bytes, faixa independente de controle e revalidação após cada espera. Completar resolve/admit/query para todas as intenções e separar caminho local/remoto por executor elegível.
 
-Ligar UI, CLI Nexus, CLI Connector, REST e entradas do domínio à mesma admissão. O Connector persiste a intenção antes do POST e consulta o resultado; não chama Core em paralelo ao pedido canônico. Preservar consumo exclusivo, delivery/inbox/handoff, actor/subject, causalidade e claims de sessão. Uma abertura seguida de prompt são duas operações correlacionadas.
+Ligar UI, CLI Nexus, CLI Connector, REST e entradas do domínio à mesma admissão. O Connector persiste a intenção de operação antes do POST e consulta o resultado; não chama Core em paralelo ao pedido canônico. Preservar consumo exclusivo, delivery/inbox/handoff, actor/subject, causalidade e claims de sessão. Uma abertura seguida de prompt são duas operações correlacionadas.
 
 **Testes:** crash antes/depois de cada commit; perda de resposta; replay idêntico e hash conflitante; autorização alterada durante fila; controle com fila produtiva bloqueada; cancelamento do waiter sem cancelar producer; disputa MCP pull versus dois runtimes; reservas recuperadas uma vez. Contar chamadas nativas e registros, não apenas métodos mockados.
 
