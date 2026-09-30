@@ -1,0 +1,14 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "D:/Projetos/Techridy/okto-nexus-connector-core/tools/probe_managed_factory.py",
+    "claude_stream",
+    "--claude",
+    "C:/Users/jpamb/.local/bin/claude.exe"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"close_stage\": \"OUTCOME_UNKNOWN\", \"open_stage\": \"SUBMITTED\", \"prepared_architecture\": \"x86_64\", \"prepared_version\": \"2.1.282\", \"shutdown_outcome\": \"already_closed\", \"submit_stage\": \"SUBMITTED\", \"terminal_operation_id\": \"turn\", \"terminal_outcome\": \"success\", \"turn_receipt_stage\": \"SUCCEEDED\"}\n",
+  "stderr": "",
+  "scope": "Installed Core production factory without qualification overrides."
+}

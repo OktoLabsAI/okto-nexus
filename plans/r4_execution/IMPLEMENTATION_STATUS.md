@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Local real harnesses — September 30, 2026
+
+[Campaign](LOCAL_HARNESS_CAMPAIGN.md): Pi, Codex and Claude completed native protocol tests. Installed factory: Pi succeeded; Claude turn succeeded with an initially unknown close; Codex 0.159.0 was refused as unqualified. Real R4 end-to-end acceptance and the complete delivery gates remain open.
+
 ## Automatic daemon lanes — September 30, 2026
 
 [Implementation and limits](M06_AUTOMATIC_LANES.md): installed Connector 336 passed / one skipped; Nexus 81 passed. Initial attachment and execution now start from approved persisted bindings. Renewal and nonempty reconciliation remain open. No milestone or gate closed.
