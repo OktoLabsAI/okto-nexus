@@ -370,15 +370,8 @@ def begin_execution_send(
                     profile["revision"] != semantic["payload"]["profile_revision"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,
                                       "The dispatch profile changed.", {})
-        lease = conn.execute(
-            "SELECT lease_id,lease_serial,grant_id,connection_generation,"
-            "authorization_revision,configuration_revision,"
-            "credential_epoch,owner_generation,allowed_actions_json,"
-            "valid_until_server,connection_id,scope_json,applied_at,status FROM execution_leases WHERE server_id=? "
-            "AND executor_id=? AND session_id=? "
-            "ORDER BY lease_serial DESC LIMIT 1",
-            (server_id, reservation.executor_id, row["session_id"]),
-        ).fetchone()
+        from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+        lease = SqliteExecutionLeaseRepository().effective(uow, scope)
         authority_now = datetime.fromisoformat(access.clock.now_iso().replace("Z", "+00:00"))
         bootstrap = row["action"] == "runtime.open" and lease is None
         if bootstrap and session["lease_state"] != "NONE":

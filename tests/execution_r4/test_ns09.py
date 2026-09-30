@@ -491,3 +491,66 @@ def test_unapplied_lease_requires_reconciliation_before_reconnect(tmp_path, monk
                     channel=next_channel)
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_leases').fetchone()[0] == 1
+
+
+def test_compatible_renewal_preserves_applied_authority_until_ack(tmp_path, monkeypatch):
+    from okto_nexus.adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
+    deps, app, access, _, canonical, _, info, revisions, link_ticket, lane_ticket, server_id, executor_id = setup_authority(tmp_path, monkeypatch)
+    repository = SqliteExecutionLeaseRepository()
+    with TestClient(app, base_url='https://127.0.0.1:8202') as client:
+        with client.websocket_connect(f'wss://127.0.0.1:8202/v1/runtime/executors/{executor_id}/link',
+                headers={'Authorization': f'Bearer {link_ticket}'}, subprotocols=['nxl.v1']) as ws:
+            channel = negotiate(ws, info, revisions, lane_ticket, server_id, executor_id)
+            scope = admit(deps, app)['scope']
+            service = ExecutionLeaseService(factory=deps.connection_factory, access=access,
+                fresh_publications=app.state.inventory_fresh_publications)
+            request = dict(protocol_major=1, contract_revision=R4_PREVIEW_REVISION, type='lease.renew',
+                request_id='initial', grant_id=canonical['grant_id'], expected_lease_serial=0, scope=scope,
+                connection_id=channel.connection_id, connection_generation=channel.connection_generation,
+                purpose='initial')
+
+            def acknowledge(grant, stage):
+                ack = {k:grant[k] for k in ('protocol_major','contract_revision','request_id','lease_id','lease_serial','grant_id','scope')}
+                ack.update(type='lease.applied', connection_id=channel.connection_id,
+                           connection_generation=channel.connection_generation, application_stage=stage)
+                service.applied(ack, channel=channel)
+
+            initial = service.issue(request, channel=channel)
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert repository.effective(uow, scope)['status'] == 'ISSUED'
+                assert uow.connection.execute('SELECT lease_state FROM execution_sessions').fetchone()[0] == 'LEASE_PENDING'
+            acknowledge(initial, 'INSTALLED')
+            renewal = service.issue({**request, 'request_id':'renewal', 'purpose':'renew',
+                                     'expected_lease_serial':1}, channel=channel)
+            with deps.connection_factory.unit_of_work() as uow:
+                conn = uow.connection
+                previous = repository.effective(uow, scope)
+                assert previous['lease_serial'] == 1 and previous['status'] == 'ACTIVE'
+                assert repository.latest(uow, scope)['status'] == 'ISSUED'
+                assert conn.execute('SELECT lease_state FROM execution_sessions').fetchone()[0] == 'ACTIVE'
+                # Selection cannot extend the old lease deadline.
+                deadline = previous['valid_until_server']
+                assert repository.effective(uow, scope)['valid_until_server'] == deadline
+                # Incompatible grants never borrow the previous authority.
+                for field, value in (
+                    ('scope_json', '{}'), ('connection_id', 'different'),
+                    ('connection_generation', channel.connection_generation + 1),
+                    ('grant_id', 'different'), ('source_grant_revision', 'different'),
+                    ('allowed_actions_json', '[]'),
+                ):
+                    conn.execute('SAVEPOINT changed_authority')
+                    conn.execute(f'UPDATE execution_leases SET {field}=? WHERE lease_serial=2', (value,))
+                    assert repository.effective(uow, scope)['lease_serial'] == 2, field
+                    conn.execute('ROLLBACK TO changed_authority')
+                    conn.execute('RELEASE changed_authority')
+                for status in ('REVOKED', 'SUPERSEDED'):
+                    conn.execute('SAVEPOINT unavailable')
+                    conn.execute('UPDATE execution_leases SET status=? WHERE lease_serial=1', (status,))
+                    assert repository.effective(uow, scope)['lease_serial'] == 2
+                    conn.execute('ROLLBACK TO unavailable')
+                    conn.execute('RELEASE unavailable')
+            acknowledge(renewal, 'RENEWED')
+            with deps.connection_factory.unit_of_work(write=False) as uow:
+                assert repository.effective(uow, scope)['lease_serial'] == 2
+                assert repository.effective(uow, scope)['status'] == 'ACTIVE'
+                assert uow.connection.execute('SELECT status FROM execution_leases WHERE lease_serial=1').fetchone()[0] == 'SUPERSEDED'

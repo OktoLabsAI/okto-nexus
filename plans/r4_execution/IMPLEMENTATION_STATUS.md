@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Automatic runtime lease renewal — September 30, 2026
+
+[Increment](M06_RUNTIME_LEASE_RENEWAL.md): the automatic daemon renews live sessions using Server grants and Core deadlines, revalidates local authority and retains renewal producers during shutdown. Compatible Server renewal keeps applied authority until ACK, including dispatch and session tools. Core 0.2.38 publishes coherent session/R4 contexts before post-CAS I/O. Final installed results: Core 154 passed; Connector 417 passed and one existing skip; Nexus 144 passed. Real Pi 0.87.1, Codex 0.159.0 and Claude 2.1.282 completed local Core turn/renewal/terminal-close probes with locally constructed grants. The initial installed Nexus failure remains recorded; it is resolved in the final run. Same Core wheel in both consumers. Full provider journeys, live-session adoption, rotation and remaining fixed-plan acceptance are pending. No milestone or gate closed.
+
+
 ## Durable resource release and automatic reconciliation — September 30, 2026
 
 [Increment](M06_RESOURCE_RELEASE.md): Core 0.2.36 exposes retained slot state and correlates release with the original opening. Connector reports that fact after lease cleanup; Nexus verifies it and closes session state without synthesizing a close operation or receipt. Real HTTP/WSS recovery returns to control readiness with unchanged native/operation counts. Installed results: Core 140 passed; Connector 410 passed (one existing skip); Nexus 87 initial passes plus the corrected bootstrap pin test passing on focused rerun (88 distinct cases). The initial Nexus failure and rerun remain in the manifest. All three production wheels updated; identical Core wheel in both consumers. Live-session adoption, unknown ownership and full acceptance remain pending.

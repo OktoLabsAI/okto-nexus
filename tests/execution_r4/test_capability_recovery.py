@@ -111,7 +111,7 @@ def test_restored_capability_requires_current_server_and_core_authority(opening,
     asyncio.run(run())
 
 
-@pytest.mark.parametrize('fault', ['none', 'reserved', 'other_agent', 'extra', 'duplicate', 'expired'])
+@pytest.mark.parametrize('fault', ['none', 'reserved', 'other_agent', 'extra', 'duplicate', 'expired', 'renewing', 'renewing_expired'])
 def test_metadata_is_authorized_read_only_and_never_returns_secret(opening, fault):
     from fastapi.testclient import TestClient
     from jsonschema import Draft202012Validator
@@ -126,6 +126,11 @@ def test_metadata_is_authorized_read_only_and_never_returns_secret(opening, faul
             uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY'")
             if fault == 'expired':
                 uow.connection.execute("UPDATE execution_session_capabilities SET valid_until_server='2000-01-01T00:00:00+00:00'")
+    if fault in ('renewing', 'renewing_expired'):
+        apply_lease(opening, serial=1, purpose='renew', request_id='metadata-renewal')
+        if fault == 'renewing_expired':
+            with deps.connection_factory.unit_of_work() as uow:
+                uow.connection.execute("UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00+00:00' WHERE lease_serial=1")
     params = [('binding_id', 'binding'), ('capability_id', issued['capability_id']), ('request_id', 'metadata-one')]
     if fault == 'extra': params.append(('scope', 'untrusted'))
     if fault == 'duplicate': params.append(('request_id', 'metadata-two'))
@@ -135,10 +140,10 @@ def test_metadata_is_authorized_read_only_and_never_returns_secret(opening, faul
     response = TestClient(app, base_url='https://127.0.0.1:8202').get(
         '/v1/runtime/sessions/' + issued['scope']['session_id'] + '/capability', params=params,
         headers={'Authorization': 'Bearer ' + app.state.test_agent_keys[actor]})
-    expected = {'none': 200, 'reserved': 403, 'other_agent': 404, 'extra': 422, 'duplicate': 422, 'expired': 403}
+    expected = {'none': 200, 'reserved': 403, 'other_agent': 404, 'extra': 422, 'duplicate': 422, 'expired': 403, 'renewing': 200, 'renewing_expired': 403}
     assert response.status_code == expected[fault], response.text
     assert issued['capability'] not in response.text
-    if fault == 'none':
+    if fault in ('none', 'renewing'):
         body = response.json()
         assert body['request_id'] == 'metadata-one' and body['lease_serial'] == 1
         assert 1 <= body['expires_in'] <= issued['expires_in']

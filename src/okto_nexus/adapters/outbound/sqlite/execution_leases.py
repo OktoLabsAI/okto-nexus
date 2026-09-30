@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from nexus_connector_core.protocol import canonical_json
 
 
@@ -67,6 +69,24 @@ class SqliteExecutionLeaseRepository:
             "SELECT * FROM execution_leases WHERE server_id=? AND executor_id=? AND session_id=? "
             "ORDER BY lease_serial DESC LIMIT 1", self.key(scope)).fetchone()
 
+    def effective(self, uow, scope):
+        """Keep a compatible applied lease until renewal application commits."""
+        latest = self.latest(uow, scope)
+        if latest is None or latest['status'] != 'ISSUED':
+            return latest
+        request = json.loads(latest['request_json'])
+        if request.get('purpose') != 'renew':
+            return latest
+        previous = uow.connection.execute(
+            "SELECT * FROM execution_leases WHERE server_id=? AND executor_id=? AND session_id=? "
+            "AND lease_serial=? AND status='ACTIVE' AND applied_at IS NOT NULL",
+            (*self.key(scope), latest['lease_serial'] - 1)).fetchone()
+        fields = ('scope_json','connection_id','connection_generation','grant_id',
+                  'source_grant_revision','allowed_actions_json')
+        if previous is not None and all(previous[k] == latest[k] for k in fields):
+            return previous
+        return latest
+
     def request(self, uow, scope, request_id):
         return uow.connection.execute(
             "SELECT * FROM execution_leases WHERE server_id=? AND executor_id=? AND session_id=? AND request_id=?",
@@ -76,8 +96,17 @@ class SqliteExecutionLeaseRepository:
         scope = request['scope']
         key = self.key(scope)
         conn = uow.connection
-        conn.execute(
-            "UPDATE execution_leases SET status='SUPERSEDED' WHERE server_id=? AND executor_id=? AND session_id=? AND status IN ('ISSUED','ACTIVE')", key)
+        previous = self.latest(uow, scope)
+        preserve_applied = (request['purpose'] == 'renew' and previous is not None and
+            previous['status'] == 'ACTIVE' and previous['applied_at'] is not None and
+            previous['scope_json'] == canonical_json(scope).decode() and
+            previous['connection_id'] == request['connection_id'] and
+            previous['connection_generation'] == request['connection_generation'] and
+            previous['grant_id'] == frame['grant_id'] and previous['source_grant_revision'] == source_revision and
+            previous['allowed_actions_json'] == canonical_json(frame['allowed_actions']).decode())
+        if not preserve_applied:
+            conn.execute(
+                "UPDATE execution_leases SET status='SUPERSEDED' WHERE server_id=? AND executor_id=? AND session_id=? AND status IN ('ISSUED','ACTIVE')", key)
         conn.execute(
             "INSERT INTO execution_leases(server_id,executor_id,session_id,lease_serial,lease_id,grant_id,"
             "allowed_actions_json,authorization_revision,configuration_revision,owner_generation,connection_generation,"
@@ -89,11 +118,15 @@ class SqliteExecutionLeaseRepository:
              scope['credential_epoch'], expires, request['request_id'], request['connection_id'],
              scope['binding_revision'], source_revision, digest, canonical_json(request).decode(),
              canonical_json(frame).decode(), canonical_json(scope).decode(), now))
-        conn.execute(
-            "UPDATE execution_sessions SET lease_state='LEASE_PENDING' WHERE server_id=? AND executor_id=? AND session_id=?", key)
+        if not preserve_applied:
+            conn.execute(
+                "UPDATE execution_sessions SET lease_state='LEASE_PENDING' WHERE server_id=? AND executor_id=? AND session_id=?", key)
 
     def applied(self, uow, scope, *, serial, now, revoked=False):
         state = 'REVOKED' if revoked else 'ACTIVE'
+        uow.connection.execute(
+            "UPDATE execution_leases SET status='SUPERSEDED' WHERE server_id=? AND executor_id=? AND session_id=? "
+            "AND lease_serial<>? AND status IN ('ISSUED','ACTIVE')", (*self.key(scope), serial))
         uow.connection.execute(
             "UPDATE execution_leases SET status=?,applied_at=? WHERE server_id=? AND executor_id=? AND session_id=? AND lease_serial=?",
             (state, now, *self.key(scope), serial))

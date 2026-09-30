@@ -157,7 +157,7 @@ class ExecutionCapabilityService:
                 raise _error(ErrorCode.CONFLICT, 'The session capability cannot be replaced safely.')
             now = _stamp(self.access.clock.now_iso())
             expires = min(now + timedelta(seconds=120), _stamp(grant['expires_at']))
-            lease = self.repo.latest(uow, scope)
+            lease = self.repo.effective(uow, scope)
             if lease is not None:
                 if (lease['status'] != 'ACTIVE' or lease['scope_json'] != canonical_json(scope).decode() or
                         lease['grant_id'] != grant['grant_id']):
@@ -210,7 +210,7 @@ class ExecutionCapabilityService:
             scope = current['scope']
             if scope['binding_id'] != binding_id:
                 raise _error(ErrorCode.NOT_FOUND, 'The session capability was not found.')
-            lease = self.repo.latest(uow, scope)
+            lease = self.repo.effective(uow, scope)
             # _authorize_hash requires READY, a matching ACTIVE applied lease,
             # current grant/revisions, unrevoked material and domain admission.
             until = min(_stamp(credential['valid_until_server']),
@@ -257,7 +257,7 @@ class ExecutionCapabilityService:
         expected_scope = json.loads(credential['scope_json'])
         authority, _ = self._authority(uow, expected_scope,
             grant_id=credential['source_grant_id'], grant_revision=credential['source_grant_revision'])
-        lease = self.repo.latest(uow, expected_scope)
+        lease = self.repo.effective(uow, expected_scope)
         if (authority['lifecycle_state'] != 'READY' or authority['lease_state'] != 'ACTIVE' or
                 lease is None or lease['status'] != 'ACTIVE' or lease['applied_at'] is None or
                 lease['scope_json'] != credential['scope_json'] or

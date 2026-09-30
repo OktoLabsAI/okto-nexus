@@ -30,7 +30,7 @@ from test_vertical_inventory import _NativeFactory
     (False, None, True, 0, None), (False, 'core_commit', True, 0, None), (False, None, True, 260, None),
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
-    (True, None, False, 0, 'active_disconnect')])
+    (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
 def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
@@ -72,7 +72,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     from okto_nexus.adapters.inbound.http import connections_v1
     monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
 
-    if event_recovery == 'active_disconnect':
+    if event_recovery in ('active_disconnect', 'lease_renewal'):
         from functools import partial
         monkeypatch.setattr(executor_link, 'ExecutionLeaseService',
             partial(executor_link.ExecutionLeaseService, max_duration_ms=5000))
@@ -234,16 +234,20 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 if event_recovery == 'active_disconnect':
                     import time
                     await owner.close()
+                    runtime = next(iter(execution._sessions.values())).runtime
+                    installed_deadline = runtime.r4_operation_context(dispatched['turn.submit'],
+                        connection_id=owner.state.connection_id,
+                        connection_generation=owner.state.connection_generation).lease_deadline_monotonic
                     async with asyncio.timeout(3):
                         while not control.cleanup_pending:
                             await asyncio.sleep(.01)
-                    assert time.monotonic() < native.context.lease_deadline_monotonic
+                    assert time.monotonic() < installed_deadline
                     assert not native.native.stopped and daemon.host._journal is not None
                     assert not control.status()['execution_ready']
                     async with asyncio.timeout(8):
                         while not native.native.stopped:
                             await asyncio.sleep(.01)
-                    assert time.monotonic() >= native.context.lease_deadline_monotonic
+                    assert time.monotonic() >= installed_deadline
                     generation = owner.state.connection_generation
                     async with asyncio.timeout(15):
                         while not (control.status()['execution_ready'] and control.connection.state.connection_generation > generation):
@@ -257,7 +261,25 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='runtime.close'").fetchone()[0] == 0
                         assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 2
                     return
-                if automatic or (reconcile_closed and not publication_failure and not history_count):
+                if event_recovery == 'lease_renewal':
+                    import time
+                    initial_deadline = native.context.lease_deadline_monotonic
+                    async with asyncio.timeout(10):
+                        while time.monotonic() <= initial_deadline + .05:
+                            assert not native.native.stopped and control.status()['execution_ready']
+                            await asyncio.sleep(.02)
+                    runtime = next(iter(execution._sessions.values())).runtime
+                    current = runtime.r4_operation_context(dispatched['turn.submit'],
+                        connection_id=owner.state.connection_id,
+                        connection_generation=owner.state.connection_generation)
+                    assert current.r4_authority.lease_serial >= 2
+                    assert current.lease_deadline_monotonic > initial_deadline
+                    assert native.opens == 1 and not native.native.stopped
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        row = uow.connection.execute(
+                            'SELECT lease_serial,status FROM execution_leases ORDER BY lease_serial DESC LIMIT 1').fetchone()
+                        assert row['lease_serial'] >= 2 and row['status'] == 'ACTIVE'
+                if (automatic and event_recovery != 'lease_renewal') or (reconcile_closed and not publication_failure and not history_count):
                     from nexus_connector_core import RuntimeEvent
                     journal = await daemon.host.ensure_history_journal()
                     original_ack = journal.acknowledge_events
@@ -312,7 +334,7 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 async with asyncio.timeout(5):
                     while execution.pending_count:
                         await asyncio.sleep(0)
-                if event_recovery:
+                if event_recovery and event_recovery != 'lease_renewal':
                     generation = owner.state.connection_generation
                     old_ticket = control.execution.lanes[binding['binding_id']].ticket.ticket_id
                     if event_recovery.startswith('cold_'):

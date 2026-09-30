@@ -191,6 +191,7 @@ def test_capability_stable_secret_follows_applied_lease_and_keeps_scope_ceiling(
     with pytest.raises(OktoNexusError):
         use(opening, issued, expected_scope=issued['scope'] | {'credential_epoch': True})
     leases, request, granted, ack = apply_lease(opening, serial=1, purpose='renew', request_id='renew')
+    assert use(opening, issued)['capability_id'] == issued['capability_id']
     with opening[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute('SELECT valid_until_server FROM execution_session_capabilities').fetchone()[0] == expiry
     leases.applied(ack, channel=opening[5])
@@ -213,7 +214,8 @@ def test_capability_stable_secret_follows_applied_lease_and_keeps_scope_ceiling(
     "UPDATE execution_leases SET valid_until_server='2000-01-01T00:00:00Z'",
     "UPDATE execution_sessions SET lifecycle_state='STOPPED'",
 ])
-def test_active_capability_immediately_loses_changed_authority(opening, sql):
+@pytest.mark.parametrize('renewing', [False, True])
+def test_active_capability_immediately_loses_changed_authority(opening, sql, renewing):
     issued = issue(opening).json()
     begin(opening)
     leases, _, _, ack = apply_lease(opening)
@@ -221,6 +223,9 @@ def test_active_capability_immediately_loses_changed_authority(opening, sql):
     with opening[0].connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE execution_sessions SET lifecycle_state='READY'")
     assert use(opening, issued)['capability_id'] == issued['capability_id']
+    if renewing:
+        apply_lease(opening, serial=1, purpose='renew', request_id='pending')
+        assert use(opening, issued)['capability_id'] == issued['capability_id']
     with opening[0].connection_factory.unit_of_work() as uow:
         uow.connection.execute(sql)
     with pytest.raises(OktoNexusError):
