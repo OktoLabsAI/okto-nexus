@@ -2,7 +2,23 @@
 
 O [plano de entrega completa](DELIVERY_PLAN.md) organiza a conclusão dos três repositórios em 14 marcos e preserva todos os requisitos R4. A [cobertura validada](delivery_coverage.json) associa tarefas e testes aos marcos; não declara novos testes de produto executados nem encerra gates.
 
-## Incremento corrente — owner de conexão R4 no Connector
+## Incremento corrente — seleção física aprovada no Connector
+
+O [incremento M03/M06](M06_PHYSICAL_SELECTION.md) persiste o resultado aprovado
+do binding e resolve a instalação/workspace contra a evidência local completa.
+O host revalida após esperas e ao reutilizar o cache, antes de compor pelo Core
+público. A jornada WSS usa esses serviços e confirma uma abertura na pasta
+aprovada, somente depois de instalar a lease.
+
+Passaram 27 casos dirigidos e 278 regressões do Connector, com dois skips;
+103 casos Nexus R4 e 55 casos instalados fora dos clones, com sobreposição.
+O [manifesto](test_runs_20260930_physical_selection.json) preserva falhas
+iniciais de fixture, resultados, comandos e hashes. Schema Connector 4 exige
+backup para downgrade; o ensaio completo fica em M12. Daemon/CLI, perfil e
+ambiente canônicos, refresh de revisões, embedded e reconciliação não vazia
+continuam pendentes. Nenhum gate ou flag de prontidão foi promovido.
+
+## Incremento anterior — owner de conexão R4 no Connector
 
 O [owner M06](M06_CONNECTOR_CONNECTION_OWNER.md) recebe operações e correlaciona
 leases/attaches pelo mesmo reader. Possui filas limitadas, revalidação de lane,

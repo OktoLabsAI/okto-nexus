@@ -6,11 +6,11 @@
   "document": "plans/r4_execution/DELIVERY_PLAN.md",
   "review_checkpoint": {
     "date": "2026-09-30",
-    "scope": "Partial M06 Connector connection ownership and real loopback WSS integration; no product gate",
+    "scope": "Partial M03/M06 approved physical selection and Core host composition in real loopback WSS; no product gate",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "672e85efa3fbc65284f1a054650259221aca72f0",
-      "connector": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
+      "nexus": "b6e9ed883f45d6eb8d573bb6e93b134038444686",
+      "connector": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
       "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
     },
     "shared_core_version": "0.2.28.dev0",
@@ -47,23 +47,26 @@
       "plans/r4_execution/M04_REMOTE_DISPATCH_PUMP.md",
       "plans/r4_execution/test_runs_20260930_dispatch_pump.json",
       "plans/r4_execution/M06_CONNECTOR_CONNECTION_OWNER.md",
-      "plans/r4_execution/test_runs_20260930_connection_owner.json"
+      "plans/r4_execution/test_runs_20260930_connection_owner.json",
+      "plans/r4_execution/M06_PHYSICAL_SELECTION.md",
+      "plans/r4_execution/test_runs_20260930_physical_selection.json"
     ],
-    "latest_increment": "Connector single-reader ownership, bounded operation reservations and correlated lease/attach producers now drive the real loopback WSS five-action journey. A same-request lease replay confirms the Server applied-ACK commit before cross-channel receipt publication.",
-    "verification_scope": "256 Connector regression passes with two recorded skips; 13 directed contract/lifecycle passes; 28 coordinated installed passes and one public source journey pass, with overlap. The installed campaign exposed an ACK/receipt ordering race that was corrected and reverified. No product gate closed.",
+    "latest_increment": "Connector schema 4 persists approved bindings against complete local evidence; physical selection checks root, binary, inventory and revisions. CoreRuntimeHost revalidates after waits and cache reuse. The real WSS journey now uses these services.",
+    "verification_scope": "27 directed and 278 Connector regression passes with two skips; 103 Nexus R4 and 55 coordinated installed passes, with overlap. Initial Connector fixture failures are preserved. No product gate closed.",
     "latest_partial_increment": {
       "status": "PARTIAL_INTEGRATION_VERIFIED",
-      "scope": "Partial M06 Connector connection ownership and real loopback WSS integration; no product gate",
-      "nexus_commit": "Commit containing M06_CONNECTOR_CONNECTION_OWNER.md",
+      "scope": "Partial M03/M06 approved physical selection and Core host composition in real loopback WSS; no product gate",
+      "nexus_commit": "Commit containing M06_PHYSICAL_SELECTION.md",
       "published_dependency_heads": {
-        "connector": "6736fc3c51b83047f50a0c92a3cf0fbe5b5293ee",
+        "connector": "b1d87106f1ed3abffd438e81ae0ca2fb4383a0af",
         "core": "9d244cfecc31c817661d560bbcee75cc9f8d5513"
       },
-      "evidence": "plans/r4_execution/test_runs_20260930_connection_owner.json",
+      "evidence": "plans/r4_execution/test_runs_20260930_physical_selection.json",
       "recorded_passes": {
-        "connector_regression": 256,
-        "connector_contracts": 13,
-        "installed_coordinated": 28,
+        "connector_regression": 278,
+        "connector_directed": 27,
+        "nexus_r4": 103,
+        "installed_coordinated": 55,
         "public_wss_source": 1
       },
       "recorded_skips": {
@@ -71,10 +74,10 @@
       },
       "counts_overlap": true,
       "next_steps": [
-        "Compose the R4 connection owner with daemon lifecycle and persisted executor/binding records.",
-        "Resolve approved physical realizations and dispatch through productive/control consumers using canonical authority.",
+        "Compose R4 daemon/CLI lifecycle with approved physical selection, connection owner and persisted executor records.",
+        "Map canonical profile/environment and explicit approved-revision refresh into productive/control consumers.",
         "Complete embedded execution, nonempty reconciliation, credential lifecycle, governance and durable receipts/events.",
-        "Complete M00/M01 acceptance, UI/CLI, US English audit, migration and native multi-host qualification."
+        "Complete M00/M01 acceptance, UI/CLI, US English audit, migration/rollback and native multi-host qualification."
       ]
     },
     "installed_core_campaign": {

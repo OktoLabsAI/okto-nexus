@@ -17,7 +17,7 @@ from okto_nexus.errors import OktoNexusError
 
 
 @pytest.fixture
-def onboarding(tmp_path):
+def onboarding(tmp_path, request):
     deps = bootstrap({}, ["--home", str(tmp_path / "home"),
                           "--feature-harness-integrations", "true"])
     app = build_app(deps)
@@ -50,7 +50,7 @@ def onboarding(tmp_path):
         response = client.put(f"/v1/runtime/executors/{executor}/inventory",
                               json=snapshot, headers=ticket)
         assert response.status_code == 200, response.text
-        response = client.post(f"/v1/runtime/executors/{executor}/realizations", json={
+        realization_body = {
             "client_intent_id": "realization", "agent_id": "subject",
             "local_realization_ref": "root_1234567890123456",
             "realization_revision": 1, "workspace_id": None,
@@ -60,9 +60,30 @@ def onboarding(tmp_path):
             "local_root_proof_digest": "sha256:" + "b" * 64,
             "configuration_digest": "sha256:" + "c" * 64,
             "local_consent_id": "consent",
-        }, headers=ticket)
+        }
+        local = store = None
+        if getattr(request, 'param', None) == 'connector-realization':
+            from okto_nexus_connector.services.realization_service import stage_local_realization, publication_body
+            from okto_nexus_connector.storage.state_store import StateStore
+            store = StateStore(tmp_path / 'connector-state.json')
+            workspace = tmp_path / 'remote-workspace'
+            workspace.mkdir()
+            local = stage_local_realization(store, server_id=registration['server_id'], executor_id=executor,
+                agent_id='subject', client_intent_id='realization', candidates=[candidate],
+                adapter_id=candidate.adapter_id, candidate_ref=snapshot['evidence'][0]['candidate_ref'],
+                inventory_revision=snapshot['inventory_revision'], workspace_root=workspace,
+                workspace_id=None, workspace_label='Project', configuration_digest='sha256:' + 'c' * 64,
+                local_consent_id='consent')
+            realization_body = publication_body(local)
+        response = client.post(f"/v1/runtime/executors/{executor}/realizations", json=realization_body, headers=ticket)
         assert response.status_code == 201, response.text
         realization = response.json()
+        if local is not None:
+            from dataclasses import fields
+            from okto_nexus_connector.services.realization_service import acknowledge_local_realization
+            from okto_nexus_connector.transport.https_client import R4Realization
+            acknowledge_local_realization(store, record=local, published=R4Realization(**{
+                field.name: realization[field.name] for field in fields(R4Realization)}))
         prepare = {
             "client_intent_id": "prepare", "agent_id_hint": "subject",
             "executor_id": executor, "adapter_id": "codex_app_server",
