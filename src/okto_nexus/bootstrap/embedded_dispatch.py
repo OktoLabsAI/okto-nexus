@@ -53,6 +53,11 @@ class EmbeddedDispatchOwner:
         self.recovery_failure = None
         from .embedded_events import EmbeddedEventPublisher
         self.events = EmbeddedEventPublisher(self)
+        from .embedded_tools import EmbeddedToolsOwner
+        self.tools = EmbeddedToolsOwner(self)
+        original_launch=self.host.local_launch_factory
+        if original_launch is not None:
+            self.host.local_launch_factory=lambda scope:self.tools.decorate(original_launch(scope))
 
     def _quiesce(self):
         c = self.channel
@@ -209,11 +214,14 @@ class EmbeddedDispatchOwner:
             await asyncio.to_thread(self.verify)
             if action == "runtime.open":
                 setup = await asyncio.to_thread(ApprovedLocalLaunch, self.inventory, session["scope"])
+                await self.tools.prepare(frame,setup)
+                tool_config=self.tools.configurations.get(key)
                 executor, applied = await EmbeddedExecutor.authorize_r4(self.host, scope=session["scope"],
                     grant_id=frame["grant_id"], connection_id=self.channel.connection_id,
                     connection_generation=self.channel.connection_generation, request_grant=self._request_grant,
                     candidate=setup.candidate, workspace_root=setup.workspace_root,
-                    environment=setup.environment, native_factory=self.native_factory)
+                    environment=setup.environment, native_factory=self.native_factory,
+                    native_action_factory=tool_config["native_factory"] if tool_config else None)
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 session["executor"] = executor
                 session["renew_at"] = time.monotonic() + max(0, applied.context.lease_deadline_monotonic-time.monotonic())/2
@@ -246,6 +254,7 @@ class EmbeddedDispatchOwner:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
             await self._publish(binding, receipt)
             if action == "runtime.close" and receipt.stage == "SUCCEEDED":
+                await self.tools.release_session(key)
                 self.sessions.pop(key, None)
 
     async def _publish(self, binding, receipt):
@@ -349,6 +358,12 @@ class EmbeddedDispatchOwner:
         failures.extend(result for result in results if isinstance(result, BaseException))
         try:
             self.containment_report = await asyncio.shield(self._containment_task)
+        except Exception as error:
+            failures.append(error)
+        try:
+            certain=self.containment_report is not None and not any(
+                "unknown" in report.session_outcomes.values() for report in self.containment_report.values())
+            await self.tools.close(release=certain)
         except Exception as error:
             failures.append(error)
         if failures:

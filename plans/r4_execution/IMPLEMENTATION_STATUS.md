@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Serve-owned session tools and automatic MCP — September 30, 2026
+
+[Increment](M05_EMBEDDED_TOOLS.md): the local dispatcher reserves canonical session capabilities under its store owner, persists material in the protected vault before native configuration, and composes checked per-session MCP homes or the existing Pi action owner. Confirmed close removes material; uncertain ownership retains it. The automatic Codex technical peer exercised real MCP identity, handoff claim/completion and a repeat call after automatic lease renewal. Installed results: 133 passed; 70 overlapping cases passed without Connector, with pip check. A separate installed SessionToolVault/Windows Credential Manager roundtrip passed with cleanup. Full Claude/Pi qualification, Pi deadline refresh, live configuration recovery and remaining M05/M09 acceptance remain open. Core/Connector artifacts are unchanged; no gate closed.
+
+
 ## Protected local provider credentials — September 30, 2026
 
 [Increment](M05_PROVIDER_VAULT.md): local owner CLI stores/removes provider secrets in the protected OS credential store with installation/agent isolation. ApprovedLocalLaunch resolves vault references off-loop and retains its authority/configuration checks around resolution. Installed results: 122 passed; 67 overlapping cases passed without Connector, with pip check. Actual Windows Credential Manager and separate installed CLI process roundtrips passed with credential cleanup and no plaintext file/output. Initial source failures and corrections are retained. Session tool capability composition, Linux/macOS vault qualification and full M05 remain open; Core/Connector artifacts are unchanged.

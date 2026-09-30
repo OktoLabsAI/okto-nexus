@@ -95,7 +95,7 @@ class ExecutionCapabilityService:
             raise _error(ErrorCode.PERMISSION_DENIED, 'A current session execution grant is required.')
         return row, grant
 
-    def issue(self, *, context, session_id, request, mcp_url):
+    def issue(self, *, context, session_id, request, mcp_url, owner_guard=None):
         required = {'capability_request_id', 'binding_id', 'audience', 'actions'}
         if (type(request) is not dict or not required <= request.keys() or
                 not request.keys() <= required | {'replaces_capability_id'} or
@@ -112,6 +112,8 @@ class ExecutionCapabilityService:
             raise _error(ErrorCode.VALIDATION_ERROR, 'Invalid session capability request.')
         server_id = ensure_execution_installation(self.factory).server_id
         with self.factory.unit_of_work(write=False) as uow:
+            if owner_guard is not None:
+                owner_guard(uow)
             target = self._target(uow, server_id=server_id, session_id=session_id,
                                   binding_id=request['binding_id'], context=context)
         _, revisions, _ = current_agent_revisions(self.factory, agent_id=target['agent_id'])
@@ -120,6 +122,8 @@ class ExecutionCapabilityService:
             body.pop('replaces_capability_id', None)
         digest = hashlib.sha256(canonical_json(body)).hexdigest()
         with self.factory.unit_of_work() as uow:
+            if owner_guard is not None:
+                owner_guard(uow)
             conn = uow.connection
             target = self._target(uow, server_id=server_id, session_id=session_id,
                                   binding_id=request['binding_id'], context=context)

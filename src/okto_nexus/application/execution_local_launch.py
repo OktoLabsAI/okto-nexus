@@ -4,6 +4,7 @@ from dataclasses import asdict
 import json
 import os
 import re
+import time
 
 from nexus_connector_core import CoreError
 from nexus_connector_core.environment import child_environment
@@ -51,6 +52,7 @@ class ApprovedLocalLaunch:
         self._snapshot, self.candidate, self.record = self._read()
         self.workspace_root = self.record["root"]["path"]
         self.auth_refs = tuple(sorted(set(self.record["configuration"]["secret_bindings"].values())))
+        self.tools = None
 
     def _database(self):
         owner, scope = self.owner, self.scope
@@ -141,8 +143,30 @@ class ApprovedLocalLaunch:
                 or set(prepared.secret_refs) != set(self.auth_refs)):
             raise _refuse()
         home = self.record["provider_home"]
-        value = await child_environment(prepared, self.resolver,
+        resolver,templates=self.resolver,()
+        provider_home=home["path"] if home else None
+        def tools_current():
+            if self.tools is not None:
+                if time.monotonic()>=self.tools["deadline"]:
+                    raise CoreError("AUTH_EXPIRED","local_tool_configuration")
+                if self.tools["home"] is not None:
+                    self.tools["home"].require_current()
+        if self.tools is not None:
+            config=self.tools
+            base=self.resolver
+            class ToolResolver:
+                async def resolve(self,reference):
+                    if reference==config["cap"]["capability_ref"]:
+                        return config["cap"]["capability"]
+                    return await base.resolve(reference)
+            resolver=ToolResolver()
+            if config["template"] is not None:
+                templates=(config["template"],)
+                provider_home=str(config["home"].home)
+        await asyncio.to_thread(tools_current)
+        value = await child_environment(prepared, resolver,
             secret_bindings=self.record["configuration"]["secret_bindings"],
-            provider_home=home["path"] if home else None, trusted_home=home is not None)
+            provider_home=provider_home, trusted_home=provider_home is not None,http_templates=templates)
+        await asyncio.to_thread(tools_current)
         await asyncio.to_thread(self.check)
         return value
