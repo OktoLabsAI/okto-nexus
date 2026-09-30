@@ -25,6 +25,52 @@ Data da baseline: 29 de setembro de 2026. Revisão de planejamento: 30 de setemb
 
 Cada marco abaixo define responsáveis, funcionalidades, testes e saída. O acompanhamento fica em [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md); os requisitos, dependências e cenários continuam rastreáveis nos arquivos de cobertura. A entrega total exige os quatro gates encerrados e evidência sobre o conjunto final dos três produtos.
 
+## Roteiro operacional consolidado
+
+Esta revisão atende à solicitação de estruturar a entrega total. O escopo de implementação continua sendo M00–M13, com os critérios detalhados abaixo e o backlog normativo preservado. A sequência de fechamento é:
+
+**M00 → M01 → M02 → M03 → M04 → {M05, M06 → M07} → M08 → {M09, M10, M11} → M12 → M13.**
+
+As chaves indicam dependências independentes, sem exigir execução por agentes paralelos. Preparar ambientes e testes negativos desde M00; incorporar os testes em cada incremento, com a campanha integral repetida no artefato final.
+
+### Primeiro pacote executável após esta revisão
+
+O Connector contém trabalho local ainda não testado em configuração de lançamento: schema 8, registro de configuração vinculado ao digest aprovado e seleção automática pelo host. Essas alterações não fazem parte do HEAD publicado e não encerram P6.1. O próximo incremento deve:
+
+1. Revisar a migração 7 → 8 e a validação de configuração, referências de segredo, consentimento, revisão de perfil e identidade física do diretório.
+2. Testar persistência, idempotência, configuração ausente/adulterada, segredo ausente, troca de diretório e mudança de autoridade durante a resolução assíncrona. Nenhuma recusa pode produzir abertura nativa.
+3. Exercitar staging → publicação de realization → aprovação do binding → abertura pelo owner real, sem callback externo para substituir a configuração aprovada.
+4. Compor a autorização de ferramentas: MCP HTTP para os adapters qualificados e bridge Pi, com segredo protegido, lease atual e recuperação explícita. A configuração básica de ambiente isoladamente não encerra esse item.
+5. Construir e instalar o Connector em ambiente limpo com o Core fixado; executar os testes dirigidos e a integração afetada com Nexus. Registrar falhas e limitações.
+6. Fazer commit/push apenas dos arquivos do incremento, atualizar evidências e continuar com P6.2. O fechamento de M02/M06 permanece condicionado a todos os demais critérios desses marcos.
+
+As alterações preexistentes de assets e exclusões em Nexus, bem como arquivos não relacionados nos demais repositórios, permanecem fora desse pacote. O plano de entrega não autoriza classificá-las automaticamente como parte da implementação.
+
+### Pacotes seguintes e prova de conclusão
+
+| Ordem | Trabalho restante | Responsável principal | Prova exigida |
+|---|---|---|---|
+| 1 | Fechar inventário de aceites e lacunas do contrato compartilhado (M00/M01) | Core + consumidores | Cada requisito ligado a teste coletável, ambiente e owner; conformance instalada e mesmo hash Core |
+| 2 | Completar autoridade, configuração, consentimento e onboarding reutilizável (M02/M03) | Nexus + Connector | Primeira configuração e reuso pelas entradas públicas; recusa de drift/revogação; segredos ausentes das projeções |
+| 3 | Completar admissão/outbox e as sete ações (M04) | Nexus | IDs estáveis, reserva durável e nenhum segundo efeito após timeout/retry |
+| 4 | Concluir composição embedded e daemon (M05/M06, P5/P6) | Nexus / Connector | Boot automático, ciclo local sem Connector, lanes remotas, renovação e reconcile paginado não vazio |
+| 5 | Completar eventos, decisões e domínio (M07–M09) | Três repositórios | Replay após restart, aprovação/input únicos, claims exclusivos e resultados causais em MCP/Pi |
+| 6 | Concluir jornadas humanas/headless e idioma (M10) | Nexus + Connector; mensagens Core | Browser/CLI reais, sucesso e erro, quatro cenários TLANG e assets do wheel em US English |
+| 7 | Qualificar falhas, limites e atualização (M11/M12) | Três repositórios | Crash, rede, disco, saturação, ownership, migração interrompida, restore e rollback |
+| 8 | Congelar e aceitar a entrega (M13) | Três repositórios | Regressões completas, providers reais, Windows/Linux, hosts independentes e G0–G3 encerrados |
+
+A tabela resume a ordem; cada linha conserva as dependências, funcionalidades e testes definidos nos milestones. Nenhuma linha pode ser encerrada somente com fixtures técnicas ou pela existência de um helper.
+
+### Controle de execução, estimativa e publicação
+
+Para cada item restante, o inventário de aceite registra: requisito, repositório responsável, caller público, dependências, teste/nodeid, ambiente, evidência, estado e defeito impeditivo. Antes de implementar um pacote, selecionar seus critérios positivos, negativos e de recuperação; depois executar, corrigir falhas, verificar o artefato instalado e publicar o incremento testado.
+
+A estimativa de calendário será calculada após M00 a partir dos itens ainda sem implementação, testes ausentes, infraestrutura e defeitos reproduzidos. Cada atualização deve mostrar trabalho restante e recursos necessários. Ausência de credencial, host ou provider mantém o respectivo aceite pendente e permite continuar os pacotes independentes.
+
+A cada milestone concluído, entregar os três SHAs de referência, hashes dos pacotes, comandos e resultados dos testes, migrações aplicáveis e restrições remanescentes. Mudanças do Core exigem pacote/hash antes da atualização dos consumidores. Os commits e pushes seguem em `feature/v0.2.0` nos repositórios envolvidos.
+
+O aceite final exige todos os casos obrigatórios aprovados no conjunto congelado. Relatórios de cobertura documental comprovam a estrutura do plano; a entrega de produto depende dos testes de execução e dos gates descritos neste documento.
+
 ## Fontes e cobertura obrigatória
 
 A ordem normativa continua sendo [arquitetura R4](../01_ARQUITETURA_E_PLANO_MESTRE.md), [contratos](../02_CONTRATOS_HTTP_NXL_E_ESTADOS.md), [dados e migração](../03_DADOS_MIGRACAO_E_RECUPERACAO.md), [backlog](../04_BACKLOG_EXECUCAO.md), [testes e aceite](../05_TESTES_E_ACEITE.md) e [handoff Core e Connector](../06_HANDOFF_CORE_CONNECTOR.md). Este documento organiza a execução e acrescenta o requisito de idioma; não reduz requisitos nem cria uma autoridade de contrato concorrente.
@@ -68,7 +114,7 @@ Os HEADs abaixo identificam o ponto de partida publicado do incremento corrente.
 
 | Repositório | HEAD verificado | Pacote |
 |---|---|---|
-| Nexus | `b3f8bc1e7713e4f0199b2497d0cddee542a7d5db` | `0.2.0` |
+| Nexus | `77243df779f7d2021d877f7e0bc9d6e9a22001e1` | `0.2.0` |
 | Connector | `f1ee452de5d2c9a2429e8f270f2308bffd24fc68` | `0.5.0.dev0` |
 | Core | `770659b7f3404798fe6c59146c7ab9d12b84bbe4` | `0.2.30.dev0` |
 

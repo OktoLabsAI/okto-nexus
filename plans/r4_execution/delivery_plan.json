@@ -9,7 +9,7 @@
     "scope": "Current capability metadata and explicit protected-material recovery under matching applied Server/Core leases; automatic host reconciliation and remaining M00-M13 acceptance are pending.",
     "branch": "feature/v0.2.0",
     "published_heads": {
-      "nexus": "b3f8bc1e7713e4f0199b2497d0cddee542a7d5db",
+      "nexus": "77243df779f7d2021d877f7e0bc9d6e9a22001e1",
       "connector": "f1ee452de5d2c9a2429e8f270f2308bffd24fc68",
       "core": "770659b7f3404798fe6c59146c7ab9d12b84bbe4"
     },
@@ -102,7 +102,15 @@
     "completion_planning_review": "plans/r4_execution/completion_review_20260930.json",
     "total_delivery_review": "plans/r4_execution/total_delivery_review_20260930.json",
     "full_delivery_checkpoint": "plans/r4_execution/full_delivery_checkpoint_20260930.json",
-    "delivery_scope_review": "plans/r4_execution/delivery_scope_review_20260930.json"
+    "delivery_scope_review": "plans/r4_execution/delivery_scope_review_20260930.json",
+    "planning_consolidation": {
+      "date": "2026-09-30",
+      "scope": "Complete delivery sequence, first remaining configuration increment, tests, milestones and publication policy.",
+      "connector_worktree": "UNTESTED: schema 8 and approved launch configuration; excluded from published baseline and milestone acceptance.",
+      "first_increment": "Review and test approved configuration, protected environment and tool authority before automatic daemon lane composition.",
+      "product_tests_executed_by_planning_review": false,
+      "product_gates_closed": []
+    }
   },
   "sources": {
     "backlog": "plans/BACKLOG_R4.json",
