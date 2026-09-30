@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Durable resource release and automatic reconciliation — September 30, 2026
+
+[Increment](M06_RESOURCE_RELEASE.md): Core 0.2.36 exposes retained slot state and correlates release with the original opening. Connector reports that fact after lease cleanup; Nexus verifies it and closes session state without synthesizing a close operation or receipt. Real HTTP/WSS recovery returns to control readiness with unchanged native/operation counts. Installed results: Core 140 passed; Connector 410 passed (one existing skip); Nexus 87 initial passes plus the corrected bootstrap pin test passing on focused rerun (88 distinct cases). The initial Nexus failure and rerun remain in the manifest. All three production wheels updated; identical Core wheel in both consumers. Live-session adoption, unknown ownership and full acceptance remain pending.
+
+
 ## Granted lease retention after WSS loss — September 30, 2026
 
 [Increment](M06_DISCONNECTED_LEASES.md): automatic transport-loss cleanup retains Core runtimes until their installed leases expire, are revoked, close or release ownership. Unknown state and inspection failures retain cleanup; an explicit daemon stop uses normal shutdown. All started inspections remain owned through errors. Real HTTP/WSS coverage verifies no premature native stop and no repeated work. Final installed results: Connector 410 passed (one existing skip), Nexus 75 passed. Core/Nexus production wheels unchanged. Live-session adoption and durable release evidence remain pending; no milestone or gate closed.

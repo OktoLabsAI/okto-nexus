@@ -158,3 +158,35 @@ def test_stream_readiness_requires_matching_durable_contiguous_prefix(recovery,r
                      "committed_contiguous,gap_state) VALUES (?,?,'session','epoch',1,?)",(c.server_id,c.executor_id,gap))
     report["stream_watermarks"][0]["sequence"]=reported
     assert service.accept(report)["recovery_remaining"] is not ready
+
+
+@pytest.mark.parametrize("fault", [None, "digest", "opening_hash", "opening_session", "opening_stage", "opening_generation"])
+def test_durable_release_correlates_original_open_without_synthetic_close(recovery, fault):
+    from nexus_connector_core import r4_resource_release_digest
+    factory,service,report,_,frame = recovery
+    c=service.channel
+    with factory.unit_of_work() as uow:
+        conn=uow.connection
+        conn.execute("UPDATE execution_operations SET action='runtime.open'")
+        conn.execute("UPDATE execution_sessions SET open_operation_id='close'")
+        if fault == "opening_hash":
+            conn.execute("UPDATE execution_operations SET intent_hash=?",("sha256:"+"f"*64,))
+        if fault == "opening_session":
+            conn.execute("UPDATE execution_operations SET session_id='foreign'")
+        if fault == "opening_generation":
+            conn.execute("UPDATE execution_operations SET expected_revisions_json=?",('{"session_owner_generation":2}',))
+    if fault == "opening_stage":
+        changed=dict(frame,stage="FAILED",receipt_revision=2)
+        seed_receipt(factory,changed)
+        report["receipts"][0].update(stage="FAILED",receipt_revision=2)
+        # Refresh the receipt high water so this tests the release predicate.
+        service.receipt_high += 1
+    report["ownership_facts"][0]["proof_digest"]=r4_resource_release_digest(
+        server_id=c.server_id,executor_id=c.executor_id,session_id="session",
+        opening_operation_id="close",opening_intent_hash=frame["intent_hash"],owner_generation=1)
+    if fault == "digest":
+        report["ownership_facts"][0]["proof_digest"]="sha256:"+"f"*64
+    result=service.accept(report)
+    assert result["recovery_remaining"] is (fault is not None)
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT count(*) FROM execution_operations WHERE action='runtime.close'").fetchone()[0]==0

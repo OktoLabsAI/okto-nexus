@@ -244,11 +244,18 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                         while not native.native.stopped:
                             await asyncio.sleep(.01)
                     assert time.monotonic() >= native.context.lease_deadline_monotonic
+                    generation = owner.state.connection_generation
+                    async with asyncio.timeout(15):
+                        while not (control.status()['execution_ready'] and control.connection.state.connection_generation > generation):
+                            await asyncio.sleep(.01)
                     assert native.opens == 1
                     assert [kind for kind, _ in native.native.sent] == ['send_turn']
                     with deps.connection_factory.unit_of_work(write=False) as uow:
                         assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 2
                         assert uow.connection.execute('SELECT COUNT(*) FROM execution_dispatch_outbox WHERE attempt_no<>1').fetchone()[0] == 0
+                        assert tuple(uow.connection.execute('SELECT lifecycle_state,lease_state FROM execution_sessions').fetchone()) == ('CLOSED','CLOSED')
+                        assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations WHERE action='runtime.close'").fetchone()[0] == 0
+                        assert uow.connection.execute('SELECT COUNT(*) FROM execution_receipts').fetchone()[0] == 2
                     return
                 if automatic or (reconcile_closed and not publication_failure and not history_count):
                     from nexus_connector_core import RuntimeEvent

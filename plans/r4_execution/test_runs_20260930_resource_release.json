@@ -1,0 +1,70 @@
+{
+  "increment": "M06 durable released-resource reconciliation",
+  "status": "PARTIAL_INSTALLED_INTEGRATION",
+  "requirements": [
+    "NS08.03 reconciliation (partial)",
+    "NS08.05 transport loss ownership (partial)",
+    "CORE-R4 public ownership evidence (partial)"
+  ],
+  "reference_commits": {
+    "nexus": "7af7b3e0ba16db13cbefe601dc069938e3f4354f",
+    "connector": "0f14f2af951d167eec2a1c7b1a35849e5b9c7226",
+    "core": "9d75b6e0de606723561b5903a9c7257dfff975b8"
+  },
+  "nexus_commit_note": "Nexus reference is the parent of the commit containing this manifest.",
+  "artifacts": "evidence/resource-release-artifacts.json",
+  "tests": {
+    "core": {
+      "tests": 140,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "passed": 140
+    },
+    "connector": {
+      "tests": 411,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 1,
+      "passed": 410
+    },
+    "nexus": {
+      "unique_tests": 88,
+      "effective_passed": 88,
+      "effective_failures": 0,
+      "initial_run": {
+        "tests": 88,
+        "errors": 0,
+        "failures": 1,
+        "skipped": 0,
+        "passed": 87
+      },
+      "bootstrap_pin_rerun": {
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "passed": 1
+      },
+      "method": "Per-test latest result: 87 initial passes plus the corrected bootstrap pin test. The full initial run and focused rerun are retained separately."
+    }
+  },
+  "verification": [
+    "Core public ownership state distinguishes missing, active and retained released records across reopening.",
+    "Release projection requires matching slot, claim, original opening operation, Core/wire binding and successful opening fact.",
+    "Server checks original opening identity/hash and owner generation before adopting release into session state.",
+    "Real HTTP/WSS expiry cleanup reconnects automatically to CONTROL_READY without a close operation or receipt.",
+    "One opening, one turn, two canonical operations, two receipts and no repeated outbox attempt.",
+    "Core 0.2.36.dev0 wheel SHA-256 is identical in artifacts and both consumer vendor directories; all package source/wheel/installed bytes verified."
+  ],
+  "corrections": [
+    "The legacy FaultyLedger conformance double lacked owned_slot_state. It now implements the port while still dropping reservations, preserving the negative conformance scenario. The installed Core suite was rerun: 140 passed.",
+    "Nexus bootstrap packaging test initially retained the 0.2.35 wheel hash. Only its expected hash was updated to the verified 0.2.36 artifact. The failed node was rerun with installed artifact verification: passed. Production package bytes did not change after the full Nexus run."
+  ],
+  "limits": [
+    "Released managed resources only; live-process transfer/adoption, unknown ownership and actual process-kill recovery remain pending.",
+    "Technical native peer and readiness fixture; provider/platform/independent-host, embedded, projections, migration and final acceptance remain pending.",
+    "One existing Connector skip and existing Nexus dependency warning. User UI assets included without new UI acceptance.",
+    "No M00-M13 milestone or G0-G3 gate closed; full scope unchanged."
+  ]
+}

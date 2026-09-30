@@ -2,7 +2,7 @@
 import secrets
 import hashlib
 
-from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame
+from nexus_connector_core import CoreError, R4_PREVIEW_REVISION, decode_r4_frame, r4_resource_release_digest
 
 
 def _receipt(row):
@@ -122,8 +122,27 @@ class ExecutionReconciliation:
                     (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
                 closed = _receipt(closed)
                 if closed is None or closed['session_id'] != session_id:
-                    self.blocked = True
-                    continue
+                    # A released managed resource can be reconciled after
+                    # lease containment without inventing a close operation.
+                    opening = conn.execute(
+                        "SELECT r.* FROM execution_sessions s JOIN execution_operations o "
+                        "ON o.server_id=s.server_id AND o.executor_id=s.executor_id "
+                        "AND o.operation_id=s.open_operation_id JOIN execution_receipts r "
+                        "ON r.server_id=o.server_id AND r.executor_id=o.executor_id AND r.operation_id=o.operation_id "
+                        "WHERE s.server_id=? AND s.executor_id=? AND s.session_id=? "
+                        "AND o.action='runtime.open' AND o.session_id=s.session_id AND r.intent_hash=o.intent_hash "
+                        "AND json_extract(o.expected_revisions_json,'$.session_owner_generation')=? "
+                        "ORDER BY r.receipt_revision DESC LIMIT 1",
+                        (c.server_id,c.executor_id,session_id,claim['owner_generation'])).fetchone()
+                    opening = _receipt(opening)
+                    if (opening is None or opening['session_id'] != session_id or
+                            opening['stage'] not in ('SUBMITTED','SUCCEEDED') or
+                            fact['proof_digest'] != r4_resource_release_digest(
+                                server_id=c.server_id,executor_id=c.executor_id,session_id=session_id,
+                                opening_operation_id=opening['operation_id'],opening_intent_hash=opening['intent_hash'],
+                                owner_generation=claim['owner_generation'])):
+                        self.blocked = True
+                        continue
                 conn.execute("UPDATE execution_sessions SET lifecycle_state='CLOSED',lease_state='CLOSED' "
                     "WHERE server_id=? AND executor_id=? AND session_id=? AND owner_generation=?",
                     (c.server_id,c.executor_id,session_id,claim['owner_generation']))
