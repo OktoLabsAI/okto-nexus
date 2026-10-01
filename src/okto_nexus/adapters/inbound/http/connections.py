@@ -80,6 +80,10 @@ def build_router():
             deps = request.app.state.deps
             connections = service(deps)
             context, arguments = connections.resolve(extract_bearer(request))
+            from ....bootstrap.execution_compat import canonical_endpoint, connect_endpoint
+            canonical = canonical_endpoint(deps, arguments["endpoint_id"])
+            if canonical:
+                return connect_endpoint(deps, context, canonical, arguments["idempotency_key"])
             connections.access.authorize(context, action="open", endpoint_id=arguments["endpoint_id"])
             if not is_local_runtime_owner(deps):
                 raise OktoNexusError(ErrorCode.CONFLICT,

@@ -210,6 +210,11 @@ class AgentConnectionService:
             if not row:
                 raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid connection credential.", {})
             endpoint = self.repo.get(uow, row['endpoint_id'])
+            if endpoint["protocol"] == "nxl-r4":
+                context = RuntimeRequestContext(row['agent_id'], 'connection_key',
+                    credential_binding=digest, endpoint_id=row['endpoint_id'])
+                return context, dict(agent_id=row['agent_id'], endpoint_id=row['endpoint_id'],
+                                     idempotency_key='connection:' + row['key_id'])
             root = uow.connection.execute("SELECT root_realpath FROM workspaces WHERE workspace_id=?", (endpoint['workspace_id'],)).fetchone()[0]
         descriptor = self.access.registry.get(endpoint['adapter_id'])
         context = RuntimeRequestContext(row['agent_id'], 'connection_key', credential_binding=digest, endpoint_id=row['endpoint_id'])

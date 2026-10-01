@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 limited connection-key opening - October 1, 2026
+
+Installed verification: **95 distinct passes**, plus **3 architecture checks**. Existing limited-bearer opening now uses R4/Core with atomic key linkage, dispatch revalidation and lease expiry/revocation enforcement. Additive schema 092 preserves prior operations/receipts on repeated upgrade. See [scope](M12_NS15_03_KEYS.md) and [manifest](test_runs_20261001_ns15_03_key.json). Implicit selection, boot/delivery, discovery, event parity and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.
+
 ## NS15.03 canonical opening - October 1, 2026
 
 Installed verification: **80 distinct passes**, plus **3 architecture checks**. Explicit canonical REST/MCP opening and path-free MCP endpoint connect now use R4/Core, with stable retries, approved-realization validation and endpoint authority. See [scope](M12_NS15_03_OPEN.md) and [manifest](test_runs_20261001_ns15_03_open.json). Implicit selection, boot/delivery, connection-key open, event parity and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.

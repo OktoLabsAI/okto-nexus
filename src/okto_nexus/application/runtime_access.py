@@ -63,7 +63,13 @@ class RuntimeAccessService:
                 endpoint_id = self.grants.runtime_endpoint(uow, session_id)
             endpoint = self.endpoints.get(uow, endpoint_id) if endpoint_id else None
             adapter_available = True
-            if endpoint and self.registry:
+            if endpoint and endpoint["protocol"] == "nxl-r4":
+                from nexus_connector_core import get_runtime_catalog
+                descriptor = next((item for item in get_runtime_catalog().runtimes
+                                   if item.adapter_id == endpoint["adapter_id"]), None)
+                adapter_available = descriptor is not None
+                substrate = descriptor.connection_mode if descriptor else None
+            elif endpoint and self.registry:
                 try:
                     substrate = self.registry.get(endpoint["adapter_id"]).substrate
                 except OktoNexusError:
@@ -90,7 +96,7 @@ class RuntimeAccessService:
                 if endpoint["profile_id"]:
                     profile = self.endpoints.profile(uow, endpoint["profile_id"])
                     enabled = enabled and profile is not None and profile["enabled"]
-                    if enabled and self.registry:
+                    if enabled and self.registry and endpoint["protocol"] != "nxl-r4":
                         try:
                             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
                                                          hitl_enabled=self.config.feature_hitl)

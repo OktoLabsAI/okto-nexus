@@ -116,6 +116,15 @@ class ExecutionLeaseService:
                 source['credential_binding'] != row['api_key_hash']):
             raise _conflict('A current canonical execution grant is required.')
         expires = _stamp(source['expires_at'])
+        if row["connection_key_id"] is not None:
+            from .execution_connection_keys import require_connection_key
+            key = require_connection_key(uow, access=self.access,
+                agent_id=scope["agent_id"], endpoint_id=row["endpoint_id"],
+                key_id=row["connection_key_id"])
+            if key["source_grant_id"] is not None and key["source_grant_id"] != grant_id:
+                raise _conflict('The opening connection grant changed.')
+            if key["expires_at"] is not None:
+                expires = min(expires, _stamp(key["expires_at"]))
         if row['kind'] == 'remote':
             expires = min(expires, require_execution_lane(uow, scope=scope, channel=channel, now=now))
         if expires <= now:

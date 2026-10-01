@@ -67,12 +67,25 @@ def submit_execution_operation(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The operation does not match its resolution.", {})
         scope = resolved["scope"]
+        connection_key_id = None
+        if context is not None and context.authentication_source == "connection_key":
+            from .execution_connection_keys import require_connection_key
+            endpoint = conn.execute(
+                "SELECT endpoint_id FROM execution_bindings WHERE server_id=? AND executor_id=? AND binding_id=?",
+                (server_id, scope["executor_id"], scope["binding_id"])).fetchone()
+            if resolved["semantic_intent"]["action"] != "runtime.open" or endpoint is None or access is None:
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Connection credentials authorize opening only.", {})
+            connection_key_id = require_connection_key(uow, access=access,
+                agent_id=actor_agent_id, endpoint_id=endpoint[0],
+                key_hash=context.credential_binding)["key_id"]
         executor_id = scope["executor_id"]
         key = (server_id, executor_id, operation_id)
         prior = conn.execute(
-            "SELECT operation_id FROM execution_operations WHERE server_id=? "
+            "SELECT operation_id,connection_key_id FROM execution_operations WHERE server_id=? "
             "AND executor_id=? AND operation_id=?", key,
         ).fetchone()
+        if prior is not None and connection_key_id is not None and prior["connection_key_id"] != connection_key_id:
+            raise OktoNexusError(ErrorCode.CONFLICT, "The opening belongs to a different connection credential.", {})
         if resolved["reuse"]:
             if prior is None or intent["session_selection"] != "reuse":
                 raise OktoNexusError(ErrorCode.CONFLICT, "The reused opening is unavailable.", {})
@@ -230,13 +243,13 @@ def submit_execution_operation(
                 "operation_id,subject_agent_id,actor_agent_id,binding_id,"
                 "workspace_id,workspace_binding_id,session_id,action,intent_hash,"
                 "semantic_payload,expected_revisions_json,delivery_id,"
-                "admission_state,created_at,admission_bytes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "admission_state,created_at,admission_bytes,connection_key_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (*key, actor_agent_id, actor_agent_id, scope["binding_id"],
                  scope["workspace_id"], scope["workspace_binding_id"],
                  session_id, action, request["intent_hash"],
                  encoded_semantic.decode("utf-8"),
                  canonical_json(scope).decode("utf-8"),
-                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic)),
+                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic), connection_key_id),
             )
             if action == "runtime.open":
                 conn.execute(

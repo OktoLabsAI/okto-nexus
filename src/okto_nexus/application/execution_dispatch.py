@@ -359,7 +359,7 @@ def begin_execution_send(
                                   "The dispatch candidate changed.", {})
         session = conn.execute(
             "SELECT s.binding_id,s.workspace_id,s.workspace_binding_id,"
-            "s.owner_generation,s.lifecycle_state,s.lease_state,p.semantic_payload AS opening_intent "
+            "s.owner_generation,s.lifecycle_state,s.lease_state,p.semantic_payload AS opening_intent,p.connection_key_id "
             "FROM execution_sessions s LEFT JOIN execution_operations p "
             "ON p.server_id=s.server_id AND p.executor_id=s.executor_id "
             "AND p.operation_id=s.open_operation_id "
@@ -379,6 +379,12 @@ def begin_execution_send(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The dispatch session changed.", {})
         opening = json.loads(session['opening_intent']) if session['opening_intent'] else {}
+        connection_key = None
+        if session["connection_key_id"] is not None and not containment:
+            from .execution_connection_keys import require_connection_key
+            connection_key = require_connection_key(uow, access=access,
+                agent_id=row["subject_agent_id"], endpoint_id=binding["endpoint_id"],
+                key_id=session["connection_key_id"])
         mode = opening.get('payload', {}).get('mode')
         if opening.get('action') != 'runtime.open' or mode not in ('managed', 'attach'):
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -434,7 +440,8 @@ def begin_execution_send(
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
         context = RuntimeRequestContext(
             actor.agent_id, 'agent_key', credential_binding=actor.api_key_hash,
-            execution_grant_id=None if bootstrap else lease['grant_id'])
+            execution_grant_id=(connection_key["source_grant_id"] if connection_key else None)
+                if bootstrap else lease['grant_id'])
         grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
                          represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
                          substrate=mode, consume=not bootstrap and not native_decision,
