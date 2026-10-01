@@ -1,0 +1,202 @@
+{
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--json",
+        "--non-interactive",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um",
+        "executor",
+        "configure-discovery",
+        "--server-id",
+        "server",
+        "--harness-root",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um"
+      ],
+      "exit_code": 0,
+      "response": {
+        "discovery_configuration": {
+          "format_version": 1,
+          "pi_install_root": null,
+          "pi_node": null,
+          "roots": [
+            {
+              "device": "14764524303808498864",
+              "inode": "229402106019475307",
+              "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um"
+            }
+          ]
+        },
+        "server_id": "server"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--json",
+        "--non-interactive",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um",
+        "executor",
+        "show",
+        "server"
+      ],
+      "exit_code": 0,
+      "response": {
+        "client_intent_id": "registration",
+        "connector_id": "connector",
+        "control_capabilities": [],
+        "discovery_configuration": {
+          "format_version": 1,
+          "pi_install_root": null,
+          "pi_node": null,
+          "roots": [
+            {
+              "device": "14764524303808498864",
+              "inode": "229402106019475307",
+              "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um"
+            }
+          ]
+        },
+        "executor_id": "executor",
+        "inventory_publication_sequence": 0,
+        "label": "Host",
+        "registration_agent_id": "agent",
+        "server_id": "server",
+        "state": "REGISTERED"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--json",
+        "--non-interactive",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um",
+        "discover",
+        "--server-id",
+        "server"
+      ],
+      "exit_code": 0,
+      "response": {
+        "availability": {
+          "executor_revision": "sha256:f8dcccfedad632cc22a0f6132fdad3d8cedc20f4a0b137ea69068f04cd9a49d7",
+          "format_version": 2,
+          "platform": "win32",
+          "rows": [
+            {
+              "adapter_id": "codex_app_server",
+              "architecture": null,
+              "build_identity": null,
+              "candidate_ref": "",
+              "connection_mode": "managed",
+              "containment": "available",
+              "display_name": "Codex (app-server)",
+              "label": "Codex (app-server)",
+              "qualification": "not_probed",
+              "reasons": [
+                "no_installed_candidate"
+              ],
+              "source": "",
+              "state": "NOT_INSTALLED",
+              "trust": "",
+              "version": null
+            },
+            {
+              "adapter_id": "pi_rpc",
+              "architecture": null,
+              "build_identity": null,
+              "candidate_ref": "",
+              "connection_mode": "managed",
+              "containment": "available",
+              "display_name": "Pi (Node RPC)",
+              "label": "Pi (Node RPC)",
+              "qualification": "not_probed",
+              "reasons": [
+                "no_installed_candidate"
+              ],
+              "source": "",
+              "state": "NOT_INSTALLED",
+              "trust": "",
+              "version": null
+            },
+            {
+              "adapter_id": "claude_stream",
+              "architecture": null,
+              "build_identity": null,
+              "candidate_ref": "",
+              "connection_mode": "managed",
+              "containment": "available",
+              "display_name": "Claude Code (stream)",
+              "label": "Claude Code (stream)",
+              "qualification": "not_probed",
+              "reasons": [
+                "no_installed_candidate"
+              ],
+              "source": "",
+              "state": "NOT_INSTALLED",
+              "trust": "",
+              "version": null
+            }
+          ]
+        },
+        "candidates": [],
+        "note": "Persisted executor discovery configuration; runtime authorization is separate."
+      }
+    },
+    {
+      "command": "configure-discovery with relative path",
+      "exit_code": 1,
+      "response": {
+        "error": {
+          "action": null,
+          "code": "VALIDATION_ERROR",
+          "message": "Discovery paths must be existing absolute local paths.",
+          "operation_id": null,
+          "possible_effect": false,
+          "retry_safe": false,
+          "stage": "discovery_configuration"
+        }
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+        "-I",
+        "-m",
+        "okto_nexus_connector.cli.main",
+        "--json",
+        "--non-interactive",
+        "--state-dir",
+        "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-discovery-cli-gwx690um",
+        "executor",
+        "configure-discovery",
+        "--server-id",
+        "server"
+      ],
+      "exit_code": 0,
+      "response": {
+        "discovery_configuration": {
+          "format_version": 1,
+          "pi_install_root": null,
+          "pi_node": null,
+          "roots": []
+        },
+        "server_id": "server"
+      }
+    }
+  ],
+  "network_registration_fixture": true,
+  "runtime_started": false,
+  "scope": "Installed CLI configuration and passive discovery only; not full onboarding acceptance."
+}

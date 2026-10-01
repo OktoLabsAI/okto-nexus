@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Persisted Connector discovery and public CLI - September 30, 2026
+
+Connector 74e9b48 adds schema 9 discovery configuration scoped to a registered Server executor. Public configure-discovery/discover commands and the automatic daemon use the persisted roots and Pi Node/release pair through Core's public discovery facade. Physical path replacement and configuration races are refused; naming an external Node file does not trust its whole directory. The final installed wheel passed 190 tests, pip check and separate CLI persistence/preview/refusal/clear processes. [Evidence index](test_runs_20260930_discovery_configuration.json). Nexus product 301ed04 and Core a061960 / 0.2.43 are unchanged. Next: public launch configuration and realization publication/acknowledgement, reusable binding onboarding, then real remote Pi/Codex/Claude journeys. M03/M10, M08 and release gates remain open.
+
+
 ## Lease-authorized remote native capture - September 30, 2026
 
 Nexus 301ed04 and Connector f49d48e adopt Core a061960 / 0.2.43.dev0. The public Core factory derives native capture at launch from an applied R4 lease with both decision actions; Connector opts in before installing the lease. Installed tests passed: Core 65, Connector 78, Nexus 101 and 83 overlapping cases without Connector. Four new loopback WebSocket cases exercise canonical approval/input approval and denial through the automatic daemon with a technical native peer. Initial test-contract errors were corrected; an isolated lease-renewal timeout did not recur in the unchanged standalone test or sequential full rerun, but its cause remains undetermined. [Evidence index](test_runs_20260930_native_lease.json). Previous real Pi/Codex/Claude results belong to Core 0.2.42. Next: existing M03/M10 public Connector discovery/configuration/realization onboarding, then real remote provider journeys. No milestone or release gate closes.

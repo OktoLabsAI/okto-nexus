@@ -21,7 +21,7 @@
       "core_pin": "0.2.43.dev0"
     },
     "connector": {
-      "commit": "f49d48e",
+      "commit": "74e9b48",
       "core_pin": "0.2.43.dev0"
     }
   },
@@ -36,14 +36,16 @@
     "Embedded capture and application under explicit HITL lease actions; actual Claude journey passed with three operator decisions.",
     "Observed and corrected Codex MCP empty elicitation forms; explicit one-call input remains mandatory.",
     "Actual installed Pi, Codex and Claude local handoff journeys passed on the same Nexus/Core wheels without Connector.",
-    "Core 0.2.43 and Connector capture from applied lease actions; four technical loopback decision cases pass with canonical admission, dispatch and receipt return."
+    "Core 0.2.43 and Connector capture from applied lease actions; four technical loopback decision cases pass with canonical admission, dispatch and receipt return.",
+    "Connector persists scoped discovery roots/Pi pair and exposes public configure/preview CLI; automatic daemon uses the public Core facade. Final installed verification passed 190 cases plus CLI subprocess checks."
   ],
   "remaining": [
-    "Expose persisted approved discovery and public configuration/realization onboarding in Connector; exercise real remote providers.",
+    "Expose public launch configuration, realization publication/acknowledgement and reusable binding onboarding in Connector; exercise real remote providers.",
     "Complete explicit native observation, sensitive input, rejection, replay and recovery acceptance.",
     "Investigate the initial isolated renewal timing failure if it recurs; do not claim the cause was fixed.",
     "Complete UI/CLI decisions and races, migration and the remaining fixed-plan milestones."
   ],
   "milestone_complete": false,
-  "consumer_evidence": "test_runs_20260930_native_lease.json"
+  "consumer_evidence": "test_runs_20260930_native_lease.json",
+  "onboarding_evidence": "test_runs_20260930_discovery_configuration.json"
 }
