@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Bounded parallel identity reads — October 1, 2026
+
+Core c2aed11 / 0.2.49.dev0 preserves full Pi content verification with four bounded readers and ordered results. Connector dca0863 and Nexus 43711b8 adopt the identical wheel. Installed regressions passed: 142 Core, 165 Connector, 89 Nexus. Actual Pi discovery stop passed in 0.0158 seconds; normal handoff/rebind/second-turn journey passed with the unchanged readiness deadline. Source discovery measured 12.51 seconds versus the prior sequential 66.18 seconds, with identical qualified build identity. See [details](M11_PARALLEL_IDENTITY.md) and [manifest](test_runs_20261001_parallel_identity.json). NS14.03 remains partial; all gates open.
+
 ## Passive discovery shutdown and lease watcher — October 1, 2026
 
 Core 8d519e0 / 0.2.48.dev0 adds cooperative passive-discovery cancellation and fixes the preexpired lease watcher's pending-event flag. Connector d4cb0c2 and Nexus 79c2d3f stop their inventory readers while retaining started publications. Installed cases passed: 139 Core, 165 Connector, 89 Nexus; two overlapping lease cases additionally verified durable journal events. Actual Pi discovery stop passed in 0.0144 seconds. The normal Pi journey failed the unchanged 120-second readiness deadline and remains unaccepted; shutdown/cleanup succeeded. Profiling measured 55.87 of 66.18 seconds in file opening. See [details](M11_DISCOVERY_SHUTDOWN.md) and [manifest](test_runs_20261001_discovery_stop.json). NS14.03 remains partial; all gates open.
