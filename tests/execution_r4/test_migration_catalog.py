@@ -53,12 +53,12 @@ def test_catalog_batches_resume_twice_without_mutating_legacy_rows(legacy, monke
     assert migrate(legacy)[1]["processed"] == 3
     assert migrate(legacy)[1]["processed"] == 3
     assert migrate(legacy)[1]["processed"] == 3
-    code, report = migrate(legacy)
+    code, report = migrate(legacy, 100)
     assert code == 0 and report["status"] == "CATALOG_BACKFILL_COMPLETE"
     config, factory, _ = legacy
     with factory.unit_of_work(write=False) as uow:
         before = [dict(r) for r in uow.connection.execute("SELECT * FROM execution_migration_map ORDER BY source_type,legacy_id")]
-        assert len(before) == 12
+        assert len(before) == 13
         states = {r["legacy_id"]: r["state"] for r in before if r["source_type"] == "agent_endpoints"}
         assert states == {"0":"REDISCOVERY_REQUIRED","1":"REDISCOVERY_REQUIRED",
             "2":"REDISCOVERY_REQUIRED","3":"REDISCOVERY_REQUIRED","4":"TOOLS_ONLY","5":"MIGRATION_REVIEW_REQUIRED"}
@@ -106,3 +106,44 @@ def test_interrupted_batch_rolls_back_and_resumes(legacy):
     assert migrate(legacy)[1]["processed"] == 3
     assert migrate(legacy)[1]["processed"] == 3
     assert migrate(legacy,100)[1]["status"] == "CATALOG_BACKFILL_COMPLETE"
+
+
+def test_legacy_denial_is_materialized_in_canonical_binding_policy(legacy):
+    from okto_nexus.application.execution_binding_proposals import _require_binding_method
+    from okto_nexus.errors import OktoNexusError
+    assert migrate(legacy, 1)[1]["processed"] == 1
+    _, factory, _ = legacy
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT enabled FROM agent_connection_methods WHERE method='codex'").fetchone()[0] == 0
+        with pytest.raises(OktoNexusError, match="Connection method is disabled"):
+            _require_binding_method(uow.connection, subject_agent_id="agent", adapter_id="codex_app_server")
+    assert migrate(legacy, 100)[1]["status"] == "CATALOG_BACKFILL_COMPLETE"
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("UPDATE agent_connection_methods SET enabled=1 WHERE method='codex_app_server'")
+    assert migrate(legacy, 100)[0] == 1
+
+
+def test_conflicting_canonical_allow_requires_review(legacy, tmp_path):
+    config, factory, _ = legacy
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO agent_connection_methods VALUES ('agent','codex_app_server',1)")
+    backup = tmp_path/"with-conflict"
+    create_migration_backup(config.db_path, backup)
+    assert migrate((config,factory,backup),100)[0] == 1
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_migration_map").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT enabled FROM agent_connection_methods WHERE method='codex_app_server'").fetchone()[0] == 1
+
+
+def test_policy_backfill_refuses_live_runtime_owner(legacy, tmp_path):
+    from datetime import datetime, timedelta, timezone
+    config, factory, _ = legacy
+    with factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO runtime_dispatcher_owner(owner_key,epoch,owner_id,lease_expires_at) VALUES('dispatcher',1,'live-owner',?)",
+                               ((datetime.now(timezone.utc)+timedelta(minutes=5)).isoformat(),))
+    backup = tmp_path/"live-backup"
+    create_migration_backup(config.db_path, backup)
+    assert migrate((config,factory,backup),100)[0] == 1
+    with factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT MAX(version) FROM schema_migrations").fetchone()[0] == 65
+        assert uow.connection.execute("SELECT COUNT(*) FROM agent_connection_methods").fetchone()[0] == 1

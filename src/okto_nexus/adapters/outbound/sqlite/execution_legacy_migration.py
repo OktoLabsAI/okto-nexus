@@ -1,4 +1,5 @@
 """Explicit, resumable legacy catalog translation; never an execution registry."""
+from datetime import datetime, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -47,7 +48,15 @@ def require_preserved_baseline(conn, manifest):
         columns = expected["columns"]
         digest, count = hashlib.sha256(), 0
         selection = ",".join(_quoted(name) for name in columns)
-        for row in conn.execute("SELECT "+selection+" FROM "+_quoted(table)+" ORDER BY "+selection):
+        restriction = ""
+        if table == "agent_connection_methods" and conn.execute(
+                "SELECT 1 FROM sqlite_master WHERE name='execution_migration_map'").fetchone():
+            restriction = (" WHERE NOT EXISTS (SELECT 1 FROM execution_migration_map m "
+                "WHERE m.source='nexus-r4-catalog-v1' AND m.source_type='agent_connection_methods' "
+                "AND json_extract(m.canonical_ref,'$.created_canonical_denial')=1 "
+                "AND json_extract(m.canonical_ref,'$.agent_id')=agent_connection_methods.agent_id "
+                "AND json_extract(m.canonical_ref,'$.canonical_method')=agent_connection_methods.method)")
+        for row in conn.execute("SELECT "+selection+" FROM "+_quoted(table)+restriction+" ORDER BY "+selection):
             encoded = _encoded(tuple(row))
             digest.update(len(encoded).to_bytes(8, "big"))
             digest.update(encoded)
@@ -65,7 +74,9 @@ def _backfill_catalog_batch(factory, manifest, *, batch_size=100):
     processed = 0
     with factory.unit_of_work() as uow:
         conn = uow.connection
+        require_idle_migration_owner(conn)
         require_preserved_baseline(conn, baseline)
+        processed = _backfill_method_denials(conn, batch_id, batch_size)
         for table, key in TABLES:
             # Detect drift in a previously recorded row instead of silently
             # assigning the same ID to a different migration source.
@@ -128,3 +139,57 @@ def backfill_catalog_batch(factory, manifest, *, batch_size=100):
         return _backfill_catalog_batch(factory, manifest, batch_size=batch_size)
     except sqlite3.Error as error:
         raise ValueError("The migration batch could not be committed.") from error
+
+
+def _pending_methods(conn, limit):
+    return conn.execute(
+        "SELECT * FROM agent_connection_methods t WHERE t.method IN (?,?,?,?) "
+        "AND NOT EXISTS (SELECT 1 FROM execution_migration_map m WHERE m.source=? "
+        "AND m.source_type='agent_connection_methods' AND m.legacy_id=json_array(t.agent_id,t.method)) "
+        "ORDER BY t.agent_id,t.method LIMIT ?", (*LEGACY_ADAPTERS, SOURCE, limit)).fetchall()
+
+
+def _backfill_method_denials(conn, batch_id, limit):
+    for saved in conn.execute("SELECT * FROM execution_migration_map WHERE source=? "
+                              "AND source_type='agent_connection_methods'", (SOURCE,)):
+        agent, method = json.loads(saved["legacy_id"])
+        source = conn.execute("SELECT * FROM agent_connection_methods WHERE agent_id=? AND method=?",
+                              (agent, method)).fetchone()
+        if source is None or _row_digest(source) != saved["row_digest_before"]:
+            raise ValueError("A migrated connection policy changed; review is required.")
+        ref = json.loads(saved["canonical_ref"])
+        if ref["denied"]:
+            canonical = conn.execute("SELECT enabled FROM agent_connection_methods WHERE agent_id=? AND method=?",
+                                     (agent, ref["canonical_method"])).fetchone()
+            if canonical is None or canonical[0] != 0:
+                raise ValueError("A canonical migration denial changed; review is required.")
+    rows = _pending_methods(conn, limit)
+    for row in rows:
+        canonical = LEGACY_ADAPTERS[row["method"]]
+        denied, created = row["enabled"] == 0, False
+        if denied:
+            current = conn.execute("SELECT enabled FROM agent_connection_methods WHERE agent_id=? AND method=?",
+                                   (row["agent_id"], canonical)).fetchone()
+            if current is not None and current[0] != 0:
+                raise ValueError("Legacy denial conflicts with canonical policy; review is required.")
+            if current is None:
+                conn.execute("INSERT INTO agent_connection_methods(agent_id,method,enabled) VALUES(?,?,0)",
+                             (row["agent_id"], canonical))
+                created = True
+        ref = {"agent_id": row["agent_id"], "canonical_method": canonical,
+               "denied": denied, "created_canonical_denial": created}
+        conn.execute("INSERT INTO execution_migration_map(source,source_type,legacy_id,canonical_ref,"
+                     "row_digest_before,migration_batch_id,state) VALUES(?,?,?,?,?,?,?)",
+                     (SOURCE, "agent_connection_methods", json.dumps([row["agent_id"],row["method"]],separators=(",",":")),
+                      json.dumps(ref,sort_keys=True,separators=(",",":")), _row_digest(row), batch_id,
+                      "DENIAL_PRESERVED" if denied else "CONSENT_REQUIRED"))
+    return len(rows)
+
+
+def require_idle_migration_owner(conn):
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='runtime_dispatcher_owner'").fetchone():
+        row = conn.execute("SELECT lease_expires_at FROM runtime_dispatcher_owner WHERE owner_key='dispatcher'").fetchone()
+        if row:
+            expiry = datetime.fromisoformat(row[0].replace("Z", "+00:00"))
+            if expiry.tzinfo is None or expiry > datetime.now(timezone.utc):
+                raise ValueError("Stop and drain the runtime owner before migrating execution policy.")
