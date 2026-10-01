@@ -1502,10 +1502,12 @@
     },
     "NS15.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_02",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "PARTIAL",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_02"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_02 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-02"
@@ -1514,9 +1516,10 @@
         "tests/execution_r4/test_binding_migration.py::test_canonical_adapter_cannot_bypass_legacy_cutover"
       ],
       "evidence": [
-        "plans/r4_execution/test_runs_20261001_migration_cutover.json"
+        "plans/r4_execution/test_runs_20261001_migration_cutover.json",
+        "plans/r4_execution/test_runs_20261001_ns15_02.json"
       ],
-      "notes": "Fixed canonical adapter-name bypass of mapped legacy endpoint review; active and unknown session cases pass. Full normative drain and safe rollback scenario remains open."
+      "notes": "TR4-15-02 passes at migration_runtime: actual legacy owner drain, unknown retained, supported combined restore with execution disabled and no stdio fallback. Final installed campaign 94 distinct passes. Task dependencies, NS15.03/04 and release gates remain open."
     },
     "NS15.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_03",
@@ -2543,9 +2546,14 @@
         "NS15.02"
       ],
       "layer": "migration_runtime",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_02"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns15_02.json"
+      ]
     },
     "TR4-15-03": {
       "task_ids": [

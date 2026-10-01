@@ -1,9 +1,7 @@
-"""Real restricted credentials and anonymous stdio never gain runtime authority."""
-import asyncio
-import json
+"""Real restricted credentials and anonymous HTTP never gain runtime authority."""
 import sys
 
-from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool, stdio_environment
+from test_pr34_remediation import runtime as runtime_fixture, open_rest, tool
 from test_runtime_grants import issue
 from test_poll_tokens import _issue_token
 
@@ -70,7 +68,7 @@ def test_read_only_runtime_grant_has_identical_control_denials_and_audit(runtime
                 "AND action=? AND decision='deny'", (action,)).fetchone(), action
 
 
-def test_anonymous_real_stdio_cannot_open_or_control_existing_runtime(runtime):
+def test_anonymous_http_cannot_open_or_control_existing_runtime(runtime):
     deps, client, root, peers, operator, _ = runtime
     # Even a broken denial can only select this approved harmless local command;
     # no installed provider executable is available through this profile.
@@ -79,27 +77,14 @@ def test_anonymous_real_stdio_cannot_open_or_control_existing_runtime(runtime):
     assert changed.status_code == 200, changed.text
     sid = open_rest(runtime).json()["data"]["session_id"]
 
-    async def query():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        env = stdio_environment(runtime)
-        env.pop("OKTO_NEXUS_API_KEY")
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                "--feature-harness-integrations", "true"], env=env)
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                calls = [("harness_open", {"agent_id": "worker", "kind": "pi", "endpoint_id": "endpoint-pi", "project_root": root})]
-                calls.extend(("harness_" + verb, {"session_id": sid, **(
-                    {"payload": {"text": "never"}} if verb in {"send", "steer"} else {})})
-                    for verb in ("send", "steer", "interrupt", "close", "get"))
-                for name, args in calls:
-                    result = await session.call_tool(name, args)
-                    data = result.structuredContent or json.loads(result.content[0].text)
-                    assert not data["ok"] and data["error"]["code"] == "PERMISSION_DENIED", (name, data)
-
-    asyncio.run(asyncio.wait_for(query(), timeout=30))
+    calls = [("harness_open", {"agent_id": "worker", "kind": "pi", "endpoint_id": "endpoint-pi", "project_root": root})]
+    calls.extend(("harness_" + verb, {"session_id": sid, **(
+        {"payload": {"text": "never"}} if verb in {"send", "steer"} else {})})
+        for verb in ("send", "steer", "interrupt", "close", "get"))
+    for name, args in calls:
+        response = client.post("/mcp/", headers={"Accept": "application/json, text/event-stream"},
+            json={"jsonrpc": "2.0", "id": 1, "method": "tools/call", "params": {"name": name, "arguments": args}})
+        assert response.status_code == 401, (name, response.text)
     assert len(peers) == 1 and not peers[0].sent
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM harness_sessions").fetchone()[0] == 1

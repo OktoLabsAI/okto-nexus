@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="6.806" timestamp="2026-10-01T14:50:01.426414-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_ns15" name="test_ns15_02" time="5.134"><failure message="okto_nexus.errors.OktoNexusError: CONFLICT: Drain or reconcile the legacy endpoint sessions before adopting this endpoint.">tests\execution_r4\test_ns15.py:188: in test_ns15_02
+    assert migration_target(c, **scope, adapter_id="pi_rpc", endpoint_id="endpoint-pi")["endpoint_id"] == "endpoint-pi"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\application\execution_binding_migration.py:32: in migration_target
+    raise OktoNexusError(ErrorCode.CONFLICT,
+E   okto_nexus.errors.OktoNexusError: CONFLICT: Drain or reconcile the legacy endpoint sessions before adopting this endpoint.</failure></testcase></testsuite></testsuites>

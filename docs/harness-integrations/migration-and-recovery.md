@@ -18,8 +18,8 @@ owned runtimes. Detach external attach sessions without killing their processes.
 Use the repository procedure with matching code and dependencies:
 
 ```powershell
-rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py backup SOURCE_HOME NEW_BACKUP_DIR --db-path SOURCE_DATABASE --all-writers-and-native-owners-stopped
-rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py validate NEW_BACKUP_DIR
+rtk proxy .venv/Scripts/python.exe tools/offline_runtime_backup.py backup SOURCE_HOME NEW_BACKUP_DIR --db-path SOURCE_DATABASE --all-writers-and-native-owners-stopped
+rtk proxy .venv/Scripts/python.exe tools/offline_runtime_backup.py validate NEW_BACKUP_DIR
 ```
 
 Replace placeholders with reviewed absolute paths. The acknowledgement records
@@ -27,7 +27,7 @@ operator-confirmed quiescence; it does not stop processes. The tool also checks
 journal locking and owner lease state. Keep the backup under the source store's
 access restrictions: it contains private data. Standalone operator-key files and
 arbitrary home configuration are not included. The detailed
-[backup contract](../../plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md)
+[backup procedure](../../tools/offline_runtime_backup.py)
 describes checksums, references, fsync limits and failure handling.
 
 ## Upgrade and enable one binding at a time
@@ -73,7 +73,7 @@ lease expiry, configuration edit, process restart or restore.
 When restoring is necessary, preserve the original store and use a new directory:
 
 ```powershell
-rtk proxy .venv/Scripts/python.exe plans/pr34-remediation/offline_runtime_backup.py restore NEW_BACKUP_DIR NEW_RESTORED_HOME --all-writers-and-native-owners-stopped
+rtk proxy .venv/Scripts/python.exe tools/offline_runtime_backup.py restore NEW_BACKUP_DIR NEW_RESTORED_HOME --all-writers-and-native-owners-stopped
 ```
 
 The restored database is `NEW_RESTORED_HOME/nexus.db`; clear any old external

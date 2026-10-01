@@ -284,9 +284,9 @@ An authorized owner settings change switches admission mode atomically; disablin
 
 ## Combined offline backup and restore
 
-A database-only copy does not preserve the runtime journal or external artifacts. Use the repository's [tested offline procedure](../../plans/pr34-remediation/P12_COMBINED_BACKUP_RESTORE.md) after stopping all writers, artifact maintenance and managed native owners. The procedure requires explicit acknowledgement of quiescence, checks owner exclusion, uses SQLite's backup API, validates file hashes/references and journal checkpoints, and refuses overwrite. It never starts a native process or replays a prompt.
+A database-only copy does not preserve the runtime journal or external artifacts. Use the repository's [tested offline procedure](../../tools/offline_runtime_backup.py) after stopping all writers, artifact maintenance and managed native owners. The procedure requires explicit acknowledgement of quiescence, checks owner exclusion, uses SQLite's backup API, validates file hashes/references and journal checkpoints, and refuses overwrite. It never starts a native process or replays a prompt.
 
-Restore into a new home and start with an explicit `--feature-harness-integrations false` while reviewing uncertain operations and preserved executor reservations. Retain the original store and dedupe history. The snapshot contains private store data and must receive the same access restrictions. The procedure lives at `plans/pr34-remediation/offline_runtime_backup.py`; it is not a remotely callable admin endpoint.
+Restore into a new home and start with an explicit `--feature-harness-integrations false` while reviewing uncertain operations and preserved executor reservations. Retain the original store and dedupe history. The snapshot contains private store data and must receive the same access restrictions. The procedure lives at `tools/offline_runtime_backup.py`; it is not a remotely callable admin endpoint.
 
 
 ## Capture capacity admission fence (schema 062)

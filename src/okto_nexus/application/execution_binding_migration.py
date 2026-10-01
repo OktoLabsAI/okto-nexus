@@ -28,7 +28,8 @@ def migration_target(conn, *, server_id, executor_id, subject_agent_id,
     if not isinstance(config, dict):
         raise OktoNexusError(ErrorCode.CONFLICT, "Review the legacy endpoint configuration before adoption.", {})
     if conn.execute("SELECT 1 FROM harness_sessions WHERE endpoint_id=? "
-                    "AND (status<>'ended' OR ended_at IS NULL) LIMIT 1", (endpoint_id,)).fetchone():
+                    "AND (upper(status)<>'ENDED' OR ended_at IS NULL "
+                    "OR lifecycle_state NOT IN ('stopped','legacy_unlinked')) LIMIT 1", (endpoint_id,)).fetchone():
         raise OktoNexusError(ErrorCode.CONFLICT,
             "Drain or reconcile the legacy endpoint sessions before adopting this endpoint.", {})
     return {"endpoint_id": endpoint_id, "revision": row["revision"],

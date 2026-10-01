@@ -68,8 +68,12 @@ class RuntimeAccessService:
                     substrate = self.registry.get(endpoint["adapter_id"]).substrate
                 except OktoNexusError:
                     adapter_available = False
-            enabled = adapter_available and self.config.feature_harness_integrations and (
-                substrate != "attach" or self.config.feature_harness_attach)
+            # Historical inspection must survive disabled execution or removed
+            # providers during cutover/restore. Authentication, grants and audit
+            # below still apply; this does not authorize a native effect.
+            enabled = action in {"read", "events"} or (
+                adapter_available and self.config.feature_harness_integrations and (
+                    substrate != "attach" or self.config.feature_harness_attach))
             if endpoint and action in {"open", "send", "steer", "execute_work"}:
                 # Deactivation revokes execution for the represented identity,
                 # including operator/boot paths and cached idempotent requests.

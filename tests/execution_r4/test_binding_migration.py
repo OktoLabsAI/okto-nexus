@@ -105,6 +105,21 @@ def test_agent_cannot_adopt_legacy_endpoint(adopted_setup):
     assert response.status_code==403,response.text
 
 
+@pytest.mark.parametrize("lifecycle", ["outcome_unknown", "detached", "protocol_ready"])
+def test_terminal_status_does_not_override_unresolved_lifecycle(adopted_setup, lifecycle):
+    deps, _, client, headers, *_ = adopted_setup
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,"
+            "started_at,ended_at,created_at,updated_at,endpoint_id,lifecycle_state) "
+            "VALUES('contradictory','codex','subject','ENDED','{}','2026-10-01','2026-10-01','2026-10-01',"
+            "'2026-10-01','legacy-endpoint',?)", (lifecycle,))
+    response = client.post("/v1/connections/bindings:prepare", json=proposal_request(adopted_setup),
+                           headers=headers["operator"])
+    assert response.status_code == 409, response.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 0
+
+
 @pytest.mark.parametrize("state", ["protocol_ready", "outcome_unknown"])
 def test_canonical_adapter_cannot_bypass_legacy_cutover(adopted_setup, state):
     deps, _, client, headers, *_ = adopted_setup

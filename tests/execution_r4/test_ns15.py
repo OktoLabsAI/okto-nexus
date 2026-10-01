@@ -3,6 +3,8 @@ import io
 import json
 import shutil
 import subprocess
+from contextlib import contextmanager
+from pathlib import Path
 
 import pytest
 
@@ -129,3 +131,101 @@ def test_ns15_01(tmp_path, monkeypatch, request):
         assert c.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
         assert c.execute("SELECT COUNT(*) FROM execution_migration_map").fetchone()[0] == 5
         assert c.execute("PRAGMA foreign_key_check").fetchall() == []
+
+
+def test_ns15_02(tmp_path, monkeypatch, request, capsys):
+    # Reuse the actual TCP/lifespan legacy owner fixture, not a second owner.
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[1]))
+    from test_pr34_remediation import runtime, open_rest
+    from okto_nexus.application.execution_binding_migration import migration_target
+    from okto_nexus.bootstrap.execution_migration import migrate_execution_catalog
+    from okto_nexus.adapters.inbound.cli.main import main
+    from okto_nexus.errors import OktoNexusError
+    from okto_nexus.bootstrap.dependencies import bootstrap
+    from okto_nexus.adapters.inbound.http.app import build_app
+    from fastapi.testclient import TestClient
+    monkeypatch.syspath_prepend(str(Path(__file__).parents[2] / "tools"))
+    import offline_runtime_backup as recovery
+
+    with contextmanager(runtime.__wrapped__)(tmp_path, request) as running:
+        deps, client, root, peers, operator_key, caller_key = running
+        headers = {"x-api-key": operator_key}
+        active = open_rest(running)
+        assert active.status_code == 200, active.text
+        uncertain = client.post("/api/v1/harness/sessions", headers=headers,
+            json={"agent_id": "worker", "kind": "codex", "project_root": root})
+        assert uncertain.status_code == 200, uncertain.text
+        assert len(peers) == 2
+        stopped_peer, unknown_peer = peers
+        monkeypatch.setattr(stopped_peer, "observe_lifecycle",
+                            lambda session: {"stop_observed": True, "active_turn": False}, raising=False)
+        monkeypatch.setattr(unknown_peer, "observe_lifecycle",
+                            lambda session: {"stop_observed": True, "active_turn": True}, raising=False)
+        response = client.post("/v1/runtime/shutdown", headers={"Authorization": "Bearer " + operator_key},
+                               json={"timeout_seconds": 5})
+        assert response.status_code in (200, 202), response.text
+        assert response.json()["state"] == "DRAINED", response.text
+        assert deps.runtime_admission_fence.closed
+        assert deps.runtime_dispatcher._shutdown_finished.is_set()
+        assert all(peer.close_called for peer in peers)
+        assert all(sum(command.verb == "end" for command in peer.sent) == 1 for peer in peers)
+        assert open_rest(running).status_code >= 400
+        assert len(peers) == 2
+        for peer in peers:
+            queried = client.get("/api/v1/harness/sessions/" + peer.session.session_id, headers=headers)
+            assert queried.status_code == 200, queried.text
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            rows = {r["session_id"]: dict(r) for r in uow.connection.execute("SELECT * FROM harness_sessions")}
+        stopped = rows[stopped_peer.session.session_id]
+        unknown = rows[unknown_peer.session.session_id]
+        assert stopped["status"] == "ENDED" and stopped["lifecycle_state"] == "stopped"
+        assert stopped["ended_at"] is not None
+        assert unknown["lifecycle_state"] == "outcome_unknown" and unknown["ended_at"] is None
+        backup = tmp_path / "cutover-backup"
+        create_migration_backup(deps.config.db_path, backup)
+        assert migrate_execution_catalog(deps.config.db_path, backup)["status"] == "CATALOG_BACKFILL_COMPLETE"
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            c = uow.connection
+            installation = c.execute("SELECT * FROM execution_installation").fetchone()
+            executor = c.execute("SELECT executor_id FROM execution_executors WHERE kind='embedded'").fetchone()[0]
+            scope = dict(server_id=installation["server_id"], executor_id=executor,
+                         subject_agent_id="worker", workspace_id=resolve_workspace_id(root))
+            assert migration_target(c, **scope, adapter_id="pi_rpc", endpoint_id="endpoint-pi")["endpoint_id"] == "endpoint-pi"
+            with pytest.raises(OktoNexusError, match="Drain or reconcile"):
+                migration_target(c, **scope, adapter_id="codex_app_server", endpoint_id="endpoint-codex")
+            assert {r["session_id"]: dict(r) for r in c.execute("SELECT * FROM harness_sessions")} == rows
+            assert c.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
+        # Physical stops are observed for both peers; the second turn result
+        # remains uncertain. Restore must preserve that uncertainty, not replay it.
+        snapshot = tmp_path / "combined-cutover-snapshot"
+        recovery.backup(deps.config.home_dir, snapshot, stopped=True)
+        with pytest.raises(ValueError, match="Confirm"):
+            recovery.restore(snapshot, tmp_path / "unsafe-restore")
+        assert not (tmp_path / "unsafe-restore").exists()
+    restored_home = recovery.restore(snapshot, tmp_path / "restored-cutover", stopped=True)
+    restored = bootstrap({}, ["--home", str(restored_home), "--feature-harness-integrations", "false"])
+    launches = []
+
+    def forbidden(**kwargs):
+        launches.append(kwargs)
+        raise AssertionError("Restoring cutover history must not launch a replacement")
+
+    restored.harness_connector_factories = {kind: forbidden for kind in ("pi", "codex", "claude_code")}
+    with TestClient(build_app(restored)) as client:
+        for peer in peers:
+            response = client.get("/api/v1/harness/sessions/" + peer.session.session_id, headers=headers)
+            assert response.status_code == 200, response.text
+            denied = client.get("/api/v1/harness/sessions/" + peer.session.session_id,
+                                headers={"x-api-key": caller_key})
+            assert denied.status_code == 403
+        refused = client.post("/api/v1/harness/sessions", headers=headers,
+                              json={"agent_id": "worker", "kind": "pi", "project_root": root})
+        assert refused.status_code == 403, refused.text
+        with restored.connection_factory.unit_of_work(write=False) as uow:
+            assert {r["session_id"]: dict(r) for r in uow.connection.execute("SELECT * FROM harness_sessions")} == rows
+            with pytest.raises(OktoNexusError, match="Drain or reconcile"):
+                migration_target(uow.connection, **scope, adapter_id="codex_app_server", endpoint_id="endpoint-codex")
+        assert not launches
+        assert main([]) == 0
+        assert main(["stdio"]) == 2
+        assert "MCP stdio is no longer available" in capsys.readouterr().err

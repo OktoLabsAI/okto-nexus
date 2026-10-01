@@ -1,7 +1,4 @@
 """P04: one production composition, real HTTP/MCP, synthetic external peer."""
-import asyncio
-import json
-import sys
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
@@ -10,7 +7,7 @@ from okto_nexus.domain.base import iso_plus
 from okto_nexus.domain.runtime_context import RuntimeRequestContext
 from okto_nexus.errors import OktoNexusError
 from okto_nexus.adapters.inbound.mcp.tools.harness import build_access_service
-from test_pr34_remediation import open_rest, tool, stdio_environment, wait_sent
+from test_pr34_remediation import open_rest, tool, wait_sent
 from test_pr34_remediation import runtime as runtime_fixture
 
 runtime = runtime_fixture
@@ -98,31 +95,15 @@ def test_p04_native_options_and_payload_identity_are_rejected(runtime):
     assert peers[0].sent == []
 
 
-def test_p04_authenticated_stdio_reuses_grant_policy_and_durable_resource(runtime):
-    deps, _, _, _, _, caller = runtime
+def test_p04_authenticated_http_reuses_grant_policy_and_durable_resource(runtime):
+    _, client, _, _, _, caller = runtime
     session = open_rest(runtime).json()["data"]["session_id"]
     issue(runtime, ["read"])
 
-    async def query():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-
-        # Only the disposable fixture caller key reaches this Nexus test process.
-        env = stdio_environment(runtime)
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                  "--feature-harness-integrations", "true"], env=env)
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as client:
-                await client.initialize()
-                result = await client.call_tool("harness_get", {"session_id": session})
-                data = result.structuredContent or json.loads(result.content[0].text)
-                assert data["ok"], data
-                result = await client.call_tool("harness_close", {"session_id": session})
-                data = result.structuredContent or json.loads(result.content[0].text)
-                assert data["error"]["code"] == "PERMISSION_DENIED"
-
-    asyncio.run(asyncio.wait_for(query(), timeout=30))
+    data = tool(client, caller, "harness_get", {"session_id": session})
+    assert data["ok"], data
+    denied = tool(client, caller, "harness_close", {"session_id": session})
+    assert denied["error"]["code"] == "PERMISSION_DENIED"
 
 
 def test_p04_concurrent_grant_budget_has_one_admitted_send(runtime):

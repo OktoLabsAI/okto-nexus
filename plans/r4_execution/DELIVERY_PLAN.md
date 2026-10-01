@@ -34,9 +34,12 @@ e [manifesto de testes](test_runs_20261001_migration_resume.json). A próxima
 fronteira de M12 é o cutover/rollback. O aceite combinado de histórico legado
 e recuperação M0–M3 passou em [TR4-15-01](M12_NS15_01_ACCEPTANCE.md).
 A [correção de admissão durante cutover](M12_MIGRATION_CUTOVER_FENCE.md)
-impede contornar endpoints legados usando o ID canônico do adapter; ainda falta
-o aceite integrado TR4-15-02 de drenagem do owner e rollback. Nenhum gate de
-release é encerrado por estes incrementos.
+impede contornar endpoints legados usando o ID canônico do adapter.
+O [incremento TR4-15-02](M12_NS15_02_DRAIN.md) integra drenagem do owner,
+incerteza preservada e restore combinado no binário HTTP atual. A próxima
+fronteira é NS15.03: retirar loaders/codecs nativos duplicados após paridade;
+NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
+Nenhum gate de release é encerrado por estes incrementos.
 
 Esta revisão atende à solicitação de estruturar a entrega total. O escopo de implementação continua sendo M00–M13, com os critérios detalhados abaixo e o backlog normativo preservado. A sequência de fechamento é:
 

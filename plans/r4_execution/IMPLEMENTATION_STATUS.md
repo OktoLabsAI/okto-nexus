@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-15-02 legacy drain and offline restore — October 1, 2026
+
+Final installed verification: **94 distinct passes**, plus **3 architecture checks**. The normative migration-runtime scenario now drains two sessions through the actual TCP Server owner, preserves one uncertain result and restores DB/journal/artifacts into a new home with execution disabled. Fixed actual ENDED casing in adoption and authorized historical reads during disabled execution; mutations and unauthorized reads remain denied. See [scope](M12_NS15_02_DRAIN.md) and [manifest](test_runs_20261001_ns15_02.json). Native runtime deduplication NS15.03, full NS15.04 configuration/post-R4-effect restore and release gates remain open.
+
 ## NS15.02 legacy cutover admission fence — October 1, 2026
 
 Canonical binding preparation now consults the migrated endpoint reference, preventing a fresh binding from bypassing legacy active/unknown ownership under a different adapter ID. Two reproductions preceded the fix. Installed verification: **65 passed**, plus **3 architecture checks**. See [scope](M12_MIGRATION_CUTOVER_FENCE.md) and [manifest](test_runs_20261001_migration_cutover.json). Full TR4-15-02 owner drain/rollback acceptance and release gates remain open.
