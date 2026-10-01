@@ -5,7 +5,7 @@ import time
 from test_pr34_remediation import runtime as runtime_fixture, tool
 from test_runtime_commands import wait_operation
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 
 runtime = runtime_fixture
 

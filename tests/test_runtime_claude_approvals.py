@@ -28,7 +28,7 @@ for line in sys.stdin:
 
 
 def claude_peer(runtime, source=PEER):
-    from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+    from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
     deps, client, root, _, operator, _ = runtime
     deps.config.feature_hitl = True
     deps.harness_connector_factories["claude_code"] = lambda **kwargs: ClaudeCodeStreamConnector(

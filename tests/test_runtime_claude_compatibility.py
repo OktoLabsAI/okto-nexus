@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
 from okto_nexus.adapters.outbound.harness.compatibility import claude_version_observation
 from okto_nexus.errors import OktoNexusError
 from test_pr34_remediation import runtime as runtime_fixture, tool

@@ -6,7 +6,7 @@ import pytest
 
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
 from okto_nexus.adapters.inbound.mcp.tools.harness import build_dispatcher
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 from okto_nexus.application.runtime_shutdown import shutdown_runtime
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
 from test_pr34_remediation import runtime as runtime_fixture, send_message, open_rest

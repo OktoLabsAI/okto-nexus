@@ -97,7 +97,7 @@ def test_uncertain_artifact_fsync_never_creates_catalog_reference(runtime, monke
 
 
 def large_output_session(runtime):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
     source = _FAKE_SERVER_SOURCE.replace('"delta": text', '"delta": "L" * 70000')

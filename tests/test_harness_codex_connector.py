@@ -1,6 +1,6 @@
 """Phase 3 (harness-integrations, ADR 0004 D6) - the Codex connector.
 
-Exercises ``okto_nexus.adapters.outbound.harness.codex.CodexAppServerConnector``
+Exercises ``legacy_native_fixture.codex.CodexAppServerConnector``
 against a FAKE ``codex app-server`` - a small standalone Python script
 speaking the real JSON-RPC 2.0 stdio framing (request/response/notification/
 server-request), launched with ``sys.executable`` so no ``codex`` binary is
@@ -31,7 +31,7 @@ from typing import Any, Callable
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 from okto_nexus.domain.harness import (
     STEER_TIMING_IMMEDIATE,
     HarnessCommand,
@@ -806,7 +806,7 @@ def test_missing_binary_raises_config_error_not_raw_oserror() -> None:
 # retries the spawn instead of firing thread/start at a dead connection.
 # --------------------------------------------------------------------------- #
 def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Path, monkeypatch) -> None:
-    from okto_nexus.adapters.outbound.harness import codex as codex_module
+    from legacy_native_fixture import codex as codex_module
     original_spawn = codex_module.spawn_owned_process
     spawned = []
 
@@ -851,7 +851,7 @@ def test_failed_handshake_does_not_permanently_wedge_the_connector(tmp_path: Pat
 # to wedge every sender behind a write stuck on a full/unresponsive pipe.
 # --------------------------------------------------------------------------- #
 def test_stdin_write_lock_acquisition_is_bounded(connector: CodexAppServerConnector, monkeypatch: pytest.MonkeyPatch) -> None:
-    import okto_nexus.adapters.outbound.harness.codex as harness_codex_mod
+    import legacy_native_fixture.codex as harness_codex_mod
 
     monkeypatch.setattr(harness_codex_mod, "_STDIN_WRITE_LOCK_TIMEOUT_S", 0.2)
     connector.start(owning_agent_id="nxs_agent")
@@ -922,7 +922,7 @@ def test_emit_for_thread_buffer_append_is_lock_protected(connector: CodexAppServ
 def test_module_never_imports_or_instantiates_sleep_poll_waiter() -> None:
     import ast
 
-    import okto_nexus.adapters.outbound.harness.codex as mod
+    import legacy_native_fixture.codex as mod
 
     source = Path(mod.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -948,7 +948,7 @@ def test_module_never_imports_or_instantiates_sleep_poll_waiter() -> None:
 def test_every_blocking_wait_in_module_carries_a_timeout() -> None:
     import re
 
-    import okto_nexus.adapters.outbound.harness.codex as mod
+    import legacy_native_fixture.codex as mod
 
     source = Path(mod.__file__).read_text(encoding="utf-8")
     # Real call sites only - drop comment/docstring lines (which reference

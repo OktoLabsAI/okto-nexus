@@ -26,13 +26,13 @@ def configure(runtime, *, depth=2, outcome="completed", kind="codex"):
     # Register the actual JSON-RPC fixture adapter through existing composition.
     codex_session(runtime, outcome=outcome)
     if kind == "claude_code":
-        from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+        from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
         from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT
         deps.harness_connector_factories[kind] = lambda **kwargs: ClaudeCodeStreamConnector(
             binary=sys._base_executable, argv=["-u", "-c", _FAKE_CLAUDE_SCRIPT], cwd=root, env=kwargs["backend"]["env"],
             version_argv=["-c", "print('2.1.281 (Claude Code)')"])
     elif kind == "pi":
-        from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
+        from legacy_native_fixture.pi import PiRpcConnector
         from test_harness_pi_connector import _FAKE_SERVER_SOURCE
         from pathlib import Path
         import itertools
@@ -290,8 +290,8 @@ def test_result_relay_obeys_canonical_human_approval(runtime, decision):
     ("claude_code", "result:error_during_execution", {}, "failed"),
 ])
 def test_adapter_outcome_mapping_does_not_promote_errors_or_payload_claims(kind, native, payload, expected):
-    from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
-    from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+    from legacy_native_fixture.pi import PiRpcConnector
+    from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
     from okto_nexus.domain.harness import HarnessEvent
     event = HarnessEvent(session_id="fixture", harness_kind=kind, kind="turn_completed",
         native_event=native, payload=payload, occurred_at="2026-09-23T00:00:00.000Z")

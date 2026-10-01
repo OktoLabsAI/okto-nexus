@@ -133,12 +133,12 @@ woken the instant an event is published, not on some fixed interval.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process, observe_owned_process
-from .framing import FrameLimitExceeded, MAX_FRAME_CHARS, protocol_lines, stderr_chunks
-from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
+from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process, observe_owned_process
+from okto_nexus.adapters.outbound.harness.framing import FrameLimitExceeded, MAX_FRAME_CHARS, protocol_lines, stderr_chunks
+from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
-from .environment import child_environment
-from .compatibility import claude_version_observation
+from okto_nexus.adapters.outbound.harness.environment import child_environment
+from okto_nexus.adapters.outbound.harness.compatibility import claude_version_observation
 
 import json
 import hashlib
@@ -149,8 +149,8 @@ from collections import deque
 from collections.abc import Iterator, Mapping, Sequence
 from typing import Any
 
-from ....domain.base import utc_now_iso
-from ....domain.harness import (
+from okto_nexus.domain.base import utc_now_iso
+from okto_nexus.domain.harness import (
     COMMAND_VERBS,
     STEER_TIMING_IMMEDIATE,
     STEER_TIMING_NEXT_TURN_BOUNDARY,
@@ -160,8 +160,8 @@ from ....domain.harness import (
     HarnessSession,
     new_harness_session_id,
 )
-from ....errors import ErrorCode, OktoNexusError
-from ....domain.runtime_commands import RuntimeCommandNotSent
+from okto_nexus.errors import ErrorCode, OktoNexusError
+from okto_nexus.domain.runtime_commands import RuntimeCommandNotSent
 
 __all__ = ["ClaudeCodeStreamConnector"]
 
@@ -999,7 +999,7 @@ class ClaudeCodeStreamConnector:
             self._emit("error", f"result:{subtype}", payload)
 
     def _handle_permission_request(self, obj):
-        from ....domain.native_inputs import CLAUDE_INPUT, validate_request
+        from okto_nexus.domain.native_inputs import CLAUDE_INPUT, validate_request
         request_id, params = obj.get("request_id"), obj.get("request")
         valid = (self.native_approvals_enabled and isinstance(request_id, str) and bool(request_id)
                  and isinstance(params, dict) and params.get("subtype") == "can_use_tool"
@@ -1047,7 +1047,7 @@ class ClaudeCodeStreamConnector:
         return None
 
     def reply_native_approval(self, session_id, request, decision):
-        from ....domain.native_inputs import response_for
+        from okto_nexus.domain.native_inputs import response_for
         with self._state_lock:
             entry = self._approval_requests.get(request.get("request_id"))
             if (decision not in {"accept", "decline"} or not entry or not entry["pending"]

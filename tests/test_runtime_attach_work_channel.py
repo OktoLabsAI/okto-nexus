@@ -195,7 +195,7 @@ def test_external_work_revalidates_return_authority(runtime, fault, stage):
 
 @pytest.mark.skipif(os.name != "posix", reason="NOT_RUN: attach socket ownership requires POSIX")
 def test_external_work_over_real_attach_socket_and_authenticated_nexus(runtime, tmp_path, fake_server):
-    from okto_nexus.adapters.outbound.harness.claude_code_attach import ClaudeCodeAttachConnector
+    from legacy_native_fixture.claude_code_attach import ClaudeCodeAttachConnector
     deps, _, _, _, _, _ = runtime
     pid = os.getpid()
     _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path), peer_protocol=1)

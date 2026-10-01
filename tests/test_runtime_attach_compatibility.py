@@ -7,7 +7,7 @@ import pytest
 from test_claude_code_attach_connector import fake_server as attach_server_fixture, _write_registry, _write_key
 from test_pr34_remediation import runtime as runtime_fixture, tool
 from test_runtime_commands import wait_operation, wait_close_result
-from okto_nexus.adapters.outbound.harness.claude_code_attach import ClaudeCodeAttachConnector
+from legacy_native_fixture.claude_code_attach import ClaudeCodeAttachConnector
 from okto_nexus.domain.harness import HarnessCommand
 from okto_nexus.errors import OktoNexusError
 

@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 native implementation removal - October 1, 2026
+
+Installed verification: **449 distinct passes and 3 architecture checks**, with **81 skips (72 platform, 9 opt-in live-provider)**. The four duplicate native connector implementations are absent from the Server source/package and installed wheel. Historical domain regression tests explicitly inject test-only fixtures; production execution remains in Core. See [scope](M12_NS15_03_NATIVE_REMOVAL.md) and [manifest](test_runs_20261001_ns15_03_native_removal.json). Shared native process/framing helper separation, canonical-attempt policy, normative TR4-15-03, NS15.04 configuration/restore and final provider/platform/release gates remain pending.
+
 ## NS15.03 production loader cutover - October 1, 2026
 
 Installed verification: **86 product passes and 3 architecture checks**. Production Server composition no longer imports or constructs the four duplicate native connectors. Default legacy factories require canonical binding migration; canonical callers execute through Core. See [scope](M12_NS15_03_LOADER_CUTOVER.md) and [manifest](test_runs_20261001_ns15_03_loader_cutover.json). Physical duplicate-code removal, canonical-attempt re-selection policy, full restore and final provider/platform/release acceptance remain pending.

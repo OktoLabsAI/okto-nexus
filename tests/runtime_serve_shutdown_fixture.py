@@ -9,6 +9,7 @@ import sys
 import time
 
 import httpx
+import okto_nexus
 
 from okto_nexus.adapters.inbound.http.app import ensure_operator_key
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
@@ -30,8 +31,8 @@ while True: time.sleep(300)
 
 LAUNCHER = '''import sys,threading,uvicorn
 from okto_nexus.adapters.inbound.cli.serve import run_serve
-from okto_nexus.adapters.inbound.mcp import server as mcp_server
-from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
+from okto_nexus.bootstrap import dependencies as mcp_server
+from legacy_native_fixture.pi import PiRpcConnector
 peer,marker=sys.argv[1:3]
 original_bootstrap=mcp_server.bootstrap
 def bootstrap(*args,**kwargs):
@@ -73,9 +74,12 @@ class ServeFixture:
         self.marker = root / "process-identities.json"
         launcher = root / "serve.py"
         launcher.write_text(LAUNCHER, encoding="utf-8")
-        repo = Path(__file__).resolve().parents[1]
+        # The generated launcher lives outside tests. Expose its injected
+        # connector fixture while retaining the exact Server package under test.
+        test_root = Path(__file__).resolve().parent
+        package_root = Path(okto_nexus.__file__).resolve().parent.parent
         env = {k: v for k, v in os.environ.items() if k.upper() in {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP"}}
-        env.update(HOME=str(self.home), USERPROFILE=str(self.home), PYTHONPATH=str(repo / "src"),
+        env.update(HOME=str(self.home), USERPROFILE=str(self.home), PYTHONPATH=os.pathsep.join(map(str, (package_root, test_root))),
                    PYTHONIOENCODING="utf-8", OKTO_NEXUS_NO_BANNER="1")
         with socket.socket() as sock:
             sock.bind(("127.0.0.1", 0))

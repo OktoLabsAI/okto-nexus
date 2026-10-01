@@ -7,9 +7,9 @@ from io import StringIO
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.codex import _CodexTransport
-from okto_nexus.adapters.outbound.harness.pi import _PiTransport
-from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+from legacy_native_fixture.codex import _CodexTransport
+from legacy_native_fixture.pi import _PiTransport
+from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
 from test_pr34_remediation import runtime as runtime_fixture
 
 runtime = runtime_fixture
@@ -78,7 +78,7 @@ def test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline():
 
 
 def test_oversized_turn_fault_reaches_production_journal_without_completion(runtime):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator_key, _ = runtime
     source = _FAKE_SERVER_SOURCE.replace(

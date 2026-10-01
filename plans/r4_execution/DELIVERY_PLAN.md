@@ -53,7 +53,10 @@ publicação governada, artefatos privados e resultados estruturados explicitame
 admitidos também reutilizam o domínio existente. Leituras de eventos MCP/REST já
 usam o histórico canônico autorizado e paginado. Retenção da captura e auditoria
 de subscribers verificadas; observadores sem execução cobertos em TR4-06-05.
-Completar fallback e retirar os loaders/codecs nativos duplicados após paridade;
+Fallback legado→R4 com prova tipada e cutover dos loaders verificados. Os quatro
+conectores nativos duplicados foram [retirados do pacote](M12_NS15_03_NATIVE_REMOVAL.md);
+resta separar helpers físicos dos consumidores de compatibilidade e concluir
+o aceite normativo NS15.03, incluindo a política de tentativas canônicas;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
 

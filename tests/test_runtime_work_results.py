@@ -13,7 +13,7 @@ runtime = runtime_fixture
 
 
 def native_work_peer(runtime, *, action="complete", mutation=""):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     transform = '''
     envelope = json.loads(text.split("\\n", 1)[1])

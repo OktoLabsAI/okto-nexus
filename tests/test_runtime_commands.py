@@ -78,7 +78,7 @@ def wait_close_result(client, operator, response):
 
 
 def codex_session(runtime, *, outcome="completed"):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
     source = _FAKE_SERVER_SOURCE.replace('"status": "completed"', '"status": "' + outcome + '"')
@@ -194,7 +194,7 @@ def test_control_queued_for_finished_turn_does_not_hit_next_turn(runtime, monkey
 
 
 def test_claude_replacement_steer_has_separate_correlated_result(runtime):
-    from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+    from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
     from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT
     deps, client, root, _, operator, _ = runtime
     deps.harness_connector_factories["claude_code"] = lambda **kwargs: ClaudeCodeStreamConnector(

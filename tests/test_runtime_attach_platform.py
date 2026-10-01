@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness import claude_code_attach as attach
+from legacy_native_fixture import claude_code_attach as attach
 from okto_nexus.errors import OktoNexusError
 
 

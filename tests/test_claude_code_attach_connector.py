@@ -23,7 +23,7 @@ from pathlib import Path
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.claude_code_attach import (
+from legacy_native_fixture.claude_code_attach import (
     CAPABILITIES,
     ClaudeCodeAttachConnector,
     ProbeResult,
@@ -634,7 +634,7 @@ def test_start_raises_config_error_when_resolved_path_is_not_a_socket(
 # _computed_socket_path is a pure function of (pid, env) - the report itself
 # flagged these two branches as the least-certain, untested part of the module.
 def test_computed_socket_path_xdg_runtime_dir_unset_matches_ev_cc_001() -> None:
-    from okto_nexus.adapters.outbound.harness.claude_code_attach import (
+    from legacy_native_fixture.claude_code_attach import (
         _computed_socket_path,
     )
 
@@ -644,7 +644,7 @@ def test_computed_socket_path_xdg_runtime_dir_unset_matches_ev_cc_001() -> None:
 
 
 def test_computed_socket_path_falls_back_past_103_byte_sun_path_limit() -> None:
-    from okto_nexus.adapters.outbound.harness.claude_code_attach import (
+    from legacy_native_fixture.claude_code_attach import (
         _computed_socket_path,
     )
 
@@ -998,7 +998,7 @@ def test_send_docstring_states_the_ack_less_limitation_plainly() -> None:
     """Positive, binding assertion (not just absence-of-bad-phrasing): the
     docstring must actually say a clean send() is not proof of delivery,
     not merely fail to contain a few specific over-claiming phrases."""
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     doc = (mod.ClaudeCodeAttachConnector.send.__doc__ or "").lower()
     assert "not proof of delivery" in doc
@@ -1028,7 +1028,7 @@ def test_events_can_be_called_twice_without_hanging(tmp_path: Path) -> None:
 def test_probe_rejects_socket_owned_by_a_different_uid(
     tmp_path: Path, fake_server: _FakeSocketServer, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     pid = _live_pid()
     _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path))
@@ -1046,7 +1046,7 @@ def test_probe_rejects_socket_owned_by_a_different_uid(
 def test_start_rejects_socket_owned_by_a_different_uid(
     tmp_path: Path, fake_server: _FakeSocketServer, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     pid = _live_pid()
     _write_registry(tmp_path, pid, socket_path=str(fake_server.sock_path))
@@ -1119,7 +1119,7 @@ def test_res_a3_and_b3_every_blocking_wait_in_the_module_carries_a_timeout() -> 
     import inspect
     import re
 
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     source = inspect.getsource(mod)
     lines = source.splitlines()
@@ -1208,7 +1208,7 @@ def test_send_rejects_socket_that_changed_owner_uid_since_start(
     world-writable /tmp fallback path means it could be swapped for an
     attacker-owned socket before send() actually writes the bearer token.
     send() must re-check, not just trust start()'s earlier check forever."""
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     connector, session = _started_connector(tmp_path, fake_server)
     fake_server.wait_for_connections(1)  # start()'s liveness probe connection
@@ -1621,7 +1621,7 @@ def test_every_oktonexuserror_raised_by_this_module_sets_reason_and_category() -
     import ast
     import inspect
 
-    from okto_nexus.adapters.outbound.harness import claude_code_attach as mod
+    from legacy_native_fixture import claude_code_attach as mod
 
     source = inspect.getsource(mod)
     tree = ast.parse(source)

@@ -96,12 +96,12 @@ reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process, observe_owned_process
-from .framing import FrameLimitExceeded, protocol_lines, stderr_chunks
-from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
+from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process, observe_owned_process
+from okto_nexus.adapters.outbound.harness.framing import FrameLimitExceeded, protocol_lines, stderr_chunks
+from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
-from .environment import child_environment
-from .compatibility import pi_version_observation
+from okto_nexus.adapters.outbound.harness.environment import child_environment
+from okto_nexus.adapters.outbound.harness.compatibility import pi_version_observation
 
 import itertools
 import json
@@ -112,8 +112,8 @@ import threading
 from collections import deque
 from typing import Any, Callable, Iterator, Mapping, Sequence
 
-from ....domain.base import utc_now_iso
-from ....domain.harness import (
+from okto_nexus.domain.base import utc_now_iso
+from okto_nexus.domain.harness import (
     STATUS_STARTING,
     STEER_TIMING_NEXT_TURN_BOUNDARY,
     HarnessCapabilities,
@@ -122,7 +122,7 @@ from ....domain.harness import (
     HarnessSession,
     new_harness_session_id,
 )
-from ....errors import ErrorCode, OktoNexusError
+from okto_nexus.errors import ErrorCode, OktoNexusError
 
 __all__ = ["PiRpcConnector"]
 

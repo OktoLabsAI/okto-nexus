@@ -95,7 +95,7 @@ an earlier version of this module would have swallowed it.
 
 from __future__ import annotations
 
-from .event_buffers import NativeEventHistory
+from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory
 
 import json
 import os
@@ -107,9 +107,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterator, Mapping, Optional
 
-from ....application.ports import Clock
-from ....domain.base import check_inline_size, utc_now_iso
-from ....domain.harness import (
+from okto_nexus.application.ports import Clock
+from okto_nexus.domain.base import check_inline_size, utc_now_iso
+from okto_nexus.domain.harness import (
     STATUS_RUNNING,
     STATUS_STARTING,
     HarnessCapabilities,
@@ -118,7 +118,7 @@ from ....domain.harness import (
     HarnessSession,
     can_transition_session,
 )
-from ....errors import ErrorCode, OktoNexusError
+from okto_nexus.errors import ErrorCode, OktoNexusError
 
 __all__ = [
     "CAPABILITIES",

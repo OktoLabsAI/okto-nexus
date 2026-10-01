@@ -56,9 +56,9 @@ def wire_write(text):
 
 @pytest.mark.parametrize("adapter", ["pi", "codex", "claude_code.stream"])
 def test_fragmented_utf8_and_full_pipes_preserve_two_turns(runtime, adapter):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
-    from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
-    from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
+    from legacy_native_fixture.pi import PiRpcConnector
+    from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE as codex_source
     from test_harness_pi_connector import _FAKE_SERVER_SOURCE as pi_source
     from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT as claude_source

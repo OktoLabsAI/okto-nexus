@@ -43,11 +43,11 @@ frozen port cleanly - reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
-from .owned_process import spawn_owned_process, observe_owned_process
-from .framing import FrameLimitExceeded, protocol_lines, stderr_chunks
-from .event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
+from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process, observe_owned_process
+from okto_nexus.adapters.outbound.harness.framing import FrameLimitExceeded, protocol_lines, stderr_chunks
+from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
-from .environment import child_environment
+from okto_nexus.adapters.outbound.harness.environment import child_environment
 
 import json
 import hashlib
@@ -59,8 +59,8 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, Callable, Iterator, Mapping, Sequence
 
-from ....domain.base import utc_now_iso
-from ....domain.harness import (
+from okto_nexus.domain.base import utc_now_iso
+from okto_nexus.domain.harness import (
     STATUS_STARTING,
     STEER_TIMING_IMMEDIATE,
     HarnessCapabilities,
@@ -69,7 +69,7 @@ from ....domain.harness import (
     HarnessSession,
     new_harness_session_id,
 )
-from ....errors import ErrorCode, OktoNexusError
+from okto_nexus.errors import ErrorCode, OktoNexusError
 
 __all__ = ["CodexAppServerConnector"]
 
@@ -932,7 +932,7 @@ class CodexAppServerConnector:
         # or `events()` on the now-healthy connector would see a stale
         # "closed" flag from the earlier failure and return immediately on
         # its very first idle poll.
-        from .compatibility import codex_initialize_observation
+        from okto_nexus.adapters.outbound.harness.compatibility import codex_initialize_observation
         self._compatibility_report = codex_initialize_observation(initialize_result)
         self._closed_event.clear()
         self._transport = transport
@@ -961,7 +961,7 @@ class CodexAppServerConnector:
             return {"completed": "success", "failed": "failed", "interrupted": "interrupted"}.get(turn.get("status")) if isinstance(turn, dict) else None
 
     def _on_server_request(self, request_id, method, params):
-        from ....domain.native_inputs import INPUT_METHODS, ELICITATION, validate_request
+        from okto_nexus.domain.native_inputs import INPUT_METHODS, ELICITATION, validate_request
         if not self.native_approvals_enabled or method not in {
                 "item/commandExecution/requestApproval", "item/fileChange/requestApproval", *INPUT_METHODS}:
             return False
@@ -1013,8 +1013,8 @@ class CodexAppServerConnector:
         return None
 
     def reply_native_approval(self, session_id, request, decision):
-        from ....domain.runtime_commands import RuntimeCommandNotSent
-        from ....domain.native_inputs import INPUT_METHODS, ELICITATION, response_for
+        from okto_nexus.domain.runtime_commands import RuntimeCommandNotSent
+        from okto_nexus.domain.native_inputs import INPUT_METHODS, ELICITATION, response_for
         if decision not in {"accept", "decline"}:
             raise RuntimeCommandNotSent("Unsupported native approval decision")
         with self._sessions_lock:

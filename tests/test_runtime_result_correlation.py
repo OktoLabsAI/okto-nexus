@@ -15,7 +15,7 @@ runtime = runtime_fixture
 @pytest.mark.parametrize("rollback_receipt", [False, True])
 @pytest.mark.parametrize("large_output", [False, True])
 def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime, monkeypatch, rollback_receipt, large_output):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, peers, operator_key, _ = runtime
     source = _FAKE_SERVER_SOURCE
@@ -93,7 +93,7 @@ def test_terminal_is_correlated_to_transport_attempt_and_releases_lane(runtime, 
 
 
 def test_stale_terminal_cannot_free_lane_and_matching_interrupt_wakes_next(runtime):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     from test_runtime_outbox import wait_status
     deps, client, root, _, operator_key, _ = runtime

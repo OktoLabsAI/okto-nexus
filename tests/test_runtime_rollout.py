@@ -35,6 +35,11 @@ def test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_d
         "LOG_PATH = sys.argv[1] if len(sys.argv) > 1 else None", "LOG_PATH = 'wire.jsonl'")
     assert source != _FAKE_SERVER_SOURCE
     Path(root, "app-server").write_text(source, encoding="utf-8")
+    # Exercise historical activation semantics with an explicit test adapter.
+    # Production's retired defaults require canonical binding migration.
+    from legacy_native_fixture.codex import CodexAppServerConnector
+    deps.harness_connector_factories = {"codex": lambda **options: CodexAppServerConnector(
+        command=[sys.executable, "app-server"], cwd=root, env=options["backend"]["env"])}
     headers = {"x-api-key": operator}
     with TestClient(build_app(deps), base_url="http://127.0.0.1:18790") as client:
         created = client.post("/api/v1/harness/profiles", headers=headers, json={
@@ -88,7 +93,7 @@ def test_activation_does_not_replay_old_unread_and_legacy_notifications_do_not_d
 @pytest.mark.parametrize("runtime", ["stored_runtime"], indirect=True)
 @pytest.mark.parametrize("cut", ["accepted", "sending_unknown"])
 def test_disable_with_accepted_turn_and_pending_journal_retains_capture_and_exclusion(runtime, tmp_path, cut):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from okto_nexus.domain.base import iso_plus
     deps, client, root, _, operator, _ = runtime
     gate = tmp_path / "emit-terminal"

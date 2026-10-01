@@ -1,6 +1,6 @@
 """Phase 3 (harness-integrations, ADR 0004 D4) - the Pi connector.
 
-Exercises ``okto_nexus.adapters.outbound.harness.pi.PiRpcConnector`` against a
+Exercises ``legacy_native_fixture.pi.PiRpcConnector`` against a
 FAKE ``pi --mode rpc`` - a small standalone Python script speaking the real
 strict-LF JSON-lines framing verified live in
 ``docs/harness-integrations/research/pi-rpc-protocol-reference.md`` and
@@ -37,7 +37,7 @@ from typing import Any, Callable
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector, _PiTransport  # noqa: SLF001 - see RES-A3/B3 unit test
+from legacy_native_fixture.pi import PiRpcConnector, _PiTransport  # noqa: SLF001 - see RES-A3/B3 unit test
 from okto_nexus.domain.harness import (
     STEER_TIMING_NEXT_TURN_BOUNDARY,
     HarnessCommand,
@@ -1160,7 +1160,7 @@ def test_child_death_fails_pending_request_immediately(fake_server_script: Path,
 def test_module_never_imports_or_instantiates_sleep_poll_waiter() -> None:
     import ast
 
-    import okto_nexus.adapters.outbound.harness.pi as mod
+    import legacy_native_fixture.pi as mod
 
     source = Path(mod.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)

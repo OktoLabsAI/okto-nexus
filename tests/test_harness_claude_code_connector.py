@@ -29,7 +29,7 @@ import pytest
 
 from okto_nexus.domain.harness import HarnessCommand, HarnessEvent, HarnessSession
 from okto_nexus.errors import OktoNexusError
-from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
 
 _HAS_REAL_CLAUDE = shutil.which("claude") is not None
 requires_real_claude = pytest.mark.skipif(
@@ -1240,7 +1240,7 @@ def test_events_iterator_delivers_promptly_not_on_a_poll_interval(monkeypatch, s
     the unchanged production iterator must deliver without advancing that clock.
     Wait bounds are deadlock guards, not claimed process-startup latency limits.
     """
-    from okto_nexus.adapters.outbound.harness import claude_code_stream as module
+    from legacy_native_fixture import claude_code_stream as module
 
     native_waiting, poll_waiting = threading.Event(), threading.Event()
     poll_release, poll_published = threading.Event(), threading.Event()

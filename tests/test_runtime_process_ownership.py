@@ -13,7 +13,7 @@ import pytest
 
 from okto_nexus.application.runtime_lifecycle import RuntimeLifecycle
 from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 from okto_nexus.errors import OktoNexusError
 from test_harness_supervisor import make_factory, make_supervisor, _Clock, FakeConnector, wait_until
 from test_pr34_remediation import runtime as runtime_fixture

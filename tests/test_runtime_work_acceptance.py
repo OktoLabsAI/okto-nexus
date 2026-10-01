@@ -82,7 +82,7 @@ def test_competitive_claim_losers_cannot_read_winning_payload_or_runtime(runtime
 
 @pytest.mark.parametrize("surface", ["rest", "mcp"])
 def test_managed_interrupt_ack_waits_for_native_terminal(runtime, surface):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, caller = runtime
     release, ack = Path(root) / "release-interrupt", Path(root) / "interrupt-ack"
@@ -171,7 +171,7 @@ def test_restricted_work_profile_keeps_qualified_conversation_useful(runtime):
 
 @pytest.mark.parametrize("requirement", [{"sandbox": "read-only"}, {"approval_policy": "untrusted"}])
 def test_unsupported_sandbox_profile_cannot_replace_compatible_conversation(runtime, requirement):
-    from okto_nexus.adapters.outbound.harness.claude_code_stream import ClaudeCodeStreamConnector
+    from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
     from test_harness_claude_code_connector import _FAKE_CLAUDE_SCRIPT
     deps, client, root, _, operator, _ = runtime
     peers = []

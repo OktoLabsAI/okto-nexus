@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 from test_pr34_remediation import runtime as runtime_fixture
 
 runtime = runtime_fixture

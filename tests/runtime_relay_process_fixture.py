@@ -11,7 +11,7 @@ import uvicorn
 
 from okto_nexus.adapters.inbound.http.app import build_app, ensure_operator_key
 from okto_nexus.adapters.inbound.mcp.server import bootstrap
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 from okto_nexus.adapters.outbound.sqlite.runtime_journal_repo import SqliteRuntimeJournalRepo
 from okto_nexus.adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
 from okto_nexus.application.auth import AgentKeyAuthService

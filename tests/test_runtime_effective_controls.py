@@ -65,7 +65,7 @@ def test_effective_control_is_revalidated_before_dispatch(runtime, tmp_path, mon
 
 @pytest.mark.parametrize("version,controls", [("0.85.1", ["steer", "interrupt"]), ("99.0.0", [])])
 def test_pi_reports_controls_from_real_owned_version_probe(tmp_path, version, controls):
-    from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
+    from legacy_native_fixture.pi import PiRpcConnector
     from test_harness_pi_connector import _FAKE_SERVER_SOURCE
     peer = PiRpcConnector(command=[sys.executable, "-u", "-c", _FAKE_SERVER_SOURCE],
         version_command=[sys.executable, "-c", "print('" + version + "')"], cwd=str(tmp_path))

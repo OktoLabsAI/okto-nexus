@@ -33,7 +33,7 @@ def test_cancel_only_native_denial_does_not_grant_policy_amendment(runtime, deci
 
 def approval_peer(runtime, *, method="item/commandExecution/requestApproval", extra_params=None,
                   control_contract=False):
-    from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+    from legacy_native_fixture.codex import CodexAppServerConnector
     from test_harness_codex_connector import _FAKE_SERVER_SOURCE
     deps, client, root, _, operator, _ = runtime
     deps.config.feature_hitl = True

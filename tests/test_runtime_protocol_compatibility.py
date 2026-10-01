@@ -6,8 +6,8 @@ import pytest
 
 from test_pr34_remediation import runtime as runtime_fixture
 from test_harness_codex_connector import _FAKE_SERVER_SOURCE
-from okto_nexus.adapters.outbound.harness.pi import PiRpcConnector
-from okto_nexus.adapters.outbound.harness.codex import CodexAppServerConnector
+from legacy_native_fixture.pi import PiRpcConnector
+from legacy_native_fixture.codex import CodexAppServerConnector
 
 runtime = runtime_fixture
 
