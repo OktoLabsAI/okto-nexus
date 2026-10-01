@@ -139,7 +139,7 @@ class EmbeddedDispatchOwner:
             self.pump._stopping.set()
         if self._containment_task is None:
             self._containment_task = asyncio.create_task(
-                self.host.shutdown(ShutdownPolicy(0,0)), name="embedded-failure-containment")
+                self.host.shutdown(ShutdownPolicy(0,0), close_stores=False), name="embedded-failure-containment")
         try:
             await asyncio.to_thread(self._quiesce)
         except Exception as error:
@@ -346,6 +346,13 @@ class EmbeddedDispatchOwner:
 
     async def _close(self):
         self._stopping.set()
+        # Native containment must start before any database or publication
+        # wait. Keep the journals alive for the producers joined below.
+        if self.pump is not None:
+            self.pump._stopping.set()
+        if self._containment_task is None:
+            self._containment_task = asyncio.create_task(
+                self.host.shutdown(close_stores=False), name="embedded-core-drain")
         failures = []
         try:
             await asyncio.to_thread(self._quiesce)
@@ -359,13 +366,13 @@ class EmbeddedDispatchOwner:
                     await task
                 except Exception as error:
                     failures.append(error)
-        # Core drain can unblock a native producer even if outbox cleanup failed.
-        if self._containment_task is None:
-            self._containment_task = asyncio.create_task(self.host.shutdown(), name="embedded-core-drain")
         results = await asyncio.gather(*tuple(self.workers), *tuple(self.renewals), return_exceptions=True)
         failures.extend(result for result in results if isinstance(result, BaseException))
         try:
             self.containment_report = await asyncio.shield(self._containment_task)
+            # All dispatch/publication producers have returned. The host now
+            # joins history readers and closes only resolved Core resources.
+            self.containment_report = await self.host.shutdown(ShutdownPolicy(0,0))
         except Exception as error:
             failures.append(error)
         try:

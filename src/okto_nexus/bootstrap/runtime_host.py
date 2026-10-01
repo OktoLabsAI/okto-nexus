@@ -176,16 +176,24 @@ class EmbeddedRuntimeHost:
         _, journal = await asyncio.shield(task)
         return await journal.get_receipt(key)
 
-    async def shutdown(self, policy: ShutdownPolicy | None = None
+    async def shutdown(self, policy: ShutdownPolicy | None = None,
+                       *, close_stores: bool = True
                        ) -> dict[tuple[str, str], object]:
-        """Drain Core before closing its stores; retain uncertain ownership."""
+        """Contain immediately; close stores only after their producers have joined.
+
+        Dispatch owners use close_stores=False while publication/history work
+        is still active, then call again after joining those producers.
+        """
+        if type(close_stores) is not bool:
+            raise ValueError("Store closure must be a boolean.")
         async with self._lock:
             self._closing = True
             tasks = dict(self._runtime_tasks)
             ledger_task = self._ledger_task
             history_tasks = tuple(self._history_tasks)
         # Canceled observers cannot abandon an open history journal.
-        await asyncio.gather(*history_tasks, return_exceptions=True)
+        if close_stores:
+            await asyncio.gather(*history_tasks, return_exceptions=True)
         reports: dict[tuple[str, str], object] = {}
         uncertain = False
 
@@ -205,6 +213,8 @@ class EmbeddedRuntimeHost:
                     **report.session_outcomes, owner.session_key: "unknown"})
             if "unknown" in report.session_outcomes.values():
                 return key, report, True
+            if not close_stores:
+                return key, report, False
             # Core does not own host-supplied journals. Close only after its
             # public shutdown reports no uncertain session ownership.
             await journal.aclose()
@@ -229,7 +239,7 @@ class EmbeddedRuntimeHost:
             uncertain |= unresolved
             if report is not None:
                 reports[key] = report
-        if ledger_task is not None and not uncertain:
+        if close_stores and ledger_task is not None and not uncertain:
             try:
                 ledger = await asyncio.shield(ledger_task)
             except Exception:
