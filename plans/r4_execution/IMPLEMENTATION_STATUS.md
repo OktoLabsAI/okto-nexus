@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Embedded shutdown deadline and retained recovery — October 1, 2026
+
+Nexus 4a7023b adds a fixed embedded observation deadline, noncanceling pending report, same-owner recovery loop and lifespan retention until resources resolve. A failed composition is removed only after journal cleanup is confirmed. Broad candidate: 106 Nexus plus four legacy cases passed; final wheel after the composition correction: 14 directed plus four legacy cases passed. See [details](M11_EMBEDDED_SHUTDOWN_DEADLINE.md) and [manifest](test_runs_20261001_shutdown_deadline.json). The Server-wide public command, reachable administrative recovery surface, full admission fence and process/release distinction remain pending. NS14.03 partial; all gates open.
+
 ## Containment before shutdown storage waits — October 1, 2026
 
 Nexus db3e019 starts retained Core containment before quiesce, outbox stop or historical-reader waits. Journals and ledger remain owned until producers return and Core resources are resolved. Three two-session fault cases failed before the fix and passed after it; 99 installed regression cases passed, including technical Pi child ownership. Core/Connector wheels are unchanged. See [details](M11_SHUTDOWN_STORAGE_ORDER.md) and [manifest](test_runs_20261001_shutdown_order.json). The full public DRAINING_PENDING deadline/recovery contract remains pending; NS14.03 partial and all gates open.
