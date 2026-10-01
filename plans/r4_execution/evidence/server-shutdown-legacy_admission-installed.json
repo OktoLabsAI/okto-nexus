@@ -1,0 +1,40 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector'); raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-canonical-installed\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_operation_authorization.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_capability_admission.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_admin_surfaces.py', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\test_runtime_shutdown.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\server-shutdown-legacy_admission-installed.xml']))"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-server-shutdown-nexus-rcwh0ube\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+        "sha256": "7aaa062faf59cc954a5c6930b8cab51ecf269a7309c5746ae131d35fc160afba"
+      }
+    },
+    "connector": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\okto_nexus_connector",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+        "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+      }
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Lib\\site-packages\\nexus_connector_core",
+      "artifact": {
+        "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+        "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+      }
+    }
+  },
+  "exit_code": 0,
+  "test_hashes": {
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_runtime_operation_authorization.py": "c8975ac6313258c496cd7bd230d6a6c437efea5c28d1ba8f4439dd0c8d1c0213",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_runtime_capability_admission.py": "f041c69aa594b4bee5f0541292f6f744b6b31aec17e5cabb7514a59b94784732",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_runtime_admin_surfaces.py": "3aa0791d3e91d0f0ce2dd56aa824ab535ff665a71d2090133bce7e5cc585cc27",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_runtime_attach_work_channel.py::test_external_work_can_return_after_native_detach_and_quarantine": "8b736bd0bcb6d8b0f061e2a67df016476202527e53497b9c3316f305eb48720a",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\test_runtime_shutdown.py": "2dc5987f063c85eb549736dbda514b53913ba12100f04cdf959bdc927826ce6a"
+  }
+}

@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Administrative Server shutdown — October 1, 2026
+
+Nexus f1db502 adds a retained Server coordinator, operator HTTP shutdown/status and CLI commands. One deadline closes productive admission and starts embedded/legacy containment concurrently; legacy release waits for embedded producers and inventory. Installed verification passed 55 R4 plus 26 legacy tests, including a child CLI over real TCP and recovery without reopening. See [details](M11_SERVER_SHUTDOWN.md) and [manifest](test_runs_20261001_server_shutdown.json). SIGINT/SIGTERM, standalone serve-process and full late-open/release/platform acceptance remain pending. NS14.03 partial; all gates open.
+
 ## Shared shutdown admission fence — October 1, 2026
 
 Nexus a389087 shares one in-memory fence across R4 and legacy MCP/REST authorization. Lifespan closes it before embedded shutdown waits. Prepared productive R4 requests are refused without operation rows; admitted R4 replay/history, authorized close and trusted external-work return remain available. Installed verification passed 52 R4 and 26 legacy cases on the same wheel. See [details](M11_SHUTDOWN_ADMISSION.md) and [manifest](test_runs_20261001_shutdown_admission.json). The public Server coordinator/command and reachable administrative recovery surface remain pending; NS14.03 partial, all gates open.

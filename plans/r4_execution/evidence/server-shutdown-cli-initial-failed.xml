@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="21.686" timestamp="2026-10-01T09:32:22.501357-03:00" hostname="Alienware_m15"><testcase classname="test_server_shutdown" name="test_operator_shutdown_returns_pending_and_keeps_recovery_available" time="4.165" /><testcase classname="test_server_shutdown" name="test_shutdown_cli_over_tcp_retains_server_until_recovery" time="14.005"><failure message="TimeoutError">tests\execution_r4\test_server_shutdown.py:124: in test_shutdown_cli_over_tcp_retains_server_until_recovery
+    report = cli("shutdown", "--timeout-seconds", "0.1")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_server_shutdown.py:116: in cli
+    assert result.returncode == 0, result.stderr
+E   AssertionError: [okto-nexus admin] REQUEST_REJECTED: Server returned HTTP 401.
+E     
+E   assert 1 == 0
+E    +  where 1 = CompletedProcess(args=['C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-installed-zk_r383i\\Scripts\\python.exe...t-seconds', '0.1'], returncode=1, stdout='', stderr='[okto-nexus admin] REQUEST_REJECTED: Server returned HTTP 401.\n').returncode
+
+During handling of the above exception, another exception occurred:
+tests\execution_r4\test_server_shutdown.py:136: in test_shutdown_cli_over_tcp_retains_server_until_recovery
+    running.result(timeout=10)
+C:\Python313\Lib\concurrent\futures\_base.py:458: in result
+    raise TimeoutError()
+E   TimeoutError</failure></testcase><testcase classname="test_server_shutdown" name="test_shutdown_retry_recovers_inventory_release_and_cancelled_observer" time="2.223"><failure message="AssertionError: assert ['LEGACY_SHUT...ERY_REQUIRED'] == []&#10;  &#10;  Left contains one more item: 'LEGACY_SHUTDOWN_RECOVERY_REQUIRED'&#10;  Use -v to get more diff">tests\execution_r4\test_server_shutdown.py:180: in test_shutdown_retry_recovers_inventory_release_and_cancelled_observer
+    assert coordinator.status()["error_codes"] == []
+E   AssertionError: assert ['LEGACY_SHUT...ERY_REQUIRED'] == []
+E     
+E     Left contains one more item: 'LEGACY_SHUTDOWN_RECOVERY_REQUIRED'
+E     Use -v to get more diff</failure></testcase></testsuite></testsuites>

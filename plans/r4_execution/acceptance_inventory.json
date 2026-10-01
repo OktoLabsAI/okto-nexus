@@ -1364,9 +1364,12 @@
         "tests/execution_r4/test_shutdown_storage_order.py::test_cancelled_shutdown_request_keeps_cleanup_owned",
         "tests/execution_r4/test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery",
         "tests/execution_r4/test_shutdown_admission.py::test_prepared_new_work_is_refused_but_replay_and_close_remain_available",
-        "tests/test_runtime_operation_authorization.py::test_shutdown_fence_rejects_turns_but_allows_authorized_close"
+        "tests/test_runtime_operation_authorization.py::test_shutdown_fence_rejects_turns_but_allows_authorized_close",
+        "tests/execution_r4/test_server_shutdown.py::test_operator_shutdown_returns_pending_and_keeps_recovery_available",
+        "tests/execution_r4/test_server_shutdown.py::test_shutdown_cli_over_tcp_retains_server_until_recovery",
+        "tests/execution_r4/test_server_shutdown.py::test_shutdown_retry_recovers_inventory_release_and_cancelled_observer"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_shutdown_admission_installed.py against its verified final artifacts. Deadline/recovery evidence remains in the shutdown-deadline manifest.",
+      "effective_test_command": "Run plans/r4_execution/run_server_shutdown_installed.py against its verified artifact tuple.",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
@@ -1378,9 +1381,10 @@
         "plans/r4_execution/test_runs_20261001_parallel_identity.json",
         "plans/r4_execution/test_runs_20261001_shutdown_order.json",
         "plans/r4_execution/test_runs_20261001_shutdown_deadline.json",
-        "plans/r4_execution/test_runs_20261001_shutdown_admission.json"
+        "plans/r4_execution/test_runs_20261001_shutdown_admission.json",
+        "plans/r4_execution/test_runs_20261001_server_shutdown.json"
       ],
-      "remaining_acceptance": "Embedded deadline/recovery and shared canonical admission fence are verified. The public Server-wide command/coordinator must trigger the fence and keep administrative recovery HTTP reachable under one budget. Qualified process-versus-durable-release projection, late-open/release fault matrix and platform acceptance remain pending."
+      "remaining_acceptance": "Administrative HTTP/CLI shutdown and retained TCP recovery are verified with one deadline and the same owners. SIGINT/SIGTERM and standalone Server-process retention, qualified process-versus-durable-release projection, the complete late-open/release fault matrix, authorization-store outage and platform acceptance remain pending."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",
