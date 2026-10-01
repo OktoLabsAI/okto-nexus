@@ -1,11 +1,11 @@
 """Opt-in real providers through public Connector onboarding and runtime CLI."""
 import asyncio
 import hashlib
-import io
 import json
 import os
 from pathlib import Path
 import socket
+import sys
 import time
 
 import httpx
@@ -24,13 +24,7 @@ from test_mcp_session_capabilities import seed_work
                     reason="The real Connector provider campaign is opt-in.")
 @pytest.mark.parametrize("adapter", ["pi_rpc", "codex_app_server", "claude_stream"])
 def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapter):
-    from okto_nexus_connector.cli.main import build_parser
-    from okto_nexus_connector.cli.output import Output
-    from okto_nexus_connector.cli.commands.identity import run_identity, _vault
-    from okto_nexus_connector.cli.commands.executor import run_executor
-    from okto_nexus_connector.cli.commands.discover import run_discover
-    from okto_nexus_connector.cli.commands.bind import run_bind
-    from okto_nexus_connector.cli.commands.runtime import run_runtime
+    from okto_nexus_connector.cli.commands.identity import _vault
     from okto_nexus_connector.daemon.app import DaemonApp
     from okto_nexus_connector.identity.vault import KeyringVault, namespace_of
     from okto_nexus_connector.platform import paths
@@ -64,9 +58,8 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     root, workspace = tmp_path / "connector", tmp_path / "workspace"
     workspace.mkdir()
     store = StateStore(paths.state_file(root))
-    parser, output = build_parser(), Output(json_mode=True, stream=io.StringIO())
     report = dict(adapter=adapter, server_release_gate_override=True, native_qualification_override=False,
-                  synthetic_native_factory=False, public_connector_cli=True, protected_os_vault=False,
+                  synthetic_native_factory=False, public_connector_cli=True, cli_subprocess=True, protected_os_vault=False,
                   topology="Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.")
     def checkpoint(phase):
         report["phase"] = phase
@@ -82,11 +75,21 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
         daemon = daemon_task = None
         async with httpx.AsyncClient(base_url=origin, timeout=30, trust_env=False) as http:
             async def cli(group, *words):
-                args = parser.parse_args(["--non-interactive", group, *words])
-                caller = {"identity": run_identity, "executor": run_executor, "discover": run_discover,
-                          "bind": run_bind, "runtime": run_runtime}[group]
                 checkpoint(group + "." + (words[0] if words else "preview"))
-                result = await caller(args, output, root)
+                process = await asyncio.create_subprocess_exec(
+                    sys.executable, "-I", "-m", "okto_nexus_connector.cli.main",
+                    "--json", "--non-interactive", "--state-dir", str(root), group,
+                    *map(str, words), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                # The public CLI owns a separate process, like a real operator.
+                # Retain it until the command settles, even if its observer cancels.
+                capture = asyncio.create_task(process.communicate())
+                try:
+                    stdout, stderr = await asyncio.shield(capture)
+                except asyncio.CancelledError:
+                    await asyncio.shield(capture)
+                    raise
+                assert process.returncode == 0, (process.returncode, stdout.decode(), stderr.decode())
+                result = json.loads(stdout)
                 checkpoint(group + ".returned")
                 return result
             async def post(path, body):
@@ -197,6 +200,13 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                     async with asyncio.timeout(240):
                         while True:
                             await decisions()
+                            if scope is not None:
+                                with deps.connection_factory.unit_of_work(write=False) as uow:
+                                    failures = uow.connection.execute(
+                                        "SELECT COUNT(*) FROM execution_event_ingress WHERE session_id=? "
+                                        "AND event_type='error' AND json_extract(payload_json,'$.native_type')='core.event_pump_failed'",
+                                        (scope["session_id"],)).fetchone()[0]
+                                assert failures == 0, "Native event observation failed."
                             view = await cli("runtime", "operation", "--alias", "assistant", "--client-intent-id", intent_id)
                             operation = view.get("operation") or {}
                             stage = operation.get("executor_stage")

@@ -1,4 +1,12 @@
-## Current development artifact: 0.2.35.dev0
+## Current development artifact: 0.2.44.dev0
+
+nexus_connector_core-0.2.44.dev0-py3-none-any.whl, SHA-256
+c6f8555adeadb68959daa8e2ad91ec755eab49183049112a3d719470321e8db0.
+
+Bounded file-read allocations preserve the complete Pi build identity and size-change refusals.
+The same wheel is used by Nexus and Connector; release gates remain open.
+
+## Previous development artifact: 0.2.35.dev0
 
 nexus_connector_core-0.2.35.dev0-py3-none-any.whl, SHA-256
 20013ae173652ea3726f5b7ae5d7c37e66eac8f9bc319ae3c36f84e70247e760.
