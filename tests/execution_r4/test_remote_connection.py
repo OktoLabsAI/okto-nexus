@@ -277,6 +277,14 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     monkeypatch.setattr(execution.publications, 'record', interrupted_record)
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
+                if cli_admission:
+                    from okto_nexus_connector.cli.main import build_parser
+                    from okto_nexus_connector.cli.commands.runtime import run_runtime
+                    from okto_nexus_connector.cli.output import Output
+                    view = await run_runtime(build_parser().parse_args(
+                        ["runtime", "inspect", session_id]), Output(json_mode=True), daemon_root)
+                    assert view["scope"] == opened["scope"] and view["lifecycle_state"] == "READY"
+                    assert view["process_state"] == "UNKNOWN"
                 turned = await admit('turn.submit', session_id=session_id, text='Hello')
                 if native_decision is not None:
                     from nexus_connector_core import RuntimeEvent
@@ -585,6 +593,14 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                 from okto_nexus_connector.cli.output import Output
                 retained = daemon.store.load().runtime_intents
                 assert len(retained) == 5
+                daemon.store.update(lambda state: state.binding_intents.clear())
+                inspected = await run_runtime(build_parser().parse_args(
+                    ["runtime", "inspect", session_id]), Output(json_mode=True), daemon_root)
+                assert inspected["lifecycle_state"] == "CLOSED"
+                assert not inspected["control_available"] and inspected["process_state"] == "UNKNOWN"
+                status = await run_runtime(build_parser().parse_args(
+                    ["runtime", "status", "--alias", "assistant"]), Output(json_mode=True), daemon_root)
+                assert status == {"sessions": [inspected]}
                 for record in retained:
                     args = build_parser().parse_args(["runtime", "operation", "--alias", "assistant",
                                                       "--client-intent-id", record.client_intent_id])
