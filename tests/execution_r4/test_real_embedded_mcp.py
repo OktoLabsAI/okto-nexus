@@ -56,7 +56,7 @@ def live_server(app,listener,origin):
 
 @pytest.mark.skipif(os.environ.get("OKTO_NEXUS_REAL_MCP") != "1", reason="Real provider campaign is opt-in.")
 @pytest.mark.parametrize("adapter",["codex_app_server","claude_stream"])
-def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monkeypatch,adapter):
+def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monkeypatch,adapter, native_request_observer):
     codex=Path.home()/"AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
     claude=Path.home()/".local/bin/claude.exe"
     binary=codex if adapter=="codex_app_server" else claude
@@ -139,16 +139,28 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
                 assert all(key[name] == approval_scope[name] for name in (
                     'server_id','executor_id','binding_id','agent_id','workspace_id','session_id','session_owner_generation'))
                 # This authorized campaign approves only its three governed
-                # MCP tools. Unexpected native input remains an observed failure.
-                assert key['kind'] == 'native_approval', proposal['display']
+                # MCP tools. Codex represents their permission as an empty form.
                 params = proposal['display']['params']
-                assert params.get('tool_name') in {
-                    'mcp__'+entry+'__'+name for name in ('handoff_get','handoff_claim','handoff_complete')}, proposal['display']
-                arguments = params['input']
+                tools = ('handoff_get','handoff_claim','handoff_complete')
+                if adapter == 'codex_app_server':
+                    assert key['kind'] == 'native_input', proposal['display']
+                    assert proposal['display']['method'] == 'mcpServer/elicitation/request'
+                    assert params['mode'] == 'form' and params['serverName'] == entry
+                    assert params['requestedSchema'] == {'type':'object','properties':{}}
+                    assert params['_meta']['codex_approval_kind'] == 'mcp_tool_call'
+                    assert params['message'] in {
+                        f'Allow the {entry} MCP server to run tool "{name}"?' for name in tools}
+                    arguments = params['_meta']['tool_params']
+                else:
+                    assert key['kind'] == 'native_approval', proposal['display']
+                    assert params.get('tool_name') in {'mcp__'+entry+'__'+name for name in tools}, proposal['display']
+                    arguments = params['input']
                 assert arguments['project_root'] == approval_scope['workspace_id']
                 assert arguments['agent_id'] == 'subject' and arguments['handoff_id'] == 'work'
                 body = {name: proposal[name] for name in ('approval_key','expected_revision','request_hash','cas_token')}
                 body.update(client_intent_id='real-'+item['approval_id'], decision='approve')
+                if adapter == 'codex_app_server':
+                    body['response'] = {'content': {}}  # Explicit one-call acceptance; no persist metadata.
                 decided = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
                 assert decided.status_code == 202, decided.text
                 replay = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
@@ -203,3 +215,30 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
     destination=os.environ.get('OKTO_NEXUS_REAL_MCP_REPORT')
     if destination:
         Path(destination+'-'+adapter+'.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+
+
+@pytest.fixture
+def native_request_observer(monkeypatch):
+    """Opt-in diagnostic observer; preserve every native handler result."""
+    destination = os.environ.get("OKTO_NEXUS_OBSERVE_CODEX_REQUESTS")
+    if not destination:
+        yield
+        return
+    from nexus_connector_core.native.adapters.codex import CodexAppServerConnector
+    from nexus_connector_core.native.redaction import NativeSecretRedactor
+    original = CodexAppServerConnector._on_server_request
+    observations = []
+    def observe(self, request_id, method, params):
+        accepted = original(self, request_id, method, params)
+        if len(observations) < 32:
+            raw = json.dumps(params, ensure_ascii=False)
+            observations.append({"method": method, "request_id_type": type(request_id).__name__,
+                "accepted_by_adapter": accepted, "capture_enabled": self.native_approvals_enabled,
+                "params": NativeSecretRedactor().clean(params) if len(raw.encode()) <= 16384 else "[OVERSIZED]"})
+        return accepted
+    monkeypatch.setattr(CodexAppServerConnector, "_on_server_request", observe)
+    try:
+        yield
+    finally:
+        Path(destination).write_text(json.dumps({"observer_only": True,
+            "handler_result_unchanged": True, "requests": observations}, indent=2)+'\n', encoding='utf-8')
