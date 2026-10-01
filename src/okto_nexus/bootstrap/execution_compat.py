@@ -175,6 +175,13 @@ def session_view(deps, context, session_id):
         session_id=session_id, context=context, access=build_execution_access(deps))
 
 
+def events_view(deps, context, session_id, **options):
+    from ..application.execution_event_views import read_execution_events
+    return read_execution_events(deps.connection_factory,
+        server_id=ensure_execution_installation(deps.connection_factory).server_id,
+        session_id=session_id, context=context, access=build_execution_access(deps), **options)
+
+
 def command(deps, context, session, verb, payload, options):
     """Translate product verbs only; Core owns native targeting and execution."""
     access = build_execution_access(deps)

@@ -430,8 +430,17 @@ add_resource(
     slug="tool-docs/identity",
     name="Tool docs - identity & sessions",
     description="Full reference for workspace/agent/session tools (resolve, whoami, register, list, get, capability_list, session open/heartbeat/close, workspace_list).",
-    version="27",
+    version="28",
     body="""\
+Canonical event history: harness_event_list and GET /api/v1/runtime/sessions/{session_id}/events
+accept executor_id, stream_epoch, after_sequence (default 0) and limit (1..1000,
+default 200). Agent-key authorization matches session reads. Omitted stream_epoch
+selects the current stream; use the returned epoch and next_after_sequence for
+subsequent pages. Only contiguous committed events are returned, with scope,
+committed_contiguous, gap_pending and has_more. Pages are bounded to 512 KiB of
+stored event payloads. History remains readable after close. Legacy harness
+sessions retain their existing event response; canonical events retain Core fields.
+
 Runtime conversational command contract v3: harness_send/harness_steer accept
 canonical input {"schema_version":1,"content":[{"type":"text","text":"prompt"}]},
 optional subject, intent="conversation" and boolean response_requested. The server

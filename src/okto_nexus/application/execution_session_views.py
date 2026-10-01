@@ -1,19 +1,20 @@
 """Scoped durable session observations; a read never authorizes execution."""
 from datetime import datetime, timezone
+from contextlib import nullcontext
 import json
 
 from ..errors import ErrorCode, OktoNexusError
 
 
 def read_execution_session(factory, *, server_id, session_id, context, access,
-                           executor_id=None):
+                           executor_id=None, _uow=None):
     actor_agent_id = context.actor_agent_id
     for value in (session_id, actor_agent_id):
         if not isinstance(value, str) or not 1 <= len(value) <= 160:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid session query.", {})
     if executor_id is not None and (not isinstance(executor_id, str) or not 1 <= len(executor_id) <= 160):
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Invalid executor ID.", {})
-    with factory.unit_of_work(write=False) as uow:
+    with nullcontext(_uow) if _uow is not None else factory.unit_of_work(write=False) as uow:
         operator = access.authenticate(context, uow=uow, require_feature=False)
         conn = uow.connection
         rows = conn.execute(

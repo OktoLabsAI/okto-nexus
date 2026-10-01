@@ -202,6 +202,9 @@ def runtime_tool_guard(deps):
                   "harness_event_list": "events"}.get(fn.__name__, "admin")
         def check(args, kwargs):
             arguments = inspect.signature(fn).bind(*args, **kwargs).arguments
+            if fn.__name__ == "harness_event_list":
+                # The shared event read authorizes in its query transaction.
+                return
             if fn.__name__ == "harness_list" and arguments.get("view") in {"bindings", "outbox", "connections"}:
                 # Shared services authenticate their own scoped reads/recovery.
                 # Operator outbox recovery survives admission being disabled.
@@ -1142,6 +1145,18 @@ def _durable_session_or_404(deps: Any, session_id: str) -> HarnessSession:
     return durable
 
 
+def read_events(deps, session_id, *, after_sequence=0, limit=200, executor_id=None, stream_epoch=None):
+    from okto_nexus.bootstrap.execution_compat import canonical_session, events_view
+    if executor_id is not None or canonical_session(deps, session_id):
+        return events_view(deps, request_context(), session_id, after_sequence=after_sequence,
+            limit=limit, executor_id=executor_id, stream_epoch=stream_epoch)
+    if stream_epoch is not None:
+        raise OktoNexusError(ErrorCode.VALIDATION_ERROR, "Legacy event replay has no R4 stream epoch.", {})
+    authorize_request(deps, action="events", session_id=session_id)
+    events = build_service(deps).replay_events(session_id, after_sequence=after_sequence, limit=limit)
+    return {"events": [event_to_dict(event) for event in events], "count": len(events)}
+
+
 def read_session(deps: Any, supervisor: HarnessSupervisor, session_id: str) -> dict[str, Any]:
     """Shared ``harness_get`` body: LIVE in-memory view if still tracked,
     else the last durable row (never a fabricated liveness signal - a row
@@ -1314,9 +1329,9 @@ def register(server: Any, deps: Any) -> None:
         session_id: Annotated[str, Field(description=_P_SESSION_ID)],
         after_sequence: Annotated[int, Field(description=_P_AFTER_SEQUENCE)] = 0,
         limit: Annotated[int, Field(description=_P_EVENTS_LIMIT)] = 200,
+        executor_id: Annotated[str | None, Field(description="Canonical executor ID when the session ID is ambiguous.")] = None,
+        stream_epoch: Annotated[str | None, Field(description="Canonical event stream epoch; omitted selects the session's current stream.")] = None,
     ) -> dict[str, Any]:
         """Durable replay of a session's events (D10), oldest first, independent of liveness. Makes the no-polling push claim checkable after the fact; native_event is the harness's own verbatim name."""
-        events = supervisor.replay_events(
-            session_id, after_sequence=after_sequence, limit=limit
-        )
-        return {"events": [event_to_dict(event) for event in events], "count": len(events)}
+        return read_events(deps, session_id, after_sequence=after_sequence, limit=limit,
+            executor_id=executor_id, stream_epoch=stream_epoch)

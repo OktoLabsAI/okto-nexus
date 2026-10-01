@@ -67,7 +67,6 @@ from ..mcp.tools.harness import (
 )
 from ..mcp.tools.harness import build_service as _build_harness_supervisor
 from ..mcp.tools.harness import capabilities_catalog as _harness_capabilities_catalog
-from ..mcp.tools.harness import event_to_dict as _harness_event_to_dict
 from ..mcp.tools.harness import normalize_payload as _harness_normalize_payload
 from ..mcp.tools.harness import read_session as _harness_read_session
 from ..mcp.tools.messages import build_service as _build_message_service
@@ -1207,27 +1206,17 @@ def build_router() -> APIRouter:
         session_id: str,
         after_sequence: int = 0,
         limit: int = 200,
+        executor_id: str | None = None,
+        stream_epoch: str | None = None,
     ) -> JSONResponse:
-        deps = request.app.state.deps
+        from ..mcp.tools.harness import read_events
         try:
-            _harness_authorize(deps, action="events", session_id=session_id)
+            result = await anyio.to_thread.run_sync(lambda: read_events(request.app.state.deps,
+                session_id, after_sequence=after_sequence, limit=limit,
+                executor_id=executor_id, stream_epoch=stream_epoch))
         except OktoNexusError as exc:
             return _map_error(exc)
-        supervisor = _build_harness_supervisor(deps)
-        try:
-            events = await anyio.to_thread.run_sync(
-                lambda: supervisor.replay_events(
-                    session_id, after_sequence=after_sequence, limit=limit
-                )
-            )
-        except OktoNexusError as exc:
-            return _map_error(exc)
-        return _ok(
-            {
-                "events": [_harness_event_to_dict(e) for e in events],
-                "count": len(events),
-            }
-        )
+        return _ok(result)
 
     @router.get("/events/cursor")
     async def poll_events_cursor(

@@ -556,6 +556,27 @@ def build_router() -> APIRouter:
             return runtime_error(error, "session.read")
         return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
+    @router.get("/runtime/sessions/{session_id}/events")
+    async def session_events(session_id: str, request: Request, after_sequence: int = 0,
+                             limit: int = 200, executor_id: str | None = None,
+                             stream_epoch: str | None = None) -> JSONResponse:
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        query = request.query_params
+        if (set(query) - {"after_sequence", "limit", "executor_id", "stream_epoch"}
+                or len(query.multi_items()) != len(query)):
+            return v1_err(422, "VALIDATION_ERROR", "Invalid event query.")
+        from ....bootstrap.execution_compat import events_view
+        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        try:
+            result = await anyio.to_thread.run_sync(lambda: events_view(request.app.state.deps,
+                context, session_id, after_sequence=after_sequence, limit=limit,
+                executor_id=executor_id, stream_epoch=stream_epoch))
+        except OktoNexusError as error:
+            return runtime_error(error, "session.events")
+        return JSONResponse(result, headers={"Cache-Control": "no-store"})
+
     @router.get("/runtime/operations/{operation_id}")
     async def operation_view(operation_id: str,
                              request: Request) -> JSONResponse:

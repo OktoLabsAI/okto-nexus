@@ -94,8 +94,9 @@ def test_harness_open_rejects_unknown_kind(harness_env):
     assert "endpoint" in r.json()["error"]["message"]
 
 
-def test_harness_open_claude_code_attach_requires_target_pid(harness_env):
+def test_harness_open_claude_code_attach_respects_explicit_disable(harness_env):
     _deps, client, root, _connectors, _op = harness_env
+    _deps.config.feature_harness_attach = False
     r = client.post(
         "/api/v1/harness/sessions",
         json={
@@ -168,8 +169,8 @@ def test_harness_open_rejects_backend_for_claude_code_attach_substrate_over_rest
             "backend": {"env": {"X": "1"}},
         },
     )
-    assert r.status_code == 403, r.text
-    assert r.json()["error"]["code"] == "PERMISSION_DENIED"
+    assert r.status_code == 422, r.text
+    assert r.json()["error"]["code"] == "VALIDATION_ERROR"
     assert connectors["claude_code"] == []
 
 

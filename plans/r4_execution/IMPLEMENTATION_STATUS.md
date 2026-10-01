@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical event reads - October 1, 2026
+
+Installed verification: **78 distinct product passes**, plus **3 architecture checks**. Canonical MCP/REST event reads share session authority and contiguous persisted history, with scoped pagination, integrity checks and closed-session replay. See [scope](M12_NS15_03_EVENT_VIEWS.md) and [manifest](test_runs_20261001_ns15_03_event_views.json). Combined claim competition, context-only observation, remaining subscriber parity audit, cross-protocol fallback, capture retention, native loader removal and final restore/release acceptance remain pending. TR4-15-03 remains NOT_RUN.
+
 ## NS15.03 canonical result publication - October 1, 2026
 
 Installed verification: **116 distinct product passes**, plus **3 architecture checks**. Canonical results now reuse governed message publication, HITL, private artifacts and explicitly admitted structured handoff decisions. Schema 096 preserves legacy result IDs and dependent references with checked atomic reconstruction. See [scope](M12_NS15_03_PUBLICATION.md) and [manifest](test_runs_20261001_ns15_03_publication.json). Combined claim competition, context-only observation, runtime-event projection, cross-protocol fallback, canonical capture retention and native loader removal remain pending; normative acceptance/release gates stay open.
