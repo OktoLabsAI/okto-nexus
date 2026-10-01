@@ -1356,14 +1356,21 @@
     },
     "NS14.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_03",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_embedded_inventory.py::test_close_interrupts_passive_core_read_without_publishing",
+        "tests/execution_r4/test_embedded_inventory.py::test_close_waits_for_started_inventory_publication"
+      ],
+      "effective_test_command": "Run plans/r4_execution/run_discovery_stop_installed.py with the verified installed artifacts; run_real_discovery_stop.py pi_rpc exercises the actual Connector lifecycle.",
+      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-03"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_discovery_stop.json"
+      ],
+      "remaining_acceptance": "This increment interrupts passive discovery and preserves publication ownership. The complete single public deadline, per-resource DRAINING_PENDING report, retained recovery loop, second recovery of the same native owners, and platform fault matrix remain pending."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",

@@ -1,0 +1,18 @@
+........................................................................ [ 71%]
+.............................                                            [100%]Task exception was never retrieved
+future: <Task finished name='Task-310' coro=<LocalRuntimeCore._watch_lease() done, defined at D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\runtime.py:2333> exception=UnboundLocalError("cannot access local variable 'expired_event_pending' where it is not associated with a value")>
+Traceback (most recent call last):
+  File "D:\Projetos\Techridy\okto-nexus-connector-core\src\nexus_connector_core\runtime.py", line 2371, in _watch_lease
+    if expired_event_pending:
+       ^^^^^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'expired_event_pending' where it is not associated with a value
+
+============================== warnings summary ===============================
+regression/test_c2_regressions.py::test_r03_late_dispatch_checks_clock_not_only_watcher_flags
+  C:\Python313\Lib\asyncio\base_events.py:2034: RuntimeWarning: coroutine '_ClockLateNative.close' was never awaited
+    handle = None  # Needed to break cycles when an exception occurs.
+  Enable tracemalloc to get traceback where the object was allocated.
+  See https://docs.pytest.org/en/stable/how-to/capture-warnings.html#resource-warnings for more info.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+101 passed, 1 warning in 69.69s (0:01:09)

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "C:/Users/jpamb/AppData/Local/Temp/okto-r4-native-installed-zk_r383i/Scripts/python.exe",
+    "-I",
+    "-c",
+    "import sys,pytest; sys.path.insert(0,'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core'); raise SystemExit(pytest.main(['-c', 'C:/Users/jpamb/AppData/Local/Temp/okto-r4-canonical-installed/pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests', 'D:\\\\Projetos\\\\Techridy\\\\okto-nexus-connector-core\\\\tests\\\\test_preexpired_lease_watcher.py', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\discovery-stop-durable-lease-installed.xml']))"
+  ],
+  "exit_code": 0,
+  "test_sha256": "a0803fdb3c8d4549194bbb18b4ea75291f219c68b397dc80f8ffc39ec4e64510",
+  "scope": "Strengthened two previously included lease-watcher cases to read the actual journal events; installed Core unchanged."
+}

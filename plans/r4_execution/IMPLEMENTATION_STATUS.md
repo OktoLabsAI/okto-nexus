@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Passive discovery shutdown and lease watcher — October 1, 2026
+
+Core 8d519e0 / 0.2.48.dev0 adds cooperative passive-discovery cancellation and fixes the preexpired lease watcher's pending-event flag. Connector d4cb0c2 and Nexus 79c2d3f stop their inventory readers while retaining started publications. Installed cases passed: 139 Core, 165 Connector, 89 Nexus; two overlapping lease cases additionally verified durable journal events. Actual Pi discovery stop passed in 0.0144 seconds. The normal Pi journey failed the unchanged 120-second readiness deadline and remains unaccepted; shutdown/cleanup succeeded. Profiling measured 55.87 of 66.18 seconds in file opening. See [details](M11_DISCOVERY_SHUTDOWN.md) and [manifest](test_runs_20261001_discovery_stop.json). NS14.03 remains partial; all gates open.
+
+
 ## Approved Codex home and public authentication failures — October 1, 2026
 
 Core 016821f / 0.2.47.dev0 fixes Codex state-directory selection from the approved provider home. Connector 10a123a and Nexus 5d90a85 adopt the same wheel. Installed results: 89 Core, 122 Connector and 21 Nexus cases passed; real public Pi/Codex/Claude missing-login journeys passed; authenticated Codex passed MCP handoff and approved rebinding. A concurrent Pi readiness/shutdown timeout is retained and remains unresolved despite the isolated pass. NS05.05 remains partial; all gates open. See [details](M03_PROVIDER_HOME_ISOLATION.md) and [manifest](test_runs_20261001_provider_home.json).
