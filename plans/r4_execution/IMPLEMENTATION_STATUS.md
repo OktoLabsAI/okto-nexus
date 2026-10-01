@@ -1,4 +1,9 @@
- # Execução R4 — estado verificado em 2026-09-30
+ # Execução R4 — estado verificado em 2026-10-01
+
+## Daemon-owned realization and public launch consent - October 1, 2026
+
+Connector 80f65e0 adds configure-launch and realize commands. Realization travels through authenticated local IPC, remains owned after observer cancellation, uses the daemon bootstrap under a rotation gate, checks the daemon inventory and persists/replays one local publication intent. Nexus 0a0eee5 returns structured realization refusals. Final installed verification passed 212 Connector tests, 31 Nexus integration/binding/local-realization tests, CLI subprocess checks and pip check. [Evidence index](test_runs_20261001_executor_onboarding.json). The real loopback journey seeds identity/vault and uses a harmless discovery candidate; it starts no provider and ends PENDING_APPROVAL. Initial producer, registration-counter and ticket-rotation failures are retained and corrected. Core a061960 / 0.2.43 is unchanged. Next: durable public binding prepare/apply and reusable runtime CLI mapping, then real remote Pi/Codex/Claude. No milestone or release gate closes.
+
 
 ## Persisted Connector discovery and public CLI - September 30, 2026
 

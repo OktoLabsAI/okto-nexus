@@ -1,0 +1,91 @@
+{
+  "date": "2026-10-01",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "0a0eee5",
+    "connector": "80f65e0",
+    "core": "a061960"
+  },
+  "core_version": "0.2.43.dev0",
+  "artifacts": {
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-onboarding-connector-wf4qq07s\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "4e55886a046cd52084d42c13f65f1922e2998b8ecdbd0b978e20308288e55305",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-onboarding-connector-wf4qq07s"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-onboarding-nexus-4aj3yfhf\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "37773a4875e8d7c63f9a5360cfce904b238a02c8b0df02248561f3be6c7308d1",
+      "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-onboarding-nexus-4aj3yfhf"
+    }
+  },
+  "core_artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw\\dist\\nexus_connector_core-0.2.43.dev0-py3-none-any.whl",
+    "sha256": "7403611bb37050700fc325b2002f74b5ac507a79af8badba0bea0cd1b775087b",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-lease-core-hi9n9umw"
+  },
+  "installed": {
+    "connector": {
+      "file": "evidence/executor-onboarding-installed.xml",
+      "tests": 212,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 56.756
+    },
+    "nexus": {
+      "file": "evidence/executor-onboarding-tcp-installed.xml",
+      "tests": 31,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 72.232
+    }
+  },
+  "source": {
+    "file": "evidence/executor-onboarding-source.xml",
+    "tests": 83,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 10.827
+  },
+  "cli": "evidence/executor-onboarding-cli.json",
+  "runner": "run_executor_onboarding_installed.py",
+  "pip_check": "evidence/executor-onboarding-install.log",
+  "changes": [
+    "Public configure-launch stages scope-bound local consent, protected references and optional approved provider home.",
+    "Public realize uses authenticated IPC; the owning daemon retains publication and serializes it with bootstrap rotation.",
+    "The daemon remains the inventory publisher. Realization verifies its authenticated path-free inventory and persists local evidence before HTTP.",
+    "Identical client intent replay recovers the same canonical realization after a lost response; no binding or runtime is implicitly created.",
+    "Cancelled IPC observers do not cancel publication; daemon shutdown drains owned work.",
+    "Registration revalidation tolerates inventory sequence advancement while preserving identity, profile and discovery-configuration fences.",
+    "Nexus returns a structured 403 for invalid realization tickets instead of an unhandled exception."
+  ],
+  "failure_history": [
+    {
+      "file": "evidence/executor-onboarding-tcp-producer-failure.xml",
+      "finding": "CLI inventory publication used a different producer on replay. Publication now remains with the automatic daemon.",
+      "redaction": "Ephemeral test bootstrap material was removed from the retained traceback."
+    },
+    {
+      "file": "evidence/executor-onboarding-tcp-registration-race.xml",
+      "finding": "Concurrent inventory sequence advancement conflicted with registration revalidation. Only that counter is excluded from the comparison; authority/configuration changes remain refused."
+    },
+    {
+      "file": "evidence/executor-onboarding-tcp-ticket-race.xml",
+      "finding": "Independent CLI and daemon bootstrap refreshes revoked each other. Realization now runs inside the daemon under its bootstrap owner gate. Nexus also maps refusal to a structured HTTP response."
+    }
+  ],
+  "initial_installed_attempt": "evidence/executor-onboarding-before-owner-installed.xml",
+  "limitations": [
+    "The TCP journey exercises public parsed CLI commands, actual authenticated local IPC, automatic daemon inventory and real Nexus HTTP routes. It seeds the imported identity and uses a technical vault.",
+    "The discovery candidate is a harmless copied interpreter, not an actual Codex provider. No provider is launched and no native/release qualification gate is overridden.",
+    "The realization ends PENDING_APPROVAL. Public binding prepare/apply, reusable runtime CLI mapping and real remote provider journeys remain pending.",
+    "Bootstrap realization uses the registration identity as required by the current scoped bootstrap contract; this is not full multi-agent onboarding acceptance.",
+    "Preexisting Nexus UI assets are excluded from these commits and UI acceptance.",
+    "Core code is unchanged. Earlier real local provider evidence remains tied to Core 0.2.42.",
+    "M03/M10, M08 and G0-G3 remain open."
+  ],
+  "milestone_complete": false
+}
