@@ -125,24 +125,23 @@ def test_discovery_internal_payload_identity_cannot_authenticate(runtime):
             service.list(context)
 
 
-def test_discovery_authenticated_stdio_shares_persisted_http_projection(runtime):
-    from test_pr34_remediation import stdio_environment
+def test_discovery_authenticated_mcp_http_shares_persisted_rest_projection(runtime):
     deps, client, _, _, _, caller = runtime
     issue(runtime, ["discover"])
     open_rest(runtime)
     expected = client.get("/api/v1/harness/bindings", headers={"x-api-key": caller}).json()
 
     async def query():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        params = StdioServerParameters(command=sys.executable,
-            args=["-m", "okto_nexus.adapters.inbound.mcp.server", "--home", str(deps.config.home_dir),
-                  "--feature-harness-integrations", "true"], env=stdio_environment(runtime))
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                response = await session.call_tool("harness_list", {"view": "bindings"})
-                assert (response.structuredContent or json.loads(response.content[0].text)) == expected
+        import httpx
+        from mcp import ClientSession
+        from mcp.client.streamable_http import streamable_http_client
+        async with httpx.AsyncClient(headers={"x-api-key": caller}, trust_env=False) as http:
+            async with streamable_http_client(str(client.base_url).rstrip("/") + "/mcp",
+                                               http_client=http) as (reader, writer, _):
+                async with ClientSession(reader, writer) as session:
+                    await session.initialize()
+                    response = await session.call_tool("harness_list", {"view": "bindings"})
+                    assert (response.structuredContent or json.loads(response.content[0].text)) == expected
     asyncio.run(asyncio.wait_for(query(), timeout=30))
 
 

@@ -64,6 +64,8 @@ class RuntimeDiscoveryService:
                     "next_endpoint_id": visible[limit - 1]["endpoint_id"] if more else None}
 
     def _endpoint(self, uow, endpoint, owner, now):
+        if endpoint["protocol"] == "nxl-r4":
+            return self._canonical_endpoint(uow, endpoint)
         descriptor = self.access.registry.get(endpoint["adapter_id"])
         profile = self.access.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
         item = {key: endpoint[key] for key in ("endpoint_id", "adapter_id", "protocol", "workspace_id",
@@ -94,4 +96,31 @@ class RuntimeDiscoveryService:
                 else asdict(EndpointCapabilities()))
             sessions.append(session)
         item.update(sessions=sessions, sessions_has_more=len(rows) > 10)
+        return item
+
+    def _canonical_endpoint(self, uow, endpoint):
+        from nexus_connector_core import get_runtime_catalog
+        descriptor = next((item for item in get_runtime_catalog().runtimes
+                           if item.adapter_id == endpoint["adapter_id"]), None)
+        profile = self.access.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+        item = {key: endpoint[key] for key in ("endpoint_id", "adapter_id", "protocol", "workspace_id",
+                "profile_id", "revision", "health", "response_policy", "consumption")}
+        item.update(enabled=bool(endpoint["enabled"]), profile_revision=profile["revision"] if profile else None,
+            declared_capabilities={}, capability_verification="core_catalog" if descriptor else "unavailable")
+        if descriptor:
+            item["runtime_descriptor"] = dict(adapter_id=descriptor.adapter_id,
+                native_kind=descriptor.native_kind, connection_mode=descriptor.connection_mode,
+                support_status=descriptor.support_status)
+        rows = uow.connection.execute(
+            "SELECT s.server_id,s.executor_id,s.session_id,s.binding_id,s.lifecycle_state,s.lease_state,"
+            "s.owner_generation,o.created_at FROM execution_sessions s "
+            "JOIN execution_bindings b ON b.server_id=s.server_id AND b.executor_id=s.executor_id AND b.binding_id=s.binding_id "
+            "JOIN execution_operations o ON o.server_id=s.server_id AND o.executor_id=s.executor_id AND o.operation_id=s.open_operation_id "
+            "JOIN execution_installation i ON i.server_id=s.server_id "
+            "WHERE b.endpoint_id=? ORDER BY o.created_at DESC,s.session_id DESC LIMIT 11",
+            (endpoint["endpoint_id"],)).fetchall()
+        # Durable lifecycle facts never assert process liveness or capabilities.
+        item.update(sessions=[dict(row) | dict(process_liveness="not_probed",
+            effective_capabilities={}, current_owner_ready_record=False) for row in rows[:10]],
+            sessions_has_more=len(rows) > 10)
         return item

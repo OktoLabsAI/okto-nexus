@@ -370,6 +370,14 @@ def connect_own_endpoint(deps, *, endpoint_id, idempotency_key):
     return open_runtime(deps, **arguments)
 
 
+def build_connection_service(deps):
+    from okto_nexus.application.agent_connections import AgentConnectionService
+    from okto_nexus.bootstrap.execution_compat import protocol_info
+    return AgentConnectionService(build_access_service(deps),
+        fresh_publications=deps.execution_fresh_publications,
+        remote_ready=protocol_info()["remote_execution_ready"])
+
+
 def build_open_service(deps):
     return RuntimeOpenService(connection_factory=deps.connection_factory, endpoints=build_endpoint_service(deps),
         agents=deps.repos.agents, sessions=deps.repos.harness_sessions, requests=SqliteRuntimeRequestRepo(),
@@ -1167,7 +1175,7 @@ def register(server: Any, deps: Any) -> None:
             from okto_nexus.application.agent_connections import AgentConnectionService
             args = runtime_object("maintenance", maintenance) or {}
             action = args.pop("action", "list")
-            service = AgentConnectionService(build_access_service(deps))
+            service = build_connection_service(deps)
             methods = {"list": service.view, "configure": service.configure, "issue": service.issue, "revoke": service.revoke, "available": service.available,
                        "connect": lambda context, endpoint_id, idempotency_key: connect_own_endpoint(deps, endpoint_id=endpoint_id, idempotency_key=idempotency_key)}
             if action not in methods:

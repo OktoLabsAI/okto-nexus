@@ -13,8 +13,10 @@ KEY_PREFIX = "nxsconn_"
 
 
 class AgentConnectionService:
-    def __init__(self, access):
+    def __init__(self, access, *, fresh_publications=None, remote_ready=False):
         self.access = access
+        self.fresh = fresh_publications if fresh_publications is not None else {}
+        self.remote_ready = remote_ready
         self.cf, self.repo, self.clock = access.cf, access.endpoints, access.clock
 
     def _global_ttl(self, uow):
@@ -44,6 +46,8 @@ class AgentConnectionService:
                     "platform_compatible": not descriptor.supported_platforms or bool({os.name, sys.platform}.intersection(descriptor.supported_platforms))})
             keys = [dict(r) for r in uow.connection.execute(
                 "SELECT key_id,endpoint_id,created_at,expires_at,revoked_at FROM agent_connection_keys WHERE agent_id=? ORDER BY created_at DESC LIMIT 100", (agent_id,))]
+            from .execution_connection_discovery import canonical_methods
+            methods.extend(canonical_methods(uow, agent_id))
             endpoint_views = []
             for endpoint in endpoints:
                 can_issue = True
@@ -53,8 +57,9 @@ class AgentConnectionService:
                     if exc.code != ErrorCode.PERMISSION_DENIED:
                         raise
                     can_issue = False
-                descriptor = self.access.registry.get(endpoint['adapter_id'])
-                can_issue = can_issue and (not descriptor.supported_platforms or bool({os.name, sys.platform}.intersection(descriptor.supported_platforms)))
+                if endpoint["protocol"] != "nxl-r4":
+                    descriptor = self.access.registry.get(endpoint['adapter_id'])
+                    can_issue = can_issue and (not descriptor.supported_platforms or bool({os.name, sys.platform}.intersection(descriptor.supported_platforms)))
                 endpoint_views.append({**{k: endpoint[k] for k in ('endpoint_id', 'adapter_id', 'enabled', 'activation_state')}, "can_issue": can_issue})
             ttl = policy['key_ttl_seconds'] if policy else None
             return {"agent_id": agent_id, "has_agent_key": bool(agent.api_key_hash), "revision": policy['revision'] if policy else 0,
@@ -113,6 +118,9 @@ class AgentConnectionService:
                     "available": any(row['available'] for row in rows), "unavailable_reasons": blockers,
                     "connection_mode": "approved_external_target" if descriptor.substrate == "attach" else "managed_runtime",
                     "capability_verification": "not_probed", "endpoints": rows})
+            from .execution_connection_discovery import canonical_available
+            methods.extend(canonical_available(uow, access=self.access, context=context,
+                endpoints=endpoints, fresh=self.fresh, remote_ready=self.remote_ready))
             return {"contract_version": 1, "agent_id": actor.agent_id, "methods": methods,
                 "instructions": "Use a returned connect call with a unique idempotency key. Reuse that key only for the same opening; uncertain outcomes require inspection. Opening does not authorize tasks or adopt your current conversation."}
 
@@ -138,6 +146,8 @@ class AgentConnectionService:
     def configure(self, context, *, agent_id, expected_revision, methods, key_ttl_seconds):
         self.access.authorize_maintenance(context)
         catalog = {d.adapter_id for d in self.access.registry.descriptors()} | {"mcp"}
+        from nexus_connector_core import get_runtime_catalog
+        catalog.update(item.adapter_id for item in get_runtime_catalog().runtimes)
         if (type(expected_revision) is not int or expected_revision < 0 or not isinstance(methods, dict)
                 or set(methods) - catalog or any(type(v) is not bool for v in methods.values())
                 or key_ttl_seconds is not None and (type(key_ttl_seconds) is not int or not 0 <= key_ttl_seconds <= 315360000)):

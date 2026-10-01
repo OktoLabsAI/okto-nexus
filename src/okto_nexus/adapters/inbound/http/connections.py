@@ -27,8 +27,8 @@ class OpenBody(RuntimeAdminBody):
 
 
 def service(deps):
-    from ..mcp.tools.harness import build_access_service
-    return AgentConnectionService(build_access_service(deps))
+    from ..mcp.tools.harness import build_connection_service
+    return build_connection_service(deps)
 
 
 def build_router():

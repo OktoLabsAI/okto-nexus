@@ -73,7 +73,7 @@ def connect_endpoint(deps, context, binding, key):
 
 
 def _start(deps, context, access, binding, key):
-    if not isinstance(key, str) or not 1 <= len(key) <= 160:
+    if not isinstance(key, str) or not 1 <= len(key) <= 160 or key == "<unique-key-for-this-opening>":
         raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
             "A stable idempotency_key is required for an R4 opening.", {})
     return _admit(deps, context, access, dict(client_intent_id=key,

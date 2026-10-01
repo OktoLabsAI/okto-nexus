@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-01",
+  "status": "PARTIAL_NS15_03_CANONICAL_DISCOVERY_VERIFIED",
+  "base_commit": "f70d2b4",
+  "installed_unique_passed": 128,
+  "architecture_passed": 3,
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-discovery-q_ltcrdn\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "7e37fbffae54137d16f04d5784f47180a13d1db1376ad01a895100ce8e3fde4a"
+    }
+  },
+  "results": {
+    "r4": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "76",
+      "time": "252.724",
+      "timestamp": "2026-10-01T15:52:11.429148-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "legacy": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "1",
+      "skipped": "0",
+      "tests": "52",
+      "time": "154.693",
+      "timestamp": "2026-10-01T15:56:25.982177-03:00",
+      "hostname": "Alienware_m15"
+    },
+    "corrected_and_architecture": {
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "4",
+      "time": "5.622",
+      "timestamp": "2026-10-01T15:59:44.213155-03:00",
+      "hostname": "Alienware_m15"
+    }
+  },
+  "runner": "plans/r4_execution/run_ns15_03_discovery.py",
+  "verification": "Installed bytes of all packages matched their wheels; Nexus nonstatic sources matched. Python -I outside checkout. No product changes after build.",
+  "correction": "One obsolete stdio parity test failed because stdio was removed by the active plan. Changed only that test to the actual MCP HTTP client, retaining REST projection equality; corrected test and three architecture checks passed on the same installed artifact. Original failed output retained.",
+  "corrected_test": "tests/test_runtime_discovery.py::test_discovery_authenticated_mcp_http_shares_persisted_rest_projection",
+  "corrected_file_sha256": "d93048b35fe30f1840a80d2e82b4fd909723ce409dfc560057d90ded304e3662",
+  "limitations": [
+    "Synthetic native peers and fixture-only readiness qualification.",
+    "Implicit selection, boot, delivery, event parity and native loader removal remain pending.",
+    "Normative TR4-15-03 and release gates remain open."
+  ]
+}

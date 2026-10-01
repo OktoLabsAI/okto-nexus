@@ -39,8 +39,8 @@ O [incremento TR4-15-02](M12_NS15_02_DRAIN.md) integra drenagem do owner,
 incerteza preservada e restore combinado no binário HTTP atual. A próxima
 fronteira é NS15.03: abertura explícita, connect, comandos e leituras MCP/REST
 de sessões canônicas, incluindo abertura por connection key com autoridade
-durável, já usam R4/Core; converter seleção implícita, boot, delivery e
-descoberta antes de retirar os
+durável, descoberta e configuração, já usam R4/Core; converter seleção
+implícita, boot, delivery e projeção de eventos antes de retirar os
 loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
