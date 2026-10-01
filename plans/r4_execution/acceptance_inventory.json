@@ -727,10 +727,16 @@
     },
     "NS06.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns06.py::test_ns06_05",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_CONSUMPTION_VERIFIED",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_05[local]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[remote]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[observer]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[handoff]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[claim_race]"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns06.py::test_ns06_05 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-06-05"
@@ -745,9 +751,11 @@
         "plans/r4_execution/M12_NS15_03_PUBLICATION.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_publication.json",
         "plans/r4_execution/M12_NS06_05_CONSUMPTION.md",
-        "plans/r4_execution/test_runs_20261001_ns06_05_consumption.json"
+        "plans/r4_execution/test_runs_20261001_ns06_05_consumption.json",
+        "plans/r4_execution/M12_NS06_05_COMBINED.md",
+        "plans/r4_execution/test_runs_20261001_ns06_05_combined.json"
       ],
-      "notes": "MCP pull exclusion for embedded and automatic remote domain delivery; sequential and concurrent pull/managed handoff claims preserve one winner and grant budget. Combined local/remote endpoint competition on one delivery, final normative TR4-06-05 acceptance and release gates remain open."
+      "notes": "TR4-06-05 passes at domain_integration. Both live canonical executors share one logical delivery/claim; priority selects one native effect and excludes MCP pull. Observer never executes, native terminal does not complete handoff, concurrent handoff claims retain one winner. Task dependencies and release gates remain open."
     },
     "NS07.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_01",
@@ -1574,9 +1582,11 @@
         "plans/r4_execution/M12_NS15_03_EVENT_VIEWS.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_event_views.json",
         "plans/r4_execution/M12_NS06_05_CONSUMPTION.md",
-        "plans/r4_execution/test_runs_20261001_ns06_05_consumption.json"
+        "plans/r4_execution/test_runs_20261001_ns06_05_consumption.json",
+        "plans/r4_execution/M12_NS06_05_COMBINED.md",
+        "plans/r4_execution/test_runs_20261001_ns06_05_combined.json"
       ],
-      "notes": "Canonical MCP/REST event reads share session authority and contiguous persisted history, with scoped pagination, integrity checks and closed-session replay. Combined claim competition, context-only observation, remaining subscriber parity audit, cross-protocol fallback, capture retention, native loader removal and final restore/release acceptance remain pending. TR4-15-03 remains NOT_RUN."
+      "notes": "Canonical callers, result publication and event reads have installed evidence. TR4-06-05 combined consumption is verified at domain_integration. Subscriber parity audit, cross-protocol fallback, canonical capture retention, native loader removal and final restore/release remain pending."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",
@@ -2117,9 +2127,19 @@
         "NS06.05"
       ],
       "layer": "domain_integration",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns06.py::test_ns06_05[local]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[remote]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[observer]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[handoff]",
+        "tests/execution_r4/test_ns06.py::test_ns06_05[claim_race]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/M12_NS06_05_COMBINED.md",
+        "plans/r4_execution/test_runs_20261001_ns06_05_combined.json"
+      ]
     },
     "TR4-07-01": {
       "task_ids": [

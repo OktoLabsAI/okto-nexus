@@ -25,6 +25,36 @@ from okto_nexus.application.execution_intents import (
     read_execution_intent, resolve_execution_intent,
 )
 
+# Fixtures are requested only by the domain-integration acceptance below.
+from test_local_realization import local_setup
+from test_canonical_delivery import connected_local
+from test_combined_consumption import combined_onboarding
+
+
+@pytest.mark.parametrize('scenario', ['local', 'remote', 'observer', 'handoff', 'claim_race'])
+def test_ns06_05(request, tmp_path, monkeypatch, scenario):
+    """TR4-06-05: one logical consumer; observer/terminal cannot execute work."""
+    from okto_nexus.bootstrap import embedded_dispatch, execution_compat
+    from okto_nexus.adapters.inbound.http import runtime_v1
+    for module in (embedded_dispatch, execution_compat, runtime_v1):
+        info = module.protocol_info()
+        monkeypatch.setattr(module, 'protocol_info', lambda info=info: {**info, 'remote_execution_ready': True})
+    if scenario in ('local', 'remote'):
+        from test_combined_consumption import test_combined_executors_and_mcp_share_one_claim
+        test_combined_executors_and_mcp_share_one_claim(
+            request.getfixturevalue('combined_onboarding'), tmp_path, monkeypatch, scenario)
+    else:
+        connected = request.getfixturevalue('connected_local')
+        if scenario == 'observer':
+            from test_canonical_delivery import test_canonical_observer_does_not_receive_executable_prompt
+            test_canonical_observer_does_not_receive_executable_prompt(connected, monkeypatch)
+        elif scenario == 'handoff':
+            from test_canonical_handoff import test_managed_claim_replays_and_native_terminal_does_not_complete
+            test_managed_claim_replays_and_native_terminal_does_not_complete(connected, monkeypatch)
+        else:
+            from test_canonical_consumption import test_handoff_pull_and_runtime_compete_for_one_claim
+            test_handoff_pull_and_runtime_compete_for_one_claim(connected, monkeypatch, 'concurrent')
+
 
 def test_ns06_01(tmp_path):
     deps = bootstrap({}, ["--home", str(tmp_path / "home")])

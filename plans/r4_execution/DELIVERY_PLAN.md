@@ -45,7 +45,9 @@ seleção explícita de workspace lógico sem caminho local e prioridade de sess
 prontas na seleção mista de endpoints. Claims de handoff com conclusão
 governada também já admitem abertura/turno R4 atomicamente, agora com
 seleção de workspace lógico nas entradas MCP/HTTP sem caminho local. Completar
-a disputa combinada de claims e fallback entre protocolos após falha. A captura
+o fallback entre protocolos após falha; a disputa combinada de claims foi
+verificada em TR4-06-05, incluindo exclusão de MCP, observadores sem execução
+e conclusão governada de handoff. A captura
 de saída R4 já preserva eventos contíguos e aparece no histórico autorizado;
 publicação governada, artefatos privados e resultados estruturados explicitamente
 admitidos também reutilizam o domínio existente. Leituras de eventos MCP/REST já

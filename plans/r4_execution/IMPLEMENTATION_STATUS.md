@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-06-05 combined consumption - October 1, 2026
+
+**Normative domain_integration scenario PASSED** in five cases; installed campaign: **6 product passes and 3 architecture checks**. Both live canonical executors share one logical delivery/claim; priority selects one native effect and excludes MCP pull. Observer never executes, native terminal does not complete handoff, concurrent handoff claims retain one winner. See [scope](M12_NS06_05_COMBINED.md) and [manifest](test_runs_20261001_ns06_05_combined.json). Task dependencies, remaining NS15.03 migration, final restore and release gates remain open.
+
 ## NS06.05 canonical consumption - October 1, 2026
 
 Installed verification: **7 distinct product passes**, plus **3 architecture checks**. MCP pull exclusion for embedded and automatic remote domain delivery; sequential and concurrent pull/managed handoff claims preserve one winner and grant budget. See [scope](M12_NS06_05_CONSUMPTION.md) and [manifest](test_runs_20261001_ns06_05_consumption.json). Combined local/remote endpoint competition on one delivery, final normative TR4-06-05 acceptance and release gates remain open.

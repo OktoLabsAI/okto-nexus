@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False, initial_prompt=False, domain_delivery=False, combined_winner=None):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -72,16 +72,25 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
     monkeypatch.setattr(runtime_v1, 'protocol_info', lambda: qualified)
     from okto_nexus.adapters.inbound.http import connections_v1
     monkeypatch.setattr(connections_v1, 'protocol_info', lambda: qualified)
+    if combined_winner:
+        from test_combined_consumption import prepare_embedded
+        embedded = prepare_embedded(onboarding, binding, tmp_path, monkeypatch, qualified)
     if domain_delivery:
         from okto_nexus.bootstrap import execution_compat
         monkeypatch.setattr(execution_compat, 'protocol_info', lambda: qualified)
         with deps.connection_factory.unit_of_work() as uow:
             uow.connection.execute("UPDATE agent_endpoints SET consumption='exclusive',response_policy='conversation' WHERE endpoint_id=?",
                                    (binding['endpoint_id'],))
+            if combined_winner:
+                uow.connection.execute('UPDATE agent_endpoints SET priority=? WHERE endpoint_id=?',
+                    (20 if combined_winner == 'remote' else 10, binding['endpoint_id']))
+                uow.connection.execute('UPDATE agent_endpoints SET priority=? WHERE endpoint_id=?',
+                    (20 if combined_winner == 'local' else 10, embedded[1]['endpoint_id']))
         # This fixture configures domain policy after binding approval. Retain
         # the resulting current authority in the Connector fixture as well.
         _, current, _ = current_agent_revisions(deps.connection_factory, agent_id='subject')
         binding['configuration_revision'] = current.configuration
+        binding['authorization_revision'] = current.authorization
     acknowledge_execution_binding(store, binding=R4BindingView(**binding))
 
     if event_recovery in ('active_disconnect', 'lease_renewal'):
@@ -317,6 +326,11 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     monkeypatch.setattr(execution.publications, 'record', interrupted_record)
                 opened = await admit('runtime.start', new_session=True)
                 session_id = opened['scope']['session_id']
+                if combined_winner:
+                    from test_combined_consumption import verify_competition
+                    await verify_competition(onboarding, binding, embedded, native, execution,
+                        session_id, combined_winner, monkeypatch, admit)
+                    return
                 if cli_admission:
                     from okto_nexus_connector.cli.main import build_parser
                     from okto_nexus_connector.cli.commands.runtime import run_runtime
