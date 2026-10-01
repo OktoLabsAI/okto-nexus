@@ -45,8 +45,9 @@ seleção explícita de workspace lógico sem caminho local e prioridade de sess
 prontas na seleção mista de endpoints. Claims de handoff com conclusão
 governada também já admitem abertura/turno R4 atomicamente, agora com
 seleção de workspace lógico nas entradas MCP/HTTP sem caminho local. Completar
-a disputa combinada de claims, fallback entre protocolos após falha
-e projeção de resultados/eventos antes de retirar os
+a disputa combinada de claims e fallback entre protocolos após falha. A captura
+de saída R4 já preserva eventos contíguos e aparece no histórico autorizado;
+completar publicação de resultados/eventos, resultados estruturados e retenção antes de retirar os
 loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.

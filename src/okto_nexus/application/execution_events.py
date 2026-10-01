@@ -12,6 +12,7 @@ from ..adapters.outbound.sqlite.execution_agent_revisions import current_agent_r
 from ..adapters.outbound.sqlite.execution_leases import SqliteExecutionLeaseRepository
 from .execution_leases import require_execution_lane
 from .execution_native_requests import project_native_request
+from .execution_results import project_execution_result
 
 
 def commit_execution_events(factory, *, channel, frame, embedded_owner=None, approvals=None):
@@ -102,6 +103,7 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None, app
                 "server_id=? AND executor_id=? AND session_id=? AND stream_epoch=? "
                 "AND sequence>? AND sequence<=? ORDER BY sequence",
                 (*key,watermark,projection.watermark)).fetchall():
+            project_execution_result(conn, event=json.loads(saved["payload_json"]), received_at=saved["received_at"])
             project_native_request(conn,event=json.loads(saved["payload_json"]),
                                    session=session,channel=channel,
                                    received_at=saved["received_at"], uow=uow, approvals=approvals)

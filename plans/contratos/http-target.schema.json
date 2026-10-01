@@ -2790,6 +2790,68 @@
             "maxLength": 160
           },
           "maxItems": 16
+        },
+        "result": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "session_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "stream_epoch": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "terminal_sequence": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "output_text": {
+                  "type": "string",
+                  "maxLength": 1048576
+                },
+                "output_truncated": {
+                  "type": "integer",
+                  "enum": [
+                    0,
+                    1
+                  ]
+                },
+                "output_event_count": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "delivery_outcome": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "captured_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "session_id",
+                "stream_epoch",
+                "terminal_sequence",
+                "output_text",
+                "output_truncated",
+                "output_event_count",
+                "delivery_outcome",
+                "captured_at"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [

@@ -44,6 +44,7 @@ class ExecutionOperationHistory:
     dispatch_error: dict | None = None
     execution_scope: dict | None = None
     follow_up_operation_ids: tuple[str, ...] = ()
+    result: dict[str, Any] | None = None
 
     def public_view(self) -> dict[str, Any]:
         latest = self.receipts[-1] if self.receipts else None
@@ -68,6 +69,7 @@ class ExecutionOperationHistory:
                        executor_id=self.executor_id, binding_id=self.binding_id)
                       if latest and latest.get("error_code") else self.dispatch_error if not latest else None),
             "follow_up_operation_ids": list(self.follow_up_operation_ids),
+            "result": self.result,
         }
 
 
@@ -134,6 +136,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
             "SELECT dispatch_state,last_error FROM execution_dispatch_outbox "
             "WHERE server_id=? AND executor_id=? AND operation_id=?",
             (server_id, executor_id, operation_id)).fetchone()
+        from ....application.execution_results import read_execution_result
         return ExecutionOperationHistory(
             server_id, executor_id, operation_id, operation["binding_id"],
             operation["session_id"], operation["action"],
@@ -150,7 +153,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
                 "SELECT operation_id FROM execution_operations WHERE server_id=? AND executor_id=? "
                 "AND parent_operation_id=? ORDER BY created_at,operation_id",
                 (server_id, executor_id, operation_id))),
-
+            read_execution_result(conn, server_id=server_id, executor_id=executor_id, operation_id=operation_id),
         )
 
 

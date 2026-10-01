@@ -50,7 +50,7 @@ def test_limited_key_opens_core_once_and_cannot_control(connected_local, issuer)
     wait_receipt(setup, close.json()["data"], stages=("SUCCEEDED",))
 
 
-@pytest.mark.parametrize("migration", [92, 93, 94])
+@pytest.mark.parametrize("migration", [92, 93, 94, 95])
 def test_additive_open_authority_migrations_preserve_existing_r4_history(connected_local, tmp_path, migration):
     import sqlite3
     from okto_nexus.config import NexusConfig
@@ -68,12 +68,14 @@ def test_additive_open_authority_migrations_preserve_existing_r4_history(connect
     with sqlite3.connect(config.db_path) as target:
         with deps.connection_factory.unit_of_work(write=False) as uow:
             uow.connection.backup(target)
-        target.execute("DROP TABLE execution_domain_deliveries")
-        target.execute("DROP TRIGGER runtime_delivery_capacity_guard")
-        target.execute("ALTER TABLE delivery_outbox DROP COLUMN canonical_terminal_operation_id")
-        import okto_nexus
-        historical = Path(okto_nexus.__file__).parent / "migrations/058_runtime_delivery_capacity.sql"
-        target.executescript("CREATE TRIGGER" + historical.read_text().split("CREATE TRIGGER", 1)[1])
+        target.execute("DROP TABLE execution_results")
+        if migration < 95:
+            target.execute("DROP TABLE execution_domain_deliveries")
+            target.execute("DROP TRIGGER runtime_delivery_capacity_guard")
+            target.execute("ALTER TABLE delivery_outbox DROP COLUMN canonical_terminal_operation_id")
+            import okto_nexus
+            historical = Path(okto_nexus.__file__).parent / "migrations/058_runtime_delivery_capacity.sql"
+            target.executescript("CREATE TRIGGER" + historical.read_text().split("CREATE TRIGGER", 1)[1])
         if migration < 94:
             target.execute("ALTER TABLE execution_operations DROP COLUMN boot_authority_json")
         if migration == 92:
@@ -81,7 +83,7 @@ def test_additive_open_authority_migrations_preserve_existing_r4_history(connect
         target.execute("DELETE FROM schema_migrations WHERE version>=?", (migration,))
         expected = target.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
         receipts = target.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision").fetchall()
-    assert MigrationRunner(factory).apply() == list(range(migration, 95))
+    assert MigrationRunner(factory).apply() == list(range(migration, 96))
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()

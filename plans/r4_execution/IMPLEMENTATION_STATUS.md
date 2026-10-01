@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical result capture - October 1, 2026
+
+Installed verification: **73 distinct product passes**, plus **3 architecture checks**. Schema 095 materializes bounded canonical output with contiguous authenticated event provenance, atomic ACK rollback and replay protection. Authorized operation history exposes terminal output without legacy harness rows. See [scope](M12_NS15_03_RESULTS.md) and [manifest](test_runs_20261001_ns15_03_results.json). Publication, structured work decisions, result artifacts/retention, combined claim competition, cross-protocol fallback and native loader removal remain pending; normative acceptance/release gates stay open.
+
 ## NS15.03 logical handoff workspace - October 1, 2026
 
 Installed verification: **334 distinct product passes**, plus **3 architecture checks**. Public MCP handoffs and HTTP callers now use existing logical workspaces without Server-local paths, preserving claim, capability and approval authority. See [scope](M12_NS15_03_HANDOFF_WORKSPACE.md) and [manifest](test_runs_20261001_ns15_03_handoff_workspace.json). Combined claim competition, canonical structured results, result/event publication, cross-protocol fallback and native loader removal remain pending; normative acceptance/release gates stay open.
