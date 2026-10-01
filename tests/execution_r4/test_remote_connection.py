@@ -31,7 +31,7 @@ from test_vertical_inventory import _NativeFactory
     (True, None, False, 0, 'unsent'), (True, None, False, 0, 'ack_lost'),
     (True, None, False, 0, 'cold_unsent'), (True, None, False, 0, 'cold_ack_lost'),
     (True, None, False, 0, 'active_disconnect'), (True, None, False, 0, 'lease_renewal')])
-def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None):
+def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onboarding, tmp_path, monkeypatch, automatic, publication_failure, reconcile_closed, history_count, event_recovery, native_decision=None, cli_admission=False):
     from okto_nexus_connector.transport.https_client import NexusHTTPClient, R4BindingView
     from okto_nexus_connector.transport.wss_r4 import connect_r4_connection
     from okto_nexus_connector.services.execution_selection import acknowledge_execution_binding
@@ -139,15 +139,46 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     type='reconcile.report', next_cursor=None, complete=True, receipts=[], claims=[],
                     stream_watermarks=[], ownership_facts=[])
         async def admit(intent, **options):
-            resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
-                'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
-                'workspace_binding_id': binding['workspace_binding_id'], **options})
-            assert resolved.status_code == 200, resolved.text
-            resolution = resolved.json()
-            assert resolution['can_submit'], resolution['blockers']
-            admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
-                k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
-            assert admitted.status_code == 202, admitted.text
+            if cli_admission:
+                from okto_nexus_connector.cli.main import build_parser
+                from okto_nexus_connector.cli.commands.runtime import run_runtime
+                from okto_nexus_connector.cli.output import Output
+                action = {"runtime.start": "start", "turn.submit": "submit", "turn.steer": "steer",
+                          "turn.interrupt": "interrupt", "runtime.close": "stop"}[intent]
+                words = ["runtime", action]
+                if intent == "runtime.start":
+                    words += ["assistant", "--new-session"]
+                else:
+                    words += [options["session_id"]]
+                    if intent in {"turn.submit", "turn.steer"}:
+                        words += [options["text"]]
+                    words += ["--alias", "assistant"]
+                    target = options.get("target", {})
+                    if target.get("kind") == "native_turn_id":
+                        words += ["--expected-turn-id", target["expected_turn_id"]]
+                    elif target.get("kind") == "current_run":
+                        words += ["--current-run"]
+                words += ["--client-intent-id", "mux-" + intent]
+                args = build_parser().parse_args(words)
+                admitted = await run_runtime(args, Output(json_mode=True), daemon_root)
+                assert admitted["state"] == "ADMITTED", admitted
+                # Repeating an acknowledged command retains the same Server
+                # operation and cannot create another native effect.
+                replay = await run_runtime(args, Output(json_mode=True), daemon_root)
+                assert replay["operation_id"] == admitted["operation_id"]
+                saved = next(r for r in daemon.store.load().runtime_intents
+                             if r.client_intent_id == "mux-" + intent)
+                resolution = saved.resolution
+            else:
+                resolved = client.post('/v1/runtime/intents:resolve', headers=headers['subject'], json={
+                    'client_intent_id': 'mux-' + intent, 'intent': intent, 'binding_id': binding['binding_id'],
+                    'workspace_binding_id': binding['workspace_binding_id'], **options})
+                assert resolved.status_code == 200, resolved.text
+                resolution = resolved.json()
+                assert resolution['can_submit'], resolution['blockers']
+                admitted = client.post('/v1/runtime/operations', headers=headers['subject'], json={
+                    k: resolution[k] for k in ('client_intent_id', 'operation_id', 'resolution_revision', 'intent_hash')})
+                assert admitted.status_code == 202, admitted.text
             operations.append(resolution['operation_id'])
             if publication_failure and intent == 'runtime.close':
                 async with asyncio.timeout(8):
@@ -179,6 +210,16 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
                     if serving.done():
                         await serving
                     await asyncio.sleep(0.01)
+            if cli_admission:
+                from okto_nexus_connector.services.binding_onboarding import BindingOnboarding
+                onboarding_service = BindingOnboarding(daemon.store, daemon.vault)
+                # Recover the already approved public Server proposal through
+                # the same durable Connector caller used by the CLI.
+                await onboarding_service.prepare(identity_alias="subject", realization_ref=binding["realization_ref"],
+                    alias="assistant", client_intent_id=prepare["client_intent_id"])
+                await onboarding_service.apply(identity_alias="subject", prepare_intent_id=prepare["client_intent_id"],
+                    client_intent_id=apply["client_intent_id"], approved_diff_hash=apply["approved_diff_hash"],
+                    operator_proof_ref=approval_id)
             from contextlib import AsyncExitStack
             async with AsyncExitStack() as stack:
                 if automatic:
@@ -538,6 +579,18 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
             assert owner.usage == {False: (0, 0), True: (0, 0)}
             assert native.native.stopped
             assert native.opens == 1
+            if cli_admission:
+                from okto_nexus_connector.cli.main import build_parser
+                from okto_nexus_connector.cli.commands.runtime import run_runtime
+                from okto_nexus_connector.cli.output import Output
+                retained = daemon.store.load().runtime_intents
+                assert len(retained) == 5
+                for record in retained:
+                    args = build_parser().parse_args(["runtime", "operation", "--alias", "assistant",
+                                                      "--client-intent-id", record.client_intent_id])
+                    view = await run_runtime(args, Output(json_mode=True), daemon_root)
+                    assert view["operation"]["receipt_revision"] == 1
+                    assert view["operation"]["error"] is None
             assert [kind for kind, _ in native.native.sent] == ['send_turn', 'steer', 'interrupt']
             with deps.connection_factory.unit_of_work(write=False) as uow:
                 assert uow.connection.execute('SELECT COUNT(*) FROM execution_operations').fetchone()[0] == 5 + history_count + bool(native_decision)
@@ -567,3 +620,9 @@ def test_owned_connector_reader_dispatches_five_actions_over_real_websocket(onbo
 def test_canonical_native_decision_roundtrip_through_automatic_connector(onboarding, tmp_path, monkeypatch, kind, choice):
     test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
         onboarding,tmp_path,monkeypatch,True,None,False,0,None,native_decision=(kind,choice))
+
+
+@pytest.mark.parametrize('onboarding', ['connector-configured'], indirect=True)
+def test_public_runtime_cli_dispatches_five_actions_through_automatic_daemon(onboarding, tmp_path, monkeypatch):
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+        onboarding, tmp_path, monkeypatch, True, None, False, 0, None, cli_admission=True)
