@@ -1416,11 +1416,16 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-04"
-      ]
+      ],
+      "supporting_nodeids": [
+        "tests/test_auth_cache_bounds.py::test_100k_sqlite_identities_use_indexed_lookup_and_bounded_cache"
+      ],
+      "evidence": "plans/r4_execution/test_runs_20261001_auth_cache.json",
+      "notes": "Bounded positive cache, TTL and invalidation-generation refill fence implemented. 100k SQLite identity churn and affected installed regression passed. Normative combined flood/control scenario and queue fairness/item-byte reserve acceptance remain open."
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",

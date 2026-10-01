@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS14.04 bounded authentication cache — October 1, 2026
+
+Nexus a329503 limits positive authentication caching to 4096 entries and TTL to 60 seconds, evicts both indexes together, and prevents a lookup from refilling the cache across invalidation. Installed validation: **100 authentication/HTTP plus 27 R4 cases passed**. Actual SQLite 100k-identity load retained 4096 entries with a memory plateau; hardware, timings, initial failures and fixture corrections are recorded in the [manifest](test_runs_20261001_auth_cache.json) and [scope](M11_AUTH_CACHE_LIMITS.md). Core 0.2.51 and Connector artifacts are unchanged. NS14.04 remains partial; normative flood/control acceptance and all release gates remain open.
+
+
 ## TR4-14-01 crash/restart history — October 1, 2026
 
 The normative restart test passed with two application processes, an abrupt producer exit, natural dispatcher lease expiry and the provider executable removed. Historical intent/operation/session queries and replay work over real HTTP, while ownership remains UNKNOWN, the slot remains reserved and no runtime is constructed. Related installed regression: **33 passed** on the unchanged Core 0.2.51 tuple. See [scope](M11_NS14_01_RESTART.md) and [manifest](test_runs_20261001_ns14_01.json). NS14.01 remains partial; broader dependencies and all release gates remain open.
