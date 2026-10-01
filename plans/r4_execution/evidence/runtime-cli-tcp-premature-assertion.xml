@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="10.851" timestamp="2026-10-01T00:55:34.443709-03:00" hostname="Alienware_m15"><testcase classname="test_remote_connection" name="test_public_runtime_cli_dispatches_five_actions_through_automatic_daemon[connector-configured]" time="9.108"><failure message="AssertionError: assert 2 == 5&#10; +  where 2 = len([RuntimeIntentRecord(server_id='srv_01cef767c57d1fc67253efa5930b0f36', agent_id='subject', alias='assistant', client_i...rkspace_binding_id': 'wxb_f60e5b94fd04820b7ea4cb55f69f3a13', 'workspace_id': 'wsr_b5fa6a1ea17d435dd71b9f20d3edf501'}})])">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:627: in test_public_runtime_cli_dispatches_five_actions_through_automatic_daemon
+    test_owned_connector_reader_dispatches_five_actions_over_real_websocket(
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:615: in test_owned_connector_reader_dispatches_five_actions_over_real_websocket
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_remote_connection.py:361: in run
+    assert len(retained) == 5
+E   AssertionError: assert 2 == 5
+E    +  where 2 = len([RuntimeIntentRecord(server_id='srv_01cef767c57d1fc67253efa5930b0f36', agent_id='subject', alias='assistant', client_i...rkspace_binding_id': 'wxb_f60e5b94fd04820b7ea4cb55f69f3a13', 'workspace_id': 'wsr_b5fa6a1ea17d435dd71b9f20d3edf501'}})])</failure></testcase></testsuite></testsuites>
