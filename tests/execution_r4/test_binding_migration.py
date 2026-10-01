@@ -103,3 +103,23 @@ def test_agent_cannot_adopt_legacy_endpoint(adopted_setup):
     response=client.post("/v1/connections/bindings:prepare",json=proposal_request(adopted_setup),
                          headers=headers["subject"])
     assert response.status_code==403,response.text
+
+
+@pytest.mark.parametrize("state", ["protocol_ready", "outcome_unknown"])
+def test_canonical_adapter_cannot_bypass_legacy_cutover(adopted_setup, state):
+    deps, _, client, headers, *_ = adopted_setup
+    with deps.connection_factory.unit_of_work() as uow:
+        uow.connection.execute("INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,"
+            "started_at,created_at,updated_at,endpoint_id,lifecycle_state) "
+            "VALUES('old-owner','codex','subject','running','{}','2026-10-01','2026-10-01','2026-10-01',"
+            "'legacy-endpoint',?)", (state,))
+    body = proposal_request(adopted_setup)
+    body.pop("adopt_endpoint_id")
+    proposal, apply = prepare_operator(client, headers, body)
+    assert proposal["can_apply"] is False
+    response = client.post("/v1/connections/bindings:apply", json=apply, headers=headers["operator"])
+    assert response.status_code == 409, response.text
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert uow.connection.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 0
+        assert uow.connection.execute("SELECT COUNT(*) FROM agent_endpoints").fetchone()[0] == 1
+        assert uow.connection.execute("SELECT lifecycle_state FROM harness_sessions WHERE session_id='old-owner'").fetchone()[0] == state

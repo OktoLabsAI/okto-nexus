@@ -102,11 +102,14 @@ def _binding_alias_conflicts(conn, *, server_id, subject_agent_id, executor_id,
     return conn.execute(
         "SELECT ep.endpoint_id FROM agent_endpoints ep LEFT JOIN execution_bindings b "
         "ON b.endpoint_id=ep.endpoint_id WHERE ep.agent_id=? AND ep.workspace_id=? "
-        "AND ((b.binding_id IS NULL AND ep.adapter_id=?) OR "
+        "AND ((b.binding_id IS NULL AND (ep.adapter_id=? OR EXISTS ("
+        "SELECT 1 FROM execution_migration_map m WHERE m.source='nexus-r4-catalog-v1' "
+        "AND m.source_type='agent_endpoints' AND m.legacy_id=ep.endpoint_id "
+        "AND json_extract(m.canonical_ref,'$.canonical_adapter_id')=?))) OR "
         "(b.server_id=? AND b.executor_id=? AND "
         "CASE WHEN json_valid(ep.public_config) THEN json_extract(ep.public_config,'$.alias') END=?)) "
         "LIMIT 2",
-        (subject_agent_id, workspace_id, adapter_id, server_id, executor_id, alias),
+        (subject_agent_id, workspace_id, adapter_id, adapter_id, server_id, executor_id, alias),
     ).fetchall()
 
 

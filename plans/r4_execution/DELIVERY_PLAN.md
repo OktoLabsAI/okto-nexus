@@ -31,8 +31,12 @@ Checkpoint de execução de 1º de outubro: o incremento corrente de NS15.01/M12
 conclui a retomada do catálogo após adoção revisada de endpoint, com recibo
 transacional e validação do backup preservado. Ver [escopo e limites](M12_MIGRATION_RESUME.md)
 e [manifesto de testes](test_runs_20261001_migration_resume.json). A próxima
-fronteira de M12 é o aceite combinado de histórico legado e recuperação M0–M3,
-seguido de cutover/rollback; nenhum gate é encerrado por este incremento.
+fronteira de M12 é o cutover/rollback. O aceite combinado de histórico legado
+e recuperação M0–M3 passou em [TR4-15-01](M12_NS15_01_ACCEPTANCE.md).
+A [correção de admissão durante cutover](M12_MIGRATION_CUTOVER_FENCE.md)
+impede contornar endpoints legados usando o ID canônico do adapter; ainda falta
+o aceite integrado TR4-15-02 de drenagem do owner e rollback. Nenhum gate de
+release é encerrado por estes incrementos.
 
 Esta revisão atende à solicitação de estruturar a entrega total. O escopo de implementação continua sendo M00–M13, com os critérios detalhados abaixo e o backlog normativo preservado. A sequência de fechamento é:
 

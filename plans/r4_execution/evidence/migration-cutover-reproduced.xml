@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="10.109" timestamp="2026-10-01T14:41:29.440095-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_binding_migration" name="test_canonical_adapter_cannot_bypass_legacy_cutover[protocol_ready]" time="4.780"><failure message="assert True is False">tests\execution_r4\test_binding_migration.py:119: in test_canonical_adapter_cannot_bypass_legacy_cutover
+    assert proposal["can_apply"] is False
+E   assert True is False</failure></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_canonical_adapter_cannot_bypass_legacy_cutover[outcome_unknown]" time="2.852"><failure message="assert True is False">tests\execution_r4\test_binding_migration.py:119: in test_canonical_adapter_cannot_bypass_legacy_cutover
+    assert proposal["can_apply"] is False
+E   assert True is False</failure></testcase></testsuite></testsuites>

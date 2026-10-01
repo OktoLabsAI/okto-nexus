@@ -1468,10 +1468,12 @@
     },
     "NS15.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_01",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "PARTIAL",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_01"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns15.py::test_ns15_01 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-15-01"
@@ -1492,20 +1494,29 @@
         "plans/r4_execution/test_runs_20261001_migration_backup.json",
         "plans/r4_execution/test_runs_20261001_migration_catalog.json",
         "plans/r4_execution/test_runs_20261001_migration_policy.json",
-        "plans/r4_execution/test_runs_20261001_migration_adoption.json"
+        "plans/r4_execution/test_runs_20261001_migration_adoption.json",
+        "plans/r4_execution/test_runs_20261001_migration_resume.json",
+        "plans/r4_execution/test_runs_20261001_ns15_01.json"
       ],
-      "notes": "M0 backup, M2 catalog/policy migration and reviewed local endpoint adoption implemented; latest installed campaign 54 passed. Combined legacy-history fixture, full M0-M3 phase resumption and normative TR4-15-01 remain open."
+      "notes": "Normative TR4-15-01 passed at the migration layer on an installed wheel: one schema-065 database, historical jobs/claims/messages/events and keys, interrupted batch rollback, public reviewed adoption and repeated resume. Task dependencies, M4-M6 and release gates remain open."
     },
     "NS15.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_02",
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
+      "implementation": "PARTIAL",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-02"
-      ]
+      ],
+      "supporting_nodeids": [
+        "tests/execution_r4/test_binding_migration.py::test_canonical_adapter_cannot_bypass_legacy_cutover"
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_migration_cutover.json"
+      ],
+      "notes": "Fixed canonical adapter-name bypass of mapped legacy endpoint review; active and unknown session cases pass. Full normative drain and safe rollback scenario remains open."
     },
     "NS15.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_03",
@@ -2518,9 +2529,14 @@
         "NS15.01"
       ],
       "layer": "migration",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns15.py::test_ns15_01"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns15_01.json"
+      ]
     },
     "TR4-15-02": {
       "task_ids": [

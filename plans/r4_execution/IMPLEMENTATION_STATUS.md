@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.02 legacy cutover admission fence — October 1, 2026
+
+Canonical binding preparation now consults the migrated endpoint reference, preventing a fresh binding from bypassing legacy active/unknown ownership under a different adapter ID. Two reproductions preceded the fix. Installed verification: **65 passed**, plus **3 architecture checks**. See [scope](M12_MIGRATION_CUTOVER_FENCE.md) and [manifest](test_runs_20261001_migration_cutover.json). Full TR4-15-02 owner drain/rollback acceptance and release gates remain open.
+
 ## TR4-15-01 historical migration acceptance — October 1, 2026
 
 The normative installed scenario passed on the unchanged migration-resume wheel: schema 065, historical jobs/claims/messages/events and keys, interrupted batch rollback, public reviewed adoption and repeated offline resume in one database. See [scope](M12_NS15_01_ACCEPTANCE.md) and [manifest](test_runs_20261001_ns15_01.json). TR4-15-01 passes at the migration layer; task dependencies, M4–M6 and all release gates remain open.

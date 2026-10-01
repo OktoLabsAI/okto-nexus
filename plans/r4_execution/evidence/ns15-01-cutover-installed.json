@@ -1,0 +1,15 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Scripts\\python.exe",
+    "-I",
+    "-c",
+    "import pytest; raise SystemExit(pytest.main(['-c', 'C:\\\\Users\\\\jpamb\\\\AppData\\\\Local\\\\Temp\\\\okto-r4-migration-cutover-b4bqqivy\\\\pytest.ini', '--rootdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '--confcutdir=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4', '-o', 'asyncio_mode=auto', '-o', 'asyncio_default_fixture_loop_scope=function', 'D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\tests\\\\execution_r4\\\\test_ns15.py::test_ns15_01', '-q', '--tb=short', '--junitxml=D:\\\\Projetos\\\\Techridy\\\\okto_labs_okto_nexus\\\\plans\\\\r4_execution\\\\evidence\\\\ns15-01-cutover-installed.xml']))"
+  ],
+  "artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-cutover-b4bqqivy\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+    "sha256": "8a61ab9a940c77011be6f0bd72239c3ef813b0b37b134328f116e0f277d76e36"
+  },
+  "installed": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-resume-bkj6ies1\\venv313\\Lib\\site-packages\\okto_nexus",
+  "exit_code": 0,
+  "test_sha256": "d1d86155d89e282be12d41911a496ab687dfd9d404549dd18226b262c573040f"
+}
