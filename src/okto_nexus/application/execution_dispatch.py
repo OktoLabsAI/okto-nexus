@@ -106,6 +106,8 @@ def reserve_execution_dispatch(
                 return None
         from .execution_initial_turns import release_ready_initial_turns
         release_ready_initial_turns(conn, server_id=server_id, executor_id=executor_id)
+        from .execution_domain_delivery import project_delivery_refusals
+        project_delivery_refusals(conn, server_id=server_id, executor_id=executor_id)
         used = {"regular": [0, 0], "control": [0, 0]}
         for row in conn.execute(
             "SELECT reservation_class,COUNT(*) AS items,"
@@ -140,6 +142,14 @@ def reserve_execution_dispatch(
                 "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
                 "AND p.action IN (" + placeholders + ") "
                 "AND length(CAST(p.semantic_payload AS BLOB))<=? "
+                "AND NOT EXISTS (SELECT 1 FROM execution_domain_deliveries m "
+                "JOIN delivery_outbox d ON d.operation_id=m.domain_operation_id "
+                "JOIN delivery_outbox earlier ON earlier.endpoint_id=d.endpoint_id "
+                "WHERE m.server_id=p.server_id AND m.executor_id=p.executor_id AND m.operation_id=p.operation_id "
+                "AND (earlier.created_at,earlier.operation_id)<(d.created_at,d.operation_id) "
+                "AND earlier.reconciliation_id IS NULL AND earlier.external_completed_at IS NULL "
+                "AND earlier.terminal_event_id IS NULL AND earlier.canonical_terminal_operation_id IS NULL "
+                "AND earlier.status NOT IN ('REJECTED','CANCELLED','FAILED_FINAL')) "
                 "ORDER BY p.created_at,p.operation_id LIMIT 1",
                 (server_id, executor_id, datetime.now(timezone.utc).isoformat(),
                  *actions, remaining),
@@ -331,6 +341,9 @@ def begin_execution_send(
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The stored dispatch intent changed.", {})
         validate_execution_target(binding["adapter_id"], row["action"], semantic["target"])
+        from .execution_domain_delivery import require_domain_delivery
+        require_domain_delivery(uow, access=access, server_id=server_id,
+            executor_id=reservation.executor_id, operation_id=reservation.operation_id)
         containment = row["action"] in {"turn.interrupt", "runtime.close"}
         current = conn.execute(
             "SELECT c.inventory_revision,c.publication_sequence,"

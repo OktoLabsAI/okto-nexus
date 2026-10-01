@@ -237,6 +237,7 @@ def build_service(deps: Any) -> MessageService:
     guardrails = build_guardrail_service(deps)
 
     from .harness import build_connector_factories
+    from okto_nexus.bootstrap.execution_compat import admit_delivery
     service = MessageService(
         connection_factory=deps.connection_factory,
         channels=repos.channels,
@@ -257,7 +258,8 @@ def build_service(deps: Any) -> MessageService:
         guardrails=guardrails,
         inbox_notifier=deps.inbox_delivery_notifier,
         runtime_planner=RuntimeDeliveryPlanner(endpoints=SqliteEndpointRepo(), outbox=SqliteRuntimeOutboxRepo(), agents=repos.agents,
-            registry=build_connector_factories(deps), config=deps.config, observations=SqliteRuntimeObservationRepo(clock=deps.clock)),
+            registry=build_connector_factories(deps), config=deps.config, observations=SqliteRuntimeObservationRepo(clock=deps.clock),
+            canonical_admit=lambda uow, operation_id: admit_delivery(deps, uow, operation_id)),
         runtime_context_provider=runtime_message_context,
         runtime_results=RuntimeResultService(connection_factory=deps.connection_factory,
             agents=repos.agents, endpoints=SqliteEndpointRepo(), config=deps.config,

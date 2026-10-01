@@ -1,5 +1,6 @@
 """Limited bearer bootstrap remains bound through admission, dispatch and leases."""
 import json
+from pathlib import Path
 import time
 
 import pytest
@@ -49,7 +50,7 @@ def test_limited_key_opens_core_once_and_cannot_control(connected_local, issuer)
     wait_receipt(setup, close.json()["data"], stages=("SUCCEEDED",))
 
 
-@pytest.mark.parametrize("migration", [92, 93])
+@pytest.mark.parametrize("migration", [92, 93, 94])
 def test_additive_open_authority_migrations_preserve_existing_r4_history(connected_local, tmp_path, migration):
     import sqlite3
     from okto_nexus.config import NexusConfig
@@ -67,17 +68,24 @@ def test_additive_open_authority_migrations_preserve_existing_r4_history(connect
     with sqlite3.connect(config.db_path) as target:
         with deps.connection_factory.unit_of_work(write=False) as uow:
             uow.connection.backup(target)
-        target.execute("ALTER TABLE execution_operations DROP COLUMN boot_authority_json")
+        target.execute("DROP TABLE execution_domain_deliveries")
+        target.execute("DROP TRIGGER runtime_delivery_capacity_guard")
+        target.execute("ALTER TABLE delivery_outbox DROP COLUMN canonical_terminal_operation_id")
+        import okto_nexus
+        historical = Path(okto_nexus.__file__).parent / "migrations/058_runtime_delivery_capacity.sql"
+        target.executescript("CREATE TRIGGER" + historical.read_text().split("CREATE TRIGGER", 1)[1])
+        if migration < 94:
+            target.execute("ALTER TABLE execution_operations DROP COLUMN boot_authority_json")
         if migration == 92:
             target.execute("ALTER TABLE execution_operations DROP COLUMN connection_key_id")
         target.execute("DELETE FROM schema_migrations WHERE version>=?", (migration,))
         expected = target.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
         receipts = target.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision").fetchall()
-    assert MigrationRunner(factory).apply() == list(range(migration, 94))
+    assert MigrationRunner(factory).apply() == list(range(migration, 95))
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
-        assert [tuple(row)[:-(94 - migration)] for row in rows] == expected
+        assert [tuple(row)[:len(expected[0])] for row in rows] == expected
         assert all(row["connection_key_id"] is None for row in rows)
         assert all(row["boot_authority_json"] is None for row in rows)
         assert [tuple(row) for row in uow.connection.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision")] == receipts

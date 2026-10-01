@@ -12,10 +12,11 @@ from .runtime_causality import RuntimeCausalityService
 
 
 class RuntimeDeliveryPlanner:
-    def __init__(self, *, endpoints, outbox, agents, registry, config, observations=None):
+    def __init__(self, *, endpoints, outbox, agents, registry, config, observations=None, canonical_admit=None):
         self.endpoints, self.outbox, self.agents = endpoints, outbox, agents
         self.registry, self.config = registry, config
         self.observations = observations
+        self.canonical_admit = canonical_admit
         self.causality = RuntimeCausalityService(config=config, agents=agents)
 
     def observer_candidates(self, uow, *, agent_id, workspace_id):
@@ -23,6 +24,9 @@ class RuntimeDeliveryPlanner:
         if not self.config.feature_harness_integrations:
             return candidates
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
+            if endpoint["protocol"] == "nxl-r4":
+                # The canonical wire has no context-only observation action.
+                continue
             if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
@@ -51,6 +55,17 @@ class RuntimeDeliveryPlanner:
         candidates = []
         for endpoint in self.endpoints.list(uow, agent_id=agent_id, workspace_id=workspace_id):
             if not method_enabled(uow, endpoint["agent_id"], endpoint["adapter_id"]):
+                continue
+            if endpoint["protocol"] == "nxl-r4":
+                from nexus_connector_core import get_runtime_catalog
+                descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
+                profile = self.endpoints.profile(uow, endpoint["profile_id"]) if endpoint["profile_id"] else None
+                if (descriptor is not None and descriptor.connection_mode == "managed"
+                        and endpoint["enabled"] and endpoint["activation_state"] == "approved"
+                        and endpoint["consumption"] == "exclusive" and endpoint["response_policy"] == "conversation"
+                        and endpoint["health"] != "quarantined" and profile and profile["enabled"]
+                        and "conversation" not in profile["config"].get("disabled_capabilities", ())):
+                    candidates.append((endpoint, profile, None))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
             if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
@@ -129,6 +144,10 @@ class RuntimeDeliveryPlanner:
         if result_source:
             uow.connection.execute("UPDATE delivery_outbox SET source_result_id=? WHERE operation_id=?",
                                   (result_source["result_id"], operation_id))
+        if endpoint["protocol"] == "nxl-r4":
+            if self.canonical_admit is None:
+                raise OktoNexusError(ErrorCode.CONFLICT, "Canonical delivery admission is unavailable.", {})
+            self.canonical_admit(uow, operation_id)
         if self.observations:
             for observer, observer_profile, observer_session in self.observer_candidates(uow,
                     agent_id=delivery.recipient_agent_id, workspace_id=message.workspace_id):
@@ -171,6 +190,12 @@ class RuntimeDeliveryPlanner:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime profile changed before dispatch.", {})
         if profile and operation["runtime_session_id"] and self.endpoints.session_profile_revision(uow, operation["runtime_session_id"]) != profile["revision"]:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime must be reopened with the current approved profile.", {})
+        if endpoint["protocol"] == "nxl-r4":
+            from nexus_connector_core import get_runtime_catalog
+            descriptor = next((r for r in get_runtime_catalog().runtimes if r.adapter_id == endpoint["adapter_id"]), None)
+            if descriptor is None or descriptor.connection_mode != "managed" or not profile or "conversation" in profile["config"].get("disabled_capabilities", ()):
+                raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Canonical conversation delivery is unavailable.", {})
+            return endpoint, profile
         if profile:
             validate_native_requirements(profile["config"], self.registry.get(endpoint["adapter_id"]),
                                          hitl_enabled=config.feature_hitl)

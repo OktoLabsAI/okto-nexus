@@ -216,6 +216,13 @@ def command(deps, context, session, verb, payload, options):
     return _admit(deps, context, access, request)
 
 
+def admit_delivery(deps, uow, operation_id):
+    from ..application.execution_domain_delivery import admit_domain_delivery
+    return admit_domain_delivery(uow, operation_id=operation_id, access=build_execution_access(deps),
+        fresh_publications=deps.execution_fresh_publications,
+        remote_ready=protocol_info()["remote_execution_ready"])
+
+
 def _admit(deps, context, access, request):
     common = dict(actor_agent_id=context.actor_agent_id, context=context,
         access=access,

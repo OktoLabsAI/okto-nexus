@@ -9,11 +9,32 @@ def build_execution_access(deps):
     # Remote technical availability comes from the executor's Core inventory.
     # This service evaluates canonical identity, endpoint, grant and policy;
     # it must not discover or launch the remote provider on the Server.
-    return RuntimeAccessService(
+    access = RuntimeAccessService(
         connection_factory=deps.connection_factory, agents=deps.repos.agents,
         endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(),
         config=deps.config, clock=deps.clock,
         admission_fence=deps.runtime_admission_fence)
+    def validate_delivery(uow, operation):
+        from ..adapters.inbound.mcp.tools.messages import build_service
+        from ..application.runtime_delivery import RuntimeDeliveryPlanner
+        from ..adapters.outbound.sqlite.runtime_outbox_repo import SqliteRuntimeOutboxRepo
+        from ..errors import ErrorCode, OktoNexusError
+        if (operation["status"] in {"REJECTED", "CANCELLED", "FAILED_FINAL"}
+                or operation["canonical_terminal_operation_id"] is not None
+                or uow.connection.execute("SELECT 1 FROM message_deliveries WHERE delivery_id=? "
+                    "AND consumer_kind='push' AND consumer_operation_id=? AND status='unread'",
+                    (operation["delivery_id"], operation["operation_id"])).fetchone() is None):
+            raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The delivery no longer owns its logical claim.", {})
+        planner = RuntimeDeliveryPlanner(endpoints=access.endpoints, outbox=SqliteRuntimeOutboxRepo(),
+            agents=access.agents, registry=None, config=deps.config)
+        planner.revalidate(uow, operation=operation, config=deps.config)
+        messages = build_service(deps)
+        messages.revalidate_runtime_delivery(uow, operation)
+        if operation.get("source_result_id"):
+            messages._runtime_results.validate_relay(uow, operation["source_result_id"])
+        planner.causality.validate_dispatch(uow, operation=operation, now=deps.clock.now_iso())
+    access.validate_domain_delivery = validate_delivery
+    return access
 
 
 class ExecutionToolDependencies:

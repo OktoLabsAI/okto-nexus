@@ -730,11 +730,16 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
+      "implementation": "PARTIAL_CANONICAL_CONVERSATION_DELIVERY",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-06-05"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/M12_NS15_03_DELIVERY.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_delivery.json"
+      ],
+      "notes": "Existing conversation push claim joins R4 admission atomically; complete MCP/local/remote claim competition and governed handoff scenario remain unimplemented. TR4-06-05 remains NOT_RUN."
     },
     "NS07.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_01",
@@ -1526,7 +1531,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_BOOT_AND_CONNECTION_SURFACES",
+      "implementation": "PARTIAL_CANONICAL_CONVERSATION_DELIVERY",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1543,9 +1548,11 @@
         "plans/r4_execution/M12_NS15_03_SELECTION.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_selection.json",
         "plans/r4_execution/M12_NS15_03_BOOT.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_boot.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_boot.json",
+        "plans/r4_execution/M12_NS15_03_DELIVERY.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_delivery.json"
       ],
-      "notes": "Approved serve boot now joins canonical open/control/key/discovery/configuration and implicit local selection through R4/Core. Schema 093 retains boot authority for admission, dispatch and initial lease checks. Delivery, event projection and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
+      "notes": "Canonical conversation delivery now atomically joins existing message/push claim and R4 open/turn admission, with source authority revalidation and receipt projection. Path-free message selection, mixed endpoint selection parity, handoff delivery, result/event publication and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

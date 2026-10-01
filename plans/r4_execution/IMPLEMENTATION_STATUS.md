@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical conversation delivery - October 1, 2026
+
+Installed verification: **200 distinct passes**, plus **3 architecture checks**. Existing message/push claims now join R4 open/turn admission atomically, with sender authority revalidation, serial delivery and authenticated receipt projection. Schema 094 preserves logical identity and historical native foreign keys. See [scope](M12_NS15_03_DELIVERY.md) and [manifest](test_runs_20261001_ns15_03_delivery.json). Path-free message selection, mixed endpoint selection parity, managed handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.
+
 ## NS15.03 approved canonical boot - October 1, 2026
 
 Installed verification: **138 distinct passes**, plus **3 architecture checks**. Operator-approved serve boot now uses R4/Core after embedded composition is ready. Schema 093 persists approval/owner authority for admission, dispatch and initial lease checks; stable replay and existing-session guards prevent duplicate boot opening. See [scope](M12_NS15_03_BOOT.md) and [manifest](test_runs_20261001_ns15_03_boot.json). Delivery, event projection and duplicated native loader removal remain pending; normative TR4-15-03 and release gates remain open.
