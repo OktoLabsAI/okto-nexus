@@ -67,8 +67,10 @@ class RuntimeOperationMaintenanceService:
                 row = uow.connection.execute("SELECT * FROM runtime_commands WHERE operation_id=?", (operation_id,)).fetchone()
             if (not row or row["reconciliation_id"] or row["status"] != expected_state or
                     row["attempt_id"] != expected_attempt_id or row["owner_epoch"] != expected_owner_epoch
-                    or (row["terminal_event_id"] and not recover_work)):
+                    or ((row["terminal_event_id"] or (table == 'delivery_outbox' and row['canonical_terminal_operation_id'])) and not recover_work)):
                 raise conflict("Operation changed, completed, or was already reconciled; refresh its snapshot.")
+            if table == 'delivery_outbox':
+                self._require_canonical_recovery(uow, operation_id, action)
             binding = uow.connection.execute("SELECT handoff_id,claim_epoch FROM runtime_handoff_bindings WHERE operation_id=?", (operation_id,)).fetchone()
             if binding and not recover_work:
                 raise conflict("Managed work requires canonical handoff recovery; its claim cannot be released as conversation.")
@@ -131,6 +133,24 @@ class RuntimeOperationMaintenanceService:
         owner.wake()
         return response
 
+    @staticmethod
+    def _require_canonical_recovery(uow, operation_id, action):
+        rows = uow.connection.execute(
+            'SELECT x.dispatch_state,s.lifecycle_state,s.lease_state FROM execution_domain_deliveries m '
+            'JOIN execution_operations p USING(server_id,executor_id,operation_id) '
+            'JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) '
+            'JOIN execution_sessions s ON s.server_id=p.server_id AND s.executor_id=p.executor_id AND s.session_id=p.session_id '
+            'WHERE m.domain_operation_id=?', (operation_id,)).fetchall()
+        if not rows:
+            return
+        # This check shares the writer transaction with the reconciliation marker.
+        # begin_execution_send revalidates that marker before crossing its fence.
+        if action == 'cancel_pending':
+            if any(r['dispatch_state'] not in ('PENDING', 'RESERVED') for r in rows):
+                raise conflict('Canonical dispatch crossed its send fence; pending cancellation is unavailable.')
+        elif any(r['lifecycle_state'] != 'CLOSED' or r['lease_state'] != 'CLOSED' for r in rows):
+            raise conflict('Close and reconcile the canonical session before recovering its domain claim.')
+
     def _inspect(self, context, *, operation_id=None, after_operation_id=None, limit=50):
         if type(limit) is not int or not 1 <= limit <= 100 or any(value is not None and (
                 not isinstance(value, str) or not 1 <= len(value) <= 128) for value in (operation_id, after_operation_id)):
@@ -165,6 +185,13 @@ class RuntimeOperationMaintenanceService:
                                                  (row["operation_id"],)).fetchone()
                 item["handoff"] = dict(binding) if binding else None
                 if operation_id and row["source_kind"] == "delivery_outbox":
+                    item['canonical_operations'] = [dict(r) for r in uow.connection.execute(
+                        'SELECT p.server_id,p.executor_id,p.operation_id,p.session_id,p.action,x.dispatch_state,'
+                        's.lifecycle_state,s.lease_state FROM execution_domain_deliveries m '
+                        'JOIN execution_operations p USING(server_id,executor_id,operation_id) '
+                        'JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) '
+                        'JOIN execution_sessions s ON s.server_id=p.server_id AND s.executor_id=p.executor_id AND s.session_id=p.session_id '
+                        'WHERE m.domain_operation_id=? ORDER BY p.operation_id LIMIT 3', (operation_id,))]
                     # Detail-only, bounded history. No payload, credential or
                     # new delivery authority is reconstructed from observations.
                     history = uow.connection.execute(

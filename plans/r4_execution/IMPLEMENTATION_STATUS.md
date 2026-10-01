@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical domain recovery - October 1, 2026
+
+Installed verification: **32 product passes and 3 architecture checks**. Domain maintenance preserves the canonical send fence and requires confirmed canonical session closure before explicit uncertain-claim takeover. Detail inspection exposes scoped canonical references. See [scope](M12_NS15_03_RECOVERY.md) and [manifest](test_runs_20261001_ns15_03_recovery.json). Capture retention, subscriber parity audit, cross-protocol fallback, native loader removal and final restore/release acceptance remain pending.
+
 ## TR4-06-05 combined consumption - October 1, 2026
 
 **Normative domain_integration scenario PASSED** in five cases; installed campaign: **6 product passes and 3 architecture checks**. Both live canonical executors share one logical delivery/claim; priority selects one native effect and excludes MCP pull. Observer never executes, native terminal does not complete handoff, concurrent handoff claims retain one winner. See [scope](M12_NS06_05_COMBINED.md) and [manifest](test_runs_20261001_ns06_05_combined.json). Task dependencies, remaining NS15.03 migration, final restore and release gates remain open.

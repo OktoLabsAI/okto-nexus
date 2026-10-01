@@ -114,7 +114,7 @@ def project_delivery_refusals(conn, *, server_id, executor_id):
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.domain_operation_id=delivery_outbox.operation_id AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 1) "
-        "WHERE canonical_terminal_operation_id IS NULL AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
+        "WHERE reconciliation_id IS NULL AND canonical_terminal_operation_id IS NULL AND operation_id IN (SELECT m.domain_operation_id FROM execution_domain_deliveries m "
         "JOIN execution_dispatch_outbox x USING(server_id,executor_id,operation_id) "
         "WHERE m.server_id=? AND m.executor_id=? AND x.dispatch_state='RESOLVED_TERMINAL' "
         "AND x.last_receipt_revision IS NULL AND x.last_error IS NOT NULL LIMIT 256)", (server_id, executor_id))

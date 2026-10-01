@@ -263,31 +263,23 @@ def test_late_correlated_terminal_is_retained_without_consumption_or_publication
         assert uow.connection.execute("SELECT count(*) FROM messages WHERE subject LIKE 'runtime processing receipt:%'").fetchone()[0] == 0
 
 
-def test_authenticated_stdio_recovery_uses_active_serve_owner(runtime):
-    import asyncio
-    import json
+def test_retired_stdio_refuses_recovery_and_http_uses_active_owner(runtime):
+    import subprocess
     import sys
     from test_pr34_remediation import stdio_environment
     deps, client, _, peers, operator, _ = runtime
     _, row = uncertain_delivery(runtime)
-    async def recover():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        env = stdio_environment(runtime)
-        env["OKTO_NEXUS_API_KEY"] = operator  # Disposable Nexus operator, never a native peer.
-        params = StdioServerParameters(command=sys.executable, args=["-m", "okto_nexus.adapters.inbound.mcp.server",
-            "--home", str(deps.config.home_dir), "--feature-harness-integrations", "true"], env=env)
-        async with stdio_client(params) as (reader, writer):
-            async with ClientSession(reader, writer) as session:
-                await session.initialize()
-                result = await session.call_tool("harness_list", {"view": "outbox", "maintenance": recovery(row)})
-                result = result.structuredContent or json.loads(result.content[0].text)
-                assert result["ok"], result
-                return result["data"]
-    result = asyncio.run(asyncio.wait_for(recover(), timeout=30))
-    retry = client.post("/api/v1/harness/outbox", headers={"x-api-key": operator}, json=recovery(row))
-    assert retry.status_code == 200 and retry.json()["data"] == result, retry.text
-    assert sum(c.verb == "send_turn" for peer in peers for c in peer.sent) == 1
+    env = stdio_environment(runtime)
+    env['OKTO_NEXUS_API_KEY'] = operator
+    retired = subprocess.run(['rtk', 'proxy', sys.executable, '-m', 'okto_nexus.adapters.inbound.mcp.server',
+        '--home', str(deps.config.home_dir)], env=env, capture_output=True, text=True, timeout=30)
+    assert retired.returncode != 0
+    assert 'MCP stdio is no longer available' in retired.stderr
+    response = client.post('/api/v1/harness/outbox', headers={'x-api-key': operator}, json=recovery(row))
+    assert response.status_code == 200, response.text
+    retry = tool(client, operator, 'harness_list', {'view': 'outbox', 'maintenance': recovery(row)})
+    assert retry['ok'] and retry['data'] == response.json()['data'], retry
+    assert sum(c.verb == 'send_turn' for peer in peers for c in peer.sent) == 1
 
 
 def test_reconciliation_migration_is_additive_and_repeatable(tmp_path):
@@ -303,7 +295,8 @@ def test_reconciliation_migration_is_additive_and_repeatable(tmp_path):
     MigrationRunner(factory, migrations_dir=old).apply()
     with factory.unit_of_work() as uow:
         uow.connection.execute("INSERT INTO runtime_access_audit(request_id,action,decision,created_at) VALUES('previous','read','deny','2026-09-23T00:00:00Z')")
-    assert MigrationRunner(factory).apply() == [54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65]
+    expected = sorted(int(p.name.split('_', 1)[0]) for p in _default_migrations_dir().glob('*.sql') if int(p.name.split('_', 1)[0]) > 53)
+    assert MigrationRunner(factory).apply() == expected
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT decision FROM runtime_access_audit WHERE request_id='previous'").fetchone()[0] == "deny"

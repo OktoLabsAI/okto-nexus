@@ -39,14 +39,20 @@ def test_outbox_byte_budget_rejects_before_any_canonical_commit(runtime):
     assert open_rest(runtime).status_code == 200
     deps.runtime_dispatcher.quiesce()
     deps.config.max_inline_bytes = 8 * 1024 * 1024
-    result = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
-        "subject": "byte budget", "body": "x" * (4 * 1024 * 1024),
-        "target": {"strategy": "direct", "agent_id": "worker"}})
+    accepted = 0
+    # Stay below the HTTP request limit; exhaust the accumulated outbox budget.
+    for _ in range(17):
+        result = tool(client, caller, "message_create", {"project_root": root, "from_agent_id": "caller",
+            "subject": "byte budget", "body": "x" * (512 * 1024),
+            "target": {"strategy": "direct", "agent_id": "worker"}})
+        if not result['ok']:
+            break
+        accepted += 1
     assert not result["ok"] and result["error"]["code"] == "QUOTA_EXCEEDED", result
     assert "backlog capacity" in result["error"]["message"]
     with deps.connection_factory.unit_of_work(write=False) as uow:
         for table in ("messages", "message_deliveries", "delivery_outbox"):
-            assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == 0
+            assert uow.connection.execute(f"SELECT count(*) FROM {table}").fetchone()[0] == accepted
 
 
 def test_full_transport_backlog_rolls_back_managed_claim_and_grant(runtime, monkeypatch):
