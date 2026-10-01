@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 R4_NXL_REVISION = "nxl-1-agent-centric-http-only-2026-09-29-r4"
 MANAGEMENT_REVISION = "nexus-connections-2026-09-29-r4"
-CORE_INVENTORY_VERSION = "0.2.47.dev0"
+CORE_INVENTORY_VERSION = "0.2.48.dev0"
 # Promoted only after admission, lease, dispatcher and Connector conformance.
 SERVER_R4_EXECUTION_READY = False
 
@@ -78,11 +78,13 @@ def local_catalog() -> dict[str, Any]:
 
 def discover_local_candidates(*, trusted_roots: tuple[Path, ...] = (),
                               path_env: str | None = None,
-                              pi_install_root: Path | None = None, pi_node: Path | None = None):
+                              pi_install_root: Path | None = None, pi_node: Path | None = None,
+                              cancel_requested=None):
     """Retain complete candidates on the Nexus host without a dummy runtime."""
     return _core().discover_installations(
         trusted_roots=trusted_roots, path_env=path_env,
         pi_install_root=pi_install_root, pi_node=pi_node,
+        **({"cancel_requested": cancel_requested} if cancel_requested is not None else {}),
     )
 
 

@@ -173,6 +173,22 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 async with asyncio.timeout(120):
                     while True:
                         control = daemon.r4_controls.get(server_id)
+                        if (os.environ.get("OKTO_NEXUS_REAL_DISCOVERY_STOP") == "1"
+                                and control is not None and control.phase == "PUBLISHING_INVENTORY"
+                                and control.publication_sequence == 0):
+                            checkpoint("stopping_during_passive_discovery")
+                            started = time.monotonic()
+                            daemon.request_stop()
+                            code = await asyncio.wait_for(asyncio.shield(daemon_task), 10)
+                            report["discovery_stop_seconds"] = time.monotonic() - started
+                            assert code == 0 and control._task.done()
+                            assert control.phase == "STOPPED" and control.publication_sequence == 0
+                            assert not daemon.r4_controls and not daemon.r4_executions
+                            with deps.connection_factory.unit_of_work(write=False) as uow:
+                                assert uow.connection.execute("SELECT COUNT(*) FROM execution_operations").fetchone()[0] == 0
+                            report["discovery_stopped_before_publication"] = True
+                            report["completed"] = True
+                            return
                         if control and control.status()["control_ready"]:
                             break
                         if daemon_task.done():

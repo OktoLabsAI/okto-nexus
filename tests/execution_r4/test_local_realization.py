@@ -23,7 +23,7 @@ def local_setup(tmp_path, monkeypatch, request):
     binary.write_bytes(b"Local realization technical candidate")
     candidate = InstallationCandidate(adapter, str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=(candidate,)))
     root = tmp_path / "workspace"
     root.mkdir()
     deps, app = app_for(tmp_path / "home")
@@ -152,7 +152,7 @@ def test_prepared_local_mapping_survives_serve_restart(tmp_path, monkeypatch):
     binary.write_bytes(b"Persistent technical candidate")
     candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=(candidate,)))
     root = tmp_path / "workspace"
     root.mkdir()
     deps, app = app_for(tmp_path / "home")

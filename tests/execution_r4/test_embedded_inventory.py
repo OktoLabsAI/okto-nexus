@@ -31,7 +31,7 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
     binary.write_bytes(b"Discovery-only technical candidate")
     candidate = InstallationCandidate("codex_app_server", str(binary), fingerprint(binary), "explicit", "selected")
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=(candidate,)))
+                        lambda **_: SimpleNamespace(candidates=(candidate,)))
     deps, app = app_for(tmp_path / "home")
     key = agent_key(deps, app)
     with TestClient(app) as client:
@@ -61,7 +61,7 @@ def test_serve_publishes_path_free_local_inventory_without_runtime_or_wss(tmp_pa
 
 def test_new_serve_owner_republishes_empty_inventory_and_retains_two_snapshots(tmp_path, monkeypatch):
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=()))
+                        lambda **_: SimpleNamespace(candidates=()))
     records = []
     for _ in range(3):
         deps, app = app_for(tmp_path / "home")
@@ -80,7 +80,7 @@ def test_new_serve_owner_republishes_empty_inventory_and_retains_two_snapshots(t
 @pytest.mark.parametrize("change", ["generation", "owner", "revoked"])
 def test_delayed_publication_cannot_cross_embedded_owner_change(tmp_path, monkeypatch, change):
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=()))
+                        lambda **_: SimpleNamespace(candidates=()))
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
         owner = app.state.embedded_inventory_owner
@@ -101,13 +101,13 @@ def test_delayed_publication_cannot_cross_embedded_owner_change(tmp_path, monkey
 
 def test_cancelled_waiters_keep_discovery_and_cleanup_owned(tmp_path, monkeypatch):
     monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
-                        lambda: SimpleNamespace(candidates=()))
+                        lambda **_: SimpleNamespace(candidates=()))
     deps, app = app_for(tmp_path / "home")
     with TestClient(app) as client:
         owner = app.state.embedded_inventory_owner
         entered, release = threading.Event(), threading.Event()
 
-        def held():
+        def held(**_):
             entered.set()
             assert release.wait(5)
             return SimpleNamespace(candidates=())
@@ -134,3 +134,102 @@ def test_cancelled_waiters_keep_discovery_and_cleanup_owned(tmp_path, monkeypatc
             assert not app.state.inventory_fresh_publications
 
         client.portal.call(scenario)
+
+
+def test_close_interrupts_passive_core_read_without_publishing(tmp_path, monkeypatch):
+    import io
+    import os
+    from pathlib import Path
+    from okto_nexus.adapters.outbound.execution.core_inventory import discover_local_candidates
+    from okto_nexus.bootstrap.local_discovery import split_discovery_args
+
+    monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                        lambda **_: SimpleNamespace(candidates=()))
+    deps, app = app_for(tmp_path / "home")
+    directory = tmp_path / "providers"
+    directory.mkdir()
+    binary = directory / ("codex.exe" if os.name == "nt" else "codex")
+    binary.write_bytes(b"native bytes")
+    if os.name != "nt":
+        binary.chmod(0o755)
+    configuration, _ = split_discovery_args(["--harness-root", str(directory)])
+    monkeypatch.setenv("PATH", str(directory))
+    with TestClient(app) as client:
+        owner = app.state.embedded_inventory_owner
+        previous = owner.publication.publication_sequence
+        monkeypatch.setattr(deps, "local_discovery", configuration, raising=False)
+        entered, release, exited = threading.Event(), threading.Event(), threading.Event()
+        original_open = Path.open
+        class Reader(io.BytesIO):
+            def read(self, size=-1):
+                entered.set()
+                assert release.wait(3)
+                return super().read(size)
+            def close(self):
+                super().close()
+                exited.set()
+        def opened(path, *args, **kwargs):
+            if path == binary and args == ("rb",):
+                return Reader(b"native bytes")
+            return original_open(path, *args, **kwargs)
+        monkeypatch.setattr(Path, "open", opened)
+        monkeypatch.setattr(embedded_inventory, "discover_local_candidates", discover_local_candidates)
+        async def scenario():
+            refreshing = asyncio.create_task(owner.refresh())
+            try:
+                assert await asyncio.to_thread(entered.wait, 2)
+                closing = asyncio.create_task(owner.close())
+                async with asyncio.timeout(2):
+                    while not owner._stop.is_set():
+                        await asyncio.sleep(0)
+                assert not closing.done()
+                release.set()
+                await asyncio.wait_for(asyncio.shield(closing), 3)
+                await refreshing
+                assert exited.is_set() and owner._refresh_task.done()
+                assert owner.publication.publication_sequence == previous
+                assert owner.failure is None and not app.state.inventory_fresh_publications
+            finally:
+                release.set()
+                await owner.close()
+        client.portal.call(scenario)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute("SELECT MAX(publication_sequence) FROM execution_inventory_snapshots").fetchone()[0] == previous
+            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "DISCONNECTED"
+
+
+def test_close_waits_for_started_inventory_publication(tmp_path, monkeypatch):
+    monkeypatch.setattr(embedded_inventory, "discover_local_candidates",
+                        lambda **_: SimpleNamespace(candidates=()))
+    deps, app = app_for(tmp_path / "home")
+    with TestClient(app) as client:
+        owner = app.state.embedded_inventory_owner
+        previous = owner.publication.publication_sequence
+        entered, release = threading.Event(), threading.Event()
+        original = owner._publish
+        def publish(*args):
+            entered.set()
+            assert release.wait(3)
+            return original(*args)
+        monkeypatch.setattr(owner, "_publish", publish)
+        async def scenario():
+            refreshing = asyncio.create_task(owner.refresh())
+            try:
+                assert await asyncio.to_thread(entered.wait, 2)
+                closing = asyncio.create_task(owner.close())
+                async with asyncio.timeout(2):
+                    while not owner._stop.is_set():
+                        await asyncio.sleep(0)
+                assert not closing.done()
+                release.set()
+                await asyncio.wait_for(asyncio.shield(closing), 3)
+                await refreshing
+                assert owner.publication.publication_sequence == previous + 1
+                assert not app.state.inventory_fresh_publications
+            finally:
+                release.set()
+                await owner.close()
+        client.portal.call(scenario)
+        with deps.connection_factory.unit_of_work(write=False) as uow:
+            assert uow.connection.execute("SELECT MAX(publication_sequence) FROM execution_inventory_snapshots").fetchone()[0] == previous + 1
+            assert uow.connection.execute("SELECT control_state FROM execution_executors WHERE kind='embedded'").fetchone()[0] == "DISCONNECTED"

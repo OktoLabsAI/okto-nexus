@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import time
+import threading
 
 from ..adapters.outbound.execution.core_inventory import (
     discover_local_candidates, local_inventory_snapshot,
@@ -27,6 +28,7 @@ class EmbeddedInventoryOwner:
         self.refresh_seconds = refresh_seconds
         self.generation = None
         self._stop = asyncio.Event()
+        self._discovery_stopped = threading.Event()
         self._task = None
         self._startup_task = None
         self._refresh_task = None
@@ -71,8 +73,15 @@ class EmbeddedInventoryOwner:
         return await asyncio.shield(self._refresh_task)
 
     async def _refresh_owned(self):
+        from nexus_connector_core import DiscoveryCancelled
         try:
             return await self._refresh()
+        except DiscoveryCancelled as error:
+            self.fresh.pop((self.key.server_id, self.key.executor_id), None)
+            if not self._stop.is_set():
+                self.failure = error
+                raise
+            return
         except Exception as error:
             self.failure = error
             self.fresh.pop((self.key.server_id, self.key.executor_id), None)
@@ -82,7 +91,10 @@ class EmbeddedInventoryOwner:
         observed_at = time.monotonic()
         configuration = getattr(self.deps, 'local_discovery', None)
         discovery = await asyncio.to_thread(discover_local_candidates,
+            cancel_requested=self._discovery_stopped.is_set,
             **(configuration.arguments() if configuration is not None else {}))
+        if self._stop.is_set():
+            return
         candidates = tuple(discovery.candidates)
         age_ms = max(0, int((time.monotonic() - observed_at) * 1000))
         publication = await asyncio.to_thread(self._publish, candidates, age_ms)
@@ -134,6 +146,7 @@ class EmbeddedInventoryOwner:
         return await asyncio.shield(self._close_task)
 
     async def _close(self):
+        self._discovery_stopped.set()
         self._stop.set()
         if self._startup_task is not None:
             await asyncio.gather(self._startup_task, return_exceptions=True)

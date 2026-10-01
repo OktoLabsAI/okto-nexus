@@ -181,7 +181,13 @@ def test_approved_provider_home_uses_process_mcp_without_copying_login(local_set
     environment=environments[0]
     assert isinstance(environment,ProcessHTTPEnvironment)
     assert environment['HOME']==str(provider_home.resolve())
-    assert not list(provider_home.iterdir())
+    def assert_no_configuration_written():
+        expected = ['.codex'] if local_setup[5].adapter_id == 'codex_app_server' else []
+        assert sorted(p.name for p in provider_home.iterdir()) == expected
+        if expected:
+            assert environment['CODEX_HOME'] == str((provider_home / '.codex').resolve())
+            assert not list((provider_home / '.codex').iterdir())
+    assert_no_configuration_written()
     template=environment.http_templates[0]
     assert template.entry_name.startswith('nexus_') and template.entry_name!='nexus'
     assert environment[template.bearer_env_name] in vault.values.values()
@@ -189,4 +195,5 @@ def test_approved_provider_home_uses_process_mcp_without_copying_login(local_set
     closed=admit(setup,binding,'home-tools-close','runtime.close',session_id=opened['scope']['session_id'])
     wait_receipt(setup,closed,stages=('SUCCEEDED',))
     client.portal.call(app.state.embedded_dispatch_owner.close)
-    assert not vault.values and not list(provider_home.iterdir())
+    assert not vault.values
+    assert_no_configuration_written()

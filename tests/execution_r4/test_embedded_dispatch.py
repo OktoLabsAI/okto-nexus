@@ -363,7 +363,7 @@ def test_restart_recovers_historical_receipt_without_provider(tmp_path,monkeypat
     Path(candidate.executable).unlink()
     from types import SimpleNamespace
     from okto_nexus.bootstrap import embedded_inventory
-    monkeypatch.setattr(embedded_inventory,"discover_local_candidates",lambda:SimpleNamespace(candidates=()))
+    monkeypatch.setattr(embedded_inventory,"discover_local_candidates",lambda **_:SimpleNamespace(candidates=()))
     if missing_journal:
         for file in (tmp_path/"home/core-runtime").glob("session-*.db"):
             file.rename(file.with_suffix(".retained"))
