@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-15-01 historical migration acceptance — October 1, 2026
+
+The normative installed scenario passed on the unchanged migration-resume wheel: schema 065, historical jobs/claims/messages/events and keys, interrupted batch rollback, public reviewed adoption and repeated offline resume in one database. See [scope](M12_NS15_01_ACCEPTANCE.md) and [manifest](test_runs_20261001_ns15_01.json). TR4-15-01 passes at the migration layer; task dependencies, M4–M6 and all release gates remain open.
+
 ## NS15.01 resume after reviewed adoption — October 1, 2026
 
 Installed verification: **62 passed**, plus **3 architecture checks**; eight directed cases overlap the installed suite. The current increment records transactional adoption receipts and validates preserved backup rows when resuming catalog migration. Repeated resume preserves legacy policy and skips generated profiles; changed resources, credentials, missing/incomplete receipts and a live owner refuse migration. See [scope](M12_MIGRATION_RESUME.md) and [verification manifest](test_runs_20261001_migration_resume.json). Full M0–M3 historical-job acceptance, M4 cutover/rollback and release gates remain open.

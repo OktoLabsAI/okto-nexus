@@ -1,0 +1,131 @@
+"""Normative legacy migration acceptance on one preserved database."""
+import io
+import json
+import shutil
+import subprocess
+
+import pytest
+
+from okto_nexus.adapters.inbound.cli.admin import run_admin
+from okto_nexus.adapters.outbound.sqlite.connection import ConnectionFactory
+from okto_nexus.adapters.outbound.sqlite.migration_backup import create_migration_backup
+from okto_nexus.adapters.outbound.sqlite.migrations import MigrationRunner, _default_migrations_dir
+from okto_nexus.config import NexusConfig
+from okto_nexus.domain.ids import resolve_workspace_id
+from okto_nexus.domain.keys import generate_api_key, hash_api_key
+import test_local_realization as local
+from test_binding_migration import proposal_request
+from test_binding_operator import prepare_operator
+
+
+def test_ns15_01(tmp_path, monkeypatch, request):
+    original_app = local.app_for
+    backup = tmp_path / "migration-backup"
+    preserved = {}
+    history_tables = ("tasks", "handoffs", "messages", "message_deliveries",
+                      "harness_sessions", "harness_events")
+
+    def migrate(db, size=1):
+        output = io.StringIO()
+        code = run_admin(["migrate-execution", "--db-path", str(db), "--backup", str(backup),
+                          "--batch-size", str(size)], out=output)
+        return code, json.loads(output.getvalue()) if output.getvalue() else None
+
+    def seeded(home):
+        old = tmp_path / "schema65"
+        old.mkdir()
+        for path in _default_migrations_dir().glob("*.sql"):
+            if int(path.name.split("_", 1)[0]) <= 65:
+                shutil.copy2(path, old / path.name)
+        config = NexusConfig(home_dir=home)
+        factory = ConnectionFactory(config)
+        MigrationRunner(factory, old).apply()
+        workspace = resolve_workspace_id(str(tmp_path / "workspace"))
+        keys = {actor: generate_api_key() for actor in ("operator", "subject")}
+        with factory.unit_of_work() as uow:
+            c = uow.connection
+            for actor, key in keys.items():
+                c.execute("INSERT INTO agents(agent_id,role,api_key_hash,created_at) VALUES(?,?,?,'2026-10-01')",
+                          (actor, "operator" if actor == "operator" else None, hash_api_key(key)))
+            c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                      (workspace, str((tmp_path / "workspace").resolve())))
+            for profile, endpoint, adapter in (("legacy-profile", "legacy-endpoint", "codex"),
+                                               ("pi-profile", "pi-endpoint", "pi")):
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES(?,?,?,'2026-10-01','2026-10-01')",
+                          (profile, adapter, '{"command":"historical command must never execute"}'))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,"
+                          "profile_id,enabled,activation_state,created_at,updated_at) "
+                          "VALUES(?,'subject',?,?,'legacy',?,0,'denied','2026-10-01','2026-10-01')",
+                          (endpoint, workspace, adapter, profile))
+            c.execute("INSERT INTO agent_connection_methods VALUES('subject','pi',0)")
+            c.execute("INSERT INTO tasks(task_id,workspace_id,title,status,created_at) "
+                      "VALUES('job',?,'Historical job','completed','2026-10-01')", (workspace,))
+            c.execute("INSERT INTO handoffs(handoff_id,workspace_id,task_id,status,claimed_by,claim_epoch,created_at) "
+                      "VALUES('handoff',?,'job','completed','subject',3,'2026-10-01')", (workspace,))
+            c.execute("INSERT INTO messages(message_id,workspace_id,from_agent_id,body,created_at) "
+                      "VALUES('result',?,'subject','Historical result','2026-10-01')", (workspace,))
+            c.execute("INSERT INTO message_deliveries(delivery_id,message_id,recipient_agent_id,status,created_at) "
+                      "VALUES('delivery','result','subject','read','2026-10-01')")
+            c.execute("INSERT INTO harness_sessions(session_id,kind,owning_agent_id,status,capabilities,started_at,"
+                      "ended_at,created_at,updated_at,endpoint_id) VALUES('old-session','codex','subject','ended',"
+                      "'{}','2026-09-30','2026-10-01','2026-09-30','2026-10-01','legacy-endpoint')")
+            c.execute("INSERT INTO harness_events(event_id,session_id,harness_kind,kind,native_event,occurred_at,"
+                      "sequence,created_at) VALUES('old-result','old-session','codex','turn_completed',"
+                      "'{\"legacy_hash\":\"unchanged\"}','2026-10-01',1,'2026-10-01')")
+            for table in history_tables:
+                preserved[table] = [dict(r) for r in c.execute("SELECT * FROM " + table)]
+            preserved["keys"] = {r[0]: r[1] for r in c.execute("SELECT agent_id,api_key_hash FROM agents")}
+        create_migration_backup(config.db_path, backup)
+        assert json.loads((backup / "manifest.json").read_text())["inventory"]["tables"]["tasks"]["rows"] == 1
+        # First CLI batch expands the old schema and commits one denial.
+        assert migrate(config.db_path)[1]["processed"] == 1
+        with factory.unit_of_work() as uow:
+            uow.connection.execute("CREATE TRIGGER interrupt_catalog BEFORE INSERT ON execution_migration_map "
+                "WHEN NEW.legacy_id='pi-profile' BEGIN SELECT RAISE(ABORT,'interrupted backfill'); END")
+        assert migrate(config.db_path, 100)[0] == 1
+        with factory.unit_of_work() as uow:
+            assert uow.connection.execute("SELECT COUNT(*) FROM execution_migration_map").fetchone()[0] == 1
+            uow.connection.execute("DROP TRIGGER interrupt_catalog")
+        for _ in range(4):
+            assert migrate(config.db_path)[0] == 0
+        for _ in range(2):
+            code, report = migrate(config.db_path)
+            assert code == 0 and report["status"] == "CATALOG_BACKFILL_COMPLETE"
+            assert report["processed"] == 0 and report["execution_activated"] is False
+        deps, app = original_app(home)
+        app.state.test_existing_keys = keys
+        app.state.test_legacy_workspace = workspace
+        return deps, app
+
+    class ForbiddenProcess(subprocess.Popen):
+        def __init__(self, *args, **kwargs):
+            raise AssertionError("Migration must not open a provider process.")
+
+    monkeypatch.setattr("subprocess.Popen", ForbiddenProcess)
+    monkeypatch.setattr(local, "app_for", seeded)
+    fixture = local.local_setup.__wrapped__(tmp_path, monkeypatch, request)
+    setup = next(fixture)
+    deps, _, client, headers, *_ = setup
+    try:
+        _, apply = prepare_operator(client, headers, proposal_request(setup))
+        response = client.post("/v1/connections/bindings:apply", json=apply, headers=headers["operator"])
+        assert response.status_code == 200, response.text
+    finally:
+        with pytest.raises(StopIteration):
+            next(fixture)
+    for _ in range(2):
+        code, report = migrate(deps.config.db_path)
+        assert code == 0 and report["processed"] == 0
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        c = uow.connection
+        for table in history_tables:
+            rows = [dict(r) for r in c.execute("SELECT * FROM " + table)]
+            assert rows == preserved[table], table
+        assert {r[0]: r[1] for r in c.execute("SELECT agent_id,api_key_hash FROM agents")} == preserved["keys"]
+        assert c.execute("SELECT COUNT(*) FROM agent_endpoints WHERE enabled=0 AND activation_state='denied'").fetchone()[0] == 2
+        assert c.execute("SELECT COUNT(*) FROM agent_connection_methods WHERE method IN ('pi','pi_rpc') AND enabled=0").fetchone()[0] == 2
+        assert c.execute("SELECT COUNT(*) FROM execution_bindings").fetchone()[0] == 1
+        assert c.execute("SELECT COUNT(*) FROM execution_sessions").fetchone()[0] == 0
+        assert c.execute("SELECT COUNT(*) FROM execution_migration_map").fetchone()[0] == 5
+        assert c.execute("PRAGMA foreign_key_check").fetchall() == []

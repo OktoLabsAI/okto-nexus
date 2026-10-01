@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="3.107" timestamp="2026-10-01T14:37:36.058273-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_ns15" name="test_ns15_01" time="1.364"><failure message="TypeError: 'function' object is not subscriptable">tests\execution_r4\test_ns15.py:106: in test_ns15_01
+    setup = next(fixture)
+            ^^^^^^^^^^^^^
+tests\execution_r4\test_local_realization.py:29: in local_setup
+    deps, app = app_for(tmp_path / "home")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_ns15.py:95: in seeded
+    deps, app = original_app(home)
+                ^^^^^^^^^^^^^^^^^^
+tests\execution_r4\test_embedded_inventory.py:19: in app_for
+    return deps, build_app(deps)
+                 ^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:526: in build_app
+    mcp_server = create_http_mcp_server(deps)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:427: in create_http_mcp_server
+    FastMCP = _load_fastmcp()  # lazy: SDK only needed at serve time
+              ^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\mcp\registration.py:545: in _load_fastmcp
+    from mcp.server.fastmcp import FastMCP
+.venv\Lib\site-packages\mcp\__init__.py:2: in &lt;module&gt;
+    from .client.session_group import ClientSessionGroup
+.venv\Lib\site-packages\mcp\client\session_group.py:28: in &lt;module&gt;
+    from mcp.client.stdio import StdioServerParameters
+.venv\Lib\site-packages\mcp\client\stdio\__init__.py:17: in &lt;module&gt;
+    from mcp.os.win32.utilities import (
+.venv\Lib\site-packages\mcp\os\win32\utilities.py:68: in &lt;module&gt;
+    class FallbackProcess:
+.venv\Lib\site-packages\mcp\os\win32\utilities.py:78: in FallbackProcess
+    def __init__(self, popen_obj: subprocess.Popen[bytes]):
+                                  ^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: 'function' object is not subscriptable</failure></testcase></testsuite></testsuites>
