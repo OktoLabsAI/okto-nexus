@@ -1,0 +1,11 @@
+........................................                                 [100%]
+============================== warnings summary ===============================
+..\..\..\..\..\..\mnt\d\Projetos\Techridy\okto_labs_okto_nexus\tests\test_replay_cli.py:19
+  /mnt/d/Projetos/Techridy/okto_labs_okto_nexus/tests/test_replay_cli.py:19: PytestUnknownMarkWarning: Unknown pytest.mark.replay - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+
+test_replay_cli.py::test_ts2_cli_and_rest_are_byte_identical_modulo_generated_at
+  C:\Users\jpamb\AppData\Local\Temp\okto-r4-native-installed-zk_r383i\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+40 passed, 2 warnings in 15.52s

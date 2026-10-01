@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.01 canonical migration denials — October 1, 2026
+
+Nexus 641b538 preserves legacy method denials under canonical adapter IDs during bounded migration batches. Conflicting/changed policy and a live runtime owner refuse migration. Installed verification: **11 migration/backup + 40 admin/architecture = 51 passed**. See [scope](M12_MIGRATION_POLICY.md) and [manifest](test_runs_20261001_migration_policy.json). Reviewed M3 endpoint adoption, normative TR4-15-01 and release gates remain open.
+
+
 ## NS15.01 M2 catalog backfill — October 1, 2026
 
 Nexus d2362e0 adds bounded public migrate-execution catalog batches with verified backup, preserved row digests and atomic migration_map records. Installed campaign: **8 migration/backup + 40 admin/architecture = 48 passed**, including interrupted-batch rollback and repeated resume. See [scope](M12_MIGRATION_CATALOG.md) and [manifest](test_runs_20261001_migration_catalog.json). Operational M3 binding/policy linkage, normative TR4-15-01 and delivery gates remain open.

@@ -1,0 +1,96 @@
+{
+  "date": "2026-10-01",
+  "status": "NS15_01_CANONICAL_DENIALS_PASSED_TASK_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "641b5381c40180e12895462693ed240c969ae302"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-migration-policy-nexus-xbaw3o3n\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "6c432aed0caf20661d64266b9c931f86d2e68c96adcbaa00030cab30197d5fdc"
+    }
+  },
+  "installed_passed": {
+    "migration_backup": 11,
+    "admin_architecture": 40,
+    "total": 51
+  },
+  "results": {
+    "migration-policy-first-source.xml": {
+      "tests": "6",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.919"
+    },
+    "migration-policy-legacy-installed.xml": {
+      "tests": "40",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "15.249"
+    },
+    "migration-policy-owner-initial.xml": {
+      "tests": "7",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "4.573"
+    },
+    "migration-policy-r4-installed.xml": {
+      "tests": "11",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "5.963"
+    },
+    "migration-policy-source.xml": {
+      "tests": "7",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "4.075"
+    }
+  },
+  "checks": {
+    "package_bytes": "All three source/wheel/installed package trees compared",
+    "credential_pattern_scan": "No matches"
+  },
+  "proof": [
+    "Legacy denials are materialized for canonical adapter policy guards without granting allows.",
+    "Conflicting or changed policy refuses resumed migration; source rows remain unchanged.",
+    "Live dispatcher lease prevents schema expansion and policy writes."
+  ],
+  "limitations": [
+    "M3 reviewed endpoint adoption remains open.",
+    "M4 process drain/containment is not qualified by an owner-lease precondition.",
+    "Normative TR4-15-01 and all release gates remain open."
+  ],
+  "overlap": "Source cases overlap the final installed run; not added.",
+  "evidence": {
+    "plans/r4_execution/evidence/migration-policy-artifacts.json": "61dae6b769181f11191abd3d28db45dee3bd0cec416d7892fda99c9be892f8da",
+    "plans/r4_execution/evidence/migration-policy-build.log": "4cf45b772ba31f52bfff520aeb366162d8a7b05ed7fe711e940d4176ce1c9609",
+    "plans/r4_execution/evidence/migration-policy-first-source.xml": "a83f91840450575482e5ab3486063fdaa7117e10cdc9ffbb556740e0871d4794",
+    "plans/r4_execution/evidence/migration-policy-install.log": "4cadf55091d0e8edfeaf18326cdfd6ff5c176188011a4c1996579d61c34dd1ca",
+    "plans/r4_execution/evidence/migration-policy-legacy-installed.json": "3992e9ffa71c86168772c4b248d12038a70c255036aaeef0898be7a4a6f0b840",
+    "plans/r4_execution/evidence/migration-policy-legacy-installed.log": "293a496bd1114c13d9c83a129315d121fff9aee12bc70263a357be4f95210b22",
+    "plans/r4_execution/evidence/migration-policy-legacy-installed.xml": "364d030426ea5ce3d5e95ca56664e8d3d55ae987a5ff771b002b736b82f674dd",
+    "plans/r4_execution/evidence/migration-policy-owner-initial.xml": "8fa34d94fc5b93b5a4311cf287948c58d58efca31887cea8be05494f264888aa",
+    "plans/r4_execution/evidence/migration-policy-r4-installed.json": "881865ea2f95666e1d6bbbc1e0e3a6bb8c20b3c713c3b433c626790dfec80748",
+    "plans/r4_execution/evidence/migration-policy-r4-installed.log": "62d5b22df5e7de006043247ade1f9c56fae45b074ff19a745543c3e74b3af438",
+    "plans/r4_execution/evidence/migration-policy-r4-installed.xml": "69a27675cbcc0cc9d10aafaf630381ce85bd264b80872edd78146a4a166ec7d2",
+    "plans/r4_execution/evidence/migration-policy-source.xml": "d5d59f3e8cdbfa074732659daccb6c6c843b0806d64f38ee52c0f5fffc31d490",
+    "plans/r4_execution/run_migration_policy_installed.py": "c68f6aca6583ae68ecc0a59a26a6ccdc318b4d754754631b6b81806727424b8f",
+    "plans/r4_execution/M12_MIGRATION_POLICY.md": "45450254fb06653525c33b1cf8016349e0c690a933f4ed8db5485643915c4b40"
+  }
+}
