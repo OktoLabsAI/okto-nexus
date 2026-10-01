@@ -34,6 +34,10 @@ def admit_initial_turn(conn, *, server_id, actor_agent_id, client_intent_id):
     if conn.execute("SELECT 1 FROM execution_operations WHERE server_id=? AND executor_id=? "
                     "AND operation_id=?", key).fetchone():
         return
+    from .execution_capacity import require_admission_capacity
+    encoded_semantic = canonical_json(child["semantic_intent"])
+    require_admission_capacity(conn, server_id=server_id, executor_id=scope["executor_id"],
+                               action="turn.submit", byte_cost=len(encoded_semantic))
     conn.execute(
         "INSERT INTO execution_client_intents(server_id,actor_agent_id,client_intent_id,body_hash,"
         "intent_id,operation_id,resolution_revision,resolved_json,created_at,source_guard_digest) "
@@ -43,12 +47,12 @@ def admit_initial_turn(conn, *, server_id, actor_agent_id, client_intent_id):
     conn.execute(
         "INSERT INTO execution_operations(server_id,executor_id,operation_id,subject_agent_id,"
         "actor_agent_id,binding_id,workspace_id,workspace_binding_id,session_id,action,intent_hash,"
-        "semantic_payload,expected_revisions_json,delivery_id,admission_state,created_at,parent_operation_id) "
-        "VALUES (?,?,?,?,?,?,?,?,?,'turn.submit',?,?,?,?, 'ACCEPTED',strftime('%Y-%m-%dT%H:%M:%fZ','now'),?)",
+        "semantic_payload,expected_revisions_json,delivery_id,admission_state,created_at,parent_operation_id,admission_bytes) "
+        "VALUES (?,?,?,?,?,?,?,?,?,'turn.submit',?,?,?,?, 'ACCEPTED',strftime('%Y-%m-%dT%H:%M:%fZ','now'),?,?)",
         (*key, scope["agent_id"], actor_agent_id, scope["binding_id"], scope["workspace_id"],
          scope["workspace_binding_id"], scope["session_id"], child["intent_hash"],
-         canonical_json(child["semantic_intent"]).decode(), canonical_json(scope).decode(),
-         "delivery_" + secrets.token_hex(16), source["operation_id"]))
+         encoded_semantic.decode(), canonical_json(scope).decode(),
+         "delivery_" + secrets.token_hex(16), source["operation_id"], len(encoded_semantic)))
 
 
 def release_ready_initial_turns(conn, *, server_id, executor_id):

@@ -220,19 +220,23 @@ def submit_execution_operation(
             else:
                 raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
                                       "Unsupported execution action.", {})
+            from .execution_capacity import require_admission_capacity
+            encoded_semantic = canonical_json(resolved["semantic_intent"])
+            require_admission_capacity(conn, server_id=server_id, executor_id=executor_id,
+                                       action=action, byte_cost=len(encoded_semantic))
             now = datetime.now(timezone.utc).isoformat()
             conn.execute(
                 "INSERT INTO execution_operations(server_id,executor_id,"
                 "operation_id,subject_agent_id,actor_agent_id,binding_id,"
                 "workspace_id,workspace_binding_id,session_id,action,intent_hash,"
                 "semantic_payload,expected_revisions_json,delivery_id,"
-                "admission_state,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                "admission_state,created_at,admission_bytes) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (*key, actor_agent_id, actor_agent_id, scope["binding_id"],
                  scope["workspace_id"], scope["workspace_binding_id"],
                  session_id, action, request["intent_hash"],
-                 canonical_json(resolved["semantic_intent"]).decode("utf-8"),
+                 encoded_semantic.decode("utf-8"),
                  canonical_json(scope).decode("utf-8"),
-                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now),
+                 "delivery_" + secrets.token_hex(16), "ACCEPTED", now, len(encoded_semantic)),
             )
             if action == "runtime.open":
                 conn.execute(

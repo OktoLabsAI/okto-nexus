@@ -193,6 +193,8 @@ def build_router() -> APIRouter:
                   "AUTHORIZED_INPUT_UNAVAILABLE": 409}.get(error.code, 500)
         result = v1_err(status, error.code, error.message, stage="approval.decision")
         result.headers["Cache-Control"] = "no-store"
+        if error.code == ErrorCode.QUOTA_EXCEEDED:
+            result.headers["Retry-After"] = "1"
         return result
 
     @router.post("/runtime/approval-decisions")
@@ -418,9 +420,12 @@ def build_router() -> APIRouter:
 
     def runtime_error(error, stage):
         status = {ErrorCode.NOT_FOUND: 404, ErrorCode.PERMISSION_DENIED: 403,
-                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+                  ErrorCode.CONFLICT: 409, ErrorCode.VALIDATION_ERROR: 422,
+                  ErrorCode.QUOTA_EXCEEDED: 429}.get(error.code, 500)
         response = v1_err(status, error.code, error.message, stage=stage)
         response.headers["Cache-Control"] = "no-store"
+        if error.code == ErrorCode.QUOTA_EXCEEDED:
+            response.headers["Retry-After"] = "1"
         return response
 
     @router.post("/runtime/intents:resolve")

@@ -215,7 +215,6 @@ class ExecutionNativeDecisions:
                        request=frame["operational_request"], response_digest=response_digest)
         if response_ref is not None:
             payload["response_ref"] = response_ref
-            self.inputs.retain(response_ref, answer, expires_at=row["expires_at"])
         semantic = dict(action="input.provide" if row["kind"] == "native_input" else "approval.decide",
                         payload=payload, target={"kind": "none", "expected_turn_id": None})
         semantic.update({name: scope[name] for name in (
@@ -228,6 +227,12 @@ class ExecutionNativeDecisions:
         if answer is not None:
             wire_semantic["payload"] = {name: value for name, value in payload.items() if name != "response_ref"}
             wire_semantic["payload"]["response"] = answer
+        from .execution_capacity import require_admission_capacity
+        byte_cost = len(canonical_json(wire_semantic))
+        require_admission_capacity(conn, server_id=scope["server_id"], executor_id=scope["executor_id"],
+                                   action=semantic["action"], byte_cost=byte_cost)
+        if response_ref is not None:
+            self.inputs.retain(response_ref, answer, expires_at=row["expires_at"])
         intent_hash = execution_intent_hash(wire_semantic)
         now = self.access.clock.now_iso()
         values = dict(decision_id=decision_id, server_id=scope["server_id"], executor_id=scope["executor_id"],
@@ -252,7 +257,7 @@ class ExecutionNativeDecisions:
             workspace_id=scope["workspace_id"], workspace_binding_id=scope["workspace_binding_id"],
             session_id=scope["session_id"], action=semantic["action"], intent_hash=intent_hash,
             semantic_payload=canonical_json(semantic).decode(), expected_revisions_json=canonical_json(scope).decode(),
-            decision_id=decision_id, delivery_id="delivery_"+secrets.token_hex(16), admission_state="ACCEPTED", created_at=now)
+            decision_id=decision_id, delivery_id="delivery_"+secrets.token_hex(16), admission_state="ACCEPTED", created_at=now, admission_bytes=byte_cost)
         conn.execute("INSERT INTO execution_operations (" + ",".join(operation) + ") VALUES (" +
                      ",".join("?" for _ in operation) + ")", tuple(operation.values()))
         conn.execute("INSERT INTO execution_dispatch_outbox(server_id,executor_id,operation_id,dispatch_state,next_attempt_at) "
