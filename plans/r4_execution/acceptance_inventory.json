@@ -741,9 +741,11 @@
         "plans/r4_execution/M12_NS15_03_HANDOFF.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_handoff.json",
         "plans/r4_execution/M12_NS15_03_HANDOFF_WORKSPACE.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json",
+        "plans/r4_execution/M12_NS15_03_PUBLICATION.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_publication.json"
       ],
-      "notes": "Conversation and managed handoff claims now join R4 admission atomically. Native terminal does not complete a handoff. Full MCP/local/remote claim competition remains unverified; TR4-06-05 remains NOT_RUN."
+      "notes": "Conversation/managed handoff claims join R4 admission atomically. Canonical structured decisions may complete work only under the admitted contract and matching claim epoch; ordinary terminal events do not. Full MCP/local/remote claim competition remains unverified; TR4-06-05 remains NOT_RUN."
     },
     "NS07.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns07.py::test_ns07_01",
@@ -1535,7 +1537,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_RESULT_CAPTURE",
+      "implementation": "PARTIAL_CANONICAL_RESULT_PUBLICATION",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1564,9 +1566,11 @@
         "plans/r4_execution/M12_NS15_03_HANDOFF_WORKSPACE.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_handoff_workspace.json",
         "plans/r4_execution/M12_NS15_03_RESULTS.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_results.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_results.json",
+        "plans/r4_execution/M12_NS15_03_PUBLICATION.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_publication.json"
       ],
-      "notes": "Logical handoff callers and canonical result capture/read now integrated. Schema 095 preserves R4 provenance and legacy history. Publication, structured work results, result artifacts/retention, combined claim competition, cross-protocol fallback and native loader removal remain pending. TR4-15-03 remains NOT_RUN."
+      "notes": "Canonical capture/read now joins governed publication, private artifacts, approval replay and explicitly admitted structured handoff decisions. Schema 096 preserves legacy history. Combined claim competition, context-only observation, domain event projection, cross-protocol fallback, capture retention and native loader removal remain pending. TR4-15-03 remains NOT_RUN."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

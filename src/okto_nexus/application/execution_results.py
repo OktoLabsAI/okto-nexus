@@ -45,6 +45,46 @@ def project_execution_result(conn, *, event, received_at):
         'delivery_outcome=excluded.delivery_outcome,captured_at=excluded.captured_at',
         (*key, event['session_id'], event['stream_epoch'], event['sequence'] if terminal else None,
          text, int(truncated), count, payload.get('delivery_outcome') if terminal else None, received_at))
+    if terminal:
+        project_domain_result(conn, server_id=key[0], executor_id=key[1], operation_id=key[2])
+
+
+def project_domain_result(conn, *, server_id, executor_id, operation_id):
+    """Join terminal output and receipt in either arrival order, exactly once."""
+    import hashlib
+    import json
+    key = (server_id, executor_id, operation_id)
+    row = conn.execute('SELECT r.*,m.domain_operation_id FROM execution_results r '
+        'JOIN execution_domain_deliveries m USING(server_id,executor_id,operation_id) '
+        'JOIN delivery_outbox o ON o.operation_id=m.domain_operation_id '
+        'WHERE r.server_id=? AND r.executor_id=? AND r.operation_id=? '
+        'AND r.terminal_sequence IS NOT NULL AND o.canonical_terminal_operation_id=r.operation_id', key).fetchone()
+    if row is None:
+        return
+    receipt = conn.execute('SELECT stage FROM execution_receipts WHERE server_id=? AND executor_id=? AND operation_id=? '
+        'ORDER BY receipt_revision DESC LIMIT 1', key).fetchone()
+    if not receipt or receipt[0] != {'success': 'SUCCEEDED', 'failed': 'FAILED', 'interrupted': 'CANCELLED'}.get(row['delivery_outcome']):
+        return
+    identity = 'result_r4_' + hashlib.sha256(json.dumps(key, separators=(',', ':')).encode()).hexdigest()
+    conn.execute('INSERT INTO runtime_results(result_id,payload,captured_at,operation_id,output_text,output_truncated,'
+        'output_event_count,delivery_outcome,canonical_server_id,canonical_executor_id,canonical_operation_id) '
+        'VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT DO NOTHING',
+        (identity, json.dumps(dict(stream_epoch=row['stream_epoch'], terminal_sequence=row['terminal_sequence'])),
+         row['captured_at'], row['domain_operation_id'], row['output_text'], row['output_truncated'],
+         row['output_event_count'], row['delivery_outcome'], *key))
+
+
+def canonical_result_matches(conn, row):
+    """Revalidate publication provenance without inventing a harness event."""
+    if not row.get('canonical_server_id'):
+        return row['event_id'] is not None and row['terminal_event_id'] == row['event_id']
+    source = conn.execute('SELECT r.* FROM execution_results r JOIN execution_domain_deliveries m '
+        'USING(server_id,executor_id,operation_id) JOIN delivery_outbox o ON o.operation_id=m.domain_operation_id '
+        'WHERE r.server_id=? AND r.executor_id=? AND r.operation_id=? AND m.domain_operation_id=? '
+        'AND r.terminal_sequence IS NOT NULL AND o.canonical_terminal_operation_id=r.operation_id',
+        (row['canonical_server_id'], row['canonical_executor_id'], row['canonical_operation_id'], row['operation_id'])).fetchone()
+    return source is not None and all(source[k] == row[k] for k in (
+        'output_text', 'output_truncated', 'output_event_count', 'delivery_outcome'))
 
 
 def read_execution_result(conn, *, server_id, executor_id, operation_id):

@@ -85,9 +85,9 @@ class RuntimeWorkService:
     def enqueue(self, uow, *, handoff, authorized, key, digest, now, completion_mode="authenticated_nexus_call"):
         context, grant, endpoint, profile, proof = authorized
         canonical = endpoint["protocol"] == "nxl-r4"
-        if canonical and (self.canonical_admit is None or completion_mode != "authenticated_nexus_call"):
+        if canonical and self.canonical_admit is None:
             raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
-                "Canonical work requires authenticated Nexus completion.", {})
+                "Canonical work admission is unavailable.", {})
         if proof and completion_mode != "authenticated_nexus_call":
             raise denied()
         if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE handoff_id=? AND claim_epoch=?",
@@ -194,8 +194,9 @@ class RuntimeWorkService:
             "JOIN delivery_outbox o ON o.operation_id=r.operation_id "
             "JOIN runtime_handoff_bindings b ON b.operation_id=o.operation_id "
             "JOIN workspaces w ON w.workspace_id=o.workspace_id WHERE r.result_id=?", (result_id,)).fetchone()
+        from .execution_results import canonical_result_matches
         if (not row or row["completion_mode"] != "structured_result_v1" or
-                row["event_id"] != row["terminal_event_id"] or row["output_truncated"]):
+                not canonical_result_matches(uow.connection, dict(row)) or row["output_truncated"]):
             raise denied()
         try:
             def unique_pairs(pairs):
@@ -223,7 +224,8 @@ class RuntimeWorkService:
                 decision["operation_id"] != row["operation_id"] or decision["handoff_id"] != row["handoff_id"] or
                 decision[field] in (None, "", {}, [])):
             raise denied()
-        return {"project_root": row["root_realpath"], "handoff_id": row["handoff_id"],
+        selector = {"project_root": None, "workspace_id": row["workspace_id"]} if row["canonical_server_id"] else {"project_root": row["root_realpath"]}
+        return {**selector, "handoff_id": row["handoff_id"],
                 "agent_id": row["recipient_agent_id"], "claim_epoch": row["claim_epoch"],
                 field: decision[field]}, action, dict(row)
 

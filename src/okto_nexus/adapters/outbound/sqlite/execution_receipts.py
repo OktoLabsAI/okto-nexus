@@ -339,6 +339,8 @@ def append_execution_receipt(factory: ConnectionFactory, *,
         from ....application.execution_domain_delivery import project_delivery_receipt
         project_delivery_receipt(conn, server_id=key[0], executor_id=key[1], operation_id=key[2],
                                  action=operation["action"], stage=projection.stage)
+        from ....application.execution_results import project_domain_result
+        project_domain_result(conn, server_id=key[0], executor_id=key[1], operation_id=key[2])
     return AcceptedExecutionReceipt(parsed["operation_id"],
                                     projection.receipt_revision,
                                     projection.stage, False)

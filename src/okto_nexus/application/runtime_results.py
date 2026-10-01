@@ -12,6 +12,7 @@ from ..domain.inbox import requires_known_recipient
 from ..domain.tag_selector import reachable
 from ..domain.targets import target_strategy
 from .permissions import permission_set_for
+from .execution_results import canonical_result_matches
 
 
 class RuntimeResultService:
@@ -49,7 +50,8 @@ class RuntimeResultService:
         artifact_id = RuntimeResultService.artifact_id(row)
         if row["output_truncated"]:
             body += "\n[Captured output exceeded the materialization limit; the artifact is also truncated.]"
-        return {"project_root": row["root_realpath"], "from_agent_id": row["recipient_agent_id"],
+        selector = {"workspace_id": row["workspace_id"], "project_root": None} if row.get("canonical_server_id") else {"project_root": row["root_realpath"]}
+        return {**selector, "from_agent_id": row["recipient_agent_id"],
             "subject": "Runtime result", "body": body, "channel_id": row["channel_id"],
             "parent_message_id": row["parent_id"],
             "target": json.loads(row["notification_config"]).get("notify_target", {"strategy": "direct", "agent_id": row["recipient_id"]}),
@@ -196,7 +198,7 @@ class RuntimeResultService:
                 epoch=owner.epoch, now=owner.clock.now_iso())):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Result publication requires the current serve owner.", {})
         row = self.row(uow, result_id)
-        if not self.config.feature_harness_integrations or not row or row["reconciliation_id"] or row["terminal_event_id"] != row["event_id"]:
+        if not self.config.feature_harness_integrations or not row or row["reconciliation_id"] or not canonical_result_matches(uow.connection, row):
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "No authorized captured result.", {})
         if uow.connection.execute("SELECT 1 FROM runtime_handoff_bindings WHERE operation_id=?", (row["operation_id"],)).fetchone():
             if not self.work_validator:

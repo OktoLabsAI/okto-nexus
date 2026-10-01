@@ -1098,6 +1098,7 @@ class HandoffService:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
                 existing = self.runtime_work.authorize_result(uow, result_id=_runtime_result_id, action="complete",
                     supplied=dict(project_root=project_root, handoff_id=handoff_id, agent_id=agent_id,
+                                  **({"workspace_id": workspace_id} if logical_workspace else {}),
                                   claim_epoch=claim_epoch, result=result))
                 if existing:
                     return existing
@@ -1506,6 +1507,7 @@ class HandoffService:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Runtime work is unavailable.", {})
                 existing = self.runtime_work.authorize_result(uow, result_id=_runtime_result_id, action="reject",
                     supplied=dict(project_root=project_root, handoff_id=handoff_id, agent_id=agent_id,
+                                  **({"workspace_id": workspace_id} if logical_workspace else {}),
                                   claim_epoch=claim_epoch, reason=reason))
                 if existing:
                     return existing

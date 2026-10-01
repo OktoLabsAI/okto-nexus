@@ -83,7 +83,7 @@ def test_additive_open_authority_migrations_preserve_existing_r4_history(connect
         target.execute("DELETE FROM schema_migrations WHERE version>=?", (migration,))
         expected = target.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()
         receipts = target.execute("SELECT * FROM execution_receipts ORDER BY operation_id,receipt_revision").fetchall()
-    assert MigrationRunner(factory).apply() == list(range(migration, 96))
+    assert MigrationRunner(factory).apply() == list(range(migration, 97))
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         rows = uow.connection.execute("SELECT * FROM execution_operations ORDER BY operation_id").fetchall()

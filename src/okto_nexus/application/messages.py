@@ -349,6 +349,7 @@ class MessageService:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
                 existing = self._runtime_results.authorize(uow, result_id=_runtime_result_id,
                     approved=_approved_execution, supplied={"project_root": root_realpath,
+                        **({"workspace_id": workspace_id} if logical_workspace else {}),
                         "from_agent_id": from_agent_id, "subject": subject, "body": body,
                         "channel_id": channel, "parent_message_id": parent, "target": target_echo, "artifacts": artifact_refs})
                 if existing:

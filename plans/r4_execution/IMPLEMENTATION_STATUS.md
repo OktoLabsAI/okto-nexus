@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 canonical result publication - October 1, 2026
+
+Installed verification: **116 distinct product passes**, plus **3 architecture checks**. Canonical results now reuse governed message publication, HITL, private artifacts and explicitly admitted structured handoff decisions. Schema 096 preserves legacy result IDs and dependent references with checked atomic reconstruction. See [scope](M12_NS15_03_PUBLICATION.md) and [manifest](test_runs_20261001_ns15_03_publication.json). Combined claim competition, context-only observation, runtime-event projection, cross-protocol fallback, canonical capture retention and native loader removal remain pending; normative acceptance/release gates stay open.
+
 ## NS15.03 canonical result capture - October 1, 2026
 
 Installed verification: **73 distinct product passes**, plus **3 architecture checks**. Schema 095 materializes bounded canonical output with contiguous authenticated event provenance, atomic ACK rollback and replay protection. Authorized operation history exposes terminal output without legacy harness rows. See [scope](M12_NS15_03_RESULTS.md) and [manifest](test_runs_20261001_ns15_03_results.json). Publication, structured work decisions, result artifacts/retention, combined claim competition, cross-protocol fallback and native loader removal remain pending; normative acceptance/release gates stay open.

@@ -238,8 +238,14 @@ class MigrationRunner:
         previously committed migrations remain durable.
         """
         script = path.read_text(encoding="utf-8")
-        self._begin_immediate(conn)
+        rebuild = script.startswith("-- foreign-key-rebuild\n")
+        if rebuild:
+            # SQLite's documented table-rebuild sequence requires this on the
+            # migration connection before BEGIN. Other connections retain FK
+            # enforcement; the writer lock and final check protect the commit.
+            conn.execute("PRAGMA foreign_keys=OFF")
         try:
+            self._begin_immediate(conn)
             row = conn.execute(
                 "SELECT 1 FROM schema_migrations WHERE version = ?", (version,)
             ).fetchone()
@@ -248,6 +254,8 @@ class MigrationRunner:
                 return False
             for statement in _split_statements(script):
                 conn.execute(statement)
+            if rebuild and conn.execute("PRAGMA foreign_key_check").fetchone() is not None:
+                raise ValueError("Rebuilt schema contains an invalid foreign key.")
             conn.execute(
                 "INSERT INTO schema_migrations (version, applied_at) VALUES (?, ?)",
                 (version, utc_now_iso()),
@@ -268,6 +276,9 @@ class MigrationRunner:
                     "migrations_dir": str(self._migrations_dir),
                 },
             ) from exc
+        finally:
+            if rebuild:
+                conn.execute("PRAGMA foreign_keys=ON")
 
 
 def _rollback_quietly(conn: sqlite3.Connection) -> None:

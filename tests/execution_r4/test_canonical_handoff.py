@@ -102,7 +102,7 @@ def test_work_authority_change_after_claim_blocks_core(connected_local, monkeypa
     assert native.opens == 0
 
 
-@pytest.mark.parametrize("denial", ["readiness", "structured_result"])
+@pytest.mark.parametrize("denial", ["readiness", "unknown_completion_contract"])
 def test_rejected_execution_rolls_back_claim_and_work_budget(connected_local, monkeypatch, denial):
     from okto_nexus.bootstrap import execution_compat
     setup, binding, native = connected_local
@@ -110,7 +110,7 @@ def test_rejected_execution_rolls_back_claim_and_work_budget(connected_local, mo
     if denial == "readiness":
         info = execution_compat.protocol_info()
         monkeypatch.setattr(execution_compat, "protocol_info", lambda: {**info, "remote_execution_ready": False})
-    result = claim(**({"completion_mode": "structured_result_v1"} if denial == "structured_result" else {}))
+    result = claim(**({"completion_mode": "unknown_result_v1"} if denial == "unknown_completion_contract" else {}))
     assert not result["ok"], result
     with setup[0].connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT status,claimed_by FROM handoffs WHERE handoff_id=?", (handoff,)).fetchone()[:] == ("OPEN", None)
