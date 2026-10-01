@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-01",
+  "status": "SIGNAL_SHUTDOWN_INCREMENT_PASSED_NS14_03_PARTIAL",
+  "commits": {
+    "nexus": "23a3ba464b23e97b7f8b4ed9a02aefa94571afca",
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-server-signal-nexus-hgiasm3k\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "9b92949de514882ba934db17e54c36a57e6fee535db39d3ba28bf3f4518e42ba"
+    }
+  },
+  "results": {
+    "server-signal-legacy-installed.xml": {
+      "tests": "8",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "11.030"
+    },
+    "server-signal-nexus-installed.xml": {
+      "tests": "9",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "29.582"
+    },
+    "server-signal-source.xml": {
+      "tests": "4",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "20.097"
+    },
+    "server-signal-startup-source.xml": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "1.172"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "uvicorn": "0.54.0",
+    "topology": "Installed three-package tuple outside clones; actual serve child with disposable home and real loopback HTTP, technical inventory release outage, Python-delivered SIGINT/SIGTERM."
+  },
+  "checks": {
+    "pip_check": "passed",
+    "package_bytes": "source/wheel/installed bytes compared for all three packages",
+    "credential_pattern_scan": "no matches"
+  },
+  "overlap": "Six source cases overlap the 17 installed cases; do not sum as unique coverage.",
+  "proof": [
+    "Signal-first and HTTP-first shutdown retain HTTP during inventory release failure.",
+    "Repeated SIGINT and SIGTERM neither force exit nor extend the deadline.",
+    "Restored inventory release produces normal process exit 0 and durable DISCONNECTED state.",
+    "Signal during startup waits for the coordinator; failed startup does not hang."
+  ],
+  "limitations": [
+    "External Windows console control events and external Linux signals are unqualified.",
+    "The signal child cases use empty discovery and do not open native provider sessions.",
+    "Full two-runtime fault matrix, process-versus-release projection, authorization-store outage and explicit force-exit qualification remain pending.",
+    "Core/Connector unchanged; older provider evidence retains original artifact scope.",
+    "Preexisting static assets included without UI acceptance. NS14.03 partial; all gates open."
+  ],
+  "evidence": {
+    "evidence/server-signal-artifacts.json": "96637cc46c73d7c960903e814c9812c34be3220cb70272b92a3412425679732a",
+    "evidence/server-signal-build.log": "d111623d784be93c759fbebc24c0f4016fdfd0551189e0d9888c5e4f6f92fabf",
+    "evidence/server-signal-install.log": "164e4090f8be1c95161b14985cb7dc5f6eb0627009713dad25dbf1ebee1e5208",
+    "evidence/server-signal-legacy-installed.json": "04eae590e9bc632c6b58a1023b1debd32bf873d629a43f856a96e41eb82a9606",
+    "evidence/server-signal-legacy-installed.log": "0eb6e990ea5862c9d1ea74992b7089dab65bdc924cbf9f6c7c55d724e042ae28",
+    "evidence/server-signal-legacy-installed.xml": "683bcde3bf2da4218126ea72771c89b16f9cefbddac46cc3c6a4de858727bbb8",
+    "evidence/server-signal-nexus-installed.json": "bb4d5134f49f025ae67ae8cb00f641e68cdb47292575aedfbb9f2c23ceea17cf",
+    "evidence/server-signal-nexus-installed.log": "734e747e28c446f7d12441455cdf7f6ca3070c89118efb2ec94f98a8ccb65fee",
+    "evidence/server-signal-nexus-installed.xml": "1a8b27271997476522e22aef1182ac8236978c19b7edcc5648b586ec29aefec9",
+    "evidence/server-signal-source.xml": "ce63adf4cbad56e234744bbcca857e28fe47f00416f911d8df1d38e1ee0fd9f6",
+    "evidence/server-signal-startup-source.xml": "9c463a53506cde4d85db347baf552133fe0331a176ba043f919527e3eb52ca0d"
+  }
+}

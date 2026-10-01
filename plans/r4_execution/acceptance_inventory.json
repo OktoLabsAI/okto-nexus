@@ -1367,9 +1367,15 @@
         "tests/test_runtime_operation_authorization.py::test_shutdown_fence_rejects_turns_but_allows_authorized_close",
         "tests/execution_r4/test_server_shutdown.py::test_operator_shutdown_returns_pending_and_keeps_recovery_available",
         "tests/execution_r4/test_server_shutdown.py::test_shutdown_cli_over_tcp_retains_server_until_recovery",
-        "tests/execution_r4/test_server_shutdown.py::test_shutdown_retry_recovers_inventory_release_and_cancelled_observer"
+        "tests/execution_r4/test_server_shutdown.py::test_shutdown_retry_recovers_inventory_release_and_cancelled_observer",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGINT]",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[signal-SIGTERM]",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGINT]",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[False]",
+        "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True]"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_server_shutdown_installed.py against its verified artifact tuple.",
+      "effective_test_command": "Run plans/r4_execution/run_server_signal_installed.py against its verified artifacts; broader administrative regression is recorded in the preceding server-shutdown manifest.",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
@@ -1382,9 +1388,10 @@
         "plans/r4_execution/test_runs_20261001_shutdown_order.json",
         "plans/r4_execution/test_runs_20261001_shutdown_deadline.json",
         "plans/r4_execution/test_runs_20261001_shutdown_admission.json",
-        "plans/r4_execution/test_runs_20261001_server_shutdown.json"
+        "plans/r4_execution/test_runs_20261001_server_shutdown.json",
+        "plans/r4_execution/test_runs_20261001_server_signal.json"
       ],
-      "remaining_acceptance": "Administrative HTTP/CLI shutdown and retained TCP recovery are verified with one deadline and the same owners. SIGINT/SIGTERM and standalone Server-process retention, qualified process-versus-durable-release projection, the complete late-open/release fault matrix, authorization-store outage and platform acceptance remain pending."
+      "remaining_acceptance": "Retained administrative HTTP/CLI and Python-delivered Windows signal recovery are verified, including actual serve child processes. External Windows console/Linux signals, the complete two-runtime late-open/stuck-close/release fault matrix, qualified process-versus-durable-release projection, authorization-store outage, explicit force-exit qualification and platform/provider acceptance remain pending."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",

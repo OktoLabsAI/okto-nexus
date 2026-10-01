@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Retained Server signal shutdown — October 1, 2026
+
+Nexus 23a3ba4 routes signals through the existing retained coordinator instead of stopping HTTP or forcing exit on repetition. Installed verification passed nine R4 and eight legacy cases, including actual serve child processes, Python-delivered SIGINT/SIGTERM, unavailable inventory release, repeated signals, restoration and startup races. See [details](M11_SERVER_SIGNALS.md) and [manifest](test_runs_20261001_server_signal.json). External console/Linux signal qualification and the remaining NS14.03 fault/report/platform matrix stay open; no release gate closed.
+
 ## Administrative Server shutdown — October 1, 2026
 
 Nexus f1db502 adds a retained Server coordinator, operator HTTP shutdown/status and CLI commands. One deadline closes productive admission and starts embedded/legacy containment concurrently; legacy release waits for embedded producers and inventory. Installed verification passed 55 R4 plus 26 legacy tests, including a child CLI over real TCP and recovery without reopening. See [details](M11_SERVER_SHUTDOWN.md) and [manifest](test_runs_20261001_server_shutdown.json). SIGINT/SIGTERM, standalone serve-process and full late-open/release/platform acceptance remain pending. NS14.03 partial; all gates open.
