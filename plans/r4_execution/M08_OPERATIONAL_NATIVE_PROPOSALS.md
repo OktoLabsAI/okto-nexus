@@ -77,3 +77,45 @@ tool claim was captured, and the handoff remained OPEN. Selected event metadata
 is retained in evidence/real-native-decision-codex-observed-refusal.json. This is
 a concrete remaining permission translation defect, not successful domain work.
 Core and Connector packages are unchanged in this Nexus increment.
+
+## Observed Codex empty elicitation form - Core 0.2.42
+
+The opt-in observer recorded the real Codex 0.159 request without changing the
+adapter's handler result. MCP permission arrives as mcpServer/elicitation/request,
+mode form, with an empty object properties map and codex_approval_kind=mcp_tool_call
+metadata. The old validator required at least one field. The diagnostic trace is
+evidence/real-native-decision-diagnostic-codex-requests.json.
+
+Core c7aa63d / 0.2.42.dev0 accepts that valid empty form under the existing native
+input contract. Approval requires the explicit response content={}; denial remains
+action=decline. The response never copies the advertised session/always persistence
+metadata. Missing responses, added answer fields, persistence instructions and
+unsupported schemas remain refused. The real consumer test approves only its three
+named governed tools, exact server/workspace/subject/handoff and empty schema.
+
+Source verification passed 57 cases after correcting a source-path collection
+mistake. Installed Core verification passed 75 cases with both application packages
+absent. Normalized wheel/sdist import, contract resource and local/remote consumer
+smokes passed, with pip check. The initial verifier command used an unsupported
+positional argument; its log is retained alongside the successful corrected call.
+Consumer and real-provider results are recorded in the subsequent test index.
+
+### Consumer adoption and three real local providers
+
+Nexus 75f1af5 and Connector a308cf6 adopt Core c7aa63d with the same 0.2.42 wheel.
+Installed regressions passed 83 Nexus cases, the same 83 cases without Connector,
+and 45 Connector cases. Pip checks passed. Source/wheel/installed bytes and package
+hashes were verified before the campaigns.
+
+All three positive local journeys passed on this same installed Nexus/Core pair:
+Codex in 104.86 seconds, Claude in 95.33 seconds and Pi in 360.83 seconds. Each
+completed its handoff, succeeded the turn and close, renewed to lease serial 2
+before the turn, and removed its temporary credential. Codex and Claude each
+received three explicit operator decisions; Pi used three governed native actions.
+No Connector application or WSS tickets were used. Native build qualification
+remained active; the Server release gate remained test-only overridden.
+
+See test_runs_20260930_native_elicitation.json for exact hashes, commands, JUnit
+results, diagnostics and retained failures. These local results resolve the
+observed Codex permission translation defect. Remote native capture and the
+remaining M08/fixed-plan acceptance remain pending; no gate is closed.

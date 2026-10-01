@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Real local Pi, Codex and Claude on Core 0.2.42 - September 30, 2026
+
+Nexus 75f1af5 and Connector a308cf6 adopt Core c7aa63d / 0.2.42.dev0. Actual Codex permission was observed as an empty elicitation form; the validator now accepts that form only with an explicit response, without persistent permission metadata. Installed tests passed: Core 75, Connector 45, Nexus 83 and the same 83 overlapping cases without Connector. Real Windows journeys passed for Pi, Codex and Claude on the same installed Nexus/Core wheels, with completed handoffs, successful turns/closes and credential cleanup. Codex and Claude each required three explicit operator decisions; Pi used three native actions. Server release gates were test-only overridden; native qualification was unchanged. [Evidence index](test_runs_20260930_native_elicitation.json). Next: remote native capture under applied lease authority and remaining M08 acceptance. No milestone or release gate closes.
+
+
 ## Canonical native decisions and real Claude - September 30, 2026
 
 Nexus dfa48d5 adds operator CAS, transactional decision/outbox admission, input retention and embedded native application on Core 0.2.41 (6cf2ecc); Connector remains ab6bfaf. Installed verification passed 83 cases in each overlapping normal/no-Connector campaign. The actual Claude journey passed with three explicit operator decisions, completed handoff, successful turn/close and credential cleanup. Codex still rejects the MCP call before any canonical request is captured; its handoff remains OPEN. The Windows standby interruption and all earlier failures are retained. See [M08 increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) and [test index](test_runs_20260930_native_decisions.json). Next: actual Codex request translation and remote capture under the applied lease. M08 and release gates remain open.

@@ -1,0 +1,37 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4",
+    "-o",
+    "asyncio_mode=auto",
+    "-o",
+    "asyncio_default_fixture_loop_scope=function",
+    "D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\tests\\execution_r4\\test_real_embedded_pi.py",
+    "-q",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\real-native-elicitation-installed-pi_rpc.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "verified_packages": {
+    "nexus": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Lib\\site-packages\\okto_nexus",
+      "files": 354
+    },
+    "core": {
+      "path": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-embedded-inventory-2z7k3itc\\isolated\\Lib\\site-packages\\nexus_connector_core",
+      "files": 93
+    }
+  },
+  "started_at": 1790819115.9710867,
+  "finished_at": 1790819478.1206322,
+  "journey_report_written": true,
+  "native_request_observer": false,
+  "connector_absent": true,
+  "exit_code": 0,
+  "scope": "Real installed provider through automatic embedded owner and protected vault: TCP HTTP MCP for Codex/Claude, native action bridge for Pi. Server release gate overridden; native qualification unchanged."
+}

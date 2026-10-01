@@ -1,0 +1,195 @@
+{
+  "date": "2026-09-30",
+  "branch": "feature/v0.2.0",
+  "commits": {
+    "nexus": "75f1af5",
+    "connector": "a308cf6",
+    "core": "c7aa63d"
+  },
+  "core_version": "0.2.42.dev0",
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-elicitation-core-exybqmms\\dist\\nexus_connector_core-0.2.42.dev0-py3-none-any.whl",
+      "sha256": "9f94903b8b31ba041df8fac42b722ecfce3ff8b26af0e82a6e41afc426fec552"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-elicitation-nexus-4j295_a1\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "406bdbeb90646c8019aba1f6a555b4d98ec181e88dd4c70ac1a109fd9cc9b620"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-elicitation-connector-d8ma_83o\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "7f63e6fb5f44ba49c6e88a10b5acf1487aa69679994b13d27664f63777184219"
+    }
+  },
+  "installed": {
+    "core": {
+      "file": "evidence/native-elicitation-core-installed.xml",
+      "tests": 75,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 17.616
+    },
+    "nexus": {
+      "file": "evidence/native-elicitation-installed-nexus.xml",
+      "tests": 83,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 240.568
+    },
+    "without_connector": {
+      "file": "evidence/native-elicitation-installed-isolated.xml",
+      "tests": 83,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 237.876
+    },
+    "connector": {
+      "file": "evidence/native-elicitation-installed-connector.xml",
+      "tests": 45,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "seconds": 11.262
+    }
+  },
+  "real": {
+    "codex_app_server": {
+      "test": {
+        "file": "evidence/real-native-elicitation-installed-codex_app_server.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 104.693
+      },
+      "journey": {
+        "adapter": "codex_app_server",
+        "server_release_gate_override": true,
+        "native_qualification_override": false,
+        "protected_os_vault": true,
+        "synthetic_native_factory": false,
+        "passive_inventory_version": null,
+        "candidate_fingerprint": "sha256:0e2a4cd6ac1b329e64ec74745e38b71a3d4fa701102c86f49cf605d23a02c4df",
+        "candidate_build_identity": "sha256:ac0413e2cd18e80561c8e1e50511f7e05465630dc16bf60656e04d7fff2e994c",
+        "open_stage": "SUBMITTED",
+        "lease_serial_before_turn": 2,
+        "turn_stage": "SUCCEEDED",
+        "explicit_operator_decisions": 3,
+        "handoff_status": "COMPLETED",
+        "tool_claim_count": 1,
+        "wss_ticket_count": 0,
+        "close_stage": "SUCCEEDED",
+        "secret_removed": true
+      }
+    },
+    "claude_stream": {
+      "test": {
+        "file": "evidence/real-native-elicitation-installed-claude_stream.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 95.297
+      },
+      "journey": {
+        "adapter": "claude_stream",
+        "server_release_gate_override": true,
+        "native_qualification_override": false,
+        "protected_os_vault": true,
+        "synthetic_native_factory": false,
+        "passive_inventory_version": null,
+        "candidate_fingerprint": "sha256:fc0e3af017705624b9e1bce913f72761864ff994804514da1f5e41380fca4484",
+        "candidate_build_identity": "sha256:14369971cf394418edc2d29fe53d78b0e8dde500cc2db7746a743110ee394862",
+        "open_stage": "SUBMITTED",
+        "lease_serial_before_turn": 2,
+        "turn_stage": "SUCCEEDED",
+        "explicit_operator_decisions": 3,
+        "handoff_status": "COMPLETED",
+        "tool_claim_count": 1,
+        "wss_ticket_count": 0,
+        "close_stage": "SUCCEEDED",
+        "secret_removed": true
+      }
+    },
+    "pi_rpc": {
+      "test": {
+        "file": "evidence/real-native-elicitation-installed-pi_rpc.xml",
+        "tests": 1,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "seconds": 360.645
+      },
+      "journey": {
+        "adapter": "pi_rpc",
+        "server_release_gate_override": true,
+        "native_qualification_override": false,
+        "protected_os_vault": true,
+        "synthetic_native_factory": false,
+        "version": "0.87.1",
+        "open_stage": "SUBMITTED",
+        "lease_serial_before_turn": 2,
+        "turn_stage": "SUCCEEDED",
+        "handoff_status": "COMPLETED",
+        "native_action_count": 3,
+        "wss_ticket_count": 0,
+        "close_stage": "SUCCEEDED",
+        "secret_removed": true
+      }
+    }
+  },
+  "source": {
+    "file": "evidence/native-elicitation-core-source.xml",
+    "tests": 57,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "seconds": 17.561
+  },
+  "diagnostic": {
+    "trace": "evidence/real-native-decision-diagnostic-codex-requests.json",
+    "test": {
+      "file": "evidence/real-native-decision-diagnostic-installed-codex_app_server.xml",
+      "tests": 1,
+      "errors": 0,
+      "failures": 1,
+      "skipped": 0,
+      "seconds": 95.779
+    },
+    "handler_result_unchanged": true,
+    "finding": "Codex MCP permission uses an empty elicitation form; the previous validator required at least one property."
+  },
+  "correction": "Accept the existing bounded form contract with zero properties. Require an explicit content={} response and never copy session/always persistence metadata.",
+  "failure_history": [
+    "evidence/native-elicitation-core-source-import-failure.xml",
+    "evidence/native-elicitation-core-package-command-error.log"
+  ],
+  "failure_corrections": [
+    "The first source test invocation imported an older user-installed Core; explicitly selecting this checkout's src fixed collection.",
+    "The wheel verifier requires --artifact-dir; the corrected invocation passed."
+  ],
+  "package_verification": "evidence/native-elicitation-core-package.log",
+  "pip_checks": [
+    "evidence/native-elicitation-core-install.log",
+    "evidence/native-elicitation-install-normal.log",
+    "evidence/native-elicitation-install-isolated.log"
+  ],
+  "runners": [
+    "run_native_elicitation_core_installed.py",
+    "run_native_elicitation_installed.py",
+    "run_real_native_elicitation.py"
+  ],
+  "limitations": [
+    "The normal and no-Connector 83-case suites overlap.",
+    "Provider journeys run on Windows through the automatic embedded owner. Nexus/Core are installed wheels; the Connector application is absent.",
+    "The Server release gate is test-overridden; native qualification is unchanged. These are positive local journeys, not release acceptance.",
+    "Remote native capture, explicit application observation, negative/input/recovery journeys, UI/CLI, migration and remaining fixed-plan acceptance are pending.",
+    "Preexisting UI asset changes are excluded from these commits and UI acceptance.",
+    "The Pi journey passed in 360.83 seconds; this does not establish a performance target.",
+    "M08 and G0-G3 remain open."
+  ],
+  "milestone_complete": false
+}

@@ -1,14 +1,14 @@
 {
-  "state": "canonical_decisions_embedded_claude_verified_codex_remote_pending",
-  "core_version": "0.2.41.dev0",
-  "core_commit": "6cf2ecc",
+  "state": "local_pi_codex_claude_verified_remote_native_capture_pending",
+  "core_version": "0.2.42.dev0",
+  "core_commit": "c7aa63d",
   "artifact": {
-    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\dist\\nexus_connector_core-0.2.41.dev0-py3-none-any.whl",
-    "sha256": "d524686df61b85f4cc284d6bc16b0f2525a9a5e6974b7213676e2eb8017fe1a7",
-    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k"
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-elicitation-core-exybqmms\\dist\\nexus_connector_core-0.2.42.dev0-py3-none-any.whl",
+    "sha256": "9f94903b8b31ba041df8fac42b722ecfce3ff8b26af0e82a6e41afc426fec552",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-elicitation-core-exybqmms"
   },
   "installed_tests": {
-    "tests": 54,
+    "tests": 75,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -17,12 +17,12 @@
   "package_verification": true,
   "consumers": {
     "nexus": {
-      "commit": "dfa48d5",
-      "core_pin": "0.2.41.dev0"
+      "commit": "75f1af5",
+      "core_pin": "0.2.42.dev0"
     },
     "connector": {
-      "commit": "ab6bfaf",
-      "core_pin": "0.2.41.dev0"
+      "commit": "a308cf6",
+      "core_pin": "0.2.42.dev0"
     }
   },
   "changes": [
@@ -33,14 +33,15 @@
     "Nexus and Connector adopt the same Core 0.2.41 wheel; installed regressions passed.",
     "Canonical operator CAS, client intent replay and one transactional decision/outbox operation.",
     "Bounded input producer with loss refusal and exact inline wire reconstruction.",
-    "Embedded capture and application under explicit HITL lease actions; actual Claude journey passed with three operator decisions."
+    "Embedded capture and application under explicit HITL lease actions; actual Claude journey passed with three operator decisions.",
+    "Observed and corrected Codex MCP empty elicitation forms; explicit one-call input remains mandatory.",
+    "Actual installed Pi, Codex and Claude local handoff journeys passed on the same Nexus/Core wheels without Connector."
   ],
   "remaining": [
     "Enable remote native capture from applied lease authority.",
-    "Observe and implement the actual Codex MCP permission request.",
     "Complete explicit native observation, sensitive input, rejection, replay and recovery acceptance.",
     "Complete UI/CLI decisions and races, migration and the remaining fixed-plan milestones."
   ],
   "milestone_complete": false,
-  "consumer_evidence": "test_runs_20260930_native_decisions.json"
+  "consumer_evidence": "test_runs_20260930_native_elicitation.json"
 }
