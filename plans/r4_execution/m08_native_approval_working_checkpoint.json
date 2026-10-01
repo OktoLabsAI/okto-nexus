@@ -1,5 +1,5 @@
 {
-  "state": "core_published_consumers_pending",
+  "state": "core_adopted_request_ingress_published_decisions_pending",
   "core_version": "0.2.41.dev0",
   "core_commit": "6cf2ecc",
   "artifact": {
@@ -17,25 +17,28 @@
   "package_verification": true,
   "consumers": {
     "nexus": {
-      "commit": "a4c6399",
-      "core_pin": "0.2.40.dev0"
+      "commit": "49b2422",
+      "core_pin": "0.2.41.dev0"
     },
     "connector": {
-      "commit": "67f2ea0",
-      "core_pin": "0.2.40.dev0"
+      "commit": "ab6bfaf",
+      "core_pin": "0.2.41.dev0"
     }
   },
   "changes": [
     "Native operational proposals are copied from the adapter correlation port before display redaction, bounded and frozen.",
     "Uncorrelated native payloads cannot install pending approval authority.",
-    "Claude MCP calls can be classified for explicit decisions; appended MCP/model arguments retain the stdio permission channel."
+    "Claude MCP calls can be classified for explicit decisions; appended MCP/model arguments retain the stdio permission channel.",
+    "Nexus commits immutable operational requests and redacted display with contiguous event ACKs; typed ID namespaces, duplicate/conflict checks, fixed expiry, terminal and stale generation handling.",
+    "Nexus and Connector adopt the same Core 0.2.41 wheel; installed regressions passed."
   ],
   "remaining": [
-    "Adopt Core 0.2.41 with operational/display separation in both consumers.",
-    "Persist canonical R4 approval requests; use authenticated operator CAS and one outbox operation for each decision/input.",
+    "Confirm canonical operator decisions with authentication, CAS, client intent replay and exactly one outbox operation.",
     "Compose native approval capture and dispatch in embedded/remote hosts under canonical lease authority.",
+    "Retain sensitive input only in the owned producer with bounded TTL and explicit AUTHORIZED_INPUT_UNAVAILABLE after loss.",
     "Observe the actual Codex MCP permission request and validate its native response mapping.",
     "Repeat real local and remote journeys, including positive/negative decisions, cancellation, replay and sensitive input retention."
   ],
-  "milestone_complete": false
+  "milestone_complete": false,
+  "consumer_evidence": "test_runs_20260930_native_requests.json"
 }

@@ -1,8 +1,12 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Transactional native request ingress and Core adoption - September 30, 2026
+
+Nexus 49b2422 and Connector ab6bfaf adopt Core 0.2.41 (6cf2ecc). [M08 ingress increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) persists intact operational proposals separately from redacted display, with scoped typed IDs, replay/conflict handling, fixed expiry and atomic event ACKs. Installed regressions passed 55 Nexus cases in each overlapping normal/no-Connector campaign and 45 Connector cases; pip checks passed. Initial inventory-version mismatch failures are retained. Operator CAS, native application, input retention and real Codex/Claude reruns remain pending. M08 and release gates remain open.
+
 ## Operational native proposals and Claude MCP permissions - September 30, 2026
 
-[Core increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) published at 6cf2ecc / 0.2.41.dev0 separates the adapter-correlated operational proposal from its redacted display and prevents uncorrelated native payloads from creating approval authority. Claude MCP permission classification and stdio channel composition are covered. Clean package checks, 54 installed Core tests and pip check passed with both applications absent. Nexus/Connector remain on Core 0.2.40 pending tested adoption and canonical native decision integration. M08 and release gates remain open.
+[Core increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) published at 6cf2ecc / 0.2.41.dev0 separates the adapter-correlated operational proposal from its redacted display and prevents uncorrelated native payloads from creating approval authority. Claude MCP permission classification and stdio channel composition are covered. Clean package checks, 54 installed Core tests and pip check passed with both applications absent. At this Core-only publication, Nexus/Connector remained on 0.2.40; the subsequent adoption is recorded above. Canonical native decision integration remains pending. M08 and release gates remain open.
 
 ## Selected version observation and opening MCP handshake - September 30, 2026
 
