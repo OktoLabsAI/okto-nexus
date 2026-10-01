@@ -10,10 +10,7 @@ import time
 
 import httpx
 import pytest
-import uvicorn
 
-from nexus_connector_core import R4_PREVIEW_REVISION
-from okto_nexus.adapters.inbound.http import connections_v1, executor_link, runtime_v1
 from okto_nexus.adapters.inbound.http.app import build_app
 from okto_nexus.bootstrap.dependencies import bootstrap
 from okto_nexus.domain.base import iso_plus
@@ -39,15 +36,13 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     assert binary.is_file(), "The selected real provider executable is missing."
     monkeypatch.setenv("PATH", str(binary.parent) + os.pathsep + os.environ.get("PATH", ""))
     monkeypatch.delenv("OKTO_NEXUS_CONNECTOR_VAULT", raising=False)
-    info = executor_link.protocol_info()
-    qualified = {**info, "remote_execution_ready": True, "nxl_accepted": [R4_PREVIEW_REVISION]}
-    for module in (executor_link, connections_v1, runtime_v1):
-        monkeypatch.setattr(module, "protocol_info", lambda: qualified)
     deps = bootstrap({}, ["--home", str(tmp_path / "nexus"), "--feature-harness-integrations", "true",
                           "--feature-hitl", "true"])
     listener = socket.socket()
     listener.bind(("127.0.0.1", 0))
-    origin = "http://127.0.0.1:" + str(listener.getsockname()[1])
+    port = listener.getsockname()[1]
+    listener.close()
+    origin = "http://127.0.0.1:" + str(port)
     app = build_app(deps, runtime_owner_api_url=origin)
     headers = {}
     with deps.connection_factory.unit_of_work() as uow:
@@ -60,7 +55,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     store = StateStore(paths.state_file(root))
     report = dict(adapter=adapter, server_release_gate_override=True, native_qualification_override=False,
                   synthetic_native_factory=False, public_connector_cli=True, cli_subprocess=True, protected_os_vault=False,
-                  topology="Single Windows host; actual loopback HTTP/WSS; Server and daemon owners.")
+                  topology="Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.")
     def checkpoint(phase):
         report["phase"] = phase
         destination = os.environ.get("OKTO_NEXUS_REAL_CONNECTOR_REPORT")
@@ -68,10 +63,50 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
             Path(destination + "-" + adapter + "-progress.json").write_text(
                 json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
+    if os.environ.get("OKTO_NEXUS_PI_STREAM_DIAGNOSTIC") == "1" and adapter == "pi_rpc":
+        import traceback
+        from nexus_connector_core.runtime import LocalRuntimeCore
+        from okto_nexus_connector.services import launch_configuration
+        from okto_nexus_connector.transport.native_actions import RefreshingNativeActionBridge
+        report["stream_diagnostic"] = True
+        original_loss = LocalRuntimeCore._record_stream_loss
+        original_resolve = launch_configuration._resolve
+        original_invoke = RefreshingNativeActionBridge.invoke
+        async def observed_loss(runtime, session, binding):
+            error = sys.exception()
+            report.setdefault("stream_failures", []).append(dict(
+                exception_type=type(error).__name__ if error is not None else "unexpected_eof",
+                code=getattr(error, "code", None),
+                frames=[dict(file=Path(frame.filename).name, function=frame.name, line=frame.lineno)
+                        for frame in traceback.extract_tb(error.__traceback__)] if error is not None else []))
+            checkpoint("native_stream_loss")
+            return await original_loss(runtime, session, binding)
+        def observed_resolve(*args, **kwargs):
+            started = time.monotonic()
+            try:
+                return original_resolve(*args, **kwargs)
+            finally:
+                report.setdefault("selection_check_seconds", []).append(time.monotonic() - started)
+        async def observed_invoke(bridge, request, context):
+            started = time.monotonic()
+            outcome = "returned"
+            try:
+                return await original_invoke(bridge, request, context)
+            except BaseException as error:
+                outcome = type(error).__name__ + ":" + str(getattr(error, "code", ""))
+                raise
+            finally:
+                report.setdefault("native_bridge_calls", []).append(dict(
+                    seconds=time.monotonic() - started, outcome=outcome))
+        monkeypatch.setattr(LocalRuntimeCore, "_record_stream_loss", observed_loss)
+        monkeypatch.setattr(launch_configuration, "_resolve", observed_resolve)
+        monkeypatch.setattr(RefreshingNativeActionBridge, "invoke", observed_invoke)
     async def run():
-        server = uvicorn.Server(uvicorn.Config(app, log_level="error", access_log=False,
-                                               timeout_graceful_shutdown=5))
-        serving = asyncio.create_task(server.serve(sockets=[listener]))
+        server = await asyncio.create_subprocess_exec(
+            sys.executable, "-I", str(Path(__file__).with_name("real_provider_server.py")),
+            "--home", str(tmp_path / "nexus"), "--port", str(port),
+            stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL)
         daemon = daemon_task = None
         async with httpx.AsyncClient(base_url=origin, timeout=30, trust_env=False) as http:
             async def cli(group, *words):
@@ -98,9 +133,14 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 return response.json()
             try:
                 async with asyncio.timeout(120):
-                    while not server.started:
-                        if serving.done():
-                            await serving
+                    while True:
+                        assert server.returncode is None, "The Server exited before readiness."
+                        try:
+                            ready = await http.get("/v1/connections/protocol")
+                            if ready.status_code == 200:
+                                break
+                        except httpx.ConnectError:
+                            pass
                         await asyncio.sleep(.05)
                 monkeypatch.setenv("OKTO_REAL_CONNECTOR_IDENTITY", headers["subject"]["Authorization"][7:])
                 imported = await cli("identity", "add", "--server", origin, "--alias", "subject",
@@ -286,11 +326,26 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                                     vault.resolve(handle)
                             report["campaign_credentials_removed"] = True
                 finally:
-                    server.should_exit = True
-                    await asyncio.wait_for(serving, 45)
-                    listener.close()
-                    destination = os.environ.get("OKTO_NEXUS_REAL_CONNECTOR_REPORT")
-                    if destination:
-                        checkpoint("finished")
-                        Path(destination + "-" + adapter + ".json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+                    try:
+                        if server.returncode is None:
+                            try:
+                                server.stdin.write(b"stop\n")
+                                await server.stdin.drain()
+                            except (BrokenPipeError, ConnectionResetError):
+                                pass
+                            try:
+                                await asyncio.wait_for(server.wait(), 45)
+                            except TimeoutError:
+                                server.kill()
+                                await server.wait()
+                                report["server_forced_stop"] = True
+                                raise
+                        report["server_exit_code"] = server.returncode
+                        if report.get("completed"):
+                            assert server.returncode == 0
+                    finally:
+                        destination = os.environ.get("OKTO_NEXUS_REAL_CONNECTOR_REPORT")
+                        if destination:
+                            checkpoint("finished")
+                            Path(destination + "-" + adapter + ".json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     asyncio.run(run())
