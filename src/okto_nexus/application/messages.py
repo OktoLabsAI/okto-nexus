@@ -243,8 +243,9 @@ class MessageService:
     def create_message(
         self,
         *,
-        project_root: Any,
+        project_root: Any = None,
         from_agent_id: Any,
+        workspace_id: Any = None,
         subject: Any = None,
         body: Any = None,
         channel_id: Any = None,
@@ -292,7 +293,15 @@ class MessageService:
         exactly the failure mode this flag surfaces (check it if you expected
         an existing workspace).
         """
-        workspace_id, root_realpath = self._resolve_workspace(project_root)
+        logical_workspace = workspace_id is not None
+        if logical_workspace:
+            if (project_root is not None or type(workspace_id) is not str
+                    or not 1 <= len(workspace_id) <= 160 or not workspace_id.isprintable()):
+                raise OktoNexusError(ErrorCode.VALIDATION_ERROR,
+                    "Select exactly one project_root or existing workspace_id.", {})
+            root_realpath = None
+        else:
+            workspace_id, root_realpath = self._resolve_workspace(project_root)
         now = self._clock.now_iso()
         runtime_context = _runtime_context
         if runtime_context is None and self._runtime_context_provider:
@@ -333,6 +342,8 @@ class MessageService:
             prepared_runtime_artifact = self._runtime_results.prepare(_runtime_result_id, approved=_approved_execution)
 
         with self._send_uow(workspace_id=workspace_id, agent_id=from_agent_id) as uow:
+            if logical_workspace and self._workspaces.get(uow, workspace_id) is None:
+                raise OktoNexusError(ErrorCode.NOT_FOUND, "The logical workspace was not found.", {})
             if _runtime_result_id:
                 if self._runtime_results is None or from_session_id or session_secret:
                     raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "Invalid runtime result publication context.", {})
@@ -494,6 +505,7 @@ class MessageService:
                         policy_id=verdict.policy.policy_id,
                         kwargs={
                             "project_root": root_realpath,
+                            **({"workspace_id": workspace_id} if logical_workspace else {}),
                             "from_agent_id": from_agent_id,
                             "subject": subject,
                             "body": body,

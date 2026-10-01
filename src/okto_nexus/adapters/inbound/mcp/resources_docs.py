@@ -125,9 +125,14 @@ add_resource(
     slug="tool-docs/messages",
     name="Tool docs - messages & channels",
     description="Full reference for message_create / channel_create / channel_list and the migrated message_get/list/wait shims.",
-    version="4",
+    version="5",
     body="""\
 # message_create
+Select either ``project_root`` or ``workspace_id``. An explicit ``workspace_id``
+must already exist; it requires no local path and never creates a workspace.
+Supplying both selectors is rejected. All message permissions, audience rules,
+channel/parent scope checks and approval requirements apply to either selector.
+
 Persist a message and emit ``message.created`` in one transaction. The response
 IS your delivery confirmation: ``recipients`` names exactly who received it in
 their inbox (the fan-out commits atomically with the send) and

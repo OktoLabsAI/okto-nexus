@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 logical message workspace - October 1, 2026
+
+Installed verification: **128 distinct passes**, plus **3 architecture checks**. Public MCP message_create accepts an existing workspace_id without resolving a Server-local path, rejects competing/unknown selectors and preserves logical selection through approval re-execution. A new R4 logical workspace reaches canonical conversation delivery/Core. See [scope](M12_NS15_03_WORKSPACE.md) and [manifest](test_runs_20261001_ns15_03_workspace.json). Mixed endpoint selection parity, managed handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.
+
 ## NS15.03 canonical conversation delivery - October 1, 2026
 
 Installed verification: **200 distinct passes**, plus **3 architecture checks**. Existing message/push claims now join R4 open/turn admission atomically, with sender authority revalidation, serial delivery and authenticated receipt projection. Schema 094 preserves logical identity and historical native foreign keys. See [scope](M12_NS15_03_DELIVERY.md) and [manifest](test_runs_20261001_ns15_03_delivery.json). Path-free message selection, mixed endpoint selection parity, managed handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.

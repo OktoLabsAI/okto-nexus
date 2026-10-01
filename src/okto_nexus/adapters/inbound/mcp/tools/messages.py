@@ -287,10 +287,11 @@ def register(server: Any, deps: Any) -> None:
     @server.tool()
     @tool_envelope
     def message_create(
-        project_root: Annotated[str, Field(description=_P_ROOT)],
         from_agent_id: Annotated[str, Field(description=_P_FROM_AGENT)],
         subject: Annotated[str, Field(description=_P_SUBJECT)],
         body: Annotated[str, Field(description=_P_BODY)],
+        project_root: Annotated[str | None, Field(description=_P_ROOT)] = None,
+        workspace_id: Annotated[str | None, Field(description="Existing logical workspace ID. Select this or project_root, never both.")] = None,
         channel_id: Annotated[str | None, Field(description=_P_CHANNEL)] = None,
         from_session_id: Annotated[
             str | None, Field(description=_P_FROM_SESSION)
@@ -307,6 +308,7 @@ def register(server: Any, deps: Any) -> None:
         require_json_object_param("target", target)
         return service.create_message(
             project_root=project_root,
+            workspace_id=workspace_id,
             from_agent_id=from_agent_id,
             subject=subject,
             body=body,

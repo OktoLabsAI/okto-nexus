@@ -40,8 +40,9 @@ incerteza preservada e restore combinado no binário HTTP atual. A próxima
 fronteira é NS15.03: abertura explícita, connect, comandos e leituras MCP/REST
 de sessões canônicas, incluindo abertura por connection key com autoridade
 durável, descoberta, configuração, seleção implícita local e boot aprovado, já usam R4/Core;
-delivery conversacional já liga claim e admissão R4 atomicamente. Completar
-handoffs, seleção de workspace/endpoint e projeção de resultados/eventos antes de retirar os
+delivery conversacional já liga claim e admissão R4 atomicamente, incluindo
+seleção explícita de workspace lógico sem caminho local. Completar
+handoffs, paridade de seleção de endpoints e projeção de resultados/eventos antes de retirar os
 loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
