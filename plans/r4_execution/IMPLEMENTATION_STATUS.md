@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-14-02 authority uncertainty and lost revoke ACK — October 1, 2026
+
+Core 18e1727 / 0.2.51.dev0 recovers a committed R4 revoke acknowledgement only after comparing the complete durable fence row, without repeating CAS. Connector 211be74 and Nexus 901fd09 pin the identical wheel. Final installed results: 43 Core, 53 Connector and 36 Nexus cases passed, including four normative NS14.02 variants and NS14.03. See [scope and defect](M11_NS14_02_AUTHORITY.md) and [manifest](test_runs_20261001_ns14_02.json). TR4-14-02 passes at unit_contract; NS14.01 and full task/platform acceptance remain open. No release gate closed.
+
 ## TR4-14-03 normative combined recovery — October 1, 2026
 
 The required test_ns14.py::test_ns14_03 now passes on the unchanged final Core 0.2.50 / Connector / Nexus installed tuple. It combines two runtimes, late native open, blocked close and blocked release; proves bounded public response, independent force, retained journals/owner, refused new start and recovery without duplicate opening or force. See [criteria and scope](M11_NS14_03_COMBINED.md) and [manifest](test_runs_20261001_ns14_03.json). The scenario is passed at core_fault_injection on Windows; NS14.03 remains partial because NS14.02 and broader lifecycle/platform acceptance are open. No gate closed.

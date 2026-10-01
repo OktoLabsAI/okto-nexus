@@ -1345,14 +1345,23 @@
     },
     "NS14.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_02",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_02[newer_generation]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[rollback]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[unknown]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[revoke_ack_lost]"
+      ],
+      "effective_test_command": "Run plans/r4_execution/run_ns14_02_installed.py against its verified final tuple.",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-02"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_02.json"
+      ],
+      "remaining_acceptance": "TR4-14-02 passed at unit_contract on the installed Windows tuple. NS14.01 and full online-surface rotation/revocation, remote expiry and final platform/provider acceptance remain open."
     },
     "NS14.03": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_03",
@@ -1393,9 +1402,10 @@
         "plans/r4_execution/test_runs_20261001_server_shutdown.json",
         "plans/r4_execution/test_runs_20261001_server_signal.json",
         "plans/r4_execution/test_runs_20261001_shutdown_facts.json",
-        "plans/r4_execution/test_runs_20261001_ns14_03.json"
+        "plans/r4_execution/test_runs_20261001_ns14_03.json",
+        "plans/r4_execution/test_runs_20261001_ns14_02.json"
       ],
-      "remaining_acceptance": "TR4-14-03 combined fault injection passed on the installed Windows tuple. NS14.02 dependency remains unverified; broader external Windows console/Linux signals, authorization-store outage, explicit force-exit qualification and final platform/provider acceptance remain open."
+      "remaining_acceptance": "TR4-14-03 passed and was rerun on Core 0.2.51. The NS14.02 normative unit scenario now passes, but its broader task and NS14.01 dependency remain partial/unverified; external signals, authorization-store outage, force-exit and platform/provider acceptance remain open."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",
@@ -2387,9 +2397,17 @@
         "NS14.02"
       ],
       "layer": "unit_contract",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_02[newer_generation]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[rollback]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[unknown]",
+        "tests/execution_r4/test_ns14.py::test_ns14_02[revoke_ack_lost]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_02.json"
+      ]
     },
     "TR4-14-03": {
       "task_ids": [
