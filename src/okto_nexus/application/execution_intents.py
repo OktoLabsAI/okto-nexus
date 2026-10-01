@@ -110,6 +110,13 @@ def resolve_execution_intent(
         validate_execution_target(binding["adapter_id"], action, target)
         containment = action in {"turn.interrupt", "runtime.close"}
         blockers = []
+        if access is not None:
+            try:
+                access.require_admission(action)
+            except OktoNexusError as error:
+                if error.details.get("reason") != "RUNTIME_DRAINING":
+                    raise
+                blockers.append("runtime_draining")
         if not remote_ready:
             blockers.append("remote_execution_unavailable")
         if (binding["protocol"] != "nxl-r4" or

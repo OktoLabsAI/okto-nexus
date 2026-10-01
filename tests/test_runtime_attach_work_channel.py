@@ -206,7 +206,8 @@ def test_external_work_over_real_attach_socket_and_authenticated_nexus(runtime, 
     os.kill(pid, 0)  # Nexus never owned or terminated this external fixture.
 
 
-def test_external_work_can_return_after_native_detach_and_quarantine(runtime):
+@pytest.mark.parametrize("draining", [False, True])
+def test_external_work_can_return_after_native_detach_and_quarantine(runtime, draining):
     deps, _, _, _, _, _ = runtime
     admission = admitted(runtime)
     operation = admission[-1]
@@ -216,6 +217,8 @@ def test_external_work_can_return_after_native_detach_and_quarantine(runtime):
     # The separate canonical Nexus session and its proof remain active.
     with deps.connection_factory.unit_of_work() as uow:
         uow.connection.execute("UPDATE agent_endpoints SET health='quarantined',health_reason='owner_lost' WHERE endpoint_id=?", (operation["endpoint_id"],))
+    if draining:
+        deps.runtime_admission_fence.close()
     complete_fixture_work(runtime, "complete", admission)
 
 

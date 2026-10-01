@@ -95,6 +95,8 @@ def submit_execution_operation(
         elif prior is not None:
             reused = True
         else:
+            if access is not None:
+                access.require_admission(resolved["semantic_intent"]["action"])
             if (not remote_ready or not resolved["can_submit"] or
                     resolved["blockers"]):
                 raise OktoNexusError(ErrorCode.CONFLICT,

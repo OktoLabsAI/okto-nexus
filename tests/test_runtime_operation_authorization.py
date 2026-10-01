@@ -73,3 +73,28 @@ def test_revoked_actor_cannot_recover_cached_control_reply(runtime, verb):
     assert peers[0].sent == calls
     with deps.connection_factory.unit_of_work(write=False) as uow:
         assert uow.connection.execute("SELECT count(*) FROM runtime_commands").fetchone()[0] == count
+
+
+@pytest.mark.parametrize("surface", ["rest", "mcp"])
+def test_shutdown_fence_rejects_turns_but_allows_authorized_close(runtime, surface):
+    deps, client, _, peers, operator, _ = runtime
+    sid = open_rest(runtime).json()["data"]["session_id"]
+    before = list(peers[0].sent)
+    deps.runtime_admission_fence.close()
+    body = {"payload": {"text": "Do not execute"}, "idempotency_key": "shutdown-denied"}
+    if surface == "rest":
+        response = client.post(f"/api/v1/harness/sessions/{sid}/send",
+            headers={"x-api-key": operator}, json=body)
+        assert response.status_code == 409
+        denied = response.json()
+    else:
+        denied = tool(client, operator, "harness_send", {"session_id": sid, **body})
+    assert not denied["ok"] and denied["error"]["code"] == "CONFLICT", denied
+    with deps.connection_factory.unit_of_work(write=False) as uow:
+        assert not uow.connection.execute(
+            "SELECT 1 FROM runtime_commands WHERE runtime_session_id=?", (sid,)).fetchone()
+    assert peers[0].sent == before
+    closed = tool(client, operator, "harness_close",
+        {"session_id": sid, "idempotency_key": "shutdown-authorized-close"})
+    assert closed["ok"], closed
+    wait_operation(runtime, closed["data"]["operation_id"], lambda row: row["state"] == "DONE")

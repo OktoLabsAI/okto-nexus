@@ -82,7 +82,8 @@ from okto_nexus.errors import ErrorCode, OktoNexusError
 def build_access_service(deps):
     return RuntimeAccessService(connection_factory=deps.connection_factory, agents=deps.repos.agents,
         endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(), config=deps.config, clock=deps.clock,
-        registry=build_connector_factories(deps))
+        registry=build_connector_factories(deps),
+        admission_fence=deps.runtime_admission_fence)
 
 
 def request_context():

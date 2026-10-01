@@ -235,6 +235,7 @@ def test_lifespan_retains_embedded_owner_until_pending_recovery(tmp_path, monkey
                     time.sleep(.01)
                 report = app.state.embedded_shutdown_report
                 assert report["state"] == "DRAINING_PENDING"
+                assert deps.runtime_admission_fence.closed
                 assert len(owner.host._runtime_tasks) == 1
                 with deps.connection_factory.unit_of_work(write=False) as uow:
                     assert owner.inventory.dispatcher.repo.owns(uow,

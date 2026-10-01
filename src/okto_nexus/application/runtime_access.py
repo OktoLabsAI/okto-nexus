@@ -16,10 +16,15 @@ def denied():
 
 
 class RuntimeAccessService:
-    def __init__(self, *, connection_factory, agents, endpoints, grants, config, clock, registry=None):
+    def __init__(self, *, connection_factory, agents, endpoints, grants, config, clock, registry=None, admission_fence=None):
         self.cf, self.agents, self.endpoints, self.grants = connection_factory, agents, endpoints, grants
         self.config, self.clock = config, clock
         self.registry = registry
+        self.admission_fence = admission_fence
+
+    def require_admission(self, action, *, returning_external_work=False):
+        if self.admission_fence is not None:
+            self.admission_fence.require(action, returning_external_work=returning_external_work)
 
     @staticmethod
     def _operator(context, actor):
@@ -50,6 +55,7 @@ class RuntimeAccessService:
     def authorize(self, context, *, action="admin", endpoint_id=None, session_id=None,
                   represented_agent_id=None, workspace_id=None, substrate=None, consume=False, uow=None, check_budget=True,
                   audit=True, _returning_external_work=False):
+        self.require_admission(action, returning_external_work=_returning_external_work)
         now, allowed, selected = self.clock.now_iso(), False, None
         with (nullcontext(uow) if uow is not None else self.cf.unit_of_work()) as uow:
             actor = self.agents.get(uow, context.actor_agent_id) if context.actor_agent_id else None

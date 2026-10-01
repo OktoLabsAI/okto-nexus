@@ -11,6 +11,7 @@ import sys
 from dataclasses import dataclass, field
 from typing import Any, Mapping
 
+from okto_nexus.application.runtime_admission_fence import RuntimeAdmissionFence
 from okto_nexus.application.approvals import ApprovalService, seed_operator_agent
 from okto_nexus.application.artifacts import externalize_legacy_artifacts
 from okto_nexus.application.capabilities import seed_capability_catalog
@@ -103,6 +104,7 @@ class Deps:
     # default; when enabled, adapters record bounded metadata only.
     telemetry: TelemetryPort | None = None
     native_decisions: Any = None
+    runtime_admission_fence: RuntimeAdmissionFence = field(default_factory=RuntimeAdmissionFence)
 
 
 def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:

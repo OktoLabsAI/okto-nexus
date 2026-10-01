@@ -610,6 +610,7 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
             async with mcp_server.session_manager.run():
                 yield
         finally:
+            deps.runtime_admission_fence.close()
             embedded_shutdown_error: Exception | None = None
             if embedded_dispatch is not None:
                 try:

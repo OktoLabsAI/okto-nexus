@@ -12,7 +12,8 @@ def build_execution_access(deps):
     return RuntimeAccessService(
         connection_factory=deps.connection_factory, agents=deps.repos.agents,
         endpoints=SqliteEndpointRepo(), grants=SqliteRuntimeGrantRepo(),
-        config=deps.config, clock=deps.clock)
+        config=deps.config, clock=deps.clock,
+        admission_fence=deps.runtime_admission_fence)
 
 
 class ExecutionToolDependencies:
