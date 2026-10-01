@@ -63,7 +63,7 @@
   "checks": {
     "installed_packages": "All three wheels compared byte-for-byte to installed packages; Nexus non-static source compared to wheel",
     "plan_validation": "PASS_DOCUMENT_COVERAGE_ONLY",
-    "diff_check": "passed"
+    "diff_check": "Runtime/test code passed; six trailing-space diagnostics in preserved initial failure XML only (raw evidence retained)."
   },
   "limitations": [
     "Synthetic discovery candidate; no provider qualification",
@@ -82,5 +82,6 @@
     "plans/r4_execution/evidence/migration-resume-source.xml": "9d55caa0235c0fcc1ef8fd5fd74647891d3c1d2e949e61a9c106f7f4d4b1f822",
     "plans/r4_execution/M12_MIGRATION_RESUME.md": "1fc3adbe86c8553f2f2869730f5f295eb9c46f921389c8549ddd0b9e69742809",
     "plans/r4_execution/run_migration_resume_installed.py": "09ca76fbeca58e78d024ece22786b5279b81c38cae58ad188ae6c626335a49c5"
-  }
+  },
+  "implementation_commit": "b6b955e89c78f406475c55414a7463a267991671"
 }
