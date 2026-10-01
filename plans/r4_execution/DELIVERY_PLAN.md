@@ -27,6 +27,13 @@ Cada marco abaixo define responsáveis, funcionalidades, testes e saída. O acom
 
 ## Roteiro operacional consolidado
 
+Checkpoint de execução de 1º de outubro: o incremento corrente de NS15.01/M12
+conclui a retomada do catálogo após adoção revisada de endpoint, com recibo
+transacional e validação do backup preservado. Ver [escopo e limites](M12_MIGRATION_RESUME.md)
+e [manifesto de testes](test_runs_20261001_migration_resume.json). A próxima
+fronteira de M12 é o aceite combinado de histórico legado e recuperação M0–M3,
+seguido de cutover/rollback; nenhum gate é encerrado por este incremento.
+
 Esta revisão atende à solicitação de estruturar a entrega total. O escopo de implementação continua sendo M00–M13, com os critérios detalhados abaixo e o backlog normativo preservado. A sequência de fechamento é:
 
 **M00 → M01 → M02 → M03 → M04 → {M05, M06 → M07} → M08 → {M09, M10, M11} → M12 → M13.**

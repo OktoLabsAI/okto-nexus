@@ -39,11 +39,17 @@ def load_backup_manifest(directory):
             raise ValueError("The migration backup inventory does not match its database.")
     finally:
         connection.close()
+    manifest["_backup_database"] = str(directory / "nexus.db")
     return manifest
 
 
 def require_preserved_baseline(conn, manifest):
     """Compare old columns, allowing additive R4 columns/tables after expansion."""
+    if conn.execute("SELECT 1 FROM sqlite_master WHERE name='execution_migration_map'").fetchone():
+        if conn.execute("SELECT 1 FROM execution_migration_map WHERE source=? AND state='BINDING_ADOPTED' LIMIT 1",
+                        (SOURCE,)).fetchone():
+            from .execution_migration_resume import require_adopted_baseline
+            return require_adopted_baseline(conn, manifest)
     for table, expected in manifest["inventory"]["tables"].items():
         columns = expected["columns"]
         digest, count = hashlib.sha256(), 0
@@ -80,12 +86,15 @@ def _backfill_catalog_batch(factory, manifest, *, batch_size=100):
         for table, key in TABLES:
             # Detect drift in a previously recorded row instead of silently
             # assigning the same ID to a different migration source.
-            for old in conn.execute("SELECT legacy_id,row_digest_before FROM execution_migration_map "
+            for old in conn.execute("SELECT legacy_id,row_digest_before,state FROM execution_migration_map "
                                     "WHERE source=? AND source_type=?", (SOURCE, table)):
+                if old["state"] == "BINDING_ADOPTED":
+                    continue  # The preserved-baseline check validated the adoption receipt.
                 row = conn.execute("SELECT * FROM "+table+" WHERE "+key+"=?", (old[0],)).fetchone()
                 if row is None or _row_digest(row) != old[1]:
                     raise ValueError("A previously migrated source row changed; review is required.")
-            rows = conn.execute("SELECT t.* FROM "+table+" t WHERE NOT EXISTS "
+            generated = _generated_profile_filter(table)
+            rows = conn.execute("SELECT t.* FROM "+table+" t WHERE "+generated+"NOT EXISTS "
                 "(SELECT 1 FROM execution_migration_map m WHERE m.source=? AND m.source_type=? "
                 "AND m.legacy_id=t."+key+") ORDER BY t."+key+" LIMIT ?",
                 (SOURCE, table, batch_size-processed)).fetchall()
@@ -112,7 +121,7 @@ def _backfill_catalog_batch(factory, manifest, *, batch_size=100):
                 processed += 1
             if processed == batch_size:
                 break
-        remaining = sum(conn.execute("SELECT COUNT(*) FROM "+table+" t WHERE NOT EXISTS "
+        remaining = sum(conn.execute("SELECT COUNT(*) FROM "+table+" t WHERE "+_generated_profile_filter(table)+"NOT EXISTS "
             "(SELECT 1 FROM execution_migration_map m WHERE m.source=? AND m.source_type=? "
             "AND m.legacy_id=t."+key+")", (SOURCE,table)).fetchone()[0] for table,key in TABLES)
     return {"status": "CATALOG_BACKFILL_COMPLETE" if not remaining else "CATALOG_BACKFILL_PENDING",
@@ -193,3 +202,11 @@ def require_idle_migration_owner(conn):
             expiry = datetime.fromisoformat(row[0].replace("Z", "+00:00"))
             if expiry.tzinfo is None or expiry > datetime.now(timezone.utc):
                 raise ValueError("Stop and drain the runtime owner before migrating execution policy.")
+
+
+def _generated_profile_filter(table):
+    if table != "runtime_profiles":
+        return ""
+    return ("NOT EXISTS (SELECT 1 FROM execution_migration_map a WHERE a.source='nexus-r4-catalog-v1' "
+            "AND a.source_type='agent_endpoints' AND a.state='BINDING_ADOPTED' "
+            "AND json_extract(a.canonical_ref,'$.adoption.profile_id')=t.profile_id) AND ")

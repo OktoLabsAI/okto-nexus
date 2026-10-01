@@ -49,3 +49,25 @@ def apply_migration(conn, *, proposal, expected, profile_id, alias, now):
         (expected["endpoint_id"],expected["source_digest"])).rowcount
     if changed != 1:
         raise OktoNexusError(ErrorCode.CONFLICT, "The migration record changed after review.", {})
+
+
+def record_adoption(conn, *, proposal):
+    def digest(row):
+        return hashlib.sha256(json.dumps(dict(row),sort_keys=True,separators=(",",":"),
+                                         ensure_ascii=True).encode()).hexdigest()
+    endpoint = conn.execute("SELECT * FROM agent_endpoints WHERE endpoint_id=?", (proposal["endpoint_id"],)).fetchone()
+    profile = conn.execute("SELECT * FROM runtime_profiles WHERE profile_id=?", (endpoint["profile_id"],)).fetchone()
+    binding = conn.execute("SELECT * FROM execution_bindings WHERE server_id=? AND binding_id=?",
+                           (proposal["server_id"],proposal["binding_id"])).fetchone()
+    row = conn.execute("SELECT canonical_ref FROM execution_migration_map WHERE source='nexus-r4-catalog-v1' "
+                       "AND source_type='agent_endpoints' AND legacy_id=? AND state='BINDING_ADOPTED'",
+                       (proposal["endpoint_id"],)).fetchone()
+    if row is None:
+        raise OktoNexusError(ErrorCode.CONFLICT, "The adoption record is unavailable.", {})
+    ref = json.loads(row[0])
+    ref["adoption"] = {"proposal_id":proposal["proposal_id"],"endpoint_digest":digest(endpoint),
+                      "profile_id":endpoint["profile_id"],"profile_digest":digest(profile) if profile else None,
+                      "binding_id":proposal["binding_id"],"binding_digest":digest(binding)}
+    conn.execute("UPDATE execution_migration_map SET canonical_ref=? WHERE source='nexus-r4-catalog-v1' "
+                 "AND source_type='agent_endpoints' AND legacy_id=?",
+                 (json.dumps(ref,sort_keys=True,separators=(",",":")),proposal["endpoint_id"]))

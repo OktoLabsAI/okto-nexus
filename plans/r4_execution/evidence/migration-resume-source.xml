@@ -1,0 +1,880 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="5" failures="1" skipped="0" tests="6" time="15.959" timestamp="2026-10-01T14:23:28.401561-03:00" hostname="Alienware_m15"><testcase classname="tests.execution_r4.test_migration_resume" name="test_migration_resumes_after_adoption_and_rejects_later_drift" time="2.717"><failure message="ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_migration_resumes_after_a0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E15C2A520&gt;
+request = &lt;FixtureRequest for &lt;Function test_migration_resumes_after_adoption_and_rejects_later_drift&gt;&gt;
+
+    def test_migration_resumes_after_adoption_and_rejects_later_drift(tmp_path, monkeypatch, request):
+        fixture = adopted_setup.__wrapped__(tmp_path,monkeypatch,request)
+&gt;       setup = next(fixture)
+                ^^^^^^^^^^^^^
+
+tests\execution_r4\test_migration_resume.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_binding_migration.py:37: in adopted_setup
+    yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E18AB2CF0&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</failure></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_reviewed_adoption_preserves_endpoint_and_disabled_policy" time="1.936"><error message="failed on setup with &quot;ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_reviewed_adoption_preserv0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E188EBCE0&gt;
+request = &lt;SubRequest 'adopted_setup' for &lt;Function test_reviewed_adoption_preserves_endpoint_and_disabled_policy&gt;&gt;
+
+    @pytest.fixture
+    def adopted_setup(tmp_path, monkeypatch, request):
+        original = local.app_for
+        def seeded(home):
+            deps, app = original(home)
+            root = tmp_path/"workspace"
+            workspace = resolve_workspace_id(str(root))
+            with deps.connection_factory.unit_of_work() as uow:
+                c=uow.connection
+                c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+                app.state.test_existing_keys = {"subject":app.state.auth.issue_key(uow,agent_id="subject")}
+                c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                          (workspace,str(root.resolve())))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES('legacy-profile','codex',?,'2026-10-01','2026-10-01')",
+                          (json.dumps({"command":"historical-command"}),))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
+                          "enabled,activation_state,public_config,created_at,updated_at) "
+                          "VALUES('legacy-endpoint','subject',?,'codex','legacy','legacy-profile',0,'denied',?,'2026-10-01','2026-10-01')",
+                          (workspace,json.dumps({"historical":True})))
+            backup=tmp_path/"migration-backup"
+            create_migration_backup(deps.config.db_path,backup)
+            assert migrate_execution_catalog(deps.config.db_path,backup)["status"]=="CATALOG_BACKFILL_COMPLETE"
+            app.state.test_legacy_workspace=workspace
+            return deps,app
+        monkeypatch.setattr(local,"app_for",seeded)
+&gt;       yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+
+tests\execution_r4\test_binding_migration.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E19296D50&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</error></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[endpoint]" time="1.861"><error message="failed on setup with &quot;ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_adoption_revalidates_sour0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E19270170&gt;
+request = &lt;SubRequest 'adopted_setup' for &lt;Function test_adoption_revalidates_source_and_legacy_session_after_review[endpoint]&gt;&gt;
+
+    @pytest.fixture
+    def adopted_setup(tmp_path, monkeypatch, request):
+        original = local.app_for
+        def seeded(home):
+            deps, app = original(home)
+            root = tmp_path/"workspace"
+            workspace = resolve_workspace_id(str(root))
+            with deps.connection_factory.unit_of_work() as uow:
+                c=uow.connection
+                c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+                app.state.test_existing_keys = {"subject":app.state.auth.issue_key(uow,agent_id="subject")}
+                c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                          (workspace,str(root.resolve())))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES('legacy-profile','codex',?,'2026-10-01','2026-10-01')",
+                          (json.dumps({"command":"historical-command"}),))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
+                          "enabled,activation_state,public_config,created_at,updated_at) "
+                          "VALUES('legacy-endpoint','subject',?,'codex','legacy','legacy-profile',0,'denied',?,'2026-10-01','2026-10-01')",
+                          (workspace,json.dumps({"historical":True})))
+            backup=tmp_path/"migration-backup"
+            create_migration_backup(deps.config.db_path,backup)
+            assert migrate_execution_catalog(deps.config.db_path,backup)["status"]=="CATALOG_BACKFILL_COMPLETE"
+            app.state.test_legacy_workspace=workspace
+            return deps,app
+        monkeypatch.setattr(local,"app_for",seeded)
+&gt;       yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+
+tests\execution_r4\test_binding_migration.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E18D6D950&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</error></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[mapping]" time="1.870"><error message="failed on setup with &quot;ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_adoption_revalidates_sour1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E18D4B130&gt;
+request = &lt;SubRequest 'adopted_setup' for &lt;Function test_adoption_revalidates_source_and_legacy_session_after_review[mapping]&gt;&gt;
+
+    @pytest.fixture
+    def adopted_setup(tmp_path, monkeypatch, request):
+        original = local.app_for
+        def seeded(home):
+            deps, app = original(home)
+            root = tmp_path/"workspace"
+            workspace = resolve_workspace_id(str(root))
+            with deps.connection_factory.unit_of_work() as uow:
+                c=uow.connection
+                c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+                app.state.test_existing_keys = {"subject":app.state.auth.issue_key(uow,agent_id="subject")}
+                c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                          (workspace,str(root.resolve())))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES('legacy-profile','codex',?,'2026-10-01','2026-10-01')",
+                          (json.dumps({"command":"historical-command"}),))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
+                          "enabled,activation_state,public_config,created_at,updated_at) "
+                          "VALUES('legacy-endpoint','subject',?,'codex','legacy','legacy-profile',0,'denied',?,'2026-10-01','2026-10-01')",
+                          (workspace,json.dumps({"historical":True})))
+            backup=tmp_path/"migration-backup"
+            create_migration_backup(deps.config.db_path,backup)
+            assert migrate_execution_catalog(deps.config.db_path,backup)["status"]=="CATALOG_BACKFILL_COMPLETE"
+            app.state.test_legacy_workspace=workspace
+            return deps,app
+        monkeypatch.setattr(local,"app_for",seeded)
+&gt;       yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+
+tests\execution_r4\test_binding_migration.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E19449BA0&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</error></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_adoption_revalidates_source_and_legacy_session_after_review[session]" time="1.839"><error message="failed on setup with &quot;ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_adoption_revalidates_sour2')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E19403F00&gt;
+request = &lt;SubRequest 'adopted_setup' for &lt;Function test_adoption_revalidates_source_and_legacy_session_after_review[session]&gt;&gt;
+
+    @pytest.fixture
+    def adopted_setup(tmp_path, monkeypatch, request):
+        original = local.app_for
+        def seeded(home):
+            deps, app = original(home)
+            root = tmp_path/"workspace"
+            workspace = resolve_workspace_id(str(root))
+            with deps.connection_factory.unit_of_work() as uow:
+                c=uow.connection
+                c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+                app.state.test_existing_keys = {"subject":app.state.auth.issue_key(uow,agent_id="subject")}
+                c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                          (workspace,str(root.resolve())))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES('legacy-profile','codex',?,'2026-10-01','2026-10-01')",
+                          (json.dumps({"command":"historical-command"}),))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
+                          "enabled,activation_state,public_config,created_at,updated_at) "
+                          "VALUES('legacy-endpoint','subject',?,'codex','legacy','legacy-profile',0,'denied',?,'2026-10-01','2026-10-01')",
+                          (workspace,json.dumps({"historical":True})))
+            backup=tmp_path/"migration-backup"
+            create_migration_backup(deps.config.db_path,backup)
+            assert migrate_execution_catalog(deps.config.db_path,backup)["status"]=="CATALOG_BACKFILL_COMPLETE"
+            app.state.test_legacy_workspace=workspace
+            return deps,app
+        monkeypatch.setattr(local,"app_for",seeded)
+&gt;       yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+
+tests\execution_r4\test_binding_migration.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E1B022780&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</error></testcase><testcase classname="tests.execution_r4.test_binding_migration" name="test_agent_cannot_adopt_legacy_endpoint" time="1.816"><error message="failed on setup with &quot;ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)&quot;">tmp_path = WindowsPath('C:/Users/jpamb/AppData/Local/Temp/pytest-of-jpamb/pytest-4512/test_agent_cannot_adopt_legacy0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021E1B051F50&gt;
+request = &lt;SubRequest 'adopted_setup' for &lt;Function test_agent_cannot_adopt_legacy_endpoint&gt;&gt;
+
+    @pytest.fixture
+    def adopted_setup(tmp_path, monkeypatch, request):
+        original = local.app_for
+        def seeded(home):
+            deps, app = original(home)
+            root = tmp_path/"workspace"
+            workspace = resolve_workspace_id(str(root))
+            with deps.connection_factory.unit_of_work() as uow:
+                c=uow.connection
+                c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+                app.state.test_existing_keys = {"subject":app.state.auth.issue_key(uow,agent_id="subject")}
+                c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
+                          (workspace,str(root.resolve())))
+                c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "
+                          "VALUES('legacy-profile','codex',?,'2026-10-01','2026-10-01')",
+                          (json.dumps({"command":"historical-command"}),))
+                c.execute("INSERT INTO agent_endpoints(endpoint_id,agent_id,workspace_id,adapter_id,protocol,profile_id,"
+                          "enabled,activation_state,public_config,created_at,updated_at) "
+                          "VALUES('legacy-endpoint','subject',?,'codex','legacy','legacy-profile',0,'denied',?,'2026-10-01','2026-10-01')",
+                          (workspace,json.dumps({"historical":True})))
+            backup=tmp_path/"migration-backup"
+            create_migration_backup(deps.config.db_path,backup)
+            assert migrate_execution_catalog(deps.config.db_path,backup)["status"]=="CATALOG_BACKFILL_COMPLETE"
+            app.state.test_legacy_workspace=workspace
+            return deps,app
+        monkeypatch.setattr(local,"app_for",seeded)
+&gt;       yield from local.local_setup.__wrapped__(tmp_path,monkeypatch,request)
+
+tests\execution_r4\test_binding_migration.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\execution_r4\test_local_realization.py:36: in local_setup
+    with TestClient(app, raise_server_exceptions=False) as client:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:697: in __enter__
+    portal.call(self.wait_startup)
+.venv\Lib\site-packages\anyio\from_thread.py:338: in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:732: in wait_startup
+    await receive()
+.venv\Lib\site-packages\starlette\testclient.py:723: in receive
+    self.task.result()
+C:\Python313\Lib\concurrent\futures\_base.py:449: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\concurrent\futures\_base.py:401: in __get_result
+    raise self._exception
+.venv\Lib\site-packages\anyio\from_thread.py:263: in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\starlette\testclient.py:713: in lifespan
+    await self.app(scope, self.stream_receive.receive, self.stream_send.send)
+.venv\Lib\site-packages\fastapi\applications.py:1162: in __call__
+    await super().__call__(scope, receive, send)
+.venv\Lib\site-packages\starlette\applications.py:90: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\errors.py:151: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\base.py:103: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\middleware\exceptions.py:49: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py:18: in __call__
+    await self.app(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:660: in __call__
+    await self.middleware_stack(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:669: in app
+    await self.lifespan(scope, receive, send)
+.venv\Lib\site-packages\starlette\routing.py:638: in lifespan
+    async with self.lifespan_context(app) as maybe_state:
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\fastapi\routing.py:225: in merged_lifespan
+    async with original_context(app) as maybe_original_state:
+               ^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\contextlib.py:214: in __aenter__
+    return await anext(self.gen)
+           ^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\adapters\inbound\http\app.py:604: in lifespan
+    await embedded_inventory.start()
+src\okto_nexus\bootstrap\embedded_inventory.py:59: in start
+    return await asyncio.shield(self._startup_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\okto_nexus\bootstrap\embedded_inventory.py:63: in _start
+    await self.refresh()
+src\okto_nexus\bootstrap\embedded_inventory.py:73: in refresh
+    return await asyncio.shield(self._refresh_task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;okto_nexus.bootstrap.embedded_inventory.EmbeddedInventoryOwner object at 0x0000021E15B7B410&gt;
+
+    async def _refresh_owned(self):
+&gt;       from nexus_connector_core import DiscoveryCancelled
+E       ImportError: cannot import name 'DiscoveryCancelled' from 'nexus_connector_core' (D:\Projetos\Techridy\okto_labs_okto_nexus\.venv\Lib\site-packages\nexus_connector_core\__init__.py)
+
+src\okto_nexus\bootstrap\embedded_inventory.py:76: ImportError</error></testcase></testsuite></testsuites>

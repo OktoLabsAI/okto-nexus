@@ -18,6 +18,10 @@ def adopted_setup(tmp_path, monkeypatch, request):
         with deps.connection_factory.unit_of_work() as uow:
             c=uow.connection
             c.execute("INSERT INTO agents(agent_id,created_at) VALUES('subject','2026-10-01')")
+            app.state.test_existing_keys = {
+                actor: app.state.auth.issue_key(uow, agent_id=actor)
+                for actor in ("operator", "subject")
+            }
             c.execute("INSERT INTO workspaces(workspace_id,root_realpath,created_at) VALUES(?,?,'2026-10-01')",
                       (workspace,str(root.resolve())))
             c.execute("INSERT INTO runtime_profiles(profile_id,adapter_id,config,created_at,updated_at) "

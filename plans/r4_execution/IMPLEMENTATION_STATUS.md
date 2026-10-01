@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.01 resume after reviewed adoption — October 1, 2026
+
+Installed verification: **62 passed**, plus **3 architecture checks**; eight directed cases overlap the installed suite. The current increment records transactional adoption receipts and validates preserved backup rows when resuming catalog migration. Repeated resume preserves legacy policy and skips generated profiles; changed resources, credentials, missing/incomplete receipts and a live owner refuse migration. See [scope](M12_MIGRATION_RESUME.md) and [verification manifest](test_runs_20261001_migration_resume.json). Full M0–M3 historical-job acceptance, M4 cutover/rollback and release gates remain open.
+
+
 ## NS15.01 reviewed endpoint adoption — October 1, 2026
 
 Nexus 811b597 adds operator-reviewed adopt_endpoint_id to canonical binding preparation. Apply preserves endpoint identity, disabled/denied state and the legacy profile, revalidating source/map/session authority. Installed campaign: **54 passed** across adoption and affected binding/migration regressions. See [scope](M12_MIGRATION_ADOPTION.md) and [manifest](test_runs_20261001_migration_adoption.json). Full phase resumption, normative legacy-history acceptance, cutover and release gates remain open.

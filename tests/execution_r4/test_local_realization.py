@@ -31,7 +31,8 @@ def local_setup(tmp_path, monkeypatch, request):
     with deps.connection_factory.unit_of_work() as uow:
         for actor in ("operator", "subject"):
             uow.connection.execute("INSERT OR IGNORE INTO agents(agent_id,created_at) VALUES (?,?)", (actor,deps.clock.now_iso()))
-            headers[actor] = {"Authorization":"Bearer " + app.state.auth.issue_key(uow,agent_id=actor)}
+            existing = getattr(app.state, "test_existing_keys", {})
+            headers[actor] = {"Authorization":"Bearer " + (existing.get(actor) or app.state.auth.issue_key(uow,agent_id=actor))}
     with TestClient(app, raise_server_exceptions=False) as client:
         owner = app.state.embedded_inventory_owner
         inventory = client.get(f"/v1/runtime/executors/{owner.key.executor_id}/inventory",headers=headers["operator"]).json()["snapshot"]

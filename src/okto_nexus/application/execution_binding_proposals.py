@@ -635,6 +635,9 @@ def apply_execution_binding(
                  proposal["candidate_ref"], proposal["inventory_revision"],
                  proposal["realization_ref"], proposal["realization_revision"]),
             )
+        if adoption is not None:
+            from .execution_binding_migration import record_adoption
+            record_adoption(conn, proposal=proposal)
         view = {
             "binding_id": proposal["binding_id"], "server_id": server_id,
             "executor_id": proposal["executor_id"],
