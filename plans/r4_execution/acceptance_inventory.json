@@ -1429,14 +1429,18 @@
         "tests/execution_r4/test_admission_capacity.py::test_productive_flood_keeps_control_reserve_and_replay",
         "tests/execution_r4/test_admission_capacity.py::test_initial_child_overflow_rolls_back_parent_and_session",
         "tests/execution_r4/test_admission_capacity.py::test_native_decision_capacity_refusal_is_atomic",
-        "tests/execution_r4/test_admission_capacity.py::test_two_requests_race_for_last_pending_slot"
+        "tests/execution_r4/test_admission_capacity.py::test_two_requests_race_for_last_pending_slot",
+        "tests/execution_r4/test_capacity_metrics.py::test_operator_metrics_count_pending_and_uncertain_reservations_without_ids",
+        "tests/execution_r4/test_capacity_metrics.py::test_nonoperator_keeps_existing_summary_without_global_runtime_gauges",
+        "tests/execution_r4/test_capacity_metrics.py::test_unavailable_storage_is_not_reported_as_zero_capacity"
       ],
       "evidence": [
         "plans/r4_execution/test_runs_20261001_auth_cache.json",
         "plans/r4_execution/test_runs_20261001_dispatch_capacity.json",
-        "plans/r4_execution/test_runs_20261001_admission_capacity.json"
+        "plans/r4_execution/test_runs_20261001_admission_capacity.json",
+        "plans/r4_execution/test_runs_20261001_capacity_metrics.json"
       ],
-      "notes": "Bounded cache/100k identity churn, dispatch quota recovery and atomic per-executor pending admission limits implemented. Latest installed increment: 62 Nexus R4 + 53 Connector + 4 migration/architecture passed. Normative combined flood/control measurement, sustained executor fairness and aggregate metrics remain open."
+      "notes": "Bounded cache/100k identity churn, retained dispatch costs, atomic pending admission budgets and operator-only fixed-cardinality gauges implemented. Latest installed increment: 16 R4 + 37 telemetry/auth/cache/architecture passed. Normative combined flood/control measurement and sustained executor fairness remain open."
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",
