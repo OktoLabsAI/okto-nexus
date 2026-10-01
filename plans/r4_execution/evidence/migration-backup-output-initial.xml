@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="3" time="0.466" timestamp="2026-10-01T13:27:01.998513-03:00" hostname="Alienware_m15"><testcase classname="test_migration_backup" name="test_backup_cli_preserves_committed_wal_snapshot_without_bootstrap" time="0.034"><failure message="json.decoder.JSONDecodeError: Extra data: line 1 column 277 (char 276)">tests\execution_r4\test_migration_backup.py:40: in test_backup_cli_preserves_committed_wal_snapshot_without_bootstrap
+    report = json.loads(output.getvalue())
+C:\Python313\Lib\json\__init__.py:346: in loads
+    return _default_decoder.decode(s)
+C:\Python313\Lib\json\decoder.py:348: in decode
+    raise JSONDecodeError("Extra data", s, end)
+E   json.decoder.JSONDecodeError: Extra data: line 1 column 277 (char 276)</failure></testcase><testcase classname="test_migration_backup" name="test_backup_cli_refuses_missing_or_invalid_source[missing]" time="0.004" /><testcase classname="test_migration_backup" name="test_backup_cli_refuses_missing_or_invalid_source[invalid]" time="0.006" /></testsuite></testsuites>

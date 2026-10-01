@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.01 M0 database backup — October 1, 2026
+
+Nexus 0f49510 adds the public admin backup command with a consistent WAL-inclusive SQLite snapshot, integrity check and count/digest inventory. Installed verification: **4 backup + 40 admin/architecture = 44 passed**. See [operator procedure and scope](M12_MIGRATION_BACKUP.md) and [manifest](test_runs_20261001_migration_backup.json). Core and Connector are unchanged. Resumable catalog/endpoint backfill, normative TR4-15-01 and all release gates remain open.
+
+
 ## TR4-14-05 Windows process crash — October 1, 2026
 
 Two installed cases passed: abrupt supervisor death before/after process-birth recording, real Job Object tree termination, a separate negative-control process alive, and retained uncertain journal receipt with idempotent replay. See [scope](M11_NS14_05_PROCESS_CRASH.md) and [manifest](test_runs_20261001_ns14_05.json). Product artifacts are unchanged. The normative scenario is qualified for Windows; Linux, additional NS14.05 scenarios and release gates remain open.

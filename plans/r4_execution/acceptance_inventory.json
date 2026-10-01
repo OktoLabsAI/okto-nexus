@@ -1471,11 +1471,19 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "implementation": "PARTIAL",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-15-01"
-      ]
+      ],
+      "supporting_nodeids": [
+        "tests/execution_r4/test_migration_backup.py::test_backup_cli_preserves_committed_wal_snapshot_without_bootstrap",
+        "tests/execution_r4/test_migration_backup.py::test_installed_cli_backs_up_complete_current_schema"
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_migration_backup.json"
+      ],
+      "notes": "M0 public consistent SQLite backup and digest/count inventory implemented; 44 installed tests passed. M2/M3 resumable backfill and normative TR4-15-01 remain open."
     },
     "NS15.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_02",
