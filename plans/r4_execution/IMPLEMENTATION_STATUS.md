@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Durable public binding prepare/apply - October 1, 2026
+
+Connector 2a52255 adds schema 10 binding intents, public prepare/apply with explicit reviewed hash and operator proof, stable retries after lost responses, scope revalidation and atomic local acknowledgment. Nexus 5d21a93 maps binding refusals to structured HTTP errors. Installed verification passed 224 Connector tests and 32 Nexus tests, including real loopback HTTP, operator approval and CLI subprocess show/list; pip check passed. [Evidence index](test_runs_20261001_binding_onboarding.json). The technical onboarding journey reaches APPLIED/BOUND without creating runtime sessions or outbox operations. Initial JSON-shape and HTTP error failures are retained. Core a061960 / 0.2.43 is unchanged. Next: canonical runtime CLI admission and reusable mapping, then actual remote Pi/Codex/Claude. Binding replacement/removal, remaining M03/M10 and all release gates remain open.
+
+
 ## Daemon-owned realization and public launch consent - October 1, 2026
 
 Connector 80f65e0 adds configure-launch and realize commands. Realization travels through authenticated local IPC, remains owned after observer cancellation, uses the daemon bootstrap under a rotation gate, checks the daemon inventory and persists/replays one local publication intent. Nexus 0a0eee5 returns structured realization refusals. Final installed verification passed 212 Connector tests, 31 Nexus integration/binding/local-realization tests, CLI subprocess checks and pip check. [Evidence index](test_runs_20261001_executor_onboarding.json). The real loopback journey seeds identity/vault and uses a harmless discovery candidate; it starts no provider and ends PENDING_APPROVAL. Initial producer, registration-counter and ticket-rotation failures are retained and corrected. Core a061960 / 0.2.43 is unchanged. Next: durable public binding prepare/apply and reusable runtime CLI mapping, then real remote Pi/Codex/Claude. No milestone or release gate closes.

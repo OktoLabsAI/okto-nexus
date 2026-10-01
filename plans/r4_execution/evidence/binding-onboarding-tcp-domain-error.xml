@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="13.444" timestamp="2026-10-01T00:20:10.220661-03:00" hostname="Alienware_m15"><testcase classname="test_executor_onboarding_cli" name="test_connector_public_commands_publish_realization_over_tcp[False]" time="6.311" /><testcase classname="test_executor_onboarding_cli" name="test_connector_public_commands_publish_realization_over_tcp[True]" time="5.778"><failure message="AssertionError: assert 'VERSION_INCOMPATIBLE' == 'PERMISSION_DENIED'&#10;  &#10;  - PERMISSION_DENIED&#10;  + VERSION_INCOMPATIBLE">D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:156: in test_connector_public_commands_publish_realization_over_tcp
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+D:\Projetos\Techridy\okto_labs_okto_nexus\tests\execution_r4\test_executor_onboarding_cli.py:128: in run
+    assert pending.value.code == "PERMISSION_DENIED"
+E   AssertionError: assert 'VERSION_INCOMPATIBLE' == 'PERMISSION_DENIED'
+E     
+E     - PERMISSION_DENIED
+E     + VERSION_INCOMPATIBLE</failure></testcase></testsuite></testsuites>
