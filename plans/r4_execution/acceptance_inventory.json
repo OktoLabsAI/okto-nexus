@@ -1483,14 +1483,18 @@
         "tests/execution_r4/test_migration_catalog.py::test_interrupted_batch_rolls_back_and_resumes",
         "tests/execution_r4/test_migration_catalog.py::test_legacy_denial_is_materialized_in_canonical_binding_policy",
         "tests/execution_r4/test_migration_catalog.py::test_conflicting_canonical_allow_requires_review",
-        "tests/execution_r4/test_migration_catalog.py::test_policy_backfill_refuses_live_runtime_owner"
+        "tests/execution_r4/test_migration_catalog.py::test_policy_backfill_refuses_live_runtime_owner",
+        "tests/execution_r4/test_binding_migration.py::test_reviewed_adoption_preserves_endpoint_and_disabled_policy",
+        "tests/execution_r4/test_binding_migration.py::test_adoption_revalidates_source_and_legacy_session_after_review",
+        "tests/execution_r4/test_binding_migration.py::test_agent_cannot_adopt_legacy_endpoint"
       ],
       "evidence": [
         "plans/r4_execution/test_runs_20261001_migration_backup.json",
         "plans/r4_execution/test_runs_20261001_migration_catalog.json",
-        "plans/r4_execution/test_runs_20261001_migration_policy.json"
+        "plans/r4_execution/test_runs_20261001_migration_policy.json",
+        "plans/r4_execution/test_runs_20261001_migration_adoption.json"
       ],
-      "notes": "M0 backup, M2 transactional catalog mapping and canonical policy denial materialization implemented; 51 installed cases passed. M3 reviewed endpoint adoption, historical-job fixture and normative TR4-15-01 remain open."
+      "notes": "M0 backup, M2 catalog/policy migration and reviewed local endpoint adoption implemented; latest installed campaign 54 passed. Combined legacy-history fixture, full M0-M3 phase resumption and normative TR4-15-01 remain open."
     },
     "NS15.02": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_02",

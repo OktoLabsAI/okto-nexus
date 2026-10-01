@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.01 reviewed endpoint adoption — October 1, 2026
+
+Nexus 811b597 adds operator-reviewed adopt_endpoint_id to canonical binding preparation. Apply preserves endpoint identity, disabled/denied state and the legacy profile, revalidating source/map/session authority. Installed campaign: **54 passed** across adoption and affected binding/migration regressions. See [scope](M12_MIGRATION_ADOPTION.md) and [manifest](test_runs_20261001_migration_adoption.json). Full phase resumption, normative legacy-history acceptance, cutover and release gates remain open.
+
+
 ## NS15.01 canonical migration denials — October 1, 2026
 
 Nexus 641b538 preserves legacy method denials under canonical adapter IDs during bounded migration batches. Conflicting/changed policy and a live runtime owner refuse migration. Installed verification: **11 migration/backup + 40 admin/architecture = 51 passed**. See [scope](M12_MIGRATION_POLICY.md) and [manifest](test_runs_20261001_migration_policy.json). Reviewed M3 endpoint adoption, normative TR4-15-01 and release gates remain open.
