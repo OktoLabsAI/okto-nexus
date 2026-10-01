@@ -102,6 +102,7 @@ class Deps:
     # Optional, best-effort anonymous usage telemetry facade. Disabled by
     # default; when enabled, adapters record bounded metadata only.
     telemetry: TelemetryPort | None = None
+    native_decisions: Any = None
 
 
 def build_repos(clock: Clock, config: NexusConfig) -> tuple[Repos, EventEmitter]:
@@ -243,6 +244,13 @@ def bootstrap(
     approvals.register_transactional_decision(
         BINDING_APPROVAL_ACTION,
         ExecutionBindingApprovals(access=build_execution_access(deps)).decide)
+    from importlib.util import find_spec
+    if find_spec("nexus_connector_core") is not None:
+        from ..application.execution_native_decisions import ExecutionNativeDecisions
+        from ..application.execution_native_requests import NATIVE_APPROVAL_ACTION
+        deps.native_decisions = ExecutionNativeDecisions(
+            factory=factory, access=build_execution_access(deps), approvals=approvals)
+        approvals.register_transactional_decision(NATIVE_APPROVAL_ACTION, deps.native_decisions.decide)
     return deps
 
 

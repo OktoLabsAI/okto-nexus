@@ -24,12 +24,13 @@ class ExecutionDispatchPump:
     """
 
     def __init__(self, *, factory, channel, access, fresh_publications,
-                 send, send_lock, verify_link, close_link, poll_interval=0.1):
+                 send, send_lock, verify_link, close_link, poll_interval=0.1, resolve_native_input=None):
         self.factory, self.channel, self.access = factory, channel, access
         self.fresh_publications = fresh_publications
         self.send, self.send_lock = send, send_lock
         self.verify_link, self.close_link = verify_link, close_link
         self.poll_interval = poll_interval
+        self.resolve_native_input = resolve_native_input
         self._stopping = asyncio.Event()
         self.task = None
         self.error = None
@@ -79,10 +80,12 @@ class ExecutionDispatchPump:
                     try:
                         authorized = await self._database(begin_execution_send,
                             factory=self.factory, reservation=reservation, remote_ready=True,
-                            fresh_publications=self.fresh_publications, access=self.access, channel=self.channel)
+                            fresh_publications=self.fresh_publications, access=self.access, channel=self.channel,
+                            resolve_native_input=self.resolve_native_input)
                     except OktoNexusError as error:
                         if error.code not in {ErrorCode.CONFLICT, ErrorCode.PERMISSION_DENIED,
-                                              ErrorCode.NOT_FOUND, ErrorCode.VALIDATION_ERROR}:
+                                              ErrorCode.NOT_FOUND, ErrorCode.VALIDATION_ERROR,
+                                              "AUTHORIZED_INPUT_UNAVAILABLE", "APPROVAL_AUTHORITY_REQUIRED"}:
                             raise
                         await self._database(reject_unsent_dispatch, factory=self.factory,
                                              reservation=reservation, error=error)

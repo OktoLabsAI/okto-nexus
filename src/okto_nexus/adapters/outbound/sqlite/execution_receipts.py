@@ -74,17 +74,17 @@ class ExecutionOperationHistory:
 def read_execution_operation_history(factory: ConnectionFactory, *,
                                      server_id: str, executor_id: str | None,
                                      operation_id: str,
-                                     subject_agent_id: str
+                                     subject_agent_id: str, actor_agent_id: str | None = None,
                                      ) -> ExecutionOperationHistory:
-    """Read one subject's operation and verified Core facts without a runtime."""
+    """Read scoped subject/actor metadata and verified facts without a runtime."""
     with factory.unit_of_work(write=False) as uow:
         conn = uow.connection
         found = conn.execute(
             "SELECT executor_id,binding_id,subject_agent_id,actor_agent_id,"
             "workspace_id,session_id,action,intent_hash,admission_state,created_at,expected_revisions_json "
             "FROM execution_operations WHERE server_id=? AND operation_id=? "
-            "AND subject_agent_id=? AND (? IS NULL OR executor_id=?) LIMIT 2",
-            (server_id, operation_id, subject_agent_id, executor_id, executor_id),
+            "AND (subject_agent_id=? OR actor_agent_id=?) AND (? IS NULL OR executor_id=?) LIMIT 2",
+            (server_id, operation_id, subject_agent_id, actor_agent_id, executor_id, executor_id),
         ).fetchall()
         if not found:
             raise OktoNexusError(ErrorCode.NOT_FOUND,
@@ -112,7 +112,7 @@ def read_execution_operation_history(factory: ConnectionFactory, *,
                 if (parsed["server_id"] != server_id or
                         parsed["executor_id"] != executor_id or
                         parsed["operation_id"] != operation_id or
-                        parsed["agent_id"] != subject_agent_id or
+                        parsed["agent_id"] != operation["subject_agent_id"] or
                         parsed["binding_id"] != operation["binding_id"] or
                         parsed["session_id"] != operation["session_id"] or
                         parsed["intent_hash"] != operation["intent_hash"]):

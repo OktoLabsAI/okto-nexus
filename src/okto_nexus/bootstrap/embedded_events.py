@@ -62,7 +62,7 @@ class EmbeddedEventPublisher:
             frame.update(type="event.batch",protocol_major=1,contract_revision=R4_PREVIEW_REVISION,
                 connection_id=channel.connection_id,connection_generation=channel.connection_generation,events=events)
             ack = await asyncio.to_thread(commit_execution_events,self.owner.factory,
-                channel=channel,frame=frame,embedded_owner=self.owner)
+                channel=channel,frame=frame,embedded_owner=self.owner,approvals=self.owner.deps.approvals)
             if ack is None or ack["sequence"]!=events[-1]["sequence"]:
                 raise CoreError("EVENT_GAP","embedded_event_ack")
             await journal.acknowledge_events(cursor,ack["sequence"])

@@ -101,7 +101,7 @@ class EmbeddedRuntimeHost:
         candidates: Mapping[str, InstallationCandidate],
         workspace_roots: Mapping[str, str],
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
-        native_factory=None, native_action_factory=None,
+        native_factory=None, native_action_factory=None, native_approvals_enabled=False,
     ) -> RuntimeCore:
         for value, label in ((executor_id, "executor"), (session_id, "session")):
             if (not isinstance(value, str) or not value or len(value) > 160 or
@@ -115,7 +115,9 @@ class EmbeddedRuntimeHost:
         if native_action_factory is not None and (
                 not callable(native_action_factory) or set(candidates) != {"pi_rpc"}):
             raise ValueError("A native action factory requires one approved Pi installation.")
-        selection = (dict(candidates), dict(workspace_roots), native_action_factory)
+        if type(native_approvals_enabled) is not bool:
+            raise ValueError("Native approval capture must be a boolean.")
+        selection = (dict(candidates), dict(workspace_roots), native_action_factory, native_approvals_enabled)
         key = (executor_id, session_id)
         async with self._lock:
             if self._closing:
@@ -148,6 +150,7 @@ class EmbeddedRuntimeHost:
                 owned_slot_ledger=ledger, native_factory=native_factory,
                 max_owned_sessions=self.max_owned_slots,
                 pi_native_action=native_launch if selection[2] is not None else None,
+                native_approvals_enabled=selection[3],
             )
             if selection[2] is not None:
                 from nexus_connector_core.native_action_socket import PiNativeActionOwner

@@ -20,8 +20,9 @@ from .execution_binding_proposals import _agent_guard
 from .executor_inventory import load_current_executor_inventory
 
 
-# Canonical delegation verbs retain their existing semantics. Approval and
-# input require their separate governance authorization before this expands.
+# Canonical delegation verbs retain their existing semantics. Native response
+# verbs below allow transport only; their dispatch additionally requires the
+# committed operator decision, original request, and current operator proof.
 _ACTIONS = {'open': 'runtime.open', 'send': 'turn.submit', 'steer': 'turn.steer',
             'interrupt': 'turn.interrupt', 'close': 'runtime.close'}
 
@@ -149,6 +150,9 @@ class ExecutionLeaseService:
                 substrate='attach' if semantic['payload']['mode'] == 'attach' else 'managed',
                 uow=uow, audit=False, check_budget=False)
             actions.append(_ACTIONS[action])
+        if (self.access.config.feature_hitl and 'turn.submit' in actions and
+                row['adapter_id'] in {'codex_app_server', 'claude_stream'}):
+            actions.extend(('approval.decide', 'input.provide'))
         if row['lifecycle_state'] == 'OPEN_PENDING' and 'runtime.open' not in actions:
             raise _conflict('The canonical grant does not authorize opening this session.')
         return row, source, sorted(set(actions)), expires

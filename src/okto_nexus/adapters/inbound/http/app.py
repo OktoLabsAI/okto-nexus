@@ -647,6 +647,8 @@ def build_app(deps: Deps, *, lock: ServeLock | None = None, runtime_owner_api_ur
                     await heartbeat_task
             if lock is not None:
                 lock.release()
+            if deps.native_decisions is not None:
+                deps.native_decisions.inputs.close()
             if embedded_shutdown_error is not None:
                 raise embedded_shutdown_error
 

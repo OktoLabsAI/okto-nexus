@@ -384,7 +384,8 @@ def build_router() -> APIRouter:
                     def _commit_events():
                         _verify()
                         return commit_execution_events(factory,
-                            channel=ExecutionChannel(server_id,executor_id,connection_id,generation),frame=frame)
+                            channel=ExecutionChannel(server_id,executor_id,connection_id,generation),frame=frame,
+                            approvals=ws.app.state.deps.approvals)
                     try:
                         ack = await anyio.to_thread.run_sync(_commit_events)
                     except OktoNexusError:
@@ -417,7 +418,8 @@ def build_router() -> APIRouter:
                             access=leases.access,
                             fresh_publications=ws.app.state.inventory_fresh_publications,
                             send=_send_operation, send_lock=send_lock,
-                            verify_link=_verify, close_link=_close_dispatch_link)
+                            verify_link=_verify, close_link=_close_dispatch_link,
+                            resolve_native_input=ws.app.state.deps.native_decisions.inputs.resolve)
                         pump.start()
                     continue
                 if frame["type"] == "error" and (

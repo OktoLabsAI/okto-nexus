@@ -39,7 +39,7 @@ class EmbeddedExecutor:
         candidate: InstallationCandidate, workspace_root: str,
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
         request_grant: Callable[[dict], Awaitable[Mapping[str, object]]],
-        native_factory=None, native_action_factory=None,
+        native_factory=None, native_action_factory=None, native_approvals_enabled=False,
     ) -> tuple[EmbeddedExecutor, R4LeaseApplication]:
         """Install canonical Server authority before prepare or native open.
 
@@ -59,7 +59,7 @@ class EmbeddedExecutor:
             candidates={candidate.adapter_id: candidate},
             workspace_roots={scope["workspace_id"]: workspace_root},
             environment=environment, native_factory=native_factory,
-            native_action_factory=native_action_factory)
+            native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         attempt = await runtime.begin_r4_lease_request(
             scope=scope, grant_id=grant_id, connection_id=connection_id,
             connection_generation=connection_generation, purpose="initial")
@@ -69,7 +69,7 @@ class EmbeddedExecutor:
             host, context=application.context, session_id=scope["session_id"],
             candidate=candidate, workspace_root=workspace_root,
             environment=environment, native_factory=native_factory,
-            native_action_factory=native_action_factory)
+            native_action_factory=native_action_factory, native_approvals_enabled=native_approvals_enabled)
         executor.local_launch = local_launch
         return executor, application
 
@@ -104,7 +104,7 @@ class EmbeddedExecutor:
         session_id: str, candidate: InstallationCandidate,
         workspace_root: str,
         environment: Callable[[PreparedLaunch], Awaitable[Mapping[str, str]]],
-        native_factory=None, native_action_factory=None,
+        native_factory=None, native_action_factory=None, native_approvals_enabled=False,
     ):
         if not isinstance(context, ExecutionContext):
             raise TypeError("An approved Core execution context is required.")
@@ -124,6 +124,7 @@ class EmbeddedExecutor:
         self.environment = environment
         self.native_factory = native_factory
         self.native_action_factory = native_action_factory
+        self.native_approvals_enabled = native_approvals_enabled
         self.local_launch = None
 
     async def _runtime(self):
@@ -133,6 +134,7 @@ class EmbeddedExecutor:
             workspace_roots={self.context.workspace_id: self.workspace_root},
             environment=self.environment, native_factory=self.native_factory,
             native_action_factory=self.native_action_factory,
+            native_approvals_enabled=self.native_approvals_enabled,
         )
 
     async def open(self, *, operation_id: str, stream_epoch: str,

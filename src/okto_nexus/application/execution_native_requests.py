@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
+import secrets
 
 from nexus_connector_core import (
     R4_PREVIEW_REVISION, reduce_r4_approval_request, r4_operational_request_hash,
@@ -19,9 +20,10 @@ _SCOPE = (
     "credential_epoch",
 )
 _TTL_SECONDS = 120
+NATIVE_APPROVAL_ACTION = "execution.native.respond"
 
 
-def project_native_request(conn, *, event, session, channel, received_at):
+def project_native_request(conn, *, event, session, channel, received_at, uow=None, approvals=None):
     """Run only inside event ingress's transaction and contiguous prefix.
 
     The source operation supplies immutable authority. Payload fields cannot
@@ -120,6 +122,19 @@ def project_native_request(conn, *, event, session, channel, received_at):
                   request_revision=1, request_hash=digest,
                   operational_frame_json=canonical_json(frame).decode(),
                   display_json=canonical_json(public_display).decode(), state=state,
-                  received_at=received_at, expires_at=expires.isoformat())
+                  received_at=received_at, expires_at=expires.isoformat(),
+                  cas_token=secrets.token_urlsafe(32))
     conn.execute("INSERT INTO execution_native_requests (" + ",".join(values) + ") VALUES (" +
                  ",".join("?" for _ in values) + ")", tuple(values.values()))
+    if approvals is not None and state == "PENDING":
+        # The canonical queue receives only a redacted presentation and the
+        # immutable request reference. It must never serialize the original.
+        approvals.intercept(uow, workspace_id=scope["workspace_id"], agent_id=scope["agent_id"],
+            action=NATIVE_APPROVAL_ACTION, policy_id="native-runtime-permission",
+            approval_id=canonical_id, kwargs={
+                "approval_key": {name: frame[name] for name in (
+                    "server_id", "executor_id", "binding_id", "agent_id", "workspace_id",
+                    "session_id", "session_owner_generation", "canonical_request_id", "kind")},
+                "request_hash": digest, "expected_revision": 1,
+                "cas_token": values["cas_token"], "expires_at": values["expires_at"],
+                "display": public_display})

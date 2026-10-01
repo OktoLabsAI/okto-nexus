@@ -67,7 +67,8 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
     info = runtime_v1.protocol_info()
     monkeypatch.setattr(runtime_v1,'protocol_info',lambda:{**info,'remote_execution_ready':True})
     monkeypatch.setattr(embedded_dispatch,'protocol_info',lambda:{**info,'remote_execution_ready':True})
-    deps=bootstrap({},['--home',str(tmp_path/'nexus'),'--feature-harness-integrations','true'])
+    deps=bootstrap({},['--home',str(tmp_path/'nexus'),'--feature-harness-integrations','true',
+                       '--feature-hitl','true'])
     deps.local_discovery=discovery
     listener=socket.socket()
     listener.bind(('127.0.0.1',0))
@@ -120,9 +121,44 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
             'expires_at':iso_plus(deps.clock.now_iso(),600)})
         assert response.status_code==200,response.text
         setup=(deps,app,client,headers,{},candidate,workspace)
+        approval_scope = None
+        approved_requests = set()
+        def decide_requested_tools():
+            if approval_scope is None:
+                return
+            queued = client.get('/api/v1/approvals', headers=headers['operator'],
+                params={'workspace': approval_scope['workspace_id'], 'status': 'pending'})
+            assert queued.status_code == 200, queued.text
+            for item in queued.json()['data']['items']:
+                if item['action'] != 'execution.native.respond' or item['approval_id'] in approved_requests:
+                    continue
+                detail = client.get('/api/v1/approvals/'+item['approval_id'], headers=headers['operator'])
+                assert detail.status_code == 200, detail.text
+                proposal = detail.json()['data']['request_payload']['kwargs']
+                key = proposal['approval_key']
+                assert all(key[name] == approval_scope[name] for name in (
+                    'server_id','executor_id','binding_id','agent_id','workspace_id','session_id','session_owner_generation'))
+                # This authorized campaign approves only its three governed
+                # MCP tools. Unexpected native input remains an observed failure.
+                assert key['kind'] == 'native_approval', proposal['display']
+                params = proposal['display']['params']
+                assert params.get('tool_name') in {
+                    'mcp__'+entry+'__'+name for name in ('handoff_get','handoff_claim','handoff_complete')}, proposal['display']
+                arguments = params['input']
+                assert arguments['project_root'] == approval_scope['workspace_id']
+                assert arguments['agent_id'] == 'subject' and arguments['handoff_id'] == 'work'
+                body = {name: proposal[name] for name in ('approval_key','expected_revision','request_hash','cas_token')}
+                body.update(client_intent_id='real-'+item['approval_id'], decision='approve')
+                decided = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
+                assert decided.status_code == 202, decided.text
+                replay = client.post('/v1/runtime/approval-decisions', headers=headers['operator'], json=body)
+                assert replay.status_code == 200, replay.text
+                assert replay.json()['native_operation_id'] == decided.json()['native_operation_id']
+                approved_requests.add(item['approval_id'])
         def receipt(operation, stages):
             until=time.monotonic()+180
             while True:
+                decide_requested_tools()
                 result=client.get('/v1/runtime/operations/'+operation['operation_id'],headers=headers['subject']).json()
                 if result.get('executor_stage') in stages:
                     return result
@@ -144,6 +180,7 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
             time.sleep(.1)
         report['lease_serial_before_turn']=serial
         entry=owner.tools.configurations[session]["template"].entry_name
+        approval_scope = opened['scope']
         workspace_id=opened["scope"]["workspace_id"]
         sent=admit(setup,binding,'real-mcp-work','turn.submit',session_id=session,text=(
             f'Use only the MCP server {entry} for this task. Call handoff_get for handoff_id work, '
@@ -152,6 +189,7 @@ def test_real_provider_uses_automatic_local_dispatch_and_http_work(tmp_path,monk
             f'For these calls use project_root "{workspace_id}" and agent_id "subject". '
             'Do not use filesystem, shell or any other MCP server. Finish with OK.'))
         report['turn_stage']=receipt(sent,('SUCCEEDED',))['executor_stage']
+        report['explicit_operator_decisions'] = len(approved_requests)
         with deps.connection_factory.unit_of_work(write=False) as uow:
             report['handoff_status']=uow.connection.execute("SELECT status FROM handoffs WHERE handoff_id='work'").fetchone()[0]
             report['tool_claim_count']=uow.connection.execute('SELECT count(*) FROM execution_tool_claims').fetchone()[0]

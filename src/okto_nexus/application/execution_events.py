@@ -14,7 +14,7 @@ from .execution_leases import require_execution_lane
 from .execution_native_requests import project_native_request
 
 
-def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
+def commit_execution_events(factory, *, channel, frame, embedded_owner=None, approvals=None):
     frame = decode_r4_frame(encode_r4_frame(frame))
     if frame["type"] != "event.batch" or any(frame[k] != getattr(channel,k) for k in (
             "server_id","executor_id","connection_id","connection_generation")):
@@ -104,7 +104,7 @@ def commit_execution_events(factory, *, channel, frame, embedded_owner=None):
                 (*key,watermark,projection.watermark)).fetchall():
             project_native_request(conn,event=json.loads(saved["payload_json"]),
                                    session=session,channel=channel,
-                                   received_at=saved["received_at"])
+                                   received_at=saved["received_at"], uow=uow, approvals=approvals)
         conn.execute("UPDATE execution_sessions SET stream_epoch=? WHERE server_id=? AND executor_id=? AND session_id=?",
                      (key[3],*key[:3]))
         conn.execute("INSERT INTO execution_event_watermarks(server_id,executor_id,session_id,stream_epoch,"

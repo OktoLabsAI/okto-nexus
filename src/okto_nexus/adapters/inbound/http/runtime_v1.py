@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import anyio
 import time
-from typing import Annotated
+from typing import Annotated, Literal
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
@@ -101,6 +101,31 @@ class OperationSubmitRequest(BaseModel):
     intent_hash: _Digest
 
 
+class NativeApprovalKey(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    server_id: _Id
+    executor_id: _Id
+    binding_id: _Id
+    agent_id: _Id
+    workspace_id: _Id
+    session_id: _Id
+    session_owner_generation: Annotated[int, Field(ge=1)]
+    canonical_request_id: _Id
+    kind: Literal["native_approval", "native_input"]
+
+
+class NativeDecisionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    client_intent_id: _Id
+    approval_key: NativeApprovalKey
+    expected_revision: Annotated[int, Field(ge=1)]
+    request_hash: _Digest
+    decision: Literal["approve", "deny"]
+    cas_token: Annotated[str, Field(min_length=16, max_length=4096)]
+    operator_proof_ref: _Id | None = None
+    response: dict[str, object] | None = Field(default=None, repr=False)
+
+
 class CapabilityRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -113,6 +138,41 @@ class CapabilityRequest(BaseModel):
 
 def build_router() -> APIRouter:
     router = APIRouter()
+
+    def native_error(error):
+        status = {"NOT_FOUND": 404, "PERMISSION_DENIED": 403, "APPROVAL_AUTHORITY_REQUIRED": 403,
+                  "CONFLICT": 409, "VALIDATION_ERROR": 422, "QUOTA_EXCEEDED": 429,
+                  "AUTHORIZED_INPUT_UNAVAILABLE": 409}.get(error.code, 500)
+        result = v1_err(status, error.code, error.message, stage="approval.decision")
+        result.headers["Cache-Control"] = "no-store"
+        return result
+
+    @router.post("/runtime/approval-decisions")
+    async def native_decision(body: NativeDecisionRequest, request: Request):
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        service = request.app.state.deps.native_decisions
+        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        try:
+            view, replay = await anyio.to_thread.run_sync(lambda: service.confirm(
+                context=context, request=body.model_dump()))
+        except OktoNexusError as error:
+            return native_error(error)
+        return JSONResponse(view, status_code=200 if replay else 202, headers={"Cache-Control": "no-store"})
+
+    @router.get("/runtime/approval-decisions/{decision_id}")
+    async def native_decision_view(decision_id: str, request: Request):
+        agent = get_authenticated_agent()
+        if agent is None:
+            return v1_err(401, "AUTH_FAILED", "Authentication is required.")
+        service = request.app.state.deps.native_decisions
+        context = RuntimeRequestContext(agent.agent_id, "agent_key", credential_binding=agent.api_key_hash)
+        try:
+            view = await anyio.to_thread.run_sync(lambda: service.read(context=context, decision_id=decision_id))
+        except OktoNexusError as error:
+            return native_error(error)
+        return JSONResponse(view, headers={"Cache-Control": "no-store"})
 
     @router.get("/runtime/sessions/{session_id}/capability")
     async def capability_metadata(session_id: str, request: Request) -> JSONResponse:
@@ -421,6 +481,7 @@ def build_router() -> APIRouter:
             return read_execution_operation_history(
                 factory, server_id=server_id, executor_id=executor_id,
                 operation_id=operation_id, subject_agent_id=subject_agent_id,
+                actor_agent_id=None if history_ticket is not None else agent.agent_id,
             ).public_view()
 
         view = await anyio.to_thread.run_sync(_read)

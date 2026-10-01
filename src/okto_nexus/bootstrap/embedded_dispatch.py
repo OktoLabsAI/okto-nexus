@@ -8,7 +8,7 @@ import time
 from nexus_connector_core import (
     CoreError, LaunchIntent, OpenOperation, TurnOperation, ControlOperation,
     OperationKey, prepare_r4_receipt_binding, project_r4_bound_receipt,
-    r4_close_operation, ShutdownPolicy,
+    r4_close_operation, r4_native_decision_operation, ShutdownPolicy,
 )
 from nexus_connector_core.protocol import canonical_json
 
@@ -112,7 +112,8 @@ class EmbeddedDispatchOwner:
             return
         self.pump = ExecutionDispatchPump(factory=self.factory, channel=self.channel, access=self.access,
             fresh_publications=self.inventory.fresh, send=self.enqueue, send_lock=asyncio.Lock(),
-            verify_link=self.verify, close_link=self.failed)
+            verify_link=self.verify, close_link=self.failed,
+            resolve_native_input=self.deps.native_decisions.inputs.resolve)
         self.pump.start()
         self.maintenance = asyncio.create_task(self._maintain(), name="embedded-publications")
 
@@ -221,7 +222,9 @@ class EmbeddedDispatchOwner:
                     connection_generation=self.channel.connection_generation, request_grant=self._request_grant,
                     candidate=setup.candidate, workspace_root=setup.workspace_root,
                     environment=setup.environment, native_factory=self.native_factory,
-                    native_action_factory=tool_config["native_factory"] if tool_config else None)
+                    native_action_factory=tool_config["native_factory"] if tool_config else None,
+                    native_approvals_enabled=bool(self.deps.config.feature_hitl and
+                        setup.candidate.adapter_id in {"codex_app_server", "claude_stream"}))
                 await asyncio.to_thread(self.leases.applied, applied.acknowledgement, channel=self.channel)
                 session["executor"] = executor
                 session["renew_at"] = time.monotonic() + max(0, applied.context.lease_deadline_monotonic-time.monotonic())/2
@@ -237,6 +240,9 @@ class EmbeddedDispatchOwner:
                     auth_refs=executor.local_launch.auth_refs),context)
                 epoch = "stream_" + secrets.token_hex(16)
                 options = dict(prepared=prepared,stream_epoch=epoch)
+            elif action in ("approval.decide", "input.provide"):
+                native_operation = r4_native_decision_operation(frame)
+                options = dict(applied_operation=native_operation)
             binding = prepare_r4_receipt_binding(frame, context, **options)
             await asyncio.to_thread(self._bind, frame, binding, options.get("stream_epoch"))
             await asyncio.to_thread(self.verify)
@@ -250,6 +256,8 @@ class EmbeddedDispatchOwner:
                     text=payload.get("text"),reason=payload.get("reason"),expected_turn_id=frame.get("expected_turn_id")),context)
             elif action == "runtime.close":
                 receipt = await runtime.close(r4_close_operation(frame),context,wait_for_completion=True)
+            elif action in ("approval.decide", "input.provide"):
+                receipt = await runtime.decide_native_approval(operation=native_operation, context=context)
             else:
                 raise CoreError("CAPABILITY_UNSUPPORTED", "embedded_dispatch")
             await self._publish(binding, receipt)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from .executor_inventory import load_current_executor_inventory
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import json
 import secrets
@@ -46,14 +46,14 @@ class DispatchReservation:
 @dataclass(frozen=True, slots=True)
 class AuthorizedDispatch:
     reservation: DispatchReservation
-    semantic_intent: dict
+    semantic_intent: dict = field(repr=False)
     lease_id: str
     lease_serial: int
     connection_generation: int
     connection_id: str
     grant_id: str
     scope: dict
-    frame: dict
+    frame: dict = field(repr=False)
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,6 +194,7 @@ def begin_execution_send(
     factory: ConnectionFactory, *, reservation: DispatchReservation,
     remote_ready: bool, fresh_publications: Mapping, access,
     channel: ExecutionChannel | None = None,
+    resolve_native_input=None,
 ) -> AuthorizedDispatch | AuthorizedOpenBootstrap:
     """Revalidate after queue wait, then fence the exact attempt as SENDING.
 
@@ -223,11 +224,11 @@ def begin_execution_send(
     with factory.unit_of_work() as uow:
         conn = uow.connection
         row = conn.execute(
-            "SELECT o.dispatch_state,o.attempt_token,o.attempt_no,"
+            "SELECT p.server_id,p.executor_id,p.operation_id,o.dispatch_state,o.attempt_token,o.attempt_no,"
             "o.reservation_class,o.reserved_bytes,o.reservation_owner,o.reservation_generation,"
             "p.subject_agent_id,p.actor_agent_id,p.binding_id,p.workspace_id,"
             "p.workspace_binding_id,p.session_id,p.action,p.semantic_payload,"
-            "p.expected_revisions_json,p.admission_state,p.intent_hash "
+            "p.expected_revisions_json,p.admission_state,p.intent_hash,p.decision_id "
             "FROM execution_dispatch_outbox o JOIN execution_operations p "
             "ON p.server_id=o.server_id AND p.executor_id=o.executor_id "
             "AND p.operation_id=o.operation_id WHERE o.server_id=? "
@@ -247,15 +248,17 @@ def begin_execution_send(
         provenance = conn.execute(
             "SELECT source_guard_digest FROM execution_client_intents "
             "WHERE server_id=? AND actor_agent_id=? AND operation_id=? "
-            "AND intent_id GLOB 'r4intent_*'",
-            (server_id, row["actor_agent_id"], reservation.operation_id),
+            "AND intent_id GLOB ?",
+            (server_id, row["actor_agent_id"], reservation.operation_id,
+             'r4decisionintent_*' if row["action"] in {"approval.decide", "input.provide"} else 'r4intent_*'),
         ).fetchall()
         scope = json.loads(row["expected_revisions_json"])
+        native_decision = row["action"] in {"approval.decide", "input.provide"}
         if (len(provenance) != 1 or
                 not provenance[0]["source_guard_digest"] or
                 provenance[0]["source_guard_digest"] !=
                 _agent_guard(conn, row["subject_agent_id"]) or
-                row["actor_agent_id"] != row["subject_agent_id"] or
+                (not native_decision and row["actor_agent_id"] != row["subject_agent_id"]) or
                 scope["authorization_revision"] != revisions.authorization or
                 scope["configuration_revision"] != revisions.configuration or
                 scope["credential_epoch"] != revisions.credential_epoch):
@@ -304,6 +307,16 @@ def begin_execution_send(
                 channel.connection_generation != binding["generation"]):
             raise OktoNexusError(ErrorCode.CONFLICT, "The dispatch source connection changed.", {})
         semantic = json.loads(row["semantic_payload"])
+        if native_decision:
+            from .execution_native_decisions import validate_native_dispatch
+            validate_native_dispatch(uow, operation=row, semantic=semantic, access=access)
+            if semantic["payload"].get("response_ref") is not None:
+                if resolve_native_input is None:
+                    raise OktoNexusError("AUTHORIZED_INPUT_UNAVAILABLE",
+                                        "The authorized input must be explicitly supplied again.", {})
+                response = resolve_native_input(semantic)
+                semantic["payload"] = {name: value for name, value in semantic["payload"].items() if name != "response_ref"}
+                semantic["payload"]["response"] = response
         if (semantic["action"] != row["action"] or
                 execution_intent_hash(semantic) != row["intent_hash"]):
             raise OktoNexusError(ErrorCode.CONFLICT,
@@ -396,7 +409,8 @@ def begin_execution_send(
         # transaction as the RESERVED -> SENDING transition. A lost send ACK
         # cannot spend it a second time by replaying this reservation.
         action = {"runtime.open": "open", "turn.submit": "send", "turn.steer": "steer",
-                  "turn.interrupt": "interrupt", "runtime.close": "close"}.get(row['action'])
+                  "turn.interrupt": "interrupt", "runtime.close": "close",
+                  "approval.decide": "send", "input.provide": "send"}.get(row['action'])
         if action is None:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "This operation requires governance authorization.", {})
@@ -406,7 +420,7 @@ def begin_execution_send(
             require_execution_lane(uow, scope=scope,
                 channel=ExecutionChannel(server_id, reservation.executor_id,
                     connection_id, connection_generation), now=authority_now)
-        actor = access.agents.get(uow, row['actor_agent_id'])
+        actor = access.agents.get(uow, row['subject_agent_id'] if native_decision else row['actor_agent_id'])
         if actor is None or not actor.is_active:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED, "The dispatch actor is unavailable.", {})
         context = RuntimeRequestContext(
@@ -414,7 +428,8 @@ def begin_execution_send(
             execution_grant_id=None if bootstrap else lease['grant_id'])
         grant = access.authorize(context, action=action, endpoint_id=binding['endpoint_id'],
                          represented_agent_id=row['subject_agent_id'], workspace_id=row['workspace_id'],
-                         substrate=mode, consume=not bootstrap, uow=uow)
+                         substrate=mode, consume=not bootstrap and not native_decision,
+                         check_budget=not native_decision, uow=uow)
         if grant is None:
             raise OktoNexusError(ErrorCode.PERMISSION_DENIED,
                                   "A canonical execution grant is required for dispatch.", {})
