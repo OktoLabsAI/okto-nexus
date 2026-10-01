@@ -38,7 +38,7 @@ from okto_nexus.domain.messages import MAX_ARTIFACTS  # noqa: E402
 def serve_env(tmp_path):
     """A booted Deps + app + operator key over a temp store."""
     home = tmp_path / "nexus_home"
-    deps = bootstrap({}, ["--home", str(home)])
+    deps = bootstrap({}, ["--home", str(home), "--feature-harness-integrations", "false", "--embedding-mode", "off"])
     auth = AgentKeyAuthService(deps.repos.agents, deps.clock)
     issued = ensure_operator_key(deps, auth)
     assert issued is not None

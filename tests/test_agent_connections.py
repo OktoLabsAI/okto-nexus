@@ -245,7 +245,10 @@ def test_upgrade_from_64_preserves_identity_and_is_idempotent(tmp_path):
     with factory.unit_of_work() as uow:
         agents.upsert(uow, agent_id='existing', role='reviewer', capabilities={'review': True}, metadata={'keep': 'profile'})
         before = agents.get(uow, 'existing')
-    assert MigrationRunner(factory).apply() == list(range(65, 83))
+    expected = sorted(int(path.name.split("_")[0])
+                      for path in _default_migrations_dir().glob("*.sql")
+                      if int(path.name.split("_")[0]) > 64)
+    assert MigrationRunner(factory).apply() == expected
     assert MigrationRunner(factory).apply() == []
     with factory.unit_of_work(write=False) as uow:
         assert agents.get(uow, 'existing') == before

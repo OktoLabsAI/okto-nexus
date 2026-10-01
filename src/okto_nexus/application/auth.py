@@ -23,7 +23,10 @@ Design notes
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
+import math
+from threading import RLock
 from typing import Optional
 
 from ..domain.keys import generate_api_key, hash_api_key, is_well_formed_api_key
@@ -36,6 +39,7 @@ from .ports import AgentRepo, Clock, UnitOfWork
 # missed by an invalidation race (multi-process serve is excluded by the
 # single-server lock, D4) still converges within a minute.
 DEFAULT_CACHE_TTL_SECONDS = 60.0
+MAX_CACHE_ENTRIES = 4096
 
 
 @dataclass(slots=True)
@@ -53,11 +57,19 @@ class AgentKeyAuthService:
         clock: Clock,
         *,
         cache_ttl_seconds: float = DEFAULT_CACHE_TTL_SECONDS,
+        cache_max_entries: int = MAX_CACHE_ENTRIES,
     ) -> None:
         self._agents = agents
         self._clock = clock
         self._ttl = float(cache_ttl_seconds)
-        self._by_hash: dict[str, _CacheEntry] = {}
+        if not math.isfinite(self._ttl) or not 0 <= self._ttl <= DEFAULT_CACHE_TTL_SECONDS:
+            raise ValueError("Cache TTL must be between 0 and 60 seconds.")
+        if type(cache_max_entries) is not int or not 0 <= cache_max_entries <= MAX_CACHE_ENTRIES:
+            raise ValueError("Cache capacity must be between 0 and 4096 entries.")
+        self._capacity = cache_max_entries
+        self._lock = RLock()
+        self._generation = 0
+        self._by_hash: OrderedDict[str, _CacheEntry] = OrderedDict()
         self._hash_by_agent: dict[str, str] = {}
 
     # ------------------------------------------------------------------ #
@@ -117,8 +129,16 @@ class AgentKeyAuthService:
             return None
         key_hash = hash_api_key(api_key)
 
-        cached = self._by_hash.get(key_hash)
-        if cached is not None and cached.expires_epoch > self._clock.now_epoch():
+        with self._lock:
+            generation = self._generation
+            cached = self._by_hash.get(key_hash)
+            if cached is not None:
+                if cached.expires_epoch > self._clock.now_epoch():
+                    self._by_hash.move_to_end(key_hash)
+                else:
+                    self._evict_hash(key_hash)
+                    cached = None
+        if cached is not None:
             self._agents.touch(uow, agent_id=cached.agent.agent_id)
             return cached.agent
 
@@ -129,10 +149,20 @@ class AgentKeyAuthService:
             self._evict_hash(key_hash)
             return None
 
-        self._by_hash[key_hash] = _CacheEntry(
-            agent=agent, expires_epoch=self._clock.now_epoch() + self._ttl
-        )
-        self._hash_by_agent[agent.agent_id] = key_hash
+        with self._lock:
+            # A lookup started before invalidation may finish afterward. Do not
+            # repopulate the positive cache from that older transaction.
+            if self._capacity and self._ttl and generation == self._generation:
+                previous = self._hash_by_agent.get(agent.agent_id)
+                if previous is not None and previous != key_hash:
+                    self._evict_hash(previous)
+                self._by_hash[key_hash] = _CacheEntry(
+                    agent=agent, expires_epoch=self._clock.now_epoch() + self._ttl
+                )
+                self._by_hash.move_to_end(key_hash)
+                self._hash_by_agent[agent.agent_id] = key_hash
+                while len(self._by_hash) > self._capacity:
+                    self._evict_hash(next(iter(self._by_hash)))
         self._agents.touch(uow, agent_id=agent.agent_id)
         return agent
 
@@ -141,16 +171,21 @@ class AgentKeyAuthService:
     # ------------------------------------------------------------------ #
     def invalidate_agent(self, agent_id: str) -> None:
         """Drop the cached resolution for an agent (rotation/revocation)."""
-        key_hash = self._hash_by_agent.pop(agent_id, None)
-        if key_hash is not None:
-            self._by_hash.pop(key_hash, None)
+        with self._lock:
+            self._generation += 1
+            key_hash = self._hash_by_agent.get(agent_id)
+            if key_hash is not None:
+                self._evict_hash(key_hash)
 
     def invalidate_all(self) -> None:
         """Drop every cached resolution at once (admin store reset)."""
-        self._by_hash.clear()
-        self._hash_by_agent.clear()
+        with self._lock:
+            self._generation += 1
+            self._by_hash.clear()
+            self._hash_by_agent.clear()
 
     def _evict_hash(self, key_hash: str) -> None:
-        entry = self._by_hash.pop(key_hash, None)
-        if entry is not None:
-            self._hash_by_agent.pop(entry.agent.agent_id, None)
+        with self._lock:
+            entry = self._by_hash.pop(key_hash, None)
+            if entry is not None and self._hash_by_agent.get(entry.agent.agent_id) == key_hash:
+                self._hash_by_agent.pop(entry.agent.agent_id, None)

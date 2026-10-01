@@ -1,11 +1,11 @@
 """Authenticated self discovery/opening through actual HTTP/MCP and owner proxy."""
 import asyncio
 import json
-import sys
+import httpx
 
 import pytest
 from test_pr34_remediation import runtime as runtime_fixture
-from test_pr34_remediation import stdio_environment, tool
+from test_pr34_remediation import tool
 
 from okto_nexus.application.auth import AgentKeyAuthService
 from okto_nexus.domain.base import iso_plus
@@ -82,31 +82,32 @@ def test_self_open_rechecks_grants_and_rejects_foreign_endpoint(runtime):
     assert not peers
 
 
-def test_actual_stdio_self_discovery_and_connect_use_existing_serve_owner(runtime):
-    deps, _, _, peers, _, _ = runtime
+def test_actual_http_mcp_self_discovery_and_connect_use_existing_serve_owner(runtime):
+    _, client, _, peers, _, _ = runtime
     key = worker_key(runtime)
     grant(runtime)
 
     async def run():
-        from mcp import ClientSession, StdioServerParameters
-        from mcp.client.stdio import stdio_client
-        env = stdio_environment(runtime)
-        env['OKTO_NEXUS_API_KEY'] = key
-        params = StdioServerParameters(command=sys.executable,
-            args=['-m', 'okto_nexus.adapters.inbound.mcp.server', '--home', str(deps.config.home_dir)], env=env)
-        async with stdio_client(params) as (reader, writer), ClientSession(reader, writer) as session:
-            await session.initialize()
-            response = await session.call_tool('harness_list', {'view': 'connections', 'maintenance': {'action': 'available'}})
-            result = response.structuredContent or json.loads(response.content[0].text)
-            assert result['ok'] and result['data']['agent_id'] == 'worker'
-            for _ in range(2):
-                response = await session.call_tool('harness_list', {'view': 'connections', 'maintenance': {
-                    'action': 'connect', 'endpoint_id': 'endpoint-pi', 'idempotency_key': 'stdio-self-fixture'}})
-                result = response.structuredContent or json.loads(response.content[0].text)
-                assert result['ok'], result
-            assert result['data']['reused']
+        from mcp import ClientSession
+        from mcp.client.streamable_http import streamable_http_client
+        async with httpx.AsyncClient(headers={"x-api-key": key}, trust_env=False) as http:
+            async with streamable_http_client(str(client.base_url).rstrip("/") + "/mcp",
+                                               http_client=http) as (reader, writer, _):
+                async with ClientSession(reader, writer) as session:
+                    await session.initialize()
+                    response = await session.call_tool("harness_list", {
+                        "view": "connections", "maintenance": {"action": "available"}})
+                    result = response.structuredContent or json.loads(response.content[0].text)
+                    assert result["ok"] and result["data"]["agent_id"] == "worker"
+                    for _ in range(2):
+                        response = await session.call_tool("harness_list", {"view": "connections",
+                            "maintenance": {"action": "connect", "endpoint_id": "endpoint-pi",
+                                            "idempotency_key": "http-self-fixture"}})
+                        result = response.structuredContent or json.loads(response.content[0].text)
+                        assert result["ok"], result
+                    assert result["data"]["reused"]
     asyncio.run(asyncio.wait_for(run(), timeout=45))
-    assert len(peers) == 1 and peers[0].session.owning_agent_id == 'worker'
+    assert len(peers) == 1 and peers[0].session.owning_agent_id == "worker"
 
 
 def test_self_connect_never_forwards_with_another_identity(runtime, monkeypatch):
