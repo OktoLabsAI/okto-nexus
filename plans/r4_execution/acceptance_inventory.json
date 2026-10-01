@@ -1362,9 +1362,11 @@
         "tests/execution_r4/test_shutdown_storage_order.py::test_native_containment_precedes_cleanup_and_preserves_stores",
         "tests/execution_r4/test_shutdown_storage_order.py::test_bounded_shutdown_recovers_same_uncertain_runtime",
         "tests/execution_r4/test_shutdown_storage_order.py::test_cancelled_shutdown_request_keeps_cleanup_owned",
-        "tests/execution_r4/test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery"
+        "tests/execution_r4/test_shutdown_storage_order.py::test_lifespan_retains_embedded_owner_until_pending_recovery",
+        "tests/execution_r4/test_shutdown_admission.py::test_prepared_new_work_is_refused_but_replay_and_close_remain_available",
+        "tests/test_runtime_operation_authorization.py::test_shutdown_fence_rejects_turns_but_allows_authorized_close"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_shutdown_deadline_installed.py --only-nexus --focused-final against its verified final artifacts. The broader precomposition campaign is preserved separately.",
+      "effective_test_command": "Run plans/r4_execution/run_shutdown_admission_installed.py against its verified final artifacts. Deadline/recovery evidence remains in the shutdown-deadline manifest.",
       "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
@@ -1375,9 +1377,10 @@
         "plans/r4_execution/test_runs_20261001_discovery_stop.json",
         "plans/r4_execution/test_runs_20261001_parallel_identity.json",
         "plans/r4_execution/test_runs_20261001_shutdown_order.json",
-        "plans/r4_execution/test_runs_20261001_shutdown_deadline.json"
+        "plans/r4_execution/test_runs_20261001_shutdown_deadline.json",
+        "plans/r4_execution/test_runs_20261001_shutdown_admission.json"
       ],
-      "remaining_acceptance": "Embedded observation deadline, same-owner recovery and lifespan retention are verified. Complete Server-wide public command and budget, reachable administrative recovery service, ingress fencing, qualified process-versus-durable-release projection, late-open/release fault matrix and platform acceptance remain pending."
+      "remaining_acceptance": "Embedded deadline/recovery and shared canonical admission fence are verified. The public Server-wide command/coordinator must trigger the fence and keep administrative recovery HTTP reachable under one budget. Qualified process-versus-durable-release projection, late-open/release fault matrix and platform acceptance remain pending."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",

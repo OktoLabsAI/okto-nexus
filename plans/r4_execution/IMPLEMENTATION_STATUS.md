@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Shared shutdown admission fence — October 1, 2026
+
+Nexus a389087 shares one in-memory fence across R4 and legacy MCP/REST authorization. Lifespan closes it before embedded shutdown waits. Prepared productive R4 requests are refused without operation rows; admitted R4 replay/history, authorized close and trusted external-work return remain available. Installed verification passed 52 R4 and 26 legacy cases on the same wheel. See [details](M11_SHUTDOWN_ADMISSION.md) and [manifest](test_runs_20261001_shutdown_admission.json). The public Server coordinator/command and reachable administrative recovery surface remain pending; NS14.03 partial, all gates open.
+
 ## Embedded shutdown deadline and retained recovery — October 1, 2026
 
 Nexus 4a7023b adds a fixed embedded observation deadline, noncanceling pending report, same-owner recovery loop and lifespan retention until resources resolve. A failed composition is removed only after journal cleanup is confirmed. Broad candidate: 106 Nexus plus four legacy cases passed; final wheel after the composition correction: 14 directed plus four legacy cases passed. See [details](M11_EMBEDDED_SHUTDOWN_DEADLINE.md) and [manifest](test_runs_20261001_shutdown_deadline.json). The Server-wide public command, reachable administrative recovery surface, full admission fence and process/release distinction remain pending. NS14.03 partial; all gates open.

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-01",
+  "status": "SHARED_ADMISSION_INCREMENT_PASSED_NS14_03_PARTIAL",
+  "commits": {
+    "nexus": "a38908755bd572c6128a059698fa1fcbfca71182",
+    "core": "c2aed115ea8add6dacf82bb892ff1415dcca652c",
+    "connector": "dca08630cd5f5a8150a01249845f9e55ee41ca70"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-core-dx3j4u5a\\dist\\nexus_connector_core-0.2.49.dev0-py3-none-any.whl",
+      "sha256": "b2787c4670c276b5310f7631552fdc53759d99a020f30cd7152154697e125963"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-parallel-identity-connector-1lc4uz_w\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "930e66148b1132a434859b4747524682c821324cc8d53dfd7ae9ce9eabf74f03"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-shutdown-admission-nexus-s6b1bcvs\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "8b5e220aa6b1189b44b2b09dc1f1c59428a060b8c27418b90f5fd1900968b86d"
+    }
+  },
+  "results": {
+    "nexus-installed": {
+      "tests": "52",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "171.597"
+    },
+    "legacy_admission-installed": {
+      "tests": "26",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "87.680"
+    },
+    "source": {
+      "tests": "3",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "9.348"
+    },
+    "external-source": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "9.731"
+    },
+    "surfaces-source": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "11.872"
+    }
+  },
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "topology": "Installed Nexus/Core/Connector wheels outside clones; HTTP/MCP test transports and synthetic native adapters."
+  },
+  "checks": {
+    "pip_check": "passed",
+    "package_bytes": "source/wheel/installed package bytes compared",
+    "credential_pattern_scan": "no matches"
+  },
+  "proof": [
+    "Prepared productive R4 intent cannot create an operation or native send after the shared fence closes.",
+    "Existing admitted R4 operation replay/history and authorized close remain available.",
+    "R4 and legacy MCP/REST authorizers share one dependency-container fence and refuse productive checks before storage.",
+    "Legacy REST/MCP turn requests are refused without command rows or native writes; authorized close succeeds.",
+    "Previously assumed external work can complete after detach/quarantine while draining, with canonical authority checks preserved.",
+    "Lifespan closes the fence before pending embedded shutdown observation."
+  ],
+  "overlap": "The seven focused source cases overlap the 78 installed cases; do not sum them as unique coverage.",
+  "limitations": [
+    "The public Server-wide shutdown command/coordinator and reachable administrative recovery service remain pending.",
+    "The command must trigger this same fence before starting all owner shutdowns and must use one shared budget.",
+    "Previously admitted or in-flight work still requires dispatcher/Core ownership handling.",
+    "The process-versus-durable-release distinction, late-open/release fault matrix and platform acceptance remain pending.",
+    "Core/Connector wheels are unchanged; older actual-provider evidence retains its recorded artifact scope.",
+    "Preexisting modified static assets are included in the wheel bytes but not accepted by this campaign. All release gates remain open."
+  ],
+  "evidence": {
+    "evidence/shutdown-admission-artifacts.json": "0482677f22ee6913c8ce4c0fab4b828e8103686c508b3ff4c9b0f079a74a0403",
+    "evidence/shutdown-admission-external-source.xml": "0548faffaea6a0376877825b96a001fc2bf7fc9c26179aa5040aeb1a2526a000",
+    "evidence/shutdown-admission-install.log": "a4e3cb515d7b2c2bf02a628f54326fbe538ac79e8922a7d66c6cb41bace45c2d",
+    "evidence/shutdown-admission-legacy_admission-installed.json": "df9732d10c2f23519fb3a5bdbeec32d97c43b711a6b31984a3359941c6f7f476",
+    "evidence/shutdown-admission-legacy_admission-installed.log": "9c887c1de63ccbce00b8c3956d8683f89589e1c5d3f58fad76e1b2472796656f",
+    "evidence/shutdown-admission-legacy_admission-installed.xml": "6f73339b17abe08a429db625287cc70211721dcc0ff6f818a31ba07c0940d4df",
+    "evidence/shutdown-admission-nexus-build.log": "074f478027cf1b1adfc5504ceb1e3a8998d268b687674fd2c2b0e0f5e66fd83a",
+    "evidence/shutdown-admission-nexus-installed.json": "8582458ef1ae9d693f8c6bd0810af6049547d48f587709e8bf5982c930d61de0",
+    "evidence/shutdown-admission-nexus-installed.log": "1f9458e943f3491b64720a4ac0a19440ce2fbdac60488eb55b3b169c6b05393b",
+    "evidence/shutdown-admission-nexus-installed.xml": "21c2a93a0cb4a405669cdcc652d0d4eb427f3de641029e089a59298765925e69",
+    "evidence/shutdown-admission-source.xml": "89275b169c90de8637640bf6a7dda3d51b776bea018595b6f966484e3dde682e",
+    "evidence/shutdown-admission-surfaces-source.xml": "1b8c4d6a5fdd94560949897dcf6a68f8fa9fe0357b4e8cdafc1e416f18fdd91a"
+  }
+}
