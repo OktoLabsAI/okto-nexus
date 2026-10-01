@@ -1374,10 +1374,11 @@
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_keeps_serve_process_and_http_until_inventory_release[http-SIGTERM]",
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[False]",
         "tests/execution_r4/test_server_signal_shutdown.py::test_signal_during_startup_waits_for_owner_without_hanging_failed_startup[True]",
-        "tests/execution_r4/test_server_shutdown.py::test_two_runtime_shutdown_reports_stopped_release_and_unknown_separately"
+        "tests/execution_r4/test_server_shutdown.py::test_two_runtime_shutdown_reports_stopped_release_and_unknown_separately",
+        "tests/execution_r4/test_ns14.py::test_ns14_03"
       ],
-      "effective_test_command": "Run plans/r4_execution/run_shutdown_facts_installed.py against its verified final tuple.",
-      "test_availability": "COLLECTED_ALTERNATIVE_ENTRY",
+      "effective_test_command": "Run plans/r4_execution/run_ns14_03_installed.py against the unchanged shutdown-facts final artifact tuple.",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
       "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
       "acceptance": "PARTIAL",
       "required_scenarios": [
@@ -1391,9 +1392,10 @@
         "plans/r4_execution/test_runs_20261001_shutdown_admission.json",
         "plans/r4_execution/test_runs_20261001_server_shutdown.json",
         "plans/r4_execution/test_runs_20261001_server_signal.json",
-        "plans/r4_execution/test_runs_20261001_shutdown_facts.json"
+        "plans/r4_execution/test_runs_20261001_shutdown_facts.json",
+        "plans/r4_execution/test_runs_20261001_ns14_03.json"
       ],
-      "remaining_acceptance": "Core-backed stopped-versus-pending-release reporting and recovery are verified through public Server HTTP for two runtimes. The combined public late-open/stuck-close/independent-force matrix, external Windows console/Linux signals, authorization-store outage, explicit force-exit qualification and platform/provider acceptance remain pending."
+      "remaining_acceptance": "TR4-14-03 combined fault injection passed on the installed Windows tuple. NS14.02 dependency remains unverified; broader external Windows console/Linux signals, authorization-store outage, explicit force-exit qualification and final platform/provider acceptance remain open."
     },
     "NS14.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_04",
@@ -2394,9 +2396,14 @@
         "NS14.03"
       ],
       "layer": "core_fault_injection",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_03"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_03.json"
+      ]
     },
     "TR4-14-04": {
       "task_ids": [

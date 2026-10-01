@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-14-03 normative combined recovery — October 1, 2026
+
+The required test_ns14.py::test_ns14_03 now passes on the unchanged final Core 0.2.50 / Connector / Nexus installed tuple. It combines two runtimes, late native open, blocked close and blocked release; proves bounded public response, independent force, retained journals/owner, refused new start and recovery without duplicate opening or force. See [criteria and scope](M11_NS14_03_COMBINED.md) and [manifest](test_runs_20261001_ns14_03.json). The scenario is passed at core_fault_injection on Windows; NS14.03 remains partial because NS14.02 and broader lifecycle/platform acceptance are open. No gate closed.
+
 ## Observed stop and durable release — October 1, 2026
 
 Core 29197d2 / 0.2.50.dev0 exposes memory-only shutdown resource facts and fixes stale release markers after stopped-session eviction. Connector 6fc8654 and Nexus 4b63b55 pin the identical wheel. Nexus reports STOPPED/release-pending separately from unknown native state through operator HTTP. Final installed results: 91 Core, 53 Connector, 46 Nexus passed. The failing expiry recovery seed and prior candidate results are retained. See [details](M11_SHUTDOWN_FACTS.md) and [manifest](test_runs_20261001_shutdown_facts.json). Combined late-open/stuck-close/force and platform qualification remain pending; NS14.03 partial, all gates open.
