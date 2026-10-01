@@ -65,6 +65,11 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
+    migration = sub.add_parser("migrate-execution", help="Backfill one legacy catalog batch without activating execution.")
+    migration.add_argument("--db-path", required=True)
+    migration.add_argument("--backup", required=True, help="Verified pre-migration backup directory.")
+    migration.add_argument("--batch-size", type=int, default=100)
+
     backup = sub.add_parser("backup", help="Create a consistent database backup before migration.")
     backup.add_argument("--db-path", required=True, help="Existing source SQLite database.")
     backup.add_argument("--output", required=True, help="New backup directory; must not already exist.")
@@ -358,6 +363,19 @@ def run_admin(
     ns, extra = parser.parse_known_args(list(argv))
     environ = env if env is not None else os.environ
     sink = out if out is not None else sys.stdout
+    if ns.command == "migrate-execution":
+        from ....bootstrap.execution_migration import migrate_execution_catalog
+        if extra:
+            parser.error("Unknown migrate-execution option.")
+        try:
+            report = migrate_execution_catalog(ns.db_path, ns.backup, batch_size=ns.batch_size)
+        except (OSError, ValueError, KeyError, OktoNexusError):
+            print("[okto-nexus admin] MIGRATION_FAILED: Verify the backup and unchanged source data before retrying.",
+                  file=sys.stderr)
+            return 1
+        sink.write(json.dumps(report, ensure_ascii=True) + "\n")
+        sink.flush()
+        return 0
     if ns.command == "backup":
         from ....bootstrap.database_backup import backup_database
         if extra:
