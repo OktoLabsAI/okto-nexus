@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Explicit reviewed binding replacement - October 1, 2026
+
+Nexus 2a37eda and Connector 4cb5ccf add replace_binding_id / --replace-binding-id, exact reviewed replacement, one binding-revision advance, unchanged endpoint/profile/global agent revisions, scoped target checks and refusal while the target has non-CLOSED claims. Connector schema 12 retains historical applications as SUPERSEDED, uses the current alias and recovers lost acknowledgments without another replacement. The TCP CLI journey exposed an obsolete administrative publication ticket after first apply; the daemon now obtains a current derivative via idempotent registration when canonical authority differs. Final installed verification passed 196 Connector tests and four TCP/HTTP/WSS journeys. The earlier installed campaign passed 34 Nexus cases on the same Nexus wheel and retained the stale-ticket failure; results overlap. [Evidence](test_runs_20261001_binding_replacement.json), [behavior and limits](M03_BINDING_REPLACEMENT.md). Core44 is unchanged. Native opening after rebind, drift/login diagnostics and live unrelated-process continuity remain pending for NS05.05; no milestone or release gate closes.
+
+
 ## Executor-scoped binding aliases - October 1, 2026
 
 Nexus 7398130 fixes the broad endpoint collision guard in prepare and apply. The same agent/workspace may bind the same alias on different executors or different aliases on one executor; same-scope collisions and unscoped legacy endpoints remain refused. The previous installed wheel reproduced both incorrect refusals. Verification passed 24 installed tests, including onboarding, NS05 and the public HTTP/WSS Connector initial-turn/control journey; 19 source cases overlap. Existing endpoint and agent credential fields remain unchanged. Connector 358fd4d and Core44 are unchanged. [Evidence](test_runs_20261001_binding_aliases.json), [scope and limits](M03_BINDING_ALIAS_SCOPE.md). Explicit replacement and live-session revision isolation remain pending; no milestone or release gate closes.
