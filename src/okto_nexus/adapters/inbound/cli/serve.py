@@ -431,7 +431,6 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
         )
         return 1
 
-    import signal
     import threading
 
     from okto_nexus.bootstrap.dependencies import bootstrap, maybe_auto_prune
@@ -506,7 +505,8 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
                 file=sys.stderr,
             )
 
-        server = uvicorn.Server(
+        from .runtime_server import RuntimeServer
+        server = RuntimeServer(
             uvicorn.Config(
                 app,
                 host=host,
@@ -516,7 +516,7 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             )
         )
         # The SSE feed reads this to end its otherwise-infinite generator the
-        # moment CTRL+C flips should_exit, so an open dashboard never holds the
+        # moment coordinated shutdown flips should_exit, so a dashboard never holds the
         # graceful-shutdown wait open (the "stuck finalizing" report).
         app.state.server = server
         # Warm the embedding model in the background (mirrors Pulse) so it is
@@ -533,29 +533,6 @@ def run_serve(args: list[str], env: Mapping[str, str] | None = None) -> int:
             args=(server, host, port, embeddings_done),
             daemon=True,
         ).start()
-        if os.name == "posix":
-            # EV-OPS-001: without this, the reap in the `finally` below
-            # NEVER runs on a SIGTERM. uvicorn's own `capture_signals()`
-            # handles SIGTERM gracefully (sets `should_exit`, lets the
-            # graceful-shutdown window run) - but once that finishes, it
-            # deliberately RESTORES whatever handler was registered before
-            # it started and RE-RAISES the captured signal against it (its
-            # own comment: "trigger the expected behaviour now"), so the
-            # process's exit still looks signal-killed to a parent/shell.
-            # For SIGINT the "expected behaviour" is Python's own built-in
-            # handler, which raises ``KeyboardInterrupt`` - a normal
-            # exception this function already catches below, so execution
-            # (and this function's `finally`) still runs. For SIGTERM there
-            # is no such built-in handler: the restored disposition is
-            # ``SIG_DFL``, whose "expected behaviour" is immediate process
-            # termination - the interpreter never returns from
-            # ``server.run()`` at all, and the reap silently never happens.
-            # A benign handler here (registered BEFORE `server.run()`, so
-            # it is what gets saved as the "previous" handler and restored)
-            # replaces that immediate termination with an ordinary return
-            # to this function, so the SIGTERM path converges on exactly
-            # the same `finally`-runs-the-reap outcome as SIGINT/CTRL-C.
-            signal.signal(signal.SIGTERM, lambda *_: None)
         # Adapters establish ownership at native process birth. The compatibility
         # hook returns None; never launch the historical cached-PID scanner.
         watchdog = (_spawn_harness_orphan_watchdog(env)
