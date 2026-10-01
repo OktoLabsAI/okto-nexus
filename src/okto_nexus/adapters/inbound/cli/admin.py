@@ -65,6 +65,10 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
+    backup = sub.add_parser("backup", help="Create a consistent database backup before migration.")
+    backup.add_argument("--db-path", required=True, help="Existing source SQLite database.")
+    backup.add_argument("--output", required=True, help="New backup directory; must not already exist.")
+
     for name in ("shutdown", "shutdown-status"):
         shutdown = sub.add_parser(name, help="Request or inspect Server shutdown.")
         shutdown.add_argument("--url", required=True, help="Running Server base URL.")
@@ -354,6 +358,19 @@ def run_admin(
     ns, extra = parser.parse_known_args(list(argv))
     environ = env if env is not None else os.environ
     sink = out if out is not None else sys.stdout
+    if ns.command == "backup":
+        from ....bootstrap.database_backup import backup_database
+        if extra:
+            parser.error("Unknown backup option.")
+        try:
+            report = backup_database(ns.db_path, ns.output)
+        except (OSError, ValueError, TimeoutError):
+            print("[okto-nexus admin] BACKUP_FAILED: The database backup could not be completed.",
+                  file=sys.stderr)
+            return 1
+        sink.write(json.dumps(report, ensure_ascii=True) + "\n")
+        sink.flush()
+        return 0
     if ns.command in {"shutdown", "shutdown-status"}:
         from .server_shutdown import run_shutdown
         if extra:
