@@ -356,7 +356,12 @@ def build_router() -> APIRouter:
             return publish_executor_realization(
                 factory, principal=principal, request=body.model_dump())
 
-        publication = await anyio.to_thread.run_sync(_publish)
+        try:
+            publication = await anyio.to_thread.run_sync(_publish)
+        except OktoNexusError as error:
+            status = {ErrorCode.CONFLICT: 409, ErrorCode.PERMISSION_DENIED: 403,
+                      ErrorCode.NOT_FOUND: 404, ErrorCode.VALIDATION_ERROR: 422}.get(error.code, 500)
+            return v1_err(status, error.code, error.message, stage="realization.publish")
         return JSONResponse(
             publication.public_dict(),
             status_code=200 if publication.reused else 201,
