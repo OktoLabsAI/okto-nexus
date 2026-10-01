@@ -22,7 +22,9 @@ for factory in _default_connector_factories().values():
         assert error.code == 'CONFLICT' and 'canonical runtime binding' in error.message
     else:
         raise AssertionError('Legacy native constructor remains enabled')
-for name in ('pi', 'codex', 'claude_code_stream', 'claude_code_attach'):
+for name in ('pi', 'codex', 'claude_code_stream', 'claude_code_attach',
+             'owned_process', 'windows_process', 'linux_process',
+             'linux_process_guardian', 'event_buffers', 'framing'):
     assert 'okto_nexus.adapters.outbound.harness.' + name not in sys.modules
     assert importlib.util.find_spec('okto_nexus.adapters.outbound.harness.' + name) is None
 assert importlib.util.find_spec('legacy_native_fixture') is None

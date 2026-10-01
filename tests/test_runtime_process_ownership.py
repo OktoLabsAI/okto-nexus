@@ -12,7 +12,7 @@ import time
 import pytest
 
 from okto_nexus.application.runtime_lifecycle import RuntimeLifecycle
-from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
+from legacy_native_fixture.owned_process import spawn_owned_process
 from legacy_native_fixture.codex import CodexAppServerConnector
 from okto_nexus.errors import OktoNexusError
 from test_harness_supervisor import make_factory, make_supervisor, _Clock, FakeConnector, wait_until
@@ -145,11 +145,11 @@ def test_abrupt_owner_death_reaps_child_and_grandchild(tmp_path, iteration):
         "print(json.dumps([os.getpid(),child.pid]),flush=True)\ntime.sleep(60)\n")
     owner_script = tmp_path / "owner.py"
     owner_script.write_text("import subprocess,sys,time\n"
-        "from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process\n"
+        "from legacy_native_fixture.owned_process import spawn_owned_process\n"
         "p=spawn_owned_process([sys.executable,sys.argv[1]],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)\n"
         "print(p.stdout.readline(),flush=True)\ntime.sleep(60)\n")
     environment = fixture_environment()
-    environment["PYTHONPATH"] = str(Path(__file__).resolve().parents[1] / "src")
+    environment["PYTHONPATH"] = os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)])
     owner = subprocess.Popen([sys.executable, str(owner_script), str(child_script)],
         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=environment)
     kernel = ctypes.WinDLL("kernel32", use_last_error=True)

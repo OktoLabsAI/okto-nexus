@@ -5,7 +5,7 @@ import time
 import pytest
 
 from legacy_native_fixture.claude_code_stream import ClaudeCodeStreamConnector
-from okto_nexus.adapters.outbound.harness.compatibility import claude_version_observation
+from legacy_native_fixture.compatibility import claude_version_observation
 from okto_nexus.errors import OktoNexusError
 from test_pr34_remediation import runtime as runtime_fixture, tool
 
@@ -50,7 +50,7 @@ def test_version_probe_accepts_only_exact_contract(tmp_path, output, version, ve
 @pytest.mark.parametrize("source", ["import time; time.sleep(60)",
     "import os;\nwhile True: os.write(1, b'x' * 4096)"])
 def test_probe_hang_and_output_flood_are_bounded_and_reaped(tmp_path, monkeypatch, source):
-    from okto_nexus.adapters.outbound.harness import compatibility
+    from legacy_native_fixture import compatibility
     spawn = compatibility.spawn_owned_process
     processes = []
     def capture(*args, **kwargs):

@@ -65,7 +65,7 @@ def test_unterminated_oversized_frame_rejects_and_reaps_owned_peer(kind, tmp_pat
 
 
 def test_frames_preserve_unicode_boundaries_and_bound_stderr_without_newline():
-    from okto_nexus.adapters.outbound.harness.framing import (
+    from legacy_native_fixture.framing import (
         MAX_FRAME_CHARS, STDERR_CHUNK_CHARS, FrameLimitExceeded, protocol_lines, stderr_chunks,
     )
     text = "á😀" * (MAX_FRAME_CHARS // 2)

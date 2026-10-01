@@ -10,8 +10,8 @@ import re
 from ....domain.runtime_commands import RuntimeCommandNotSent, RuntimeLaneBusyBeforeWrite
 from ....errors import ErrorCode, OktoNexusError
 from .event_journal import redact
-from .event_buffers import NativeEventOverflow, NativeReplayExpired, NativeSubscriptionLimit
-from .framing import FrameLimitExceeded
+from .legacy_errors import NativeEventOverflow, NativeReplayExpired, NativeSubscriptionLimit
+from .legacy_errors import FrameLimitExceeded
 
 _TEXT_FIELDS = {"text", "delta", "content", "result", "output", "stdout", "stderr", "raw", "message"}
 _SENSITIVE_ENV = re.compile(r"(?:KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL|AUTH)", re.I)

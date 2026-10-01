@@ -1,16 +1,13 @@
 """Bound allocations before decoding native JSONL, including missing newlines."""
+from okto_nexus.adapters.outbound.harness.legacy_errors import FrameLimitExceeded, MAX_FRAME_CHARS
 from typing import Iterator, TextIO
 
 
 # A Python Unicode character occupies at most four bytes. TextIOWrapper's
 # decoder buffer is bounded independently; no complete unbounded line is read.
-MAX_FRAME_CHARS = 262_144
 STDERR_CHUNK_CHARS = 4096
 
 
-class FrameLimitExceeded(ValueError):
-    def __init__(self):
-        super().__init__(f"frame_limit_exceeded: maximum {MAX_FRAME_CHARS} characters")
 
 
 def protocol_lines(stream: TextIO) -> Iterator[str]:

@@ -12,7 +12,7 @@ import time
 
 import pytest
 
-from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
+from legacy_native_fixture.owned_process import spawn_owned_process
 
 
 def environment():
@@ -33,7 +33,7 @@ class ExactWitness:
             self.handle = self.kernel.OpenProcess(0x100001, False, pid)
             assert self.handle
         else:
-            from okto_nexus.adapters.outbound.harness.linux_process_guardian import pidfd_open
+            from legacy_native_fixture.linux_process_guardian import pidfd_open
             self.handle = pidfd_open(pid)
         assert not self.stopped(0)
 

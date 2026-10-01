@@ -16,8 +16,43 @@ from okto_nexus.config import NexusConfig
 from okto_nexus.domain.ids import resolve_workspace_id
 from okto_nexus.domain.keys import generate_api_key, hash_api_key
 import test_local_realization as local
+from test_embedded_dispatch import local_setup, connected_local, qualified_contract
 from test_binding_migration import proposal_request
 from test_binding_operator import prepare_operator
+
+
+@pytest.mark.parametrize("surface", ["rest", "mcp"])
+def test_ns15_03(connected_local, qualified_contract, monkeypatch, surface):
+    """TR4-15-03: physical adapters only in Core; public callers survive removal."""
+    import ast
+    import okto_nexus
+    from okto_nexus.bootstrap import execution_compat
+    import test_harness_canonical as callers
+    from test_native_loader_cutover import test_clean_server_composition_does_not_import_legacy_native_loaders
+
+    test_clean_server_composition_does_not_import_legacy_native_loaders()
+    package = Path(okto_nexus.__file__).resolve().parent
+    native = package / "adapters/outbound/harness"
+    files = list(package.rglob("*.py"))
+    assert files and native.is_dir()
+    forbidden = {"subprocess", "socket", "ctypes"}
+    for path in files:
+        tree = ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+        for node in ast.walk(tree):
+            imports = ([alias.name for alias in node.names] if isinstance(node, ast.Import)
+                       else [node.module or ""] if isinstance(node, ast.ImportFrom) else [])
+            for name in imports:
+                assert name.split(".")[0] not in {"legacy_native_fixture", "okto_nexus_connector"}, (path, name)
+                if native in path.parents:
+                    assert name.split(".")[0] not in forbidden, (path, name)
+    # Existing scoped public-caller contracts exercise the same Core dispatch,
+    # durable history and idempotency after the physical code has been removed.
+    info = execution_compat.protocol_info()
+    monkeypatch.setattr(execution_compat, "protocol_info", lambda: {**info, "remote_execution_ready": True})
+    if surface == "rest":
+        callers.test_existing_rest_commands_use_core_once(connected_local, monkeypatch)
+    else:
+        callers.test_mcp_uses_same_admission_and_history(connected_local, monkeypatch)
 
 
 def test_ns15_01(tmp_path, monkeypatch, request):

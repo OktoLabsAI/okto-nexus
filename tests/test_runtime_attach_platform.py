@@ -51,7 +51,7 @@ def test_catalog_preserves_attach_and_reports_platform_contract():
 
 
 def test_unsupported_managed_platform_rejects_before_spawn(monkeypatch):
-    from okto_nexus.adapters.outbound.harness import owned_process
+    from legacy_native_fixture import owned_process
     monkeypatch.setattr(owned_process, "os", SimpleNamespace(name="posix"))
     monkeypatch.setattr(owned_process, "sys", SimpleNamespace(platform="darwin"))
     with pytest.raises(OktoNexusError) as error:

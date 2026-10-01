@@ -55,8 +55,9 @@ usam o histórico canônico autorizado e paginado. Retenção da captura e audit
 de subscribers verificadas; observadores sem execução cobertos em TR4-06-05.
 Fallback legado→R4 com prova tipada e cutover dos loaders verificados. Os quatro
 conectores nativos duplicados foram [retirados do pacote](M12_NS15_03_NATIVE_REMOVAL.md);
-resta separar helpers físicos dos consumidores de compatibilidade e concluir
-o aceite normativo NS15.03, incluindo a política de tentativas canônicas;
+os helpers físicos também foram retirados e [TR4-15-03 passou](M12_NS15_03_HELPER_REMOVAL.md)
+com REST/MCP pelo Core e verificação do pacote instalado. Tentativas canônicas
+mantêm reconciliação explícita antes de novo trabalho;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
 

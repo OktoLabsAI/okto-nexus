@@ -96,12 +96,12 @@ reported instead of smoothed over, per instructions.
 
 from __future__ import annotations
 
-from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process, observe_owned_process
-from okto_nexus.adapters.outbound.harness.framing import FrameLimitExceeded, protocol_lines, stderr_chunks
-from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
+from legacy_native_fixture.owned_process import spawn_owned_process, observe_owned_process
+from legacy_native_fixture.framing import FrameLimitExceeded, protocol_lines, stderr_chunks
+from legacy_native_fixture.event_buffers import NativeEventHistory, subscribe, stop_overflowed_process
 
 from okto_nexus.adapters.outbound.harness.environment import child_environment
-from okto_nexus.adapters.outbound.harness.compatibility import pi_version_observation
+from legacy_native_fixture.compatibility import pi_version_observation
 
 import itertools
 import json

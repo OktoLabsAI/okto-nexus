@@ -74,8 +74,8 @@ def test_redaction_preserves_no_write_proof_and_retry_classification():
 
 def test_redaction_preserves_local_gap_and_overflow_evidence_types():
     from okto_nexus.adapters.outbound.harness.secret_redaction import BackendSecretRedactor
-    from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventOverflow, NativeReplayExpired, NativeSubscriptionLimit
-    from okto_nexus.adapters.outbound.harness.framing import FrameLimitExceeded
+    from legacy_native_fixture.event_buffers import NativeEventOverflow, NativeReplayExpired, NativeSubscriptionLimit
+    from legacy_native_fixture.framing import FrameLimitExceeded
     redactor = BackendSecretRedactor([SECRET])
     for cls in (NativeEventOverflow, NativeReplayExpired, FrameLimitExceeded):
         assert type(redactor.error(cls())) is cls

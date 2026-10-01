@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 from okto_nexus.application.runtime_lifecycle import RuntimeLifecycle
-from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
+from legacy_native_fixture.owned_process import spawn_owned_process
 
 
 def main():

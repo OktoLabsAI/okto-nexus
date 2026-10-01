@@ -2,8 +2,8 @@
 import os
 import sys
 
-from ....application.runtime_lifecycle import current_lifecycle
-from ....errors import ErrorCode, OktoNexusError
+from okto_nexus.application.runtime_lifecycle import current_lifecycle
+from okto_nexus.errors import ErrorCode, OktoNexusError
 
 
 def observe_owned_process(process):

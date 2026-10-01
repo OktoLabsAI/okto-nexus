@@ -78,7 +78,7 @@ class PeerWitness:
             self.handle = self.kernel.OpenProcess(0x100000, False, pid)
             assert self.handle and self.kernel.WaitForSingleObject(self.handle, 0) == 258
         else:
-            from okto_nexus.adapters.outbound.harness.linux_process_guardian import pidfd_open
+            from legacy_native_fixture.linux_process_guardian import pidfd_open
             self.handle = pidfd_open(pid)
             assert not select.select([self.handle], [], [], 0)[0]
 

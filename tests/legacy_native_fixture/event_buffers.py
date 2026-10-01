@@ -4,6 +4,7 @@ Overflow is latched, never a silent queue drop. Readers drain the retained
 prefix then receive an explicit gap, allowing the supervisor to record UNKNOWN.
 Budgets measure serialized event bytes, not a claim about exact Python RSS.
 """
+from okto_nexus.adapters.outbound.harness.legacy_errors import NativeEventOverflow, NativeReplayExpired, NativeSubscriptionLimit
 from collections import deque
 from dataclasses import fields
 import json
@@ -11,18 +12,10 @@ import queue
 import threading
 
 
-class NativeEventOverflow(RuntimeError):
-    def __init__(self):
-        super().__init__("native event buffer overflow; outcome unknown")
 
 
-class NativeReplayExpired(RuntimeError):
-    def __init__(self):
-        super().__init__("native event replay expired; use canonical durable replay")
 
 
-class NativeSubscriptionLimit(RuntimeError):
-    pass
 
 
 def event_bytes(event):

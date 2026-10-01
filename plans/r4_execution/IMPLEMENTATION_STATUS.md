@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 physical helper removal and normative acceptance - October 1, 2026
+
+**TR4-15-03 PASSED at unit_contract**, REST and MCP. Installed campaign: **98 distinct passes and 3 architecture checks**, 11 skips. TR4-15-03 passed in both REST and MCP cases. Retired process ownership, framing, event buffers and version probes are absent from the Server package; only inert legacy metadata and redaction error identities remain. Core owns physical native runtime. See [scope](M12_NS15_03_HELPER_REMOVAL.md) and [manifest](test_runs_20261001_ns15_03_helper_removal.json). Task dependency acceptance, NS15.04 configuration/restore and final provider/platform/release gates remain open.
+
 ## NS15.03 native implementation removal - October 1, 2026
 
 Installed verification: **449 distinct passes and 3 architecture checks**, with **81 skips (72 platform, 9 opt-in live-provider)**. The four duplicate native connector implementations are absent from the Server source/package and installed wheel. Historical domain regression tests explicitly inject test-only fixtures; production execution remains in Core. See [scope](M12_NS15_03_NATIVE_REMOVAL.md) and [manifest](test_runs_20261001_ns15_03_native_removal.json). Shared native process/framing helper separation, canonical-attempt policy, normative TR4-15-03, NS15.04 configuration/restore and final provider/platform/release gates remain pending.

@@ -95,7 +95,7 @@ an earlier version of this module would have swallowed it.
 
 from __future__ import annotations
 
-from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventHistory
+from legacy_native_fixture.event_buffers import NativeEventHistory
 
 import json
 import os

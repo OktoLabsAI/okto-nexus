@@ -101,7 +101,7 @@ def test_expired_codex_thread_history_does_not_block_new_thread_subscription(tmp
 
 
 def test_retained_terminal_drains_before_explicit_overflow():
-    from okto_nexus.adapters.outbound.harness.event_buffers import NativeEventQueue
+    from legacy_native_fixture.event_buffers import NativeEventQueue
     from okto_nexus.domain.harness import HarnessEvent
     queue = NativeEventQueue(max_events=2)
     event = HarnessEvent(session_id="fixture", harness_kind="codex", kind="turn_completed",

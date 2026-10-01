@@ -12,15 +12,15 @@ import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from okto_nexus.adapters.outbound.harness.linux_process_guardian import pidfd_open, pidfd_send_signal
+sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+from legacy_native_fixture.linux_process_guardian import pidfd_open, pidfd_send_signal
 
 
 @unittest.skipUnless(sys.platform == "linux", "NOT_RUN: Linux pidfd test")
 class LinuxOwnershipTests(unittest.TestCase):
     def test_native_stream_eof_is_independent_of_process_exit(self):
         import threading
-        from okto_nexus.adapters.outbound.harness.linux_process import OwnedLinuxPopen
+        from legacy_native_fixture.linux_process import OwnedLinuxPopen
         process = OwnedLinuxPopen([sys.executable, "-u", "-c",
             "import os,time;print('ready',flush=True);os.close(1);time.sleep(60)"],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env={"PATH": os.defpath})
@@ -54,8 +54,8 @@ class LinuxOwnershipTests(unittest.TestCase):
     def test_capacity_is_held_until_observed_cleanup(self):
         import threading
         from unittest.mock import patch
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-        from okto_nexus.adapters.outbound.harness.linux_process import OwnedLinuxPopen
+        sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+        from legacy_native_fixture.linux_process import OwnedLinuxPopen
         with patch.object(OwnedLinuxPopen, "_slots", threading.BoundedSemaphore(1)):
             process = OwnedLinuxPopen([sys.executable, "-c", "import time;time.sleep(60)"],
                                      env={"PATH": os.defpath})
@@ -70,8 +70,8 @@ class LinuxOwnershipTests(unittest.TestCase):
             self.assertTrue(replacement.tree_stopped)
 
     def test_terminate_preserves_native_graceful_exit_status(self):
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-        from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
+        sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+        from legacy_native_fixture.owned_process import spawn_owned_process
         process = spawn_owned_process([sys.executable, "-u", "-c",
             "import signal,sys,time;signal.signal(signal.SIGTERM,lambda *_:sys.exit(23));print('ready',flush=True);time.sleep(60)"],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env={"PATH": os.defpath})
@@ -87,8 +87,8 @@ class LinuxOwnershipTests(unittest.TestCase):
             process.stderr.close()
 
     def test_normal_leader_exit_reaps_escaped_child_without_touching_bystander(self):
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-        from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process
+        sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+        from legacy_native_fixture.owned_process import spawn_owned_process
         code = ("import subprocess,sys,json,os\n"
             "extra=[]\n"
             "for fd in range(3,64):\n"
@@ -129,8 +129,8 @@ class LinuxOwnershipTests(unittest.TestCase):
             bystander.wait(timeout=5)
 
     def test_observed_stop_requires_tree_cleanup_proof(self):
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-        from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process, observe_owned_process
+        sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+        from legacy_native_fixture.owned_process import spawn_owned_process, observe_owned_process
         for guardian_crash in (False, True):
             with self.subTest(guardian_crash=guardian_crash):
                 process = spawn_owned_process([sys.executable, "-u", "-c",
@@ -165,8 +165,8 @@ class LinuxOwnershipTests(unittest.TestCase):
 
     def test_partial_descriptor_failure_does_not_leak(self):
         from unittest.mock import patch
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-        from okto_nexus.adapters.outbound.harness.linux_process import OwnedLinuxPopen
+        sys.path.insert(0, os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)]))
+        from legacy_native_fixture.linux_process import OwnedLinuxPopen
         before = len(list(Path("/proc/self/fd").iterdir()))
         with patch("os.pipe", side_effect=OSError("fixture FD pressure")):
             with self.assertRaises(OSError):
@@ -183,10 +183,10 @@ class LinuxOwnershipTests(unittest.TestCase):
                 "print(json.dumps([os.getpid(),grand.pid]),flush=True)\ntime.sleep(60)\n")
             owner = root / "owner.py"
             owner.write_text("import subprocess,sys,time,os\n"
-                "from okto_nexus.adapters.outbound.harness.owned_process import spawn_owned_process\n"
+                "from legacy_native_fixture.owned_process import spawn_owned_process\n"
                 "p=spawn_owned_process([sys.executable,'-u',sys.argv[1]],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,env={'PATH':os.defpath})\n"
                 "print(p.stdout.readline(),flush=True)\ntime.sleep(60)\n")
-            env = {"PATH": os.defpath, "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src")}
+            env = {"PATH": os.defpath, "PYTHONPATH": os.pathsep.join([str(Path(__file__).resolve().parents[1] / "src"), str(Path(__file__).resolve().parent)])}
             process = subprocess.Popen([sys.executable, "-u", str(owner), str(child)],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
             descriptors = []
