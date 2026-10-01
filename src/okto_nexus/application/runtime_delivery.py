@@ -65,7 +65,9 @@ class RuntimeDeliveryPlanner:
                         and endpoint["consumption"] == "exclusive" and endpoint["response_policy"] == "conversation"
                         and endpoint["health"] != "quarantined" and profile and profile["enabled"]
                         and "conversation" not in profile["config"].get("disabled_capabilities", ())):
-                    candidates.append((endpoint, profile, None))
+                    from .execution_domain_delivery import select_delivery_session
+                    _, session_id = select_delivery_session(uow, endpoint["endpoint_id"])
+                    candidates.append((endpoint, profile, session_id))
                 continue
             descriptor = self.registry.get(endpoint["adapter_id"])
             if not descriptor.capabilities.conversation or (descriptor.substrate == "attach" and not self.config.feature_harness_attach):
@@ -140,7 +142,8 @@ class RuntimeDeliveryPlanner:
             artifact_refs=tuple(message.artifacts or ()),
             runtime_context=bootstrap)
         self.outbox.enqueue(uow, envelope=envelope, context=context, endpoint=endpoint, profile=profile,
-                           session_id=session, now=now, authorization_revision=authorization_revision)
+                           session_id=None if endpoint["protocol"] == "nxl-r4" else session,
+                           now=now, authorization_revision=authorization_revision)
         if result_source:
             uow.connection.execute("UPDATE delivery_outbox SET source_result_id=? WHERE operation_id=?",
                                   (result_source["result_id"], operation_id))
@@ -227,6 +230,7 @@ class RuntimeDeliveryPlanner:
         candidates = [candidate for candidate in self.candidates(uow,
             agent_id=operation["recipient_agent_id"], workspace_id=operation["workspace_id"])
             if candidate[0]["selection_group"] == admission["selection_group"]
+            and candidate[0]["protocol"] != "nxl-r4"
             and self.registry.get(candidate[0]["adapter_id"]).input_schema.get("transport_binding_contract") == 1
             and candidate[0]["endpoint_id"] not in tried]
         if not candidates:

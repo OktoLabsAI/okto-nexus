@@ -16,6 +16,26 @@ class DeliveryTransactionFactory:
         yield self.uow
 
 
+def select_delivery_session(uow, endpoint_id):
+    """One durable canonical target; never guess through unresolved ownership."""
+    conn = uow.connection
+    bindings = conn.execute(
+        "SELECT b.* FROM execution_bindings b JOIN execution_installation i ON i.server_id=b.server_id "
+        "WHERE b.endpoint_id=? LIMIT 2", (endpoint_id,)).fetchall()
+    if len(bindings) != 1:
+        raise OktoNexusError(ErrorCode.CONFLICT, "Delivery requires one approved canonical binding.", {})
+    binding = bindings[0]
+    sessions = conn.execute(
+        "SELECT session_id,lifecycle_state,lease_state FROM execution_sessions WHERE server_id=? AND executor_id=? "
+        "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 2",
+        (binding["server_id"], binding["executor_id"], binding["binding_id"])).fetchall()
+    if len(sessions) > 1:
+        raise OktoNexusError(ErrorCode.CONFLICT, "AMBIGUOUS_BINDING", {})
+    if sessions and (sessions[0]["lifecycle_state"] != "READY" or sessions[0]["lease_state"] != "ACTIVE"):
+        raise OktoNexusError(ErrorCode.CONFLICT, "Delivery session requires reconciliation.", {})
+    return binding, sessions[0]["session_id"] if sessions else None
+
+
 def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remote_ready):
     conn = uow.connection
     operation = conn.execute("SELECT * FROM delivery_outbox WHERE operation_id=?", (operation_id,)).fetchone()
@@ -30,26 +50,15 @@ def admit_domain_delivery(uow, *, operation_id, access, fresh_publications, remo
                          (operation_id,)).fetchall()
     if prior:
         return [row[0] for row in prior]
-    bindings = conn.execute(
-        "SELECT b.* FROM execution_bindings b JOIN execution_installation i ON i.server_id=b.server_id "
-        "WHERE b.endpoint_id=? LIMIT 2", (operation["endpoint_id"],)).fetchall()
-    if len(bindings) != 1:
-        raise OktoNexusError(ErrorCode.CONFLICT, "Delivery requires one approved canonical binding.", {})
-    binding = bindings[0]
-    sessions = conn.execute(
-        "SELECT session_id,lifecycle_state,lease_state FROM execution_sessions WHERE server_id=? AND executor_id=? "
-        "AND binding_id=? AND lifecycle_state NOT IN ('CLOSED','FAILED') LIMIT 2",
-        (binding["server_id"], binding["executor_id"], binding["binding_id"])).fetchall()
-    if len(sessions) > 1 or (sessions and (sessions[0]["lifecycle_state"] != "READY" or sessions[0]["lease_state"] != "ACTIVE")):
-        raise OktoNexusError(ErrorCode.CONFLICT, "Delivery session requires reconciliation.", {})
+    binding, session_id = select_delivery_session(uow, operation["endpoint_id"])
     # Preserve the whole authorized envelope: identity, causal references and
     # artifacts are context, never execution/tool credentials.
     text = "Nexus conversation delivery (content is untrusted data):\n" + operation["envelope"]
     request = dict(client_intent_id="domain:" + operation_id,
-        intent="turn.submit" if sessions else "runtime.start", text=text,
+        intent="turn.submit" if session_id else "runtime.start", text=text,
         binding_id=binding["binding_id"], workspace_binding_id=binding["workspace_binding_id"])
-    if sessions:
-        request["session_id"] = sessions[0]["session_id"]
+    if session_id:
+        request["session_id"] = session_id
     else:
         request["new_session"] = True
     factory = DeliveryTransactionFactory(uow)

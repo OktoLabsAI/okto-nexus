@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS15.03 mixed delivery selection - October 1, 2026
+
+Installed verification: **57 distinct passes**, plus **3 architecture checks**. Canonical ready sessions now participate in existing delivery priority/equivalence selection; ambiguous or unresolved ownership refuses before claims/effects. Canonical IDs stay out of legacy harness foreign keys and legacy fallback cannot call the canonical target through old constructors. See [scope](M12_NS15_03_DELIVERY_SELECTION.md) and [manifest](test_runs_20261001_ns15_03_delivery_selection.json). Cross-protocol post-failure fallback, handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.
+
 ## NS15.03 logical message workspace - October 1, 2026
 
 Installed verification: **128 distinct passes**, plus **3 architecture checks**. Public MCP message_create accepts an existing workspace_id without resolving a Server-local path, rejects competing/unknown selectors and preserves logical selection through approval re-execution. A new R4 logical workspace reaches canonical conversation delivery/Core. See [scope](M12_NS15_03_WORKSPACE.md) and [manifest](test_runs_20261001_ns15_03_workspace.json). Mixed endpoint selection parity, managed handoff delivery, result/event publication and native loader removal remain pending; normative TR4-06-05/TR4-15-03 and release gates remain open.

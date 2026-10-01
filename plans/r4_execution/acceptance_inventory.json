@@ -1531,7 +1531,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_DELIVERY_AND_LOGICAL_WORKSPACE",
+      "implementation": "PARTIAL_CANONICAL_DELIVERY_SELECTION",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1552,9 +1552,11 @@
         "plans/r4_execution/M12_NS15_03_DELIVERY.md",
         "plans/r4_execution/test_runs_20261001_ns15_03_delivery.json",
         "plans/r4_execution/M12_NS15_03_WORKSPACE.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_workspace.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_workspace.json",
+        "plans/r4_execution/M12_NS15_03_DELIVERY_SELECTION.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_delivery_selection.json"
       ],
-      "notes": "Canonical conversation delivery now accepts explicit existing logical workspace IDs through public MCP, including approval re-execution without filesystem resolution. Mixed endpoint selection parity, handoff delivery, result/event publication and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
+      "notes": "Canonical ready sessions participate in mixed delivery priority/equivalence selection; ambiguous or unresolved canonical ownership refuses before effects. Public logical workspace selection and canonical conversation delivery are integrated. Cross-protocol post-failure fallback, managed handoff delivery, result/event publication and native loader/codecs removal remain pending; normative TR4-15-03 remains NOT_RUN."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

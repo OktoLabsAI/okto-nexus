@@ -41,8 +41,9 @@ fronteira é NS15.03: abertura explícita, connect, comandos e leituras MCP/REST
 de sessões canônicas, incluindo abertura por connection key com autoridade
 durável, descoberta, configuração, seleção implícita local e boot aprovado, já usam R4/Core;
 delivery conversacional já liga claim e admissão R4 atomicamente, incluindo
-seleção explícita de workspace lógico sem caminho local. Completar
-handoffs, paridade de seleção de endpoints e projeção de resultados/eventos antes de retirar os
+seleção explícita de workspace lógico sem caminho local e prioridade de sessões
+prontas na seleção mista de endpoints. Completar
+handoffs, fallback entre protocolos após falha e projeção de resultados/eventos antes de retirar os
 loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
