@@ -28,10 +28,20 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     from okto_nexus_connector.storage.state_store import StateStore
 
     user_home = Path.home()
+    missing_login = os.environ.get("OKTO_NEXUS_REAL_CONNECTOR_MISSING_LOGIN") == "1"
     codex = user_home / "AppData/Roaming/npm/node_modules/@openai/codex/node_modules/@openai/codex-win32-x64/vendor/x86_64-pc-windows-msvc/bin/codex.exe"
     claude = user_home / ".local/bin/claude.exe"
     node = Path(os.environ.get("OKTO_NEXUS_REAL_PI_NODE", "C:/Program Files/nodejs/node.exe"))
     pi_install = Path(os.environ.get("OKTO_NEXUS_REAL_PI_HOME", str(user_home / ".pi/agent"))) / "install"
+    provider_home = user_home
+    if missing_login:
+        provider_home = tmp_path / "empty-provider-home"
+        provider_home.mkdir()
+        (provider_home / ".codex").mkdir()
+        pi_home = provider_home / ".pi/agent"
+        pi_home.mkdir(parents=True)
+        (pi_home / "settings.json").write_text(json.dumps({
+            "defaultProvider": "anthropic", "defaultModel": "claude-haiku-4-5"}), encoding="utf-8")
     binary = {"pi_rpc": node, "codex_app_server": codex, "claude_stream": claude}[adapter]
     assert binary.is_file(), "The selected real provider executable is missing."
     monkeypatch.setenv("PATH", str(binary.parent) + os.pathsep + os.environ.get("PATH", ""))
@@ -53,7 +63,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
     root, workspace = tmp_path / "connector", tmp_path / "workspace"
     workspace.mkdir()
     store = StateStore(paths.state_file(root))
-    report = dict(adapter=adapter, server_release_gate_override=True, native_qualification_override=False,
+    report = dict(adapter=adapter, missing_login=missing_login, server_release_gate_override=True, native_qualification_override=False,
                   synthetic_native_factory=False, public_connector_cli=True, cli_subprocess=True, protected_os_vault=False,
                   topology="Single Windows host; actual loopback HTTP/WSS; separate Server and daemon processes.")
     def checkpoint(phase):
@@ -174,7 +184,7 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 report["candidate_ref"] = row["candidate_ref"]
                 config = await cli("executor", "configure-launch", "--identity", "subject",
                     "--harness", adapter, "--local-consent-id", "authorized-real-provider-campaign",
-                    "--profile-revision", "1", "--provider-home", str(user_home))
+                    "--profile-revision", "1", "--provider-home", str(provider_home))
                 realized = await cli("executor", "realize", "--identity", "subject", "--client-intent-id", "realize",
                     "--harness", adapter, "--candidate-ref", row["candidate_ref"],
                     "--inventory-revision", inventory["availability"]["executor_revision"],
@@ -250,8 +260,12 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                                 assert failures == 0, "Native event observation failed."
                             view = await cli("runtime", "operation", "--alias", "assistant", "--client-intent-id", intent_id)
                             operation = view.get("operation") or {}
-                            assert operation.get("error") is None, operation
                             stage = operation.get("executor_stage")
+                            if missing_login and stages == ("FAILED",):
+                                assert stage != "SUCCEEDED", "An empty approved provider home unexpectedly authenticated."
+                            if missing_login and stage == "FAILED" and stage in stages:
+                                return operation
+                            assert operation.get("error") is None, operation
                             assert stage not in ("FAILED", "REJECTED", "OUTCOME_UNKNOWN"), operation
                             assert owner.failure is None, type(owner.failure).__name__
                             if stage in stages:
@@ -264,6 +278,36 @@ def test_real_provider_through_public_connector_cli(tmp_path, monkeypatch, adapt
                 scope = saved.resolution["scope"]
                 session = scope["session_id"]
                 report["scope"] = scope
+                if missing_login:
+                    prompt = "Do not call tools. Reply with OK."
+                    await cli("runtime", "submit", session, prompt, "--alias", "assistant",
+                              "--client-intent-id", "missing-login")
+                    failed = await receipt("missing-login", ("FAILED",))
+                    error = failed["error"]
+                    assert error["code"] == "PROVIDER_AUTH_REQUIRED", error
+                    assert error["possible_effect"] is True and error["retry_safe"] is False
+                    assert scope["executor_id"] in error["action"] and scope["binding_id"] in error["action"]
+                    assert "Complete provider sign-in locally" in error["action"]
+                    assert error["action"].startswith("Query this operation and reconcile")
+                    response = await http.get("/v1/runtime/operations/" + failed["operation_id"],
+                                              headers=headers["subject"])
+                    assert response.status_code == 200
+                    assert response.json()["error"] == error
+                    await cli("runtime", "submit", session, prompt, "--alias", "assistant",
+                              "--client-intent-id", "missing-login")
+                    replay = await receipt("missing-login", ("FAILED",))
+                    assert replay["operation_id"] == failed["operation_id"]
+                    assert replay["error"] == error
+                    with deps.connection_factory.unit_of_work(write=False) as uow:
+                        assert uow.connection.execute(
+                            "SELECT COUNT(*) FROM execution_operations WHERE action='turn.submit'").fetchone()[0] == 1
+                    report["authentication_error"] = error
+                    report["replayed_operation_id"] = replay["operation_id"]
+                    report["single_admitted_turn"] = True
+                    await cli("runtime", "stop", session, "--alias", "assistant", "--client-intent-id", "close")
+                    report["close_stage"] = (await receipt("close", ("SUCCEEDED",)))["executor_stage"]
+                    report["completed"] = True
+                    return
                 seed_work((deps,), workspace=scope["workspace_id"])
                 async with asyncio.timeout(120):
                     while True:
