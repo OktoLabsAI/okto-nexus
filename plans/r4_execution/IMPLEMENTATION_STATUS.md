@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## TR4-14-05 Windows process crash — October 1, 2026
+
+Two installed cases passed: abrupt supervisor death before/after process-birth recording, real Job Object tree termination, a separate negative-control process alive, and retained uncertain journal receipt with idempotent replay. See [scope](M11_NS14_05_PROCESS_CRASH.md) and [manifest](test_runs_20261001_ns14_05.json). Product artifacts are unchanged. The normative scenario is qualified for Windows; Linux, additional NS14.05 scenarios and release gates remain open.
+
+
 ## TR4-14-04 combined load — October 1, 2026
 
 Installed verification: **47 passed**, including the normative 100k-identity load scenario and affected authority fixtures. Cache occupancy remains 4,096; measured control emission was 276 ms and the second executor progressed in 104 ms while the first executor was saturated. Product packages remain the capacity-metrics tuple. See [scope and failed preparations](M11_NS14_04_LOAD.md) and [manifest](test_runs_20261001_ns14_04.json). TR4-14-04 passes at the synthetic load layer; task dependencies, provider/platform acceptance and all release gates remain open.

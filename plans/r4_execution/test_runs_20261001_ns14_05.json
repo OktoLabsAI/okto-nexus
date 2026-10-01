@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-01",
+  "status": "TR4_14_05_WINDOWS_PASSED_TASK_PARTIAL",
+  "commits": {
+    "core": "18e172781b018ae09960fafc1bf7e2c4b1e8410f",
+    "connector": "211be74009a7f3c4f48eb25961f9860a91825df9",
+    "nexus": "1be8b8ee59d5e7957a9fe3bc910f4233ac5e3d25"
+  },
+  "artifacts": {
+    "core": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-core-3msf4qiz\\dist\\nexus_connector_core-0.2.51.dev0-py3-none-any.whl",
+      "sha256": "4c4c0c58d25b93f4f08ba8515d8476ffc29d1f0a27cc577c9fccb610716d1d1c"
+    },
+    "connector": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-revoke-ack-connector-pmt6y5x7\\dist\\okto_nexus_connector-0.5.0.dev0-py3-none-any.whl",
+      "sha256": "baf837251f654ab6385f5fba4e22d1a1b69da1839e8f47752795d1518dd29fe7"
+    },
+    "nexus": {
+      "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-capacity-metrics-nexus-ycmz2rq7\\dist\\okto_nexus-0.2.0-py3-none-any.whl",
+      "sha256": "9d1177dd8ad4d87ba4871152e31dfb131c1b181d2b3a3f2a4453109ecf1e26c9"
+    }
+  },
+  "installed_passed": 2,
+  "results": {
+    "ns14-05-initial.xml": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "2.432"
+    },
+    "ns14-05-nexus-installed.xml": {
+      "tests": "2",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "time": "4.227"
+    }
+  },
+  "measurements": [
+    {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "stage": "before_birth_record",
+      "containment": "windows_job",
+      "tree_members": 3,
+      "stop_seconds": 0.01429149997420609,
+      "unrelated_control_alive": true,
+      "durable_receipt": "SUBMISSION_STARTED",
+      "possible_effect": true,
+      "missing_or_foreign_evidence": "No ownership inferred; foreign platform remains UNKNOWN",
+      "topology": "Installed Core; laboratory owner and child tree; no native provider"
+    },
+    {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "stage": "recorded",
+      "containment": "windows_job",
+      "tree_members": 3,
+      "stop_seconds": 0.00477530003990978,
+      "unrelated_control_alive": true,
+      "durable_receipt": "SUBMISSION_STARTED",
+      "possible_effect": true,
+      "missing_or_foreign_evidence": "No ownership inferred; foreign platform remains UNKNOWN",
+      "topology": "Installed Core; laboratory owner and child tree; no native provider"
+    }
+  ],
+  "checks": {
+    "package_bytes": "All three source/wheel/installation package trees compared; child imports isolated installed Core",
+    "credential_scan": "No matches"
+  },
+  "overlap": "Initial two cases overlap the final two installed cases; counted once.",
+  "limitations": [
+    "Windows Job Objects only. Linux qualification remains open.",
+    "No native provider or remote-host effect claimed.",
+    "NS14.05 additional required scenarios, milestone dependencies and all release gates remain open."
+  ],
+  "evidence": {
+    "plans/r4_execution/evidence/ns14-05-initial.xml": "c908da9269f95f98a116d7dc6296a58e6479c414402ecbd7f34c50b9691b3631",
+    "plans/r4_execution/evidence/ns14-05-nexus-installed.json": "fa19511be1c0b2be1a18d5ca76bf5c252e692cb7f26c00150c9cb9b9e5038098",
+    "plans/r4_execution/evidence/ns14-05-nexus-installed.log": "6bf4672404cd3dc3b5d3850861f9fb17e346b25c5e28f88f85954e74f0485820",
+    "plans/r4_execution/evidence/ns14-05-nexus-installed.xml": "0e60701b37a55ef7c07f6acf64108b65a974714997320291223d40857de0a020",
+    "plans/r4_execution/run_ns14_05_installed.py": "ae3bc6a98cca8d2fdd49428e4136dbbf297d79063c9ca0f247bc1d2715ed7b70",
+    "plans/r4_execution/M11_NS14_05_PROCESS_CRASH.md": "6667ea87e909dd711c377607b31adc64ae667c9d2767daf75df435e185126c39"
+  }
+}

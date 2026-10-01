@@ -314,3 +314,11 @@ def test_ns14_04(opening, decision_state, tmp_path, record_property, monkeypatch
     monkeypatch.setattr(runtime_v1, "protocol_info", lambda: {**info, "remote_execution_ready": True})
     from ns14_load import run_load
     run_load(opening, tmp_path, record_property)
+
+
+@pytest.mark.skipif(__import__("sys").platform != "win32",
+                    reason="This normative backend campaign requires Windows Job Objects.")
+@pytest.mark.parametrize("stage", ["before_birth_record", "recorded"])
+def test_ns14_05(tmp_path, stage, record_property):
+    from ns14_process_crash import run_crash
+    run_crash(tmp_path, stage, record_property)

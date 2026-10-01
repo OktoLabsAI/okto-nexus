@@ -1447,17 +1447,24 @@
     },
     "NS14.05": {
       "proposed_nodeid": "tests/execution_r4/test_ns14.py::test_ns14_05",
-      "collected_nodeids": [],
-      "effective_test_command": null,
-      "test_availability": "MISSING",
-      "implementation": "UNVERIFIED",
-      "acceptance": "NOT_RUN",
+      "collected_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_05[before_birth_record]",
+        "tests/execution_r4/test_ns14.py::test_ns14_05[recorded]"
+      ],
+      "effective_test_command": "python -m pytest tests/execution_r4/test_ns14.py::test_ns14_05 -q",
+      "test_availability": "COLLECTED_NORMATIVE_ENTRY",
+      "implementation": "PARTIAL_REQUIRES_ACCEPTANCE",
+      "acceptance": "PARTIAL",
       "required_scenarios": [
         "TR4-14-05",
         "TN-35",
         "TN-36",
         "TN-37"
-      ]
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_05.json"
+      ],
+      "notes": "TR4-14-05 passes on Windows Job Objects with installed Core: supervisor crash before/after birth persistence, observed tree termination, independent control alive, journal uncertainty and idempotent replay retained. Linux and additional required scenarios remain open."
     },
     "NS15.01": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_01",
@@ -2473,9 +2480,19 @@
         "NS14.05"
       ],
       "layer": "os_backend",
-      "candidate_nodeids": [],
-      "coverage": "REQUIRES_REVIEW",
-      "execution": "NOT_RUN"
+      "candidate_nodeids": [
+        "tests/execution_r4/test_ns14.py::test_ns14_05[before_birth_record]",
+        "tests/execution_r4/test_ns14.py::test_ns14_05[recorded]"
+      ],
+      "coverage": "VERIFIED_NORMATIVE_SCENARIO",
+      "execution": "PASSED",
+      "qualified_platforms": [
+        "Windows Job Objects"
+      ],
+      "evidence": [
+        "plans/r4_execution/test_runs_20261001_ns14_05.json"
+      ],
+      "notes": "Platform-specific pass; no Linux, provider or remote-host acceptance."
     },
     "TR4-15-01": {
       "task_ids": [
