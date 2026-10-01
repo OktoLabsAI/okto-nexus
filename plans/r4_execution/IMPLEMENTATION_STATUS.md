@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## Native terminal failure diagnostics — October 1, 2026
+
+Core 3823ae3 / 0.2.45.dev0 preserves structured Claude/Codex authentication failure codes in durable terminal receipts and concludes Claude result-error operations. Connector e67eb87 and Nexus 12e2c41 adopt the same wheel; Nexus inventory pin and uv.lock are updated. Installed evidence: 58 Core regression cases plus one real Claude missing-login case using the normal qualified factory, 122 Connector cases and 21 Nexus cases. Missing-login evidence for real Codex/Pi and public consumer journeys remains pending; no gate closed. See [details](M03_NATIVE_AUTH_FAILURES.md) and [manifest](test_runs_20261001_native_failures.json).
+
+
 ## Scoped executor recovery guidance — October 1, 2026
 
 Nexus 6184739 adds US English corrective actions for verified executor receipt codes, naming the canonical executor/binding and preserving effect/retry facts. Possible native effects require reconciliation before new work. Installed verification passed 21 Nexus and 60 Connector cases; no Core/Connector product changes or migration. Native missing-login detection is still unproven by this projection test. See [details](M03_EXECUTOR_DIAGNOSTICS.md) and [evidence](test_runs_20261001_executor_diagnostics.json). No release gate closed.

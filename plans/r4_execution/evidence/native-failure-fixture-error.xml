@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="0.576" timestamp="2026-10-01T06:03:58.019945-03:00" hostname="Alienware_m15"><testcase classname="test_native_failure_receipts" name="test_terminal_failure_is_durable_and_scoped[claude_auth-PROVIDER_AUTH_REQUIRED]" time="0.024"><failure message="nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED">..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED</failure></testcase><testcase classname="test_native_failure_receipts" name="test_terminal_failure_is_durable_and_scoped[claude_error-NATIVE_OPERATION_FAILED]" time="0.017"><failure message="nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED">..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED</failure></testcase><testcase classname="test_native_failure_receipts" name="test_terminal_failure_is_durable_and_scoped[claude_text-NATIVE_OPERATION_FAILED]" time="0.014"><failure message="nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED">..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED</failure></testcase><testcase classname="test_native_failure_receipts" name="test_terminal_failure_is_durable_and_scoped[codex_auth-PROVIDER_AUTH_REQUIRED]" time="0.016"><failure message="nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED">..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:70: in test_terminal_failure_is_durable_and_scoped
+    asyncio.run(run())
+C:\Python313\Lib\asyncio\runners.py:194: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\asyncio\base_events.py:720: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+..\okto-nexus-connector-core\tests\test_native_failure_receipts.py:54: in run
+    await OperationKernel(journal).execute(Operation("turn", "turn.submit", "session", {"text": "hello"}), context(), effect)
+..\okto-nexus-connector-core\src\nexus_connector_core\kernel.py:47: in execute
+    raise CoreError("BINDING_NOT_AUTHORIZED", "admission", retry_safe=True,
+E   nexus_connector_core.models.CoreError: BINDING_NOT_AUTHORIZED</failure></testcase></testsuite></testsuites>
