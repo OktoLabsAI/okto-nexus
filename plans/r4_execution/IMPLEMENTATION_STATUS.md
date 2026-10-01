@@ -1,5 +1,10 @@
  # Execução R4 — estado verificado em 2026-10-01
 
+## NS14.04 atomic pending admission budgets — October 1, 2026
+
+Nexus 6da5f16 adds 32 productive / 8 control pending-operation limits per executor with separate byte budgets, persisted charges and migration 091. Canonical submission, initial children and native decisions share atomic checks; quota refusals return 429 with Retry-After, and replays retain their original charge. Installed campaign: **62 Nexus R4 + 53 Connector + 4 migration/architecture = 119 passed**, including a last-slot race and parent/child rollback. See [scope](M11_ADMISSION_CAPACITY.md) and [manifest](test_runs_20261001_admission_capacity.json). NS14.04 remains partial; combined load measurement, executor fairness, metrics and all gates remain open.
+
+
 ## NS14.04 dispatch capacity and eligible lanes — October 1, 2026
 
 Nexus c8a07f3 fixes a blocked control backlog hiding eligible work and keeps RECONCILING reservations charged against item/byte limits. Five failing reproductions preceded the fix; six directed cases now pass. Installed acceptance by unique test: **81 Nexus + 53 Connector**, combining the candidate results with a corrected 13-case control follow-up on the same wheel. The raw failures and overlapping runs remain recorded. See [scope](M11_DISPATCH_CAPACITY.md) and [manifest](test_runs_20261001_dispatch_capacity.json). Pending admission quotas, full flood/control load, executor fairness and all release gates remain open.
