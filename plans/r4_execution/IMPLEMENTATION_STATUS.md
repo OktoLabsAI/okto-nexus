@@ -1,5 +1,9 @@
  # Execução R4 — estado verificado em 2026-09-30
 
+## Operational native proposals and Claude MCP permissions - September 30, 2026
+
+[Core increment](M08_OPERATIONAL_NATIVE_PROPOSALS.md) published at 6cf2ecc / 0.2.41.dev0 separates the adapter-correlated operational proposal from its redacted display and prevents uncorrelated native payloads from creating approval authority. Claude MCP permission classification and stdio channel composition are covered. Clean package checks, 54 installed Core tests and pip check passed with both applications absent. Nexus/Connector remain on Core 0.2.40 pending tested adoption and canonical native decision integration. M08 and release gates remain open.
+
 ## Selected version observation and opening MCP handshake - September 30, 2026
 
 [Increment](M05_MCP_OPENING_HANDSHAKE.md): Core 0.2.40 observes missing selected versions at the guarded launch frontier; Nexus permits bounded MCP initialization under an applied lease before READY while retaining domain gates. Installed regressions passed 101 Core, 45 Connector, 79 Nexus and 78 overlapping no-Connector cases (one Connector-only case deselected). Real Codex now reaches MCP ready; both Codex and Claude fail governed handoff completion because native tool permission decisions are not yet composed. Failure evidence and test-drain cleanup are retained. Next: complete the existing M08 native approval/input path and rerun the real journeys. No milestone or release gate closes.

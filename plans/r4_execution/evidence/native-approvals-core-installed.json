@@ -1,0 +1,25 @@
+{
+  "command": [
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\test-env\\Scripts\\python.exe",
+    "-I",
+    "-m",
+    "pytest",
+    "-c",
+    "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed\\pytest.ini",
+    "--rootdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+    "--confcutdir=D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_operational_native_request.py",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_claude_mcp_permissions.py",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_runtime_bridge.py",
+    "D:\\Projetos\\Techridy\\okto-nexus-connector-core\\tests\\test_native_redaction.py",
+    "-q",
+    "--junitxml=D:\\Projetos\\Techridy\\okto_labs_okto_nexus\\plans\\r4_execution\\evidence\\native-approvals-core-installed.xml"
+  ],
+  "cwd": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-canonical-installed",
+  "core_version": "0.2.41.dev0",
+  "wheel_sha256": "d524686df61b85f4cc284d6bc16b0f2525a9a5e6974b7213676e2eb8017fe1a7",
+  "verified_files": 93,
+  "application_packages_absent": true,
+  "exit_code": 0,
+  "scope": "Technical native adapters; no product journey acceptance."
+}

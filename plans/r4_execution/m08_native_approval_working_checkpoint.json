@@ -1,0 +1,41 @@
+{
+  "state": "core_published_consumers_pending",
+  "core_version": "0.2.41.dev0",
+  "core_commit": "6cf2ecc",
+  "artifact": {
+    "wheel": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k\\dist\\nexus_connector_core-0.2.41.dev0-py3-none-any.whl",
+    "sha256": "d524686df61b85f4cc284d6bc16b0f2525a9a5e6974b7213676e2eb8017fe1a7",
+    "stage": "C:\\Users\\jpamb\\AppData\\Local\\Temp\\okto-r4-native-approvals-core-yqwcdf8k"
+  },
+  "installed_tests": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "pip_check": true,
+  "package_verification": true,
+  "consumers": {
+    "nexus": {
+      "commit": "a4c6399",
+      "core_pin": "0.2.40.dev0"
+    },
+    "connector": {
+      "commit": "67f2ea0",
+      "core_pin": "0.2.40.dev0"
+    }
+  },
+  "changes": [
+    "Native operational proposals are copied from the adapter correlation port before display redaction, bounded and frozen.",
+    "Uncorrelated native payloads cannot install pending approval authority.",
+    "Claude MCP calls can be classified for explicit decisions; appended MCP/model arguments retain the stdio permission channel."
+  ],
+  "remaining": [
+    "Adopt Core 0.2.41 with operational/display separation in both consumers.",
+    "Persist canonical R4 approval requests; use authenticated operator CAS and one outbox operation for each decision/input.",
+    "Compose native approval capture and dispatch in embedded/remote hosts under canonical lease authority.",
+    "Observe the actual Codex MCP permission request and validate its native response mapping.",
+    "Repeat real local and remote journeys, including positive/negative decisions, cancellation, replay and sensitive input retention."
+  ],
+  "milestone_complete": false
+}
