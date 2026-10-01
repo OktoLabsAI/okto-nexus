@@ -1547,7 +1547,7 @@
       "collected_nodeids": [],
       "effective_test_command": null,
       "test_availability": "MISSING",
-      "implementation": "PARTIAL_CANONICAL_RECOVERY",
+      "implementation": "PARTIAL_CANONICAL_RETENTION_AND_CALLER_PARITY",
       "acceptance": "NOT_RUN",
       "required_scenarios": [
         "TR4-15-03"
@@ -1586,9 +1586,11 @@
         "plans/r4_execution/M12_NS06_05_COMBINED.md",
         "plans/r4_execution/test_runs_20261001_ns06_05_combined.json",
         "plans/r4_execution/M12_NS15_03_RECOVERY.md",
-        "plans/r4_execution/test_runs_20261001_ns15_03_recovery.json"
+        "plans/r4_execution/test_runs_20261001_ns15_03_recovery.json",
+        "plans/r4_execution/M12_NS15_03_RETENTION.md",
+        "plans/r4_execution/test_runs_20261001_ns15_03_retention.json"
       ],
-      "notes": "Domain maintenance preserves the canonical send fence and requires confirmed canonical session closure before explicit uncertain-claim takeover. Detail inspection exposes scoped canonical references. TR4-06-05 remains verified at domain_integration. Capture retention, subscriber parity audit, cross-protocol fallback, native loader removal and final restore/release acceptance remain pending."
+      "notes": "Canonical callers, domain publication, consumption, recovery and capture retention have installed evidence. Core compacts only Server-committed events; old Core cursors report EVENT_GAP. Server retention preserves canonical result provenance and authorized history. Legacy subscriber registry has no production consumers to migrate. Cross-protocol fallback, native loader removal, full restore and final provider/platform/release acceptance remain pending."
     },
     "NS15.04": {
       "proposed_nodeid": "tests/execution_r4/test_ns15.py::test_ns15_04",

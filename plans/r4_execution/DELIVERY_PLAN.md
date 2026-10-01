@@ -51,9 +51,9 @@ e conclusão governada de handoff. A captura
 de saída R4 já preserva eventos contíguos e aparece no histórico autorizado;
 publicação governada, artefatos privados e resultados estruturados explicitamente
 admitidos também reutilizam o domínio existente. Leituras de eventos MCP/REST já
-usam o histórico canônico autorizado e paginado. Completar auditoria de subscribers,
-observação de contexto e retenção da captura canônica antes de retirar os
-loaders/codecs nativos duplicados após paridade;
+usam o histórico canônico autorizado e paginado. Retenção da captura e auditoria
+de subscribers verificadas; observadores sem execução cobertos em TR4-06-05.
+Completar fallback e retirar os loaders/codecs nativos duplicados após paridade;
 NS15.04 mantém o aceite completo de configuração e recuperação após efeitos R4.
 Nenhum gate de release é encerrado por estes incrementos.
 
