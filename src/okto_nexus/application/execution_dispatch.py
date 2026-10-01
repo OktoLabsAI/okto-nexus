@@ -111,38 +111,42 @@ def reserve_execution_dispatch(
             "SELECT reservation_class,COUNT(*) AS items,"
             "COALESCE(SUM(reserved_bytes),0) AS bytes FROM "
             "execution_dispatch_outbox WHERE server_id=? AND executor_id=? "
-            "AND dispatch_state IN ('RESERVED','SENDING') "
+            "AND dispatch_state IN ('RESERVED','SENDING','RECONCILING') "
             "GROUP BY reservation_class",
             (server_id, executor_id),
         ):
             if row["reservation_class"] in used:
                 used[row["reservation_class"]] = [row["items"], row["bytes"]]
-        rows = conn.execute(
-            "SELECT o.operation_id,o.attempt_no,p.action,p.semantic_payload "
-            "FROM execution_dispatch_outbox o JOIN execution_operations p "
-            "ON p.server_id=o.server_id AND p.executor_id=o.executor_id "
-            "AND p.operation_id=o.operation_id "
-            "WHERE o.server_id=? AND o.executor_id=? "
-            "AND o.dispatch_state='PENDING' "
-            "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
-            "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
-            "ORDER BY CASE WHEN p.action IN ('turn.steer','turn.interrupt',"
-            "'runtime.close','approval.decide','input.provide') THEN 0 ELSE 1 END,"
-            "p.created_at,p.operation_id LIMIT 32",
-            (server_id, executor_id, datetime.now(timezone.utc).isoformat()),
-        ).fetchall()
-        for row in rows:
-            action = row["action"]
-            lane = "control" if action in _CONTROL else "regular"
-            if action not in _CONTROL | _REGULAR:
+        # Filter each lane by its remaining budget before selecting a row.
+        # A fixed mixed window lets a blocked control backlog hide all regular
+        # work, or oversized rows hide later controls that still fit.
+        for lane, actions, max_items, max_bytes in (
+            ("control", sorted(_CONTROL), control_items, control_bytes),
+            ("regular", sorted(_REGULAR), regular_items, regular_bytes),
+        ):
+            remaining = max_bytes - used[lane][1]
+            if used[lane][0] >= max_items or remaining <= 0:
                 continue
-            cost = len(row["semantic_payload"].encode("utf-8"))
-            max_items, max_bytes = ((control_items, control_bytes)
-                                    if lane == "control" else
-                                    (regular_items, regular_bytes))
-            if (cost > max_bytes or used[lane][0] >= max_items or
-                    used[lane][1] + cost > max_bytes):
+            placeholders = ",".join("?" for _ in actions)
+            row = conn.execute(
+                "SELECT o.operation_id,o.attempt_no,"
+                "length(CAST(p.semantic_payload AS BLOB)) AS byte_cost "
+                "FROM execution_dispatch_outbox o JOIN execution_operations p "
+                "ON p.server_id=o.server_id AND p.executor_id=o.executor_id "
+                "AND p.operation_id=o.operation_id "
+                "WHERE o.server_id=? AND o.executor_id=? "
+                "AND o.dispatch_state='PENDING' "
+                "AND (o.next_attempt_at IS NULL OR o.next_attempt_at<=?) "
+                "AND p.admission_state IN ('ACCEPTED','DISPATCH_PENDING') "
+                "AND p.action IN (" + placeholders + ") "
+                "AND length(CAST(p.semantic_payload AS BLOB))<=? "
+                "ORDER BY p.created_at,p.operation_id LIMIT 1",
+                (server_id, executor_id, datetime.now(timezone.utc).isoformat(),
+                 *actions, remaining),
+            ).fetchone()
+            if row is None:
                 continue
+            cost = row["byte_cost"]
             token = "attempt_" + secrets.token_hex(16)
             now = datetime.now(timezone.utc).isoformat()
             changed = conn.execute(

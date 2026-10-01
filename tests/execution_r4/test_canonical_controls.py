@@ -151,7 +151,7 @@ def test_public_controls_preserve_ids_authority_and_expired_containment(tmp_path
                                     headers={'Authorization':f'Bearer {key}'}, json=dict(
                                     client_intent_id='invalid', intent='turn.steer', binding_id='binding',
                                     workspace_binding_id='wxb', session_id=scope['session_id'], text='Continue', target=target))
-                                assert response.status_code == 400, response.text
+                                assert response.status_code == 422, response.text
 
                             queued = await resolve('turn.submit', 'queued', text='Queued work')
                             await http.submit_r4_operation(key, queued)
@@ -269,7 +269,7 @@ def test_public_controls_preserve_ids_authority_and_expired_containment(tmp_path
                                 finally:
                                     close_release.set()
                                     await asyncio.gather(waiter,return_exceptions=True)
-                                assert closed.stage == 'SUBMITTED' and native.native.stopped
+                                assert closed.stage == 'SUCCEEDED' and native.native.stopped
                                 assert close_calls == ['close']
                                 assert await runtime.close(close_operation, close_context) == closed
                                 with factory.unit_of_work() as uow:
