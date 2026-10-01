@@ -96,6 +96,20 @@ def _require_binding_method(conn, *, subject_agent_id, adapter_id):
                               "Connection method is disabled for this agent.", {})
 
 
+def _binding_alias_conflicts(conn, *, server_id, subject_agent_id, executor_id,
+                             workspace_id, adapter_id, alias):
+    """Canonical aliases are scoped to an agent, executor and workspace."""
+    return conn.execute(
+        "SELECT ep.endpoint_id FROM agent_endpoints ep LEFT JOIN execution_bindings b "
+        "ON b.endpoint_id=ep.endpoint_id WHERE ep.agent_id=? AND ep.workspace_id=? "
+        "AND ((b.binding_id IS NULL AND ep.adapter_id=?) OR "
+        "(b.server_id=? AND b.executor_id=? AND "
+        "CASE WHEN json_valid(ep.public_config) THEN json_extract(ep.public_config,'$.alias') END=?)) "
+        "LIMIT 2",
+        (subject_agent_id, workspace_id, adapter_id, server_id, executor_id, alias),
+    ).fetchall()
+
+
 def prepare_execution_binding(
     factory: ConnectionFactory, *, actor_agent_id: str,
     request: Mapping[str, Any], fresh_publications: Mapping,
@@ -208,12 +222,10 @@ def prepare_execution_binding(
         ):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected candidate is not in this inventory.", {})
-        legacy = conn.execute(
-            "SELECT endpoint_id FROM agent_endpoints WHERE agent_id=? "
-            "AND workspace_id=? AND adapter_id=? LIMIT 2",
-            (subject_agent_id, request["workspace_id"],
-             request["adapter_id"]),
-        ).fetchall()
+        legacy = _binding_alias_conflicts(conn, server_id=server_id,
+            subject_agent_id=subject_agent_id, executor_id=request["executor_id"],
+            workspace_id=request["workspace_id"], adapter_id=request["adapter_id"],
+            alias=request["alias"])
         blockers = (["existing_endpoint_requires_review"] if legacy else [])
         request_operator_proof = bool(
             not operator and access is not None and
@@ -490,15 +502,13 @@ def apply_execution_binding(
                 int((time.monotonic() - fresh[1]) * 1000) >= 120_000):
             raise OktoNexusError(ErrorCode.CONFLICT,
                                   "The selected inventory is no longer fresh.", {})
-        existing = conn.execute(
-            "SELECT 1 FROM agent_endpoints WHERE agent_id=? AND "
-            "workspace_id=? AND adapter_id=? LIMIT 1",
-            (subject_agent_id, proposal["workspace_id"],
-             proposal["adapter_id"]),
-        ).fetchone()
-        if existing is not None:
+        existing = _binding_alias_conflicts(conn, server_id=server_id,
+            subject_agent_id=subject_agent_id, executor_id=proposal["executor_id"],
+            workspace_id=proposal["workspace_id"], adapter_id=proposal["adapter_id"],
+            alias=expected["alias"])
+        if existing:
             raise OktoNexusError(ErrorCode.CONFLICT,
-                                  "An endpoint was added after preparation.", {})
+                                  "The binding alias is already in use in this executor and workspace.", {})
         now = datetime.now(timezone.utc).isoformat()
         profile_id = proposal["profile_id"] if operator_approved else None
         endpoint_repo = SqliteEndpointRepo()
